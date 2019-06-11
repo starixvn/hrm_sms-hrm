@@ -232,7 +232,7 @@
     <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
-    <Compile Include="Supervisor\GetDisciplineSettingByGroupIdCriteria.cs" />
+    <Compile Include="Team\GetDisciplineManagerByTeamIdCriteria.cs" />
     <Compile Include="Team\GetGroupBySupervisorCriteria.cs" />
     <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />

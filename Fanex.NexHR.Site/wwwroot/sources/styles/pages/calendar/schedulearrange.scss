@@ -10,6 +10,7 @@
 @import '../../components/checkbox';
 @import '../../components/icon';
 @import '../../components/modal';
+@import '../../components/react-autocomplete-wrapper';
 
 .btn {
     font-size: inherit;
@@ -64,37 +65,6 @@ input[type="text"] {
                 position: unset;
                 top: unset;
                 right: unset;
-            }
-        }
-    }
-}
-
-.shift-autocomplete-wrapper {
-    width: 120px;
-    position: relative;
-    text-align: left;
-    font-size: 12px;
-
-    .items {
-        position: absolute;
-        width: 100%;
-        max-height: 240px;
-        min-width: 120px;
-        overflow-y: auto;
-        border: 1px solid #c5c5c5;
-        background: #fff;
-        color: #333;
-        z-index: 1;
-
-        .item {
-            padding: 3px;
-
-            &.highlighted {
-                border: 1px solid #003eff;
-                background: #007fff;
-                font-weight: normal;
-                color: #fff;
-                cursor: pointer;
             }
         }
     }
@@ -307,7 +277,7 @@ input[type="text"] {
                         text-overflow: ellipsis;
                     }
 
-                    .shift-autocomplete-wrapper {
+                    .react-autocomplete-wrapper {
                         display: table-cell;
                     }
                 }
@@ -421,7 +391,7 @@ input[type="text"] {
                 }
             }
 
-            .shift-autocomplete-wrapper {
+            .react-autocomplete-wrapper {
                 width: 100%;
 
                 input[type="text"] {

@@ -7,6 +7,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
 
@@ -56,14 +57,22 @@
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }
 
-        public IList<TeamSupervisorModel> GetSupervisorByTeamId(GetSupervisorByTeamIdCriteria criteria)
+        public IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id)
         {
+            var criteria = new GetSupervisorByTeamIdCriteria
+            {
+                GroupId = id
+            };
             return baseService.GetData<TeamSupervisorModel>(criteria).ToList();
         }
 
-        public IList<SupervisorModel> GetDisciplineSettingByGroupId(GetDisciplineSettingByGroupIdCriteria criteria)
+        public IList<DisciplineManager> GetDisciplineManagerByTeamId(int id)
         {
-            return baseService.GetData<SupervisorModel>(criteria).ToList();
+            var criteria = new GetDisciplineManagerByTeamIdCriteria
+            {
+                GroupId = id
+            };
+            return baseService.GetData<DisciplineManager>(criteria).ToList();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
 import Autocomplete from 'react-autocomplete';
 
 export default class ShiftAutocomplete extends PureComponent {
@@ -99,7 +98,7 @@ export default class ShiftAutocomplete extends PureComponent {
                 items={options}
                 shouldItemRender={(item, value) => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''))}
                 getItemValue={item => item.code}
-                wrapperProps={{ className: 'shift-autocomplete-wrapper' }}
+                wrapperProps={{ className: 'react-autocomplete-wrapper' }}
                 wrapperStyle={{ display: 'block' }}
                 renderInput={(props) => <input type="text" {...props} />}
                 renderMenu={(items, value, style) => <div className="items" children={items} />}

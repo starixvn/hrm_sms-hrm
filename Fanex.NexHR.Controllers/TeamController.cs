@@ -4,17 +4,18 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -185,15 +186,11 @@
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {
-            var criteria = new GetSupervisorByTeamIdCriteria
-            {
-                GroupId = id
-            };
-
-            IList<TeamSupervisorModel> model = teamService.GetSupervisorByTeamId(criteria);
+            IEnumerable<TeamSupervisorModel> supervisors = teamService.GetSupervisorByTeamId(id);
             ViewBag.TeamId = id;
+            ViewBag.TeamCode = supervisors.Any() ? supervisors.First().Code : string.Empty;
 
-            return View(model);
+            return View(supervisors);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
@@ -241,27 +238,6 @@
             return View("~/Views/Employee/ShiftManager.cshtml", model);
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult DisciplineSetting(int teamId)
-        {
-            ViewBag.Groups = GetAllTeam();
-
-            var criteria = new GetDisciplineSettingByGroupIdCriteria
-            {
-                GroupId = teamId
-            };
-            IList<SupervisorModel> supervisors = teamService.GetDisciplineSettingByGroupId(criteria);
-
-            var model = new SupervisorViewModel
-            {
-                SupervisorList = supervisors,
-                TeamId = teamId,
-                SupervisorRole = (short)RoleSystem.DisciplineManager
-            };
-
-            return View(model);
-        }
-
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Supervisor(SupervisorViewModel model)
@@ -298,20 +274,36 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult DisciplineManager(int teamId)
+        {
+            ViewBag.TeamId = teamId;
+            ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+            return View();
+        }
+
+        [HttpGet]
+        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
+        public CustomJsonResult GetDisciplineManagerByTeamId(int teamId)
+        {
+            IEnumerable<DisciplineManager> supervisors = teamService.GetDisciplineManagerByTeamId(teamId);
+            return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult UpdateDisciplineSetting(SupervisorViewModel model)
+        public ActionResult EditDisciplineManager(int teamId, string supervisorIds = "")
         {
             var criteria = new InsertOrUpdateTeamSupervisorCriteria
             {
-                EmpIdDisciplines = model.RoleDisciplines,
-                GroupId = model.TeamId,
+                EmpIdDisciplines = supervisorIds,
+                GroupId = teamId,
                 ModifiedBy = sessionService.Employee.Id,
                 Role = (short)RoleSystem.DisciplineManager
             };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private IList<Department> GetAllDepartment(bool? isActive)

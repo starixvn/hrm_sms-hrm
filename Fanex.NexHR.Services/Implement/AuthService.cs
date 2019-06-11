@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -76,7 +77,10 @@
             {
                 UserId = employeeId
             };
-            return baseService.GetData<MenuItemSession>(criteria);
+            IEnumerable<MenuItemSession> menus = baseService.GetData<MenuItemSession>(criteria);
+            menus = menus.GroupBy(i => i.Name).Select(g => g.First()).ToList();
+
+            return menus;
         }
     }
 }
