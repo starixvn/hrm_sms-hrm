@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, blockUI, unblockUI } from '../../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder } from '../../../shared/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 
@@ -18,7 +18,7 @@ export default class App extends Component {
             employeeOptions: []
         };
 
-        this.teamId = document.getElementById('TeamId').value;
+        this.sectionId = document.getElementById('SectionId').value;
         this.roleId = document.getElementById('RoleId').value;
     }
 
@@ -29,9 +29,9 @@ export default class App extends Component {
     getDisciplineManagers = () => {
         blockUI();
 
-        axios(_global.root + 'Team/GetDisciplineManagerByTeamId', {
+        axios(_global.root + 'Team/GetDisciplineManagerBySectionId', {
             params: {
-                teamId: this.teamId
+                sectionId: this.sectionId
             }
         }).then(response => {
             this.setState({ managers: response.data });
@@ -39,31 +39,35 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
-        const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
+        if (query.trim().length > 1) {
+            const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
 
-        axios(_global.root + 'employee/GetSupervisors', {
-            params: {
-                roleIds: this.roleId,
-                query,
-                excludeIds
-            }
-        }).then(response => {
-            let employeeOptions = response.data.map(item => {
-                return {
-                    id: item.Id,
-                    nickname: item.NickName,
-                    fullName: item.FullName,
-                    value: `${item.NickName} (${item.FullName})`
-                };
-            });
+            axios(_global.root + 'employee/GetSupervisors', {
+                params: {
+                    roleIds: this.roleId,
+                    query,
+                    excludeIds
+                }
+            }).then(response => {
+                let employeeOptions = response.data.map(item => {
+                    return {
+                        id: item.Id,
+                        nickname: item.NickName,
+                        fullName: item.FullName,
+                        value: `${item.NickName} (${item.FullName})`
+                    };
+                });
 
-            this.setState({ employeeOptions: employeeOptions });
-        }).catch(axiosError);
+                this.setState({ employeeOptions: employeeOptions });
+            }).catch(axiosError);
+        } else {
+            this.setState({ employeeOptions: [] });
+        }
     }
 
     handleAddEmployee = employee => {
         let managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
-        this.setState({ managers });
+        this.setState({ managers, employeeOptions: [] });
     }
 
     handleRemoveEmployee = employeeId => {
@@ -71,13 +75,6 @@ export default class App extends Component {
         const index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
-    }
-
-    reorder = (managers, startIndex, endIndex) => {
-        const [removed] = managers.splice(startIndex, 1);
-        managers.splice(endIndex, 0, removed);
-
-        return managers;
     }
 
     handleChangeOrder = (key, employeeId) => {
@@ -105,17 +102,26 @@ export default class App extends Component {
             return;
         }
 
-        managers = [...this.reorder(managers, sourceIndex, destinationIndex)];
+        managers = reorder(managers, sourceIndex, destinationIndex);
         this.setState({ managers });
     }
 
     handleSave = () => {
-        const managerIds = this.state.managers.map(item => item.ownerId).join(',');
+        const supervisors = this.state.managers.map((item, index) => {
+            return {
+                ownerId: item.ownerId,
+                displayOrder: index + 1
+            };
+        });
 
         axios({
-            url: _global.root + 'Team/EditDisciplineManager',
+            url: _global.root + 'Team/EditSectionSupervisor',
             method: 'POST',
-            data: stringify({ teamId: this.teamId, supervisorIds: managerIds }),
+            data: stringify({
+                sectionId: this.sectionId,
+                roleId: this.roleId,
+                supervisors
+            }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -145,7 +151,7 @@ export default class App extends Component {
                     onChangeOrder={this.handleChangeOrder}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
-                <a className="btn btn-default" href={_global.root + `team/TeamSupervisor/${this.teamId}`}>Back</a>
+                <a className="btn btn-default" href={_global.root + `team/TeamSupervisor/${this.sectionId}`}>Back</a>
             </Fragment>
         );
     }

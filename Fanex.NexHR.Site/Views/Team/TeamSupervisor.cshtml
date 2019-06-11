@@ -39,19 +39,19 @@
                         @switch (item.ActionType)
                         {
                             case (short)RoleSystem.ShiftManager:
-                                <a href="@Url.Action("ShiftManager", "Team", new { TeamId = teamId })">
+                                <a href="@Url.Action("ShiftManager", "Team", new { id = teamId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;
                             case (short)RoleSystem.Verifier:
                             case (short)RoleSystem.Approver:
                             case (short)RoleSystem.ActingSupervisor:
-                                <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = teamId, SupervisorRole = item.ActionType })">
+                                <a href="@Url.Action("ManageSupervisor", "Team", new { id = teamId, roleId = item.ActionType })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;
                             case (short)RoleSystem.DisciplineManager:
-                                <a href="@Url.Action("DisciplineManager", "Team", new { TeamId = teamId })">
+                                <a href="@Url.Action("DisciplineManager", "Team", new { id = teamId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;

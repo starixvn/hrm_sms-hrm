@@ -847,6 +847,10 @@
     <Content Include="wwwroot\dist\styles\report.attendance.js" />
     <Content Include="wwwroot\dist\styles\schedule.arrange.css" />
     <Content Include="wwwroot\dist\styles\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.css" />
+    <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\styles\section.supervisor.index.css" />
+    <Content Include="wwwroot\dist\styles\section.supervisor.index.js" />
     <Content Include="wwwroot\dist\styles\shiftstatistic.css" />
     <Content Include="wwwroot\dist\styles\shiftstatistic.js" />
     <Content Include="wwwroot\dist\styles\workingcalendars.css" />
@@ -883,6 +887,14 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\shift-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\table.jsx" />
@@ -1066,6 +1078,7 @@
     <Content Include="Views\Employee\Supervisor.cshtml" />
     <Content Include="Views\Employee\MultiRoleManagementDashboard.cshtml" />
     <Content Include="Views\Employee\ShiftManager.cshtml" />
+    <Content Include="Views\Team\ShiftManager.cshtml" />
     <Content Include="Views\ChangeShift\ChangeShiftDetail.cshtml" />
     <Content Include="Views\Leave\LeaveRequestDetail.cshtml" />
     <Content Include="Views\KeepInView\Create.cshtml" />
@@ -1253,6 +1266,9 @@
     <Content Include="wwwroot\sources\styles\components\_react-autocomplete-wrapper.scss" />
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
+    <Content Include="Views\Team\ManageSupervisor.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
@@ -1327,6 +1343,7 @@
     <Content Include="wwwroot\sources\styles\vendors\_weekpicker.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_autocomplete.scss" />
     <Content Include="wwwroot\sources\styles\pages\section\edit.discipline.manager.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\edit.supervisor.scss" />
     <None Include="wwwroot\sources\styles\pages\section\supervisor.index.scss" />
   </ItemGroup>
   <ItemGroup>

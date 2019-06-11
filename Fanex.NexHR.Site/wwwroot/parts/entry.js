@@ -18,6 +18,7 @@ module.exports = {
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
         [`${styleDistPath}/section.supervisor.index`]: `${styleSourcePath}/pages/section/supervisor.index.scss`,
+        [`${styleDistPath}/section.edit.supervisor`]: `${styleSourcePath}/pages/section/edit.supervisor.scss`,
         [`${styleDistPath}/section.edit.discipline.manager`]: `${styleSourcePath}/pages/section/edit.discipline.manager.scss`,
 
         //
@@ -26,6 +27,8 @@ module.exports = {
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`,
-        [`${jsDistPath}/section.edit.discipline.manager`]: `${jsSourcePath}/section/discipline-manager/index.jsx`
+        [`${jsDistPath}/section.edit.supervisor`]: `${jsSourcePath}/section/supervisor/index.jsx`,
+        [`${jsDistPath}/section.edit.discipline.manager`]: `${jsSourcePath}/section/discipline-manager/index.jsx`,
+        [`${jsDistPath}/section.edit.shift.manager`]: `${jsSourcePath}/section/shift-manager/index.jsx`
     }
 };

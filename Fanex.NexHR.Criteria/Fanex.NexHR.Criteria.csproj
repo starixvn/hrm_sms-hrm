@@ -157,8 +157,8 @@
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Supervisor\GetTeamSupervisorCriteria.cs" />
-    <Compile Include="Supervisor\InsertOrUpdateTeamSupervisorCriteria.cs" />
-    <Compile Include="Supervisor\InsertTeamShiftManagerCriteria.cs" />
+    <Compile Include="Section\EditSectionSupervisorCriteria.cs" />
+    <Compile Include="Section\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
@@ -220,8 +220,8 @@
     <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
-    <Compile Include="Team\GetDisciplineManagerByTeamIdCriteria.cs" />
-    <Compile Include="Team\GetGroupBySupervisorCriteria.cs" />
+    <Compile Include="Section\GetDisciplineManagerByTeamIdCriteria.cs" />
+    <Compile Include="Section\GetGroupBySupervisorCriteria.cs" />
     <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
@@ -262,11 +262,11 @@
     <Compile Include="Shift\GetShiftStatisticCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />
     <Compile Include="Shift\UpdateShiftCriteria.cs" />
-    <Compile Include="Team\DeleteGroupCriteria.cs" />
-    <Compile Include="Team\GetAllGroupCriteria.cs" />
-    <Compile Include="Team\GetGroupByIdCriteria.cs" />
-    <Compile Include="Team\InsertNewGroupCriteria.cs" />
-    <Compile Include="Team\UpdateGroupCriteria.cs" />
+    <Compile Include="Section\DeleteGroupCriteria.cs" />
+    <Compile Include="Section\GetAllGroupCriteria.cs" />
+    <Compile Include="Section\GetGroupByIdCriteria.cs" />
+    <Compile Include="Section\InsertNewGroupCriteria.cs" />
+    <Compile Include="Section\UpdateGroupCriteria.cs" />
     <Compile Include="Time\GetTimeRecordCriteria.cs" />
     <Compile Include="Time\InsertTimeRecordCriteria.cs" />
   </ItemGroup>

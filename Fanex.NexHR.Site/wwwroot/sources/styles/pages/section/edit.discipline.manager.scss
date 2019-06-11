@@ -10,19 +10,6 @@
     padding-top: 4px;
     padding-bottom: 4px;
     margin-right: 5px;
-
-    &.btn-cancel {
-        background: #fff;
-        color: #545454;
-        border: 1px solid #545454;
-        transition: all .2s ease-in;
-
-        &:hover, &:focus, &:active {
-            color: #fff;
-            background: lighten(#324476, 10%);
-            border-color: lighten(#324476, 10%);
-        }
-    }
 }
 
 .table {

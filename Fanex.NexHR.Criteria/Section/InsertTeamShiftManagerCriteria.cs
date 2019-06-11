@@ -10,14 +10,8 @@
 
         public int ModifiedBy { get; set; }
 
-        public override bool IsValid()
-        {
-            return GroupId > 0;
-        }
+        public override bool IsValid() => GroupId > 0;
 
-        public override string GetSettingKey()
-        {
-            return "GroupSupervisor_UpdateForShiftArrange";
-        }
+        public override string GetSettingKey() => "GroupSupervisor_UpdateForShiftArrange";
     }
 }

@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
@@ -66,13 +68,25 @@
             return baseService.GetData<TeamSupervisorModel>(criteria).ToList();
         }
 
-        public IList<DisciplineManager> GetDisciplineManagerByTeamId(int id)
+        public IEnumerable<DisciplineManager> GetDisciplineManagerBySectionId(int sectionId)
         {
             var criteria = new GetDisciplineManagerByTeamIdCriteria
             {
-                GroupId = id
+                GroupId = sectionId
             };
             return baseService.GetData<DisciplineManager>(criteria).ToList();
+        }
+
+        public CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        {
+            var criteria = new EditSectionSupervisorCriteria
+            {
+                GroupId = sectionId,
+                ActorId = actorId,
+                RoleId = roleId,
+                SupervisorXml = supervisors.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }
