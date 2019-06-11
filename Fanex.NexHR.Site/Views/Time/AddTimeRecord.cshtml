@@ -29,7 +29,9 @@
                 Employee
             </div>
             <div class="input">
-                @Html.TextBoxFor(x => x.EmployeeName)
+                @Html.TextBoxFor(x => x.Employee)
+                @Html.HiddenFor(model => model.Employee)
+                @Html.HiddenFor(model => model.EmpId)
             </div>
         </div>
     

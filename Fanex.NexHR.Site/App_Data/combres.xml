@@ -474,8 +474,8 @@
       <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="timesheetrecordjs" type="js">
-      <resource path="~/scripts/libs/jquery.min.js" />
       <resource reference="sitejs" />
+      <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>
 
     <resourceSet name="myovertimecss" type="css">
