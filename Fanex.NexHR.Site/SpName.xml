@@ -277,8 +277,7 @@
       <Mapping DataField="Code" ObjectProperty="Team" />
       <Mapping DataField="EmpId" ObjectProperty="OwnerId" />
     </Setting>
-    <Setting Key="GroupSupervisor_Set" SpName="GroupSupervisor_Set" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="GroupSupervisor_UpdateForShiftArrange" SpName="GroupSupervisor_UpdateForShiftArrange" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0">
     </Setting>

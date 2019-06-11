@@ -184,4 +184,22 @@ function axiosError(error) {
     }
 }
 
-export { showMessage, fadeOutMessage, confirm, alert, updateTableHeaders, floatingHeader, blockUI, unblockUI, toastOptions, axiosError };
+function reorder(items, startIndex, endIndex) {
+    const [removed] = items.splice(startIndex, 1);
+    items.splice(endIndex, 0, removed);
+
+    return [...items];
+}
+
+export {
+    showMessage,
+    fadeOutMessage,
+    confirm,
+    updateTableHeaders,
+    floatingHeader,
+    blockUI,
+    unblockUI,
+    toastOptions,
+    axiosError,
+    reorder
+};

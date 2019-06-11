@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.DisciplineManager;
-    var teamId = (int)ViewBag.TeamId;
+    var sectionId = (int)ViewBag.SectionId;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/section.edit.discipline.manager.css" rel="stylesheet" />
@@ -12,12 +12,10 @@
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a href="@Url.Action("index", "team")" class="step">@Labels.SectionManagement</a>
-    <a href="@Url.Action("TeamSupervisor", "team", new { id = teamId })" class="step">@Labels.SectionSupervisor</a>
+    <a href="@Url.Action("TeamSupervisor", "team", new { id = sectionId })" class="step">@Labels.SectionSupervisor</a>
     <a class="step">@Labels.DisciplineManager</a>
 }
 
-<h2 class="page-title">@ViewBag.Title</h2>
-
-@Html.Hidden("TeamId", teamId)
+@Html.Hidden("SectionId", sectionId)
 @Html.Hidden("RoleId", (short)ViewBag.RoleId)
 <div id="discipline-wrapper"></div>

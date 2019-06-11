@@ -8,14 +8,8 @@
 
         public int Role { get; set; }
 
-        public override bool IsValid()
-        {
-            return GroupId > 0;
-        }
+        public override bool IsValid() => GroupId > 0;
 
-        public override string GetSettingKey()
-        {
-            return "GroupSupervisor_GetByRole";
-        }
+        public override string GetSettingKey() => "GroupSupervisor_GetByRole";
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -19,6 +20,8 @@
 
         IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id);
 
-        IList<DisciplineManager> GetDisciplineManagerByTeamId(int id);
+        IEnumerable<DisciplineManager> GetDisciplineManagerBySectionId(int sectionId);
+
+        CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
     }
 }

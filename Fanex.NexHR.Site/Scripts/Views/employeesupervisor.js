@@ -59,7 +59,7 @@ $(document).ready(function () {
                 query: $.trim(request.term),
                 $top: 10
             };
-            console.log($("#supervisorRole").val() === "False");
+            
             if ($("#supervisorRole").val() === "False") {
                 $.ajax({
                     url: urlAllEmployee,

@@ -19,7 +19,6 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
 
     public class TeamController : BaseController
@@ -193,115 +192,75 @@
             return View(supervisors);
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult ManageSupervisor(int teamId, short supervisorRole)
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult ManageSupervisor(int id, short roleId)
         {
-            ViewBag.Groups = GetAllTeam();
-            var criteria = new GetTeamSupervisorCriteria
-            {
-                GroupId = teamId,
-                Role = supervisorRole
-            };
-            IList<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
+            ViewBag.SectionId = id;
+            ViewBag.RoleId = roleId;
 
-            var model = new SupervisorViewModel
-            {
-                SupervisorList = supervisors,
-                TeamId = teamId,
-                SupervisorRole = supervisorRole,
-                ForView = "Team"
-            };
-
-            return View("~/Views/Employee/Supervisor.cshtml", model);
+            return View();
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult ShiftManager(int teamId)
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public CustomJsonResult GetSectionSupervisorByRoleId(int sectionId, short roleId)
         {
-            ViewBag.Groups = GetAllTeam();
-
             var criteria = new GetTeamSupervisorCriteria
             {
-                GroupId = teamId,
+                GroupId = sectionId,
+                Role = roleId
+            };
+            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
+
+            return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult ShiftManager(int id)
+        {
+            ViewBag.SectionId = id;
+            ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+
+            return View();
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public CustomJsonResult GetShiftManagerBySectionId(int sectionId)
+        {
+            var criteria = new GetTeamSupervisorCriteria
+            {
+                GroupId = sectionId,
                 Role = (short)RoleSystem.ShiftManager
             };
-            IList<SupervisorModel> supervisorModel = teamService.GetTeamSupervisor(criteria);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
 
-            var model = new ShiftManagerViewModel
+            return new CustomJsonResult
             {
-                ShiftManagerList = supervisorModel,
-                TeamId = teamId,
-                SupervisorRole = (short)RoleSystem.ShiftManager,
-                ForView = "Team"
+                Data = supervisors.Select(x => new DisciplineManager { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }),
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
-
-            return View("~/Views/Employee/ShiftManager.cshtml", model);
-        }
-
-        [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult Supervisor(SupervisorViewModel model)
-        {
-            var criteria = new InsertOrUpdateTeamSupervisorCriteria
-            {
-                EmpIdChangeShifts = model.RoleChangeShifts,
-                EmpIdCheckInOuts = model.RoleCheckInOuts,
-                EmpIdKeepInViews = model.RoleKeepInViews,
-                EmpIdLateInEarlyOuts = model.RoleLateInEarlyOuts,
-                EmpIdLeaves = model.RoleLeaves,
-                EmpIdOvertimes = model.RoleOvertimes,
-                GroupId = model.TeamId,
-                ModifiedBy = sessionService.Employee.Id,
-                Role = model.SupervisorRole
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult ShiftManager(ShiftManagerViewModel model)
-        {
-            var criteria = new InsertTeamShiftManagerCriteria
-            {
-                GroupId = model.TeamId,
-                ShiftArrangers = model.RoleShiftArrange,
-                ModifiedBy = sessionService.Employee.Id
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult DisciplineManager(int teamId)
+        public ActionResult DisciplineManager(int id)
         {
-            ViewBag.TeamId = teamId;
+            ViewBag.SectionId = id;
             ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
             return View();
         }
 
         [HttpGet]
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public CustomJsonResult GetDisciplineManagerByTeamId(int teamId)
+        public CustomJsonResult GetDisciplineManagerBySectionId(int sectionId)
         {
-            IEnumerable<DisciplineManager> supervisors = teamService.GetDisciplineManagerByTeamId(teamId);
+            IEnumerable<DisciplineManager> supervisors = teamService.GetDisciplineManagerBySectionId(sectionId);
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult EditDisciplineManager(int teamId, string supervisorIds = "")
+        public ActionResult EditSectionSupervisor(int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
         {
-            var criteria = new InsertOrUpdateTeamSupervisorCriteria
-            {
-                EmpIdDisciplines = supervisorIds,
-                GroupId = teamId,
-                ModifiedBy = sessionService.Employee.Id,
-                Role = (short)RoleSystem.DisciplineManager
-            };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = teamService.EditSectionSupervisor(sessionService.Employee.Id, sectionId, roleId, supervisors);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

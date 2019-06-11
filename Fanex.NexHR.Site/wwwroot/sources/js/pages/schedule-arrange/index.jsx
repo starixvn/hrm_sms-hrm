@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder } from '../../shared/common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
@@ -922,13 +922,6 @@ export default class App extends Component {
         }
     }
 
-    reorder = (schedules, startIndex, endIndex) => {
-        const [removed] = schedules.splice(startIndex, 1);
-        schedules.splice(endIndex, 0, removed);
-
-        return schedules;
-    }
-
     handleDragEnd = result => {
         if (!result.destination || result.source.index === result.destination.index) {
             return;
@@ -939,14 +932,14 @@ export default class App extends Component {
         const destinationIndex = result.destination.index;
         let schedules = [...this.state.schedules];
         if (resultType === 'droppableSection') {
-            schedules = [...this.reorder(schedules, sourceIndex, destinationIndex)];
-            this.originalSchedules = [...this.reorder(schedules, sourceIndex, destinationIndex)];
+            schedules = reorder(schedules, sourceIndex, destinationIndex);
+            this.originalSchedules = reorder(schedules, sourceIndex, destinationIndex);
             this.setState({ schedules }, () => this.handleEditGroupOrder());
         } else if (resultType.includes('droppableMember')) {
             const groupId = parseInt(resultType.split('-')[1]);
             const index = schedules.findIndex(x => x.groupId === groupId);
-            this.originalSchedules[index].members = [...this.reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex)];
-            schedules[index].members = [...this.reorder(schedules[index].members, sourceIndex, destinationIndex)];
+            this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
+            schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
             this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
         }
     }
@@ -976,8 +969,8 @@ export default class App extends Component {
             return;
         }
 
-        schedules = [...this.reorder(schedules, sourceIndex, destinationIndex)];
-        this.originalSchedules = [...this.reorder(this.originalSchedules, sourceIndex, destinationIndex)];
+        schedules = reorder(schedules, sourceIndex, destinationIndex);
+        this.originalSchedules = reorder(this.originalSchedules, sourceIndex, destinationIndex);
         this.setState({ schedules }, () => this.handleEditGroupOrder());
     }
 
@@ -1007,8 +1000,8 @@ export default class App extends Component {
             return;
         }
 
-        schedules[index].members = [...this.reorder(schedules[index].members, sourceIndex, destinationIndex)];
-        this.originalSchedules[index].members = [...this.reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex)];
+        schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
+        this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
         this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
     }
 
