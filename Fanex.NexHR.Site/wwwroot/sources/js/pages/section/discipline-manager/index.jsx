@@ -39,10 +39,13 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
+        const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
+
         axios(_global.root + 'employee/GetSupervisors', {
             params: {
                 roleIds: this.roleId,
-                query: query
+                query,
+                excludeIds
             }
         }).then(response => {
             let employeeOptions = response.data.map(item => {
