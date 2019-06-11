@@ -14,16 +14,11 @@
 
         public string Remark { get; set; }
 
-        public int KeepInViewType { get; set; }
+        public short KeepInViewType { get; set; }
 
         public DateTime OnDate { get; set; }
 
         public bool IsHalfDay { get; set; }
-
-        public int ShiftId { get; set; }
-
-        [SpParam(Ignored = true)]
-        public string ShiftName { get; set; }
 
         public DateTime FromTime { get; set; }
 
@@ -39,9 +34,7 @@
 
         public override string GetSettingKey()
         {
-            return KeepInViewType == (int)KeepInViewTypes.KeepInViewByDay
-                ? "KeepInViewRequestByDay_Insert"
-                : "KeepInViewRequestByHour_Insert";
+            return "KeepInViewRequest_Insert";
         }
 
         public override bool IsValid()

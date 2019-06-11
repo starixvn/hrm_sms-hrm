@@ -1,76 +1,78 @@
 ﻿@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
-@{
-    ViewBag.Title = Labels.MyKeepInViewRequest;
-}
-@section css{
-    @Url.CombresLink("keepinviewcss")
-}
-@section js{
-    @Url.CombresLink("keepinviewviewlistjs")
-}
-@section Breadcrumb {
-    <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
-}
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    <input type="hidden" value="LateInEarlyOut" id="RequestType" />
+@using Fanex.NexHR.Core.Enums
+@model IList<KeepInViewModel>
+    @{
+        ViewBag.Title = Labels.MyKeepInViewRequest;
+    }
+    @section css{
+        @Url.CombresLink("keepinviewcss")
+    }
+    @section js{
+        @Url.CombresLink("keepinviewviewlistjs")
+    }
+    @section Breadcrumb {
+        <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
+    }
+    <h2>@ViewBag.Title</h2>
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" value="LateInEarlyOut" id="RequestType" />
 
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            <label for="Year">@Labels.Year</label>
-        </div>
-        <div class="grid_2">
-            @Html.YearPicker("Year", 2014, (int)ViewBag.Year)
-        </div>
-        <div class="grid_2">
-            <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
-        </div>
-        <div class="grid_5">
-            <div class="button-icon">
-                <span class="icon plus"></span>@Html.ActionLink(Labels.KeepInViewRequest, "Create")
+        <div class="container_24 bunhat">
+            <div class="grid_1 gridlabel">
+                <label for="Year">@Labels.Year</label>
+            </div>
+            <div class="grid_2">
+                @Html.YearPicker("Year", 2014, (int)ViewBag.Year)
+            </div>
+            <div class="grid_2">
+                <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
+            </div>
+            <div class="grid_5">
+                <div class="button-icon">
+                    <span class="icon plus"></span>@Html.ActionLink(Labels.KeepInViewRequest, "Create")
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="clear">
-    </div>
+        <div class="clear">
+        </div>
 
-    <table class="table table-custom">
-        <thead>
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th>@Labels.Shift</th>
-                <th>@Labels.RequestDate</th>
-                <th>@Labels.CreatedDate</th>
-                <th>@Labels.Remark</th>
-                <th>@Labels.Status</th>
-                <th>@Labels.History</th>
-            </tr>
-        </thead>
-        @if (Model != null && Model.Any())
-        {
-            <tbody>
-                @{int index = 1;}
-                @foreach (RequestEntity request in Model)
-                {
-                    var requestDate = request.IsHalfDay
-                        ? (request.FromDate.ToDateMonthYearFormatedDate() + " (" + request.FromTime.ToString("HH:mm") + " - " + request.ToTime.ToString("HH:mm") + ")")
-                        : request.FromDate.ToDateMonthYearFormatedDate();
-                    <tr id="row@(request.Id)">
+        <table class="table table-custom">
+            <thead>
+                <tr>
+                    <th>@Labels.SymbolCount</th>
+                    <th>@Labels.KIVType</th>
+                    <th>@Labels.RequestDate</th>
+                    <th>@Labels.FromTime</th>
+                    <th>@Labels.ToTime</th>
+                    <th>@Labels.Remark</th>
+                    <th>@Labels.VerifiedBy</th>
+                    <th>@Labels.ApprovedBy</th>
+                    <th>@Labels.CreatedDate</th>
+                    <th>@Labels.Status</th>
+                    <th>@Labels.History</th>
+                </tr>
+            </thead>
+            @if (Model != null && Model.Any())
+            {
+                <tbody>
+                    @{int index = 1;}
+                    @foreach (KeepInViewModel request in Model)
+                    {
+                        var fromTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.FromTime.ToString("HH:mm");
+                        var toTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.ToTime.ToString("HH:mm");
+
+                    <tr id="row@(request.RequestId)">
                         <td>
                             @(index++)
                         </td>
-                        <td>
-                            @((request.FromShift == null || string.IsNullOrWhiteSpace(request.FromShift.Name)) ? Labels.NA : request.FromShift.Name)
-                        </td>
+                        <td class="align-left">@request.KeepInViewTypeName</td>
                         <td class="ddMMyyyyhhmm">
-                            @requestDate
+                            @request.OnDate.ToDayOfWeekFormatedDate()
                         </td>
-                        <td class="ddMMyyyyhhmm">
-                            @request.CreatedDate.ToShortFormatedDate()
-                        </td>
+                        <td>@fromTime</td>
+                        <td>@toTime</td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
                         {
                             <td class="tooltip" title="@request.Remark">
@@ -83,22 +85,64 @@
                                 -
                             </td>
                         }
-                        @Html.Partial("_SharedRequestStatus", request)
 
+                        <td>@request.VerifiedBy.NickName</td>
+                        <td>@request.ApprovedBy.NickName</td>
+
+                        <td class="ddMMyyyyhhmm">
+                            @request.CreatedDate.ToShortFormatedDate()
+                        </td>
+                        @RenderRequestStatus(request)
                         <td>
-                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                            <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.RequestId">
                                 @Labels.View
                             </a>
                         </td>
                     </tr>
-                }
-            </tbody>
                     }
-                    else
-                    {
-                        @RazorHelper.DisplayNoInformation(colspan: 12);
-                    }
-    </table>
-                    }
-@RazorHelper.EmployeeProcessMenu()
-<div id="dialoghistorycontent" />
+                </tbody>
+            }
+            else
+            {
+                @RazorHelper.DisplayNoInformation(colspan: 12);
+            }
+        </table>
+    }
+    @RazorHelper.EmployeeProcessMenu()
+    <div id="dialoghistorycontent" />
+
+    @helper RenderRequestStatus(KeepInViewModel request)
+    {
+        switch (request.Status.Id)
+        {
+            case (byte)CurrentRequestStatus.Pending:
+                <td>
+                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip @request.Status.ToString()">@request.Status.ToString()</a>
+                </td>
+                break;
+            case (byte)CurrentRequestStatus.Verified:
+            case (byte)CurrentRequestStatus.NotVerified:
+                <td>
+                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                </td>
+                break;
+            case (byte)CurrentRequestStatus.Approved:
+            case (byte)CurrentRequestStatus.Rejected:
+                <td>
+                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                </td>
+                break;
+
+            case (byte)CurrentRequestStatus.Processed:
+            case (byte)CurrentRequestStatus.Void:
+                <td>
+                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+                </td>
+                break;
+            default:
+                <td>
+                    <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+                </td>
+                break;
+        }
+    }

@@ -140,6 +140,10 @@
     <Compile Include="Postnatal\UpdatePostnatalCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewHistoryByIdCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
+    <Compile Include="Request\KeepInView\DeleteKeepInViewRequestCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Role\GetRolesByUserIdCriteria.cs" />

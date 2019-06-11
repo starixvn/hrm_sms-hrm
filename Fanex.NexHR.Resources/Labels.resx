@@ -1701,4 +1701,10 @@
   <data name="Relationship" xml:space="preserve">
     <value>Relationship</value>
   </data>
+   <data name="EditKeepInViewRequest" xml:space="preserve">
+    <value>Edit Keep In View Request</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Log Date</value>
+  </data>
 </root>

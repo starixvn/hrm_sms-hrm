@@ -68,6 +68,7 @@ var KIVRequest = (function ($) {
             KIVRequest.date.attr('readonly', 'readonly');
             KIVRequest.bindHalfDay();
             KIVRequest.dateChange();
+            KIVRequest.kivTypeChange();
         },
         bindHalfDay: function () {
             if (KIVRequest.halfDay.prop('checked')) {

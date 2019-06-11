@@ -1,8 +1,9 @@
 ﻿@using Fanex.NexHR.ViewModels.Request
 @model KeepInViewRequestViewModel
-@using System.Web.Mvc.Html5;
+@using Fanex.NexHR.Resources
+
 @{
-    ViewBag.Title = "Update My KIV Request";
+    ViewBag.Title = @Labels.EditKeepInViewRequest;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -12,11 +13,11 @@
     @Url.CombresLink("keepinviewcreatejs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> 
+    <a class="step">Personal</a>
     <a class="step" href="@Url.Action("employeeview", "keepinview")">@Labels.MyKeepInViewRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@Labels.Edit</h2>
+    <h2>@ViewBag.Title</h2>
 <div class="bunhat">
     @using (Html.BeginForm())
     {
@@ -24,9 +25,9 @@
 
         if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
-        <div class="success">@Messages.RequestUpdated</div> 
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@Model.Date.Year" />
+            <div class="success">@Messages.RequestUpdated</div>
+            <input type="hidden" id="successed" value="true" />
+            <input type="hidden" id="year" value="@Model.Date.Year" />
         }
         <div class="formrow">
             <div class="label">
@@ -34,6 +35,29 @@
             </div>
             <div class="input">
                 @Html.DisplayFor(model => model.RefNo)
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.KeepInViewType, Labels.KIVType)
+            </div>
+            <div class="input">
+                <div class="radio-form">
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(model => model.KeepInViewType, 1)
+                            @Labels.ByDay
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            @Html.RadioButtonFor(model => model.KeepInViewType, 2)
+                            @Labels.ByHour
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="clear">
             </div>
@@ -54,7 +78,7 @@
             </div>
             <div class="input">
                 @if (hasOnBehalfOthersPermission)
-                { 
+                {
                     @Html.EditorFor(model => model.Employee)
                 }
                 else
@@ -97,16 +121,6 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Shift, Labels.Shift)
-            </div>
-            <div class="input">
-                <span id="shiftName">@Html.DisplayFor(model => model.Shift)</span>
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
                 @Html.LabelFor(model => model.VerifierId)
             </div>
             <div class="input">
@@ -139,12 +153,10 @@
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.Employee)
-				@Html.HiddenFor(model => model.RequestId)
-                @Html.HiddenFor(model => model.Shift)
-                @Html.HiddenFor(model => model.ShiftId)
+                @Html.HiddenFor(model => model.RequestId)
             </div>
             <div class="input">
-                <input type="submit" value="@Labels.Update"/>
+                <input type="submit" value="@Labels.Update" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

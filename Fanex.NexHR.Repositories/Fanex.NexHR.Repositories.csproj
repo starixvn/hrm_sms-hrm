@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="DepartmentRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
+    <Compile Include="Interfaces\IKeepInViewRequestRepository.cs" />
     <Compile Include="Interfaces\IMenuRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
     <Compile Include="Interfaces\IDisciplineRepository.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Interfaces\IReportRepository.cs" />
     <Compile Include="EmployeeRepository.cs" />
     <Compile Include="Interfaces\IScheduleArrangeRepository.cs" />
+    <Compile Include="KeepInViewRequestRepository.cs" />
     <Compile Include="ScheduleArrangeRepository.cs" />
     <Compile Include="MenuRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">

@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -10,7 +9,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -20,32 +18,26 @@
         private readonly IKeepInViewRequestService keepInViewRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
-        private readonly IShiftService shiftService;
 
         public KeepInViewController(
             ISessionService sessionService,
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
-            IBaseService baseService,
-            IShiftService shiftService) : base(sessionService)
+            IBaseService baseService) : base(sessionService)
         {
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
-            this.shiftService = shiftService;
         }
 
         public ActionResult Create()
         {
-            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, DateTime.Now);
-
             var model = new KeepInViewRequestViewModel
             {
                 Employee = sessionService.Employee.Nickname,
                 EmployeeId = sessionService.Employee.Id,
                 Date = DateTime.Now.Date,
-                Shift = (shift == null) ? string.Empty : shift.Name,
-                ShiftId = (shift == null) ? 0 : shift.Id,
+                KeepInViewType = (int)KeepInViewTypes.KeepInViewByDay,
                 VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -70,15 +62,15 @@
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
                         KeepInViewType = model.KeepInViewType,
-                        IsHalfDay = model.HalfDay,
+                        IsHalfDay = model.HalfDay, 
                         RefNo = model.RefNo,
                         Remark = model.Remark,
-                        ShiftName = model.Shift,
-                        FromTime = (fromTime < toTime && model.CrossDay) ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
+                        FromTime = (fromTime < toTime && model.CrossDay) 
+                            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
                             : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                         ToTime = model.CrossDay
-                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
+                            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
                         CreatedBy = sessionService.Employee.Id
@@ -105,11 +97,11 @@
 
         public ActionResult Update(long id)
         {
-            var criteria = new GetRequestByIdCriteria
+            var criteria = new GetKeepInViewRequestByIdCriteria
             {
                 RequestId = id
             };
-            RequestEntity request = requestService.GetRequestById(criteria);
+            KeepInViewModel request = keepInViewRequestService.GetById(criteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -123,13 +115,12 @@
                     HalfDay = request.IsHalfDay,
                     Employee = sessionService.Employee.Nickname,
                     EmployeeId = sessionService.Employee.Id,
-                    Date = request.RequestedDate,
-                    Shift = request.FromShift.Name,
-                    ShiftId = request.FromShift.Id,
+                    Date = request.OnDate,
+                    KeepInViewType = request.KeepInViewTypeId,
                     ApproverId = request.ApprovedBy.Id,
                     VerifierId = request.VerifiedBy.Id,
                     Remark = request.Remark,
-                    CrossDay = request.CrossDay,
+                    CrossDay = (request.ToTime - request.OnDate).Days > 0,
                     FromTime = request.FromTime.ToString("HH:mm"),
                     ToTime = request.ToTime.ToString("HH:mm"),
                     VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
@@ -155,12 +146,9 @@
                         RequestId = model.RequestId,
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
-                        RequestType = (int)RequestType.KeepInView,
-                        RefNo = model.RefNo,
+                        KeepInViewType = model.KeepInViewType,
                         Remark = model.Remark,
                         IsHalfDay = model.HalfDay,
-                        ShiftId = model.ShiftId,
-                        ShiftName = model.Shift,
                         FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                         ToTime = model.CrossDay
                         ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
@@ -189,6 +177,20 @@
             return View(model);
         }
 
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            var criteria = new DeleteKeepInViewRequestCriteria
+            {
+                RequestId = id
+            };
+
+            keepInViewRequestService.SendMailForDeleteSuccessfully(id);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
+            return Json(result);
+        }
+
         [HttpGet]
         public ActionResult EmployeeView()
         {
@@ -200,21 +202,25 @@
         {
             ViewBag.Year = year;
 
-            var criteria = new GetRequestCriteria
+            var criteria = new GetKeepInViewRequestByDateCriteria
             {
                 EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31),
-                RequestType = (int)RequestFilter.KeepInView,
-                IsQueryByCreatedDate = false,
-                RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = sessionService.Employee.Id,
-                IsLocal = null
+                ToDate = new DateTime(year, 12, 31)
             };
 
-            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
+            var requests = keepInViewRequestService.GetByDate(criteria);
+            return View(requests);
+        }
 
-            return View(entityList);
+        public ActionResult ViewHistory(long id)
+        {
+            var criteria = new GetKeepInViewHistoryByIdCriteria
+            {
+                RequestId = id
+            };
+            var requests = keepInViewRequestService.GetHistoryById(criteria);
+            return View(requests);
         }
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)

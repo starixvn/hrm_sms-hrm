@@ -18,7 +18,7 @@
 
         public string RefNo { get; set; }
 
-        public int KeepInViewType { get; set; }
+        public short KeepInViewType { get; set; }
 
         public bool HalfDay { get; set; }
 
@@ -36,11 +36,6 @@
         [AllowHtml]
         [Required(ErrorMessage = "The Remark field is required.")]
         public string Remark { get; set; }
-
-        public string Shift { get; set; }
-
-        [Required]
-        public int ShiftId { get; set; }
 
         [Display(Name = "Verified by")]
         [Required(ErrorMessage = "The Verified by field is required.")]

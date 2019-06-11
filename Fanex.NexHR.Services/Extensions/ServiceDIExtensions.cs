@@ -20,6 +20,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IDisciplineRepository, DisciplineRepository>();
             container.RegisterType<IMenuRepository, MenuRepository>();
             container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
+            container.RegisterType<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();

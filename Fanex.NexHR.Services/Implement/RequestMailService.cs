@@ -33,7 +33,6 @@
         private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
         private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
-        private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
         private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
         #endregion constant
@@ -129,6 +128,7 @@
             }
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
+            emailModel.Sender = SenderEmail;
             return emailModel;
         }
 
@@ -274,10 +274,6 @@
                 case (short)RequestType.CheckIn:
                 case (short)RequestType.CheckOut:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOutCancelation);
-                    break;
-
-                case (short)RequestType.KeepInView:
-                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInViewCancelation);
                     break;
 
                 default:

@@ -1294,6 +1294,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Keep In View Request.
+        /// </summary>
+        public static string EditKeepInViewRequest {
+            get {
+                return ResourceManager.GetString("EditKeepInViewRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Memo.
         /// </summary>
         public static string EditMemo {
@@ -2298,6 +2307,15 @@ namespace Fanex.NexHR.Resources {
         public static string LocalLeave {
             get {
                 return ResourceManager.GetString("LocalLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Date.
+        /// </summary>
+        public static string LogDate {
+            get {
+                return ResourceManager.GetString("LogDate", resourceCulture);
             }
         }
         
