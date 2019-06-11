@@ -275,7 +275,6 @@
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
     <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
-    <Content Include="Scripts\Views\Team\team.discipline.setting.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Report\report.manpower.css" />
@@ -820,6 +819,7 @@
     <Content Include="wwwroot\dist\js\main.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\js\section.edit.discipline.manager.js" />
     <Content Include="wwwroot\dist\styles\employee.details.css" />
     <Content Include="wwwroot\dist\styles\employee.details.js" />
     <Content Include="wwwroot\dist\styles\employee.edit.css" />
@@ -882,6 +882,10 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
@@ -1245,7 +1249,9 @@
     <Content Include="ExcelTemplates\DriverPickup.xlsx" />
     <Content Include="Views\Shared\_IFrame.cshtml" />
     <Content Include="Views\ScheduleArrange\IFrame.cshtml" />
+    <Content Include="wwwroot\sources\styles\components\_react-autocomplete-wrapper.scss" />
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
+    <Content Include="wwwroot\dist\js\section.edit.discipline.manager.js.map" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
@@ -1275,7 +1281,7 @@
     <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
     <Content Include="Scripts\Views\Team\team.index.js" />
     <Content Include="Views\Employee\_ListEmployee.cshtml" />
-    <Content Include="Views\Team\DisciplineSetting.cshtml" />
+    <Content Include="Views\Team\DisciplineManager.cshtml" />
     <Content Include="Views\Employee\DisciplineSetting.cshtml" />
     <Content Include="Views\Employee\_ContactList.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
@@ -1319,6 +1325,8 @@
     <Content Include="wwwroot\sources\styles\vendors\_multiselect.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_weekpicker.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_autocomplete.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\edit.discipline.manager.scss" />
+    <None Include="wwwroot\sources\styles\pages\section\supervisor.index.scss" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\Google.Protobuf.dll" />

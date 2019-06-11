@@ -1,0 +1,59 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/table';
+@import '../../layout/toastify';
+@import '../../components/icon';
+@import '../../components/react-autocomplete-wrapper';
+
+.btn {
+    font-size: inherit;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-right: 5px;
+
+    &.btn-cancel {
+        background: #fff;
+        color: #545454;
+        border: 1px solid #545454;
+        transition: all .2s ease-in;
+
+        &:hover, &:focus, &:active {
+            color: #fff;
+            background: lighten(#324476, 10%);
+            border-color: lighten(#324476, 10%);
+        }
+    }
+}
+
+.table {
+    max-width: 600px;
+
+    .header-control {
+        display: flex;
+        align-items: center;
+
+        .react-autocomplete-wrapper {
+            width: unset;
+            margin: 0 5px;
+
+            .form-control {
+                height: 28px;
+                padding: 6px;
+            }
+        }
+    }
+
+    .cell-name {
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .customize-order {
+                &.dropdown .dropdown-menu {
+                    min-width: 100px;
+                }
+            }
+        }
+    }
+}

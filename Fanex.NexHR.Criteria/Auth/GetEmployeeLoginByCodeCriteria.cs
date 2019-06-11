@@ -6,7 +6,7 @@
     {
         public string Code { get; set; }
 
-        public override string GetSettingKey() => "Auth_GetEmployeeLoginByCode";
+        public override string GetSettingKey() => "Employee_GetEmployeeLoginByCode";
 
         public override bool IsValid() => !string.IsNullOrWhiteSpace(Code);
     }

@@ -17,12 +17,15 @@ module.exports = {
         [`${styleDistPath}/employee.request`]: `${styleSourcePath}/pages/request/employee.request.scss`,
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function/index.scss`,
+        [`${styleDistPath}/section.supervisor.index`]: `${styleSourcePath}/pages/section/supervisor.index.scss`,
+        [`${styleDistPath}/section.edit.discipline.manager`]: `${styleSourcePath}/pages/section/edit.discipline.manager.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
-        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`
+        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.js`,
+        [`${jsDistPath}/section.edit.discipline.manager`]: `${jsSourcePath}/section/discipline-manager/index.jsx`
     }
 };

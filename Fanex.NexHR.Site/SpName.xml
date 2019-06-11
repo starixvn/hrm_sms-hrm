@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions>
   <Function Name="Auth">
-    <Setting Key="Auth_GetEmployeeLoginByCode" SpName="Auth_GetEmployeeLoginByCode" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Employee_GetEmployeeLoginByCode" SpName="Employee_GetEmployeeLoginByCode" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Employee">
     <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">

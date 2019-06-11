@@ -1,23 +1,23 @@
 ﻿@model List<TeamSupervisorModel>
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.SectionSupervisor;
-}
-@section css{
-    @Url.CombresLink("teamsupervisorcss")
-}
-@section js{
-    @Url.CombresLink("teamsupervisorjs")
+    var teamId = ViewBag.TeamId;
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a href="@Url.Action("index", "team")" class="step">@Labels.SectionManagement</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
+
+@section css{
+    <link href="~/wwwroot/dist/styles/section.supervisor.index.css" rel="stylesheet" />
+}
+
+<h2 class="page-title">Section: @ViewBag.TeamCode</h2>
 <table class="table table-custom" style="width: auto; min-width: 800px;">
     <thead>
         <tr>
-            <th>@Labels.Section</th>
             <th>@Labels.Roles</th>
             <th>@Labels.Nick</th>
             <th>@Labels.Edit</th>
@@ -25,21 +25,10 @@
     </thead>
     @if (Model != null)
     {
-        var firstRow = true;
         <tbody>
-            @Html.Hidden("TeamId", (int)ViewBag.TeamId)
             @foreach (TeamSupervisorModel item in Model)
             {
                 <tr>
-                    @if (firstRow)
-                    {
-                        firstRow = false;
-
-                        <td rowspan="5">
-                            @item.Code
-                        </td>
-                    }
-
                     <td class="align-left">
                         @item.ActionName
                     </td>
@@ -50,19 +39,19 @@
                         @switch (item.ActionType)
                         {
                             case (short)RoleSystem.ShiftManager:
-                                <a href="@Url.Action("ShiftManager", "Team", new { TeamId = ViewBag.TeamId })">
+                                <a href="@Url.Action("ShiftManager", "Team", new { TeamId = teamId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;
                             case (short)RoleSystem.Verifier:
                             case (short)RoleSystem.Approver:
                             case (short)RoleSystem.ActingSupervisor:
-                                <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = ViewBag.TeamId, SupervisorRole = item.ActionType })">
+                                <a href="@Url.Action("ManageSupervisor", "Team", new { TeamId = teamId, SupervisorRole = item.ActionType })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;
                             case (short)RoleSystem.DisciplineManager:
-                                <a href="@Url.Action("DisciplineSetting", "Team", new { TeamId = ViewBag.TeamId })">
+                                <a href="@Url.Action("DisciplineManager", "Team", new { TeamId = teamId })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;

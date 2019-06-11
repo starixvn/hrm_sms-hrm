@@ -29,7 +29,6 @@ export default class App extends Component {
             employeeOptions: []
         };
 
-        this.originalSchedules = [];
         this.groupOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
