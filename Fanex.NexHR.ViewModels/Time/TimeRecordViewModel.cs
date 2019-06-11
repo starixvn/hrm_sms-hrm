@@ -9,7 +9,7 @@
         public int EmpId { get; set; }
 
         [Required]
-        public string EmployeeName { get; set; }
+        public string Employee { get; set; }
 
         public DateTime RecordTime { get; set; }
 
