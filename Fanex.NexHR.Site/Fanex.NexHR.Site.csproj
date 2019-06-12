@@ -821,6 +821,8 @@
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js" />
     <Content Include="wwwroot\dist\js\section.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\js\section.edit.shift.manager.js" />
+    <Content Include="wwwroot\dist\js\section.edit.supervisor.js" />
     <Content Include="wwwroot\dist\styles\employee.details.css" />
     <Content Include="wwwroot\dist\styles\employee.details.js" />
     <Content Include="wwwroot\dist\styles\employee.edit.css" />
@@ -849,6 +851,8 @@
     <Content Include="wwwroot\dist\styles\schedule.arrange.js" />
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.css" />
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\styles\section.edit.supervisor.css" />
+    <Content Include="wwwroot\dist\styles\section.edit.supervisor.js" />
     <Content Include="wwwroot\dist\styles\section.supervisor.index.css" />
     <Content Include="wwwroot\dist\styles\section.supervisor.index.js" />
     <Content Include="wwwroot\dist\styles\shiftstatistic.css" />
@@ -1269,6 +1273,9 @@
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
     <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
     <Content Include="Views\Team\ManageSupervisor.cshtml" />
+    <Content Include="wwwroot\dist\js\section.edit.shift.manager.js.map" />
+    <Content Include="wwwroot\dist\js\section.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\styles\section.edit.supervisor.js.map" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
