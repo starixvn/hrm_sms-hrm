@@ -60,9 +60,9 @@ $(document).ready(function () {
         });
     });
 
-    let selectNavItem = $('#' + $('#CurrentUrlSelected').val());
-    if (selectNavItem !== undefined) {
-        selectNavItem.addClass('selected');
+    const currentUrlSelected = $('#CurrentUrlSelected').val();
+    if (currentUrlSelected) {
+        $('#' + currentUrlSelected).addClass('selected');
     }
 
     //show/hide navigation section
