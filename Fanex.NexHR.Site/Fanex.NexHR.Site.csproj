@@ -259,7 +259,6 @@
     <Content Include="Scripts\Views\Department\department.js" />
     <Content Include="Scripts\Views\Employee\user.management.js" />
     <Content Include="Scripts\Views\Employee\employee.index.js" />
-    <Content Include="Scripts\Views\Employee\employee.discipline.setting.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
@@ -324,8 +323,6 @@
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
     <Content Include="Scripts\Views\Overtime\myovertimerequest.js" />
     <Content Include="Scripts\Views\Overtime\yearlyovertimereport.js" />
-    <Content Include="Scripts\Views\employeeshiftmanager.js" />
-    <Content Include="Scripts\Views\employeesupervisor.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
@@ -815,6 +812,9 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="wwwroot\dist\js\employee.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.shift.manager.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.supervisor.js" />
     <Content Include="wwwroot\dist\js\employee.request.js" />
     <Content Include="wwwroot\dist\js\function.index.js" />
     <Content Include="wwwroot\dist\js\main.js" />
@@ -829,8 +829,6 @@
     <Content Include="wwwroot\dist\styles\employee.edit.js" />
     <Content Include="wwwroot\dist\styles\employee.request.css" />
     <Content Include="wwwroot\dist\styles\employee.request.js" />
-    <Content Include="wwwroot\dist\styles\employee.shift.manager.css" />
-    <Content Include="wwwroot\dist\styles\employee.shift.manager.js" />
     <Content Include="wwwroot\dist\styles\error.css" />
     <Content Include="wwwroot\dist\styles\error.js" />
     <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.svg" />
@@ -865,6 +863,18 @@
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\supervisor\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\index.jsx" />
@@ -1079,7 +1089,7 @@
     <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />
     <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
     <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
-    <Content Include="Views\Employee\Supervisor.cshtml" />
+    <Content Include="Views\Employee\ManageSupervisor.cshtml" />
     <Content Include="Views\Employee\MultiRoleManagementDashboard.cshtml" />
     <Content Include="Views\Employee\ShiftManager.cshtml" />
     <Content Include="Views\Team\ShiftManager.cshtml" />
@@ -1239,11 +1249,6 @@
     <Content Include="wwwroot\dist\js\function.index.js.map" />
     <Content Include="wwwroot\dist\js\main.js.map" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js.map" />
-    <Content Include="wwwroot\dist\styles\employee.details.js.map" />
-    <Content Include="wwwroot\dist\styles\employee.edit.js.map" />
-    <Content Include="wwwroot\dist\styles\employee.request.js.map" />
-    <Content Include="wwwroot\dist\styles\employee.shift.manager.js.map" />
-    <Content Include="wwwroot\dist\styles\error.js.map" />
     <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.eot" />
     <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.ttf" />
     <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.woff" />
@@ -1256,13 +1261,6 @@
     <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="wwwroot\dist\styles\function.index.js.map" />
-    <Content Include="wwwroot\dist\styles\main.js.map" />
-    <Content Include="wwwroot\dist\styles\main_new.js.map" />
-    <Content Include="wwwroot\dist\styles\report.attendance.js.map" />
-    <Content Include="wwwroot\dist\styles\schedule.arrange.js.map" />
-    <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
-    <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="wwwroot\dist\vendors\react-manifest.json" />
     <Content Include="ExcelTemplates\DriverPickup.xlsx" />
     <Content Include="Views\Shared\_IFrame.cshtml" />
@@ -1270,15 +1268,28 @@
     <Content Include="wwwroot\sources\styles\components\_react-autocomplete-wrapper.scss" />
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.discipline.manager.js.map" />
-    <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
-    <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
     <Content Include="Views\Team\ManageSupervisor.cshtml" />
     <Content Include="wwwroot\dist\js\section.edit.shift.manager.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.shift.manager.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.details.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.request.js.map" />
+    <Content Include="wwwroot\dist\styles\error.js.map" />
+    <Content Include="wwwroot\dist\styles\function.index.js.map" />
+    <Content Include="wwwroot\dist\styles\main.js.map" />
+    <Content Include="wwwroot\dist\styles\main_new.js.map" />
+    <Content Include="wwwroot\dist\styles\report.attendance.js.map" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.js.map" />
+    <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
+    <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
-    <None Include="wwwroot\sources\styles\pages\employee\employee.shift.manager.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\function\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\error.scss" />
@@ -1306,7 +1317,7 @@
     <Content Include="Scripts\Views\Team\team.index.js" />
     <Content Include="Views\Employee\_ListEmployee.cshtml" />
     <Content Include="Views\Team\DisciplineManager.cshtml" />
-    <Content Include="Views\Employee\DisciplineSetting.cshtml" />
+    <Content Include="Views\Employee\DisciplineManager.cshtml" />
     <Content Include="Views\Employee\_ContactList.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\Create.cshtml" />
@@ -1358,6 +1369,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.12.0.8217\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

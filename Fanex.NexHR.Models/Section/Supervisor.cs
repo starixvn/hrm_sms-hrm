@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NexHR.Models.Section
 {
-    public class DisciplineManager
+    public class Supervisor
     {
         public int OwnerId { get; set; }
         public string Nickname { get; set; }

@@ -1,7 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.DisciplineManager;
+    ViewBag.Title = "Edit Section Supervisor";
     var sectionId = (int)ViewBag.SectionId;
+    var roleId = (short)ViewBag.RoleId;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/section.edit.discipline.manager.css" rel="stylesheet" />
@@ -17,5 +18,5 @@
 }
 
 @Html.Hidden("SectionId", sectionId)
-@Html.Hidden("RoleId", (short)ViewBag.RoleId)
+@Html.Hidden("RoleId", roleId)
 <div id="discipline-wrapper"></div>

@@ -99,6 +99,7 @@
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\InsertWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
+    <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
     <Compile Include="Function\AssignFunctionToRoleCriteria.cs" />
     <Compile Include="Function\GetFunctionsByRoleIdCriteria.cs" />
@@ -148,8 +149,6 @@
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
-    <Compile Include="Supervisor\InsertShiftManagerCriteria.cs" />
-    <Compile Include="Supervisor\UpdateSupervisorCriteria.cs" />
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\GetListEmployeeClaimOvertimeCriteria.cs" />
