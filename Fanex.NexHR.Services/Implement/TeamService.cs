@@ -68,13 +68,13 @@
             return baseService.GetData<TeamSupervisorModel>(criteria).ToList();
         }
 
-        public IEnumerable<DisciplineManager> GetDisciplineManagerBySectionId(int sectionId)
+        public IEnumerable<Supervisor> GetDisciplineManagerBySectionId(int sectionId)
         {
             var criteria = new GetDisciplineManagerByTeamIdCriteria
             {
                 GroupId = sectionId
             };
-            return baseService.GetData<DisciplineManager>(criteria).ToList();
+            return baseService.GetData<Supervisor>(criteria).ToList();
         }
 
         public CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)

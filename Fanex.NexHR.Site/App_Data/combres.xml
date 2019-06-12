@@ -116,29 +116,6 @@
       <resource path="~/scripts/Libs/birthdaypicker.js" />
     </resourceSet>
 
-    <resourceSet name="employeesupervisorcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/scripts/chosen/chosen.css" />
-    </resourceSet>
-
-    <resourceSet name="employeeshiftmanagercss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/scripts/chosen/chosen.css" />
-      <resource path="~/wwwroot/dist/styles/employee.shift.manager.css" />
-    </resourceSet>
-
-    <resourceSet name="employeesupervisorjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employeesupervisor.js" />
-    </resourceSet>
-
-    <resourceSet name="employeesshiftmanagerjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employeeshiftmanager.js" />
-    </resourceSet>
-
     <resourceSet name="manpowerreportcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report/report.manpower.css" />
@@ -671,14 +648,6 @@
       <resource path="~/scripts/views/report/report.weekendleave.detail.js" />
     </resourceSet>
 
-    <resourceSet name="employeedisciplinesettingcss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-
-    <resourceSet name="employeedisciplinesettingjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee/employee.discipline.setting.js" />
-    </resourceSet>
     <resourceSet name="menujs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/menu.js" />

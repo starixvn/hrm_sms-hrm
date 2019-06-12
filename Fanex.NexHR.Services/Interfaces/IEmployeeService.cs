@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Country;
@@ -11,6 +11,7 @@
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.AnnualLeave;
 
@@ -62,8 +63,10 @@
 
         IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria);
 
-        IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria);
+        IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
 
         IList<Employee> GetEmployeeByGender(string query, int gender);
+        
+        CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
     }
 }

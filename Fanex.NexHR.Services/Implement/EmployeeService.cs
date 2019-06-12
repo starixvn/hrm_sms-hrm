@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
@@ -14,6 +16,7 @@
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.ViewModels.AnnualLeave;
@@ -207,9 +210,25 @@
             return baseService.GetData<SupervisorNameModel>(criteria).ToList();
         }
 
-        public IList<SupervisorModel> GetDisciplineSettingByEmployeeId(GetDisciplineSettingByEmployeeId criteria)
+        public IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId)
         {
-            return baseService.GetData<SupervisorModel>(criteria).ToList();
+            var criteria = new GetDisciplineSettingByEmployeeId
+            {
+                EmpId = employeeId
+            };
+            return baseService.GetData<Supervisor>(criteria).ToList();
+        }
+
+        public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        {
+            var criteria = new EditEmployeeSupervisorCriteria
+            {
+                EmployeeId = employeeId,
+                ActorId = actorId,
+                RoleId = roleId,
+                SupervisorXml = supervisors.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public IList<Employee> GetEmployeeByGender(string query, int gender)

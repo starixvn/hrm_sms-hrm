@@ -1,120 +1,23 @@
-﻿@model ShiftManagerViewModel
-@{
-    ViewBag.Title = Labels.UpdateShiftManager;
+﻿@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Edit Employee Supervisor";
+    var employeeId = (int)ViewBag.EmployeeId;
+    var roleId = (short)ViewBag.RoleId;
 }
 @section css{
-    @Url.CombresLink("employeeshiftmanagercss")
+    <link href="~/wwwroot/dist/styles/section.edit.discipline.manager.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("employeesshiftmanagerjs")
+    <script src="~/wwwroot/dist/js/employee.edit.shift.manager.js"></script>
 }
 @section Breadcrumb
 {
-    @if (Model.ForView == "Employee")
-    {
-        <a class="step" href="javascript:;">@Labels.HR</a>
-        <span class="step">
-            <a href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
-        </span>
-        <span class="step">
-            <a href="/employee/edit/@Model.EmployeeId">@Labels.EmployeePersonalInformation</a>
-        </span>
-    }
-    else
-    {
-        <a class="step">@Labels.HRSpace</a>
-        <a href="@Url.Action("index", "team")" class="step">@Labels.SectionManagement</a>
-        <a href="~/team/TeamSupervisor/@Model.TeamId" class="step">@Labels.SectionSupervisors</a>
-    }
-    <a class="step">@Model.DisplayTitle</a>
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a href="@Url.Action("usermanagement", "employee")" class="step">@Labels.EmployeeManagement</a>
+    <a href="@Url.Action("edit", "employee", new { id = employeeId })" class="step">@Labels.EmployeePersonalInformation</a>
+    <a class="step">@Labels.ShiftArrangement</a>
 }
-<table id="tblSupervisor" class="table table-custom">
-    <thead>
-        <tr>
-            <th colspan="4" class="align-left">
-                <p class="title">@Labels.Employee</p>
-                <span class="control">
-                    @Html.TextBox("Supervisor", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
-                </span>
-                @Html.Hidden("SupervisorId")
-                @Html.Hidden("SupervisorTeam")
-                <span class="add">
-                    <a id="lknAdd" href="javascript:;">+ Add to list</a>
-                </span>
-            </th>
-        </tr>
-        <tr>
-            <th colspan="4" class="align-left">
-                <p class="title">@Labels.Team</p>
-                <span class="control">
-                    <select id="group" multiple="multiple" class="team-select">
-                        @foreach (Team item in ViewBag.Groups)
-                        {
-                            <option value="@item.Id">@item.Name</option>
-                        }
-                    </select>
-                </span>
-                <span class="add">
-                    <a id="lnkAddEmployeesOfTeam" href="javascript:;">+ Add all members to list</a>
-                </span>
-            </th>
-        </tr>
-        <tr>
-            <th>
-                @Labels.Priority
-            </th>
-            <th>
-                @Labels.Employee
-            </th>
-            <th>
-                @Labels.Team
-            </th>
-            <th>
-                <a id="removeAll" href="javascript:;">Remove All</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.ShiftManagerList != null)
-        {
-            foreach (var item in Model.ShiftManagerList)
-            {
-                <tr>
-                    <td>
-                        <a href="javascript:;" class="up">Up |</a>
-                        <a href="javascript:;" class="down">Down |</a>
-                        <a href="javascript:;" class="moveTop">Top</a>
-                    </td>
-                    <td class="align-left" data-id="@item.OwnerId">
-                        @item.NickName (@item.FullName)
-                    </td>
-                    <td class="align-left">
-                        @item.Team
-                    </td>
-                    <td>
-                        <a href="javascript:;" class="lnkremove">Remove</a>
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-<div>
-    @Html.Hidden("EmployeeId", Model.EmployeeId)
-    @Html.Hidden("TeamId", Model.TeamId)
-    @Html.Hidden("SupervisorRole", Model.SupervisorRole)
-    @Html.Hidden("ForView", Model.ForView)
-    <input id="btnSave" type="button" value="Save" />
-    @if (Model.ForView == "Employee")
-    {
-        <a href="/employee/edit/@Model.EmployeeId">
-            <input type="button" value="Back" />
-        </a>
-    }
-    else
-    {
-        <a href="/team/TeamSupervisor/@Model.TeamId">
-            <input type="button" value="Back" />
-        </a>
-    }
-</div>
+
+@Html.Hidden("EmployeeId", employeeId)
+@Html.Hidden("RoleId", roleId)
+<div id="shift-wrapper"></div>

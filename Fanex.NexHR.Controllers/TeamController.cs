@@ -235,7 +235,7 @@
 
             return new CustomJsonResult
             {
-                Data = supervisors.Select(x => new DisciplineManager { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }),
+                Data = supervisors.Select(x => new Supervisor { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }),
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
@@ -252,13 +252,13 @@
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public CustomJsonResult GetDisciplineManagerBySectionId(int sectionId)
         {
-            IEnumerable<DisciplineManager> supervisors = teamService.GetDisciplineManagerBySectionId(sectionId);
+            IEnumerable<Supervisor> supervisors = teamService.GetDisciplineManagerBySectionId(sectionId);
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult EditSectionSupervisor(int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        public CustomJsonResult EditSectionSupervisor(int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
         {
             CommandResult commandResult = teamService.EditSectionSupervisor(sessionService.Employee.Id, sectionId, roleId, supervisors);
 

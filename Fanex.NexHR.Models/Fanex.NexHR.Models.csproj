@@ -139,10 +139,9 @@
     <Compile Include="ScheduleArrange\WeeklyDefaultShift.cs" />
     <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
-    <Compile Include="Section\DisciplineManager.cs" />
+    <Compile Include="Section\Supervisor.cs" />
     <Compile Include="Section\EditSectionSupervisor.cs" />
     <Compile Include="Section\SectionModel.cs" />
-    <Compile Include="Section\SectionSupervisor.cs" />
     <Compile Include="Supervisor\SupervisorReportGroupModel.cs" />
     <Compile Include="Supervisor\SupervisorReportModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorModel.cs" />

@@ -297,7 +297,7 @@
                     @Html.LabelFor(model => model.PickupRemark, Labels.PickupRemark)
                 </div>
                 <div class="input">
-                    @Html.TextAreaFor(model => model.PickupRemark, new { maxlength=200 })
+                    @Html.TextAreaFor(model => model.PickupRemark, new { maxlength = 200 })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -363,7 +363,7 @@
                 <div class="label marginlable">@Labels.VerifiedBy</div>
                 <div class="input">
                     <span id="lstVerifier">@Model.Verifier</span>
-                    @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.Verifier, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "ManageSupervisor", "Employee", new { id = Model.Id, roleId = (short)RoleSystem.Verifier }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -371,7 +371,7 @@
                 <div class="label marginlable">@Labels.ApprovedBy</div>
                 <div class="input">
                     <span id="lstApprover">@Model.Approver</span>
-                    @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.Approver, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "ManageSupervisor", "Employee", new { id = Model.Id, roleId = (short)RoleSystem.Approver }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -379,7 +379,7 @@
                 <div class="label marginlable">@Labels.DisciplineManager</div>
                 <div class="input">
                     <span id="lstDisciplinarian">@Model.Disciplinarian</span>
-                    @Html.ActionLink("Update", "DisciplineSetting", "Employee", new { employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "DisciplineManager", "Employee", new { id = Model.Id }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -506,7 +506,7 @@
                 <div class="label marginlable">@Labels.ShiftArrangement</div>
                 <div class="input">
                     @Model.EmpShiftList
-                    @Html.ActionLink("Update", "ShiftManager", "Employee", new { role = (short)RoleSystem.ShiftManager, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "ShiftManager", "Employee", new { id = Model.Id }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -514,7 +514,7 @@
                 <div class="label marginlable">@Labels.OnBehalfRequest</div>
                 <div class="input">
                     @Model.ActingEmpList
-                    @Html.ActionLink("Update", "Supervisor", "Employee", new { role = (short)RoleSystem.ActingSupervisor, employeeId = Model.Id }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "ManageSupervisor", "Employee", new { id = Model.Id, roleId = (short)RoleSystem.ActingSupervisor }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>

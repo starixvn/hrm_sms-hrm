@@ -20,7 +20,7 @@
 
         IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id);
 
-        IEnumerable<DisciplineManager> GetDisciplineManagerBySectionId(int sectionId);
+        IEnumerable<Supervisor> GetDisciplineManagerBySectionId(int sectionId);
 
         CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
     }

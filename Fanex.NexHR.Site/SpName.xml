@@ -239,10 +239,9 @@
     <Setting Key="Employee_ChangePassword" SpName="Employee_ChangePassword" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetByRole" SpName="Employee_GetByRole" DbName="nexhrx" Plain="0">
     </Setting>
-    <Setting Key="EmployeeSupervisorUpdate" SpName="EmployeeSupervisor_InsertEmpByListOwner" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeSupervisor_Update" SpName="EmployeeSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetRequestByEmpID" SpName="EmployeeSupervisor_GetRequestByEmpID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetListSupervisorByEmpID" SpName="EmployeeSupervisor_GetListSupervisorByEmpID" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeSupervisor_InsertEmpMngShiftList" SpName="EmployeeSupervisor_InsertEmpMngShiftList" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0"></Setting>
