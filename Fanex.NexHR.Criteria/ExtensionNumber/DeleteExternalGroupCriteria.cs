@@ -7,14 +7,8 @@
         [SpParam(SqlParamName = "ExtID")]
         public int ExternalId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "ExtensionNO_DELETE_GroupExternal";
-        }
+        public override string GetSettingKey() => "ExtensionNO_DELETE_GroupExternal";
 
-        public override bool IsValid()
-        {
-            return ExternalId > 0;
-        }
+        public override bool IsValid() => ExternalId > 0;
     }
 }

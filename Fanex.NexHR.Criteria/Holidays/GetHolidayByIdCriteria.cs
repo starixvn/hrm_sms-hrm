@@ -1,19 +1,13 @@
 ﻿namespace Fanex.NexHR.Criteria.Holidays
 {
-    using Data.Repository;
+    using Fanex.Data.Repository;
 
     public class GetHolidayByIdCriteria : CriteriaBase
     {
         public int Id { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Holiday_GetById"; 
-        }
+        public override string GetSettingKey() => "Holiday_GetById";
 
-        public override bool IsValid()
-        {
-            return Id > 0;
-        }
+        public override bool IsValid() => Id > 0;
     }
 }

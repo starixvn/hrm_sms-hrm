@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Services;
-    using Criteria.Holidays;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -16,15 +15,12 @@
     public class HolidayController : BaseController
     {
         private readonly IHolidayService holidayService;
-        private readonly IBaseService baseService;
 
         public HolidayController(
             ISessionService sessionService,
-            IHolidayService holidayService,
-            IBaseService baseService) : base(sessionService)
+            IHolidayService holidayService) : base(sessionService)
         {
             this.holidayService = holidayService;
-            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -32,7 +28,6 @@
         public ActionResult Index(int? year)
         {
             int yearToCheck = year ?? DateTime.Now.Year;
-
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
             ViewBag.Year = yearToCheck;
 
@@ -55,23 +50,12 @@
         {
             if (ModelState.IsValid)
             {
-                var criteria = new UpdateHolidayCriteria
+                CommandResult commandResult = holidayService.Edit(sessionService.Employee.Id, model);
+                ViewBag.Updated = commandResult.IsSuccessful;
+
+                if (!commandResult.IsSuccessful)
                 {
-                    Id = model.Id,
-                    HolidayName = model.HolidayName,
-                    FromDate = model.FromDate,
-                    ToDate = model.ToDate,
-                    ModifiedBy = sessionService.Employee.Id,
-                    ModifiedDate = DateTime.Now
-                };
-
-                var result = baseService.ExecuteNonQuery(criteria);
-
-                ViewBag.Updated = result.IsSuccessful;
-
-                if (!result.IsSuccessful)
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
             else
@@ -100,21 +84,12 @@
         {
             if (ModelState.IsValid)
             {
-                var criteria = new InsertHolidayCriteria
-                {
-                    HolidayName = model.HolidayName,
-                    FromDate = model.FromDate,
-                    ToDate = model.ToDate,
-                    ModifiedBy = sessionService.Employee.Id,
-                    ModifiedDate = DateTime.Now
-                };
-                CommandResult result = baseService.ExecuteNonQuery(criteria);
+                CommandResult commandResult = holidayService.Create(sessionService.Employee.Id, model);
+                ViewBag.Updated = commandResult.IsSuccessful;
 
-                ViewBag.Updated = result.IsSuccessful;
-
-                if (!result.IsSuccessful)
+                if (!commandResult.IsSuccessful)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
             else
@@ -129,15 +104,9 @@
         [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteHolidayCriteria
-            {
-                Id = id,
-                ModifiedBy = sessionService.Employee.Id,
-                ModifiedDate = DateTime.Now
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = holidayService.Delete(sessionService.Employee.Id, id);
 
-            return Json(result);
+            return Json(commandResult);
         }
     }
 }

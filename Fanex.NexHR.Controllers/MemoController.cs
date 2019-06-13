@@ -3,17 +3,15 @@
     using System;
     using System.Configuration;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Memo;
-    using Services;
 
     public class MemoController : BaseController
     {
@@ -21,31 +19,26 @@
         private readonly IMemoService memoService;
         private readonly ILookupDataService lookupDataService;
         private readonly IEmailService emailService;
-        private readonly IBaseService baseService;
 
         public MemoController(
             ISessionService sessionService,
             IMemoService memoService,
             ILookupDataService lookupDataService,
-            IEmailService emailService,
-            IBaseService baseService) : base(sessionService)
+            IEmailService emailService) : base(sessionService)
         {
             this.memoService = memoService;
             this.lookupDataService = lookupDataService;
             this.emailService = emailService;
-            this.baseService = baseService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index()
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
-            var model = new MemoViewModel();
-            var criteria = new GetAllMemoCriteria { Year = model.Year, Category = model.Category };
-
-            model.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
-            model.Memos = memoService.GetAll(criteria);
-
+            var model = new MemoViewModel
+            {
+                MemoCategories = lookupDataService.GetAll(Constants.MemoCategory)
+            };
+            model.Memos = memoService.GetAll(model.Year, model.Category);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
             return View(model);
@@ -55,12 +48,8 @@
         [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index(MemoViewModel model)
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
-            var criteria = new GetAllMemoCriteria { Year = model.Year, Category = model.Category };
-
-            model.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
-            model.Memos = memoService.GetAll(criteria);
-
+            model.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            model.Memos = memoService.GetAll(model.Year, model.Category);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
             return View(model);
@@ -70,11 +59,8 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Edit(int id)
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
-            var getMemoById = new GetMemoByIdCriteria { Id = id };
-            var memo = memoService.GetById(getMemoById);
-
-            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
+            Memo memo = memoService.GetById(id);
+            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
             ViewBag.Updated = false;
 
             return View(memo);
@@ -85,8 +71,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Edit(Memo model)
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
-            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
             if (model.MemoType == UploadMemoType && string.IsNullOrEmpty(model.AttachFile))
             {
                 ViewBag.Updated = false;
@@ -97,32 +82,17 @@
 
             if (ModelState.IsValid)
             {
-                var updateMemoCriteria = new UpdateMemoCriteria
-                {
-                    Id = model.Id,
-                    RefNo = model.RefNo,
-                    Contents = model.Contents,
-                    Subject = model.Subject,
-                    SentTo = model.SentTo,
-                    SentFrom = model.SentFrom,
-                    ForInfo = model.ForInfo,
-                    TotalPages = model.TotalPages,
-                    SentDate = model.SentDate,
-                    Category = model.Category,
-                    MemoType = model.MemoType
-                };
+                CommandResult commandResult = memoService.Edit(model);
+                ViewBag.Updated = commandResult.IsSuccessful;
 
-                CommandResult result = baseService.ExecuteNonQuery(updateMemoCriteria);
-                ViewBag.Updated = result.IsSuccessful;
-
-                if (result.IsSuccessful && updateMemoCriteria.SendMail)
+                if (commandResult.IsSuccessful && model.SendMail)
                 {
-                    SendMail(updateMemoCriteria.Subject, result);
+                    SendMail(model.Subject, commandResult);
                 }
 
-                if (!result.IsSuccessful)
+                if (!commandResult.IsSuccessful)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
             else
@@ -136,7 +106,6 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Create()
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
             var memo = new Memo
             {
                 SentTo = "All Staff",
@@ -147,7 +116,7 @@
                 MemoType = UploadMemoType
             };
 
-            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
             ViewBag.Updated = false;
 
             return View(memo);
@@ -158,40 +127,22 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Create(Memo model)
         {
-            var getAllMemoCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.MemoCategory };
-
-            ViewBag.MemoCategories = lookupDataService.GetAll(getAllMemoCriteria);
+            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
             model.Contents = model.MemoType == UploadMemoType ? model.AttachFile : model.Contents;
 
             if (ModelState.IsValid)
             {
-                var insertMemoCriteria = new InsertMemoCriteria
+                CommandResult commandResult = memoService.Create(model);
+                ViewBag.Updated = commandResult.IsSuccessful;
+
+                if (commandResult.IsSuccessful && model.SendMail)
                 {
-                    RefNo = model.RefNo,
-                    Contents = model.Contents,
-                    Subject = model.Subject,
-                    SentTo = model.SentTo,
-                    SentFrom = model.SentFrom,
-                    SentDate = model.SentDate,
-                    ForInfo = model.ForInfo,
-                    TotalPages = model.TotalPages,
-                    Category = model.Category,
-                    MemoType = model.MemoType,
-                    SendMail = model.SendMail
-                };
-
-                CommandResult result = baseService.ExecuteNonQuery(insertMemoCriteria);
-
-                ViewBag.Updated = result.IsSuccessful;
-
-                if (result.IsSuccessful && insertMemoCriteria.SendMail)
-                {
-                    SendMail(insertMemoCriteria.Subject, result);
+                    SendMail(model.Subject, commandResult);
                 }
 
-                if (!result.IsSuccessful)
+                if (!commandResult.IsSuccessful)
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
             else
@@ -204,13 +155,12 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
-        public JsonResult DeleteMemo(int id)
+        public JsonResult Delete(int id)
         {
-            var criteria = new DeleteMemoCriteria { Id = id };
-            Memo memo = memoService.GetById(new GetMemoByIdCriteria { Id = id });
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            Memo memo = memoService.GetById(id);
+            CommandResult commandResult = memoService.Delete(id);
 
-            if (result.IsSuccessful && memo.MemoType == UploadMemoType)
+            if (commandResult.IsSuccessful && memo.MemoType == UploadMemoType)
             {
                 var allFiles = memo.AttachFile.Split(';');
 
@@ -220,14 +170,13 @@
                 }
             }
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Detail(int id)
         {
-            var criteria = new GetMemoByIdCriteria { Id = id };
-            Memo memo = memoService.GetById(criteria);
+            Memo memo = memoService.GetById(id);
 
             return View(memo);
         }

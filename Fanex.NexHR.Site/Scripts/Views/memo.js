@@ -11,7 +11,7 @@ var Memo = (function ($) {
             var memoId = $self.data("id");
 
             confirm('Are you sure you want to delete this memo?', function () {
-                $.post(_global.root + 'Memo/deletememo', { id: memoId }, function (response) {
+                $.post(_global.root + 'Memo/delete', { id: memoId }, function (response) {
                     if (response.IsSuccessful) {
                         $('#row_' + memoId).remove();
                         autoIndex();

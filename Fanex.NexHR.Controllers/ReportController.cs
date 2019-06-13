@@ -8,7 +8,6 @@
     using Core;
     using Core.Enums;
     using Criteria;
-    using Criteria.Lookup;
     using Criteria.Report;
     using Criteria.Supervisor;
     using Criteria.Time;
@@ -408,12 +407,8 @@
                 ViewBag.Groups = teamService.GetAll();
                 ViewBag.DefaultFromDate = model.FromDate;
                 ViewBag.DefaultToDate = model.ToDate;
-                var getAllJobTitleCriteria = new GetAllLookupDataCriteria
-                {
-                    LookupCode = Constants.JobTitle
-                };
-                IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
-                ViewBag.JobTitles = listJobTitle.Select(j => new SelectListItem
+                IList<LookupData> listJobTitles = lookupDataService.GetAll(Constants.JobTitle);
+                ViewBag.JobTitles = listJobTitles.Select(j => new SelectListItem
                 {
                     Text = j.Name,
                     Value = j.Id.ToString(),

@@ -17,8 +17,12 @@
             this.baseService = baseService;
         }
 
-        public IList<LeaveType> GetAll(GetLeaveTypeCriteria criteria)
+        public IList<LeaveType> GetAll(bool excludeNotShown = true)
         {
+            var criteria = new GetLeaveTypeCriteria
+            {
+                ExcludeNotShown = excludeNotShown
+            };
             IList<LeaveType> leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
             leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
 

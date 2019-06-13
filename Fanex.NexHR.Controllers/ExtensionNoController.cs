@@ -33,7 +33,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ExtensionNumber)]
         public ActionResult Index()
         {
-            IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo(new GetAllExtensionNumberCriteria());
+            IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo();
 
             var model = (from item in lstEntity
                          group item by item.TeamName into g
@@ -86,15 +86,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(bool isInternal, int employeeExtensionId)
         {
-            var getExtensionNoByIdcriteria = new GetExtensionNumberMemberByIdCriteria
-            {
-                IsInternal = isInternal,
-                EmployeeExtensionNoId = employeeExtensionId
-            };
-
-            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(getExtensionNoByIdcriteria);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = isInternal, GroupId = null };
-            IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
+            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(employeeExtensionId, isInternal);
+            IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(isInternal: isInternal);
 
             if (groups != null)
             {
@@ -109,12 +102,7 @@
         public ActionResult Edit(ExtensionNoModel model)
         {
             CheckExternalEmployee(model);
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria
-            {
-                IsInternal = model.IsInternal,
-                GroupId = null
-            };
-            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
+            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: model.IsInternal);
             ViewBag.Group = group.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
             if (ModelState.IsValid)
             {
@@ -146,9 +134,9 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExtensionNumber(int employeeExtensionId)
         {
-            var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = employeeExtensionId };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            return Json(result);
+            CommandResult commandResult = extensionNumberService.DeleteExtensionNumberById(employeeExtensionId);
+
+            return Json(commandResult);
         }
 
         #region External Group
@@ -156,8 +144,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult ManageExternalGroup()
         {
-            var getAllExtensionNoGroupInfo = new GetExtensionNumberGroupInfoCriteria { IsInternal = false };
-            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(getAllExtensionNoGroupInfo);
+            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: false);
 
             return View(group);
         }
@@ -178,12 +165,7 @@
             }
             else
             {
-                var getGroupInfoCriteria = new GetExtensionNumberGroupInfoCriteria
-                {
-                    IsInternal = isInternal,
-                    GroupId = groupId
-                };
-                IEnumerable<ExtensionNoModel> extensionGroups = extensionNumberService.GetAllExtensionGroupInfo(getGroupInfoCriteria);
+                IEnumerable<ExtensionNoModel> extensionGroups = extensionNumberService.GetAllExtensionGroupInfo(groupId, isInternal);
                 groups = extensionGroups.Select(x => new SelectListItem
                 {
                     Text = x.TeamName,
@@ -199,23 +181,18 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult AddNewExternalGroup(string groupName)
         {
-            var criteria = new InsertExternalGroupCriteria
-            {
-                FullName = groupName
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = extensionNumberService.CreateExternalGroup(groupName);
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult DeleteExternalGroup(int groupId)
         {
-            var criteria = new DeleteExternalGroupCriteria { ExternalId = groupId };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = extensionNumberService.DeleteExternalGroup(groupId);
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         [ValidateInput(false)]
@@ -223,14 +200,9 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public JsonResult EditExternalGroup(int groupId, string groupName)
         {
-            var criteria = new UpdateExternalNumberCriteria
-            {
-                ExternalId = groupId,
-                FullName = groupName
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = extensionNumberService.EditExternalGroup(groupId, groupName);
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         #endregion External Group

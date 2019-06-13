@@ -109,8 +109,8 @@
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
     <Compile Include="Holidays\GetHolidaysCriteria.cs" />
-    <Compile Include="Holidays\InsertHolidayCriteria.cs" />
-    <Compile Include="Holidays\UpdateHolidayCriteria.cs" />
+    <Compile Include="Holidays\CreateHolidayCriteria.cs" />
+    <Compile Include="Holidays\EditHolidayCriteria.cs" />
     <Compile Include="Menu\DeleteMenuCriteria.cs" />
     <Compile Include="Menu\GetMenuByIdCriteria.cs" />
     <Compile Include="Menu\GetMenusCriteria.cs" />
@@ -179,8 +179,8 @@
     <Compile Include="Memo\DeleteMemoCriteria.cs" />
     <Compile Include="Memo\GetAllMemoCriteria.cs" />
     <Compile Include="Memo\GetMemoByIdCriteria.cs" />
-    <Compile Include="Memo\InsertMemoCriteria.cs" />
-    <Compile Include="Memo\UpdateMemoCriteria.cs" />
+    <Compile Include="Memo\CreateMemoCriteria.cs" />
+    <Compile Include="Memo\EditMemoCriteria.cs" />
     <Compile Include="Employee\GetMySpaceCriteria.cs" />
     <Compile Include="Request\GetOffDateAndHolidayDateCriteria.cs" />
     <Compile Include="Report\GetEmployeeAttendanceCriteria.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="ExtensionNumber\GetExtensionNumberGroupInfoCriteria.cs" />
     <Compile Include="ExtensionNumber\GetExtensionNumberMemberByIdCriteria.cs" />
     <Compile Include="ExtensionNumber\InsertExtensionNumberCriteria.cs" />
-    <Compile Include="ExtensionNumber\InsertExternalGroupCriteria.cs" />
+    <Compile Include="ExtensionNumber\CreateExternalGroupCriteria.cs" />
     <Compile Include="ExtensionNumber\UpdateExtensionNumberMemberCriteria.cs" />
     <Compile Include="ExtensionNumber\UpdateExternalNumberCriteria.cs" />
     <Compile Include="Report\GetReportWorkingHourSummaryCriteria.cs" />

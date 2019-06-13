@@ -3,8 +3,10 @@
     using System;
     using Fanex.Data.Repository;
 
-    public class InsertMemoCriteria : CriteriaBase
+    public class EditMemoCriteria : CriteriaBase
     {
+        public int Id { get; set; }
+
         public string RefNo { get; set; }
 
         public string Contents { get; set; }
@@ -26,17 +28,11 @@
         [SpParam(SqlParamName = "Type")]
         public int MemoType { get; set; }
 
-        [SpParam(Ignored  = true)]
+        [SpParam(Ignored = true)]
         public bool SendMail { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Memo_Insert";
-        }
+        public override string GetSettingKey() => "Memo_Update";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => Id > 0;
     }
 }

@@ -6,14 +6,8 @@
     {
         public int Id { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Memo_GetById";
-        }
+        public override string GetSettingKey() => "Memo_GetById";
 
-        public override bool IsValid()
-        {
-            return Id > 0;
-        }
+        public override bool IsValid() => Id > 0;
     }
 }

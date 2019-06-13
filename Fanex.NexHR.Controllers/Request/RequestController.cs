@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -92,16 +91,6 @@
             GetRequests(request);
 
             return View("EmployeeRequest", request);
-        }
-
-        private IList<LeaveType> GetLeaveType()
-        {
-            var criteria = new GetLeaveTypeCriteria
-            {
-                ExcludeNotShown = true
-            };
-            IList<LeaveType> leaveTypes = leaveTypeService.GetAll(criteria);
-            return leaveTypes;
         }
 
         public ActionResult DailyView(RequestViewModel request)
@@ -268,7 +257,7 @@
         {
             request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
-            request.LeaveTypeCollection = GetLeaveType();
+            request.LeaveTypeCollection = leaveTypeService.GetAll();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {

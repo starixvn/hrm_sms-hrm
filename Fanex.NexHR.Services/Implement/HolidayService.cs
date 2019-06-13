@@ -1,9 +1,11 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
-    using Criteria.Holidays;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Holidays;
     using Fanex.NexHR.Models;
 
     public class HolidayService : IHolidayService
@@ -21,12 +23,7 @@
             {
                 Year = year
             };
-            IList<Holiday> holidays = null;
-
-            if (criteria.IsValid())
-            {
-                holidays = baseService.GetData<Holiday>(criteria).ToList();
-            }
+            IList<Holiday> holidays = baseService.GetData<Holiday>(criteria).ToList();
 
             return holidays ?? new List<Holiday>();
         }
@@ -37,14 +34,47 @@
             {
                 Id = holidayId
             };
-            Holiday holiday = null;
-
-            if (criteria.IsValid())
-            {
-                holiday = baseService.GetDataEntity<Holiday>(criteria);
-            }
+            Holiday holiday = baseService.GetDataEntity<Holiday>(criteria);
 
             return holiday ?? new Holiday();
+        }
+
+        public CommandResult Create(int actorId, Holiday model)
+        {
+            var criteria = new CreateHolidayCriteria
+            {
+                HolidayName = model.HolidayName,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                ModifiedBy = actorId,
+                ModifiedDate = DateTime.Now
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Edit(int actorId, Holiday model)
+        {
+            var criteria = new EditHolidayCriteria
+            {
+                Id = model.Id,
+                HolidayName = model.HolidayName,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                ModifiedBy = actorId,
+                ModifiedDate = DateTime.Now
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Delete(int actorId, int id)
+        {
+            var criteria = new DeleteHolidayCriteria
+            {
+                Id = id,
+                ModifiedBy = actorId,
+                ModifiedDate = DateTime.Now
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }

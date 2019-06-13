@@ -9,14 +9,8 @@
 
         public string FullName { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "ExtensionNO_Update_GroupExternal";
-        }
+        public override string GetSettingKey() => "ExtensionNO_Update_GroupExternal";
 
-        public override bool IsValid()
-        {
-            return ExternalId > 0;
-        }
+        public override bool IsValid() => ExternalId > 0;
     }
 }

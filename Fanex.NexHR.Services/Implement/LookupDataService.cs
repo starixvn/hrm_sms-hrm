@@ -15,25 +15,29 @@
             this.baseService = baseService;
         }
 
-        public IList<LookupData> GetAll(GetAllLookupDataCriteria criteria)
+        public IList<LookupData> GetAll(string code)
         {
+            var criteria = new GetAllLookupDataCriteria
+            {
+                LookupCode = code
+            };
             return baseService.GetData<LookupData>(criteria).ToList();
         }
 
         public LookupData GetLookupByCodeAndId(string lookupCode, int lookupId)
         {
-            var criteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = lookupCode
-            };
-            IList<LookupData> lookupDataList = GetAll(criteria);
-            LookupData lookupData = lookupDataList.Single(data => data.Id == lookupId);
+            IList<LookupData> lookupDatas = GetAll(lookupCode);
+            LookupData lookupData = lookupDatas.Single(data => data.Id == lookupId);
 
             return lookupData;
         }
 
-        public IList<LookupData> GetJobTitle(GetJobTitleCriteria criteria)
+        public IList<LookupData> GetJobTitle(string jobTitle)
         {
+            var criteria = new GetJobTitleCriteria
+            {
+                JobTitle = jobTitle
+            };
             return baseService.GetData<LookupData>(criteria).ToList();
         }
     }

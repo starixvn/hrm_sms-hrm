@@ -9,7 +9,6 @@
     using Core.Models;
     using Core.Services;
     using Criteria;
-    using Criteria.Lookup;
     using Criteria.Overtime;
     using Criteria.Request;
     using Criteria.Supervisor;
@@ -386,11 +385,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
-            var criteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(criteria);
+            IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,

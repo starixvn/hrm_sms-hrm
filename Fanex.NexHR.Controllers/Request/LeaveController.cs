@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
@@ -56,7 +55,7 @@
                 FromDate = DateTime.Now.Date,
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
-                LeaveTypeList = GetAllLeaveType(),
+                LeaveTypeList = leaveTypeService.GetAll(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
@@ -98,7 +97,7 @@
             }
 
             model.UnavailDates = GetUnavailDate(model);
-            model.LeaveTypeList = GetAllLeaveType();
+            model.LeaveTypeList = leaveTypeService.GetAll();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
             model.VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id);
 
@@ -135,7 +134,7 @@
             };
             RequestEntity request = requestService.GetRequestById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-            model.LeaveTypeList = GetAllLeaveType();
+            model.LeaveTypeList = leaveTypeService.GetAll();
             model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -209,7 +208,7 @@
             var model = new LeaveDetailViewModel
             {
                 LeaveRequestDetail = leaveRequestDetail,
-                LeaveTypeList = GetAllLeaveType()
+                LeaveTypeList = leaveTypeService.GetAll()
             };
 
             return View(model);
@@ -370,16 +369,6 @@
             }
 
             return supervisor;
-        }
-
-        private IList<LeaveType> GetAllLeaveType()
-        {
-            var criteria = new GetLeaveTypeCriteria
-            {
-                ExcludeNotShown = true
-            };
-            IList<LeaveType> leaveTypes = leaveTypeService.GetAll(criteria);
-            return leaveTypes;
         }
 
         private LeaveRequestViewModel ConvertRequestToModel(RequestEntity request)

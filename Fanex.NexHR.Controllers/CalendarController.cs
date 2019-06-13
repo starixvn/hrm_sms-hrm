@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
@@ -156,13 +155,13 @@
         public ActionResult WorkingCalendars()
         {
             IList<Team> sections = teamService.GetAll();
-            var criteria = new GetAllLookupDataCriteria { LookupCode = Constants.JobTitle };
-            IList<SelectListItem> jobTitles = lookupDataService.GetAll(criteria).Select(j => new SelectListItem
-            {
-                Text = j.Name,
-                Value = j.Id.ToString(),
-                Selected = string.IsNullOrEmpty(j.Id.ToString())
-            }).ToList();
+            IList<SelectListItem> jobTitles = lookupDataService.GetAll(Constants.JobTitle)
+                .Select(j => new SelectListItem
+                {
+                    Text = j.Name,
+                    Value = j.Id.ToString(),
+                    Selected = string.IsNullOrEmpty(j.Id.ToString())
+                }).ToList();
 
             ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);

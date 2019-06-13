@@ -6,14 +6,8 @@
     {
         public bool ExcludeNotShown { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "LeaveType_GetAll";
-        }
+        public override string GetSettingKey() => "LeaveType_GetAll";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

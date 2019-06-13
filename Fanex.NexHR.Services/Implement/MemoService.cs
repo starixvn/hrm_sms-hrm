@@ -2,9 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
-    using Criteria.Memo;
-    using Models;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Memo;
+    using Fanex.NexHR.Models;
 
     public class MemoService : IMemoService
     {
@@ -15,28 +16,73 @@
             this.baseService = baseService;
         }
 
-        public IList<Memo> GetAll(GetAllMemoCriteria criteria)
+        public IList<Memo> GetAll(int year, int category)
         {
-            IList<Memo> entityList = null;
-
-            if (criteria.IsValid())
+            var criteria = new GetAllMemoCriteria
             {
-                entityList = baseService.GetData<Memo>(criteria).ToList();
-            }
-
-            return entityList ?? new List<Memo>();
+                Year = year,
+                Category = category
+            };
+            return baseService.GetData<Memo>(criteria).ToList();
         }
 
-        public Memo GetById(GetMemoByIdCriteria criteria)
+        public Memo GetById(int id)
         {
+            var criteria = new GetMemoByIdCriteria
+            {
+                Id = id
+            };
             var memo = baseService.GetDataEntity<Memo>(criteria);
-
             if (memo != null && memo.MemoType == 1)
             {
                 memo.AttachFile = memo.Contents;
             }
 
             return memo ?? new Memo();
+        }
+
+        public CommandResult Create(Memo model)
+        {
+            var criteria = new CreateMemoCriteria
+            {
+                RefNo = model.RefNo,
+                Contents = model.Contents,
+                Subject = model.Subject,
+                SentTo = model.SentTo,
+                SentFrom = model.SentFrom,
+                SentDate = model.SentDate,
+                ForInfo = model.ForInfo,
+                TotalPages = model.TotalPages,
+                Category = model.Category,
+                MemoType = model.MemoType,
+                SendMail = model.SendMail
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Edit(Memo model)
+        {
+            var criteria = new EditMemoCriteria
+            {
+                Id = model.Id,
+                RefNo = model.RefNo,
+                Contents = model.Contents,
+                Subject = model.Subject,
+                SentTo = model.SentTo,
+                SentFrom = model.SentFrom,
+                ForInfo = model.ForInfo,
+                TotalPages = model.TotalPages,
+                SentDate = model.SentDate,
+                Category = model.Category,
+                MemoType = model.MemoType
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Delete(int id)
+        {
+            var criteria = new DeleteMemoCriteria { Id = id };
+            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }

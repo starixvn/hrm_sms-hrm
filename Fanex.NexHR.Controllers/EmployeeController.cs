@@ -16,7 +16,6 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
@@ -101,7 +100,7 @@
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
-            IList<LookupData> listJobTitle = GetAllJobTitle();
+            IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -611,21 +610,10 @@
         private void ComposeViewBagsForEditEmployee()
         {
             ViewBag.Groups = teamService.GetAll();
-            ViewBag.JobTitles = GetAllJobTitle();
+            ViewBag.JobTitles = lookupDataService.GetAll(Constants.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
-        }
-
-        private IList<LookupData> GetAllJobTitle()
-        {
-            var criteria = new GetAllLookupDataCriteria
-            {
-                LookupCode = Constants.JobTitle
-            };
-            IList<LookupData> jobTitles = lookupDataService.GetAll(criteria);
-
-            return jobTitles;
         }
 
         private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)

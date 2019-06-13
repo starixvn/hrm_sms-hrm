@@ -8,14 +8,8 @@
 
         public int? GroupId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "ExtensionNO_GetGroupInfo";
-        }
+        public override string GetSettingKey() => "ExtensionNO_GetGroupInfo";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

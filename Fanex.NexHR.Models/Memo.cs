@@ -9,11 +9,7 @@
     public class Memo : EntityBase<int>
     {
         [Required]
-        public string Contents
-        {
-            get;
-            set;
-        }
+        public string Contents { get; set; }
 
         [AllowHtml]
         [Required]

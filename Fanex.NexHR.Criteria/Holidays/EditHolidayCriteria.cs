@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NexHR.Criteria.Holidays
 {
-    using Data.Repository;
     using System;
+    using Fanex.Data.Repository;
 
-    public class UpdateHolidayCriteria : CriteriaBase
+    public class EditHolidayCriteria : CriteriaBase
     {
         public int Id { get; set; }
 
@@ -17,14 +17,8 @@
 
         public int ModifiedBy { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Holiday_Update";
-        }
+        public override string GetSettingKey() => "Holiday_Update";
 
-        public override bool IsValid()
-        {
-            return Id > 0 && !string.IsNullOrEmpty(HolidayName) && ModifiedBy > 0;
-        }
+        public override bool IsValid() => Id > 0 && !string.IsNullOrEmpty(HolidayName) && ModifiedBy > 0;
     }
 }

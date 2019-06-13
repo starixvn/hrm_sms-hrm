@@ -43,8 +43,7 @@
         [HRMPermission(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult GetJobTitles(string jobTitle)
         {
-            var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };
-            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(criteria);
+            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(jobTitle);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
@@ -53,9 +52,7 @@
         [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public ActionResult ExportExcel(string jobTitle)
         {
-            var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };
-            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(criteria);
-
+            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(jobTitle);
             jobTitleExportService.ExportJobTitle(jobTitles);
 
             return new EmptyResult();
