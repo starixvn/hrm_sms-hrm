@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetEmployee] @ActorId INT
 	,@GroupIds VARCHAR(MAX) = ''
 	,@Query NVARCHAR(256) = ''
+	,@IsIFrame BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-05-02
@@ -50,7 +51,8 @@ BEGIN
 			WHERE e.GroupId = tblgr.GroupId
 			)
 		AND (
-			EXISTS (
+			@IsIFrame = 1
+			OR EXISTS (
 				SELECT 1
 				FROM dbo.RoleFunction AS rf WITH (NOLOCK)
 					INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId

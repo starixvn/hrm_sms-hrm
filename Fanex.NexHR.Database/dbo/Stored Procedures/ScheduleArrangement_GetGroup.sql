@@ -1,5 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetGroup] @ActorId INT
+	,@IsIFrame BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-05-02
@@ -22,7 +23,8 @@ BEGIN
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
 	WHERE gr.IsDeleted = 0
 		AND (
-			EXISTS (
+			@IsIFrame = 1
+			OR EXISTS (
 				SELECT 1
 				FROM dbo.RoleFunction AS rf WITH (NOLOCK)
 					INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId

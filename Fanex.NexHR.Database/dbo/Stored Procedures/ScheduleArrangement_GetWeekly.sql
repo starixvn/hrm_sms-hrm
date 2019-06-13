@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@totime DATE
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(MAX) = ''
+	,@IsIFrame BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-04-12
@@ -38,13 +39,13 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	CREATE TABLE #Calendar (WorkDate DATE)
+	CREATE TABLE #tblDate (WorkDate DATE)
 
-	CREATE TABLE #tmpCalendar (
+	CREATE TABLE #tblEmployeeCalendar (
 		EmpId INT
 		,WorkDate DATE
 		,ShiftId INT
-		,ChangeShiftId INT
+		,IsChangeShift BIT
 		,IsOffDay BIT
 		,IsHoliday BIT
 		,IsKeepInView BIT
@@ -56,7 +57,7 @@ BEGIN
 		,ModifiedDate DATETIME
 		)
 
-	CREATE TABLE #tblEmployeeSupervisor (OwnerId INT)
+	CREATE TABLE #tblEmployee (EmployeeId INT)
 
 	CREATE TABLE #tblDefaultShift (
 		EmployeeId INT
@@ -72,7 +73,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
 	END
 
-	INSERT INTO #tblEmployeeSupervisor (OwnerId)
+	INSERT INTO #tblEmployee (EmployeeId)
 	SELECT OwnerId
 	FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 	WHERE EmpId = @ActorId
@@ -91,7 +92,7 @@ BEGIN
 				AND es.OwnerId = emp.EmpId
 			)
 
-	INSERT INTO #tblEmployeeSupervisor (OwnerId)
+	INSERT INTO #tblEmployee (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
@@ -111,11 +112,12 @@ BEGIN
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblEmployeeSupervisor AS tbl
-			WHERE tbl.OwnerId = emp.EmpId
+			FROM #tblEmployee AS tbl
+			WHERE tbl.EmployeeId = emp.EmpId
 			)
 
-	IF EXISTS (
+	IF @IsIFrame = 1
+		OR EXISTS (
 			SELECT 1
 			FROM dbo.RoleFunction AS rf WITH (NOLOCK)
 				INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
@@ -126,7 +128,7 @@ BEGIN
 			WHERE rf.IsRead = 1
 			)
 	BEGIN
-		INSERT INTO #tblEmployeeSupervisor (OwnerId)
+		INSERT INTO #tblEmployee (EmployeeId)
 		SELECT EmpId
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 		WHERE [Enabled] = 1
@@ -142,23 +144,23 @@ BEGIN
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM #tblEmployeeSupervisor AS tbl
-				WHERE emp.EmpId = tbl.OwnerId
+				FROM #tblEmployee AS tbl
+				WHERE emp.EmpId = tbl.EmployeeId
 				)
 	END
 
 	DELETE emp
-	FROM #tblEmployeeSupervisor AS emp
+	FROM #tblEmployee AS emp
 	WHERE EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeSummary AS esum WITH (NOLOCK)
-			WHERE emp.OwnerId = esum.EmpId
+			WHERE emp.EmployeeId = esum.EmpId
 				AND esum.IsTopManager = 1
 			)
 
 	WHILE (@fromDate <= @toDate)
 	BEGIN
-		INSERT INTO #Calendar (WorkDate)
+		INSERT INTO #tblDate (WorkDate)
 		VALUES (@fromDate)
 
 		SET @fromDate = DATEADD(d, 1, @fromDate)
@@ -166,11 +168,11 @@ BEGIN
 
 	SET @fromDate = @fromtime
 
-	INSERT INTO #tmpCalendar (
+	INSERT INTO #tblEmployeeCalendar (
 		EmpId
 		,WorkDate
 		,ShiftId
-		,ChangeShiftId
+		,IsChangeShift
 		,IsOffDay
 		,IsHoliday
 		,IsKeepInView
@@ -181,10 +183,13 @@ BEGIN
 		,ModifiedBy
 		,ModifiedDate
 		)
-	SELECT EmpId
+	SELECT empca.EmpId
 		,WorkDate
 		,ShiftId
-		,ChangeShiftId
+		,(CASE 
+			WHEN changeshift.EmpId IS NOT NULL THEN 1
+			ELSE 0 END
+			) AS IsChangeShift
 		,IsOffDay
 		,IsHoliday
 		,IsKeepInView
@@ -194,19 +199,46 @@ BEGIN
 		,IsPublic
 		,ModifiedBy
 		,ModifiedDate
-	FROM dbo.EmployeeCalendar AS ec WITH (NOLOCK)
-		INNER JOIN #tblEmployeeSupervisor AS es ON ec.EmpId = es.OwnerId
-	WHERE WorkDate BETWEEN @fromDate
+	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
+		INNER JOIN #tblEmployee AS emp ON empca.EmpId = emp.EmployeeId
+		OUTER APPLY (
+		SELECT csr.EmpId
+		FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+			INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+			AND empca.WorkDate = csrdt.OnDate
+			INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+			AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+		WHERE empca.EmpId = csr.EmpId
+		) AS changeshift
+	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
+		AND (
+			@IsIFrame = 0
+			OR (
+				@IsIFrame = 1
+				AND empca.IsPublic = 1
+				)
+			)
+
+	IF @IsIFrame = 1
+	BEGIN
+		DELETE emp
+		FROM #tblEmployee AS emp
+		WHERE NOT EXISTS (
+				SELECT 1
+				FROM #tblEmployeeCalendar AS empca
+				WHERE emp.EmployeeId = empca.EmpId
+				)
+	END
 
 	INSERT INTO #tblDefaultShift (
 		EmployeeId
 		,ShiftId
 		)
-	SELECT emp.OwnerId
+	SELECT emp.EmployeeId
 		,defaultshift.ShiftId
-	FROM #tblEmployeeSupervisor AS emp
-		INNER JOIN dbo.ScheduleArrangementDefaultShift AS defaultshift WITH (NOLOCK) ON emp.OwnerId = defaultshift.EmployeeId
+	FROM #tblEmployee AS emp
+		INNER JOIN dbo.ScheduleArrangementDefaultShift AS defaultshift WITH (NOLOCK) ON emp.EmployeeId = defaultshift.EmployeeId
 	WHERE defaultshift.FromDate = @fromtime
 
 	INSERT INTO #tblDefaultShift (
@@ -241,9 +273,9 @@ BEGIN
 		,esum.IsDefaultSchedule AS IsUsedWeeklyDefaultShift
 		,modifier.NickName AS Modifier
 		,ec.ModifiedDate
-		,g.GroupId
-		,g.Code
-		,g.[Name]
+		,gr.GroupId
+		,gr.Code
+		,gr.[Name]
 		,shift.ShiftId AS DefaultShiftId
 		,shift.Code
 		,shift.[Name]
@@ -252,24 +284,24 @@ BEGIN
 		,shift.IsInAfterDay
 		,shift.IsOutAfterDay
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN #tblEmployeeSupervisor AS es ON emp.EmpId = es.OwnerId
+		INNER JOIN #tblEmployee AS tblemp ON emp.EmpId = tblemp.EmployeeId
 		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId
-		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
+		LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		LEFT JOIN dbo.ScheduleArrangement AS arrange WITH (NOLOCK) ON emp.EmpId = arrange.EmployeeId
-		LEFT JOIN dbo.ScheduleArrangementGroupOrder AS gorder WITH (NOLOCK) ON g.GroupId = gorder.GroupId
+		LEFT JOIN dbo.ScheduleArrangementGroupOrder AS gorder WITH (NOLOCK) ON gr.GroupId = gorder.GroupId
 		LEFT JOIN #tblDefaultShift AS defaultshift ON emp.EmpId = defaultshift.EmployeeId
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON defaultshift.ShiftId = shift.ShiftId
 		AND ISNULL(shift.IsDisabled, 0) = 0
 		OUTER APPLY (
 		SELECT TOP 1 ec.ModifiedBy
 			,ec.ModifiedDate
-		FROM #tmpCalendar AS ec
+		FROM #tblEmployeeCalendar AS ec
 		WHERE ec.EmpId = emp.EmpId
 			AND ec.ModifiedBy IS NOT NULL
 			AND ec.ModifiedDate IS NOT NULL
 			AND ec.ModifiedDate = (
 				SELECT MAX(ec1.ModifiedDate)
-				FROM #tmpCalendar AS ec1
+				FROM #tblEmployeeCalendar AS ec1
 				WHERE ec.EmpId = ec1.EmpId
 				)
 		) AS ec
@@ -280,7 +312,7 @@ BEGIN
 			WHERE emp.GroupId = tblgr.GroupId
 			)
 	ORDER BY ISNULL(gorder.DisplayOrder, 0)
-		,g.Code
+		,gr.Code
 		,ISNULL(arrange.DisplayOrder, 0)
 		,emp.NickName
 
@@ -295,10 +327,7 @@ BEGIN
 				AND spwkr.WorkType = @OffDay THEN 1
 			ELSE 0 END
 			) AS IsLeaveOffday
-		,(CASE 
-			WHEN ec.ChangeShiftId IS NULL THEN 0
-			ELSE 1 END
-			) AS IsChangeShift
+		,ec.IsChangeShift
 		,(CASE 
 			WHEN (
 					esum.IsLocal = 1
@@ -346,9 +375,9 @@ BEGIN
 		,lv2.Code
 		,lv2.[Name]
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN #tblEmployeeSupervisor AS es ON emp.EmpId = es.OwnerId
-		CROSS JOIN #Calendar AS tmp
-		LEFT JOIN #tmpCalendar AS ec ON emp.EmpId = ec.EmpId
+		INNER JOIN #tblEmployee AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		CROSS JOIN #tblDate AS tmp
+		LEFT JOIN #tblEmployeeCalendar AS ec ON emp.EmpId = ec.EmpId
 		AND ec.WorkDate = tmp.WorkDate
 		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON ot.OvertimeDate = tmp.WorkDate
@@ -381,8 +410,8 @@ BEGIN
 			,lrd.ToTime AS ToTime
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
-			INNER JOIN #Calendar AS tmp ON lrd.OnDate = tmp.WorkDate
-			INNER JOIN #tmpCalendar AS cla ON lrd.OnDate = cla.WorkDate
+			INNER JOIN #tblDate AS tmp ON lrd.OnDate = tmp.WorkDate
+			INNER JOIN #tblEmployeeCalendar AS cla ON lrd.OnDate = cla.WorkDate
 			AND wkr.EmpId = cla.EmpId
 		WHERE lrd.WorkType IN (@OffDay, @LeaveDay)
 			AND wkr.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -398,9 +427,9 @@ BEGIN
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.LeaveType <> @GeneralLeaveId
 			AND wkr.RequestId = lr.RequestId
-			INNER JOIN #Calendar AS tmp ON tmp.WorkDate BETWEEN lr.FromDate
+			INNER JOIN #tblDate AS tmp ON tmp.WorkDate BETWEEN lr.FromDate
 				AND lr.ToDate
-			INNER JOIN #tmpCalendar AS cla ON cla.WorkDate = tmp.WorkDate
+			INNER JOIN #tblEmployeeCalendar AS cla ON cla.WorkDate = tmp.WorkDate
 			AND wkr.EmpId = cla.EmpId
 		WHERE wkr.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 			AND cla.IsOffDay <> 1
@@ -423,7 +452,7 @@ BEGIN
 	ORDER BY emp.NickName
 		,tmp.WorkDate
 
-	SELECT emp.OwnerId AS EmployeeId
+	SELECT emp.EmployeeId
 		,ISNULL(monshift.ShiftID, - 1) AS MonShiftId
 		,ISNULL(tueshift.ShiftID, - 1) AS TueShiftId
 		,ISNULL(wedshift.ShiftID, - 1) AS WedShiftId
@@ -431,8 +460,8 @@ BEGIN
 		,ISNULL(frishift.ShiftID, - 1) AS FriShiftId
 		,ISNULL(satshift.ShiftID, - 1) AS SatShiftId
 		,ISNULL(sunshift.ShiftID, - 1) AS SunShiftId
-	FROM #tblEmployeeSupervisor AS emp
-		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpID = emp.OwnerId
+	FROM #tblEmployee AS emp
+		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpID = emp.EmployeeId
 		LEFT JOIN dbo.Shift AS monshift WITH (NOLOCK) ON eds.MonShift = monshift.ShiftID
 		AND ISNULL(monshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS tueshift WITH (NOLOCK) ON eds.TueShift = tueshift.ShiftID
@@ -450,11 +479,11 @@ BEGIN
 
 	DROP TABLE #tblGroupIds
 
-	DROP TABLE #Calendar
+	DROP TABLE #tblDate
 
-	DROP TABLE #tmpCalendar
+	DROP TABLE #tblEmployeeCalendar
 
-	DROP TABLE #tblEmployeeSupervisor
+	DROP TABLE #tblEmployee
 
 	DROP TABLE #tblDefaultShift
 END

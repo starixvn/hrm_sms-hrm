@@ -31,6 +31,14 @@ BEGIN
 		,@ModifiedDate DATETIME = GETDATE()
 		,@FromDate1 DATE = @FromDate
 		,@ToDate1 DATE = DATEADD(MONTH, 4, @FromDate)
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 
 	CREATE TABLE #tblCalendar (WorkDate DATE)
 
@@ -105,7 +113,15 @@ BEGIN
 				AND hld.ToDate
 		WHERE ec.WorkDate >= @FromDate
 			AND ec.IsLeaveDay = 0
-			AND ec.ChangeShiftId IS NULL
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+					INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+					AND csrdt.OnDate = ec.WorkDate
+					INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+					AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+				WHERE ec.EmpId = csr.EmpId
+				)
 
 		WHILE @FromDate1 <= @ToDate1
 		BEGIN

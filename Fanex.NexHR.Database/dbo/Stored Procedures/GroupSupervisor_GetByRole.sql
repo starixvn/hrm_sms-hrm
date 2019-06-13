@@ -5,10 +5,10 @@ AS
 /*
 Created: 20140723@Quinn.Vo
 Task: Get list supervisors by group and action type.
-DB: NexEPA
-Original: 
+DB: SMSHRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -19,7 +19,7 @@ BEGIN
 		,e.FullName
 		,g.GroupId
 		,g.Code
-		,g.NAME
+		,g.[Name]
 		,CAST(MAX(CASE 
 					WHEN su.RequestType IN (1, 2) THEN 1
 					ELSE 0
@@ -55,5 +55,7 @@ BEGIN
 		,e.FullName
 		,g.GroupId
 		,g.Code
-		,g.NAME
+		,g.[Name]
+		,su.DisplayOrder
+	ORDER BY ISNULL(su.DisplayOrder, 0)
 END

@@ -29,11 +29,11 @@ BEGIN
 		SET @ToDate = DATEADD(DAY, 6, @FromDate)
 	END
 
-	CREATE TABLE #tblCalendar (WorkDate DATE)
+	CREATE TABLE #tblDate (WorkDate DATE)
 
 	WHILE @FromDate <= @ToDate
 	BEGIN
-		INSERT INTO #tblCalendar (WorkDate)
+		INSERT INTO #tblDate (WorkDate)
 		VALUES (@FromDate)
 
 		SET @FromDate = DATEADD(DAY, 1, @FromDate)
@@ -74,9 +74,6 @@ BEGIN
 			) AS IsHoliday
 		,1
 	FROM dbo.Employee AS e WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
-		AND es.IsDefaultSchedule = 0
-		,#tblCalendar AS tblc
 		CROSS APPLY (
 		SELECT TOP 1 shift.ShiftId
 		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
@@ -85,6 +82,9 @@ BEGIN
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
+		AND es.IsDefaultSchedule = 0
+		,#tblDate AS tblc
 		LEFT JOIN dbo.Holiday AS hld WITH (NOLOCK) ON tblc.WorkDate BETWEEN hld.FromDate
 			AND hld.ToDate
 	WHERE e.[Enabled] = 1
@@ -113,5 +113,5 @@ BEGIN
 			,@ErrMsg = N'Insert default shift unsuccessfully!'
 	END
 
-	DROP TABLE #tblCalendar
+	DROP TABLE #tblDate
 END

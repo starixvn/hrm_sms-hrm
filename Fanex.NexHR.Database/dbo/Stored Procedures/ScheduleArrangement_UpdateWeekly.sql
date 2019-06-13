@@ -135,7 +135,15 @@ BEGIN
 			ec.IsLeaveDay = 1
 			AND ec.LeaveDay = 1
 			)
-		OR ec.ChangeShiftId IS NOT NULL
+		OR EXISTS (
+			SELECT 1
+			FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+				AND csrdt.OnDate = ec.WorkDate
+				INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+				AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+			WHERE ec.EmpId = csr.EmpId
+			)
 		OR (
 			ec.IsKeepInView = 1
 			AND tblweekly.ShiftId IS NULL

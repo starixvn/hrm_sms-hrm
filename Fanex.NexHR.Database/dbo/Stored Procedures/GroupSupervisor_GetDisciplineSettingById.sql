@@ -5,9 +5,9 @@ AS
 Created: 20160620@Tim.Trinh
 Task: Get list supervisors by group id
 DB: SMSHRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -23,4 +23,6 @@ BEGIN
 		AND su.ActionType = 8 -- edit discipline
 		AND su.RequestType = 0
 		AND ISNULL(su.IsDeleted, 0) = 0
+	ORDER BY ISNULL(su.DisplayOrder, 0)
+		,e.NickName
 END

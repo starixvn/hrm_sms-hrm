@@ -81,7 +81,7 @@ BEGIN
 		EmployeeId INT
 		,WorkDate DATE
 		,ShiftId INT
-		,ChangeShiftId INT
+		,IsChangeShift BIT
 		,IsLeaveOffDay BIT
 		,IsOvertime BIT
 		,IsHoliday BIT
@@ -237,7 +237,7 @@ BEGIN
 		EmployeeId
 		,WorkDate
 		,ShiftId
-		,ChangeShiftId
+		,IsChangeShift
 		,IsLeaveOffDay
 		,IsOvertime
 		,IsHoliday
@@ -251,7 +251,10 @@ BEGIN
 	SELECT emp.EmployeeId
 		,daterange.WorkDate
 		,empca.ShiftId
-		,empca.ChangeShiftId
+		,(CASE 
+			WHEN changeshift.EmpId IS NOT NULL THEN 1
+			ELSE 0 END
+			) AS IsChangeShift
 		,(CASE 
 			WHEN lr.WorkDate IS NOT NULL
 				AND lr.WorkType = @OffDay THEN 1
@@ -294,6 +297,15 @@ BEGIN
 			AND holiday.ToDate
 		LEFT JOIN #tblLeaveRequest AS lr ON emp.EmployeeId = lr.EmployeeId
 		AND lr.WorkDate = daterange.WorkDate
+		OUTER APPLY (
+		SELECT csr.EmpId
+		FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+			INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+			AND daterange.WorkDate = csrdt.OnDate
+			INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+			AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+		WHERE emp.EmployeeId = csr.EmpId
+		) AS changeshift
 	ORDER BY emp.EmployeeId
 		,daterange.WorkDate
 
@@ -318,20 +330,30 @@ BEGIN
 				AND empca.WorkDate BETWEEN emp.FromDate
 					AND emp.ToDate
 				AND empca.IsHoliday = 0
-				AND empca.ChangeShiftId IS NULL
+				AND empca.IsChangeShift = 0
 				AND empca.IsKeepInView = 0
-				AND empca.IsOvertime = 0
 				AND (
 					empca.IsLeaveOffDay = 1
 					OR (
 						empca.IsOffDay = 1
-						AND empca.ShiftId IS NULL
+						AND (
+							(
+								empca.IsOvertime = 0
+								AND empca.ShiftId IS NULL
+								)
+							OR empca.IsOvertime = 1
+							)
 						AND NOT EXISTS (
 							SELECT 1
 							FROM #tblOffDayReplacement AS offrep
 							WHERE emp.EmployeeId = offrep.EmployeeId
 								AND empca.WorkDate = offrep.WorkDate
-								AND offrep.ReplaceForDate < @FromDate
+							)
+						AND NOT EXISTS (
+							SELECT 1
+							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
+							WHERE emp.EmployeeId = offrep.EmployeeId
+								AND empca.WorkDate = offrep.WorkDate
 							)
 						)
 					)
@@ -345,11 +367,27 @@ BEGIN
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
-			AND emp.TotalOffDaysUsed >= emp.OffDaysByWeek
-		WHERE EXISTS (
+		WHERE empca.IsOffDay = 1
+			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmpId = offrep.EmployeeId
+					AND empca.WorkDate = offrep.WorkDate
+					AND offrep.ReplaceForDate BETWEEN emp.FromDate
+						AND emp.ToDate
+				)
+
+		UPDATE empca
+		SET empca.IsOffDay = 0
+		FROM #tblCalendar AS empca
+			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmployeeId = emp.EmployeeId
+			AND emp.FromDate = @FromDate
+			AND emp.ToDate = @ToDate
+		WHERE empca.IsOffDay = 1
+			AND EXISTS (
+				SELECT 1
+				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
+				WHERE empca.EmployeeId = offrep.EmployeeId
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate
@@ -403,7 +441,7 @@ BEGIN
 						AND @ToDate
 					AND IsHoliday = 0
 					AND ShiftId IS NOT NULL
-					AND ChangeShiftId IS NULL
+					AND IsChangeShift = 0
 					AND IsKeepInView = 0
 					AND IsOvertime = 0
 					AND IsLeaveDay = 0
@@ -431,7 +469,7 @@ BEGIN
 						AND WorkDate > @PHDate
 						AND WorkDate <= @ToDate
 						AND IsHoliday = 0
-						AND ChangeShiftId IS NULL
+						AND IsChangeShift = 0
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0
@@ -481,7 +519,7 @@ BEGIN
 					AND WorkDate > @PHDate
 					AND WorkDate <= @ToDate
 					AND IsHoliday = 0
-					AND ChangeShiftId IS NULL
+					AND IsChangeShift = 0
 					AND IsKeepInView = 0
 					AND IsOvertime = 0
 					AND IsLeaveDay = 0
@@ -526,7 +564,7 @@ BEGIN
 							AND @ToDate1
 						AND IsHoliday = 0
 						AND ShiftId IS NULL
-						AND ChangeShiftId IS NULL
+						AND IsChangeShift = 0
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0
@@ -550,7 +588,7 @@ BEGIN
 								AND WorkDate BETWEEN @FromDate1
 									AND @WorkDate
 								AND IsHoliday = 0
-								AND ChangeShiftId IS NULL
+								AND IsChangeShift = 0
 								AND IsKeepInView = 0
 								AND IsOvertime = 0
 								AND IsLeaveDay = 0
@@ -592,7 +630,7 @@ BEGIN
 							AND @ToDate1
 						AND IsHoliday = 0
 						AND ShiftId IS NOT NULL
-						AND ChangeShiftId IS NULL
+						AND IsChangeShift = 0
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0
@@ -620,7 +658,7 @@ BEGIN
 							AND WorkDate BETWEEN @FromDate1
 								AND @ToDate1
 							AND IsHoliday = 0
-							AND ChangeShiftId IS NULL
+							AND IsChangeShift = 0
 							AND IsKeepInView = 0
 							AND IsOvertime = 0
 							AND IsLeaveDay = 0
@@ -667,7 +705,7 @@ BEGIN
 									AND @ToDate1
 								AND IsHoliday = 0
 								AND ShiftId IS NULL
-								AND ChangeShiftId IS NULL
+								AND IsChangeShift = 0
 								AND IsKeepInView = 0
 								AND IsOvertime = 0
 								AND IsLeaveDay = 0
@@ -686,7 +724,7 @@ BEGIN
 								AND @ToDate1
 							AND IsHoliday = 0
 							AND ShiftId IS NULL
-							AND ChangeShiftId IS NULL
+							AND IsChangeShift = 0
 							AND IsKeepInView = 0
 							AND IsOvertime = 0
 							AND IsLeaveDay = 0
@@ -721,7 +759,7 @@ BEGIN
 						AND WorkDate BETWEEN @FromDate1
 							AND @ToDate1
 						AND IsHoliday = 0
-						AND ChangeShiftId IS NULL
+						AND IsChangeShift = 0
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0

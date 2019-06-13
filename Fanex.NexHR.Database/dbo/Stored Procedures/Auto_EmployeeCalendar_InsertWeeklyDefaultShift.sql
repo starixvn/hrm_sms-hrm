@@ -29,11 +29,11 @@ BEGIN
 		SET @ToDate = DATEADD(MONTH, 4, @FromDate)
 	END
 
-	CREATE TABLE #tblCalendar (WorkDate DATE)
+	CREATE TABLE #tblDate (WorkDate DATE)
 
 	WHILE @FromDate <= @ToDate
 	BEGIN
-		INSERT INTO #tblCalendar (WorkDate)
+		INSERT INTO #tblDate (WorkDate)
 		VALUES (@FromDate)
 
 		SET @FromDate = DATEADD(DAY, 1, @FromDate)
@@ -109,7 +109,7 @@ BEGIN
 		AND ISNULL(emp.IsDeleted, 0) = 0
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		AND empsum.IsDefaultSchedule = 1
-		,#tblCalendar AS tblc
+		,#tblDate AS tblc
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
 	WHERE (
@@ -145,5 +145,5 @@ BEGIN
 			,@ErrMsg = N'Insert weekly default shift unsuccessfully!'
 	END
 
-	DROP TABLE #tblCalendar
+	DROP TABLE #tblDate
 END

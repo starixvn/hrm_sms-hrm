@@ -6,6 +6,7 @@
     [ModifiedBy]   INT      NULL,
     [ModifiedDate] DATETIME NULL,
     [IsDeleted]    BIT      NULL,
+    [DisplayOrder] SMALLINT NULL, 
     CONSTRAINT [PK_GroupSupervisor] PRIMARY KEY CLUSTERED ([OwnerId] ASC, [GroupId] ASC, [ActionType] ASC, [RequestType] ASC) ON [Employee]
 );
 

@@ -275,11 +275,9 @@
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Delete_TmpLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\Country_GetByName.sql" />
-    <Build Include="dbo\Stored Procedures\GroupSupervisor_Set.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetAllByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
-    <Build Include="dbo\Stored Procedures\GroupSupervisor_UpdateForShiftArrange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetOtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeCalendar_Insert_weekly.sql" />
@@ -388,10 +386,8 @@
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetRequestByEmpID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_7.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetMissingCheckinOut.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_InsertEmpByListOwner.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_SET_TmpKIVLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAbsent.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_InsertEmpMngShiftList.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_SET_TmpLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetLateInEarlyOut.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update.sql" />
@@ -477,6 +473,9 @@
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertWeeklyDefaultShift.sql" />
     <Build Include="dbo\Tables\ScheduleArrangementOffDayReplacement.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader_1.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_GetEmployeeLoginByCode.sql" />
+    <Build Include="dbo\Stored Procedures\GroupSupervisor_Update.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
