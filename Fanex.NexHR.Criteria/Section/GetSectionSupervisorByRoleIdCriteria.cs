@@ -1,11 +1,10 @@
-﻿namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Section
 {
     using Fanex.Data.Repository;
 
-    public class GetTeamSupervisorCriteria : CriteriaBase
+    public class GetSectionSupervisorByRoleIdCriteria : CriteriaBase
     {
         public int GroupId { get; set; }
-
         public int Role { get; set; }
 
         public override bool IsValid() => GroupId > 0;

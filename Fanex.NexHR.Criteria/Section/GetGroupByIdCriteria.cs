@@ -8,14 +8,8 @@
 
         public bool? IsDeleted { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Group_Get";
-        }
+        public override string GetSettingKey() => "Group_Get";
 
-        public override bool IsValid()
-        {
-            return GroupId > 0;
-        }
+        public override bool IsValid() => GroupId > 0;
     }
 }

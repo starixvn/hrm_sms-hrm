@@ -3,14 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core;
-    using Core.Models;
-    using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Discipline;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
@@ -40,7 +39,7 @@
             {
                 model.FromDate = GetFromDate();
                 model.ToDate = GetToDate();
-                model.Teams = GetAllTeam();
+                model.Teams = teamService.GetAll();
                 model.DisciplineTypes = GetDisciplineType(true);
                 model.DateRange = Utilities.GetDateRangeByQuarter();
             }
@@ -88,7 +87,7 @@
                     model.ReasonId = null;
                 }
 
-                model.Teams = GetAllTeam();
+                model.Teams = teamService.GetAll();
                 model.DisciplineTypes = GetDisciplineType(false);
                 model.DateRange = Utilities.GetDateRangeByQuarter();
             }
@@ -233,13 +232,6 @@
             IList<Employee> employees = disciplineService.GetMemberToAddOtherDiscipline(criteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
-        }
-
-        private IList<Team> GetAllTeam()
-        {
-            IList<Team> teamList = teamService.GetAll(new GetAllGroupCriteria());
-
-            return teamList;
         }
 
         private IList<DisciplineTypeModel> GetDisciplineType(bool includeOtherType)

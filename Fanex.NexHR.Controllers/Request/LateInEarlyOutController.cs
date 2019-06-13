@@ -8,9 +8,9 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -249,8 +249,7 @@
 
         private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = model.EmployeeId };
-            var employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee employee = employeeService.GetEmployeeById(model.EmployeeId);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

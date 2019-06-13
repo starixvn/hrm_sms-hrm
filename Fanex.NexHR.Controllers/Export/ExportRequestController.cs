@@ -9,8 +9,6 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Team;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -72,7 +70,7 @@
 
         public ActionResult VoidRequestWorkingTimeRequest(RequestViewModel request)
         {
-            request.TeamCollection = GetGroupBySupervisor();
+            request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
@@ -100,17 +98,6 @@
             string fileName = "EmployeeVoidRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
-        }
-
-        private IList<Team> GetGroupBySupervisor()
-        {
-            var criteria = new GetGroupBySupervisorCriteria
-            {
-                SupervisorId = sessionService.Employee.Id
-            };
-
-            IList<Team> teams = teamService.GetBySupervisor(criteria);
-            return teams;
         }
 
         public ActionResult DailyViewWorkingTimeRequest(RequestViewModel model)

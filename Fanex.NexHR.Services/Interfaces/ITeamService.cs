@@ -1,22 +1,23 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
 
     public interface ITeamService
     {
-        Team GetById(GetGroupByIdCriteria criteria);
+        Team GetById(int id);
 
-        IList<Team> GetAll(GetAllGroupCriteria criteria);
+        IList<Team> GetAll(bool isDeleted = false);
 
-        IList<Team> GetBySupervisor(GetGroupBySupervisorCriteria criteria);
+        CommandResult Delete(int actorId, int id);
 
-        IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
+        IList<Team> GetBySupervisor(int supervisorId);
+
+        IList<SupervisorModel> GetSectionSupervisorByRoleId(int sectionId, RoleSystem roleId);
 
         IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id);
 

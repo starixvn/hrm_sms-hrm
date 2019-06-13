@@ -6,14 +6,8 @@
     {
         public int LeaveTransId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "AnnualLeave_GetByID";
-        }
+        public override string GetSettingKey() => "AnnualLeave_GetByID";
 
-        public override bool IsValid()
-        {
-            return LeaveTransId > 0;
-        }
+        public override bool IsValid() => LeaveTransId > 0;
     }
 }

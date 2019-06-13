@@ -11,8 +11,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -120,7 +118,7 @@
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
-            model.Sections = GetBySupervisor();
+            model.Sections = teamService.GetBySupervisor(sessionService.Employee.Id);
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
 
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSumaries, model.Sections);
@@ -159,7 +157,7 @@
                 Year = DateTime.Now.Year,
                 ExcludedRequestTrans = true,
                 AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, DateTime.Now.Year),
-                Employee = GetEmployeeById(id)
+                Employee = employeeService.GetEmployeeById(id)
             };
 
             return View(model);
@@ -170,7 +168,7 @@
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
             model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
-            model.Employee = GetEmployeeById(model.EmployeeId);
+            model.Employee = employeeService.GetEmployeeById(model.EmployeeId);
             model.AnnualLeaveBalances = GetAnnualLeaveTransactions(model.EmployeeId, model.ExcludedRequestTrans, model.Year);
 
             return View(model);
@@ -179,12 +177,8 @@
         [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(int id)
         {
-            var criteria = new GetAnnualLeaveTransactionByIdCriteria
-            {
-                LeaveTransId = id
-            };
-            AnnualLeaveTransactionViewModel model = employeeService.GetAnnualLeaveTransaction(criteria);
-            ViewBag.Employee = GetEmployeeById(model.EmpId);
+            AnnualLeaveTransactionViewModel model = employeeService.GetAnnualLeaveTransaction(id);
+            ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             return View(model);
@@ -195,7 +189,7 @@
         [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
         {
-            ViewBag.Employee = GetEmployeeById(model.EmpId);
+            ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             if (formCollection["command"].Equals(Labels.Delete))
@@ -209,7 +203,7 @@
         [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(int id)
         {
-            ViewBag.Employee = GetEmployeeById(id);
+            ViewBag.Employee = employeeService.GetEmployeeById(id);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             var model = new AnnualLeaveTransactionViewModel
@@ -224,7 +218,7 @@
         [HRMPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Create(AnnualLeaveTransactionViewModel model)
         {
-            ViewBag.Employee = GetEmployeeById(model.EmpId);
+            ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
             ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
 
             if (ModelState.IsValid)
@@ -268,27 +262,6 @@
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
             return leaveSumaries;
-        }
-
-        private IList<Team> GetBySupervisor()
-        {
-            var criteria = new GetGroupBySupervisorCriteria
-            {
-                SupervisorId = sessionService.Employee.Id
-            };
-            IList<Team> teams = teamService.GetBySupervisor(criteria);
-
-            return teams;
-        }
-
-        private Employee GetEmployeeById(int empId)
-        {
-            var criteria = new GetEmployeeByIdCriteria
-            {
-                EmpId = empId
-            };
-
-            return employeeService.GetEmployeeById(criteria);
         }
 
         private IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(int empId, bool excludedRequest, int year)

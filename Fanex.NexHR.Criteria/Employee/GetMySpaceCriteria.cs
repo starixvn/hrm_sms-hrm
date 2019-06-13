@@ -6,17 +6,10 @@
     public class GetMySpaceCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
-
         public DateTime? Date { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Report_EmployeeDashBoard";
-        }
+        public override string GetSettingKey() => "Report_EmployeeDashBoard";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }

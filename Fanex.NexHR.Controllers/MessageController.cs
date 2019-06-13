@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Message;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
 
@@ -78,9 +77,7 @@
                 IsLocalUser = null
             };
             ViewBag.Employees = employeeService.GetEmployees(getEmployeeCriteria);
-
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll();
             var model = new Message { FromDate = DateTime.Now, ToDate = DateTime.Now };
 
             return View(model);
@@ -129,9 +126,7 @@
             };
 
             ViewBag.Employees = employeeService.GetEmployees(getEmployeeCriteria);
-
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            ViewBag.Groups = teamService.GetAll(getAllGroupCriteria);
+            ViewBag.Groups = teamService.GetAll();
 
             return View();
         }

@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.ExtensionNumber;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.ExtensionNumber;
@@ -170,8 +169,7 @@
             IList<SelectListItem> groups = null;
             if (isInternal)
             {
-                var getAllGroupCriteria = new GetAllGroupCriteria();
-                IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+                IList<Team> teams = teamService.GetAll();
                 groups = teams.Select(x => new SelectListItem
                 {
                     Text = x.Name,

@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Section;
@@ -17,15 +16,13 @@
 
     public interface IEmployeeService
     {
-        string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria);
+        string GenerateEmployeeCode();
 
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
-        IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria);
+        IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId);
 
-        Employee GetEmployeeById(GetEmployeeByIdCriteria criteria);
-
-        Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria);
+        Employee GetEmployeeById(int id);
 
         IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria);
 
@@ -33,13 +30,11 @@
 
         IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 
-        IList<Country> GetAllCountry(GetAllCountryCriteria criteria);
+        IList<Country> GetAllCountry();
 
-        Country GetCountryByCode(GetCountryByCodeCriteria criteria);
+        EmployeeShift GetShiftByEmployeeId(int id);
 
-        EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria);
-
-        MySpaceModel GetMySpace(GetMySpaceCriteria criteria);
+        MySpaceModel GetMySpace(int employeeId, DateTime? date);
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 
@@ -49,7 +44,7 @@
 
         IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 
-        AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria);
+        AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId);
 
         IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria);
 
@@ -66,7 +61,7 @@
         IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
 
         IList<Employee> GetEmployeeByGender(string query, int gender);
-        
+
         CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
     }
 }

@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
@@ -26,36 +28,52 @@
             this.baseService = baseService;
         }
 
-        public Team GetById(GetGroupByIdCriteria criteria)
+        public Team GetById(int id)
         {
-            Team team = new Team();
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetGroupByIdCriteria
             {
-                team = teamRepository.GetById(criteria);
-            }
-
-            return team;
+                GroupId = id
+            };
+            return teamRepository.GetById(criteria);
         }
 
-        public IList<Team> GetAll(GetAllGroupCriteria criteria)
+        public IList<Team> GetAll(bool isDeleted = false)
         {
-            IList<Team> teams = null;
-
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetAllGroupCriteria
             {
-                teams = teamRepository.GetAll(criteria);
-            }
+                IsDeleted = isDeleted
+            };
+            IList<Team> teams = teamRepository.GetAll(criteria);
 
             return teams ?? new List<Team>();
         }
 
-        public IList<Team> GetBySupervisor(GetGroupBySupervisorCriteria criteria)
+        public CommandResult Delete(int actorId, int id)
         {
+            var criteria = new DeleteGroupCriteria
+            {
+                GroupId = id,
+                ModifiedBy = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public IList<Team> GetBySupervisor(int supervisorId)
+        {
+            var criteria = new GetGroupBySupervisorCriteria
+            {
+                SupervisorId = supervisorId
+            };
             return baseService.GetData<Team>(criteria).ToList();
         }
 
-        public IList<SupervisorModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+        public IList<SupervisorModel> GetSectionSupervisorByRoleId(int sectionId, RoleSystem roleId)
         {
+            var criteria = new GetSectionSupervisorByRoleIdCriteria
+            {
+                GroupId = sectionId,
+                Role = (short)roleId
+            };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
@@ -37,36 +38,22 @@
             this.baseService = baseService;
         }
 
-        public string NewEmployeeCode(GetNewEmployeeCodeCriteria criteria)
+        public string GenerateEmployeeCode()
         {
+            var criteria = new GenerateEmployeeCodeCriteria();
             return baseService.GetDataEntity<string>(criteria);
         }
 
-        public Employee GetEmployeeById(GetEmployeeByIdCriteria criteria)
+        public Employee GetEmployeeById(int id)
         {
-            Employee employee = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetEmployeeByIdCriteria
             {
-                employee = employeeRepository.GetEmployeeById(criteria);
-                if (employee != null)
-                {
-                    employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
-                }
-            }
-
-            return employee;
-        }
-
-        public Employee GetEmployeeByCode(GetEmployeeByCodeCriteria criteria)
-        {
-            Employee employee = null;
-            if (criteria != null && criteria.IsValid())
+                EmpId = id
+            };
+            Employee employee = employeeRepository.GetEmployeeById(criteria);
+            if (employee != null)
             {
-                employee = employeeRepository.GetEmployeeByCode(criteria);
-                if (employee != null)
-                {
-                    employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
-                }
+                employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
             }
 
             return employee;
@@ -99,13 +86,22 @@
             return employees ?? new List<Employee>();
         }
 
-        public EmployeeShift GetEmployeeShift(GetEmployeeShiftCriteria criteria)
+        public EmployeeShift GetShiftByEmployeeId(int id)
         {
+            var criteria = new GetShiftByEmployeeIdCriteria
+            {
+                EmpId = id
+            };
             return baseService.GetDataEntity<EmployeeShift>(criteria);
         }
 
-        public MySpaceModel GetMySpace(GetMySpaceCriteria criteria)
+        public MySpaceModel GetMySpace(int employeeId, DateTime? date)
         {
+            var criteria = new GetMySpaceCriteria
+            {
+                EmpId = employeeId,
+                Date = date
+            };
             return baseService.GetDataEntity<MySpaceModel>(criteria);
         }
 
@@ -155,8 +151,12 @@
             return baseService.GetData<AnnualLeaveTransactionViewModel>(criteria).ToList();
         }
 
-        public AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(GetAnnualLeaveTransactionByIdCriteria criteria)
+        public AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId)
         {
+            var criteria = new GetAnnualLeaveTransactionByIdCriteria
+            {
+                LeaveTransId = leaveTransId
+            };
             return baseService.GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
         }
 
@@ -180,18 +180,19 @@
             return baseService.GetData<DateTime>(criteria).ToList();
         }
 
-        public IList<Country> GetAllCountry(GetAllCountryCriteria criteria)
+        public IList<Country> GetAllCountry()
         {
+            var criteria = new GetAllCountryCriteria();
             return baseService.GetData<Country>(criteria).ToList();
         }
 
-        public Country GetCountryByCode(GetCountryByCodeCriteria criteria)
+        public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)
         {
-            return baseService.GetDataEntity<Country>(criteria);
-        }
-
-        public IList<SupervisorModel> GetEmployeeSupervisor(GetEmployeeSupervisorCriteria criteria)
-        {
+            var criteria = new GetEmployeeSupervisorCriteria
+            {
+                EmpId = employeeId,
+                Role = (short)roleId
+            };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }
 

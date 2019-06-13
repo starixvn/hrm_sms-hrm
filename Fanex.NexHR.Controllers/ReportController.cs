@@ -11,7 +11,6 @@
     using Criteria.Lookup;
     using Criteria.Report;
     using Criteria.Supervisor;
-    using Criteria.Team;
     using Criteria.Time;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
@@ -54,12 +53,7 @@
 
         public ActionResult Attendance()
         {
-            var getGroupCriteria = new GetGroupBySupervisorCriteria
-            {
-                SupervisorId = sessionService.Employee.Id
-            };
-
-            ViewBag.Groups = teamService.GetBySupervisor(getGroupCriteria);
+            ViewBag.Groups = teamService.GetBySupervisor(sessionService.Employee.Id);
             var model = new EmployeeAttendanceViewModel
             {
                 FromDate = DateTime.Now,
@@ -130,13 +124,11 @@
 
         public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
         {
-            IList<Team> teams = GetAllTeam();
-
             var model = new TimeRecordViewModel
             {
                 FromDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : fromDate.Value,
                 ToDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : toDate.Value,
-                Teams = teams,
+                Teams = teamService.GetAll(),
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
@@ -213,7 +205,7 @@
                 };
             }
 
-            ViewBag.Groups = GetAllTeam();
+            ViewBag.Groups = teamService.GetAll();
             ViewBag.TeamIds = model.TeamIds;
 
             var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria
@@ -239,7 +231,7 @@
                 var today = DateTime.Today;
                 model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
-                model.Teams = GetAllTeam();
+                model.Teams = teamService.GetAll();
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
@@ -272,7 +264,7 @@
 
                 model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
-                model.Teams = GetAllTeam();
+                model.Teams = teamService.GetAll();
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
@@ -305,7 +297,7 @@
             {
                 Month = today.Month,
                 Year = today.Year,
-                Sections = GetAllTeam()
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -340,7 +332,7 @@
             var model = new TotalWorkingHourDailyViewModel
             {
                 WorkDate = DateTime.Now,
-                Sections = GetAllTeam()
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -354,7 +346,7 @@
             {
                 FromDate = DateTime.Now.AddDays(dayDiff).ToDateMonthYearFormatedDate(),
                 ToDate = DateTime.Now.AddDays(dayDiff).AddDays(6).ToDateMonthYearFormatedDate(),
-                Sections = GetAllTeam()
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -413,7 +405,7 @@
                     IsLocal = filterModel.IsLocal
                 };
 
-                ViewBag.Groups = GetAllTeam();
+                ViewBag.Groups = teamService.GetAll();
                 ViewBag.DefaultFromDate = model.FromDate;
                 ViewBag.DefaultToDate = model.ToDate;
                 var getAllJobTitleCriteria = new GetAllLookupDataCriteria
@@ -434,16 +426,11 @@
 
         public ActionResult UnpaidLeaveSummary()
         {
-            var getGroupCriteria = new GetGroupBySupervisorCriteria
-            {
-                SupervisorId = sessionService.Employee.Id
-            };
-
             var model = new LeaveSummaryViewModel
             {
                 Year = DateTime.Now.Year,
                 EmployeeId = -1,
-                Sections = teamService.GetBySupervisor(getGroupCriteria),
+                Sections = teamService.GetBySupervisor(sessionService.Employee.Id),
                 LeaveType = UnpaidLeaveType.UnpaidLeave
             };
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
@@ -464,11 +451,8 @@
                 LeaveType = (int)leavingSummaryModel.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
-
-            IList<Team> sections = teamService.GetBySupervisor(new GetGroupBySupervisorCriteria { SupervisorId = sessionService.Employee.Id });
-
+            IList<Team> sections = teamService.GetBySupervisor(sessionService.Employee.Id);
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
-
             ViewBag.HeaderTitle = string.Format("{0} {1}", Enumerations.GetStringValue(leavingSummaryModel.LeaveType), leavingSummaryModel.Year);
             return PartialView("_ListLeaveSummary", leaveSummaryByTeamList);
         }
@@ -485,7 +469,7 @@
         {
             var model = new EmployeeAndSectionSupervisorViewModel
             {
-                Sections = GetAllTeam()
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -509,7 +493,7 @@
         {
             var model = new EmployeeAndSectionSupervisorViewModel
             {
-                Sections = GetAllTeam()
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -571,13 +555,6 @@
                 hssfworkbook.Write(output);
                 return File(output.ToArray(), "application/vnd.ms-excel", fileName);
             }
-        }
-
-        private IList<Team> GetAllTeam()
-        {
-            var criteria = new GetAllGroupCriteria();
-
-            return teamService.GetAll(criteria);
         }
     }
 }

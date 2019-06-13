@@ -5,17 +5,10 @@
     public class GetDepartmentByParentIdCriteria : CriteriaBase
     {
         public int? ParentId { get; set; }
-
         public bool? IsActive { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Department_GetByParentId";
-        }
+        public override string GetSettingKey() => "Department_GetByParentId";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

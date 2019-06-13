@@ -13,7 +13,6 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Criteria.Shift;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -44,8 +43,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = teamService.GetAll();
 
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
@@ -95,15 +93,13 @@
             var model = new EmployeeShiftViewModel
             {
                 TeamIds = teamIds ?? string.Empty,
-                WorkDate = workDate.HasValue ? workDate.Value : DateTime.Now,
+                WorkDate = workDate ?? DateTime.Now,
                 IsLocal = isLocal,
                 IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
-                ShiftId = shiftId.HasValue ? shiftId.Value : -1,
-                Shifts = shiftService.GetAll()
+                ShiftId = shiftId ?? -1,
+                Shifts = shiftService.GetAll(),
+                Teams = teamService.GetAll()
             };
-
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            model.Teams = teamService.GetAll(getAllGroupCriteria);
 
             return View(model);
         }
@@ -159,10 +155,9 @@
 
         public ActionResult WorkingCalendars()
         {
-            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
-
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria { LookupCode = Constants.JobTitle };
-            IList<SelectListItem> jobTitles = lookupDataService.GetAll(getAllJobTitleCriteria).Select(j => new SelectListItem
+            IList<Team> sections = teamService.GetAll();
+            var criteria = new GetAllLookupDataCriteria { LookupCode = Constants.JobTitle };
+            IList<SelectListItem> jobTitles = lookupDataService.GetAll(criteria).Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),

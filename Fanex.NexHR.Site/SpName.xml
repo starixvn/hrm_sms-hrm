@@ -21,9 +21,8 @@
     </Setting>
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeRecord_Insert" SpName="TimeRecord_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Country_GetByCode" SpName="Country_GetByCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Employee_GetNewEmployeecode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Employee_GenerateEmployeeCode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_Insert" SpName="Employee_Information_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Delete" SpName="Employee_Delete" DbName="nexhrx" Plain="0"></Setting>
@@ -234,11 +233,8 @@
     <Setting Key="Employee_Shift_GetByDate" SpName="Employee_Shift_GetByDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetUnavailRequestDate" SpName="EmployeeCalendar_GetUnavailRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeForRelatedTeam" SpName="Employee_GetEmployeeForRelatedTeam" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Employee_GetEmployeeByCode" SpName="Employee_GetEmployeeByCode" DbName="nexhrx" Plain="0">
-    </Setting>
     <Setting Key="Employee_ChangePassword" SpName="Employee_ChangePassword" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Employee_GetByRole" SpName="Employee_GetByRole" DbName="nexhrx" Plain="0">
-    </Setting>
+    <Setting Key="Employee_GetByRole" SpName="Employee_GetByRole" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_Update" SpName="EmployeeSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetRequestByEmpID" SpName="EmployeeSupervisor_GetRequestByEmpID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_GetListSupervisorByEmpID" SpName="EmployeeSupervisor_GetListSupervisorByEmpID" DbName="nexhrx" Plain="0"></Setting>

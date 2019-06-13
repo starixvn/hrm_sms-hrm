@@ -167,7 +167,7 @@
     <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
-    <Compile Include="Supervisor\GetTeamSupervisorCriteria.cs" />
+    <Compile Include="Section\GetSectionSupervisorByRoleIdCriteria.cs" />
     <Compile Include="Section\EditSectionSupervisorCriteria.cs" />
     <Compile Include="Section\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
@@ -205,15 +205,13 @@
     <Compile Include="Request\GetHistoryRequestCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
-    <Compile Include="Country\GetCountryByCodeCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByRequestTypeCriteria.cs" />
     <Compile Include="Country\GetAllCountryCriteria.cs" />
     <Compile Include="Employee\DeleteEmployeeCriteria.cs" />
-    <Compile Include="Employee\GetEmployeeByCodeCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByRoleCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetListSupervisorNameCriteria.cs" />
-    <Compile Include="Employee\GetNewEmployeeCodeCriteria.cs" />
+    <Compile Include="Employee\GenerateEmployeeCodeCriteria.cs" />
     <Compile Include="Employee\GetUserLoginByDomainUserNameCriteria.cs" />
     <Compile Include="Employee\GetEmployeeByIdCriteria.cs" />
     <Compile Include="Employee\InsertEmployeeCriteria.cs" />
@@ -268,7 +266,7 @@
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />
     <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
-    <Compile Include="Shift\GetEmployeeShiftCriteria.cs" />
+    <Compile Include="Shift\GetShiftByEmployeeIdCriteria.cs" />
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\GetShiftStatisticCriteria.cs" />
     <Compile Include="Shift\InsertShiftCriteria.cs" />

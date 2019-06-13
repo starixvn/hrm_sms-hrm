@@ -4,14 +4,8 @@
 
     public class GetAllCountryCriteria : CriteriaBase
     {
-        public override string GetSettingKey()
-        {
-            return "Country_GetAll";
-        }
+        public override string GetSettingKey() => "Country_GetAll";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

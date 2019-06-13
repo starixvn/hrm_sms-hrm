@@ -1,15 +1,17 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Criteria.Department;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
 
     public interface IDepartmentService
     {
-        Department GetById(GetDepartmentByIdCriteria criteria);
+        Department GetById(int id);
 
-        IList<Department> GetDepartment(GetDepartmentByParentIdCriteria criteria);
+        IList<Department> GetDepartment(int? parentId = null, bool? isActive = true);
 
-        IList<Department> GetParentDepartment(GetParentByDepartmentCriteria criteria);
+        IList<Department> GetParentDepartment(int departmentId);
+
+        CommandResult Delete(int actorId, int id);
     }
 }

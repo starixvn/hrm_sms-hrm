@@ -7,21 +7,18 @@
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
-    using Criteria.Calendar;
-    using Criteria.Request;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Security;
-    using Fanex.NexHR.Criteria.Country;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Lookup;
-    using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
@@ -62,7 +59,7 @@
             var model = new UserManagementViewModel
             {
                 IsEnable = true,
-                Groups = GetAllTeam(),
+                Groups = teamService.GetAll(),
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
@@ -117,7 +114,7 @@
                 JobTitleId = jobTitleId,
                 GroupIds = groupIds,
                 IsEnable = true,
-                Groups = GetAllTeam(),
+                Groups = teamService.GetAll(),
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
@@ -164,8 +161,8 @@
 
         public ActionResult Detail(int id)
         {
-            Employee model = GetEmployeeById(id);
-            EmployeeShift employeeShift = GetEmployeeShift(id);
+            Employee model = employeeService.GetEmployeeById(id);
+            EmployeeShift employeeShift = employeeService.GetShiftByEmployeeId(id);
 
             ViewBag.Sun = employeeShift.SunShiftName;
             ViewBag.Mon = employeeShift.MonShiftName;
@@ -182,9 +179,7 @@
         [HRMPermission(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
-            IList<Team> teams = GetAllTeam();
-            ViewBag.Teams = teams;
-
+            ViewBag.Teams = teamService.GetAll();
             return View(new CreateEmployeeViewModel());
         }
 
@@ -217,18 +212,17 @@
                 }
             }
 
-            IList<Team> teams = GetAllTeam();
-            ViewBag.Teams = teams;
+            ViewBag.Teams = teamService.GetAll();
             return View(model);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
-            Employee model = GetEmployeeById(id);
+            Employee model = employeeService.GetEmployeeById(id);
             if (model != null)
             {
-                model.Coutries = GetCountries();
+                model.Coutries = employeeService.GetAllCountry();
 
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
                 model.Verifier = GetVerifiers(supervisors);
@@ -267,7 +261,7 @@
                     }
                 }
 
-                model.Coutries = GetCountries();
+                model.Coutries = employeeService.GetAllCountry();
 
                 IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
                 model.Verifier = GetVerifiers(supervisors);
@@ -337,14 +331,8 @@
 
         public ActionResult MySpace()
         {
-            var getMySpaceCriteria = new GetMySpaceCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                Date = DateTime.Now
-            };
-            MySpaceModel model = employeeService.GetMySpace(getMySpaceCriteria);
-
-            Employee employee = GetEmployeeById(sessionService.Employee.Id);
+            MySpaceModel model = employeeService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
+            Employee employee = employeeService.GetEmployeeById(sessionService.Employee.Id);
             ViewBag.ResetPassword = employee.PasswordReset;
             model.HasManagementDashboard = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
@@ -373,14 +361,9 @@
             return View();
         }
 
-        public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
+        public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)
         {
-            var criteria = new GetEmployeeSupervisorCriteria
-            {
-                EmpId = employeeId,
-                Role = roleId
-            };
-            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisor(criteria);
+            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, roleId);
 
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -404,12 +387,7 @@
 
         public CustomJsonResult GetShiftManagerByEmployeeId(int employeeId)
         {
-            var criteria = new GetEmployeeSupervisorCriteria
-            {
-                EmpId = employeeId,
-                Role = (short)RoleSystem.ShiftManager
-            };
-            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisor(criteria);
+            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, RoleSystem.ShiftManager);
             return new CustomJsonResult
             {
                 Data = supervisors.Select(x => new Supervisor { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }),
@@ -560,11 +538,9 @@
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetNewEmployeeCode()
+        public JsonResult GenerateEmployeeCode()
         {
-            var getNewEmployeeCodeCriteria = new GetNewEmployeeCodeCriteria();
-            string newCode = employeeService.NewEmployeeCode(getNewEmployeeCodeCriteria);
-
+            string newCode = employeeService.GenerateEmployeeCode();
             return Json(newCode, JsonRequestBehavior.AllowGet);
         }
 
@@ -632,50 +608,13 @@
             return GetSupervisors(supervisors, (int)RoleSystem.DisciplineManager);
         }
 
-        private IList<Country> GetCountries()
-        {
-            var criteria = new GetAllCountryCriteria();
-            IList<Country> countries = employeeService.GetAllCountry(criteria);
-            return countries;
-        }
-
-        private Employee GetEmployeeById(int empId)
-        {
-            var criteria = new GetEmployeeByIdCriteria
-            {
-                EmpId = empId
-            };
-
-            Employee employee = employeeService.GetEmployeeById(criteria);
-            return employee;
-        }
-
-        private EmployeeShift GetEmployeeShift(int empId)
-        {
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria
-            {
-                EmpId = empId
-            };
-
-            EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
-            return employeeShift;
-        }
-
         private void ComposeViewBagsForEditEmployee()
         {
-            ViewBag.Groups = GetAllTeam();
+            ViewBag.Groups = teamService.GetAll();
             ViewBag.JobTitles = GetAllJobTitle();
 
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
-        }
-
-        private IList<Team> GetAllTeam()
-        {
-            var criteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(criteria);
-
-            return teams;
         }
 
         private IList<LookupData> GetAllJobTitle()

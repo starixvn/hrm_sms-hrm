@@ -6,7 +6,6 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.ExportExcel;
@@ -52,8 +51,7 @@
                 SupervisorId = null
             };
             IList<LeaveSummary> leaveSummary = reportService.GetAnnualLeaveBalanceReport(criteria);
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
+            IList<Team> teams = teamService.GetAll();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
             HSSFWorkbook hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
@@ -73,7 +71,7 @@
                 LeaveType = (int)model.LeaveType
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
-            IList<Team> teams = teamService.GetAll(new GetAllGroupCriteria());
+            IList<Team> teams = teamService.GetAll();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
             exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
 

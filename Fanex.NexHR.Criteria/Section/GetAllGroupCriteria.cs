@@ -6,14 +6,8 @@
     {
         public int SupervisorId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Group_GetBySupervisor";
-        }
+        public override string GetSettingKey() => "Group_GetBySupervisor";
 
-        public override bool IsValid()
-        {
-            return SupervisorId > 0;
-        }
+        public override bool IsValid() => SupervisorId > 0;
     }
 }

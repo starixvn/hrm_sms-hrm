@@ -10,9 +10,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Section;
@@ -44,9 +42,8 @@
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
-            IList<Team> teams = GetAllTeam();
+            IList<Team> teams = teamService.GetAll();
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
-
             ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
 
             return View(teams);
@@ -57,7 +54,7 @@
         {
             var model = new TeamViewModel
             {
-                Departments = GetAllDepartment(isActive: true),
+                Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()
             };
             return View(model);
@@ -67,7 +64,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create(TeamViewModel model)
         {
-            model.Departments = GetAllDepartment(isActive: true);
+            model.Departments = departmentService.GetDepartment();
             model.Employees = GetAllEmployees();
             if (ModelState.IsValid)
             {
@@ -101,13 +98,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Edit(int id)
         {
-            var criteria = new GetGroupByIdCriteria
-            {
-                GroupId = id
-            };
-
-            Team team = teamService.GetById(criteria);
-
+            Team team = teamService.GetById(id);
             var model = new TeamViewModel
             {
                 TeamCode = team.Code,
@@ -120,7 +111,7 @@
                 ModifiedDate = DateTime.Now,
                 ModifiedBy = sessionService.Employee.Id,
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
-                Departments = GetAllDepartment(isActive: true),
+                Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()
             };
 
@@ -133,7 +124,7 @@
         {
             if (model != null)
             {
-                model.Departments = GetAllDepartment(isActive: true);
+                model.Departments = departmentService.GetDepartment();
                 model.Employees = GetAllEmployees();
                 if (ModelState.IsValid)
                 {
@@ -172,12 +163,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteGroupCriteria
-            {
-                GroupId = id,
-                ModifiedBy = sessionService.Employee.Id
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult result = teamService.Delete(sessionService.Employee.Id, id);
 
             return Json(result);
         }
@@ -202,14 +188,9 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public CustomJsonResult GetSectionSupervisorByRoleId(int sectionId, short roleId)
+        public CustomJsonResult GetSectionSupervisorByRoleId(int sectionId, RoleSystem roleId)
         {
-            var criteria = new GetTeamSupervisorCriteria
-            {
-                GroupId = sectionId,
-                Role = roleId
-            };
-            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetSectionSupervisorByRoleId(sectionId, roleId);
 
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -226,12 +207,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public CustomJsonResult GetShiftManagerBySectionId(int sectionId)
         {
-            var criteria = new GetTeamSupervisorCriteria
-            {
-                GroupId = sectionId,
-                Role = (short)RoleSystem.ShiftManager
-            };
-            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisor(criteria);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetSectionSupervisorByRoleId(sectionId, RoleSystem.ShiftManager);
 
             return new CustomJsonResult
             {
@@ -265,17 +241,6 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private IList<Department> GetAllDepartment(bool? isActive)
-        {
-            var criteria = new GetDepartmentByParentIdCriteria
-            {
-                IsActive = isActive
-            };
-            IList<Department> departments = departmentService.GetDepartment(criteria);
-
-            return departments;
-        }
-
         private IList<Employee> GetAllEmployees()
         {
             var getEmployeeCriteria = new GetAllEmployeeCriteria
@@ -287,18 +252,9 @@
                 TitleId = null,
                 IsLocalUser = null
             };
-
             IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria).ToList();
 
             return employees;
-        }
-
-        private IList<Team> GetAllTeam()
-        {
-            var criteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(criteria);
-
-            return teams;
         }
     }
 }

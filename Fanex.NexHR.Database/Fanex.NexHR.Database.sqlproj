@@ -270,11 +270,9 @@
     <Build Include="dbo\Stored Procedures\Country_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetById.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Delete_TmpKIVLeaveBalance.sql" />
-    <Build Include="dbo\Stored Procedures\Country_GetByCode.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Insert.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Delete_TmpLeaveBalance.sql" />
-    <Build Include="dbo\Stored Procedures\Country_GetByName.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetAllByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
@@ -296,7 +294,6 @@
     <Build Include="dbo\Stored Procedures\Employee_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\Message_Delete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByCode.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetOtherDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\Message_EmployeeDelete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById.sql" />

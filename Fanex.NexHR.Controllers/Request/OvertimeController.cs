@@ -13,7 +13,6 @@
     using Criteria.Overtime;
     using Criteria.Request;
     using Criteria.Supervisor;
-    using Criteria.Team;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Hangfire;
@@ -273,11 +272,10 @@
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult YearlyReport()
         {
-            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
             var model = new YearlyOvertimeReportViewModel
             {
                 Year = DateTime.Now.Year,
-                Sections = sections
+                Sections = teamService.GetAll()
             };
 
             return View(model);
@@ -388,13 +386,11 @@
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
-            IList<Team> sections = teamService.GetAll(new GetAllGroupCriteria());
-
-            var getAllJobTitleCriteria = new GetAllLookupDataCriteria
+            var criteria = new GetAllLookupDataCriteria
             {
                 LookupCode = Constants.JobTitle
             };
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(getAllJobTitleCriteria);
+            IList<LookupData> listJobTitle = lookupDataService.GetAll(criteria);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -405,7 +401,7 @@
             {
                 FromDate = DateTime.Now.AddMonths(-1),
                 ToDate = DateTime.Now,
-                Sections = sections,
+                Sections = teamService.GetAll(),
                 JobTitles = jobTitles
             };
 
@@ -452,11 +448,9 @@
         [NonAction]
         private MemberOvertimeViewModel GetMemberOvertimeViewModel()
         {
-            var getAllGroupCriteria = new GetAllGroupCriteria();
-            IList<Team> teams = teamService.GetAll(getAllGroupCriteria);
             var memberOvertimeViewModel = new MemberOvertimeViewModel
             {
-                Teams = teams,
+                Teams = teamService.GetAll(),
                 StatusId = -1
             };
 

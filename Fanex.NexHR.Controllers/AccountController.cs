@@ -12,9 +12,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Security;
-    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -39,12 +37,9 @@
 
         public ActionResult Index()
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
-            Employee model = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee model = employeeService.GetEmployeeById(sessionService.Employee.Id);
             model.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
-
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = sessionService.Employee.Id };
-            EmployeeShift employeeShift = employeeService.GetEmployeeShift(employeeShiftCriteria);
+            EmployeeShift employeeShift = employeeService.GetShiftByEmployeeId(sessionService.Employee.Id);
 
             ViewBag.IsUpdated = false;
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
@@ -71,12 +66,9 @@
                 ViewBag.IsUpdated = false;
             }
 
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
-            Employee displayModel = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+            Employee displayModel = employeeService.GetEmployeeById(sessionService.Employee.Id);
             displayModel.AllowEditPersonalInformation = ConfigSettings.AllowEditPersonalInformation;
-
-            var employeeShiftCriteria = new GetEmployeeShiftCriteria { EmpId = sessionService.Employee.Id };
-            var workingCalendar = employeeService.GetEmployeeShift(employeeShiftCriteria);
+            var workingCalendar = employeeService.GetShiftByEmployeeId(sessionService.Employee.Id);
 
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
             DisplayShiftForPersonalInformation(workingCalendar);
@@ -98,8 +90,7 @@
 
         public ActionResult EditContact()
         {
-            var criteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
-            Employee employee = employeeService.GetEmployeeById(criteria);
+            Employee employee = employeeService.GetEmployeeById(sessionService.Employee.Id);
             var model = new EmployeeContactViewModel
             {
                 ChineseName = employee.ChineseName,
@@ -252,8 +243,7 @@
 
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
-            var getAllCountryCriteria = new GetAllCountryCriteria();
-            var countries = employeeService.GetAllCountry(getAllCountryCriteria);
+            IList<Country> countries = employeeService.GetAllCountry();
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
             ViewBag.Genders = new List<SelectListItem>

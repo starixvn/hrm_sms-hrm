@@ -16,7 +16,6 @@
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
@@ -267,7 +266,7 @@
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
-            request.TeamCollection = GetGroupBySupervisor();
+            request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
             request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
             request.LeaveTypeCollection = GetLeaveType();
             int? employeeId = null;
@@ -308,17 +307,6 @@
                 && (t.ApprovedBy.Id == sessionService.Employee.Id || t.VerifiedBy.Id == sessionService.Employee.Id);
             bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == sessionService.Employee.Id);
             return pending || verified;
-        }
-
-        private IList<Team> GetGroupBySupervisor()
-        {
-            var criteria = new GetGroupBySupervisorCriteria
-            {
-                SupervisorId = sessionService.Employee.Id
-            };
-
-            IList<Team> teams = teamService.GetBySupervisor(criteria);
-            return teams;
         }
 
         private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)

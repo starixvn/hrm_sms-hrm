@@ -6,30 +6,25 @@
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.ViewModels;
-    using Models.Report;
 
     public class ReportService : IReportService
     {
         private readonly IReportRepository reportRepository;
         private readonly IBaseService baseService;
-        private readonly ITeamService teamService;
 
         public ReportService(
             IReportRepository reportRepository,
-            IBaseService baseService,
-            ITeamService teamService)
+            IBaseService baseService)
         {
             this.reportRepository = reportRepository;
             this.baseService = baseService;
-            this.teamService = teamService;
         }
 
         public IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria)
@@ -111,11 +106,11 @@
 
         public IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
         {
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = AddManagementTeamFirstPosition(teams);
+            var leaveSummaryByTeams = new List<LeaveSummaryByTeam>();
 
             foreach (Team team in teams)
             {
-                LeaveSummaryByTeam entity = new LeaveSummaryByTeam
+                var entity = new LeaveSummaryByTeam
                 {
                     Team = team,
                     LeaveSummaryInTeam = new List<LeaveSummary>()
@@ -123,27 +118,13 @@
 
                 foreach (LeaveSummary leavesumary in leaveSummaryList.Where(x => x.Employee.Team.Name == team.Name))
                 {
-                    /*Check if team is mamagement team, add leave summary for them*/
-                    if ((team.Id == 11 && teams.Count > 1) || (teams.Count == 1 && teams[0].Id == 11))
-                    {
-                        leaveSummaryByTeamList[0].LeaveSummaryInTeam.Add(leavesumary);
-                    }
-                    else
-                    {
-                        entity.LeaveSummaryInTeam.Add(leavesumary);
-                    }
+                    entity.LeaveSummaryInTeam.Add(leavesumary);
                 }
 
-                // When select management team, return here
-                if (teams.Count == 1 && teams[0].Id == 11)
-                {
-                    return leaveSummaryByTeamList;
-                }
-
-                leaveSummaryByTeamList.Add(entity);
+                leaveSummaryByTeams.Add(entity);
             }
 
-            return leaveSummaryByTeamList;
+            return leaveSummaryByTeams;
         }
 
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
@@ -220,30 +201,6 @@
         public IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria)
         {
             return baseService.GetData<WeekendLeaveDetail>(criteria).ToList();
-        }
-
-        private IList<LeaveSummaryByTeam> AddManagementTeamFirstPosition(
-            IList<Team> teams)
-        {
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = new List<LeaveSummaryByTeam>();
-
-            if (teams.Count > 1 || (teams.Count == 1 && teams[0].Id == 11))
-            {
-                var getGroupByIdCriteria = new GetGroupByIdCriteria
-                {
-                    GroupId = 11
-                };
-                LeaveSummaryByTeam management = new LeaveSummaryByTeam
-                {
-                    Team = teamService.GetById(getGroupByIdCriteria),
-                    LeaveSummaryInTeam = new List<LeaveSummary>()
-                };
-
-                // Add management team in 1st position
-                leaveSummaryByTeamList.Add(management);
-            }
-
-            return leaveSummaryByTeamList;
         }
     }
 }

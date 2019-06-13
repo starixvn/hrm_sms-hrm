@@ -7,7 +7,6 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Criteria.Shift;
@@ -263,8 +262,7 @@
 
         private void CheckIsTopManager(CheckInOutRequestViewModel model)
         {
-            var criteria = new GetEmployeeByIdCriteria { EmpId = model.EmployeeId };
-            var employee = employeeService.GetEmployeeById(criteria);
+            Employee employee = employeeService.GetEmployeeById(model.EmployeeId);
             if (employee.IsTopManager)
             {
                 foreach (var modelError in ModelState)

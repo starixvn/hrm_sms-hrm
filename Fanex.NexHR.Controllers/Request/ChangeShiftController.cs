@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
@@ -180,8 +179,7 @@
 
             if (request != null && changeShiftDetail != null)
             {
-                var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = request.Requester.Id };
-                Employee employee = employeeService.GetEmployeeById(getEmployeeByIdCriteria);
+                Employee employee = employeeService.GetEmployeeById(request.Requester.Id);
                 model = new ChangeShiftViewModel
                 {
                     Employee = employee.NickName,

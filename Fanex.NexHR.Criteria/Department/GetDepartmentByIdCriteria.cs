@@ -6,14 +6,8 @@
     {
         public int DepartmentId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Department_GetById";
-        }
+        public override string GetSettingKey() => "Department_GetById";
 
-        public override bool IsValid()
-        {
-            return DepartmentId > 0;
-        }
+        public override bool IsValid() => DepartmentId > 0;
     }
 }

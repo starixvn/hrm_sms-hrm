@@ -43,7 +43,7 @@
         {
             if (model != null)
             {
-                model.Departments = GetAllDepartment(model.IsActive);
+                model.Departments = departmentService.GetDepartment(isActive: model.IsActive);
             }
 
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DivisionManagement, Policy.Host);
@@ -56,7 +56,7 @@
         {
             var model = new AddDepartmentViewModel
             {
-                ParentDepartments = GetAllDepartment(isActive: true)
+                ParentDepartments = departmentService.GetDepartment()
             };
             return View(model);
         }
@@ -67,7 +67,7 @@
         {
             if (model != null)
             {
-                model.ParentDepartments = GetAllDepartment(isActive: true);
+                model.ParentDepartments = departmentService.GetDepartment();
 
                 if (ModelState.IsValid)
                 {
@@ -99,8 +99,8 @@
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
         {
-            Department department = GetDepartmentById(departmentId);
-
+            Department department = departmentService.GetById(departmentId);
+            IList<Department> parentDepartments = departmentService.GetParentDepartment(departmentId);
             var model = new EditDepartmentViewModel
             {
                 DeprtamentId = departmentId,
@@ -110,7 +110,7 @@
                 ManagerId = department.Manager.Id,
                 Manager = department.Manager.DisplayName,
                 ParentId = department.Parent == null ? 0 : department.Parent.Id,
-                ParentDepartments = GetParentDepartment(departmentId)
+                ParentDepartments = parentDepartments
             };
             return View(model);
         }
@@ -121,7 +121,7 @@
         {
             if (model != null)
             {
-                model.ParentDepartments = GetParentDepartment(model.DeprtamentId);
+                model.ParentDepartments = departmentService.GetParentDepartment(model.DeprtamentId);
                 if (ModelState.IsValid)
                 {
                     var criteria = new UpdateDepartmentCriteria
@@ -155,49 +155,9 @@
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public JsonResult Delete(int departmentId)
         {
-            var criteria = new DeleteDepartmentCriteria
-            {
-                DepartmentId = departmentId,
-                ModifiedBy = sessionService.Employee.Id,
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult result = departmentService.Delete(sessionService.Employee.Id, departmentId);
 
             return Json(result);
-        }
-
-        private IList<Department> GetAllDepartment(bool? isActive)
-        {
-            var criteria = new GetDepartmentByParentIdCriteria
-            {
-                IsActive = isActive
-            };
-            IList<Department> departments = departmentService.GetDepartment(criteria);
-
-            return departments;
-        }
-
-        private Department GetDepartmentById(int departmentId)
-        {
-            var criteria = new GetDepartmentByIdCriteria
-            {
-                DepartmentId = departmentId
-            };
-
-            Department department = departmentService.GetById(criteria);
-
-            return department;
-        }
-
-        private IList<Department> GetParentDepartment(int departmentId)
-        {
-            var criteria = new GetParentByDepartmentCriteria
-            {
-                DepartmentId = departmentId
-            };
-
-            IList<Department> departments = departmentService.GetParentDepartment(criteria);
-
-            return departments;
         }
     }
 }
