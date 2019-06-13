@@ -436,7 +436,7 @@
         {
             var getGroupCriteria = new GetGroupBySupervisorCriteria
             {
-                SupervisorId = CurrentUser.Id
+                SupervisorId = sessionService.Employee.Id
             };
 
             var model = new LeaveSummaryViewModel
@@ -460,7 +460,7 @@
                 EmpId = leavingSummaryModel.EmployeeId != -1 ? new int?(leavingSummaryModel.EmployeeId) : null,
                 GroupIds = leavingSummaryModel.SectionIds,
                 IsLocal = (byte?)leavingSummaryModel.Category,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = sessionService.Employee.Id,
                 LeaveType = (int)leavingSummaryModel.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);

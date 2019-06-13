@@ -98,7 +98,7 @@
 
         public ActionResult EditContact()
         {
-            var criteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
+            var criteria = new GetEmployeeByIdCriteria { EmpId = sessionService.Employee.Id };
             Employee employee = employeeService.GetEmployeeById(criteria);
             var model = new EmployeeContactViewModel
             {
@@ -110,7 +110,7 @@
                 Address = employee.Address,
                 CurrentAddress = employee.CurrentAddress,
                 FileUploaded = GetAllFileUploaded(),
-                BaseFileLocation = Constants.ProfileUploadPath + "/" + CurrentUser.Code + "/"
+                BaseFileLocation = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/"
             };
             return View(model);
         }
@@ -123,7 +123,7 @@
             {
                 var criteria = new SelfUpdateContactCriteria
                 {
-                    EmpId = CurrentUser.Id,
+                    EmpId = sessionService.Employee.Id,
                     ChineseName = model.ChineseName,
                     Email = model.Email,
                     Phone = model.Phone,
@@ -144,7 +144,7 @@
                     ModelState.AddModelError(string.Empty, result.Message);
                 }
                 model.FileUploaded = GetAllFileUploaded();
-                model.BaseFileLocation = Constants.ProfileUploadPath + "/" + CurrentUser.Code + "/";
+                model.BaseFileLocation = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
             }
             return View(model);
         }
@@ -152,14 +152,14 @@
         public ActionResult GetFileUploaded()
         {
             var fileNames = GetAllFileUploaded();
-            ViewBag.BaseUrl = Constants.ProfileUploadPath + "/" + CurrentUser.Code + "/";
+            ViewBag.BaseUrl = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
             return PartialView("_ListFileUploaded", fileNames);
         }
 
         private IList<string> GetAllFileUploaded()
         {
             var filePath = new List<string>();
-            string path = HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + CurrentUser.Code;
+            string path = HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + sessionService.Employee.Code;
             if (Directory.Exists(path))
             {
                 var paths = Directory.GetFiles(path);

@@ -12,6 +12,8 @@
 
     public class FileController : BaseController
     {
+        private const int MaxSizeFileUpload = 5 * 1024 * 1024;
+
         public FileController(ISessionService sessionService) : base(sessionService)
         {
         }
@@ -81,7 +83,7 @@
                 foreach (var file in files)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    string basePath = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + CurrentUser.Code;
+                    string basePath = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + sessionService.Employee.Code;
                     if (!Directory.Exists(basePath))
                     {
                         Directory.CreateDirectory(basePath);
@@ -93,7 +95,7 @@
                     }
                     else
                     {
-                        var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), CurrentUser.Code, fileName);
+                        var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), sessionService.Employee.Code, fileName);
                         file.SaveAs(path);
                     }
                 }
@@ -127,7 +129,7 @@
         {
             bool isSuccessful = false;
             string message = string.Empty;
-            string path = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + CurrentUser.Code + "/" + fileName;
+            string path = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + sessionService.Employee.Code + "/" + fileName;
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);

@@ -50,7 +50,7 @@
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.JobTitleManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public ActionResult ExportExcel(string jobTitle)
         {
             var criteria = new GetJobTitleCriteria { JobTitle = jobTitle };

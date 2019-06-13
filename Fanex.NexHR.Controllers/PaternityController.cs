@@ -3,39 +3,42 @@
     using System;
     using System.Linq;
     using System.Web.Mvc;
-    using Core.Constants;
-    using Core.Enums;
-    using Core.Models;
-    using Criteria.Paternity;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Paternity;
     using Fanex.NexHR.Services.Interfaces;
-    using ViewModels.Paternity;
-    using Web.Providers;
+    using Fanex.NexHR.ViewModels.Paternity;
 
     public class PaternityController : BaseController
     {
         private readonly IPaternityService paternityService;
 
-        public PaternityController(IPaternityService paternityService)
+        public PaternityController(
+            ISessionService sessionService,
+            IPaternityService paternityService) : base(sessionService)
         {
             this.paternityService = paternityService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return View();
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult ListPaternity(int year)
         {
             var paternities = paternityService.GetAll(year);
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_ListPaternity", paternities);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
             var model = new PaternityViewModel
@@ -47,7 +50,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create(PaternityViewModel model)
         {
             var result = new CommandResult();
@@ -59,7 +62,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    CreatedBy = CurrentUser.Id,
+                    CreatedBy = sessionService.Employee.Id,
                     Remark = model.Remark
                 };
 
@@ -73,7 +76,7 @@
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
             var paternity = paternityService.GetById(id);
@@ -90,7 +93,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Update(int id, PaternityViewModel model)
         {
             var result = new CommandResult();
@@ -103,7 +106,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    ModifiedBy = CurrentUser.Id,
+                    ModifiedBy = sessionService.Employee.Id,
                     Remark = model.Remark
                 };
 
@@ -118,7 +121,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(int id)
         {
             var result = paternityService.Delete(id);

@@ -7,35 +7,38 @@
     using Core.Enums;
     using Core.Models;
     using Criteria.Postnatal;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
     using Services.Interfaces;
     using ViewModels.Postnatal;
-    using Web.Providers;
 
     public class PostnatalController : BaseController
     {
         private readonly IPostnatalService postnatalService;
 
-        public PostnatalController(IPostnatalService postnatalService)
+        public PostnatalController(
+            ISessionService sessionService,
+            IPostnatalService postnatalService) : base(sessionService)
         {
             this.postnatalService = postnatalService;
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return View();
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult ListPostnatal(int year)
         {
             var postnatals = postnatalService.GetAll(year);
-            ViewBag.IsHost = CurrentUser.HasPermission(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_ListPostnatal", postnatals);
         }
 
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
             var model = new PostnatalViewModel
@@ -47,7 +50,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create(PostnatalViewModel model)
         {
             var result = new CommandResult();
@@ -59,7 +62,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    CreatedBy = CurrentUser.Id,
+                    CreatedBy = sessionService.Employee.Id,
                     Remark = model.Remark
                 };
 
@@ -73,7 +76,7 @@
             return Json(result);
         }
 
-        [HRAuthorize(Policy.Read, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
             var postnatal = postnatalService.GetById(id);
@@ -89,7 +92,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Update(int id, PostnatalViewModel model)
         {
             var result = new CommandResult();
@@ -102,7 +105,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = CurrentUser.Id,
+                    ModifiedBy = sessionService.Employee.Id,
                     Remark = model.Remark
                 };
 
@@ -117,7 +120,7 @@
         }
 
         [HttpPost]
-        [HRAuthorize(Policy.Host, FunctionKey.EmployeeManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(int id)
         {
             var result = postnatalService.Delete(id);
