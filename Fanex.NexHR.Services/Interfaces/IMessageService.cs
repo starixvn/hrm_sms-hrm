@@ -1,20 +1,31 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Message;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Message;
 
     public interface IMessageService
     {
-        IList<Message> GetMessageByCreator(GetMessageByCreatorCriteria criteria);
+        IList<Message> GetMessageByCreator(GetMessageByCreatorParam param);
 
-        Message GetMessageById(GetMessageByIdCriteria criteria);
+        Message GetMessageById(int id);
 
-        IList<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria);
+        CommandResult Create(int actorId, Message model);
 
-        Message GetDetailMessageByEmployee(GetMessageOfEmployeeByIdCriteria criteria);
+        CommandResult Edit(int actorId, Message model);
 
-        IList<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria);
+        CommandResult Delete(int actorId, int id);
+
+        CommandResult EditStatus(int employeeId, int messageId);
+
+        CommandResult DeleteMessageByEmployee(int employeeId, int messageId);
+
+        IList<Message> GetMessageByEmployee(GetMessageByEmployeeParam param);
+
+        Message GetDetailMessageByEmployee(int messageId);
+
+        IList<Message> GetUnreadMessageOfEmployee(int employeeId);
 
         void SendMailToStaff(Message model);
     }

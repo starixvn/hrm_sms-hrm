@@ -112,7 +112,9 @@
     <Compile Include="Function\FunctionPermission.cs" />
     <Compile Include="HRLeaderDashboardModel.cs" />
     <Compile Include="MenuModel.cs" />
-    <Compile Include="Message.cs" />
+    <Compile Include="Message\GetMessageByCreatorParam.cs" />
+    <Compile Include="Message\GetMessageByEmployeeParam.cs" />
+    <Compile Include="Message\Message.cs" />
     <Compile Include="MySpaceModel.cs" />
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />

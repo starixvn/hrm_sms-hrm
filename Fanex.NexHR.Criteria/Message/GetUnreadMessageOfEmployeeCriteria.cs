@@ -6,14 +6,8 @@
     {
         public int EmployeeId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Message_GetUnreadMessageByEmployee";
-        }
+        public override string GetSettingKey() => "Message_GetUnreadMessageByEmployee";
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0;
-        }
+        public override bool IsValid() => EmployeeId > 0;
     }
 }

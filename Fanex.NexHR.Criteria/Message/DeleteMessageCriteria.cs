@@ -11,14 +11,8 @@
 
         public DateTime ModifiedDate { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Message_Delete";
-        }
+        public override string GetSettingKey() => "Message_Delete";
 
-        public override bool IsValid()
-        {
-            return MessageId > 0;
-        }
+        public override bool IsValid() => MessageId > 0;
     }
 }

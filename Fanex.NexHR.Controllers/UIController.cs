@@ -6,7 +6,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Message;
+    using Fanex.NexHR.Models.Message;
     using Fanex.NexHR.Services;
 
     public class UIController : BaseController
@@ -23,7 +23,7 @@
         [ChildActionOnly]
         public ActionResult Header()
         {
-            var criteria = new GetMessageByEmployeeCriteria
+            var param = new GetMessageByEmployeeParam
             {
                 EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Today,
@@ -31,7 +31,7 @@
                 IsDisabled = 0
             };
 
-            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+            ViewBag.Messages = messageService.GetMessageByEmployee(param);
             return PartialView(sessionService.Employee);
         }
 
@@ -59,7 +59,7 @@
         [ChildActionOnly]
         public ActionResult NewHeader()
         {
-            var criteria = new GetMessageByEmployeeCriteria
+            var param = new GetMessageByEmployeeParam
             {
                 EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Today,
@@ -67,7 +67,7 @@
                 IsDisabled = 0
             };
 
-            ViewBag.Messages = messageService.GetMessageByEmployee(criteria);
+            ViewBag.Messages = messageService.GetMessageByEmployee(param);
             return PartialView("_NewHeader", sessionService.Employee);
         }
 
@@ -85,9 +85,9 @@
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = sessionService.MenuItems.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
-            var criteria = new GetUnreadMessageOfEmployeeCriteria { EmployeeId = sessionService.Employee.Id };
+
             var menus = GetNagivationData();
-            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(criteria).Count;
+            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(sessionService.Employee.Id).Count;
 
             ViewBag.SelectedMenu = selectedMenu;
             ViewBag.UnreadMessage = unreadMessageCount;

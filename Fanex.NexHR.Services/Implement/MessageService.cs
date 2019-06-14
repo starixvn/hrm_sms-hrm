@@ -1,13 +1,15 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
     using System.Web;
-    using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Message;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Message;
     using Hangfire;
 
     public class MessageService : IMessageService
@@ -25,59 +27,116 @@
             this.emailService = emailService;
         }
 
-        public IList<Message> GetMessageByCreator(GetMessageByCreatorCriteria criteria)
+        public IList<Message> GetMessageByCreator(GetMessageByCreatorParam param)
         {
-            IList<Message> messages = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetMessageByCreatorCriteria
             {
-                messages = baseService.GetData<Message>(criteria).ToList();
-            }
-
-            return messages ?? new List<Message>();
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                IsDisabled = param.IsDisabled,
+                CreatedBy = param.CreatedBy
+            };
+            return baseService.GetData<Message>(criteria).ToList();
         }
 
-        public Message GetMessageById(GetMessageByIdCriteria criteria)
+        public Message GetMessageById(int id)
         {
-            var message = new Message();
-            if (criteria != null && criteria.IsValid())
-            {
-                message = baseService.GetDataEntity<Message>(criteria);
-            }
-
-            return message;
+            var criteria = new GetMessageByIdCriteria { MessageId = id };
+            return baseService.GetDataEntity<Message>(criteria);
         }
 
-        public IList<Message> GetMessageByEmployee(GetMessageByEmployeeCriteria criteria)
+        public CommandResult Create(int actorId, Message model)
         {
-            IList<Message> messages = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new CreateMessageCriteria
             {
-                messages = baseService.GetData<Message>(criteria).ToList();
-            }
-
-            return messages ?? new List<Message>();
+                Subject = model.Subject,
+                Contents = model.Contents,
+                Category = model.Category,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                EmployeeIds = model.EmployeeIds,
+                GroupIds = model.GroupIds,
+                CreatedBy = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
-        public Message GetDetailMessageByEmployee(GetMessageOfEmployeeByIdCriteria criteria)
+        public CommandResult Edit(int actorId, Message model)
         {
-            var message = new Message();
-            if (criteria != null && criteria.IsValid())
+            var criteria = new EditMessageCriteria
             {
-                message = baseService.GetDataEntity<Message>(criteria);
-            }
-
-            return message;
+                MessageId = model.MessageId,
+                Subject = model.Subject,
+                Contents = model.Contents,
+                Category = model.Category,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                EmployeeIds = model.EmployeeIds,
+                GroupIds = model.GroupIds,
+                ModifiedBy = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<Message> GetUnreadMessageOfEmployee(GetUnreadMessageOfEmployeeCriteria criteria)
+        public CommandResult Delete(int actorId, int id)
         {
-            IList<Message> messages = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new DeleteMessageCriteria
             {
-                messages = baseService.GetData<Message>(criteria).ToList();
-            }
+                MessageId = id,
+                ModifiedBy = actorId,
+                ModifiedDate = DateTime.Now
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
 
-            return messages ?? new List<Message>();
+        public CommandResult EditStatus(int employeeId, int messageId)
+        {
+            var criteria = new EditMessageStatusCriteria
+            {
+                MessageId = messageId,
+                EmployeeId = employeeId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult DeleteMessageByEmployee(int employeeId, int messageId)
+        {
+            var criteria = new DeleteMessageByEmployeeCriteria
+            {
+                MessageId = messageId,
+                EmployeeId = employeeId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public IList<Message> GetMessageByEmployee(GetMessageByEmployeeParam param)
+        {
+            var criteria = new GetMessageByEmployeeCriteria
+            {
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                IsDisabled = param.IsDisabled,
+                EmployeeId = param.EmployeeId
+            };
+            return baseService.GetData<Message>(criteria).ToList();
+        }
+
+        public Message GetDetailMessageByEmployee(int messageId)
+        {
+            var criteria = new GetMessageOfEmployeeByIdCriteria
+            {
+                MessageId = messageId
+            };
+            return baseService.GetDataEntity<Message>(criteria);
+        }
+
+        public IList<Message> GetUnreadMessageOfEmployee(int employeeId)
+        {
+            var criteria = new GetUnreadMessageOfEmployeeCriteria
+            {
+                EmployeeId = employeeId
+            };
+            return baseService.GetData<Message>(criteria).ToList();
         }
 
         public void SendMailToStaff(Message model)

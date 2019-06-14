@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Menu;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.ViewModels;
 
@@ -12,9 +11,9 @@
 
         MenuModel GetMenusById(int id);
 
-        CommandResult Insert(InsertMenuCriteria criteria);
+        CommandResult Create(MenuModel model);
 
-        CommandResult Update(UpdateMenuCriteria criteria);
+        CommandResult Edit(MenuModel model);
 
         CommandResult Delete(int id);
     }

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models.Message
 {
     using Fanex.NexHR.Core.Enums;
     using System;

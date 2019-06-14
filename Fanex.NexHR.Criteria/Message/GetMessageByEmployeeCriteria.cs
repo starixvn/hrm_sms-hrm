@@ -13,14 +13,8 @@
 
         public int? IsDisabled { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Message_GetByEmployee";
-        }
+        public override string GetSettingKey() => "Message_GetByEmployee";
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0;
-        }
+        public override bool IsValid() => EmployeeId > 0;
     }
 }

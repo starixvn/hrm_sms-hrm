@@ -1,4 +1,5 @@
-﻿@model Message
+﻿@using Fanex.NexHR.Models.Message
+@model Message
 @{
     var messageSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = messageSubject + " - " + Labels.Message;
@@ -13,7 +14,7 @@
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>
     <a class="step" href="@Url.Action("ViewMessageOfEmployee", "message")">@Labels.Message</a>
-    <a class="step">Message "@messageSubject" Details</a>
+    <a class="step">Details</a>
 }
 <h2>@Labels.Details</h2>
 

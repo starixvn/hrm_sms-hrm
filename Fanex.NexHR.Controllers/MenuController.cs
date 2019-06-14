@@ -5,8 +5,8 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Menu;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -51,17 +51,8 @@
         {
             if (ModelState.IsValid)
             {
-                var criteria = new InsertMenuCriteria
-                {
-                    DisplayOrder = menu.DisplayOrder,
-                    FunctionId = menu.FunctionId == 0 ? null : menu.FunctionId,
-                    Link = menu.Link,
-                    Name = menu.Name,
-                    ParentId = menu.ParentId == 0 ? null : menu.ParentId,
-                    Text = menu.Text
-                };
-                var result = menuService.Insert(criteria);
-                if (result.IsSuccessful)
+                CommandResult commandResult = menuService.Create(menu);
+                if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index");
                 }
@@ -87,19 +78,8 @@
         {
             if (ModelState.IsValid)
             {
-                var criteria = new UpdateMenuCriteria
-                {
-                    DisplayOrder = menu.DisplayOrder,
-                    FunctionId = menu.FunctionId == 0 ? null : menu.FunctionId,
-                    Link = menu.Link,
-                    Name = menu.Name,
-                    ParentId = menu.ParentId == 0 ? null : menu.ParentId,
-                    Text = menu.Text,
-                    MenuId = menu.MenuId,
-                    IsActive = menu.IsActive
-                };
-                var result = menuService.Update(criteria);
-                if (result.IsSuccessful)
+                CommandResult commandResult = menuService.Edit(menu);
+                if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index");
                 }

@@ -1,4 +1,5 @@
-﻿@model Message
+﻿@using Fanex.NexHR.Models.Message
+@model Message
 @{
     var messageSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = messageSubject + " - " + Labels.Message;
@@ -13,7 +14,7 @@
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("Index", "message")">@Labels.Message</a>
-    <a class="step">Message "@messageSubject" Details</a>
+    <a class="step">Details</a>
 }
 <h2>@Labels.Details</h2>
 
@@ -24,52 +25,52 @@
             <tr>
                 <th colspan="4">
                     @Model.Subject
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="left">
-                @Labels.SendTo
-            </td>
-            <td class="left">
-                <b>@Model.SendTo</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Labels.Category
-            </td>
-            <td>
-                <b>@Model.CategoryName</b>
-            </td>
-        </tr>
-        <tr>
-            <td class="left" style="width:80px;">
-                @Labels.FromDate
-            </td>
-            <td class="left">
-                <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Labels.ToDate
-            </td>
-            <td>
-                <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
-            </td>
-        </tr>
-        <tr>
-            <td class="left">
-                @Labels.Content
-            </td>
-            <td colspan="3">
-                <b>@Model.Contents</b>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left">
+                    @Labels.SendTo
+                </td>
+                <td class="left">
+                    <b>@Model.SendTo</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Labels.Category
+                </td>
+                <td>
+                    <b>@Model.CategoryName</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="left" style="width:80px;">
+                    @Labels.FromDate
+                </td>
+                <td class="left">
+                    <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Labels.ToDate
+                </td>
+                <td>
+                    <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="left">
+                    @Labels.Content
+                </td>
+                <td colspan="3">
+                    <b>@Model.Contents</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
 }
 else

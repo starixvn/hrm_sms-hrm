@@ -224,9 +224,9 @@
     <Compile Include="Message\GetMessageByIdCriteria.cs" />
     <Compile Include="Message\GetMessageOfEmployeeByIdCriteria.cs" />
     <Compile Include="Message\GetUnreadMessageOfEmployeeCriteria.cs" />
-    <Compile Include="Message\InsertMessageCriteria.cs" />
-    <Compile Include="Message\UpdateMessageCriteria.cs" />
-    <Compile Include="Message\UpdateReadStatusMessageCriteria.cs" />
+    <Compile Include="Message\CreateMessageCriteria.cs" />
+    <Compile Include="Message\EditMessageCriteria.cs" />
+    <Compile Include="Message\EditMessageStatusCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="Section\GetDisciplineManagerByTeamIdCriteria.cs" />

@@ -1,5 +1,5 @@
-﻿@using Fanex.NexHR.Criteria.Message
-@model GetMessageByCreatorCriteria
+﻿@using Fanex.NexHR.Models.Message
+@model GetMessageByCreatorParam
 @{
     ViewBag.Title = Labels.Message;
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -117,10 +117,10 @@
                     </tr>
                 }
             </tbody>
-                    }
-                    else
-                    {
-                        @RazorHelper.DisplayNoInformation(7)
-                    }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(7)
+        }
     </table>
-                    }
+}

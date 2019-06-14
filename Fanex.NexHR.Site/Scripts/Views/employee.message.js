@@ -26,9 +26,9 @@ var deleteMessage = function (messageId) {
 };
 
 var detailMessage = function (messageId) {
-    $.post(_global.root + 'Message/UpdateReadStatusOfMessage', { id: messageId }, function () {
+    $.post(_global.root + 'Message/EditMessageStatus', { id: messageId }, function () {
     }).always(function () {
-        window.location.href = '/message/detailByEmployee/' + messageId;
+        window.location.href = _global.root + 'message/detailByEmployee/' + messageId;
     });
 };
 

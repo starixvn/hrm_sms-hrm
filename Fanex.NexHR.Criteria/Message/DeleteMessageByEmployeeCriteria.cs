@@ -8,14 +8,8 @@
 
         public int EmployeeId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Message_EmployeeDelete";
-        }
+        public override string GetSettingKey() => "Message_EmployeeDelete";
 
-        public override bool IsValid()
-        {
-            return MessageId > 0 && EmployeeId > 0;
-        }
+        public override bool IsValid() => MessageId > 0 && EmployeeId > 0;
     }
 }
