@@ -1,143 +1,149 @@
 ﻿@model IList<Team>
-@{
-    ViewBag.Title = Labels.SectionManagement;
-    var hasPermission = (bool)ViewBag.HasPermission;
-    var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
-}
-@section css{
-    @Url.CombresLink("sitecss")
-}
-@section js{
-    @Url.CombresLink("teamjs")
-}
-@section Breadcrumb {
-    <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
-}
-<h2>@ViewBag.Title</h2>
-@if (hasPermission)
-{
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("New Section", "Create")
+    @{
+        ViewBag.Title = Labels.SectionManagement;
+        var hasPermission = (bool)ViewBag.HasPermission;
+        var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
+    }
+    @section css{
+        @Url.CombresLink("sitecss")
+    }
+    @section js{
+        @Url.CombresLink("teamjs")
+    }
+    @section Breadcrumb {
+        <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
+    }
+    <h2>@ViewBag.Title</h2>
+    @if (hasPermission)
+    {
+        <div class="button-icon">
+            <span class="icon plus"></span>@Html.ActionLink("New Section", "Create")
+        </div>
+    }
+
+    <div class="button-icon pd-auto">
+        @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report")
     </div>
-}
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
-    <thead>
-        <tr>
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.Code</th>
-            <th>@Labels.Team</th>
-            <th>@Labels.Department</th>
-            <th>@Labels.SectionHead</th>
-            <th>@Labels.AssistantSectionHead</th>
-            <th>@Labels.Email</th>
-            <th>@Labels.TotalExpat</th>
-            <th>@Labels.TotalLocal</th>
-            <th>@Labels.Total</th>
-            @if (hasPermission)
-            {
-                <th>@Labels.Edit</th>
-                <th>@Labels.Roles</th>
-                <th>@Labels.Delete</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @{int index = 1;}
-        @foreach (Team team in Model)
-        {
-            <tr id="row@(team.Id)">
-                @Html.Hidden("groupid", team.Id)
-                <td>@(index++)</td>
-                <td>@team.Code</td>
-                <td>@team.Name</td>
-                <td>@team.Department.Name</td>
-                @if (team.Leaders.Any())
-                {
-                    <td>
-                        @{
-                            var count = 0;
-                            foreach (var leader in team.Leaders)
-                            {
-                                <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
-                                if (count < team.Leaders.Count - 1)
-                                {
-                                    <span>,</span>
-                                }
-                                count ++;
-                            }
-                        }
-                    </td>
-                                    }
-                                    else
-                                    {
-                    <td></td>
-                }
-                @if (team.AssistantLeaders.Any())
-                {
-                    <td>
-                        @{
-                            var count = 0;
-                            foreach (var leader in team.AssistantLeaders)
-                            {
-                                <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
-                                if (count < team.AssistantLeaders.Count - 1)
-                                {
-                                    <span>,</span>
-                                }
-                                count++;
-                            }
-                        }
-                    </td>
-                   
-                        }
-                        else
-                        {
-                    <td></td>
-                }
-                <td class="align-left">@team.MailGroup</td>
-                <td>@team.TotalExpat</td>
-                <td>@team.TotalLocal</td>
-                <td>
-                    @{
-            if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
-            {
-                <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
-            }
-            else
-            {
-                <span>@team.NoOfMembers</span>
-            }
-                    }
-                </td>
+    <div class="button-icon">
+        @Html.ActionLink("Section Permission Summary", "SectionSupervisor", "report")
+    </div>
+    <div class="clear">
+    </div>
+    <div class="space">
+    </div>
+    <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Code</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Department</th>
+                <th>@Labels.SectionHead</th>
+                <th>@Labels.AssistantSectionHead</th>
+                <th>@Labels.Email</th>
+                <th>@Labels.TotalExpat</th>
+                <th>@Labels.TotalLocal</th>
+                <th>@Labels.Total</th>
                 @if (hasPermission)
                 {
-                    <td>
-                        <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
-                    </td>
-                    <td>
-                        @if (team.NoOfMembers > 0)
-                        {
-                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                        }
-                        else
-                        {
-                            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                                <i class="fa fa-times fa-lg icon-delete"></i>
-                            </a>
-                        }
-
-                    </td>
+                    <th>@Labels.Edit</th>
+                    <th>@Labels.Roles</th>
+                    <th>@Labels.Delete</th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{int index = 1;}
+            @foreach (Team team in Model)
+            {
+                <tr id="row@(team.Id)">
+                    @Html.Hidden("groupid", team.Id)
+                    <td>@(index++)</td>
+                    <td>@team.Code</td>
+                    <td>@team.Name</td>
+                    <td>@team.Department.Name</td>
+                    @if (team.Leaders.Any())
+                    {
+                        <td>
+                            @{
+                                var count = 0;
+                                foreach (var leader in team.Leaders)
+                                {
+                                    <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                    if (count < team.Leaders.Count - 1)
+                                    {
+                                        <span>,</span>
+                                    }
+                                    count++;
+                                }
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (team.AssistantLeaders.Any())
+                    {
+                        <td>
+                            @{
+                                var count = 0;
+                                foreach (var leader in team.AssistantLeaders)
+                                {
+                                    <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                    if (count < team.AssistantLeaders.Count - 1)
+                                    {
+                                        <span>,</span>
+                                    }
+                                    count++;
+                                }
+                            }
+                        </td>
+
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td class="align-left">@team.MailGroup</td>
+                    <td>@team.TotalExpat</td>
+                    <td>@team.TotalLocal</td>
+                    <td>
+                        @{
+                            if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
+                            {
+                                <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
+                            }
+                            else
+                            {
+                                <span>@team.NoOfMembers</span>
+                            }
+                        }
+                    </td>
+                    @if (hasPermission)
+                    {
+                        <td>
+                            <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
+                        </td>
+                        <td>
+                            @if (team.NoOfMembers > 0)
+                            {
+                                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+                                    <i class="fa fa-times fa-lg icon-delete"></i>
+                                </a>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>

@@ -181,6 +181,7 @@
     <Compile Include="Enums\Permision.cs" />
     <Compile Include="Enums\LeaveTypes.cs" />
     <Compile Include="Enums\Policy.cs" />
+    <Compile Include="Enums\Relationship.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
     <Compile Include="Enums\SettingsSendMail.cs" />

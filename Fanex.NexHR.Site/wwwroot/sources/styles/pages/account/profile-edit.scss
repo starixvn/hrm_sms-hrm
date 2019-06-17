@@ -5,62 +5,141 @@
 @import '../../abstracts/mixins';
 @import '../../layout/filter';
 @import '../../layout/toastr';
+@import '../../layout/table';
 @import '../../components/buttons';
 @import '../../components/validation';
+@import '../../components/modal';
 
-.form-horizontal {
-    .label-form {
-        padding-bottom: 5px;
-        width: 10rem !important;
-        font-weight: bold;
-    }
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
 
-    .form-group--m {
-        width: 400px !important;
+.form-control {
+    height: 30px;
+    padding: 4px 8px;
+}
 
-        .input-form {
-            width: calc(100% - 8rem);
+.label {
+    float: left;
+    text-align: right;
+    padding-left: 10px;
+    margin-right: 10px;
+    width: 120px;
+    color: #000;
+    font-size: 12px;
+    padding-top: 2px;
+}
+
+.label-edit {
+    padding-top: 10px;
+}
+
+#info-update {
+    .leftpersonal {
+        width: 500px;
+        float: left;
+        padding: 5px;
+        margin-right: 10px;
+
+        input, select, textarea {
+            width: calc(100% - 130px);
+        }
+
+        textarea {
+            height: 80px !important;
         }
     }
 
-    textarea.form-control {
-        height: 100px;
+    .list-group-item {
+        padding: 5px 10px;
+    }
+
+    .submitWrapper {
+        margin-top: 10px;
+    }
+
+    .formrow {
+        padding: 5px 10px 5px 5px;
+        float: left;
+    }
+
+    .formrow .input {
+        margin-left: 0;
+    }
+
+    .formrow {
+        margin: 0;
+    }
+
+    .formrow .label {
+        width: 150px;
+    }
+
+    .formrow .input {
+        margin-left: 160px;
+    }
+
+    .align-right {
+        text-align: right;
+        padding-bottom: 10px;
+    }
+
+    .datepicker {
+        display: inline-block;
+        width: calc(100% - 155px) !important;
+        margin-right: 5px;
+    }
+}
+
+.rightjob {
+    float: left;
+    padding: 5px 10px 5px 5px;
+    width: calc(100% - 600px);
+
+    .pcontent {
+        float: left;
+        text-align: left;
+    }
+
+    .relationship {
+        padding: 10px;
+        text-align: right;
     }
 
     .note {
-        color: #878787;
-        font-size: 11px;
+        line-height: 2px;
+        padding: 5px;
         font-style: italic;
-        margin: 0;
-        line-height: 1.2;
+        color: #2f2e2e;
+        font-weight: 500;
+        font-size: 11px;
     }
-}
 
-.upload-file-list {
-    list-style: none;
-    padding: 0;
+    ul.upload-file-list {
+        padding: 10px;
+        text-align: left;
 
-    li {
-        padding: 3px;
+        li {
+            list-style: none;
+            padding: 5px;
 
-        .file-name {
-            display: inline-block;
-            max-width: 230px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            .icon-delete {
+                float: right;
+                color: #da5350;
+            }
         }
     }
 }
 
-.no-file {
-    text-align: center;
-    color: red;
-    font-style: italic;
-}
-
-.delete-file-upload {
-    color: red;
-    float: right;
-    cursor: pointer;
+.icon-calendar {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    font-size: 1.6rem;
+    color: #A63C45;
 }

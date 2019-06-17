@@ -143,6 +143,7 @@
     <Compile Include="Export\ExportTotalWorkingHourController.cs" />
     <Compile Include="Export\ExportDisciplineController.cs" />
     <Compile Include="Export\ExportWeekendLeaveController.cs" />
+    <Compile Include="InformationController.cs" />
     <Compile Include="MenuController.cs" />
     <Compile Include="AccountController.cs" />
     <Compile Include="AnnualLeaveBalanceController.cs" />

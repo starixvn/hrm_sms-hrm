@@ -106,6 +106,7 @@
     <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="EmployeePaternity.cs" />
     <Compile Include="EmployeePostnatal.cs" />
+    <Compile Include="EmployeeRelationship\EmployeeRelationship.cs" />
     <Compile Include="EmployeeRole.cs" />
     <Compile Include="EmployeeSuggestion.cs" />
     <Compile Include="Function\FunctionModel.cs" />

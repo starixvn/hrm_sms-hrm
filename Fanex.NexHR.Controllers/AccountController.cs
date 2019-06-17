@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Web.Hosting;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -86,81 +84,6 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
-        }
-
-        public ActionResult EditContact()
-        {
-            Employee employee = employeeService.GetEmployeeById(sessionService.Employee.Id);
-            var model = new EmployeeContactViewModel
-            {
-                ChineseName = employee.ChineseName,
-                Email = employee.Email,
-                Phone = employee.Phone,
-                Skype = employee.Skype,
-                LetsTalk = employee.LetsTalk,
-                Address = employee.Address,
-                CurrentAddress = employee.CurrentAddress,
-                FileUploaded = GetAllFileUploaded(),
-                BaseFileLocation = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/"
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditContact(EmployeeContactViewModel model)
-        {
-            if (model != null && ModelState.IsValid)
-            {
-                var criteria = new SelfUpdateContactCriteria
-                {
-                    EmpId = sessionService.Employee.Id,
-                    ChineseName = model.ChineseName,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Skype = model.Skype,
-                    Yahoo = model.LetsTalk,
-                    Address = model.Address,
-                    CurrentAddress = model.CurrentAddress
-                };
-
-                var result = baseService.ExecuteNonQuery(criteria);
-
-                if (result.IsSuccessful)
-                {
-                    ViewBag.Message = result.Message;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                }
-                model.FileUploaded = GetAllFileUploaded();
-                model.BaseFileLocation = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
-            }
-            return View(model);
-        }
-
-        public ActionResult GetFileUploaded()
-        {
-            var fileNames = GetAllFileUploaded();
-            ViewBag.BaseUrl = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
-            return PartialView("_ListFileUploaded", fileNames);
-        }
-
-        private IList<string> GetAllFileUploaded()
-        {
-            var filePath = new List<string>();
-            string path = HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + sessionService.Employee.Code;
-            if (Directory.Exists(path))
-            {
-                var paths = Directory.GetFiles(path);
-                foreach (var p in paths)
-                {
-                    filePath.Add(Path.GetFileName(p));
-                }
-            }
-
-            return filePath;
         }
 
         [HttpPost]

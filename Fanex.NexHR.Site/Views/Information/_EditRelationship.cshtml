@@ -1,0 +1,78 @@
+﻿@model Fanex.NexHR.ViewModels.Information.EmployeeRelationshipViewModel
+
+@using (Html.BeginForm("EditRelationship", "Information", FormMethod.Post, new { @class = "dialog-form" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary();
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("FullName", Model.FullName, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.DateOfBirth, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.DateOfBirth).ToString(), Model.DateOfBirth.ToString("dd MMM yyyy")
+               , new { @class = "datepicker form-control", maxDate = DateTime.Now })
+                <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var gender = new List<SelectListItem>
+                                        {
+                                            new SelectListItem() {Text = "Female", Value = "0"},
+                                            new SelectListItem() {Text = "Male", Value = "1"},
+                                        };
+                }
+                @Html.DropDownList("Gender", gender, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Relationship, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @if (Model.IsExistEmergency)
+                {
+                    @Html.EnumDropDownFor(model => model.Relationship, null, null, new { @class = "form-control", @disabled = "disabled" })
+                }
+                else
+                {
+                    @Html.EnumDropDownFor(model => model.Relationship, null, null, new { @class = "form-control" })
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Phone", Model.Phone, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+}

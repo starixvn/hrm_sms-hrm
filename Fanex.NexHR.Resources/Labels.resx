@@ -1695,4 +1695,10 @@
   <data name="MaternityLeave" xml:space="preserve">
     <value>Maternity Leave</value>
   </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Date of birth</value>
+  </data>
+  <data name="Relationship" xml:space="preserve">
+    <value>Relationship</value>
+  </data>
 </root>

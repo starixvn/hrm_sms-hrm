@@ -944,6 +944,9 @@
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
+    <Content Include="Views\Information\_AddRelationship.cshtml" />
+    <Content Include="Views\Information\_ListRelationship.cshtml" />
+    <Content Include="Views\Information\_EditRelationship.cshtml" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1302,9 +1305,9 @@
     <Content Include="Views\Paternity\_ListPaternity.cshtml" />
     <Content Include="Views\Paternity\Index.cshtml" />
     <Content Include="wwwroot\sources\styles\components\_validation.scss" />
-    <Content Include="Views\Account\EditContact.cshtml" />
+    <Content Include="Views\Information\UpdateInformation.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\account\profile-edit.scss" />
-    <Content Include="Views\Account\_ListFileUploaded.cshtml" />
+    <Content Include="Views\Information\_ListFileUploaded.cshtml" />
     <Content Include="ExcelTemplates\JobTitleSummary.xls" />
     <Content Include="Views\Report\_ListLeaveSummary.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
