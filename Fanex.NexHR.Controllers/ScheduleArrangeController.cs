@@ -100,9 +100,9 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult EditRemark(int employeeId, string remark)
+        public ActionResult EditRemark(EditRemark model)
         {
-            CommandResult commandResult = scheduleArrangeService.EditRemark(sessionService.Employee.Id, employeeId, remark);
+            CommandResult commandResult = scheduleArrangeService.EditRemark(sessionService.Employee.Id, model);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

@@ -461,6 +461,7 @@ export default class App extends Component {
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday) {
                         member[attrName] = { ...member[attrName], isOffDay: true, shift: null };
+                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
                     }
                 });
 
@@ -485,22 +486,18 @@ export default class App extends Component {
                 let members = [...schedules[gindex].members];
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-                let isChanged = false;
 
                 this.scheduleAttrNames.forEach(attrName => {
-                    if (selectWeekDays[attrName] && !member[attrName].isHoliday
-                        && !member[attrName].isOffDay && member[attrName].shift !== null) {
+                    if (selectWeekDays[attrName] && !member[attrName].isHoliday && !member[attrName].isOffDay && member[attrName].shift !== null) {
                         const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                         const isModified = !originalSchedule.isOffDay ? true : originalSchedule.isModified;
                         member[attrName] = { ...member[attrName], isOffDay: true, isModified };
-                        isChanged = true;
+                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
                     }
                 });
 
-                if (isChanged) {
-                    members[eindex] = member;
-                    schedules[gindex] = { ...schedules[gindex], members };
-                }
+                members[eindex] = member;
+                schedules[gindex] = { ...schedules[gindex], members };
             }
 
             this.setState({ schedules });
@@ -520,22 +517,20 @@ export default class App extends Component {
                 let members = [...schedules[gindex].members];
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-                let isChanged = false;
 
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday
                         && member[attrName].isOffDay && member[attrName].shift !== null) {
                         const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                         const isModified = originalSchedule.isOffDay ? true : originalSchedule.isModified;
+                        selectWeekDays[attrName] = false;
                         member[attrName] = { ...member[attrName], isOffDay: false, isOffDayReplacement: false, isModified };
-                        isChanged = true;
+                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
                     }
                 });
 
-                if (isChanged) {
-                    members[eindex] = member;
-                    schedules[gindex] = { ...schedules[gindex], members };
-                }
+                members[eindex] = member;
+                schedules[gindex] = { ...schedules[gindex], members };
             }
 
             this.setState({ schedules });
@@ -566,22 +561,19 @@ export default class App extends Component {
                 let members = [...schedules[gindex].members];
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-                let isChanged = false;
 
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName] && !member[attrName].isHoliday) {
                         const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                        const isModified =
-                            !isEqual(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
+                        const isModified = !isEqual(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay
+                            ? true : originalSchedule.isModified;
                         member[attrName] = { ...member[attrName], isOffDay, shift, isModified };
-                        isChanged = true;
+                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
                     }
                 });
 
-                if (isChanged) {
-                    members[eindex] = member;
-                    schedules[gindex] = { ...schedules[gindex], members };
-                }
+                members[eindex] = member;
+                schedules[gindex] = { ...schedules[gindex], members };
             }
 
             this.setState({ schedules });
@@ -745,6 +737,7 @@ export default class App extends Component {
             weeklyDefaultShift,
             isUsedWeeklyDefaultShift
         };
+        const fromDate = moment(this.currentWeek.toDate).add(1, 'days').format(DateFormat);
 
         if (isUsedWeeklyDefaultShift) {
             this.scheduleAttrNames.forEach(attrName => {
@@ -753,7 +746,7 @@ export default class App extends Component {
                 const shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
                 const workDate = moment(members[eindex][attrName].workDate);
 
-                if (workDate.isSameOrAfter(moment(this.currentWeek.fromDate).format(DateFormat))
+                if (workDate.isSameOrAfter(fromDate)
                     && !members[eindex][attrName].isLeaveOffDay
                     && !members[eindex][attrName].isHoliday
                     && !members[eindex][attrName].isChangeShift
@@ -768,7 +761,9 @@ export default class App extends Component {
 
             if (defaultShift !== null) {
                 this.scheduleAttrNames.forEach(attrName => {
-                    if (!members[eindex][attrName].isLeaveOffDay
+                    const workDate = moment(members[eindex][attrName].workDate);
+                    if (workDate.isSameOrAfter(fromDate)
+                        && !members[eindex][attrName].isLeaveOffDay
                         && !(members[eindex][attrName].isLeaveDay && !members[eindex][attrName].isLeaveHalfDay)
                         && !members[eindex][attrName].isChangeShift
                         && !members[eindex][attrName].isOvertime
@@ -827,37 +822,40 @@ export default class App extends Component {
             } else {
                 toast.error(data.message);
             }
-        });
+        }).catch(axiosError);
     }
 
     handleUpdateRemark = (groupId, employeeId, remark) => {
-        axios({
-            url: _global.root + 'ScheduleArrange/EditRemark',
-            method: 'POST',
-            data: stringify({ employeeId, remark }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
-            let data = response.data;
+        let schedules = [...this.state.schedules];
+        let gindex = schedules.findIndex(item => item.groupId === groupId);
+        let members = [...schedules[gindex].members];
+        let eindex = members.findIndex(item => item.employeeId === employeeId);
 
-            if (data.isSuccessful) {
-                toast.success('Updated Successfully!');
+        if (!isEqual(remark, this.originalSchedules[gindex].members[eindex].remark)) {
+            axios({
+                url: _global.root + 'ScheduleArrange/EditRemark',
+                method: 'POST',
+                data: stringify({ employeeId, remark }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let data = response.data;
 
-                let schedules = [...this.state.schedules];
-                let gindex = schedules.findIndex(item => item.groupId === groupId);
-                let members = [...schedules[gindex].members];
-                let eindex = members.findIndex(item => item.employeeId === employeeId);
-                members[eindex] = { ...members[eindex], remark };
-                schedules[gindex] = { ...schedules[gindex], members };
-                this.originalSchedules[gindex].members[eindex].remark = remark;
+                if (data.isSuccessful) {
+                    toast.success('Updated Successfully!');
 
-                this.setState({ schedules });
-            } else {
-                toast.error(data.message);
-            }
-        });
+                    members[eindex] = { ...members[eindex], remark };
+                    schedules[gindex] = { ...schedules[gindex], members };
+                    this.originalSchedules[gindex].members[eindex].remark = remark;
+
+                    this.setState({ schedules });
+                } else {
+                    toast.error(data.message);
+                }
+            }).catch(axiosError);
+        }
     }
 
     handleEditGroupOrder = () => {

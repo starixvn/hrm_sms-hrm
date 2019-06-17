@@ -92,13 +92,13 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditRemark(int actorId, int employeeId, string remark)
+        public CommandResult EditRemark(int actorId, EditRemark model)
         {
             var criteria = new EditRemarkCriteria
             {
                 ActorId = actorId,
-                EmployeeId = employeeId,
-                Remark = remark
+                EmployeeId = model.EmployeeId,
+                Remark = model.Remark
             };
 
             return baseService.ExecuteNonQuery(criteria);

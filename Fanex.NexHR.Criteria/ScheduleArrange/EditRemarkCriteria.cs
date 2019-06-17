@@ -10,6 +10,6 @@
 
         public override string GetSettingKey() => "ScheduleArrangement_UpdateRemark";
 
-        public override bool IsValid() => ActorId > 0 && EmployeeId > 0 && !string.IsNullOrWhiteSpace(Remark);
+        public override bool IsValid() => ActorId > 0 && EmployeeId > 0;
     }
 }
