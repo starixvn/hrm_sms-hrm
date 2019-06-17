@@ -205,8 +205,6 @@ var editAccount = (function ($) {
 
     function initDatePicker($dialog) {
         if ($dialog.find('.datepicker').length > 0) {
-            console.log($dialog);
-            console.log($('.datepicker'));
             $('.datepicker').datepicker({
                 dateFormat: "dd MMM, yyyy",
                 changeMonth: true,

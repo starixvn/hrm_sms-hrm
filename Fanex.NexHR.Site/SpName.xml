@@ -113,7 +113,7 @@
       <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
       <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
+      <Mapping DataField="RequestDate" ObjectProperty="Month" />
     </Setting>
     <Setting Key="OverTime_GetRequestMonthlyByLeader" SpName="OverTime_GetRequestMonthlyByLeader" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequesterID" ObjectProperty="Id" />
@@ -130,7 +130,7 @@
       <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
       <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
+      <Mapping DataField="RequestDate" ObjectProperty="Month" />
     </Setting>
     <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestID" ObjectProperty="Id" />

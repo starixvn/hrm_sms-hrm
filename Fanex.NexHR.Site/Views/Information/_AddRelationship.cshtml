@@ -35,13 +35,13 @@
             <div class="label-form">
                 @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
             </div>
-            <div class="input-form">
+            <div class="select-form">
                 @{
                     var gender = new List<SelectListItem>
-                                                        {
-                                                            new SelectListItem() {Text = "Female", Value = "0"},
-                                                            new SelectListItem() {Text = "Male", Value = "1"},
-                                                        };
+                    {
+                        new SelectListItem() {Text = "Female", Value = "0"},
+                        new SelectListItem() {Text = "Male", Value = "1"},
+                    };
                 }
                 @Html.DropDownList("Gender", gender, new { @class = "form-control" })
             </div>

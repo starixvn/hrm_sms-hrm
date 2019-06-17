@@ -10,7 +10,7 @@
 
         public Employee Employee { get; set; }
 
-        public DateTime RequestedDate { get; set; }
+        public DateTime Month { get; set; }
 
         public IList<OvertimeDaily> OvertimeDaily { get; set; }
 
