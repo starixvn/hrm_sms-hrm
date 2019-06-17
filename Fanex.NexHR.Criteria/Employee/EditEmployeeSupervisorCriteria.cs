@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.Supervisor
+﻿namespace Fanex.NexHR.Criteria.Employee
 {
     using Fanex.Data.Repository;
 

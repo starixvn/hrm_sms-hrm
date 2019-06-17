@@ -104,6 +104,7 @@
     <Compile Include="EmployeeRelationship\GetRelationshipByEmployeeIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\GetRelationshipByIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\InsertRelationshipCriteria.cs" />
+    <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
