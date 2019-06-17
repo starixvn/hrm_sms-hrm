@@ -6,14 +6,8 @@
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Overtime_GeById";
-        }
+        public override string GetSettingKey() => "Overtime_GeById";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
     }
 }

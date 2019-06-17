@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
-    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
@@ -38,12 +37,7 @@
 
         public ActionResult Create()
         {
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
-            {
-                EmployeeId = sessionService.Employee.Id,
-                Date = DateTime.Now
-            };
-            Shift shift = shiftService.GetByDate(getShiftByDateCriteria);
+            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, DateTime.Now);
 
             var model = new KeepInViewRequestViewModel
             {

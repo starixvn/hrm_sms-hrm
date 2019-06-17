@@ -1,10 +1,10 @@
-﻿@using Fanex.NexHR.ViewModels.Shifts
+﻿@using Fanex.NexHR.Models
 @using System.Web.Mvc.Html5
-@model ShiftViewModel
+@model EditShiftModel
 
 @{
     ViewBag.Title = @Labels.EditShift;
-    var hasPermission = (bool)ViewBag.HasPermission;
+    var isHost = (bool)ViewBag.IsHost;
 }
 
 @section css{
@@ -84,7 +84,7 @@ else
                 </div>
                 <div class="input">
                     <input type="submit" value="@Labels.Save" />
-                    @if (!Model.IsUsed && hasPermission)
+                    @if (!Model.IsUsed && isHost)
                     {
                         <a href="javascript:;" class="button js-link-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
                     }

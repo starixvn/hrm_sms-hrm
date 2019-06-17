@@ -3,7 +3,6 @@
 
 var editShift = (function ($) {
     var me = {};
-    var urlRoot = "/";
     var initEvent = function () {
         $(".js-link-delete-shift").click(function () {
             var $self = $(this);
@@ -11,7 +10,7 @@ var editShift = (function ($) {
             confirm('Are you sure you want to delete this shift?', function () {
                 $.post(_global.root + 'shift/delete', { shiftId: shilfID }, function (response) {
                     if (response.IsSuccessful) {
-                        document.location = urlRoot + "shift/index";
+                        document.location = _global.root + "shift/index";
                     }
                     else {
                         alert(response.Message);
@@ -25,7 +24,7 @@ var editShift = (function ($) {
         });
     };
 
-    me.init = function (globalRoot) {
+    me.init = function () {
         if ($("#IsUsed").val() === "True") {
             $("#Name").attr("disabled", "disabled");
             $("#HourTimeIn").attr("disabled", "disabled");
@@ -35,8 +34,6 @@ var editShift = (function ($) {
             $("#IsInAfterDay").attr("disabled", "disabled");
             $("#IsOutAfterDay").attr("disabled", "disabled");
         }
-
-        urlRoot = globalRoot;
 
         initEvent();
     };

@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
-    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
@@ -231,12 +230,7 @@
 
         private Shift GetShiftByDate(DateTime date)
         {
-            var getShiftByDateCriteria = new GetEmployeeShiftByDateCriteria
-            {
-                EmployeeId = sessionService.Employee.Id,
-                Date = date
-            };
-            Shift shift = shiftService.GetByDate(getShiftByDateCriteria);
+            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, date);
 
             return shift;
         }

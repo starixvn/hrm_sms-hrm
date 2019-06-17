@@ -1,6 +1,6 @@
-﻿@using Fanex.NexHR.ViewModels.Shifts
+﻿@using Fanex.NexHR.Models
 @using System.Web.Mvc.Html5
-@model ShiftViewModel
+@model CreateShiftModel
 @{
     ViewBag.Title = @Labels.Shift;
 }
@@ -57,14 +57,11 @@
             </div>
         </div>
         <div class="formrow">
-            <div class="label">
-
-            </div>
+            <div class="label"></div>
             <div class="input">
                 <input type="submit" value="@Labels.Save" />
                 <a href="@Url.Action("index","shift")" class="button">@Labels.Back</a>
             </div>
         </div>
-
     </div>
 }

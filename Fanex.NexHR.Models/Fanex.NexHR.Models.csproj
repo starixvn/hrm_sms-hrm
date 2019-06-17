@@ -145,6 +145,8 @@
     <Compile Include="Section\Supervisor.cs" />
     <Compile Include="Section\EditSectionSupervisor.cs" />
     <Compile Include="Section\SectionModel.cs" />
+    <Compile Include="Shifts\EditShiftModel.cs" />
+    <Compile Include="Shifts\CreateShiftModel.cs" />
     <Compile Include="Supervisor\SupervisorReportGroupModel.cs" />
     <Compile Include="Supervisor\SupervisorReportModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorModel.cs" />
@@ -177,7 +179,7 @@
     <Compile Include="Memo.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shift.cs" />
+    <Compile Include="Shifts\Shift.cs" />
     <Compile Include="TotalWorkingHours.cs" />
     <Compile Include="UserChangedShift.cs" />
     <Compile Include="WeekWorking.cs" />

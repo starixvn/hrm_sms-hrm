@@ -107,7 +107,6 @@
     <Compile Include="Request\ProcessRequestViewModel.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
-    <Compile Include="Shifts\ShiftViewModel.cs" />
     <Compile Include="Report\TimeRecordViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourMonthlyViewModel.cs" />
     <Compile Include="ExtensionNumber\ExtensionNumberViewModel.cs" />

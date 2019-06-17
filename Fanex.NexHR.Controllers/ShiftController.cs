@@ -2,12 +2,11 @@
 {
     using System;
     using System.Web.Mvc;
-    using Core.Enums;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Criteria.Shift;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Shifts;
@@ -17,14 +16,11 @@
         private const int HourIndex = 0;
         private const int MinutesIndex = 1;
         private readonly IShiftService shiftService;
-        private readonly IBaseService baseService;
 
         public ShiftController(
             ISessionService sessionService,
-            IBaseService baseService,
             IShiftService shiftService) : base(sessionService)
         {
-            this.baseService = baseService;
             this.shiftService = shiftService;
         }
 
@@ -36,8 +32,7 @@
                 StatusId = statusId.Value,
                 Shifts = shiftService.GetAll(statusId.Value)
             };
-
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
@@ -45,7 +40,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
-            var model = new ShiftViewModel();
+            var model = new CreateShiftModel();
             ViewBag.Successed = false;
             return View(model);
         }
@@ -53,29 +48,18 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-        public ActionResult Create(ShiftViewModel model)
+        public ActionResult Create(CreateShiftModel model)
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new InsertShiftCriteria
-                {
-                    Name = model.Name,
-                    CheckInTime = model.TimeIn,
-                    CheckOutTime = model.TimeOut,
-                    IsInAfterDay = model.IsInAfterDay,
-                    IsOutAfterDay = model.IsOutAfterDay,
-                    CreatedBy = sessionService.Employee.Id,
-                    CreatedDate = DateTime.Now
-                };
-                CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-                if (result.IsSuccessful)
+                CommandResult commandResult = shiftService.Create(sessionService.Employee.Id, model);
+                if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
 
@@ -83,31 +67,30 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-        public ActionResult Edit(int shiftId)
+        public ActionResult Edit(int id)
         {
-            var criteria = new GetShiftByIdCriteria { ShiftId = shiftId };
-            var shift = shiftService.GetById(criteria);
-            ShiftViewModel model = null;
+            Shift shift = shiftService.GetById(id);
+            EditShiftModel model = null;
 
             if (shift != null)
             {
-                model = new ShiftViewModel
+                model = new EditShiftModel
                 {
+                    ShiftId = shift.Id,
                     Name = shift.Name,
                     HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
                     MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
                     HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
                     MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
-                    IsDisabled = shift.IsDisabled,
-                    ShiftId = shift.Id,
                     IsInAfterDay = shift.IsInAfterDay,
                     IsOutAfterDay = shift.IsOutAfterDay,
+                    IsDisabled = shift.IsDisabled,
                     IsUsed = shift.IsUsed
                 };
             }
 
             ViewBag.Successed = false;
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
@@ -115,35 +98,22 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-        public ActionResult Edit(ShiftViewModel model)
+        public ActionResult Edit(EditShiftModel model)
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new UpdateShiftCriteria
-                {
-                    ShiftId = model.ShiftId,
-                    Name = model.Name,
-                    CheckInTime = model.TimeIn,
-                    CheckOutTime = model.TimeOut,
-                    IsInAfterDay = model.IsInAfterDay,
-                    IsOutAfterDay = model.IsOutAfterDay,
-                    ModifiedBy = sessionService.Employee.Id,
-                    ModifiedDate = DateTime.Now,
-                    IsDisabled = model.IsDisabled
-                };
-                CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-                if (result.IsSuccessful)
+                CommandResult commandResult = shiftService.Edit(sessionService.Employee.Id, model);
+                if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
@@ -152,21 +122,13 @@
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public JsonResult Delete(int shiftId)
         {
-            var criteria = new DeleteShiftCriteria { ShiftId = shiftId };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
+            CommandResult commandResult = shiftService.Delete(shiftId);
+            return Json(commandResult);
         }
 
         public JsonResult GetShiftByDate(int employeeId, DateTime date)
         {
-            var criteria = new GetEmployeeShiftByDateCriteria
-            {
-                EmployeeId = employeeId,
-                Date = date
-            };
-
-            Shift shift = shiftService.GetByDate(criteria);
+            Shift shift = shiftService.GetByDate(employeeId, date);
             return Json(shift, JsonRequestBehavior.AllowGet);
         }
 

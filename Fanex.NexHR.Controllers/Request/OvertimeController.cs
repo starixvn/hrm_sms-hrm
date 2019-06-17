@@ -4,22 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Core;
-    using Core.Enums;
-    using Core.Models;
-    using Core.Services;
-    using Criteria;
-    using Criteria.Overtime;
-    using Criteria.Request;
-    using Criteria.Supervisor;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Overtime;
+    using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Supervisor;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
     using Hangfire;
-    using Models;
-    using Models.Request;
-    using Models.Supervisor;
-    using Services;
-    using ViewModels;
 
     public class OvertimeController : BaseController
     {

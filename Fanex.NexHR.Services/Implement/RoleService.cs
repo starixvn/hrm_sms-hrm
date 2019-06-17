@@ -17,13 +17,7 @@
         public IEnumerable<SystemRoleModel> GetRolesByUserId(int userId)
         {
             var criteria = new GetRolesByUserIdCriteria { UserId = userId };
-            IEnumerable<SystemRoleModel> roles = new List<SystemRoleModel>();
-            if (criteria.IsValid())
-            {
-                roles = baseService.GetData<SystemRoleModel>(criteria);
-            }
-
-            return roles;
+            return baseService.GetData<SystemRoleModel>(criteria);
         }
 
         public IEnumerable<SystemRoleModel> GetRoles()
