@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.EmployeeRelationship;
     using Fanex.NexHR.Models;
@@ -26,8 +25,9 @@
         private readonly IEmployeeService employeeService;
 
         public InformationController(
+            ISessionService sessionService,
             IBaseService baseService,
-            IEmployeeService employeeService)
+            IEmployeeService employeeService) : base(sessionService)
         {
             this.baseService = baseService;
             this.employeeService = employeeService;
@@ -35,17 +35,15 @@
 
         public ActionResult UpdateInformation()
         {
-            var criteria = new GetEmployeeByIdCriteria { EmpId = CurrentUser.Id };
-            Employee employee = employeeService.GetEmployeeById(criteria);
+            Employee employee = employeeService.GetEmployeeById(sessionService.Employee.Id);
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
-            ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + CurrentUser.Code + "/";
+            ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
             return View(employee);
         }
 
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
-            var getAllCountryCriteria = new GetAllCountryCriteria();
-            var countries = employeeService.GetAllCountry(getAllCountryCriteria);
+            var countries = employeeService.GetAllCountry();
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
             ViewBag.Genders = new List<SelectListItem>
@@ -70,8 +68,8 @@
         public ActionResult UpdateInformation(Employee model)
         {
             ModelState.Clear();
-            model.Id = CurrentUser.Id;
-            model.Modifier = new Employee { Id = CurrentUser.Id };
+            model.Id = sessionService.Employee.Id;
+            model.Modifier = new Employee { Id = sessionService.Employee.Id };
             var criteria = SetUpdatePersonalInfoCriteria(model);
 
             var result = baseService.ExecuteNonQuery(criteria);
@@ -115,14 +113,14 @@
         public ActionResult GetFileUploaded()
         {
             var fileNames = GetAllFileUploaded();
-            ViewBag.BaseUrl = Constants.ProfileUploadPath + "/" + CurrentUser.Code + "/";
+            ViewBag.BaseUrl = Constants.ProfileUploadPath + "/" + sessionService.Employee.Code + "/";
             return PartialView("_ListFileUploaded", fileNames);
         }
 
         private IList<string> GetAllFileUploaded()
         {
             var filePath = new List<string>();
-            string path = HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + CurrentUser.Code;
+            string path = HostingEnvironment.ApplicationPhysicalPath + "/file/uploads/profile/" + sessionService.Employee.Code;
             if (Directory.Exists(path))
             {
                 var paths = Directory.GetFiles(path);
@@ -139,7 +137,7 @@
         {
             var criteria = new GetRelationshipByEmployeeIdCriteria
             {
-                EmployeeId = CurrentUser.Id
+                EmployeeId = sessionService.Employee.Id
             };
 
             var relationships = baseService.GetData<EmployeeRelationship>(criteria);
@@ -173,13 +171,13 @@
             {
                 var criteria = new InsertRelationshipCriteria
                 {
-                    EmployeeId = CurrentUser.Id,
+                    EmployeeId = sessionService.Employee.Id,
                     FullName = viewModel.FullName,
                     Gender = viewModel.Gender,
                     DateOfBirth = viewModel.DateOfBirth,
                     Relationship = (int)viewModel.Relationship,
                     Phone = viewModel.Phone,
-                    Creator = CurrentUser.Id
+                    Creator = sessionService.Employee.Id
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -231,7 +229,7 @@
                     DateOfBirth = viewModel.DateOfBirth,
                     Relationship = (int)viewModel.Relationship,
                     Phone = viewModel.Phone,
-                    Modifier = CurrentUser.Id
+                    Modifier = sessionService.Employee.Id
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -248,7 +246,7 @@
         {
             var criteria = new CheckEmergencyExistsCriteria
             {
-                EmployeeId = CurrentUser.Id
+                EmployeeId = sessionService.Employee.Id
             };
 
             return baseService.GetDataEntity<bool>(criteria);
@@ -260,7 +258,7 @@
             var criteria = new DeleteRelationshipCriteria
             {
                 RelationshipId = id,
-                ActorId = CurrentUser.Id
+                ActorId = sessionService.Employee.Id
             };
 
             var result = baseService.ExecuteNonQuery(criteria);
