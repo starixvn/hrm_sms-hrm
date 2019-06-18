@@ -1,11 +1,10 @@
-﻿namespace Fanex.NexHR.Services.Implement
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
     using System.Linq;
     using Core.Models;
     using Core.Services;
     using Criteria.Paternity;
-    using Fanex.NexHR.Services.Interfaces;
     using Models;
 
     public class PaternityService : IPaternityService

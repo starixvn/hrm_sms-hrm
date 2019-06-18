@@ -4,8 +4,6 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.Services.ExportExcel.JobTitle;
-    using Implement;
-    using Interfaces;
     using Unity;
 
     public static class ServiceDIExtensions
@@ -55,6 +53,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IPostnatalService, PostnatalService>();
             container.RegisterType<IPaternityService, PaternityService>();
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
+            container.RegisterType<IDashboardService, DashboardService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

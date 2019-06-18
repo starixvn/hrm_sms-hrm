@@ -13,7 +13,7 @@
             }
             else
             {
-                Response.Redirect("~/employee/myspace/");
+                Response.Redirect("~/home/index");
             }
         }
     }

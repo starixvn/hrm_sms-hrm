@@ -9,7 +9,7 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Paternity;
-    using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Paternity;
 
     public class PaternityController : BaseController

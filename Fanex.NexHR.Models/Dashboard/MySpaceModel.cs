@@ -1,18 +1,8 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using System.Collections.Generic;
-
     public class MySpaceModel
     {
-        public decimal AnnualLeaveBalance { get; set; }
-
-        public decimal TotalWorkHours { get; set; }
-
-        public decimal TotalWorkDays { get; set; }
-
         public decimal TotalPendingRequest { get; set; }
-
-        public decimal TotalRequest { get; set; }
 
         public decimal TotalCheckInOutRequest { get; set; }
 
@@ -34,18 +24,10 @@
 
         public decimal TotalPendingKivRequest { get; set; }
 
-        public decimal KeepInViewBalance { get; set; }
-
-        public decimal OutStandingLeaveBalance { get; set; }
-
-        public decimal OutStandingKivLeaveBalance { get; set; }
-
         public decimal ForgotInOut { get; set; }
 
         public decimal LateInEarlyOut { get; set; }
 
         public decimal TotalPendingOverTimeRequest { get; set; }
-
-        public bool HasManagementDashboard { get; set; }
     }
 }

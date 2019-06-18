@@ -44,6 +44,12 @@
             return baseService.GetDataEntity<string>(criteria);
         }
 
+        public bool CheckResetPassword(int employeeId)
+        {
+            var criteria = new CheckResetPasswordCriteria { EmployeeId = employeeId };
+            return baseService.GetDataEntity<bool>(criteria);
+        }
+
         public Employee GetEmployeeById(int id)
         {
             var criteria = new GetEmployeeByIdCriteria
@@ -93,16 +99,6 @@
                 EmpId = id
             };
             return baseService.GetDataEntity<EmployeeShift>(criteria);
-        }
-
-        public MySpaceModel GetMySpace(int employeeId, DateTime? date)
-        {
-            var criteria = new GetMySpaceCriteria
-            {
-                EmpId = employeeId,
-                Date = date
-            };
-            return baseService.GetDataEntity<MySpaceModel>(criteria);
         }
 
         public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)

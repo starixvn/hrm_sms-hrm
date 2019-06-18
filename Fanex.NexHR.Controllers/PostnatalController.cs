@@ -9,7 +9,7 @@
     using Criteria.Postnatal;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Services.Interfaces;
+    using Fanex.NexHR.Services;
     using ViewModels.Postnatal;
 
     public class PostnatalController : BaseController

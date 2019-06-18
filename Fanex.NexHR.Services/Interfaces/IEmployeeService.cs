@@ -18,6 +18,8 @@
     {
         string GenerateEmployeeCode();
 
+        bool CheckResetPassword(int employeeId);
+
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
         IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId);
@@ -33,8 +35,6 @@
         IList<Country> GetAllCountry();
 
         EmployeeShift GetShiftByEmployeeId(int id);
-
-        MySpaceModel GetMySpace(int employeeId, DateTime? date);
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 

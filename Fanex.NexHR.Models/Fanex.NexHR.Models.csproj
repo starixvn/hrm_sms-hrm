@@ -116,7 +116,7 @@
     <Compile Include="Message\GetMessageByCreatorParam.cs" />
     <Compile Include="Message\GetMessageByEmployeeParam.cs" />
     <Compile Include="Message\Message.cs" />
-    <Compile Include="MySpaceModel.cs" />
+    <Compile Include="Dashboard\MySpaceModel.cs" />
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />

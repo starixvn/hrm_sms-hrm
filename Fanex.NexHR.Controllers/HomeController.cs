@@ -1,17 +1,50 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
 
     public class HomeController : BaseController
     {
-        public HomeController(ISessionService sessionService) : base(sessionService)
+        private readonly IDashboardService dashboardService;
+        private readonly IEmployeeService employeeService;
+
+        public HomeController(
+            ISessionService sessionService,
+            IEmployeeService employeeService,
+            IDashboardService dashboardService) : base(sessionService)
         {
+            this.employeeService = employeeService;
+            this.dashboardService = dashboardService;
         }
 
         public ActionResult Index()
         {
-            return RedirectToAction("myspace", "employee");
+            MySpaceModel model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
+            ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
+            ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
+                || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
+
+            return View(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult MemberRequest()
+        {
+            var criteria = new GetHRLeaderDashboardCriteria
+            {
+                Empid = sessionService.Employee.Id,
+                Date = DateTime.Now
+            };
+            IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
+
+            return PartialView("_MemberRequest", model);
         }
     }
 }

@@ -1013,7 +1013,6 @@
     <Content Include="Views\CheckInOut\Update.cshtml" />
     <Content Include="Views\LateInEarlyOut\Update.cshtml" />
     <Content Include="Views\Leave\Update.cshtml" />
-    <Content Include="Views\Employee\MySpace.cshtml" />
     <Content Include="Views\ChangeShift\Create.cshtml" />
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
     <Content Include="Views\ChangeShift\Update.cshtml" />
@@ -1095,7 +1094,7 @@
     <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
     <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
     <Content Include="Views\Employee\ManageSupervisor.cshtml" />
-    <Content Include="Views\Employee\MultiRoleManagementDashboard.cshtml" />
+    <Content Include="Views\Home\_MemberRequest.cshtml" />
     <Content Include="Views\Employee\ShiftManager.cshtml" />
     <Content Include="Views\Team\ShiftManager.cshtml" />
     <Content Include="Views\ChangeShift\ChangeShiftDetail.cshtml" />

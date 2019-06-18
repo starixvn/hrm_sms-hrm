@@ -328,30 +328,6 @@
             return Json(null);
         }
 
-        public ActionResult MySpace()
-        {
-            MySpaceModel model = employeeService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
-            Employee employee = employeeService.GetEmployeeById(sessionService.Employee.Id);
-            ViewBag.ResetPassword = employee.PasswordReset;
-            model.HasManagementDashboard = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
-                || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
-
-            return View(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ManagementDashboard()
-        {
-            var criteria = new GetHRLeaderDashboardCriteria
-            {
-                Empid = sessionService.Employee.Id,
-                Date = DateTime.Now
-            };
-            IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
-
-            return PartialView("MultiRoleManagementDashboard", model);
-        }
-
         [HttpGet]
         public ActionResult ManageSupervisor(int id, short roleId)
         {

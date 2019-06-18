@@ -104,6 +104,7 @@
     <Compile Include="EmployeeRelationship\GetRelationshipByEmployeeIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\GetRelationshipByIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\InsertRelationshipCriteria.cs" />
+    <Compile Include="Employee\CheckResetPasswordCriteria.cs" />
     <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
@@ -187,7 +188,7 @@
     <Compile Include="Memo\GetMemoByIdCriteria.cs" />
     <Compile Include="Memo\CreateMemoCriteria.cs" />
     <Compile Include="Memo\EditMemoCriteria.cs" />
-    <Compile Include="Employee\GetMySpaceCriteria.cs" />
+    <Compile Include="Dashboard\GetMySpaceCriteria.cs" />
     <Compile Include="Request\GetOffDateAndHolidayDateCriteria.cs" />
     <Compile Include="Report\GetEmployeeAttendanceCriteria.cs" />
     <Compile Include="ExtensionNumber\DeleteExtensionNumberMemberCriteria.cs" />
