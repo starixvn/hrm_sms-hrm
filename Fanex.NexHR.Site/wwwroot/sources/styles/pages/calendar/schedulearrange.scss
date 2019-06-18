@@ -77,7 +77,7 @@ input[type="text"] {
 
 .section-content.iframe {
     .table-wrapper {
-        width: 1190px;
+        width: 1070px;
 
         .table-header.fixed {
             top: 0;
@@ -273,6 +273,24 @@ input[type="text"] {
 
             .cell-shift-wrapper {
                 position: relative;
+
+                &.leavehalfday {
+                    display: table-row;
+
+                    .halfdaycode {
+                        display: table-cell;
+                        width: 35px;
+                        text-align: center;
+                        padding: 0 6px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .react-autocomplete-wrapper {
+                        display: table-cell;
+                    }
+                }
 
                 .fa-info-circle {
                     color: #2e6da4;

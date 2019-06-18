@@ -12,6 +12,8 @@ export default class ColShift extends PureComponent {
         let classOfleavetype = '';
         let moreInfo = {
             show: false,
+            isLeaveHalfDay: false,
+            leaveCode: '',
             content: ''
         };
 
@@ -51,7 +53,9 @@ export default class ColShift extends PureComponent {
                     const toTime = moment(data.leaveType.toTime).format('DD MMM, YYYY HH:mm');
                     moreInfo = {
                         show: true,
-                        content: `½ ${data.leaveType.name}\r\nFrom: ${fromTime}\r\nTo: ${toTime}`
+                        isLeaveHalfDay: true,
+                        leaveCode: data.leaveType.code + ' ½',
+                        content: `From: ${fromTime}\r\nTo: ${toTime}`
                     };
 
                     if (data.shift !== null) {
@@ -128,7 +132,7 @@ export default class ColShift extends PureComponent {
 
         return (
             <div className="table-cell cell-shift">
-                <div className={`cell-shift-wrapper`}>
+                <div className={`cell-shift-wrapper ${moreInfo.isLeaveHalfDay ? 'leavehalfday' : ''}`}>
                     {
                         moreInfo.show &&
                         <OverlayTrigger trigger={['hover']} placement={'top'}
@@ -138,7 +142,11 @@ export default class ColShift extends PureComponent {
                                 </Tooltip>
                             }
                         >
-                            <i className="fa fa-info-circle" />
+                            {
+                                moreInfo.isLeaveHalfDay
+                                    ? <span className={`halfdaycode ${classOfleavetype}`}>{moreInfo.leaveCode}</span>
+                                    : <i className="fa fa-info-circle" />
+                            }
                         </OverlayTrigger>
                     }
                     <ShiftAutocomplete shift={shift} className={classOfInput} isDisabled />

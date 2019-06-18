@@ -51,7 +51,6 @@ export default class THead extends PureComponent {
                     <div className="table-cell cell-nickname">
                         Nickname
                     </div>
-                    <div className="table-cell cell-shift">Default Shift</div>
                     {
                         this.dayOfWeeks.map(item => {
                             return (
