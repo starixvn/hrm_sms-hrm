@@ -51,12 +51,10 @@
       <resource path="~/Libs/SimplePagination/jquery.simplePagination.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
-      <resource path="~/scripts/views/home.js" />
     </resourceSet>
 
     <resourceSet name="homecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/home.css" />
     </resourceSet>
     <resourceSet name="homejs" type="js">
       <resource reference="sitejs" />

@@ -702,7 +702,6 @@
     <Content Include="Scripts\Views\memo.edit.js" />
     <Content Include="Scripts\Views\Report\report.attendance.js" />
     <Content Include="Scripts\Views\Employee\employee.edit.js" />
-    <Content Include="Scripts\Views\home.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -756,7 +755,6 @@
     <Content Include="Styles\myrequest.css" />
     <Content Include="Styles\employee.create.css" />
     <Content Include="Styles\employee.defaultschedule.css" />
-    <Content Include="Styles\home.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
@@ -1022,7 +1020,6 @@
     <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
     <Content Include="Views\Report\Timesheet.cshtml" />
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
-    <Content Include="Views\UI\Welcome.cshtml" />
     <Content Include="Views\UI\GlobalScript.cshtml" />
     <Content Include="Views\Request\CriteriaPanel.cshtml" />
     <Content Include="Views\UI\StatusDropDownList.cshtml" />
