@@ -392,7 +392,7 @@
                 else if (dailySchedule.LeaveType.ToTime.Value == checkOutTime)
                 {
                     shift.CheckIn = GetHalfShiftCode(dailySchedule.Shift.CheckIn);
-                    shift.CheckOut = GetHalfShiftCode(dailySchedule.LeaveType.ToTime.Value.ToShortTime());
+                    shift.CheckOut = GetHalfShiftCode(dailySchedule.LeaveType.FromTime.Value.ToShortTime());
                     shift.Code = $"{shift.CheckIn} >{shift.CheckOut}";
                     shift.IsInAfterDay = dailySchedule.Shift.IsInAfterDay;
                     shift.IsOutAfterDay = dailySchedule.Shift.IsOutAfterDay;
