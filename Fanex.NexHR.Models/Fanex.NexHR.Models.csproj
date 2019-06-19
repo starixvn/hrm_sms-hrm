@@ -103,10 +103,11 @@
     <Compile Include="Discipline\DisciplineModel.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
+    <Compile Include="EmployeeInformation\EmployeeEmergency.cs" />
     <Compile Include="EmployeeLeaveBalance.cs" />
     <Compile Include="EmployeePaternity.cs" />
     <Compile Include="EmployeePostnatal.cs" />
-    <Compile Include="EmployeeRelationship\EmployeeRelationship.cs" />
+    <Compile Include="EmployeeInformation\EmployeeRelationship.cs" />
     <Compile Include="EmployeeRole.cs" />
     <Compile Include="EmployeeSuggestion.cs" />
     <Compile Include="Function\FunctionModel.cs" />

@@ -862,7 +862,6 @@
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
-    <Content Include="wwwroot\sources\js\pages\account\profile-edit.js" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\table.jsx" />
@@ -876,6 +875,7 @@
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.js" />
+    <Content Include="wwwroot\sources\js\pages\information\index.js" />
     <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
@@ -945,6 +945,9 @@
     <Content Include="Views\Information\_AddRelationship.cshtml" />
     <Content Include="Views\Information\_ListRelationship.cshtml" />
     <Content Include="Views\Information\_EditRelationship.cshtml" />
+    <Content Include="Views\Information\_AddEmergency.cshtml" />
+    <Content Include="Views\Information\_EditEmergency.cshtml" />
+    <Content Include="Views\Information\_ListEmergency.cshtml" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />

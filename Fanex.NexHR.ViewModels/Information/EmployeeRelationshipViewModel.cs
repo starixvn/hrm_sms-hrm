@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
     public class EmployeeRelationshipViewModel
@@ -14,7 +13,7 @@
 
         [Required]
         [Display(Name = "Birthday")]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime BirthDay { get; set; }
 
         [RegularExpression(@"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$", ErrorMessage = "Phone number is invalid")]
         [Display(Name = "Phone")]
@@ -22,9 +21,5 @@
         public string Phone { get; set; }
 
         public int Gender { get; set; }
-
-        public Relationship Relationship { get; set; }
-
-        public bool IsExistEmergency { get; set; }
     }
 }

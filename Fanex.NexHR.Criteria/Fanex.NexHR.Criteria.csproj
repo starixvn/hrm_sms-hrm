@@ -98,7 +98,11 @@
     <Compile Include="Discipline\GetWeekendLeaveOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
-    <Compile Include="EmployeeRelationship\CheckEmergencyExistsCriteria.cs" />
+    <Compile Include="EmployeeEmergency\DeleteEmergencyCriteria.cs" />
+    <Compile Include="EmployeeEmergency\EditEmergencyCriteria.cs" />
+    <Compile Include="EmployeeEmergency\GetEmergencyByEmployeeIdCriteria.cs" />
+    <Compile Include="EmployeeEmergency\GetEmergencyByIdCriteria.cs" />
+    <Compile Include="EmployeeEmergency\InsertEmergencyCriteria.cs" />
     <Compile Include="EmployeeRelationship\DeleteRelationshipCriteria.cs" />
     <Compile Include="EmployeeRelationship\EditRelationshipCriteria.cs" />
     <Compile Include="EmployeeRelationship\GetRelationshipByEmployeeIdCriteria.cs" />

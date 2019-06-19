@@ -1,14 +1,14 @@
-﻿namespace Fanex.NexHR.Criteria.EmployeeRelationship
+﻿namespace Fanex.NexHR.Criteria.EmployeeEmergency
 {
     using Fanex.Data.Repository;
 
-    public class CheckEmergencyExistsCriteria : CriteriaBase
+    public class GetEmergencyByEmployeeIdCriteria : CriteriaBase
     {
         public int EmployeeId { get; set; }
 
         public override string GetSettingKey()
         {
-            return "EmployeeRelationship_CheckEmergencyExist";
+            return "EmployeeEmergency_GetByEmployeeId";
         }
 
         public override bool IsValid()

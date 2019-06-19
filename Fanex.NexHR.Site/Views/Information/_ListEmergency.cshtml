@@ -1,0 +1,58 @@
+﻿@using Fanex.NexHR.Models.EmployeeInformation
+@model IList<EmployeeEmergency>
+    @{ 
+        var isAllowInsert = (bool)ViewBag.IsAllowInsert;
+    }
+   <input type="checkbox" name="isAllowInsert" checked="@isAllowInsert" hidden />       
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Name</th>
+                <th>@Labels.Relationship</th>
+                <th>@Labels.Phone</th>
+                <th>@Labels.DateOfBirth</th>
+                <th>@Labels.Gender</th>
+                <th>@Labels.Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                var index = 1;
+                foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@index</td>
+                        <td class="align-left">@r.FullName</td>
+                        <td>@r.Relationship</td>
+                        <td>@r.Phone</td>
+                        <td>@r.DateOfBirth.ToString("dd MMM yyyy")</td>
+                        <td>
+                            @if (r.Gender == 0)
+                            {
+                                <span>@Labels.Female</span>
+                            }
+                            else
+                            {
+                                <span>@Labels.Male</span>
+                            }
+                        </td>
+                        <td>
+                            <a title="Edit" class="edit-icon" data-id="@r.EmergencyId">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                            <a title="Delete" class="delete-icon" data-id="@r.EmergencyId">
+                                <i class="fa fa-remove fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                @RazorHelper.DisplayNoInformation(7)
+            }
+        </tbody>
+    </table>

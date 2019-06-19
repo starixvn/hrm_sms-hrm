@@ -15,8 +15,6 @@
 
         public int Gender { get; set; }
 
-        public int Relationship { get; set; }
-
         public int Modifier { get; set; }
 
         public override string GetSettingKey()

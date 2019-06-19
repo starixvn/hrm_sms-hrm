@@ -37,6 +37,6 @@ module.exports = {
         [`${jsDistPath}/employee.edit.shift.manager`]: `${jsSourcePath}/employee/shift-manager/index.jsx`,
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
         [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,
-        [`${jsDistPath}/account.edit`]: `${jsSourcePath}/account/profile-edit.js`
+        [`${jsDistPath}/employee.information`]: `${jsSourcePath}/information/index.js`
     }
 };

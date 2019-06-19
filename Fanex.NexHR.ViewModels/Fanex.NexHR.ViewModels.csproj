@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Information\EmployeeEmergencyViewModel.cs" />
     <Compile Include="Information\EmployeeRelationshipViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveTransactionViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models.EmployeeRelationship
+﻿namespace Fanex.NexHR.Models.EmployeeInformation
 {
     using System;
 
@@ -15,7 +15,5 @@
         public DateTime DateOfBirth { get; set; }
 
         public int Gender { get; set; }
-
-        public int Relationship { get; set; }
     }
 }

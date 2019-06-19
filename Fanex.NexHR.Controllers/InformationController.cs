@@ -8,13 +8,13 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.EmployeeEmergency;
     using Fanex.NexHR.Criteria.EmployeeRelationship;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.EmployeeRelationship;
+    using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Information;
@@ -147,12 +147,9 @@
 
         public ActionResult InsertRelationship()
         {
-            var isExistsEmergency = IsExistsEmergency();
             var viewModel = new EmployeeRelationshipViewModel
             {
-                DateOfBirth = DateTime.Now,
-                Relationship = isExistsEmergency ? Relationship.Children : Relationship.Emergency,
-                IsExistEmergency = isExistsEmergency
+                BirthDay = DateTime.Now
             };
 
             return PartialView("_AddRelationship", viewModel);
@@ -162,10 +159,6 @@
         public ActionResult InsertRelationship(EmployeeRelationshipViewModel viewModel)
         {
             var result = new CommandResult { Code = 1, Message = string.Empty };
-            if (viewModel.Relationship == Relationship.Emergency && string.IsNullOrEmpty(viewModel.Phone))
-            {
-                ModelState.AddModelError("Phone", "The phone is required for Emergency");
-            }
 
             if (ModelState.IsValid)
             {
@@ -174,8 +167,7 @@
                     EmployeeId = sessionService.Employee.Id,
                     FullName = viewModel.FullName,
                     Gender = viewModel.Gender,
-                    DateOfBirth = viewModel.DateOfBirth,
-                    Relationship = (int)viewModel.Relationship,
+                    DateOfBirth = viewModel.BirthDay,
                     Phone = viewModel.Phone,
                     Creator = sessionService.Employee.Id
                 };
@@ -197,15 +189,12 @@
                 RelationshipId = id
             };
             var relationship = baseService.GetDataEntity<EmployeeRelationship>(criteria);
-            var isExistsEmergency = IsExistsEmergency();
             var viewModel = new EmployeeRelationshipViewModel
             {
                 FullName = relationship.FullName,
                 Gender = relationship.Gender,
                 Phone = relationship.Phone,
-                DateOfBirth = relationship.DateOfBirth,
-                Relationship = (Relationship)relationship.Relationship,
-                IsExistEmergency = (Relationship)relationship.Relationship != Relationship.Emergency && isExistsEmergency
+                BirthDay = relationship.DateOfBirth
             };
             return PartialView("_EditRelationship", viewModel);
         }
@@ -214,11 +203,6 @@
         public ActionResult EditRelationship(int id, EmployeeRelationshipViewModel viewModel)
         {
             var result = new CommandResult { Code = 1, Message = string.Empty };
-            if (viewModel.Relationship == Relationship.Emergency && string.IsNullOrEmpty(viewModel.Phone))
-            {
-                ModelState.AddModelError("Phone", "The phone is required for Emergency");
-            }
-
             if (ModelState.IsValid)
             {
                 var criteria = new EditRelationshipCriteria
@@ -226,9 +210,8 @@
                     RelationshipId = id,
                     FullName = viewModel.FullName,
                     Gender = viewModel.Gender,
-                    DateOfBirth = viewModel.DateOfBirth,
-                    Relationship = (int)viewModel.Relationship,
-                    Phone = viewModel.Phone,
+                    DateOfBirth = viewModel.BirthDay,
+                    Phone = string.IsNullOrEmpty(viewModel.Phone) ? string.Empty : viewModel.Phone,
                     Modifier = sessionService.Employee.Id
                 };
 
@@ -242,22 +225,122 @@
             return Json(result);
         }
 
-        private bool IsExistsEmergency()
-        {
-            var criteria = new CheckEmergencyExistsCriteria
-            {
-                EmployeeId = sessionService.Employee.Id
-            };
-
-            return baseService.GetDataEntity<bool>(criteria);
-        }
-
         [HttpPost]
         public ActionResult DeleteRelationship(int id)
         {
             var criteria = new DeleteRelationshipCriteria
             {
                 RelationshipId = id,
+                ActorId = sessionService.Employee.Id
+            };
+
+            var result = baseService.ExecuteNonQuery(criteria);
+
+            return Json(result);
+        }
+
+        public ActionResult GetEmployeeEmergency()
+        {
+            var criteria = new GetEmergencyByEmployeeIdCriteria
+            {
+                EmployeeId = sessionService.Employee.Id
+            };
+
+            var emergencies = baseService.GetData<EmployeeEmergency>(criteria);
+
+            ViewBag.IsAllowInsert = !emergencies.Any();
+            return PartialView("_ListEmergency", emergencies);
+        }
+
+        public ActionResult InsertEmergency()
+        {
+            var viewModel = new EmployeeEmergencyViewModel
+            {
+                BirthDay = DateTime.Now
+            };
+
+            return PartialView("_AddEmergency", viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult InsertEmergency(EmployeeEmergencyViewModel viewModel)
+        {
+            var result = new CommandResult { Code = 1, Message = string.Empty };
+
+            if (ModelState.IsValid)
+            {
+                var criteria = new InsertEmergencyCriteria
+                {
+                    EmployeeId = sessionService.Employee.Id,
+                    FullName = viewModel.FullName,
+                    Gender = viewModel.Gender,
+                    DateOfBirth = viewModel.BirthDay,
+                    Phone = viewModel.Phone,
+                    Relationship = viewModel.Relationship,
+                    Creator = sessionService.Employee.Id
+                };
+
+                result = baseService.ExecuteNonQuery(criteria);
+            }
+            else
+            {
+                result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            }
+
+            return Json(result);
+        }
+
+        public ActionResult EditEmergency(int id)
+        {
+            var criteria = new GetEmergencyByIdCriteria
+            {
+                EmergencyId = id
+            };
+            var emergency = baseService.GetDataEntity<EmployeeEmergency>(criteria);
+            var viewModel = new EmployeeEmergencyViewModel
+            {
+                FullName = emergency.FullName,
+                Gender = emergency.Gender,
+                Phone = emergency.Phone,
+                BirthDay = emergency.DateOfBirth,
+                Relationship = emergency.Relationship
+            };
+            return PartialView("_EditEmergency", viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditEmergency(int id, EmployeeEmergencyViewModel viewModel)
+        {
+            var result = new CommandResult { Code = 1, Message = string.Empty };
+            if (ModelState.IsValid)
+            {
+                var criteria = new EditEmergencyCriteria
+                {
+                    EmergencyId = id,
+                    FullName = viewModel.FullName,
+                    Gender = viewModel.Gender,
+                    DateOfBirth = viewModel.BirthDay,
+                    Phone = viewModel.Phone,
+                    Relationship = viewModel.Relationship,
+                    Modifier = sessionService.Employee.Id
+                };
+
+                result = baseService.ExecuteNonQuery(criteria);
+            }
+            else
+            {
+                result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            }
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteEmergency(int id)
+        {
+            var criteria = new DeleteEmergencyCriteria
+            {
+                EmergencyId = id,
                 ActorId = sessionService.Employee.Id
             };
 

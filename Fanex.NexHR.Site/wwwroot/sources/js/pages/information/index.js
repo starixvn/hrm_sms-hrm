@@ -8,13 +8,24 @@ var editAccount = (function ($) {
     const domElement = {
         EditInformationForm: "#info-update",
         Attachments: "#Attachments",
-        FileMaxSize: 5242880,
         DeleteFile: ".delete-file-upload",
         ListFileUpload: "#upload-list",
         Relationship: "#relationship",
+        Emergency: "#emergency",
         BtnAddRelationship: "#btn-add-relationship",
+        BtnAddEmergency: "#btn-add-emergency",
         CreateForm: "#create-form",
         EditForm: "#edit-form"
+    };
+
+    const constants = {
+        FileMaxSize: 5242880,
+        CreateRelationshipUrl: "/Information/InsertRelationship",
+        EditRelationshipUrl: "/Information/EditRelationship/",
+        CreateEmergencyUrl: "/Information/InsertEmergency",
+        EditEmergencyUrl: "/Information/EditEmergency/",
+		DeleteRelationship: "/Information/DeleteRelationship/",
+		DeleteEmergency: "/Information/DeleteEmergency/"
     };
 
     function updateInformationEvent() {
@@ -34,6 +45,15 @@ var editAccount = (function ($) {
                 }
             });
         });
+    }
+
+    function setAddEmergencyButton() {
+        var isAllowInsert = $('#emergency input[name=isAllowInsert]').is(':checked');
+        if (isAllowInsert) {
+            $(domElement.BtnAddEmergency).removeAttr("disabled");
+        } else {
+            $(domElement.BtnAddEmergency).attr("disabled", true);
+        }
     }
 
     function initUploadFileHandler() {
@@ -120,7 +140,7 @@ var editAccount = (function ($) {
     function validateFileUpload(files) {
         var isValid = true;
         for (var i = 0; i < files.length; i++) {
-            if (files[i].size > domElement.FileMaxSize) {
+            if (files[i].size > constants.FileMaxSize) {
                 isValid = false;
             }
             break;
@@ -148,50 +168,75 @@ var editAccount = (function ($) {
             contentType: "html",
             success: function (data) {
                 $(domElement.Relationship).html(data);
-                initEditRelationshipEvent();
-                initDeleteRelationshipEvent();
+                initEditEvent($(domElement.Relationship),
+                    constants.EditRelationshipUrl,
+                    "Edit Relationship",
+                    function () {
+                        getRelationship();
+                    });
+                initDeleteEvent($(domElement.Relationship),
+					constants.DeleteRelationship,
+					function() {
+						getRelationship();
+					});
             }
         });
     }
 
-    function initAddRelationshipEvent() {
-        $(domElement.BtnAddRelationship).on("click", function () {
-            $.get("/Information/InsertRelationship", function (data) {
-                $(domElement.CreateForm).html(data);
-                initDatePicker($(domElement.CreateForm));
-                $(domElement.CreateForm).dialog({
-                    title: "Add relationship",
-                    height: 'auto',
-                    width: 'auto',
-                    modal: true,
-                    buttons: {
-                        'Submit': function () {
-                            onAddRelationship();
-                        },
-                        'Cancel': function () {
-                            $(this).dialog('close');
-                        }
-                    }
-                });
-            });
+    function getEmergency() {
+        $.ajax({
+            type: "GET",
+            url: "/Information/GetEmployeeEmergency",
+            contentType: "html",
+            success: function (data) {
+                $(domElement.Emergency).html(data);
+                setAddEmergencyButton(); 
+                initEditEvent($(domElement.Emergency),
+                    constants.EditEmergencyUrl,
+                    "Edit Emergency",
+                    function () {
+                        getEmergency();
+                    });
+                initDeleteEvent($(domElement.Emergency),
+					constants.DeleteEmergency,
+					function() {
+						getEmergency();
+                    });
+                
+            }
         });
     }
 
-    function initEditRelationshipEvent() {
-        $('.edit-relationship').on("click", function () {
+    function initEditEvent($table, baseUrl, title, onEditSuccess) {
+        $table.find('.edit-icon').on("click", function () {
             var id = $(this).data('id');
             if (id > 0) {
-                $.get("/Information/EditRelationship/" + id, function (data) {
+                $.get(baseUrl + id, function (data) {
                     $(domElement.EditForm).html(data);
                     initDatePicker($(domElement.EditForm));
                     $(domElement.EditForm).dialog({
-                        title: "Add relationship",
+                        title: title,
                         height: 'auto',
                         width: 'auto',
                         modal: true,
                         buttons: {
                             'Submit': function () {
-                                onEditRelationship();
+                                $.ajax({
+                                    method: $(domElement.EditForm).find('form').attr("method"),
+                                    url: $(domElement.EditForm).find('form').attr("action"),
+                                    data: $(domElement.EditForm).find('form').serialize(),
+                                    success: function (data) {
+                                        if (data.IsSuccessful) {
+                                            $(domElement.EditForm).dialog('close');
+                                            toastr.success("Updated successfully!");
+                                            if (onEditSuccess) {
+                                                onEditSuccess();
+                                            }
+                                        } else {
+                                            showErrorMsg($(domElement.EditForm), data.Message);
+                                        }
+                                    }
+                                });
                             },
                             'Cancel': function () {
                                 $(this).dialog('close');
@@ -202,72 +247,60 @@ var editAccount = (function ($) {
             }
         });
     }
+	
+	
 
-    function initDatePicker($dialog) {
-        if ($dialog.find('.datepicker').length > 0) {
-            $('.datepicker').datepicker({
-                dateFormat: "dd MMM, yyyy",
-                changeMonth: true,
-                changeYear: true
+    function initButtonInsertEvent($btn, onCreateSuccess) {
+        $btn.on("click", function () {
+            var url = $(this).attr("data-url");
+            var title = $(this).attr("title");
+            $.get(url, function (data) {
+                $(domElement.CreateForm).html(data);
+                initDatePicker($(domElement.CreateForm));
+                $(domElement.CreateForm).dialog({
+                    title: title,
+                    height: 'auto',
+                    width: 'auto',
+                    modal: true,
+                    buttons: {
+                        'Submit': function () {
+                            $.ajax({
+                                method: $(domElement.CreateForm).find('form').attr("method"),
+                                url: $(domElement.CreateForm).find('form').attr("action"),
+                                data: $(domElement.CreateForm).find('form').serialize(),
+                                success: function (data) {
+                                    if (data.IsSuccessful) {
+                                        $(domElement.CreateForm).dialog('close');
+                                        if (onCreateSuccess) {
+                                            onCreateSuccess();
+                                        }
+                                        toastr.success("Created successfully!");
+                                    } else {
+                                        showErrorMsg($(domElement.CreateForm), data.Message);
+                                    }
+                                }
+                            });
+                        },
+                        'Cancel': function () {
+                            $(this).dialog('close');
+                        }
+                    }
+                });
             });
-
-            $('.datepicker').attr('readonly', 'readonly');
-            $('.datepicker').keydown(function (e) {
-                var tab = 9, enter = 13;
-                if (e.keyCode === tab || e.keyCode === enter) {
-                    return true;
-                }
-
-                return false;
-            });
-        }
-    }
-
-    function onAddRelationship() {
-        $.ajax({
-            method: "POST",
-            url: $(domElement.CreateForm).find('form').attr("action"),
-            data: $(domElement.CreateForm).find('form').serialize(),
-            success: function (data) {
-                if (data.IsSuccessful) {
-                    $(domElement.CreateForm).dialog('close');
-                    getRelationship();
-                    toastr.success("Add relationship successfully!");
-                } else {
-                    showErrorMsg($(domElement.CreateForm), data.Message);
-                }
-            }
         });
     }
 
-    function onEditRelationship() {
-        $.ajax({
-            method: "POST",
-            url: $(domElement.EditForm).find('form').attr("action"),
-            data: $(domElement.EditForm).find('form').serialize(),
-            success: function (data) {
-                if (data.IsSuccessful) {
-                    $(domElement.EditForm).dialog('close');
-                    getRelationship();
-                    toastr.success("Update relationship successfully!");
-                } else {
-                    showErrorMsg($(domElement.EditForm), data.Message);
-                }
-            }
-        });
-    }
-
-    function initDeleteRelationshipEvent() {
-        $('.delete-relationship').on("click", function () {
+    function initDeleteEvent($table, url, onDeleteSuccess) {
+        $table.find('.delete-icon').on("click", function () {
             var id = $(this).data("id");
-            confirm("Do you want to delete this relationship?", function () {
+            confirm("Do you want to delete this?", function () {
                 $.ajax({
                     method: "POST",
-                    url: "/Information/DeleteRelationship/" + id,
+                    url: url + id,
                     success: function (data) {
                         if (data.IsSuccessful) {
-                            getRelationship();
-                            toastr.success("Delete relationship successfully!");
+                            onDeleteSuccess();
+                            toastr.success("Deleted successfully!");
                         } else {
                             toastr.error(data.message);
                         }
@@ -275,6 +308,33 @@ var editAccount = (function ($) {
                 });
             });
         });
+    }
+
+    function initDatePicker($dialog) {
+        if ($dialog.find('.datepicker').length > 0) {
+            $dialog.find('.datepicker').each(function (index, element) {
+                var yearRange = $(element).attr('yearrange');
+                $(element).datepicker({
+                    dateFormat: "dd M, yy",
+                    yearRange: yearRange,
+                    changeMonth: true,
+                    changeYear: true
+                });
+
+                $(element).attr('readonly', 'readonly');
+                $(element).keydown(function (e) {
+                    var tab = 9, enter = 13;
+                    if (e.keyCode === tab || e.keyCode === enter) {
+                        return true;
+                    }
+
+                    return false;
+                });
+            });
+            
+
+            
+        }
     }
 
     function showErrorMsg($form, msg) {
@@ -293,9 +353,15 @@ var editAccount = (function ($) {
     function init() {
         initDatePicker($(domElement.EditInformationForm));
         getFileUpload();
-        getRelationship();
         updateInformationEvent();
-        initAddRelationshipEvent();
+        getRelationship();
+        getEmergency();
+        initButtonInsertEvent($(domElement.BtnAddRelationship), function () {
+            getRelationship();
+        });
+        initButtonInsertEvent($(domElement.BtnAddEmergency), function () {
+            getEmergency();
+        });
     }
 
     return {
