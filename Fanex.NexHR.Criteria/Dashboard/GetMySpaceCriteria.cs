@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria
+﻿namespace Fanex.NexHR.Criteria.Dashboard
 {
     using System;
     using Fanex.Data.Repository;

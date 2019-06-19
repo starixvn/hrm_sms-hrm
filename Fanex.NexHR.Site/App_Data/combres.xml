@@ -53,13 +53,6 @@
       <resource path="~/scripts/views/request/request.constant.js" />
     </resourceSet>
 
-    <resourceSet name="homecss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-    <resourceSet name="homejs" type="js">
-      <resource reference="sitejs" />
-    </resourceSet>
-
     <resourceSet name="accountcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/account.css" />

@@ -111,7 +111,7 @@
     <Compile Include="EmployeeSuggestion.cs" />
     <Compile Include="Function\FunctionModel.cs" />
     <Compile Include="Function\FunctionPermission.cs" />
-    <Compile Include="HRLeaderDashboardModel.cs" />
+    <Compile Include="Dashboard\MemberRequest.cs" />
     <Compile Include="MenuModel.cs" />
     <Compile Include="Message\GetMessageByCreatorParam.cs" />
     <Compile Include="Message\GetMessageByEmployeeParam.cs" />

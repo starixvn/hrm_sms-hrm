@@ -1,10 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
-    using Fanex.NexHR.Models;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Models.Dashboard;
 
     public interface IDashboardService
     {
         MySpaceModel GetMySpace(int employeeId, DateTime date);
+
+        IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date);
     }
 }

@@ -137,11 +137,6 @@
             return unavailableDates;
         }
 
-        public IList<HRLeaderDashboardModel> GetHRLeaderDashboard(GetHRLeaderDashboardCriteria criteria)
-        {
-            return baseService.GetData<HRLeaderDashboardModel>(criteria).ToList();
-        }
-
         public IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
         {
             return baseService.GetData<AnnualLeaveTransactionViewModel>(criteria).ToList();

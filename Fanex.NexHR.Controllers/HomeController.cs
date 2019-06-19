@@ -6,8 +6,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Dashboard;
     using Fanex.NexHR.Services;
 
     public class HomeController : BaseController
@@ -37,12 +36,7 @@
         [ChildActionOnly]
         public ActionResult MemberRequest()
         {
-            var criteria = new GetHRLeaderDashboardCriteria
-            {
-                Empid = sessionService.Employee.Id,
-                Date = DateTime.Now
-            };
-            IList<HRLeaderDashboardModel> model = employeeService.GetHRLeaderDashboard(criteria);
+            IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(sessionService.Employee.Id, DateTime.Now);
 
             return PartialView("_MemberRequest", model);
         }

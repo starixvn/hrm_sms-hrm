@@ -40,8 +40,6 @@
 
         IList<DateTime> GetNotOffOrHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
 
-        IList<HRLeaderDashboardModel> GetHRLeaderDashboard(GetHRLeaderDashboardCriteria criteria);
-
         IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 
         AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId);

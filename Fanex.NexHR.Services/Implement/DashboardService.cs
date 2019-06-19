@@ -1,9 +1,10 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
+    using System.Collections.Generic;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Criteria.Dashboard;
+    using Fanex.NexHR.Models.Dashboard;
 
     public class DashboardService : IDashboardService
     {
@@ -22,6 +23,16 @@
                 Date = date
             };
             return baseService.GetDataEntity<MySpaceModel>(criteria);
+        }
+
+        public IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date)
+        {
+            var criteria = new GetMemberRequestCriteria
+            {
+                EmployeeId = employeeId,
+                Date = date
+            };
+            return baseService.GetData<MemberRequest>(criteria);
         }
     }
 }

@@ -5,6 +5,7 @@
   </Function>
   <Function Name="Dashboard">
     <Setting Key="Dashboard_Get" SpName="Dashboard_Get" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Dashboard_GetMemberRequest" SpName="Dashboard_GetMemberRequest" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Employee">
     <Setting Key="Employee_CheckResetPassword" SpName="Employee_CheckResetPassword" DbName="nexhrx" Plain="0"></Setting>
@@ -53,7 +54,6 @@
     <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_Manpower" SpName="Report_Manpower" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_ManpowerCategory" SpName="Report_ManpowerCategory" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_HRLeaderDashBoard" SpName="Report_HRLeaderDashBoard" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>

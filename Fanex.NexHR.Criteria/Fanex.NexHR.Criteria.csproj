@@ -150,7 +150,7 @@
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
-    <Compile Include="Employee\GetHRLeaderDashboardCriteria.cs" />
+    <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeDailyReportCriteria.cs" />
