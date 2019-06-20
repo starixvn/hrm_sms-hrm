@@ -149,7 +149,7 @@
         {
             var viewModel = new EmployeeRelationshipViewModel
             {
-                BirthDay = DateTime.Now
+                BirthDay = new DateTime(2000, 1,1 )
             };
 
             return PartialView("_AddRelationship", viewModel);
@@ -256,7 +256,7 @@
         {
             var viewModel = new EmployeeEmergencyViewModel
             {
-                BirthDay = DateTime.Now
+                BirthDay = new DateTime(2000, 1, 1)
             };
 
             return PartialView("_AddEmergency", viewModel);
