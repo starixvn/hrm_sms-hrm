@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_RejectRequest_7    Script Date: 7/20/2016 10:19:23 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_RejectRequest_7    Script Date: 7/19/2016 5:22:23 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest_7] @RequestId BIGINT
 	,@EmpId INT
 	,@ProcessedBy INT
@@ -66,13 +69,6 @@ BEGIN
 				,ModifiedBy = @ProcessedBy
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestID = @RequestId
-
-			UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-			SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) - CASE 
-					WHEN @IsHalfDay = 1 THEN 0.5
-					ELSE 1
-					END
-			WHERE EmpId = @EmpId
 
 			UPDATE cl WITH (ROWLOCK, UPDLOCK)
 			SET cl.IsKeepInView = 0

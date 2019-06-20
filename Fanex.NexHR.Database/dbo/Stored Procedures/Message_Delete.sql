@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.Message_Delete    Script Date: 7/20/2016 10:19:12 AM ******/
+/****** Object:  Stored Procedure dbo.Message_Delete    Script Date: 7/19/2016 5:22:17 PM ******/
+
 CREATE PROCEDURE [dbo].[Message_Delete] 
 	@MessageId INT
 	,@ModifiedBy INT

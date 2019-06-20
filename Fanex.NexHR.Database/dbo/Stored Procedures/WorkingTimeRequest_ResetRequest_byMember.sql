@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].WorkingTimeRequest_ResetRequest_byMember
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_byMember    Script Date: 7/20/2016 10:19:24 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_byMember    Script Date: 7/19/2016 5:22:23 PM ******/
+CREATE PROCEDURE [dbo].WorkingTimeRequest_ResetRequest_byMember
 	@RequestID bigint,	
 	@EmpId int,
 	@ErrCode int = 0 OUTPUT,

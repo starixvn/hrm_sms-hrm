@@ -1,4 +1,5 @@
 ﻿
+
 --DROP PROCEDURE [dbo].OverTimeRequest_ApproveDailySingleRequest
 
 CREATE PROCEDURE [dbo].[OverTime_ApproveMultiRequest]
@@ -64,7 +65,7 @@ ELSE IF (@RoleID = 3)
 		FROM #RequestID tmp
 		INNER JOIN dbo.[OTMonthlyRequest] OT WITH(NOLOCK)
 			ON OT.RequestID = tmp.RequestID 
-				AND (OT.CurrentStatus <> 2 AND OT.VerifierId<>OT.ApproverId)
+				AND (OT.CurrentStatus NOT IN (1, 2))
 	END
 ELSE IF (@RoleID = 6)
 	BEGIN

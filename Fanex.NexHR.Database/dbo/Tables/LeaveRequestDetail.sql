@@ -8,7 +8,9 @@
     [FromTime]  DATETIME NULL,
     [ToTime]    DATETIME NULL,
     [WorkType]  TINYINT  NULL
-);
+) ON [EmpRequest];
+
+
 
 
 GO
@@ -18,52 +20,6 @@ CREATE CLUSTERED INDEX [IX_LeaveRequestDetail_IDX_Shift]
 
 
 GO
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-CREATE TRIGGER [dbo].[LeaveRequestDetailBeforUpdate]
-   ON  [dbo].[LeaveRequestDetail] 
-   AFTER UPDATE,DELETE
-AS 
-BEGIN
-	SET NOCOUNT ON;
-
-	DECLARE @ReworkCount INT 
-
-	SELECT @ReworkCount  = MAX(lrh.ReworkCount) 
-		FROM dbo.LeaveRequestHistory lrh WITH(NOLOCK)
-			INNER JOIN deleted d
-				ON lrh.RequestId = d.RequestId
-
-	SET @ReworkCount = ISNULL(@ReworkCount,0)
-
-	INSERT INTO LeaveRequestDetailHistory(
-		[RequestId]
-		  ,[EmpId]
-		  ,[OnDate]
-		  ,[ShiftId]
-		  ,[LeaveType]
-		  ,[IsHalfDay]
-		  ,[FromTime]
-		  ,[ToTime]
-		  ,[InsertedDate]
-		  ,ReworkCount 
-		  ,WorkType
-		)
-	SELECT [RequestId]
-		  ,[EmpId]
-		  ,[OnDate]
-		  ,[ShiftId]
-		  ,[LeaveType]
-		  ,[IsHalfDay]
-		  ,[FromTime]
-		  ,[ToTime]
-		  ,GETDATE()
-		  ,@ReworkCount
-		  ,WorkType
-	  FROM  deleted lt
-
-END
 
 

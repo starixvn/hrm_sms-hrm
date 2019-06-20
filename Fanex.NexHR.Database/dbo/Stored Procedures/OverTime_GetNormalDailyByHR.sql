@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.OverTime_GetNormalDailyByHR    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_GetNormalDailyByHR    Script Date: 7/19/2016 5:22:18 PM ******/
+
 CREATE PROCEDURE [dbo].[OverTime_GetNormalDailyByHR]
 	@EmpID INT,
 	@Month datetime,

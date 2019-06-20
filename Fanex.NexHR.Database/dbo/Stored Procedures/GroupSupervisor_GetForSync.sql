@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[GroupSupervisor_GetForSync] @FromDate DATETIME = NULL
+﻿
+CREATE PROCEDURE [dbo].[GroupSupervisor_GetForSync] @FromDate DATETIME = NULL
 AS
 /*
 Created: 20150921@Quinn.Vo
@@ -13,6 +14,11 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	IF(@FromDate IS NOT NULL)
+	BEGIN
+		SELECT @FromDate = DATEADD(HH, -1, @FromDate)
+	END
+
 	SELECT DISTINCT r.[OwnerId]
 		,r.[GroupId]
 		,m.[ModifiedDate]
@@ -22,8 +28,11 @@ BEGIN
 			,GroupId
 			,MAX(ModifiedDate) AS ModifiedDate
 		FROM dbo.GroupSupervisor WITH (NOLOCK)
-		WHERE @FromDate IS NULL
-			OR ModifiedDate > @FromDate
+		WHERE ActionType IN (2, 3)
+			AND (
+				@FromDate IS NULL
+				OR ModifiedDate > @FromDate
+				)
 		GROUP BY OwnerId
 			,GroupId
 		) AS m

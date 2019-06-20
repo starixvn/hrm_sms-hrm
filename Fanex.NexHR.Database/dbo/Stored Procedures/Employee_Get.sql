@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.Employee_Get    Script Date: 7/20/2016 10:19:02 AM ******/
+/****** Object:  Stored Procedure dbo.Employee_Get    Script Date: 7/19/2016 5:22:12 PM ******/
+
 
 
 CREATE PROCEDURE [dbo].[Employee_Get] --'2014-12-04'
@@ -16,6 +18,11 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	IF(@FromDate IS NOT NULL)
+	BEGIN
+		SELECT @FromDate = DATEADD(HH, -1, @FromDate)
+	END
 
 	--IF(EXISTS(SELECT 1 FROM dbo.Employee WITH (NOLOCK) WHERE DATEDIFF(SECOND, @FromDate, ModifiedDate) = 0 HAVING COUNT(1) > 1))
 	--BEGIN
@@ -53,7 +60,8 @@ BEGIN
 	e.ConfirmedDate,
 	es.IsLocal,
 	e.GroupId AS TeamId,
-	CASE WHEN e.ModifiedDate IS NULL THEN e.CreatedDate ELSE e.ModifiedDate END AS ModifiedDate
+	CASE WHEN e.ModifiedDate IS NULL THEN e.CreatedDate ELSE e.ModifiedDate END AS ModifiedDate,
+	es.Unit AS CostCenter
 	FROM dbo.Employee AS e WITH (NOLOCK)
 	INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE @FromDate IS NULL

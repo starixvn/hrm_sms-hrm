@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByYear    Script Date: 7/20/2016 10:18:58 AM ******/
+/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByYear    Script Date: 7/19/2016 5:22:10 PM ******/
+
 CREATE FUNCTION [dbo].[fnc_GetAnnualLeaveBalanceByYear] (
 	@EmpID INT
 	,@Year INT

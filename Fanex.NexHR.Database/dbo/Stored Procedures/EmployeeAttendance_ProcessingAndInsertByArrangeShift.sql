@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.EmployeeAttendance_ProcessingAndInsertByArrangeShift    Script Date: 7/20/2016 10:19:04 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeAttendance_ProcessingAndInsertByArrangeShift    Script Date: 7/19/2016 5:22:13 PM ******/
+
 CREATE PROCEDURE [dbo].[EmployeeAttendance_ProcessingAndInsertByArrangeShift] --'375', '2014-09-21'
 	@sEmpid VARCHAR(1000), 
 	@ondate DATETIME,

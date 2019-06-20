@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateWeekly] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -107,6 +108,11 @@ BEGIN
 
 		RETURN
 	END CATCH;
+
+	DECLARE @EmployeeIds VARCHAR(MAX)
+
+	SELECT DISTINCT @EmployeeIds = COALESCE(@EmployeeIds + ', ', '') + EmployeeId
+	FROM #tblWeeklySchedule
 
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
@@ -259,6 +265,7 @@ BEGIN
 				);
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@EmployeeIds = @EmployeeIds
 		,@FromDate = @FromDate
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT

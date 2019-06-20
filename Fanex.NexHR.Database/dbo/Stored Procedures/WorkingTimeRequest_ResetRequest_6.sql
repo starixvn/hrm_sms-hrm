@@ -1,4 +1,8 @@
 ﻿
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_6    Script Date: 7/20/2016 10:19:24 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_6    Script Date: 7/19/2016 5:22:23 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_6]
 	@RequestID BIGINT,
 	@EmpId INT,
@@ -77,7 +81,7 @@ BEGIN
 			ELSE
 			BEGIN
 				UPDATE dbo.WorkingTimeRequest WITH(ROWLOCK,UPDLOCK)
-				SET CurrentStatus = 2,
+				SET CurrentStatus = CASE WHEN VerifiedStatus = 2 THEN 2 ELSE 1 END,
 					ApprovedStatus = 1,
 					ApproverId= @ProcessedBy,
 					ApprovedDate= @ProcessedDate,

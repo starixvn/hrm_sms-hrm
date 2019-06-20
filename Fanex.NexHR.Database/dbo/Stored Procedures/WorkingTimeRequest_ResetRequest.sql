@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest] @RequestId BIGINT
+﻿
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest    Script Date: 7/19/2016 5:22:23 PM ******/
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''

@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Export_InformationBasic]
+﻿/****** Object:  Stored Procedure dbo.Employee_Export_InformationBasic    Script Date: 7/20/2016 10:19:02 AM ******/
+/****** Object:  Stored Procedure dbo.Employee_Export_InformationBasic    Script Date: 7/19/2016 5:22:12 PM ******/
+
+CREATE PROCEDURE [dbo].[Employee_Export_InformationBasic]
 AS
 /*
 Created: Tom.Vo@2014-01-06

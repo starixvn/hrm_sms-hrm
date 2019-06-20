@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByMonth] @reportMonth DATETIME
+﻿
+CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByMonth] @reportMonth DATETIME
 	,@empId INT = NULL
 	,@groupids VARCHAR(1000) = ''
 	,@isLocal BIT = NULL
@@ -143,17 +144,19 @@ BEGIN
 		,(CASE 
 			WHEN e_att.AttendanceDate < getdate() - 1
 				AND e_att.ShiftId IS NOT NULL
-				AND (
-					InFixed IS NULL
-					OR OutFixed IS NULL
-					)
-				AND NOT (
-					InFixed IS NULL
-					AND OutFixed IS NULL
-					)
+				AND InFixed IS NULL 
+				AND OutFixed IS NOT NULL
 				AND e_att.TotalWorkHours IS NULL THEN 1
 			ELSE 0 END
-			) AS isMissIO
+			) AS isMissingCheckIn
+		,(CASE 
+			WHEN e_att.AttendanceDate < getdate() - 1
+				AND e_att.ShiftId IS NOT NULL
+				AND OutFixed IS NULL 
+				AND InFixed IS NOT NULL
+				AND e_att.TotalWorkHours IS NULL THEN 1
+			ELSE 0 END
+			) AS isMissingCheckOut
 		,(CASE 
 			WHEN e_att.AttendanceDate < getdate() - 1
 				AND (
@@ -262,7 +265,8 @@ BEGIN
 	SELECT ' + @cols + ' FROM (
 		SELECT Team, Positions, EmpId, EmpCode, NickName, FullName, d,
 		CASE WHEN isLeaveDay =1 THEN Code 
-			WHEN isMissIO =1 AND ISNULL(TotalWorkHours,''0.00'') = ''0.00'' THEN ''?'' 
+			WHEN isMissingCheckIn =1 AND ISNULL(TotalWorkHours,''0.00'') = ''0.00'' THEN ''Check In''
+			WHEN isMissingCheckOut =1 AND ISNULL(TotalWorkHours,''0.00'') = ''0.00'' THEN ''Check Out'' 
 			WHEN isAbsent =1 AND ISNULL(TotalWorkHours,''0.00'') = ''0.00'' THEN ''Absent''			
 			WHEN isOffday =1 AND Code = ''OFF'' THEN ''OFF'' 
 			WHEN IsHoliday =1 AND ISNULL(TotalWorkHours,''0.00'') = ''0.00'' THEN ''PH'' 			

@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Insert_LateInEarlyOutRequest    Script Date: 7/20/2016 10:19:22 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Insert_LateInEarlyOutRequest    Script Date: 7/19/2016 5:22:22 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_Insert_LateInEarlyOutRequest] @EmpId INT
 	,@RequestType SMALLINT
@@ -46,7 +49,7 @@ BEGIN
 			AND (
 				@FromDate IS NULL
 				OR isnull(@LateInMins, 0) <= 0
-				OR isnull(@LateInMins, 0) > 150
+				OR isnull(@LateInMins, 0) > 60
 				)
 			)
 	BEGIN
@@ -61,7 +64,7 @@ BEGIN
 			AND (
 				@FromDate IS NULL
 				OR isnull(@EarlyOutMins, 0) <= 0
-				OR isnull(@EarlyOutMins, 0) > 150
+				OR isnull(@EarlyOutMins, 0) > 60
 				)
 			)
 	BEGIN
@@ -108,14 +111,26 @@ BEGIN
 
 	IF @EmpId <> @CreatedBy
 	BEGIN
-		IF NOT EXISTS (
+		IF (NOT EXISTS (
 				SELECT TOP 1 1
 				FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
 				WHERE sp.OwnerId = @EmpId
 					AND sp.EmpId = @CreatedBy
 					AND sp.ActionType = 5
 					AND sp.RequestType IN (3, 4)
+					AND ISNULL(sp.IsDeleted, 0) = 0
 				)
+			AND NOT EXISTS (
+					SELECT 1
+					FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+						INNER JOIN Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
+					WHERE gs.OwnerId = @CreatedBy
+						AND e.EmpId = @EmpId
+						AND gs.ActionType = 5
+						AND gs.RequestType IN (3, 4)
+						AND ISNULL(gs.IsDeleted, 0) = 0
+					)
+					)
 		BEGIN
 			SET @ErrCode = 106
 			SET @ErrMsg = 'You could not permision on this request.'
@@ -128,16 +143,16 @@ BEGIN
 	IF (
 			(
 				@RequestType = 3
-				AND @LateInMins > 210
+				AND @LateInMins > 60
 				)
 			OR (
 				@RequestType = 4
-				AND @EarlyOutMins > 210
+				AND @EarlyOutMins > 60
 				)
 			)
 	BEGIN
 		SET @ErrCode = 108
-		SET @ErrMsg = 'The maximun late in/early out minutes is 03h30'
+		SET @ErrMsg = 'The maximun late in/early out minutes is 60'
 
 		RETURN;
 	END

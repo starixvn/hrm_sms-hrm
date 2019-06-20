@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
+﻿/****** Object:  Stored Procedure dbo.AnnualLeave_InsertMultipleTransactions    Script Date: 7/20/2016 10:18:59 AM ******/
+/****** Object:  Stored Procedure dbo.AnnualLeave_InsertMultipleTransactions    Script Date: 7/19/2016 5:22:10 PM ******/
+CREATE PROCEDURE [dbo].[AnnualLeave_InsertMultipleTransactions] @EmpIds VARCHAR(4000) = NULL
 	,@Description NVARCHAR(4000) = ''
 	,@FromDate DATETIME
 	,@DeductDays NUMERIC(18, 1)

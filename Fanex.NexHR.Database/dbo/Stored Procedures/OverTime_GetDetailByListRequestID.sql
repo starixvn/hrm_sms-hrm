@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.OverTime_GetDetailByListRequestID    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_GetDetailByListRequestID    Script Date: 7/19/2016 5:22:18 PM ******/
+
 --DROP PROCEDURE [dbo].OverTimeRequest_ApproveDailySingleRequest
 
 CREATE PROCEDURE [dbo].[OverTime_GetDetailByListRequestID]

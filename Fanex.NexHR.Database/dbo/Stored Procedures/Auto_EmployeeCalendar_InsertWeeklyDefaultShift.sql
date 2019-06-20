@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Auto_EmployeeCalendar_InsertWeeklyDefaultShift] @EmployeeId INT = NULL
 	,@FromDate DATE = NULL
 	,@ToDate DATE = NULL
@@ -52,10 +53,7 @@ BEGIN
 		,(CASE 
 			WHEN (
 					empsum.IsLocal = 1
-					OR (
-						empsum.IsLocal = 0
-						AND empsum.IsExpatUseHoliday = 1
-						)
+					OR empsum.IsExpatUseHoliday = 1
 					)
 				AND holiday.Id IS NOT NULL THEN NULL
 			WHEN DATEPART(dw, tblc.WorkDate) = 1 THEN shift.SunShift
@@ -69,10 +67,7 @@ BEGIN
 		,(CASE 
 			WHEN (
 					empsum.IsLocal = 1
-					OR (
-						empsum.IsLocal = 0
-						AND empsum.IsExpatUseHoliday = 1
-						)
+					OR empsum.IsExpatUseHoliday = 1
 					)
 				AND holiday.Id IS NOT NULL THEN 0
 			WHEN DATEPART(dw, tblc.WorkDate) = 1
@@ -94,10 +89,7 @@ BEGIN
 		,(CASE 
 			WHEN (
 					empsum.IsLocal = 1
-					OR (
-						empsum.IsLocal = 0
-						AND empsum.IsExpatUseHoliday = 1
-						)
+					OR empsum.IsExpatUseHoliday = 1
 					)
 				AND holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
@@ -133,7 +125,7 @@ BEGIN
 			)
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
-		,@EmployeeId = @EmployeeId
+		,@EmployeeIds = @EmployeeId
 		,@FromDate = @FromDate
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT

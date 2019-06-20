@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Auto_EmployeeCalendar_InsertDefaultShift] @EmployeeId INT = NULL
 	,@FromDate DATE = NULL
 	,@ToDate DATE = NULL
@@ -47,61 +48,55 @@ BEGIN
 		,IsHoliday
 		,IsPublic
 		)
-	SELECT DISTINCT e.EmpId
+	SELECT DISTINCT emp.EmpId
 		,tblc.WorkDate
 		,(CASE 
 			WHEN (
-					es.IsLocal = 1
-					OR (
-						es.IsLocal = 0
-						AND es.IsExpatUseHoliday = 1
-						)
+					empsum.IsLocal = 1
+					OR empsum.IsExpatUseHoliday = 1
 					)
-				AND hld.Id IS NOT NULL THEN NULL
+				AND holiday.Id IS NOT NULL THEN NULL
 			ELSE shift.ShiftId END
 			) AS ShiftId
 		,0 AS IsOffDay
 		,(CASE 
 			WHEN (
-					es.IsLocal = 1
-					OR (
-						es.IsLocal = 0
-						AND es.IsExpatUseHoliday = 1
-						)
+					empsum.IsLocal = 1
+					OR empsum.IsExpatUseHoliday = 1
 					)
-				AND hld.Id IS NOT NULL THEN 1
+				AND holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			) AS IsHoliday
 		,1
-	FROM dbo.Employee AS e WITH (NOLOCK)
+	FROM dbo.Employee AS emp WITH (NOLOCK)
 		CROSS APPLY (
 		SELECT TOP 1 shift.ShiftId
 		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
-		WHERE shift.EmployeeId = e.EmpId
+		WHERE shift.EmployeeId = emp.EmpId
 			AND shift.ShiftId > 0
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
-		AND es.IsDefaultSchedule = 0
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
+		AND empsum.IsDefaultSchedule = 0
 		,#tblDate AS tblc
-		LEFT JOIN dbo.Holiday AS hld WITH (NOLOCK) ON tblc.WorkDate BETWEEN hld.FromDate
-			AND hld.ToDate
-	WHERE e.[Enabled] = 1
-		AND ISNULL(e.IsDeleted, 0) = 0
+		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
+			AND holiday.ToDate
+	WHERE emp.[Enabled] = 1
+		AND ISNULL(emp.IsDeleted, 0) = 0
 		AND (
 			@EmployeeId IS NULL
-			OR e.EmpId = @EmployeeId
+			OR emp.EmpId = @EmployeeId
 			)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar AS ec WITH (NOLOCK)
-			WHERE e.EmpId = ec.EmpId
+			WHERE emp.EmpId = ec.EmpId
 				AND tblc.WorkDate = ec.WorkDate
 			)
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
-		,@EmployeeId = @EmployeeId
+		,@EmployeeIds = @EmployeeId
 		,@FromDate = @FromDate
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT

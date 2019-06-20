@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[GroupSupervisor_Get] @GroupIds VARCHAR(MAX) = ''
+﻿/****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/20/2016 10:19:09 AM ******/
+/****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/19/2016 5:22:16 PM ******/
+
+CREATE PROCEDURE [dbo].[GroupSupervisor_Get] @GroupIds VARCHAR(MAX) = ''
 AS
 /*
 Created: 20140723@Quinn.Vo

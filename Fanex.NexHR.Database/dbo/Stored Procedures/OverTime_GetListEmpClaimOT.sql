@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_GetListEmpClaimOT]
+﻿
+CREATE PROCEDURE [dbo].[OverTime_GetListEmpClaimOT]
 AS
 
 /*
@@ -34,7 +35,9 @@ Param's Explanation:
                      AND ee.Enabled = 1
                      AND ISNULL(ee.ResignedDate, GETDATE() + 30) > GETDATE()
                      AND ISNULL(su.IsDeleted, 0) = 0;
-         SELECT ee.EmpId EmployeeId,
+
+
+         SELECT DISTINCT ee.EmpId EmployeeId,
                 ee.NickName,
                 ee.FullName,
                 ee.Email

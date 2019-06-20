@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_bySA_6    Script Date: 7/20/2016 10:19:26 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_bySA_6    Script Date: 7/19/2016 5:22:24 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_bySA_6] @RequestID BIGINT
 	,@ProcessedBy INT
 	,@ErrCode INT = 0 OUTPUT

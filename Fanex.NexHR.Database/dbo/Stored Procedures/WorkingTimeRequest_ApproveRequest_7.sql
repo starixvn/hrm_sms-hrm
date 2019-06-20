@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest_7    Script Date: 7/20/2016 10:19:20 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest_7    Script Date: 7/19/2016 5:22:21 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest_7] @RequestID BIGINT
 	,@EmpId INT
 	,@RoleID INT
@@ -71,13 +74,6 @@ BEGIN
 			WHERE RequestID = @RequestID
 
 			EXEC [WorkingTimeRequest_WriteHistory] @RequestID, @Comment
-
-			UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-			SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) + CASE 
-					WHEN @IsHalfDay = 1 THEN 0.5
-					ELSE 1
-					END
-			WHERE EmpId = @EmpId
 
 			-- update the working calendar to record the check-in time
 			UPDATE cl WITH (ROWLOCK, UPDLOCK)

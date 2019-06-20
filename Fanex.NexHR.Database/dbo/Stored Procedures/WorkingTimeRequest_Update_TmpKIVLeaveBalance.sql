@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_Update_TmpKIVLeaveBalance] 
 	@RequestId BIGINT
 	,@EmpID INT
@@ -25,12 +26,13 @@ BEGIN
 		WHERE Requestid = @Requestid
 			AND [Status] <> 2
 
-		IF ISNULL(@KIVLeave, 0) > 0
-		BEGIN
-			UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-			SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) - ISNULL(@KIVLeave, 0)
-			WHERE EmpId = @EmpId
-		END
+	END
+	ELSE
+	BEGIN
+		SELECT @KIVLeave = SUM(TotalDays)
+		FROM dbo.tmpKIVLeaveBalance WITH (NOLOCK)
+		WHERE Requestid = @Requestid
+			AND [Status] = 2
 	END
 
 	UPDATE dbo.[tmpKIVLeaveBalance] WITH (ROWLOCK, UPDLOCK)

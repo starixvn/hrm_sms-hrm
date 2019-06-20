@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetMemberToAddOtherDiscipine] @SupervisorId INT
+﻿
+CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetMemberToAddOtherDiscipine] @SupervisorId INT
 	,@Query NVARCHAR(100)
 AS
 /*
@@ -20,10 +21,20 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeSupervisor AS es WITH (NOLOCK) ON emp.EmpId = es.EmpId
-	WHERE es.OwnerId = @SupervisorId
-		AND es.EmpId <> @SupervisorId
-		AND es.ActionType IN (8)
+		LEFT JOIN dbo.EmployeeSupervisor AS es WITH (NOLOCK) ON emp.EmpId = es.EmpId
+	WHERE (
+			EXISTS (
+				SELECT 1
+				FROM EmployeeRole WITH (NOLOCK)
+				WHERE EmployeeId = @SupervisorId
+					AND RoleId IN (6, 7)
+				)
+			OR (
+				es.OwnerId = @SupervisorId
+				AND es.EmpId <> @SupervisorId
+				AND es.ActionType IN (8)
+				)
+			)
 		AND (
 			emp.NickName LIKE '%' + @query + '%'
 			OR emp.FullName LIKE '%' + @query + '%'

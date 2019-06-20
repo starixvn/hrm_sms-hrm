@@ -1,6 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_AddOtherDiscipline] @EmpId INT
-	,@WorkDate DATETIME
-	,@DisciplineTypeId INT
+﻿
+
+CREATE PROCEDURE [dbo].[EmployeeDiscipline_AddOtherDiscipline] @EmpId INT
+	,@WorkDate DATE
+	,@DisciplineTypeId SMALLINT
+	,@Score DECIMAL(5,2)
 	,@ApproverComment NVARCHAR(500) = NULL
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
@@ -21,10 +24,11 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeDiscipline WITH (NOLOCK)
-			WHERE CAST(WorkDate AS DATE) = CAST(@WorkDate AS DATE)
+			WHERE WorkDate = @WorkDate
 				AND EmpId = @EmpId
 				AND DisciplineType = @DisciplineTypeId
 				AND DisciplineType IN (- 1, - 2) -- verbal, written warning
+				AND ISNULL(IsDeleted, 0) = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1
@@ -36,11 +40,20 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
+		DELETE
+		FROM dbo.EmployeeDiscipline
+		WHERE EmpId = @EmpId
+			AND DisciplineType = @DisciplineTypeId
+			AND WorkDate = @WorkDate
+			AND ISNULL(IsDeleted, 1) = 1
+
 		INSERT INTO dbo.EmployeeDiscipline (
 			WorkDate
 			,EmpId
 			,DisciplineType
+			,DisciplineScore
 			,ApproverComment
+			,IsDeleted
 			,ModifiedBy
 			,ModifiedDate
 			)
@@ -48,7 +61,9 @@ BEGIN
 			CAST(@WorkDate AS DATE)
 			,@EmpId
 			,@DisciplineTypeId
+			,@Score
 			,@ApproverComment
+			,0
 			,@CreatedBy
 			,GETDATE()
 			)

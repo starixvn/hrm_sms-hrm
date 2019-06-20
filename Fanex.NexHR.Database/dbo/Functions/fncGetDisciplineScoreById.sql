@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  User Defined Function dbo.fncGetDisciplineScoreById    Script Date: 7/20/2016 10:18:58 AM ******/
+/****** Object:  User Defined Function dbo.fncGetDisciplineScoreById    Script Date: 7/19/2016 5:22:10 PM ******/
+
 CREATE FUNCTION [dbo].[fncGetDisciplineScoreById] (@DisciplineTypeId INT)
 RETURNS DECIMAL(5, 2)
 AS
@@ -19,5 +21,5 @@ BEGIN
 	FROM dbo.DisciplineType WITH (NOLOCK)
 	WHERE DisciplineTypeId = @DisciplineTypeId
 
-	RETURN @Score
+	RETURN ISNULL(@Score, 0)
 END

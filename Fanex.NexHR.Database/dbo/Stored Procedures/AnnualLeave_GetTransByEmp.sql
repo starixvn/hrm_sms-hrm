@@ -1,4 +1,7 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿
+/****** Object:  Stored Procedure dbo.AnnualLeave_GetTransByEmp    Script Date: 7/20/2016 10:18:59 AM ******/
+/****** Object:  Stored Procedure dbo.AnnualLeave_GetTransByEmp    Script Date: 7/19/2016 5:22:10 PM ******/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 CREATE PROCEDURE [dbo].[AnnualLeave_GetTransByEmp] 
@@ -29,7 +32,7 @@ BEGIN
 		FromDate AS AffectedFrom,
 		ISNULL(CreditDays,0) - ISNULL(DeductDays,0) AS [ToTalDays],
 		Description,
-		t.CreatedDate		
+		ISNULL(t.ModifiedDate, t.CreatedDate) AS ModifiedDate
 	FROM dbo.LeaveTrans t WITH (NOLOCK) 
 		INNER JOIN dbo.Employee e WITH (NOLOCK) ON e.EmpID = t.EmpID	
 	WHERE fromdate>=@fromdate and fromdate<@todate AND

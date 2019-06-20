@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[EmployeeDiscipline_DeleteOtherDiscipline] @EmpId INT
 	,@WorkDate DATETIME
 	,@DisciplineTypeId INT
@@ -18,22 +19,10 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	BEGIN TRY
-		BEGIN TRANSACTION
-
-		DELETE
-		FROM dbo.EmployeeDiscipline
-		WHERE EmpId = @EmpId
-			AND DisciplineType = @DisciplineTypeId
-			AND WorkDate = @WorkDate
-
-		COMMIT TRANSACTION
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION
-
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Delete other violation unsuccessfully.'
-	END CATCH
+	UPDATE dbo.EmployeeDiscipline WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1,
+		ModifiedDate = GETDATE()
+	WHERE EmpId = @EmpId
+		AND DisciplineType = @DisciplineTypeId
+		AND WorkDate = @WorkDate
 END

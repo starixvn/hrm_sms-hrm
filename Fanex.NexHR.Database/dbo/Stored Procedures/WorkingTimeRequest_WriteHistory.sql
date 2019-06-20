@@ -1,4 +1,6 @@
-﻿-- WorkingTimeRequest_WriteHistory 316
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_WriteHistory    Script Date: 7/20/2016 10:19:26 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_WriteHistory    Script Date: 7/19/2016 5:22:24 PM ******/
+-- WorkingTimeRequest_WriteHistory 316
 
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_WriteHistory]	
 	@RequestID bigint,

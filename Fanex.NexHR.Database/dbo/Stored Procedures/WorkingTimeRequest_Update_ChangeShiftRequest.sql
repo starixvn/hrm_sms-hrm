@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[WorkingTimeRequest_Update_ChangeShiftRequest] @RequestId
 	,@ModifiedBy INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
-	,@ListDetail VARCHAR(MAX)
+	,@ListDetail NVARCHAR(MAX)
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -115,7 +115,7 @@ BEGIN
 		SELECT OnDate
 			,FromShift
 			,ToShift
-			,Remark
+			,REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Remark, '&amp;', '&'), '&#39;', ''''), '&lt;', '<'), '&gt;', '>'), '&quot;', '"')
 		FROM OPENXML(@DocHandler, '/ROOT/Request', 1) WITH (OnDate DATETIME, FromShift INT, ToShift INT, Remark NVARCHAR(2000)) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler

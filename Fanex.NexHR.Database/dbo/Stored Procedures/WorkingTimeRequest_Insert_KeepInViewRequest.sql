@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Insert_KeepInViewRequest    Script Date: 7/20/2016 10:19:22 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Insert_KeepInViewRequest    Script Date: 7/19/2016 5:22:22 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_Insert_KeepInViewRequest] @EmpId INT
 	,@RequestType SMALLINT
 	,@Remark NVARCHAR(2000) = NULL
@@ -204,10 +206,10 @@ BEGIN
 					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
 						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
 					WHERE e.EmpId = @EmpId
-						AND g.OwnerId = @VerifierId
+						AND g.OwnerId = @ApproverId
 						AND ISNULL(g.IsDeleted, 0) = 0
 						AND g.RequestType IN (7)
-						AND g.ActionType = 2
+						AND g.ActionType = 3
 					)
 				)
 		BEGIN

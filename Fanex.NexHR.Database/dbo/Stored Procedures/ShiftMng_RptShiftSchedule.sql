@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.ShiftMng_RptShiftSchedule    Script Date: 7/20/2016 10:19:19 AM ******/
+/****** Object:  Stored Procedure dbo.ShiftMng_RptShiftSchedule    Script Date: 7/19/2016 5:22:20 PM ******/
+
 CREATE PROCEDURE [dbo].[ShiftMng_RptShiftSchedule] @SupervisorID INT = NULL
 	,@fromtime DATETIME
 	,@totime DATETIME

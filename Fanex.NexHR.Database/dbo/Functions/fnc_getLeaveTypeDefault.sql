@@ -1,4 +1,6 @@
-﻿CREATE function [dbo].[fnc_getLeaveTypeDefault] () 
+﻿/****** Object:  User Defined Function dbo.fnc_getLeaveTypeDefault    Script Date: 7/20/2016 10:18:58 AM ******/
+/****** Object:  User Defined Function dbo.fnc_getLeaveTypeDefault    Script Date: 7/19/2016 5:22:10 PM ******/
+CREATE FUNCTION [dbo].[fnc_getLeaveTypeDefault] () 
 returns int
 as
 begin

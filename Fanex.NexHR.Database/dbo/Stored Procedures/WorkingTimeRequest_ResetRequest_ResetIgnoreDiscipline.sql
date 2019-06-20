@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline] @RequestId BIGINT
 	,@ModifiedBy INT
 	,@RoleId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -37,6 +38,7 @@ BEGIN
 		,IsToAfterday BIT
 		,IsUnpaidLeaveAbsent BIT
 		,IsAbsent BIT
+		,IsUnplannedLeave BIT
 		)
 
 	CREATE TABLE #RequestDetail (
@@ -124,6 +126,7 @@ BEGIN
 			,IsToAfterday
 			,IsUnpaidLeaveAbsent
 			,IsAbsent
+			,IsUnplannedLeave
 			)
 		EXEC dbo.WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById @RequestId = @RequestId
 
@@ -211,9 +214,25 @@ BEGIN
 					WHEN r.DisciplineTypeId = 8 THEN 0
 					ELSE dis.IsConfirmedUnpaidLeaveAbsent END
 					)
+				,dis.IsIgnoredUnplannedLeave = (CASE 
+					WHEN r.DisciplineTypeId = 9 THEN 0
+					ELSE dis.IsIgnoredUnplannedLeave END
+					)
+				,dis.IsConfirmedUnplannedLeave = (CASE 
+					WHEN r.DisciplineTypeId = 9 THEN 0
+					ELSE dis.IsConfirmedUnplannedLeave END
+					)
+				,dis.IsIgnoreWeekendLeave = (CASE 
+					WHEN r.DisciplineTypeId = 10 THEN 0
+					ELSE dis.IsIgnoreWeekendLeave END
+					)
+				,dis.IsConfirmedWeekendLeave = (CASE 
+					WHEN r.DisciplineTypeId = 10 THEN 0
+					ELSE dis.IsConfirmedWeekendLeave END
+					)
 				,ModifiedBy = @ModifiedBy
 				,ModifiedDate = GETDATE()
-			FROM dbo.EmployeeDiscipline AS dis
+			FROM dbo.EmployeeDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN #RequestDetail AS r ON dis.WorkDate = r.WorkDate
 				AND dis.EmpId = r.EmployeeId
 				AND dis.DisciplineType = 1

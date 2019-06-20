@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR] @EmpId INT = NULL
+﻿/****** Object:  Stored Procedure dbo.OverTime_GetNormalMonthlyByHR    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_GetNormalMonthlyByHR    Script Date: 7/19/2016 5:22:18 PM ******/
+
+CREATE PROCEDURE [dbo].[OverTime_GetNormalMonthlyByHR] @EmpId INT = NULL
 	,@GroupIds VARCHAR(max) = ''
 	,@fromdate DATETIME
 	,@todate DATETIME

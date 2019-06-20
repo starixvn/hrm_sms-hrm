@@ -39,6 +39,16 @@
     [IsDeleted]                    BIT            NULL,
     [ModifiedBy]                   INT            NULL,
     [ModifiedDate]                 DATETIME       NULL,
+    [IsUnplannedLeave]             BIT            NULL,
+    [IsIgnoredUnplannedLeave]      BIT            NULL,
+    [IsConfirmedUnplannedLeave]    BIT            NULL,
+    [IsWeekendLeave]               BIT            NULL,
+    [IsIgnoredWeekendLeave]        BIT            NULL,
+    [IsConfirmedWeekendLeave]      BIT            NULL,
+    [WeekendLeave]                 DECIMAL (5, 2) NULL,
+    [IsOutOfControlReason]         BIT            NULL,
     CONSTRAINT [PK_EmployeeDiscipline] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC, [DisciplineType] ASC)
 );
+
+
 

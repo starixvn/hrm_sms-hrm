@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.AnnualLeave_UpdateTransaction    Script Date: 7/20/2016 10:18:59 AM ******/
+/****** Object:  Stored Procedure dbo.AnnualLeave_UpdateTransaction    Script Date: 7/19/2016 5:22:10 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
 AnnualLeave_UpdateTransaction 1, NULL, 'CAP NGAY PHEP DAU NAM', '2012/01/01', '2012/01/01',0,12, '2012/04/20', 86

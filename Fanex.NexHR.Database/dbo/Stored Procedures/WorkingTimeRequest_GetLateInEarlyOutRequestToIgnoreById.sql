@@ -51,6 +51,16 @@ BEGIN
 			AND (
 				(
 					@RequestType = 3
+					)
+				OR (
+					@RequestType = 4
+					AND ISNULL(ca.IsOffDay, 0) = 0
+					AND ISNULL(ca.IsHoliday, 0) = 0
+					)
+			)
+			AND (
+				(
+					@RequestType = 3
 					AND drule.DisciplineTypeId = 3
 					)
 				OR (

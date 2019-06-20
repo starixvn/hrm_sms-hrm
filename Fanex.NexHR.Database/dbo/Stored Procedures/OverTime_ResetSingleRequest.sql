@@ -1,4 +1,5 @@
 ﻿
+
 --DROP PROCEDURE [dbo].OverTime_RejectSingleRequest
 CREATE PROCEDURE [dbo].[OverTime_ResetSingleRequest] @RequestID BIGINT
 	,@ProcessedBy INT
@@ -40,10 +41,10 @@ BEGIN
 		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@TotalDay INT
+		,@VerifiedStatus TINYINT
 	DECLARE @VerifierId INT
 		,@ApproverId INT
 		,@HRId INT
-	DECLARE @VerifiedStatus INT
 		,@ApprovedStatus INT
 		,@HRStatus INT
 	DECLARE @Month DATETIME
@@ -142,7 +143,23 @@ BEGIN
 		END
 		ELSE IF @RoleID = 3 --Approver
 		BEGIN
-			IF @VerifierId <> @ApproverId
+			IF @VerifierId = @ApproverId OR @VerifiedStatus = 1
+			BEGIN
+				UPDATE OT
+				SET OT.[Status] = 1
+				FROM [OTDailyRequest] OT WITH (ROWLOCK, UPDLOCK)
+				WHERE RequestID = @RequestID
+
+				UPDATE OTM
+				SET [CurrentStatus] = 1
+					,-- approved
+					VerifierId = @ProcessedBy
+					,VerifiedDate = @ProcessedDate
+					,VerifiedStatus = 1
+				FROM dbo.[OTMonthlyRequest] OTM WITH (ROWLOCK, UPDLOCK)
+				WHERE RequestID = @RequestID
+			END
+			ELSE
 			BEGIN
 				UPDATE OT
 				SET OT.[Status] = 2
@@ -174,22 +191,6 @@ BEGIN
 						,@ErrCode = @ErrCode OUTPUT
 						,@ErrMsg = @ErrMsg OUTPUT
 				END
-			END
-			ELSE
-			BEGIN
-				UPDATE OT
-				SET OT.[Status] = 1
-				FROM [OTDailyRequest] OT WITH (ROWLOCK, UPDLOCK)
-				WHERE RequestID = @RequestID
-
-				UPDATE OTM
-				SET [CurrentStatus] = 1
-					,-- approved
-					VerifierId = @ProcessedBy
-					,VerifiedDate = @ProcessedDate
-					,VerifiedStatus = 1
-				FROM dbo.[OTMonthlyRequest] OTM WITH (ROWLOCK, UPDLOCK)
-				WHERE RequestID = @RequestID
 			END
 		END
 		ELSE IF @RoleID = 6 --HR

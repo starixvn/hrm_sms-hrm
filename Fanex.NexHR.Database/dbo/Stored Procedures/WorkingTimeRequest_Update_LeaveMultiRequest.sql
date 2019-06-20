@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Update_LeaveMultiRequest    Script Date: 7/20/2016 10:19:25 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Update_LeaveMultiRequest    Script Date: 7/19/2016 5:22:24 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_Update_LeaveMultiRequest]
 	@RequestId bigint,
 	@EmpId int, 

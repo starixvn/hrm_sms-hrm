@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[DBA_AnnualLeave_DeleteAnnualBalance] @Year INT
+﻿/****** Object:  Stored Procedure dbo.DBA_AnnualLeave_DeleteAnnualBalance    Script Date: 7/20/2016 10:19:00 AM ******/
+/****** Object:  Stored Procedure dbo.DBA_AnnualLeave_DeleteAnnualBalance    Script Date: 7/19/2016 5:22:11 PM ******/
+
+CREATE PROCEDURE [dbo].[DBA_AnnualLeave_DeleteAnnualBalance] @Year INT
 	,@EmpID INT = NULL
 	,@CreatedDate DATETIME
 	,@CreatedBy INT
@@ -40,6 +43,7 @@ BEGIN
 			INNER JOIN LeaveTrans lt ON ES.EmpId = lt.EmpId
 			AND FromDate = @FromDate
 			AND ISNULL(lt.Deleted, 0) = 0
+			AND RequestId IS NULL
 		WHERE ES.EmpId = @EmpID
 			OR @EmpID IS NULL
 
@@ -50,6 +54,7 @@ BEGIN
 				)
 			AND FromDate = @FromDate
 			AND CreditDays > 0
+			AND RequestId IS NULL
 
 		COMMIT TRANSACTION;
 

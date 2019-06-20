@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetForSync] @FromDate DATETIME = NULL
 AS
 /*
@@ -16,6 +15,11 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	IF(@FromDate IS NOT NULL)
+	BEGIN
+		SELECT @FromDate = DATEADD(HH, -1, @FromDate)
+	END
+
 	SELECT DISTINCT r.[OwnerId]
 		,r.[EmpId]
 		,ISNULL(r.[IsDeleted], 0) AS IsDeleted
@@ -27,8 +31,10 @@ BEGIN
 			,MAX(ModifiedDate) AS ModifiedDate
 		FROM dbo.[EmployeeSupervisor] WITH (NOLOCK)
 		WHERE ActionType IN (2, 3)
-			AND @FromDate IS NULL
-			OR ModifiedDate > @FromDate
+			AND (
+				@FromDate IS NULL
+				OR ModifiedDate > @FromDate
+				)
 		GROUP BY [OwnerId]
 			,[EmpId]
 			,[IsDeleted]

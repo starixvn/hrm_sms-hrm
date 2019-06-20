@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateWeeklyDefaultShift] @ActorId INT
 	,@EmployeeId INT
 	,@FromDate DATE
@@ -40,7 +41,7 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	CREATE TABLE #tblCalendar (WorkDate DATE)
+	CREATE TABLE #tblDate (WorkDate DATE)
 
 	UPDATE dbo.EmployeeDefaultShift WITH (ROWLOCK, UPDLOCK)
 	SET MonShift = @MonShiftId
@@ -58,74 +59,77 @@ BEGIN
 
 	IF @IsUsedWeeklyDefaultShift = 1
 	BEGIN
-		UPDATE ec
-		SET ec.ShiftId = CASE 
-				WHEN es.IsLocal = 0
+		UPDATE empca
+		SET empca.ShiftId = CASE 
+				WHEN empsum.IsLocal = 0
 					OR (
-						es.IsLocal = 1
-						AND hld.Id IS NULL
+						empsum.IsLocal = 1
+						AND holiday.Id IS NULL
 						) THEN CASE 
-						WHEN DATEPART(dw, ec.WorkDate) = 1 THEN SunShift
-						WHEN DATEPART(dw, ec.WorkDate) = 2 THEN MonShift
-						WHEN DATEPART(dw, ec.WorkDate) = 3 THEN TueShift
-						WHEN DATEPART(dw, ec.WorkDate) = 4 THEN WedShift
-						WHEN DATEPART(dw, ec.WorkDate) = 5 THEN ThuShift
-						WHEN DATEPART(dw, ec.WorkDate) = 6 THEN FriShift
-						WHEN DATEPART(dw, ec.WorkDate) = 7 THEN SatShift
+						WHEN DATEPART(dw, empca.WorkDate) = 1 THEN SunShift
+						WHEN DATEPART(dw, empca.WorkDate) = 2 THEN MonShift
+						WHEN DATEPART(dw, empca.WorkDate) = 3 THEN TueShift
+						WHEN DATEPART(dw, empca.WorkDate) = 4 THEN WedShift
+						WHEN DATEPART(dw, empca.WorkDate) = 5 THEN ThuShift
+						WHEN DATEPART(dw, empca.WorkDate) = 6 THEN FriShift
+						WHEN DATEPART(dw, empca.WorkDate) = 7 THEN SatShift
 						END
-				ELSE ec.ShiftId
+				ELSE empca.ShiftId
 				END
-			,ec.IsOffDay = CASE 
-				WHEN es.IsLocal = 1
-					AND hld.Id IS NOT NULL THEN 0
-				WHEN DATEPART(dw, ec.WorkDate) = 1
+			,empca.IsOffDay = CASE 
+				WHEN (
+						empsum.IsLocal = 1
+						OR empsum.IsExpatUseHoliday = 1
+						)
+					AND holiday.Id IS NOT NULL THEN 0
+				WHEN DATEPART(dw, empca.WorkDate) = 1
 					AND SunShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 2
+				WHEN DATEPART(dw, empca.WorkDate) = 2
 					AND MonShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 3
+				WHEN DATEPART(dw, empca.WorkDate) = 3
 					AND TueShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 4
+				WHEN DATEPART(dw, empca.WorkDate) = 4
 					AND WedShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 5
+				WHEN DATEPART(dw, empca.WorkDate) = 5
 					AND ThuShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 6
+				WHEN DATEPART(dw, empca.WorkDate) = 6
 					AND FriShift IS NULL THEN 1
-				WHEN DATEPART(dw, ec.WorkDate) = 7
+				WHEN DATEPART(dw, empca.WorkDate) = 7
 					AND SatShift IS NULL THEN 1
 				ELSE 0
 				END
-			,ec.IsHoliday = CASE 
-				WHEN es.IsLocal = 1
-					AND hld.Id IS NOT NULL THEN 1
+			,empca.IsHoliday = CASE 
+				WHEN (
+						empsum.IsLocal = 1
+						OR empsum.IsExpatUseHoliday = 1
+						)
+					AND holiday.Id IS NOT NULL THEN 1
 				ELSE 0
 				END
-			,ec.ModifiedBy = @ActorId
-			,ec.ModifiedDate = @ModifiedDate
-		FROM dbo.EmployeeCalendar AS ec WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON ec.EmpId = es.EmpId
-			AND es.IsDefaultSchedule = 1
-			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = es.EmpId
-			AND e.EmpId = @EmployeeId
-			AND e.[Enabled] = 1
-			AND e.isDeleted = 0
-			LEFT JOIN dbo.EmployeeDefaultShift AS s WITH (NOLOCK) ON ec.EmpId = s.EmpID
-			LEFT JOIN dbo.Holiday AS hld WITH (NOLOCK) ON ec.WorkDate BETWEEN hld.FromDate
-				AND hld.ToDate
-		WHERE ec.WorkDate >= @FromDate
-			AND ec.IsLeaveDay = 0
+			,empca.ModifiedBy = @ActorId
+			,empca.ModifiedDate = @ModifiedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empca.EmpId = empsum.EmpId
+			AND empsum.IsDefaultSchedule = 1
+			LEFT JOIN dbo.EmployeeDefaultShift AS shift WITH (NOLOCK) ON empca.EmpId = shift.EmpID
+			LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON empca.WorkDate BETWEEN holiday.FromDate
+				AND holiday.ToDate
+		WHERE empca.EmpId = @EmployeeId
+			AND empca.WorkDate >= @FromDate
+			AND empca.IsLeaveDay = 0
 			AND NOT EXISTS (
 				SELECT 1
 				FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
 					INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
-					AND csrdt.OnDate = ec.WorkDate
+					AND csrdt.OnDate = empca.WorkDate
 					INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
 					AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
-				WHERE ec.EmpId = csr.EmpId
+				WHERE empca.EmpId = csr.EmpId
 				)
 
 		WHILE @FromDate1 <= @ToDate1
 		BEGIN
-			INSERT INTO #tblCalendar (WorkDate)
+			INSERT INTO #tblDate (WorkDate)
 			VALUES (@FromDate1)
 
 			SET @FromDate1 = DATEADD(DAY, 1, @FromDate1)
@@ -138,16 +142,15 @@ BEGIN
 			,IsOffDay
 			,IsHoliday
 			,IsPublic
+			,ModifiedBy
+			,ModifiedDate
 			)
 		SELECT DISTINCT emp.EmpId
 			,tblc.WorkDate
 			,(CASE 
 				WHEN (
 						empsum.IsLocal = 1
-						OR (
-							empsum.IsLocal = 0
-							AND empsum.IsExpatUseHoliday = 1
-							)
+						OR empsum.IsExpatUseHoliday = 1
 						)
 					AND holiday.Id IS NOT NULL THEN NULL
 				WHEN DATEPART(dw, tblc.WorkDate) = 1 THEN shift.SunShift
@@ -161,10 +164,7 @@ BEGIN
 			,(CASE 
 				WHEN (
 						empsum.IsLocal = 1
-						OR (
-							empsum.IsLocal = 0
-							AND empsum.IsExpatUseHoliday = 1
-							)
+						OR empsum.IsExpatUseHoliday = 1
 						)
 					AND holiday.Id IS NOT NULL THEN 0
 				WHEN DATEPART(dw, tblc.WorkDate) = 1
@@ -186,21 +186,20 @@ BEGIN
 			,(CASE 
 				WHEN (
 						empsum.IsLocal = 1
-						OR (
-							empsum.IsLocal = 0
-							AND empsum.IsExpatUseHoliday = 1
-							)
+						OR empsum.IsExpatUseHoliday = 1
 						)
 					AND holiday.Id IS NOT NULL THEN 1
 				ELSE 0 END
 				) AS IsHoliday
 			,1
+			,@ActorId
+			,@ModifiedDate
 		FROM dbo.EmployeeDefaultShift AS shift WITH (NOLOCK)
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = @EmployeeId
-			AND emp.EmpId = shift.EmpID
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = shift.EmpID
+			AND emp.EmpId = @EmployeeId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 			AND empsum.IsDefaultSchedule = 1
-			,#tblCalendar AS tblc
+			,#tblDate AS tblc
 			LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 				AND holiday.ToDate
 		WHERE (
@@ -218,14 +217,62 @@ BEGIN
 				WHERE emp.EmpId = empca.EmpId
 					AND tblc.WorkDate = empca.WorkDate
 				)
-
-		EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
-			,@EmployeeId = @EmployeeId
-			,@FromDate = @FromDate
-			,@ToDate = @ToDate1
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
 	END
+	ELSE
+	BEGIN
+		UPDATE empca
+		SET empca.ShiftId = (CASE 
+				WHEN (
+						empsum.IsLocal = 1
+						OR empsum.IsExpatUseHoliday = 1
+						)
+					AND holiday.Id IS NOT NULL THEN NULL
+				ELSE shift.ShiftId END
+				)
+			,empca.IsOffDay = 0
+			,empca.IsHoliday = CASE 
+				WHEN (
+						empsum.IsLocal = 1
+						OR empsum.IsExpatUseHoliday = 1
+						)
+					AND holiday.Id IS NOT NULL THEN 1
+				ELSE 0
+				END
+			,empca.ModifiedBy = @ActorId
+			,empca.ModifiedDate = @ModifiedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empca.EmpId = empsum.EmpId
+			AND empsum.IsDefaultSchedule = 0
+			CROSS APPLY (
+			SELECT TOP 1 shift.ShiftId
+			FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
+			WHERE shift.EmployeeId = empca.EmpId
+				AND shift.ShiftId > 0
+				AND shift.FromDate <= @FromDate
+			ORDER BY shift.FromDate DESC
+			) AS shift
+			LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON empca.WorkDate BETWEEN holiday.FromDate
+				AND holiday.ToDate
+		WHERE empca.EmpId = @EmployeeId
+			AND empca.WorkDate >= @FromDate
+			AND empca.IsLeaveDay = 0
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+					INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+					AND csrdt.OnDate = empca.WorkDate
+					INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+					AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+				WHERE empca.EmpId = csr.EmpId
+				)
+	END
+
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
+		,@EmployeeIds = @EmployeeId
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate1
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	IF @@ERROR <> 0
 	BEGIN
@@ -233,5 +280,5 @@ BEGIN
 			,@ErrMsg = N'Update Unsuccessfully!'
 	END
 
-	DROP TABLE #tblCalendar
+	DROP TABLE #tblDate
 END

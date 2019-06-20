@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Overtime_SET_OTSum]
+﻿/****** Object:  Stored Procedure dbo.Overtime_SET_OTSum    Script Date: 7/20/2016 10:19:16 AM ******/
+/****** Object:  Stored Procedure dbo.Overtime_SET_OTSum    Script Date: 7/19/2016 5:22:19 PM ******/
+CREATE PROCEDURE [dbo].[Overtime_SET_OTSum]
 	@EmpId VARCHAR(8000), 
 	@Month datetime=NULL,
 

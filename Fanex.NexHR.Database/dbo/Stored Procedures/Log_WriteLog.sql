@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Log_WriteLog]
+﻿/****** Object:  Stored Procedure dbo.Log_WriteLog    Script Date: 7/20/2016 10:19:11 AM ******/
+/****** Object:  Stored Procedure dbo.Log_WriteLog    Script Date: 7/19/2016 5:22:16 PM ******/
+CREATE PROCEDURE [dbo].[Log_WriteLog]
 	@LogActionID int,
 	@LogDate datetime,
 	@Description NVARCHAR(4000),

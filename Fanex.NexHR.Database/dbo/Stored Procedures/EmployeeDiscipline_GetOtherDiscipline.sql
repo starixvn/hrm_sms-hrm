@@ -1,7 +1,9 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetOtherDiscipline] @EmpId INT
-	,@FromDate DATETIME
-	,@ToDate DATETIME
+	,@FromDate DATE
+	,@ToDate DATE
 AS
 /*
 Created: 20160414@Tim.Trinh
@@ -20,13 +22,14 @@ BEGIN
 		,emp.NickName
 		,dtype.DisciplineTypeId
 		,dtype.[Name]
-		,dtype.Score
+		,d.DisciplineScore AS Score
 		,d.ApproverComment AS Comment
 	FROM dbo.EmployeeDiscipline AS d WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON d.EmpId = emp.EmpId
 		INNER JOIN dbo.DisciplineType AS dtype WITH (NOLOCK) ON d.DisciplineType = dtype.DisciplineTypeId
-		AND dtype.DisciplineTypeId IN (- 1, - 2) -- verbal, written warning
+		AND dtype.DisciplineTypeId IN (- 1, - 2, -3) -- verbal, written warning
 	WHERE emp.EmpId = @EmpId
-		AND CAST(WorkDate AS DATE) BETWEEN CAST(@FromDate AS DATE)
-			AND CAST(@ToDate AS DATE)
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(d.IsDeleted, 0) = 0
 END

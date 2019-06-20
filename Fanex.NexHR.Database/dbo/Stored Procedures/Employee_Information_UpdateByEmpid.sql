@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
+﻿/****** Object:  Stored Procedure dbo.Employee_Information_UpdateByEmpid    Script Date: 7/20/2016 10:19:03 AM ******/
+/****** Object:  Stored Procedure dbo.Employee_Information_UpdateByEmpid    Script Date: 7/19/2016 5:22:12 PM ******/
+
+CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
 	,@DOB SMALLDATETIME = NULL
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL

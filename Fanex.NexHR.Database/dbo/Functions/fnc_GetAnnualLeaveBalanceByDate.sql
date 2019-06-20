@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByDate    Script Date: 7/20/2016 10:18:58 AM ******/
+/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByDate    Script Date: 7/19/2016 5:22:10 PM ******/
+
 CREATE FUNCTION [dbo].[fnc_GetAnnualLeaveBalanceByDate] (
 	@EmpID INT
 	,@Date DATETIME
@@ -18,7 +20,10 @@ BEGIN
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
 	WHERE EmpId = @EmpID
 
-	SET @Date = CASE WHEN DATEDIFF(MM, @Date, GETDATE()) > 0 THEN GETDATE() ELSE @Date END
+	IF(YEAR(GETDATE()) = YEAR(@Date))
+	BEGIN
+		SET @Date = CASE WHEN DATEDIFF(MM, @Date, GETDATE()) > 0 THEN GETDATE() ELSE @Date END
+	END
 
 	SELECT @LeaveBalanceDay = SUM(ISNULL(CreditDays, 0)) - SUM(ISNULL(DeductDays, 0))
 	FROM dbo.LeaveTrans WITH (NOLOCK)

@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.TimeRecord_UpdateType    Script Date: 7/20/2016 10:19:19 AM ******/
+/****** Object:  Stored Procedure dbo.TimeRecord_UpdateType    Script Date: 7/19/2016 5:22:21 PM ******/
+
 CREATE PROCEDURE [dbo].[TimeRecord_UpdateType]
 	@RecordTimeId INT
 	,@InOutType TINYINT

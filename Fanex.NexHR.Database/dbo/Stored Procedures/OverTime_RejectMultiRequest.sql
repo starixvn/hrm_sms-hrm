@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.OverTime_RejectMultiRequest    Script Date: 7/20/2016 10:19:15 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_RejectMultiRequest    Script Date: 7/19/2016 5:22:19 PM ******/
+
 --DROP PROCEDURE [dbo].OverTime_RejectSingleRequest
 CREATE PROCEDURE [dbo].[OverTime_RejectMultiRequest]
 	--@Month datetime,

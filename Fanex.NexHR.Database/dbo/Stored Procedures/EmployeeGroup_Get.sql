@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.EmployeeGroup_Get    Script Date: 7/20/2016 10:19:06 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeGroup_Get    Script Date: 7/19/2016 5:22:14 PM ******/
+
 CREATE PROCEDURE [dbo].[EmployeeGroup_Get] 
 	@FromDate DATETIME = NULL
 AS
@@ -14,6 +16,11 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	IF(@FromDate IS NOT NULL)
+	BEGIN
+		SELECT @FromDate = DATEADD(HH, -1, @FromDate)
+	END
 
 	SELECT
 	g.GroupId AS TeamId,

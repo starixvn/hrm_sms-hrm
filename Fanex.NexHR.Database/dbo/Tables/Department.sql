@@ -10,7 +10,8 @@
     [CreatedDate]     DATETIME       NULL,
     [ModifiedBy]      INT            NULL,
     [ModifiedDate]    DATETIME       NULL,
-    [IsDeleted]       BIT            NULL,
     CONSTRAINT [PK_Department] PRIMARY KEY CLUSTERED ([DepartmentId] ASC)
 );
+
+
 

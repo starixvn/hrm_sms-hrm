@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.EmployeeRole_Update    Script Date: 7/20/2016 10:19:06 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeRole_Update    Script Date: 7/19/2016 5:22:14 PM ******/
+
 CREATE PROCEDURE [dbo].[EmployeeRole_Update] @EmployeeId INT
 	,@RoleIds NVARCHAR(500) = ''
 	,@ModifiedBy INT

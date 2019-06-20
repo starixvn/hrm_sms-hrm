@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_bySA_7    Script Date: 7/20/2016 10:19:26 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_bySA_7    Script Date: 7/19/2016 5:22:24 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_bySA_7] @RequestID BIGINT
 	,@ProcessedBy INT
 	,@ErrCode INT = 0 OUTPUT
@@ -45,13 +48,6 @@ BEGIN
 
 		IF @CurrentStatus IN (4, 6)
 		BEGIN
-			UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-			SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) - CASE 
-					WHEN @IsHalfDay = 1 THEN 0.5
-					ELSE 1
-					END
-			WHERE EmpId = @EmpId
-
 			UPDATE cl WITH (ROWLOCK, UPDLOCK)
 			SET cl.IsKeepInView = 0
 				,cl.LeaveDay = 0

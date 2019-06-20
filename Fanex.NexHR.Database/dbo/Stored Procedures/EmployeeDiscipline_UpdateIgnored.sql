@@ -1,5 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeDiscipline_UpdateIgnored] @ModifiedBy INT
+﻿
+CREATE PROCEDURE [dbo].[EmployeeDiscipline_UpdateIgnored] @ModifiedBy INT
 	,@IgnoredDetails NVARCHAR(MAX) = NULL
+	,@HasUpdateOutOfControlReason BIT = 0
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -7,21 +9,22 @@ AS
 Created: 20160512@Tim.Trinh
 Task: ignored discipline score.
 DB: SMSHRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
     @IgnoredDetails: 
         <ROOT>
             <Discipline WorkDate='{0}' EmployeeId='{1}' IsIgnoredChangeShift='{2}' IsIgnoredMissingCheckInOut='{3}' IsIgnoredLateIn='{4}'
-                IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnpaidLeave='{7}'
-                IsIgnoredWorkingUnderTime='{7}' IsIgnoredUnpaidLeaveAbsent='{8}' IsConfirmed='{9}' ApproverSubtractScore='{10}'></Discipline>
+                IsIgnoredEarlyOut='{5}' IsIgnoredAbsent='{6}' IsIgnoredUnplannedLeave='{7}' IsIgnoredUnpaidLeave='{8}'
+                IsIgnoredWorkingUnderTime='{9}' IsIgnoredUnpaidLeaveAbsent='{10}' IsIgnoredWeekendLeave='{11}'
+                IsConfirmed='{12}' ApproverSubtractScore='{13}' IsOutOfControlReason='{14}'></Discipline>
         </ROOT>
 */
 BEGIN
 	SET NOCOUNT ON;
-	
-	CREATE TABLE #IgnoredDisciplineDetail (
+
+	CREATE TABLE #tblIgnoredDisciplineDetail (
 		WorkDate DATE
 		,EmployeeId INT
 		,IsIgnoredChangeShift BIT
@@ -29,11 +32,14 @@ BEGIN
 		,IsIgnoredLateIn BIT
 		,IsIgnoredEarlyOut BIT
 		,IsIgnoredAbsent BIT
+		,IsIgnoredUnplannedLeave BIT
 		,IsIgnoredUnpaidLeave BIT
 		,IsIgnoredWorkingUnderTime BIT
 		,IsIgnoredUnpaidLeaveAbsent BIT
+		,IsIgnoredWeekendLeave BIT
 		,IsConfirmed BIT
 		,ApproverSubtractScore DECIMAL(5, 2)
+		,IsOutOfControlReason BIT
 		)
 
 	IF ISNULL(@IgnoredDetails, '') <> ''
@@ -44,7 +50,23 @@ BEGIN
 			EXEC sp_xml_preparedocument @DocHandler OUTPUT
 				,@IgnoredDetails
 
-			INSERT INTO #IgnoredDisciplineDetail
+			INSERT INTO #tblIgnoredDisciplineDetail (
+				WorkDate
+				,EmployeeId
+				,IsIgnoredChangeShift
+				,IsIgnoredMissingCheckInOut
+				,IsIgnoredLateIn
+				,IsIgnoredEarlyOut
+				,IsIgnoredAbsent
+				,IsIgnoredUnplannedLeave
+				,IsIgnoredUnpaidLeave
+				,IsIgnoredWorkingUnderTime
+				,IsIgnoredUnpaidLeaveAbsent
+				,IsIgnoredWeekendLeave
+				,IsConfirmed
+				,ApproverSubtractScore
+				,IsOutOfControlReason
+				)
 			SELECT DISTINCT WorkDate
 				,EmployeeId
 				,IsIgnoredChangeShift
@@ -52,12 +74,30 @@ BEGIN
 				,IsIgnoredLateIn
 				,IsIgnoredEarlyOut
 				,IsIgnoredAbsent
+				,IsIgnoredUnplannedLeave
 				,IsIgnoredUnpaidLeave
 				,IsIgnoredWorkingUnderTime
 				,IsIgnoredUnpaidLeaveAbsent
+				,IsIgnoredWeekendLeave
 				,IsConfirmed
 				,ApproverSubtractScore
-			FROM OPENXML(@DocHandler, '/ROOT/Discipline', 1) WITH (WorkDate DATE, EmployeeId INT, IsIgnoredChangeShift BIT, IsIgnoredMissingCheckInOut BIT, IsIgnoredLateIn BIT, IsIgnoredEarlyOut BIT, IsIgnoredAbsent BIT, IsIgnoredUnpaidLeave BIT, IsIgnoredWorkingUnderTime BIT, IsIgnoredUnpaidLeaveAbsent BIT, IsConfirmed BIT, ApproverSubtractScore DECIMAL(5, 2)) AS Data
+				,IsOutOfControlReason
+			FROM OPENXML(@DocHandler, '/ROOT/Discipline', 1) 
+			     WITH (WorkDate DATE,
+			         EmployeeId INT,
+			         IsIgnoredChangeShift BIT,
+			         IsIgnoredMissingCheckInOut BIT,
+			         IsIgnoredLateIn BIT,
+			         IsIgnoredEarlyOut BIT,
+			         IsIgnoredAbsent BIT,
+			         IsIgnoredUnplannedLeave BIT,
+			         IsIgnoredUnpaidLeave BIT,
+			         IsIgnoredWorkingUnderTime BIT,
+			         IsIgnoredUnpaidLeaveAbsent BIT,
+			         IsIgnoredWeekendLeave BIT,
+			         IsConfirmed BIT,
+			         ApproverSubtractScore DECIMAL(5, 2),
+					 IsOutOfControlReason BIT) AS Data
 
 			EXEC sp_xml_removedocument @DocHandler
 		END TRY
@@ -73,8 +113,19 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
+		IF(@HasUpdateOutOfControlReason = 1)
+		BEGIN
+			UPDATE dis
+				SET dis.IsOutOfControlReason = ignore.IsOutOfControlReason
+					,dis.ModifiedBy = @ModifiedBy
+					,dis.ModifiedDate = GETDATE()
+				FROM dbo.EmployeeDiscipline AS dis WITH (NOLOCK)
+					INNER JOIN #tblIgnoredDisciplineDetail AS ignore WITH (NOLOCK) ON dis.WorkDate = ignore.WorkDate
+					AND dis.EmpId = ignore.EmployeeId
+					AND dis.DisciplineType = 1
+		END
 		DELETE ignore
-		FROM #IgnoredDisciplineDetail AS ignore
+		FROM #tblIgnoredDisciplineDetail AS ignore WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ignore.EmployeeId = emp.EmpId
 			AND emp.isDeleted = 0
 			AND emp.[Enabled] = 1
@@ -108,7 +159,7 @@ BEGIN
 
 		IF EXISTS (
 				SELECT 1
-				FROM #IgnoredDisciplineDetail
+				FROM #tblIgnoredDisciplineDetail WITH (NOLOCK)
 				)
 		BEGIN
 			UPDATE dis
@@ -118,14 +169,17 @@ BEGIN
 				,dis.IsIgnoredLateIn = ignore.IsIgnoredLateIn
 				,dis.IsIgnoredEarlyOut = ignore.IsIgnoredEarlyOut
 				,dis.IsIgnoredAbsent = ignore.IsIgnoredAbsent
+				,dis.IsIgnoredUnplannedLeave = ignore.IsIgnoredUnplannedLeave
 				,dis.IsIgnoredUnpaidLeave = ignore.IsIgnoredUnpaidLeave
 				,dis.IsIgnoredWorkingUndertime = ignore.IsIgnoredWorkingUnderTime
 				,dis.IsIgnoredUnpaidLeaveAbsent = ignore.IsIgnoredUnpaidLeaveAbsent
+				,dis.IsIgnoreWeekendLeave = ignore.IsIgnoredWeekendLeave
 				,dis.IsConfirmed = ignore.IsConfirmed
+				,dis.IsOutOfControlReason = ignore.IsOutOfControlReason
 				,dis.ModifiedBy = @ModifiedBy
 				,dis.ModifiedDate = GETDATE()
-			FROM dbo.EmployeeDiscipline AS dis
-				INNER JOIN #IgnoredDisciplineDetail AS ignore ON dis.WorkDate = ignore.WorkDate
+			FROM dbo.EmployeeDiscipline AS dis WITH (NOLOCK)
+				INNER JOIN #tblIgnoredDisciplineDetail AS ignore WITH (NOLOCK) ON dis.WorkDate = ignore.WorkDate
 				AND dis.EmpId = ignore.EmployeeId
 				AND dis.DisciplineType = 1
 		END
@@ -140,5 +194,5 @@ BEGIN
 			,@ErrMsg = N'Ignored discipline score unsuccessfully.'
 	END CATCH
 
-	DROP TABLE #IgnoredDisciplineDetail
+	DROP TABLE #tblIgnoredDisciplineDetail
 END

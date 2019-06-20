@@ -1,4 +1,4 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿
 CREATE PROCEDURE [dbo].[Holiday_Update]
 	@Id int,
 	@HolidayName nvarchar(50),	
@@ -33,39 +33,68 @@ BEGIN TRANSACTION;
 IF (@OldFromdate=@FromDate AND @ToDate = @Oldtodate)
 begin
 	UPDATE dbo.Holiday
-	SET HolidayName = @HolidayName				
-	WHERE ID=@ID	
+	SET HolidayName = @HolidayName
+	WHERE ID=@Id
 end
 else
 begin
-	-- update working calendar for employee tu turn off the isHoliday for previous  time range
 	UPDATE dbo.EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
 	Set IsHoliday = 0
-	WHERE WorkDate BETWEEN @OldFromdate AND @Oldtodate	
+	WHERE WorkDate BETWEEN @OldFromdate AND @Oldtodate
 
-	-- just update attendate record from past to today
-	-- EXEC EmployeeAttendance_ProcessingAndInsert null, @OldFromdate, @Oldtodate, 1
+	UPDATE cl
+	SET cl.IsHoliday = 1
+		,cl.ModifiedBy = @ModifiedBy
+		,cl.ModifiedDate = @ModifiedDate
+	FROM dbo.EmployeeCalendar AS cl WITH (ROWLOCK, UPDLOCK)
+	WHERE WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = cl.EmpId
+				AND (
+					IsLocal = 1
+					OR (
+						IsLocal = 0
+						AND IsExpatUseHoliday = 1
+						)
+					)
+			)
 
-	-- update working calendar for employee tu turn on the isHoliday  for new range
-	UPDATE dbo.EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-	Set IsHoliday = 1,
-		ModifiedBy = @ModifiedBy,
-		ModifiedDate = @ModifiedDate
-	WHERE WorkDate BETWEEN @FromDate AND @ToDate
-
-	IF(@fromdate < GETDATE())
+	DECLARE @WorkDate DATETIME
+	SELECT @WorkDate = CONVERT(VARCHAR(10), @FromDate, 111)
+	WHILE (DATEDIFF(d, @WorkDate, @ToDate) >= 0)
 	BEGIN
-		DECLARE @WorkDate DATETIME
-		SELECT @WorkDate = CONVERT(VARCHAR(10), @FromDate, 111)
-		WHILE (DATEDIFF(d, @WorkDate, @ToDate) >= 0)
-		BEGIN 
+		IF(@WorkDate  < GETDATE())
+		BEGIN
 			INSERT INTO dbo.tmpEmployeeAttendace(EmpId, WorkDate, InsertedDate)
 			SELECT EmpId, @WorkDate, GETDATE()
 			FROM dbo.Employee AS e WITH (NOLOCK)
 			WHERE [Enabled] = 1
-
-			SET @WorkDate = DATEADD(d, 1, @WorkDate)
 		END
+
+		INSERT INTO dbo.EmployeeCalendar(EmpId, WorkDate, IsHoliday, ModifiedDate)
+		SELECT EmpId, @WorkDate, 1, GETDATE()
+		FROM dbo.Employee AS e WITH (NOLOCK)
+		WHERE [Enabled] = 1
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = e.EmpId
+				AND (
+					IsLocal = 1
+					OR (
+						IsLocal = 0
+						AND IsExpatUseHoliday = 1
+						)
+					)
+			)
+		AND NOT EXISTS (SELECT 1 FROM dbo.EmployeeCalendar WITH (NOLOCK)
+			WHERE EmpId = e.EmpId AND WorkDate = @WorkDate
+		)
+
+		SET @WorkDate = DATEADD(d, 1, @WorkDate)
 	END
 		
 	UPDATE dbo.Holiday WITH(ROWLOCK,UPDLOCK)

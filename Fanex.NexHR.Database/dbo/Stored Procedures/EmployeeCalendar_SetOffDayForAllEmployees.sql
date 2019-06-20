@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeCalendar_SetOffDayForAllEmployees] @date DATETIME
+﻿/****** Object:  Stored Procedure dbo.EmployeeCalendar_SetOffDayForAllEmployees    Script Date: 7/20/2016 10:19:05 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeCalendar_SetOffDayForAllEmployees    Script Date: 7/19/2016 5:22:14 PM ******/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[EmployeeCalendar_SetOffDayForAllEmployees] @date DATETIME
 	,@isOffDay BIT
 	,@ModifiedBy INT
 	,@ModifiedDate DATETIME

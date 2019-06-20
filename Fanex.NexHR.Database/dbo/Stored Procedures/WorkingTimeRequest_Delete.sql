@@ -124,16 +124,14 @@ BEGIN
 
 			IF(ISNULL(@KIVLeave, 0) > 0)
 			BEGIN
-				UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-				SET KeepInViewBalance = KeepInViewBalance + @KIVLeave
-				WHERE EmpId = @EmpId
-
 				DELETE
 				FROM dbo.[tmpKIVLeaveBalance]
 				WHERE RequestID = @RequestID
 			END
 
-			
+			DELETE
+			FROM dbo.WeekendLeaveTrans
+			WHERE RequestID = @RequestID
 
 			COMMIT TRANSACTION;
 		END TRY

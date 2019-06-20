@@ -1,21 +1,56 @@
-﻿CREATE function  [dbo].[fnc_strSplit] ( @string nvarchar( 4000), @splitter char( 1) )
-returns @res table ( id int primary key, rank int, val nvarchar( 4000) )
-as
-begin
-     if substring ( @string, len ( @string), 1)<>@splitter
-          set @string= @string+@splitter
-     declare @start int, @word nvarchar(4000), @charindex int, @i int
-     set @i=1
-     set @start=1
-     set @charindex= charindex( @splitter, @string, @start)
-     while (@charindex <> 0)begin
-          set @word= substring( @string, @start, @charindex - @start)
-          set @start= @charindex +1
-          set @charindex= charindex( @splitter, @string, @start)
-          insert into @res  values ( @start, @i, LTrim(Rtrim(@word)))
-          set @i=@i+1
-     end
-     return
-end
+﻿
+CREATE FUNCTION [dbo].[fnc_strSplit] (
+    @string NVARCHAR(4000)
+    ,@splitter CHAR(1)
+)
+RETURNS @res TABLE (
+    id INT PRIMARY KEY
+    ,RANK INT
+    ,val NVARCHAR(4000)
+)
+AS
+/*
+Created:
+Task: Split string by character.
+DB:
+Original: 
+
+Revisions:  
+Param's Explanation:
+
+*/
+BEGIN
+    IF SUBSTRING(@string, LEN(@string), 1) <> @splitter
+    BEGIN
+	   SET @string = @string + @splitter
+    END
+
+    DECLARE @start INT
+        ,@word NVARCHAR(4000)
+        ,@charindex INT
+        ,@i INT
+
+    SET @i = 1
+    SET @start = 1
+    SET @charindex = CHARINDEX(@splitter, @string, @start)
+
+    WHILE (@charindex <> 0)
+    BEGIN
+	   SET @word = SUBSTRING(@string, @start, @charindex - @start)
+	   SET @start = @charindex + 1
+	   SET @charindex = CHARINDEX(@splitter, @string, @start)
+
+	   INSERT INTO @res
+	   VALUES (
+		  @start
+		  ,@i
+		  ,LTRIM(RTRIM(@word))
+	   )
+
+	   SET @i = @i + 1
+    END
+
+    RETURN
+END
 
 

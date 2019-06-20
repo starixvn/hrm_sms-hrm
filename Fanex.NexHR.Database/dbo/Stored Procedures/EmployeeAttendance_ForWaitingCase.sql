@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[EmployeeAttendance_ForWaitingCase]
 AS
 BEGIN
-DECLARE @i INT, @TempEmpId INT, @TempWorkDate DATE, @fromDate DATE, @toDate DATE
+DECLARE @i INT, @TempEmpId INT, @TempWorkDate DATE, @TempShiftId INT, @fromDate DATE, @toDate DATE
 DECLARE @Employee TABLE (Id INT PRIMARY KEY IDENTITY(1,1), EmpId INT, WorkDate DATE)
 
 SELECT @fromDate = MIN (tmpAtt.WorkDate)
@@ -10,9 +10,12 @@ SELECT @fromDate = MIN (tmpAtt.WorkDate)
 FROM dbo.tmpEmployeeAttendace AS tmpAtt WITH (NOLOCK)
 
 INSERT INTO @Employee(EmpId, WorkDate)
-SELECT EmpId
+SELECT TOP 100 EmpId
 	,WorkDate
 FROM dbo.tmpEmployeeAttendace AS tmpAtt WITH (NOLOCK)
+
+DELETE tmp FROM dbo.tmpEmployeeAttendace as tmp
+INNER JOIN @Employee AS e ON tmp.EmpId = e.EmpId AND tmp.WorkDate = e.WorkDate
 
 IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '#TimeRecord'))
 BEGIN
@@ -24,8 +27,15 @@ CREATE TABLE #TimeRecord (Id INT, EmpID INT, RecordTime DATETIME, InOutType TINY
 INSERT INTO #TimeRecord (Id, EmpID, RecordTime, InOutType)
 SELECT Id, EmpID, RecordTime, InOutType 
 FROM dbo.TimeRecord AS ti WITH (NOLOCK) 
-WHERE DATEDIFF(DD, @fromDate, RecordTime) >= 0
-	AND DATEDIFF(DD, RecordTime, DATEADD(DD, 2, @toDate)) >= 0
+WHERE 
+
+	--DATEDIFF(DD, @fromDate, RecordTime) >= 0
+	--AND DATEDIFF(DD, RecordTime, DATEADD(DD, 2, @toDate)) >= 0
+
+	RecordTime BETWEEN  
+	DATEADD(HH, -2, CONVERT(VARCHAR(10),  @fromDate, 111))
+	AND DATEADD(d, 2, CONVERT(VARCHAR(10),  @toDate, 111))
+
 	AND EXISTS (SELECT 1 FROM @Employee WHERE EmpId = ti.EmpID)
 
 IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '#LeaveRequestHalfDay'))
@@ -102,8 +112,8 @@ INSERT INTO #EmpCalendar (
 		BreakTimeMins,
 		LeaveDay)
 SELECT 	
-		ec.EmpId,
-		ec.WorkDate,
+		e.EmpId,
+		e.WorkDate,
 		ec.ShiftId,
 		IsHoliday,
 		IsOffDay,
@@ -134,28 +144,34 @@ SELECT
 			END AS [EndCheckOutTime],
 		BreakTimeMins,
 		LeaveDay
-FROM dbo.EmployeeCalendar ec WITH (NOLOCK)
-INNER JOIN @Employee AS e ON ec.EmpId = e.EmpId 
+FROM @Employee AS e 
+LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.EmpId = e.EmpId 
 	AND ec.WorkDate = e.WorkDate
 LEFT JOIN dbo.Shift s WITH (NOLOCK)ON s.ShiftID = ec.ShiftId
-ORDER BY ec.EmpId, ec.WorkDate
+ORDER BY e.EmpId, e.WorkDate
 
 IF EXISTS(SELECT 1 FROM #EmpCalendar)
 BEGIN
-
 	SET @i = 1
 	WHILE EXISTS (SELECT 1 FROM #EmpCalendar WHERE Id = @i)
 	BEGIN
-		SELECT @TempEmpId = EmpId, @TempWorkDate = WorkDate FROM #EmpCalendar WHERE Id = @i
-		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @TempEmpId, @TempWorkDate, @TempWorkDate, 0
-		DELETE FROM dbo.tmpEmployeeAttendace WHERE EmpId = @TempEmpId AND WorkDate = @TempWorkDate
-		INSERT INTO dbo.tmpLogAttendance([Name]
-		  ,[EmpId]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[IsOnlyUpdate]
-		  ,[InsertDate])
-		VALUES('EmployeeAttendance_ForWaitingCase', @TempEmpId, @TempWorkDate, @TempWorkDate, 0, GETDATE())
+		SELECT @TempEmpId = EmpId
+			,@TempWorkDate = WorkDate
+			,@TempShiftId = ShiftId
+		FROM #EmpCalendar WHERE Id = @i
+		
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @TempEmpId, @TempWorkDate, @TempWorkDate, 1
+
+		--IF(EXISTS (SELECT 1 FROM dbo.EmployeeCalendar WITH (NOLOCK)
+		--	WHERE EmpId = @TempEmpId 
+		--	AND WorkDate = @TempWorkDate
+		--	AND ShiftId = @TempShiftId
+		--))
+		--BEGIN
+		--	DELETE FROM dbo.tmpEmployeeAttendace WHERE EmpId = @TempEmpId AND WorkDate = @TempWorkDate
+		--END
+
+		EXEC dbo.Discipline_Insert @TempWorkDate, @TempWorkDate, @TempEmpId
 
 		SET @i = @i + 1
 	END

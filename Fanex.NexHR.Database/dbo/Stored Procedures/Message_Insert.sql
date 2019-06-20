@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.Message_Insert    Script Date: 7/20/2016 10:19:13 AM ******/
+/****** Object:  Stored Procedure dbo.Message_Insert    Script Date: 7/19/2016 5:22:17 PM ******/
+
 CREATE PROCEDURE [dbo].[Message_Insert] 
 	@Subject VARCHAR(100)
 	,@Contents NVARCHAR(MAX)

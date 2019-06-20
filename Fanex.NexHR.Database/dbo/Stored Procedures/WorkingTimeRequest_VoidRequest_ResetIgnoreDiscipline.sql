@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline] @RequestId BIGINT
+﻿
+
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline    Script Date: 7/19/2016 5:22:24 PM ******/
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline] @RequestId BIGINT
 	,@ModifiedBy INT
 	,@RoleId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -37,6 +41,7 @@ BEGIN
 		,IsToAfterday BIT
 		,IsUnpaidLeaveAbsent BIT
 		,IsAbsent BIT
+		,IsUnplannedLeave BIT
 		)
 
 	CREATE TABLE #RequestDetail (
@@ -124,6 +129,7 @@ BEGIN
 			,IsToAfterday
 			,IsUnpaidLeaveAbsent
 			,IsAbsent
+			,IsUnplannedLeave
 			)
 		EXEC dbo.WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById @RequestId = @RequestId
 

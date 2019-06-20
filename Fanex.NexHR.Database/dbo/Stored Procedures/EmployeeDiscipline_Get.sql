@@ -1,4 +1,6 @@
 ﻿
+
+--[dbo].[EmployeeDiscipline_Get] '2017-01-01', '2017-06-01'
 CREATE PROCEDURE [dbo].[EmployeeDiscipline_Get] @FromDate DATETIME
 	,@LastModifiedDate DATETIME
 AS
@@ -24,7 +26,7 @@ BEGIN
 		,[LateIn]
 		,[EarlyOut]
 		,[DisciplineType]
-		,[DisciplineScore]
+		,dis.DisciplineScore
 		,[EmployeeComment]
 		,[ApproverComment]
 		,[IsMissingCheckInOut]
@@ -39,14 +41,22 @@ BEGIN
 		,[IsIgnoredChangeShift]
 		,[IsAbsent]
 		,[IsIgnoredAbsent]
+		,ISNULL([IsUnplannedLeave], 0) AS [IsUnplannedLeave]
+		,ISNULL([IsIgnoredUnplannedLeave], 0) AS [IsIgnoredUnplannedLeave]
 		,[IsUnpaidLeave]
 		,[IsIgnoredUnpaidLeave]
+		,ISNULL([IsWeekendLeave], 0) AS [IsWeekendLeave]
+		,ISNULL([IsIgnoreWeekendLeave], 0) AS [IsWeekendLeave]
 		,[IsUnpaidLeaveAbsent]
 		,[IsIgnoredUnpaidLeaveAbsent]
 		,[ModifiedDate]
 		,[IsDeleted]
-	FROM dbo.[EmployeeDiscipline] WITH (NOLOCK)
-	WHERE ModifiedDate > @LastModifiedDate
-		AND DATEDIFF(DD, @FromDate, WorkDate) >= 0
+	FROM dbo.[EmployeeDiscipline] AS dis WITH (NOLOCK)
+		INNER JOIN dbo.DisciplineType AS ty WITH (NOLOCK) ON dis.DisciplineType = ty.DisciplineTypeId
+	WHERE (
+			ModifiedDate > @LastModifiedDate
+			AND DATEDIFF(DD, @FromDate, WorkDate) >= 0
+			)
+		OR DisciplineType < 0
 	ORDER BY ModifiedDate
 END

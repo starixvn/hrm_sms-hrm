@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.OverTime_ResetMultiRequest    Script Date: 7/20/2016 10:19:15 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_ResetMultiRequest    Script Date: 7/19/2016 5:22:19 PM ******/
+
 --DROP PROCEDURE [dbo].OverTime_ResetMultiRequest
 CREATE PROCEDURE [dbo].[OverTime_ResetMultiRequest]
 	--@Month datetime,
@@ -121,7 +124,7 @@ BEGIN
 		ELSE IF @RoleID = 3 --Approver
 		BEGIN
 			UPDATE OT
-			SET [CurrentStatus] = 2
+			SET [CurrentStatus] = CASE WHEN VerifiedStatus = 2 THEN 2 ELSE 1 END
 				,-- approved
 				ApproverId = @ProcessedBy
 				,ApprovedDate = @ProcessedDate

@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
+﻿
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest    Script Date: 7/19/2016 5:22:21 PM ******/
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''
@@ -36,12 +39,6 @@ BEGIN
 		,@HRStatus INT
 		,@ProcessedDate DATETIME
 
-	EXEC dbo.WorkingTimeRequest_GetRangeDateByRequestID @RequestId = @RequestId
-		,@FromDate = @FromDate OUTPUT
-		,@ToDate = @ToDate OUTPUT
-		,@TotalDay = @TotalDay OUTPUT
-		,@RequestType = @RequestType OUTPUT
-
 	-- get employee and requestype of the request
 	SELECT TOP 1 @EmpId = EmpId
 		,@Status = [CurrentStatus]
@@ -54,27 +51,37 @@ BEGIN
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
 	WHERE RequestID = @RequestId
 
-	SELECT @FromDate = CONVERT(VARCHAR(10), @FromDate, 111)
-		,@ToDate = CONVERT(VARCHAR(10), @ToDate, 111)
-
-	IF @RoleId = 3
-		AND @Status = 4
-	BEGIN
-		RETURN
-	END
-
-	IF @RoleId = 6
-		AND (@Status NOT IN (4))
+	IF (@RoleId = 2 AND (@Status <> 1 OR @VerifierId <> @ProcessedBy))
 	BEGIN
 		SET @ErrCode = 103
-
-		IF @Status NOT IN (4)
-			SET @ErrMsg = 'This request have been approved or rejected.'
-		ELSE IF @HRId <> @ProcessedBy
-			SET @ErrMsg = 'You don''t have permission on this request.'
-
+		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
 		RETURN
 	END
+
+	IF (@RoleId = 3 AND (@Status NOT IN (1, 2) OR @ApproverId <> @ProcessedBy))
+	BEGIN
+		SET @ErrCode = 103
+		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
+		RETURN
+	END
+
+	IF (@RoleId = 6 AND (@Status <> 4
+		OR NOT EXISTS (SELECT 1 FROM dbo.EmployeeRole WHERE EmployeeId = @ProcessedBy AND RoleId IN (6, 7))
+	))
+	BEGIN
+		SET @ErrCode = 103
+		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
+		RETURN
+	END
+
+	EXEC dbo.WorkingTimeRequest_GetRangeDateByRequestID @RequestId = @RequestId
+		,@FromDate = @FromDate OUTPUT
+		,@ToDate = @ToDate OUTPUT
+		,@TotalDay = @TotalDay OUTPUT
+		,@RequestType = @RequestType OUTPUT
+
+	SELECT @FromDate = CONVERT(VARCHAR(10), @FromDate, 111)
+		,@ToDate = CONVERT(VARCHAR(10), @ToDate, 111)
 
 	IF @RequestType IN (1, 2)
 	BEGIN

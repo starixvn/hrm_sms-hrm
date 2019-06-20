@@ -13,14 +13,15 @@ BEGIN
 	INSERT INTO @TimeRecord	(Id, EmpID, RecordTime, InOutType)
 	SELECT Id, EmpID, RecordTime, InOutType 
 	FROM #TimeRecord
-	WHERE RecordTime BETWEEN CONVERT(VARCHAR(10), DATEADD(HH, -2, @fromTime), 111) 
-		AND CONVERT(VARCHAR(10), DATEADD(d, 2, @toTime), 111)
+	WHERE RecordTime BETWEEN 
+		DATEADD(HH, -2, CONVERT(VARCHAR(10),  @fromTime, 111))
+		AND DATEADD(d, 2, CONVERT(VARCHAR(10),  @toTime, 111))
 		AND EmpID = @empId
 	--DELETE FROM #TimeRecord
 	--WHERE RecordTime BETWEEN CONVERT(VARCHAR(10), @fromTime, 111) 
 	--	AND CONVERT(VARCHAR(10), DATEADD(d, 2, @toTime), 111)
 	--	AND EmpID = @empId
-
+	
 	DECLARE @i INT, @attendaceDate DATETIME
 	DECLARE	@ID INT, 
 		@EmpIdCur INT,
@@ -110,7 +111,7 @@ BEGIN
 			FROM @TimeRecord 
 			WHERE InOutType = 1
 				AND RecordTime BETWEEN @ExpectedInTime AND DATEADD(mi, @RangeToScanTime, @ExpectedOutTime)
-
+			
 			IF @InOfMachine > @OutOfMachine
 			BEGIN
 				SET @OutOfMachine = NULL
@@ -154,9 +155,8 @@ BEGIN
 
 					IF(@RequestLeaveTimeBegin IS NOT NULL AND @RequestLeaveTimeEnd IS NOT NULL)
 					BEGIN
-						IF(DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) < 5 AND DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) > -5)
+						IF(DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) < 30 AND DATEDIFF(mi, @ExpectedInTime, @RequestLeaveTimeBegin) > -30)
 						BEGIN
-						select 1
 							SET @adjustLateIn = DATEDIFF(mi, @RequestLeaveTimeBegin, @RequestLeaveTimeEnd)
 							SET @ActualLateIn = @ActualLateIn - @adjustLateIn
 							IF @ActualLateIn < 0
@@ -164,9 +164,8 @@ BEGIN
 								SET @ActualLateIn = 0
 							END
 						END
-						ELSE IF (DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) < 5 AND DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) > -5)
+						ELSE IF (DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) < 30 AND DATEDIFF(mi, @ExpectedOutTime, @RequestLeaveTimeEnd) > -30)
 						BEGIN
-						select 2
 							SET @adjustEarlyOut = DATEDIFF(mi, @RequestLeaveTimeBegin, @RequestLeaveTimeEnd)
 							SET @ActualEarlyOut = @ActualEarlyOut - @adjustEarlyOut
 							IF @ActualEarlyOut < 0
@@ -217,7 +216,7 @@ BEGIN
 			END
 		END
 
-		IF (@isOffDay = 1 OR @IsHoliday = 1 OR (@IsLeaveDay = 1 AND @LeaveDay = 1))
+		IF (@ShiftId IS NULL OR (@IsLeaveDay = 1 AND @LeaveDay = 1))
 		BEGIN
 			SET @Absence = 1
 		END

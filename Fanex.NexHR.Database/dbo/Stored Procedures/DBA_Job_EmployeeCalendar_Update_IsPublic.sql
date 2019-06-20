@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.DBA_Job_EmployeeCalendar_Update_IsPublic    Script Date: 7/20/2016 10:19:00 AM ******/
+/****** Object:  Stored Procedure dbo.DBA_Job_EmployeeCalendar_Update_IsPublic    Script Date: 7/19/2016 5:22:11 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE [dbo].[DBA_Job_EmployeeCalendar_Update_IsPublic] @empid INT = NULL
 	,@ErrCode INT = 0 OUTPUT

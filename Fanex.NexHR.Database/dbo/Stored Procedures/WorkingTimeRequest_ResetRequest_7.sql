@@ -1,4 +1,8 @@
 ﻿
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_7    Script Date: 7/20/2016 10:19:24 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ResetRequest_7    Script Date: 7/19/2016 5:22:23 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ResetRequest_7] @RequestID BIGINT
 	,@EmpId INT
 	,@RoleID INT
@@ -70,7 +74,7 @@ BEGIN
 			ELSE
 			BEGIN
 				UPDATE dbo.WorkingTimeRequest WITH(ROWLOCK,UPDLOCK)
-				SET CurrentStatus = 2,
+				SET CurrentStatus = CASE WHEN VerifiedStatus = 2 THEN 2 ELSE 1 END,
 					ApprovedStatus = 1,
 					ApproverId= @ProcessedBy,
 					ApprovedDate= @ProcessedDate,
@@ -81,13 +85,6 @@ BEGIN
 
 			IF @CurrentStatus = 4
 			BEGIN
-				UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-				SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) - CASE 
-						WHEN @IsHalfDay = 1 THEN 0.5
-						ELSE 1
-						END
-				WHERE EmpId = @EmpId
-
 				UPDATE cl WITH (ROWLOCK, UPDLOCK)
 				SET cl.IsKeepInView = 0
 					--,cl.LeaveDay = CASE 
@@ -124,13 +121,6 @@ BEGIN
 
 			IF @CurrentStatus = 7
 			BEGIN
-				UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-				SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) + CASE 
-						WHEN @IsHalfDay = 1 THEN 0.5
-						ELSE 1
-						END
-				WHERE EmpId = @EmpId
-
 				-- update the working calendar to record the check-in time
 				UPDATE cl WITH (ROWLOCK, UPDLOCK)
 				SET cl.IsKeepInView = 1

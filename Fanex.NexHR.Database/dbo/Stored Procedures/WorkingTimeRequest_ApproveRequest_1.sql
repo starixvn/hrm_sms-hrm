@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest_1    Script Date: 7/20/2016 10:19:19 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest_1    Script Date: 7/19/2016 5:22:21 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest_1] @RequestId BIGINT
 	,@EmpId INT
 	,@RoleId INT

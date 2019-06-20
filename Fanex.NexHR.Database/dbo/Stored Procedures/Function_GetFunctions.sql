@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Function_GetFunctions]
+﻿/****** Object:  Stored Procedure dbo.Function_GetFunctions    Script Date: 7/20/2016 10:19:09 AM ******/
+/****** Object:  Stored Procedure dbo.Function_GetFunctions    Script Date: 7/19/2016 5:22:15 PM ******/
+CREATE PROCEDURE [dbo].[Function_GetFunctions]
 AS
 
 /*

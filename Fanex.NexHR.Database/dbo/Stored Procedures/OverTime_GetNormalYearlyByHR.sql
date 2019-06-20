@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[OverTime_GetNormalYearlyByHR] @empid INT = NULL
+﻿/****** Object:  Stored Procedure dbo.OverTime_GetNormalYearlyByHR    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_GetNormalYearlyByHR    Script Date: 7/19/2016 5:22:18 PM ******/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[OverTime_GetNormalYearlyByHR] @empid INT = NULL
 	,@groupids VARCHAR(max) = ''
 	,@Year INT
 	,@status VARCHAR(max) = '4,6'

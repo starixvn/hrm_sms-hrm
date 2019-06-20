@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetByQuery    Script Date: 7/20/2016 10:19:07 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetByQuery    Script Date: 7/19/2016 5:22:14 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- [dbo].[EmployeeSupervisor_GetByQuery] 421, null, null, 'Jack'
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetByQuery] @EmpId INT

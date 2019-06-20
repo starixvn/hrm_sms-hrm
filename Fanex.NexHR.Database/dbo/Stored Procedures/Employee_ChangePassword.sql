@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Employee_ChangePassword] @empId INT
+﻿/****** Object:  Stored Procedure dbo.Employee_ChangePassword    Script Date: 7/20/2016 10:19:01 AM ******/
+/****** Object:  Stored Procedure dbo.Employee_ChangePassword    Script Date: 7/19/2016 5:22:11 PM ******/
+
+CREATE PROCEDURE [dbo].[Employee_ChangePassword] @empId INT
 	,@password NVARCHAR(100)
 	,@ModifiedBy INT
 	,@PasswordReset BIT = 0

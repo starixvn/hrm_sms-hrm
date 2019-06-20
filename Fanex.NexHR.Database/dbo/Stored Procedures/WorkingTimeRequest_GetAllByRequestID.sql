@@ -1,6 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetAllByRequestID]
-	@RequestId BIGINT
+
+
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetAllByRequestID] @RequestId BIGINT
 AS
 /*
 Created: Tom.Vo@2013-11-05
@@ -73,45 +74,45 @@ BEGIN
 	IF @RequestType IN (3, 4)
 	BEGIN
 		INSERT INTO @Request (
-			RequestId,
-			RequestType,
-			FromShiftId,
-			FromShiftName,
-			FromDate,
-			ToDate,
-			RequestedDate,
-			TotalMinutes,
-			Remark,
-			[Status],
-			RefNo,
-			CreatedDate,
-			RequesterId,
-			RequesterNickName,
-			RequesterFullName,
-			GroupId,
-			GroupCode,
-			GroupName,
-			VerifierId,
-			VerifierNickName,
-			VerifierFullName,
-			VerifiedDate,
-			VerifiedStatus,
-			ApproverId,
-			ApproverNickName,
-			ApproverFullName,
-			ApprovedDate,
-			ApprovedStatus,
-			ProcessedId,
-			ProcessedNickName,
-			ProcessedFullName,
-			ProcessedDate,
-			ProcessedStatus,
-			ModifiedById,
-			ModifiedByNickName,
-			ModifiedByFullName,
-			ModifiedDate,
-			ReworkCount
-		)
+			RequestId
+			,RequestType
+			,FromShiftId
+			,FromShiftName
+			,FromDate
+			,ToDate
+			,RequestedDate
+			,TotalMinutes
+			,Remark
+			,[Status]
+			,RefNo
+			,CreatedDate
+			,RequesterId
+			,RequesterNickName
+			,RequesterFullName
+			,GroupId
+			,GroupCode
+			,GroupName
+			,VerifierId
+			,VerifierNickName
+			,VerifierFullName
+			,VerifiedDate
+			,VerifiedStatus
+			,ApproverId
+			,ApproverNickName
+			,ApproverFullName
+			,ApprovedDate
+			,ApprovedStatus
+			,ProcessedId
+			,ProcessedNickName
+			,ProcessedFullName
+			,ProcessedDate
+			,ProcessedStatus
+			,ModifiedById
+			,ModifiedByNickName
+			,ModifiedByFullName
+			,ModifiedDate
+			,ReworkCount
+			)
 		SELECT r.RequestId
 			,RequestType
 			,s.ShiftId
@@ -132,7 +133,7 @@ BEGIN
 			,e.FullName
 			,g.GroupId
 			,g.Code
-			,g.Name
+			,g.NAME
 			,ap_V.empID AS VerifierID
 			,ap_V.NickName
 			,ap_V.FullName
@@ -169,44 +170,44 @@ BEGIN
 	ELSE IF @RequestType IN (1, 2)
 	BEGIN
 		INSERT INTO @Request (
-			RequestId,
-			RequestType,
-			FromShiftId,
-			FromShiftName,
-			FromDate,
-			ToDate,
-			RequestedDate,
-			Remark,
-			[Status],
-			RefNo,
-			CreatedDate,
-			RequesterId,
-			RequesterNickName,
-			RequesterFullName,
-			GroupId,
-			GroupCode,
-			GroupName,
-			VerifierId,
-			VerifierNickName,
-			VerifierFullName,
-			VerifiedDate,
-			VerifiedStatus,
-			ApproverId,
-			ApproverNickName,
-			ApproverFullName,
-			ApprovedDate,
-			ApprovedStatus,
-			ProcessedId,
-			ProcessedNickName,
-			ProcessedFullName,
-			ProcessedDate,
-			ProcessedStatus,
-			ModifiedById,
-			ModifiedByNickName,
-			ModifiedByFullName,
-			ModifiedDate,
-			ReworkCount
-		)
+			RequestId
+			,RequestType
+			,FromShiftId
+			,FromShiftName
+			,FromDate
+			,ToDate
+			,RequestedDate
+			,Remark
+			,[Status]
+			,RefNo
+			,CreatedDate
+			,RequesterId
+			,RequesterNickName
+			,RequesterFullName
+			,GroupId
+			,GroupCode
+			,GroupName
+			,VerifierId
+			,VerifierNickName
+			,VerifierFullName
+			,VerifiedDate
+			,VerifiedStatus
+			,ApproverId
+			,ApproverNickName
+			,ApproverFullName
+			,ApprovedDate
+			,ApprovedStatus
+			,ProcessedId
+			,ProcessedNickName
+			,ProcessedFullName
+			,ProcessedDate
+			,ProcessedStatus
+			,ModifiedById
+			,ModifiedByNickName
+			,ModifiedByFullName
+			,ModifiedDate
+			,ReworkCount
+			)
 		SELECT r.RequestId
 			,r.RequestType
 			,s.ShiftID
@@ -223,7 +224,7 @@ BEGIN
 			,e.FullName
 			,g.GroupId
 			,g.Code
-			,g.Name
+			,g.NAME
 			,ap_V.empID AS VerifierId
 			,ap_V.NickName
 			,ap_V.FullName
@@ -259,70 +260,76 @@ BEGIN
 	END
 	ELSE IF @RequestType = 6
 	BEGIN
-		DECLARE @IsHalfDay BIT,
-			@TotalDay DECIMAL(18,2)
+		DECLARE @IsHalfDay BIT
+			,@TotalDay DECIMAL(18, 2)
 
 		SELECT @IsHalfDay = (CASE 
 				WHEN TotalDays = 0.5
 					AND LeaveType <> 0 THEN 1
 				ELSE 0 END
-				),
-				@TotalDay = TotalDays
+				)
+			,@TotalDay = TotalDays
 		FROM dbo.LeaveRequest WITH (NOLOCK)
 		WHERE RequestId = @RequestID
 
 		IF (@TotalDay = 0.5)
 		BEGIN
 			INSERT INTO @Request (
-				RequestId,
-				RequestType,
-				FromDate,
-				ToDate,
-				RequestedDate,
-				FromTime,
-				ToTime,
-				TotalDays,
-				IsHalfDay,
-				LeaveTypeId,
-				LeaveTypeName,
-				Remark,
-				RefNo,
-				[Status],
-				CreatedDate,
-				RequesterId,
-				RequesterNickName,
-				RequesterFullName,
-				GroupId,
-				GroupCode,
-				GroupName,
-				VerifierId,
-				VerifierNickName,
-				VerifierFullName,
-				VerifiedDate,
-				VerifiedStatus,
-				ApproverId,
-				ApproverNickName,
-				ApproverFullName,
-				ApprovedDate,
-				ApprovedStatus,
-				ProcessedId,
-				ProcessedNickName,
-				ProcessedFullName,
-				ProcessedDate,
-				ProcessedStatus,
-				ModifiedById,
-				ModifiedByNickName,
-				ModifiedByFullName,
-				ModifiedDate,
-				ReworkCount
-			)
+				RequestId
+				,RequestType
+				,FromDate
+				,ToDate
+				,RequestedDate
+				,FromTime
+				,ToTime
+				,TotalDays
+				,IsHalfDay
+				,LeaveTypeId
+				,LeaveTypeName
+				,Remark
+				,RefNo
+				,[Status]
+				,CreatedDate
+				,RequesterId
+				,RequesterNickName
+				,RequesterFullName
+				,GroupId
+				,GroupCode
+				,GroupName
+				,VerifierId
+				,VerifierNickName
+				,VerifierFullName
+				,VerifiedDate
+				,VerifiedStatus
+				,ApproverId
+				,ApproverNickName
+				,ApproverFullName
+				,ApprovedDate
+				,ApprovedStatus
+				,ProcessedId
+				,ProcessedNickName
+				,ProcessedFullName
+				,ProcessedDate
+				,ProcessedStatus
+				,ModifiedById
+				,ModifiedByNickName
+				,ModifiedByFullName
+				,ModifiedDate
+				,ReworkCount
+				)
 			SELECT r.RequestId
 				,r.RequestType
 				,lr.FromDate
 				,lr.ToDate
 				,lr.FromDate AS RequestedDate
-				,CASE WHEN ldt.FromTime IS NULL THEN lr.FromDate ELSE ldt.FromTime END
-				,CASE WHEN ldt.ToTime IS NULL THEN lr.ToDate ELSE ldt.ToTime END
+				,CASE 
+					WHEN ldt.FromTime IS NULL THEN lr.FromDate
+					ELSE ldt.FromTime
+					END
+				,CASE 
+					WHEN ldt.ToTime IS NULL THEN lr.ToDate
+					ELSE ldt.ToTime
+					END
 				,lr.TotalDays
 				,@IsHalfDay
 				,lt.LeaveTypeId
@@ -336,7 +343,7 @@ BEGIN
 				,e.FullName
 				,g.GroupId
 				,g.Code
-				,g.Name
+				,g.NAME
 				,ap_V.empID AS VerifierId
 				,ap_V.NickName
 				,ap_V.FullName
@@ -372,48 +379,48 @@ BEGIN
 		ELSE
 		BEGIN
 			INSERT INTO @Request (
-				RequestId,
-				RequestType,
-				FromDate,
-				ToDate,
-				RequestedDate,
-				FromTime,
-				ToTime,
-				TotalDays,
-				IsHalfDay,
-				LeaveTypeId,
-				LeaveTypeName,
-				Remark,
-				RefNo,
-				[Status],
-				CreatedDate,
-				RequesterId,
-				RequesterNickName,
-				RequesterFullName,
-				GroupId,
-				GroupCode,
-				GroupName,
-				VerifierId,
-				VerifierNickName,
-				VerifierFullName,
-				VerifiedDate,
-				VerifiedStatus,
-				ApproverId,
-				ApproverNickName,
-				ApproverFullName,
-				ApprovedDate,
-				ApprovedStatus,
-				ProcessedId,
-				ProcessedNickName,
-				ProcessedFullName,
-				ProcessedDate,
-				ProcessedStatus,
-				ModifiedById,
-				ModifiedByNickName,
-				ModifiedByFullName,
-				ModifiedDate,
-				ReworkCount
-			)
+				RequestId
+				,RequestType
+				,FromDate
+				,ToDate
+				,RequestedDate
+				,FromTime
+				,ToTime
+				,TotalDays
+				,IsHalfDay
+				,LeaveTypeId
+				,LeaveTypeName
+				,Remark
+				,RefNo
+				,[Status]
+				,CreatedDate
+				,RequesterId
+				,RequesterNickName
+				,RequesterFullName
+				,GroupId
+				,GroupCode
+				,GroupName
+				,VerifierId
+				,VerifierNickName
+				,VerifierFullName
+				,VerifiedDate
+				,VerifiedStatus
+				,ApproverId
+				,ApproverNickName
+				,ApproverFullName
+				,ApprovedDate
+				,ApprovedStatus
+				,ProcessedId
+				,ProcessedNickName
+				,ProcessedFullName
+				,ProcessedDate
+				,ProcessedStatus
+				,ModifiedById
+				,ModifiedByNickName
+				,ModifiedByFullName
+				,ModifiedDate
+				,ReworkCount
+				)
 			SELECT r.RequestId
 				,r.RequestType
 				,lr.FromDate
@@ -434,7 +441,7 @@ BEGIN
 				,e.FullName
 				,g.GroupId
 				,g.Code
-				,g.Name
+				,g.NAME
 				,ap_V.empID AS VerifierId
 				,ap_V.NickName
 				,ap_V.FullName
@@ -470,60 +477,70 @@ BEGIN
 	ELSE IF @RequestType IN (5)
 	BEGIN
 		DECLARE @IsOneDay BIT
-		SELECT @IsOneDay = CASE WHEN DATEDIFF(d, FromDate, ToDate) = 0 THEN 1 ELSE 0 END
+
+		SELECT @IsOneDay = CASE 
+				WHEN DATEDIFF(d, FromDate, ToDate) = 0 THEN 1
+				ELSE 0
+				END
 		FROM dbo.ChangeShiftRequest WITH (NOLOCK)
 		WHERE RequestId = @RequestId
 
-		IF(@IsOneDay = 1)
+		IF (@IsOneDay = 1)
 		BEGIN
 			INSERT INTO @Request (
-				RequestId,
-				RequestType,
-				FromDate,
-				ToDate,
-				FromShiftId,
-				FromShiftName,
-				ToShiftId,
-				ToShiftName,
-				RequestedDate,
-				Remark,
-				[Status],
-				CreatedDate,
-				RequesterId,
-				RequesterNickName,
-				RequesterFullName,
-				GroupId,
-				GroupCode,
-				GroupName,
-				VerifierId,
-				VerifierNickName,
-				VerifierFullName,
-				VerifiedDate,
-				VerifiedStatus,
-				ApproverId,
-				ApproverNickName,
-				ApproverFullName,
-				ApprovedDate,
-				ApprovedStatus,
-				ProcessedId,
-				ProcessedNickName,
-				ProcessedFullName,
-				ProcessedDate,
-				ProcessedStatus,
-				ModifiedById,
-				ModifiedByNickName,
-				ModifiedByFullName,
-				ModifiedDate,
-				ReworkCount
-			)
+				RequestId
+				,RequestType
+				,FromDate
+				,ToDate
+				,FromShiftId
+				,FromShiftName
+				,ToShiftId
+				,ToShiftName
+				,RequestedDate
+				,Remark
+				,[Status]
+				,CreatedDate
+				,RequesterId
+				,RequesterNickName
+				,RequesterFullName
+				,GroupId
+				,GroupCode
+				,GroupName
+				,VerifierId
+				,VerifierNickName
+				,VerifierFullName
+				,VerifiedDate
+				,VerifiedStatus
+				,ApproverId
+				,ApproverNickName
+				,ApproverFullName
+				,ApprovedDate
+				,ApprovedStatus
+				,ProcessedId
+				,ProcessedNickName
+				,ProcessedFullName
+				,ProcessedDate
+				,ProcessedStatus
+				,ModifiedById
+				,ModifiedByNickName
+				,ModifiedByFullName
+				,ModifiedDate
+				,ReworkCount
+				)
 			SELECT r.RequestId
 				,r.RequestType
 				,cs.FromDate
 				,cs.ToDate
 				,fs.ShiftID AS FromShiftId
-				,CASE WHEN fs.ShiftID IS NULL THEN 'OFF' ELSE fs.Name END
+				,CASE 
+					WHEN fs.ShiftID IS NULL THEN 'OFF'
+					ELSE fs.NAME
+					END
 				,ts.ShiftID AS ToShiftId
-				,CASE WHEN ts.ShiftID IS NULL THEN 'OFF' ELSE ts.Name END
+				,CASE 
+					WHEN ts.ShiftID IS NULL THEN 'OFF'
+					ELSE ts.NAME
+					END
 				,cs.FromDate AS RequestedDate
 				,r.Remark
 				,r.currentstatus
@@ -533,14 +550,14 @@ BEGIN
 				,e.FullName
 				,g.GroupId
 				,g.Code
-				,g.Name
+				,g.NAME
 				,ap_V.empID AS VerifierId
 				,ap_V.NickName
 				,ap_V.FullName
 				,r.VerifiedDate
 				,r.VerifiedStatus
 				,ap_A.empID AS ApproverId
-				,ap_A.NickName 
+				,ap_A.NickName
 				,ap_A.FullName
 				,r.ApprovedDate
 				,r.ApprovedStatus
@@ -571,41 +588,41 @@ BEGIN
 		ELSE
 		BEGIN
 			INSERT INTO @Request (
-				RequestId,
-				RequestType,
-				FromDate,
-				ToDate,
-				RequestedDate,
-				Remark,
-				[Status],
-				CreatedDate,
-				RequesterId,
-				RequesterNickName,
-				RequesterFullName,
-				GroupId,
-				GroupCode,
-				GroupName,
-				VerifierId,
-				VerifierNickName,
-				VerifierFullName,
-				VerifiedDate,
-				VerifiedStatus,
-				ApproverId,
-				ApproverNickName,
-				ApproverFullName,
-				ApprovedDate,
-				ApprovedStatus,
-				ProcessedId,
-				ProcessedNickName,
-				ProcessedFullName,
-				ProcessedDate,
-				ProcessedStatus,
-				ModifiedById,
-				ModifiedByNickName,
-				ModifiedByFullName,
-				ModifiedDate,
-				ReworkCount
-			)
+				RequestId
+				,RequestType
+				,FromDate
+				,ToDate
+				,RequestedDate
+				,Remark
+				,[Status]
+				,CreatedDate
+				,RequesterId
+				,RequesterNickName
+				,RequesterFullName
+				,GroupId
+				,GroupCode
+				,GroupName
+				,VerifierId
+				,VerifierNickName
+				,VerifierFullName
+				,VerifiedDate
+				,VerifiedStatus
+				,ApproverId
+				,ApproverNickName
+				,ApproverFullName
+				,ApprovedDate
+				,ApprovedStatus
+				,ProcessedId
+				,ProcessedNickName
+				,ProcessedFullName
+				,ProcessedDate
+				,ProcessedStatus
+				,ModifiedById
+				,ModifiedByNickName
+				,ModifiedByFullName
+				,ModifiedDate
+				,ReworkCount
+				)
 			SELECT r.RequestId
 				,r.RequestType
 				,cs.FromDate
@@ -619,14 +636,14 @@ BEGIN
 				,e.FullName
 				,g.GroupId
 				,g.Code
-				,g.Name
+				,g.NAME
 				,ap_V.empID AS VerifierId
 				,ap_V.NickName
 				,ap_V.FullName
 				,r.VerifiedDate
 				,r.VerifiedStatus
 				,ap_A.empID AS ApproverId
-				,ap_A.NickName 
+				,ap_A.NickName
 				,ap_A.FullName
 				,r.ApprovedDate
 				,r.ApprovedStatus
@@ -655,54 +672,54 @@ BEGIN
 	ELSE IF @RequestType IN (7)
 	BEGIN
 		INSERT INTO @Request (
-			RequestId,
-			RequestType,
-			FromShiftId,
-			FromShiftName,
-			FromDate,
-			ToDate,
-			RequestedDate,
-			IsHalfDay,
-			FromTime,
-			ToTime,
-			Remark,
-			RefNo,
-			[Status],
-			CreatedDate,
-			RequesterId,
-			RequesterNickName,
-			RequesterFullName,
-			GroupId,
-			GroupCode,
-			GroupName,
-			VerifierId,
-			VerifierNickName,
-			VerifierFullName,
-			VerifiedDate,
-			VerifiedStatus,
-			ApproverId,
-			ApproverNickName,
-			ApproverFullName,
-			ApprovedDate,
-			ApprovedStatus,
-			ProcessedId,
-			ProcessedNickName,
-			ProcessedFullName,
-			ProcessedDate,
-			ProcessedStatus,
-			ModifiedById,
-			ModifiedByNickName,
-			ModifiedByFullName,
-			ModifiedDate,
-			ReworkCount
-		)
+			RequestId
+			,RequestType
+			,FromShiftId
+			,FromShiftName
+			,FromDate
+			,ToDate
+			,RequestedDate
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,Remark
+			,RefNo
+			,[Status]
+			,CreatedDate
+			,RequesterId
+			,RequesterNickName
+			,RequesterFullName
+			,GroupId
+			,GroupCode
+			,GroupName
+			,VerifierId
+			,VerifierNickName
+			,VerifierFullName
+			,VerifiedDate
+			,VerifiedStatus
+			,ApproverId
+			,ApproverNickName
+			,ApproverFullName
+			,ApprovedDate
+			,ApprovedStatus
+			,ProcessedId
+			,ProcessedNickName
+			,ProcessedFullName
+			,ProcessedDate
+			,ProcessedStatus
+			,ModifiedById
+			,ModifiedByNickName
+			,ModifiedByFullName
+			,ModifiedDate
+			,ReworkCount
+			)
 		SELECT r.RequestId
 			,RequestType
 			,s.shiftid AS FromShiftId
 			,s.NAME
-			,kiv.FromDate
-			,kiv.ToDate
-			,kiv.FromDate AS RequestedDate
+			,kiv.OnDate
+			,kiv.OnDate
+			,kiv.OnDate AS RequestedDate
 			,kiv.IsHalfDay
 			,kiv.[FromTime]
 			,kiv.[ToTime]
@@ -715,7 +732,7 @@ BEGIN
 			,e.FullName
 			,g.GroupId
 			,g.Code
-			,g.Name
+			,g.NAME
 			,ap_V.EmpId AS VerifierId
 			,ap_V.NickName
 			,ap_V.FullName
@@ -752,54 +769,89 @@ BEGIN
 		ORDER BY r.CreatedDate DESC
 	END
 
-	SELECT RequestId 
+	CREATE TABLE #GeneralLeaveDetail (
+		RequestId BIGINT
+		,LeaveCountDetails NVARCHAR(MAX)
+		)
+
+	INSERT INTO #GeneralLeaveDetail (
+		RequestId
+		,LeaveCountDetails
+		)
+	SELECT DISTINCT rd.RequestId
+		,STUFF((
+				SELECT ', ' + (
+						CAST(SUM(CASE 
+									WHEN rd1.IsHalfDay = 0 THEN 1
+									ELSE 0.5
+									END) AS NVARCHAR(100)) + ' days ' + lt1.Code
+						)
+				FROM dbo.LeaveRequestDetail AS rd1 WITH (NOLOCK)
+					INNER JOIN dbo.LeaveType AS lt1 WITH (NOLOCK) ON lt1.LeaveTypeId = rd1.LeaveType
+				WHERE rd1.RequestId = rd.RequestId
+					AND rd1.LeaveType <> 0
+				GROUP BY rd1.RequestId
+					,rd1.LeaveType
+					,lt1.Code
+				FOR XML PATH('')
+				), 1, 2, '') AS LeaveCountDetails
+	FROM dbo.LeaveRequest AS r WITH (NOLOCK)
+		INNER JOIN dbo.LeaveRequestDetail AS rd WITH (NOLOCK) ON r.RequestId = rd.RequestId
+		INNER JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = rd.LeaveType
+	WHERE r.RequestId = @RequestId
+
+	SELECT r.RequestId
 		,RequestType
-		,[Status] 
-		,FromDate 
-		,ToDate 
-		,TotalDays 
-		,IsHalfDay 
-		,FromTime 
-		,ToTime 
-		,LeaveTypeId 
-		,LeaveTypeName 
+		,[Status]
+		,FromDate
+		,ToDate
+		,TotalDays
+		,IsHalfDay
+		,FromTime
+		,ToTime
+		,LeaveTypeId
+		,LeaveTypeName
 		,Remark
 		,TotalDaysRequestInMonth
-		,RefNo 
+		,RefNo
 		,CreatedDate
 		,RequesterId
 		,RequesterNickName
 		,RequesterFullName
 		,GroupId
-		,GroupCode 
-		,GroupName 
-		,ApprovedDate 
-		,VerifiedDate 
-		,ProcessedDate 
-		,VerifiedStatus 
-		,ApprovedStatus 
-		,ProcessedStatus 
-		,ModifiedDate 
-		,ModifiedById 
+		,GroupCode
+		,GroupName
+		,ApprovedDate
+		,VerifiedDate
+		,ProcessedDate
+		,VerifiedStatus
+		,ApprovedStatus
+		,ProcessedStatus
+		,ModifiedDate
+		,ModifiedById
 		,ModifiedByNickName
-		,ModifiedByFullName 
-		,VerifierId 
+		,ModifiedByFullName
+		,VerifierId
 		,VerifierNickName
 		,VerifierFullName
-		,ApproverId 
-		,ApproverNickName 
+		,ApproverId
+		,ApproverNickName
 		,ApproverFullName
-		,ProcessedId 
+		,ProcessedId
 		,ProcessedNickName
-		,ProcessedFullName 
-		,FromShiftId 
+		,ProcessedFullName
+		,FromShiftId
 		,FromShiftName
-		,ToShiftId 
-		,ToShiftName 
-		,RequestedDate 
+		,ToShiftId
+		,ToShiftName
+		,RequestedDate
 		,TotalMinutes
 		,0 AS ActualInOutMins
-		,IsWarning 
+		,IsWarning
 		,ReworkCount
-	FROM @Request
+		,gdt.LeaveCountDetails
+		,e_s.AnnualLeaveBalance
+	FROM @Request AS r
+	INNER JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON r.RequesterId = e_s.EmpId
+		LEFT JOIN #GeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId
 END

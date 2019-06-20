@@ -37,13 +37,54 @@ BEGIN
 		,@FromDate
 		,@ToDate
 		)
-
-	UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
-	SET IsHoliday = 1
-		,ModifiedBy = @ModifiedBy
-		,ModifiedDate = @ModifiedDate
+	
+	UPDATE cl
+	SET cl.IsHoliday = 1
+		,cl.ModifiedBy = @ModifiedBy
+		,cl.ModifiedDate = @ModifiedDate
+	FROM dbo.EmployeeCalendar AS cl WITH (ROWLOCK, UPDLOCK)
 	WHERE WorkDate BETWEEN @FromDate
 			AND @ToDate
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = cl.EmpId
+				AND (
+					IsLocal = 1
+					OR (
+						IsLocal = 0
+						AND IsExpatUseHoliday = 1
+						)
+					)
+			)
+
+	DECLARE @WorkDate DATETIME
+	SELECT @WorkDate = CONVERT(VARCHAR(10), @FromDate, 111)
+	WHILE (DATEDIFF(d, @WorkDate, @ToDate) >= 0)
+	BEGIN 
+		INSERT INTO dbo.EmployeeCalendar(EmpId, WorkDate, IsHoliday, ModifiedDate)
+		SELECT EmpId, @WorkDate, 1, GETDATE()
+		FROM dbo.Employee AS e WITH (NOLOCK)
+		WHERE [Enabled] = 1
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = e.EmpId
+				AND (
+					IsLocal = 1
+					OR (
+						IsLocal = 0
+						AND IsExpatUseHoliday = 1
+						)
+					)
+			)
+		AND NOT EXISTS (SELECT 1 FROM dbo.EmployeeCalendar WITH (NOLOCK)
+			WHERE EmpId = e.EmpId AND WorkDate = @WorkDate
+		)
+
+		SET @WorkDate = DATEADD(d, 1, @WorkDate)
+	END
+
 
 	IF @@ERROR <> 0
 	BEGIN

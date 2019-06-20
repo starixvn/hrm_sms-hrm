@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Overtime_GetOTMonthlyOfEmpByHR]
+﻿/****** Object:  Stored Procedure dbo.Overtime_GetOTMonthlyOfEmpByHR    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.Overtime_GetOTMonthlyOfEmpByHR    Script Date: 7/19/2016 5:22:18 PM ******/
+CREATE PROCEDURE [dbo].[Overtime_GetOTMonthlyOfEmpByHR]
 	@EmpID INT,
 	@Month datetime,
 	@ErrCode int = 0 OUTPUT,

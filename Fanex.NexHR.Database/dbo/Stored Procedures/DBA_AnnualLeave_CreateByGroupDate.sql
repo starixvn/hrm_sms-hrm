@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[DBA_AnnualLeave_CreateByGroupDate] -- 2015, null, '2014-11-10'
+﻿
+CREATE PROCEDURE [dbo].[DBA_AnnualLeave_CreateByGroupDate] -- 2015, null, '2014-11-10'
 	@Year INT
 	,@EmpID INT = NULL
 	,@CreatedDate DATETIME
@@ -43,18 +44,18 @@ BEGIN
 		SELECT e.EmpId
 			,CASE 
 				WHEN es.WorkingDays = 15 THEN (
-						((DATEDIFF(YY, e.JoinedDate, @FromDate) - 1) / 5) + CASE 
+						((DATEDIFF(YY, es.CompanyDate, @FromDate) - 1) / 5) + CASE 
 						WHEN (
-								((DATEDIFF(YY, e.JoinedDate, @FromDate) - 1) % 5) = 4
-								AND MONTH(e.JoinedDate) < 7
+								((DATEDIFF(YY, es.CompanyDate, @FromDate) - 1) % 5) = 4
+								AND MONTH(es.CompanyDate) < 7
 								) THEN 1
 						ELSE 0 END
 						) / 2.0
 				ELSE (
-						((DATEDIFF(YY, e.JoinedDate, @FromDate) - 1) / 5) + CASE 
+						((DATEDIFF(YY, es.CompanyDate, @FromDate) - 1) / 5) + CASE 
 						WHEN (
-								((DATEDIFF(YY, e.JoinedDate, @FromDate) - 1) % 5) = 4
-								AND MONTH(e.JoinedDate) < 7
+								((DATEDIFF(YY, es.CompanyDate, @FromDate) - 1) % 5) = 4
+								AND MONTH(es.CompanyDate) < 7
 								) THEN 1
 						ELSE 0 END
 						)
@@ -63,7 +64,9 @@ BEGIN
 			INNER JOIN dbo.Employee e WITH (NOLOCK) ON e.EmpId = es.EmpId
 		WHERE ISNULL(isdeleted, 0) = 0
 			AND e.[Enabled] = 1
-			AND e.JoinedDate <= @FromDate
+			-- AND e.CompanyDate <= @FromDate
+			AND es.CompanyDate IS NOT NULL 
+			AND es.CompanyDate <= @FromDate
 			AND e.ResignedDate IS NULL
 			AND (
 				e.EmpId = @EmpID

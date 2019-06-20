@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.AnnualLeave_ResetMultipleTransactions    Script Date: 7/20/2016 10:18:59 AM ******/
+/****** Object:  Stored Procedure dbo.AnnualLeave_ResetMultipleTransactions    Script Date: 7/19/2016 5:22:10 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE [dbo].[AnnualLeave_ResetMultipleTransactions] @EmpValue VARCHAR(4000) = NULL
 	,@Description NVARCHAR(4000)

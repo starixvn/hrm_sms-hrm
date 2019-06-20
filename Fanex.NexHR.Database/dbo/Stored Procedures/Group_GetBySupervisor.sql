@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.Group_GetBySupervisor    Script Date: 7/20/2016 10:19:09 AM ******/
+/****** Object:  Stored Procedure dbo.Group_GetBySupervisor    Script Date: 7/19/2016 5:22:16 PM ******/
+
 CREATE PROCEDURE [dbo].[Group_GetBySupervisor] @SupervisorId INT
 AS
 /*

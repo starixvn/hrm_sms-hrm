@@ -1,4 +1,7 @@
 ﻿
+
+/****** Object:  Stored Procedure dbo.Report_LeaveSummary    Script Date: 7/20/2016 10:19:17 AM ******/
+/****** Object:  Stored Procedure dbo.Report_LeaveSummary    Script Date: 7/19/2016 5:22:20 PM ******/
 /*
 declare @empid int, @groupid int,
 		@todate datetime, @year datetime
@@ -32,25 +35,37 @@ BEGIN
 		)
 
 	CREATE TABLE #tmpOwner (OwnerId INT)
+
 	CREATE TABLE #GroupsList (GroupId INT)
+
 	CREATE TABLE #EmployeeId (EmpId INT)
 
-	IF ISNULL(@GroupIds,'') <>''
+	IF ISNULL(@GroupIds, '') <> ''
 	BEGIN
 		INSERT INTO #GroupsList (GroupId)
-		SELECT val FROM fnc_strSplit (@GroupIds, ',')
+		SELECT val
+		FROM fnc_strSplit(@GroupIds, ',')
 	END
 	ELSE
 	BEGIN
-		IF (EXISTS (SELECT 1 FROM dbo.Employee e WITH(NOLOCK) INNER JOIN dbo.EmployeeRole er WITH(NOLOCK) ON e.EmpId=er.EmployeeId WHERE EmpId = @SupervisorID AND er.RoleId IN(2,3,4,5,6,7)))
+		IF (
+				EXISTS (
+					SELECT 1
+					FROM dbo.Employee AS e WITH (NOLOCK)
+						INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
+					WHERE EmpId = @SupervisorID
+						AND er.RoleId IN (2, 3, 4, 5, 6, 7)
+					)
+				)
 		BEGIN
 			INSERT INTO #GroupsList (GroupId)
-			SELECT GroupID FROM [Group] g WITH (NOLOCK)
+			SELECT GroupID
+			FROM [Group] g WITH (NOLOCK)
 		END
-		--ELSE
-		--BEGIN
-		--	SET @EmpId = @SupervisorId
-		--END
+				--ELSE
+				--BEGIN
+				--	SET @EmpId = @SupervisorId
+				--END
 	END
 
 	IF (@empid IS NULL)
@@ -76,17 +91,20 @@ BEGIN
 	SELECT e.EmpId AS Empid
 		,SUM(ISNULL(CreditDays, 0) - ISNULL(DeductDays, 0)) AS OpenBalance
 	INTO #OpenBalance
-	FROM Employee e WITH (NOLOCK)
-		LEFT JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
+	FROM dbo.Employee AS e WITH (NOLOCK)
+		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN (
 		SELECT *
 		FROM dbo.LeaveTrans WITH (NOLOCK)
 		WHERE ISNULL(Deleted, 0) = 0
 			AND FromDate <= @fromdate
 		) t ON e.EmpId = t.Empid
-	WHERE
-		(
-			EXISTS (SELECT 1 FROM #EmployeeId WHERE e.EmpId = EmpId)
+	WHERE (
+			EXISTS (
+				SELECT 1
+				FROM #EmployeeId
+				WHERE e.EmpId = EmpId
+				)
 			)
 		AND (
 			@isLocal IS NULL
@@ -112,8 +130,8 @@ BEGIN
 				ELSE 1
 				END) AS OpenKIV
 	INTO #CreditKIV
-	FROM WorkingTimeRequest AS w WITH (NOLOCK)
-		INNER JOIN [KeepInViewRequest] AS k WITH (NOLOCK) ON w.RequestId = k.RequestId
+	FROM dbo.WorkingTimeRequest AS w WITH (NOLOCK)
+		INNER JOIN dbo.[KeepInViewRequest] AS k WITH (NOLOCK) ON w.RequestId = k.RequestId
 	WHERE w.CurrentStatus IN (4, 6)
 		AND k.FromDate BETWEEN @fromdate
 			AND @todate
@@ -131,7 +149,7 @@ BEGIN
 				WHEN rq.TotalDays > 1 THEN 1
 				ELSE rq.TotalDays END
 				) AS DECIMAL(18, 2)) AS DeductDays
-	FROM EmployeeCalendar AS cl WITH (NOLOCK)
+	FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
 		LEFT JOIN (
 		SELECT w.RequestId
 			,w.EmpId
@@ -140,13 +158,17 @@ BEGIN
 			,lv.ToDate
 			,lv.TotalDays
 			,lv.LeaveType
-		FROM LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN WorkingTimeRequest AS w WITH (NOLOCK) ON lv.RequestId = w.RequestId
+		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
+			INNER JOIN dbo.WorkingTimeRequest AS w WITH (NOLOCK) ON lv.RequestId = w.RequestId
 		WHERE lv.LeaveType = 10
 		) AS rq ON cl.EmpId = rq.EmpId
 		AND cl.WorkDate BETWEEN rq.FromDate
 			AND rq.ToDate
-	WHERE EXISTS(SELECT 1 FROM #EmployeeId WHERE EmpId = cl.EmpId)
+	WHERE EXISTS (
+			SELECT 1
+			FROM #EmployeeId
+			WHERE EmpId = cl.EmpId
+			)
 		AND cl.IsLeaveDay = 1
 		AND cl.WorkDate BETWEEN rq.FromDate
 			AND rq.ToDate
@@ -166,7 +188,7 @@ BEGIN
 				WHEN IsHalfDay = 1 THEN 0.5
 				ELSE 1 END
 				) AS DECIMAL(18, 2)) AS DeductDays
-	FROM LeaveRequestDetail AS ldt WITH (NOLOCK)
+	FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON ldt.RequestId = lv.RequestId
 		INNER JOIN dbo.WorkingTimeRequest AS w WITH (NOLOCK) ON ldt.RequestId = w.RequestId
 	WHERE ldt.LeaveType = 10
@@ -174,7 +196,11 @@ BEGIN
 		AND w.CurrentStatus IN (4, 6)
 		AND ldt.OnDate BETWEEN @fromdate
 			AND DATEADD(dd, - 1, @todate)
-		AND EXISTS(SELECT 1 FROM #EmployeeId WHERE EmpId = ldt.EmpId)
+		AND EXISTS (
+			SELECT 1
+			FROM #EmployeeId
+			WHERE EmpId = ldt.EmpId
+			)
 
 	SELECT EmpId AS EmpId
 		,SUM(DeductDays) AS DeductKIVDays
@@ -283,56 +309,27 @@ BEGIN
 				ELSE 0
 				END) DEC
 	INTO #CurrenBalace
-	FROM Employee e WITH (NOLOCK)
+	FROM dbo.Employee AS e WITH (NOLOCK)
 		LEFT JOIN (
-		SELECT lt.EmpId
-			,CASE 
-				WHEN WorkDate IS NULL THEN FromDate
-				ELSE WorkDate
-				END FromDate
-			,SUM(CASE 
-					WHEN lt.RequestId IS NULL THEN lt.DeductDays
-					ELSE (CASE 
-							WHEN EC.LeaveTypeId = 2
-								OR EC.LeaveTypeId2 = 2 THEN (CASE 
-									WHEN EC.LeaveTypeId2 IS NULL THEN EC.LeaveDay
-									ELSE (CASE 
-											WHEN (ISNULL(EC.LeaveTypeId, 0) <> ISNULL(EC.LeaveTypeId2, 0)) THEN 0.5
-											ELSE 1 END
-											) END
-									)
-							ELSE 0 END
-							)
-					END) DeductDays
-		FROM dbo.LeaveTrans lt WITH (NOLOCK)
-			LEFT JOIN EmployeeCalendar EC WITH (NOLOCK) ON lt.EmpId = EC.EmpId
-			AND ISNULL(DeductDays, 0) <> 0
-			AND DATEDIFF(D, lt.FromDate, EC.WorkDate) >= 0
-			AND DATEDIFF(D, EC.WorkDate, lt.ToDate) >= 0
-			AND EC.LeaveDay > 0
-		WHERE FromDate >= @fromdate
-			AND FromDate < @todate
-			AND ISNULL(Deleted, 0) <> 1
-		GROUP BY lt.EmpId
-			,CASE 
-				WHEN WorkDate IS NULL THEN FromDate
-				ELSE WorkDate
-				END
-		) t ON e.EmpId = t.Empid
+			SELECT EmpId, DeductDays, FromDate FROM dbo.LeaveTrans WITH (NOLOCK) WHERE YEAR(FromDate) = @year AND ISNULL(Deleted, 0) = 0) AS ded  ON e.EmpId = ded.EmpId
 		LEFT JOIN (
-		SELECT lt.EmpId
-			,SUM(CreditDays) CreditDays
-		FROM dbo.LeaveTrans lt WITH (NOLOCK)
-		WHERE FromDate >= @fromdate
-			AND FromDate < @todate
-			AND ISNULL(Deleted, 0) <> 1
-			AND CreditDays > 0
-			AND ISNULL(Deleted, 0) <> 1
-		GROUP BY lt.EmpId
+			SELECT lt.EmpId
+				,SUM(CreditDays) CreditDays
+			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
+			WHERE FromDate >= @fromdate
+				AND FromDate < @todate
+				AND ISNULL(Deleted, 0) <> 1
+				AND CreditDays > 0
+				AND ISNULL(Deleted, 0) <> 1
+			GROUP BY lt.EmpId
 		) Cred ON e.EmpId = Cred.Empid
 		LEFT JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE (
-			EXISTS (SELECT 1 FROM #EmployeeId WHERE e.EmpId = EmpId)
+			EXISTS (
+				SELECT 1
+				FROM #EmployeeId
+				WHERE e.EmpId = EmpId
+				)
 			)
 		AND (
 			@isLocal IS NULL
@@ -369,8 +366,7 @@ BEGIN
 		,(cb.Oct + ISNULL(dek.Oct, 0)) AS Oct
 		,(cb.Nov + ISNULL(dek.Nov, 0)) AS Nov
 		,(cb.[Dec] + ISNULL(dek.[Dec], 0)) AS [Dec]
-		,
-		ISNULL(CreditDays, 0) - ISNULL(cb.DeductDays, 0) AS LeaveBalance
+		,ISNULL(CreditDays, 0) - ISNULL(cb.DeductDays, 0) AS LeaveBalance
 		,ISNULL(OpenKIV, 0) - ISNULL(dek.DeductKIVDays, 0) AS KIVBalance
 		,'' AS Remark
 		,cb.EmpId
@@ -381,15 +377,15 @@ BEGIN
 		,JoinedDate
 		,ConfirmedDate
 		,g.GroupId
-		,g.NAME [Name]
-	FROM #CurrenBalace cb
-		LEFT JOIN #OpenBalance op ON OP.empid = cb.empid
+		,g.[Name]
+	FROM #CurrenBalace AS cb
+		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid
 		LEFT JOIN #CreditKIV AS crk ON cb.EmpId = crk.EmpId
 		LEFT JOIN #CurrentKIV AS dek ON cb.EmpId = dek.EmpId
-		JOIN Employee e WITH (NOLOCK) ON e.EmpId = cb.Empid
-		LEFT JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON g.GroupId = e.GroupId
-	WHERE ISNULL(e.Enabled, 0) = 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = cb.Empid
+		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = e.GroupId
+	WHERE ISNULL(e.[Enabled], 0) = 1
 		AND (
 			@isLocal IS NULL
 			OR es.IsLocal = @isLocal
@@ -411,8 +407,7 @@ BEGIN
 		,dek.Oct
 		,dek.Nov
 		,dek.[Dec]
-		,
-		ISNULL(OpenBalance, 0) AS LeaveBalance
+		,ISNULL(OpenBalance, 0) AS LeaveBalance
 		,ISNULL(OpenKIV, 0) - ISNULL(dek.DeductKIVDays, 0) AS KIVBalance
 		,'' AS Remark
 		,op.EmpId
@@ -424,17 +419,17 @@ BEGIN
 		,ConfirmedDate
 		,g.GroupId
 		,g.NAME [Name]
-	FROM #OpenBalance op
+	FROM #OpenBalance AS op
 		LEFT JOIN #CreditKIV AS kiv ON op.EmpId = kiv.EmpId
 		LEFT JOIN #CurrentKIV AS dek ON op.EmpId = dek.EmpId
-		JOIN Employee e WITH (NOLOCK) ON e.Empid = op.Empid
-		LEFT JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON g.GroupId = e.GroupId
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.Empid = op.Empid
+		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = e.GroupId
 	WHERE e.Empid NOT IN (
 			SELECT EmpID
-			FROM #CurrenBalace cb
+			FROM #CurrenBalace AS cb
 			)
-		AND ISNULL(e.Enabled, 0) = 1
+		AND ISNULL(e.[Enabled], 0) = 1
 		AND (
 			@isLocal IS NULL
 			OR es.IsLocal = @isLocal

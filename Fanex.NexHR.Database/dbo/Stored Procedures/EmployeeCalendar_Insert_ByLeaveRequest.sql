@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeCalendar_Insert_ByLeaveRequest]
+﻿/****** Object:  Stored Procedure dbo.EmployeeCalendar_Insert_ByLeaveRequest    Script Date: 7/20/2016 10:19:05 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeCalendar_Insert_ByLeaveRequest    Script Date: 7/19/2016 5:22:13 PM ******/
+CREATE PROCEDURE [dbo].[EmployeeCalendar_Insert_ByLeaveRequest]
 	@empid int,
 	@fromdate datetime, 
 	@todate datetime	,

@@ -1,7 +1,10 @@
 ﻿
+/****** Object:  Stored Procedure dbo.OverTime_ApproveSingleRequest    Script Date: 7/20/2016 10:19:13 AM ******/
+/****** Object:  Stored Procedure dbo.OverTime_ApproveSingleRequest    Script Date: 7/19/2016 5:22:18 PM ******/
+
 --DROP PROCEDURE [dbo].OverTimeRequest_ApproveDailySingleRequest
 
-CREATE PROCEDURE [dbo].OverTime_ApproveSingleRequest
+CREATE PROCEDURE [dbo].[OverTime_ApproveSingleRequest]
 	@RequestID bigint,
 	@ProcessedBy int,
 	@ProcessedDate datetime,
@@ -54,7 +57,7 @@ BEGIN
 	RETURN
 END
 
-IF (@RoleID=3 and ((@ApproverId <> @ProcessedBy and @bOnbehalf=1) or (@Status not in (2) ) AND @VerifierId <> @ApproverId) )
+IF (@RoleID=3 and ((@ApproverId <> @ProcessedBy and @bOnbehalf=1) or (@Status not in (1, 2))))
 BEGIN
 	SET @ErrCode = 102
 	IF  @Status not in (1,2,3)

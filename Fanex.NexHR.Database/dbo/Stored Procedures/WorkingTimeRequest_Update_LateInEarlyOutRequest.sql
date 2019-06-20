@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Update_LateInEarlyOutRequest    Script Date: 7/20/2016 10:19:25 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_Update_LateInEarlyOutRequest    Script Date: 7/19/2016 5:22:24 PM ******/
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_Update_LateInEarlyOutRequest] @RequestId BIGINT
 	,@EmpId INT
@@ -146,16 +148,16 @@ BEGIN
 	IF (
 			(
 				@RequestType = 3
-				AND @LateInMins > 210
+				AND @LateInMins > 60
 				)
 			OR (
 				@RequestType = 4
-				AND @EarlyOutMins > 210
+				AND @EarlyOutMins > 60
 				)
 			)
 	BEGIN
 		SET @ErrCode = 108
-		SET @ErrMsg = 'The maximun late in/early out minutes is 03h30'
+		SET @ErrMsg = 'The maximun late in/early out minutes is 60'
 
 		RETURN;
 	END

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[DBA_AnnualLeave_CreateAnnualBalance] @Year INT
+﻿
+CREATE PROCEDURE [dbo].[DBA_AnnualLeave_CreateAnnualBalance] @Year INT
 	,@EmpID INT = NULL
 	,@CreatedDate DATETIME
 	,@Description NVARCHAR(1000) = ''
@@ -71,7 +72,9 @@ BEGIN
 			) lt ON e.EmpId = lt.EmpId
 		WHERE ISNULL(isdeleted, 0) = 0
 			AND e.[Enabled] = 1
-			AND e.JoinedDate <= @FromDate
+			AND ((es.CompanyDate IS NOT NULL AND es.CompanyDate <= @FromDate)
+				OR es.IsLocal = 0
+			)
 			AND e.ResignedDate IS NULL
 			AND (
 				e.EmpId = @EmpID
@@ -118,7 +121,9 @@ BEGIN
 			) lt ON e.EmpId = lt.EmpId
 		WHERE ISNULL(isdeleted, 0) = 0
 			AND e.[Enabled] = 1
-			AND e.JoinedDate <= @FromDate
+			AND ((es.CompanyDate IS NOT NULL AND es.CompanyDate <= @FromDate)
+				OR es.IsLocal = 0
+			)
 			AND e.ResignedDate IS NULL
 			AND (
 				e.EmpId = @EmpID

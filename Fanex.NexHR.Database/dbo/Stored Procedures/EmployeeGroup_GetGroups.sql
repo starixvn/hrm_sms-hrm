@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeGroup_GetGroups]
+﻿/****** Object:  Stored Procedure dbo.EmployeeGroup_GetGroups    Script Date: 7/20/2016 10:19:06 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeGroup_GetGroups    Script Date: 7/19/2016 5:22:14 PM ******/
+CREATE PROCEDURE [dbo].[EmployeeGroup_GetGroups]
 	@groupId INT=NULL,
 	@isDeleted bit=0
 AS

@@ -1,4 +1,7 @@
 ﻿
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_SET_TmpKIVLeaveBalance    Script Date: 7/20/2016 10:19:25 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_SET_TmpKIVLeaveBalance    Script Date: 7/19/2016 5:22:23 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_SET_TmpKIVLeaveBalance] 
 	@RequestId BIGINT
 	,@EmpID INT
@@ -31,13 +34,6 @@ BEGIN
 		FROM dbo.tmpKIVLeaveBalance WITH (NOLOCK)
 		WHERE Requestid = @Requestid
 			AND [Status] = 1
-
-		IF ISNULL(@KIVLeave, 0) > 0
-		BEGIN
-			UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-			SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) + ISNULL(@KIVLeave, 0)
-			WHERE EmpId = @EmpId
-		END
 
 		DELETE
 		FROM dbo.[tmpKIVLeaveBalance]
@@ -93,9 +89,5 @@ BEGIN
 			,0
 		FROM dbo.LeaveRequest lr WITH (NOLOCK)
 		WHERE Requestid = @Requestid
-
-		UPDATE EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-		SET KeepInViewBalance = ISNULL(KeepInViewBalance, 0) - ISNULL(@KIVLeave, 0)
-		WHERE EmpId = @EmpId
 	END
 END

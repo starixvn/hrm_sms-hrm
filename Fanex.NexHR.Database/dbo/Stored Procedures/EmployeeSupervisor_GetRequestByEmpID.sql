@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetRequestByEmpID    Script Date: 7/20/2016 10:19:07 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetRequestByEmpID    Script Date: 7/19/2016 5:22:15 PM ******/
+
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetRequestByEmpID] @EmpId INT
 	,@Role TINYINT = NULL
 AS

@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
+﻿
+--[TimeRecord_Get] null, '2016-12-20', '2016-12-20'
+CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@GroupIds VARCHAR(MAX) = ''
@@ -6,7 +8,7 @@
 	,@PageIndex INT = NULL
 	,@ItemsPerPage INT = NULL
 	,@TotalItem INT = NULL OUT
-AS
+WITH RECOMPILE AS 
 /*
 Created: Quinn.Vo@2014-01-24
 Task: Get Time Record
@@ -18,14 +20,23 @@ Param's Explanation:
 
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT OFF;
+	set arithabort on;
+set concat_null_yields_null on;
+set ansi_nulls on;
+set cursor_close_on_commit off;
+set ansi_null_dflt_on on;
+set implicit_transactions off;
+set ansi_padding on;
+set ansi_warnings on;
+set quoted_identifier on;
 
-	IF OBJECT_ID('tempdb..#TimeRecord') IS NOT NULL
+	IF OBJECT_ID('tempdb..#tblTimeRecord') IS NOT NULL
 	BEGIN
-		DROP TABLE #TimeRecord
+		DROP TABLE #tblTimeRecord
 	END
 
-	CREATE TABLE #TimeRecord (
+	CREATE TABLE #tblTimeRecord (
 		RecordTimeId INT
 		,RecordTime DATETIME
 		,InOutType TINYINT
@@ -44,7 +55,7 @@ BEGIN
 	SELECT val
 	FROM fnc_strSplit(@GroupIds, ',')
 
-	INSERT INTO #TimeRecord
+	INSERT INTO #tblTimeRecord
 	SELECT t.[Id]
 		,t.RecordTime
 		,t.InOutType
@@ -82,24 +93,42 @@ BEGIN
 	IF @PageIndex IS NOT NULL
 		AND @ItemsPerPage IS NOT NULL
 	BEGIN
-		SELECT t.*
-		FROM #TimeRecord AS t
+		SELECT RecordTimeId
+		,RecordTime
+		,InOutType
+		,EmpId 
+		,Code 
+		,NickName 
+		,FullName 
+		,GroupId 
+		,GroupCode
+		,[Name]
+		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
 
 		FETCH NEXT @ItemsPerPage ROWS ONLY;
 	END
 	ELSE
 	BEGIN
-		SELECT t.*
-		FROM #TimeRecord AS t
+		SELECT RecordTimeId
+		,RecordTime
+		,InOutType
+		,EmpId 
+		,Code 
+		,NickName 
+		,FullName 
+		,GroupId 
+		,GroupCode
+		,[Name]
+		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC
 	END
 
-	SELECT @TotalItem = COUNT(*)
-	FROM #TimeRecord
+	SELECT @TotalItem = COUNT(1)
+	FROM #tblTimeRecord
 
-	IF OBJECT_ID('tempdb..#TimeRecord') IS NOT NULL
+	IF OBJECT_ID('tempdb..#tblTimeRecord') IS NOT NULL
 	BEGIN
-		DROP TABLE #TimeRecord
+		DROP TABLE #tblTimeRecord
 	END
 END

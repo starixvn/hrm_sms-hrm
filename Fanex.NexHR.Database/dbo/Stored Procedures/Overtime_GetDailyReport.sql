@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] @EmpID INT
+﻿/****** Object:  Stored Procedure dbo.Overtime_GetDailyReport    Script Date: 7/20/2016 10:19:14 AM ******/
+/****** Object:  Stored Procedure dbo.Overtime_GetDailyReport    Script Date: 7/19/2016 5:22:18 PM ******/
+
+CREATE PROCEDURE [dbo].[Overtime_GetDailyReport] @EmpID INT
 	,@Month DATETIME
 	,@IsNormal BIT = 0
 AS
@@ -58,7 +61,7 @@ BEGIN
 			SET @tempDate = DATEADD(DD, 1, @tempDate)
 		END
 	END
-	
+
 	SELECT CAST(0 AS BIGINT) RequestId
 		,@Month [Month]
 		,CAST(0 AS DECIMAL(18, 2)) AS NormalHours

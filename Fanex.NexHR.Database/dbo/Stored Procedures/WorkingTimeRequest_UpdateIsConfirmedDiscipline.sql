@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_UpdateIsConfirmedDiscipline]
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline    Script Date: 7/20/2016 10:19:26 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_UpdateIsConfirmedDiscipline    Script Date: 7/19/2016 5:22:24 PM ******/
+
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_UpdateIsConfirmedDiscipline]
 AS
 /*
 Created: 20160719@Tim.Trinh

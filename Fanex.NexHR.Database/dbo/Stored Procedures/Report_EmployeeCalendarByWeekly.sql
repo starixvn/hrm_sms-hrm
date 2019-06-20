@@ -1,7 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @EmpId INT = NULL
+﻿
+CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
 	,@fromtime DATETIME
 	,@totime DATETIME
-	,@GroupIds VARCHAR(1000) = ''
+	,@groupids VARCHAR(1000) = ''
 	,@JobTitleId VARCHAR(1000) = ''
 	,@isLocal BIT = NULL
 	,@ErrCode INT = 0 OUTPUT
@@ -49,31 +50,31 @@ BEGIN
 	FROM dbo.LeaveType(NOLOCK)
 	WHERE IsHoliday = 1
 
-	CREATE TABLE #Group (GroupId INT)
+	CREATE TABLE #GroupsList (GroupId INT)
 
-	SET @GroupIds = ISNULL(@GroupIds, '')
+	SET @groupids = ISNULL(@groupids, '')
 
-	IF @GroupIds <> ''
-		INSERT INTO #Group (GroupId)
+	IF @groupids <> ''
+		INSERT INTO #GroupsList (GroupId)
 		SELECT DISTINCT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@groupids, ',')
 	ELSE
 	BEGIN
-		INSERT INTO #Group (GroupId)
+		INSERT INTO #GroupsList (GroupId)
 		SELECT g.GroupId
 		FROM dbo.[Group] AS g WITH (NOLOCK)
 		WHERE ISNULL(g.IsDeleted, 0) = 0
 	END
 
-	CREATE TABLE #JobTitle (JobTitleId INT)
+	CREATE TABLE #JobTitleList (JobTitleId INT)
 
 	IF ISNULL(@JobTitleId, '') <> ''
-		INSERT INTO #JobTitle (JobTitleId)
+		INSERT INTO #JobTitleList (JobTitleId)
 		SELECT DISTINCT val
 		FROM dbo.fnc_strSplit(@JobTitleId, ',')
 	ELSE
 	BEGIN
-		INSERT INTO #JobTitle (JobTitleId)
+		INSERT INTO #JobTitleList (JobTitleId)
 		SELECT DISTINCT lk.Id
 		FROM dbo.LookupData AS lk WITH (NOLOCK)
 		WHERE lk.LookupId = 1
@@ -142,27 +143,27 @@ BEGIN
 
 	SELECT e.EmpId
 		,DATEPART(dw, tmp.WorkDate) [Weekday]
-		,(CASE 
-			WHEN isLeaveDay = 1 THEN lv.code + (CASE 
+		,CASE 
+			WHEN isLeaveDay = 1 AND c.LeaveTypeId <> 0  THEN lv.code + CASE 
 					WHEN lv2.LeaveTypeId IS NOT NULL THEN '/' + lv2.code
 					WHEN c.LeaveDay = 1 THEN ''
 					WHEN c.LeaveDay = 0.5 THEN '½'
-					ELSE '' END
-					)
+					ELSE ''
+					END
 			WHEN s.code IS NOT NULL THEN s.code
 			WHEN c.isHoliday = 1 THEN @HolidayLeaveTypeCode
 			WHEN esum.islocal = 1
 				AND hld.HolidayName IS NOT NULL THEN @HolidayLeaveTypeCode
-			WHEN isOffday = 1 THEN 'OFF' END
-			) AS Code
+			WHEN isOffday = 1 THEN 'OFF'
+			END AS Code
 		,isOffday
-		,(CASE 
+		,CASE 
 			WHEN c.IsHoliday IS NOT NULL THEN c.IsHoliday
 			WHEN esum.islocal = 1
 				AND hld.HolidayName IS NOT NULL THEN 1
-			ELSE 0 END
-			) AS IsHoliday
-		,lk.[Name] AS [Positions]
+			ELSE 0
+			END IsHoliday
+		,lk.NAME [Positions]
 	INTO #CalendarWeekLy
 	FROM dbo.Employee e WITH (NOLOCK)
 		INNER JOIN #Calendar tmp WITH (NOLOCK) ON e.[Enabled] = tmp.[Enabled]
@@ -172,7 +173,7 @@ BEGIN
 		LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate = tmp.WorkDate
 		AND e.empid = c.empid
 		AND c.IsPublic = 1
-		LEFT JOIN dbo.LeaveType lv WITH (NOLOCK) ON lv.LeaveTypeId = c.LeaveTypeId
+		LEFT JOIN dbo.LeaveType lv WITH (NOLOCK) ON lv.LeaveTypeId = c.LeaveTypeId 
 		LEFT JOIN dbo.LeaveType lv2 WITH (NOLOCK) ON lv2.LeaveTypeId = c.LeaveTypeId2
 		LEFT JOIN dbo.Shift s WITH (NOLOCK) ON s.shiftid = c.shiftid
 		LEFT JOIN dbo.EmployeeSummary esum WITH (NOLOCK) ON esum.EmpId = e.EmpId
@@ -189,32 +190,35 @@ BEGIN
 			)
 		LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON g.groupid = e.groupid
 	WHERE (
-			@EmpId IS NULL
-			OR e.empid = @EmpId
+			@empId IS NULL
+			OR e.empid = @empId
 			)
 		AND (
 			@JobTitleId = ''
 			OR e.JobTitleId IN (
 				SELECT JobTitleId
-				FROM #JobTitle
+				FROM #JobTitleList
 				)
 			)
 		AND (
-			@GroupIds = ''
+			@groupids = ''
 			OR e.GroupId IN (
 				SELECT GroupId
-				FROM #Group
+				FROM #GroupsList
 				)
 			)
 
 	DECLARE @query NVARCHAR(4000)
 
 	SET @cols = 'EmpId, [2],[3],[4],[5],[6],[7],[1]'
-	SET @query = 'INSERT INTO #tmpCalendar (' + @cols + ')
+	SET @query = '
+	INSERT INTO #tmpCalendar (' + @cols + ')
 	SELECT ' + @cols + ' FROM (
-		SELECT EmpId, Weekday, Code FROM #CalendarWeekLy WITH (NOLOCK)	
-	) AS ea
-	PIVOT (MAX(Code) FOR [Weekday] IN ([2],[3],[4],[5],[6],[7],[1])' + ') AS pvt'
+		SELECT EmpId,Weekday,Code FROM #CalendarWeekLy	 WITH (NOLOCK)	
+	) ea
+	PIVOT
+	(
+		MAX(Code) FOR [Weekday] IN ([2],[3],[4],[5],[6],[7],[1])' + ') AS pvt'
 
 	IF @isDebug = 1
 		PRINT @query
@@ -223,8 +227,8 @@ BEGIN
 
 	SET @query = '
 	UPDATE tmp
-	SET ' + @updtbl + '
-	FROM #tmpCalendar tmp
+		SET ' + @updtbl + '
+	FROM #tmpCalendar  tmp
 		INNER JOIN (
 		SELECT ' + @cols + ' FROM ( 
 			SELECT c.EmpId, c.[Weekday], 
@@ -241,9 +245,11 @@ BEGIN
 					ELSE ''''
 					END AS Color
 			 FROM #CalendarWeekLy c LEFT JOIN  Shift s WITH(NOLOCK) on s.Code= c.Code
-				LEFT JOIN  LeaveType lt WITH(NOLOCK) on lt.Code= c.Code
+					LEFT JOIN  LeaveType lt WITH(NOLOCK) on lt.Code= c.Code
 		) ea
-		PIVOT (MAX(Color) FOR [Weekday] IN ([2],[3],[4],[5],[6],[7],[1])' + ') AS pvt ) tblC
+		PIVOT
+		(
+			MAX(Color) FOR [Weekday] IN ([2],[3],[4],[5],[6],[7],[1])' + ') AS pvt ) tblC
 		ON tblC.EmpId = tmp.EmpId 
 		'
 
@@ -319,7 +325,7 @@ BEGIN
 
 	DROP TABLE #tmpCalendar
 
-	DROP TABLE #Group
+	DROP TABLE #GroupsList
 
 	SELECT @ErrCode = 0
 END

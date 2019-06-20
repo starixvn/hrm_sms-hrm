@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest] @RequestId BIGINT
+﻿
+
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_RejectRequest    Script Date: 7/19/2016 5:22:22 PM ******/
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = 'No@Comment!'

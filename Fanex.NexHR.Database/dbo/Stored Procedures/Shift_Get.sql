@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.Shift_Get    Script Date: 7/20/2016 10:19:18 AM ******/
+/****** Object:  Stored Procedure dbo.Shift_Get    Script Date: 7/19/2016 5:22:20 PM ******/
+
 CREATE PROCEDURE [dbo].[Shift_Get] 
 AS
 /*

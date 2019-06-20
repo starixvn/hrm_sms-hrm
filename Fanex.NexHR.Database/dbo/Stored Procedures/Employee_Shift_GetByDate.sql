@@ -1,5 +1,4 @@
 ﻿
--- [dbo].[Employee_Shift_GetByDate] '2015-10-19'
 CREATE PROCEDURE [dbo].[Employee_Shift_GetByDate] @WorkDate DATETIME
 	,@ShiftId INT = NULL
 	,@EmployeeId INT = NULL
@@ -95,18 +94,44 @@ BEGIN
 		,sh.NAME
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN #tmpEmployee AS ee ON e.EmpId = ee.EmpId
-		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON e.EmpId = ec.EmpId
+		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON e.EmpId = ec.EmpId AND DATEDIFF(DD, ec.WorkDate, @WorkDate) = 0
 		INNER JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON ec.ShiftId = sh.ShiftID
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	WHERE DATEDIFF(DD, ec.WorkDate, @WorkDate) = 0
 		AND ISNULL(ec.ShiftId, 0) <> 0
 		AND ISNULL(ec.LeaveDay, 0) <> 1
+		--AND e.EmpId = 421
 		AND (
 			@ShiftId IS NULL
 			OR ISNULL(ec.ShiftId, 0) = @ShiftId
 			)
 	ORDER BY e.GroupId
 		,e.EmpId
+
+	--SELECT ec.WorkDate
+	--	,e.EmpId
+	--	,e.Code
+	--	,e.NickName
+	--	,e.FullName
+	--	,g.GroupId
+	--	,g.Code
+	--	,g.NAME
+	--	,sh.ShiftID
+	--	,sh.NAME
+	--FROM dbo.Employee AS e WITH (NOLOCK)
+	--	INNER JOIN #tmpEmployee AS ee ON e.EmpId = ee.EmpId
+	--	INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON e.EmpId = ec.EmpId AND DATEDIFF(DD, ec.WorkDate, @WorkDate) = 0
+	--	INNER JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON ec.ShiftId = sh.ShiftID
+	--	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+	--WHERE DATEDIFF(DD, ec.WorkDate, @WorkDate) = 0
+	--	AND ISNULL(ec.ShiftId, 0) <> 0
+	--	AND ISNULL(ec.LeaveDay, 0) <> 1
+	--	AND (
+	--		@ShiftId IS NULL
+	--		OR ISNULL(ec.ShiftId, 0) = @ShiftId
+	--		)
+	--ORDER BY e.GroupId
+	--	,e.EmpId
 
 	DROP TABLE #tmpEmployee
 

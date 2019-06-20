@@ -1,4 +1,6 @@
-﻿-- [EmployeeAttendance_GetByType] '2015-10-01', '2015-10-01',337, @type = 0
+﻿/****** Object:  Stored Procedure dbo.EmployeeAttendance_GetByType    Script Date: 7/20/2016 10:19:04 AM ******/
+/****** Object:  Stored Procedure dbo.EmployeeAttendance_GetByType    Script Date: 7/19/2016 5:22:13 PM ******/
+
 CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType] @fromtime DATETIME
 	,@totime DATETIME
 	,@empid INT = NULL
@@ -473,13 +475,16 @@ BEGIN
 		,T.isOffday
 		,(CASE 
 			WHEN (
-					od.EmpId IS NOT NULL
-					OR AttendanceDate1 IS NOT NULL
-					AND isMissingCheckin = 1
-					OR AttendanceDate1 IS NOT NULL
-					AND isMissingCheckOut = 1
-					AND CONVERT(NVARCHAR(20), T.AttendanceDate1, 111) < CONVERT(NVARCHAR(20), GETDATE(), 111)
-					) THEN 1
+					(od.EmpId IS NOT NULL
+						OR 
+							(AttendanceDate1 IS NOT NULL
+							AND isMissingCheckin = 1
+							)
+						OR (AttendanceDate1 IS NOT NULL
+							AND isMissingCheckOut = 1)
+					)
+				AND CONVERT(NVARCHAR(20), T.AttendanceDate1, 111) < CONVERT(NVARCHAR(20), GETDATE(), 111)
+				) THEN 1
 			ELSE 0 END
 			) AS IsWarning
 		,T.IsOvertime
@@ -536,16 +541,19 @@ BEGIN
 					) + (CASE 
 					WHEN isNotWork = 1
 						AND r.LeaveType IS NULL THEN ', Absent'
-					ELSE (CASE 
-							WHEN lv.NAME IS NULL
-								OR r.LeaveTypeId = @LeaveTypeDefaultId THEN ''
-							ELSE ', ' + lv.NAME + (CASE 
-									WHEN lv2.NAME IS NULL THEN ''
-									ELSE ' & ' + lv2.NAME END
-									) + (CASE 
-									WHEN LeaveDay = 0.5 THEN ' (Half day)'
-									ELSE '' END
-									) END
+					ELSE (
+						(CASE 
+						WHEN lv.NAME IS NULL
+							OR r.LeaveTypeId = @LeaveTypeDefaultId THEN ''
+						ELSE ', ' + lv.NAME + (CASE 
+								WHEN lv2.NAME IS NULL THEN ''
+								ELSE ' & ' + lv2.NAME END
+								) + (CASE 
+								WHEN LeaveDay = 0.5 THEN ' (Half day)'
+								ELSE '' END
+								) END
+							)
+							+ CASE WHEN LeaveDay = 0.5 AND isNotWork = 1 THEN ', Absent' ELSE '' END
 							) END
 					), 1, 2, ''), CASE 
 				WHEN AttendanceDate1 IS NULL THEN 'No Data'
@@ -655,7 +663,7 @@ BEGIN
 					)
 				OR (empId.EmpId = @empId)
 				)
-			LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON empId.EmpId = e.EmpId
+			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empId.EmpId = e.EmpId
 			LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
 			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON CalendarDF.AttendanceDate = a.AttendanceDate
 			AND a.empid = e.empid
@@ -678,7 +686,7 @@ BEGIN
 				)
 			LEFT JOIN dbo.[Shift] AS s_CrossDay WITH (NOLOCK) ON s_CrossDay.ShiftId = c_CrossDay.ShiftId
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.groupid = g.groupid
-			LEFT JOIN #Group AS gId ON g.GroupId = gId.GroupId
+			INNER JOIN #Group AS gId ON g.GroupId = gId.GroupId
 			LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
 			AND a.EmpId = ot.EmpId
 		WHERE @isLocal IS NULL

@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.AnnualLeave_DeleteTransaction    Script Date: 7/20/2016 10:18:58 AM ******/
+/****** Object:  Stored Procedure dbo.AnnualLeave_DeleteTransaction    Script Date: 7/19/2016 5:22:10 PM ******/
+
 CREATE PROCEDURE [dbo].[AnnualLeave_DeleteTransaction] @LeaveTransId INT
 	,@ModifiedDate DATETIME
 	,@ModifiedBy INT
@@ -7,7 +9,7 @@ CREATE PROCEDURE [dbo].[AnnualLeave_DeleteTransaction] @LeaveTransId INT
 AS
 /*
 Created: Tom.Vo@2013.10.29
-Task: soft delete leave transaction and calculate annual leave balance for employee a
+Task: soft delete leave transaction and calculate annual leave balance for employee
 DB: HRM
 Original: 
 

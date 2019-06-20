@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Report_OvertimeDetail] @fromDate DATETIME
+﻿/****** Object:  Stored Procedure dbo.Report_OvertimeDetail    Script Date: 7/20/2016 10:19:17 AM ******/
+/****** Object:  Stored Procedure dbo.Report_OvertimeDetail    Script Date: 7/19/2016 5:22:20 PM ******/
+
+CREATE PROCEDURE [dbo].[Report_OvertimeDetail] @fromDate DATETIME
 	,@toDate DATETIME
 	,@EmpID INT = NULL
 	,@JobTitleId VARCHAR(1000) = ''

@@ -1,11 +1,12 @@
-﻿CREATE PROCEDURE [dbo].[Overtime_SET_OTRequest] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[Overtime_SET_OTRequest] @EmpId INT
 	,@RequestType SMALLINT = 8
 	,@Remark VARCHAR(8000) = ''
 	,@ProcessedBy INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
 	,@HRId INT = NULL
-	,@ListDetail VARCHAR(8000)
+	,@ListDetail NVARCHAR(MAX)
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -80,7 +81,7 @@ BEGIN
 		,NormalHours DECIMAL(18, 2)
 		,OffHours DECIMAL(18, 2)
 		,PublicHours DECIMAL(18, 2)
-		,Remark VARCHAR(1000)
+		,Remark NVARCHAR(1000)
 		,IsOffDay BIT
 		,TotalShiftHours DECIMAL(18, 2)
 		,TotalWorkHours DECIMAL(18, 2)
@@ -111,8 +112,8 @@ BEGIN
 			,NormalHours
 			,OffHours
 			,PublicHours
-			,Remark
-		FROM OPENXML(@DocHandler, '/Requests/Request', 1) WITH (OnDate DATETIME, ShiftID INT, TimeIn NVARCHAR(100), [TimeOut] NVARCHAR(100), TotalHours DECIMAL(18, 2), NormalHours DECIMAL(18, 2), OffHours DECIMAL(18, 2), PublicHours DECIMAL(18, 2), Remark VARCHAR(1000)) AS Data
+			,REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Remark, '&amp;', '&'), '&#39;', ''''), '&lt;', '<'), '&gt;', '>'), '&quot;', '"')
+		FROM OPENXML(@DocHandler, '/Requests/Request', 1) WITH (OnDate DATETIME, ShiftID INT, TimeIn NVARCHAR(100), [TimeOut] NVARCHAR(100), TotalHours DECIMAL(18, 2), NormalHours DECIMAL(18, 2), OffHours DECIMAL(18, 2), PublicHours DECIMAL(18, 2), Remark NVARCHAR(1000)) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler
 	END TRY
@@ -194,6 +195,8 @@ BEGIN
 		END
 	END
 
+	
+
 	UPDATE cl
 	SET cl.TotalShiftHours = ISNULL(s.TotalHours, 0)
 		,cl.TotalWorkHours = ISNULL(at.TotalWorkHours, 0)
@@ -251,6 +254,20 @@ BEGIN
 
 		RETURN;
 	END
+
+	IF(NOT EXISTS (SELECT 1 FROM #Calendar WHERE ISNULL(NormalHours, 0) <> 0 OR ISNULL(OffHours, 0) <> 0 OR ISNULL(PublicHours, 0) <> 0))
+	BEGIN
+		
+		DELETE dbo.[OTDailyRequest] WITH (ROWLOCK, UPDLOCK)
+		WHERE EmpId = @EmpId
+			AND [RequestId] = @RequestId
+
+		DELETE dbo.[OTMonthlyRequest] WITH (ROWLOCK, UPDLOCK)
+		WHERE [RequestId] = @RequestId
+
+	END
+	ELSE
+	BEGIN
 
 	IF @RequestId IS NULL
 	BEGIN
@@ -381,7 +398,7 @@ BEGIN
 			OR [OffHours] <> 0
 			OR [PublicHours] <> 0
 			)
-
+	END
 	IF @@ERROR <> 0
 	BEGIN
 		DELETE dbo.[OTDailyRequest]

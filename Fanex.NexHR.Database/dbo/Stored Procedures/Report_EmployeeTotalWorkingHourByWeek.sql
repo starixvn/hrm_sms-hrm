@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByWeek] @FromDate DATETIME
+﻿/****** Object:  Stored Procedure dbo.Report_EmployeeTotalWorkingHourByWeek    Script Date: 7/20/2016 10:19:17 AM ******/
+/****** Object:  Stored Procedure dbo.Report_EmployeeTotalWorkingHourByWeek    Script Date: 7/19/2016 5:22:19 PM ******/
+
+-- Report_EmployeeCalendarByMonth '2012/04/08'
+CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByWeek] @FromDate DATETIME
 	,@ToDate DATETIME
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(1000) = ''

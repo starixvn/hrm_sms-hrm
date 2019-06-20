@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[TimeRecord_Insert] @EmpId INT
+﻿/****** Object:  Stored Procedure dbo.TimeRecord_Insert    Script Date: 7/20/2016 10:19:19 AM ******/
+/****** Object:  Stored Procedure dbo.TimeRecord_Insert    Script Date: 7/19/2016 5:22:21 PM ******/
+CREATE PROCEDURE [dbo].[TimeRecord_Insert] @EmpId INT
 	,@RecordTime DATETIME
 	,@InOutType BIT
 	,@ErrCode INT = 0 OUTPUT

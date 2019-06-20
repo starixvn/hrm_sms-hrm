@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Employee_GetMemberByManager] 
+
+CREATE PROCEDURE [dbo].[Employee_GetMemberByManager] --421, 1, 'Yen'
 	@supervisorId INT
 	,@excludedManager BIT
 	,@query NVARCHAR(100)
@@ -19,17 +20,13 @@ BEGIN
 
 	DECLARE @searchGO NVARCHAR(100)
 
-	IF (ISNULL(@query, '') <> '')
-		SET @query = '%' + @query + '%'
-
-	PRINT @query
-
 	SELECT e.EmpId,
 		e.NickName,
 		e.FullName
 	FROM dbo.Employee AS e WITH (NOLOCK)
 	WHERE 
-		e.NickName LIKE '%' + @query + '%'
+		(e.NickName LIKE  @query + '%'
+		OR e.FullName LIKE @query + '%')
 		AND EXISTS (SELECT 1 FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 1) WHERE EmpId = e.EmpId)
 		AND e.Enabled = 1 
 		AND ISNULL(e.isDeleted, 0) = 0

@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Report_EmployeeDashBoard] -- 125, '2014-07-01'
 	@empid int,
 	@date datetime
@@ -40,7 +41,7 @@ WHERE e.EmpId= @empid AND e.Status = 0 AND YEAR(@fromDate)=InYear
 
 SET @AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear (@empid, YEAR(@fromDate), null)
 SELECT --@AnnualLeaveBalance = s.AnnualLeaveBalance, 
-		@KIVLeaveBalance = s.KeepInViewBalance, 
+		@KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpID, @fromDate, NULL),
 		@groupid=e.groupid
 FROM dbo.employee e WITH (NOLOCK) 
 	inner join dbo.EmployeeSummary s WITH (NOLOCK) 

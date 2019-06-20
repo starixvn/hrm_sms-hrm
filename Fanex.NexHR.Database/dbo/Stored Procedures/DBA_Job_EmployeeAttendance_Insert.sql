@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[DBA_Job_EmployeeAttendance_Insert] @ErrCode INT = 0 OUTPUT
+﻿/****** Object:  Stored Procedure dbo.DBA_Job_EmployeeAttendance_Insert    Script Date: 7/20/2016 10:19:00 AM ******/
+/****** Object:  Stored Procedure dbo.DBA_Job_EmployeeAttendance_Insert    Script Date: 7/19/2016 5:22:11 PM ******/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DBA_Job_EmployeeAttendance_Insert] @ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 BEGIN

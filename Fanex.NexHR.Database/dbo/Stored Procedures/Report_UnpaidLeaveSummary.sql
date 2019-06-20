@@ -1,4 +1,7 @@
-﻿CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
+﻿/****** Object:  Stored Procedure dbo.Report_UnpaidLeaveSummary    Script Date: 7/20/2016 10:19:18 AM ******/
+/****** Object:  Stored Procedure dbo.Report_UnpaidLeaveSummary    Script Date: 7/19/2016 5:22:20 PM ******/
+
+CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
@@ -40,20 +43,13 @@ BEGIN
 		FROM dbo.[Group] AS g WITH (NOLOCK)
 		WHERE ISNULL(g.IsDeleted, 0) = 0
 
-		IF EXISTS (
+		IF NOT EXISTS (
 				SELECT 1
 				FROM dbo.Employee AS e WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
 				WHERE EmpId = @SupervisorId
 					AND er.RoleId IN (2, 3, 4, 5, 6, 7)
 				)
-		BEGIN
-			INSERT INTO #Groups (GroupId)
-			SELECT DISTINCT GroupId
-			FROM dbo.[Group] AS g WITH (NOLOCK)
-			WHERE ISNULL(g.IsDeleted, 0) = 0
-		END
-		ELSE
 		BEGIN
 			SET @EmpId = @SupervisorId
 		END
@@ -276,7 +272,7 @@ BEGIN
 		INNER JOIN #EmployeeId AS empId ON e.EmpId = empId.EmpId
 		INNER JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = e.GroupId
-		--INNER JOIN #Groups AS gr ON g.GroupId = gr.GroupId
+	     --INNER JOIN #Groups AS gr ON g.GroupId = gr.GroupId
 	WHERE YEAR(cl.WorkDate) = @Year
 		AND ISNULL(e.isDeleted, 0) = 0
 		AND ISNULL(e.[Enabled], 0) = 1

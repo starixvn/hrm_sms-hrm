@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeCalendar_Update] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[EmployeeCalendar_Update] @EmpId INT
 	,@date DATETIME
 	,@ShiftID INT
 	,@ModifiedBy INT
@@ -28,17 +29,32 @@ BEGIN
 
 	SET @date = convert(VARCHAR(10), @date, 111)
 
-	UPDATE dbo.EmployeeCalendar
-	SET @dw = datepart(dw, WorkDate)
-		,@isHoliday = (CASE 
-			WHEN EXISTS (
-					SELECT 1
-					FROM dbo.Holiday
-					WHERE WorkDate BETWEEN FromDate
-							AND ToDate
-					) THEN 1
-			ELSE 0 END
+	IF (
+			EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSummary AS es WITH (NOLOCK)
+				WHERE es.EmpId = @EmpId
+					AND (
+						es.IsLocal = 1
+						OR (
+							es.IsLocal = 0
+							AND es.IsExpatUseHoliday = 1
+							)
+						)
+					AND EXISTS (
+						SELECT 1
+						FROM dbo.Holiday WITH (NOLOCK)
+						WHERE @date BETWEEN FromDate
+								AND ToDate
+						)
+				)
 			)
+	BEGIN
+		SET @isHoliday = 1
+	END
+
+	UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+	SET @dw = datepart(dw, WorkDate)
 		,IsHoliday = (CASE 
 			WHEN @ShiftID IS NULL THEN @isHoliday
 			ELSE 0 END

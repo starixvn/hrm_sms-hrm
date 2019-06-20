@@ -16,9 +16,10 @@ BEGIN
 
 	DECLARE @KIVLeaveBalance NUMERIC(18, 2)
 		,@AnnualLeaveBalance NUMERIC(18, 2)
+		,@Today DATE = GETDATE()
 
-	SELECT @KIVLeaveBalance = [dbo].[fnc_GetKIVBalance](@EmpID, NULL)
-		,@AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(GETDATE()), NULL)
+	SELECT @KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpID, @Today, NULL)
+		,@AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@Today), NULL)
 
 	SELECT e.EmpId AS ID
 		,e.Code

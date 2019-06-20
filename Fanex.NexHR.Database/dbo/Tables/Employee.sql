@@ -11,6 +11,7 @@
     [Phone]            VARCHAR (50)   NULL,
     [Gender]           TINYINT        NULL,
     [GroupId]          INT            NULL,
+    [Roles]            VARCHAR (20)   NULL,
     [ManagerId]        INT            NULL,
     [JoinedDate]       SMALLDATETIME  NULL,
     [ConfirmedDate]    SMALLDATETIME  NULL,
@@ -42,9 +43,11 @@
     [Major]            NVARCHAR (300) NULL,
     [PasswordReset]    BIT            CONSTRAINT [DF_Employee_PasswordReset] DEFAULT ((0)) NULL,
     [EmployeeCard]     VARCHAR (10)   NULL,
-	[PickupRemark]     NVARCHAR(200)  NULL,
+    [PickupRemark]     NVARCHAR (200) NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
-);
+) ON [Employee];
+
+
 
 
 

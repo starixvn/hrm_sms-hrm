@@ -1,4 +1,6 @@
-﻿
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_GetCheckInOutRequestToIgnoreById    Script Date: 7/20/2016 10:19:21 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_GetCheckInOutRequestToIgnoreById    Script Date: 7/19/2016 5:22:22 PM ******/
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetCheckInOutRequestToIgnoreById] @RequestId BIGINT
 AS
 /*

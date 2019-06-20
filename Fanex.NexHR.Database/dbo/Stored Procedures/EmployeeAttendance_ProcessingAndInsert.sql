@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[EmployeeAttendance_ProcessingAndInsert] --null, '2015-12-09', '2015-12-09'
 	@empId INT = NULL, 
 	@fromTime DATETIME , 
@@ -6,10 +7,10 @@ CREATE PROCEDURE [dbo].[EmployeeAttendance_ProcessingAndInsert] --null, '2015-12
 	@onlyUpdate BIT = 0
 AS
 BEGIN
+
+ --SET XACT_ABORT ON;
 DECLARE @i INT, @TempEmpId INT
 DECLARE @Employee TABLE (Id INT PRIMARY KEY IDENTITY(1,1), EmpId INT)
-
-EXEC [dbo].[EmployeeAttendance_ProcessingAndInsert_ForWorkDay] @empId, @fromTime, @toTime
 
 IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '#TimeRecord'))
 BEGIN
@@ -21,8 +22,11 @@ CREATE TABLE #TimeRecord (Id INT, EmpID INT, RecordTime DATETIME, InOutType TINY
 INSERT INTO #TimeRecord	(Id, EmpID, RecordTime, InOutType)
 SELECT Id, EmpID, RecordTime, InOutType 
 FROM dbo.TimeRecord WITH (NOLOCK) 
-WHERE RecordTime BETWEEN CONVERT(VARCHAR(10), DATEADD(HH, -2, @fromTime), 111) 
-	AND CONVERT(VARCHAR(10), DATEADD(d, 2, @toTime), 111)
+WHERE RecordTime BETWEEN  
+	DATEADD(HH, -2, CONVERT(VARCHAR(10),  @fromTime, 111))
+	AND DATEADD(d, 2, CONVERT(VARCHAR(10),  @toTime, 111))
+--CONVERT(VARCHAR(10), DATEADD(HH, -2, @fromTime), 111) 
+	-- AND CONVERT(VARCHAR(10), DATEADD(d, 2, @toTime), 111)
 	AND (@empId IS NULL OR EmpID = @empId)
 
 IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '#LeaveRequestHalfDay'))
@@ -137,7 +141,7 @@ FROM dbo.EmployeeCalendar ec WITH (NOLOCK)
 LEFT JOIN dbo.Shift s WITH (NOLOCK)ON s.ShiftID = ec.ShiftId
 WHERE (@EmpId IS NULL OR ec.EmpId = @EmpId)
 AND ec.WorkDate BETWEEN @FromTime AND @ToTime
-AND (ec.ShiftId IS NULL OR ISNULL(ec.LeaveDay, 0) <> 0)
+--AND (ec.ShiftId IS NULL OR ISNULL(ec.LeaveDay, 0) <> 0)
 ORDER BY ec.EmpId, ec.WorkDate
 
 IF @empId IS NULL
@@ -162,23 +166,12 @@ BEGIN
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @TempEmpId, @fromTime, @toTime, @onlyUpdate
 		SET @i = @i + 1
 	END
-	
+
+	EXEC [dbo].[EmployeeAttendance_ProcessingAndInsert_ForWorkDay] @empId, @fromTime, @toTime
 END
 ELSE
 BEGIN
-	IF(NOT EXISTS (SELECT 1 FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-					INNER JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID
-				WHERE ISNULL(cl.LeaveDay, 0) = 0
-					AND DATEDIFF(DD, @fromTime, WorkDate) >= 0
-					AND DATEDIFF(DD, WorkDate, @toTime) >= 0
-					AND (
-						@empId IS NULL
-						OR cl.EmpId = @empId
-						)
-						))
-	BEGIN 
-		EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @EmpId, @fromTime, @toTime, @onlyUpdate
-	END
+	EXEC dbo.EmployeeAttendance_ProcessingAndInsert_ForEmpId @EmpId, @fromTime, @toTime, @onlyUpdate
 END
 
 EXEC dbo.Discipline_Insert @fromTime, @toTime, @EmpId

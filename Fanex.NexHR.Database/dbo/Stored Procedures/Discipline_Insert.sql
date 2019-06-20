@@ -15,10 +15,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @SyncFromDate DATETIME
-
-	SET @SyncFromDate = '2015-06-01 00:00:00.000'
-
+	DECLARE @SyncFromDate DATETIME = '2016-01-01 00:00:00.000'
 	DECLARE @TotalWorkHoursWeekend DECIMAL(18, 2)
 		,@TotalWorkHours DECIMAL(18, 2)
 		,@LateInMins INT
@@ -26,6 +23,8 @@ BEGIN
 		,@AnnualLeaveType INT
 		,@UnpaidLeaveType INT
 		,@GeneralLeaveType INT
+		,@KeepInViewLeaveType INT
+		,@PublicHolidayLeaveType INT
 
 	SELECT @TotalWorkHoursWeekend = 9.75
 		,@TotalWorkHours = 7
@@ -34,669 +33,545 @@ BEGIN
 		,@AnnualLeaveType = 2
 		,@UnpaidLeaveType = 25
 		,@GeneralLeaveType = 0
+		,@KeepInViewLeaveType = 10
+		,@PublicHolidayLeaveType = 13
 
 	CREATE TABLE #MissingCheckInOutDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #MissingCheckInOutDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT [AttendanceDate]
-		,empA.[EmpId]
-		,ISNULL(req.Remark, '')
-		,ISNULL(req.ApproverComment, '')
-	FROM [dbo].[EmployeeAttendance] AS empA WITH (NOLOCK)
-		INNER JOIN [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.[EmpId]
-		AND empA.[AttendanceDate] = empC.[WorkDate]
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 2
+	GROUP BY EmpId
+		,WorkDate
+	
+	UNION
+	SELECT empA.EmpId
+		,AttendanceDate
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
+		AND empA.AttendanceDate = empC.WorkDate
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 2
-		LEFT JOIN (
-		SELECT RequestId
-			,EmpId
-			,OnDate
-			,Remark
-			,ApproverComment
-		FROM (
-			SELECT missR.RequestId
-				,missR.EmpId
-				,missR.OnDate
-				,workR.Remark
-				,workR.ApproverComment
-				,row_number() OVER (
-					PARTITION BY missR.OnDate, missR.EmpId ORDER BY missR.RequestId DESC
-					) AS rownum
-			FROM dbo.InoutMissRequest AS missR WITH (NOLOCK)
-				INNER JOIN [dbo].[WorkingTimeRequest] AS workR WITH (NOLOCK) ON missR.[RequestId] = workR.[RequestId]
-				AND workR.[CurrentStatus] IN (4, 6)
-				AND workR.[RequestType] IN (1, 2) -- Check In / Check Out
-			WHERE missR.[OnDate] BETWEEN @FromDate
-					AND @ToDaTe
-				AND (
-					@EmpId IS NULL
-					OR missR.[EmpId] = @EmpId
-					)
-			) AS T
-		WHERE rownum = 1
-		) AS req ON empA.[AttendanceDate] = req.[OnDate]
-		AND empA.[EmpId] = req.[EmpId]
-	WHERE [AttendanceDate] >= @SyncFromDate
-		AND (
-			ISNULL(@EmpId, '') = ''
-			OR empA.[EmpId] = @EmpId
-			)
-		AND (
-			empA.[AttendanceDate] BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(empA.[ShiftId], '') <> ''
+	WHERE AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
+		AND empA.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(empA.ShiftId, '') <> ''
 		AND empC.LeaveDay <> 1
 		AND (
 			(
-				ISNULL([InFixed], '') = ''
-				AND ISNULL([OutFixed], '') <> ''
-				AND GETDATE() > empA.[ExpectedInTime]
+				ISNULL(InFixed, '') = ''
+				AND ISNULL(OutFixed, '') <> ''
+				AND GETDATE() > empA.ExpectedInTime
 				)
 			OR (
-				ISNULL([InFixed], '') <> ''
-				AND ISNULL([OutFixed], '') = ''
-				AND GETDATE() > empA.[ExpectedOutTime]
+				ISNULL(InFixed, '') <> ''
+				AND ISNULL(OutFixed, '') = ''
+				AND GETDATE() > empA.ExpectedOutTime
 				)
-			OR req.[EmpId] IS NOT NULL
 			)
 		AND ISNULL(rul.Value, 0) = 1
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+			WHERE EmpId = empA.EmpId
+				AND WorkDate = empA.AttendanceDate
+				AND DisciplineTypeId = 2
+			)
 
 	CREATE TABLE #LateInDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #LateInDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT [AttendanceDate]
-		,empA.[EmpId]
-		,ISNULL(req.Remark, '')
-		,ISNULL(req.ApproverComment, '')
-	FROM [dbo].[EmployeeAttendance] AS empA WITH (NOLOCK)
-		INNER JOIN [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.[EmpId]
-		AND empA.[AttendanceDate] = empC.[WorkDate]
+	SELECT EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+	FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 3
+	
+	UNION
+	SELECT empA.EmpId
+		,AttendanceDate
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.EmpId
+		AND empA.AttendanceDate = empC.WorkDate
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 3
-		LEFT JOIN (
-		SELECT inR.FromDate
-			,inR.[EmpId]
-			,workR.Remark
-			,workR.ApproverComment
-		FROM [dbo].[InOutRequest] AS inR WITH (NOLOCK)
-			INNER JOIN [dbo].[WorkingTimeRequest] AS workR WITH (NOLOCK) ON inR.[RequestId] = workR.[RequestId]
-			AND workR.[CurrentStatus] IN (4, 6)
-			AND workR.[RequestType] = 3
-		WHERE inR.FromDate BETWEEN @FromDate
-				AND @ToDaTe
-			AND (
-				@EmpId IS NULL
-				OR inR.[EmpId] = @EmpId
-				)
-		) AS req ON empA.[AttendanceDate] = req.FromDate
-		AND empA.[EmpId] = req.[EmpId]
-	WHERE [AttendanceDate] >= @SyncFromDate
-		AND (
-			ISNULL(@EmpId, '') = ''
-			OR empA.[EmpId] = @EmpId
-			)
-		AND (
-			empA.[AttendanceDate] BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(empA.[ShiftId], '') <> ''
+	WHERE AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
+		AND empA.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(empA.ShiftId, '') <> ''
 		AND empC.LeaveDay <> 1
-		AND (
-			empA.[LateIn] > @LateInMins
-			OR req.[EmpId] IS NOT NULL
-			)
+		AND empA.LateIn > @LateInMins
 		AND ISNULL(rul.Value, 0) = 1
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+			WHERE EmpId = empA.EmpId
+				AND WorkDate = empA.AttendanceDate
+				AND DisciplineTypeId = 3
+			)
 
 	CREATE TABLE #EarlyOutDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #EarlyOutDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT [AttendanceDate]
-		,empA.[EmpId]
-		,ISNULL(req.Remark, '')
-		,ISNULL(req.ApproverComment, '')
-	FROM [dbo].[EmployeeAttendance] AS empA WITH (NOLOCK)
-		INNER JOIN [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.[EmpId]
-		AND empA.[AttendanceDate] = empC.[WorkDate]
+	SELECT EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+	FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 4
+	
+	UNION
+	SELECT empA.EmpId
+		,AttendanceDate
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
+		AND empA.AttendanceDate = empC.WorkDate
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 4
-		LEFT JOIN (
-		SELECT inR.FromDate
-			,inR.[EmpId]
-			,workR.Remark
-			,workR.ApproverComment
-		FROM [dbo].[InOutRequest] AS inR WITH (NOLOCK)
-			INNER JOIN [dbo].[WorkingTimeRequest] AS workR WITH (NOLOCK) ON inR.[RequestId] = workR.[RequestId]
-			AND workR.[CurrentStatus] IN (4, 6)
-			AND workR.[RequestType] = 4
-		WHERE inR.FromDate BETWEEN @FromDate
-				AND @ToDaTe
-			AND (
-				@EmpId IS NULL
-				OR inR.[EmpId] = @EmpId
-				)
-		) AS req ON empA.[AttendanceDate] = req.FromDate
-		AND empA.[EmpId] = req.[EmpId]
-	WHERE [AttendanceDate] >= @SyncFromDate
-		AND (
-			ISNULL(@EmpId, '') = ''
-			OR empA.[EmpId] = @EmpId
-			)
-		AND (
-			empA.[AttendanceDate] BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(empA.[ShiftId], '') <> ''
+	WHERE AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
+		AND empA.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(empA.ShiftId, '') <> ''
 		AND empC.LeaveDay <> 1
-		AND (
-			empA.EarlyOut > @EarlyOutMins
-			OR req.[EmpId] IS NOT NULL
-			)
+		AND ISNULL(empC.IsOffDay, 0) = 0
+		AND empA.EarlyOut > @EarlyOutMins
 		AND ISNULL(rul.Value, 0) = 1
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+			WHERE EmpId = empA.EmpId
+				AND WorkDate = empA.AttendanceDate
+				AND DisciplineTypeId = 4
+			)
 
 	CREATE TABLE #ChangeShiftDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #ChangeShiftDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT [AttendanceDate]
-		,empA.[EmpId]
-		,ISNULL(req.Remark, '')
-		,ISNULL(req.ApproverComment, '')
-	FROM [dbo].[EmployeeAttendance] AS empA WITH (NOLOCK)
-		INNER JOIN [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.[EmpId]
-		AND empA.[AttendanceDate] = empC.[WorkDate]
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 1
-		INNER JOIN (
-		SELECT cg.FromDate
-			,cg.[EmpId]
-			,workR.Remark
-			,workR.ApproverComment
-		FROM [ChangeShiftRequest] AS cg WITH (NOLOCK)
-			INNER JOIN [dbo].[WorkingTimeRequest] AS workR WITH (NOLOCK) ON cg.[RequestId] = workR.[RequestId]
-			AND workR.[CurrentStatus] IN (4, 6)
-			AND workR.[RequestType] = 5
-		WHERE cg.FromDate BETWEEN @FromDate
-				AND @ToDaTe
-			AND (
-				@EmpId IS NULL
-				OR cg.[EmpId] = @EmpId
-				)
-			--AND workR.CreatedDate >= cg.FromDate
-		) AS req ON empA.[AttendanceDate] = req.FromDate
-		AND empA.[EmpId] = req.[EmpId]
-	WHERE [AttendanceDate] >= @SyncFromDate
-		AND (
-			ISNULL(@EmpId, '') = ''
-			OR empA.[EmpId] = @EmpId
+	SELECT EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+	FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
 			)
-		AND (
-			empA.[AttendanceDate] BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(rul.Value, 0) = 1
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 1
 
 	CREATE TABLE #WorkingUnderTimeDiscipline (
-		[WorkDate] DATETIME
+		[WorkDate] DATE
 		,[EmpId] INT
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #WorkingUnderTimeDiscipline (
 		WorkDate
 		,EmpId
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT [AttendanceDate]
-		,empA.[EmpId]
-	FROM [dbo].[EmployeeAttendance] AS empA WITH (NOLOCK)
-		INNER JOIN [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.[EmpId]
-		AND empA.[AttendanceDate] = empC.[WorkDate]
+	SELECT AttendanceDate
+		,empA.EmpId
+		,ISNULL(drt.IsIgnored, 0)
+		,ISNULL(drt.IsOutOfControl, 0)
+	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
+		AND empA.AttendanceDate = empC.WorkDate
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 7
-	WHERE [AttendanceDate] >= @SyncFromDate
-		AND (
-			ISNULL(@EmpId, '') = ''
-			OR empA.[EmpId] = @EmpId
-			)
-		AND (
-			empA.[AttendanceDate] BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(empA.[ShiftId], '') <> ''
+		LEFT JOIN dbo.DisciplineRequestTrans AS drt  WITH (NOLOCK) ON drt.EmpId = empA.EmpId
+			AND drt.WorkDate = empA.AttendanceDate
+			AND drt.DisciplineTypeId = 7
+	WHERE AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
+		AND empA.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(empA.ShiftId, '') <> ''
 		AND empC.LeaveDay <> 1
 		AND (
 			(
-				DATEPART(DW, empA.[AttendanceDate]) IN (1, 7) -- Sunday or Saturday
-				AND [TotalWorkHours] < @TotalWorkHoursWeekend
+				DATEPART(DW, empA.AttendanceDate) IN (1, 7) -- Sunday or Saturday
+				AND TotalWorkHours < @TotalWorkHoursWeekend
 				)
 			OR (
-				DATEPART(DW, empA.[AttendanceDate]) NOT IN (1, 7)
-				AND [TotalWorkHours] < @TotalWorkHours
+				DATEPART(DW, empA.AttendanceDate) NOT IN (1, 7)
+				AND TotalWorkHours < @TotalWorkHours
 				)
 			)
 		AND ISNULL(rul.Value, 0) = 1
 
-	CREATE TABLE #UnpainLeaveAbsentDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+	CREATE TABLE #UnpaidLeaveAbsentDiscipline (
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #UnpainLeaveAbsentDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+	INSERT INTO #UnpaidLeaveAbsentDiscipline (
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 8
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lv.FromDate
-			,lv.ToDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-		WHERE lv.LeaveType = @UnpaidLeaveType
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND DATEDIFF(dd, lv.FromDate, wk.[CreatedDate]) >= 0
-			AND lv.ToDate >= @SyncFromDate
-			AND (
-				(
-					lv.FromDate BETWEEN @FromDate
-						AND @ToDaTe
-					)
-				OR (
-					@FromDate BETWEEN lv.FromDate
-						AND lv.ToDate
-					)
-				)
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND DATEDIFF(dd, empC.WorkDate, lea.FromDate) = 0
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
 			)
-		AND ISNULL(rul.Value, 0) = 1
-	
-	UNION ALL
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 8
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lvt.OnDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-			INNER JOIN dbo.LeaveRequestDetail lvt WITH (NOLOCK) ON lv.RequestId = lvt.RequestId
-		WHERE lv.LeaveType = @GeneralLeaveType
-			AND lvt.LeaveType = @UnpaidLeaveType
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND lvt.OnDate = (
-				SELECT MIN(OnDate)
-				FROM dbo.LeaveRequestDetail
-				WHERE LeaveType = @UnpaidLeaveType
-					AND RequestId = lv.RequestId
-				GROUP BY RequestId
-				)
-			AND DATEDIFF(dd, lv.FromDate, wk.[CreatedDate]) >= 0
-			AND lv.ToDate >= @SyncFromDate
-			AND lvt.OnDate BETWEEN @FromDate
-				AND @ToDaTe
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND DATEDIFF(dd, empC.WorkDate, lea.OnDate) = 0
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
-			)
-		AND ISNULL(rul.Value, 0) = 1
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 8
+	GROUP BY EmpId
+		,WorkDate
 
 	CREATE TABLE #AbsentDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
 	INSERT INTO #AbsentDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 5
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lv.FromDate
-			,lv.ToDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-		WHERE lv.LeaveType = 2
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND DATEDIFF(dd, lv.FromDate, wk.[CreatedDate]) >= 0
-			AND lv.ToDate >= @SyncFromDate
-			AND (
-				(
-					lv.FromDate BETWEEN @FromDate
-						AND @ToDaTe
-					)
-				OR (
-					@FromDate BETWEEN lv.FromDate
-						AND lv.ToDate
-					)
-				)
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND DATEDIFF(dd, empC.WorkDate, lea.FromDate) = 0
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
 			)
-		AND ISNULL(rul.Value, 0) = 1
-	
-	UNION ALL
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 5
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lvt.OnDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-			INNER JOIN dbo.LeaveRequestDetail lvt WITH (NOLOCK) ON lv.RequestId = lvt.RequestId
-		WHERE lv.LeaveType = @GeneralLeaveType
-			AND lvt.LeaveType = @AnnualLeaveType
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.LeaveRequestDetail WITH (NOLOCK)
-				WHERE RequestId = lv.RequestId
-					AND LeaveType = @UnpaidLeaveType
-				)
-			AND lvt.OnDate = (
-				SELECT MIN(OnDate)
-				FROM dbo.LeaveRequestDetail
-				WHERE LeaveType = @AnnualLeaveType
-					AND RequestId = lv.RequestId
-				GROUP BY RequestId
-				)
-			AND DATEDIFF(dd, lv.FromDate, wk.[CreatedDate]) >= 0
-			AND lv.ToDate >= @SyncFromDate
-			AND (
-				(
-					lv.FromDate BETWEEN @FromDate
-						AND @ToDaTe
-					)
-				OR (
-					@FromDate BETWEEN lv.FromDate
-						AND lv.ToDate
-					)
-				)
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND DATEDIFF(dd, empC.WorkDate, lea.OnDate) = 0
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 5
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #UnpaidLeaveAbsentDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
 			)
-		AND ISNULL(rul.Value, 0) = 1
+	GROUP BY EmpId
+		,WorkDate
 	
 	UNION
-	SELECT att.AttendanceDate
-		,att.EmpId
-		,''
-		,''
-	FROM [dbo].[EmployeeAttendance] AS att WITH (NOLOCK)
+	SELECT att.EmpId
+		,att.AttendanceDate
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS att WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON att.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
-	WHERE (
-			att.AttendanceDate BETWEEN @FromDate
-				AND @ToDate
-			)
+	WHERE att.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
 		AND att.[EmpId] = att.[EmpId]
 		AND ISNULL(att.[ShiftId], '') <> ''
 		AND ISNULL(att.[InFixed], '') = ''
 		AND ISNULL(att.[OutFixed], '') = ''
 		AND GETDATE() > att.[ExpectedOutTime]
-		AND att.LeaveDay <> 1
+		AND ISNULL(att.LeaveDay, 0) <> 1
 		AND ISNULL(rul.Value, 0) = 1
+
+	CREATE TABLE #UnplannedDiscipline (
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
+		)
+
+	INSERT INTO #UnplannedDiscipline (
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+		)
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 9
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #UnpaidLeaveAbsentDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
+			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #AbsentDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
+			)
+	GROUP BY EmpId
+		,WorkDate
 
 	CREATE TABLE #UnpaidLeaveDiscipline (
-		[WorkDate] DATETIME
-		,[EmpId] INT
-		,[EmployeeComment] NVARCHAR(500)
-		,[ApproverComment] NVARCHAR(500)
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #UnpaidLeaveDiscipline (
-		WorkDate
-		,EmpId
-		,EmployeeComment
-		,ApproverComment
+	INSERT INTO #UnplannedDiscipline (
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
 		)
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 6
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lv.FromDate
-			,lv.ToDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-		WHERE lv.LeaveType = @UnpaidLeaveType
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND lv.ToDate >= @SyncFromDate
-			AND (
-				(
-					lv.FromDate BETWEEN @FromDate
-						AND @ToDaTe
-					)
-				OR (
-					@FromDate BETWEEN lv.FromDate
-						AND lv.ToDate
-					)
-				)
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND CAST(empC.[WorkDate] AS DATE) >= CAST(lea.[FromDate] AS DATE)
-		AND CAST(empC.[WorkDate] AS DATE) <= CAST(lea.[ToDate] AS DATE)
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
 			)
-		AND ISNULL(rul.Value, 0) = 1
-	
-	UNION ALL
-	SELECT empC.WorkDate
-		,empC.[EmpId]
-		,lea.Remark
-		,lea.ApproverComment
-	FROM [dbo].[EmployeeCalendar] AS empC WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empC.EmpId = e.EmpId
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
-		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 6
-		INNER JOIN (
-		SELECT lv.RequestId
-			,lv.EmpId
-			,lvt.OnDate
-			,wk.Remark
-			,wk.ApproverComment
-		FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-			INNER JOIN dbo.LeaveRequestDetail lvt WITH (NOLOCK) ON lv.RequestId = lvt.RequestId
-		WHERE lv.LeaveType = @GeneralLeaveType
-			AND lvt.LeaveType = @UnpaidLeaveType
-			AND wk.[CurrentStatus] IN (4, 6)
-			AND lv.ToDate >= @SyncFromDate
-			AND (
-				lvt.OnDate BETWEEN @FromDate
-					AND @ToDaTe
-				)
-			AND (
-				ISNULL(@EmpId, '') = ''
-				OR lv.[EmpId] = @EmpId
-				)
-		) AS lea ON empC.[EmpId] = lea.[EmpId]
-		AND empC.[WorkDate] = lea.OnDate
-	WHERE CAST(empC.[WorkDate] AS DATE) <= CAST(GETDATE() AS DATE)
-		AND empC.[WorkDate] >= @SyncFromDate
-		AND (
-			empC.WorkDate BETWEEN @FromDate
-				AND @ToDate
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 6
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #UnpaidLeaveAbsentDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
 			)
-		AND ISNULL(rul.Value, 0) = 1
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #AbsentDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
+			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM #UnplannedDiscipline
+			WHERE EmpId = drt.EmpId
+				AND WorkDate = drt.WorkDate
+			)
+	GROUP BY EmpId
+		,WorkDate
 
-	CREATE TABLE #EmployeeDiscipline (
+	CREATE TABLE #WeekendLeaveDiscipline (
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
+		)
+
+	INSERT INTO #WeekendLeaveDiscipline (
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+		)
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 10
+	GROUP BY EmpId
+		,WorkDate
+		
+	CREATE TABLE #Discipline (
 		[EmpId] [int] NOT NULL
 		,[WorkDate] [date] NOT NULL
-		,[DisciplineType] [int] NOT NULL
-		,[ShiftName] [varchar](50) NULL
-		,[CheckIn] [datetime] NULL
-		,[CheckOut] [datetime] NULL
-		,[TotalHours] [decimal](5, 2) NULL
-		,[LateIn] [int] NULL
-		,[EarlyOut] [int] NULL
 		,[DisciplineScore] [decimal](5, 2) NULL
-		,[EmployeeComment] [nvarchar](500) NULL
-		,[ApproverComment] [nvarchar](500) NULL
+		,[IsOutOfControlReason] [bit] NULL
+		,[EmployeeComment] [nvarchar](MAX) NULL
+		,[ApproverComment] [nvarchar](MAX) NULL
 		,[IsMissingCheckInOut] [bit] NULL
 		,[IsLateIn] [bit] NULL
 		,[IsEarlyOut] [bit] NULL
@@ -705,18 +580,33 @@ BEGIN
 		,[IsAbsent] [bit] NULL
 		,[IsUnpaidLeave] [bit] NULL
 		,[IsUnpaidLeaveAbsent] [bit] NULL
+		,[IsUnplannedLeave] [bit] NULL
+		,[IsWeekendLeave] [bit] NULL
+		,[IsIgnoredMissingCheckInOut] [bit] NULL
+		,[IsIgnoredLateIn] [bit] NULL
+		,[IsIgnoredEarlyOut] [bit] NULL
+		,[IsIgnoredWorkingUndertime] [bit] NULL
+		,[IsIgnoredChangeShift] [bit] NULL
+		,[IsIgnoredAbsent] [bit] NULL
+		,[IsIgnoredUnpaidLeave] [bit] NULL
+		,[IsIgnoredUnpaidLeaveAbsent] [bit] NULL
+		,[IsIgnoredUnplannedLeave] [bit] NULL
+		,[IsIgnoredWeekendLeave] [bit] NULL
+		,[IsOutOfControlMissingCheckInOut] [bit] NULL
+		,[IsOutOfControlLateIn] [bit] NULL
+		,[IsOutOfControlEarlyOut] [bit] NULL
+		,[IsOutOfControlWorkingUndertime] [bit] NULL
+		,[IsOutOfControlChangeShift] [bit] NULL
+		,[IsOutOfControlAbsent] [bit] NULL
+		,[IsOutOfControlUnpaidLeave] [bit] NULL
+		,[IsOutOfControlUnpaidLeaveAbsent] [bit] NULL
+		,[IsOutOfControlUnplannedLeave] [bit] NULL
+		,[IsOutOfControlWeekendLeave] [bit] NULL
 		)
 
-	INSERT #EmployeeDiscipline (
+	INSERT #Discipline (
 		[EmpId]
 		,[WorkDate]
-		,[DisciplineType]
-		,[ShiftName]
-		,[CheckIn]
-		,[CheckOut]
-		,[TotalHours]
-		,[LateIn]
-		,[EarlyOut]
 		,[DisciplineScore]
 		,[EmployeeComment]
 		,[ApproverComment]
@@ -728,88 +618,110 @@ BEGIN
 		,[IsAbsent]
 		,[IsUnpaidLeave]
 		,[IsUnpaidLeaveAbsent]
+		,[IsUnplannedLeave]
+		,[IsWeekendLeave]
+		,[IsIgnoredMissingCheckInOut]
+		,[IsIgnoredLateIn]
+		,[IsIgnoredEarlyOut]
+		,[IsIgnoredWorkingUndertime]
+		,[IsIgnoredChangeShift]
+		,[IsIgnoredAbsent]
+		,[IsIgnoredUnpaidLeave]
+		,[IsIgnoredUnpaidLeaveAbsent]
+		,[IsIgnoredUnplannedLeave]
+		,[IsIgnoredWeekendLeave]
+		,[IsOutOfControlMissingCheckInOut]
+		,[IsOutOfControlLateIn]
+		,[IsOutOfControlEarlyOut]
+		,[IsOutOfControlWorkingUndertime]
+		,[IsOutOfControlChangeShift]
+		,[IsOutOfControlAbsent]
+		,[IsOutOfControlUnpaidLeave]
+		,[IsOutOfControlUnpaidLeaveAbsent]
+		,[IsOutOfControlUnplannedLeave]
+		,[IsOutOfControlWeekendLeave]
 		)
 	SELECT e.EmpId
-		,att.AttendanceDate
-		,1
-		,ISNULL(sh.NAME, '')
-		,att.InFixed
-		,att.OutFixed
-		,att.TotalWorkHours
-		,att.LateIn
-		,att.EarlyOut
+		,cal.WorkDate
 		,(CASE 
-			WHEN (upa.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredUnpaidLeaveAbsent, 0) = 0) THEN 3.5
+			WHEN (
+					upa.EmpId IS NOT NULL
+					AND ISNULL(upa.IsIgnored, 0) = 0
+					) THEN 3.5
 			ELSE 0 END + CASE 
-			WHEN (ab.EmpId IS NOT NULL AND upa.EmpId IS NULL AND ISNULL(dis.IsIgnoredAbsent, 0) = 0) THEN 3.5
+			WHEN (
+					upl.EmpId IS NOT NULL
+					AND ISNULL(upl.IsIgnored, 0) = 0
+					) THEN 3.5
 			ELSE 0 END + CASE 
-			WHEN (up.EmpId IS NOT NULL AND upa.EmpId IS NULL AND ab.EmpId IS NULL AND ISNULL(dis.IsIgnoredUnpaidLeave, 0) = 0) THEN 2.5
+			WHEN (
+					ab.EmpId IS NOT NULL
+					AND upa.EmpId IS NULL
+					AND ISNULL(ab.IsIgnored, 0) = 0
+					) THEN 3.5
 			ELSE 0 END + CASE 
-			WHEN (la.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredLateIn, 0) = 0) THEN 2.5
+			WHEN (
+					up.EmpId IS NOT NULL
+					AND upa.EmpId IS NULL
+					AND ab.EmpId IS NULL
+					AND ISNULL(up.IsIgnored, 0) = 0
+					) THEN 2.5
 			ELSE 0 END + CASE 
-			WHEN (ear.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredEarlyOut, 0) = 0) THEN 2.5
+			WHEN (
+					la.EmpId IS NOT NULL
+					AND ISNULL(la.IsIgnored, 0) = 0
+					) THEN 2.5
 			ELSE 0 END + CASE 
-			WHEN (wud.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredWorkingUndertime, 0) = 0) THEN 2.5
+			WHEN (
+					ear.EmpId IS NOT NULL
+					AND ISNULL(ear.IsIgnored, 0) = 0
+					) THEN 2.5
 			ELSE 0 END + CASE 
-			WHEN (mis.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredMissingCheckInOut, 0) = 0) THEN 2.5
+			WHEN (
+					wud.EmpId IS NOT NULL
+					AND ISNULL(dis.IsIgnoredWorkingUndertime, 0) = 0
+					) THEN 2.5
 			ELSE 0 END + CASE 
-			WHEN (chs.EmpId IS NOT NULL AND ISNULL(dis.IsIgnoredChangeShift, 0) = 0) THEN 2.5
+			WHEN (
+					mis.EmpId IS NOT NULL
+					AND ISNULL(mis.IsIgnored, 0) = 0
+					) THEN 2.5
+			ELSE 0 END + CASE 
+			WHEN (
+					chs.EmpId IS NOT NULL
+					AND ISNULL(chs.IsIgnored, 0) = 0
+					) THEN 2.5
+			ELSE 0 END + CASE 
+			WHEN (
+					wld.EmpId IS NOT NULL
+					AND ISNULL(wld.IsIgnored, 0) = 0
+					) THEN 2.5
 			ELSE 0 END
 			)
-		,CASE 
-			WHEN ISNULL(mis.EmployeeComment, '') <> '' THEN 'Missing Check In/Out_ ' + ISNULL(mis.EmployeeComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(la.EmployeeComment, '') <> '' THEN + 'Late In_ ' + ISNULL(la.EmployeeComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(ear.EmployeeComment, '') <> '' THEN + 'Early Out_ ' + ISNULL(ear.EmployeeComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(chs.EmployeeComment, '') <> '' THEN + 'Change Shift_ ' + ISNULL(chs.EmployeeComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(upa.EmployeeComment, '') <> ''
-				OR ISNULL(ab.EmployeeComment, '') <> ''
-				OR ISNULL(up.EmployeeComment, '') <> '' THEN + 'Leave_ ' + (CASE 
-					WHEN ISNULL(upa.EmployeeComment, '') <> '' THEN upa.EmployeeComment
-					ELSE CASE 
-							WHEN ISNULL(ab.EmployeeComment, '') <> '' THEN ab.EmployeeComment
-							ELSE CASE 
-									WHEN ISNULL(up.EmployeeComment, '') <> '' THEN up.EmployeeComment
-									ELSE ''
-									END
-							END END
-					) + ' & '
-			ELSE ''
-			END
-		,CASE 
-			WHEN ISNULL(mis.ApproverComment, '') <> '' THEN 'Missing Check In/Out_ ' + ISNULL(mis.ApproverComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(la.ApproverComment, '') <> '' THEN + 'Late In_ ' + ISNULL(la.ApproverComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(ear.ApproverComment, '') <> '' THEN + 'Early Out_ ' + ISNULL(ear.ApproverComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(chs.ApproverComment, '') <> '' THEN + 'Change Shift_ ' + ISNULL(chs.ApproverComment, '') + ' & '
-			ELSE ''
-			END + CASE 
-			WHEN ISNULL(upa.ApproverComment, '') <> ''
-				OR ISNULL(ab.ApproverComment, '') <> ''
-				OR ISNULL(up.ApproverComment, '') <> '' THEN + 'Leave_ ' + (CASE 
-					WHEN ISNULL(upa.ApproverComment, '') <> '' THEN upa.ApproverComment
-					ELSE CASE 
-							WHEN ISNULL(ab.ApproverComment, '') <> '' THEN ab.ApproverComment
-							ELSE CASE 
-									WHEN ISNULL(up.ApproverComment, '') <> '' THEN up.ApproverComment
-									ELSE ''
-									END
-							END END
-					) + ' & '
-			ELSE ''
-			END
+		,(
+				SELECT CASE 
+						WHEN rq.Remark <> '' THEN ('- ' + dt.NAME + ': ' + rq.Remark + '. ')
+						ELSE ''
+						END
+				FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+					INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
+					INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
+				WHERE drt.EmpId = cal.EmpId
+					AND drt.WorkDate = cal.WorkDate
+				FOR XML PATH('')
+				) AS [EmployeeComment]
+		,(
+				SELECT CASE 
+						WHEN rq.ApproverComment <> '' THEN ('- ' + dt.NAME + ': ' + rq.ApproverComment + '. ')
+						ELSE ''
+						END
+				FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+					INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
+					INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
+				WHERE drt.EmpId = cal.EmpId
+					AND drt.WorkDate = cal.WorkDate
+				FOR XML PATH('')
+				) AS ApproverComment
 		,CASE 
 			WHEN mis.EmpId IS NULL THEN 0
 			ELSE 1
@@ -849,40 +761,73 @@ BEGIN
 			WHEN upa.EmpId IS NULL THEN 0
 			ELSE 1
 			END
+		,CASE 
+			WHEN upl.EmpId IS NULL THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN wld.EmpId IS NULL THEN 0
+			ELSE 1
+			END
+		,ISNULL(mis.IsIgnored, 0)
+		,ISNULL(la.IsIgnored, 0)
+		,ISNULL(ear.IsIgnored, 0)
+		,ISNULL(wud.IsIgnored, 0)
+		,ISNULL(chs.IsIgnored, 0)
+		,ISNULL(ab.IsIgnored, 0)
+		,ISNULL(up.IsIgnored, 0)
+		,ISNULL(upa.IsIgnored, 0)
+		,ISNULL(upl.IsIgnored, 0)
+		,ISNULL(wld.IsIgnored, 0)
+		,ISNULL(mis.IsOutOfControl, 0)
+		,ISNULL(la.IsOutOfControl, 0)
+		,ISNULL(ear.IsOutOfControl, 0)
+		,ISNULL(wud.IsOutOfControl, 0)
+		,ISNULL(chs.IsOutOfControl, 0)
+		,ISNULL(ab.IsOutOfControl, 0)
+		,ISNULL(up.IsOutOfControl, 0)
+		,ISNULL(upa.IsOutOfControl, 0)
+		,ISNULL(upl.IsOutOfControl, 0)
+		,ISNULL(wld.IsOutOfControl, 0)
 	FROM dbo.Employee AS e WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON e.EmpId = att.EmpId
-		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON att.ShiftId = sh.ShiftID
-		LEFT JOIN #UnpainLeaveAbsentDiscipline AS upa ON e.EmpId = upa.EmpId
-		AND att.AttendanceDate = upa.WorkDate
-		LEFT JOIN #AbsentDiscipline AS ab ON e.EmpId = ab.EmpId
-		AND att.AttendanceDate = ab.WorkDate
-		LEFT JOIN #UnpaidLeaveDiscipline AS up ON e.EmpId = up.EmpId
-		AND att.AttendanceDate = up.WorkDate
-		LEFT JOIN #LateInDiscipline AS la ON e.EmpId = la.EmpId
-		AND att.AttendanceDate = la.WorkDate
-		LEFT JOIN #EarlyOutDiscipline AS ear ON e.EmpId = ear.EmpId
-		AND att.AttendanceDate = ear.WorkDate
-		LEFT JOIN #WorkingUnderTimeDiscipline AS wud ON e.EmpId = wud.EmpId
-		AND att.AttendanceDate = wud.WorkDate
-		LEFT JOIN #MissingCheckInOutDiscipline AS mis ON e.EmpId = mis.EmpId
-		AND att.AttendanceDate = mis.WorkDate
-		LEFT JOIN #ChangeShiftDiscipline AS chs ON e.EmpId = chs.EmpId
-		AND att.AttendanceDate = chs.WorkDate
+		INNER JOIN dbo.EmployeeCalendar AS cal WITH (NOLOCK) ON e.EmpId = cal.EmpId
+		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON e.EmpId = att.EmpId
+		AND cal.WorkDate = att.AttendanceDate
+		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cal.ShiftId = sh.ShiftID
+		LEFT JOIN #UnpaidLeaveAbsentDiscipline AS upa WITH (NOLOCK) ON e.EmpId = upa.EmpId
+		AND cal.WorkDate = upa.WorkDate
+		LEFT JOIN #AbsentDiscipline AS ab WITH (NOLOCK) ON e.EmpId = ab.EmpId
+		AND cal.WorkDate = ab.WorkDate
+		LEFT JOIN #UnplannedDiscipline AS upl WITH (NOLOCK) ON e.EmpId = upl.EmpId
+		AND cal.WorkDate = upl.WorkDate
+		LEFT JOIN #UnpaidLeaveDiscipline AS up WITH (NOLOCK) ON e.EmpId = up.EmpId
+		AND cal.WorkDate = up.WorkDate
+		LEFT JOIN #WeekendLeaveDiscipline AS wld WITH (NOLOCK) ON e.EmpId = wld.EmpId
+		AND cal.WorkDate = wld.WorkDate
+		LEFT JOIN #LateInDiscipline AS la WITH (NOLOCK) ON e.EmpId = la.EmpId
+		AND cal.WorkDate = la.WorkDate
+		LEFT JOIN #EarlyOutDiscipline AS ear WITH (NOLOCK) ON e.EmpId = ear.EmpId
+		AND cal.WorkDate = ear.WorkDate
+		LEFT JOIN #WorkingUnderTimeDiscipline AS wud WITH (NOLOCK) ON e.EmpId = wud.EmpId
+		AND cal.WorkDate = wud.WorkDate
+		LEFT JOIN #MissingCheckInOutDiscipline AS mis WITH (NOLOCK) ON e.EmpId = mis.EmpId
+		AND cal.WorkDate = mis.WorkDate
+		LEFT JOIN #ChangeShiftDiscipline AS chs WITH (NOLOCK) ON e.EmpId = chs.EmpId
+		AND cal.WorkDate = chs.WorkDate
 		LEFT JOIN dbo.EmployeeDiscipline AS dis WITH (NOLOCK) ON e.EmpId = dis.EmpId
-		AND att.AttendanceDate = dis.WorkDate AND dis.DisciplineType = 1
+		AND cal.WorkDate = dis.WorkDate
 	WHERE ISNULL(e.isDeleted, 0) = 0
 		AND e.[Enabled] = 1
-		AND CAST(att.AttendanceDate AS DATE) <= CAST(GETDATE() AS DATE)
-		AND att.AttendanceDate >= @SyncFromDate
-		AND (
-			att.AttendanceDate BETWEEN @FromDate
-				AND @ToDate
-			)
+		AND ISNULL(@EmpId, e.EmpId) = e.EmpId
+		AND cal.WorkDate >= @SyncFromDate
+		AND cal.WorkDate BETWEEN @FromDate
+			AND @ToDate
 		AND (
 			upa.EmpId IS NOT NULL
-			OR upa.EmpId IS NOT NULL
 			OR up.EmpId IS NOT NULL
 			OR ab.EmpId IS NOT NULL
+			OR upl.EmpId IS NOT NULL
+			OR wld.EmpId IS NOT NULL
 			OR la.EmpId IS NOT NULL
 			OR ear.EmpId IS NOT NULL
 			OR wud.EmpId IS NOT NULL
@@ -891,64 +836,51 @@ BEGIN
 			)
 
 	UPDATE edi
-	SET edi.DisciplineType = dis.DisciplineType
-		,edi.ShiftName = dis.ShiftName
-		,edi.CheckIn = dis.CheckIn
-		,edi.CheckOut = dis.CheckOut
-		,edi.TotalHours = dis.TotalHours
-		,edi.LateIn = dis.LateIn
-		,edi.EarlyOut = dis.EarlyOut
-		,edi.DisciplineScore = dis.DisciplineScore
-		,edi.EmployeeComment = CASE 
-			WHEN LEN(dis.EmployeeComment) > 1 THEN LEFT(dis.EmployeeComment, LEN(dis.EmployeeComment) - 2)
-			ELSE ''
-			END
-		,edi.ApproverComment = CASE 
-			WHEN LEN(dis.ApproverComment) > 1 THEN LEFT(dis.ApproverComment, LEN(dis.ApproverComment) - 2)
-			ELSE ''
-			END
+	SET edi.DisciplineScore = dis.DisciplineScore
+		,edi.EmployeeComment = dis.EmployeeComment
+		,edi.ApproverComment = dis.ApproverComment
 		,edi.IsMissingCheckInOut = dis.IsMissingCheckInOut
 		,edi.IsLateIn = dis.IsLateIn
 		,edi.IsEarlyOut = dis.IsEarlyOut
 		,edi.IsWorkingUndertime = dis.IsWorkingUndertime
 		,edi.IsChangeShift = dis.IsChangeShift
 		,edi.IsAbsent = dis.IsAbsent
+		,edi.IsUnplannedLeave = dis.IsUnplannedLeave
 		,edi.IsUnpaidLeave = dis.IsUnpaidLeave
 		,edi.IsUnpaidLeaveAbsent = dis.IsUnpaidLeaveAbsent
+		,edi.IsWeekendLeave = dis.IsWeekendLeave
 		,edi.IsDeleted = 0
 		,edi.ModifiedDate = GETDATE()
-	FROM [dbo].[EmployeeDiscipline] AS edi WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #EmployeeDiscipline AS dis ON edi.EmpId = dis.EmpId AND edi.DisciplineType = 1
+	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON edi.EmpId = dis.EmpId
 		AND edi.WorkDate = dis.WorkDate
 
 	UPDATE edi
-	SET edi.IsDeleted = 1
+	SET edi.IsMissingCheckInOut = 0
+		,edi.IsLateIn = 0
+		,edi.IsEarlyOut = 0
+		,edi.IsChangeShift = 0
+		,edi.IsAbsent = 0
+		,edi.IsUnplannedLeave = 0
+		,edi.IsUnpaidLeave = 0
+		,edi.IsUnpaidLeaveAbsent = 0
+		,edi.IsWeekendLeave = 0
+		,edi.IsDeleted = 1
 		,edi.ModifiedDate = GETDATE()
-	FROM [dbo].[EmployeeDiscipline] AS edi WITH (ROWLOCK, UPDLOCK)
-	WHERE 
-		edi.DisciplineType = 1
-		AND NOT EXISTS (
+	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
+	WHERE NOT EXISTS (
 			SELECT 1
-			FROM #EmployeeDiscipline
+			FROM #Discipline WITH (NOLOCK)
 			WHERE edi.EmpId = EmpId
 				AND edi.WorkDate = WorkDate
 			)
 		AND edi.WorkDate BETWEEN @FromDate
-				AND @ToDate
-		AND (
-				@EmpId IS NULL
-				OR edi.[EmpId] = @EmpId
-				)
-	INSERT [dbo].[EmployeeDiscipline] (
-		[EmpId]
+			AND @ToDate
+		AND ISNULL(@EmpId, edi.EmpId) = edi.EmpId
+		
+	INSERT dbo.Discipline (
+		EmpId
 		,[WorkDate]
-		,[DisciplineType]
-		,[ShiftName]
-		,[CheckIn]
-		,[CheckOut]
-		,[TotalHours]
-		,[LateIn]
-		,[EarlyOut]
 		,[DisciplineScore]
 		,[EmployeeComment]
 		,[ApproverComment]
@@ -958,64 +890,162 @@ BEGIN
 		,[IsWorkingUndertime]
 		,[IsChangeShift]
 		,[IsAbsent]
+		,[IsUnplannedLeave]
 		,[IsUnpaidLeave]
 		,[IsUnpaidLeaveAbsent]
-		,[IsIgnoredUnpaidLeaveAbsent]
-		,[IsIgnoredAbsent]
-		,[IsIgnoredUnpaidLeave]
-		,[IsIgnoredLateIn]
-		,[IsIgnoredEarlyOut]
-		,[IsIgnoredWorkingUnderTime]
-		,[IsIgnoredMissingCheckInOut]
-		,[IsIgnoredChangeShift]
+		,[IsWeekendLeave]
 		,[IsDeleted]
 		,[ModifiedBy]
 		,[ModifiedDate]
 		)
 	SELECT dis.EmpId
 		,dis.WorkDate
-		,dis.DisciplineType
-		,dis.ShiftName
-		,dis.CheckIn
-		,dis.CheckOut
-		,dis.TotalHours
-		,dis.LateIn
-		,dis.EarlyOut
 		,dis.DisciplineScore
-		,CASE 
-			WHEN LEN(dis.EmployeeComment) > 1 THEN LEFT(dis.EmployeeComment, LEN(dis.EmployeeComment) - 2)
-			ELSE ''
-			END
-		,CASE 
-			WHEN LEN(dis.ApproverComment) > 1 THEN LEFT(dis.ApproverComment, LEN(dis.ApproverComment) - 2)
-			ELSE ''
-			END
+		,dis.EmployeeComment
+		,dis.ApproverComment
 		,dis.IsMissingCheckInOut
 		,dis.IsLateIn
 		,dis.IsEarlyOut
 		,dis.IsWorkingUndertime
 		,dis.IsChangeShift
 		,dis.IsAbsent
+		,dis.IsUnplannedLeave
 		,dis.IsUnpaidLeave
 		,dis.IsUnpaidLeaveAbsent
-		,0
-		,0
-		,0
-		,0
-		,0
-		,0
-		,0
-		,0
+		,dis.IsWeekendLeave
 		,0
 		,NULL
 		,GETDATE()
-	FROM #EmployeeDiscipline AS dis
+	FROM #Discipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM dbo.EmployeeDiscipline WITH (NOLOCK)
+			FROM dbo.Discipline WITH (NOLOCK)
 			WHERE EmpId = dis.EmpId
 				AND WorkDate = dis.WorkDate
-				AND DisciplineType = 1
+			)
+
+	UPDATE di
+	SET di.IsIgnoredMissingCheckInOut = dis.IsIgnoredMissingCheckInOut
+		,di.IsIgnoredLateIn = dis.IsIgnoredLateIn
+		,di.IsIgnoredEarlyOut = dis.IsIgnoredEarlyOut
+		,di.IsIgnoredWorkingUndertime = dis.IsIgnoredWorkingUndertime
+		,di.IsIgnoredChangeShift = dis.IsIgnoredChangeShift
+		,di.IsIgnoredAbsent = dis.IsIgnoredAbsent
+		,di.IsIgnoredUnplannedLeave = dis.IsIgnoredUnplannedLeave
+		,di.IsIgnoredUnpaidLeave = dis.IsIgnoredUnpaidLeave
+		,di.IsIgnoredUnpaidLeaveAbsent = dis.IsIgnoredUnpaidLeaveAbsent
+		,di.IsIgnoredWeekendLeave = dis.IsIgnoredWeekendLeave
+	FROM dbo.DisciplineIgnore AS di WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON di.EmpId = dis.EmpId
+		AND di.WorkDate = dis.WorkDate
+
+	DELETE di
+	FROM dbo.DisciplineIgnore AS di
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM #Discipline WITH (NOLOCK)
+			WHERE di.EmpId = EmpId
+				AND di.WorkDate = WorkDate
+			)
+		AND di.WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(@EmpId, di.EmpId) = di.EmpId
+
+	INSERT INTO dbo.DisciplineIgnore (
+		EmpId
+		,WorkDate
+		,IsIgnoredMissingCheckInOut
+		,IsIgnoredLateIn
+		,IsIgnoredEarlyOut
+		,IsIgnoredWorkingUndertime
+		,IsIgnoredChangeShift
+		,IsIgnoredAbsent
+		,IsIgnoredUnplannedLeave
+		,IsIgnoredUnpaidLeave
+		,IsIgnoredUnpaidLeaveAbsent
+		,IsIgnoredWeekendLeave
+		)
+	SELECT
+		EmpId
+		,WorkDate 
+		,IsIgnoredMissingCheckInOut
+		,IsIgnoredLateIn
+		,IsIgnoredEarlyOut
+		,IsIgnoredWorkingUndertime
+		,IsIgnoredChangeShift
+		,IsIgnoredAbsent
+		,IsIgnoredUnplannedLeave
+		,IsIgnoredUnpaidLeave
+		,IsIgnoredUnpaidLeaveAbsent
+		,IsIgnoredWeekendLeave
+	FROM #Discipline AS dis
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.DisciplineIgnore
+			WHERE EmpId = dis.EmpId
+				AND WorkDate = dis.WorkDate
+			)
+
+	UPDATE doc
+	SET doc.IsOutOfControlMissingCheckInOut = dis.IsOutOfControlMissingCheckInOut
+		,doc.IsOutOfControlLateIn = dis.IsOutOfControlLateIn
+		,doc.IsOutOfControlEarlyOut = dis.IsOutOfControlEarlyOut
+		,doc.IsOutOfControlWorkingUndertime = dis.IsOutOfControlWorkingUndertime
+		,doc.IsOutOfControlChangeShift = dis.IsOutOfControlChangeShift
+		,doc.IsOutOfControlAbsent = dis.IsOutOfControlAbsent
+		,doc.IsOutOfControlUnplannedLeave = dis.IsOutOfControlUnplannedLeave
+		,doc.IsOutOfControlUnpaidLeave = dis.IsOutOfControlUnpaidLeave
+		,doc.IsOutOfControlUnpaidLeaveAbsent = dis.IsOutOfControlUnpaidLeaveAbsent
+		,doc.IsOutOfControlWeekendLeave = dis.IsOutOfControlWeekendLeave
+	FROM dbo.DisciplineOutOfControl AS doc WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON doc.EmpId = dis.EmpId
+		AND doc.WorkDate = dis.WorkDate
+
+	DELETE doc
+	FROM dbo.DisciplineOutOfControl AS doc
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM #Discipline WITH (NOLOCK)
+			WHERE doc.EmpId = EmpId
+				AND doc.WorkDate = WorkDate
+			)
+		AND doc.WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(@EmpId, doc.EmpId) = doc.EmpId
+
+	INSERT INTO dbo.DisciplineOutOfControl (
+		EmpId
+		,WorkDate 
+		,IsOutOfControlMissingCheckInOut
+		,IsOutOfControlLateIn
+		,IsOutOfControlEarlyOut
+		,IsOutOfControlWorkingUndertime
+		,IsOutOfControlChangeShift
+		,IsOutOfControlAbsent
+		,IsOutOfControlUnplannedLeave
+		,IsOutOfControlUnpaidLeave
+		,IsOutOfControlUnpaidLeaveAbsent
+		,IsOutOfControlWeekendLeave
+		)
+	SELECT 
+		EmpId
+		,WorkDate 
+		,IsOutOfControlMissingCheckInOut
+		,IsOutOfControlLateIn
+		,IsOutOfControlEarlyOut
+		,IsOutOfControlWorkingUndertime
+		,IsOutOfControlChangeShift
+		,IsOutOfControlAbsent
+		,IsOutOfControlUnplannedLeave
+		,IsOutOfControlUnpaidLeave
+		,IsOutOfControlUnpaidLeaveAbsent
+		,IsOutOfControlWeekendLeave
+	FROM #Discipline AS dis
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.DisciplineOutOfControl
+			WHERE EmpId = dis.EmpId
+				AND WorkDate = dis.WorkDate
 			)
 
 	DROP TABLE #MissingCheckInOutDiscipline
@@ -1028,11 +1058,15 @@ BEGIN
 
 	DROP TABLE #WorkingUnderTimeDiscipline
 
-	DROP TABLE #UnpainLeaveAbsentDiscipline
+	DROP TABLE #UnpaidLeaveAbsentDiscipline
 
 	DROP TABLE #AbsentDiscipline
 
+	DROP TABLE #UnplannedDiscipline
+
 	DROP TABLE #UnpaidLeaveDiscipline
 
-	DROP TABLE #EmployeeDiscipline
+	DROP TABLE #WeekendLeaveDiscipline
+
+	DROP TABLE #Discipline
 END

@@ -8,7 +8,9 @@
     [RefNo]       NVARCHAR (200)  NULL,
     [ReworkCount] INT             CONSTRAINT [DF_LeaveRequest_ReworkCount] DEFAULT ((0)) NULL,
     CONSTRAINT [PK_LeaveRequest] PRIMARY KEY CLUSTERED ([RequestId] ASC) ON [EmpRequest]
-);
+) ON [EmpRequest];
+
+
 
 
 GO
@@ -18,39 +20,7 @@ CREATE NONCLUSTERED INDEX [IX_LeaveRequest_FromDate_ToDate]
 
 
 GO
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
- 
-CREATE TRIGGER [dbo].[LeaveRequestBeforUpdate]
-   ON  LeaveRequest
-   AFTER UPDATE
-AS 
-BEGIN
-	SET NOCOUNT ON;
-	
-	INSERT INTO [LeaveRequestHistory] ( 
-			[RequestId]
-		  ,[EmpId]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[LeaveType]
-		  ,[TotalDays]
-		  ,[RefNo]
-		  ,[ReworkCount]
-		  ,[InsertedDate]
-		)
-	SELECT [RequestId]
-		  ,[EmpId]
-		  ,[FromDate]
-		  ,[ToDate]
-		  ,[LeaveType]
-		  ,[TotalDays]
-		  ,[RefNo]
-		  ,[ReworkCount]
-		  ,GETDATE() [InsertedDate]	FROM  deleted lt
-	 
-END
  
 
 

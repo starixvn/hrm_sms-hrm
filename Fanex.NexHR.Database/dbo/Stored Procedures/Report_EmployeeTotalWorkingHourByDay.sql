@@ -1,4 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByDay] @workDate DATETIME
+﻿/****** Object:  Stored Procedure dbo.Report_EmployeeTotalWorkingHourByDay    Script Date: 7/20/2016 10:19:17 AM ******/
+/****** Object:  Stored Procedure dbo.Report_EmployeeTotalWorkingHourByDay    Script Date: 7/19/2016 5:22:19 PM ******/
+
+-- [dbo].[Report_EmployeeTotalWorkingHourByDay] '2015-8-01', @isDebug=1
+CREATE PROCEDURE [dbo].[Report_EmployeeTotalWorkingHourByDay] @workDate DATETIME
 	,@empId INT = NULL
 	,@groupids VARCHAR(1000) = ''
 	,@isLocal BIT = NULL
@@ -272,12 +276,12 @@ BEGIN
 		FullName AS [Full Name/Nick],
 		NickName AS [Nick],
 		ISNULL(TotalWorkDays,0) AS [Count WorkDay],
-		' + @days
+	     ' + @days
 
 	SELECT @query = @query + ' FROM #tmpCalendar AS cl
-		LEFT JOIN #Calendar_TotalWorkDays AS ttd
+	     LEFT JOIN #Calendar_TotalWorkDays AS ttd
 		ON cl.EmpId = ttd.EmpId
-		ORDER BY Team, [Positions], FullName'
+          ORDER BY Team, [Positions], FullName'
 
 	IF @isDebug = 1
 		PRINT @query

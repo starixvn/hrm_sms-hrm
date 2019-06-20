@@ -23,74 +23,25 @@ Revisions:
 Param's Explanation:
 */
 BEGIN
-	SET NOCOUNT ON;
+	--SET NOCOUNT ON;
 
 	SELECT @excludedEmpID = NULL
 
-	CREATE TABLE #status (Currentstatus TINYINT)
+	CREATE TABLE #tblstatus (Currentstatus TINYINT)
 
-	IF ISNULL(@status, '') <> ''
-		INSERT INTO #status (Currentstatus)
-		SELECT val
-		FROM fnc_strSplit(@status, ',')
+	CREATE TABLE #tblGroupsList (GroupId INT)
 
-	CREATE TABLE #GroupsList (GroupId INT)
+	CREATE TABLE #tblEmployeeId (EmpId INT)
 
-	CREATE TABLE #EmployeeId (EmpId INT)
+	CREATE TABLE #tblRequestId (RequestId INT)
 
-	IF ISNULL(@GroupIds, '') <> ''
-	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT val
-		FROM fnc_strSplit(@GroupIds, ',')
-	END
-	ELSE
-	BEGIN
-		INSERT INTO #GroupsList (GroupId)
-		SELECT GroupID
-		FROM [Group] g WITH (NOLOCK)
-	END
-
-	IF (@empid IS NULL)
-	BEGIN
-		IF (
-				@SupervisorID IS NULL
-				OR @role LIKE '%6%'
-				)
-		BEGIN
-			INSERT INTO #EmployeeId (EmpID)
-			SELECT DISTINCT e.EmpId
-			FROM dbo.Employee AS e WITH (NOLOCK)
-		END
-		ELSE IF (@role LIKE '%2%')
-		BEGIN
-			INSERT INTO #EmployeeId (EmpId)
-			SELECT EmpId
-			FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 0)
-		END
-		ELSE
-		BEGIN
-			INSERT INTO #EmployeeId (EmpId)
-			SELECT EmpId
-			FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 1)
-		END
-	END
-	ELSE
-	BEGIN
-		INSERT INTO #EmployeeId (EmpID)
-		VALUES (@empid)
-	END
-
-	SELECT @fromdate = CONVERT(VARCHAR(10), @fromdate, 111)
-		,@todate = DATEADD(ms, - 2, DATEADD(d, 1, CONVERT(VARCHAR(10), @todate, 111)))
-
-	CREATE TABLE #TotalDaysRequestInMonth (
+	CREATE TABLE #tblTotalDaysRequestInMonth (
 		empid INT
 		,RequestType INT
 		,TotalDaysRequest INT
 		)
 
-	CREATE TABLE #RequestInDaily (
+	CREATE TABLE #tblRequestInDaily (
 		RequestID BIGINT
 		,empid INT
 		,RequestType INT
@@ -105,10 +56,151 @@ BEGIN
 		,ToShift INT
 		,TotalDays NUMERIC(18, 1)
 		,IsHalfDay BIT
+		,KeepInViewType TINYINT
 		,IsWarning BIT
 		)
 
-	INSERT INTO #TotalDaysRequestInMonth (
+	CREATE TABLE #tblGeneralLeaveDetail (
+		RequestId BIGINT
+		,LeaveCountDetails NVARCHAR(MAX)
+		)
+
+	IF ISNULL(@status, '') <> ''
+		INSERT INTO #tblstatus (Currentstatus)
+		SELECT val
+		FROM dbo.fnc_strSplit(@status, ',')
+
+	IF ISNULL(@GroupIds, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupsList (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupsList (GroupId)
+		SELECT GroupID
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+	END
+
+	IF (@empid IS NULL)
+	BEGIN
+		IF (
+				@SupervisorID IS NULL
+				OR @role LIKE '%6%'
+				)
+		BEGIN
+			INSERT INTO #tblEmployeeId (EmpID)
+			SELECT DISTINCT e.EmpId
+			FROM dbo.Employee AS e WITH (NOLOCK)
+		END
+		ELSE IF (@role LIKE '%2%')
+		BEGIN
+			INSERT INTO #tblEmployeeId (EmpId)
+			SELECT EmpId
+			FROM dbo.[fnc_GetEmployeeByActorId](@SupervisorId, 1, 0)
+		END
+		ELSE
+		BEGIN
+			INSERT INTO #tblEmployeeId (EmpId)
+			SELECT EmpId
+			FROM dbo.[fnc_GetEmployeeByActorId](@SupervisorId, 1, 1)
+		END
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblEmployeeId (EmpID)
+		VALUES (@empid)
+	END
+
+	SELECT @fromdate = CONVERT(VARCHAR(10), @fromdate, 111)
+		,@todate = DATEADD(ms, - 2, DATEADD(d, 1, CONVERT(VARCHAR(10), @todate, 111)))
+
+	INSERT INTO #tblRequestId(RequestId)
+	SELECT r.RequestId
+	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+		LEFT JOIN #tblEmployeeId AS eid ON r.EmpId = eid.EmpId
+		LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = eid.empID
+		LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = eid.EmpId
+	WHERE (
+			e.isDeleted IS NULL
+			OR e.isDeleted = 0
+			)
+		AND (
+			@requestType = 0
+			OR (
+				@requestType = 1
+				AND r.RequestType IN (1, 2)
+				)
+			OR (
+				@requestType = 2
+				AND r.RequestType IN (3, 4)
+				)
+			OR (
+				@requestType = 3
+				AND r.RequestType = 5
+				)
+			OR (
+				@requestType = 4
+				AND r.RequestType = 6
+				)
+			OR (
+				@requestType = 5
+				AND r.RequestType = 7
+				)
+			)
+		AND ((
+			@empid IS NULL
+			AND
+			(
+			EXISTS (
+				SELECT 1
+				FROM #tblEmployeeId
+				WHERE EmpId = r.EmpId
+				)
+			 OR r.VerifierId = @SupervisorID
+			 OR r.ApproverId = @SupervisorID
+			 )
+			)
+			OR (@empid IS NOT NULL
+				AND
+				(
+				EXISTS (
+					SELECT 1
+					FROM #tblEmployeeId
+					WHERE EmpId = r.EmpId
+					)
+				)
+			)
+			)
+		AND (
+			@excludedEmpID IS NULL
+			OR r.empid <> @excludedEmpID
+			)
+		AND (
+			ISNULL(@status, '') = ''
+			OR r.currentstatus IN (
+				SELECT Currentstatus
+				FROM #tblstatus
+				)
+			)
+		AND (
+			e.GroupId IS NULL
+			OR
+			e.GroupId IN (
+				SELECT GroupId
+				FROM #tblGroupsList
+				)
+			)
+		AND (
+			@isLocal IS NULL
+			OR e_s.IsLocal = @isLocal
+			)
+		AND r.CreatedDate BETWEEN @fromdate
+				AND @todate
+			
+
+	INSERT INTO #tblTotalDaysRequestInMonth (
 		empid
 		,RequestType
 		,TotalDaysRequest
@@ -116,14 +208,14 @@ BEGIN
 	SELECT wt.empid
 		,wt.RequestType
 		,count(1)
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InOutRequest] inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
-		INNER JOIN Employee ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN dbo.[InOutRequest] AS inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
+		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
 		AND wt.RequestType IN (3, 4)
 		AND ee.GroupId IN (
 			SELECT GroupId
-			FROM #GroupsList
+			FROM #tblGroupsList
 			)
 		AND (
 			DATEDIFF(MM, inout.FromDate, @fromdate) = 0
@@ -131,13 +223,13 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #EmployeeId
+			FROM #tblEmployeeId
 			WHERE EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
 
-	INSERT INTO #TotalDaysRequestInMonth (
+	INSERT INTO #tblTotalDaysRequestInMonth (
 		empid
 		,RequestType
 		,TotalDaysRequest
@@ -145,13 +237,13 @@ BEGIN
 	SELECT wt.empid
 		,wt.RequestType
 		,count(1)
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].LeaveRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-		INNER JOIN Employee ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
 		AND ee.GroupId IN (
 			SELECT GroupId
-			FROM #GroupsList
+			FROM #tblGroupsList
 			)
 		AND (
 			DATEDIFF(MM, lr.FromDate, @fromdate) = 0
@@ -159,13 +251,13 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #EmployeeId
+			FROM #tblEmployeeId
 			WHERE EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
 
-	INSERT INTO #TotalDaysRequestInMonth (
+	INSERT INTO #tblTotalDaysRequestInMonth (
 		empid
 		,RequestType
 		,TotalDaysRequest
@@ -173,8 +265,8 @@ BEGIN
 	SELECT wt.empid
 		,wt.RequestType
 		,count(1)
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].ChangeShiftRequest cs WITH (NOLOCK) ON wt.RequestId = cs.RequestId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wt.RequestId = cs.RequestId
 	WHERE wt.currentstatus = 6
 		AND (
 			DATEDIFF(MM, cs.FromDate, @fromdate) = 0
@@ -182,13 +274,13 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #EmployeeId
+			FROM #tblEmployeeId
 			WHERE EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
 
-	INSERT INTO #TotalDaysRequestInMonth (
+	INSERT INTO #tblTotalDaysRequestInMonth (
 		empid
 		,RequestType
 		,TotalDaysRequest
@@ -196,22 +288,21 @@ BEGIN
 	SELECT @empid
 		,wt.RequestType
 		,count(1)
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].KeepInViewRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN dbo.KeepInViewRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 	WHERE wt.EmpId = @empid
 		AND wt.currentstatus = 6
 		AND (
-			DATEDIFF(MM, lr.FromDate, @fromdate) = 0
-			OR DATEDIFF(MM, lr.ToDate, @todate) = 0
+			DATEDIFF(MM, lr.OnDate, @fromdate) = 0
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #EmployeeId
+			FROM #tblEmployeeId
 			WHERE EmpId = wt.EmpId
 			)
 	GROUP BY wt.RequestType
 
-	INSERT INTO #TotalDaysRequestInMonth (
+	INSERT INTO #tblTotalDaysRequestInMonth (
 		empid
 		,RequestType
 		,TotalDaysRequest
@@ -219,13 +310,13 @@ BEGIN
 	SELECT wt.empid
 		,wt.RequestType
 		,count(1)
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InoutMissRequest] lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-		INNER JOIN Employee ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN dbo.[InoutMissRequest] AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
 		AND ee.GroupId IN (
 			SELECT GroupId
-			FROM #GroupsList
+			FROM #tblGroupsList
 			)
 		AND (
 			DATEDIFF(MM, lr.[OnDate], @fromdate) = 0
@@ -233,13 +324,13 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #EmployeeId
+			FROM #tblEmployeeId
 			WHERE EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -263,20 +354,13 @@ BEGIN
 			WHEN wt.RequestType = 3 THEN att.LateIn
 			ELSE att.EarlyOut
 			END
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InOutRequest] inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
-		LEFT JOIN [dbo].[EmployeeAttendance] AS att WITH (NOLOCK) ON inout.EmpId = att.EmpId
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.[InOutRequest] AS inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
+		LEFT JOIN dbo.[EmployeeAttendance] AS att WITH (NOLOCK) ON inout.EmpId = att.EmpId
 		AND inout.FromDate = att.AttendanceDate
-	WHERE wt.RequestType IN (3, 4)
-		AND wt.CreatedDate >= @fromdate
-		AND wt.CreatedDate <= @todate
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -303,21 +387,13 @@ BEGIN
 		,lr.TotalDays
 		,1
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN [dbo].LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 		LEFT JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
-	WHERE (
-			wt.CreatedDate BETWEEN @fromdate
-				AND @todate
-			)
-		AND lr.TotalDays = 0.5
+	WHERE lr.TotalDays = 0.5
 		AND ldt.IsHalfDay = 1
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -333,20 +409,12 @@ BEGIN
 		,lr.ToDate
 		,lr.TotalDays
 		,0
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].LeaveRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-	WHERE (
-			wt.CreatedDate BETWEEN @fromdate
-				AND @todate
-			)
-		AND lr.TotalDays <> 0.5
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+	WHERE lr.TotalDays <> 0.5
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -356,34 +424,26 @@ BEGIN
 		,FromTime
 		,ToTime
 		,TotalDays
-		,FromShift
-		,ToShift
+		,KeepInViewType
 		)
 	SELECT wt.RequestID
 		,wt.EmpId
 		,wt.RequestType
-		,lr.FromDate
-		,lr.FromDate
-		,lr.ToDate
+		,lr.OnDate
+		,lr.OnDate
+		,lr.OnDate
 		,lr.FromTime
 		,lr.ToTime
 		,CASE 
 			WHEN lr.IsHalfDay = 0 THEN 1
 			ELSE 0.5
 			END TotalDays
-		,lr.ShiftId
-		,lr.ShiftId
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].KeepInViewRequest lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-	WHERE wt.CreatedDate >= @fromdate
-		AND wt.CreatedDate <= @todate
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
+		,lr.KeepInViewType
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.KeepInViewRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -406,22 +466,16 @@ BEGIN
 			WHEN ISNULL(att.TotalWorkHours, 0) = 0 THEN 1
 			ELSE 0
 			END
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InoutMissRequest] lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-		LEFT JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = lr.OnDate
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.[InoutMissRequest] AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = lr.OnDate
 		AND ec.EmpId = lr.EmpId
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON lr.OnDate = att.AttendanceDate
 		AND lr.EmpId = att.EmpId
-	WHERE wt.CreatedDate >= @fromdate
-		AND wt.CreatedDate <= @todate
-		AND wt.CurrentStatus = 4
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
+	WHERE wt.CurrentStatus = 4
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -439,20 +493,14 @@ BEGIN
 		,lr.OnDate
 		,1 TotalDays
 		,ec.ShiftId
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].[InoutMissRequest] lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
-		LEFT JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = lr.OnDate
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.[InoutMissRequest] AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
+		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = lr.OnDate
 		AND ec.EmpId = lr.EmpId
-	WHERE wt.CreatedDate >= @fromdate
-		AND wt.CreatedDate <= @todate
-		AND wt.CurrentStatus <> 4
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
+	WHERE wt.CurrentStatus <> 4
 
-	INSERT INTO #RequestInDaily (
+	INSERT INTO #tblRequestInDaily (
 		RequestID
 		,empid
 		,RequestType
@@ -470,21 +518,47 @@ BEGIN
 		,count(1) TotalDays
 		,MAX(csd.FromShift) FromShift
 		,MAX(csd.ToShift) ToShift
-	FROM dbo.WorkingTimeRequest wt WITH (NOLOCK)
-		INNER JOIN [dbo].ChangeShiftRequest cs WITH (NOLOCK) ON wt.RequestId = cs.RequestId
-		INNER JOIN [dbo].ChangeShiftRequestDetail csd WITH (NOLOCK) ON csd.RequestId = cs.RequestId
-	WHERE wt.CreatedDate >= @fromdate
-		AND wt.CreatedDate <= @todate
-		AND EXISTS (
-			SELECT 1
-			FROM #EmployeeId
-			WHERE EmpId = wt.EmpId
-			)
+	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
+	INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wt.RequestId = cs.RequestId
+		INNER JOIN dbo.ChangeShiftRequestDetail AS csd WITH (NOLOCK) ON csd.RequestId = cs.RequestId
 	GROUP BY wt.RequestID
 		,wt.EmpId
 		,wt.RequestType
 		,cs.FromDate
 		,cs.ToDate
+
+	INSERT INTO #tblGeneralLeaveDetail (
+		RequestId
+		,LeaveCountDetails
+		)
+	SELECT DISTINCT wt.RequestId
+		,STUFF((
+				SELECT ', ' + (
+						CAST(SUM(CASE 
+									WHEN rd1.IsHalfDay = 0 THEN 1
+									ELSE 0.5
+									END) AS NVARCHAR(100)) + ' days ' + lt1.Code
+						)
+				FROM dbo.LeaveRequestDetail AS rd1 WITH (NOLOCK)
+					INNER JOIN dbo.LeaveType AS lt1 WITH (NOLOCK) ON lt1.LeaveTypeId = rd1.LeaveType
+				WHERE rd1.RequestId = rd.RequestId
+					AND rd1.LeaveType <> 0
+				GROUP BY rd1.RequestId
+					,rd1.LeaveType
+					,lt1.Code
+				FOR XML PATH('')
+				), 1, 2, '') AS LeaveCountDetails
+	FROM (
+		SELECT rq.RequestId
+			,CreatedDate
+			,EmpId
+		FROM dbo.WorkingTimeRequest AS rq WITH (NOLOCK)
+		INNER JOIN #tblRequestId AS r ON r.RequestId = rq.RequestId
+		) AS wt
+		INNER JOIN #tblRequestInDaily AS rd ON wt.RequestId = rd.RequestID
+		INNER JOIN #tblRequestId AS r1 ON r1.RequestId = rd.RequestId
+	ORDER BY wt.RequestId
 
 	SELECT r.RequestId
 		,r.RequestType
@@ -497,8 +571,10 @@ BEGIN
 		,rd.RequestedTime AS RequestedDate
 		,rd.FromTime
 		,rd.ToTime
+		,rd.KeepInViewType
+		,gdt.LeaveCountDetails
 		,lv.LeaveTypeId
-		,lv.NAME AS LeaveTypeName
+		,lv.[Name] AS LeaveTypeName
 		,r.Remark
 		,ISNULL(rm.TotalDaysRequest, 0) TotalDaysRequestInMonth
 		,CASE 
@@ -532,7 +608,7 @@ BEGIN
 		,e.FullName AS RequesterFullName
 		,g.GroupId
 		,g.Code AS GroupCode
-		,g.NAME AS GroupName
+		,g.[Name] AS GroupName
 		,ap_V.EmpId AS VerifierId
 		,ap_V.NickName AS VerifierNickName
 		,ap_V.FullName AS VerifierFullName
@@ -554,90 +630,42 @@ BEGIN
 		,r.ModifiedDate
 		,ISNULL(rd.IsWarning, 0) AS IsWarning
 		,r.ReworkCount
-	FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-		INNER JOIN #RequestInDaily rd ON r.RequestId = rd.RequestID
-		LEFT JOIN [dbo].[InOutRequest] inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
-		LEFT JOIN [dbo].LeaveRequest lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-		LEFT JOIN [dbo].[InoutMissRequest] inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
-		LEFT JOIN [dbo].ChangeShiftRequest csr WITH (NOLOCK) ON r.RequestId = csr.RequestId
-		LEFT JOIN [dbo].Employee ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
-		LEFT JOIN [dbo].Employee ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
-		LEFT JOIN [dbo].Employee ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
-		LEFT JOIN Employee e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
-		LEFT JOIN #TotalDaysRequestInMonth rm ON r.empID = rm.empid
+		,dbo.fnc_GetAnnualLeaveBalanceByYear (r.EmpId, YEAR(rd.FromDate), r.RequestId) AS AnnualLeaveBalance
+	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID
+		INNER JOIN #tblRequestId AS rq ON r.RequestId = rq.RequestId
+		LEFT JOIN dbo.[InOutRequest] AS inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
+		LEFT JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
+		LEFT JOIN dbo.[InoutMissRequest] AS inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
+		LEFT JOIN dbo.ChangeShiftRequest AS csr WITH (NOLOCK) ON r.RequestId = csr.RequestId
+		LEFT JOIN dbo.Employee AS ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
+		LEFT JOIN dbo.Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
+		LEFT JOIN dbo.Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
+		LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
+		LEFT JOIN #tblTotalDaysRequestInMonth AS rm ON r.empID = rm.empid
 		AND r.RequestType = rm.RequestType
-		LEFT JOIN Employee e WITH (NOLOCK) ON e.empID = r.empID
-		LEFT JOIN dbo.EmployeeSummary e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
-		LEFT JOIN [dbo].EmployeeCalendar C WITH (NOLOCK) ON c.empid = r.empid
+		LEFT JOIN #tblGeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId
+		LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = r.empID
+		LEFT JOIN dbo.EmployeeCalendar AS C WITH (NOLOCK) ON c.empid = r.empid
 		AND c.WorkDate = convert(VARCHAR(10), rd.FromDate, 111)
-		LEFT JOIN dbo.[Shift] s1 WITH (NOLOCK) ON s1.ShiftID = rd.FromShift
-		LEFT JOIN dbo.[Shift] s2 WITH (NOLOCK) ON s2.ShiftID = rd.ToShift
-		LEFT JOIN dbo.[Shift] s3 WITH (NOLOCK) ON s3.ShiftID = c.ShiftID
-		LEFT JOIN [Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
-		LEFT JOIN dbo.LeaveType lv WITH (NOLOCK) ON lv.LeaveTypeID = lr.LeaveType
-	WHERE (
-			e.isDeleted IS NULL
-			OR e.isDeleted = 0
-			)
-		AND (
-			@requestType = 0
-			OR (
-				@requestType = 1
-				AND r.RequestType IN (1, 2)
-				)
-			OR (
-				@requestType = 2
-				AND r.RequestType IN (3, 4)
-				)
-			OR (
-				@requestType = 3
-				AND r.RequestType = 5
-				)
-			OR (
-				@requestType = 4
-				AND r.RequestType = 6
-				)
-			OR (
-				@requestType = 5
-				AND r.RequestType = 7
-				)
-			)
-		AND (
-			EXISTS (
-				SELECT 1
-				FROM #EmployeeId
-				WHERE EmpId = r.EmpId
-				)
-			)
-		AND (
-			@excludedEmpID IS NULL
-			OR r.empid <> @excludedEmpID
-			)
-		AND (
-			ISNULL(@status, '') = ''
-			OR r.currentstatus IN (
-				SELECT Currentstatus
-				FROM #status
-				)
-			)
-		AND (
-			e.GroupId IN (
-				SELECT GroupId
-				FROM #GroupsList
-				)
-			)
-		AND (
-			@isLocal IS NULL
-			OR e_s.IsLocal = @isLocal
-			)
-
+		LEFT JOIN dbo.[Shift] AS s1 WITH (NOLOCK) ON s1.ShiftID = rd.FromShift
+		LEFT JOIN dbo.[Shift] AS s2 WITH (NOLOCK) ON s2.ShiftID = rd.ToShift
+		LEFT JOIN dbo.[Shift] AS s3 WITH (NOLOCK) ON s3.ShiftID = c.ShiftID
+		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID
+		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeID = lr.LeaveType
 	ORDER BY r.CreatedDate DESC
 
-	DROP TABLE #GroupsList
+	DROP TABLE #tblstatus
 
-	DROP TABLE #TotalDaysRequestInMonth
+	DROP TABLE #tblGroupsList
 
-	DROP TABLE #RequestInDaily
+	DROP TABLE #tblEmployeeId
 
-	DROP TABLE #status
+	DROP TABLE #tblTotalDaysRequestInMonth
+
+	DROP TABLE #tblRequestInDaily
+
+	DROP TABLE #tblGeneralLeaveDetail
+
+	DROP TABLE #tblRequestId
 END

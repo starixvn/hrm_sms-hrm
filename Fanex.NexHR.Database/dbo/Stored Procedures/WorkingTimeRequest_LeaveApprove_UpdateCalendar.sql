@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[WorkingTimeRequest_LeaveApprove_UpdateCalendar]
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_LeaveApprove_UpdateCalendar    Script Date: 7/20/2016 10:19:23 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_LeaveApprove_UpdateCalendar    Script Date: 7/19/2016 5:22:22 PM ******/
+CREATE PROCEDURE [dbo].[WorkingTimeRequest_LeaveApprove_UpdateCalendar]
 	@RequestId BIGINT,
 	@EmpId INT,
 	@ProcessedBy INT
@@ -110,12 +112,25 @@ BEGIN
 
 			UPDATE EC
 			SET EC.IsOffDay = 1,
+				EC.LeaveTypeId = NULL,
+				EC.LeaveTypeId2 = NULL,
 				EC.ShiftId = NULl
 			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
 				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
 					ON EC.WorkDate = lrd.OnDate 
 			WHERE EC.EmpID = @EmpId 
 				AND lrd.WorkType = 1
+				AND lrd.RequestId = @RequestID
+
+			UPDATE EC
+			SET 
+				EC.LeaveTypeId = NULL,
+				EC.LeaveTypeId2 = NULL
+			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
+					ON EC.WorkDate = lrd.OnDate 
+			WHERE EC.EmpID = @EmpId 
+				AND lrd.WorkType = 3
 				AND lrd.RequestId = @RequestID
 
 			UPDATE EC

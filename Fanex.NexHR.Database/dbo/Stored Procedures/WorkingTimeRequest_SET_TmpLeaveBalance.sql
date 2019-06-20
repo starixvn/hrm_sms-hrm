@@ -1,4 +1,6 @@
-﻿-- [dbo].[WorkingTimeRequest_SET_TmpLeaveBalance_xtest] 173841, 217 select * from tmpLeaveBalance WHERE InYear = 2015
+﻿/****** Object:  Stored Procedure dbo.WorkingTimeRequest_SET_TmpLeaveBalance    Script Date: 7/20/2016 10:19:25 AM ******/
+/****** Object:  Stored Procedure dbo.WorkingTimeRequest_SET_TmpLeaveBalance    Script Date: 7/19/2016 5:22:23 PM ******/
+-- [dbo].[WorkingTimeRequest_SET_TmpLeaveBalance_xtest] 173841, 217 select * from tmpLeaveBalance WHERE InYear = 2015
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_SET_TmpLeaveBalance] 
 	@Requestid BIGINT
 	,@EmpID INT
