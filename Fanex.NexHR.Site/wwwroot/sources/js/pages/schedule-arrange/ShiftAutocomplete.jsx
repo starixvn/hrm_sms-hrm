@@ -1,7 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
-import { isEqual } from 'lodash';
 
 export default class ShiftAutocomplete extends PureComponent {
     static propTypes = {
@@ -35,7 +34,7 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (!isEqual(this.props.shift, prevProps.shift)) {
+        if (this.props.shift !== prevProps.shift) {
             this.setState({ value: this.props.shift === null ? '' : this.props.shift.code });
         }
     }
@@ -73,6 +72,10 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     handleInputBlur = event => {
+        if (this.props.isDisabled) {
+            return;
+        }
+
         const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
 
         if (value.length > 0) {
@@ -88,6 +91,10 @@ export default class ShiftAutocomplete extends PureComponent {
         } else {
             this.props.onChange(this.props.name, null);
         }
+    }
+
+    handleMouseLeave = event => {
+        this.handleInputBlur(event);
     }
 
     render() {
@@ -111,7 +118,8 @@ export default class ShiftAutocomplete extends PureComponent {
                     disabled: isDisabled,
                     onFocus: this.handleInputFocus,
                     onPaste: this.handleInputPaste,
-                    onBlur: this.handleInputBlur
+                    onBlur: this.handleInputBlur,
+                    onMouseLeave: this.handleMouseLeave
                 }}
                 value={value}
                 onChange={this.handleChange}
