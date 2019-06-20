@@ -102,7 +102,7 @@
                 RequestId = id
             };
             KeepInViewModel request = keepInViewRequestService.GetById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
