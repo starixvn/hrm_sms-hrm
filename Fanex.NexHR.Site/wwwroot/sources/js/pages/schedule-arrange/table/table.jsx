@@ -51,7 +51,6 @@ export default class Table extends PureComponent {
                             onChangeOffdayOT={this.props.onChangeOffdayOT}
                             onChangeWorkday={this.props.onChangeWorkday}
                             onShiftMultiple={this.props.onShiftMultiple}
-                            onChangePublics={this.props.onChangePublics}
                             onPrevious={this.props.onPrevious}
                             onNext={this.props.onNext}
                         />

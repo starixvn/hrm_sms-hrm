@@ -209,15 +209,12 @@ export default class ColShift extends PureComponent {
                         shiftOptions={moreInfo.isLeaveHalfDay ? shiftOptions.filter(shift => shift.id !== OffDayShiftId) : shiftOptions}
                         onChange={this.handleChangeShift}
                     />
-                    {
-                        isShowCheckBox && this.state.isShowCheckbox &&
-                        <div className="checkbox">
-                            <input type="checkbox" className={`checkbox-custom ${scheduleAttrName}`} checked={this.props.isChecked}
-                                id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleChangeSelectWeekDay}
-                            />
-                            <label htmlFor={`ckb-${scheduleAttrName}${employeeId}`} />
-                        </div>
-                    }
+                    <div className={`checkbox ${isShowCheckBox && this.state.isShowCheckbox ? '' : 'hidden'}`}>
+                        <input type="checkbox" className={`checkbox-custom ${scheduleAttrName}`} checked={this.props.isChecked}
+                            id={`ckb-${scheduleAttrName}${employeeId}`} onChange={this.handleChangeSelectWeekDay}
+                        />
+                        <label htmlFor={`ckb-${scheduleAttrName}${employeeId}`} />
+                    </div>
                 </div>
             </div>
         );

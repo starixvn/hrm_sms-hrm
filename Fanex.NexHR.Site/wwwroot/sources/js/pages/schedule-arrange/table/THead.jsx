@@ -13,10 +13,6 @@ export default class THead extends PureComponent {
         { name: 'sundaySchedule', value: 6 }
     ];
 
-    handleChangePublics = event => {
-        this.props.onChangePublics(null, null, event.target.checked);
-    }
-
     render() {
         const { isHost, fromDate, toDate } = this.props;
 
@@ -63,14 +59,11 @@ export default class THead extends PureComponent {
                                 <MenuItem><span className="leaveday" />Others Leave</MenuItem>
                             </Dropdown.Menu>
                         </Dropdown>
-                        
                     </div>
                 </div>
                 <div className="header">
                     <div className="table-cell cell-index" />
-                    <div className="table-cell cell-nickname">
-                        Nickname
-                    </div>
+                    <div className="table-cell cell-nickname">Nickname</div>
                     <div className="table-cell cell-shift">Default Shift</div>
                     {
                         this.dayOfWeeks.map(item => {
@@ -89,17 +82,6 @@ export default class THead extends PureComponent {
                             );
                         })
                     }
-                    <div className="table-cell cell-public">
-                        <div className="cell-control-wrapper">
-                            <div>Public</div>
-                            <div className="checkbox">
-                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-publicAll`} disabled={!isHost}
-                                    onChange={this.handleChangePublics}
-                                />
-                                <label htmlFor={`ckb-publicAll`} />
-                            </div>
-                        </div>
-                    </div>
                     <div className="table-cell cell-modifier">Modified by</div>
                 </div>
             </Fragment>

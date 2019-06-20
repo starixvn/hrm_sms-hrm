@@ -1,6 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Autocomplete from 'react-autocomplete';
+import { isEqual } from 'lodash';
 
 export default class ShiftAutocomplete extends PureComponent {
     static propTypes = {
@@ -34,7 +35,7 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.shift !== prevProps.shift) {
+        if (!isEqual(this.props.shift, prevProps.shift)) {
             this.setState({ value: this.props.shift === null ? '' : this.props.shift.code });
         }
     }

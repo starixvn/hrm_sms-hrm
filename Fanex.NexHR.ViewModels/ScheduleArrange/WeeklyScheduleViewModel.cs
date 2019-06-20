@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.ViewModels.ScheduleArrange
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.NexHR.Models.ScheduleArrange;
 
     public class WeeklyScheduleViewModel
@@ -8,6 +9,7 @@
         public int GroupId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        public bool IsPublic => !Members.Any(x => !x.IsPublic);
 
         public IEnumerable<WeeklySchedule> Members { get; set; } = new List<WeeklySchedule>();
     }
