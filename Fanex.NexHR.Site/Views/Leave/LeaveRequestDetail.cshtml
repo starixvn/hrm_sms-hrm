@@ -50,8 +50,8 @@
                     }
                 }
                 <tr>
-                    <td class="tdleavedate" data-date="@item.LeaveDate.ToDateMonthYearFormatedDate()">
-                        @(item.LeaveDate.ToDateMonthYearFormatedDate() + " (" + item.LeaveDate.ToString("ddd") + ")")
+                    <td class="tdleavedate" data-date="@item.OnDate.ToDateMonthYearFormatedDate()">
+                        @(item.OnDate.ToDateMonthYearFormatedDate() + " (" + item.OnDate.ToString("ddd") + ")")
                     </td>
                     <td class="tdschedulestatus">
                         @item.ScheduleStatus

@@ -173,6 +173,7 @@
                 IsHalfDay = reader.ToBool("IsHalfDay"),
                 FromTime = reader.ToDateTime("FromTime"),
                 ToTime = reader.ToDateTime("ToTime"),
+                KeepInViewType = reader.ToByte("KeepInViewType"),
                 LeaveCountDetails = reader.ToString("LeaveCountDetails"),
                 LeaveType = new LeaveType
                 {
@@ -223,7 +224,6 @@
                     NickName = reader.ToString("ProcessedNickName"),
                     FullName = reader.ToString("ProcessedFullName"),
                 },
-                //// Late In, Early Out
                 FromShift = new Shift
                 {
                     Id = reader.ToInt("FromShiftId"),
@@ -232,9 +232,7 @@
                 RequestedDate = reader.ToDateTime("RequestedDate"),
                 TotalMins = reader.ToInt("TotalMinutes"),
                 ActualLateInEarlyOut = reader.ToInt("ActualInOutMins"),
-                //// Keep in view
                 CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
-                //// Change shift
                 ToShift = new Shift
                 {
                     Id = reader.ToInt("ToShiftId"),

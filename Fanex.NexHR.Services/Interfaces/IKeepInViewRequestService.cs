@@ -10,7 +10,7 @@
 
         KeepInViewModel GetById(GetKeepInViewRequestByIdCriteria criteria);
 
-        IList<KeepInViewModel> GetHistoryById(GetKeepInViewHistoryByIdCriteria criteria);
+        IList<KeepInViewModel> GetHistoryById(GetKeepInViewRequestHistoryByIdCriteria criteria);
 
         void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria);
 

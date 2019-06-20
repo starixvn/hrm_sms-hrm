@@ -215,7 +215,7 @@
 
         public ActionResult ViewHistory(long id)
         {
-            var criteria = new GetKeepInViewHistoryByIdCriteria
+            var criteria = new GetKeepInViewRequestHistoryByIdCriteria
             {
                 RequestId = id
             };

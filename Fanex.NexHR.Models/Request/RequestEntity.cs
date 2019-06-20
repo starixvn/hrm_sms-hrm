@@ -96,5 +96,7 @@
         public bool IsHalfDay { get; set; }
 
         public bool CrossDay { get; set; }
+
+        public byte KeepInViewType { get; set; }
     }
 }

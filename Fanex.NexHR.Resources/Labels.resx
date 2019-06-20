@@ -1707,4 +1707,7 @@
   <data name="LogDate" xml:space="preserve">
     <value>Log Date</value>
   </data>
+  <data name="Minutes" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
 </root>

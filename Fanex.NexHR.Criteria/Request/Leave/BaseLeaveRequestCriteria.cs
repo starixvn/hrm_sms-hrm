@@ -58,7 +58,7 @@
                             LeaveRequestDetailTpl,
                             0,
                             EmployeeId,
-                            detail.LeaveDate,
+                            detail.OnDate,
                             detail.WorkType == 2 ? detail.LeaveTypeId.ToString() : string.Empty,
                             detail.IsHalfDay,
                             detail.WorkType,

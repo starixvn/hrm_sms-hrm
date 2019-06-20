@@ -16,6 +16,9 @@
 
     public class RequestService : IRequestService
     {
+        private const decimal HalfDayValue = (decimal)0.5;
+        private const int OneHourValue = 60;
+
         private readonly IRequestRepository requestRepository;
         private readonly IBaseService baseService;
 
@@ -251,22 +254,63 @@
 
         private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)
         {
+            string messageDetail = request.KeepInViewType == (int)KeepInViewTypes.KeepInViewByDay
+                ? GetMessageForKeepInViewByDay(request, isNoFormat)
+                : GetMessageForKeepInViewByHour(request, isNoFormat);
+
+            return messageDetail;
+        }
+
+
+        private static string GetMessageForKeepInViewByDay(RequestEntity request, bool isNoFormat)
+        {
             string msgTemplate;
             string messageDetail;
-            if (request.TotalDays.Equals(0.5))
+
+            if (request.TotalDays.Equals(HalfDayValue))
             {
                 msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfdayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfday;
                 messageDetail = string.Format(
                     msgTemplate,
                     request.FromDate.ToDateMonthYearFormatedDate(),
                     request.FromTime.ToShortTime(),
-                    request.ToTime.ToShortTime(),
-                    request.FromShift.Name);
+                    request.ToTime.ToShortTime());
             }
             else
             {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewWithNoFormat : RequestFormatConstants.MsgKeepInView;
-                messageDetail = string.Format(msgTemplate, request.FromDate.ToDateMonthYearFormatedDate(), request.FromShift.Name);
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewOneDayWithNoFormat : RequestFormatConstants.MsgKeepInViewOneDay;
+                messageDetail = string.Format(msgTemplate, request.FromDate.ToDateMonthYearFormatedDate());
+            }
+
+            return messageDetail;
+        }
+
+        private static string GetMessageForKeepInViewByHour(RequestEntity request, bool isNoFormat)
+        {
+            string msgTemplate;
+            string messageDetail;
+
+            var minutes = (request.ToTime - request.FromTime).TotalMinutes;
+            var hours = minutes / 60.0;
+            if (minutes > OneHourValue)
+            {
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHoursWithNoFormat : RequestFormatConstants.MsgKeepInViewByHours;
+                messageDetail = string.Format(
+                    msgTemplate,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromTime.ToShortTime(),
+                    request.ToTime.ToShortTime(),
+                    hours.ToString("0.#"));
+            }
+            else
+            {
+                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHourWithNoFormat : RequestFormatConstants.MsgKeepInViewByHour;
+                messageDetail = string.Format(
+                    msgTemplate,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromTime.ToShortTime(),
+                    request.ToTime.ToShortTime(),
+                    hours.ToString("0.#"));
             }
 
             return messageDetail;

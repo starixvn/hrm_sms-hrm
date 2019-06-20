@@ -85,11 +85,11 @@
 
         public ActionResult Update(long requestId)
         {
-            var criteria = new GetRequestByIdCriteria
+            var criteria = new GetLeaveRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            RequestEntity request = requestService.GetRequestById(criteria);
+            var request = leaveRequestService.GetById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId))
             {
@@ -128,19 +128,33 @@
 
         public ActionResult Detail(int requestId)
         {
-            var criteria = new GetRequestByIdCriteria
+            var criteria = new GetLeaveRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            RequestEntity request = requestService.GetRequestById(criteria);
+            var request = leaveRequestService.GetById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = leaveTypeService.GetAll();
-            model.VerifierAndApprover = GetVerifierApprover(request.Requester.Id, request);
+            model.VerifierAndApprover = GetVerifierApprover(request.Employee.Id, request);
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            var criteria = new DeleteLeaveRequestCriteria
+            {
+                RequestId = id
+            };
+
+            leaveRequestService.SendMailForDeleteSuccessfully(id);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
+            return Json(result);
         }
 
         [HttpGet]
@@ -152,23 +166,28 @@
         [HttpPost]
         public ActionResult EmployeeView(int year)
         {
-            var criteria = new GetRequestCriteria
+            var criteria = new GetLeaveRequestByDateCriteria
             {
-                SupervisorId = sessionService.Employee.Id,
                 EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31),
-                RequestType = (int)RequestFilter.Leave,
-                IsQueryByCreatedDate = false,
-                RequestViewType = RequestViewType.CompanySpace,
-                IsLocal = null
+                ToDate = new DateTime(year, 12, 31)
             };
 
-            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
+            var leaves = leaveRequestService.GetByDate(criteria);
 
             ViewBag.Year = year;
             ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
-            return View(entityList);
+            return View(leaves);
+        }
+
+        public ActionResult ViewHistory(long id)
+        {
+            var criteria = new GetLeaveRequestHistoryByIdCriteria
+            {
+                RequestId = id
+            };
+            var requests = leaveRequestService.GetHistoryById(criteria);
+            return View(requests);
         }
 
         public ActionResult GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
@@ -229,7 +248,7 @@
                 for (int i = 0; i < numberDays; i++)
                 {
                     tempDate = fromDate.AddDays(i);
-                    IEnumerable<LeaveDetailModel> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.LeaveDate == tempDate));
+                    IEnumerable<LeaveDetailModel> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.OnDate == tempDate));
                     IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
 
                     if (tempWokingCalendars != null && tempWokingCalendars.Any())
@@ -244,7 +263,7 @@
                 }
             }
 
-            return leaveRequestDetailOutput.OrderBy(t => t.LeaveDate).ThenBy(t => t.FromTime).ToList();
+            return leaveRequestDetailOutput.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
         }
 
         private void AddLeaveRequestExistCalendar(
@@ -283,8 +302,8 @@
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
                     tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
-                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
-                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
                     leaveRequestDetailOutput.Add(tempLeaveDetailModel);
                 }
             }
@@ -292,7 +311,7 @@
             {
                 tempLeaveDetailModel = new LeaveDetailModel
                 {
-                    LeaveDate = tempWokingCalendar.WorkDate,
+                    OnDate = tempWokingCalendar.WorkDate,
                     ScheduleStatus = tempScheduleStatus,
                     IsOffOrHoliday = isOffOrHoliday,
                     LeaveTypeId = Constants.AnnualLeave,
@@ -316,8 +335,8 @@
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
-                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.LeaveDate.Date;
-                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.LeaveDate.Date;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
                     leaveRequestDetailOutput.Add(tempLeaveDetailModel);
                 }
             }
@@ -325,7 +344,7 @@
             {
                 tempLeaveDetailModel = new LeaveDetailModel
                 {
-                    LeaveDate = workDate,
+                    OnDate = workDate,
                     ScheduleStatus = Labels.NA,
                     LeaveTypeId = Constants.AnnualLeave,
                     WorkType = 2
@@ -334,7 +353,7 @@
             }
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, RequestEntity request = null)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, LeaveModel request = null)
         {
             var criteria = new GetVerifierAndApproverCriteria
             {
@@ -371,35 +390,37 @@
             return supervisor;
         }
 
-        private LeaveRequestViewModel ConvertRequestToModel(RequestEntity request)
+        private LeaveRequestViewModel ConvertRequestToModel(LeaveModel request)
         {
             LeaveRequestViewModel model = null;
             if (request != null)
             {
+                var fromTime = request.GetFromTimeHalfDay();
+                var toTime = request.GetToTimeHalfDay();
                 model = new LeaveRequestViewModel
                 {
-                    RequestId = request.Id,
+                    RequestId = request.RequestId,
                     LeaveTypeId = request.LeaveType.Id,
-                    Employee = request.Requester.DisplayName,
-                    EmployeeId = request.Requester.Id,
+                    Employee = request.Employee.DisplayName,
+                    EmployeeId = request.Employee.Id,
                     FromDate = request.FromDate,
                     ToDate = (request.LeaveType.Id != (int)LeaveTypes.GeneralLeave
                             && request.IsHalfDay
-                            && request.ToDate.Date != request.ToTime.Date) ? request.ToDate.AddDays(1) : request.ToDate,
+                            && request.ToDate.Date != request.GetToTimeHalfDay()) ? request.ToDate.AddDays(1) : request.ToDate,
                     TotalDays = request.TotalDays,
                     HalfDayOff = request.IsHalfDay,
                     VerifierId = request.VerifiedBy.Id,
                     ApproverId = request.ApprovedBy.Id,
                     RefNo = request.RefNO,
                     Remark = request.Remark,
-                    FromTime = request.FromTime.ToString("HH:mm"),
-                    ToTime = request.ToTime.ToString("HH:mm"),
-                    FromTimeHour = request.FromTime.Hour,
-                    FromTimeMinute = request.FromTime.Minute,
-                    ToTimeHour = request.ToTime.Hour,
-                    ToTimeMinute = request.ToTime.Minute,
-                    IsFromTimeAfterDay = request.FromDate.Date != request.FromTime.Date,
-                    IsToTimeAfterDay = request.ToDate.Date != request.ToTime.Date,
+                    FromTime = fromTime.ToString("HH:mm"),
+                    ToTime = toTime.ToString("HH:mm"),
+                    FromTimeHour = fromTime.Hour,
+                    FromTimeMinute = fromTime.Minute,
+                    ToTimeHour = toTime.Hour,
+                    ToTimeMinute = toTime.Minute,
+                    IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date,
+                    IsToTimeAfterDay = request.ToDate.Date != toTime.Date,
                     Status = request.Status
                 };
             }

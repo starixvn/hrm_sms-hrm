@@ -100,11 +100,7 @@
                             @request.CreatedDate.ToDetailFormatedDate()
                         </td>
                         @RenderStatus(Model, request)
-                        <td>
-                            <a class="viewhistory" href="javascript:;" id="/request/viewhistorynewversion?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                                @Labels.View
-                            </a>
-                        </td>
+                        @RenderHistoryLink(request)
                         <td class="td-warning">
                             @if (request.IsWarning)
                             {
@@ -412,6 +408,34 @@
         default:
             <td class="status">
                 <span class="tooltip-tipsy">@request.Status.ToString()</span>
+            </td>
+            break;
+    }
+}
+
+@helper RenderHistoryLink(RequestEntity request)
+{
+    switch (request.RequestType.Id)
+    {
+        case (int)RequestType.Leave:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/request/viewhistorynewversion?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                    @Labels.View
+                </a>
+            </td>
+            break;
+        case (int)RequestType.KeepInView:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.Id">
+                    @Labels.View
+                </a>
+            </td>
+            break;
+        default:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                    @Labels.View
+                </a>
             </td>
             break;
     }

@@ -55,7 +55,7 @@
             return request ?? new KeepInViewModel();
         }
 
-        public IList<KeepInViewModel> GetHistoryById(GetKeepInViewHistoryByIdCriteria criteria)
+        public IList<KeepInViewModel> GetHistoryById(GetKeepInViewRequestHistoryByIdCriteria criteria)
         {
             IList<KeepInViewModel> requests = null;
             if (criteria != null && criteria.IsValid())

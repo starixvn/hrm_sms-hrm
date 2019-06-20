@@ -1,145 +1,145 @@
 ﻿@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
-@{
-    ViewBag.Title = Labels.MyLeaveRequest;
-    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
-    decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
-    decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
-}
-@section css{
-    @Url.CombresLink("myrequestcss")
-}
-@section js{
-    @Url.CombresLink("empleavejs")
-}
-@{
-    ViewBag.Title = Labels.MyLeaveRequest;
-}
-@section Breadcrumb {
-    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
-}
-<h2>@ViewBag.Title</h2>
-<div class="balance-area">
-    <table class="tblBalance">
-        <tr class="odd1">
-            <td>@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong></td>
-        </tr>
-        <tr class="event1">
-            <td>Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></td>
-        </tr>
-    </table>
-</div>
+@model IList<LeaveModel>
+    @{
+        ViewBag.Title = Labels.MyLeaveRequest;
+        var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
+        decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
+        decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
+    }
+    @section css{
+        @Url.CombresLink("myrequestcss")
+    }
+    @section js{
+        @Url.CombresLink("empleavejs")
+    }
+    @{
+        ViewBag.Title = Labels.MyLeaveRequest;
+    }
+    @section Breadcrumb {
+        <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+    }
+    <h2>@ViewBag.Title</h2>
+    <div class="balance-area">
+        <table class="tblBalance">
+            <tr class="odd1">
+                <td>@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong></td>
+            </tr>
+            <tr class="event1">
+                <td>Keep In View Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></td>
+            </tr>
+        </table>
+    </div>
 
-@using (Html.BeginForm())
-{
-    <input type="hidden" value="Leave" id="RequestType" />
+    @using (Html.BeginForm())
+    {
+        <input type="hidden" value="Leave" id="RequestType" />
 
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            <label for="Year">@Labels.Year</label>
-        </div>
-        <div class="grid_2">
-            @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
-        </div>
-        <div class="grid_2">
-            <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
-        </div>
-        <div class="grid_5">
-            <div class="button-icon">
-                <span class="icon plus"></span>@Html.ActionLink(Labels.LeaveRequest, "Create")
+        <div class="container_24 bunhat">
+            <div class="grid_1 gridlabel">
+                <label for="Year">@Labels.Year</label>
+            </div>
+            <div class="grid_2">
+                @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+            </div>
+            <div class="grid_2">
+                <input type="submit" id="submit" value="@Labels.Submit" class="button-primary submit processing-submit" />
+            </div>
+            <div class="grid_5">
+                <div class="button-icon">
+                    <span class="icon plus"></span>@Html.ActionLink(Labels.LeaveRequest, "Create")
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="clear">
-    </div>
-}
-<table class="table table-custom" id="data">
-    <thead>
-        <tr>
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.RefNo1</th>
-            <th>@Labels.LeaveType</th>
-            <th>@Labels.From</th>
-            <th>@Labels.To</th>
-            <th>@Labels.Total</th>
-            <th>@Labels.CreatedDate</th>
-            <th>@Labels.Remark</th>
-            <th>@Labels.Status</th>
-            <th>@Labels.History</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{int index = 1;}
-        @if (Model != null && Model.Count > 0)
-        {
-            var verifiedStatus = VerifiedStatus.Pending;
-            var approvedStatus = ApprovedStatus.Pending;
-            var processedStatus = HRStatus.Pending;
-
-            foreach (RequestEntity request in Model)
+        <div class="clear">
+        </div>
+    }
+    <table class="table table-custom" id="data">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.RefNo1</th>
+                <th>@Labels.LeaveType</th>
+                <th>@Labels.From</th>
+                <th>@Labels.To</th>
+                <th>@Labels.Total</th>
+                <th>@Labels.CreatedDate</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.History</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int index = 1;}
+            @if (Model != null && Model.Count > 0)
             {
-                verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
-                approvedStatus = (ApprovedStatus)request.ApprovedStatus;
-                processedStatus = (HRStatus)request.ProcessedStatus;
-                <tr id="row@(request.Id)">
-                    <td>
-                        @(index++)
-                    </td>
-                    <td>
-                        @request.RefNO
-                    </td>
-                    <td>
-                        <a class="viewdetail"
-                           data-id="@request.Id"
-                           data-verifier="@request.VerifiedBy.NickName"
-                           data-verifier-status="@verifiedStatus"
-                           data-verified-date="@(request.VerifiedStatus == (int)VerifiedStatus.Pending ? string.Empty : request.VerifiedDate.ToShortFormatedDate())"
-                           data-approver="@request.ApprovedBy.NickName"
-                           data-approver-status="@approvedStatus"
-                           data-approved-date="@(request.ApprovedStatus == (int)ApprovedStatus.Pending ? string.Empty : request.ApprovedDate.ToShortFormatedDate())"
-                           data-hr="@request.ProcessedBy.NickName"
-                           data-hr-status="@processedStatus"
-                           data-processed-date="@(request.ProcessedStatus == (int)HRStatus.Pending ? string.Empty : request.ProcessedDate.ToShortFormatedDate())"
-                           href="~/Leave/Detail?requestId=@request.Id">@request.LeaveType.Name</a>
-                    </td>
-                    <td class="ddMMyyyy">
-                        @request.FromDate.ToDateMonthYearFormatedDate()
-                    </td>
-                    <td class="ddMMyyyy">
-                        @request.ToDate.ToDateMonthYearFormatedDate()
-                    </td>
-                    <td>
-                        @request.TotalDays.ToString("0.0")
-                    </td>
-                    <td>
-                        @request.CreatedDate.ToShortFormatedDate()
-                    </td>
-                    @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    {
-                        <td class="tooltip" title="@request.Remark">
-                            <span class="icon remark" alt="remark" />
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                    }
-                    @Html.Partial("_SharedRequestStatus", request)
-                    <td>
-                        <a class="viewhistory" href="javascript:;" id="/request/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                            @Labels.View
-                        </a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: 10);
-        }
-    </tbody>
-</table>
+                var verifiedStatus = VerifiedStatus.Pending;
+                var approvedStatus = ApprovedStatus.Pending;
+                var processedStatus = HRStatus.Pending;
 
-@RazorHelper.EmployeeProcessMenu()
-<div id="dialoghistorycontent" />
+                foreach (LeaveModel request in Model)
+                {
+                    verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
+                    approvedStatus = (ApprovedStatus)request.ApprovedStatus;
+                    processedStatus = (HRStatus)request.ProcessedStatus;
+                    <tr id="row@(request.RequestId)">
+                        <td>
+                            @(index++)
+                        </td>
+                        <td>
+                            @request.RefNO
+                        </td>
+                        <td>
+                            <a class="viewdetail"
+                               data-id="@request.RequestId"
+                               data-verifier="@request.VerifiedBy.NickName"
+                               data-verifier-status="@verifiedStatus"
+                               data-verified-date="@(request.VerifiedStatus == (int)VerifiedStatus.Pending ? string.Empty : request.VerifiedDate.ToShortFormatedDate())"
+                               data-approver="@request.ApprovedBy.NickName"
+                               data-approver-status="@approvedStatus"
+                               data-approved-date="@(request.ApprovedStatus == (int)ApprovedStatus.Pending ? string.Empty : request.ApprovedDate.ToShortFormatedDate())"
+                               data-hr="@(request.ProcessedBy == null ? string.Empty : request.ProcessedBy.NickName)"
+                               data-hr-status="@processedStatus"
+                               data-processed-date="@(request.ProcessedStatus == (int)HRStatus.Pending ? string.Empty : request.ProcessedDate.ToShortFormatedDate())"
+                               href="~/Leave/Detail?requestId=@request.RequestId">@request.LeaveType.Name</a>
+                        </td>
+                        <td class="ddMMyyyy">
+                            @request.FromDate.ToDateMonthYearFormatedDate()
+                        </td>
+                        <td class="ddMMyyyy">
+                            @request.ToDate.ToDateMonthYearFormatedDate()
+                        </td>
+                        <td>
+                            @request.TotalDays.ToString("0.0")
+                        </td>
+                        <td>
+                            @request.CreatedDate.ToShortFormatedDate()
+                        </td>
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        {
+                            <td class="tooltip" title="@request.Remark">
+                                <span class="icon remark" alt="remark" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                        @RazorHelper.RenderRequestStatus(request)
+                        <td>
+                            <a class="viewhistory" href="javascript:;" id="/leave/viewhistory?id=@request.RequestId">
+                                @Labels.View
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @RazorHelper.DisplayNoInformation(colspan: 10);
+            }
+        </tbody>
+    </table>
+
+    @RazorHelper.EmployeeProcessMenu()
+    <div id="dialoghistorycontent" />

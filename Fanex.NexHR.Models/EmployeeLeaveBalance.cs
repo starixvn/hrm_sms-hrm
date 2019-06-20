@@ -11,5 +11,7 @@
         public decimal CurrentLeaveBalanceDay { get; set; }
 
         public decimal WeekedLeaveDayTaken { get; set; }
+
+        public decimal KeepInViewByHourBalance { get; set; }
     }
 }

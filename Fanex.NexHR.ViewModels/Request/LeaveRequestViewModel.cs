@@ -46,6 +46,8 @@
 
         public int ToTimeMinute { get; set; }
 
+        public int Minutes { get; set; }
+
         public bool IsFromTimeAfterDay { get; set; }
 
         public string ToTime { get; set; }

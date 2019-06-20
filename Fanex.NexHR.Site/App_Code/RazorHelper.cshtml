@@ -2,6 +2,7 @@
 @using Fanex.NexHR.Core;
 @using Fanex.NexHR.Resources;
 @using Fanex.NexHR.Models;
+@using Fanex.NexHR.Models.Request;
 
 @helper FormatDate(DateTime? date)
 {
@@ -494,5 +495,41 @@
     else
     {
         <span>-</span>
+    }
+}
+
+@helper RenderRequestStatus(BaseRequest request)
+{
+    switch (request.Status.Id)
+    {
+        case (byte)CurrentRequestStatus.Pending:
+            <td>
+                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip @request.Status.ToString()">@request.Status.ToString()</a>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+        case (byte)CurrentRequestStatus.NotVerified:
+            <td>
+                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            </td>
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        case (byte)CurrentRequestStatus.Rejected:
+            <td>
+                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            </td>
+            break;
+
+        case (byte)CurrentRequestStatus.Processed:
+        case (byte)CurrentRequestStatus.Void:
+            <td>
+                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
+            </td>
+            break;
+        default:
+            <td>
+                <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
+            </td>
+            break;
     }
 }

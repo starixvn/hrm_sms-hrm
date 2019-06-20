@@ -30,8 +30,8 @@
             <div class="leave-info">
                 ※ <span class="infobalance">
                     In <span id="lblMonth">@Model.ToDate.ToString("MMMM")</span>, you can use up to
-                    <span class="numberbalance" id="lblCurrentLeaveBalance">@Model.EmployeeLeaveBalance.CurrentLeaveBalanceDay.ToString("0.#")</span> day(s) AL &
-                    <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeLeaveBalance.KeepInViewBalance.ToString("0.#")</span> day(s) KIV for
+                    <span class="numberbalance" id="lblCurrentLeaveBalance">@Model.EmployeeLeaveBalance.CurrentLeaveBalanceDay.ToString("0.#")</span> day(s) AL for
+
                     <span id="lblYear">@Model.ToDate.ToString("yyyy")</span>
                 </span>
                 <br />
@@ -39,6 +39,15 @@
                     Weekend Leave has been taken:
                     <span class="numberbalance" id="lblWeekendLeave">@Model.EmployeeLeaveBalance.WeekedLeaveDayTaken.ToString("0.#")</span> day(s)
                 </span>
+                <br />
+                <span id="kivbyhourbalance">
+                    ※<span class="infobalance">
+                        KIV balance:
+                        <span class="numberbalance" id="lblKeepInViewBalance">@Model.EmployeeLeaveBalance.KeepInViewBalance.ToString("0.#")</span> day(s) &
+                        <span class="numberbalance">@Model.EmployeeLeaveBalance.KeepInViewByHourBalance.ToString("0.#")</span> hour(s)
+                    </span>
+                </span>
+
             </div>
         </div>
 
@@ -138,6 +147,17 @@
             <div class="clear">
             </div>
         </div>
+        @*<div id="grbMinutes" class="formrow">
+            <div class="label">
+                @Html.LabelFor(model => model.Minutes, Labels.Minutes)
+            </div>
+            <div class="input">
+                @Html.EditorFor(model => model.Minutes)
+
+            </div>
+            <div class="clear">
+            </div>
+        </div>*@
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)

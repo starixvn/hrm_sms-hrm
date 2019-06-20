@@ -4,7 +4,9 @@
 
     public class LeaveDetailModel
     {
-        public DateTime LeaveDate { get; set; }
+        public long RequestId { get; set; }
+
+        public DateTime OnDate { get; set; }
 
         public string ScheduleStatus { get; set; }
 

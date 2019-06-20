@@ -943,6 +943,7 @@
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
     <Content Include="Views\KeepInView\ViewHistory.cshtml" />
+    <Content Include="Views\Leave\ViewHistory.cshtml" />
     <Content Include="Views\Information\_AddRelationship.cshtml" />
     <Content Include="Views\Information\_ListRelationship.cshtml" />
     <Content Include="Views\Information\_EditRelationship.cshtml" />

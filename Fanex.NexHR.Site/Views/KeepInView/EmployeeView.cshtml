@@ -92,7 +92,7 @@
                         <td class="ddMMyyyyhhmm">
                             @request.CreatedDate.ToShortFormatedDate()
                         </td>
-                        @RenderRequestStatus(request)
+                        @RazorHelper.RenderRequestStatus(request)
                         <td>
                             <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.RequestId">
                                 @Labels.View
@@ -110,39 +110,3 @@
     }
     @RazorHelper.EmployeeProcessMenu()
     <div id="dialoghistorycontent" />
-
-    @helper RenderRequestStatus(KeepInViewModel request)
-    {
-        switch (request.Status.Id)
-        {
-            case (byte)CurrentRequestStatus.Pending:
-                <td>
-                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip @request.Status.ToString()">@request.Status.ToString()</a>
-                </td>
-                break;
-            case (byte)CurrentRequestStatus.Verified:
-            case (byte)CurrentRequestStatus.NotVerified:
-                <td>
-                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-                </td>
-                break;
-            case (byte)CurrentRequestStatus.Approved:
-            case (byte)CurrentRequestStatus.Rejected:
-                <td>
-                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-                </td>
-                break;
-
-            case (byte)CurrentRequestStatus.Processed:
-            case (byte)CurrentRequestStatus.Void:
-                <td>
-                    <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-                </td>
-                break;
-            default:
-                <td>
-                    <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
-                </td>
-                break;
-        }
-    }

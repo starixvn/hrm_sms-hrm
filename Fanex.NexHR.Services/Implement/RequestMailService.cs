@@ -29,7 +29,7 @@
         private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
-        private const string _EmailTemplatePathForLeaveCancelation = "~/app_data/emails/LeaveCancelation.cshtml";
+        
         private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
         private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
@@ -143,7 +143,7 @@
                    || isVerifierDifferenceApprover;
         }
 
-        protected static string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
+        public string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
         {
             if (totalDays > 1)
             {
@@ -258,10 +258,6 @@
 
             switch (requestType)
             {
-                case (short)RequestType.Leave:
-                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeaveCancelation);
-                    break;
-
                 case (short)RequestType.ChangeShift:
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
                     break;
@@ -301,10 +297,6 @@
         {
             switch (request.RequestType.Id)
             {
-                case (short)RequestType.Leave:
-                    SendMailForCancelLeaveRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                    break;
-
                 case (short)RequestType.ChangeShift:
                     SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                     break;
@@ -326,25 +318,6 @@
                 default:
                     return;
             }
-        }
-
-        private void SendMailForCancelLeaveRequest(
-            RequestEntity request,
-            string mailTo,
-            string sendCc,
-            string sendToNickName,
-            string templateEmailPath)
-        {
-            var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester.NickName);
-            var forDate = request.TotalDays == (decimal)0.5
-                ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
-                : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
-
-            var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(body, sendToNickName, displayName, forDate, request.LeaveType.Name, request.Remark);
-
-            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private void SendMailForCancelChangeShiftRequest(
