@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class ChangePasswordCriteria : CriteriaBase
+    public class EditPasswordCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
 
@@ -15,14 +15,8 @@
 
         public int ModifiedBy { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_ChangePassword";
-        }
+        public override string GetSettingKey() => "Employee_ChangePassword";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }

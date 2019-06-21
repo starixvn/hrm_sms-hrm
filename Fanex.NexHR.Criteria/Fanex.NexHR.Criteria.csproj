@@ -180,7 +180,7 @@
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
-    <Compile Include="Employee\ChangePasswordCriteria.cs" />
+    <Compile Include="Employee\EditPasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\GetListEmployeeClaimOvertimeCriteria.cs" />
     <Compile Include="Employee\EditPasswordResetStatusCriteria.cs" />

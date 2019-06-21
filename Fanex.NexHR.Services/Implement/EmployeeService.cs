@@ -243,5 +243,17 @@
             };
             return baseService.ExecuteNonQuery(criteria);
         }
+
+        public CommandResult EditPassword(int actorId, int employeeId, string password, bool isReset = false)
+        {
+            var criteria = new EditPasswordCriteria
+            {
+                EmpId = employeeId,
+                Password = password,
+                PasswordReset = isReset,
+                ModifiedBy = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

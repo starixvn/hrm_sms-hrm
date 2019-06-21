@@ -215,13 +215,11 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveApprove_UpdateCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByWeekly.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveReject_RollbackCalendar.sql" />
-    <Build Include="dbo\Stored Procedures\Report_EmployeeDashBoard.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeTotalWorkingHourByMonth.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_TmpKIVLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetMemberByManager.sql" />
     <Build Include="dbo\Stored Procedures\Report_ForgotAndLateEarlyIO.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_TmpLeaveBalance.sql" />
-    <Build Include="dbo\Stored Procedures\Report_HRLeaderDashBoard.sql" />
     <Build Include="dbo\Stored Procedures\Report_LeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\Report_OvertimeDetail.sql" />
     <Build Include="dbo\Stored Procedures\Function_AssignFunctionToRole.sql" />

@@ -63,5 +63,7 @@
         CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
 
         CommandResult EditPasswordResetStatus(int employeeId, bool status);
+
+        CommandResult EditPassword(int actorId, int employeeId, string password, bool isReset = false);
     }
 }

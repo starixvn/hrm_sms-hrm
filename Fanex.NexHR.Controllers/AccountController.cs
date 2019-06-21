@@ -86,16 +86,8 @@
         public ActionResult ResetPassword(int id)
         {
             string hashPassword = Encryptor.ComputeHash(authService.HashProvider, "123456");
-            var criteria = new ChangePasswordCriteria
-            {
-                EmpId = id,
-                Password = hashPassword,
-                PasswordReset = true,
-                ModifiedBy = sessionService.Employee.Id
-            };
-
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            return Json(result);
+            CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, id, hashPassword, true);
+            return Json(commandResult);
         }
 
         [HttpGet]
@@ -113,14 +105,9 @@
                 int retCode = authService.Validate(sessionService.Employee, model.Password);
                 if (retCode == 0)
                 {
-                    var criteria = new ChangePasswordCriteria
-                    {
-                        EmpId = sessionService.Employee.Id,
-                        Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
-                    };
-
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    switch (result.Code)
+                    string hashPassword = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword);
+                    CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, sessionService.Employee.Id, hashPassword);
+                    switch (commandResult.Code)
                     {
                         case 0: // OK
                             ViewBag.ChangePwdOK = Messages.ChangePwdOK;
