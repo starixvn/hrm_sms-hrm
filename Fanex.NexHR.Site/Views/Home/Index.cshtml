@@ -1,5 +1,5 @@
 @using Fanex.NexHR.Models.Dashboard
-@model MySpaceModel
+@model IEnumerable<SummaryRequest>
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Dashboard;
@@ -26,123 +26,74 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td class="align-left">
-                @Labels.CheckInOut
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalCheckInOutRequest)
-            </td>
-            <td>
-                @if (Model.TotalPendingCheckInOutRequest > 0)
-                {
-                    @Html.ActionLink(Model.TotalPendingCheckInOutRequest.ToString(), "employeeView", "checkinout")
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "create", "checkinout")
-            </td>
-        </tr>
-        <tr>
-            <td class="align-left">
-                @Labels.LateInEarlyOut
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalLateInEarlyOutRequest)
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalPendingLateInEarlyOutRequest)
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
-            </td>
-        </tr>
-        <tr>
-            <td class="align-left">
-                @Labels.ChangeShift
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalChangedShiftRequest)
-            </td>
-            <td>
-                @if (Model.TotalPendingChangedShiftRequest > 0)
-                {
-                    @Html.ActionLink(Model.TotalPendingChangedShiftRequest.ToString(), "employeeView", "changeshift")
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "create", "changeshift")
-            </td>
-        </tr>
-        <tr>
-            <td class="align-left">
-                @Labels.Leave
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalLeaveRequest)
-            </td>
-            <td>
-                @if (Model.TotalPendingLeaveRequest > 0)
-                {
-                    @Html.ActionLink(Model.TotalPendingLeaveRequest.ToString(), "employeeView", "leave")
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "create", "leave")
-            </td>
-        </tr>
-        <tr>
-            <td class="align-left">
-                @Labels.KeepInView
-            </td>
-            <td>
-                @RazorHelper.DisplayZeroCell(Model.TotalKivRequest)
-            </td>
-            <td>
-                @if (Model.TotalPendingKivRequest > 0)
-                {
-                    @Html.ActionLink(Model.TotalPendingKivRequest.ToString(), "employeeView", "KeepInView")
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "create", "KeepInView")
-            </td>
-        </tr>
-        <tr>
-            <td class="align-left">
-                @Labels.Overtime
-            </td>
-            <td>-</td>
-            <td>
-                @if (Model.TotalPendingOverTimeRequest > 0)
-                {
-                    @Html.ActionLink(Model.TotalPendingOverTimeRequest.ToString(), "employeeView", "overtime")
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
-            <td>
-                @Html.ActionLink(Labels.Request, "employeeView", "overtime")
-            </td>
-        </tr>
+        @foreach (SummaryRequest item in Model)
+        {
+            <tr>
+                <td class="align-left">
+                    @item.RequestType
+                </td>
+                <td>
+                    @RazorHelper.DisplayZeroCell(item.TotalRequest)
+                </td>
+                <td>
+                    @if (item.TotalPending > 0)
+                    {
+                        switch (item.RequestTypeId)
+                        {
+                            case (ushort)RequestType.CheckIn:
+                            case (ushort)RequestType.CheckOut:
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout")
+                                break;
+                            case (ushort)RequestType.LateIn:
+                            case (ushort)RequestType.EarlyOut:
+                                @RazorHelper.DisplayZeroCell(item.TotalPending)
+                                break;
+                            case (ushort)RequestType.ChangeShift:
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift")
+                                break;
+                            case (ushort)RequestType.Leave:
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave")
+                                break;
+                            case (ushort)RequestType.KeepInView:
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView")
+                                break;
+                            case (ushort)RequestType.Overtime:
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "overtime")
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    @switch (item.RequestTypeId)
+                    {
+                        case (ushort)RequestType.CheckIn:
+                        case (ushort)RequestType.CheckOut:
+                            @Html.ActionLink(Labels.Request, "create", "checkinout")
+                            break;
+                        case (ushort)RequestType.LateIn:
+                        case (ushort)RequestType.EarlyOut:
+                            @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
+                            break;
+                        case (ushort)RequestType.ChangeShift:
+                            @Html.ActionLink(Labels.Request, "create", "changeshift")
+                            break;
+                        case (ushort)RequestType.Leave:
+                            @Html.ActionLink(Labels.Request, "create", "leave")
+                            break;
+                        case (ushort)RequestType.KeepInView:
+                            @Html.ActionLink(Labels.Request, "create", "KeepInView")
+                            break;
+                        case (ushort)RequestType.Overtime:
+                            @Html.ActionLink(Labels.Request, "employeeView", "overtime")
+                            break;
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 @if ((bool)ViewBag.IsVerifierApprover)

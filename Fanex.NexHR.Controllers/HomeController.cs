@@ -25,7 +25,7 @@
 
         public ActionResult Index()
         {
-            MySpaceModel model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
+            IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
             ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
             ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);

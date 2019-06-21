@@ -6,7 +6,7 @@
 
     public interface IDashboardService
     {
-        MySpaceModel GetMySpace(int employeeId, DateTime date);
+        IEnumerable<SummaryRequest> GetMySpace(int employeeId, DateTime date);
 
         IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date);
     }

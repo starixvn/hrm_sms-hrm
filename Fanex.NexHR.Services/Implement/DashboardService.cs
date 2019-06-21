@@ -15,14 +15,14 @@
             this.baseService = baseService;
         }
 
-        public MySpaceModel GetMySpace(int employeeId, DateTime date)
+        public IEnumerable<SummaryRequest> GetMySpace(int employeeId, DateTime date)
         {
             var criteria = new GetMySpaceCriteria
             {
                 EmployeeId = employeeId,
                 Date = date
             };
-            return baseService.GetDataEntity<MySpaceModel>(criteria);
+            return baseService.GetData<SummaryRequest>(criteria);
         }
 
         public IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date)
