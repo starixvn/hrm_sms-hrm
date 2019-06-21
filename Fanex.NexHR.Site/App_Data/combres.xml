@@ -516,15 +516,6 @@
       <resource path="~/scripts/views/overtime/dailyovertime.member.js" />
     </resourceSet>
 
-    <resourceSet name="myspacecss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-    <resourceSet name="myspacejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/myspace.js" />
-    </resourceSet>
-
     <resourceSet name="extensionnocss" type="css">
       <resource reference="sitecss" />
     </resourceSet>

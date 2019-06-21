@@ -5,15 +5,13 @@
     {
         IEnumerable<MemberRequest> verifiers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Verifier);
         IEnumerable<MemberRequest> approvers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Approver);
-        <h2 class="section">
-            My members' requests
-        </h2>
+        <h2 class="section page-title">My members' requests</h2>
         if (verifiers.Any())
         {
             <h4>
                 Verification List
             </h4>
-            <table class="table table-custom" id="myspace" style="width: 500px;">
+            <table class="table table-custom">
                 <thead>
                     <tr>
                         <th rowspan="2" class="align-left">
@@ -85,7 +83,7 @@
             <h4>
                 Approval List
             </h4>
-            <table class="table table-custom" id="myspace" style="width: 500px;">
+            <table class="table table-custom">
                 <thead>
                     <tr>
                         <th rowspan="2" class="align-left">

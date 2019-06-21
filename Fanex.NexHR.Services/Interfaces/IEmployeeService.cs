@@ -61,5 +61,7 @@
         IList<Employee> GetEmployeeByGender(string query, int gender);
 
         CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
+
+        CommandResult EditPasswordResetStatus(int employeeId, bool status);
     }
 }

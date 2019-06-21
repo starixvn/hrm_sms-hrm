@@ -309,7 +309,6 @@
     <Content Include="Scripts\Views\annualbalance.js" />
     <Content Include="Scripts\Views\Report\report.totalworkinghourmonthly.js" />
     <Content Include="Scripts\Views\extensionno.js" />
-    <Content Include="Scripts\Views\myspace.js" />
     <Content Include="Scripts\Views\Overtime\overtime.command.request.js" />
     <Content Include="Scripts\Views\Overtime\hrovertimereport.js" />
     <Content Include="Scripts\Views\Overtime\overtimereportdetails.js" />
@@ -874,8 +873,9 @@
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\THead.jsx" />
-    <Content Include="wwwroot\sources\js\pages\function\index.js" />
+    <Content Include="wwwroot\sources\js\pages\function.index.js" />
     <Content Include="wwwroot\sources\js\pages\information\index.js" />
+    <Content Include="wwwroot\sources\js\pages\home.index.js" />
     <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
@@ -950,6 +950,8 @@
     <Content Include="Views\Information\_AddEmergency.cshtml" />
     <Content Include="Views\Information\_EditEmergency.cshtml" />
     <Content Include="Views\Information\_ListEmergency.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1314,7 +1316,6 @@
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
-    <Content Include="wwwroot\sources\styles\pages\function\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\error.scss" />
     <Content Include="wwwroot\sources\styles\pages\postnatal\postnatal.scss" />
     <None Include="wwwroot\sources\styles\pages\request\employee.request.scss" />

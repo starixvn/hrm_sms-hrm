@@ -74,16 +74,11 @@
             return View(displayModel);
         }
 
-        public ActionResult UpdatePasswordResetStatus(bool status)
+        [HttpPost]
+        public ActionResult EditPasswordResetStatus(bool status)
         {
-            var criteria = new UpdatePasswordResetStatusCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                PasswordReset = status
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
+            CommandResult commandResult = employeeService.EditPasswordResetStatus(sessionService.Employee.Id, status);
+            return Json(commandResult);
         }
 
         [HttpPost]

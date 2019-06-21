@@ -233,5 +233,15 @@
 
             return baseService.GetData<Employee>(criteria).ToList();
         }
+
+        public CommandResult EditPasswordResetStatus(int employeeId, bool status)
+        {
+            var criteria = new EditPasswordResetStatusCriteria
+            {
+                EmpId = employeeId,
+                PasswordReset = status
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

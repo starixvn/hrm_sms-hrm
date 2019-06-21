@@ -183,7 +183,7 @@
     <Compile Include="Employee\ChangePasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Employee\GetListEmployeeClaimOvertimeCriteria.cs" />
-    <Compile Include="Employee\UpdatePasswordResetStatusCriteria.cs" />
+    <Compile Include="Employee\EditPasswordResetStatusCriteria.cs" />
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Section\GetSectionSupervisorByRoleIdCriteria.cs" />

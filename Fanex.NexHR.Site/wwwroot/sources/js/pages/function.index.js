@@ -3,7 +3,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, floatingHeader, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatingHeader, toastOptions } from '../shared/common.functions';
 
 let assignPermissionToRole = (function ($) {
     let $functionTable,
