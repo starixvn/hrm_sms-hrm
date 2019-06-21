@@ -8,7 +8,7 @@ namespace Fanex.NexHR.Services.Extensions
 
     public static class ServiceDIExtensions
     {
-        public static void ResolveServiceCoreDI(this UnityContainer container)
+        public static void ResolveServiceCoreDI(this IUnityContainer container)
         {
             container.RegisterType<IDepartmentRepository, DepartmentRepository>();
             container.RegisterType<IEmployeeRepository, EmployeeRepository>();

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Web.Configuration;
 using Fanex.Common;
-using Fanex.Data.Repository;
-using Fanex.NexHR.Core.Repositories;
-using Fanex.NexHR.Core.Services;
-using Fanex.NexHR.Services;
+using Fanex.NexHR.Core;
+using Fanex.NexHR.Services.Extensions;
 using Fanex.NexHR.Site.App_Start;
 using Hangfire;
 using Microsoft.Owin;
 using Owin;
 using Unity;
-using Unity.Lifetime;
 
 [assembly: OwinStartup(typeof(Fanex.NexHR.Site.Startup))]
 
@@ -43,10 +40,8 @@ namespace Fanex.NexHR.Site
         public UnityJobActivator(IUnityContainer hangfireContainer)
         {
             this.hangfireContainer = hangfireContainer;
-            this.hangfireContainer.RegisterType<IDynamicRepository, DynamicRepository>(new PerResolveLifetimeManager());
-            this.hangfireContainer.RegisterType<IBaseRepository, BaseRepository>(new PerResolveLifetimeManager());
-            this.hangfireContainer.RegisterType<IBaseService, BaseService>(new PerResolveLifetimeManager());
-            this.hangfireContainer.RegisterType<IBackgroundJobService, BackgroundJobService>(new PerResolveLifetimeManager());
+            this.hangfireContainer.ResolveCoreDI();
+            this.hangfireContainer.ResolveServiceCoreDI();
         }
 
         public override object ActivateJob(Type type)
