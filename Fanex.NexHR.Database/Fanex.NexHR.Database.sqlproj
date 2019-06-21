@@ -66,7 +66,6 @@
     <Folder Include="Storage\" />
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
-    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\TimeRecordOld.sql" />
@@ -201,7 +200,6 @@
     <Build Include="dbo\Stored Procedures\AnnualLeave_DeleteTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByRoleId.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_Get.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_1.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_ResetMultiRequest.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA.sql" />
@@ -235,7 +233,6 @@
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportData.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioAdmin.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_1.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_2.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_DeleteTransaction.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_3.sql" />
@@ -270,7 +267,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetOtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeCalendar_Insert_weekly.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Employee_ChangePassword.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForWorkDay.sql" />
@@ -308,7 +304,6 @@
     <Build Include="dbo\Stored Procedures\Employee_Shift_Get.sql" />
     <Build Include="dbo\Stored Procedures\Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftDetailToIgnoreById.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeCalendar_Update_IsPublic.sql" />
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestHistory.sql" />
@@ -337,7 +332,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetOffDate_HolidayDate.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_UpdateType.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetMemberToAddOtherDiscipine.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_1.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetRangeDate.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetNumberRequestInmonth.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_2.sql" />
@@ -357,7 +351,6 @@
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_1.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_2.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ForWaitingCase.sql" />
@@ -461,26 +454,19 @@
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertDefaultShift.sql" />
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertWeeklyDefaultShift.sql" />
     <Build Include="dbo\Tables\ScheduleArrangementOffDayReplacement.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader_1.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployeeLoginByCode.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Update.sql" />
     <Build Include="dbo\Tables\WeekendLeaveTrans.sql" />
-    <Build Include="dbo\Tables\UserLog.sql" />
-    <Build Include="dbo\Tables\ShiftArrangementOrder.sql" />
     <Build Include="dbo\Tables\LogObjectDetail.sql" />
     <Build Include="dbo\Tables\LogObject.sql" />
     <Build Include="dbo\Tables\KeepInViewByHourTrans.sql" />
     <Build Include="dbo\Tables\KeepInViewByDayTrans.sql" />
     <Build Include="dbo\Tables\GroupLeader.sql" />
-    <Build Include="dbo\Tables\EmployeeScheduleShiftMultiple.sql" />
-    <Build Include="dbo\Tables\EmployeeRelationship_1.sql" />
-    <Build Include="dbo\Tables\EmployeeEmergency_1.sql" />
     <Build Include="dbo\Tables\DisciplineRequestTrans.sql" />
     <Build Include="dbo\Tables\DisciplineOutOfControl.sql" />
     <Build Include="dbo\Tables\DisciplineIgnore.sql" />
     <Build Include="dbo\Tables\Discipline.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Functions\fnc_GetWeekendLeaveTaken.sql" />
     <Build Include="dbo\Functions\fnc_GetKIVByHourBalance.sql" />
     <Build Include="dbo\Functions\fnc_GetKIVByDayBalance.sql" />
@@ -490,16 +476,8 @@
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioStar.sql" />
     <Build Include="dbo\Stored Procedures\Sync_DisciplineSummary.sql" />
     <Build Include="dbo\Stored Procedures\Sync_Department.sql" />
-    <Build Include="dbo\Stored Procedures\ShiftMng_Set_ShiftSchedule.sql" />
-    <Build Include="dbo\Stored Procedures\ShiftMng_GetShiftSchedule.sql" />
     <Build Include="dbo\Stored Procedures\Report_GetWeekendLeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\Report_GetWeekendLeaveDetail.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Update_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Insert_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenusById_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenus_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenuById_1.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_Delete_1.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_WriteLog.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_WeekendLeave_InsertAll.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_VoidBySA.sql" />
@@ -539,22 +517,6 @@
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_DeleteTrans.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Delete.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Approve.sql" />
-    <Build Include="dbo\Stored Procedures\GroupSupervisor_UpdateForShiftArrange.sql" />
-    <Build Include="dbo\Stored Procedures\GroupSupervisor_Set.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_UpdateOrderShiftArrange.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_InsertEmpMngShiftList.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_InsertEmpByListOwner.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetEmployeeByShiftManagement.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Insert_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetById_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetByEmployeeId_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Edit_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Delete_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Insert_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetById_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetByEmployeeId_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Edit_1.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Delete_1.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetWeekendLeave.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_UpdateWeekWorking.sql" />
@@ -564,12 +526,28 @@
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_GrantPermissions.sql">
-      <AnsiNulls>Off</AnsiNulls>
-      <QuotedIdentifier>Off</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Stored Procedures\Dashboard_GetMemberRequest.sql" />
     <Build Include="dbo\Stored Procedures\Dashboard_Get.sql" />
+    <Build Include="dbo\Tables\EmployeeEmergency.sql" />
+    <Build Include="dbo\Tables\EmployeeRelationship.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Edit.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetByEmployeeId.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Edit.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetByEmployeeId.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeRelationship_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get_zo.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_GetMenuById.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_GetMenus.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_GetMenusById.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
+    <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
