@@ -56,6 +56,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IPaternityService, PaternityService>();
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
             container.RegisterType<IDashboardService, DashboardService>();
+            container.RegisterType<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

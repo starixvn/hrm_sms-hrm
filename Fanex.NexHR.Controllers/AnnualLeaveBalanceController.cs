@@ -12,6 +12,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.AnnualLeaveBalance;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -23,68 +24,21 @@
         private readonly ITeamService teamService;
         private readonly IReportService reportService;
         private readonly IBaseService baseService;
+        private readonly IAnnualLeaveBalanceService annualLeaveBalanceService;
 
         public AnnualLeaveBalanceController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             ITeamService teamService,
             IReportService reportService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService,
+            IAnnualLeaveBalanceService annualLeaveBalanceService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.reportService = reportService;
             this.baseService = baseService;
-        }
-
-        [ValidateInput(false)]
-        [HttpPost]
-        public JsonResult Adjust(string annualLeaveJson)
-        {
-            var model = JsonConverter.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
-            var criteria = new AdjustEmployeeAnnualLeaveCriteria
-            {
-                EmpIds = model.EmpIds,
-                Description = model.Description,
-                CreatedBy = sessionService.Employee.Id,
-                CreatedDate = DateTime.Now,
-                CreditDays = model.CreditDays,
-                DeductDays = model.DeductDays,
-                FromDate = model.AffectedFrom
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
-        }
-
-        [HttpPost]
-        public JsonResult Reset(int minbalance, string descriptionReset)
-        {
-            int lastYear = DateTime.Now.AddYears(-1).Year;
-            DateTime date = new DateTime(lastYear, 12, 31);
-
-            var criteria = new GetAnnualLeaveBalanceCriteria
-            {
-                Year = lastYear,
-                EmpId = null,
-                GroupIds = null,
-                IsLocal = null,
-                Role = string.Empty,
-                SupervisorId = null
-            };
-            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
-            var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
-            {
-                CreatedBy = sessionService.Employee.Id,
-                CreatedDate = DateTime.Now,
-                Description = descriptionReset,
-                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
-                FromDate = date,
-                ResetDays = minbalance
-            };
-            CommandResult result = baseService.ExecuteNonQuery(resetAnnualLeaveCriteria);
-
-            return Json(result);
+            this.annualLeaveBalanceService = annualLeaveBalanceService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
@@ -125,6 +79,52 @@
             ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
 
             return View(model);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public JsonResult Adjust(string annualLeaveJson)
+        {
+            var model = JsonConverter.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
+            var annualLeave = new AdjustAnnualLeaveBalance
+            {
+                EmployeeIds = model.EmpIds,
+                Description = model.Description,
+                CreditDays = model.CreditDays,
+                DeductDays = model.DeductDays
+            };
+            CommandResult commandResult = annualLeaveBalanceService.Adjust(sessionService.Employee.Id, annualLeave);
+
+            return Json(commandResult);
+        }
+
+        [HttpPost]
+        public JsonResult Reset(int minbalance, string descriptionReset)
+        {
+            int lastYear = DateTime.Now.AddYears(-1).Year;
+            DateTime date = new DateTime(lastYear, 12, 31);
+
+            var criteria = new GetAnnualLeaveBalanceCriteria
+            {
+                Year = lastYear,
+                EmpId = null,
+                GroupIds = null,
+                IsLocal = null,
+                Role = string.Empty,
+                SupervisorId = null
+            };
+            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
+            var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
+            {
+                ActorId = sessionService.Employee.Id,
+                Description = descriptionReset,
+                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
+                FromDate = date,
+                ResetDays = minbalance
+            };
+            CommandResult result = baseService.ExecuteNonQuery(resetAnnualLeaveCriteria);
+
+            return Json(result);
         }
 
         [ChildActionOnly]

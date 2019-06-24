@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NexHR.Criteria.AnnualLeave
 {
-    using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Fanex.Data.Repository;
+    using Fanex.NexHR.Models;
 
     public class ResetAnnualLeaveCriteria : CriteriaBase
     {
@@ -37,18 +37,10 @@
 
         public decimal ResetDays { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public int ActorId { get; set; }
 
-        public int CreatedBy { get; set; }
+        public override string GetSettingKey() => "AnnualLeave_ResetMultipleTransactions";
 
-        public override string GetSettingKey()
-        {
-            return "AnnualLeave_ResetMultipleTransactions";
-        }
-
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

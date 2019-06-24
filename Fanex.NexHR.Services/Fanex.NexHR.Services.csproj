@@ -179,6 +179,7 @@
   <ItemGroup>
     <Compile Include="ExportExcel\JobTitle\IJobTitleExportService.cs" />
     <Compile Include="ExportExcel\JobTitle\JobTitleExportService.cs" />
+    <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\RoleService.cs" />
+    <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />
