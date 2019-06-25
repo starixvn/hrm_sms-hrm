@@ -5,6 +5,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
 
@@ -42,7 +43,7 @@
 
         public ActionResult EmployeeDetailsInfo(UserManagementViewModel model)
         {
-            var criteria = new GetAllEmployeeCriteria
+            var criteria = new GetEmployeeFullProfileCriteria
             {
                 Query = model.Keyword,
                 GroupIds = model.GroupIds,
@@ -52,8 +53,8 @@
                 IsLocalUser = model.IsLocal
             };
 
-            IList<Employee> employees = employeeService.GetEmployees(criteria);
-            excelService.ExportEmployeeDetailsInfo(employees);
+            IList<EmployeeFullProfile> profiles = employeeService.GetEmployeeFullProfile(criteria);
+            excelService.ExportEmployeeFullProfile(profiles);
 
             return new EmptyResult();
         }

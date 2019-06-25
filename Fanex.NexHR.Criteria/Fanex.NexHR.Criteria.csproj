@@ -110,6 +110,7 @@
     <Compile Include="EmployeeRelationship\InsertRelationshipCriteria.cs" />
     <Compile Include="Employee\CheckResetPasswordCriteria.cs" />
     <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
+    <Compile Include="Employee\GetEmployeeFullProfileCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />

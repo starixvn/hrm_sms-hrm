@@ -71,6 +71,19 @@
             cell.SetCellValue(value);
         }
 
+        public void CopyCellStyle(int sourceRow, int sourceCol, int desRow, int desCol)
+        {
+            var cellStyle = _templateSheet.GetCell(sourceRow, sourceCol).CellStyle;
+            var cell = _sheet.CreateCell(desRow, desCol);
+            cell.CellStyle = cellStyle;
+        }
+
+        public void WriteCellValue(int rowIndex, int ColIndex, object value)
+        {
+            var cell = _sheet.CreateCell(rowIndex, ColIndex);
+            cell.SetCellValue(value);
+        }
+
         #region Auto resize columns' width
 
         public void AutosizeColumns(int from, int to)

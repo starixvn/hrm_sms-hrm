@@ -2,15 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Resources;
 
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
     {
         private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
+        private const string EmployeeFullInfoTemplatePath = @"~\ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
 
         private enum BasicInfo
         {
@@ -194,5 +197,136 @@
         }
 
         #endregion Employee Details Info
+
+        #region Employee Full Profile Information
+
+        public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
+        {
+            int maxRelationship = profiles.Max(p => p.Relationships.Count());
+
+            string templatePath = HttpContext.Current.Server.MapPath(EmployeeFullInfoTemplatePath);
+            string fileName = "EmployeeFullInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            const string sheetName = "Employee Full Information";
+            var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+
+            /// Fill report title.
+            writer.CopyRows(0, 2);
+            /// Fill report header.
+            writer.CopyRows(2, 1);
+            FillEmployeeFullProfileHeader(writer, maxRelationship);
+
+            WriteFullProfileBody(writer, profiles, maxRelationship);
+            writer.SyncColumnsWidth(21 + maxRelationship);
+            writer.CreateFreezePane(0, 3);
+
+            writer.Render();
+        }
+
+        private static void WriteFullProfileBody(ExcelTemplateWriter writer,
+            IList<EmployeeFullProfile> profiles,
+            int maxLengthRelationship)
+        {
+            var currentRow = 3;
+            foreach (var p in profiles)
+            {
+                var writeRowNumber = (currentRow % 2 == 0) ? 4 : 3;
+
+                var record = CreateRecordEployeeFullProfile(p, currentRow);
+                if (maxLengthRelationship > 0)
+                {
+                    var baseColumn = 21;
+                    for (int i = 0; i < maxLengthRelationship; i++)
+                    {
+                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
+                        baseColumn++;
+                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
+                        baseColumn++;
+                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
+                    }
+                }
+                writer.WriteRow(writeRowNumber, record);
+                WriteRelationship(writer, p.Relationships, currentRow);
+
+                currentRow++;
+            }
+        }
+
+        private static void WriteRelationship(ExcelTemplateWriter writer, IEnumerable<EmployeeRelationship> relationships, int currentRow)
+        {
+            if (relationships != null && relationships.Any())
+            {
+                int baseColumn = 21;
+                foreach (var r in relationships)
+                {
+                    writer.WriteCellValue(currentRow, baseColumn, r.FullName);
+                    baseColumn++;
+                    writer.WriteCellValue(currentRow, baseColumn, r.DateOfBirth.ToString("dd/MM/yyyy"));
+                    baseColumn++;
+                    writer.WriteCellValue(currentRow, baseColumn, r.Gender == 0 ? "Female" : "Male");
+                    baseColumn++;
+                }
+            }
+        }
+
+        private static object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
+        {
+            var gender = "unknown";
+            if (p.Employee.Gender.HasValue)
+            {
+                gender = p.Employee.Gender == 0 ? "Female" : "Male";
+            }
+
+            var record = new
+            {
+                Index = currentRow - 2,
+                TeamName = p.Employee.Team.Name,
+                p.Employee.Code,
+                p.Employee.FullName,
+                p.Employee.NickName,
+                Gender = gender,
+                DOB = p.Employee.DateOfBirth.ToString("dd/MM/yyyy"),
+                p.Employee.MarriageName,
+                p.Employee.Address,
+                p.Employee.CurrentAddress,
+                p.Employee.CardNo,
+                DateOfIDCard = p.Employee.DateOfIdCard.HasValue ? p.Employee.DateOfIdCard.Value.ToString("dd/MM/yyyy") : string.Empty,
+                p.Employee.PlaceOfIdCard,
+                PlaceRegKCB = string.Empty,
+                p.Employee.Phone,
+                p.Employee.HomePhone,
+                p.Employee.Email,
+                p.Employee.Qualification,
+                p.Employee.Major,
+                Emergency = p.Emergency != null ? p.Emergency.Phone : string.Empty,
+                EmergencyFullName = p.Emergency != null ? p.Emergency.FullName : string.Empty
+            };
+
+            return record;
+        }
+
+        private static void FillEmployeeFullProfileHeader(ExcelTemplateWriter writer, int maxRelationship)
+        {
+            const int headerRow = 2;
+            var currentColumn = 21;
+
+            if (maxRelationship > 0)
+            {
+                for (int i = 0; i < maxRelationship; i++)
+                {
+                    var index = i + 1;
+                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.WriteCellValue(headerRow, currentColumn, "Con " + index);
+                    currentColumn++;
+                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.WriteCellValue(headerRow, currentColumn, "Ngày sinh " + index);
+                    currentColumn++;
+                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.WriteCellValue(headerRow, currentColumn, "Giới tính " + index);
+                    currentColumn++;
+                }
+            }
+        }
+
+        #endregion Employee Full Profile Information
     }
 }

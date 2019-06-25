@@ -21,12 +21,8 @@
         </div>
     }
 
-    <div class="button-icon pd-auto">
-        @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report")
-    </div>
-    <div class="button-icon">
-        @Html.ActionLink("Section Permission Summary", "SectionSupervisor", "report")
-    </div>
+    @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "link-button" })
+    @Html.ActionLink("Section Permission Summary", "SectionSupervisor", "report", null, new { @class = "link-button" })
     <div class="clear">
     </div>
     <div class="space">

@@ -17,6 +17,7 @@
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
@@ -232,6 +233,11 @@
             };
 
             return baseService.GetData<Employee>(criteria).ToList();
+        }
+
+        public IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
+        {
+            return employeeRepository.GetEmployeeFullInformation(criteria);
         }
 
         public CommandResult EditPasswordResetStatus(int employeeId, bool status)

@@ -1181,3 +1181,22 @@ table.data tr td.weekend {
 #IsActive {
     min-width: 50px;
 }
+
+.link-button {
+	border: 1px solid transparent;
+	border-color: #2e6da4;
+	background-color: #308fb7;
+	color: #fff;
+	padding: 6px 12px;
+	text-align: center;
+	border-radius: 4px;
+	font-weight: 500;
+	vertical-align: middle;
+}
+
+.link-button:hover {
+	color: #fff;
+	font-style: unset;
+	background-color: #337ab7;
+	text-decoration: none;
+}

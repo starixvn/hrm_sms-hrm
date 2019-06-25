@@ -30,18 +30,21 @@
         private readonly ITeamService teamService;
         private readonly IExportExcelService exportExcelService;
         private readonly ILookupDataService lookupDataService;
+        private readonly IEmployeeService employeeService;
 
         public ReportController(
             ISessionService sessionService,
             IReportService reportSevice,
             ITeamService teamService,
             IExportExcelService exportExcelService,
+            IEmployeeService employeeService,
             ILookupDataService lookupDataService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.teamService = teamService;
             this.exportExcelService = exportExcelService;
             this.lookupDataService = lookupDataService;
+            this.employeeService = employeeService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]

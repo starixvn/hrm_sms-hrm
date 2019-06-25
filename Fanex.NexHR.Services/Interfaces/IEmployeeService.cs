@@ -10,6 +10,7 @@
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.AnnualLeave;
@@ -59,6 +60,8 @@
         IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
 
         IList<Employee> GetEmployeeByGender(string query, int gender);
+
+        IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
         CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
 

@@ -14,12 +14,19 @@
       <Mapping DataField="TeamID" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_SelfUpdateInfo" SpName="Employee_SelfUpdateInfo" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
+      <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
+      <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
+    </Setting>
     <Setting Key="Employee_GetUploadedFile" SpName="Employee_GetUploadedFile" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetEmployees" SpName="Employee_GetEmployees" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
       <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
       <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_GetMemberByManager" SpName="Employee_GetMemberByManager" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />

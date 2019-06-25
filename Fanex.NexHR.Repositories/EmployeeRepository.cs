@@ -8,6 +8,7 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.EmployeeInformation;
 
     public class EmployeeRepository : IEmployeeRepository
     {
@@ -125,6 +126,41 @@
             }
 
             return employees;
+        }
+
+        public IList<EmployeeFullProfile> GetEmployeeFullInformation(ICriteria criteria)
+        {
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                {
+                    IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, Employee, Team, EmployeeEmergency, EmployeeFullProfile>(
+                        (f, e, t, em) =>
+                        {
+                            f.Employee = e;
+                            e.Team = t;
+                            f.Emergency = em;
+                            return f;
+                        },
+                        splitOn: "EmpId, GroupId, EmergencyId");
+
+                    IEnumerable<EmployeeRelationship> relationships = multi.Read<EmployeeRelationship>();
+
+                    profiles = GroupRelationship(profiles, relationships);
+
+                    return profiles.ToList();
+                }
+            }
+        }
+
+        private static IEnumerable<EmployeeFullProfile> GroupRelationship(IEnumerable<EmployeeFullProfile> profiles, IEnumerable<EmployeeRelationship> relationships)
+        {
+            foreach (var profile in profiles)
+            {
+                profile.Relationships = relationships.Where(r => r.EmployeeId == profile.Employee.Id);
+            }
+
+            return profiles;
         }
     }
 }

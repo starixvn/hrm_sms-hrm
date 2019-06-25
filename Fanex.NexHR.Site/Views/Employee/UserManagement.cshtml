@@ -33,7 +33,7 @@
             <select id="group" multiple="multiple" class="team-select">
                 @foreach (Team item in Model.Groups)
                 {
-                    <option value="@item.Id">@item.Name</option>
+                    <option value="@item.Id" selected>@item.Name</option>
                 }
             </select>
         </div>
@@ -55,11 +55,11 @@
         <div class="grid_3">
             @{
                 var category = new List<SelectListItem>
-                                        {
-                                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                                            new SelectListItem() {Text = "Expat", Value = "0"},
-                                            new SelectListItem() {Text = "Local", Value = "1"},
-                                        };
+                                            {
+                                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                                new SelectListItem() {Text = "Expat", Value = "0"},
+                                                new SelectListItem() {Text = "Local", Value = "1"},
+                                            };
             }
             @Html.DropDownList("category", category, new { @class = "category" })
         </div>
