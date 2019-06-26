@@ -51,22 +51,12 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
                 EmployeeId = model.EmployeeId,
                 IsLocal = model.IsLocal
             };
-            if (model.Calendar == (ushort)CalendarType.Normal)
-            {
-                var dayInMonth = DateTime.DaysInMonth(model.Year, model.Month);
-                param.FromDate = new DateTime(model.Year, model.Month, 1);
-                param.ToDate = new DateTime(model.Year, model.Month, dayInMonth);
-            }
-            else
-            {
-                DateTime previousMonth = new DateTime(model.Year, model.Month, 1).AddMonths(-1);
-                param.FromDate = new DateTime(previousMonth.Year, previousMonth.Month, 26);
-                param.ToDate = new DateTime(model.Year, model.Month, 25);
-            }
             IEnumerable<MonthlyWorking> monthlyWorkings = monthlyWorkingHoursService.GetMonthlyWorkingHours(param);
             ViewBag.FromDate = param.FromDate;
             ViewBag.ToDate = param.ToDate;
