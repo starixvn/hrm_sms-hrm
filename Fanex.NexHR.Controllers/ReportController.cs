@@ -291,44 +291,6 @@
             return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
         }
 
-        [HttpGet]
-        public ActionResult TotalWorkingHourMonthly()
-        {
-            var today = DateTime.Today;
-            var model = new TotalWorkingHourMonthlyViewModel
-            {
-                Month = today.Month,
-                Year = today.Year,
-                Sections = teamService.GetAll()
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult TotalWorkingHourMonthlyDetails(TotalWorkingHourMonthlyViewModel model)
-        {
-            var criteria = new GetTotalWorkingHourMonthlyCriteria
-            {
-                EmpId = model.EmployeeId,
-                GroupIds = model.SectionIds,
-                IsLocal = model.IsLocal,
-                ReportMonth = new DateTime(model.Year, model.Month, 1)
-            };
-
-            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourMonthly(criteria);
-            TotalWorkingHourMonthly firstRecord = null;
-            if (totalWorkingHours != null && totalWorkingHours.Any())
-            {
-                firstRecord = totalWorkingHours.First();
-                totalWorkingHours.RemoveAt(0);
-            }
-
-            ViewBag.FirstRecord = firstRecord;
-
-            return PartialView("_TotalWorkingHourMonthlyDetails", totalWorkingHours);
-        }
-
         public ActionResult TotalWorkingHourDaily()
         {
             var model = new TotalWorkingHourDailyViewModel

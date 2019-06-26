@@ -136,12 +136,12 @@
     <resourceSet name="timesheetcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report.timesheet.css" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="timesheetjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/wwwroot/sources/js/date.js" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/report/report.timesheet.js" />
     </resourceSet>
     <resourceSet name="checkinoutrequestcss" type="css">
@@ -309,7 +309,7 @@
 
     <resourceSet name="monthpickcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
 
     <resourceSet name="empcheckinoutjs" type="js">
@@ -333,7 +333,7 @@
     <resourceSet name="managercheckinoutjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/checkinout.bymanager.js" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="annualbalancejs" type="js">
@@ -377,11 +377,11 @@
     <resourceSet name="totalworkinghourmonthlycss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report.totalworkinghourmonthly.css" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="totalworkinghourmonthlyjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
     </resourceSet>
@@ -455,20 +455,20 @@
 
     <resourceSet name="myovertimecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
       <resource path="~/styles/myrequest.css" />
     </resourceSet>
     <resourceSet name="myovertimerequestjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/myovertimerequest.js" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="overtimereportcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/fixtable.css" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
       <resource path="~/styles/overtimereport.css" />
     </resourceSet>
     <resourceSet name="yearlyovertimereportjs" type="js">
@@ -476,7 +476,7 @@
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/Overtime/yearlyovertimereport.js" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
     </resourceSet>
 
     <resourceSet name="overtimereportdetailsjs" type="js">
@@ -495,13 +495,13 @@
 
     <resourceSet name="monthlyovertimememberjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/overtime/monthlyovertime.member.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
     </resourceSet>
     <resourceSet name="memberovertimecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
       <resource path="~/styles/memberovertime.css" />
     </resourceSet>
     <resourceSet name="monthlyovertimememberdetailjs" type="js">
@@ -537,11 +537,11 @@
     <resourceSet name="reportovertimerequestcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report.overtimerequest.css" />
-      <resource path="~/styles/monPickr-0.0.3.css" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
     <resourceSet name="reportovertimerequestjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/libs/monPickr-0.0.3.js" />
+      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/reportovertimerequest.js" />
     </resourceSet>

@@ -139,6 +139,7 @@
     <Compile Include="Postnatal\GetPostnatalCriteria.cs" />
     <Compile Include="Postnatal\InsertPostnatalCriteria.cs" />
     <Compile Include="Postnatal\UpdatePostnatalCriteria.cs" />
+    <Compile Include="Report\GetMonthlyWorkingHoursCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestHistoryByIdCriteria.cs" />
@@ -214,7 +215,6 @@
     <Compile Include="ExtensionNumber\UpdateExtensionNumberMemberCriteria.cs" />
     <Compile Include="ExtensionNumber\UpdateExternalNumberCriteria.cs" />
     <Compile Include="Report\GetReportWorkingHourSummaryCriteria.cs" />
-    <Compile Include="Report\GetTotalWorkingHourMonthlyCriteria.cs" />
     <Compile Include="Report\GetTotalWorkingHourWeeklyCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\InsertChangeShiftRequestCriteria.cs" />

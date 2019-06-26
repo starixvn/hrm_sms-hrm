@@ -169,6 +169,7 @@
     <Compile Include="ReportController.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Report\MonthlyWorkingHoursController.cs" />
     <Compile Include="Request\ChangeShiftController.cs" />
     <Compile Include="Request\CheckInOutController.cs" />
     <Compile Include="Request\KeepInViewController.cs" />
@@ -250,6 +251,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

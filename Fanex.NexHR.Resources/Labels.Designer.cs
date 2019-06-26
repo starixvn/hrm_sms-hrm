@@ -151,6 +151,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual Working Days.
+        /// </summary>
+        public static string ActualWorkingDays {
+            get {
+                return ResourceManager.GetString("ActualWorkingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -534,6 +543,15 @@ namespace Fanex.NexHR.Resources {
         public static string ByHour {
             get {
                 return ResourceManager.GetString("ByHour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calendar.
+        /// </summary>
+        public static string Calendar {
+            get {
+                return ResourceManager.GetString("Calendar", resourceCulture);
             }
         }
         
@@ -1447,6 +1465,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excel.
+        /// </summary>
+        public static string Excel {
+            get {
+                return ResourceManager.GetString("Excel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sick(i).
         /// </summary>
         public static string ExcelSick {
@@ -1551,6 +1578,15 @@ namespace Fanex.NexHR.Resources {
         public static string FileDoesNotExists {
             get {
                 return ResourceManager.GetString("FileDoesNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fiscal.
+        /// </summary>
+        public static string Fiscal {
+            get {
+                return ResourceManager.GetString("Fiscal", resourceCulture);
             }
         }
         
@@ -3648,6 +3684,15 @@ namespace Fanex.NexHR.Resources {
         public static string ScheduleStatus {
             get {
                 return ResourceManager.GetString("ScheduleStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

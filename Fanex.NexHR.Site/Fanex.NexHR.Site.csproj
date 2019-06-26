@@ -250,6 +250,8 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
+    <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\edit-account.js" />
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
@@ -307,7 +309,6 @@
     <Content Include="Scripts\Views\account.js" />
     <Content Include="Scripts\Views\addextensionno.js" />
     <Content Include="Scripts\Views\annualbalance.js" />
-    <Content Include="Scripts\Views\Report\report.totalworkinghourmonthly.js" />
     <Content Include="Scripts\Views\extensionno.js" />
     <Content Include="Scripts\Views\Overtime\overtime.command.request.js" />
     <Content Include="Scripts\Views\Overtime\hrovertimereport.js" />
@@ -424,7 +425,6 @@
     <Content Include="Scripts\Libs\jquery.tmpl.js" />
     <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\modernizr.js" />
-    <Content Include="Scripts\Libs\monPickr-0.0.3.js" />
     <Content Include="Scripts\tiny_mce\langs\en.js" />
     <Content Include="Scripts\tiny_mce\license.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -722,7 +722,6 @@
     <Content Include="Styles\Images\delete-icon.png" />
     <Content Include="Styles\Images\edit-icon.png" />
     <Content Include="Styles\Images\tick-icon.png" />
-    <Content Include="Styles\monPickr-0.0.3.css" />
     <Content Include="Styles\request.changeshift.css" />
     <Content Include="Styles\request.leave.css" />
     <Content Include="Styles\request.css" />
@@ -861,6 +860,7 @@
     <Content Include="wwwroot\sources\js\date.js" />
     <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
     <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\report\monthlyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\table.jsx" />
@@ -953,6 +953,10 @@
     <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
     <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
+    <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
+    <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1141,7 +1145,6 @@
     <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xls" />
     <Content Include="Views\ExtensionNo\Create.cshtml" />
     <Content Include="Views\ExtensionNo\Edit.cshtml" />
-    <Content Include="Views\Report\TotalWorkingHourMonthly.cshtml" />
     <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
@@ -1352,7 +1355,6 @@
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
     <Content Include="Views\Report\_TotalWorkingHourWeeklyDetails.cshtml" />
-    <Content Include="Views\Report\_TotalWorkingHourMonthlyDetails.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
     <Content Include="Views\Report\_AttendanceDetails.cshtml" />
     <Content Include="WebConfigs\Web.PRO.sms.config">

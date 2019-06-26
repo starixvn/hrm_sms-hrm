@@ -167,6 +167,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
+    <Compile Include="Enums\CalendarType.cs" />
     <Compile Include="Enums\Command.cs" />
     <Compile Include="Enums\DisciplineType.cs" />
     <Compile Include="Constants\FunctionKey.cs" />

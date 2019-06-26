@@ -97,6 +97,7 @@
     <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
+    <Compile Include="Report\MonthlyWorkingHours\FilterViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Report\TimeRecordViewModel.cs" />
-    <Compile Include="Report\TotalWorkingHourMonthlyViewModel.cs" />
     <Compile Include="ExtensionNumber\ExtensionNumberViewModel.cs" />
     <Compile Include="Request\KeepInViewRequestViewModel.cs" />
     <Compile Include="Report\EmployeeAttendanceOvertime.cs" />

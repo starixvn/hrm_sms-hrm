@@ -44,7 +44,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#toggle-left-navigation').bind('click', function () {
+    $('#toggle-left-navigation').on('click', function () {
         let currentElement = $(this);
         if (currentElement.hasClass('large-back')) {
             toggleLeftNavigation(false);

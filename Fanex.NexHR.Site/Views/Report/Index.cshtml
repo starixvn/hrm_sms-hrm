@@ -1,17 +1,18 @@
 ﻿@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Reports;
 }
 @section css{
-    @Url.CombresLink("myspacecss")
+    <link href="~/wwwroot/dist/styles/home.index.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("myspacejs")
+
 }
 @section Breadcrumb {
     <a class="step">HR</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@Labels.Reports</h2>
+<h2 class="page-title">@Labels.Reports</h2>
 <table class="table table-custom" id="reports">
     <thead>
         <tr>
@@ -24,61 +25,61 @@
     <tbody>
         <tr>
             <td>1</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Employee Infomation", "usermanagement", "employee")
             </td>
         </tr>
         <tr>
             <td>2</td>
-            <td class="firstColumn">
-                @Html.ActionLink("Total Working Hour Monthly", "totalworkinghourmonthly", "report")
+            <td class="align-left">
+                @Html.ActionLink("Total Working Hour Monthly", "index", "MonthlyWorkingHours")
             </td>
         </tr>
         <tr>
             <td>3</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Total Working Hour Weekly", "totalworkinghourweekly", "report")
             </td>
         </tr>
         <tr>
             <td>4</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Total Working Hour Daily", "totalworkinghourdaily", "report")
             </td>
         </tr>
         <tr>
             <td>5</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Monthly OT Summary", "OvertimeReport", "report")
             </td>
         </tr>
         <tr>
             <td>6</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Yearly OT Summary", "YearlyReport", "overtime")
             </td>
         </tr>
         <tr>
             <td>7</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("OT Data", "OTExcelReport", "overtime")
             </td>
         </tr>
         <tr>
             <td>8</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Attendance Statistic", "totalworkinghours", "report")
             </td>
         </tr>
         <tr>
             <td>9</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Working Calendar Summary", "workingCalendarSummary", "report")
             </td>
         </tr>
         <tr>
             <td>10</td>
-            <td class="firstColumn">
+            <td class="align-left">
                 @Html.ActionLink("Manpower Category", "ManpowerCategory", "report")
             </td>
         </tr>

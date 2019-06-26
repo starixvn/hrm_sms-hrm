@@ -191,6 +191,20 @@ function reorder(items, startIndex, endIndex) {
     return [...items];
 }
 
+function floatThead(el) {
+    $(el).floatThead({
+        scrollContainer: function ($table) {
+            return $table.closest('.content_scroll');
+        },
+        position: 'fixed',
+        top: 72
+    });
+
+    $('#toggle-left-navigation').on('click', function () {
+        $(el).floatThead('reflow');
+    });
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -201,5 +215,6 @@ export {
     unblockUI,
     toastOptions,
     axiosError,
-    reorder
+    reorder,
+    floatThead
 };

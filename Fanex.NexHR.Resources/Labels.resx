@@ -1701,7 +1701,7 @@
   <data name="Relationship" xml:space="preserve">
     <value>Relationship</value>
   </data>
-   <data name="EditKeepInViewRequest" xml:space="preserve">
+  <data name="EditKeepInViewRequest" xml:space="preserve">
     <value>Edit Keep In View Request</value>
   </data>
   <data name="LogDate" xml:space="preserve">
@@ -1709,5 +1709,20 @@
   </data>
   <data name="Minutes" xml:space="preserve">
     <value>Minutes</value>
+  </data>
+  <data name="ActualWorkingDays" xml:space="preserve">
+    <value>Actual Working Days</value>
+  </data>
+  <data name="Calendar" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="Excel" xml:space="preserve">
+    <value>Excel</value>
+  </data>
+  <data name="Fiscal" xml:space="preserve">
+    <value>Fiscal</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
 </root>

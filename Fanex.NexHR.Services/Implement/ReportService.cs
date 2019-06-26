@@ -38,17 +38,6 @@
             return totalWorkingHours;
         }
 
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(GetTotalWorkingHourMonthlyCriteria criteria)
-        {
-            IList<TotalWorkingHourMonthly> totalWorkingHours = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                totalWorkingHours = reportRepository.GetTotalWorkingHourMonthly(criteria);
-            }
-
-            return totalWorkingHours;
-        }
-
         public IList<TotalWorkingHourMonthly> GetTotalWorkingHourDaily(GetTotalWorkingHourDailyCriteria criteria)
         {
             IList<TotalWorkingHourMonthly> totalWorkingHours = null;

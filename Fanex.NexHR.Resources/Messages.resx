@@ -289,7 +289,7 @@
     <value>search employee...</value>
   </data>
   <data name="SearchEmployeeWatermark" xml:space="preserve">
-    <value>full name or nick name</value>
+    <value>full name or nickname</value>
   </data>
   <data name="ShiftCreated" xml:space="preserve">
     <value>Shift's created successfully!</value>
