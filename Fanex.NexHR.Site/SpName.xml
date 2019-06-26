@@ -481,6 +481,7 @@
     <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Background Job">
+    <Setting Key="Auto_EmployeeCalendar_UpdateIsPublic" SpName="Auto_EmployeeCalendar_UpdateIsPublic" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Auto_EmployeeCalendar_InsertDefaultShift" SpName="Auto_EmployeeCalendar_InsertDefaultShift" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" SpName="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" DbName="nexhrx" Plain="0"></Setting>
   </Function>

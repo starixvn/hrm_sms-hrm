@@ -11,11 +11,14 @@
         {
             IBackgroundJobService backgroundJob = DependencyResolver.Current.GetService<BackgroundJobService>();
 
+            RecurringJob.AddOrUpdate("PublishSchedule",
+                () => backgroundJob.PublishSchedule(), "05 00 * * *", TimeZoneInfo.Local); // everyday at 00:05AM
+
             RecurringJob.AddOrUpdate("InsertScheduleByDefaultShift",
-                () => backgroundJob.InsertScheduleByDefaultShift(), "05 00 * * FRI", TimeZoneInfo.Local); // every friday at 00:05AM
+                () => backgroundJob.InsertScheduleByDefaultShift(), "10 00 * * FRI", TimeZoneInfo.Local); // every friday at 00:10AM
 
             RecurringJob.AddOrUpdate("InsertScheduleByWeeklyDefaultShift",
-                () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "10 00 01 1-12/4 *", TimeZoneInfo.Local); // every four months at 00:10AM
+                () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "15 00 01 1-12/4 *", TimeZoneInfo.Local); // every four months at 00:15AM
         }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Auth\GetMenusByUserIdCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByWeeklyDefaultShiftCriteria.cs" />
+    <Compile Include="BackgroundJob\PublishScheduleCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />

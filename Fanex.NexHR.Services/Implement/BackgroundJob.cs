@@ -14,6 +14,12 @@
             this.baseService = baseService;
         }
 
+        public void PublishSchedule()
+        {
+            var criteria = new PublishScheduleCriteria();
+            baseService.ExecuteNonQuery(criteria);
+        }
+
         public void InsertScheduleByDefaultShift()
         {
             var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
