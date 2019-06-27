@@ -168,6 +168,7 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\CalendarType.cs" />
+    <Compile Include="Enums\LateInEarlyOutReasons.cs" />
     <Compile Include="Enums\CheckInOutReasons.cs" />
     <Compile Include="Enums\Command.cs" />
     <Compile Include="Enums\DisciplineType.cs" />
