@@ -133,6 +133,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actual Request Time.
+        /// </summary>
+        public static string ActualRequestTime {
+            get {
+                return ResourceManager.GetString("ActualRequestTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual Time.
         /// </summary>
         public static string ActualTime {
@@ -1587,6 +1596,15 @@ namespace Fanex.NexHR.Resources {
         public static string Fiscal {
             get {
                 return ResourceManager.GetString("Fiscal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgot.
+        /// </summary>
+        public static string Forgot {
+            get {
+                return ResourceManager.GetString("Forgot", resourceCulture);
             }
         }
         
@@ -3058,6 +3076,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other Discipline.
         /// </summary>
         public static string OtherDiscipline {
@@ -3544,7 +3571,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request time.
+        ///   Looks up a localized string similar to Request Time.
         /// </summary>
         public static string RequestTime {
             get {
@@ -3675,6 +3702,15 @@ namespace Fanex.NexHR.Resources {
         public static string ScheduleArrange {
             get {
                 return ResourceManager.GetString("ScheduleArrange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule Date.
+        /// </summary>
+        public static string ScheduleDate {
+            get {
+                return ResourceManager.GetString("ScheduleDate", resourceCulture);
             }
         }
         
@@ -4530,6 +4566,15 @@ namespace Fanex.NexHR.Resources {
         public static string UploadFileExists {
             get {
                 return ResourceManager.GetString("UploadFileExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Van Late.
+        /// </summary>
+        public static string VanLate {
+            get {
+                return ResourceManager.GetString("VanLate", resourceCulture);
             }
         }
         

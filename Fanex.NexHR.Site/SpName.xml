@@ -572,4 +572,32 @@
     <Setting Key="EmployeeEmergency_Edit" SpName="EmployeeEmergency_Edit" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeEmergency_Delete" SpName="EmployeeEmergency_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
+  <Function Name="Check In Out">
+    <Setting Key="CheckInOutRequest_Insert" SpName="CheckInOutRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_Update" SpName="CheckInOutRequest_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_Delete" SpName="CheckInOutRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_Approve" SpName="CheckInOutRequest_Approve" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_Reject" SpName="CheckInOutRequest_Reject" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_Reset" SpName="CheckInOutRequest_Reset" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_VoidBySA" SpName="CheckInOutRequest_VoidBySA" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="CheckInOutRequest_GetById" SpName="CheckInOutRequest_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="CheckInOutRequest_GetByDate" SpName="CheckInOutRequest_GetByDate" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="CheckInOutRequest_GetHistoryById" SpName="CheckInOutRequest_GetHistoryById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+  </Function>
 </Functions>

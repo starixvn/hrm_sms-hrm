@@ -11,8 +11,8 @@
     @Url.CombresLink("checkinoutrequestjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "checkinout")">@Labels.MyCheckInOutRequests</a>
-    <a class="step">@ViewBag.Title</a>
+<a class="step">Personal</a> <a class="step" href="@Url.Action(" employeeview", "checkinout" )">@Labels.MyCheckInOutRequests</a>
+<a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 <div class="bunhat container_24">
@@ -21,26 +21,15 @@
         @Html.ValidationSummary()
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Messages.RequestCreated</div>
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@Model.ForDate.Year" />
+            <div class="success">@Messages.RequestCreated</div>
+            <input type="hidden" id="successed" value="true" />
+            <input type="hidden" id="year" value="@Model.ForDate.Year" />
         }
-        
+
         <div id="model-state-error" class="ui-state-error ui-corner-all">
             @Labels.CannotCreateRequest
         </div>
 
-        if (Model.TotalRequestInMonth >= 1)
-        {
-
-        <div class="ui-state-error ui-corner-all">
-            <p>
-                <a href="@Url.Action("EmployeeView")">You've already requested for Check in/out
-                    @Model.TotalRequestInMonth times since @DateTime.Now.ToString("MMM yyyy")</a>
-            </p>
-        </div>
-        }      
-          
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.RefNO)
@@ -49,15 +38,15 @@
                 @Html.TextBoxFor(model => model.RefNO)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.RequestType)
+                @Html.LabelFor(model => model.RequestTypeId)
             </div>
             <div class="input">
-                @Html.RadioButtonList(model => model.RequestType, Utilities.CheckInOutTypes)
+                @Html.RadioButtonList(model => model.RequestTypeId, Utilities.CheckInOutTypes)
             </div>
-        </div>  
+        </div>
         <div class="clear">
         </div>
         <div class="space">
@@ -70,10 +59,10 @@
                 @Html.EditorFor(model => model.Employee)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.AttendantDate, "Attendant date")
+                @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate)
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-6), DateTime.Now)
@@ -98,7 +87,7 @@
         </div>
         <div class="space">
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Labels.Shift
@@ -109,8 +98,19 @@
             <div class="clear">
             </div>
         </div>
-        
 
+        <div class="clear">
+        </div>
+        <div class="space">
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Labels.Reason
+            </div>
+            <div class="input">
+                @RazorHelper.CheckInOutReasonDropDownList()
+            </div>
+        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId)
@@ -126,7 +126,7 @@
                 }
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.ApproverId)
@@ -142,7 +142,7 @@
                 }
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Remark)
@@ -153,7 +153,7 @@
             <div class="clear">
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
@@ -162,13 +162,13 @@
                 @Html.Hidden("InTime")
                 @Html.Hidden("OutTime")
                 @Html.Hidden("CrossDay")
-				@Html.Hidden("IsInAfterDay")
-				@Html.Hidden("IsOutAfterDay")
-                @Html.Hidden("RequestType", (int)RequestType.CheckIn)
+                @Html.Hidden("IsInAfterDay")
+                @Html.Hidden("IsOutAfterDay")
+                @Html.Hidden("RequestTypeId", (int)RequestType.CheckIn)
             </div>
             <div class="input">
-                <input type="submit" value="@Labels.Request"/>
-               <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+                <input type="submit" value="@Labels.Request" />
+                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>
     }

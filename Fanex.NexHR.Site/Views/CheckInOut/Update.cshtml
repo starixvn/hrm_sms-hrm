@@ -40,10 +40,10 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.RequestType)
+                @Html.LabelFor(model => model.RequestTypeId)
             </div>
             <div class="input">
-                @(Model.RequestType == 1 ? "Check in" : "Check out")
+                @Model.RequestTypeName
             </div>
         </div>
         
@@ -60,7 +60,7 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.AttendantDate, "Attendant date")
+                @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate)
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1), DateTime.Now)
@@ -121,7 +121,7 @@
             <div class="input">
                 @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.RequestType)
+                @Html.HiddenFor(model => model.RequestTypeId)
 				@Html.HiddenFor(model => model.RequestId)
                 @Html.HiddenFor(model => model.Shift)
                 @Html.Hidden("InTime")

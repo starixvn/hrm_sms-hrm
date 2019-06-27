@@ -8,7 +8,7 @@
 
         public override string GetSettingKey()
         {
-            return "KeepInViewRequest_Delete";
+            return "CheckInOutRequest_Delete";
         }
 
         public override bool IsValid()

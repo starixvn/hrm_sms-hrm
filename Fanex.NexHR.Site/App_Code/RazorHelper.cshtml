@@ -533,3 +533,14 @@
             break;
     }
 }
+
+@helper CheckInOutReasonDropDownList(byte reasonId = (byte)CheckInOutReasons.Forgot, string controlName = "reasonId", string htmlClass = "")
+{
+    <select name="@controlName" id="@controlName" class="@htmlClass">
+        <option selected="@(reasonId == (byte)CheckInOutReasons.VanLate)" value="@Convert.ToByte(CheckInOutReasons.VanLate)">@Labels.VanLate</option>
+        <option selected="@(reasonId == (byte)CheckInOutReasons.BusinessTrip)" value="@Convert.ToByte(CheckInOutReasons.BusinessTrip)">@Labels.BusinessTrip</option>
+        <option selected="@(reasonId == (byte)CheckInOutReasons.Forgot)" value="@Convert.ToByte(CheckInOutReasons.Forgot)">@Labels.Forgot</option>
+        <option selected="@(reasonId == (byte)CheckInOutReasons.Other)" value="@Convert.ToByte(CheckInOutReasons.Other)">@Labels.Other</option>
+    </select>
+
+}

@@ -3,7 +3,7 @@
 
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
-        $.post(_global.root + 'request/delete' + "/" + id, function (response) {
+        $.post(_global.root + 'checkinout/delete' + "/" + id, function (response) {
             if (response.IsSuccessful) {
                 $('#row' + id).remove();
                 autoIndex();

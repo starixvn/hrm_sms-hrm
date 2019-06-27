@@ -21,7 +21,7 @@
             <div id="DateControl"></div>
             <input type="hidden" id="Year" name="Year" value="@ViewBag.Year" />
             <input type="hidden" id="Month" name="Month" value="@ViewBag.Month" />
-            @Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
+            @Html.Hidden("MinDate", DateTime.Now.AddYears(-2).ToDateMonthYearFormatedDate())
             @Html.Hidden("MaxDate", DateTime.Now.AddMonths(1).ToDateMonthYearFormatedDate())
         </div>
         <div class="grid_2 gridlabel">Calendar</div>

@@ -1,13 +1,9 @@
-﻿/****** Object:  Stored Procedure dbo.AnnualLeave_ResetMultipleTransactions    Script Date: 7/20/2016 10:18:59 AM ******/
-/****** Object:  Stored Procedure dbo.AnnualLeave_ResetMultipleTransactions    Script Date: 7/19/2016 5:22:10 PM ******/
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[AnnualLeave_ResetMultipleTransactions] @EmpValue VARCHAR(4000) = NULL
+﻿
+CREATE PROCEDURE [dbo].[AnnualLeave_ResetMultipleTransactions] @EmpValue VARCHAR(MAX)
 	,@Description NVARCHAR(4000)
-	,@FromDate DATETIME
+	,@FromDate DATE
 	,@ResetDays NUMERIC(18, 1)
-	,@CreatedDate DATETIME
-	,@CreatedBy INT
+	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -15,9 +11,9 @@ AS
 Created: Tom.Vo@2013-10-23
 Task: reset anual balance
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 	@EmpValue:
 		<ROOT><Employee Id="1" LeaveBalance="2"/></ROOT>
@@ -59,8 +55,8 @@ BEGIN
 			,@FromDate
 			,LeaveBalance - @ResetDays
 			,0
-			,@CreatedDate
-			,@CreatedBy
+			,GETDATE()
+			,@ActorId
 		FROM @Emp
 
 		UPDATE e
@@ -69,15 +65,12 @@ BEGIN
 			INNER JOIN @Emp AS d ON e.EmpID = d.EmpID
 
 		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0
-			,@ErrCode = ''
 	END TRY
 
 	BEGIN CATCH
 		ROLLBACK TRANSACTION;
 
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'Reset anual balance failed.'
+			,@ErrMsg = N'Reset annual balance failed.'
 	END CATCH;
 END

@@ -11,13 +11,15 @@
 
         public int EmpId { get; set; }
 
-        public short RequestType { get; set; }
+        public int RequestType { get; set; }
 
         public string Remark { get; set; }
 
         public DateTime OnDate { get; set; }
 
-        public DateTime CheckTime { get; set; }
+        public DateTime RequestTime { get; set; }
+
+        public byte ReasonId { get; set; }
 
         public int CreatedBy { get; set; }
 
@@ -32,12 +34,12 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_Insert_CheckInOutRequest";
+            return "CheckInOutRequest_Insert";
         }
 
         public override bool IsValid()
         {
-            return EmpId > 0 && (CheckTime - OnDate).Days >= 0 && (CheckTime - OnDate).Days <= 1;
+            return EmpId > 0 && (RequestTime - OnDate).Days >= 0 && (RequestTime - OnDate).Days <= 1;
         }
     }
 }

@@ -951,6 +951,7 @@
     <Content Include="Views\Information\_EditEmergency.cshtml" />
     <Content Include="Views\Information\_ListEmergency.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
+    <Content Include="Views\CheckInOut\ViewHistory.cshtml" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
     <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />

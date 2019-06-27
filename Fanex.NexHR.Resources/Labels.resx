@@ -256,7 +256,7 @@
     <value>Requester</value>
   </data>
   <data name="RequestTime" xml:space="preserve">
-    <value>Request time</value>
+    <value>Request Time</value>
   </data>
   <data name="Shift" xml:space="preserve">
     <value>Shift</value>
@@ -1724,5 +1724,20 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="ActualRequestTime" xml:space="preserve">
+    <value>Actual Request Time</value>
+  </data>
+  <data name="Forgot" xml:space="preserve">
+    <value>Forgot</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ScheduleDate" xml:space="preserve">
+    <value>Schedule Date</value>
+  </data>
+  <data name="VanLate" xml:space="preserve">
+    <value>Van Late</value>
   </data>
 </root>

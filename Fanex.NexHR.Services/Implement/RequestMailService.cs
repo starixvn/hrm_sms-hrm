@@ -32,7 +32,7 @@
         
         private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
-        private const string _EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
+        
         private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
         #endregion constant
@@ -267,11 +267,6 @@
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOutCancelation);
                     break;
 
-                case (short)RequestType.CheckIn:
-                case (short)RequestType.CheckOut:
-                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOutCancelation);
-                    break;
-
                 default:
                     templateEmailPath = string.Empty;
                     break;
@@ -304,15 +299,6 @@
                 case (short)RequestType.LateIn:
                 case (short)RequestType.EarlyOut:
                     SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                    break;
-
-                case (short)RequestType.CheckIn:
-                case (short)RequestType.CheckOut:
-                    SendMailForCancelCheckInOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                    break;
-
-                case (short)RequestType.KeepInView:
-                    SendMailForCancelKeepInViewRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                     break;
 
                 default:
@@ -355,48 +341,6 @@
                 request.Remark);
 
             emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
-        }
-
-        private void SendMailForCancelCheckInOutRequest(
-            RequestEntity request,
-            string mailTo,
-            string sendCc,
-            string sendToNickName,
-            string templateEmailPath)
-        {
-            var subject = string.Format(Messages.MessageCheckInOutRequest, request.RequestType.Name, request.Requester.NickName);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                sendToNickName,
-                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.RequestType.Name.ToLowerInvariant(),
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                request.FromShift.Name,
-                request.RequestedDate.ToShortTime(),
-                request.Remark);
-
-            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
-        }
-
-        private void SendMailForCancelKeepInViewRequest(
-            RequestEntity request,
-            string mailTo,
-            string sendCc,
-            string sendToNickName,
-            string templateEmailPath)
-        {
-            var subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester.NickName);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                sendToNickName,
-                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                request.FromShift.Name,
-                request.Remark);
-
-            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private static string GetPassiveNameOfCommand(string command)

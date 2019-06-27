@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.ViewModels.Request
 {
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -36,7 +38,17 @@
         public int Minute { get; set; }
 
         [Required]
-        public short RequestType { get; set; }
+        public int RequestTypeId { get; set; }
+
+        public string RequestTypeName
+        {
+            get
+            {
+                return RequestTypeId == (int)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
+            }
+        }
+
+        public byte ReasonId { get; set; }
 
         public string Shift { get; set; }
 
@@ -53,8 +65,6 @@
         [Display(Name = "Approved by")]
         [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
-
-        public decimal TotalRequestInMonth { get; set; }
 
         public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 

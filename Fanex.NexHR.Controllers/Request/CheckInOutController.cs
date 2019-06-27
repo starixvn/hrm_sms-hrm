@@ -47,20 +47,15 @@
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-            var criteria = new GetRequestCriteria
+            var criteria = new GetCheckInOutRequestByDateCriteria
             {
                 EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31),
-                RequestType = (int)RequestFilter.CheckInOut,
-                IsQueryByCreatedDate = false,
-                RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = sessionService.Employee.Id,
-                IsLocal = null
+                ToDate = new DateTime(year, 12, 31)
             };
 
-            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
-            return View(entityList);
+            var requests = checkInOutRequestService.GetByDate(criteria);
+            return View(requests);
         }
 
         public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
@@ -73,9 +68,9 @@
                 AttendantDate = suggestedDate ?? DateTime.Today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
-                RequestType = (isMissingCheckIn.HasValue && isMissingCheckIn.Value) ? (short)RequestType.CheckIn : (short)RequestType.CheckOut,
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id)
+                RequestTypeId = (isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
+                //RequestTypeId = (!isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
+                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
 
             Shift shift = GetShiftByDate(DateTime.Now);
@@ -92,7 +87,6 @@
             {
                 CheckIsTopManager(model);
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
 
                 if (ModelState.IsValid)
                 {
@@ -100,8 +94,9 @@
                     {
                         EmpId = model.EmployeeId,
                         OnDate = model.AttendantDate,
-                        CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                        RequestType = model.RequestType,
+                        RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                        RequestType = model.RequestTypeId,
+                        ReasonId = model.ReasonId,
                         RefNo = model.RefNO,
                         Remark = model.Remark,
                         CreatedBy = sessionService.Employee.Id,
@@ -128,32 +123,34 @@
 
         public ActionResult Update(int id)
         {
-            var criteria = new GetRequestByIdCriteria
+            var criteria = new GetCheckInOutRequestByIdCriteria
             {
                 RequestId = id
             };
-            RequestEntity request = requestService.GetRequestById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
+            
+            var request = checkInOutRequestService.GetById(criteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
             else
             {
-                Shift shift = GetShiftByDate(request.RequestedDate);
+                Shift shift = GetShiftByDate(request.OnDate);
                 var viewModel = new CheckInOutRequestViewModel
                 {
-                    RequestId = request.Id,
-                    RequestType = request.RequestType.Id,
+                    RequestId = request.RequestId,
+                    RequestTypeId = request.RequestTypeId,
                     Employee = sessionService.Employee.Nickname,
                     EmployeeId = sessionService.Employee.Id,
-                    ForDate = request.RequestedDate.Date,
-                    Hour = request.RequestedDate.Hour,
-                    Minute = request.RequestedDate.Minute,
+                    ForDate = request.RequestTime.Date,
+                    Hour = request.RequestTime.Hour,
+                    Minute = request.RequestTime.Minute,
+                    ReasonId = request.ReasonId,
                     Shift = (shift == null) ? string.Empty : shift.Name,
                     ApproverId = request.ApprovedBy.Id,
                     VerifierId = request.VerifiedBy.Id,
                     RefNO = request.RefNO,
-                    AttendantDate = request.FromDate,
+                    AttendantDate = request.OnDate,
                     Remark = request.Remark,
                     VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
                 };
@@ -177,8 +174,9 @@
                         RequestId = model.RequestId,
                         EmpId = model.EmployeeId,
                         OnDate = model.AttendantDate,
-                        CheckTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                        RequestType = model.RequestType,
+                        RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                        RequestType = model.RequestTypeId,
+                        ReasonId = model.ReasonId,
                         RefNo = model.RefNO,
                         Remark = model.Remark,
                         ModifiedBy = sessionService.Employee.Id,
@@ -203,18 +201,28 @@
             return View(model);
         }
 
-        private decimal GetTotalRequestInMonth(int employeeId)
+        [HttpPost]
+        public JsonResult Delete(int id)
         {
-            var currentDate = DateTime.Now.Date;
-            var criteria = new GetNumberRequestInMonthCriteria
+            var criteria = new DeleteCheckInOutRequestCriteria
             {
-                EmployeeId = employeeId,
-                RequestType = (int)RequestType.CheckIn,
-                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
-                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
+                RequestId = id
             };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
-            return numberRequests;
+
+            checkInOutRequestService.SendMailForDeleteSuccessfully(id);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
+            return Json(result);
+        }
+
+        public ActionResult ViewHistory(long id)
+        {
+            var criteria = new GetCheckInOutRequestHistoryByIdCriteria
+            {
+                RequestId = id
+            };
+            var requests = checkInOutRequestService.GetHistoryById(criteria);
+            return View(requests);
         }
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)

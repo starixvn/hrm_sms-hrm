@@ -132,6 +132,7 @@
     <Compile Include="Report\WeekendLeaveSummary.cs" />
     <Compile Include="Request\BaseRequest.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />
+    <Compile Include="Request\CheckInOutModel.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
     <Compile Include="Request\KeepInViewModel.cs" />
     <Compile Include="Request\LeaveDisciplineDetailModel.cs" />

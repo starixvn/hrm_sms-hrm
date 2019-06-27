@@ -438,7 +438,6 @@
     <Build Include="dbo\Stored Procedures\Postnatal_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Get.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetUploadedFile.sql" />
     <Build Include="dbo\Tables\EmployeeUploadFile.sql" />
     <Build Include="dbo\Tables\EmployeePaternity.sql" />
     <Build Include="dbo\Stored Procedures\Paternity_Update.sql" />
@@ -551,6 +550,19 @@
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetById.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get_zo.sql" />
+    <Build Include="dbo\Tables\CheckInOutRequestHistory.sql" />
+    <Build Include="dbo\Tables\CheckInOutRequest.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_WriteLog.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_VoidBySA.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Update.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Reset.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Reject.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetHistoryById.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetByDate.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_Approve.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenuById.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenus.sql" />

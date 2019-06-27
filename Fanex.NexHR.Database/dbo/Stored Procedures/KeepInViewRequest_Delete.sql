@@ -30,10 +30,10 @@ BEGIN
 		RETURN;
 	END
 
-	DELETE WorkingTimeRequest
+	DELETE dbo.WorkingTimeRequest
 	WHERE RequestID = @RequestID
 
-	DELETE KeepInViewRequest
+	DELETE dbo.KeepInViewRequest
 	WHERE RequestID = @RequestID
 
 	SELECT @ErrCode = 0
