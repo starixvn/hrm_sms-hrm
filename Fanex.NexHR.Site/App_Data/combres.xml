@@ -379,12 +379,6 @@
       <resource path="~/styles/report.totalworkinghourmonthly.css" />
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
-    <resourceSet name="totalworkinghourmonthlyjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/report/report.totalworkinghourmonthly.js" />
-    </resourceSet>
 
     <resourceSet name="totalworkinghourdailyjs" type="js">
       <resource reference="sitejs" />
