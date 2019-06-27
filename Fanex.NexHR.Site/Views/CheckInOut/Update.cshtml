@@ -122,11 +122,12 @@
                 @Html.HiddenFor(model => model.Employee)
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.HiddenFor(model => model.RequestTypeId)
-				@Html.HiddenFor(model => model.RequestId)
+                @Html.HiddenFor(model => model.RequestId)
                 @Html.HiddenFor(model => model.Shift)
+                @Html.HiddenFor(model => model.ReasonId)
                 @Html.Hidden("InTime")
                 @Html.Hidden("OutTime")
-                <input type="submit" value="@Labels.Update"/>
+                <input type="submit" value="@Labels.Update" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

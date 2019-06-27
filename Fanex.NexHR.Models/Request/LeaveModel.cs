@@ -25,29 +25,5 @@
                 return TotalDays == HalfDayEnum;
             }
         }
-
-        public DateTime GetFromTimeHalfDay()
-        {
-            var fromTime = DateTime.Now;
-            if (LeaveDetail != null && LeaveDetail.Any() && IsHalfDay)
-            {
-                var leaveHalfDay = LeaveDetail.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
-                fromTime = leaveHalfDay.FromTime;
-            }
-
-            return fromTime;
-        }
-
-        public DateTime GetToTimeHalfDay()
-        {
-            var toTime = DateTime.Now;
-            if (LeaveDetail != null && LeaveDetail.Any() && IsHalfDay)
-            {
-                var leaveHalfDay = LeaveDetail.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
-                toTime = leaveHalfDay.ToTime;
-            }
-
-            return toTime;
-        }
     }
 }

@@ -5,6 +5,7 @@
     using System.Text;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;
 
     public class BaseLeaveRequestCriteria : CriteriaBase
@@ -59,7 +60,7 @@
                             0,
                             EmployeeId,
                             detail.OnDate,
-                            detail.WorkType == 2 ? detail.LeaveTypeId.ToString() : string.Empty,
+                            detail.WorkType == (int)WorkType.Leave ? detail.LeaveTypeId.ToString() : string.Empty,
                             detail.IsHalfDay,
                             detail.WorkType,
                             detail.FromTime,

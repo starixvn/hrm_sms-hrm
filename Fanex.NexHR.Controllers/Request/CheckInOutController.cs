@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -69,7 +68,6 @@
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 RequestTypeId = (isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
-                //RequestTypeId = (!isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
                 VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
 

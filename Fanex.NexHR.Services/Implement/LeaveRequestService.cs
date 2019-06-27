@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
@@ -133,8 +134,8 @@
             {
                 var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Employee.NickName);
                 
-                var fromDate = request.TotalDays == (decimal)0.5 ? request.GetFromTimeHalfDay() : request.FromDate;
-                var toDate = request.TotalDays == (decimal)0.5 ? request.GetToTimeHalfDay() : request.ToDate;
+                var fromDate = request.TotalDays == (decimal)0.5 ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
+                var toDate = request.TotalDays == (decimal)0.5 ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
                 var displayName = string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName);
@@ -145,15 +146,40 @@
             }
         }
 
+        public DateTime GetFromTimeHalfDay(IList<LeaveDetailModel> leaveDetails)
+        {
+            var fromTime = DateTime.Now;
+            if (leaveDetails.Any())
+            {
+                var leaveHalfDay = leaveDetails.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
+                fromTime = leaveHalfDay.FromTime;
+            }
+
+            return fromTime;
+        }
+
+        public DateTime GetToTimeHalfDay(IList<LeaveDetailModel> leaveDetails)
+        {
+            var toTime = DateTime.Now;
+            if (leaveDetails.Any())
+            {
+                var leaveHalfDay = leaveDetails.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
+                toTime = leaveHalfDay.ToTime;
+            }
+
+            return toTime;
+        }
+
         private void SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
         {
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 email.Subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
                                                   : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                string forDate = criteria.TotalDays == (decimal)0.5
-                    ? requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, criteria.RequestDetail[0].FromTime, criteria.RequestDetail[0].ToTime, criteria.TotalDays)
-                    : requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, criteria.FromDate, criteria.ToDate, criteria.TotalDays);
+                var fromDate = criteria.TotalDays == (decimal)0.5 ? GetFromTimeHalfDay(criteria.RequestDetail) : criteria.FromDate;
+                var toDate = criteria.TotalDays == (decimal)0.5 ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
+                var forDate = requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, fromDate, toDate, criteria.TotalDays);
+
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
                 email.Body = string.Format(
                     email.Body,

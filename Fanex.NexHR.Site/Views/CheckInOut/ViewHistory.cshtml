@@ -28,6 +28,7 @@
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Remark</th>
                 <th>@Labels.Status</th>
+                <th>@Labels.LogDate</th>
             </tr>
         </thead>
         @if (Model != null && Model.Any())
@@ -70,6 +71,7 @@
                         <td>-</td>
                     }
                     <td>@request.Status.ToString()</td>
+                    <td class="ddMMyyyyhhmm">@request.InsertedDate.ToShortFormatedDate()</td>
                 </tr>
                 }
             </tbody>

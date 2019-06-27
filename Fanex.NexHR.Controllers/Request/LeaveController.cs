@@ -395,8 +395,8 @@
             LeaveRequestViewModel model = null;
             if (request != null)
             {
-                var fromTime = request.GetFromTimeHalfDay();
-                var toTime = request.GetToTimeHalfDay();
+                var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
+                var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
                 model = new LeaveRequestViewModel
                 {
                     RequestId = request.RequestId,
@@ -406,7 +406,7 @@
                     FromDate = request.FromDate,
                     ToDate = (request.LeaveType.Id != (int)LeaveTypes.GeneralLeave
                             && request.IsHalfDay
-                            && request.ToDate.Date != request.GetToTimeHalfDay()) ? request.ToDate.AddDays(1) : request.ToDate,
+                            && request.ToDate.Date != toTime) ? request.ToDate.AddDays(1) : request.ToDate,
                     TotalDays = request.TotalDays,
                     HalfDayOff = request.IsHalfDay,
                     VerifierId = request.VerifiedBy.Id,

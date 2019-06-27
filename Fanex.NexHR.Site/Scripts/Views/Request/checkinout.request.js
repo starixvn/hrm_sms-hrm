@@ -34,7 +34,7 @@ function bindingHourAndMinute() {
 function getShiftByDate() {
     $.getJSON(_global.root + 'shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: $("#AttendantDate").val() },
     function (data) {
-        if (data != null) {
+        if (data !== null) {
             $("#model-state-error").hide();
             $('#shiftname').text(data.Name);
             $('#Shift').val(data.Name);
@@ -104,7 +104,7 @@ $(document).ready(function () {
     $("#Employee").blur(function () {
         $.getJSON(_global.root + 'employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
                 function (response) {
-                    if (response != null) {
+                    if (response !== null) {
                         $("#ForDate").attr("disabledDate", response.join(","));
                         $("#AttendantDate").attr("disabledDate", response.join(","));
                         $('#AttendantDate').change();
@@ -116,7 +116,7 @@ $(document).ready(function () {
     $('#AttendantDate').change(function () {
         $.getJSON(_global.root + 'shift/getshiftbydate', { employeeId: $("#EmployeeId").val(), date: $("#AttendantDate").val() },
         function (data) {
-            if (data != null) {
+            if (data !== null) {
                 $("#model-state-error").hide();
                 $('#shiftname').text(data.Name);
                 $('#Shift').val(data.Name);

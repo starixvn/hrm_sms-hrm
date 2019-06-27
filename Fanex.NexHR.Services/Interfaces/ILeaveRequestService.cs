@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
@@ -23,5 +24,10 @@
         void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria);
 
         void SendMailForDeleteSuccessfully(long requestId);
+
+        DateTime GetFromTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
+
+        DateTime GetToTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
+
     }
 }
