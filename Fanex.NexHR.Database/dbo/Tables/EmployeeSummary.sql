@@ -13,6 +13,11 @@
     [OffDaysbyWeek]      SMALLINT        CONSTRAINT [DF_EmployeeSummary_OffDaybyWeek] DEFAULT ((0)) NULL,
     [Unit]               NVARCHAR (150)  NULL,
     [IsExpatUseHoliday]  BIT             CONSTRAINT [DF_EmployeeSummary_IsExpatUseHoliday] DEFAULT ((0)) NULL,
+    [MilitaryFromDate]   DATETIME        NULL,
+    [MilitaryToDate]     DATETIME        NULL,
+    [Remark]             NVARCHAR (200)  NULL,
     CONSTRAINT [PK_EmployeeSummary] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
-);
+) ON [Employee];
+
+
 

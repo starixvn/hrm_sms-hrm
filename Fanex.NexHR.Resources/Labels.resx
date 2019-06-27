@@ -1740,4 +1740,10 @@
   <data name="VanLate" xml:space="preserve">
     <value>Van Late</value>
   </data>
+  <data name="SectionDate" xml:space="preserve">
+    <value>Section Date</value>
+  </data>
+  <data name="PromotionDate" xml:space="preserve">
+    <value>Promotion Date</value>
+  </data>
 </root>

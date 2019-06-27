@@ -13,6 +13,8 @@ CREATE PROCEDURE [dbo].[Employee_Summary_Update] @EmpID INT
 	,@IsTopManager BIT = 0
 	,@OffDaysbyWeek SMALLINT = 0
 	,@IsExpatUseHoliday BIT = 0
+	,@MilitaryFromDate DATETIME = NULL
+	,@MilitaryToDate DATETIME = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -44,6 +46,8 @@ BEGIN
 			,Unit = @Unit
 			,IsExpatUseHoliday = @IsExpatUseHoliday
 			,OffDaysbyWeek = @OffDaysbyWeek
+			,MilitaryFromDate = @MilitaryFromDate
+			,MilitaryToDate = @MilitaryToDate
 		WHERE [EmpId] = @EmpId
 
 		COMMIT TRANSACTION;

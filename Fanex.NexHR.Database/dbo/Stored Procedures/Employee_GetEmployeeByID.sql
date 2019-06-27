@@ -21,7 +21,7 @@ BEGIN
 	SELECT @KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpID, @Today, NULL)
 		,@AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@Today), NULL)
 
-	SELECT e.EmpId AS ID
+	SELECT e.EmpId as ID
 		,e.Code
 		,e.DomainUsername
 		,e.FullName
@@ -34,6 +34,8 @@ BEGIN
 		,e.Enabled
 		,e.Phone
 		,e.Gender
+		,e.SectionDate
+		,e.PromotionDate
 		,e.GroupId
 		,g.DepartmentId
 		,e.ManagerId

@@ -122,7 +122,6 @@ BEGIN
       ,[Enabled]
       ,[Phone]
       ,[Gender]
-      ,e.[GroupId]
       ,[ManagerId]
       ,[JoinedDate]
       ,[ConfirmedDate]

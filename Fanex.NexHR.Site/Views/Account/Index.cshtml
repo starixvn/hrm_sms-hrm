@@ -431,11 +431,27 @@
                     <div class="pcontent role">@Model.JobTitle</div>
                     <div class="clear"></div>
                 </li>
+                @if (Model.PromotionDate.HasValue)
+                {
+                    <li class="list-group-item">
+                        <div class="label">@Labels.PromotionDate:</div>
+                        <div class="pcontent role">@Model.PromotionDate.ToDateMonthYearFormatedDate()</div>
+                        <div class="clear"></div>
+                    </li>
+                }
                 <li class="list-group-item">
                     <div class="label">@Labels.Section:</div>
                     <div class="pcontent role">@Model.Team.Name</div>
                     <div class="clear"></div>
                 </li>
+                @if (Model.SectionDate.HasValue)
+                {
+                    <li class="list-group-item">
+                        <div class="label">@Labels.SectionDate:</div>
+                        <div class="pcontent role">@Model.SectionDate.ToDateMonthYearFormatedDate()</div>
+                        <div class="clear"></div>
+                    </li>
+                }
                 <li class="list-group-item">
                     <div class="label">@Labels.Roles</div>
                     <div class="pcontent role">@Model.Roles2String</div>

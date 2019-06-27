@@ -3319,6 +3319,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Promotion Date.
+        /// </summary>
+        public static string PromotionDate {
+            get {
+                return ResourceManager.GetString("PromotionDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Public.
         /// </summary>
         public static string Public {
@@ -3747,6 +3756,15 @@ namespace Fanex.NexHR.Resources {
         public static string Section {
             get {
                 return ResourceManager.GetString("Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Date.
+        /// </summary>
+        public static string SectionDate {
+            get {
+                return ResourceManager.GetString("SectionDate", resourceCulture);
             }
         }
         

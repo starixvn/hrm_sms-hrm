@@ -162,7 +162,7 @@
             @if (Model.PromotionDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="label">Promotion Date:</div>
+                    <div class="label">@Labels.PromotionDate:</div>
                     <div class="pcontent">@Model.PromotionDate.Value.ToDateMonthYearFormatedDate()</div>
                     <div class="clear"></div>
                 </li>
@@ -176,7 +176,7 @@
             @if (Model.SectionDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="label">Section Date:</div>
+                    <div class="label">@Labels.SectionDate:</div>
                     <div class="pcontent">@Model.SectionDate.Value.ToDateMonthYearFormatedDate()</div>
                     <div class="clear"></div>
                 </li>

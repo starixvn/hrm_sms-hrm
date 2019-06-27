@@ -75,6 +75,10 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@History NVARCHAR(500) = NULL
 	,@EmployeeCard VARCHAR(10) = ''
 	,@PickupRemark NVARCHAR(200) = NULL
+	,@PromotionDate DATETIME = NULL
+	,@SectionDate DATETIME = NULL
+	,@MilitaryFromDate DATETIME = NULL
+	,@MilitaryToDate DATETIME = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -212,6 +216,10 @@ BEGIN
 		,@History_old NVARCHAR(500) = NULL
 		,@EmployeeCard_old VARCHAR(10) = ''
 		,@PickupRemark_old NVARCHAR(200) = NULL
+		,@PromotionDate_old DATETIME = NULL
+		,@SectionDate_old DATETIME = NULL
+		,@MilitaryFromDate_old DATETIME = NULL
+		,@MilitaryToDate_old DATETIME = NULL
 
 	SELECT TOP 1 @Code_Old = Code
 		,@DomainUsername_Old = DomainUsername
@@ -252,6 +260,8 @@ BEGIN
 		,@Major_Old = Major
 		,@EmployeeCard_old = EmployeeCard
 		,@PickupRemark_old = PickupRemark
+		,@PromotionDate_old = PromotionDate
+		,@SectionDate_old = SectionDate
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpId = @EmpId
 
@@ -270,6 +280,8 @@ BEGIN
 		,@Unit_old = Unit
 		,@IsExpatUseHoliday_old = IsExpatUseHoliday
 		,@OffDaysbyWeek_old = OffDaysbyWeek
+		,@MilitaryFromDate_old = MilitaryFromDate
+		,@MilitaryToDate_old = MilitaryToDate
 	FROM dbo.[EmployeeSummary] WITH (NOLOCK)
 	WHERE EmpId = @EmpId
 
@@ -316,6 +328,8 @@ BEGIN
 			,Major = @Major
 			,EmployeeCard = @EmployeeCard
 			,PickupRemark = @PickupRemark
+			,PromotionDate = @PromotionDate
+			,SectionDate = @SectionDate
 		WHERE EmpId = @EmpId
 
 		EXEC [dbo].[EmployeeRole_Update] @EmployeeId = @EmpId
@@ -336,6 +350,8 @@ BEGIN
 			,@IsTopManager = @IsTopManager
 			,@OffDaysbyWeek = @OffDaysbyWeek
 			,@IsExpatUseHoliday = @IsExpatUseHoliday
+			,@MilitaryFromDate = @MilitaryFromDate
+			,@MilitaryToDate = @MilitaryToDate
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
