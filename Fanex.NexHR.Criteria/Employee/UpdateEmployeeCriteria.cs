@@ -24,6 +24,8 @@
 
         public int? JobTitleId { get; set; }
 
+        public DateTime? PromotionDate { get; set; }
+
         public bool Enabled { get; set; }
 
         public string Phone { get; set; }
@@ -31,6 +33,8 @@
         public byte? Gender { get; set; }
 
         public int GroupId { get; set; }
+
+        public DateTime? SectionDate { get; set; }
 
         public string Roles { get; set; }
 
@@ -41,6 +45,10 @@
         public DateTime? ConfirmedDate { get; set; }
 
         public DateTime? ResignedDate { get; set; }
+
+        public DateTime? MilitaryFromDate { get; set; }
+
+        public DateTime? MilitaryToDate { get; set; }
 
         public string Skype { get; set; }
 

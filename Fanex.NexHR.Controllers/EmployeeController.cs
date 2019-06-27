@@ -647,7 +647,11 @@
                 SocialInsuranceNo = model.SocialInsuranceNo,
                 RegisteredHospital = model.RegisteredHospital,
                 IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
-                PickupRemark = model.PickupRemark
+                PickupRemark = model.PickupRemark,
+                PromotionDate = model.PromotionDate,
+                SectionDate = model.SectionDate,
+                MilitaryFromDate = model.MilitaryFromDate,
+                MilitaryToDate = model.MilitaryToDate
             };
 
             return criteria;

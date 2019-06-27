@@ -154,11 +154,11 @@
                 <div class="input">
                     @{
                         var gender = new List<SelectListItem>
-                        {
-                            new SelectListItem() {Text = "Unknown", Value = ""},
-                            new SelectListItem() {Text = "Female", Value = "0"},
-                            new SelectListItem() {Text = "Male", Value = "1"}
-                        };
+                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Unknown", Value = ""},
+                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Female", Value = "0"},
+                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Male", Value = "1"}
+                                                                                                                                                                                                                                                                };
                     }
                     @Html.DropDownListFor(model => model.Gender, gender)
                     @Html.ValidationMessageFor(model => model.Gender)
@@ -238,6 +238,36 @@
             </li>
         </ul>
     </div>
+    if (Model.Gender != null && Model.Gender != 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading collapse">
+                <span class="fa fa-chevron-down"></span>
+                <span>Military</span>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="label">
+                        From
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.MilitaryFromDate)
+                    </div>
+                    <div class="clear"></div>
+                </li>
+                <li class="list-group-item">
+                    <div class="label">
+                        To
+                    </div>
+                    <div class="input">
+                        @Html.DatePickerFor(model => model.MilitaryToDate)
+                    </div>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+        </div>
+    }
+
     <div class="panel panel-default">
         <div class="panel-heading collapse">
             <span class="fa fa-chevron-down"></span>
@@ -351,11 +381,29 @@
             </li>
             <li class="list-group-item">
                 <div class="label">
+                    @Html.LabelFor(model => model.SectionDate)
+                </div>
+                <div class="input">
+                    @Html.DatePickerFor(model => model.SectionDate)
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">
                     @Html.LabelFor(model => model.JobTitleId)
                 </div>
                 <div class="input">
                     @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), "--Select a Job Title--", new { @style = "width : 230px;" })
                     @Html.ValidationMessageFor(model => model.JobTitleId)
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">
+                    @Html.LabelFor(model => model.PromotionDate)
+                </div>
+                <div class="input">
+                    @Html.DatePickerFor(model => model.PromotionDate)
                 </div>
                 <div class="clear"></div>
             </li>
@@ -523,10 +571,10 @@
                 <div class="input">
                     @{
                         var empType = new List<SelectListItem>
-                        {
-                            new SelectListItem() {Text = "Local", Value = "true"},
-                            new SelectListItem() {Text = "Expat", Value = "false"},
-                        };
+                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Local", Value = "true"},
+                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Expat", Value = "false"},
+                                                                                                                                                                                                                                                                };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, empType)
                 </div>

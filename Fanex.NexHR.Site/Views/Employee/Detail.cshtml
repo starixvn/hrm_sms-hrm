@@ -54,13 +54,13 @@
             </li>
             @if (hasPermission)
             {
-            <li class="list-group-item">
-                <div class="label">D.O.B:</div>
-                <div class="pcontent">
-                    @Model.DateOfBirth.ToDateMonthYearFormatedDate()
-                </div>
-                <div class="clear"></div>
-            </li>
+                <li class="list-group-item">
+                    <div class="label">D.O.B:</div>
+                    <div class="pcontent">
+                        @Model.DateOfBirth.ToDateMonthYearFormatedDate()
+                    </div>
+                    <div class="clear"></div>
+                </li>
             }
             <li class="list-group-item">
                 <div class="label">@Labels.Gender:</div>
@@ -76,56 +76,74 @@
             </li>
             @if (hasPermission)
             {
-            <li class="list-group-item">
-                <div class="label">@Labels.Marriage:</div>
-                <div class="pcontent">
-                    @{
+                <li class="list-group-item">
+                    <div class="label">@Labels.Marriage:</div>
+                    <div class="pcontent">
+                        @{
                             MarriageStatus status = (MarriageStatus)Model.Marriage;
-                    }
-                    @(Model.Marriage == null ? "Unknown" : status.ToString())
-                </div>
-                <div class="clear"></div>
-            </li>
-            <li class="list-group-item">
-                <div class="label">@Labels.CardNo:</div>
-                <div class="pcontent">@Model.CardNo</div>
-                <div class="clear"></div>
-            </li>
+                        }
+                        @(Model.Marriage == null ? "Unknown" : status.ToString())
+                    </div>
+                    <div class="clear"></div>
+                </li>
+                <li class="list-group-item">
+                    <div class="label">@Labels.CardNo:</div>
+                    <div class="pcontent">@Model.CardNo</div>
+                    <div class="clear"></div>
+                </li>
                 if (!string.IsNullOrEmpty(Model.PassportNo))
                 {
-            <li class="list-group-item">
-                <div class="label">@Labels.PassportNo:</div>
-                <div class="pcontent">@Model.PassportNo</div>
-                <div class="clear"></div>
-            </li>
+                    <li class="list-group-item">
+                        <div class="label">@Labels.PassportNo:</div>
+                        <div class="pcontent">@Model.PassportNo</div>
+                        <div class="clear"></div>
+                    </li>
+                }
+
+                if (Model.Gender != null && Model.Gender != 0 && (Model.MilitaryFromDate.HasValue || Model.MilitaryToDate.HasValue))
+                {
+                    <li class="list-group-item">
+                        <div class="label">@Labels.PassportExp:</div>
+                        <div class="pcontent">
+                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
+                        </div>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="label">@Labels.PassportExp:</div>
+                        <div class="pcontent">
+                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
+                        </div>
+                        <div class="clear"></div>
+                    </li>
                 }
                 if (Model.PassportExp.HasValue)
                 {
-            <li class="list-group-item">
-                <div class="label">@Labels.PassportExp:</div>
-                <div class="pcontent">
-                    @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
-                </div>
-                <div class="clear"></div>
-            </li>
+                    <li class="list-group-item">
+                        <div class="label">@Labels.PassportExp:</div>
+                        <div class="pcontent">
+                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
+                        </div>
+                        <div class="clear"></div>
+                    </li>
                 }
                 if (Model.WorkingDays > 0)
                 {
-            <li class="list-group-item">
-                <div class="label">@Labels.WorkingDays:</div>
-                <div class="pcontent">
-                    @Model.WorkingDays
-                </div>
-                <div class="clear"></div>
-            </li>
+                    <li class="list-group-item">
+                        <div class="label">@Labels.WorkingDays:</div>
+                        <div class="pcontent">
+                            @Model.WorkingDays
+                        </div>
+                        <div class="clear"></div>
+                    </li>
                 }
                 if (Model.WorkingHours > 0)
                 {
-            <li class="list-group-item">
-                <div class="label"> Working Hours: </div>
-                <div class="pcontent">@Model.WorkingHours</div>
-                <div class="clear"> </div>
-            </li>
+                    <li class="list-group-item">
+                        <div class="label"> Working Hours: </div>
+                        <div class="pcontent">@Model.WorkingHours</div>
+                        <div class="clear"> </div>
+                    </li>
                 }
             }
         </ul>
@@ -138,13 +156,31 @@
             <li class="list-group-item">
                 <div class="label">@Labels.JobTitle:</div>
                 <div class="pcontent">@Model.JobTitle</div>
+
                 <div class="clear"></div>
             </li>
+            @if (Model.PromotionDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="label">Promotion Date:</div>
+                    <div class="pcontent">@Model.PromotionDate.Value.ToDateMonthYearFormatedDate()</div>
+                    <div class="clear"></div>
+                </li>
+            }
             <li class="list-group-item">
                 <div class="label">@Labels.Section:</div>
                 <div class="pcontent">@Model.Team.Name</div>
+
                 <div class="clear"></div>
             </li>
+            @if (Model.SectionDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="label">Section Date:</div>
+                    <div class="pcontent">@Model.SectionDate.Value.ToDateMonthYearFormatedDate()</div>
+                    <div class="clear"></div>
+                </li>
+            }
             <li class="list-group-item">
                 <div class="label">@Labels.Roles:</div>
                 <div class="pcontent role">
@@ -157,7 +193,7 @@
                 <div class="pcontent">
                     @if (Model.JoinedDate.HasValue)
                     {
-                    @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                        @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
                 <div class="clear"></div>
@@ -167,7 +203,7 @@
                 <div class="pcontent">
                     @if (Model.CompanyDate.HasValue)
                     {
-                    @Model.CompanyDate.Value.ToDateMonthYearFormatedDate()
+                        @Model.CompanyDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
                 <div class="clear"></div>
@@ -177,20 +213,20 @@
                 <div class="pcontent">
                     @if (Model.ConfirmedDate.HasValue)
                     {
-                    @Model.ConfirmedDate.Value.ToDateMonthYearFormatedDate()
+                        @Model.ConfirmedDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
                 <div class="clear"></div>
             </li>
             @if (Model.ResignedDate.HasValue)
             {
-            <li class="list-group-item">
-                <div class="label">@Labels.ResignedDate:</div>
-                <div class="pcontent">
-                    @Model.ResignedDate.Value.ToDateMonthYearFormatedDate()
-                </div>
-                <div class="clear"></div>
-            </li>
+                <li class="list-group-item">
+                    <div class="label">@Labels.ResignedDate:</div>
+                    <div class="pcontent">
+                        @Model.ResignedDate.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                    <div class="clear"></div>
+                </li>
             }
         </ul>
     </div>
@@ -229,16 +265,16 @@
             </li>
             @if (hasPermission)
             {
-            <li class="list-group-item">
-                <div class="label">@Labels.Address:</div>
-                <div class="pcontent">@Model.Address</div>
-                <div class="clear"></div>
-            </li>
-            <li class="list-group-item">
-                <div class="label">@Labels.CurrentAddress:</div>
-                <div class="pcontent">@Model.CurrentAddress</div>
-                <div class="clear"></div>
-            </li>
+                <li class="list-group-item">
+                    <div class="label">@Labels.Address:</div>
+                    <div class="pcontent">@Model.Address</div>
+                    <div class="clear"></div>
+                </li>
+                <li class="list-group-item">
+                    <div class="label">@Labels.CurrentAddress:</div>
+                    <div class="pcontent">@Model.CurrentAddress</div>
+                    <div class="clear"></div>
+                </li>
             }
         </ul>
     </div>

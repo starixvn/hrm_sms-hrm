@@ -570,6 +570,7 @@
     <Build Include="dbo\Stored Procedures\Menu_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_GetFullProfileInformation.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

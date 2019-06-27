@@ -26,7 +26,7 @@
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
       <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
       <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="TeamID" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_GetMemberByManager" SpName="Employee_GetMemberByManager" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
@@ -211,7 +211,7 @@
       <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
       <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />
     </Setting>
-    
+
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate" SpName="WorkingTimeRequest_GetRequestByCreateDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate" SpName="WorkingTimeRequest_GetRequestByRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByRequestDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
@@ -508,7 +508,7 @@
     <Setting Key="LeaveRequest_Update" SpName="LeaveRequest_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_Delete" SpName="LeaveRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_GetLeaveBalance" SpName="LeaveRequest_GetLeaveBalance" DbName="nexhrx" Plain="0"></Setting>
-    
+
     <Setting Key="LeaveRequest_GetById" SpName="LeaveRequest_GetById" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="EmpId" ObjectProperty="Id" />

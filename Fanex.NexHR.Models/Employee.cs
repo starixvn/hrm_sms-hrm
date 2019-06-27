@@ -61,6 +61,9 @@
 
         public Team Team { get; set; } ////remove
 
+        [DataType(DataType.Date)]
+        public DateTime? SectionDate { get; set; }
+
         public Employee Manager { get; set; }
 
         [DataType(DataType.Date)]
@@ -86,6 +89,14 @@
             }
         }
 
+        [DataType(DataType.Date)]
+        public DateTime? MilitaryFromDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? MilitaryToDate { get; set; }
+
+        public string Remark { get; set; }
+
         public DateTime? LastLogin { get; set; }
 
         public decimal AnnualLeaveBalance { get; set; }
@@ -99,6 +110,9 @@
         public Employee Modifier { get; set; }
 
         public string JobTitle { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime? PromotionDate { get; set; }
 
         [Display(Name = "Permanent Address")]
         public string Address { get; set; }
