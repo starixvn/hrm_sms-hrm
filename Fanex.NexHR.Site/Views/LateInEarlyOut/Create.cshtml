@@ -29,18 +29,6 @@
             <p>@Labels.CannotCreateRequest</p>
         </div>
 
-        if (Model.TotalRequestInMonth >= 1)
-        {
-            <div class="ui-state-error ui-corner-all">
-                <p>
-                    <a href="@Url.Action("EmployeeView")">
-                        You've already requested for Late in/early out
-                        @Model.TotalRequestInMonth times since @DateTime.Now.ToString("MMM yyyy")
-                    </a>
-                </p>
-            </div>
-        }
-
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.RequestType)
@@ -60,10 +48,10 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Date)
+                @Html.LabelFor(model => model.OnDate)
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.Date,
+                @Html.DatePickerFor(model => model.OnDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(4).AddDays(-1))
                 <span id="lateIn"> ※ Actual Late In: <span id="lateInHours">N/A</span></span>
@@ -76,6 +64,14 @@
             </div>
             <div class="input">
                 @Html.TextBoxFor(model => model.Minute)
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label">
+                @Labels.Reason
+            </div>
+            <div class="input">
+                @RazorHelper.LateInEarlyOutReasonDropDownList()
             </div>
         </div>
         <div class="formrow">

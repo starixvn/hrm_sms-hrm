@@ -17,6 +17,7 @@
 
     public class LateInEarlyOutController : BaseController
     {
+        private const int DefaultMinutes = 60;
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
@@ -41,12 +42,12 @@
             {
                 Employee = sessionService.Employee.Nickname,
                 EmployeeId = sessionService.Employee.Id,
-                Date = suggestedDate ?? DateTime.Today,
-                Minute = 60,
-                RequestType = (isLateIn.HasValue && isLateIn.Value) ? (short)RequestType.LateIn : (short)RequestType.EarlyOut,
+                OnDate = suggestedDate ?? DateTime.Today,
+                Minute = DefaultMinutes,
+                ReasonId = (byte)LateInEarlyOutReasons.Other,
+                RequestType = (isLateIn.HasValue && !isLateIn.Value) ? (int)RequestType.EarlyOut : (int)RequestType.LateIn,
                 UnavailDates = GetUnavailDate(sessionService.Employee.Id),
                 VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
-                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id)
             };
 
             return View(viewModel);
@@ -59,7 +60,6 @@
             {
                 CheckIsTopManager(model);
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
                 model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
@@ -67,11 +67,12 @@
                     var criteria = new InsertLateInEarlyOutRequestCriteria
                     {
                         EmpId = model.EmployeeId,
-                        OnDate = model.Date,
+                        OnDate = model.OnDate,
                         RequestType = model.RequestType,
                         Remark = model.Remark,
-                        LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
-                        EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
+                        LateInMins = model.RequestType == (int)RequestType.LateIn ? model.Minute : 0,
+                        EarlyOutMins = model.RequestType == (int)RequestType.EarlyOut ? model.Minute : 0,
+                        ReasonId = model.ReasonId,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
                         CreatedBy = sessionService.Employee.Id
@@ -95,28 +96,27 @@
 
         public ActionResult Update(int id)
         {
-            var criteria = new GetRequestByIdCriteria
+            var criteria = new GetLateInEarlyOutRequestByIdCriteria
             {
                 RequestId = id
             };
-            RequestEntity request = requestService.GetRequestById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
+            var request = lateInEarlyOutRequestService.GetById(criteria);
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
 
-            int minute = request.TotalMins;
-            var type = short.Parse(request.RequestType.Id.ToString());
-
+            var minutes = request.RequestTypeId == (int)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
             var viewModel = new LateInEarlyOutRequestViewModel
             {
-                RequestId = request.Id,
+                RequestId = request.RequestId,
                 Employee = sessionService.Employee.Nickname,
                 EmployeeId = sessionService.Employee.Id,
-                Date = request.RequestedDate,
-                Minute = minute,
-                RequestType = type,
+                OnDate = request.OnDate,
+                Minute = minutes,
+                RequestType = request.RequestTypeId,
                 Remark = request.Remark,
+                ReasonId = request.ReasonId,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
                 UnavailDates = GetUnavailDate(sessionService.Employee.Id),
@@ -133,7 +133,6 @@
             {
                 CheckIsTopManager(model);
                 model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
-                model.TotalRequestInMonth = GetTotalRequestInMonth(model.EmployeeId);
                 model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
@@ -142,14 +141,15 @@
                     {
                         RequestId = model.RequestId,
                         EmpId = model.EmployeeId,
-                        OnDate = model.Date,
+                        OnDate = model.OnDate,
                         RequestType = model.RequestType,
                         Remark = model.Remark,
+                        ReasonId = model.ReasonId,
                         LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
                         EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
                         VerifierId = model.VerifierId,
                         ApproverId = model.ApproverId,
-                        ModifiedBy = sessionService.Employee.Id,
+                        ModifiedBy = sessionService.Employee.Id
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -178,22 +178,39 @@
         public ActionResult EmployeeView(int year)
         {
             ViewBag.Year = year;
-
-            var criteria = new GetRequestCriteria
+            var criteria = new GetLateInEarlyOutRequestByDateCriteria
             {
                 EmpId = sessionService.Employee.Id,
                 FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31),
-                RequestType = (int)RequestFilter.LateInEarlyOut,
-                IsQueryByCreatedDate = false,
-                RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = sessionService.Employee.Id,
-                IsLocal = null
+                ToDate = new DateTime(year, 12, 31)
             };
 
-            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
+            var requests = lateInEarlyOutRequestService.GetByDate(criteria);
+            return View(requests);
+        }
 
-            return View(entityList);
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            var criteria = new DeleteLateInEarlyOutRequestCriteria
+            {
+                RequestId = id
+            };
+
+            lateInEarlyOutRequestService.SendMailForDeleteSuccessfully(id);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+
+            return Json(result);
+        }
+
+        public ActionResult ViewHistory(long id)
+        {
+            var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
+            {
+                RequestId = id
+            };
+            var requests = lateInEarlyOutRequestService.GetHistoryById(criteria);
+            return View(requests);
         }
 
         public ActionResult GetActualLateInEarlyOut(int employeeId, DateTime workDate)
@@ -220,20 +237,6 @@
             };
             var unavailDates = employeeService.GetUnavailableDates(criteria);
             return unavailDates;
-        }
-
-        private decimal GetTotalRequestInMonth(int employeeId)
-        {
-            var currentDate = DateTime.Now.Date;
-            var criteria = new GetNumberRequestInMonthCriteria
-            {
-                EmployeeId = employeeId,
-                RequestType = (int)RequestType.LateIn,
-                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
-                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
-            };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
-            return numberRequests;
         }
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)

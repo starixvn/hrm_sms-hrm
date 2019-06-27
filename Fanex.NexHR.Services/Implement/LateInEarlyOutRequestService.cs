@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
     using System.Web;
     using Core;
     using Core.Enums;
@@ -12,16 +13,61 @@
     using Models.Request;
     using Resources;
 
-    public class LateInEarlyOutRequestService : RequestMailService, ILateInEarlyOutRequestService
+    public class LateInEarlyOutRequestService : ILateInEarlyOutRequestService
     {
         private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
+        private const string EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
+        private readonly IEmployeeRepository employeeRepository;
+        private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
+        private readonly IRequestMailService requestMailService;
+        private readonly IEmailService emailService;
+        private readonly IBaseService baseService;
 
         public LateInEarlyOutRequestService(
             IEmployeeRepository employeeRepository,
-            IRequestRepository requestRepository,
-            IBaseService baseService,
-            IEmailService emailService) : base(employeeRepository, requestRepository, baseService, emailService)
+            ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
+            IRequestMailService requestMailService,
+            IEmailService emailService,
+            IBaseService baseService)
         {
+            this.employeeRepository = employeeRepository;
+            this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository;
+            this.requestMailService = requestMailService;
+            this.emailService = emailService;
+            this.baseService = baseService;
+        }
+
+        public IList<LateInEarlyOutModel> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
+        {
+            IList<LateInEarlyOutModel> requests = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                requests = lateInEarlyOutRequestRepository.GetByDate(criteria);
+            }
+
+            return requests ?? new List<LateInEarlyOutModel>();
+        }
+
+        public LateInEarlyOutModel GetById(GetLateInEarlyOutRequestByIdCriteria criteria)
+        {
+            LateInEarlyOutModel request = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                request = lateInEarlyOutRequestRepository.GetById(criteria);
+            }
+
+            return request ?? new LateInEarlyOutModel();
+        }
+
+        public IList<LateInEarlyOutModel> GetHistoryById(GetLateInEarlyOutRequestHistoryByIdCriteria criteria)
+        {
+            IList<LateInEarlyOutModel> requests = null;
+            if (criteria != null && criteria.IsValid())
+            {
+                requests = lateInEarlyOutRequestRepository.GetHistoryById(criteria);
+            }
+
+            return requests ?? new List<LateInEarlyOutModel>();
         }
 
         public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
@@ -43,7 +89,7 @@
 
         public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
             {
@@ -78,7 +124,7 @@
 
         public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
 
             var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
             {
@@ -109,6 +155,41 @@
                 email.SendCC,
                 email.Subject,
                 email.Body);
+        }
+
+        public void SendMailForDeleteSuccessfully(long requestId)
+        {
+            var criteria = new GetLateInEarlyOutRequestByIdCriteria
+            {
+                RequestId = requestId
+            };
+            var request = GetById(criteria);
+
+            if (request != null)
+            {
+                var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForLateInEarlyOutCancelation);
+                BackgroundJob.Enqueue(() => SendMailForeleteRequest(request, templateEmailPath));
+            }
+        }
+
+        public void SendMailForeleteRequest(LateInEarlyOutModel request, string templateEmailPath)
+        {
+            EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
+            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            {
+                var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Employee.NickName);
+                var body = Utilities.ReadTextFile(templateEmailPath);
+                body = string.Format(
+                    body,
+                   email.SendToNickName,
+                    string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName),
+                    request.RequestTypeName,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
+                    request.Remark);
+
+                emailService.SendEmail(email.Sender, email.SendTo, email.SendCC, subject, body);
+            }
         }
     }
 }

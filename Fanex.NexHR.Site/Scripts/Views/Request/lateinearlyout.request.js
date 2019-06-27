@@ -1,101 +1,148 @@
 ﻿'use strict';
-/*global _global*/
+/*global _global, _messages*/
 
-$(document).ready(function () {
-    function shiftChange() {
-        $.getJSON(_global.root + 'shift/getshiftbydate', { employeeId: $('#EmployeeId').val(), date: $('#Date').val() },
-        function (data) {
-            if (data != null) {
-                $("#model-state-error").hide();
-                $('input[type=submit]').show();
+var LateInEarlyOutRequest = (function ($) {
+    return {
+        verifierId: null,
+        approverId: null,
+        successed: null,
+        year: null,
+        onDate: null,
+        
+        datePicker: null,
+        employeeId: null,
+        employee: null,
+
+        modalError: null,
+        lateInHours: null,
+        earlyOutHours: null,
+        requestTypeLateIn: null,
+        requestTypeEarlyOut: null,
+        lateIn: null,
+        earlyOut: null,
+
+
+        init: function () {
+            LateInEarlyOutRequest.verifierId = $('#VerifierId');
+            LateInEarlyOutRequest.approverId = $('#ApproverId');
+            LateInEarlyOutRequest.successed = $('#successed');
+            LateInEarlyOutRequest.year = $('#year');
+            LateInEarlyOutRequest.onDate = $('#OnDate');
+            LateInEarlyOutRequest.datePicker = $('.datepicker');
+            LateInEarlyOutRequest.employeeId = $('#EmployeeId');
+            LateInEarlyOutRequest.employee = $("#Employee");
+
+            LateInEarlyOutRequest.modalError = $("#model-state-error");
+            LateInEarlyOutRequest.lateInHours = $("#lateInHours");
+            LateInEarlyOutRequest.earlyOutHours = $("#earlyOutHours");
+            LateInEarlyOutRequest.requestTypeLateIn = $("#RequestType_3");
+            LateInEarlyOutRequest.requestTypeEarlyOut = $("#RequestType_4");
+            LateInEarlyOutRequest.lateIn = $("#lateIn");
+            LateInEarlyOutRequest.earlyOut = $("#earlyOut");
+
+            LateInEarlyOutRequest.initState();
+ 
+            var successed = LateInEarlyOutRequest.successed.val();
+            var year = LateInEarlyOutRequest.year.val();
+            if (successed === "true") {
+                $('form').removeClass("dirty");
+                confirm('Successfull!\nPress OK to continue', function () {
+                    document.location = _global.root + "LateInEarlyOut/EmployeeView/" + year;
+                });
+            }
+
+            LateInEarlyOutRequest.requestTypeLateIn.change(function () {
+                LateInEarlyOutRequest.showHideActualLateInEarlyOut();
+            });
+
+            LateInEarlyOutRequest.requestTypeEarlyOut.change(function () {
+                LateInEarlyOutRequest.showHideActualLateInEarlyOut();
+            });
+
+            LateInEarlyOutRequest.employee.blur(function () {
+                $.getJSON(_global.root + 'employee/GetUnavailableDates', 
+                    {
+                        employeeId: LateInEarlyOutRequest.employeeId.val(), 
+                        date: new Date().toDateString() 
+                    },
+                    function (response) {
+                        if (response !== null) {
+                            LateInEarlyOutRequest.onDate.attr("disableddate", response.join(","));
+                            LateInEarlyOutRequest.shiftChange();
+                            LateInEarlyOutRequest.getActualLateInEarlyOut();
+                        }
+                    }
+                );
+            });
+
+            LateInEarlyOutRequest.employee.blur();
+            $('.datepicker').datepicker("option", "onSelect", function () {
+                LateInEarlyOutRequest.shiftChange();
+                LateInEarlyOutRequest.getActualLateInEarlyOut();
+            });
+        },
+        initState: function () {
+            LateInEarlyOutRequest.lateIn.hide();
+            LateInEarlyOutRequest.earlyOut.hide();
+            LateInEarlyOutRequest.modalError.hide();
+            LateInEarlyOutRequest.onDate.attr('readonly', 'readonly');
+        },
+        shiftChange: function () {
+            $.getJSON(_global.root + 'shift/getshiftbydate', 
+                { 
+                    employeeId: LateInEarlyOutRequest.employeeId.val(), 
+                    date: LateInEarlyOutRequest.onDate.val() 
+                },
+                function (data) {
+                    if (data !== null) {
+                        LateInEarlyOutRequest.modalError.hide();
+                        $('input[type=submit]').show();
+                    }
+                    else {
+                        LateInEarlyOutRequest.modalError.show();
+                    }
+                });
+        },
+        getActualLateInEarlyOut: function () {
+                $.getJSON(_global.root + 'lateinearlyout/GetActualLateInEarlyOut', 
+                {
+                    employeeId: LateInEarlyOutRequest.employeeId.val(),
+                    workDate: LateInEarlyOutRequest.onDate.val()
+                },
+                function (data) {
+                    if (data !== null) {
+                        if (data.LateIn > 0) {
+                            LateInEarlyOutRequest.lateInHours.html(data.LateIn + "'");
+                        }
+                        else {
+                            LateInEarlyOutRequest.lateInHours.html("N/A");
+                        }
+
+                        if (data.EarlyOut > 0) {
+                            LateInEarlyOutRequest.earlyOutHours.html(data.EarlyOut + "'");
+                        }
+                        else {
+                            LateInEarlyOutRequest.earlyOutHours.html("N/A");
+                        }
+
+                        LateInEarlyOutRequest.showHideActualLateInEarlyOut();
+                    }
+                });
+        },
+        showHideActualLateInEarlyOut: function () {
+            if (LateInEarlyOutRequest.requestTypeLateIn.attr("checked") === "checked") {
+                LateInEarlyOutRequest.lateIn.show();
+                LateInEarlyOutRequest.earlyOut.hide();
             }
             else {
-                $("#model-state-error").show();
-                //$('input[type=submit]').hide();
+                LateInEarlyOutRequest.lateIn.hide();
+                LateInEarlyOutRequest.earlyOut.show();
             }
-        });
-    }
-
-    function getActualLateInEarlyOut() {
-        $.getJSON(_global.root + 'lateinearlyout/GetActualLateInEarlyOut', { employeeId: $('#EmployeeId').val(), workDate: $('#Date').val() },
-        function (data) {
-            if (data != null) {
-                if (data.LateIn > 0) {
-                    $("#lateInHours").html(data.LateIn + "'");
-                }
-                else {
-                    $("#lateInHours").html("N/A");
-                }
-
-                if (data.EarlyOut > 0) {
-                    $("#earlyOutHours").html(data.EarlyOut + "'");
-                }
-                else {
-                    $("#earlyOutHours").html("N/A");
-                }
-
-                showHideActualLateInEarlyOut();
-            }
-        });
-    }
-
-    function showHideActualLateInEarlyOut() {
-        if ($("#RequestType_3").attr("checked") === "checked") {
-            $("#lateIn").show();
-            $("#earlyOut").hide();
         }
-        else {
-            $("#lateIn").hide();
-            $("#earlyOut").show();
-        }
-    }
+    };
+}(jQuery));
 
-    $("#lateIn").hide();
-    $("#earlyOut").hide();
-    $("#model-state-error").hide();
-    $("#Date").attr('readonly', 'readonly');
-    //Process redirect to My late in/earlt out request.
-    var successed = $("#successed").val();
-    var year = $("#year").val();
-    if (successed === "true") {
-        $('form').removeClass("dirty");
-        confirm('Successfull!\nPress OK to continue', function () {
-            document.location = _global.root + "LateInEarlyOut/EmployeeView/" + year;
-        });
-    }
-
-    $(".radioButton").change(function () {
-        showHideActualLateInEarlyOut();
-    });
-
-    $("#Employee").blur(function () {
-        $.getJSON(_global.root + 'employee/GetUnavailableDates', { employeeId: $('#EmployeeId').val(), date: new Date().toDateString() },
-                function (response) {
-                    if (response != null) {
-                        $("#Date").attr("disableddate", response.join(","));
-                        shiftChange();
-                        getActualLateInEarlyOut();
-                    }
-                }
-            );
-    });
-
-    $("#Employee").blur();
-    $('.datepicker').datepicker("option", "onSelect", function () {
-        shiftChange();
-        getActualLateInEarlyOut();
-    });
-
-    $("#FromTime, #ToTime").blur(function () {
-        var arrFromTime = $("#FromTime").val().split(":");
-        var arrToTime = $("#ToTime").val().split(":");
-
-        var fromTime = (parseInt(arrFromTime[0], 10) * 60) + parseInt(arrFromTime[1], 10);
-        var toTime = (parseInt(arrToTime[0], 10) * 60) + parseInt(arrToTime[1], 10);
-        $("#Minute").val((toTime - fromTime));
-    });
-
+$(document).ready(function () {
+    LateInEarlyOutRequest.init();
     $('form').areYouSure();
-
 });
-

@@ -19,6 +19,8 @@
 
         public int EarlyOutMins { get; set; }
 
+        public byte ReasonId { get; set; }
+
         public int ModifiedBy { get; set; }
 
         public int? VerifierId { get; set; }
@@ -27,7 +29,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_Update_LateInEarlyOutRequest";
+            return "LateInEarlyOutRequest_Update";
         }
 
         public override bool IsValid()

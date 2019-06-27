@@ -2,7 +2,7 @@
 @model CheckInOutRequestViewModel
 @using System.Web.Mvc.Html5;
 @{
-    ViewBag.Title = "Update My Check In Out Request";
+    ViewBag.Title = @Labels.UpdateMyCheckInOutRequest;
 }
 @section css{
     @Url.CombresLink("checkinoutrequestcss")
@@ -87,7 +87,14 @@
                 <span id="shiftname">@Model.Shift</span>
             </div>
         </div>
-        
+        <div class="formrow">
+            <div class="label">
+                @Labels.Reason
+            </div>
+            <div class="input">
+                @RazorHelper.CheckInOutReasonDropDownList(Model.ReasonId)
+            </div>
+        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierAndApprover.Verifiers)
@@ -124,9 +131,6 @@
                 @Html.HiddenFor(model => model.RequestTypeId)
                 @Html.HiddenFor(model => model.RequestId)
                 @Html.HiddenFor(model => model.Shift)
-                @Html.HiddenFor(model => model.ReasonId)
-                @Html.Hidden("InTime")
-                @Html.Hidden("OutTime")
                 <input type="submit" value="@Labels.Update" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>

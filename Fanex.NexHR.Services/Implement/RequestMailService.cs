@@ -31,8 +31,6 @@
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
         
         private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
-        private const string _EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
-        
         private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
         #endregion constant
@@ -262,11 +260,6 @@
                     templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
                     break;
 
-                case (short)RequestType.LateIn:
-                case (short)RequestType.EarlyOut:
-                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOutCancelation);
-                    break;
-
                 default:
                     templateEmailPath = string.Empty;
                     break;
@@ -296,11 +289,6 @@
                     SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
                     break;
 
-                case (short)RequestType.LateIn:
-                case (short)RequestType.EarlyOut:
-                    SendMailForCancelLateInEarlyOutRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                    break;
-
                 default:
                     return;
             }
@@ -320,27 +308,6 @@
             body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
 
             emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
-        }
-
-        private void SendMailForCancelLateInEarlyOutRequest(
-            RequestEntity request,
-            string mailTo,
-            string sendCc,
-            string sendToNickName,
-            string templateEmailPath)
-        {
-            var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestType.Name, request.Requester.NickName);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                sendToNickName,
-                string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName),
-                request.RequestType.Name,
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                request.RequestType.Id == (short)RequestType.LateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
-                request.Remark);
-
-            emailService.SendEmail(ConfigurationManager.AppSettings["Email"], mailTo, sendCc, subject, body);
         }
 
         private static string GetPassiveNameOfCommand(string command)

@@ -150,6 +150,10 @@
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
     <Compile Include="Request\KeepInView\DeleteKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\DeleteLateInEarlyOutRequestCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByDateCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByIdCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />

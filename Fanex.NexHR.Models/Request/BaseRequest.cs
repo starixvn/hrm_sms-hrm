@@ -61,17 +61,17 @@
                         return Labels.CheckIn;
                     case (int)RequestType.CheckOut:
                         return Labels.CheckOut;
-                    case (byte)RequestType.LateIn:
+                    case (int)RequestType.LateIn:
                         return Labels.LateIn;
-                    case (byte)RequestType.EarlyOut:
+                    case (int)RequestType.EarlyOut:
                         return Labels.EarlyOut;
-                    case (byte)RequestType.ChangeShift:
+                    case (int)RequestType.ChangeShift:
                         return Labels.ChangeShift;
-                    case (byte)RequestType.Leave:
+                    case (int)RequestType.Leave:
                         return Labels.Leave;
-                    case (byte)RequestType.KeepInView:
+                    case (int)RequestType.KeepInView:
                         return Labels.KeepInView;
-                    case (byte)RequestType.Overtime:
+                    case (int)RequestType.Overtime:
                         return Labels.Overtime;
                     default:
                         return string.Empty;

@@ -600,4 +600,32 @@
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
   </Function>
+  <Function Name="Late In Early Out">
+    <Setting Key="LateInEarlyOutRequest_Insert" SpName="LateInEarlyOutRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_Update" SpName="LateInEarlyOutRequest_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_Delete" SpName="LateInEarlyOutRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_Approve" SpName="LateInEarlyOutRequest_Approve" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_Reject" SpName="LateInEarlyOutRequest_Reject" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_Reset" SpName="LateInEarlyOutRequest_Reset" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_VoidBySA" SpName="LateInEarlyOutRequest_VoidBySA" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LateInEarlyOutRequest_GetById" SpName="LateInEarlyOutRequest_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="LateInEarlyOutRequest_GetByDate" SpName="LateInEarlyOutRequest_GetByDate" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="LateInEarlyOutRequest_GetHistoryById" SpName="LateInEarlyOutRequest_GetHistoryById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+  </Function>
 </Functions>

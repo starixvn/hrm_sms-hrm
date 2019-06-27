@@ -1755,4 +1755,13 @@
   <data name="EmployeeWeeklyWorkingHours" xml:space="preserve">
     <value>Employee's Weekly Working Hours</value>
   </data>
+  <data name="ManagementAllow" xml:space="preserve">
+    <value>Management Allow</value>
+  </data>
+  <data name="UpdateMyLateInEarlyOutRequest" xml:space="preserve">
+    <value>Update My Late In Early Out Request</value>
+  </data>
+  <data name="UpdateMyCheckInOutRequest" xml:space="preserve">
+    <value>Update My Check In Out Request</value>
+  </data>
 </root>

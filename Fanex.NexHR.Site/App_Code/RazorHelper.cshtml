@@ -177,7 +177,7 @@
 }
 @helper LateInEarlyOutTimeFormat(int mins, short type)
 {
-    if (type == (byte)RequestType.LateIn)
+    if (type == (short)RequestType.LateIn)
     {
         <span>+@mins'</span>
     }
@@ -186,6 +186,7 @@
         <span>-@mins'</span>
     }
 }
+
 @helper VerifierAndApproverMenu()
 {
     <ul id="verifierMenu" class="hide">
@@ -541,6 +542,15 @@
         <option selected="@(reasonId == (byte)CheckInOutReasons.BusinessTrip)" value="@Convert.ToByte(CheckInOutReasons.BusinessTrip)">@Labels.BusinessTrip</option>
         <option selected="@(reasonId == (byte)CheckInOutReasons.Forgot)" value="@Convert.ToByte(CheckInOutReasons.Forgot)">@Labels.Forgot</option>
         <option selected="@(reasonId == (byte)CheckInOutReasons.Other)" value="@Convert.ToByte(CheckInOutReasons.Other)">@Labels.Other</option>
+    </select>
+
+}
+
+@helper LateInEarlyOutReasonDropDownList(byte reasonId = (byte)LateInEarlyOutReasons.Other, string controlName = "reasonId", string htmlClass = "")
+{
+    <select name="@controlName" id="@controlName" class="@htmlClass">
+        <option selected="@(reasonId == (byte)LateInEarlyOutReasons.ManagementAllow)" value="@Convert.ToByte(LateInEarlyOutReasons.ManagementAllow)">@Labels.ManagementAllow</option>
+        <option selected="@(reasonId == (byte)LateInEarlyOutReasons.Other)" value="@Convert.ToByte(LateInEarlyOutReasons.Other)">@Labels.Other</option>
     </select>
 
 }

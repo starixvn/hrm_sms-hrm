@@ -44,16 +44,15 @@
                 <th>@Labels.Request</th>
                 <th>@Labels.Shift</th>
                 <th>@Labels.ScheduleDate</th>
-                <th>
-                    @Labels.RequestTime
-                </th>
+                <th>@Labels.RequestTime</th>
+                <th>@Labels.Reason</th>
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Remark</th>
                 <th>@Labels.Status</th>
                 <th>@Labels.History</th>
             </tr>
         </thead>
-        @if (Model.Count > 0)
+        @if (Model != null && Model.Any())
         {
             <tbody>
                 @{int index = 1;}
@@ -74,6 +73,7 @@
                     <td class="ddMMyyyyhhmm">
                         @request.RequestTime.ToShortFormatedDate()
                     </td>
+                    <td>@request.ReasonName</td>
                     <td class="ddMMyyyyhhmm">
                         @request.CreatedDate.ToShortFormatedDate()
                     </td>

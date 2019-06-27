@@ -75,8 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LateInEarlyOutRequestRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
+    <Compile Include="Interfaces\ILateInEarlyOutRequestRepository.cs" />
     <Compile Include="Interfaces\ICheckInOutRequestRepository.cs" />
     <Compile Include="Interfaces\ILeaveRequestRepository.cs" />
     <Compile Include="Interfaces\IKeepInViewRequestRepository.cs" />

@@ -2428,6 +2428,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Management Allow.
+        /// </summary>
+        public static string ManagementAllow {
+            get {
+                return ResourceManager.GetString("ManagementAllow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manager.
         /// </summary>
         public static string Manager {
@@ -4566,6 +4575,24 @@ namespace Fanex.NexHR.Resources {
         public static string UpdateLeaveRequest {
             get {
                 return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update My Check In Out Request.
+        /// </summary>
+        public static string UpdateMyCheckInOutRequest {
+            get {
+                return ResourceManager.GetString("UpdateMyCheckInOutRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update My Late In Early Out Request.
+        /// </summary>
+        public static string UpdateMyLateInEarlyOutRequest {
+            get {
+                return ResourceManager.GetString("UpdateMyLateInEarlyOutRequest", resourceCulture);
             }
         }
         

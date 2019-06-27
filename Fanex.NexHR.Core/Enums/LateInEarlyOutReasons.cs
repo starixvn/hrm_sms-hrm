@@ -5,7 +5,7 @@
     public enum LateInEarlyOutReasons
     {
         [StringValue("Management Allow")]
-        VanLate = 1,
+        ManagementAllow = 1,
 
         [StringValue("Other")]
         Other = 2

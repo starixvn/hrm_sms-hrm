@@ -12,7 +12,7 @@
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public DateTime OnDate { get; set; }
 
         public string FromTime { get; set; }
 
@@ -33,7 +33,10 @@
         public int Minute { get; set; }
 
         [Required]
-        public short RequestType { get; set; }
+        public int RequestType { get; set; }
+
+        [Required]
+        public byte ReasonId { get; set; }
 
         [Display(Name = "Verified by")]
         [Required(ErrorMessage = "The Verified by field is required.")]
@@ -42,8 +45,6 @@
         [Display(Name = "Approved by")]
         [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
-
-        public decimal TotalRequestInMonth { get; set; }
 
         public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 

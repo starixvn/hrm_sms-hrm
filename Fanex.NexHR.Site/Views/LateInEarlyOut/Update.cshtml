@@ -2,7 +2,7 @@
 @model LateInEarlyOutRequestViewModel
 @using System.Web.Mvc.Html5;
 @{
-    ViewBag.Title = "Update My Late In Early Out Request";
+    ViewBag.Title = @Labels.UpdateMyLateInEarlyOutRequest;
 }
 @section css{
     @Url.CombresLink("lateinearlyoutcss")
@@ -24,7 +24,7 @@
         {
         <div class="success">@Messages.RequestUpdated</div> 
         <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@Model.Date.Year" />
+        <input type="hidden" id="year" value="@Model.OnDate.Year" />
         }
         
         <div id="model-state-error" class="ui-state-error ui-corner-all">
@@ -45,7 +45,7 @@
                 @Html.LabelFor(model => model.RequestType)
             </div>
             <div class="input">
-                @(Model.RequestType == 3 ? Labels.LateIn : Labels.EarlyOut)
+                @(Model.RequestType == (int)RequestType.LateIn ? Labels.LateIn : Labels.EarlyOut)
             </div>
         </div>
         
@@ -60,10 +60,10 @@
         
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.Date)
+                @Html.LabelFor(model => model.OnDate)
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.Date,
+                @Html.DatePickerFor(model => model.OnDate,
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(10).AddDays(-1))
 
@@ -80,7 +80,14 @@
                 @Html.TextBoxFor(model => model.Minute)
             </div>
         </div>
-        
+        <div class="formrow">
+            <div class="label">
+                @Labels.Reason
+            </div>
+            <div class="input">
+                @RazorHelper.LateInEarlyOutReasonDropDownList(Model.ReasonId)
+            </div>
+        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId)

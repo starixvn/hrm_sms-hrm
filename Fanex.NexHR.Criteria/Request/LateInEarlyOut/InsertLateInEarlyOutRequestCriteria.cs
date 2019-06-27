@@ -11,7 +11,7 @@
 
         public int EmpId { get; set; }
 
-        public short RequestType { get; set; }
+        public int RequestType { get; set; }
 
         public string Remark { get; set; }
 
@@ -21,6 +21,8 @@
 
         public int EarlyOutMins { get; set; }
 
+        public byte ReasonId { get; set; }
+
         public int CreatedBy { get; set; }
 
         public int? VerifierId { get; set; }
@@ -29,7 +31,7 @@
 
         public override string GetSettingKey()
         {
-            return "WorkingTimeRequest_Insert_LateInEarlyOutRequest";
+            return "LateInEarlyOutRequest_Insert";
         }
 
         public override bool IsValid()
