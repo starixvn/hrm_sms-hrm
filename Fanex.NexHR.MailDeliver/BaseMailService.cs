@@ -5,9 +5,9 @@
     using System.Configuration;
     using System.Net.Mail;
     using System.Text;
-    using System.Text.RegularExpressions;
-    using Core.Services;
     using Criteria;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Services;
     using MailKit.Net.Smtp;
     using MailKit.Security;
     using MimeKit;
@@ -24,7 +24,7 @@
         public bool SendEmailAsync(MailRecord email)
         {
             var isSucessfull = false;
-            if (email != null && IsValidEmail(email.MailTo))
+            if (email != null && Utilities.IsValidEmail(email.MailTo))
             {
                 email.MailSetting = GetMailSettingById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
                 InsertMailRecord(email);
@@ -279,17 +279,6 @@
             };
 
             baseService.ExecuteNonQuery(criteria);
-        }
-
-        private static bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                return false;
-            }
-
-            var regex = new Regex(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
-            return regex.IsMatch(email);
         }
     }
 }

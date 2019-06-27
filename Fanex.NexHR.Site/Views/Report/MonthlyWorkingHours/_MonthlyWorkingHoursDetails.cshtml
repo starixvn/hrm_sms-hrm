@@ -9,8 +9,8 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.Section</th>
-            <th>@Labels.FullName</th>
+            <th class="cell-section">@Labels.Section</th>
+            <th class="cell-fullname">@Labels.FullName</th>
             <th>@Labels.NickName</th>
             <th>@Labels.ActualWorkingDays</th>
             @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
@@ -41,29 +41,42 @@
                         var value = string.Empty;
                         if (dailyWorking.IsLeaveDay)
                         {
-                            value = dailyWorking.LeaveType.Code;
-                            switch (dailyWorking.LeaveType.Id)
+                            if (dailyWorking.IsHoliday)
                             {
-                                case (int)LeaveTypes.AnnualLeave:
-                                    className = "annualleave";
-                                    break;
-                                case (int)LeaveTypes.UnpaidLeave:
-                                    className = "unpaidleave";
-                                    break;
-                                case (int)LeaveTypes.BusinessTrip:
-                                    className = "businesstrip";
-                                    break;
-                                case (int)LeaveTypes.WeddingLeave:
-                                    className = "weddingleave";
-                                    break;
-                                default:
-                                    className = "leaveday";
-                                    break;
+                                value = "PH";
+                                className = "holiday";
                             }
-
-                            if (dailyWorking.IsLeaveHalfDay)
+                            else if (dailyWorking.IsOffDay)
                             {
-                                value = string.Format("{0} ½", dailyWorking.LeaveType.Code);
+                                value = "OFF";
+                                className = "offday";
+                            }
+                            else
+                            {
+                                value = dailyWorking.LeaveType.Code;
+                                switch (dailyWorking.LeaveType.Id)
+                                {
+                                    case (int)LeaveTypes.AnnualLeave:
+                                        className = "annualleave";
+                                        break;
+                                    case (int)LeaveTypes.UnpaidLeave:
+                                        className = "unpaidleave";
+                                        break;
+                                    case (int)LeaveTypes.BusinessTrip:
+                                        className = "businesstrip";
+                                        break;
+                                    case (int)LeaveTypes.WeddingLeave:
+                                        className = "weddingleave";
+                                        break;
+                                    default:
+                                        className = "leaveday";
+                                        break;
+                                }
+
+                                if (dailyWorking.IsLeaveHalfDay)
+                                {
+                                    value = string.Format("{0} ½", dailyWorking.LeaveType.Code);
+                                }
                             }
                         }
                         else if (dailyWorking.IsMissingCheckIn)

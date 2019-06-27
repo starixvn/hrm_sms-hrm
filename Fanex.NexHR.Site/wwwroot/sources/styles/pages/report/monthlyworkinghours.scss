@@ -3,26 +3,20 @@
 
 @import '../../abstracts/variables';
 @import '../../abstracts/mixins';
+@import '../../components/buttons-new';
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../layout/shift.color';
 @import '../../vendors/multiselect';
 
-.btn {
-    font-size: inherit;
-    padding-top: 4px;
-    padding-bottom: 4px;
+.table {
+    .cell-section {
+        width: 120px;
+        min-width: 120px;
+    }
 
-    &.btn-excel {
-        background: #549f3b;
-        color: #fff;
-        border: 1px solid #549f3b;
-        transition: all .2s ease-in;
-
-        &:hover, &:focus, &:active {
-            color: #fff;
-            background: lighten(#549f3b, 10%);
-            border-color: lighten(#549f3b, 10%);
-        }
+    .cell-fullname {
+        width: 150px;
+        min-width: 150px;
     }
 }

@@ -15,6 +15,11 @@
                defaults: new { controller = "employee", action = "AddTeam", teamId = UrlParameter.Optional });
 
             routes.MapRoute(
+               name: "MonthlyWorkingHours",
+               url: "Report/MonthlyWorkingHours",
+               defaults: new { controller = "MonthlyWorkingHours", action = "index" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "home", action = "index", id = UrlParameter.Optional });

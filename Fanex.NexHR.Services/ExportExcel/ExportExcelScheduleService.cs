@@ -7,7 +7,7 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
     using OfficeOpenXml;
@@ -270,11 +270,8 @@
             if (!string.IsNullOrEmpty(shift.BackgroundColor))
             {
                 var backgroundColor = ColorTranslator.FromHtml(shift.BackgroundColor);
-                if (backgroundColor != null)
-                {
-                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    cell.Style.Fill.BackgroundColor.SetColor(backgroundColor);
-                }
+                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                cell.Style.Fill.BackgroundColor.SetColor(backgroundColor);
             }
         }
 
@@ -284,7 +281,7 @@
             if (dailySchedule.IsLeaveOffDay)
             {
                 shift.Code = "Off";
-                shift.BackgroundColor = "#f8f89c";
+                shift.BackgroundColor = Constants.OffDayBackgroundColor;
             }
             else if (dailySchedule.IsLeaveDay)
             {
@@ -320,7 +317,7 @@
                 shift.Code = "Off";
             }
 
-            shift.BackgroundColor = "#f8f89c";
+            shift.BackgroundColor = Constants.OffDayBackgroundColor;
 
             return shift;
         }
@@ -342,7 +339,7 @@
                 shift.Code = "PH";
             }
 
-            shift.BackgroundColor = "#f3aa4b";
+            shift.BackgroundColor = Constants.HolidayBackgroundColor;
 
             return shift;
         }
@@ -353,12 +350,12 @@
             if (dailySchedule.IsHoliday)
             {
                 shift.Code = "PH";
-                shift.BackgroundColor = "#f3aa4b";
+                shift.BackgroundColor = Constants.HolidayBackgroundColor;
             }
             else if (dailySchedule.IsOffDay)
             {
                 shift.Code = "Off";
-                shift.BackgroundColor = "#f8f89c";
+                shift.BackgroundColor = Constants.OffDayBackgroundColor;
             }
             else if (dailySchedule.LeaveDay == 0.5M)
             {
@@ -367,7 +364,7 @@
             else
             {
                 shift.Code = dailySchedule.LeaveType.Code;
-                shift.BackgroundColor = GetBackgroundColorForLeave(dailySchedule);
+                shift.BackgroundColor = Utilities.GetBackgroundColorForLeave(dailySchedule.LeaveType.Id);
             }
 
             return shift;
@@ -405,35 +402,6 @@
             }
 
             return shift;
-        }
-
-        private static string GetBackgroundColorForLeave(DailySchedule dailySchedule)
-        {
-            var backgroundColor = string.Empty;
-            switch (dailySchedule.LeaveType.Id)
-            {
-                case (int)LeaveTypes.AnnualLeave:
-                    backgroundColor = "#c7f391";
-                    break;
-
-                case (int)LeaveTypes.UnpaidLeave:
-                    backgroundColor = "#eacded";
-                    break;
-
-                case (int)LeaveTypes.BusinessTrip:
-                    backgroundColor = "#c1d6ed";
-                    break;
-
-                case (int)LeaveTypes.WeddingLeave:
-                    backgroundColor = "#7cd3e9";
-                    break;
-
-                default:
-                    backgroundColor = "#a9a7a7";
-                    break;
-            }
-
-            return backgroundColor;
         }
 
         private static DateTime GetCheckInTime(DateTime workDate, ShiftBase shift)

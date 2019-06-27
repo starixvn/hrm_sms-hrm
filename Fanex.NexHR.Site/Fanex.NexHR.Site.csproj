@@ -957,6 +957,8 @@
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
+    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
+    <Content Include="wwwroot\sources\styles\components\_buttons-new.scss" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />

@@ -1393,6 +1393,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee&apos;s Daily Working Hours.
+        /// </summary>
+        public static string EmployeeDailyWorkingHours {
+            get {
+                return ResourceManager.GetString("EmployeeDailyWorkingHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee ID.
         /// </summary>
         public static string EmployeeID {
@@ -1416,6 +1425,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeManagement {
             get {
                 return ResourceManager.GetString("EmployeeManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee&apos;s Monthly Working Hours.
+        /// </summary>
+        public static string EmployeeMonthlyWorkingHours {
+            get {
+                return ResourceManager.GetString("EmployeeMonthlyWorkingHours", resourceCulture);
             }
         }
         
@@ -1452,6 +1470,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeView {
             get {
                 return ResourceManager.GetString("EmployeeView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee&apos;s Weekly Working Hours.
+        /// </summary>
+        public static string EmployeeWeeklyWorkingHours {
+            get {
+                return ResourceManager.GetString("EmployeeWeeklyWorkingHours", resourceCulture);
             }
         }
         

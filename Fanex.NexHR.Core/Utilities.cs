@@ -2,11 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
-    using System.Text;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
@@ -170,25 +168,6 @@
             }
         }
 
-        public static DateTime FirstDayOfWeek(DateTime dayInWeek, CultureInfo culture = null)
-        {
-            CultureInfo cultureInfo = culture ?? CultureInfo.CurrentCulture;
-
-            DayOfWeek firstDay = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDayInWeek = dayInWeek.Date;
-            while (firstDayInWeek.DayOfWeek != firstDay)
-            {
-                firstDayInWeek = firstDayInWeek.AddDays(-1);
-            }
-
-            return firstDayInWeek;
-        }
-
-        public static DateTime LastDayOfWeek(DateTime dayInWeek)
-        {
-            return DateTime.Now.AddDays(6 - Convert.ToDouble(dayInWeek.DayOfWeek));
-        }
-
         public static IList<SelectListItem> MinuteSteps(int step)
         {
             var list = new List<SelectListItem>();
@@ -279,24 +258,6 @@
             }
 
             return list;
-        }
-
-        public static string StringArrayToString(string[] array)
-        {
-            if (array == null || array.Length == 0)
-            {
-                return string.Empty;
-            }
-
-            StringBuilder result = new StringBuilder();
-
-            foreach (var item in array)
-            {
-                result.Append(item);
-                result.Append(", ");
-            }
-
-            return result.ToString(0, result.Length - 1);
         }
 
         public static bool IsValidEmail(string email)
@@ -438,6 +399,35 @@
         public static string DisplayFloatNumber(float number)
         {
             return number.ToString("0.0");
+        }
+
+        public static string GetBackgroundColorForLeave(int leaveTypeId)
+        {
+            var backgroundColor = string.Empty;
+            switch (leaveTypeId)
+            {
+                case (int)LeaveTypes.AnnualLeave:
+                    backgroundColor = "#c7f391";
+                    break;
+
+                case (int)LeaveTypes.UnpaidLeave:
+                    backgroundColor = "#eacded";
+                    break;
+
+                case (int)LeaveTypes.BusinessTrip:
+                    backgroundColor = "#c1d6ed";
+                    break;
+
+                case (int)LeaveTypes.WeddingLeave:
+                    backgroundColor = "#7cd3e9";
+                    break;
+
+                default:
+                    backgroundColor = "#a9a7a7";
+                    break;
+            }
+
+            return backgroundColor;
         }
     }
 }

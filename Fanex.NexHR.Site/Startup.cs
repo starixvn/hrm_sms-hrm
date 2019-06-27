@@ -44,9 +44,9 @@ namespace Fanex.NexHR.Site
             this.hangfireContainer.ResolveServiceCoreDI();
         }
 
-        public override object ActivateJob(Type type)
+        public override object ActivateJob(Type jobType)
         {
-            return hangfireContainer.Resolve(type);
+            return hangfireContainer.Resolve(jobType);
         }
     }
 }
