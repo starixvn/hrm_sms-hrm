@@ -42,7 +42,7 @@
                     showURL: false,
                     bodyHandler: function () {
                         var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
-                        return '<img width=64px; height=64px; src="' + path + '" />';
+                        return '<img width=80px; height=80px; src="' + path + '" />';
                     }
                 });
 
