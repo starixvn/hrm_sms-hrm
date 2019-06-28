@@ -169,6 +169,7 @@
     <Compile Include="ReportController.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="Report\DailyWorkingHoursController.cs" />
     <Compile Include="Report\WeeklyWorkingHoursController.cs" />
     <Compile Include="Report\MonthlyWorkingHoursController.cs" />
     <Compile Include="Request\ChangeShiftController.cs" />

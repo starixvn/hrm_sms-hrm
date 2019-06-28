@@ -2,8 +2,8 @@
 /* exported DatePicker */
 
 function setDateTimeRange(selectedIndex) {
-    var fromDate = new Date($("#FromDate").val()).toString('dd MMM, yyyy');
-    var toDate = new Date($("#ToDate").val()).toString('dd MMM, yyyy');
+    var fromDate = new Date($('#FromDate').val()).toString('dd MMM, yyyy');
+    var toDate = new Date($('#ToDate').val()).toString('dd MMM, yyyy');
     var now = $('#DateTime-Now').val();
 
     switch (parseInt(selectedIndex, 10)) {
@@ -37,10 +37,9 @@ function setDateTimeRange(selectedIndex) {
             break;
     }
 
-    $("#FromDate").val(fromDate);
-    $("#ToDate").val(toDate);
+    $('#FromDate').val(fromDate);
+    $('#ToDate').val(toDate);
 }
-
 
 function initDatePicker() {
     if ($('.datepicker').length > 0) {
@@ -51,7 +50,7 @@ function initDatePicker() {
 
         if (disabledDates.length > 0) {
             $('.datepicker').datepicker({
-                dateFormat: "dd M, yy",
+                dateFormat: 'dd M, yy',
                 beforeShowDay: checkBadDates,
                 changeMonth: true,
                 changeYear: true
@@ -59,7 +58,7 @@ function initDatePicker() {
         }
         else {
             $('.datepicker').datepicker({
-                dateFormat: "dd M, yy",
+                dateFormat: 'dd M, yy',
                 changeMonth: true,
                 changeYear: true
             });
@@ -76,41 +75,40 @@ function initDatePicker() {
         });
     }
 
-    $('#Date').val($("#DateOption").val());
-    setDateTimeRange($("#DateOption").val());
-
+    $('#Date').val($('#DateOption').val());
+    setDateTimeRange($('#DateOption').val());
 }
 
 function registerEventTriggerDatepicker() {
     $('.trigger-fromdate').on('click', function () {
-        var fromDate = $("#FromDate");
-        if (fromDate.datepicker( "widget" ).is(":visible")) {
-            fromDate.datepicker("hide");
+        var fromDate = $('#FromDate');
+        if (fromDate.datepicker('widget').is(':visible')) {
+            fromDate.datepicker('hide');
         } else {
-            fromDate.datepicker("show");
+            fromDate.datepicker('show');
         }
     });
 
     $('.trigger-todate').on('click', function () {
-        var toDate = $("#ToDate");
-        if (toDate.datepicker("widget").is(":visible")) {
-            toDate.datepicker("hide");
+        var toDate = $('#ToDate');
+        if (toDate.datepicker('widget').is(':visible')) {
+            toDate.datepicker('hide');
         } else {
-            toDate.datepicker("show");
+            toDate.datepicker('show');
         }
     });
 }
 
 $(document).ready(function () {
-    $("#Date").change(function () {
+    $('#Date').change(function () {
         setDateTimeRange($(this).val());
-        $("#DateOption").attr("value", $(this).val());
+        $('#DateOption').attr('value', $(this).val());
     });
 
-    $("#Date").val($("#DateOption").val());
-    $("#FromDate, #ToDate").change(function () {
-        $("#Date").val("0");
-        $("#DateOption").attr("value", "0");
+    $('#Date').val($('#DateOption').val());
+    $('#FromDate, #ToDate').change(function () {
+        $('#Date').val('0');
+        $('#DateOption').attr('value', '0');
     });
 
     initDatePicker();
@@ -119,11 +117,11 @@ $(document).ready(function () {
     var mindate = $('.datepicker').attr('mindate');
     var maxdate = $('.datepicker').attr('maxdate');
     if (mindate !== 'null') {
-        mindate = mindate.split("/");
-        $('.datepicker').datepicker("option", "minDate", new Date(mindate[0], mindate[1] - 1, mindate[2]));
+        mindate = mindate.split('/');
+        $('.datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
     }
     if (maxdate !== 'null') {
-        maxdate = maxdate.split("/");
-        $('.datepicker').datepicker("option", "maxDate", new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
+        maxdate = maxdate.split('/');
+        $('.datepicker').datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
     }
 });

@@ -150,7 +150,6 @@
     <Build Include="dbo\Stored Procedures\Employee_GetNewEmployeeCode.sql" />
     <Build Include="dbo\Stored Procedures\Memo_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\Report_EmployeeTotalWorkingHourByDay.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Update.sql" />
     <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_DeleteAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\TimeSheet_GetLateInEarlyOut.sql" />

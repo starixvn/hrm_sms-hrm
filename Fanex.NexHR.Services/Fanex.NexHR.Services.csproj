@@ -209,16 +209,13 @@
     <Compile Include="ExportExcel\Supervisor\IExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\IExportExcelSectionSupervisorService.cs" />
     <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
-    <Compile Include="ExportExcel\TotalWorkingHourDailyExportService.cs" />
     <Compile Include="ExportExcel\UnpaidLeaveSummary\ExportExcelUnpaidLeaveSummaryReportService.cs" />
     <Compile Include="ExportExcel\UnpaidLeaveSummary\IExportExcelUnpaidLeaveSummaryReportService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveDetailService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\IExportWeekendLeaveDetailService.cs" />
     <Compile Include="Implement\ExtensionNumberService.cs" />
-    <Compile Include="ExportExcel\ITotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="ExportExcel\ReportExporting.cs" />
-    <Compile Include="ExportExcel\TotalWorkingHourMonthlyExporting.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\MenuService.cs" />

@@ -250,6 +250,26 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="wwwroot\dist\js\employee.information.js" />
+    <Content Include="wwwroot\dist\js\employee.paternity.js" />
+    <Content Include="wwwroot\dist\js\employee.postnatal.js" />
+    <Content Include="wwwroot\dist\js\home.index.js" />
+    <Content Include="wwwroot\dist\js\report.dailyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\styles\account.editprofile.css" />
+    <Content Include="wwwroot\dist\styles\account.editprofile.js" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.css" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.js" />
+    <Content Include="wwwroot\dist\styles\home.index.css" />
+    <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.css" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.css" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
+    <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
+    <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
@@ -267,7 +287,6 @@
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
-    <Content Include="Scripts\Views\Report\report.totalworkinghourdaily.js" />
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
     <Content Include="Scripts\Views\message.edit.js" />
@@ -338,7 +357,6 @@
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
     <Content Include="Styles\report.supervisor.css" />
-    <Content Include="Styles\report.totalworkinghourmonthly.css" />
     <Content Include="Styles\memberovertime.css" />
     <Content Include="Styles\overtimereport.css" />
     <Content Include="Styles\report.overtimerequest.css" />
@@ -963,6 +981,20 @@
     <Content Include="Views\Report\WeeklyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\WeeklyWorkingHours\_WeeklyWorkingHoursDetails.cshtml" />
     <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\DailyWorkingHours.xlsx" />
+    <Content Include="wwwroot\dist\js\employee.information.js.map" />
+    <Content Include="wwwroot\dist\js\employee.paternity.js.map" />
+    <Content Include="wwwroot\dist\js\employee.postnatal.js.map" />
+    <Content Include="wwwroot\dist\js\home.index.js.map" />
+    <Content Include="wwwroot\dist\js\report.dailyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\styles\account.editprofile.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.js.map" />
+    <Content Include="wwwroot\dist\styles\home.index.js.map" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
@@ -1189,7 +1221,7 @@
       <DependentUpon>Web.local.config</DependentUpon>
     </Content>
     <Content Include="Deployment.ignore" />
-    <Content Include="Views\Report\TotalWorkingHourDaily.cshtml" />
+    <Content Include="Views\Report\DailyWorkingHours.cshtml" />
     <Content Include="Views\Calendar\EmployeeShift.cshtml" />
     <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />

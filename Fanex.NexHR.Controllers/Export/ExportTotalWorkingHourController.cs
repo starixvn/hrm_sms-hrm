@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Web.Mvc;
-    using Criteria;
     using Criteria.Report;
     using Fanex.NexHR.Core.Services;
     using Models;
@@ -54,25 +53,6 @@
             IList<TotalWorkingHours> totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
 
             exportService = new TotalWorkingHourExportService(totalWorkingHours, model.FromDate, model.ToDate);
-            HSSFWorkbook hssfworkbook = exportService.Export();
-
-            return ExcelFile(hssfworkbook, fileName);
-        }
-
-        public ActionResult ExportTotalWorkingHourDaily(TotalWorkingHourDailyViewModel model)
-        {
-            IExportService exportService;
-            string fileName = "TotalWorkingHourDaily_" + model.WorkDate.ToString("yyyyMMdd") + ".xls";
-            var criteria = new GetTotalWorkingHourDailyCriteria
-            {
-                EmpId = model.EmployeeId,
-                GroupIds = model.SectionIds,
-                IsLocal = model.IsLocal,
-                WorkDate = model.WorkDate
-            };
-
-            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourDaily(criteria);
-            exportService = new TotalWorkingHourDailyExportService(totalWorkingHours);
             HSSFWorkbook hssfworkbook = exportService.Export();
 
             return ExcelFile(hssfworkbook, fileName);

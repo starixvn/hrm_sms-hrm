@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
+    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -194,6 +195,60 @@
 
                     worksheet.Cells.AutoFitColumns();
                     worksheet.View.FreezePanes(3, 6);
+
+                    return xlPackage.GetAsByteArray();
+                }
+            }
+        }
+
+        public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
+        {
+            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyWorkingHours.xlsx");
+            const ushort TotalColumns = 13;
+
+            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+            {
+                using (var xlPackage = new ExcelPackage())
+                {
+                    var redColor = ColorTranslator.FromHtml(Constants.RedColor);
+                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Employee's Daily Working Hours");
+                    var rowIndex = 1;
+                    var colIndex = 1;
+
+                    // title
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                    worksheet.Cells[rowIndex, colIndex].Value = $"Employee's Daily Working Hours";
+                    rowIndex++;
+
+                    // header
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                    colIndex = 6;
+                    worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
+                    if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
+                    }
+
+                    // data
+                    rowIndex++;
+                    foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+                    {
+                        colIndex = 1;
+                        templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+                        worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
+                        WriteDailyCells(worksheet.Cells[rowIndex, colIndex], monthlyWorking.DailyWorkings.First());
+
+                        rowIndex++;
+                    }
+
+                    worksheet.Cells.AutoFitColumns();
+                    worksheet.View.FreezePanes(3, 1);
 
                     return xlPackage.GetAsByteArray();
                 }

@@ -12,7 +12,6 @@
 
         IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria);
 
-        IList<TotalWorkingHourMonthly> GetTotalWorkingHourMonthly(ICriteria criteria);
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria);
 
         IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria);

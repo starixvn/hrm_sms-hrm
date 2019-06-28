@@ -288,17 +288,6 @@
             return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
         }
 
-        public ActionResult TotalWorkingHourDaily()
-        {
-            var model = new TotalWorkingHourDailyViewModel
-            {
-                WorkDate = DateTime.Now,
-                Sections = teamService.GetAll()
-            };
-
-            return View(model);
-        }
-
         public ActionResult WorkingCalendarSummary(ReportFilterViewModel filterModel)
         {
             if (filterModel.IsExportExcel)

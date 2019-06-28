@@ -98,7 +98,6 @@
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
-    <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
     <Compile Include="Report\WorkingHours\WeeklyFilterViewModel.cs" />
     <Compile Include="Report\WorkingHours\MonthlyFilterViewModel.cs" />

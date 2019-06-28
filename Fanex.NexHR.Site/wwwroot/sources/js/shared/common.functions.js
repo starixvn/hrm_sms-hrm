@@ -205,6 +205,74 @@ function floatThead(el) {
     });
 }
 
+function initDatepicker() {
+    let checkBadDates = function (mydate) {
+        let isEnable = true;
+        let disabledDates = $('.datepicker').attr('disabledDate');
+        let myBadDates = disabledDates.split(",");
+
+        let checkdate = new Date(mydate).format('dd mmm, yyyy');
+        for (let i = 0; i < myBadDates.length; i++) {
+            let date = new Date(myBadDates[i]).format('dd mmm, yyyy');
+            if (date === checkdate) {
+                isEnable = false;
+            }
+        }
+
+        return [isEnable];
+    };
+    // get minDate, maxDate, disabledDates
+    let mindate = $('.datepicker').attr('mindate');
+    let maxdate = $('.datepicker').attr('maxdate');
+    let disabledDates = $('.datepicker').attr('disabledDate');
+
+    if (disabledDates.length > 0) {
+        $('.datepicker').datepicker({
+            dateFormat: 'dd M, yy',
+            beforeShowDay: checkBadDates,
+            changeMonth: true,
+            changeYear: true
+        });
+    }
+    else {
+        $('.datepicker').datepicker({
+            dateFormat: 'dd M, yy',
+            changeMonth: true,
+            changeYear: true
+        });
+    }
+
+    if (mindate !== 'null') {
+        mindate = mindate.split('/');
+        $('.datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+    }
+
+    if (maxdate !== 'null') {
+        maxdate = maxdate.split('/');
+        $('.datepicker').datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
+    }
+
+    $('.datepicker').attr('readonly', 'readonly');
+    $('.datepicker').keydown(function (e) {
+        const tab = 9, enter = 13;
+        if (e.keyCode === tab || e.keyCode === enter) {
+            return true;
+        }
+
+        return false;
+    });
+
+    $('.icon-calendar').on('click', function () {
+        let $el = $(this).closest('.calendar-form').find('.datepicker');
+
+        if ($el.datepicker('widget').is(':visible')) {
+            $el.datepicker('hide');
+        } else {
+            $el.datepicker('show');
+        }
+    });
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -216,5 +284,6 @@ export {
     toastOptions,
     axiosError,
     reorder,
-    floatThead
+    floatThead,
+    initDatepicker
 };

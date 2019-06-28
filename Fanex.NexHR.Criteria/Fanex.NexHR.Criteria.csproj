@@ -181,7 +181,6 @@
     <Compile Include="Report\GetManpowerCategoryCriteria.cs" />
     <Compile Include="Report\GetManpowerCriteria.cs" />
     <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
-    <Compile Include="Report\GetTotalWorkingHourDailyCriteria.cs" />
     <Compile Include="Request\ApproveRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\ChangeShiftCommand.cs" />
