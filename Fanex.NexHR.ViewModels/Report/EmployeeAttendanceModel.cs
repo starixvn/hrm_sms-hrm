@@ -63,6 +63,8 @@
 
         public int IsOffDay { get; set; }
 
+        public bool IsPublicHoliday { get; set; }
+
         public bool IsWarning { get; set; }
 
         public bool IsOvertime { get; set; }
@@ -75,7 +77,7 @@
         {
             get
             {
-                if (this.OvertimeStatus.HasValue)
+                if (OvertimeStatus.HasValue)
                 {
                     switch (this.OvertimeStatus.Value)
                     {
@@ -115,12 +117,8 @@
             {
                 if (AttendanceDate != null)
                 {
-                    if (AttendanceDate.Value.DayOfWeek == DayOfWeek.Sunday || AttendanceDate.Value.DayOfWeek == DayOfWeek.Saturday)
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    return AttendanceDate.Value.DayOfWeek == DayOfWeek.Sunday ||
+                        AttendanceDate.Value.DayOfWeek == DayOfWeek.Saturday;
                 }
 
                 return false;

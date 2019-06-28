@@ -1,137 +1,144 @@
 ﻿@model IList<EmployeeAttendanceModel>
 
-<table id="data" class="table table-custom">
-    <thead>
-        <tr>
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.Date</th>
-            <th>@Labels.NickName</th>
-            <th>@Labels.Section</th>
-            <th>@Labels.Shift</th>
-            <th>@Labels.CheckIn</th>
-            <th>@Labels.CheckOut</th>
-            <th>@Labels.TotalHours</th>
-            <th>@Labels.LateIn</th>
-            <th>@Labels.EarlyOut</th>
-            <th>@Labels.Request</th>
-            <th>@Labels.Overtime</th>
-            <th>@Labels.Note</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            int index = 0;
-            foreach (EmployeeAttendanceModel item in Model)
+    <table id="data" class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Date</th>
+                <th>@Labels.NickName</th>
+                <th>@Labels.Section</th>
+                <th>@Labels.Shift</th>
+                <th>@Labels.CheckIn</th>
+                <th>@Labels.CheckOut</th>
+                <th>@Labels.TotalHours</th>
+                <th>@Labels.LateIn</th>
+                <th>@Labels.EarlyOut</th>
+                <th>@Labels.Request</th>
+                <th>@Labels.Overtime</th>
+                <th>Status</th>
+                <th>@Labels.Note</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
             {
-                index++;
-                var trClass = (item.LateIn > 0 || item.EarlyOut > 30) ? "highlight" : string.Empty;
+                int index = 0;
+                foreach (EmployeeAttendanceModel item in Model)
+                {
+                    index++;
+                    var trClass = (item.LateIn > 0 || item.EarlyOut > 30) ? "highlight" : string.Empty;
 
-                <tr class="@trClass">
-                    <td>@index</td>
-                    @if (item.IsWeekend)
-                    {
-                        <td class="weekend">@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
-                    }
-                    else
-                    {
-                        <td>@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
-                    }
-                    <td class="tooltip" title="@item.FullName">@item.NickName</td>
-                    <td class="tooltip" title="@item.Team">@item.TeamCode</td>
-                    @if (item.IsOffDay != 0 && item.ShiftId != null)
-                    {
-                        var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                        <td class="tooltip mytimesheet-workinginoffday" title="@title">@item.ShiftCode</td>
-                    }
-                    else
-                    {
-                        var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                        <td class="tooltip" title="@title">@item.ShiftCode</td>
-                    }
-                    @if (item.InFixed.HasValue)
-                    {
-                        <td class="tooltip" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                            @item.InFixed.Value.ToString("HH:mm")
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    @if (item.OutFixed.HasValue)
-                    {
-                        <td class="tooltip" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                            @item.OutFixed.Value.ToString("HH:mm")
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    <td>
-                        @if (item.TotalWorkHours > 0)
+                    <tr class="@trClass">
+                        <td>@index</td>
+                        @if (item.IsWeekend)
                         {
-                            @Utilities.TotalHoursToTime((float)item.TotalWorkHours)
+                            <td class="weekend">@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
                         }
-                    </td>
-                    <td>
-                        @if (item.LateIn > 0)
+                        else
                         {
-                            @Utilities.MinuteToTime(item.LateIn)
+                            <td>@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
                         }
-                    </td>
-                    <td>
-                        @if (item.EarlyOut > 0)
+                        <td class="tooltip" title="@item.FullName">@item.NickName</td>
+                        <td class="tooltip" title="@item.Team">@item.TeamCode</td>
+
+                        @if (item.IsOffDay != 0 && item.ShiftId != null)
                         {
-                            @Utilities.MinuteToTime(item.EarlyOut)
+                            var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                            var className = string.Format("{0} {1}", "tooltip mytimesheet-workinginoffday",
+                                item.IsPublicHoliday ? "orange-highlight" : "");
+                            <td class="@className" title="@title"> @item.ShiftCode</td>
                         }
-                    </td>
-                    <td>
-                        @if (item.RequestList != null && item.RequestList.Any())
+                        else
                         {
-                            foreach (EmployeeAttendanceRequest request in item.RequestList)
+                            var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                            var className = string.Format("{0} {1}", "tooltip",
+                                item.IsPublicHoliday ? "orange-highlight" : "");
+                            <td class="@className" title="@title">@item.ShiftCode</td>
+                        }
+                        @if (item.InFixed.HasValue)
+                        {
+                            <td class="tooltip" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                                @item.InFixed.Value.ToString("HH:mm")
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        @if (item.OutFixed.HasValue)
+                        {
+                            <td class="tooltip" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                                @item.OutFixed.Value.ToString("HH:mm")
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td>
+                            @if (item.TotalWorkHours > 0)
                             {
-                                <a href='#' class="tooltip-request req"
-                                   data-requesttype="@request.RequestType.Id"
-                                   data-fromdate="@request.FromDate.ToFormatedDate()"
-                                   data-todate="@request.ToDate.ToFormatedDate()"
-                                   data-createddate="@request.CreatedDateTime"
-                                   data-fromshift="@request.FromShift"
-                                   data-toshift="@request.ToShift"
-                                   data-fromtime="@request.FromTime"
-                                   data-totime="@request.ToTime"
-                                   data-totaldays="@request.TotalDays"
-                                   data-totalmins="@request.TotalMins"
-                                   data-actualLateInEarlyOut="@(request.RequestType.Id == 3 ? item.LateIn : item.EarlyOut)"
-                                   data-remark='@request.Remark'>
-                                    @request.RequestType.Name
-                                </a>
+                                @Utilities.TotalHoursToTime((float)item.TotalWorkHours)
                             }
-                        }
-                    </td>
-                    <td>
-                        @if (item.IsOvertime)
-                        {
-                            <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip">
-                                @item.OvertimeHours
-                            </span>
-                        }
-                    </td>
-                    <td class="align-left">@item.Notes</td>
-                    <td class="td-warning">
-                        @if (item.IsWarning)
-                        {
-                            <span class="icon-warning" />
-                        }
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            @if (item.LateIn > 0)
+                            {
+                                @Utilities.MinuteToTime(item.LateIn)
+                            }
+                        </td>
+                        <td>
+                            @if (item.EarlyOut > 0)
+                            {
+                                @Utilities.MinuteToTime(item.EarlyOut)
+                            }
+                        </td>
+                        <td>
+                            @if (item.RequestList != null && item.RequestList.Any())
+                            {
+                                foreach (EmployeeAttendanceRequest request in item.RequestList)
+                                {
+                                    <a href='#' class="tooltip-request req"
+                                       data-requesttype="@request.RequestType.Id"
+                                       data-fromdate="@request.FromDate.ToFormatedDate()"
+                                       data-todate="@request.ToDate.ToFormatedDate()"
+                                       data-createddate="@request.CreatedDateTime"
+                                       data-fromshift="@request.FromShift"
+                                       data-toshift="@request.ToShift"
+                                       data-fromtime="@request.FromTime"
+                                       data-totime="@request.ToTime"
+                                       data-totaldays="@request.TotalDays"
+                                       data-totalmins="@request.TotalMins"
+                                       data-actualLateInEarlyOut="@(request.RequestType.Id == 3 ? item.LateIn : item.EarlyOut)"
+                                       data-remark='@request.Remark'>
+                                        @request.RequestType.Name
+                                    </a>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (item.IsOvertime)
+                            {
+                                <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip">
+                                    @item.OvertimeHours
+                                </span>
+                            }
+                        </td>
+                        <td>@item.FormattedOvertimeStatus</td>
+                        <td class="align-left">@item.Notes</td>
+                        <td class="td-warning">
+                            @if (item.IsWarning)
+                            {
+                                <span class="icon-warning" />
+                            }
+                        </td>
+                    </tr>
+                }
             }
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: 14)
-        }
-    </tbody>
-</table>
+            else
+            {
+                @RazorHelper.DisplayNoInformation(colspan: 14)
+            }
+        </tbody>
+    </table>
