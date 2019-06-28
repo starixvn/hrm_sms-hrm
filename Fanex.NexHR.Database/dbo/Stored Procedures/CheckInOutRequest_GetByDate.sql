@@ -23,6 +23,7 @@ BEGIN
 		,mis.ReasonId
 		,wk.Remark
 		,mis.RefNo
+		,sh.Name AS ShiftName
 		,wk.CreatedDate
 		,wk.CurrentStatus
 		,wk.VerifiedDate
@@ -42,6 +43,8 @@ BEGIN
 		,pr.FullName
 	FROM dbo.CheckInOutRequest AS mis WITH (NOLOCK)
 	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON mis.RequestId = wk.RequestId
+	INNER JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON mis.OnDate = cl.WorkDate AND mis.EmpId = cl.EmpId
+	LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID 
 	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON mis.EmpId = e.EmpId
 	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
 	LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId

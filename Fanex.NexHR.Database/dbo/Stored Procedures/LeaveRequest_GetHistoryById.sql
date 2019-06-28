@@ -43,7 +43,7 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.WorkingTimeRequestHistory AS wk WITH (NOLOCK)
-	INNER JOIN dbo.LeaveRequestHistory AS lr WITH (NOLOCK) ON lr.RequestId = wk.RequestId AND wk.HistoryId = lr.HistoryId
+	INNER JOIN dbo.LeaveRequestHistory AS lr WITH (NOLOCK) ON wk.HistoryId = lr.HistoryId
 	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON lr.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lr.LeaveType = lv.LeaveTypeId

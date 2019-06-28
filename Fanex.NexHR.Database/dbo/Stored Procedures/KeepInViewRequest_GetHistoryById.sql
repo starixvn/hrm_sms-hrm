@@ -42,7 +42,7 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.WorkingTimeRequestHistory AS wk WITH (NOLOCK)
-	INNER JOIN dbo.KeepInViewRequestHistory AS kiv WITH (NOLOCK) ON wk.RequestId = kiv.RequestId
+	INNER JOIN dbo.KeepInViewRequestHistory AS kiv WITH (NOLOCK) ON wk.HistoryId = kiv.HistoryId
 	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON kiv.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId

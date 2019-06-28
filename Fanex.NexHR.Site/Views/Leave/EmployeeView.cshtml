@@ -63,8 +63,10 @@
                 <th>@Labels.From</th>
                 <th>@Labels.To</th>
                 <th>@Labels.Total</th>
-                <th>@Labels.CreatedDate</th>
                 <th>@Labels.Remark</th>
+                <th>@Labels.VerifiedBy</th>
+                <th>@Labels.ApprovedBy</th>
+                <th>@Labels.CreatedDate</th>
                 <th>@Labels.Status</th>
                 <th>@Labels.History</th>
             </tr>
@@ -82,61 +84,65 @@
                     verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
                     approvedStatus = (ApprovedStatus)request.ApprovedStatus;
                     processedStatus = (HRStatus)request.ProcessedStatus;
-                    <tr id="row@(request.RequestId)">
-                        <td>
-                            @(index++)
-                        </td>
-                        <td>
-                            @request.RefNO
-                        </td>
-                        <td>
-                            <a class="viewdetail"
-                               data-id="@request.RequestId"
-                               data-verifier="@request.VerifiedBy.NickName"
-                               data-verifier-status="@verifiedStatus"
-                               data-verified-date="@(request.VerifiedStatus == (int)VerifiedStatus.Pending ? string.Empty : request.VerifiedDate.ToShortFormatedDate())"
-                               data-approver="@request.ApprovedBy.NickName"
-                               data-approver-status="@approvedStatus"
-                               data-approved-date="@(request.ApprovedStatus == (int)ApprovedStatus.Pending ? string.Empty : request.ApprovedDate.ToShortFormatedDate())"
-                               data-hr="@(request.ProcessedBy == null ? string.Empty : request.ProcessedBy.NickName)"
-                               data-hr-status="@processedStatus"
-                               data-processed-date="@(request.ProcessedStatus == (int)HRStatus.Pending ? string.Empty : request.ProcessedDate.ToShortFormatedDate())"
-                               href="~/Leave/Detail?requestId=@request.RequestId">@request.LeaveType.Name</a>
-                        </td>
-                        <td class="ddMMyyyy">
-                            @request.FromDate.ToDateMonthYearFormatedDate()
-                        </td>
-                        <td class="ddMMyyyy">
-                            @request.ToDate.ToDateMonthYearFormatedDate()
-                        </td>
-                        <td>
-                            @request.TotalDays.ToString("0.0")
-                        </td>
-                        <td>
-                            @request.CreatedDate.ToShortFormatedDate()
-                        </td>
-                        @if (!string.IsNullOrWhiteSpace(request.Remark))
-                        {
-                            <td class="tooltip" title="@request.Remark">
-                                <span class="icon remark" alt="remark" />
-                            </td>
-                        }
-                        else
-                        {
-                            <td>-</td>
-                        }
-                        @RazorHelper.RenderRequestStatus(request)
-                        <td>
-                            <a class="viewhistory" href="javascript:;" id="/leave/viewhistory?id=@request.RequestId">
-                                @Labels.View
-                            </a>
-                        </td>
-                    </tr>
+            <tr id="row@(request.RequestId)">
+                <td>
+                    @(index++)
+                </td>
+                <td>
+                    @request.RefNO
+                </td>
+                <td>
+                    <a class="viewdetail"
+                       data-id="@request.RequestId"
+                       data-verifier="@request.VerifiedBy.NickName"
+                       data-verifier-status="@verifiedStatus"
+                       data-verified-date="@(request.VerifiedStatus == (int)VerifiedStatus.Pending ? string.Empty : request.VerifiedDate.ToShortFormatedDate())"
+                       data-approver="@request.ApprovedBy.NickName"
+                       data-approver-status="@approvedStatus"
+                       data-approved-date="@(request.ApprovedStatus == (int)ApprovedStatus.Pending ? string.Empty : request.ApprovedDate.ToShortFormatedDate())"
+                       data-hr="@(request.ProcessedBy == null ? string.Empty : request.ProcessedBy.NickName)"
+                       data-hr-status="@processedStatus"
+                       data-processed-date="@(request.ProcessedStatus == (int)HRStatus.Pending ? string.Empty : request.ProcessedDate.ToShortFormatedDate())"
+                       href="~/Leave/Detail?requestId=@request.RequestId">@request.LeaveType.Name</a>
+                </td>
+                <td class="ddMMyyyy">
+                    @request.FromDate.ToDateMonthYearFormatedDate()
+                </td>
+                <td class="ddMMyyyy">
+                    @request.ToDate.ToDateMonthYearFormatedDate()
+                </td>
+                <td>
+                    @request.TotalDays.ToString("0.0")
+                </td>
+
+                @if (!string.IsNullOrWhiteSpace(request.Remark))
+                {
+                    <td class="tooltip" title="@request.Remark">
+                        <span class="icon remark" alt="remark" />
+                    </td>
+                }
+                else
+                {
+                    <td>-</td>
+                }
+
+                <td>@request.VerifiedBy.NickName</td>
+                <td>@request.ApprovedBy.NickName</td>
+                <td>
+                    @request.CreatedDate.ToShortFormatedDate()
+                </td>
+                @RazorHelper.RenderRequestStatus(request)
+                <td>
+                    <a class="viewhistory" href="javascript:;" id="/leave/viewhistory?id=@request.RequestId">
+                        @Labels.View
+                    </a>
+                </td>
+            </tr>
                 }
             }
             else
             {
-                @RazorHelper.DisplayNoInformation(colspan: 10);
+                @RazorHelper.DisplayNoInformation(colspan: 10)
             }
         </tbody>
     </table>

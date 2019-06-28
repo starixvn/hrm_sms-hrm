@@ -4,7 +4,7 @@ CREATE PROCEDURE [dbo].[CheckInOutRequest_Update] @RequestId BIGINT
 	,@RequestType SMALLINT
 	,@Remark NVARCHAR(2000) = NULL
 	,@OnDate DATETIME = NULL
-	,@CheckTime DATETIME = NULL
+	,@RequestTime DATETIME = NULL
 	,@ReasonId TINYINT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
@@ -200,7 +200,7 @@ BEGIN
 	UPDATE dbo.CheckInOutRequest WITH (ROWLOCK, UPDLOCK)
 	SET EmpId = @EmpId
 		,OnDate = CONVERT(NVARCHAR(100), @OnDate, 111)
-		,RequestTime = @CheckTime
+		,RequestTime = @RequestTime
 		,RefNo = @RefNo
 		,ReasonId = @ReasonId
 	WHERE RequestId = @RequestId
