@@ -1,0 +1,20 @@
+﻿@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
+
+@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/icon';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/shift.color';
+@import '../../vendors/multiselect';
+@import '../../vendors/weekpicker';
+
+form.filter {
+    .weekpicker-wrapper {
+        .fromDate, .toDate {
+            display: inline;
+            width: 80px !important;
+        }
+    }
+}

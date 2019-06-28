@@ -20,6 +20,11 @@
                defaults: new { controller = "MonthlyWorkingHours", action = "index" });
 
             routes.MapRoute(
+               name: "WeeklyWorkingHours",
+               url: "Report/WeeklyWorkingHours",
+               defaults: new { controller = "WeeklyWorkingHours", action = "index" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "home", action = "index", id = UrlParameter.Optional });

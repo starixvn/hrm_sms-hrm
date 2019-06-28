@@ -24,6 +24,7 @@ module.exports = {
         [`${styleDistPath}/section.edit.supervisor`]: `${styleSourcePath}/pages/section/edit.supervisor.scss`,
         [`${styleDistPath}/section.edit.discipline.manager`]: `${styleSourcePath}/pages/section/edit.discipline.manager.scss`,
         [`${styleDistPath}/report.monthlyworkinghours`]: `${styleSourcePath}/pages/report/monthlyworkinghours.scss`,
+        [`${styleDistPath}/report.weeklyworkinghours`]: `${styleSourcePath}/pages/report/weeklyworkinghours.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -41,6 +42,7 @@ module.exports = {
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
         [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,
         [`${jsDistPath}/employee.information`]: `${jsSourcePath}/information/index.js`,
-        [`${jsDistPath}/report.monthlyworkinghours`]: `${jsSourcePath}/report/monthlyworkinghours.js`
+        [`${jsDistPath}/report.monthlyworkinghours`]: `${jsSourcePath}/report/monthlyworkinghours.js`,
+        [`${jsDistPath}/report.weeklyworkinghours`]: `${jsSourcePath}/report/weeklyworkinghours.js`
     }
 };

@@ -22,7 +22,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
             container.RegisterType<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
             container.RegisterType<ILeaveRequestRepository, LeaveRequestRepository>();
-            container.RegisterType<IMonthlyWorkingHoursRepository, MonthlyWorkingHoursRepository>();
+            container.RegisterType<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
             container.RegisterType<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
             container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
 
@@ -60,7 +60,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
             container.RegisterType<IDashboardService, DashboardService>();
             container.RegisterType<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
-            container.RegisterType<IMonthlyWorkingHoursService, MonthlyWorkingHoursService>();
+            container.RegisterType<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

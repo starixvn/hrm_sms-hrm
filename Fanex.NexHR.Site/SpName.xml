@@ -81,7 +81,6 @@
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Report_EmployeeTotalWorkingHourByDay" SpName="Report_EmployeeTotalWorkingHourByDay" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_EmployeeTotalWorkingHourByWeek" SpName="Report_EmployeeTotalWorkingHourByWeek" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" SpName="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" DbName="nexhrx" Plain="0"></Setting>

@@ -105,44 +105,6 @@
                 return entityList;
             }
         }
-
-        public IList<TotalWorkingHourMonthly> GetTotalWorkingHourWeekly(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var entityList = new List<TotalWorkingHourMonthly>();
-
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
-                    {
-                        while (reader.Read())
-                        {
-                            var entity = new TotalWorkingHourMonthly
-                            {
-                                StaffId = Convert.ToString(reader.GetValue(0)),
-                                Section = Convert.ToString(reader.GetValue(1)),
-                                FullNameNick = Convert.ToString(reader.GetValue(2)),
-                                Nick = Convert.ToString(reader.GetValue(3)),
-                                CountWorkDay = Convert.ToDecimal(reader.GetValue(4)),
-                            };
-
-                            entity.WorkingHours = new List<string>();
-                            for (int i = 5; i < reader.FieldCount; i++)
-                            {
-                                var workingHour = reader.GetValue(i);
-                                entity.WorkingHours.Add(Convert.ToString(workingHour));
-                            }
-
-                            entityList.Add(entity);
-                        }
-                    }
-                }
-
-                return entityList;
-            }
-        }
-
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
         {
             IList<LeaveSummary> entities = null;

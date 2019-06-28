@@ -79,6 +79,19 @@
                                 }
                             }
                         }
+                        else if (dailyWorking.TotalWorkingHours > 0)
+                        {
+                            value = dailyWorking.TotalWorkingHoursToDisplay;
+
+                            if (dailyWorking.IsHoliday)
+                            {
+                                className = "holiday";
+                            }
+                            else if (dailyWorking.IsOffDay)
+                            {
+                                className = "offday";
+                            }
+                        }
                         else if (dailyWorking.IsMissingCheckIn)
                         {
                             value = "Check In";
@@ -100,10 +113,6 @@
                         {
                             value = "OFF";
                             className = "offday";
-                        }
-                        else if(dailyWorking.TotalWorkingHours > 0)
-                        {
-                            value = dailyWorking.TotalWorkingHoursToDisplay;
                         }
                         <td class="@className">@value</td>
                     }

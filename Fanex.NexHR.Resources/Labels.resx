@@ -501,7 +501,7 @@
   <data name="TotalHours" xml:space="preserve">
     <value>Total hours</value>
   </data>
-  <data name="WorkigDay" xml:space="preserve">
+  <data name="WorkingDay" xml:space="preserve">
     <value>Working day</value>
   </data>
   <data name="Save" xml:space="preserve">
@@ -1754,6 +1754,9 @@
   </data>
   <data name="EmployeeWeeklyWorkingHours" xml:space="preserve">
     <value>Employee's Weekly Working Hours</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Week</value>
   </data>
   <data name="ManagementAllow" xml:space="preserve">
     <value>Management Allow</value>

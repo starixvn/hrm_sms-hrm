@@ -250,6 +250,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\edit-account.js" />
@@ -272,7 +273,6 @@
     <Content Include="Scripts\Views\message.edit.js" />
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
-    <Content Include="Scripts\Views\Report\report.totalworkinghourweekly.js" />
     <Content Include="Scripts\Views\Report\report.weekendleave.summary.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
@@ -960,7 +960,11 @@
     <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
     <Content Include="wwwroot\sources\styles\components\_buttons-new.scss" />
     <Content Include="Views\LateInEarlyOut\ViewHistory.cshtml" />
+    <Content Include="Views\Report\WeeklyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\WeeklyWorkingHours\_WeeklyWorkingHoursDetails.cshtml" />
+    <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1157,7 +1161,6 @@
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
-    <Content Include="Views\Report\TotalWorkingHourWeekly.cshtml" />
     <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
     <Content Include="Views\Message\Index.cshtml" />
@@ -1358,7 +1361,6 @@
     <Content Include="Scripts\Views\Report\report.timerecord.js" />
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
-    <Content Include="Views\Report\_TotalWorkingHourWeeklyDetails.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
     <Content Include="Views\Report\_AttendanceDetails.cshtml" />
     <Content Include="WebConfigs\Web.PRO.sms.config">

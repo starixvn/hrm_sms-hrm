@@ -1,11 +1,11 @@
-﻿namespace Fanex.NexHR.ViewModels.Report.MonthlyWorkingHours
+﻿namespace Fanex.NexHR.ViewModels.Report.WorkingHours
 {
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
-    public class FilterViewModel
+    public class MonthlyFilterViewModel
     {
         public int Month { get; set; }
         public int Year { get; set; }

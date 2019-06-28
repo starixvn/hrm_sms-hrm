@@ -8,9 +8,6 @@ export default class WeekPicker extends PureComponent {
         this.$el = $(this.el);
         this.updateWeekPicker();
 
-        this.$el.on('mousemove', '.ui-datepicker-calendar tr', function () { $(this).find('td a').addClass('ui-state-hover'); });
-        this.$el.on('mouseleave', '.ui-datepicker-calendar tr', function () { $(this).find('td a').removeClass('ui-state-hover'); });
-
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 

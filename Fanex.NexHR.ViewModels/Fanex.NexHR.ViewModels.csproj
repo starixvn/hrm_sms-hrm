@@ -97,14 +97,14 @@
     <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
-    <Compile Include="Report\MonthlyWorkingHours\FilterViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
     <Compile Include="Report\TotalWorkingHourDailyViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
+    <Compile Include="Report\WorkingHours\WeeklyFilterViewModel.cs" />
+    <Compile Include="Report\WorkingHours\MonthlyFilterViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />
     <Compile Include="Message\MessageViewModel.cs" />
     <Compile Include="EmployeeGroup\TeamSupervisorViewModel.cs" />
-    <Compile Include="Report\TotalWorkingHourWeeklyViewModel.cs" />
     <Compile Include="Overtime\OvertimeExcelReportViewModel.cs" />
     <Compile Include="Request\ProcessRequestViewModel.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />

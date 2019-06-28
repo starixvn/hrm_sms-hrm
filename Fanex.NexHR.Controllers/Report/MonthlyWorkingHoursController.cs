@@ -11,21 +11,21 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.ViewModels.Report.MonthlyWorkingHours;
+    using Fanex.NexHR.ViewModels.Report.WorkingHours;
 
     [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
     public class MonthlyWorkingHoursController : BaseController
     {
         private readonly ITeamService teamService;
-        private readonly IMonthlyWorkingHoursService monthlyWorkingHoursService;
+        private readonly IEmployeeWorkingHoursService workingHoursService;
 
         public MonthlyWorkingHoursController(
             ISessionService sessionService,
             ITeamService teamService,
-            IMonthlyWorkingHoursService monthlyWorkingHoursService) : base(sessionService)
+            IEmployeeWorkingHoursService workingHoursService) : base(sessionService)
         {
             this.teamService = teamService;
-            this.monthlyWorkingHoursService = monthlyWorkingHoursService;
+            this.workingHoursService = workingHoursService;
         }
 
         [HttpGet]
@@ -34,7 +34,7 @@
             IEnumerable<Team> sections = teamService.GetAll();
             var today = DateTime.Today;
 
-            var model = new FilterViewModel
+            var model = new MonthlyFilterViewModel
             {
                 Month = today.Month,
                 Year = today.Year,
@@ -51,7 +51,7 @@
         }
 
         [HttpGet]
-        public ActionResult GetMonthlyWorkingHours(FilterViewModel model)
+        public ActionResult GetMonthlyWorkingHours(MonthlyFilterViewModel model)
         {
             var param = new GetMonthlyWorkingHoursParam
             {
@@ -61,7 +61,7 @@
                 EmployeeId = model.EmployeeId,
                 IsLocal = model.IsLocal
             };
-            IEnumerable<MonthlyWorking> monthlyWorkings = monthlyWorkingHoursService.GetMonthlyWorkingHours(param);
+            IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             ViewBag.FromDate = param.FromDate;
             ViewBag.ToDate = param.ToDate;
 
@@ -69,7 +69,7 @@
         }
 
         [HttpGet]
-        public ActionResult ExportExcel(FilterViewModel model)
+        public ActionResult ExportExcel(MonthlyFilterViewModel model)
         {
             var param = new GetMonthlyWorkingHoursParam
             {
@@ -79,8 +79,8 @@
                 EmployeeId = model.EmployeeId,
                 IsLocal = model.IsLocal
             };
-            IEnumerable<MonthlyWorking> monthlyWorkings = monthlyWorkingHoursService.GetMonthlyWorkingHours(param);
-            byte[] bytes = monthlyWorkingHoursService.ExportExcel(param.FromDate, param.ToDate, monthlyWorkings);
+            IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
+            byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);
 
             var fileName = $"Monthly working hours {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
             return File(bytes, "application/xlsx", fileName);

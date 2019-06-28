@@ -85,7 +85,7 @@
     <Compile Include="Interfaces\IMenuRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
     <Compile Include="Interfaces\IDisciplineRepository.cs" />
-    <Compile Include="Interfaces\IMonthlyWorkingHoursRepository.cs" />
+    <Compile Include="Interfaces\IEmployeeWorkingHoursRepository.cs" />
     <Compile Include="Interfaces\IOvertimeRequestRepository.cs" />
     <Compile Include="Interfaces\IWorkingCalendarRepository.cs" />
     <Compile Include="Interfaces\IEmployeeRepository.cs" />
@@ -97,7 +97,7 @@
     <Compile Include="CheckInOutRequestRepository.cs" />
     <Compile Include="LeaveRequestRepository.cs" />
     <Compile Include="KeepInViewRequestRepository.cs" />
-    <Compile Include="MonthlyWorkingHoursRepository.cs" />
+    <Compile Include="EmployeeWorkingHoursRepository.cs" />
     <Compile Include="ScheduleArrangeRepository.cs" />
     <Compile Include="MenuRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">

@@ -25,6 +25,9 @@ import moment from 'moment';
                 }
             }));
 
+            $(document)
+                .on('mousemove', '.ui-datepicker-calendar tr', function () { $(this).find('td a').addClass('ui-state-hover'); })
+                .on('mouseleave', '.ui-datepicker-calendar tr', function () { $(this).find('td a').removeClass('ui-state-hover'); });
             this._select(moment(date).format('MM/DD/YYYY'), this._picker, onSelect);
         },
 

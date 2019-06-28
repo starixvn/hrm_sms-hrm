@@ -299,44 +299,6 @@
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult TotalWorkingHourWeekly()
-        {
-            var dayDiff = DayOfWeek.Monday - DateTime.Now.DayOfWeek;
-            var model = new TotalWorkingHourWeeklyViewModel
-            {
-                FromDate = DateTime.Now.AddDays(dayDiff).ToDateMonthYearFormatedDate(),
-                ToDate = DateTime.Now.AddDays(dayDiff).AddDays(6).ToDateMonthYearFormatedDate(),
-                Sections = teamService.GetAll()
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult TotalWorkingHourWeeklyDetails(TotalWorkingHourWeeklyViewModel model)
-        {
-            var criteria = new GetTotalWorkingHourWeeklyCriteria
-            {
-                EmpId = model.EmployeeId,
-                FromDate = DateTime.Parse(model.FromDate),
-                ToDate = DateTime.Parse(model.ToDate),
-                GroupIds = model.SectionIds,
-                IsLocal = model.IsLocal
-            };
-            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourWeekly(criteria);
-            TotalWorkingHourMonthly firstRecord = null;
-            if (totalWorkingHours != null && totalWorkingHours.Any())
-            {
-                firstRecord = totalWorkingHours.First();
-                totalWorkingHours.RemoveAt(0);
-            }
-
-            ViewBag.FirstRecord = firstRecord;
-
-            return PartialView("_TotalWorkingHourWeeklyDetails", totalWorkingHours);
-        }
-
         public ActionResult WorkingCalendarSummary(ReportFilterViewModel filterModel)
         {
             if (filterModel.IsExportExcel)

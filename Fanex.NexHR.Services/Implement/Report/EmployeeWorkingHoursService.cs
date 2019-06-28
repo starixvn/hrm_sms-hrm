@@ -13,11 +13,11 @@
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 
-    public class MonthlyWorkingHoursService : IMonthlyWorkingHoursService
+    public class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private readonly IMonthlyWorkingHoursRepository repository;
+        private readonly IEmployeeWorkingHoursRepository repository;
 
-        public MonthlyWorkingHoursService(IMonthlyWorkingHoursRepository repository)
+        public EmployeeWorkingHoursService(IEmployeeWorkingHoursRepository repository)
         {
             this.repository = repository;
         }
@@ -36,11 +36,11 @@
             return repository.GetMonthlyWorkingHours(criteria);
         }
 
-        public byte[] ExportExcel(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
+        public byte[] ExportMonthlyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/MonthlyWorkingHours.xlsx");
-            const ushort TotalFixedColumns = 14;
-            var totalColumns = TotalFixedColumns + (int)(toDate - fromDate).TotalDays + 1;
+            const ushort StartDateColumn = 15;
+            var totalColumns = StartDateColumn + (int)(toDate - fromDate).TotalDays;
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -61,7 +61,7 @@
 
                     // header
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
-                    colIndex = TotalFixedColumns + 1;
+                    colIndex = StartDateColumn;
                     for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
                     {
                         worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
@@ -89,35 +89,101 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
 
-                        var excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        var excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"AL\")+(COUNTIF({0},\"AL½\")/2)", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula =
                             string.Format("COUNTIF({0},\"UPL\")+(COUNTIF({0},\"UPL½\")/2)+COUNTIF({0},\"UPLI\")+(COUNTIF({0},\"UPLI½\")/2)+COUNTIF({0},\"PL\")", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"WL\")", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"ML\")", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"BTL\")+(COUNTIF({0},\"BTL½\")/2)", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"BL3\")", excelAddress);
 
                         colIndex++;
-                        excelAddress = $"{worksheet.Cells[rowIndex, TotalFixedColumns + 1].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
+                        excelAddress = $"{worksheet.Cells[rowIndex, StartDateColumn].Address}:{worksheet.Cells[rowIndex, totalColumns].Address}";
                         worksheet.Cells[rowIndex, colIndex].Formula = string.Format("COUNTIF({0},\"CL\")", excelAddress);
 
                         colIndex++;
+                        foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
+                        {
+                            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
+                        }
+
+                        rowIndex++;
+                    }
+
+                    worksheet.Cells.AutoFitColumns();
+                    worksheet.View.FreezePanes(3, 6);
+
+                    return xlPackage.GetAsByteArray();
+                }
+            }
+        }
+
+        public byte[] ExportWeeklyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
+        {
+            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WeeklyWorkingHours.xlsx");
+            const ushort StartDateColumn = 7;
+            const ushort TotalColumns = 13;
+
+            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+            {
+                using (var xlPackage = new ExcelPackage())
+                {
+                    var redColor = ColorTranslator.FromHtml(Constants.RedColor);
+                    const string ShortDateFormat = "dd MMM yyyy";
+                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Employee's Weekly Working Hours");
+                    var rowIndex = 1;
+                    var colIndex = 1;
+
+                    // title
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                    worksheet.Cells[rowIndex, colIndex].Value = $"Employee's Weekly Working Hours {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
+                    rowIndex++;
+
+                    // header
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                    colIndex = StartDateColumn;
+                    for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+                    {
+                        worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
+
+                        if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
+                        {
+                            worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
+                        }
+
+                        colIndex++;
+                    }
+
+                    // data
+                    rowIndex++;
+                    foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+                    {
+                        colIndex = 1;
+                        templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+                        worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
                         foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
                         {
                             WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
@@ -144,6 +210,23 @@
                 value = tupple.Item1;
                 backgroundColor = tupple.Item2;
             }
+            else if (dailyWorking.TotalWorkingHours > 0)
+            {
+                value = dailyWorking.TotalWorkingHoursToDisplay;
+
+                if (dailyWorking.IsHoliday)
+                {
+                    backgroundColor = Constants.HolidayBackgroundColor;
+                }
+                else if (dailyWorking.IsOffDay)
+                {
+                    backgroundColor = Constants.OffDayBackgroundColor;
+                }
+                else
+                {
+                    backgroundColor = string.Empty;
+                }
+            }
             else if (dailyWorking.IsMissingCheckIn)
             {
                 value = "Check In";
@@ -165,10 +248,6 @@
             {
                 value = "OFF";
                 backgroundColor = Constants.OffDayBackgroundColor;
-            }
-            else if (dailyWorking.TotalWorkingHours > 0)
-            {
-                value = dailyWorking.TotalWorkingHoursToDisplay;
             }
             else
             {

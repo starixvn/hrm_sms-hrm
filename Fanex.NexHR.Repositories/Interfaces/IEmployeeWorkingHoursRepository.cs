@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
 
-    public interface IMonthlyWorkingHoursRepository
+    public interface IEmployeeWorkingHoursRepository
     {
         IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(ICriteria criteria);
     }

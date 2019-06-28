@@ -59,25 +59,6 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
-        public ActionResult ExportTotalWorkingHourWeekly(TotalWorkingHourWeeklyViewModel model)
-        {
-            IExportService exportService;
-            string fileName = "TotalWorkingHourWeekly_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var criteria = new GetTotalWorkingHourWeeklyCriteria
-            {
-                EmpId = model.EmployeeId,
-                FromDate = DateTime.Parse(model.FromDate),
-                ToDate = DateTime.Parse(model.ToDate),
-                GroupIds = model.SectionIds,
-                IsLocal = model.IsLocal
-            };
-            IList<TotalWorkingHourMonthly> totalWorkingHours = reportService.GetTotalWorkingHourWeekly(criteria);
-            exportService = new TotalWorkingHourMonthlyExportService(totalWorkingHours);
-            HSSFWorkbook hssfworkbook = exportService.Export();
-
-            return ExcelFile(hssfworkbook, fileName);
-        }
-
         public ActionResult ExportTotalWorkingHourDaily(TotalWorkingHourDailyViewModel model)
         {
             IExportService exportService;

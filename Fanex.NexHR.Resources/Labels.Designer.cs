@@ -4804,6 +4804,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Week.
+        /// </summary>
+        public static string Week {
+            get {
+                return ResourceManager.GetString("Week", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weekend Leave.
         /// </summary>
         public static string WeekendLeave {
@@ -4869,9 +4878,9 @@ namespace Fanex.NexHR.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Working day.
         /// </summary>
-        public static string WorkigDay {
+        public static string WorkingDay {
             get {
-                return ResourceManager.GetString("WorkigDay", resourceCulture);
+                return ResourceManager.GetString("WorkingDay", resourceCulture);
             }
         }
         

@@ -215,7 +215,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveApprove_UpdateCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByWeekly.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_LeaveReject_RollbackCalendar.sql" />
-    <Build Include="dbo\Stored Procedures\Report_EmployeeTotalWorkingHourByMonth.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_TmpKIVLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetMemberByManager.sql" />
     <Build Include="dbo\Stored Procedures\Report_ForgotAndLateEarlyIO.sql" />
@@ -311,7 +310,6 @@
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_ChangeShift.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
-    <Build Include="dbo\Stored Procedures\Report_EmployeeTotalWorkingHourByWeek.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_CheckInOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_KeepInViewRequest.sql" />
@@ -571,6 +569,7 @@
     <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetFullProfileInformation.sql" />
+    <Build Include="dbo\Stored Procedures\Report_MonthlyWorkingHours.sql" />
     <Build Include="dbo\Tables\LateInEarlyOutRequestHistory.sql" />
     <Build Include="dbo\Tables\LateInEarlyOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_WriteLog.sql" />
