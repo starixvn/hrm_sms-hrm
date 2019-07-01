@@ -93,10 +93,6 @@ export default class ShiftAutocomplete extends PureComponent {
         }
     }
 
-    handleMouseLeave = event => {
-        this.handleInputBlur(event);
-    }
-
     render() {
         const { name, className, isDisabled, placeholder } = this.props;
         const { value, options } = this.state;
@@ -118,8 +114,7 @@ export default class ShiftAutocomplete extends PureComponent {
                     disabled: isDisabled,
                     onFocus: this.handleInputFocus,
                     onPaste: this.handleInputPaste,
-                    onBlur: this.handleInputBlur,
-                    onMouseLeave: this.handleMouseLeave
+                    onBlur: this.handleInputBlur
                 }}
                 value={value}
                 onChange={this.handleChange}
