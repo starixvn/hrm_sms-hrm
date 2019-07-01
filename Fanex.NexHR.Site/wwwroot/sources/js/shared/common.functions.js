@@ -205,6 +205,15 @@ function floatThead(el) {
     });
 }
 
+function initFromDateOnChange($fromDate, $toDate) {
+    if ($fromDate && $toDate) {
+        $fromDate.on("change", function () {
+            let fromDateValue = $(this).val();
+            $toDate.val(fromDateValue);
+        });
+    }
+}
+
 function initDatepicker() {
     let checkBadDates = function (mydate) {
         let isEnable = true;
@@ -280,10 +289,12 @@ export {
     updateTableHeaders,
     floatingHeader,
     blockUI,
+    alert,
     unblockUI,
     toastOptions,
     axiosError,
     reorder,
     floatThead,
     initDatepicker
+    initFromDateOnChange
 };
