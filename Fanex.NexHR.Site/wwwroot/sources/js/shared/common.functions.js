@@ -295,6 +295,6 @@ export {
     axiosError,
     reorder,
     floatThead,
-    initDatepicker
+    initDatepicker,
     initFromDateOnChange
 };
