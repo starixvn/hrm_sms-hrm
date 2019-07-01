@@ -32,19 +32,19 @@ function initTooltip() {
         bodyHandler: function () {
             var object = $(this);
             var result = getMessageDetail(
-            object.attr('data-requesttype'),
-            object.attr('data-fromdate'),
-            object.attr('data-todate'),
-            object.attr('data-fromtime'),
-            object.attr('data-totime'),
-            object.attr('data-createddate'),
-            object.attr('data-fromshift'),
-            object.attr('data-toshift'),
-            object.attr('data-totaldays'),
-            object.attr('data-totalmins'),
-            object.attr('data-ottype'),
-            object.attr('data-isothours'),
-            object.attr('data-actualLateInEarlyOut'));
+                object.attr('data-requesttype'),
+                object.attr('data-fromdate'),
+                object.attr('data-todate'),
+                object.attr('data-fromtime'),
+                object.attr('data-totime'),
+                object.attr('data-createddate'),
+                object.attr('data-fromshift'),
+                object.attr('data-toshift'),
+                object.attr('data-totaldays'),
+                object.attr('data-totalmins'),
+                object.attr('data-ottype'),
+                object.attr('data-isothours'),
+                object.attr('data-actualLateInEarlyOut'));
             return "<div class='tooltip'>" + "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
@@ -89,6 +89,11 @@ function query() {
 $(document).ready(function () {
     $('form.form-filter #group').multiselect();
     $('#FromDate, #ToDate').attr('readonly', 'readonly');
+
+    $('#FromDate').on("change", function () {
+        var value = $(this).val();
+        $('#ToDate').val(value);
+    });
 
     $('form.form-filter #group').on('change', function () {
         var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';

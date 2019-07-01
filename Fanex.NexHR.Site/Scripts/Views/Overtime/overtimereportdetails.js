@@ -51,5 +51,10 @@
         $("#btnExcel").click(function () {
             window.location.href = _global.root + "ExportOvertime/OvertimeReport?" + $('form.form-filter').serialize();
         });
+
+        $("#fromDate").on("change", function () {
+            var value = $(this).val();
+            $("#toDate").val(value);
+        });
     });
 })();

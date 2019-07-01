@@ -32,15 +32,15 @@
         showMessage('Processing');
 
         $.post(_global.root + 'time/ProcessInOut',
-        { inoutType: inoutType, recordTimeId: recordTimeId },
-        function (response) {
-            if (response.IsSuccessful) {
-                query();
-            } else {
-                alert(response.Message);
-                return;
-            }
-        });
+            { inoutType: inoutType, recordTimeId: recordTimeId },
+            function (response) {
+                if (response.IsSuccessful) {
+                    query();
+                } else {
+                    alert(response.Message);
+                    return;
+                }
+            });
         fadeOutMessage();
     }
 
@@ -48,20 +48,20 @@
         $(element).contextMenu({
             menu: menu
         },
-        function (command, eventElement) {
-            switch (command) {
-                case 'in':
-                    confirm('Are you sure you change to in?', function () {
-                        processInOut(0, eventElement);
-                    });
-                    break;
-                case 'out':
-                    confirm('Are you sure you change to out?', function () {
-                        processInOut(1, eventElement);
-                    });
-                    break;
-            }
-        });
+            function (command, eventElement) {
+                switch (command) {
+                    case 'in':
+                        confirm('Are you sure you change to in?', function () {
+                            processInOut(0, eventElement);
+                        });
+                        break;
+                    case 'out':
+                        confirm('Are you sure you change to out?', function () {
+                            processInOut(1, eventElement);
+                        });
+                        break;
+                }
+            });
     }
 
     function query() {
@@ -95,6 +95,13 @@
         });
     }
 
+    function initFromDateOnChange() {
+        $('#FromDate').on("change", function () {
+            var value = $(this).val();
+            $('#ToDate').val(value);
+        });
+    }
+
     $(document).ready(function () {
         $('#TeamIds').multiselect();
 
@@ -117,5 +124,6 @@
         });
 
         query();
+        initFromDateOnChange();
     });
 })();

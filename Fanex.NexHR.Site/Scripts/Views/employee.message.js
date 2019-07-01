@@ -15,6 +15,11 @@ var init = function () {
 
         $('#IsDisabled').val(value);
     });
+
+    $('#FromDate').on("change", function () {
+        var fromDate = $(this).val();
+        $('#ToDate').val(fromDate);
+    });
 };
 
 var deleteMessage = function (messageId) {

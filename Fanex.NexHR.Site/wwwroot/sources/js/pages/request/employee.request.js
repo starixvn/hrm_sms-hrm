@@ -5,7 +5,7 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 
-import { floatingHeader, showMessage, fadeOutMessage, confirm } from '../../shared/common.functions';
+import { floatingHeader, showMessage, fadeOutMessage, confirm, initFromDateOnChange } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/employee.search.in.team';
 import './date.filter.new';
@@ -339,6 +339,8 @@ $(function () {
                 });
             });
         });
+
+        initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
         $('form').submit(function (e) {
             e.preventDefault();

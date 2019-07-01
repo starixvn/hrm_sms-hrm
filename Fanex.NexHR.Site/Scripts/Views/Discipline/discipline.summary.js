@@ -128,6 +128,13 @@
         });
     }
 
+    function initEventOnChangeFromDate() {
+        $('#FromDate').on("change", function () {
+            var fromDate = $(this).val();
+            $('#ToDate').val(fromDate);
+        });
+    }
+
     function initAddOtherDisciplineDialog() {
         initAutocomplete($dialogAddOtherDiscipline);
         initDatePicker($dialogAddOtherDiscipline);
@@ -329,10 +336,10 @@
 
     function formatDate(date) {
         var monthNames = [
-          "Jan", "Feb", "Mar",
-          "Apr", "May", "Jun", "Jul",
-          "Aug", "Sep", "Oct",
-          "Nov", "Dec"
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sep", "Oct",
+            "Nov", "Dec"
         ];
 
         var day = date.getDate();
@@ -363,6 +370,7 @@
 
         initEventForTeamDropdown();
         initEventForDateRangeDropdown();
+        initEventOnChangeFromDate();
 
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');
@@ -380,7 +388,7 @@
 
         floatThead("table#data");
         initEventAddOtherDiscipline();
-        initEventAddWeekendLeave();
+        //initEventAddWeekendLeave();
         query();
     });
 })();

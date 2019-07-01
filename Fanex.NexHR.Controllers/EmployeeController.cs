@@ -92,6 +92,7 @@
                     TotalItem = (int)criteria.TotalRow
                 };
                 ViewBag.PagerOption = pagerOption;
+                ViewBag.IsShowJobtitle = roleService.GetRolesByUserId(sessionService.Employee.Id).Any(r => r.Code == RoleSystem.HR.ToString() || r.Code == RoleSystem.SystemAdmin.ToString());
             }
 
             return PartialView("_ContactList", employees);

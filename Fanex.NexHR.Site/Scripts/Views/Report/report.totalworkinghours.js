@@ -18,4 +18,8 @@ $(document).ready(function () {
         location.href = url;
     });
 
+    $("#FromDate").on("change", function () {
+        var value = $(this).val();
+        $("#ToDate").val(value);
+    });
 });
