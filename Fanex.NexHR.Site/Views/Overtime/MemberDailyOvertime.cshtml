@@ -6,7 +6,7 @@
     var currentUserId = ViewBag.CurrentUserId != null ? (int)ViewBag.CurrentUserId : 0;
     if (Model != null)
     {
-        ViewBag.Title = Labels.MemberOvertime + " of " + Model.Employee.NickName + " (" + (Model.RequestedDate).ToString("MMM-yyyy") + ")";
+        ViewBag.Title = Labels.MemberOvertime + " of " + Model.Employee.NickName + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
         modifier = Model.VerifiedBy == null ? string.Empty : Model.VerifiedBy.DisplayName;
         approver = Model.ApprovedBy == null ? string.Empty : Model.ApprovedBy.DisplayName;
     }
