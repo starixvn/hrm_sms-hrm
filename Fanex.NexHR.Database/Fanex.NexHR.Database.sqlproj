@@ -526,7 +526,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetWeekendLeave.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_UpdateWeekWorking.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_Update.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByCode.sql" />
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
