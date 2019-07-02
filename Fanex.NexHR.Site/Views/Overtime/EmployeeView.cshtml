@@ -1,180 +1,159 @@
-﻿@using System.Configuration;
-
-@model OvertimeReportViewModel
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Overtime
+@using Fanex.NexHR.ViewModels.Overtime
+@model EmployeeMonthlyOvertimeViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.MyOvertimeRequest;
 }
 @section css{
-    @Url.CombresLink("myovertimecss")
+    <link href="~/wwwroot/dist/styles/overtime.myrequest.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("myovertimerequestjs")
+    <script src="~/wwwroot/dist/js/overtime.myrequest.js"></script>
 }
 @section Breadcrumb {
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
+<h2 class="page-title">@ViewBag.Title</h2>
+@using (Html.BeginForm("EmployeeView", "overtime", FormMethod.Get, new { @class = "filter" }))
 {
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            <label for="Year">@Labels.Year</label>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.YearPicker("Year", 2010, Model.Year)
+            </div>
         </div>
-        <div class="grid_2">
-            @Html.YearPicker("Year", 2010, Model.Year)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
         </div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.Employee)
-        </div>
-        <div class="grid_7">
-            @Html.EditorFor(model => model.Employee)
-            @Html.HiddenFor(model => model.EmpId)
-        </div>
-        <div class="grid_2">
-            <input type="submit" name="submit" value="@Labels.Submit" class="button-primary button" />
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
         </div>
     </div>
-
-    <div class="clear">
-    </div>
-    <table class="table table-custom" id="data">
-        <thead>
-            <tr>
-                <th>@Labels.Month</th>
-                <th>@Labels.TotalHours</th>
-                <th>@Labels.NormalDay</th>
-                <th>@Labels.OffDay</th>
-                <th>@Labels.PublicHoliday</th>
-                <th>@Labels.Verifier</th>
-                <th>@Labels.VerifiedDate</th>
-                <th>@Labels.Approver</th>
-                <th>@Labels.ApprovedDate</th>
-                <th>@Labels.Status</th>
-                <th>@Labels.Details</th>
-                <th>@Labels.Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null)
-            {
-                foreach (var request in Model.TotalRequest)
-                {
-                    <tr id="row@(request.Id)">
-                        <td>
-                            @request.RequestedDate.ToString("MMM-yyyy")
-                        </td>
-                        <td class="sumtotal">
-                            @if (request.ToTalHours > 0)
-                            {
-                                @request.ToTalHours
-                            }
-                        </td>
-                        <td class="sumnormal">
-                            @if (request.NormalHours > 0)
-                            {
-                                @request.NormalHours
-                            }
-                        </td>
-                        <td class="sumoff">
-                            @if (request.OffHours > 0)
-                            {
-                                @request.OffHours
-                            }
-                        </td>
-                        <td class="sumpublic">
-                            @if (request.PublicHours > 0)
-                            {
-                                @request.PublicHours
-                            }
-                        </td>
-                        <td>
-                            @if (request.VerifiedBy != null)
-                            {
-                                @request.VerifiedBy.NickName
-                            }
-                        </td>
-                        <td>
-                            @if (request.VerifiedDate != null)
-                            {
-                                @request.VerifiedDate.Value.ToShortFormatedDate()
-                            }
-                        </td>
-                        <td>
-                            @if (request.ApprovedBy != null)
-                            {
-                                @request.ApprovedBy.NickName
-                            }
-                        </td>
-                        <td>
-                            @if (request.ApprovedDate != null)
-                            {
-                                @request.ApprovedDate.Value.ToShortFormatedDate()
-                            }
-                        </td>
-                        <td>
-                            <span>@request.Status</span>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("ViewDetail", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
-                                View
-                            </a>
-                        </td>
-                        <td>
-                            @{
-                                var currentDate = DateTime.Now.Date;
-                                var requestDate = request.RequestedDate.Date;
-                                var requestDatePreviousOneMonth = requestDate.AddMonths(-1).Date;
-                                var canEditFrom = new DateTime();
-                                if (requestDate.Month == 1)
-                                {
-                                    canEditFrom = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
-                                }
-                                else
-                                {
-                                    canEditFrom = new DateTime(requestDate.Year, requestDate.AddMonths(-1).Month, 10);
-                                }
-                                var OvertimeClaimDate = Convert.ToInt32(ConfigurationManager.AppSettings["OvertimeClaimDate"]);
-                                var canEditTo = new DateTime(requestDate.Year, requestDate.Month, OvertimeClaimDate);
-
-                                if (request.Status == null || (int)(request.Status.Id) == 1)
-                                {
-                                    <a href="@Url.Action("Update", "Overtime", new { requestDate = request.RequestedDate, empId = request.Requester.Id })">
-                                        <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span>-</span>
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-
-            }
-            else
-            {
-                @RazorHelper.DisplayNoInformation(colspan: 12);
-            }
-        </tbody>
-        <tfoot>
-            <tr class="summary">
-                <td class="sumhours align-right">
-                    @Labels.TotalOvertimeHours:
-                </td>
-                <td id="sumtotal"></td>
-                <td id="sumnormal">@Model.TotalRequest.Sum(t => t.NormalHours).ToString("0.00")</td>
-                <td id="sumoff">@Model.TotalRequest.Sum(t => t.OffHours).ToString("0.00")</td>
-                <td id="sumpublic">@Model.TotalRequest.Sum(t => t.PublicHours).ToString("0.00")</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tfoot>
-    </table>
 }
-@RazorHelper.EmployeeProcessMenu()
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Month</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.VerifiedDate</th>
+            <th>@Labels.Approver</th>
+            <th>@Labels.ApprovedDate</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.Details</th>
+            <th>@Labels.Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (MonthlyOvertimeRequest request in Model.OvertimeRequests)
+            {
+                <tr id="row@(request.RequestId)">
+                    <td>
+                        @request.Month.ToString("MMM-yyyy")
+                    </td>
+                    <td class="sumtotal">
+                        @if (request.TotalHours > 0)
+                        {
+                            @request.TotalHours
+                        }
+                    </td>
+                    <td class="sumnormal">
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td class="sumoff">
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td class="sumpublic">
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.Verifier != null)
+                        {
+                            @request.Verifier.Nickname
+                        }
+                    </td>
+                    <td>
+                        @if (request.VerifiedDate.HasValue)
+                        {
+                            @request.VerifiedDate.Value.ToShortFormatedDate()
+                        }
+                    </td>
+                    <td>
+                        @if (request.Approver != null)
+                        {
+                            @request.Approver.Nickname
+                        }
+                    </td>
+                    <td>
+                        @if (request.ApprovedDate.HasValue)
+                        {
+                            @request.ApprovedDate.Value.ToShortFormatedDate()
+                        }
+                    </td>
+                    <td>
+                        <span>@request.Status</span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ViewDetail", "Overtime", new { requestDate = request.Month, empId = Model.EmployeeId })">
+                            View
+                        </a>
+                    </td>
+                    <td>
+                        @if (request.Status == null || request.Status.Id == (byte)CurrentRequestStatus.Pending)
+                        {
+                            <a href="@Url.Action("Update", "Overtime", new { requestDate = request.Month, empId = Model.EmployeeId })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                </tr>
+            }
+
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 12);
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td class="sumhours align-right">
+                @Labels.TotalOvertimeHours:
+            </td>
+            <td id="sumtotal"></td>
+            <td id="sumnormal">@Model.OvertimeRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td id="sumoff">@Model.OvertimeRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td id="sumpublic">@Model.OvertimeRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td colspan="7"></td>
+        </tr>
+    </tfoot>
+</table>

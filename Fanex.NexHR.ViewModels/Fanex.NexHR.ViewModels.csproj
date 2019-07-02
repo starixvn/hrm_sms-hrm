@@ -120,7 +120,7 @@
     <Compile Include="Overtime\MyOverTimeViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Overtime\OvertimeAnnualReportViewModel.cs" />
-    <Compile Include="Overtime\OvertimeReportViewModel.cs" />
+    <Compile Include="Overtime\EmployeeMonthlyOvertimeViewModel.cs" />
     <Compile Include="Overtime\MemberOvertimeDailyViewModel.cs" />
     <Compile Include="Overtime\MemberOvertimeViewModel.cs" />
     <Compile Include="Request\RequestViewModel.cs" />

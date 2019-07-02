@@ -7,6 +7,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
 
     public class OvertimeRequestRepository : IOvertimeRequestRepository
@@ -77,23 +78,20 @@
             }
         }
 
-        public IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria)
+        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyOvertimeRequestByEmployeeId(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestTypeModel, RequestStatus, RequestEntity>(
-                    (re, reter, gr, ver, appr, rety, stt) =>
+                return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, MonthlyOvertimeRequest>(
+                    (re, stt, verifier, approver) =>
                     {
-                        reter.Team = gr;
-                        re.Requester = reter;
-                        re.VerifiedBy = ver;
-                        re.ApprovedBy = appr;
-                        re.RequestType = rety;
                         re.Status = stt;
+                        re.Verifier = verifier;
+                        re.Approver = approver;
                         return re;
                     },
-                    "RequesterID,GroupId,VerifierID,ApproverID,RequestTypeId,StatusId",
-                    criteria.GetSpParams()).ToList();
+                    "StatusId, VerifierId, ApproverId",
+                    criteria.GetSpParams());
             }
         }
 

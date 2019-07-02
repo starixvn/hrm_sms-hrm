@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
 
     public interface IOvertimeRequestRepository
@@ -13,7 +14,7 @@
 
         OvertimeRequest GetOvertimeDailyReport(ICriteria criteria);
 
-        IList<RequestEntity> GetOvertimeReportInYear(ICriteria criteria);
+        IEnumerable<MonthlyOvertimeRequest> GetMonthlyOvertimeRequestByEmployeeId(ICriteria criteria);
 
         IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria);
 

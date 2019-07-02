@@ -180,7 +180,7 @@
     <Build Include="dbo\Stored Procedures\EmployeeGroup_Get.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenusByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_7.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByEmpId.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Role_GetRolesByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_6.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByHR.sql" />

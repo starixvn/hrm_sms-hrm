@@ -120,9 +120,11 @@
     <Compile Include="Message\GetMessageByEmployeeParam.cs" />
     <Compile Include="Message\Message.cs" />
     <Compile Include="Dashboard\SummaryRequest.cs" />
+    <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
+    <Compile Include="Overtime\Requester.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />
     <Compile Include="Report\ManpowerModel.cs" />
     <Compile Include="Report\MonthlyWorkingHours\DailyWorking.cs" />

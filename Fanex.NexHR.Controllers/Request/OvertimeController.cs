@@ -19,6 +19,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
 
     public class OvertimeController : BaseController
@@ -48,30 +49,11 @@
         }
 
         [HttpGet]
-        public ActionResult EmployeeView()
+        public ActionResult EmployeeView(EmployeeMonthlyOvertimeViewModel model)
         {
-            var model = new OvertimeReportViewModel
-            {
-                Employee = sessionService.Employee.Nickname,
-                EmpId = sessionService.Employee.Id,
-                Year = DateTime.Now.Year
-            };
-            return EmployeeView(model);
-        }
-
-        [HttpPost]
-        public ActionResult EmployeeView(OvertimeReportViewModel model)
-        {
-            if (model != null)
-            {
-                var criteria = new GetOvertimeReportInYearCriteria
-                {
-                    EmployeeId = model.EmpId,
-                    Year = model.Year
-                };
-                IList<RequestEntity> entityList = overtimeService.GetOvertimeReportInYear(criteria);
-                model.TotalRequest = entityList;
-            }
+            model.Employee = model.Employee ?? sessionService.Employee.Nickname;
+            model.EmployeeId = model.EmployeeId <= 0 ? sessionService.Employee.Id : model.EmployeeId;
+            model.OvertimeRequests = overtimeService.GetMonthlyOvertimeRequestByEmployeeId(model.EmployeeId, model.Year);
 
             return View(model);
         }

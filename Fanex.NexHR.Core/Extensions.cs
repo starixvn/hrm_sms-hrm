@@ -115,7 +115,12 @@
             return date;
         }
 
-        public static MvcHtmlString YearPicker(this HtmlHelper htmlHelper, string name, int fromYear = 2000, int currentYear = 2000, bool isShowAll = false)
+        public static MvcHtmlString YearPicker(
+            this HtmlHelper htmlHelper,
+            string name,
+            int fromYear = 2000,
+            int currentYear = 2000,
+            bool isShowAll = false)
         {
             var list = new List<SelectListItem>();
             var toYear = DateTime.Now.GetMaxDate().Year;

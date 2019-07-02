@@ -269,6 +269,7 @@
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -997,6 +998,7 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
