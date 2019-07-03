@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -47,7 +46,7 @@
                 ReasonId = (byte)LateInEarlyOutReasons.Other,
                 RequestType = (isLateIn.HasValue && !isLateIn.Value) ? (int)RequestType.EarlyOut : (int)RequestType.LateIn,
                 UnavailDates = GetUnavailDate(sessionService.Employee.Id),
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
+                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn),
             };
 
             return View(viewModel);
@@ -59,7 +58,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.LateIn);
                 model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
@@ -120,7 +119,7 @@
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
                 UnavailDates = GetUnavailDate(sessionService.Employee.Id),
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn)
             };
 
             return View(viewModel);
@@ -132,7 +131,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.LateIn);
                 model.UnavailDates = GetUnavailDate(model.EmployeeId);
 
                 if (ModelState.IsValid)
@@ -237,17 +236,6 @@
             };
             var unavailDates = employeeService.GetUnavailableDates(criteria);
             return unavailDates;
-        }
-
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
-        {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.LateIn
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
-            return supervisor;
         }
 
         private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)

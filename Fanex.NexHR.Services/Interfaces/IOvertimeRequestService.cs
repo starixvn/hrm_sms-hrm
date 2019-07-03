@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Models;
@@ -17,7 +18,9 @@
 
         IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
 
-        IEnumerable<MonthlyOvertimeRequest> GetMonthlyOvertimeRequestByEmployeeId(int employeeId, int year);
+        IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year);
+
+        MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
 
         IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
 

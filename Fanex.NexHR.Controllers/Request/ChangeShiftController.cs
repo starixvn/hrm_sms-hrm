@@ -261,12 +261,7 @@
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, RequestEntity request = null)
         {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.ChangeShift
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.ChangeShift);
 
             if (request != null)
             {

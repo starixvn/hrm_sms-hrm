@@ -119,7 +119,7 @@
                         <span>@request.Status</span>
                     </td>
                     <td>
-                        <a href="@Url.Action("ViewDetail", "Overtime", new { requestDate = request.Month, empId = Model.EmployeeId })">
+                        <a href="@Url.Action("Details", "Overtime", new { employeeId = Model.EmployeeId, month = request.Month })">
                             View
                         </a>
                     </td>

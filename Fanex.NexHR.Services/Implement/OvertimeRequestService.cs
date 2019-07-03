@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
@@ -68,16 +69,28 @@
             return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
-        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyOvertimeRequestByEmployeeId(int employeeId, int year)
+        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
         {
             var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
             {
                 EmployeeId = employeeId,
                 Year = year
             };
-            IEnumerable<MonthlyOvertimeRequest> overtimeRequests = overtimeRepository.GetMonthlyOvertimeRequestByEmployeeId(criteria);
+            IEnumerable<MonthlyOvertimeRequest> overtimeRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
             return overtimeRequests;
+        }
+
+        public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
+        {
+            var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
+            {
+                EmployeeId = employeeId,
+                Month = month
+            };
+            MonthlyOvertimeRequest overtimeRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+            return overtimeRequest ?? new MonthlyOvertimeRequest();
         }
 
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)

@@ -3,6 +3,10 @@
     padding-top: 4px;
     padding-bottom: 4px;
 
+    &.btn-default {
+        background-color: #e6e6e6;
+    }
+
     &.btn-excel {
         background: #549f3b;
         color: #fff;

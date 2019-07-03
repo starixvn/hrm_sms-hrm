@@ -996,9 +996,11 @@
     <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js.map" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js.map" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
+    <Content Include="Views\Overtime\Details.cshtml" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\details.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1141,7 +1143,6 @@
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
     <Content Include="Views\Account\ChangePwd.cshtml" />
-    <Content Include="Views\Overtime\ViewDetail.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
     <Content Include="Views\Overtime\Update.cshtml" />
     <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />

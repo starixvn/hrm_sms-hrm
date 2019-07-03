@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -17,7 +18,7 @@
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
-        VerifierAndApproverForRequest GetVerifierAndApprover(GetVerifierAndApproverCriteria criteria);
+        VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);
 
         RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria);
 

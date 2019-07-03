@@ -94,6 +94,11 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="Overtime_GetMonthlyRequestDetailsByEmpId" SpName="Overtime_GetMonthlyRequestDetailsByEmpId" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+    </Setting>
     <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">

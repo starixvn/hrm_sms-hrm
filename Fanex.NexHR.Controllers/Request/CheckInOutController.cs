@@ -6,10 +6,8 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
 
@@ -68,7 +66,7 @@
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
                 RequestTypeId = (isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn)
             };
 
             Shift shift = GetShiftByDate(DateTime.Now);
@@ -84,7 +82,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.CheckIn);
 
                 if (ModelState.IsValid)
                 {
@@ -125,7 +123,7 @@
             {
                 RequestId = id
             };
-            
+
             var request = checkInOutRequestService.GetById(criteria);
             if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
             {
@@ -150,7 +148,7 @@
                     RefNO = request.RefNO,
                     AttendantDate = request.OnDate,
                     Remark = request.Remark,
-                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                    VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn)
                 };
 
                 return View(viewModel);
@@ -163,7 +161,7 @@
             if (model != null)
             {
                 CheckIsTopManager(model);
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.CheckIn);
 
                 if (ModelState.IsValid)
                 {
@@ -221,17 +219,6 @@
             };
             var requests = checkInOutRequestService.GetHistoryById(criteria);
             return View(requests);
-        }
-
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
-        {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.CheckIn
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
-            return supervisor;
         }
 
         private Shift GetShiftByDate(DateTime date)

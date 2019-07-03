@@ -1,0 +1,115 @@
+﻿@using Fanex.NexHR.Models.Overtime
+@model MonthlyOvertimeRequest
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.MyOvertimeRequest + " in " + Model.Month.ToString("MMM-yyyy");
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/overtime.details.css" rel="stylesheet" />
+}
+@section js{
+}
+@section Breadcrumb {
+    <a class="step">Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>
+    <a class="step">@Labels.Details</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="header-control">
+    <div><strong>@Labels.Status</strong>: @Model.Status</div>
+    <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+</div>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Schedule</th>
+            <th>@Labels.TimeIn</th>
+            <th>@Labels.TimeOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DailyOvertimes.Any())
+        {
+            foreach (DailyOvertimeRequest request in Model.DailyOvertimes)
+            {
+                <tr>
+                    @{
+                        var className = string.Empty;
+                        if (request.IsHoliday)
+                        {
+                            className = "holiday";
+                        }
+                        else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                        {
+                            className = "weekend";
+                        }
+                    }
+                    <td class="@className">
+                        @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
+                    </td>
+                    <td>@request.Shift</td>
+                    <td>@request.TimeIn</td>
+                    <td>@request.TimeOut</td>
+                    <td class="totalHours">
+                        @if (request.TotalWorkHours > 0)
+                        {
+                            @request.TotalWorkHours
+                        }
+                    </td>
+                    <td class="sumnormal">
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td class="sumoff">
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td class="sumpublic">
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @request.Remark
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 11)
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td class="sumhours align-right">
+                @Labels.TotalOvertimeHours:
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="sumnormal">
+                @Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")
+            </td>
+            <td id="sumoff">
+                @Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")
+            </td>
+            <td id="sumpublic">
+                @Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")
+            </td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

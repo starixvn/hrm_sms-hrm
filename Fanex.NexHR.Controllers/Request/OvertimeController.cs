@@ -12,9 +12,9 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Overtime;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
@@ -53,30 +53,23 @@
         {
             model.Employee = model.Employee ?? sessionService.Employee.Nickname;
             model.EmployeeId = model.EmployeeId <= 0 ? sessionService.Employee.Id : model.EmployeeId;
-            model.OvertimeRequests = overtimeService.GetMonthlyOvertimeRequestByEmployeeId(model.EmployeeId, model.Year);
+            model.OvertimeRequests = overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
             return View(model);
         }
 
-        public ActionResult ViewDetail(DateTime requestDate, int empId)
+        public ActionResult Details(int employeeId, DateTime month)
         {
-            var criteria = new GetOvertimeRequestByMonthCriteria
-            {
-                EmpId = empId,
-                Month = requestDate
-            };
+            MonthlyOvertimeRequest overtimeRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
 
-            OvertimeRequest overtime = overtimeService.GetOvertimeRequestByMonth(criteria);
-            var model = new MyOverTimeViewModel
-            {
-                OvertimeRequest = overtime.OvertimeDaily,
-                EmpId = empId,
-                Month = requestDate,
-                Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus),
-                Employee = overtime.Employee.DisplayName
-            };
+            return View(overtimeRequest);
+        }
 
-            return View(model);
+        public ActionResult Edit(int employeeId, DateTime month)
+        {
+            MonthlyOvertimeRequest overtimeRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
+
+            return View(overtimeRequest);
         }
 
         public ActionResult Update(DateTime requestDate, int empId)
@@ -98,7 +91,7 @@
                 model.Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus);
                 model.Employee = overtime.Employee.DisplayName;
                 model.Month = requestDate;
-                model.VerifierAndApprover = GetVerifierApprover(empId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(empId, RequestType.Overtime);
 
                 ViewBag.WorkingHours = overtime.Employee.WorkingHours;
             }
@@ -432,17 +425,6 @@
             };
 
             return memberOvertimeViewModel;
-        }
-
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
-        {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.Overtime
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
-            return supervisor;
         }
     }
 }

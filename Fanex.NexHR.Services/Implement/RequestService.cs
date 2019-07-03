@@ -134,15 +134,14 @@
             return histories;
         }
 
-        public VerifierAndApproverForRequest GetVerifierAndApprover(GetVerifierAndApproverCriteria criteria)
+        public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType)
         {
-            VerifierAndApproverForRequest supervisor = new VerifierAndApproverForRequest();
-
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetVerifierAndApproverCriteria
             {
-                supervisor = requestRepository.GetVerifierAndApprover(criteria);
-            }
-
+                EmpId = employeeId,
+                RequestType = (byte)requestType
+            };
+            VerifierAndApproverForRequest supervisor = requestRepository.GetVerifierAndApprover(criteria);
             return supervisor;
         }
 
@@ -260,7 +259,6 @@
 
             return messageDetail;
         }
-
 
         private static string GetMessageForKeepInViewByDay(RequestEntity request, bool isNoFormat)
         {

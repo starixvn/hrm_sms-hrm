@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
@@ -38,7 +37,7 @@
                 EmployeeId = sessionService.Employee.Id,
                 Date = DateTime.Now.Date,
                 KeepInViewType = (int)KeepInViewTypes.KeepInViewByDay,
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView)
             };
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -51,7 +50,7 @@
         {
             if (model != null)
             {
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.KeepInView);
                 var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
                 var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
 
@@ -62,10 +61,10 @@
                         EmpId = model.EmployeeId,
                         OnDate = model.Date,
                         KeepInViewType = model.KeepInViewType,
-                        IsHalfDay = model.HalfDay, 
+                        IsHalfDay = model.HalfDay,
                         RefNo = model.RefNo,
                         Remark = model.Remark,
-                        FromTime = (fromTime < toTime && model.CrossDay) 
+                        FromTime = (fromTime < toTime && model.CrossDay)
                             ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
                             : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
                         ToTime = model.CrossDay
@@ -123,7 +122,7 @@
                     CrossDay = (request.ToTime - request.OnDate).Days > 0,
                     FromTime = request.FromTime.ToString("HH:mm"),
                     ToTime = request.ToTime.ToString("HH:mm"),
-                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                    VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView)
                 };
                 ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                     || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -137,7 +136,7 @@
         {
             if (model != null)
             {
-                model.VerifierAndApprover = GetVerifierApprover(model.EmployeeId);
+                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.KeepInView);
 
                 if (ModelState.IsValid)
                 {
@@ -221,17 +220,6 @@
             };
             var requests = keepInViewRequestService.GetHistoryById(criteria);
             return View(requests);
-        }
-
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId)
-        {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.KeepInView
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
-            return supervisor;
         }
     }
 }

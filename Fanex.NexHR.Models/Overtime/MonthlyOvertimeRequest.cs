@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Overtime
 {
     using System;
+    using System.Collections.Generic;
     using Fanex.NexHR.Models.Request;
 
     public class MonthlyOvertimeRequest
@@ -17,5 +18,7 @@
         public RequestStatus Status { get; set; }
         public DateTime? VerifiedDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
+
+        public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
     }
 }

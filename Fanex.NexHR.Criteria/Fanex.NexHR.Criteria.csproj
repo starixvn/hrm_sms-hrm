@@ -129,6 +129,7 @@
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />
     <Compile Include="Overtime\GetMemberOvertimeByLeaderCriteria.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria.cs" />
     <Compile Include="Paternity\DeletePaternityCriteria.cs" />
     <Compile Include="Paternity\UpdatePaternityCriteria.cs" />
     <Compile Include="Paternity\GetPaternityByIdCriteria.cs" />

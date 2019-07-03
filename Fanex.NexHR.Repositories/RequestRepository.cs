@@ -101,9 +101,11 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    supervisor = new VerifierAndApproverForRequest();
-                    supervisor.Verifiers = multi.Read<SupervisorNameModel>().ToList();
-                    supervisor.Approvers = multi.Read<SupervisorNameModel>().ToList();
+                    supervisor = new VerifierAndApproverForRequest
+                    {
+                        Verifiers = multi.Read<SupervisorNameModel>().ToList(),
+                        Approvers = multi.Read<SupervisorNameModel>().ToList()
+                    };
                 }
             }
 

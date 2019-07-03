@@ -78,7 +78,7 @@
             }
         }
 
-        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyOvertimeRequestByEmployeeId(ICriteria criteria)
+        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
@@ -92,6 +92,33 @@
                     },
                     "StatusId, VerifierId, ApproverId",
                     criteria.GetSpParams());
+            }
+        }
+
+        public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria)
+        {
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                using (GridReader multi = db.QueryMultiple(criteria))
+                {
+                    var overtimeRequest = multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
+                    (re, stt, requester, verifier, approver) =>
+                    {
+                        re.Requester = requester;
+                        re.Status = stt;
+                        re.Verifier = verifier;
+                        re.Approver = approver;
+                        return re;
+                    },
+                    "StatusId, EmployeeId, VerifierId, ApproverId").FirstOrDefault();
+
+                    if (overtimeRequest != null)
+                    {
+                        overtimeRequest.DailyOvertimes = multi.Read<DailyOvertimeRequest>();
+                    }
+
+                    return overtimeRequest;
+                }
             }
         }
 

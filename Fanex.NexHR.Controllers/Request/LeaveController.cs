@@ -355,12 +355,7 @@
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, LeaveModel request = null)
         {
-            var criteria = new GetVerifierAndApproverCriteria
-            {
-                EmpId = employeeId,
-                RequestType = (byte)RequestType.Leave
-            };
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(criteria);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.Leave);
 
             if (request != null)
             {
