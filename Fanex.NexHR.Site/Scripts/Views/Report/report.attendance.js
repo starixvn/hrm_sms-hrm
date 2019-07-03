@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 /*global _global, floatThead, _messages, dontBlock:true*/
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
@@ -45,14 +46,32 @@ function initTooltip() {
                 object.attr('data-ottype'),
                 object.attr('data-isothours'),
                 object.attr('data-actualLateInEarlyOut'));
+            var status = "";
+            switch (parseInt(object.attr('data-currentStatus'))) {
+                case 1:
+                    status = "Pending";
+                    break;
+                case 2:
+                    status = "Verified";
+                    break;
+                case 4:
+                    status = "Approved";
+                    break;
+                case 6:
+                    status = "Processed";
+                    break;
+                default:
+                    status = "Approved";
+            }
             return "<div class='tooltip'>" + "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
                 "<td class='col2'>" + result +
                 "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
                 object.attr('data-createddate') +
-                "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
-                object.attr('data-remark') + "</td></tr></table></div>";
+                "</td></tr><tr  class='hasborder'><td class='col1'>Remark</td><td class='col2'>" +
+                object.attr('data-remark') + "</td></tr>" +
+                "</td></tr><tr><td class='col1'>Status</td><td class='col2'>" + status + "</td></table ></div>";
         }
     });
 

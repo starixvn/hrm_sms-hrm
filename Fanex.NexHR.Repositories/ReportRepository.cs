@@ -231,7 +231,8 @@
                 LeaveType = FillLeaveType(t),
                 FromShift = t.FromShift,
                 ToShift = t.ToShift,
-                TotalMins = t.Time
+                TotalMins = t.Time,
+                CurrentStatus = t.CurrentStatus
             };
             return request;
         }

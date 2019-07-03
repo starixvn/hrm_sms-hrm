@@ -17,6 +17,10 @@
         private const int RowStartBody = 3;
         private const int RowHighlight = 5;
         private const int RowOffdate = 6;
+        private const int ShiftCodeColumn = 6;
+        private const int AttendanceDateColumn = 1;
+        private const int RowWeekend = 7;
+
         private const string AttendanceTemplatePath = @"~\ExcelTemplates\AttendanceReportTemplate.xls";
 
         public void Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
@@ -54,24 +58,28 @@
         {
             object record = CreateRecordReport(attendance, rowIndex);
 
-            if (attendance.LateIn > 30 || attendance.EarlyOut > 30)
+            writer.WriteRow(rowIndex % 2 != 0 ? RowStartBody : RowStartBody + 1, record);
+
+            SetColorHighlightRow(attendance, ref writer, rowIndex);
+            rowIndex++;
+        }
+
+        private static void SetColorHighlightRow(EmployeeAttendanceModel attendance, ref ExcelTemplateWriter writer, int rowIndex)
+        {
+            if (attendance.IsOffdayOT)
             {
-                writer.WriteRow(RowHighlight, record);
-            }
-            else if (attendance.IsWeekend)
-            {
-                writer.WriteRow(RowOffdate, record);
-            }
-            else if (rowIndex % 2 != 0)
-            {
-                writer.WriteRow(RowStartBody, record);
-            }
-            else
-            {
-                writer.WriteRow(RowStartBody + 1, record);
+                writer.CopyCellStyle(RowHighlight, ShiftCodeColumn, rowIndex + RowStartHeader, ShiftCodeColumn);
             }
 
-            rowIndex++;
+            if (attendance.IsPublicHolidayOT)
+            {
+                writer.CopyCellStyle(RowOffdate, ShiftCodeColumn, rowIndex + RowStartHeader, ShiftCodeColumn);
+            }
+
+            if (attendance.IsWeekend)
+            {
+                writer.CopyCellStyle(RowWeekend, AttendanceDateColumn, rowIndex + RowStartHeader, AttendanceDateColumn);
+            }
         }
 
         private object CreateRecordReport(EmployeeAttendanceModel attendance, int rowIndex)
@@ -98,7 +106,8 @@
                 OutFixed = outFixed,
                 TotalWorkHours = totalWorkHours,
                 LateIn = Utilities.MinuteToTime(attendance.LateIn),
-                EarlyOut = Utilities.MinuteToTime(attendance.EarlyOut),
+                EarlyOut = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?
+                                string.Empty : Utilities.MinuteToTime(attendance.EarlyOut),
                 Remark = requests,
                 Overtime = overtime,
                 Notes = attendance.Notes

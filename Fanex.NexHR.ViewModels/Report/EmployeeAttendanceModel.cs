@@ -111,6 +111,22 @@
             }
         }
 
+        public bool IsOffdayOT
+        {
+            get
+            {
+                return IsOffDay == 1 && ShiftId != null;
+            }
+        }
+
+        public bool IsPublicHolidayOT
+        {
+            get
+            {
+                return IsPublicHoliday && ShiftId != null;
+            }
+        }
+
         public bool IsWeekend
         {
             get

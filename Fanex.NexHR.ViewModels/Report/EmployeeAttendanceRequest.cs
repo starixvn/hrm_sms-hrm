@@ -41,5 +41,7 @@
 
         // LateIn-EarlyOut
         public int? TotalMins { get; set; }
+
+        public int CurrentStatus { get; set; }
     }
 }
