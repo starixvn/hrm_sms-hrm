@@ -5,6 +5,8 @@
     using System.Linq;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Overtime;
@@ -76,9 +78,9 @@
                 EmployeeId = employeeId,
                 Year = year
             };
-            IEnumerable<MonthlyOvertimeRequest> overtimeRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
+            IEnumerable<MonthlyOvertimeRequest> monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
-            return overtimeRequests;
+            return monthlyRequests;
         }
 
         public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
@@ -88,9 +90,9 @@
                 EmployeeId = employeeId,
                 Month = month
             };
-            MonthlyOvertimeRequest overtimeRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
-            return overtimeRequest ?? new MonthlyOvertimeRequest();
+            return monthlyRequest ?? new MonthlyOvertimeRequest();
         }
 
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
@@ -216,6 +218,19 @@
             }
 
             return isInvalid;
+        }
+
+        public CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model)
+        {
+            var criteria = new EditMonthlyOvertimeRequestCriteria
+            {
+                ActorId = actorId,
+                EmployeeId = model.EmployeeId,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         private static bool CheckInvalidOvertimes(OvertimeDaily overtime)

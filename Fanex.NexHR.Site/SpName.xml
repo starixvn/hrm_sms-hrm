@@ -88,7 +88,7 @@
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_KeepInViewType" SpName="WorkingTimeRequest_GetRequestByCreateDate_KeepInViewType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType_xtest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetInOutMonthlyByEmpId" SpName="Overtime_GetInOutMonthlyByEmpId" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_SET_OTRequest" SpName="Overtime_SET_OTRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetMonthlyRequestByEmpId" SpName="Overtime_GetMonthlyRequestByEmpId" DbName="nexhrx" Plain="0">
       <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
       <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />

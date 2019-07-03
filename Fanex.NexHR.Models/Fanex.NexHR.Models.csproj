@@ -87,6 +87,7 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actor.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Message\Message.cs" />
     <Compile Include="Dashboard\SummaryRequest.cs" />
     <Compile Include="Overtime\DailyOvertimeRequest.cs" />
+    <Compile Include="Overtime\EditMonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />

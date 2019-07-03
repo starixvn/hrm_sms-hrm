@@ -101,7 +101,7 @@
             {
                 using (GridReader multi = db.QueryMultiple(criteria))
                 {
-                    var overtimeRequest = multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
+                    var monthlyRequest = multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
                     (re, stt, requester, verifier, approver) =>
                     {
                         re.Requester = requester;
@@ -112,12 +112,12 @@
                     },
                     "StatusId, EmployeeId, VerifierId, ApproverId").FirstOrDefault();
 
-                    if (overtimeRequest != null)
+                    if (monthlyRequest != null)
                     {
-                        overtimeRequest.DailyOvertimes = multi.Read<DailyOvertimeRequest>();
+                        monthlyRequest.DailyOvertimes = multi.Read<DailyOvertimeRequest>();
                     }
 
-                    return overtimeRequest;
+                    return monthlyRequest;
                 }
             }
         }

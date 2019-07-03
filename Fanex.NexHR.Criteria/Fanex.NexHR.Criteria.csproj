@@ -288,7 +288,7 @@
     <Compile Include="Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Overtime\ProcessMultipleOvertimeCriteria.cs" />
     <Compile Include="Overtime\ProcessSingleOvertimeCriteria.cs" />
-    <Compile Include="Overtime\UpdateOvertimeRequestCriteria.cs" />
+    <Compile Include="Overtime\EditMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Request\ProcessRequestCriteria.cs" />
     <Compile Include="Shift\DeleteShiftCriteria.cs" />
     <Compile Include="Shift\GetAllShiftCriteria.cs" />

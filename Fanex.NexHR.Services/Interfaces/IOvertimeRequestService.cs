@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
@@ -45,5 +46,7 @@
         IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 
         IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria);
+
+        CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
     }
 }

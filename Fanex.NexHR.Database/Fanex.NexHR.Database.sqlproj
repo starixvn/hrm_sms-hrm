@@ -203,7 +203,7 @@
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_ResetSingleRequest.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_SET_OTRequest.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_SET_OTSum.sql" />
     <Build Include="dbo\Stored Procedures\OverTimeRequest_ApproveSingleRequest.sql" />

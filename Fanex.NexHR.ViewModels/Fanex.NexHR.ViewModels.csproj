@@ -89,6 +89,7 @@
     <Compile Include="Employee\UserManagementViewModel.cs" />
     <Compile Include="Function\TreeFunctionViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
+    <Compile Include="Overtime\EditMonthlyRequestViewModel.cs" />
     <Compile Include="Overtime\OvertimeDetailReportViewModel.cs" />
     <Compile Include="Overtime\YearlyOvertimeReportViewModel.cs" />
     <Compile Include="PagerOptionModel.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="AnnualLeave\LeaveSummaryViewModel.cs" />
     <Compile Include="Employee\LoginViewModel.cs" />
     <Compile Include="Memo\MemoViewModel.cs" />
-    <Compile Include="Overtime\MyOverTimeViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Overtime\OvertimeAnnualReportViewModel.cs" />
     <Compile Include="Overtime\EmployeeMonthlyOvertimeViewModel.cs" />

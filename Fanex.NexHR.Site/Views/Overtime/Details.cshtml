@@ -53,36 +53,34 @@
                     <td class="@className">
                         @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
                     </td>
-                    <td>@request.Shift</td>
+                    <td>@request.ShiftCode</td>
                     <td>@request.TimeIn</td>
                     <td>@request.TimeOut</td>
-                    <td class="totalHours">
-                        @if (request.TotalWorkHours > 0)
+                    <td>
+                        @if (request.ActualWorkingHours > 0)
                         {
-                            @request.TotalWorkHours
+                            @request.ActualWorkingHours
                         }
                     </td>
-                    <td class="sumnormal">
+                    <td>
                         @if (request.NormalHours > 0)
                         {
                             @request.NormalHours
                         }
                     </td>
-                    <td class="sumoff">
+                    <td>
                         @if (request.OffHours > 0)
                         {
                             @request.OffHours
                         }
                     </td>
-                    <td class="sumpublic">
+                    <td>
                         @if (request.PublicHours > 0)
                         {
                             @request.PublicHours
                         }
                     </td>
-                    <td>
-                        @request.Remark
-                    </td>
+                    <td>@request.Remark</td>
                 </tr>
             }
         }

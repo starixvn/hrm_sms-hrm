@@ -126,7 +126,7 @@
                     <td>
                         @if (request.Status == null || request.Status.Id == (byte)CurrentRequestStatus.Pending)
                         {
-                            <a href="@Url.Action("Update", "Overtime", new { requestDate = request.Month, empId = Model.EmployeeId })">
+                            <a href="@Url.Action("Edit", "Overtime", new { employeeId = Model.EmployeeId, month = request.Month })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         }

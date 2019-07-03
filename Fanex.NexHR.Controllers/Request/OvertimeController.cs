@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
@@ -60,61 +59,33 @@
 
         public ActionResult Details(int employeeId, DateTime month)
         {
-            MonthlyOvertimeRequest overtimeRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
+            MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
 
-            return View(overtimeRequest);
+            return View(monthlyRequest);
         }
 
         public ActionResult Edit(int employeeId, DateTime month)
         {
-            MonthlyOvertimeRequest overtimeRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
+            MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.Overtime);
 
-            return View(overtimeRequest);
-        }
-
-        public ActionResult Update(DateTime requestDate, int empId)
-        {
-            MyOverTimeViewModel model = new MyOverTimeViewModel();
-            var criteria = new GetOvertimeRequestByMonthCriteria
+            var model = new EditMonthlyRequestViewModel
             {
-                EmpId = empId,
-                Month = requestDate
+                MonthlyRequest = monthlyRequest,
+                VerifierId = monthlyRequest.Verifier != null ? monthlyRequest.Verifier.EmployeeId : 0,
+                ApproverId = monthlyRequest.Approver != null ? monthlyRequest.Approver.EmployeeId : 0,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers,
             };
-
-            OvertimeRequest overtime = overtimeService.GetOvertimeRequestByMonth(criteria);
-            if (overtime != null)
-            {
-                model.OvertimeRequest = overtime.OvertimeDaily;
-                model.VerifierId = overtime.VerifiedBy != null ? overtime.VerifiedBy.Id : 0;
-                model.ApproverId = overtime.ApprovedBy != null ? overtime.ApprovedBy.Id : 0;
-                model.EmpId = empId;
-                model.Status = Utilities.GetCurrentStatusName(overtime.CurrentStatus);
-                model.Employee = overtime.Employee.DisplayName;
-                model.Month = requestDate;
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(empId, RequestType.Overtime);
-
-                ViewBag.WorkingHours = overtime.Employee.WorkingHours;
-            }
 
             return View(model);
         }
 
         [HttpPost]
-        public JsonResult Update(string overtimeJson, string overtimeDetailsJson)
+        public CustomJsonResult Edit(EditMonthlyOvertimeRequest model)
         {
-            var model = JsonConverter.FromJson<MyOverTimeViewModel>(overtimeJson);
-            var overtimeDetailModel = JsonConverter.FromJsonArray<OvertimeDaily>(overtimeDetailsJson).ToList();
-            var criteria = new UpdateOvertimeRequestCriteria
-            {
-                EmployeeId = model.EmpId,
-                ProcessedBy = sessionService.Employee.Id,
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                OvertimeRequest = overtimeDetailModel.Where(x => x.TotalWorkHours > 0).ToList()
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
+            CommandResult commandResult = overtimeService.EditMonthlyRequest(sessionService.Employee.Id, model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult GetActingEmployees(string query)

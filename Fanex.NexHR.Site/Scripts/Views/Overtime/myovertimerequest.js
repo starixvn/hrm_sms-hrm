@@ -190,10 +190,6 @@ $(document).ready(function () {
     textbox.keyup(function () {
         var row = $(this).parent().parent();
         var TotalHours = parseFloat($('td:eq(4)', row).html().trim());
-        //        var NormalHours = parseFloat($('td #request_NormalHours', row).val());
-        //        var OffHours = parseFloat($('td #request_OffHours', row).val());
-        //        var PublicHours = parseFloat($('td #request_PublicHours', row).val());
-        //var TotalShiftHours = parseFloat($("#request_TotalShiftHours", row).val());
         var TotalShiftHours = parseFloat($("#WorkingHours").val());
 
         var object = $(this).first();

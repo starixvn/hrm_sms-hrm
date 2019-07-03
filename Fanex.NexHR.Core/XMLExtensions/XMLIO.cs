@@ -63,11 +63,11 @@
             var isGenericType = p.PropertyType.IsGenericType
                     && p.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>)
                     && p.PropertyType.GetGenericArguments()[0].IsPrimitive;
-
-            if (p.PropertyType.IsPrimitive
-                || p.PropertyType == typeof(string)
+            var isNotPrimitive = p.PropertyType == typeof(string)
                 || p.PropertyType == typeof(DateTime)
-                || isGenericType)
+                || p.PropertyType == typeof(decimal);
+
+            if (p.PropertyType.IsPrimitive || isNotPrimitive || isGenericType)
             {
                 var name = GetPropertyName(p);
                 return new[] { Expression.Invoke(lambda, Expression.Constant(name), Expression.Convert(prop, typeof(object))) };
