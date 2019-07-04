@@ -16,7 +16,7 @@ export const RoleSystem = {
     Verifier: 2,
     Approver: 3,
     ShiftManager: 4,
-    ActingSupervisor: 5,
+    OnBehalfRequest: 5,
     HR: 6,
     SystemAdmin: 7,
     DisciplineManager: 8

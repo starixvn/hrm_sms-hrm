@@ -97,15 +97,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Acting Supervisor.
-        /// </summary>
-        public static string ActingSupervisor {
-            get {
-                return ResourceManager.GetString("ActingSupervisor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string Action {

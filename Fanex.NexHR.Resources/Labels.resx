@@ -696,9 +696,6 @@
   <data name="PublicHoliday" xml:space="preserve">
     <value>Public Holiday</value>
   </data>
-  <data name="ActingSupervisor" xml:space="preserve">
-    <value>Acting Supervisor</value>
-  </data>
   <data name="Approver" xml:space="preserve">
     <value>Approver</value>
   </data>

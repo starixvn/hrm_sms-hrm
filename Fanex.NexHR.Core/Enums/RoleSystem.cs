@@ -13,19 +13,19 @@
         [StringValue("Approver")]
         Approver = 3,
 
-        [StringValue("ShiftManager")]
+        [StringValue("Shift Manager")]
         ShiftManager = 4,
 
-        [StringValue("ActingSupervisor")]
-        ActingSupervisor = 5,
+        [StringValue("On Behalf Request")]
+        OnBehalfRequest = 5,
 
         [StringValue("HR")]
         HR = 6,
 
-        [StringValue("SystemAdmin")]
+        [StringValue("System Admin")]
         SystemAdmin = 7,
 
-        [StringValue("DisciplineManager")]
+        [StringValue("Discipline Manager")]
         DisciplineManager = 8
     }
 }

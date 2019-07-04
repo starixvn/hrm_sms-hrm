@@ -32,7 +32,7 @@
                 @Html.Label(Labels.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>

@@ -576,7 +576,7 @@
 
         private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.ActingSupervisor);
+            return GetSupervisors(supervisors, (int)RoleSystem.OnBehalfRequest);
         }
 
         private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
@@ -699,7 +699,7 @@
         {
             return string.Format(
                 "{0},{1},{2},{3},{4},{5},{6}",
-                ((int)RoleSystem.ActingSupervisor).ToString(),
+                ((int)RoleSystem.OnBehalfRequest).ToString(),
                 ((int)RoleSystem.Approver).ToString(),
                 ((int)RoleSystem.DisciplineManager).ToString(),
                 ((int)RoleSystem.HR).ToString(),

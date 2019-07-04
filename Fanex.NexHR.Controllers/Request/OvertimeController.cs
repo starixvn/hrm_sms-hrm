@@ -93,8 +93,8 @@
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
                 EmpId = sessionService.Employee.Id,
-                Role = (int)RoleSystem.ActingSupervisor,
-                RequestType = null,
+                Role = (int)RoleSystem.OnBehalfRequest,
+                RequestType = (byte)RequestType.Overtime,
                 Query = string.IsNullOrWhiteSpace(query) ? string.Empty : query.Trim(),
                 IncludeLoginUser = true
             };

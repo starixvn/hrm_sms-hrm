@@ -429,17 +429,6 @@
     </select>
 }
 
-@helper SupervisorRolesDropDownList(short action, string controlName = "", string classObject = "")
-{
-    <select id="@controlName">
-        <option selected="@(action == 0)" value="">@Labels.All</option>
-        <option selected="@(action == (short)RoleSystem.Verifier)" value="@((short)RoleSystem.Verifier)">@Labels.Verifier</option>
-        <option selected="@(action == (short)RoleSystem.Approver)" value="@((short)RoleSystem.Approver)">@Labels.Approver</option>
-        <option selected="@(action == (short)RoleSystem.ShiftManager)" value="@((short)RoleSystem.ShiftManager)">@Labels.ShiftManager</option>
-        <option selected="@(action == (short)RoleSystem.ActingSupervisor)" value="@((short)RoleSystem.ActingSupervisor)">@Labels.ActingSupervisor</option>
-    </select>
-}
-
 @helper MessageCategoryDropDownList(short action = 0, string controlName = "", string classObject = "")
 {
     <select id="@controlName">

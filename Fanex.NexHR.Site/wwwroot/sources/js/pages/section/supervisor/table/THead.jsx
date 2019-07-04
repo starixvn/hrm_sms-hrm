@@ -43,7 +43,7 @@ export default class THead extends PureComponent {
             case RoleSystem.Approver:
                 roleName = 'Approver';
                 break;
-            case RoleSystem.ActingSupervisor:
+            case RoleSystem.OnBehalfRequest:
                 roleName = 'Employee';
                 break;
         }

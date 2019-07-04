@@ -154,11 +154,11 @@
                 <div class="input">
                     @{
                         var gender = new List<SelectListItem>
-                                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Unknown", Value = ""},
-                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Female", Value = "0"},
-                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Male", Value = "1"}
-                                                                                                                                                                                                                                                                };
+                        {
+                            new SelectListItem() {Text = "Unknown", Value = ""},
+                            new SelectListItem() {Text = "Female", Value = "0"},
+                            new SelectListItem() {Text = "Male", Value = "1"}
+                        };
                     }
                     @Html.DropDownListFor(model => model.Gender, gender)
                     @Html.ValidationMessageFor(model => model.Gender)
@@ -562,7 +562,7 @@
                 <div class="label marginlable">@Labels.OnBehalfRequest</div>
                 <div class="input">
                     @Model.ActingEmpList
-                    @Html.ActionLink("Update", "ManageSupervisor", "Employee", new { id = Model.Id, roleId = (short)RoleSystem.ActingSupervisor }, new { @class = "linkUpdate" })
+                    @Html.ActionLink("Update", "ManageSupervisor", "Employee", new { id = Model.Id, roleId = (short)RoleSystem.OnBehalfRequest }, new { @class = "linkUpdate" })
                 </div>
                 <div class="clear"></div>
             </li>
@@ -571,10 +571,10 @@
                 <div class="input">
                     @{
                         var empType = new List<SelectListItem>
-                                                                                                                                                                                                                                                                {
-                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Local", Value = "true"},
-                                                                                                                                                                                                                                                                    new SelectListItem() {Text = "Expat", Value = "false"},
-                                                                                                                                                                                                                                                                };
+                        {
+                            new SelectListItem() {Text = "Local", Value = "true"},
+                            new SelectListItem() {Text = "Expat", Value = "false"},
+                        };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, empType)
                 </div>
