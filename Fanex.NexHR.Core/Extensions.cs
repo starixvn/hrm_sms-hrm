@@ -256,6 +256,60 @@
             return CheckBoxList(htmlHelper, ExpressionHelper.GetExpressionText(expression), selectList, htmlAttributes);
         }
 
+        public static MvcHtmlString AttendanceNoteHtml(string notes)
+        {
+            StringBuilder htmlString = new StringBuilder();
+            if (!string.IsNullOrEmpty(notes))
+            {
+                string[] noteArray = notes.Split(',');
+                for (int i = 0; i < noteArray.Count(); i++)
+                {
+                    if (noteArray[i] == "No Data" || noteArray[i] == "PH" || noteArray[i].Contains("Off day"))
+                    {
+                        htmlString.Append(noteArray[i]);
+                    }
+                    else
+                    {
+                        bool isLastElement = i + 1 == noteArray.Count();
+                        SetLinkValue(noteArray[i], ref htmlString, isLastElement);
+                    }
+                }
+            }
+            return MvcHtmlString.Create(htmlString.ToString());
+        }
+
+        private static void SetLinkValue(string noteValue, ref StringBuilder htmlString, bool isLastElement)
+        {
+            var tag = new TagBuilder("a");
+            var link = string.Empty;
+
+            if (noteValue.Contains("Missing"))
+            {
+                link = "/checkinout/employeeview";
+            }
+            else if (noteValue.Contains("Late") || noteValue.Contains("Early"))
+            {
+                link = "/lateinearlyout/employeeview";
+            }
+            else if (noteValue.Contains("KIV"))
+            {
+                link = "/keepinview/employeeview";
+            }
+            else
+            {
+                link = "/leave/employeeview";
+            }
+
+            tag.MergeAttribute("href", link);
+            tag.SetInnerText(noteValue);
+            htmlString.Append(tag.ToString(TagRenderMode.Normal));
+
+            if (!isLastElement)
+            {
+                htmlString.Append(",");
+            }
+        }
+
         #region Business
 
         public static string ToText(this byte status)

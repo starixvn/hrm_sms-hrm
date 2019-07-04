@@ -116,7 +116,9 @@
                                 </span>
                             }
                         </td>
-                        <td class="align-left">@item.Notes</td>
+                        <td class="align-left">
+                            @Extensions.AttendanceNoteHtml(item.Notes)
+                        </td>
                         <td class="td-warning">
                             @if (item.IsWarning)
                             {
