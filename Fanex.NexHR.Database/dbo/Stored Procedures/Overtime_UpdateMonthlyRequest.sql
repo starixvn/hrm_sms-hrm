@@ -90,12 +90,6 @@ BEGIN
 		RETURN
 	END CATCH
 
-	DELETE
-	FROM #tblDailyOvertime
-	WHERE NormalHours = 0
-		AND OffHours = 0
-		AND PublicHours = 0
-
 	DECLARE @RequestId BIGINT
 		,@Month DATE
 		,@CurrentStatus TINYINT
@@ -117,13 +111,19 @@ BEGIN
 	WHERE [Month] = @Month
 		AND EmpId = @EmployeeId
 
-	IF @CurrentStatus NOT IN (1)
+	IF @CurrentStatus NOT IN (1, 3, 5, 7)
 	BEGIN
 		SET @ErrCode = 104
 		SET @ErrMsg = 'The status of this request is not pending.'
 
 		RETURN
 	END
+
+	DELETE
+	FROM #tblDailyOvertime
+	WHERE NormalHours = 0
+		AND OffHours = 0
+		AND PublicHours = 0
 
 	IF NOT EXISTS (
 			SELECT 1

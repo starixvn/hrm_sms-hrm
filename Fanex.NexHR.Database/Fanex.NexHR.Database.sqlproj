@@ -545,7 +545,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetByEmployeeId.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetById.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get_zo.sql" />
     <Build Include="dbo\Tables\CheckInOutRequestHistory.sql" />
     <Build Include="dbo\Tables\CheckInOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_WriteLog.sql" />
@@ -581,6 +580,7 @@
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetByDate.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_Delete.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_Approve.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsByEmpId.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
