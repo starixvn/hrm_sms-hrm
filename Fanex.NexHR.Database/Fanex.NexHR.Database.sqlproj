@@ -153,7 +153,7 @@
     <Build Include="dbo\Stored Procedures\Memo_Update.sql" />
     <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_DeleteAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\TimeSheet_GetLateInEarlyOut.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_ApproveMultiRequest.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_ApproveRequest.sql" />
     <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_CreateAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\Report_Manpower.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_ApproveSingleRequest.sql" />
@@ -192,14 +192,14 @@
     <Build Include="dbo\Stored Procedures\Role_GetRoles.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update_byDefaultShift.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_3.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_RejectMultiRequest.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_RejectRequest.sql" />
     <Build Include="dbo\Stored Procedures\JobTitle_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_2.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_RejectSingleRequest.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_DeleteTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByRoleId.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_Get.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_ResetMultiRequest.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_ResetRequest.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_ResetSingleRequest.sql" />

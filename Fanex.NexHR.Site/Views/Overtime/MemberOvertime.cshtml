@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Members' overtime";
     HtmlHelper.ClientValidationEnabled = false;
+    var showCheckAll = Model.MemberRequests.Any(x => x.IsHost);
+    var currentUserId = (int)ViewBag.CurrentUserId;
+    var isVerifier = (bool)ViewBag.IsVerifier;
+    var isApprover = (bool)ViewBag.IsApprover;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
@@ -15,8 +19,8 @@
 @section Breadcrumb {
     <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
 }
-
 <h2 class="page-title">@ViewBag.Title</h2>
+@Html.Hidden("CurrentUserId", currentUserId)
 @Html.Hidden("MinDate", new DateTime(2010, 1, 1).ToDateMonthYearFormatedDate())
 @Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
 <form class="filter">
@@ -36,7 +40,7 @@
                 @Html.Label(Labels.Status, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "statusId", htmlClass: "form-control")
+                @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control")
             </div>
         </div>
     </div>
@@ -59,19 +63,41 @@
             </div>
         </div>
         <div class="form-group form-group--m">
-            <button class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
         </div>
     </div>
 </form>
 <table class="table table-custom" id="data">
     <thead>
+        @if (showCheckAll && (isVerifier || isApprover))
+        {
+            <tr>
+                <th colspan="13">
+                    <div style="float:right;">
+                        @if (isVerifier)
+                        {
+                            <input type="button" class="btn btn-primary" id="btnVerify" value="Verify" />
+                            <input type="button" class="btn btn-primary" id="btnNotVerify" value="Not Verify" />
+                        }
+                        @if (isApprover)
+                        {
+                            <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                            <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
+                        }
+                    </div>
+                </th>
+            </tr>
+        }
         <tr>
-            <th>
-                <div class="checkbox">
-                    <input type="checkbox" class="checkbox-custom" id="chkAll" />
-                    <label for="chkAll"></label>
-                </div>
-            </th>
+            @if (showCheckAll)
+            {
+                <th>
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                        <label for="ckbAll"></label>
+                    </div>
+                </th>
+            }
             <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
             <th>@Labels.Team</th>
@@ -92,15 +118,23 @@
             foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
             {
                 <tr>
-                    <td>
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-custom" id="chk@(request.RequestId)" />
-                            <label for="chk@(request.RequestId)"></label>
-                        </div>
-                    </td>
+                    @if (showCheckAll)
+                    {
+                        <td>
+                            @if (request.IsHost)
+                            {
+                                <div class="checkbox">
+                                    <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                                           data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                                           data-verifierid="@request.Verifier.EmployeeId" data-approverid="@request.Approver.EmployeeId" />
+                                    <label for="ckb@(request.RequestId)"></label>
+                                </div>
+                            }
+                        </td>
+                    }
                     <td class="align-left">@request.Requester.FullName</td>
-                    <td class="align-left">@request.Requester.Nickname</td>
-                    <td class="align-left">@request.Requester.Section.Name</td>
+                    <td>@request.Requester.Nickname</td>
+                    <td>@request.Requester.Section.Name</td>
                     <td>@request.Month.ToString("MMM-yyyy")</td>
                     <td>
                         @if (request.NormalHours > 0)
@@ -120,23 +154,16 @@
                             @request.PublicHours
                         }
                     </td>
-                    <td class="align-left">
-                        @if (request.Verifier != null)
-                        {
-                            @request.Verifier.Nickname
-                        }
-                    </td>
-                    <td class="align-left">
-                        @if (request.Approver != null)
-                        {
-                            @request.Approver.Nickname
-                        }
-                    </td>
+                    <td>@request.Verifier.Nickname</td>
+                    <td>@request.Approver.Nickname</td>
+                    <td>@request.Status</td>
+                    <td></td>
                     <td>
-                        <span>@request.Status</span>
+                        @if (request.IsWarning)
+                        {
+                            <i class="fa fa-exclamation-triangle"></i>
+                        }
                     </td>
-                    <td></td>
-                    <td></td>
                 </tr>
             }
         }
@@ -147,10 +174,7 @@
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td class="align-right">
-                @Labels.TotalOvertimeHours:
-            </td>
-            <td colspan="4"></td>
+            <td colspan="@(showCheckAll ? 5 : 4)" class="align-right">@Labels.TotalOvertimeHours:</td>
             <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
@@ -158,3 +182,18 @@
         </tr>
     </tfoot>
 </table>
+<div id="confirmModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">SMS HRM</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" id="btnConfirm" class="btn btn-primary">OK</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,3 +21,22 @@ export const RoleSystem = {
     SystemAdmin: 7,
     DisciplineManager: 8
 };
+export const CommandRequest = {
+    Accept: 'Accept',
+    NotAccept: 'NotAccept',
+    Approve: 'Approve',
+    Reject: 'Reject',
+    Process: 'Process',
+    Void: 'Void',
+    Reset: 'Reset'
+};
+export const CurrentRequestStatus =
+{
+    Pending: 1,
+    Verified: 2,
+    NotVerified: 3,
+    Approved: 4,
+    Rejected: 5,
+    Processed: 6,
+    Void: 7
+}

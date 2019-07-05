@@ -162,11 +162,11 @@
     <Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="OverTime_ApproveMultiRequest" SpName="OverTime_ApproveMultiRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_RejectMultiRequest" SpName="OverTime_RejectMultiRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_ApproveSingleRequest" SpName="OverTime_ApproveSingleRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_RejectSingleRequest" SpName="OverTime_RejectSingleRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_ResetMultiRequest" SpName="Overtime_ResetMultiRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ResetSingleRequest" SpName="Overtime_ResetSingleRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GeByMonth" SpName="Overtime_GeByMonth" DbName="nexhrx" Plain="0">

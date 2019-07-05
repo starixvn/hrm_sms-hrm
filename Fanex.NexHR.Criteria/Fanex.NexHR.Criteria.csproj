@@ -287,7 +287,7 @@
     <Compile Include="Overtime\GetMonthlyOvertimeRequestByEmployeeIdCriteria.cs" />
     <Compile Include="Overtime\GetYearlyOvertimeReportByNormalCalendarCriteria.cs" />
     <Compile Include="Overtime\GetYearlyOvertimeReportCriteria.cs" />
-    <Compile Include="Overtime\ProcessMultipleOvertimeCriteria.cs" />
+    <Compile Include="Overtime\EditMonthlyOvertimeRequestStatusCriteria.cs" />
     <Compile Include="Overtime\ProcessSingleOvertimeCriteria.cs" />
     <Compile Include="Overtime\EditMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Request\ProcessRequestCriteria.cs" />

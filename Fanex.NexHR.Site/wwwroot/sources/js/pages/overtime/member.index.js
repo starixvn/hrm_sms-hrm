@@ -2,25 +2,33 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 import 'floatthead/dist/jquery.floatThead';
+import 'bootstrap/dist/js/bootstrap';
 import '../../../libs/monthPicker/monPickr-0.0.3';
+import toastr from 'toastr';
 import axios from 'axios';
+import { stringify } from 'qs';
 
-import { axiosError, blockUI, unblockUI, floatThead } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { CommandRequest, CurrentRequestStatus } from '../../shared/constants';
 import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
-    let monthPicker = $('#MonthControl');
-    monthPicker.monPickr({
+    const currentUserId = parseInt($('#CurrentUserId').val(), 10);
+    let $confirmModal = $('#confirmModal'),
+        $btnConfirm = $confirmModal.find('#btnConfirm'),
+        $monthPicker = $('#MonthControl'),
+        $table = $('table#data');
+    $monthPicker.monPickr({
         showDateRange: false,
         sortDesc: true,
         minDate: $('#MinDate').val(),
         maxDate: $('#MaxDate').val(),
         today: undefined,
-        month: undefined,
+        month: $('#Month').val() === '' ? undefined : $('#Month').val(),
         afterChangeMonth: function () {
-            const month = monthPicker.monPickr('getMonth', 'MM');
-            const year = monthPicker.monPickr('getMonth', 'yyyy');
-            $('#Month').val(`01-${month}-${year}`);
+            const month = $monthPicker.monPickr('getMonth', 'MM');
+            const year = $monthPicker.monPickr('getMonth', 'yyyy');
+            $('#Month').val(`${year}-${month}-01`);
         }
     });
 
@@ -46,4 +54,163 @@ $(document).ready(function () {
     });
 
     floatThead('table#data');
+
+    $('#btnSearch').on('click', function () {
+        const statusId = parseInt($('#StatusId').val(), 10),
+            month = $('#Month').val();
+
+        if (statusId === 0 && month === '') {
+            toastr.error('Please select a month to search.', '', toastOptions());
+        } else {
+            $('form.filter').submit();
+        }
+    });
+
+    $('#ckbAll').on('change', function (event) {
+        $table.find('tbody input[type=checkbox]').prop('checked', event.target.checked);
+    });
+
+    let onUpdateRequestStatus = function (requestIds, command) {
+        axios({
+            url: _global.root + 'overtime/ProcessMultiple',
+            method: 'POST',
+            data: stringify({ requestIds, command }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            let data = response.data;
+            if (data.IsSuccessful) {
+                toastr.success('Updated Successfully!', '', toastOptions());
+                setTimeout(function () { $('form.filter').submit(); }, 1000);
+            } else {
+                toastr.error(data.Message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    $('#btnVerify').on('click', function () {
+        let objSelected = $table.find('tbody input[type=checkbox]:checked');
+        if (objSelected.length > 0) {
+            let requestIds = [];
+            for (let i = 0; i < objSelected.length; i++) {
+                let $obj = $(objSelected[i]);
+                if ($obj.data('verifierid') === currentUserId) {
+                    if ($obj.data('statusid') === CurrentRequestStatus.Pending) {
+                        requestIds.push($obj.data('requestid'));
+                    } else {
+                        toastr.error('The status of some requests is not pending.', '', toastOptions());
+                        return;
+                    }
+                } else {
+                    toastr.error('You are not permission on some requests.', '', toastOptions());
+                    return;
+                }
+            }
+
+            if (requestIds.length > 0) {
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Verify</strong> this request(s)?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Accept);
+                });
+            }
+        } else {
+            toastr.error('Please choose at least one request to continue.', '', toastOptions());
+        }
+    });
+
+    $('#btnNotVerify').on('click', function () {
+        let objSelected = $table.find('tbody input[type=checkbox]:checked');
+        if (objSelected.length > 0) {
+            let requestIds = [];
+            for (let i = 0; i < objSelected.length; i++) {
+                let $obj = $(objSelected[i]);
+                if ($obj.data('verifierid') === currentUserId) {
+                    if ($obj.data('statusid') === CurrentRequestStatus.Pending) {
+                        requestIds.push($obj.data('requestid'));
+                    } else {
+                        toastr.error('The status of some requests is not pending.', '', toastOptions());
+                        return;
+                    }
+                } else {
+                    toastr.error('You are not permission on some requests.', '', toastOptions());
+                    return;
+                }
+            }
+
+            if (requestIds.length > 0) {
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Not Verify</strong> this request(s)?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.NotAccept);
+                });
+            }
+        } else {
+            toastr.error('Please choose at least one request to continue.', '', toastOptions());
+        }
+    });
+
+    $('#btnApprove').on('click', function () {
+        let objSelected = $table.find('tbody input[type=checkbox]:checked');
+        if (objSelected.length > 0) {
+            let requestIds = [];
+            for (let i = 0; i < objSelected.length; i++) {
+                let $obj = $(objSelected[i]);
+                if ($obj.data('approverid') === currentUserId) {
+                    if ($obj.data('statusid') === CurrentRequestStatus.Pending || $obj.data('statusid') === CurrentRequestStatus.Verified) {
+                        requestIds.push($obj.data('requestid'));
+                    } else {
+                        toastr.error('The status of some requests is not pending or verified.', '', toastOptions());
+                        return;
+                    }
+                } else {
+                    toastr.error('You are not permission on some requests.', '', toastOptions());
+                    return;
+                }
+            }
+
+            if (requestIds.length > 0) {
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Approve</strong> this request(s)?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Approve);
+                });
+            }
+        } else {
+            toastr.error('Please choose at least one request to continue.', '', toastOptions());
+        }
+    });
+
+    $('#btnReject').on('click', function () {
+        let objSelected = $table.find('tbody input[type=checkbox]:checked');
+        if (objSelected.length > 0) {
+            let requestIds = [];
+            for (let i = 0; i < objSelected.length; i++) {
+                let $obj = $(objSelected[i]);
+                if ($obj.data('approverid') === currentUserId) {
+                    if ($obj.data('statusid') === CurrentRequestStatus.Pending || $obj.data('statusid') === CurrentRequestStatus.Verified) {
+                        requestIds.push($obj.data('requestid'));
+                    } else {
+                        toastr.error('The status of some requests is not pending or verified.', '', toastOptions());
+                        return;
+                    }
+                } else {
+                    toastr.error('You are not permission on some requests.', '', toastOptions());
+                    return;
+                }
+            }
+
+            if (requestIds.length > 0) {
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reject</strong> this request(s)?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Reject);
+                });
+            }
+        } else {
+            toastr.error('Please choose at least one request to continue.', '', toastOptions());
+        }
+    });
 });

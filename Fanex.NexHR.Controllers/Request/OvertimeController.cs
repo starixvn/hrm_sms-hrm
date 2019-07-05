@@ -118,6 +118,10 @@
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+
             return View(model);
         }
 
@@ -161,14 +165,12 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public JsonResult ProcessMultiple(string command, string requestIds)
         {
-            var criteria = new ProcessMultipleOvertimeCriteria
+            var criteria = new EditMonthlyOvertimeRequestStatusCriteria
             {
                 CommandProcess = command,
-                ListRequestId = requestIds,
-                ProcessedBy = sessionService.Employee.Id,
-                ProcessedDate = DateTime.Now
+                RequestIds = requestIds,
+                ActorId = sessionService.Employee.Id
             };
-            criteria.RoleId = ProcessMultipleOvertimeCriteria.GetRoleIdForProcessOvertime(command);
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
             return Json(result);
@@ -180,7 +182,7 @@
             var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
             employeeOvertimeViewModel.IsHRView = true;
 
-            return View("MemberOvertime", employeeOvertimeViewModel);
+            return View("HRView", employeeOvertimeViewModel);
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]

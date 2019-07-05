@@ -16,7 +16,7 @@ export default class ColIndex extends PureComponent {
 
         return (
             <div className="table-cell cell-index">
-                {totalOffDaysDefault < totalOffDays ? <span className="glyphicon glyphicon-alert" /> : ''}
+                {totalOffDaysDefault < totalOffDays ? <i className="fa fa-exclamation-triangle" /> : ''}
             </div>
         );
     }
