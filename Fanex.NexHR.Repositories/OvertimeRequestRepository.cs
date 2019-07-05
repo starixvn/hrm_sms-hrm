@@ -122,6 +122,25 @@
             }
         }
 
+        public IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(ICriteria criteria)
+        {
+            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, EntityBase<int>, Requester, Requester, MonthlyOvertimeRequest>(
+                    (req, stt, requester, section, verifier, approver) =>
+                    {
+                        requester.Section = section;
+                        req.Status = stt;
+                        req.Requester = requester;
+                        req.Verifier = verifier;
+                        req.Approver = approver;
+                        return req;
+                    },
+                    "StatusId, EmployeeId, GroupId, VerifierId, ApproverId",
+                    criteria.GetSpParams());
+            }
+        }
+
         public IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))

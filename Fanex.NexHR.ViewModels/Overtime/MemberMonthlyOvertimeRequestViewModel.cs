@@ -1,0 +1,18 @@
+﻿namespace Fanex.NexHR.ViewModels.Overtime
+{
+    using System;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Overtime;
+
+    public class MemberMonthlyOvertimeRequestViewModel
+    {
+        public string Employee { get; set; }
+        public int? EmployeeId { get; set; }
+        public DateTime? Month { get; set; }
+        public string SectionIds { get; set; }
+        public short StatusId { get; set; } = -1; // pending and verified
+        public IEnumerable<MonthlyOvertimeRequest> MemberRequests { get; set; }
+        public IEnumerable<EntityBase<int>> Sections { get; set; }
+    }
+}

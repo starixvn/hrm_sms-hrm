@@ -270,6 +270,7 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
@@ -999,11 +1000,13 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
     <Content Include="Views\Overtime\Details.cshtml" />
     <Content Include="Views\Overtime\Edit.cshtml" />
+    <Content Include="Views\Overtime\HRView.cshtml" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\details.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\edit.scss" />
+    <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />

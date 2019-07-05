@@ -1,10 +1,11 @@
 ﻿@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
-@model EmployeeMonthlyOvertimeViewModel
+@model MonthlyOvertimeRequestViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.MyOvertimeRequest;
+    HtmlHelper.ClientValidationEnabled = false;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/overtime.myrequest.css" rel="stylesheet" />
@@ -59,7 +60,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null)
+        @if (Model.OvertimeRequests.Any())
         {
             foreach (MonthlyOvertimeRequest request in Model.OvertimeRequests)
             {
@@ -67,25 +68,25 @@
                     <td>
                         @request.Month.ToString("MMM-yyyy")
                     </td>
-                    <td class="sumtotal">
+                    <td>
                         @if (request.TotalHours > 0)
                         {
                             @request.TotalHours
                         }
                     </td>
-                    <td class="sumnormal">
+                    <td>
                         @if (request.NormalHours > 0)
                         {
                             @request.NormalHours
                         }
                     </td>
-                    <td class="sumoff">
+                    <td>
                         @if (request.OffHours > 0)
                         {
                             @request.OffHours
                         }
                     </td>
-                    <td class="sumpublic">
+                    <td>
                         @if (request.PublicHours > 0)
                         {
                             @request.PublicHours
@@ -146,13 +147,13 @@
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td class="sumhours align-right">
+            <td class="align-right">
                 @Labels.TotalOvertimeHours:
             </td>
-            <td id="sumtotal"></td>
-            <td id="sumnormal">@Model.OvertimeRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
-            <td id="sumoff">@Model.OvertimeRequests.Sum(t => t.OffHours).ToString("0.00")</td>
-            <td id="sumpublic">@Model.OvertimeRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td></td>
+            <td>@Model.OvertimeRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.OvertimeRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.OvertimeRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
             <td colspan="7"></td>
         </tr>
     </tfoot>

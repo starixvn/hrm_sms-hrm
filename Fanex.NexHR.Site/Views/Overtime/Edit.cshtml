@@ -4,6 +4,7 @@
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Model.MonthlyRequest.Requester.Nickname + "'s Overtime Request in " + Model.MonthlyRequest.Month.ToString("MMM-yyyy");
+    HtmlHelper.ClientValidationEnabled = false;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/overtime.edit.css" rel="stylesheet" />
@@ -110,19 +111,19 @@
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
                                 && !request.IsOffDay && !request.IsHoliday && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
                             {
-                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", @maxlength = 5, autocomplete = false })
+                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", @maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsOffDay && !request.IsHoliday)
                             {
-                                @Html.TextBoxFor(model => request.OffHours, new { @class = "offHours form-control", @maxlength = 5, autocomplete = false })
+                                @Html.TextBoxFor(model => request.OffHours, new { @class = "offHours form-control", @maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsHoliday)
                             {
-                                @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", @maxlength = 5, autocomplete = false })
+                                @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", @maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td>
@@ -130,7 +131,7 @@
                             {
                                 if (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
                                 {
-                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", @maxlength = 2000, autocomplete = false })
+                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", @maxlength = 2000, autocomplete = "off" })
                                 }
                             }
                         </td>

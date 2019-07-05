@@ -99,6 +99,12 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="OverTime_GetMemberMonthlyRequest" SpName="OverTime_GetMemberMonthlyRequest" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+    </Setting>
     <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
@@ -118,23 +124,7 @@
       <Mapping DataField="StatusId" ObjectProperty="Id" />
       <Mapping DataField="RequestDate" ObjectProperty="Month" />
     </Setting>
-    <Setting Key="OverTime_GetRequestMonthlyByLeader" SpName="OverTime_GetRequestMonthlyByLeader" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-      <Mapping DataField="VerifierID" ObjectProperty="Id" />
-      <Mapping DataField="VerifierBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
-      <Mapping DataField="ApproverID" ObjectProperty="Id" />
-      <Mapping DataField="ApproverBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
-      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="Month" />
-    </Setting>
+
     <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestID" ObjectProperty="Id" />
       <Mapping DataField="RequesterID" ObjectProperty="Id" />

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Models.Overtime;
 
-    public class EmployeeMonthlyOvertimeViewModel
+    public class MonthlyOvertimeRequestViewModel
     {
         public string Employee { get; set; }
         public int EmployeeId { get; set; }

@@ -18,6 +18,7 @@
         public RequestStatus Status { get; set; }
         public DateTime? VerifiedDate { get; set; }
         public DateTime? ApprovedDate { get; set; }
+        public bool IsWarning { get; set; }
 
         public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
     }

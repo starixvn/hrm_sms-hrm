@@ -23,6 +23,8 @@
 
         MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
 
+        IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
+
         IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
 
         IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria);
@@ -36,8 +38,6 @@
         IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
 
         IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria);
-
-        IList<OvertimeRequest> GetMemberOvertimeByLeader(GetMemberOvertimeByLeaderCriteria criteria);
 
         void SendMailToReminderClaimOvertime(string subject, string content);
 

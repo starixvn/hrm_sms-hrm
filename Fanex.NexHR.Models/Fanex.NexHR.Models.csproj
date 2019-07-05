@@ -123,6 +123,7 @@
     <Compile Include="Dashboard\SummaryRequest.cs" />
     <Compile Include="Overtime\DailyOvertimeRequest.cs" />
     <Compile Include="Overtime\EditMonthlyOvertimeRequest.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestParam.cs" />
     <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />

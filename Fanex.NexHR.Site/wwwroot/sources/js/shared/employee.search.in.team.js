@@ -1,9 +1,5 @@
-﻿'use strict';
-/*global _global*/
-/*exported*/
-
-$(document).ready(function () {
-    $("#Employee").autocomplete({
+﻿$(document).ready(function () {
+    $('#Employee').autocomplete({
         source: function (request, response) {
             $.ajax({
                 url: _global.root + 'employee/getmemberbymanager',
@@ -44,14 +40,5 @@ $(document).ready(function () {
                 }
             }
         }
-    });
-
-    // when user clear the textbox, we must set employeeId field to -1 for seaching all employees
-    $('form').submit(function () {
-        var employee = $('#Employee').val();
-        if (employee.length === 0) {
-            $('#EmployeeId').val(-1);
-        }
-        return true;
     });
 });

@@ -1,0 +1,13 @@
+﻿namespace Fanex.NexHR.Models.Overtime
+{
+    using System;
+
+    public class GetMonthlyOvertimeRequestParam
+    {
+        public int ActorId { get; set; }
+        public DateTime? Month { get; set; }
+        public int? EmployeeId { get; set; }
+        public string SectionIds { get; set; }
+        public string StatusIds { get; set; }
+    }
+}

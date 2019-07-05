@@ -28,6 +28,7 @@ module.exports = {
         [`${styleDistPath}/overtime.myrequest`]: `${styleSourcePath}/pages/overtime/myrequest.scss`,
         [`${styleDistPath}/overtime.edit`]: `${styleSourcePath}/pages/overtime/edit.scss`,
         [`${styleDistPath}/overtime.details`]: `${styleSourcePath}/pages/overtime/details.scss`,
+        [`${styleDistPath}/overtime.member.index`]: `${styleSourcePath}/pages/overtime/member.index.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -49,6 +50,7 @@ module.exports = {
         [`${jsDistPath}/report.weeklyworkinghours`]: `${jsSourcePath}/report/weeklyworkinghours.js`,
         [`${jsDistPath}/report.dailyworkinghours`]: `${jsSourcePath}/report/dailyworkinghours.js`,
         [`${jsDistPath}/overtime.myrequest`]: `${jsSourcePath}/overtime/myrequest.js`,
-        [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`
+        [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`,
+        [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`
     }
 };

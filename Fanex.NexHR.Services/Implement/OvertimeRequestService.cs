@@ -95,6 +95,20 @@
             return monthlyRequest ?? new MonthlyOvertimeRequest();
         }
 
+        public IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param)
+        {
+            var criteria = new GetMemberMonthlyOvertimeRequestCriteria
+            {
+                ActorId = param.ActorId,
+                Month = param.Month,
+                StatusIds = param.StatusIds,
+                GroupIds = param.SectionIds,
+                EmployeeId = param.EmployeeId
+            };
+            IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
+            return memberRequests;
+        }
+
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
         {
             IList<OvertimeExcelReport> overtimeRecord = null;
@@ -152,17 +166,6 @@
         }
 
         public IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria)
-        {
-            IList<OvertimeRequest> memberOvertimes = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                memberOvertimes = overtimeRepository.GetMemberOvertime(criteria);
-            }
-
-            return memberOvertimes ?? new List<OvertimeRequest>();
-        }
-
-        public IList<OvertimeRequest> GetMemberOvertimeByLeader(GetMemberOvertimeByLeaderCriteria criteria)
         {
             IList<OvertimeRequest> memberOvertimes = null;
             if (criteria != null && criteria.IsValid())

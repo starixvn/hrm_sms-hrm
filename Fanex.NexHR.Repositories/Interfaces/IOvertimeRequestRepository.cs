@@ -18,6 +18,8 @@
 
         MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria);
 
+        IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(ICriteria criteria);
+
         IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria);
 
         IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria);

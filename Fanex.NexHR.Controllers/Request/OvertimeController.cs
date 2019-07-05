@@ -48,7 +48,7 @@
         }
 
         [HttpGet]
-        public ActionResult EmployeeView(EmployeeMonthlyOvertimeViewModel model)
+        public ActionResult EmployeeView(MonthlyOvertimeRequestViewModel model)
         {
             model.Employee = model.Employee ?? sessionService.Employee.Nickname;
             model.EmployeeId = model.EmployeeId <= 0 ? sessionService.Employee.Id : model.EmployeeId;
@@ -86,6 +86,39 @@
         {
             CommandResult commandResult = overtimeService.EditMonthlyRequest(sessionService.Employee.Id, model);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
+        public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var statusIds = string.Empty;
+            IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+            IEnumerable<Team> sections = teamService.GetAll();
+            if (model.StatusId == -1)
+            {
+                statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
+            }
+            else if (model.StatusId == 0)
+            {
+                statusIds = string.Join(",", requestStatusIds);
+            }
+            else
+            {
+                statusIds = model.StatusId.ToString();
+            }
+            var param = new GetMonthlyOvertimeRequestParam
+            {
+                ActorId = sessionService.Employee.Id,
+                Month = model.Month,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                StatusIds = statusIds
+            };
+            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
+            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
+
+            return View(model);
         }
 
         public ActionResult GetActingEmployees(string query)
@@ -141,16 +174,6 @@
             return Json(result);
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
-        public ActionResult MemberOvertime()
-        {
-            var memberOvertimeViewModel = GetMemberOvertimeViewModel();
-            memberOvertimeViewModel.IsHRView = false;
-
-            return View(memberOvertimeViewModel);
-        }
-
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult EmployeeOvertime()
         {
@@ -158,29 +181,6 @@
             employeeOvertimeViewModel.IsHRView = true;
 
             return View("MemberOvertime", employeeOvertimeViewModel);
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
-        public ActionResult MemberOvertimeViewByLeader(DateTime? month, int? employeeId, string teamIds, string statusId)
-        {
-            var criteria = new GetMemberOvertimeByLeaderCriteria
-            {
-                SupervisorId = sessionService.Employee.Id,
-                FromDate = month != null ? month.Value : month,
-                ToDate = month != null ? month.Value : month,
-                EmployeeId = employeeId,
-                GroupIds = teamIds,
-                Status = statusId
-            };
-            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertimeByLeader(criteria);
-
-            ViewBag.CurrentUserId = sessionService.Employee.Id;
-            ViewBag.HasVerfifyPermision = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
-            ViewBag.HasApprovePermision = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
-
-            return View(memberOvertimes);
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
