@@ -320,6 +320,7 @@
     <Setting Key="Holiday_Delete" SpName="Holiday_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Holiday_GetByYear" SpName="Holiday_GetByYear" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Holiday_GetById" SpName="Holiday_GetById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Holiday_AutoGenerate" SpName="Holiday_AutoGenerate" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Holiday">
     <Setting Key="Holiday_Insert" SpName="Holiday_Insert" DbName="nexhrx" Plain="0"></Setting>

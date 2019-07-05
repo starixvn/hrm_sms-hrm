@@ -8,10 +8,12 @@
     public class BackgroundJobService : IBackgroundJobService
     {
         private readonly IBaseService baseService;
+        private readonly IHolidayService holidayService;
 
-        public BackgroundJobService(IBaseService baseService)
+        public BackgroundJobService(IBaseService baseService, IHolidayService holidayService)
         {
             this.baseService = baseService;
+            this.holidayService = holidayService;
         }
 
         public void InsertScheduleByDefaultShift()
@@ -38,6 +40,12 @@
             };
 
             baseService.ExecuteNonQuery(criteria);
+        }
+
+        public void InsertHolidayAutomatically()
+        {
+            var nowYear = DateTime.Now.Year;
+            holidayService.AutoInsertHolidayOnYear(nowYear);
         }
     }
 }

@@ -15,5 +15,7 @@
         CommandResult Edit(int actorId, Holiday model);
 
         CommandResult Delete(int actorId, int id);
+
+        CommandResult AutoInsertHolidayOnYear(int year);
     }
 }

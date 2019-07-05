@@ -5,5 +5,7 @@
         void InsertScheduleByDefaultShift();
 
         void InsertScheduleByWeeklyDefaultShift();
+
+        void InsertHolidayAutomatically();
     }
 }

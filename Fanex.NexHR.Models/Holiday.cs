@@ -3,7 +3,10 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.XMLExtensions;
 
+    [Serializable]
+    [XMLName("Row")]
     public class Holiday : EntityBase<int>
     {
         [AllowHtml]

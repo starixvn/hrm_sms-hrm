@@ -16,6 +16,9 @@
 
             RecurringJob.AddOrUpdate("InsertScheduleByWeeklyDefaultShift",
                 () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "10 00 01 1-12/4 *", TimeZoneInfo.Local); // every four months at 00:10AM
+
+            RecurringJob.AddOrUpdate("InsertHolidayAutomatically",
+                () => backgroundJob.InsertHolidayAutomatically(), "1 0 1 1 *", TimeZoneInfo.Local);
         }
     }
 }
