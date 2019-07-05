@@ -581,6 +581,7 @@
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_Delete.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_Approve.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsByEmpId.sql" />
+    <Build Include="dbo\Stored Procedures\Holiday_AutoGenerate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
