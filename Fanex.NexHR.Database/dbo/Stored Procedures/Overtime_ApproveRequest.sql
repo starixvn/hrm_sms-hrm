@@ -72,7 +72,7 @@ BEGIN
 	BEGIN
 		DELETE tmp
 		FROM #tblRequestIds tmp
-			INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON OT.RequestId = tmp.RequestId
+			INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON req.RequestId = tmp.RequestId
 			AND req.CurrentStatus <> @ApprovedStatusId
 
 		UPDATE req

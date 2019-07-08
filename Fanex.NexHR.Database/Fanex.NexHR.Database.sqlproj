@@ -159,7 +159,6 @@
     <Build Include="dbo\Stored Procedures\Report_ManpowerCategory.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetDetailByListRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_GetByDate.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GetDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Group_GetBySupervisor.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetInOutMonthlyByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Report_UnpaidLeaveSummary.sql" />
@@ -187,7 +186,6 @@
     <Build Include="dbo\Stored Procedures\OverTime_GetRequestYearlyByHR.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_4.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_RejectMonthlySingleRequest.sql" />
     <Build Include="dbo\Stored Procedures\Role_GetRoles.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update_byDefaultShift.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_3.sql" />
@@ -203,7 +201,6 @@
     <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_SET_OTSum.sql" />
-    <Build Include="dbo\Stored Procedures\OverTimeRequest_ApproveSingleRequest.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GeByMonth.sql" />
     <Build Include="dbo\Stored Procedures\Group_Get.sql" />
     <Build Include="dbo\Stored Procedures\Report_DateOfEmployeeForgotAndLateEarlyIO.sql" />
@@ -560,7 +557,6 @@
     <Build Include="dbo\Stored Procedures\Menu_GetMenusById.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByLeader.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetFullProfileInformation.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyWorkingHours.sql" />
     <Build Include="dbo\Tables\LateInEarlyOutRequestHistory.sql" />
@@ -578,6 +574,8 @@
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_Approve.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_AutoGenerate.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_GetMemberMonthlyRequest.sql" />
+    <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsById.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

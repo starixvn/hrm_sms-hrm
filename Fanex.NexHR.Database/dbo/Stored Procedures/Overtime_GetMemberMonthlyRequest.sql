@@ -1,0 +1,155 @@
+﻿
+CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
+	,@EmployeeId INT = NULL
+	,@GroupIds VARCHAR(MAX) = NULL
+	,@Month DATE = NULL
+	,@StatusIds VARCHAR(MAX) = NULL
+	,@IsProcessor BIT = 0
+AS
+/*
+Created: Tim.Trinh@2019-07-05
+Task: Get member overtime request
+DB: HRM
+Original:
+
+Revisions:
+Param's Explanation:
+*/
+BEGIN
+	SET NOCOUNT ON;
+
+	-- request status
+	DECLARE @PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
+	DECLARE @tblStatusIds TABLE (StatusId TINYINT)
+
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+
+	CREATE TABLE #tblGroupIds (GroupId INT)
+
+	IF @EmployeeId IS NULL
+	BEGIN
+		IF @IsProcessor = 1
+		BEGIN
+			INSERT INTO #tblEmployeeIds (EmployeeId)
+			SELECT emp.EmpId
+			FROM dbo.Employee AS emp WITH (NOLOCK)
+			WHERE emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+		END
+		ELSE
+		BEGIN
+			INSERT INTO #tblEmployeeIds (EmployeeId)
+			SELECT EmpId
+			FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 1, 0)
+		END
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblEmployeeIds (EmployeeId)
+		VALUES (@EmployeeId)
+	END
+
+	INSERT INTO @tblStatusIds (StatusId)
+	SELECT val
+	FROM dbo.fnc_strSplit(@StatusIds, ',')
+
+	IF ISNULL(@GroupIds, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT GroupId
+		FROM dbo.[Group] WITH (NOLOCK)
+		WHERE IsDeleted = 0
+	END
+
+	SELECT req.RequestId
+		,req.empID
+		,req.[Month]
+		,req.NormalHours
+		,req.OffHours
+		,req.PublicHours
+		,(CASE 
+			WHEN att.RequestId IS NOT NULL THEN 1
+			ELSE 0 END
+			) IsWarning
+		,(CASE 
+			WHEN (
+					@IsProcessor = 0
+					AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ApprovedStatusId, @RejectedStatusId)
+					AND (
+						verifier.EmpId = @ActorId
+						OR approver.EmpId = @ActorId
+						)
+					)
+				OR @IsProcessor = 1 THEN 1
+			ELSE 0 END
+			) AS IsHost
+		,req.CurrentStatus AS StatusId
+		,emp.EmpId AS EmployeeId
+		,emp.NickName
+		,emp.FullName
+		,gr.GroupId
+		,gr.[Name]
+		,gr.Code
+		,verifier.EmpId AS VerifierId
+		,verifier.NickName
+		,verifier.FullName
+		,approver.EmpId AS ApproverId
+		,approver.NickName
+		,approver.FullName
+	FROM dbo.OTMonthlyRequest AS req WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
+		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.EmpId = req.VerifierId
+		LEFT JOIN dbo.Employee AS approver WITH (NOLOCK) ON approver.EmpId = req.ApproverId
+		LEFT JOIN (
+		SELECT DISTINCT ot.RequestId
+		FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
+			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ot.Schedule = s.ShiftId
+			LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON empatt.AttendanceDate = ot.OvertimeDate
+			AND empatt.EmpId = ot.EmpId
+		WHERE ot.TotalHours - ISNULL(empatt.LateIn, 0) / 60 >= s.TotalHours + 1
+		) AS att ON att.RequestId = req.RequestId
+	WHERE (
+			@Month IS NULL
+			OR req.[Month] = @Month
+			)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE gr.GroupId = tbl.GroupId
+			)
+		AND EXISTS (
+			SELECT 1
+			FROM @tblStatusIds AS tbl
+			WHERE req.CurrentStatus = tbl.StatusId
+			)
+		AND (
+			EXISTS (
+				SELECT 1
+				FROM #tblEmployeeIds AS tbl
+				WHERE tbl.EmployeeId = req.EmpId
+				)
+			OR req.VerifierId = @ActorId
+			OR req.ApproverId = @ActorId
+			)
+	ORDER BY IsHost DESC
+		,StatusId
+		,req.[Month] DESC
+		,emp.NickName
+
+	DROP TABLE #tblEmployeeIds
+
+	DROP TABLE #tblGroupIds
+END

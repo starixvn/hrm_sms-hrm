@@ -80,7 +80,7 @@ BEGIN
 
 		UPDATE req
 		SET CurrentStatus = CASE 
-				WHEN OT.CurrentStatus = @VoidStatusId THEN @PendingStatusId
+				WHEN req.CurrentStatus = @VoidStatusId THEN @PendingStatusId
 				ELSE @ApprovedStatusId
 				END
 			,ApproverId = @ActorId
