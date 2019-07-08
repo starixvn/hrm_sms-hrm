@@ -44,17 +44,6 @@
             return overtime;
         }
 
-        public OvertimeRequest GetOvertimeRequestById(GetOvertimeRequestByIdCriteria criteria)
-        {
-            OvertimeRequest overtime = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                overtime = overtimeRepository.GetOvertimeRequestById(criteria);
-            }
-
-            return overtime;
-        }
-
         public OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria)
         {
             OvertimeRequest overtime = null;
@@ -107,6 +96,17 @@
             };
             IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
             return memberRequests;
+        }
+
+        public MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId)
+        {
+            var criteria = new GetMonthlyOvertimeRequestDetailsByIdCriteria
+            {
+                RequestId = requestId
+            };
+            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+            return monthlyRequest ?? new MonthlyOvertimeRequest();
         }
 
         public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
@@ -232,6 +232,18 @@
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, string command, byte roleId)
+        {
+            var criteria = new EditMonthlyOvertimeRequestStatusCriteria
+            {
+                CommandProcess = command,
+                RequestIds = requestIds,
+                ActorId = actorId,
+                RoleId = roleId
             };
             return baseService.ExecuteNonQuery(criteria);
         }

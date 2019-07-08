@@ -39,4 +39,4 @@ export const CurrentRequestStatus =
     Rejected: 5,
     Processed: 6,
     Void: 7
-}
+};

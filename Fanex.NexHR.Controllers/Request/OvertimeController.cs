@@ -28,7 +28,6 @@
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
         private readonly IOvertimeRequestService overtimeService;
-        private readonly IBaseService baseService;
 
         public OvertimeController(
             ISessionService sessionService,
@@ -36,15 +35,13 @@
             IRequestService requestService,
             ITeamService teamService,
             IOvertimeRequestService overtimeService,
-            ILookupDataService lookupDataService,
-            IBaseService baseService) : base(sessionService)
+            ILookupDataService lookupDataService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.teamService = teamService;
             this.overtimeService = overtimeService;
             this.lookupDataService = lookupDataService;
-            this.baseService = baseService;
         }
 
         [HttpGet]
@@ -125,6 +122,13 @@
             return View(model);
         }
 
+        public ActionResult MemberDetails(long id)
+        {
+            MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+            return View(monthlyRequest);
+        }
+
         public ActionResult GetActingEmployees(string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
@@ -144,36 +148,10 @@
         [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
         [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        public JsonResult ProcessSingle(string command, long requestId, int roleId)
+        public JsonResult EditMonthlyRequestStatus(string requestIds, string command, byte roleId)
         {
-            var criteria = new ProcessSingleOvertimeCriteria
-            {
-                CommandProcess = command,
-                RequestId = requestId,
-                RoleId = roleId,
-                ProcessedBy = sessionService.Employee.Id,
-                ProcessedDate = DateTime.Now
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
-        }
-
-        [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        public JsonResult ProcessMultiple(string command, string requestIds)
-        {
-            var criteria = new EditMonthlyOvertimeRequestStatusCriteria
-            {
-                CommandProcess = command,
-                RequestIds = requestIds,
-                ActorId = sessionService.Employee.Id
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
+            CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(sessionService.Employee.Id, requestIds, command, roleId);
+            return Json(commandResult);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
@@ -201,19 +179,6 @@
             IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
 
             return View(memberOvertimes);
-        }
-
-        public ActionResult MemberDailyOvertime(int requestId, bool isHRView)
-        {
-            var criteria = new GetOvertimeRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            OvertimeRequest overtime = overtimeService.GetOvertimeRequestById(criteria);
-
-            ViewBag.IsHRView = isHRView;
-            ViewBag.CurrentUserId = sessionService.Employee.Id;
-            return View(overtime);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]

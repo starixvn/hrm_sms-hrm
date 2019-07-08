@@ -9,7 +9,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
-import { CommandRequest, CurrentRequestStatus } from '../../shared/constants';
+import { CommandRequest, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
@@ -70,11 +70,11 @@ $(document).ready(function () {
         $table.find('tbody input[type=checkbox]').prop('checked', event.target.checked);
     });
 
-    let onUpdateRequestStatus = function (requestIds, command) {
+    let onUpdateRequestStatus = function (requestIds, command, roleId) {
         axios({
-            url: _global.root + 'overtime/ProcessMultiple',
+            url: _global.root + 'overtime/EditMonthlyRequestStatus',
             method: 'POST',
-            data: stringify({ requestIds, command }),
+            data: stringify({ requestIds, command, roleId }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -113,7 +113,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Verify</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Accept);
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Accept, RoleSystem.Verifier);
                 });
             }
         } else {
@@ -144,7 +144,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Not Verify</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.NotAccept);
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.NotAccept, RoleSystem.Verifier);
                 });
             }
         } else {
@@ -175,7 +175,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Approve</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Approve);
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Approve, RoleSystem.Approver);
                 });
             }
         } else {
@@ -206,7 +206,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reject</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Reject);
+                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Reject, RoleSystem.Approver);
                 });
             }
         } else {

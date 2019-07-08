@@ -13,8 +13,6 @@
     {
         OvertimeRequest GetOvertimeRequestByMonth(GetOvertimeRequestByMonthCriteria criteria);
 
-        OvertimeRequest GetOvertimeRequestById(GetOvertimeRequestByIdCriteria criteria);
-
         OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria);
 
         IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
@@ -24,6 +22,8 @@
         MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
 
         IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
+
+        MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId);
 
         IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria);
 
@@ -48,5 +48,7 @@
         IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria);
 
         CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
+
+        CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, string command, byte roleId);
     }
 }

@@ -87,111 +87,11 @@
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_OvertimeType" SpName="WorkingTimeRequest_GetRequestByCreateDate_OvertimeType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_KeepInViewType" SpName="WorkingTimeRequest_GetRequestByCreateDate_KeepInViewType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType_xtest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_GetInOutMonthlyByEmpId" SpName="Overtime_GetInOutMonthlyByEmpId" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_GetMonthlyRequestByEmpId" SpName="Overtime_GetMonthlyRequestByEmpId" DbName="nexhrx" Plain="0">
-      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="Overtime_GetMonthlyRequestDetailsByEmpId" SpName="Overtime_GetMonthlyRequestDetailsByEmpId" DbName="nexhrx" Plain="0">
-      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="OverTime_GetMemberMonthlyRequest" SpName="OverTime_GetMemberMonthlyRequest" DbName="nexhrx" Plain="0">
-      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-      <Mapping DataField="VerifierID" ObjectProperty="Id" />
-      <Mapping DataField="VerifierBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
-      <Mapping DataField="ApproverID" ObjectProperty="Id" />
-      <Mapping DataField="ApproverBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
-      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="Month" />
-    </Setting>
-
-    <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestID" ObjectProperty="Id" />
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-      <Mapping DataField="VerifierID" ObjectProperty="Id" />
-      <Mapping DataField="NickNameVerifier" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
-      <Mapping DataField="ApproverID" ObjectProperty="Id" />
-      <Mapping DataField="NickNameApprover" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
-      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
-    </Setting>
-    <Setting Key="Overtime_GetOTMonthlyOfEmpByHR" SpName="Overtime_GetOTMonthlyOfEmpByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetNormalDailyByHR" SpName="OverTime_GetNormalDailyByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetNormalMonthlyByHR" SpName="OverTime_GetNormalMonthlyByHR" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestID" ObjectProperty="Id" />
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-    </Setting>
-    <Setting Key="Report_OvertimeDetail" SpName="Report_OvertimeDetail" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="ExportExcel_OvertimeFiscal" SpName="ExportExcel_OvertimeFiscal" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="ExportExcel_OvertimeNormal" SpName="ExportExcel_OvertimeNormal" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetSupervisorForRequest" SpName="Employee_GetSupervisorForRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetVerifierAndApprover" SpName="Employee_GetVerifierAndApprover" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_ApproveSingleRequest" SpName="OverTime_ApproveSingleRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_RejectSingleRequest" SpName="OverTime_RejectSingleRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_ResetSingleRequest" SpName="Overtime_ResetSingleRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_GeByMonth" SpName="Overtime_GeByMonth" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="Overtime_GeById" SpName="Overtime_GeById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="Overtime_GetDailyReport" SpName="Overtime_GetDailyReport" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
-      <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />
-    </Setting>
-
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate" SpName="WorkingTimeRequest_GetRequestByCreateDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate" SpName="WorkingTimeRequest_GetRequestByRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByRequestDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
@@ -607,6 +507,102 @@
       <Mapping DataField="VerifierId" ObjectProperty="Id" />
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+  </Function>
+  <Function Name="Overtime">
+    <Setting Key="Overtime_GetInOutMonthlyByEmpId" SpName="Overtime_GetInOutMonthlyByEmpId" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_GetMonthlyRequestByEmpId" SpName="Overtime_GetMonthlyRequestByEmpId" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Overtime_GetMonthlyRequestDetailsByEmpId" SpName="Overtime_GetMonthlyRequestDetailsByEmpId" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="OverTime_GetMemberMonthlyRequest" SpName="OverTime_GetMemberMonthlyRequest" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Overtime_GetMonthlyRequestDetailsById" SpName="Overtime_GetMonthlyRequestDetailsById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequesterID" ObjectProperty="Id" />
+      <Mapping DataField="Requester" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="Team" ObjectProperty="Name" />
+      <Mapping DataField="TeamCode" ObjectProperty="Code" />
+      <Mapping DataField="VerifierID" ObjectProperty="Id" />
+      <Mapping DataField="VerifierBy" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
+      <Mapping DataField="ApproverID" ObjectProperty="Id" />
+      <Mapping DataField="ApproverBy" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
+      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+      <Mapping DataField="RequestDate" ObjectProperty="Month" />
+    </Setting>
+    <Setting Key="Overtime_GetRequestByRequestID" SpName="Overtime_GetRequestByRequestID" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequestID" ObjectProperty="Id" />
+      <Mapping DataField="RequesterID" ObjectProperty="Id" />
+      <Mapping DataField="Requester" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="Team" ObjectProperty="Name" />
+      <Mapping DataField="TeamCode" ObjectProperty="Code" />
+      <Mapping DataField="VerifierID" ObjectProperty="Id" />
+      <Mapping DataField="NickNameVerifier" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
+      <Mapping DataField="ApproverID" ObjectProperty="Id" />
+      <Mapping DataField="NickNameApprover" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
+      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
+      <Mapping DataField="StatusId" ObjectProperty="Id" />
+      <Mapping DataField="RequestDate" ObjectProperty="RequestedDate" />
+    </Setting>
+    <Setting Key="Overtime_GetOTMonthlyOfEmpByHR" SpName="Overtime_GetOTMonthlyOfEmpByHR" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OverTime_GetNormalDailyByHR" SpName="OverTime_GetNormalDailyByHR" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OverTime_GetNormalMonthlyByHR" SpName="OverTime_GetNormalMonthlyByHR" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequestID" ObjectProperty="Id" />
+      <Mapping DataField="RequesterID" ObjectProperty="Id" />
+      <Mapping DataField="Requester" ObjectProperty="NickName" />
+      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="Team" ObjectProperty="Name" />
+      <Mapping DataField="TeamCode" ObjectProperty="Code" />
+    </Setting>
+    <Setting Key="Report_OvertimeDetail" SpName="Report_OvertimeDetail" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="ExportExcel_OvertimeFiscal" SpName="ExportExcel_OvertimeFiscal" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="ExportExcel_OvertimeNormal" SpName="ExportExcel_OvertimeNormal" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_GeByMonth" SpName="Overtime_GeByMonth" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="Overtime_GetDailyReport" SpName="Overtime_GetDailyReport" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+      <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
+      <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
+      <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />
     </Setting>
   </Function>
 </Functions>

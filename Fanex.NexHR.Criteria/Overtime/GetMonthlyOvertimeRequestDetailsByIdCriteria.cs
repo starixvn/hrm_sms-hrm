@@ -2,11 +2,11 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetOvertimeRequestByIdCriteria : CriteriaBase
+    public class GetMonthlyOvertimeRequestDetailsByIdCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey() => "Overtime_GeById";
+        public override string GetSettingKey() => "Overtime_GetMonthlyRequestDetailsById";
 
         public override bool IsValid() => RequestId > 0;
     }

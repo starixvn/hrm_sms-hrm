@@ -178,7 +178,7 @@
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeDailyReportCriteria.cs" />
-    <Compile Include="Overtime\GetOvertimeRequestByIdCriteria.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByIdCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeRequestByMonthCriteria.cs" />
     <Compile Include="Report\GetManpowerCategoryCriteria.cs" />
     <Compile Include="Report\GetManpowerCriteria.cs" />
@@ -288,7 +288,6 @@
     <Compile Include="Overtime\GetYearlyOvertimeReportByNormalCalendarCriteria.cs" />
     <Compile Include="Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Overtime\EditMonthlyOvertimeRequestStatusCriteria.cs" />
-    <Compile Include="Overtime\ProcessSingleOvertimeCriteria.cs" />
     <Compile Include="Overtime\EditMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Request\ProcessRequestCriteria.cs" />
     <Compile Include="Shift\DeleteShiftCriteria.cs" />

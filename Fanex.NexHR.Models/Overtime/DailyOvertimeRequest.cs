@@ -14,6 +14,9 @@
         [XmlIgnore]
         public string ShiftCode { get; set; }
 
+        [XmlIgnore]
+        public decimal TotalShiftHours { get; set; }
+
         public string TimeIn { get; set; }
         public string TimeOut { get; set; }
         public decimal ActualWorkingHours { get; set; }

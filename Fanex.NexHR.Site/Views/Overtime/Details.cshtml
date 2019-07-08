@@ -91,20 +91,16 @@
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td class="sumhours align-right">
+            <td class="align-right" colspan="5">
                 @Labels.TotalOvertimeHours:
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td id="sumnormal">
+            <td>
                 @Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")
             </td>
-            <td id="sumoff">
+            <td>
                 @Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")
             </td>
-            <td id="sumpublic">
+            <td>
                 @Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")
             </td>
             <td></td>
