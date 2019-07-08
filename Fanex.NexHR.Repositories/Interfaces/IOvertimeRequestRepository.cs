@@ -22,8 +22,6 @@
 
         IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria);
 
-        IList<OvertimeRequest> GetMemberOvertime(ICriteria criteria);
-
         IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria);
     }
 }

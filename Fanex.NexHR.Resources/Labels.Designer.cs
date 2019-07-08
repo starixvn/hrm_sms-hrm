@@ -3022,6 +3022,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Verify.
+        /// </summary>
+        public static string NotVerify {
+            get {
+                return ResourceManager.GetString("NotVerify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Work.
         /// </summary>
         public static string NotWork {
@@ -4683,6 +4692,15 @@ namespace Fanex.NexHR.Resources {
         public static string Verifier {
             get {
                 return ResourceManager.GetString("Verifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify.
+        /// </summary>
+        public static string Verify {
+            get {
+                return ResourceManager.GetString("Verify", resourceCulture);
             }
         }
         

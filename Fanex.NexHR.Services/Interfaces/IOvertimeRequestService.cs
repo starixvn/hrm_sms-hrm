@@ -37,11 +37,9 @@
 
         IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
 
-        IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria);
-
         void SendMailToReminderClaimOvertime(string subject, string content);
 
-        bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria);
+        bool CheckInvalidOvertimes(string requestIds);
 
         IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 

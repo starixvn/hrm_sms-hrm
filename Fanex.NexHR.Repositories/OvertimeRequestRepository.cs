@@ -153,24 +153,6 @@
             }
         }
 
-        public IList<OvertimeRequest> GetMemberOvertime(ICriteria criteria)
-        {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                return db.Query<OvertimeRequest, Employee, Team, Employee, Employee, OvertimeRequest>(
-                    (ot, e, gr, ver, appr) =>
-                    {
-                        e.Team = gr;
-                        ot.Employee = e;
-                        ot.VerifiedBy = ver;
-                        ot.ApprovedBy = appr;
-                        return ot;
-                    },
-                    "RequesterID,GroupId,VerifierID,ApproverID,",
-                    criteria.GetSpParams()).ToList();
-            }
-        }
-
         public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

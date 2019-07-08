@@ -271,6 +271,7 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\member.details.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\hr.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
@@ -1001,7 +1002,7 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
     <Content Include="Views\Overtime\Details.cshtml" />
     <Content Include="Views\Overtime\Edit.cshtml" />
-    <Content Include="Views\Overtime\HRView.cshtml" />
+    <Content Include="Views\Overtime\EmployeeOvertime.cshtml" />
     <Content Include="Views\Overtime\MemberDetails.cshtml" />
     <Content Include="Views\Shared\_ConfirmModal.cshtml" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
@@ -1183,10 +1184,6 @@
     <Content Include="Views\Overtime\MemberDailyOvertime.cshtml" />
     <Content Include="Views\Overtime\MemberDailyOvertimeDetail.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
-    <Content Include="Views\Overtime\SharedApproverStatus.cshtml" />
-    <Content Include="Views\Overtime\SharedVerifierStatus.cshtml" />
-    <Content Include="Views\Overtime\MemberOvertimeViewByHR.cshtml" />
-    <Content Include="Views\Overtime\SharedHrStatus.cshtml" />
     <Content Include="Views\Overtime\_HRMonthlyReportDetails.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\_OTExcelReportDetails.cshtml" />

@@ -92,7 +92,8 @@
                 Month = param.Month,
                 StatusIds = param.StatusIds,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId
+                EmployeeId = param.EmployeeId,
+                IsProcessor = param.IsProcessor
             };
             IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
             return memberRequests;
@@ -165,17 +166,6 @@
             return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
-        public IList<OvertimeRequest> GetMemberOvertime(GetMemberOvertimeCriteria criteria)
-        {
-            IList<OvertimeRequest> memberOvertimes = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                memberOvertimes = overtimeRepository.GetMemberOvertime(criteria);
-            }
-
-            return memberOvertimes ?? new List<OvertimeRequest>();
-        }
-
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             var criteria = new GetListEmployeeClaimOvertimeCriteria();
@@ -199,17 +189,11 @@
             return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
-        public bool CheckInvalidOvertimes(GetDetailOvertimeByRequestIdsCriteria criteria)
+        public bool CheckInvalidOvertimes(string requestIds)
         {
             var isInvalid = false;
-            IEnumerable<OvertimeDaily> rawOvertime = baseService.GetData<OvertimeDaily>(criteria);
-            if (rawOvertime == null)
-            {
-                return isInvalid;
-            }
-
-            IList<OvertimeDaily> overtimes = rawOvertime.ToList();
-
+            var criteria = new GetDetailOvertimeByRequestIdsCriteria { ListRequestId = requestIds };
+            IList<OvertimeDaily> overtimes = baseService.GetData<OvertimeDaily>(criteria).ToList();
             if (overtimes != null && overtimes.Any())
             {
                 var index = 0;

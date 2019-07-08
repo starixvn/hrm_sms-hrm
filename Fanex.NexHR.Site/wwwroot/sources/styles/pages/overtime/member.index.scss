@@ -13,3 +13,23 @@
 @import '../../layout/toastr';
 @import '../../vendors/multiselect';
 @import '../../vendors/autocomplete';
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.reminder-modal {
+    .form-horizontal {
+        .form-group {
+            margin-right: 0;
+            float: none;
+
+            textarea {
+                height: 120px;
+                padding: 5px;
+                resize: none;
+            }
+        }
+    }
+}

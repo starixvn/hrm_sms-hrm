@@ -9,5 +9,6 @@
         public int? EmployeeId { get; set; }
         public string SectionIds { get; set; }
         public string StatusIds { get; set; }
+        public bool IsProcessor { get; set; }
     }
 }

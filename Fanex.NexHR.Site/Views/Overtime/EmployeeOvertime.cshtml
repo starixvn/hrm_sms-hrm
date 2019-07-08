@@ -1,0 +1,215 @@
+﻿@using Fanex.NexHR.Models.Overtime
+@using Fanex.NexHR.ViewModels.Overtime
+@model MemberMonthlyOvertimeRequestViewModel
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Employee's overtime";
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/overtime.hr.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+}
+
+<div class="title">
+    <h2 class="page-title">@ViewBag.Title → </h2>
+    <a href="javascript:;" id="lkSendMail">Send mail to reminder claim OT</a>
+</div>
+
+@Html.Hidden("MinDate", new DateTime(2010, 1, 1).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
+<form class="filter">
+    @Html.HiddenFor(model => model.SectionIds)
+    @Html.HiddenFor(model => model.Month)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Month, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                <div id="MonthControl"></div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Status, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control")
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Section, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownList("Section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.Hidden("EmployeeId", Model.EmployeeId, new { data_val = "false" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+        </div>
+    </div>
+</form>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th colspan="12">
+                <div style="float:right;">
+                    <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
+                    <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                    <label for="ckbAll"></label>
+                </div>
+            </th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Month</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.Approver</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.MemberRequests.Any())
+        {
+            foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
+            {
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                                   data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                                   data-verifierid="@request.Verifier.EmployeeId" data-approverid="@request.Approver.EmployeeId" />
+                            <label for="ckb@(request.RequestId)"></label>
+                        </div>
+                    </td>
+                    <td class="align-left">@request.Requester.FullName</td>
+                    <td>@request.Requester.Nickname</td>
+                    <td>@request.Requester.Section.Name</td>
+                    <td>@request.Month.ToString("MMM-yyyy")</td>
+                    <td>
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>@request.Verifier.Nickname</td>
+                    <td>@request.Approver.Nickname</td>
+                    <td>@request.Status</td>
+                    <td>
+                        <a href="@Url.Action("EmployeeDetails", "Overtime", new { id = request.RequestId })">
+                            @Labels.View
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 12);
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td colspan="5"></td>
+        </tr>
+    </tfoot>
+</table>
+@Html.Partial("_ConfirmModal")
+<div id="dialog-mail" title="@Labels.TitleReminderClaimOT" style="display: none;">
+    <div>
+        <span>@Messages.ReminderClaimOT</span>
+    </div>
+    <hr />
+    <div class="grid_24">
+        <div class="grid_2">
+            <label>@Labels.Subject: </label>
+        </div>
+        <div class="grid_10">
+            <input id="txtSubjectMail" maxlength="200" type="text" />
+        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="grid_2">
+            <label>@Labels.Content: </label>
+        </div>
+        <div class="grid_10">
+            <textarea id="txtContentMail" maxlength="5000" rows="2" cols="20"></textarea>
+        </div>
+    </div>
+</div>
+
+<div id="reminderMailModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog-centered modal-dialog reminder-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Labels.TitleReminderClaimOT</h4>
+            </div>
+            <div class="modal-body">
+                <p>@Messages.ReminderClaimOT</p>
+                <div class="form-horizontal clearfix">
+                    <div class="form-group">
+                        <label for="txtSubject" class="col-sm-2 control-label">@Labels.Subject:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtSubject" maxlength="200" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtContent" class="col-sm-2 control-label">@Labels.Content:</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="txtContent" maxlength="5000"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSendMail" class="btn btn-primary">Send</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

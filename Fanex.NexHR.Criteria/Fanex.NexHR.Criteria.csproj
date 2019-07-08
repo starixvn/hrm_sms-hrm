@@ -276,7 +276,6 @@
     <Compile Include="Overtime\GetDetailOvertimeByRequestIdsCriteria.cs" />
     <Compile Include="Overtime\GetMemberOvertimeCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeReportByNormalCalendarCriteria.cs" />
-    <Compile Include="Overtime\GetOvertimeByRequestIdCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeExcelReportDetailCriteria.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>

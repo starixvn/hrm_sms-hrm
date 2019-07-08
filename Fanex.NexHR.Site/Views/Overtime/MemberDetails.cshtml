@@ -49,16 +49,16 @@
                 case (byte)CurrentRequestStatus.Pending:
                     if (Model.Verifier.EmployeeId == currentUserId)
                     {
-                        <input type="button" class="btn btn-primary" id="btnApprove" value="Approve" />
-                        <input type="button" class="btn btn-primary" id="btnReject" value="Reject" />
+                        <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                        <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
                     }
                     break;
                 case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" class="btn btn-primary" id="btnApprove" value="Approve" />
-                    <input type="button" class="btn btn-primary" id="btnReject" value="Reject" />
+                    <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                    <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
                     break;
                 case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" class="btn btn-primary" id="btnResetByApprover" value="Reset" />
+                    <input type="button" class="btn btn-primary" id="btnResetByApprover" value="@Labels.Reset" />
                     break;
             }
         }
@@ -67,12 +67,12 @@
             switch (Model.Status.Id)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" class="btn btn-primary" id="btnVerify" value="Verify" />
-                    <input type="button" class="btn btn-primary" id="btnNotVerify" value="Not Verify" />
+                    <input type="button" class="btn btn-primary" id="btnVerify" value="@Labels.Verify" />
+                    <input type="button" class="btn btn-primary" id="btnNotVerify" value="@Labels.NotVerify" />
                     break;
                 case (byte)CurrentRequestStatus.Verified:
                 case (byte)CurrentRequestStatus.NotVerified:
-                    <input type="button" class="btn btn-primary" id="btnResetByVerifier" value="Reset" />
+                    <input type="button" class="btn btn-primary" id="btnResetByVerifier" value="@Labels.Reset" />
                     break;
             }
         }

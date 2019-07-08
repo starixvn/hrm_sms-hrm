@@ -129,6 +129,39 @@
             return View(monthlyRequest);
         }
 
+        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
+        public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var statusIds = string.Empty;
+            IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+            IEnumerable<Team> sections = teamService.GetAll();
+            if (model.StatusId == -1)
+            {
+                statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
+            }
+            else if (model.StatusId == 0)
+            {
+                statusIds = string.Join(",", requestStatusIds);
+            }
+            else
+            {
+                statusIds = model.StatusId.ToString();
+            }
+            var param = new GetMonthlyOvertimeRequestParam
+            {
+                ActorId = sessionService.Employee.Id,
+                Month = model.Month,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                StatusIds = statusIds,
+                IsProcessor = true
+            };
+            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
+            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
+
+            return View(model);
+        }
+
         public ActionResult GetActingEmployees(string query)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
@@ -152,33 +185,6 @@
         {
             CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(sessionService.Employee.Id, requestIds, command, roleId);
             return Json(commandResult);
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        public ActionResult EmployeeOvertime()
-        {
-            var employeeOvertimeViewModel = GetMemberOvertimeViewModel();
-            employeeOvertimeViewModel.IsHRView = true;
-
-            return View("HRView", employeeOvertimeViewModel);
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        public ActionResult MemberOvertimeViewByHR(DateTime? month, int? employeeId, string teamIds, string statusId)
-        {
-            var criteria = new GetMemberOvertimeCriteria
-            {
-                SupervisorId = sessionService.Employee.Id,
-                FromDate = month != null ? month.Value : month,
-                ToDate = month != null ? month.Value : month,
-                EmployeeId = employeeId,
-                GroupIds = teamIds,
-                Status = statusId
-            };
-            IList<OvertimeRequest> memberOvertimes = overtimeService.GetMemberOvertime(criteria);
-
-            return View(memberOvertimes);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
@@ -337,11 +343,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult CheckInvalidOvertime(string requestIds)
         {
-            var criteria = new GetDetailOvertimeByRequestIdsCriteria
-            {
-                ListRequestId = requestIds
-            };
-            bool isInvalid = overtimeService.CheckInvalidOvertimes(criteria);
+            bool isInvalid = overtimeService.CheckInvalidOvertimes(requestIds);
 
             return Json(isInvalid, JsonRequestBehavior.AllowGet);
         }
