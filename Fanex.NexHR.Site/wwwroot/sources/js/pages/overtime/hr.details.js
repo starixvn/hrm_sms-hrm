@@ -1,0 +1,88 @@
+﻿import $ from 'jquery/dist/jquery';
+import 'floatthead/dist/jquery.floatThead';
+import 'bootstrap/dist/js/bootstrap';
+import 'tipsy/src/javascripts/jquery.tipsy';
+import toastr from 'toastr';
+import axios from 'axios';
+import { stringify } from 'qs';
+
+import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { CommandRequest, RoleSystem } from '../../shared/constants';
+
+$(document).ready(function () {
+    const requestId = parseInt($('#RequestId').val(), 10);
+    let $confirmModal = $('#confirmModal'),
+        $btnConfirm = $confirmModal.find('#btnConfirm');
+
+    $('.tooltip-tipsy').tipsy({
+        gravity: 'e'
+    });
+
+    floatThead('table#data');
+
+    let onUpdateRequestStatus = function (requestIds, command, roleId) {
+        axios({
+            url: _global.root + 'overtime/EditMonthlyRequestStatus',
+            method: 'POST',
+            data: stringify({ requestIds, command, roleId }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            let data = response.data;
+            if (data.IsSuccessful) {
+                toastr.success('Updated Successfully!', '', toastOptions());
+                setTimeout(function () { window.location.reload(); }, 1000);
+            } else {
+                toastr.error(data.Message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    $('#btnProcess').on('click', function () {
+        $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Process</strong> this request?');
+        $confirmModal.modal('show');
+        $btnConfirm.on('click', function () {
+            $confirmModal.modal('hide');
+            axios({
+                url: _global.root + 'overtime/CheckInvalidOvertime',
+                method: 'POST',
+                data: stringify({ requestIds: requestId }),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(response => {
+                let isValid = response.data;
+                if (isValid) {
+                    onUpdateRequestStatus(requestId, CommandRequest.Process, RoleSystem.HR);
+                } else {
+                    $confirmModal.find('.modal-body')
+                        .html('The request is invalid. Are you sure you want to <strong>Process</strong> this request?');
+                    $confirmModal.modal('show');
+                    $btnConfirm.off('click');
+                    $btnConfirm.on('click', function () {
+                        onUpdateRequestStatus(requestId, CommandRequest.Process, RoleSystem.HR);
+                    });
+                }
+            }).catch(axiosError);
+        });
+    });
+
+    $('#btnVoid').on('click', function () {
+        $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Void</strong> this request?');
+        $confirmModal.modal('show');
+        $btnConfirm.on('click', function () {
+            onUpdateRequestStatus(requestId, CommandRequest.Void, RoleSystem.HR);
+        });
+    });
+
+    $('#btnReset').on('click', function () {
+        $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
+        $confirmModal.modal('show');
+        $btnConfirm.on('click', function () {
+            onUpdateRequestStatus(requestId, CommandRequest.Reset, RoleSystem.HR);
+        });
+    });
+});

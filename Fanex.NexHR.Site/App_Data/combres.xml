@@ -465,29 +465,6 @@
       <resource path="~/scripts/views/Overtime/hrovertimereport.js" />
     </resourceSet>
 
-    <resourceSet name="monthlyovertimememberjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
-      <resource path="~/scripts/views/overtime/monthlyovertime.member.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-    </resourceSet>
-    <resourceSet name="memberovertimecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-      <resource path="~/styles/memberovertime.css" />
-    </resourceSet>
-    <resourceSet name="monthlyovertimememberdetailjs" type="js">
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Overtime/overtime.command.request.js" />
-      <resource path="~/scripts/views/overtime/monthlyovertime.member.detail.js" />
-    </resourceSet>
-    <resourceSet name="dailyovertimememberjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Overtime/overtime.command.request.js" />
-      <resource path="~/scripts/views/overtime/dailyovertime.member.js" />
-    </resourceSet>
-
     <resourceSet name="extensionnocss" type="css">
       <resource reference="sitecss" />
     </resourceSet>

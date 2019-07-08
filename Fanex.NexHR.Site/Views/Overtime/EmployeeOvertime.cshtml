@@ -159,29 +159,6 @@
     </tfoot>
 </table>
 @Html.Partial("_ConfirmModal")
-<div id="dialog-mail" title="@Labels.TitleReminderClaimOT" style="display: none;">
-    <div>
-        <span>@Messages.ReminderClaimOT</span>
-    </div>
-    <hr />
-    <div class="grid_24">
-        <div class="grid_2">
-            <label>@Labels.Subject: </label>
-        </div>
-        <div class="grid_10">
-            <input id="txtSubjectMail" maxlength="200" type="text" />
-        </div>
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="grid_2">
-            <label>@Labels.Content: </label>
-        </div>
-        <div class="grid_10">
-            <textarea id="txtContentMail" maxlength="5000" rows="2" cols="20"></textarea>
-        </div>
-    </div>
-</div>
-
 <div id="reminderMailModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog-centered modal-dialog reminder-modal" role="document">
         <div class="modal-content">
