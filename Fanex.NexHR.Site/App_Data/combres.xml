@@ -483,18 +483,6 @@
       <resource path="~/scripts/views/external-group.js" />
     </resourceSet>
 
-    <resourceSet name="reportovertimerequestcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/report.overtimerequest.css" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-    </resourceSet>
-    <resourceSet name="reportovertimerequestjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/report/reportovertimerequest.js" />
-    </resourceSet>
-
     <resourceSet name="timerecordcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/timerecord.css" />

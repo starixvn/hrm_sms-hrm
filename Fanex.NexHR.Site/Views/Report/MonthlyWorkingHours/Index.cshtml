@@ -16,6 +16,9 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
+
+@Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.SectionIds)
     @Html.HiddenFor(model => model.Month)
@@ -27,8 +30,6 @@
             </div>
             <div class="select-form">
                 <div id="MonthControl"></div>
-                @Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
-                @Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
             </div>
         </div>
         <div class="form-group form-group--m">

@@ -99,6 +99,7 @@
     <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
+    <Compile Include="Report\Overtime\MonthlyFilterViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
     <Compile Include="Report\WorkingHours\WeeklyFilterViewModel.cs" />

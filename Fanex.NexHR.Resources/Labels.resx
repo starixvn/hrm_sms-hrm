@@ -1770,4 +1770,7 @@
   <data name="Verify" xml:space="preserve">
     <value>Verify</value>
   </data>
+  <data name="MonthlyOvertimeReport" xml:space="preserve">
+    <value>Monthly Overtime Report</value>
+  </data>
 </root>

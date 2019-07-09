@@ -19,7 +19,7 @@
         {
             get
             {
-                if (Calendar == (ushort)CalendarType.Normal)
+                if (Calendar == (byte)CalendarType.Normal)
                 {
                     return new DateTime(Year, Month, 1);
                 }
@@ -35,7 +35,7 @@
         {
             get
             {
-                if (Calendar == (ushort)CalendarType.Normal)
+                if (Calendar == (byte)CalendarType.Normal)
                 {
                     var dayInMonth = DateTime.DaysInMonth(Year, Month);
                     return new DateTime(Year, Month, dayInMonth);

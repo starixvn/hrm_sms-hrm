@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -8,25 +7,20 @@
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.ViewModels;
-    using NPOI.HSSF.UserModel;
 
     public class ExportOvertimeController : BaseExportController
     {
-        private readonly IExportExcelService exportExcelService;
         private readonly IOvertimeRequestService overtimeService;
         private readonly IExportExcelOvertimeReportService exportExcelOvertimeReportService;
         private readonly IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService;
 
         public ExportOvertimeController(
             ISessionService sessionService,
-            IExportExcelService exportExcelService,
             IOvertimeRequestService overtimeService,
             IExportExcelOvertimeReportService exportExcelOvertimeReportService,
             IExportExcelYearlyOvertimeReportService exportExcelYearlyOvertimeReportService) : base(sessionService)
         {
-            this.exportExcelService = exportExcelService;
             this.overtimeService = overtimeService;
             this.exportExcelOvertimeReportService = exportExcelOvertimeReportService;
             this.exportExcelYearlyOvertimeReportService = exportExcelYearlyOvertimeReportService;
@@ -78,38 +72,6 @@
             exportExcelYearlyOvertimeReportService.Export(entity, model.Year, model.Calendar);
 
             return new EmptyResult();
-        }
-
-        public ActionResult EmployeeOvertimeReport(int? year, int? month, int? calendar, int? empId)
-        {
-            DateTime requestDate = new DateTime(year.Value, month.Value, 1);
-            DateTime fromDate;
-            DateTime toDate;
-
-            if (calendar == 0)
-            {
-                var dayInMonth = DateTime.DaysInMonth(year.Value, month.Value);
-                fromDate = requestDate;
-                toDate = new DateTime(year.Value, month.Value, dayInMonth);
-            }
-            else
-            {
-                DateTime prevMonthDate = requestDate.Date.AddMonths(-1);
-                fromDate = new DateTime(prevMonthDate.Year, prevMonthDate.Month, 10);
-                toDate = new DateTime(requestDate.Year, requestDate.Month, 9);
-            }
-
-            string fileName = "EmployeeOvertimeRecord_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-            var criteria = new GetOvertimeRecordCriteria
-            {
-                Month = requestDate,
-                EmployeeId = empId,
-                Calendar = calendar.Value
-            };
-            IList<OvertimeExcelReport> overtimes = overtimeService.OvertimeRecord(criteria);
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportEmployeeOvertimeRecord(overtimes, calendar, fromDate, toDate);
-
-            return ExcelFile(hssfworkbook, fileName);
         }
     }
 }

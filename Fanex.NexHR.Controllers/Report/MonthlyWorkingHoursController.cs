@@ -38,7 +38,7 @@
             {
                 Month = today.Month,
                 Year = today.Year,
-                Calendar = (ushort)CalendarType.Fiscal,
+                Calendar = (byte)CalendarType.Fiscal,
                 Sections = sections.Select(x => new EntityBase<int>
                 {
                     Id = x.Id,

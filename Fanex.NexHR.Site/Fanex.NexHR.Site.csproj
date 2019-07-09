@@ -276,6 +276,7 @@
     <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\report\monthlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
@@ -302,7 +303,6 @@
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
-    <Content Include="Scripts\Views\Report\reportovertimerequest.js" />
     <Content Include="Styles\Calendar\report.employeeshift.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Report\report.manpower.css" />
@@ -360,7 +360,6 @@
     <Content Include="Styles\message.css" />
     <Content Include="Styles\report.supervisor.css" />
     <Content Include="Styles\overtimereport.css" />
-    <Content Include="Styles\report.overtimerequest.css" />
     <Content Include="Styles\shift.css" />
     <Content Include="Styles\timerecord.css" />
     <Content Include="Styles\keepinview.css" />
@@ -1002,6 +1001,7 @@
     <Content Include="Views\Overtime\MemberDetails.cshtml" />
     <Content Include="Views\Shared\_ConfirmModal.cshtml" />
     <Content Include="Views\Overtime\EmployeeDetails.cshtml" />
+    <Content Include="Views\Report\MonthlyOvertime.cshtml" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1009,6 +1009,7 @@
     <Content Include="wwwroot\sources\styles\pages\overtime\edit.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
     <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1192,7 +1193,6 @@
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
     <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
-    <Content Include="Views\Report\OvertimeReport.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />

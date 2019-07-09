@@ -2680,6 +2680,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monthly Overtime Report.
+        /// </summary>
+        public static string MonthlyOvertimeReport {
+            get {
+                return ResourceManager.GetString("MonthlyOvertimeReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MultipleInsert.
         /// </summary>
         public static string MultipleInsert {

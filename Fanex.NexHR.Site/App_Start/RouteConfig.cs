@@ -25,6 +25,11 @@
                defaults: new { controller = "WeeklyWorkingHours", action = "index" });
 
             routes.MapRoute(
+               name: "MonthlyOvertime",
+               url: "Report/MonthlyOvertime",
+               defaults: new { controller = "OvertimeReport", action = "MonthlyOvertime" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "home", action = "index", id = UrlParameter.Optional });
