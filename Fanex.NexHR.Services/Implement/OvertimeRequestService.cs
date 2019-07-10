@@ -12,7 +12,6 @@
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
 
@@ -119,30 +118,6 @@
             }
 
             return overtimeRecord;
-        }
-
-        public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria)
-        {
-            IList<RequestEntity> overtimeReports = new List<RequestEntity>();
-
-            if (criteria.IsValid())
-            {
-                overtimeReports = overtimeRepository.GetMonthlyOvertimeReport(criteria);
-            }
-
-            return overtimeReports;
-        }
-
-        public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria)
-        {
-            IList<RequestEntity> overtimeReports = new List<RequestEntity>();
-
-            if (criteria.IsValid())
-            {
-                overtimeReports = overtimeRepository.GetMonthlyOvertimeReportByNormalCalendar(criteria);
-            }
-
-            return overtimeReports;
         }
 
         public IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)

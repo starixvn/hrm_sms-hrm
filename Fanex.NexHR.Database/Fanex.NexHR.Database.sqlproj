@@ -166,7 +166,6 @@
     <Build Include="dbo\Stored Procedures\Department_Delete.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetNormalDailyByHR.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetNormalMonthlyByHR.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetByParentId.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
@@ -180,7 +179,6 @@
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Role_GetRolesByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_6.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetRequestMonthlyByHR.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_5.sql" />
     <Build Include="dbo\Stored Procedures\Report_YearlyOvertime.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByUserId.sql" />

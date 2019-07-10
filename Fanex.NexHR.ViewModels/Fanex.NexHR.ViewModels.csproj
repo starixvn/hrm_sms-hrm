@@ -122,8 +122,6 @@
     <Compile Include="Memo\MemoViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Overtime\MonthlyOvertimeRequestViewModel.cs" />
-    <Compile Include="Overtime\MemberOvertimeDailyViewModel.cs" />
-    <Compile Include="Overtime\MemberOvertimeViewModel.cs" />
     <Compile Include="Request\RequestViewModel.cs" />
     <Compile Include="Request\ChangeShiftDetailViewModel.cs" />
     <Compile Include="Calendar\ShiftStatisticContentViewModel.cs" />

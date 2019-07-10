@@ -51,11 +51,27 @@
             return View("~/Views/Report/Overtime/MonthlyOvertime.cshtml", model);
         }
 
+        public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
+        {
+            IEnumerable<Team> sections = teamService.GetAll();
+            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
+            var param = new GetYearlyOvertimeParam
+            {
+                Year = model.Year,
+                Calendar = model.Calendar,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId
+            };
+            model.Overtimes = overtimeReportService.GetYearlyOvertime(param);
+
+            return View("~/Views/Report/Overtime/YearlyOvertime.cshtml", model);
+        }
+
         public ActionResult ExportMonthlyOvertime(MonthlyFilterViewModel model)
         {
             DateTime requestDate = new DateTime(model.Year, model.Month, 1);
 
-            string fileName = "EmployeeOvertimeRecord_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "Monthly Overtime Report " + requestDate.ToString("MMM-yyyy") + ".xls";
             var criteria = new GetOvertimeRecordCriteria
             {
                 Month = requestDate,
@@ -71,22 +87,6 @@
 
                 return File(output.ToArray(), "application/vnd.ms-excel", fileName);
             }
-        }
-
-        public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
-        {
-            IEnumerable<Team> sections = teamService.GetAll();
-            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
-            var param = new GetYearlyOvertimeParam
-            {
-                Year = model.Year,
-                Calendar = model.Calendar,
-                SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId
-            };
-            model.Overtimes = overtimeReportService.GetYearlyOvertime(param);
-
-            return View("~/Views/Report/Overtime/YearlyOvertime.cshtml", model);
         }
 
         public ActionResult ExportYearlyOvertime(YearlyOvertimeViewModel model)

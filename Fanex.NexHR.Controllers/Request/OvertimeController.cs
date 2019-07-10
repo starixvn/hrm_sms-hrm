@@ -208,60 +208,6 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
-        public ActionResult HRMonthlyReport(int month, int year, int? calendar)
-        {
-            var date = new DateTime(year, month, 1);
-            ViewBag.Date = date.ToString("MMM-yyyy");
-            ViewBag.Calendar = calendar;
-
-            if (calendar == 0)
-            {
-                var fromDate = new DateTime(year, month, 1);
-                var toDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-                ViewBag.FromDate = fromDate;
-                ViewBag.ToDate = toDate;
-            }
-            else
-            {
-                var currentDate = new DateTime(year, month, DateTime.Now.Day);
-                var requestDatePreviousOneMonth = currentDate.AddMonths(-1).Date;
-                var fromDate = new DateTime(requestDatePreviousOneMonth.Year, requestDatePreviousOneMonth.Month, 10);
-                var toDate = new DateTime(year, month, 9);
-                ViewBag.FromDate = fromDate;
-                ViewBag.ToDate = toDate;
-            }
-
-            return View();
-        }
-
-        public ActionResult HRMonthlyReportDetails(DateTime fromDate, DateTime toDate, int? calendar)
-        {
-            ViewBag.Calendar = calendar;
-            IList<RequestEntity> entityList;
-            if (calendar == 0)
-            {
-                var criteria = new GetMonthlyOvertimeReportByNormalCalendarCriteria
-                {
-                    FromDate = fromDate,
-                    ToDate = toDate
-                };
-                entityList = overtimeService.GetMonthlyOvertimeReportByNormalCalendar(criteria);
-            }
-            else
-            {
-                var date = new DateTime(toDate.Year, toDate.Month, 1);
-                var criteria = new GetMemberOvertimeCriteria
-                {
-                    FromDate = date,
-                    ToDate = date
-                };
-                entityList = overtimeService.GetMonthlyOvertimeReport(criteria);
-            }
-
-            return PartialView("_HRMonthlyReportDetails", entityList);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
             IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);
@@ -313,18 +259,6 @@
         public void ReminderClaimOvertime(string subject, string content)
         {
             BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
-        }
-
-        [NonAction]
-        private MemberOvertimeViewModel GetMemberOvertimeViewModel()
-        {
-            var memberOvertimeViewModel = new MemberOvertimeViewModel
-            {
-                Teams = teamService.GetAll(),
-                StatusId = -1
-            };
-
-            return memberOvertimeViewModel;
         }
     }
 }

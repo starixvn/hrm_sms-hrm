@@ -119,40 +119,6 @@
             }
         }
 
-        public IList<RequestEntity> GetMonthlyOvertimeReport(ICriteria criteria)
-        {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                return db.Query<RequestEntity, Employee, Team, Employee, Employee, RequestEntity>(
-                    (re, reter, gr, ver, appr) =>
-                    {
-                        reter.Team = gr;
-                        re.Requester = reter;
-                        re.VerifiedBy = ver;
-                        re.ApprovedBy = appr;
-                        return re;
-                    },
-                    "RequesterID,GroupId,VerifierID,ApproverID",
-                    criteria.GetSpParams()).ToList();
-            }
-        }
-
-        public IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(ICriteria criteria)
-        {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                return db.Query<RequestEntity, Employee, Team, RequestEntity>(
-                    (re, reter, te) =>
-                    {
-                        reter.Team = te;
-                        re.Requester = reter;
-                        return re;
-                    },
-                    "RequesterID,GroupId",
-                    criteria.GetSpParams()).ToList();
-            }
-        }
-
         public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

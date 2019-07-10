@@ -536,34 +536,8 @@
     <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="nexhrx" Plain="0">
       <Mapping DataField="Name" ObjectProperty="Section" />
     </Setting>
-    <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-      <Mapping DataField="VerifierID" ObjectProperty="Id" />
-      <Mapping DataField="VerifierBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameVerifierBy" ObjectProperty="FullName" />
-      <Mapping DataField="ApproverID" ObjectProperty="Id" />
-      <Mapping DataField="ApproverBy" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameApproverBy" ObjectProperty="FullName" />
-      <Mapping DataField="RequestTypeId" ObjectProperty="Id" />
-      <Mapping DataField="StatusId" ObjectProperty="Id" />
-      <Mapping DataField="RequestDate" ObjectProperty="Month" />
-    </Setting>
     <Setting Key="Overtime_GetOTMonthlyOfEmpByHR" SpName="Overtime_GetOTMonthlyOfEmpByHR" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetNormalDailyByHR" SpName="OverTime_GetNormalDailyByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetNormalMonthlyByHR" SpName="OverTime_GetNormalMonthlyByHR" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestID" ObjectProperty="Id" />
-      <Mapping DataField="RequesterID" ObjectProperty="Id" />
-      <Mapping DataField="Requester" ObjectProperty="NickName" />
-      <Mapping DataField="FullNameRequester" ObjectProperty="FullName" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="Team" ObjectProperty="Name" />
-      <Mapping DataField="TeamCode" ObjectProperty="Code" />
-    </Setting>
     <Setting Key="Report_OvertimeDetail" SpName="Report_OvertimeDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExportExcel_OvertimeFiscal" SpName="ExportExcel_OvertimeFiscal" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExportExcel_OvertimeNormal" SpName="ExportExcel_OvertimeNormal" DbName="nexhrx" Plain="0"></Setting>

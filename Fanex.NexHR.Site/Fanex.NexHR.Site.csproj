@@ -336,7 +336,6 @@
     <Content Include="Scripts\Views\addextensionno.js" />
     <Content Include="Scripts\Views\annualbalance.js" />
     <Content Include="Scripts\Views\extensionno.js" />
-    <Content Include="Scripts\Views\Overtime\hrovertimereport.js" />
     <Content Include="Scripts\Views\Overtime\overtimereportdetails.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
@@ -1179,9 +1178,7 @@
     <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
     <Content Include="Views\Overtime\OvertimeRequestDetails.cshtml" />
     <Content Include="Views\Overtime\HRViewDetails.cshtml" />
-    <Content Include="Views\Overtime\HRMonthlyReport.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
-    <Content Include="Views\Overtime\_HRMonthlyReportDetails.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\_OTExcelReportDetails.cshtml" />
     <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />

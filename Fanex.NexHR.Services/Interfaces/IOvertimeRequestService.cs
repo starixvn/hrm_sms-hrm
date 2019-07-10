@@ -6,7 +6,6 @@
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
-    using Fanex.NexHR.Models.Request;
 
     public interface IOvertimeRequestService
     {
@@ -23,10 +22,6 @@
         IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
 
         MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId);
-
-        IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria);
-
-        IList<RequestEntity> GetMonthlyOvertimeReportByNormalCalendar(GetMonthlyOvertimeReportByNormalCalendarCriteria criteria);
 
         IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria);
 
