@@ -201,9 +201,7 @@
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerCategoryService.cs" />
     <Compile Include="ExportExcel\Overtime\ExportExcelOvertimeReportService.cs" />
-    <Compile Include="ExportExcel\Overtime\ExportExcelYearlyOvertimeReportService.cs" />
     <Compile Include="ExportExcel\Overtime\IExportExcelOvertimeReportService.cs" />
-    <Compile Include="ExportExcel\Overtime\IExportExcelYearlyOvertimeReportService.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
     <Compile Include="ExportExcel\Supervisor\IExportExcelEmployeeSupervisor.cs" />
@@ -222,6 +220,7 @@
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
+    <Compile Include="Implement\Report\OvertimeReportService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
@@ -279,6 +278,7 @@
     <Compile Include="Implement\LeaveTypeService.cs" />
     <Compile Include="Interfaces\IScheduleArrangeService.cs" />
     <Compile Include="Interfaces\Report\IEmployeeWorkingHoursService.cs" />
+    <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implement\RequestService.cs" />
     <Compile Include="Implement\ShiftService.cs" />

@@ -533,8 +533,9 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="OverTime_GetRequestYearlyByHR" SpName="OverTime_GetRequestYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetNormalYearlyByHR" SpName="OverTime_GetNormalYearlyByHR" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="nexhrx" Plain="0">
+      <Mapping DataField="Name" ObjectProperty="Section" />
+    </Setting>
     <Setting Key="OverTime_GetRequestMonthlyByHR" SpName="OverTime_GetRequestMonthlyByHR" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequesterID" ObjectProperty="Id" />
       <Mapping DataField="Requester" ObjectProperty="NickName" />

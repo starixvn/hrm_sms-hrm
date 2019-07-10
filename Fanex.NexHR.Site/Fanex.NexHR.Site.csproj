@@ -277,6 +277,7 @@
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\monthlyovertime.js" />
+    <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
@@ -344,7 +345,6 @@
     <Content Include="Scripts\Views\Request\keepinview.viewlist.js" />
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
     <Content Include="Scripts\Views\Overtime\myovertimerequest.js" />
-    <Content Include="Scripts\Views\Overtime\yearlyovertimereport.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
@@ -1001,7 +1001,9 @@
     <Content Include="Views\Overtime\MemberDetails.cshtml" />
     <Content Include="Views\Shared\_ConfirmModal.cshtml" />
     <Content Include="Views\Overtime\EmployeeDetails.cshtml" />
-    <Content Include="Views\Report\MonthlyOvertime.cshtml" />
+    <Content Include="Views\Report\Overtime\MonthlyOvertime.cshtml" />
+    <Content Include="Views\Report\Overtime\YearlyOvertime.cshtml" />
+    <Content Include="ExcelTemplates\YearlyOvertime.xlsx" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1010,6 +1012,7 @@
     <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
     <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1175,8 +1178,6 @@
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
     <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
     <Content Include="Views\Overtime\OvertimeRequestDetails.cshtml" />
-    <Content Include="Views\Overtime\YearlyReport.cshtml" />
-    <Content Include="Views\Overtime\_YearlyReportDetails.cshtml" />
     <Content Include="Views\Overtime\HRViewDetails.cshtml" />
     <Content Include="Views\Overtime\HRMonthlyReport.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
@@ -1367,7 +1368,6 @@
     <None Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
     <Content Include="Libs\SimplePagination\bower.json" />
     <Content Include="Libs\SimplePagination\README.md" />
-    <Content Include="ExcelTemplates\YearlyOvertimeReportTemplate.xls" />
     <Content Include="Fanex.NexHR.Site.Debug.ruleset" />
     <Content Include="Fanex.NexHR.Site.ruleset" />
     <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />

@@ -15,7 +15,6 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.ViewModels;
 
     public class OvertimeRequestService : IOvertimeRequestService
     {
@@ -120,16 +119,6 @@
             }
 
             return overtimeRecord;
-        }
-
-        public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReport(GetYearlyOvertimeReportCriteria criteria)
-        {
-            return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
-        }
-
-        public IList<OvertimeAnnualReportViewModel> GetYearlyOvertimeReportByNormalCalendar(GetYearlyOvertimeReportByNormalCalendarCriteria criteria)
-        {
-            return baseService.GetData<OvertimeAnnualReportViewModel>(criteria).ToList();
         }
 
         public IList<RequestEntity> GetMonthlyOvertimeReport(GetMemberOvertimeCriteria criteria)

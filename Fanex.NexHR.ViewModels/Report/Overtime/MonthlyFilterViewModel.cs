@@ -7,7 +7,7 @@
     {
         public int Month { get; set; }
         public int Year { get; set; }
-        public ushort Calendar { get; set; }
+        public byte Calendar { get; set; }
         public int? EmployeeId { get; set; }
 
         public DateTime FromDate

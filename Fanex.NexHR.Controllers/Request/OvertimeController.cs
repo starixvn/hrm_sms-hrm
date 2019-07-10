@@ -193,52 +193,6 @@
             return Json(commandResult);
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
-        public ActionResult YearlyReport()
-        {
-            var model = new YearlyOvertimeReportViewModel
-            {
-                Year = DateTime.Now.Year,
-                Sections = teamService.GetAll()
-            };
-
-            return View(model);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
-        public ActionResult YearlyOvertimeReportDetails(YearlyOvertimeReportViewModel model)
-        {
-            ViewBag.Year = model.Year;
-            ViewBag.Calendar = model.Calendar;
-            IList<OvertimeAnnualReportViewModel> listEntity = null;
-
-            if (model.Calendar == 1)
-            {
-                var getYearlyOvertimeReportCriteria = new GetYearlyOvertimeReportCriteria
-                {
-                    SupervisorId = sessionService.Employee.Id,
-                    Year = model.Year,
-                    GroupIds = model.SectionIds,
-                    EmployeeId = model.EmployeeId,
-                    Status = null
-                };
-                listEntity = overtimeService.GetYearlyOvertimeReport(getYearlyOvertimeReportCriteria);
-            }
-            else
-            {
-                var criteria = new GetYearlyOvertimeReportByNormalCalendarCriteria
-                {
-                    Year = model.Year,
-                    GroupIds = model.SectionIds,
-                    EmployeeId = model.EmployeeId,
-                    Status = null
-                };
-                listEntity = overtimeService.GetYearlyOvertimeReportByNormalCalendar(criteria);
-            }
-
-            return PartialView("_YearlyReportDetails", listEntity);
-        }
-
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
         {

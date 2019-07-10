@@ -9,7 +9,7 @@ $(document).ready(function () {
     initDatepicker();
 
     $('#Section').multiselect({
-        minWidth: 180,
+        minWidth: 170,
         checkAllText: 'Check',
         uncheckAllText: 'Uncheck'
     });

@@ -5011,6 +5011,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yearly Overtime Report.
+        /// </summary>
+        public static string YearlyOvertimeReport {
+            get {
+                return ResourceManager.GetString("YearlyOvertimeReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {

@@ -1,0 +1,19 @@
+﻿namespace Fanex.NexHR.ViewModels.Report.Overtime
+{
+    using System;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report.Overtime;
+
+    public class YearlyOvertimeViewModel
+    {
+        public int Year { get; set; } = DateTime.Now.Year;
+        public string Employee { get; set; }
+        public int? EmployeeId { get; set; }
+        public IEnumerable<EntityBase<int>> Sections { get; set; }
+        public string SectionIds { get; set; }
+        public byte Calendar { get; set; } = (byte)CalendarType.Normal;
+        public IEnumerable<YearlyOvertime> Overtimes { get; set; } = new List<YearlyOvertime>();
+    }
+}

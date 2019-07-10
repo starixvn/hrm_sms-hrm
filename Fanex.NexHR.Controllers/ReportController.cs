@@ -365,14 +365,6 @@
             return PartialView("_ListLeaveSummary", leaveSummaryByTeamList);
         }
 
-        public ActionResult OvertimeReport(int? month, int? year)
-        {
-            ViewBag.Month = (month.HasValue) ? month.Value : DateTime.Now.Month;
-            ViewBag.Year = (year.HasValue) ? year.Value : DateTime.Now.Year;
-
-            return View();
-        }
-
         public ActionResult EmployeeSupervisor()
         {
             var model = new EmployeeAndSectionSupervisorViewModel

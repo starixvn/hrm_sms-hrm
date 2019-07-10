@@ -1,0 +1,215 @@
+﻿@using Fanex.NexHR.Models.Report.Overtime
+@using Fanex.NexHR.ViewModels.Report.Overtime
+@model YearlyOvertimeViewModel
+@{
+    ViewBag.Title = Labels.YearlyOvertimeReport;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    HtmlHelper.ClientValidationEnabled = false;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/report.yearlyovertime.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/report.yearlyovertime.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">HR</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    @Html.HiddenFor(model => model.SectionIds)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.YearPicker("Year", 2010, Model.Year)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Calendar, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var calendarType = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = Labels.Fiscal, Value = "1"},
+                        new SelectListItem() {Text = Labels.Normal, Value = "0"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.Calendar, calendarType, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Section, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownList("Section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2">@Labels.Section</th>
+            <th rowspan="2">@Labels.FullName</th>
+            <th rowspan="2">@Labels.NickName</th>
+            <th colspan="12">
+                Overtime Summary in @Model.Year
+            </th>
+            <th rowspan="2">@Labels.Total</th>
+        </tr>
+        <tr>
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
+            <th>@Labels.Mar</th>
+            <th>@Labels.Apr</th>
+            <th>@Labels.May</th>
+            <th>@Labels.Jun</th>
+            <th>@Labels.Jul</th>
+            <th>@Labels.Aug</th>
+            <th>@Labels.Sep</th>
+            <th>@Labels.Oct</th>
+            <th>@Labels.Nov</th>
+            <th>@Labels.Dec</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Overtimes.Any())
+        {
+            var rowIndex = 0;
+            foreach (YearlyOvertime overtime in Model.Overtimes)
+            {
+                rowIndex++;
+                <tr>
+                    <td>@rowIndex</td>
+                    <td class="align-left">@overtime.Section</td>
+                    <td class="align-left">@overtime.FullName</td>
+                    <td class="align-left">@overtime.Nickname</td>
+                    <td class="align-right">
+                        @if(overtime.Jan != 0)
+                        {
+                            @overtime.Jan
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Feb != 0)
+                        {
+                            @overtime.Feb
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Mar != 0)
+                        {
+                            @overtime.Mar
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Apr != 0)
+                        {
+                            @overtime.Apr
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.May != 0)
+                        {
+                            @overtime.May
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Jun != 0)
+                        {
+                            @overtime.Jun
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Jul != 0)
+                        {
+                            @overtime.Jul
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Aug != 0)
+                        {
+                            @overtime.Aug
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Sep != 0)
+                        {
+                            @overtime.Sep
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Oct != 0)
+                        {
+                            @overtime.Oct
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Nov != 0)
+                        {
+                            @overtime.Nov
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Dec != 0)
+                        {
+                            @overtime.Dec
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if(overtime.Total != 0)
+                        {
+                            @overtime.Total
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(17)
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td colspan="4" class="align-right">@Labels.TotalHours:</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Jan)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Feb)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Mar)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Apr)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.May)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Jun)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Jul)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Aug)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Sep)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Oct)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Nov)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Dec)</td>
+            <td class="align-right">@Model.Overtimes.Sum(x => x.Total)</td>
+        </tr>
+    </tfoot>
+</table>

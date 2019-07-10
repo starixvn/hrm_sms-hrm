@@ -48,7 +48,7 @@ $(document).ready(function () {
 
     $('.monpickr-dropdown').hide();
     $('#Section').multiselect({
-        minWidth: 180,
+        minWidth: 170,
         checkAllText: 'Check',
         uncheckAllText: 'Uncheck'
     });

@@ -61,6 +61,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IDashboardService, DashboardService>();
             container.RegisterType<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
             container.RegisterType<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
+            container.RegisterType<IOvertimeReportService, OvertimeReportService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();
@@ -71,7 +72,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportExcelManpowerCategoryService, ExportExcelManpowerCategoryService>();
             container.RegisterType<IExportExcelManpowerService, ExportExcelManpowerService>();
             container.RegisterType<IExportExcelOvertimeReportService, ExportExcelOvertimeReportService>();
-            container.RegisterType<IExportExcelYearlyOvertimeReportService, ExportExcelYearlyOvertimeReportService>();
             container.RegisterType<IExportExcelEmployeeSupervisor, ExportExcelEmployeeSupervisor>();
             container.RegisterType<IExportExcelSectionSupervisorService, ExportExcelSectionSupervisorService>();
             container.RegisterType<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();
