@@ -144,7 +144,7 @@
     <Compile Include="Report\GetMonthlyWorkingHoursCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
-    <Compile Include="Report\GetYearlyOvertimeReportCriteria.cs" />
+    <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Request\CheckInOut\DeleteCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByDateCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByIdCriteria.cs" />
@@ -178,7 +178,7 @@
     <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeHalfDayOffCriteria.cs" />
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
-    <Compile Include="Overtime\GetOvertimeDailyReportCriteria.cs" />
+    <Compile Include="Report\Overtime\GetMonthlyOvertimeDetailsReportCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByIdCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeRequestByMonthCriteria.cs" />
     <Compile Include="Report\GetManpowerCategoryCriteria.cs" />

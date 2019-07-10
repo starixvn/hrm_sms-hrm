@@ -343,7 +343,6 @@
     <Content Include="Scripts\Views\Request\keepinview.create.js" />
     <Content Include="Scripts\Views\Request\keepinview.viewlist.js" />
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
-    <Content Include="Scripts\Views\Overtime\myovertimerequest.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
@@ -1176,8 +1175,7 @@
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
     <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
-    <Content Include="Views\Overtime\OvertimeRequestDetails.cshtml" />
-    <Content Include="Views\Overtime\HRViewDetails.cshtml" />
+    <Content Include="Views\Report\Overtime\MonthlyOvertimeDetails.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
     <Content Include="Views\Overtime\OTExcelReport.cshtml" />
     <Content Include="Views\Overtime\_OTExcelReportDetails.cshtml" />

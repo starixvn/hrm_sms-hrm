@@ -76,7 +76,6 @@
     <Build Include="dbo\Tables\Memo.sql" />
     <Build Include="dbo\Tables\OTDailyRequest.sql" />
     <Build Include="dbo\Tables\OTMonthlyRequest.sql" />
-    <Build Include="dbo\Tables\OTMonthlySum.sql" />
     <Build Include="dbo\Tables\Shift.sql" />
     <Build Include="dbo\Tables\SystemSetting.sql" />
     <Build Include="dbo\Tables\Department.sql" />
@@ -197,7 +196,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_SET_OTSum.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GeByMonth.sql" />
     <Build Include="dbo\Stored Procedures\Group_Get.sql" />
     <Build Include="dbo\Stored Procedures\Report_DateOfEmployeeForgotAndLateEarlyIO.sql" />
@@ -325,7 +323,7 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_3.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_4.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GetDailyReport.sql" />
+    <Build Include="dbo\Stored Procedures\Report_MonthlyOvertimeDetails.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_5.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />

@@ -67,6 +67,23 @@
             return View("~/Views/Report/Overtime/YearlyOvertime.cshtml", model);
         }
 
+        public ActionResult MonthlyOvertimeDetails(int employeeId, byte month, int year, CalendarType calendar)
+        {
+            var fromDate = new DateTime(year, month, 1);
+            var toDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+            if (calendar == CalendarType.Fiscal)
+            {
+                var previousMonth = fromDate.AddMonths(-1);
+                fromDate = new DateTime(previousMonth.Year, previousMonth.Month, 10);
+                toDate = new DateTime(year, month, 9);
+            }
+
+            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(employeeId, fromDate, toDate);
+            ViewBag.Month = new DateTime(year, month, 1);
+
+            return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
+        }
+
         public ActionResult ExportMonthlyOvertime(MonthlyFilterViewModel model)
         {
             DateTime requestDate = new DateTime(model.Year, model.Month, 1);

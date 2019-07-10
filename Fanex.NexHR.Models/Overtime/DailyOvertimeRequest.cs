@@ -20,12 +20,13 @@
         public string TimeIn { get; set; }
         public string TimeOut { get; set; }
         public decimal ActualWorkingHours { get; set; }
-
         public decimal NormalHours { get; set; }
         public decimal OffHours { get; set; }
         public decimal PublicHours { get; set; }
-
         public string Remark { get; set; }
+
+        [XmlIgnore]
+        public byte StatusId { get; set; }
 
         [XmlIgnore]
         public bool IsOffDay { get; set; }

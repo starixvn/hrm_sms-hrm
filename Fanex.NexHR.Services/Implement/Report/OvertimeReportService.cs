@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
@@ -28,6 +29,17 @@
                 EmployeeId = param.EmployeeId
             };
             return baseService.GetData<YearlyOvertime>(criteria);
+        }
+
+        public IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetMonthlyOvertimeDetailsReportCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            return baseService.GetData<DailyOvertimeDetails>(criteria);
         }
 
         public byte[] ExportYearlyOvertime(IEnumerable<YearlyOvertime> overtimes, GetYearlyOvertimeParam param)

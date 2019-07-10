@@ -551,15 +551,10 @@
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Overtime_GetDailyReport" SpName="Overtime_GetDailyReport" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
-    </Setting>
     <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
       <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />
     </Setting>
+    <Setting Key="Report_MonthlyOvertimeDetails" SpName="Report_MonthlyOvertimeDetails" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

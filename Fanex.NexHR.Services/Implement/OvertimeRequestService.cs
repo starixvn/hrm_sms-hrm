@@ -42,17 +42,6 @@
             return overtime;
         }
 
-        public OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria)
-        {
-            OvertimeRequest overtime = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                overtime = overtimeRepository.GetOvertimeDailyReport(criteria);
-            }
-
-            return overtime;
-        }
-
         public IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
         {
             return baseService.GetData<OvertimeDaily>(criteria).ToList();

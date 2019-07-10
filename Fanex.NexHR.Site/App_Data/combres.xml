@@ -425,18 +425,6 @@
       <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>
 
-    <resourceSet name="myovertimecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-      <resource path="~/styles/myrequest.css" />
-    </resourceSet>
-    <resourceSet name="myovertimerequestjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/Overtime/myovertimerequest.js" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
-    </resourceSet>
-
     <resourceSet name="overtimereportcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/fixtable.css" />

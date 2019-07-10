@@ -194,20 +194,6 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
-        public ActionResult HRViewDetails(DateTime requestDate, int empId, int? calendar)
-        {
-            var criteria = new GetOvertimeDailyReportCriteria
-            {
-                EmpId = empId,
-                Month = Convert.ToDateTime(requestDate).Date,
-                IsNormal = calendar == 0
-            };
-
-            OvertimeRequest overtime = overtimeService.GetOvertimeDailyReport(criteria);
-            return View(overtime);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
         public ActionResult OTExcelReport()
         {
             IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);

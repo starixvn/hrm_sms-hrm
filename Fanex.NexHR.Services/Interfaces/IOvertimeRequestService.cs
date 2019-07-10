@@ -11,8 +11,6 @@
     {
         OvertimeRequest GetOvertimeRequestByMonth(GetOvertimeRequestByMonthCriteria criteria);
 
-        OvertimeRequest GetOvertimeDailyReport(GetOvertimeDailyReportCriteria criteria);
-
         IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria);
 
         IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year);
