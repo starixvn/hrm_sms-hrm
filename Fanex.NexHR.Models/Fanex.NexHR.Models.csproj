@@ -135,6 +135,7 @@
     <Compile Include="Report\MonthlyWorkingHours\GetMonthlyWorkingHoursParam.cs" />
     <Compile Include="Report\MonthlyWorkingHours\MonthlyWorking.cs" />
     <Compile Include="Report\Overtime\DailyOvertimeDetails.cs" />
+    <Compile Include="Report\Overtime\GetDailyOvertimeDetailsParam.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeParam.cs" />
     <Compile Include="Report\Overtime\YearlyOvertime.cs" />
     <Compile Include="Report\WeekendLeaveDetail.cs" />

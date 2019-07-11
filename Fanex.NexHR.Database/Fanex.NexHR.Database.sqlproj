@@ -163,12 +163,10 @@
     <Build Include="dbo\Stored Procedures\Report_UnpaidLeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetListEmpClaimOT.sql" />
     <Build Include="dbo\Stored Procedures\Department_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\OverTime_GetNormalDailyByHR.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetByParentId.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GetOTMonthlyOfEmpByHR.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetRequestByRequestID.sql" />
@@ -208,7 +206,7 @@
     <Build Include="dbo\Stored Procedures\Report_ForgotAndLateEarlyIO.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_TmpLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\Report_LeaveSummary.sql" />
-    <Build Include="dbo\Stored Procedures\Report_OvertimeDetail.sql" />
+    <Build Include="dbo\Stored Procedures\Report_DailyOvertime.sql" />
     <Build Include="dbo\Stored Procedures\Function_AssignFunctionToRole.sql" />
     <Build Include="dbo\Stored Procedures\Report_WorkingHoursSummary.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetShifts.sql" />

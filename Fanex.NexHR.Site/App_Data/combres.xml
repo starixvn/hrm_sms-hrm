@@ -194,16 +194,6 @@
       <resource path="~/scripts/views/Request/keepinview.viewlist.js" />
     </resourceSet>
 
-    <resourceSet name="overtimecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/request.overtime.css" />
-    </resourceSet>
-    <resourceSet name="overtimejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Overtime/overtime.request.js" />
-      <resource path="~/scripts/views/search.request.js" />
-    </resourceSet>
-
     <resourceSet name="changeshiftcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/employeechangeshift.css" />
@@ -423,20 +413,6 @@
     <resourceSet name="timesheetrecordjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/addtimerecord.js" />
-    </resourceSet>
-
-    <resourceSet name="overtimereportcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/fixtable.css" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-      <resource path="~/styles/overtimereport.css" />
-    </resourceSet>
-
-    <resourceSet name="overtimereportdetailsjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/Overtime/overtimereportdetails.js" />
     </resourceSet>
 
     <resourceSet name="extensionnocss" type="css">

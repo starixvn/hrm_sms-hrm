@@ -1776,4 +1776,7 @@
   <data name="YearlyOvertimeReport" xml:space="preserve">
     <value>Yearly Overtime Report</value>
   </data>
+  <data name="OvertimeDetailsReport" xml:space="preserve">
+    <value>Overtime Details Report</value>
+  </data>
 </root>

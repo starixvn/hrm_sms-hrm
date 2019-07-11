@@ -3175,6 +3175,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime Details Report.
+        /// </summary>
+        public static string OvertimeDetailsReport {
+            get {
+                return ResourceManager.GetString("OvertimeDetailsReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime Report.
         /// </summary>
         public static string OvertimeReport {

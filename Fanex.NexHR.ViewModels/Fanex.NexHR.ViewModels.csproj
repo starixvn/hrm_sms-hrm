@@ -91,7 +91,7 @@
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="Overtime\EditMonthlyRequestViewModel.cs" />
     <Compile Include="Overtime\MemberMonthlyOvertimeRequestViewModel.cs" />
-    <Compile Include="Overtime\OvertimeDetailReportViewModel.cs" />
+    <Compile Include="Report\Overtime\DailyOvertimeDetailsViewModel.cs" />
     <Compile Include="Report\Overtime\YearlyOvertimeViewModel.cs" />
     <Compile Include="PagerOptionModel.cs" />
     <Compile Include="Paternity\PaternityViewModel.cs" />

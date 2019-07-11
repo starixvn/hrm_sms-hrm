@@ -84,10 +84,26 @@
             return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
         }
 
+        public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
+        {
+            IEnumerable<Team> sections = teamService.GetAll();
+            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
+            var param = new GetDailyOvertimeDetailsParam
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                IsLocal = model.IsLocal
+            };
+            model.Overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
+
+            return View("~/Views/Report/Overtime/DailyOvertime.cshtml", model);
+        }
+
         public ActionResult ExportMonthlyOvertime(MonthlyFilterViewModel model)
         {
             DateTime requestDate = new DateTime(model.Year, model.Month, 1);
-
             string fileName = "Monthly Overtime Report " + requestDate.ToString("MMM-yyyy") + ".xls";
             var criteria = new GetOvertimeRecordCriteria
             {
@@ -119,6 +135,26 @@
             byte[] bytes = overtimeReportService.ExportYearlyOvertime(overtimes, param);
 
             var fileName = $"Yearly overtime report - {param.Year}.xlsx";
+            return File(bytes, "application/xlsx", fileName);
+        }
+
+        public ActionResult ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
+        {
+            var param = new GetDailyOvertimeDetailsParam
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                IsLocal = model.IsLocal
+            };
+            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
+            byte[] bytes = overtimeReportService.ExportDailyOvertimeDetails(overtimes, param);
+
+            var fileName = string.Format(
+                "Overtime Details Report from {0} to {1}.xlsx",
+                param.FromDate.ToString("dd-MMM-yyyy"),
+                param.ToDate.ToString("dd-MMM-yyyy"));
             return File(bytes, "application/xlsx", fileName);
         }
     }

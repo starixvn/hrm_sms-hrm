@@ -200,8 +200,6 @@
     <Compile Include="ExportExcel\Manpower\ExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Manpower\IExportExcelManpowerCategoryService.cs" />
-    <Compile Include="ExportExcel\Overtime\ExportExcelOvertimeReportService.cs" />
-    <Compile Include="ExportExcel\Overtime\IExportExcelOvertimeReportService.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
     <Compile Include="ExportExcel\Supervisor\IExportExcelEmployeeSupervisor.cs" />

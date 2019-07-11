@@ -142,7 +142,7 @@
                             @request.PublicHours
                         }
                     </td>
-                    <td>@request.Remark</td>
+                    <td class="align-left">@request.Remark</td>
                     @if (request.TotalShiftHours != 0 && ((request.ActualWorkingHours >= request.TotalShiftHours + 1)
                         || ((request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours)
                             && request.ActualWorkingHours >= Model.Requester.WorkingHours)))

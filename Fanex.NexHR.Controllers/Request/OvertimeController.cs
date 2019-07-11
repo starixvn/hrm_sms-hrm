@@ -10,20 +10,17 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
 
     public class OvertimeController : BaseController
     {
-        private readonly ILookupDataService lookupDataService;
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ITeamService teamService;
@@ -34,14 +31,12 @@
             IEmployeeService employeeService,
             IRequestService requestService,
             ITeamService teamService,
-            IOvertimeRequestService overtimeService,
-            ILookupDataService lookupDataService) : base(sessionService)
+            IOvertimeRequestService overtimeService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.teamService = teamService;
             this.overtimeService = overtimeService;
-            this.lookupDataService = lookupDataService;
         }
 
         [HttpGet]
@@ -191,44 +186,6 @@
         {
             CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(sessionService.Employee.Id, requestIds, command, roleId);
             return Json(commandResult);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
-        public ActionResult OTExcelReport()
-        {
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);
-            IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
-            {
-                Text = j.Name,
-                Value = j.Id.ToString()
-            }).ToList();
-
-            var model = new OvertimeDetailReportViewModel
-            {
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now,
-                Sections = teamService.GetAll(),
-                JobTitles = jobTitles
-            };
-
-            return View(model);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ProcessOvertime)]
-        public ActionResult OTExcelReportDetails(OvertimeDetailReportViewModel model)
-        {
-            var criteria = new GetOvertimeExcelReportDetailCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                EmployeeId = model.EmployeeId,
-                JobTitleId = model.JobTitleIds,
-                GroupIds = model.SectionIds,
-                IsLocal = model.IsLocal
-            };
-            IList<OvertimeDaily> overtimeDetails = overtimeService.OTExcelReportDetails(criteria).OrderBy(x => x.OvertimeDate).ToList();
-
-            return PartialView("_OTExcelReportDetails", overtimeDetails);
         }
 
         [HttpPost]

@@ -21,15 +21,9 @@
 
         MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId);
 
-        IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria);
-
-        IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria);
-
         void SendMailToReminderClaimOvertime(string subject, string content);
 
         bool CheckInvalidOvertimes(string requestIds);
-
-        IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria);
 
         IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria);
 

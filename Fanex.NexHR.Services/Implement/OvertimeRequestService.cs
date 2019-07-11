@@ -109,16 +109,6 @@
             return overtimeRecord;
         }
 
-        public IList<OvertimeDaily> HRGetOvertimeRequest(GetOvertimeMonthlyByHRCriteria criteria)
-        {
-            return baseService.GetData<OvertimeDaily>(criteria).ToList();
-        }
-
-        public IList<OvertimeDaily> HRGetNormalOvertimeRequest(GetOvertimeNormalDailyByHRCriteria criteria)
-        {
-            return baseService.GetData<OvertimeDaily>(criteria).ToList();
-        }
-
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             var criteria = new GetListEmployeeClaimOvertimeCriteria();
@@ -135,11 +125,6 @@
                     emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
                 }
             }
-        }
-
-        public IList<OvertimeDaily> OTExcelReportDetails(GetOvertimeExcelReportDetailCriteria criteria)
-        {
-            return baseService.GetData<OvertimeDaily>(criteria).ToList();
         }
 
         public bool CheckInvalidOvertimes(string requestIds)
