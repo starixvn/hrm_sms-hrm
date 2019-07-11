@@ -180,7 +180,6 @@
     <Compile Include="Calendar\GetUserChangedShiftCriteria.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeDetailsReportCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByIdCriteria.cs" />
-    <Compile Include="Overtime\GetOvertimeRequestByMonthCriteria.cs" />
     <Compile Include="Report\GetManpowerCategoryCriteria.cs" />
     <Compile Include="Report\GetManpowerCriteria.cs" />
     <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
@@ -278,7 +277,6 @@
     <Compile Include="Report\Overtime\GetDailyOvertimeReportCriteria.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Overtime\GetOvertimeMonthlyByEmployeeIdCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeRecordCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestByEmployeeIdCriteria.cs" />
     <Compile Include="Overtime\EditMonthlyOvertimeRequestStatusCriteria.cs" />

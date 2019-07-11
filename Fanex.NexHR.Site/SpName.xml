@@ -510,7 +510,6 @@
     </Setting>
   </Function>
   <Function Name="Overtime">
-    <Setting Key="Overtime_GetInOutMonthlyByEmpId" SpName="Overtime_GetInOutMonthlyByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetMonthlyRequestByEmpId" SpName="Overtime_GetMonthlyRequestByEmpId" DbName="nexhrx" Plain="0">
       <Mapping DataField="VerifierId" ObjectProperty="EmployeeId" />
@@ -539,12 +538,6 @@
     <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Overtime_GeByMonth" SpName="Overtime_GeByMonth" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
-    </Setting>
     <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
       <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />

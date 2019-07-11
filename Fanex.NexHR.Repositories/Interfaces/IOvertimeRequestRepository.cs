@@ -7,8 +7,6 @@
 
     public interface IOvertimeRequestRepository
     {
-        OvertimeRequest GetOvertimeRequestByMonth(ICriteria criteria);
-
         IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(ICriteria criteria);
 
         MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria);

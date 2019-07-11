@@ -31,22 +31,6 @@
             this.emailService = emailService;
         }
 
-        public OvertimeRequest GetOvertimeRequestByMonth(GetOvertimeRequestByMonthCriteria criteria)
-        {
-            OvertimeRequest overtime = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                overtime = overtimeRepository.GetOvertimeRequestByMonth(criteria);
-            }
-
-            return overtime;
-        }
-
-        public IList<OvertimeDaily> GetOvertimeRequests(GetOvertimeMonthlyByEmployeeIdCriteria criteria)
-        {
-            return baseService.GetData<OvertimeDaily>(criteria).ToList();
-        }
-
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
         {
             var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria

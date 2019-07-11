@@ -159,7 +159,6 @@
     <Build Include="dbo\Stored Procedures\OverTime_GetDetailByListRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_GetByDate.sql" />
     <Build Include="dbo\Stored Procedures\Group_GetBySupervisor.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GetInOutMonthlyByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Report_UnpaidLeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\OverTime_GetListEmpClaimOT.sql" />
     <Build Include="dbo\Stored Procedures\Department_Delete.sql" />
@@ -169,7 +168,6 @@
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GetRequestByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_Get.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenusByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_7.sql" />
@@ -194,7 +192,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
-    <Build Include="dbo\Stored Procedures\Overtime_GeByMonth.sql" />
     <Build Include="dbo\Stored Procedures\Group_Get.sql" />
     <Build Include="dbo\Stored Procedures\Report_DateOfEmployeeForgotAndLateEarlyIO.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByMonth.sql" />

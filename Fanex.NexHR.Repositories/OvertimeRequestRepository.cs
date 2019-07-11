@@ -12,28 +12,6 @@
 
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {
-        public OvertimeRequest GetOvertimeRequestByMonth(ICriteria criteria)
-        {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                using (GridReader multi = db.QueryMultiple(criteria))
-                {
-                    var overtime = multi.Read<OvertimeRequest, Employee, Employee, Employee, Employee, OvertimeRequest>(
-                        (ot, e, ve, ap, hr) =>
-                        {
-                            ot.Employee = e;
-                            ot.VerifiedBy = ve;
-                            ot.ApprovedBy = ap;
-                            ot.ProcessedBy = hr;
-                            return ot;
-                        },
-                        "EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
-                    overtime.OvertimeDaily = multi.Read<OvertimeDaily>().ToList();
-                    return overtime;
-                }
-            }
-        }
-
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(ICriteria criteria)
         {
             using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))

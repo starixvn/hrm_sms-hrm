@@ -114,7 +114,6 @@
     <Compile Include="Report\TimeRecordViewModel.cs" />
     <Compile Include="ExtensionNumber\ExtensionNumberViewModel.cs" />
     <Compile Include="Request\KeepInViewRequestViewModel.cs" />
-    <Compile Include="Report\EmployeeAttendanceOvertime.cs" />
     <Compile Include="Report\EmployeeAttendanceRequest.cs" />
     <Compile Include="Request\LeaveDetailViewModel.cs" />
     <Compile Include="AnnualLeave\LeaveSummaryViewModel.cs" />

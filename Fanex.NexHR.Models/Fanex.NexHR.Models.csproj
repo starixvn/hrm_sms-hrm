@@ -176,7 +176,6 @@
     <Compile Include="TeamLeader.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="ExtensionNoModel.cs" />
-    <Compile Include="Overtime\OvertimeRequest.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="Department.cs" />
     <Compile Include="Employee.cs" />
@@ -185,7 +184,6 @@
     <Compile Include="Request\LeaveDetailModel.cs" />
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveSummaryByTeam.cs" />
-    <Compile Include="Overtime\OvertimeTypeModel.cs" />
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
     <Compile Include="Request\RequestTypeModel.cs" />
