@@ -7,7 +7,9 @@
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class Employee : EntityBase<int>
+#pragma warning disable S109 // Magic numbers should not be used
     {
         public string DomainUsername { get; set; }
 

@@ -85,8 +85,13 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult ResetPassword(int id)
         {
-            string hashPassword = Encryptor.ComputeHash(authService.HashProvider, "123456");
-            CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, id, hashPassword, true);
+            var model = new EditPassword
+            {
+                EmployeeId = id,
+                Password = Encryptor.ComputeHash(authService.HashProvider, "123456"),
+                IsReset = true
+            };
+            CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, model);
             return Json(commandResult);
         }
 
@@ -102,22 +107,28 @@
         {
             if (ModelState.IsValid)
             {
+                const byte DeletedUserStatusId = 1;
+                const byte DisabledUserStatusId = 2;
                 int retCode = authService.Validate(sessionService.Employee, model.Password);
                 if (retCode == 0)
                 {
-                    string hashPassword = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword);
-                    CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, sessionService.Employee.Id, hashPassword);
+                    var param = new EditPassword
+                    {
+                        EmployeeId = sessionService.Employee.Id,
+                        Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
+                    };
+                    CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, param);
                     switch (commandResult.Code)
                     {
                         case 0: // OK
                             ViewBag.ChangePwdOK = Messages.ChangePwdOK;
                             break;
 
-                        case 1: // deleted
+                        case DeletedUserStatusId:
                             ModelState.AddModelError(string.Empty, Messages.DeletedUser);
                             break;
 
-                        case 2: // disabled
+                        case DisabledUserStatusId:
                             ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                             break;
 

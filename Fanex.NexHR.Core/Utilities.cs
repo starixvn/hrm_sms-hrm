@@ -10,7 +10,9 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public static class Utilities
+#pragma warning disable S109 // Magic numbers should not be used
     {
         public static IList<SelectListItem> CheckInOutTypes
         {

@@ -103,6 +103,7 @@
     <Compile Include="Discipline\IgnoredDisciplineModel.cs" />
     <Compile Include="Discipline\OtherDisciplineModel.cs" />
     <Compile Include="Discipline\DisciplineModel.cs" />
+    <Compile Include="EditPassword.cs" />
     <Compile Include="EmailModel.cs" />
     <Compile Include="EmailSettingsModel.cs" />
     <Compile Include="EmployeeInformation\EmployeeEmergency.cs" />

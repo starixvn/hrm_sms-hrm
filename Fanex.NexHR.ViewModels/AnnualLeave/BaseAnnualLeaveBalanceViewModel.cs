@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
 
     public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
     {
@@ -19,21 +20,9 @@
         [Display(Name = "Affect from")]
         public DateTime AffectedFrom { get; set; }
 
-        public decimal DeductDays
-        {
-            get
-            {
-                return this.TotalDays < 0 ? -this.TotalDays : 0;
-            }
-        }
+        public decimal DeductDays => TotalDays < 0 ? -TotalDays : 0;
 
-        public decimal CreditDays
-        {
-            get
-            {
-                return this.TotalDays > 0 ? this.TotalDays : 0;
-            }
-        }
+        public decimal CreditDays => TotalDays > 0 ? TotalDays : 0;
 
         public int LocalLeave { get; set; }
 
@@ -41,11 +30,9 @@
         {
             IList<ValidationResult> result = new List<ValidationResult>();
 
-            if (this.TotalDays == 0 || this.TotalDays % (decimal)0.5 != 0)
+            if (TotalDays == 0 || TotalDays % Constants.HalfDayOffValue != 0)
             {
-                var validation = new ValidationResult(
-                    Resources.Messages.InvalidInputData,
-                    new[] { "TotalDays" });
+                var validation = new ValidationResult(Resources.Messages.InvalidInputData, new[] { "TotalDays" });
                 result.Add(validation);
             }
 

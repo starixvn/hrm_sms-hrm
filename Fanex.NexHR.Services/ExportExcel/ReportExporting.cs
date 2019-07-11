@@ -11,7 +11,9 @@
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ReportExporting
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int _RowStartBodyWorkingCalendarSummary = 5;
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";

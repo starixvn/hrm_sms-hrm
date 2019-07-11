@@ -2,12 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using Fanex.NexHR.Core.Constants;
 
     public class LeaveModel : BaseRequest
     {
-        private const decimal HalfDayEnum = (decimal)0.5;
-
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
@@ -18,12 +16,6 @@
 
         public IList<LeaveDetailModel> LeaveDetail { get; set; }
 
-        public bool IsHalfDay
-        {
-            get
-            {
-                return TotalDays == HalfDayEnum;
-            }
-        }
+        public bool IsHalfDay => TotalDays == Constants.HalfDayOffValue;
     }
 }

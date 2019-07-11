@@ -6,6 +6,7 @@
     using System.Web;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
@@ -29,7 +30,7 @@
         private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
-        
+
         private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
         private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
@@ -252,17 +253,11 @@
 
         private static string GetEmailTemplatePathForCancelRequest(short requestType)
         {
-            string templateEmailPath;
+            string templateEmailPath = string.Empty;
 
-            switch (requestType)
+            if (requestType == (short)RequestType.ChangeShift)
             {
-                case (short)RequestType.ChangeShift:
-                    templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
-                    break;
-
-                default:
-                    templateEmailPath = string.Empty;
-                    break;
+                templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
             }
 
             return templateEmailPath;
@@ -283,14 +278,9 @@
 
         private void HandleSendMailCancelRequest(RequestEntity request, string templateEmailPath, EmailModel email)
         {
-            switch (request.RequestType.Id)
+            if (request.RequestType.Id == (short)RequestType.ChangeShift)
             {
-                case (short)RequestType.ChangeShift:
-                    SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-                    break;
-
-                default:
-                    return;
+                SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
             }
         }
 
@@ -303,9 +293,8 @@
         {
             var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.NickName);
             var forDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
-            var displayName = string.Format("{0} ({1})", request.Requester.NickName, request.Requester.FullName);
             var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(body, sendToNickName, displayName, forDate, request.Remark);
+            body = string.Format(body, sendToNickName, request.Requester.DisplayName, forDate, request.Remark);
 
             emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
@@ -561,9 +550,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                employee.DisplayName,
                 command,
-                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                processUser.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,
@@ -586,9 +575,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                employee.DisplayName,
                 command,
-                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                processUser.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
@@ -610,9 +599,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                employee.DisplayName,
                 command,
-                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                processUser.DisplayName,
                 request.RequestType.Name,
                 forDate,
                 request.Remark);
@@ -629,15 +618,15 @@
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = request.TotalDays == (decimal)0.5
+            var forDate = request.TotalDays == Constants.HalfDayOffValue
                 ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
                 : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                employee.DisplayName,
                 command,
-                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                processUser.DisplayName,
                 request.RequestType.Name,
                 forDate,
                 request.LeaveType.Name,
@@ -664,9 +653,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                string.Format("{0} ({1})", employee.NickName, employee.FullName),
+                employee.DisplayName,
                 command,
-                string.Format("{0} ({1})", processUser.NickName, processUser.FullName),
+                processUser.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,

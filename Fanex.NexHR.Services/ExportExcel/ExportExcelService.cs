@@ -14,7 +14,9 @@
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelService : IExportExcelService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;

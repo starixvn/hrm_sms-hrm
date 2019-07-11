@@ -14,7 +14,9 @@
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IEmployeeWorkingHoursRepository repository;
 

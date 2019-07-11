@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.ScheduleArrange
 {
     using System;
+    using Fanex.NexHR.Core.Constants;
 
     public class DailySchedule
     {
@@ -23,6 +24,6 @@
 
         public bool IsPublic { get; set; }
 
-        public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == 0.5M;
+        public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == Constants.HalfDayOffValue;
     }
 }

@@ -9,7 +9,9 @@
     using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Resources;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";

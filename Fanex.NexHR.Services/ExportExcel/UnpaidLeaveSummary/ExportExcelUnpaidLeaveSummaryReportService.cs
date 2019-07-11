@@ -9,7 +9,9 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int RowStartHeader = 2;
         private const int RowStartBody = 4;

@@ -20,7 +20,9 @@
         byte[] ExportDriverPickup(Actor actor, WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules);
     }
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelScheduleService : IExportExcelScheduleService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int DefaultRowHeight = 14;
         private const string DateFormat = "dd-MMM-yyyy";
@@ -357,7 +359,7 @@
                 shift.Code = "Off";
                 shift.BackgroundColor = Constants.OffDayBackgroundColor;
             }
-            else if (dailySchedule.LeaveDay == 0.5M)
+            else if (dailySchedule.LeaveDay == Constants.HalfDayOffValue)
             {
                 shift = GetShiftOnLeaveHalfDay(dailySchedule);
             }

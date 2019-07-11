@@ -250,13 +250,13 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditPassword(int actorId, int employeeId, string password, bool isReset = false)
+        public CommandResult EditPassword(int actorId, EditPassword model)
         {
             var criteria = new EditPasswordCriteria
             {
-                EmpId = employeeId,
-                Password = password,
-                PasswordReset = isReset,
+                EmpId = model.EmployeeId,
+                Password = model.Password,
+                PasswordReset = model.IsReset,
                 ModifiedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);

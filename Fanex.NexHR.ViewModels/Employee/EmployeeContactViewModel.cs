@@ -4,7 +4,9 @@
     using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Resources;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class EmployeeContactViewModel
+#pragma warning disable S109 // Magic numbers should not be used
     {
         [Display(Name = "Chinese Name")]
         [StringLength(200, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]

@@ -38,6 +38,8 @@
         {
             if (ModelState.IsValid)
             {
+                const byte DeletedUserStatusId = 1;
+                const byte DisabledUserStatusId = 2;
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 EmployeeSession employee = authService.GetEmployeeByCode(model.UserName);
                 int retCode = authService.Validate(employee, model.Password);
@@ -52,11 +54,11 @@
                         FormsAuthentication.SetAuthCookie(model.UserName, false);
                         return RedirectToAction("Index", "Home");
 
-                    case 1: // deleted
+                    case DeletedUserStatusId: // deleted
                         ModelState.AddModelError(string.Empty, Messages.DeletedUser);
                         break;
 
-                    case 2: // disalbed
+                    case DisabledUserStatusId:
                         ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                         break;
 

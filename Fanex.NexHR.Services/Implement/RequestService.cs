@@ -5,6 +5,7 @@
     using System.Linq;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
@@ -16,7 +17,6 @@
 
     public class RequestService : IRequestService
     {
-        private const decimal HalfDayValue = (decimal)0.5;
         private const int OneHourValue = 60;
 
         private readonly IRequestRepository requestRepository;
@@ -197,7 +197,7 @@
         {
             var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
 
-            if ((request.TotalDays - (decimal)0.5) == 0)
+            if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
             {
                 leaveDate = string.Format(RequestFormatConstants.MsgLeaveHalfDayWithNoFormat, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
             }
@@ -265,7 +265,7 @@
             string msgTemplate;
             string messageDetail;
 
-            if (request.TotalDays.Equals(HalfDayValue))
+            if (request.TotalDays.Equals(Constants.HalfDayOffValue))
             {
                 msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfdayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfday;
                 messageDetail = string.Format(

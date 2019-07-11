@@ -21,7 +21,9 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class RequestController : BaseController
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IEmployeeService employeeService;
         private readonly IShiftService shiftService;

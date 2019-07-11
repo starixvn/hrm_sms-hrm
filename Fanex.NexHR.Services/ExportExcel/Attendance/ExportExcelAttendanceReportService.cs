@@ -11,7 +11,9 @@
     using Models;
     using Models.Request;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int RowStartHeader = 2;
         private const int RowStartBody = 3;

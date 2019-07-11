@@ -67,6 +67,6 @@
 
         CommandResult EditPasswordResetStatus(int employeeId, bool status);
 
-        CommandResult EditPassword(int actorId, int employeeId, string password, bool isReset = false);
+        CommandResult EditPassword(int actorId, EditPassword model);
     }
 }

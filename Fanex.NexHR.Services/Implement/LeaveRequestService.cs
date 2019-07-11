@@ -8,6 +8,7 @@
     using Core.Enums;
     using Criteria.Request;
     using Criteria.Request.Leave;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Repositories;
     using Hangfire;
@@ -133,9 +134,9 @@
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Employee.NickName);
-                
-                var fromDate = request.TotalDays == (decimal)0.5 ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
-                var toDate = request.TotalDays == (decimal)0.5 ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
+
+                var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
+                var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
                 var displayName = string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName);
@@ -176,8 +177,8 @@
             {
                 email.Subject += criteria.TotalDays > 1 ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
                                                   : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                var fromDate = criteria.TotalDays == (decimal)0.5 ? GetFromTimeHalfDay(criteria.RequestDetail) : criteria.FromDate;
-                var toDate = criteria.TotalDays == (decimal)0.5 ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
+                var fromDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(criteria.RequestDetail) : criteria.FromDate;
+                var toDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, fromDate, toDate, criteria.TotalDays);
 
                 email.Body = Utilities.ReadTextFile(templateEmailPath);

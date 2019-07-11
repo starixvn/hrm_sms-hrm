@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Report.MonthlyWorkingHours
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Constants;
 
     public class MonthlyWorking
     {
@@ -20,7 +21,7 @@
                 {
                     if (dailyWorking.IsLeaveDay)
                     {
-                        workingDays += dailyWorking.IsLeaveHalfDay && dailyWorking.TotalWorkingHours > 0 ? 0.5M : 0;
+                        workingDays += dailyWorking.IsLeaveHalfDay && dailyWorking.TotalWorkingHours > 0 ? Constants.HalfDayOffValue : 0;
                     }
                     else
                     {

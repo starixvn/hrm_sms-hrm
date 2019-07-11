@@ -16,7 +16,9 @@
     using Fanex.NexHR.ViewModels.Request;
     using NPOI.HSSF.UserModel;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportRequestController : BaseExportController
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IExportExcelService exportExcelService;
         private readonly IRequestService requestService;

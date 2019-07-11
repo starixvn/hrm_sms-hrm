@@ -11,7 +11,9 @@
     using NPOI.SS.Util;
     using Resources;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class TotalWorkingHourExportService : IExportService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IList<TotalWorkingHours> totalWorkingHours;
         private readonly DateTime fromDate;
