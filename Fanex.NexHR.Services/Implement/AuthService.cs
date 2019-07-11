@@ -32,34 +32,28 @@
 
         public int Validate(EmployeeSession employee, string password)
         {
-            //// -1: wrong username
-            ////  1: deleted
-            ////  2: disabled
-            ////  3: wrong password
-            ////  0: success
-
             if (employee == null)
             {
-                return -1;
+                return (short)ValidateUserStatus.WrongUsername;
             }
 
             if (!employee.Enabled)
             {
-                return 2;
+                return (short)ValidateUserStatus.Disabled;
             }
 
             if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) ||
                 (ConfigSettings.AllowAdminLogin && password == Constants.PassWordAdmin))
             {
-                return 0;
+                return (short)ValidateUserStatus.Success;
             }
 
             if (string.IsNullOrWhiteSpace(employee.Password) || !ConfigSettings.AllowAdminLogin || password != Constants.PassWordAdmin)
             {
-                return 3;
+                return (short)ValidateUserStatus.WrongPassword;
             }
 
-            return 1;
+            return (short)ValidateUserStatus.Deleted;
         }
 
         public IEnumerable<FunctionSession> GetFunctionByEmployeeId(int employeeId)

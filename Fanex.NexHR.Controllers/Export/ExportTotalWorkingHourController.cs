@@ -29,13 +29,14 @@
             var model = workingHoursModel;
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
+            const byte CurrentMonthOption = 5;
             if (model == null)
             {
                 model = new ReportFilterViewModel
                 {
                     FromDate = new DateTime(year, month, 1),
                     ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    DateOption = 5
+                    DateOption = CurrentMonthOption
                 };
             }
 

@@ -76,7 +76,7 @@
                     var rowTeam = sheet.GetRow(rowIndex);
                     var cellTeam = rowTeam.GetCell(0);
                     cellTeam.SetCellValue(item.Team.Name.ToUpperInvariant());
-                    sheet.MergeCells(rowIndex, 0, rowIndex, 18);
+                    sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 18);
                     rowTeam.Height = height;
 
                     rowIndex++;
@@ -165,7 +165,7 @@
                         rowTeam.Height = rowTeamHeight;
                         ICell cellTeam = rowTeam.GetCell(0);
                         cellTeam.SetCellValue(overtime.Name.ToUpperInvariant());
-                        sheet.MergeCells(rowIndex, 0, rowIndex, 2);
+                        sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 2);
                         rowIndex++;
                         var numberStart = rowIndex + 1;
 

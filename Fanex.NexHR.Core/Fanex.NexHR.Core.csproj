@@ -192,6 +192,7 @@
     <Compile Include="Enums\SiteId.cs" />
     <Compile Include="Enums\SupervisorActionType.cs" />
     <Compile Include="Enums\UnpaidLeaveType.cs" />
+    <Compile Include="Enums\ValidateUserStatus.cs" />
     <Compile Include="Enums\VerifiedStatus.cs" />
     <Compile Include="Enums\CurrentRequestStatus.cs" />
     <Compile Include="Enums\HashProvider.cs" />

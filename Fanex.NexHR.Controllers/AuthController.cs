@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Core.Services;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Resources;
@@ -38,14 +39,12 @@
         {
             if (ModelState.IsValid)
             {
-                const byte DeletedUserStatusId = 1;
-                const byte DisabledUserStatusId = 2;
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 EmployeeSession employee = authService.GetEmployeeByCode(model.UserName);
                 int retCode = authService.Validate(employee, model.Password);
                 switch (retCode)
                 {
-                    case 0: // OK
+                    case (short)ValidateUserStatus.Success:
                         LogEmployeeLogin(employee.Id);
                         sessionService.IsShowLeftNavigation = true;
                         sessionService.Employee = employee;
@@ -54,11 +53,11 @@
                         FormsAuthentication.SetAuthCookie(model.UserName, false);
                         return RedirectToAction("Index", "Home");
 
-                    case DeletedUserStatusId: // deleted
+                    case (short)ValidateUserStatus.Deleted:
                         ModelState.AddModelError(string.Empty, Messages.DeletedUser);
                         break;
 
-                    case DisabledUserStatusId:
+                    case (short)ValidateUserStatus.Disabled:
                         ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                         break;
 

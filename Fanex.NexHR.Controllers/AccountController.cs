@@ -107,10 +107,8 @@
         {
             if (ModelState.IsValid)
             {
-                const byte DeletedUserStatusId = 1;
-                const byte DisabledUserStatusId = 2;
                 int retCode = authService.Validate(sessionService.Employee, model.Password);
-                if (retCode == 0)
+                if (retCode == (short)ValidateUserStatus.Success)
                 {
                     var param = new EditPassword
                     {
@@ -120,15 +118,15 @@
                     CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, param);
                     switch (commandResult.Code)
                     {
-                        case 0: // OK
+                        case (short)ValidateUserStatus.Success: // OK
                             ViewBag.ChangePwdOK = Messages.ChangePwdOK;
                             break;
 
-                        case DeletedUserStatusId:
+                        case (short)ValidateUserStatus.Deleted:
                             ModelState.AddModelError(string.Empty, Messages.DeletedUser);
                             break;
 
-                        case DisabledUserStatusId:
+                        case (short)ValidateUserStatus.Disabled:
                             ModelState.AddModelError(string.Empty, Messages.DisabledUser);
                             break;
 

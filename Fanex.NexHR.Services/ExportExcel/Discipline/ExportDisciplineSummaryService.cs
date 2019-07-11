@@ -8,7 +8,9 @@
     using Models.Discipline;
     using Resources;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportDisciplineSummaryService : IExportDisciplineSummaryService
+#pragma warning disable S109 // Magic numbers should not be used
     {
         private const string TemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const int HeaderRow = 2;

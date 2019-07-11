@@ -70,17 +70,17 @@
         {
             if (attendance.IsOffdayOT)
             {
-                writer.CopyCellStyle(RowHighlight, ShiftCodeColumn, rowIndex + RowStartHeader, ShiftCodeColumn);
+                writer.CopyCellStyle(RowHighlight, ShiftCodeColumn, rowIndex + RowStartHeader, desCol: ShiftCodeColumn);
             }
 
             if (attendance.IsPublicHolidayOT)
             {
-                writer.CopyCellStyle(RowOffdate, ShiftCodeColumn, rowIndex + RowStartHeader, ShiftCodeColumn);
+                writer.CopyCellStyle(RowOffdate, ShiftCodeColumn, rowIndex + RowStartHeader, desCol: ShiftCodeColumn);
             }
 
             if (attendance.IsWeekend)
             {
-                writer.CopyCellStyle(RowWeekend, AttendanceDateColumn, rowIndex + RowStartHeader, AttendanceDateColumn);
+                writer.CopyCellStyle(RowWeekend, AttendanceDateColumn, rowIndex + RowStartHeader, desCol: AttendanceDateColumn);
             }
         }
 

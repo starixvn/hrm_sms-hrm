@@ -200,7 +200,7 @@
 
                 for (var i = 3; i <= totalColumns - 1; i++)
                 {
-                    string totalEmployeeAddress = ExcelCellBase.GetAddress(shiftHeaderRow + 1, i, rowIndex - 1, i);
+                    string totalEmployeeAddress = ExcelCellBase.GetAddress(shiftHeaderRow + 1, i, rowIndex - 1, ToColumn: i);
                     worksheet.Cells[shiftHeaderRow, i].Formula = string.Format("SUM({0})", totalEmployeeAddress);
                     worksheet.Cells[shiftHeaderRow, i].Calculate();
                 }
@@ -237,11 +237,13 @@
             if (shift.IsShift)
             {
                 var findExists = employeeWorkingOnShifts.FirstOrDefault(
+#pragma warning disable S1067 // Expressions should not be too complex
                     x => x.Code == shift.Code
                         && x.CheckIn == shift.CheckIn
                         && x.CheckOut == shift.CheckOut
                         && x.IsInAfterDay == shift.IsInAfterDay
                         && x.IsOutAfterDay == shift.IsOutAfterDay
+#pragma warning restore S1067 // Expressions should not be too complex
                     );
                 if (findExists == null)
                 {

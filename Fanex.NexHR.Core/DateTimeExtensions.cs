@@ -2,7 +2,9 @@
 {
     using System;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public static class DateTimeExtensions
+#pragma warning disable S109 // Magic numbers should not be used
     {
         public static DateTime FirstDayOfWeek(this DateTime dt)
         {

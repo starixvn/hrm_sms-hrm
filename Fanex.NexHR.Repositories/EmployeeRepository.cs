@@ -25,7 +25,7 @@
                             e.Team = t;
                             return e;
                         },
-                        splitOn: "TeamID").First();
+                        splitOn: "TeamId").First();
 
                     return employee;
                 }
@@ -42,7 +42,7 @@
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
                             return e;
                         },
-                        splitOn: "TeamID",
+                        splitOn: "TeamId",
                         parameters: criteria.GetSpParams());
 
                 return entity;

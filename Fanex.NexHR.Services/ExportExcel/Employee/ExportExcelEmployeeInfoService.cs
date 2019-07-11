@@ -316,13 +316,13 @@
                 for (int i = 0; i < maxRelationship; i++)
                 {
                     var index = i + 1;
-                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
                     writer.WriteCellValue(headerRow, currentColumn, "Con " + index);
                     currentColumn++;
-                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
                     writer.WriteCellValue(headerRow, currentColumn, "Ngày sinh " + index);
                     currentColumn++;
-                    writer.CopyCellStyle(headerRow, 1, headerRow, currentColumn);
+                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
                     writer.WriteCellValue(headerRow, currentColumn, "Giới tính " + index);
                     currentColumn++;
                 }

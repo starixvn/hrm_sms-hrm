@@ -7,7 +7,9 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Discipline;
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class DisciplineRepository : IDisciplineRepository
+#pragma warning disable S109 // Magic numbers should not be used
     {
         public IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria)
         {
