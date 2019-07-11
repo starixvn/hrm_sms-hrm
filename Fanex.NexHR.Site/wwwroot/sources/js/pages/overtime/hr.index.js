@@ -106,6 +106,7 @@ $(document).ready(function () {
             }
 
             if (requestIds.length > 0) {
+                $btnConfirm.off('click');
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Process</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {

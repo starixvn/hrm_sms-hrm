@@ -537,11 +537,8 @@
     <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetListEmpClaimOT" SpName="OverTime_GetListEmpClaimOT" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="OverTime_GetDetailByListRequestID" SpName="OverTime_GetDetailByListRequestID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="TotalHours" ObjectProperty="TotalWorkHours" />
-      <Mapping DataField="ShiftTotalHours" ObjectProperty="TotalShiftHours" />
-    </Setting>
+    <Setting Key="Overtime_GetEmployeeToRemindClaim" SpName="Overtime_GetEmployeeToRemindClaim" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Overtime_GetDetailsByRequestIds" SpName="Overtime_GetDetailsByRequestIds" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="nexhrx" Plain="0">
       <Mapping DataField="Name" ObjectProperty="Section" />
     </Setting>

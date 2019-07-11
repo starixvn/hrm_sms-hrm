@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria
+﻿namespace Fanex.NexHR.Criteria.Overtime
 {
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;

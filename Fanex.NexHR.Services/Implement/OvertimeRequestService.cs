@@ -7,8 +7,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.XMLExtensions;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
@@ -95,7 +93,7 @@
 
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
-            var criteria = new GetListEmployeeClaimOvertimeCriteria();
+            var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
             IList<SupervisorNameModel> employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
 
             if (employees != null)
@@ -114,8 +112,8 @@
         public bool CheckInvalidOvertimes(string requestIds)
         {
             var isInvalid = false;
-            var criteria = new GetDetailOvertimeByRequestIdsCriteria { ListRequestId = requestIds };
-            IList<OvertimeDaily> overtimes = baseService.GetData<OvertimeDaily>(criteria).ToList();
+            var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
+            IList<DailyOvertimeRequest> overtimes = baseService.GetData<DailyOvertimeRequest>(criteria).ToList();
             if (overtimes != null && overtimes.Any())
             {
                 var index = 0;
@@ -154,7 +152,7 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        private static bool CheckInvalidOvertimes(OvertimeDaily overtime)
+        private static bool CheckInvalidOvertimes(DailyOvertimeRequest overtime)
         {
             var isInvalid = false;
             if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
@@ -175,25 +173,25 @@
             return isInvalid;
         }
 
-        private static bool IsInvalidKeepInView(OvertimeDaily overtime)
+        private static bool IsInvalidKeepInView(DailyOvertimeRequest overtime)
         {
             return (!overtime.OffHours.Equals(0) ||
                 !overtime.PublicHours.Equals(0) ||
-                overtime.TotalWorkHours < (overtime.TotalShiftHours + overtime.NormalHours));
+                overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.NormalHours));
         }
 
-        private static bool IsInvalidOffDay(OvertimeDaily overtime)
+        private static bool IsInvalidOffDay(DailyOvertimeRequest overtime)
         {
             return (!overtime.NormalHours.Equals(0) ||
                 !overtime.PublicHours.Equals(0) ||
-                overtime.TotalWorkHours < overtime.OffHours);
+                overtime.ActualWorkingHours < overtime.OffHours);
         }
 
-        private static bool IsInvalidHoliday(OvertimeDaily overtime)
+        private static bool IsInvalidHoliday(DailyOvertimeRequest overtime)
         {
             return (!overtime.NormalHours.Equals(0) ||
                 !overtime.OffHours.Equals(0) ||
-                overtime.TotalWorkHours < overtime.PublicHours);
+                overtime.ActualWorkingHours < overtime.PublicHours);
         }
 
         private static List<List<string>> SplitList(List<string> locations, int size)

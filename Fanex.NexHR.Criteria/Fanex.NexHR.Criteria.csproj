@@ -193,7 +193,7 @@
     <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
     <Compile Include="Employee\EditPasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
-    <Compile Include="Employee\GetListEmployeeClaimOvertimeCriteria.cs" />
+    <Compile Include="Overtime\GetEmployeeToRemindClaimOvertimeCriteria.cs" />
     <Compile Include="Employee\EditPasswordResetStatusCriteria.cs" />
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\ResetLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
-    <Compile Include="Overtime\GetDetailOvertimeByRequestIdsCriteria.cs" />
+    <Compile Include="Overtime\GetOvertimeDetailsByRequestIdsCriteria.cs" />
     <Compile Include="Report\Overtime\GetDailyOvertimeReportCriteria.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>

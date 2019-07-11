@@ -9,7 +9,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;

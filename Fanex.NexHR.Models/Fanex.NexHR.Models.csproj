@@ -126,7 +126,6 @@
     <Compile Include="Overtime\EditMonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestParam.cs" />
     <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
-    <Compile Include="Overtime\OvertimeDaily.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Overtime\Requester.cs" />

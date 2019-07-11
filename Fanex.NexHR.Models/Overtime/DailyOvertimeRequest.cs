@@ -8,6 +8,9 @@
     [XMLName("Row")]
     public class DailyOvertimeRequest
     {
+        [XmlIgnore]
+        public long RequestId { get; set; }
+
         public DateTime WorkDate { get; set; }
         public int? ShiftId { get; set; }
 

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Overtime;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
 
