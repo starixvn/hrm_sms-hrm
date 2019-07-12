@@ -43,7 +43,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
-            model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
+            model.ToDate = Utilities.SetTimeToEndOfDay(model.ToDate);
             model.ViewType = RequestViewType.HRSpace;
 
             var criteria = new GetRequestCriteria
@@ -70,7 +70,7 @@
         public ActionResult VoidRequestWorkingTimeRequest(RequestViewModel request)
         {
             request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
-            request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
+            request.ToDate = Utilities.SetTimeToEndOfDay(request.ToDate);
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {
@@ -107,7 +107,7 @@
 
         private ActionResult WorkingTimeRequest(RequestViewModel model)
         {
-            model.ToDate = Utilities.AddTimeToDate(model.ToDate, 23, 59, 59);
+            model.ToDate = Utilities.SetTimeToEndOfDay(model.ToDate);
             model.ViewType = RequestViewType.CompanySpace;
             var criteria = new GetRequestCriteria
             {

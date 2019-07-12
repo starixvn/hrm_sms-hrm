@@ -74,7 +74,7 @@
         public ActionResult Create()
         {
             var currentDate = DateTime.Now.Date;
-            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(sessionService.Employee.Id, currentDate, currentDate);
+            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(sessionService.Employee.Id, currentDate, toDate: currentDate);
 
             var model = new ChangeShiftViewModel
             {

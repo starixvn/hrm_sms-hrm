@@ -256,7 +256,7 @@
         private void GetRequests(RequestViewModel request)
         {
             request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
-            request.ToDate = Utilities.AddTimeToDate(request.ToDate, 23, 59, 59);
+            request.ToDate = Utilities.SetTimeToEndOfDay(request.ToDate);
             request.LeaveTypeCollection = leaveTypeService.GetAll();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))

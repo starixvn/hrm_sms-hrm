@@ -312,10 +312,11 @@
                 {
                     using (var processor = new ImageProcessor())
                     {
+                        const int JpegCompression = 100;
                         var resizer = new ResizeFilter(80, 80, ResizeMethod.Crop, AnchorLocation.Middle);
                         processor.AddFilter(resizer);
                         processor.OutputFormat = OutputFormat.Jpeg;
-                        processor.JpegCompression = 100;
+                        processor.JpegCompression = JpegCompression;
                         processor.ProcessImage(file.InputStream, stream);
                         var image = Image.FromStream(stream);
                         image.Save(Server.MapPath("/avatars/") + code + ".jpg");
@@ -544,13 +545,14 @@
         {
             string supervisorsName = string.Empty;
             IList<SupervisorNameModel> supervisorsFilter;
+            const byte MaxDisplayItems = 3;
 
             if (supervisors != null)
             {
-                supervisorsFilter = supervisors.Where(x => x.ActionType == roleSystem).Take(3).ToList();
+                supervisorsFilter = supervisors.Where(x => x.ActionType == roleSystem).Take(MaxDisplayItems).ToList();
                 supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
 
-                if (supervisorsFilter.Count > 3)
+                if (supervisorsFilter.Count > MaxDisplayItems)
                 {
                     supervisorsName = supervisorsName + ",...";
                 }

@@ -1,13 +1,15 @@
 ﻿namespace Fanex.NexHR.ViewModels.Request
 {
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Resources;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Resources;
 
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class CheckInOutRequestViewModel : IValidatableObject
     {
         public long RequestId { get; set; }
@@ -40,13 +42,7 @@
         [Required]
         public int RequestTypeId { get; set; }
 
-        public string RequestTypeName
-        {
-            get
-            {
-                return RequestTypeId == (int)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
-            }
-        }
+        public string RequestTypeName => RequestTypeId == (int)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
 
         public byte ReasonId { get; set; }
 
@@ -74,25 +70,19 @@
 
             if (string.IsNullOrEmpty(Shift))
             {
-                var validation = new ValidationResult(
-                    "Invalid shift",
-                    new[] { "Shift" });
+                var validation = new ValidationResult("Invalid shift", new[] { "Shift" });
                 result.Add(validation);
             }
 
             if (ForDate.Date > DateTime.Today)
             {
-                var validation = new ValidationResult(
-                    Resources.Messages.NoFutureCheckInOutRequest,
-                    new[] { "ForDate" });
+                var validation = new ValidationResult(Messages.NoFutureCheckInOutRequest, new[] { "ForDate" });
                 result.Add(validation);
             }
 
             if (string.IsNullOrEmpty(Shift))
             {
-                var validation = new ValidationResult(
-                    "Invalid shift",
-                    new[] { "Shift" });
+                var validation = new ValidationResult("Invalid shift", new[] { "Shift" });
                 result.Add(validation);
             }
 

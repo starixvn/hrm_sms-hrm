@@ -86,16 +86,9 @@
             }
         }
 
-        public static DateTime AddTimeToDate(DateTime dateTime, string time)
+        public static DateTime SetTimeToEndOfDay(DateTime time)
         {
-            var times = time.Split(new[] { ':' });
-            TimeSpan ts = new TimeSpan(int.Parse(times[0]), int.Parse(times[1]), 0);
-            return dateTime.Date + ts;
-        }
-
-        public static DateTime AddTimeToDate(DateTime dateTime, int hours, int minutes, int seconds)
-        {
-            return dateTime.Date.AddHours(hours).AddMinutes(minutes).AddSeconds(seconds);
+            return new DateTime(time.Year, time.Month, time.Day, 23, 59, 59);
         }
 
         public static string GetTime(DateTime? dateTime)
