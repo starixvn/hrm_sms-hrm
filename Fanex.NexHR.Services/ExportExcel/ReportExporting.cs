@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -11,9 +12,8 @@
     using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ReportExporting
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int _RowStartBodyWorkingCalendarSummary = 5;
         private const string _EmployeeWorkingCalendarSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarSummaryTemplate.xls";

@@ -14,7 +14,7 @@
 
         public void SendEmail(string senderEmail, string receiverEmail, string mailCC, string subject, string body)
         {
-            SendEmail(senderEmail, senderEmail, receiverEmail, mailCC, subject, body);
+            SendEmail(senderEmail, senderName: senderEmail, receiverEmail: receiverEmail, mailCC: mailCC, subject: subject, body: body);
         }
 
         public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCC, string subject, string body)

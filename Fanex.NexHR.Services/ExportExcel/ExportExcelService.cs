@@ -1,7 +1,8 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -14,9 +15,8 @@
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelService : IExportExcelService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;

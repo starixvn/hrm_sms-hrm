@@ -1,6 +1,7 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Web;
     using Core;
     using Criteria.Discipline;
@@ -8,9 +9,8 @@
     using Models.Discipline;
     using Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportDisciplineSummaryService : IExportDisciplineSummaryService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const string TemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const int HeaderRow = 2;

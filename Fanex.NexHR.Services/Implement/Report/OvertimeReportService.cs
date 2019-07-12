@@ -111,8 +111,8 @@
 
                     // summary
                     templateWorksheet.Cells[StartMonthColumn, 1, StartMonthColumn, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-
-                    for (var i = 0; i <= 12; i++)
+                    const byte TotalMonths = 12;
+                    for (var i = 0; i <= TotalMonths; i++)
                     {
                         colIndex = StartMonthColumn + i;
                         var excelAddress = $"{worksheet.Cells[StartBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";

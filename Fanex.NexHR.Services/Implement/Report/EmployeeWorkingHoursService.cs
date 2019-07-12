@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -14,9 +15,8 @@
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IEmployeeWorkingHoursRepository repository;
 

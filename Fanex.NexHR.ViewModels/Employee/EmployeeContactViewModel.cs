@@ -2,11 +2,11 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using Fanex.NexHR.Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class EmployeeContactViewModel
-#pragma warning disable S109 // Magic numbers should not be used
     {
         [Display(Name = "Chinese Name")]
         [StringLength(200, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]

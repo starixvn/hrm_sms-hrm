@@ -13,7 +13,6 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.ViewModels.Report.Overtime;
     using NPOI.HSSF.UserModel;
 
@@ -69,13 +68,15 @@
 
         public ActionResult MonthlyOvertimeDetails(int employeeId, byte month, int year, CalendarType calendar)
         {
+            const byte FromDay = 10;
+            const byte ToDay = 9;
             var fromDate = new DateTime(year, month, 1);
             var toDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
             if (calendar == CalendarType.Fiscal)
             {
                 var previousMonth = fromDate.AddMonths(-1);
-                fromDate = new DateTime(previousMonth.Year, previousMonth.Month, 10);
-                toDate = new DateTime(year, month, 9);
+                fromDate = new DateTime(previousMonth.Year, previousMonth.Month, FromDay);
+                toDate = new DateTime(year, month, ToDay);
             }
 
             IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(employeeId, fromDate, toDate);

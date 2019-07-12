@@ -1,10 +1,15 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel.JobTitle
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
+
+    public interface IJobTitleExportService
+    {
+        void ExportJobTitle(IEnumerable<LookupData> jobtitles);
+    }
 
     public class JobTitleExportService : IJobTitleExportService
     {
@@ -20,9 +25,10 @@
             const string sheetName = "Job title";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
+            // Fill report title.
+            const byte TotalCopyRows = 2;
+            writer.CopyRows(0, TotalCopyRows);
+            // Fill report header.
             writer.CopyRows(RowStartHead, 1);
 
             FillContent(jobtitles, ref writer);

@@ -27,9 +27,7 @@
     using Simplicode.Imaging;
     using Simplicode.Imaging.Filters;
 
-#pragma warning disable S109 // Magic numbers should not be used
     public class EmployeeController : BaseController
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly ITeamService teamService;
         private readonly ILookupDataService lookupDataService;

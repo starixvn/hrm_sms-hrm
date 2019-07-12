@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
     using System.Web;
@@ -11,9 +12,13 @@
     using Models;
     using Models.Request;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    public interface IExportExcelAttendanceReportService
+    {
+        void Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate);
+    }
+
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int RowStartHeader = 2;
         private const int RowStartBody = 3;

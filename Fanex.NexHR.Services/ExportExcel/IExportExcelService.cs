@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;

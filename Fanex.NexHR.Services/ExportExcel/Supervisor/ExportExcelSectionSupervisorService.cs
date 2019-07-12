@@ -4,10 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using ExportExcel;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Supervisor;
+
+    public interface IExportExcelSectionSupervisorService
+    {
+        void Export(IList<SectionSupervisorReportModel> supervisors);
+    }
 
     public class ExportExcelSectionSupervisorService : IExportExcelSectionSupervisorService
     {
@@ -23,9 +27,11 @@
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Section Supervisor");
 
-            /// Fill report title.
-            writer.CopyRows(0, 2);
-            /// Fill report header.
+            // Fill report title.
+            const byte TotalCopyRows = 2;
+            writer.CopyRows(0, TotalCopyRows);
+
+            // Fill report header.
             writer.CopyRows(RowStartHeader, 1);
 
             FillContentRowReport(supervisors, ref writer);

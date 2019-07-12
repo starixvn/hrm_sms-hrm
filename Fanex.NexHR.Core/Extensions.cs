@@ -312,24 +312,6 @@
 
         #region Business
 
-        public static string ToText(this byte status)
-        {
-            switch (status)
-            {
-                case 1:
-                    return Labels.Pending;
-
-                case 2:
-                    return Labels.Approved;
-
-                case 3:
-                    return Labels.Rejected;
-
-                default:
-                    return string.Empty;
-            }
-        }
-
         public static string RequestTypeToText(this short type)
         {
             switch (type)

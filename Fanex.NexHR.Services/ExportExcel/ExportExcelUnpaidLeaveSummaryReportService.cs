@@ -2,16 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web;
-    using ExportExcel;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    public interface IExportExcelUnpaidLeaveSummaryReportService
+    {
+        void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, UnpaidLeaveType leaveType);
+    }
+
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int RowStartHeader = 2;
         private const int RowStartBody = 4;
@@ -69,8 +73,8 @@
             var record = new
             {
                 Count = rowIndex,
-                NickName = leaveSummary.Employee.NickName,
-                FullName = leaveSummary.Employee.FullName,
+                leaveSummary.Employee.NickName,
+                leaveSummary.Employee.FullName,
                 Jan = leaveSummary.Jan * 1.00,
                 Feb = leaveSummary.Feb * 1.00,
                 Mar = leaveSummary.Mar * 1.00,

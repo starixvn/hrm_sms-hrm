@@ -2,8 +2,6 @@ namespace Fanex.NexHR.Services.Extensions
 {
     using Fanex.NexHR.MailDeliver;
     using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.Services.ExportExcel;
-    using Fanex.NexHR.Services.ExportExcel.JobTitle;
     using Unity;
 
     public static class ServiceDIExtensions

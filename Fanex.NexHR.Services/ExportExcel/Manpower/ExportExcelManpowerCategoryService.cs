@@ -4,10 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using ExportExcel;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
+
+    public interface IExportExcelManpowerCategoryService
+    {
+        void Export(IList<ManpowerCategoryModel> manpowers, int year);
+    }
 
     public class ExportExcelManpowerCategoryService : IExportExcelManpowerCategoryService
     {
@@ -30,7 +34,8 @@
             writer.CopyRows(1, 1);
 
             /// Fill report header.
-            writer.CopyRows(RowStartHeader, 2);
+            const byte TotalCopyRows = 2;
+            writer.CopyRows(RowStartHeader, TotalCopyRows);
 
             FillContentRowReport(manpowers, ref writer);
             FillContentRowFooterReport(manpowers, ref writer);
@@ -62,19 +67,19 @@
             var record = new
             {
                 Count = rowIndex,
-                GroupCode = manpower.GroupCode,
-                TotalExpat = manpower.TotalExpat,
-                TotalLocal = manpower.TotalLocal,
-                Total = manpower.Total,
-                Management = manpower.Management,
+                manpower.GroupCode,
+                manpower.TotalExpat,
+                manpower.TotalLocal,
+                manpower.Total,
+                manpower.Management,
                 AVGManagement = ReturnValidValue(manpower.Total, ((manpower.Management * 1.00) / manpower.Total)),
-                ExecutiveWithPosition = manpower.ExecutiveWithPosition,
+                manpower.ExecutiveWithPosition,
                 AVGExecutiveWithPosition = ReturnValidValue(manpower.Total, ((manpower.ExecutiveWithPosition * 1.00) / manpower.Total)),
-                Executive = manpower.Executive,
+                manpower.Executive,
                 AVGExecutive = ReturnValidValue(manpower.Total, ((manpower.Executive * 1.00) / manpower.Total)),
-                Staff = manpower.Staff,
+                manpower.Staff,
                 AVGStaff = ReturnValidValue(manpower.Total, ((manpower.Staff * 1.00) / manpower.Total)),
-                Worker = manpower.Worker,
+                manpower.Worker,
                 AVGWorker = ReturnValidValue(manpower.Total, ((manpower.Worker * 1.00) / manpower.Total))
             };
 

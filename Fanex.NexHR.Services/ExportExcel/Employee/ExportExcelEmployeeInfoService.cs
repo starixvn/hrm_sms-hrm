@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
@@ -9,9 +10,8 @@
     using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";

@@ -1,7 +1,8 @@
-﻿namespace Fanex.NexHR.Services.ExportExcel
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
@@ -11,9 +12,8 @@
     using NPOI.SS.Util;
     using Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class TotalWorkingHourExportService : IExportService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private readonly IList<TotalWorkingHours> totalWorkingHours;
         private readonly DateTime fromDate;
@@ -80,7 +80,7 @@
             {
                 bodyStyle = (rowIndex % 2 == 0) ? bodyStyle2 : bodyStyle1;
 
-                var row = sheet.CreateRow(rowIndex);
+                IRow row = sheet.CreateRow(rowIndex);
                 cellBody = row.CreateCell(0);
                 cellBody.CellStyle = bodyStyle;
                 cellBody.SetCellValue(rowIndex - 4);
@@ -91,103 +91,38 @@
 
                 bodyStyle3.Alignment = HorizontalAlignment.Left;
                 cellBody = row.CreateCell(2);
-
                 cellBody.CellStyle = (rowIndex % 2 == 0) ? bodyStyle4 : bodyStyle3;
-
                 cellBody.SetCellValue(totalWorkingHour.Employee.FullName);
 
-                cellBody = row.CreateCell(3);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.Employee.NickName);
+                WriteCell(row.CreateCell(3), bodyStyle, totalWorkingHour.Employee.NickName);
+                WriteCell(row.CreateCell(4), bodyStyle, totalWorkingHour.Employee.Team.Name);
+                WriteCell(row.CreateCell(5), bodyStyle, totalWorkingHour.WorkingDay);
+                WriteCell(row.CreateCell(6), bodyStyle, totalWorkingHour.WorkingHours);
+                WriteCell(row.CreateCell(7), bodyStyle, totalWorkingHour.TotalHours.ToString("0.00"));
+                WriteCell(row.CreateCell(8), bodyStyle, totalWorkingHour.ActualWorkingDay);
+                WriteCell(row.CreateCell(9), bodyStyle, totalWorkingHour.PaymentWorkingDay);
 
-                cellBody = row.CreateCell(4);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.Employee.Team.Name);
+                WriteCell(row.CreateCell(10), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.AnnualLeave));
+                WriteCell(row.CreateCell(11), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BusinessTrip));
+                WriteCell(row.CreateCell(12), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BereavementLeave));
+                WriteCell(row.CreateCell(13), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.Compensationleave));
+                WriteCell(row.CreateCell(14), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.WeddingLeave));
+                WriteCell(row.CreateCell(15), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.TotalPaymentWorkingDay));
+                WriteCell(row.CreateCell(16), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.UnpaidLeave));
+                WriteCell(row.CreateCell(17), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
+                WriteCell(row.CreateCell(18), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.PeternityLeave));
+                WriteCell(row.CreateCell(19), bodyStyle, Utilities.DisplayEmptyFloatNumber(totalWorkingHour.MaternityLeave));
 
-                cellBody = row.CreateCell(5);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.WorkingDay);
-
-                cellBody = row.CreateCell(6);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.WorkingHours);
-
-                cellBody = row.CreateCell(7);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.TotalHours.ToString("0.00"));
-
-                cellBody = row.CreateCell(8);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.ActualWorkingDay);
-
-                cellBody = row.CreateCell(9);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(totalWorkingHour.PaymentWorkingDay);
-
-                cellBody = row.CreateCell(10);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.AnnualLeave));
-
-                cellBody = row.CreateCell(11);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BusinessTrip));
-
-                cellBody = row.CreateCell(12);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.BereavementLeave));
-
-                cellBody = row.CreateCell(13);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.Compensationleave));
-
-                cellBody = row.CreateCell(14);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.WeddingLeave));
-
-                cellBody = row.CreateCell(15);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.TotalPaymentWorkingDay));
-
-                cellBody = row.CreateCell(16);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.UnpaidLeave));
-
-                cellBody = row.CreateCell(17);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
-
-                cellBody = row.CreateCell(18);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.PeternityLeave));
-
-                cellBody = row.CreateCell(19);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayEmptyFloatNumber(totalWorkingHour.MaternityLeave));
-
-                cellBody = row.CreateCell(20);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
-
-                cellBody = row.CreateCell(21);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTNormalHours));
-
-                cellBody = row.CreateCell(22);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTOffHours));
-
-                cellBody = row.CreateCell(23);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(Utilities.DisplayFloatNumber(totalWorkingHour.OTPublicHours));
-
-                cellBody = row.CreateCell(24);
-                cellBody.CellStyle = bodyStyle;
-                cellBody.SetCellValue(string.Empty);
+                WriteCell(row.CreateCell(20), bodyStyle, Utilities.DisplayFloatNumber(totalWorkingHour.TotalUnpaidLeaveInsurance));
+                WriteCell(row.CreateCell(21), bodyStyle, Utilities.DisplayFloatNumber(totalWorkingHour.OTNormalHours));
+                WriteCell(row.CreateCell(22), bodyStyle, Utilities.DisplayFloatNumber(totalWorkingHour.OTOffHours));
+                WriteCell(row.CreateCell(23), bodyStyle, Utilities.DisplayFloatNumber(totalWorkingHour.OTPublicHours));
+                WriteCell(row.CreateCell(24), bodyStyle, string.Empty);
 
                 rowIndex++;
             }
 
-            sheet.CreateFreezePane(0, 4);
+            sheet.CreateFreezePane(0, 5);
 
             for (var i = 0; i < sheet.GetRow(3).LastCellNum; i++)
             {
@@ -195,6 +130,12 @@
             }
 
             return workbook;
+        }
+
+        public static void WriteCell(ICell cell, ICellStyle cellStyle, dynamic value)
+        {
+            cell.CellStyle = cellStyle;
+            cell.SetCellValue(value);
         }
 
         public static void WriteHeader(HSSFWorkbook workbook, ISheet sheet)

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Linq;
@@ -20,9 +21,8 @@
         byte[] ExportDriverPickup(Actor actor, WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules);
     }
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelScheduleService : IExportExcelScheduleService
-#pragma warning disable S109 // Magic numbers should not be used
     {
         private const int DefaultRowHeight = 14;
         private const string DateFormat = "dd-MMM-yyyy";
@@ -229,6 +229,7 @@
                 .ThenBy(x => x.CheckIn).ThenBy(x => x.CheckOut).ToList();
         }
 
+        [SuppressMessage("Critical Code Smell", "S1067:Expressions should not be too complex", Justification = "Pending")]
         private static void SumEmployeeWorkingOnShift(
             IList<SumEmployeeWorkingOnShift> employeeWorkingOnShifts,
             DailySchedule dailySchedule)
@@ -237,13 +238,11 @@
             if (shift.IsShift)
             {
                 var findExists = employeeWorkingOnShifts.FirstOrDefault(
-#pragma warning disable S1067 // Expressions should not be too complex
                     x => x.Code == shift.Code
                         && x.CheckIn == shift.CheckIn
                         && x.CheckOut == shift.CheckOut
                         && x.IsInAfterDay == shift.IsInAfterDay
                         && x.IsOutAfterDay == shift.IsOutAfterDay
-#pragma warning restore S1067 // Expressions should not be too complex
                     );
                 if (findExists == null)
                 {

@@ -620,7 +620,7 @@
             var body = Utilities.ReadTextFile(templateEmailPath);
             var forDate = request.TotalDays == Constants.HalfDayOffValue
                 ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
-                : GetStringDateForLeaveRequest(request.FromDate, request.FromDate, request.ToDate, request.TotalDays);
+                : GetStringDateForLeaveRequest(request.FromDate, fromDate: request.FromDate, toDate: request.ToDate, totalDays: request.TotalDays);
             body = string.Format(
                 body,
                 emailModel.SendToNickName,

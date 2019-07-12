@@ -10,7 +10,6 @@
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel.JobTitle;
     using Resources;
 
     public class JobTitleController : BaseExportController

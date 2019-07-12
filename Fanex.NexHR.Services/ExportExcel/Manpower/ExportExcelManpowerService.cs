@@ -4,10 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using ExportExcel;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
+
+    public interface IExportExcelManpowerService
+    {
+        void Export(IList<ManpowerModel> manpowers, int year);
+    }
 
     public class ExportExcelManpowerService : IExportExcelManpowerService
     {
@@ -25,12 +29,13 @@
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Manpower Report");
 
-            /// Fill report title.
+            // Fill report title.
             writer.WriteRow(0, new object[] { reportTitle });
             writer.CopyRows(1, 1);
 
-            /// Fill report header.
-            writer.CopyRows(RowStartHeader, 2);
+            // Fill report header.
+            const byte TotalCopyRows = 2;
+            writer.CopyRows(RowStartHeader, TotalCopyRows);
 
             FillContentRowReport(manpowers, year, ref writer);
             FillContentRowFooterReport(manpowers, year, ref writer);
@@ -85,11 +90,11 @@
             var record = new
             {
                 Count = rowIndex,
-                GroupCode = manpower.GroupCode,
-                ProbationResigned = manpower.ProbationResigned,
-                ConfirmedResigned = manpower.ConfirmedResigned,
-                NewHire = manpower.NewHire,
-                ActiveUser = manpower.ActiveUser,
+                manpower.GroupCode,
+                manpower.ProbationResigned,
+                manpower.ConfirmedResigned,
+                manpower.NewHire,
+                manpower.ActiveUser,
                 ProbationResignedJan = GetValueForCell(manpower.ProbationResignedJan, year, month),
                 ConfirmedResignedJan = GetValueForCell(manpower.ConfirmedResignedJan, year, month),
                 NewHireJan = GetValueForCell(manpower.NewHireJan, year, month),

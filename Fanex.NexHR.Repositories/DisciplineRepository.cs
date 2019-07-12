@@ -2,14 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Discipline;
 
-#pragma warning disable S109 // Magic numbers should not be used
     public class DisciplineRepository : IDisciplineRepository
-#pragma warning disable S109 // Magic numbers should not be used
     {
         public IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria)
         {
@@ -40,6 +39,7 @@
             }
         }
 
+        [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
         private static IList<DisciplineDetailModel> MappingObjectForDisciplineDetail(IList<dynamic> disciplines)
         {
             return disciplines.Select(discipline =>

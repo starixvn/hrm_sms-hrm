@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -10,9 +11,8 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public static class Utilities
-#pragma warning disable S109 // Magic numbers should not be used
     {
         public static IList<SelectListItem> CheckInOutTypes
         {

@@ -6,7 +6,6 @@
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.ExportExcel;
     using Fanex.NexHR.ViewModels.Discipline;
 
     public class ExportDisciplineController : BaseController

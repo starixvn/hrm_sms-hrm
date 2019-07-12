@@ -7,6 +7,9 @@
 
     public class MonthlyFilterViewModel
     {
+        private const byte FromDay = 26;
+        private const byte ToDay = 25;
+
         public int Month { get; set; }
         public int Year { get; set; }
         public string SectionIds { get; set; }
@@ -26,7 +29,7 @@
                 else
                 {
                     var previousMonth = new DateTime(Year, Month, 1).AddMonths(-1);
-                    return new DateTime(previousMonth.Year, previousMonth.Month, 26);
+                    return new DateTime(previousMonth.Year, previousMonth.Month, FromDay);
                 }
             }
         }
@@ -42,7 +45,7 @@
                 }
                 else
                 {
-                    return new DateTime(Year, Month, 25);
+                    return new DateTime(Year, Month, ToDay);
                 }
             }
         }

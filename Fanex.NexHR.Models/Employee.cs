@@ -3,13 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class Employee : EntityBase<int>
-#pragma warning disable S109 // Magic numbers should not be used
     {
         public string DomainUsername { get; set; }
 

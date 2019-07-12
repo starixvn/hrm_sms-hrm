@@ -8,6 +8,11 @@
     using Models.Report;
     using Resources;
 
+    public interface IExportWeekendLeaveSummaryService
+    {
+        void Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves);
+    }
+
     public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
     {
         private const string WeekendLeaveSummaryTemplatePath = @"~\ExcelTemplates\WeekendLeaveSummaryTemplate.xls";
@@ -42,7 +47,7 @@
 
             FillContentRow(weekendLeaves, ref writer);
             writer.SyncColumnsWidth(TotalCol);
-            writer.CreateFreezePane(6, 3);
+            writer.CreateFreezePane(0, BodyRow);
 
             writer.Render();
         }
@@ -87,8 +92,8 @@
             var record = new
             {
                 Count = rowIndex,
-                Code = weekendLeave.Code,
-                FullName = weekendLeave.FullName,
+                weekendLeave.Code,
+                weekendLeave.FullName,
                 Nick = weekendLeave.NickName,
                 Section = weekendLeave.GroupName,
                 Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,

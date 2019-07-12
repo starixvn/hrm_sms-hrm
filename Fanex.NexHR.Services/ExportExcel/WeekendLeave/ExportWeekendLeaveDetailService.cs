@@ -8,6 +8,11 @@
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Resources;
 
+    public interface IExportWeekendLeaveDetailService
+    {
+        void Export(GetWeekendLeaveDetailCriteria criteria, IList<WeekendLeaveDetail> weekendLeaveDetails);
+    }
+
     public class ExportWeekendLeaveDetailService : IExportWeekendLeaveDetailService
     {
         private const string WeekendLeaveDetailTemplatePath = @"~\ExcelTemplates\WeekendLeaveDetailTemplate.xls";
@@ -42,7 +47,7 @@
 
             FillContentRow(weekendLeaveDetails, ref writer);
             writer.SyncColumnsWidth(TotalCol);
-            writer.CreateFreezePane(6, 3);
+            writer.CreateFreezePane(0, BodyRow);
 
             writer.Render();
         }
@@ -87,13 +92,13 @@
             var record = new
             {
                 Count = rowIndex,
-                Code = weekendLeave.Code,
-                FullName = weekendLeave.FullName,
+                weekendLeave.Code,
+                weekendLeave.FullName,
                 Nick = weekendLeave.NickName,
                 Section = weekendLeave.GroupName,
                 Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,
                 LeaveDate = weekendLeave.LeaveDate.ToDateMonthYearFormatedDate(),
-                LeaveType = weekendLeave.LeaveType,
+                weekendLeave.LeaveType,
                 LeaveDay = leaveDayQuantity
             };
             rowIndex++;

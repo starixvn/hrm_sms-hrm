@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NexHR.Core
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
-#pragma warning disable S109 // Magic numbers should not be used
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public static class DateTimeExtensions
-#pragma warning disable S109 // Magic numbers should not be used
     {
         public static DateTime FirstDayOfWeek(this DateTime dt)
         {
