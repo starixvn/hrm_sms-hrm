@@ -187,11 +187,7 @@
                     colIndex = 3;
                     for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
                     {
-                        if (item.Weekdays[(int)day.DayOfWeek] > 0)
-                        {
-                            worksheet.Cells[rowIndex, colIndex].Value = item.Weekdays[(int)day.DayOfWeek];
-                        }
-
+                        worksheet.Cells[rowIndex, colIndex].Value = item.Weekdays[(int)day.DayOfWeek];
                         colIndex++;
                     }
 
