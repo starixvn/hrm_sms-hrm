@@ -1047,6 +1047,7 @@
     <Content Include="wwwroot\dist\styles\report.dailyovertime.js.map" />
     <Content Include="wwwroot\dist\styles\report.monthlyovertime.js.map" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.js.map" />
+    <Content Include="ExcelTemplates\MonthlyOvertime.xlsx" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1225,7 +1226,6 @@
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
     <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
     <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
-    <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xls" />
     <Content Include="Views\ExtensionNo\Create.cshtml" />
     <Content Include="Views\ExtensionNo\Edit.cshtml" />
     <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />

@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Overtime;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
@@ -77,18 +76,6 @@
             MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
             return monthlyRequest ?? new MonthlyOvertimeRequest();
-        }
-
-        public IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria)
-        {
-            IList<OvertimeExcelReport> overtimeRecord = null;
-
-            if (criteria.IsValid())
-            {
-                overtimeRecord = overtimeRepository.OvertimeRecord(criteria);
-            }
-
-            return overtimeRecord;
         }
 
         public void SendMailToReminderClaimOvertime(string subject, string content)

@@ -21,8 +21,6 @@
 
         bool CheckInvalidOvertimes(string requestIds);
 
-        IList<OvertimeExcelReport> OvertimeRecord(GetOvertimeRecordCriteria criteria);
-
         CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
 
         CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, string command, byte roleId);

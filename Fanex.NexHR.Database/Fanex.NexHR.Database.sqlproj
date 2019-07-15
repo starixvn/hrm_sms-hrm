@@ -142,9 +142,8 @@
     <Build Include="dbo\Stored Procedures\LookupData_JobTitle_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsertByArrangeShift.sql" />
     <Build Include="dbo\Stored Procedures\LookupData_Marriage_SELECT.sql" />
-    <Build Include="dbo\Stored Procedures\ExportExcel_OvertimeNormal.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ExportExcel_OvertimeFiscal.sql" />
+    <Build Include="dbo\Stored Procedures\Report_MonthlyOvertime.sql" />
     <Build Include="dbo\Stored Procedures\Memo_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetNewEmployeeCode.sql" />
     <Build Include="dbo\Stored Procedures\Memo_GetById.sql" />

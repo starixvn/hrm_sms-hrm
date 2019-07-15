@@ -532,8 +532,6 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmployeeId" />
       <Mapping DataField="StatusId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="ExportExcel_OvertimeFiscal" SpName="ExportExcel_OvertimeFiscal" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="ExportExcel_OvertimeNormal" SpName="ExportExcel_OvertimeNormal" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
@@ -543,6 +541,9 @@
       <Mapping DataField="Name" ObjectProperty="Section" />
     </Setting>
     <Setting Key="Report_MonthlyOvertimeDetails" SpName="Report_MonthlyOvertimeDetails" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_MonthlyOvertime" SpName="Report_MonthlyOvertime" DbName="nexhrx" Plain="0">
+      <Mapping DataField="GroupName" ObjectProperty="Section" />
+    </Setting>
     <Setting Key="Report_DailyOvertime" SpName="Report_DailyOvertime" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupName" ObjectProperty="Section" />
     </Setting>

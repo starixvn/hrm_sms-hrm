@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IOvertimeReportRepository.cs" />
     <Compile Include="LateInEarlyOutRequestRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="LeaveRequestRepository.cs" />
     <Compile Include="KeepInViewRequestRepository.cs" />
     <Compile Include="EmployeeWorkingHoursRepository.cs" />
+    <Compile Include="OvertimeReportRepository.cs" />
     <Compile Include="ScheduleArrangeRepository.cs" />
     <Compile Include="MenuRepository.cs" />
     <Compile Include="OvertimeRequestRepository.cs">

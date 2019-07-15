@@ -127,7 +127,6 @@
     <Compile Include="Overtime\GetMonthlyOvertimeRequestParam.cs" />
     <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
-    <Compile Include="Overtime\OvertimeExcelReport.cs" />
     <Compile Include="Overtime\Requester.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />
     <Compile Include="Report\ManpowerModel.cs" />
@@ -135,6 +134,7 @@
     <Compile Include="Report\MonthlyWorkingHours\GetMonthlyWorkingHoursParam.cs" />
     <Compile Include="Report\MonthlyWorkingHours\MonthlyWorking.cs" />
     <Compile Include="Report\Overtime\DailyOvertimeDetails.cs" />
+    <Compile Include="Report\Overtime\DateRange.cs" />
     <Compile Include="Report\Overtime\GetDailyOvertimeDetailsParam.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeParam.cs" />
     <Compile Include="Report\Overtime\YearlyOvertime.cs" />

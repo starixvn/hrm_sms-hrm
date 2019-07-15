@@ -15,8 +15,6 @@
 
         HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate);
 
-        HSSFWorkbook ExportEmployeeOvertimeRecord(IList<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate);
-
         HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate);
     }
 }

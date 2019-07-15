@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -20,12 +19,10 @@
     {
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;
-        private const int _RowStartBodyOvertimeRecord = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
 
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
-        private const string _EmployeeOvertimeRecordFilePathExcelTemplate = "~\\ExcelTemplates\\EmployeeOvertimeTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
         public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
@@ -118,219 +115,6 @@
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;
-        }
-
-        public HSSFWorkbook ExportEmployeeOvertimeRecord(IList<OvertimeExcelReport> overtimes, int? calendar, DateTime fromDate, DateTime toDate)
-        {
-            int totalDay = Convert.ToInt32((toDate - fromDate).TotalDays) + 1;
-            HSSFWorkbook hssfworkbook;
-
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeOvertimeRecordFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            ISheet templateSheet = hssfworkbook.GetSheet("sheet1");
-            ISheet sheet = hssfworkbook.CloneSheet("sheet1", "OvertimeRecord");
-
-            //// render Header
-            int totalHeaderDateCell = totalDay * 2;
-
-            RenderExportEmployeeOTHeader(sheet, fromDate, toDate, totalHeaderDateCell);
-
-            if (overtimes != null && overtimes.Any())
-            {
-                //// render Overtime type Header.
-                RenderOverTimeTypeHeader(totalHeaderDateCell, overtimes, sheet);
-
-                //// render Body.
-                overtimes.RemoveAt(0);
-                var model = (from item in overtimes
-                             group item by item.Team into g
-                             select new OvertimeExcelReportViewModel { Name = g.Key, ListOvertimeEntity = g.ToList() }).ToList();
-
-                int rowIndex = _RowStartBodyOvertimeRecord;
-                const int rowTeamCopy = _RowStartBodyOvertimeRecord + 2;
-                short rowTeamHeight = sheet.GetRow(rowTeamCopy).Height;
-                var numberCount = 1;
-
-                foreach (OvertimeExcelReportViewModel overtime in model)
-                {
-                    if (overtime.Name != null && overtime.ListOvertimeEntity.Any())
-                    {
-                        CopyRow(templateSheet, sheet, rowIndex, rowTeamCopy);
-
-                        IRow rowTeam = sheet.GetRow(rowIndex);
-                        rowTeam.Height = rowTeamHeight;
-                        ICell cellTeam = rowTeam.GetCell(0);
-                        cellTeam.SetCellValue(overtime.Name.ToUpperInvariant());
-                        sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 2);
-                        rowIndex++;
-                        var numberStart = rowIndex + 1;
-
-                        RenderOvertimeSection(overtime, sheet, templateSheet, ref rowIndex, ref numberCount, totalHeaderDateCell);
-
-                        ICell cellCountMemberInTeam = rowTeam.GetCell(3);
-                        cellCountMemberInTeam.SetCellValue(numberCount - 1);
-
-                        ICell cellSumNormal = rowTeam.GetCell(7);
-                        ICell cellSumOff = rowTeam.GetCell(8);
-                        ICell cellSumPH = rowTeam.GetCell(9);
-                        ICell cellSumTax = rowTeam.GetCell(10);
-                        const string formulaNormal = "SUMIF(H{0}:H{1},\"<>#N/A\")";
-                        const string formulaOff = "SUMIF(I{0}:I{1},\"<>#N/A\")";
-                        const string formulaPH = "SUMIF(J{0}:J{1},\"<>#N/A\")";
-                        const string formulaTax = "SUMIF(K{0}:K{1},\"<>#N/A\")";
-
-                        string data1 = Convert.ToString(numberStart);
-                        string data2 = Convert.ToString(rowIndex);
-                        cellSumNormal.CellFormula = string.Format(formulaNormal, data1, data2);
-                        cellSumOff.CellFormula = string.Format(formulaOff, data1, data2);
-                        cellSumPH.CellFormula = string.Format(formulaPH, data1, data2);
-                        cellSumTax.CellFormula = string.Format(formulaTax, data1, data2);
-
-                        sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
-                        numberCount = 1;
-                    }
-                }
-            }
-
-            sheet.CreateFreezePane(11, 3);
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
-
-        private static void CopyRow(ISheet templateSheet, ISheet sheet, int rowIndex, int rowTeamCopy)
-        {
-            if (rowIndex <= _RowStartBodyOvertimeRecord)
-            {
-                sheet.CopyRow(templateSheet, rowTeamCopy, rowIndex);
-            }
-        }
-
-        private static void RenderOvertimeSection(
-            OvertimeExcelReportViewModel overtime,
-            ISheet sheet,
-            ISheet templateSheet,
-            ref int rowIndex,
-            ref int numberCount,
-            int totalHeaderDateCell)
-        {
-            var index = 1;
-            short rowHeight = sheet.GetRow(_RowStartBodyOvertimeRecord).Height;
-            double? defaultCellValue = null;
-
-            foreach (OvertimeExcelReport item in overtime.ListOvertimeEntity)
-            {
-                int rowCopy = _RowStartBodyOvertimeRecord + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                IRow row = sheet.GetRow(rowIndex);
-                row.Height = rowHeight;
-                row.GetCell(0).SetCellValue(numberCount);
-                row.GetCell(1).SetCellValue(item.EmpCode);
-                row.GetCell(2).SetCellValue(item.Fullname);
-                row.GetCell(3).SetCellValue(item.Nickname);
-                row.GetCell(4).SetCellValue(item.Team);
-                row.GetCell(5).SetCellValue(!item.TotalWorkDays.Equals(0) ? item.TotalWorkDays : defaultCellValue);
-                row.GetCell(6).SetCellValue(!item.UnpaidLeave.Equals(0) ? item.UnpaidLeave : defaultCellValue);
-                row.GetCell(7).SetCellValue(!item.Normal.Equals(0) ? item.Normal : defaultCellValue);
-                row.GetCell(8).SetCellValue(!item.Offday.Equals(0) ? item.Offday : defaultCellValue);
-                row.GetCell(9).SetCellValue(!item.Holiday.Equals(0) ? item.Holiday : defaultCellValue);
-                row.GetCell(10).SetCellValue(!item.Tax.Equals(0) ? item.Tax : defaultCellValue);
-
-                SetCellValue(item, totalHeaderDateCell, row);
-
-                rowIndex++;
-                index++;
-                numberCount++;
-            }
-        }
-
-        private static void SetCellValue(OvertimeExcelReport report, int totalHeaderDateCell, IRow row)
-        {
-            int indexCount = 0;
-
-            for (int i = 1; i <= totalHeaderDateCell; i++)
-            {
-                WriteDataToCell(report, ref indexCount, row, i);
-            }
-        }
-
-        private static void WriteDataToCell(OvertimeExcelReport report, ref int indexCount, IRow row, int i)
-        {
-            double? defaultCellValue = null;
-            OvertimeDailyReport data = report.OvertimeDailyReport[indexCount];
-            if (i % 2 == 0)
-            {
-                var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType2) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType2);
-
-                ////cellValue = cellValue == 0 ? defaultCellValue : cellValue;
-
-                if (cellValue != null && Math.Abs(cellValue.Value - 0) <= 0)
-                {
-                    cellValue = null;
-                }
-
-                row.GetCell(i + 10).SetCellValue(cellValue);
-
-                indexCount++;
-            }
-            else
-            {
-                var cellValue = string.IsNullOrEmpty(data.TotalOvertimeType1) ? defaultCellValue : Convert.ToDouble(data.TotalOvertimeType1);
-
-                ////cellValue = cellValue == 0 ? defaultCellValue : cellValue;
-
-                if (cellValue != null && Math.Abs(cellValue.Value - 0) <= 0)
-                {
-                    cellValue = null;
-                }
-
-                row.GetCell(i + 10).SetCellValue(cellValue);
-            }
-        }
-
-        private static void RenderExportEmployeeOTHeader(ISheet sheet, DateTime fromDate, DateTime toDate, int totalHeaderDateCell)
-        {
-            IRow rowHeaderTitle = sheet.GetRow(0);
-            ICell cellHeader = rowHeaderTitle.GetCell(0);
-            cellHeader.SetCellValue("OVERTIME RECORD - SMS STAFF Local From "
-                + fromDate.ToString("dd MMM yyyy") + " - " + toDate.ToString("dd MMM yyyy"));
-
-            IRow rowHeaderDate = sheet.GetRow(1);
-            int rowHeaderCount = 0;
-            for (int i = 1; i <= totalHeaderDateCell; i++)
-            {
-                if (i % 2 != 0)
-                {
-                    var displayDate = fromDate.Date.AddDays(rowHeaderCount);
-                    rowHeaderDate.GetCell(i + 10).SetCellValue(displayDate.ToString("dd-MMM"));
-                    rowHeaderCount++;
-                }
-            }
-        }
-
-        private static void RenderOverTimeTypeHeader(int totalHeaderDateCell, IList<OvertimeExcelReport> overtimes, ISheet sheet)
-        {
-            IRow rowHeaderOvertimeType = sheet.GetRow(2);
-            OvertimeExcelReport headerRowEntity = overtimes.First();
-            var overtimeTypeIndex = 0;
-            for (int i = 1; i <= totalHeaderDateCell; i++)
-            {
-                var data = headerRowEntity.OvertimeDailyReport[overtimeTypeIndex];
-                if (i % 2 == 0)
-                {
-                    rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType2);
-                    overtimeTypeIndex++;
-                }
-
-                if (i % 2 != 0)
-                {
-                    rowHeaderOvertimeType.GetCell(i + 10).SetCellValue(data.TotalOvertimeType1);
-                }
-            }
         }
 
         public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title)

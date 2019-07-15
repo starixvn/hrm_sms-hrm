@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -73,71 +71,6 @@
                     "StatusId, EmployeeId, GroupId, VerifierId, ApproverId",
                     criteria.GetSpParams());
             }
-        }
-
-        public IList<OvertimeExcelReport> OvertimeRecord(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var entityList = new List<OvertimeExcelReport>();
-                var ds = db.ExecuteDataSet(criteria.GetSpParams());
-                var dataTableOvertimeExcelReport = ds != null && ds.Tables != null && ds.Tables.Count > 0 ? ds.Tables[0] : null;
-
-                if (dataTableOvertimeExcelReport != null && dataTableOvertimeExcelReport.Rows != null && dataTableOvertimeExcelReport.Rows.Count != 0)
-                {
-                    var columnCount = (dataTableOvertimeExcelReport.Columns.Count - 12) / 2;
-                    int rowIndex = 0;
-
-                    foreach (DataRow row in dataTableOvertimeExcelReport.Rows)
-                    {
-                        var overtimeExcelReport = SetOvertimeExcelReport(row);
-
-                        var list = new List<OvertimeDailyReport>();
-
-                        for (int column = 1; column <= columnCount; column++)
-                        {
-                            var entity = SetValueOvertimeDailyReport(dataTableOvertimeExcelReport, column, rowIndex);
-                            list.Add(entity);
-                        }
-
-                        overtimeExcelReport.OvertimeDailyReport = list;
-                        entityList.Add(overtimeExcelReport);
-                        rowIndex++;
-                    }
-                }
-
-                return entityList;
-            }
-        }
-
-        private static OvertimeExcelReport SetOvertimeExcelReport(DataRow row)
-        {
-            OvertimeExcelReport overtimeExcelReport = new OvertimeExcelReport();
-            overtimeExcelReport.Team = row["Team"].ToString();
-            overtimeExcelReport.Positions = row["Positions"].ToString();
-            overtimeExcelReport.EmpId = Convert.ToInt32(!string.IsNullOrEmpty(row["EmpId"].ToString()) ? row["EmpId"].ToString() : "0");
-            overtimeExcelReport.EmpCode = row["EmpCode"].ToString();
-            overtimeExcelReport.Nickname = row["Nickname"].ToString();
-            overtimeExcelReport.Fullname = row["Fullname"].ToString();
-            overtimeExcelReport.TotalWorkDays = Convert.ToDouble(!string.IsNullOrEmpty(row["TotalWorkDays"].ToString()) ? row["TotalWorkDays"].ToString() : "0");
-            overtimeExcelReport.UnpaidLeave = Convert.ToDouble(!string.IsNullOrEmpty(row["UnpaidLeave"].ToString()) ? row["UnpaidLeave"].ToString() : "0");
-            overtimeExcelReport.Normal = Convert.ToDouble(!string.IsNullOrEmpty(row["Normal"].ToString()) ? row["Normal"].ToString() : "0");
-            overtimeExcelReport.Offday = Convert.ToDouble(!string.IsNullOrEmpty(row["Offday"].ToString()) ? row["Offday"].ToString() : "0");
-            overtimeExcelReport.Holiday = Convert.ToDouble(!string.IsNullOrEmpty(row["Holiday"].ToString()) ? row["Holiday"].ToString() : "0");
-            overtimeExcelReport.Tax = Convert.ToDouble(!string.IsNullOrEmpty(row["Tax"].ToString()) ? row["Tax"].ToString() : "0");
-
-            return overtimeExcelReport;
-        }
-
-        private static OvertimeDailyReport SetValueOvertimeDailyReport(DataTable dataTableOvertimeExcelReport, int column, int rowIndex)
-        {
-            var entity = new OvertimeDailyReport
-            {
-                TotalOvertimeType1 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 11) : ((column * 2) + 10)].ToString(),
-                TotalOvertimeType2 = dataTableOvertimeExcelReport.Rows[rowIndex][column == 1 ? (column + 12) : ((column * 2) + 11)].ToString()
-            };
-
-            return entity;
         }
     }
 }
