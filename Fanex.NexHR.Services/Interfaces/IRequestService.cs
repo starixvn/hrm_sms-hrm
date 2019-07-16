@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -27,5 +28,7 @@
         IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
 
         IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
+
+        CommandResult Delete(long requestId);
     }
 }

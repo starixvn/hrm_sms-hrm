@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -181,6 +182,15 @@
             }
 
             return disciplines ?? new List<LeaveDisciplineModel>();
+        }
+
+        public CommandResult Delete(long requestId)
+        {
+            var criteria = new DeleteRequestCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)

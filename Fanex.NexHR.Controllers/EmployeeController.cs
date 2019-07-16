@@ -401,8 +401,9 @@
                 ExcludedManager = false
             };
             IList<Employee> employees = employeeService.GetMemberByManager(criteria);
+            const byte TotalItems = 10;
 
-            return Json(employees.Take(10), JsonRequestBehavior.AllowGet);
+            return Json(employees.Take(TotalItems), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetEmployees(

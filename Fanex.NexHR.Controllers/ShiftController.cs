@@ -13,8 +13,6 @@
 
     public class ShiftController : BaseController
     {
-        private const int HourIndex = 0;
-        private const int MinutesIndex = 1;
         private readonly IShiftService shiftService;
 
         public ShiftController(
@@ -69,6 +67,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Edit(int id)
         {
+            const byte HourIndex = 0;
+            const byte MinutesIndex = 1;
             Shift shift = shiftService.GetById(id);
             EditShiftModel model = null;
 
@@ -138,7 +138,8 @@
             if (!string.IsNullOrWhiteSpace(time))
             {
                 var timeArr = time.Split(':');
-                if (timeArr.Length == 2)
+                const byte TotalItems = 2;
+                if (timeArr.Length == TotalItems)
                 {
                     value = int.Parse(timeArr[index]);
                 }

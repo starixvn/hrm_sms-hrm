@@ -14,6 +14,8 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public static class Utilities
     {
+        private const byte PaddingLeftWidth = 2;
+
         public static IList<SelectListItem> CheckInOutTypes
         {
             get
@@ -99,7 +101,7 @@
             }
 
             var value = (DateTime)dateTime;
-            return string.Format(Labels.TimeFormat, value.Hour.ToString().PadLeft(2, '0'), value.Minute.ToString().PadLeft(2, '0'));
+            return string.Format(Labels.TimeFormat, value.Hour.ToString().PadLeft(PaddingLeftWidth, '0'), value.Minute.ToString().PadLeft(PaddingLeftWidth, '0'));
         }
 
         public static void CopyTo(this object s, object t)
@@ -188,7 +190,7 @@
 
             while (hour < 24)
             {
-                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
+                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(PaddingLeftWidth, '0'), minute.ToString().PadLeft(PaddingLeftWidth, '0'));
                 list.Add(new SelectListItem
                 {
                     Text = value,
@@ -213,7 +215,7 @@
 
             while (hour < 24)
             {
-                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(2, '0'), minute.ToString().PadLeft(2, '0'));
+                var value = string.Format(Labels.TimeFormat, hour.ToString().PadLeft(PaddingLeftWidth, '0'), minute.ToString().PadLeft(PaddingLeftWidth, '0'));
                 list.Add(new SelectListItem
                 {
                     Text = value,
@@ -239,7 +241,7 @@
 
             while (hour < 1)
             {
-                var value = minute.ToString().PadLeft(2, '0');
+                var value = minute.ToString().PadLeft(PaddingLeftWidth, '0');
                 list.Add(new SelectListItem
                 {
                     Text = value,
@@ -272,8 +274,8 @@
             int minute = (int)Math.Round((value - hour) * 60);
 
             return hour > 0
-                ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
-                : minute.ToString().PadLeft(2, '0') + "'";
+                ? hour.ToString().PadLeft(PaddingLeftWidth, '0') + "h" + minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'"
+                : minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'";
         }
 
         public static string MinuteToTime(int value)
@@ -287,8 +289,8 @@
             int minute = value - (hour * 60);
 
             return hour > 0
-                ? hour.ToString().PadLeft(2, '0') + "h" + minute.ToString().PadLeft(2, '0') + "'"
-                : minute.ToString().PadLeft(2, '0') + "'";
+                ? hour.ToString().PadLeft(PaddingLeftWidth, '0') + "h" + minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'"
+                : minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'";
         }
 
         public static string FormatString(string input)

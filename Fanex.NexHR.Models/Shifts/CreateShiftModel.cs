@@ -4,8 +4,9 @@
 
     public class CreateShiftModel
     {
-        private const short MaximumHours = 23;
-        private const short MaximumMinutes = 59;
+        private const byte MaximumHours = 23;
+        private const byte MaximumMinutes = 59;
+        private const byte PaddingLeftWidth = 2;
 
         [Required]
         public string Name { get; set; }
@@ -36,8 +37,8 @@
         [Required]
         public bool IsOutAfterDay { get; set; }
 
-        public string TimeIn => HourTimeIn.ToString().PadLeft(2, '0') + ":" + MinuteTimeIn.ToString().PadLeft(2, '0');
+        public string TimeIn => HourTimeIn.ToString().PadLeft(PaddingLeftWidth, '0') + ":" + MinuteTimeIn.ToString().PadLeft(PaddingLeftWidth, '0');
 
-        public string TimeOut => HourTimeOut.ToString().PadLeft(2, '0') + ":" + MinuteTimeOut.ToString().PadLeft(2, '0');
+        public string TimeOut => HourTimeOut.ToString().PadLeft(PaddingLeftWidth, '0') + ":" + MinuteTimeOut.ToString().PadLeft(PaddingLeftWidth, '0');
     }
 }

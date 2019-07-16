@@ -14,6 +14,6 @@
 
         public override string GetSettingKey() => "ScheduleArrangement_GetWeekly";
 
-        public override bool IsValid() => ToTime.DayOfYear - FromTime.DayOfYear == 6;
+        public override bool IsValid() => true;
     }
 }

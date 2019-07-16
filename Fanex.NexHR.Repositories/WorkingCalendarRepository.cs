@@ -36,7 +36,7 @@
             {
                 using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
                 {
-                    var dttWorkingSchedule = ds != null ? ds.Tables[0] : null;
+                    var dttWorkingSchedule = ds?.Tables[0];
 
                     var list = new List<WorkingScheduleViewModel>();
                     if (dttWorkingSchedule != null && dttWorkingSchedule.Rows.Count != 0)
@@ -71,19 +71,21 @@
 
                 using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
                 {
-                    var dttWorkingCalendars = ds != null ? ds.Tables[0] : null;
+                    var dttWorkingCalendars = ds?.Tables[0];
                     var totalColumns = dttWorkingCalendars != null ? dttWorkingCalendars.Columns.Count : 0;
 
                     foreach (DataRow row in dttWorkingCalendars?.Rows)
                     {
-                        var empWorkingCalendar = new WorkingCalendarsViewModel();
-                        empWorkingCalendar.EmpId = int.Parse(row["Empid"].ToString());
-                        empWorkingCalendar.FullName = row["fullname"].ToString();
-                        empWorkingCalendar.NickName = row["nickname"].ToString();
-                        empWorkingCalendar.Team = row["Team"].ToString();
-                        empWorkingCalendar.Positions = row["Positions"].ToString();
-                        empWorkingCalendar.EmpCode = row["EmpCode"].ToString();
-                        empWorkingCalendar.Days = (totalColumns - 6) / 2;
+                        var empWorkingCalendar = new WorkingCalendarsViewModel
+                        {
+                            EmpId = int.Parse(row["Empid"].ToString()),
+                            FullName = row["fullname"].ToString(),
+                            NickName = row["nickname"].ToString(),
+                            Team = row["Team"].ToString(),
+                            Positions = row["Positions"].ToString(),
+                            EmpCode = row["EmpCode"].ToString(),
+                            Days = (totalColumns - 6) / 2
+                        };
                         var days = new List<string>();
                         var workingSchedule = new List<WorkingScheduleViewModel>();
                         var defaultColumn = 6;

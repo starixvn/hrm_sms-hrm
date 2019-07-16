@@ -14,34 +14,22 @@
     {
         private bool isFilterByAffectedDate;
 
-        public RequestViewModel()
-        {
-            StatusId = -2;
-            FromDate = DateTime.Now.Date;
-            ToDate = DateTime.Now.Date;
-            DateOption = 0;
-            TeamIds = null;
-            EmployeeId = -1;
-            RequestType = (int)RequestFilter.All;
-            LeaveType = null;
-        }
-
         public int DateOption { get; set; }
 
         [Display(Name = "Status")]
-        public int StatusId { get; set; }
+        public int StatusId { get; set; } = -2;
 
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime FromDate { get; set; }
+        public DateTime FromDate { get; set; } = DateTime.Now.Date;
 
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ToDate { get; set; }
+        public DateTime ToDate { get; set; } = DateTime.Now.Date;
 
-        public int EmployeeId { get; set; }
+        public int EmployeeId { get; set; } = -1;
 
         public string Employee { get; set; }
 
@@ -49,7 +37,7 @@
 
         public string Team { get; set; }
 
-        public int RequestType { get; set; }
+        public int RequestType { get; set; } = (int)RequestFilter.All;
 
         [Display(Name = "Section")]
         public int? LeaveType { get; set; }
@@ -122,13 +110,7 @@
             }
         }
 
-        public bool IsAllowChangeStatus
-        {
-            get
-            {
-                return ViewType != RequestViewType.CompanySpace;
-            }
-        }
+        public bool IsAllowChangeStatus => ViewType != RequestViewType.CompanySpace;
 
         public bool IsFilterByAffectedDate
         {
@@ -161,7 +143,7 @@
                     TeamCollection = new List<Team>();
                 }
 
-                var teamIds = TeamIds != null ? TeamIds.Split(',') : null;
+                var teamIds = TeamIds?.Split(',');
 
                 foreach (Team team in TeamCollection)
                 {
@@ -189,13 +171,7 @@
             }
         }
 
-        public string BreadcrumbText
-        {
-            get
-            {
-                return Enumerations.GetStringValue(ViewType);
-            }
-        }
+        public string BreadcrumbText => Enumerations.GetStringValue(ViewType);
 
         public string PageTitle
         {

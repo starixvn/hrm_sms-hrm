@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -13,6 +14,7 @@
     using Fanex.NexHR.Repositories;
     using OfficeOpenXml;
 
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class OvertimeReportService : IOvertimeReportService
     {
         private readonly IBaseService baseService;

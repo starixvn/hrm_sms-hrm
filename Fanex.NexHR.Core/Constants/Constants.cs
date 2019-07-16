@@ -15,7 +15,7 @@
         public const int WeddingLeave = 6;
         public const int CompensationLeave = 27;
 
-        public const int NumberMonthsInFutureCanLeaveRequest = 7;
+        public const byte NumberMonthsInFutureCanLeaveRequest = 7;
 
         public const string PassWordAdmin = "@dm!nhrms";
 
@@ -24,16 +24,16 @@
 
         public const decimal MaxScoreSubtractDate = (decimal)3.5;
 
-        public const int CurrentPage = 1;
-        public const int ItemsPerPage = 50;
+        public const byte CurrentPage = 1;
+        public const byte ItemsPerPage = 50;
 
         public const string BeginRootTag = "<ROOT>";
         public const string EndRootTag = "</ROOT>";
 
-        public const int TotalWeekendLeaveLimit = 16;
+        public const byte TotalWeekendLeaveLimit = 16;
         public const decimal HalfDayOffValue = 0.5M;
-
-        public const int OffDayShiftId = -1;
+        public const short PendingAndVerifiedStatusId = -1;
+        public const short OffDayShiftId = -1;
 
         public const string ProfileUploadPath = "/file/uploads/profile/";
 

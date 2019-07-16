@@ -74,7 +74,7 @@
 
             if (request.StatusId == -2)
             {
-                request.StatusId = -1;
+                request.StatusId = Constants.PendingAndVerifiedStatusId;
                 request.FromDate = DateTime.Now.Date.AddDays(-60);
                 request.IsFilterByAffectedDate = false;
             }
@@ -127,17 +127,15 @@
         }
 
         [HttpPost]
-        public JsonResult Delete(int id)
+        public JsonResult Delete(long id)
         {
-            var criteria = new DeleteRequestCriteria
+            CommandResult commandResult = requestService.Delete(id);
+            if (commandResult.IsSuccessful)
             {
-                RequestId = id
-            };
+                requestMailService.SendMailForDeleteSuccessfully(id);
+            }
 
-            requestMailService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-            return Json(result);
+            return Json(commandResult);
         }
 
         public JsonResult GetEmployeesByActingUser(int role, string query)

@@ -58,10 +58,10 @@
             }
 
             var path = Path.Combine(Server.MapPath(dir), fileName);
-
             file.SaveAs(path);
+            const byte StartIndex = 2;
 
-            return pathAttach.Substring(2);
+            return pathAttach.Substring(StartIndex);
         }
 
         public bool Delete(string fileName)
