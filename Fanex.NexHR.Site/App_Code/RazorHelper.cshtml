@@ -4,27 +4,6 @@
 @using Fanex.NexHR.Models;
 @using Fanex.NexHR.Models.Request;
 
-@helper FormatDate(DateTime? date)
-{
-    <span>
-        @if (date.HasValue)
-        {
-            @date.Value.ToString("MMM dd, yyyy hhH:mm")
-        }
-    </span>
-}
-@helper YearDropDownList(int year)
-{
-    <span style="font-size:12px">Year</span>
-    <select id="year" name="year">
-        @for (int i = DateTime.Now.Year; i >= 2010; i--)
-        {
-            var selected = year == i ? "selected='true'" : string.Empty;
-            <option @selected value="@i">@i</option>
-        }
-    </select>
-}
-
 @helper CategoryDropDownList(string id, string classHTML = "", string selectedId = "")
 {
     <select id="@id" name="@id" class="@classHTML">
@@ -42,6 +21,7 @@
         </td>
     </tr>
 }
+
 @helper StatusDropDownList(int status = (int)CurrentRequestStatus.Pending, bool isShowAll = true, bool isShowPendingAndVerified = true, string controlName = "status", string htmlClass = "")
 {
     <select name="@controlName" id="@controlName" class="@htmlClass">
@@ -62,116 +42,8 @@
         <option selected="@(status == (byte)CurrentRequestStatus.Processed)" value="@Convert.ToByte(CurrentRequestStatus.Processed)">@Labels.Processed</option>
         <option selected="@(status == (byte)CurrentRequestStatus.Void)" value="@Convert.ToByte(CurrentRequestStatus.Void)">@Labels.Void</option>
     </select>
-
 }
 
-@helper BooleanDropDownList(bool? selectedValue, IList<System.Web.Mvc.SelectListItem> items, string controlName)
-{
-    <select name="@controlName" id="@controlName">
-        @foreach (var item in items)
-        {
-            <option selected="@(selectedValue.HasValue && item.Value.Equals(selectedValue.ToString(), StringComparison.OrdinalIgnoreCase) || (string.IsNullOrEmpty(item.Value) && !selectedValue.HasValue))" value="@item.Value">@item.Text</option>
-        }
-    </select>
-}
-@helper StatusDisplayByHR(long statusId, Fanex.NexHR.Models.Request.RequestStatus status)
-{
-    if (status.Id != (byte)CurrentRequestStatus.Rejected)
-    {
-        <td>
-            <a requestid="@statusId" href="javascript:;" class="@status.Name tooltip">@status.Name</a>
-        </td>
-    }
-    else
-    {
-        <td>
-            @status.Name
-        </td>
-    }
-}
-
-@helper ModifierDisplay(string nickName, string fullName, DateTime? modifiedDate, long requestId)
-{
-    if (!string.IsNullOrWhiteSpace(nickName))
-    {
-        if (modifiedDate > new DateTime(2010, 1, 1))
-        {
-            <td id="pb@(requestId)">@nickName, @modifiedDate.ToShortFormatedDate()</td>
-        }
-        else
-        {
-            <td id="pb@(requestId)">@nickName</td>
-        }
-    }
-    else
-    {
-        <td id="pb@(requestId)">N/A</td>
-    }
-}
-@helper TeamDropDownList(List<Fanex.NexHR.Models.Team> teamList, string controlName = "team")
-{
-    <select name="@controlName" id="@controlName">
-        @if (teamList != null && teamList.Count > 0)
-        {
-            foreach (Fanex.NexHR.Models.Team team in teamList)
-            {
-                <option value="@team.Name">@team.Name</option>
-            }
-        }
-    </select>
-}
-@helper EmployeeDropDownList(List<string> EmployeeList)
-{
-    <select id="employee">
-        @foreach (string emp in EmployeeList)
-        {
-            <option value="@emp">@emp</option>
-        }
-    </select>
-}
-@helper ShiftInfoTable(dynamic shiftInfoList)
-{
-    <div id="shifts">
-        <table class="shift_table">
-            <thead>
-                <tr>
-                    <th class="left">
-                        Shift
-                    </th>
-                    <th>
-                        Checkin time
-                    </th>
-                    <th>
-                        Checkout time
-                    </th>
-                    <th>
-                        Break
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Fanex.NexHR.Models.Shift item in shiftInfoList)
-                {
-                    <tr>
-                        <td class="left">
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                        </td>
-                        <td>
-                            @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                        </td>
-                        <td>
-                            @((item.BreakTimeMins == 0) ? string.Empty : (item.BeginBreakTime + "' - " + item.EndBreakTime + "'"))
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-}
 @helper LateInEarlyOutTimeFormat(int mins, short type)
 {
     if (type == (short)RequestType.LateIn)
@@ -184,166 +56,6 @@
     }
 }
 
-@helper VerifierAndApproverMenu()
-{
-    <ul id="verifierMenu" class="hide">
-        <li class="accepted">
-            <a command="Accept" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Verified
-            </a>
-        </li>
-        <li class="notaccepted">
-            <a command="NotAccept" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.NotVerified
-            </a>
-        </li>
-    </ul>
-    <ul id="approverMenu" class="hide">
-        <li class="approved">
-            <a command="Approve" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Approve
-            </a>
-        </li>
-        <li class="rejected">
-            <a command="Reject" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Reject
-            </a>
-        </li>
-    </ul>
-}
-@helper ResetMenu()
-{
-    <ul id="resetMenu" class="hide">
-        <li class="reset">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Reset
-            </a>
-        </li>
-    </ul>
-}
-
-@helper VoidMenu()
-{
-    <ul id="voidMenu" class="hide">
-        <li class="void">
-            <a command="VoidBySA" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Void
-            </a>
-        </li>
-    </ul>
-}
-
-@helper VerifierAndApproverOvertimeMenu()
-{
-    <ul id="verifierPendingMenu" class="hide">
-        <li class="accepted">
-            <a command="Accept" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Verified
-            </a>
-        </li>
-        <li class="notaccepted">
-            <a command="NotAccept" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.NotVerified
-            </a>
-        </li>
-    </ul>
-    <ul id="acceptedMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="notaccepted"><a command="NotAccepted" href="javascript:;">@Labels.NotAccepted</a>
-            </li>*@
-    </ul>
-    <ul id="notAcceptedMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="accepted"><a command="Accepted" href="javascript:;">@Labels.Accepted</a>
-            </li>*@
-    </ul>
-    <ul id="approverPendingMenu" class="hide">
-        <li class="approved">
-            <a command="Approve" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Approved
-            </a>
-        </li>
-        <li class="rejected">
-            <a command="Reject" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Rejected
-            </a>
-        </li>
-    </ul>
-    <ul id="approvedMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="rejected"><a command="Rejected" href="javascript:;">@Labels.Rejected</a>
-            </li>*@
-    </ul>
-    <ul id="rejectedMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="approved"><a command="Approved" href="javascript:;">@Labels.Approved</a>
-            </li>*@
-    </ul>
-}
-@helper HrOvertimeMenu()
-{
-    <ul id="hrPendingMenu" class="hide">
-        <li class="processed">
-            <a command="Process" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Processed
-            </a>
-        </li>
-        <li class="void">
-            <a command="Void" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Void
-            </a>
-        </li>
-    </ul>
-    <ul id="processedMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="void"><a command="Void" href="javascript:;">@Labels.Void</a>
-            </li>*@
-    </ul>
-    <ul id="voidMenu" class="hide">
-        <li class="reseted">
-            <a command="Reset" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reset
-            </a>
-        </li>
-        @*<li class="processed"><a command="Processed" href="javascript:;">@Labels.Processed</a>
-            </li>*@
-    </ul>
-}
-@helper HrMenu()
-{
-    <ul id="hrMenu" class="hide">
-        <li class="processed">
-            <a command="Process" href="javascript:;">
-                <i class="fa fa-check fa-lg icon-check"></i>@Labels.Process
-            </a>
-        </li>
-        <li class="void">
-            <a command="Void" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Void
-            </a>
-        </li>
-    </ul>
-}
 @helper EmployeeProcessMenu()
 {
     <ul id="pendingMenu" class="hide">
@@ -359,39 +71,6 @@
         </li>
     </ul>
 }
-@helper EmployeeReeditMenu()
-{
-    <ul id="reeditMenu" class="hide">
-        <li class="edit">
-            <a command="Reedit" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Reedit
-            </a>
-        </li>
-    </ul>
-}
-
-@helper MinuteDropDownList(string name, int step)
-{
-    <select id="@name" name="@name">
-        @{
-            var index = 60;
-        }
-        @while (index > 0)
-        {
-            <option value="@index">@index'</option>
-            index -= step;
-        }
-    </select>
-}
-@helper MaxRequestDropDownList(int maxRequest, string name = "MaxRequest")
-{
-    <select id="@name" name="@name" class="minWidthDropdown">
-        @for (int i = 1; i <= 10; i++)
-        {
-            <option selected="@(i == maxRequest)" value="@i">@i</option>
-        }
-    </select>
-}
 
 @helper MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
 {
@@ -401,28 +80,6 @@
         {
             <option selected="@(i == minTotalLeave)" value="@i">@i</option>
         }
-    </select>
-}
-@helper ShiftDropDownList(string name, int? currentValue, IList<System.Web.Mvc.SelectListItem> listItem)
-{
-    <select id="@name" name="@name">
-        <option value="">@Labels.Off</option>
-        @{
-            var value = currentValue != null ? currentValue.ToString() : string.Empty;
-        }
-        @foreach (var item in listItem)
-        {
-            <option value="@item.Value" selected="@(item.Value == value)">@item.Text</option>
-        }
-    </select>
-}
-
-@helper OvertimeTypeDropDownList(int type)
-{
-    <select id="OvertimeType" name="OvertimeType">
-        <option @(type == 0 ? "selected" : "") value="0">@Labels.NormalDay</option>
-        <option @(type == 1 ? "selected" : "") value="1">@Labels.OffDay</option>
-        <option @(type == 2 ? "selected" : "") value="2">@Labels.PublicHoliday</option>
     </select>
 }
 
@@ -441,22 +98,6 @@
         <option @(action == -1 ? "selected" : "") value="">-- All --</option>
         <option @(action == 0 ? "selected" : "") value="0">Active</option>
         <option @(action == 1 ? "selected" : "") value="1">Disabled</option>
-    </select>
-}
-
-@helper PolicyDropDownList(string inputId, int selected)
-{
-    <select id="@inputId" name="@inputId">
-        <option @(selected == (int)Policy.Read ? "selected" : "") value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
-        <option @(selected == (int)Policy.Host ? "selected" : "") value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
-    </select>
-}
-
-@helper PolicyDropDownList(string inputId)
-{
-    <select id="@inputId" name="@inputId">
-        <option value="@((int)Policy.Read)">@Policy.Read.ToString()</option>
-        <option value="@((int)Policy.Host)">@Policy.Host.ToString()</option>
     </select>
 }
 
@@ -529,7 +170,6 @@
         <option selected="@(reasonId == (byte)CheckInOutReasons.Forgot)" value="@Convert.ToByte(CheckInOutReasons.Forgot)">@Labels.Forgot</option>
         <option selected="@(reasonId == (byte)CheckInOutReasons.Other)" value="@Convert.ToByte(CheckInOutReasons.Other)">@Labels.Other</option>
     </select>
-
 }
 
 @helper LateInEarlyOutReasonDropDownList(byte reasonId = (byte)LateInEarlyOutReasons.Other, string controlName = "reasonId", string htmlClass = "")
@@ -538,5 +178,4 @@
         <option selected="@(reasonId == (byte)LateInEarlyOutReasons.ManagementAllow)" value="@Convert.ToByte(LateInEarlyOutReasons.ManagementAllow)">@Labels.ManagementAllow</option>
         <option selected="@(reasonId == (byte)LateInEarlyOutReasons.Other)" value="@Convert.ToByte(LateInEarlyOutReasons.Other)">@Labels.Other</option>
     </select>
-
 }

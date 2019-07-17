@@ -495,9 +495,6 @@
   <data name="Note" xml:space="preserve">
     <value>Notes</value>
   </data>
-  <data name="ReportWorkingHours" xml:space="preserve">
-    <value>Total Working Hours Report</value>
-  </data>
   <data name="TotalHours" xml:space="preserve">
     <value>Total hours</value>
   </data>

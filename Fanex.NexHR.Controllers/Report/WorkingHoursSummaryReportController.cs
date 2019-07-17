@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
 
@@ -16,14 +17,17 @@
     public class WorkingHoursSummaryReportController : BaseController
     {
         private readonly IWorkingHoursSummaryReportService reportService;
+        private readonly IOvertimeReportService overtimeReportService;
         private readonly ITeamService teamService;
 
         public WorkingHoursSummaryReportController(
             ISessionService sessionService,
-            IWorkingHoursSummaryReportService reportSevice,
+            IWorkingHoursSummaryReportService reportService,
+            IOvertimeReportService overtimeReportService,
             ITeamService teamService) : base(sessionService)
         {
-            this.reportService = reportSevice;
+            this.reportService = reportService;
+            this.overtimeReportService = overtimeReportService;
             this.teamService = teamService;
         }
 
@@ -59,10 +63,24 @@
                 IsLocal = model.IsLocal
             };
             IEnumerable<WorkingHoursSummary> workingHours = reportService.GetWorkingHoursSummary(param);
-            byte[] bytes = reportService.Export(param, workingHours);
+            IEnumerable<DailyOvertimeDetails> overtimes = GetOvertimeDetails(model);
+            byte[] bytes = reportService.Export(param, workingHours, overtimes);
 
             var fileName = $"Attendance Statistic for Payroll.xlsx";
             return File(bytes, "application/xlsx", fileName);
+        }
+
+        private IEnumerable<DailyOvertimeDetails> GetOvertimeDetails(WorkingHoursSummaryViewModel model)
+        {
+            var param = new GetDailyOvertimeDetailsParam
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                IsLocal = model.IsLocal
+            };
+            return overtimeReportService.GetDailyOvertimeDetails(param);
         }
     }
 }

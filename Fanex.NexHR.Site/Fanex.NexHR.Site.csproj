@@ -1109,7 +1109,6 @@
     <Content Include="App_Data\Emails\RequestApproval.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Code\UIHelper.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
