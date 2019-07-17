@@ -139,7 +139,6 @@
     <Compile Include="Export\ExportManpowerControlle.cs" />
     <Compile Include="Export\ExportRequestController.cs" />
     <Compile Include="Export\ExportLeaveSummaryController.cs" />
-    <Compile Include="Export\ExportTotalWorkingHourController.cs" />
     <Compile Include="Export\ExportDisciplineController.cs" />
     <Compile Include="Export\ExportWeekendLeaveController.cs" />
     <Compile Include="InformationController.cs" />
@@ -172,6 +171,7 @@
     <Compile Include="Report\OvertimeReportController.cs" />
     <Compile Include="Report\WeeklyWorkingHoursController.cs" />
     <Compile Include="Report\MonthlyWorkingHoursController.cs" />
+    <Compile Include="Report\WorkingHoursSummaryReportController.cs" />
     <Compile Include="Request\ChangeShiftController.cs" />
     <Compile Include="Request\CheckInOutController.cs" />
     <Compile Include="Request\KeepInViewController.cs" />

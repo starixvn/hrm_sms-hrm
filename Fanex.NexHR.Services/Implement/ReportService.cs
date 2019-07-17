@@ -27,17 +27,6 @@
             this.baseService = baseService;
         }
 
-        public IList<TotalWorkingHours> GetWorkingHoursList(GetReportWorkingHourSummaryCriteria criteria)
-        {
-            IList<TotalWorkingHours> totalWorkingHours = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                totalWorkingHours = reportRepository.GetWorkingHoursList(criteria);
-            }
-
-            return totalWorkingHours;
-        }
-
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
             IList<EmployeeAttendanceModel> employeeAttendance = null;

@@ -338,18 +338,6 @@
       <resource path="~/styles/annualbalance.css" />
     </resourceSet>
 
-    <resourceSet name="totalworkinghourcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/report.totalworkinghours.css" />
-    </resourceSet>
-    <resourceSet name="totalworkinghourjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/wwwroot/sources/js/date.js" />
-      <resource path="~/scripts/views/date.filter.js" />
-      <resource path="~/scripts/views/report/report.totalworkinghours.js" />
-    </resourceSet>
-
     <resourceSet name="reportsupervisorcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/report.supervisor.css" />

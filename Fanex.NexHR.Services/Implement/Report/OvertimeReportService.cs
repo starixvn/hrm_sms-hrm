@@ -21,8 +21,8 @@
         private readonly IOvertimeReportRepository overtimeReportRepository;
         private const string SumFormula = "SUM({0})";
         private const string DateFormat = "dd-MMM-yyyy";
-        private const double MinimumWidth = 5;
-        private const double MaximumWidth = 50;
+        private const byte MinimumWidth = 5;
+        private const byte MaximumWidth = 50;
 
         public OvertimeReportService(
             IBaseService baseService,

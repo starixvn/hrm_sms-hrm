@@ -50,25 +50,6 @@
             return listAttendance;
         }
 
-        public IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var entity = db.Query<TotalWorkingHours, Employee, Team, TotalWorkingHours>(
-                        (w, e, t) =>
-                        {
-                            e.Team = t;
-                            w.Employee = e;
-
-                            return w;
-                        },
-                        splitOn: "EmpId,GroupId",
-                        parameterValues: criteria.GetSpParams());
-
-                return entity.ToList();
-            }
-        }
-
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
         {
             IList<LeaveSummary> entities = null;

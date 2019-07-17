@@ -196,7 +196,7 @@
             {
                 EmpId = employeeId,
                 RequestId = requestId == -1 ? null : requestId,
-                EffectedDay = toDate.HasValue ? toDate.Value : DateTime.Now.Date
+                EffectedDay = toDate ?? DateTime.Now.Date
             };
             EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(criteria);
             return Json(employeeLeaveBalance, JsonRequestBehavior.AllowGet);
@@ -315,7 +315,7 @@
                     ScheduleStatus = tempScheduleStatus,
                     IsOffOrHoliday = isOffOrHoliday,
                     LeaveTypeId = Constants.AnnualLeave,
-                    WorkType = 2
+                    WorkType = (byte)WorkType.Leave
                 };
                 leaveRequestDetailOutput.Add(tempLeaveDetailModel);
             }
@@ -347,7 +347,7 @@
                     OnDate = workDate,
                     ScheduleStatus = Labels.NA,
                     LeaveTypeId = Constants.AnnualLeave,
-                    WorkType = 2
+                    WorkType = (byte)WorkType.Leave
                 };
                 leaveRequestDetailOutput.Add(tempLeaveDetailModel);
             }

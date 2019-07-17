@@ -102,6 +102,7 @@
     <Compile Include="Report\Overtime\MonthlyFilterViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
+    <Compile Include="Report\WorkingHoursSummaryViewModel.cs" />
     <Compile Include="Report\WorkingHours\WeeklyFilterViewModel.cs" />
     <Compile Include="Report\WorkingHours\MonthlyFilterViewModel.cs" />
     <Compile Include="Request\ChangeShiftViewModel.cs" />

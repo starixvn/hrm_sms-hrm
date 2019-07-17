@@ -193,12 +193,10 @@
     <Compile Include="ExportExcel\Discipline\IExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Employee\ExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\Employee\IExportExcelEmployeeInfoService.cs" />
-    <Compile Include="ExportExcel\IExportService.cs" />
     <Compile Include="ExportExcel\Manpower\ExportExcelManpowerCategoryService.cs" />
     <Compile Include="ExportExcel\Manpower\ExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
-    <Compile Include="ExportExcel\TotalWorkingHourExportService.cs" />
     <Compile Include="ExportExcel\ExportExcelUnpaidLeaveSummaryReportService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveDetailService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
@@ -211,6 +209,7 @@
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
+    <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />

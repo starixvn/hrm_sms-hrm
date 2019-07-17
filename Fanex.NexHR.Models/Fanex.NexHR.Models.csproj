@@ -128,6 +128,7 @@
     <Compile Include="Overtime\MonthlyOvertimeRequest.cs" />
     <Compile Include="Overtime\OvertimeDailyReport.cs" />
     <Compile Include="Overtime\Requester.cs" />
+    <Compile Include="Report\GetWorkingHoursSummaryParam.cs" />
     <Compile Include="Report\ManpowerCategoryModel.cs" />
     <Compile Include="Report\ManpowerModel.cs" />
     <Compile Include="Report\MonthlyWorkingHours\DailyWorking.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Report\Overtime\YearlyOvertime.cs" />
     <Compile Include="Report\WeekendLeaveDetail.cs" />
     <Compile Include="Report\WeekendLeaveSummary.cs" />
+    <Compile Include="Report\WorkingHoursSummary.cs" />
     <Compile Include="Request\BaseRequest.cs" />
     <Compile Include="Request\ChangeShiftDetailModel.cs" />
     <Compile Include="Request\LateInEarlyOutModel.cs" />
@@ -198,7 +200,6 @@
     <Compile Include="EntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shifts\Shift.cs" />
-    <Compile Include="TotalWorkingHours.cs" />
     <Compile Include="UserChangedShift.cs" />
     <Compile Include="Calendar\WorkingCalendarModel.cs" />
   </ItemGroup>

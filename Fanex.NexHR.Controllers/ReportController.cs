@@ -5,22 +5,22 @@
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
-    using Core;
-    using Core.Enums;
-    using Criteria;
-    using Criteria.Report;
-    using Criteria.Supervisor;
-    using Criteria.Time;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Models;
-    using Models.Report;
-    using Models.Supervisor;
+    using Fanex.NexHR.Criteria;
+    using Fanex.NexHR.Criteria.Report;
+    using Fanex.NexHR.Criteria.Supervisor;
+    using Fanex.NexHR.Criteria.Time;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.ViewModels.Report;
     using NPOI.HSSF.UserModel;
-    using Services;
-    using ViewModels;
-    using ViewModels.Report;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -166,60 +166,6 @@
             ViewBag.PagerOption = pagerOption;
 
             return PartialView("_TimeRecordDetail", timeRecords);
-        }
-
-        [HttpGet]
-        public ActionResult TotalWorkingHours()
-        {
-            var year = DateTime.Now.Year;
-            var month = DateTime.Now.Month;
-
-            var model = new ReportFilterViewModel
-            {
-                FromDate = new DateTime(year, month, 1),
-                ToDate = DateTime.Now,
-                EmployeeId = -1,
-                DateOption = 5
-            };
-
-            return TotalWorkingHours(model);
-        }
-
-        [HttpPost]
-        public ActionResult TotalWorkingHours(ReportFilterViewModel workingHoursModel)
-        {
-            ReportFilterViewModel model = workingHoursModel;
-
-            if (model == null)
-            {
-                var year = DateTime.Now.Year;
-                var month = DateTime.Now.Month;
-                model = new ReportFilterViewModel
-                {
-                    FromDate = new DateTime(year, month, 1),
-                    ToDate = new DateTime(year, month, DateTime.DaysInMonth(year, month)),
-                    DateOption = 5,
-                    IsExportExcel = false
-                };
-            }
-
-            ViewBag.Groups = teamService.GetAll();
-            ViewBag.TeamIds = model.TeamIds;
-
-            var getTotalWorkingHourCriteria = new GetReportWorkingHourSummaryCriteria
-            {
-                Fromdate = model.FromDate,
-                Todate = model.ToDate,
-                EmpId = (model.EmployeeId != -1 && model.EmployeeId != 0) ? new int?(model.EmployeeId) : null,
-                GroupIds = model.TeamIds,
-                IsLocal = model.IsLocal
-            };
-            var totalWorkingHours = reportService.GetWorkingHoursList(getTotalWorkingHourCriteria);
-
-            ViewBag.EntityList = totalWorkingHours;
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ProcessRequest, Policy.Host);
-
-            return View(model);
         }
 
         public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)

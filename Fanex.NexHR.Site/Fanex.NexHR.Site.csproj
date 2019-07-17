@@ -269,6 +269,7 @@
     <Content Include="wwwroot\dist\js\report.monthlyovertime.js" />
     <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js" />
     <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.workinghours.summary.js" />
     <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\styles\account.editprofile.css" />
     <Content Include="wwwroot\dist\styles\account.editprofile.js" />
@@ -304,6 +305,7 @@
     <Content Include="wwwroot\sources\js\pages\overtime\hr.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\report\workinghours.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\monthlyovertime.js" />
@@ -376,7 +378,6 @@
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
     <Content Include="Scripts\Views\Report\report.leavesumary.js" />
-    <Content Include="Scripts\Views\Report\report.totalworkinghours.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\Team\team.edit.js" />
@@ -405,7 +406,6 @@
     <Content Include="Styles\Images\icons.png" />
     <Content Include="Styles\Images\tipsy.gif" />
     <Content Include="Styles\request.checkinout.css" />
-    <Content Include="Styles\report.totalworkinghours.css" />
     <Content Include="Styles\style.css" />
     <Content Include="Styles\table.css" />
     <Content Include="Styles\themes\Aristo\index.html" />
@@ -1048,6 +1048,9 @@
     <Content Include="wwwroot\dist\styles\report.monthlyovertime.js.map" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.js.map" />
     <Content Include="ExcelTemplates\MonthlyOvertime.xlsx" />
+    <Content Include="Views\Report\WorkingHoursSummary.cshtml" />
+    <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx" />
+    <Content Include="wwwroot\dist\js\report.workinghours.summary.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1146,7 +1149,6 @@
     <Content Include="Views\UI\Header.cshtml" />
     <Content Include="Views\UI\NavBar.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
-    <Content Include="Views\Report\TotalWorkingHours.cshtml" />
     <Content Include="Views\Report\UnpaidLeaveSummary.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Create.cshtml" />

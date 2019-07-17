@@ -10,8 +10,6 @@
     {
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria);
 
-        IList<TotalWorkingHours> GetWorkingHoursList(ICriteria criteria);
-
         IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria);
 
         IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria);
