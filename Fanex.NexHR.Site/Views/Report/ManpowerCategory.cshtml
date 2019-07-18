@@ -3,40 +3,40 @@
 
 @model ManpowerCategoryViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.ManpowerCategory;
+    HtmlHelper.ClientValidationEnabled = false;
 }
 @section css{
-    @Url.CombresLink("manpowerreportcss")
+    <link href="~/wwwroot/dist/styles/report.manpower.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("manpowercategoryreportjs")
+    <script src="~/wwwroot/dist/js/report.manpower.category.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a> <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>
-    @ViewBag.Title
-</h2>
-@using (Html.BeginGetForm())
-{
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">
-            @Labels.Year
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.YearPicker("Year", 2010, Model.Year)
+            </div>
         </div>
-        <div class="grid_2">
-            @Html.YearPicker("Year", 2010, Model.Year)
-        </div>
-        <div class="grid_6">
-            <input type="submit" value="@Labels.Submit" id="btnSubmit" />
-            <input type="button" value="Excel" id="btnExcel" />
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
         </div>
     </div>
-}
-<div class="clear"></div>
-<div class="space"></div>
-<table id="data" class="table table-custom persist-area">
-    <thead class="persist-header">
+</form>
+
+<table id="data" class="table table-custom">
+    <thead>
         <tr>
             <th rowspan="2">@Labels.SymbolCount</th>
             <th rowspan="2">@Labels.Team</th>
@@ -63,89 +63,26 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td class="align-left">
-                        @manpower.GroupName
-                    </td>
-                    <td class="align-right">
-                        @manpower.TotalExpat
-                    </td>
-                    <td class="align-right">
-                        @manpower.TotalLocal
-                    </td>
-                    <td class="align-right">
-                        @manpower.Total
-                    </td>
-                    <td class="align-right">
-                        @manpower.Management
-                    </td>
-                    <td class="align-right">
-                        @if (manpower.Total != 0)
-                        {
-                            @((manpower.Management * 100.00 / manpower.Total).ToString("0.0") + "%")
-                        }
-                        else
-                        {
-                            @("0.0%")
-                        }
-                    </td>
-                    <td class="align-right">
-                        @manpower.ExecutiveWithPosition
-                    </td>
-                    <td class="align-right">
-                        @if (manpower.Total != 0)
-                        {
-                            @((manpower.ExecutiveWithPosition * 100.00 / manpower.Total).ToString("0.0") + "%")
-                        }
-                        else
-                        {
-                            @("0.0%")
-                        }
-                    </td>
-                    <td class="align-right">
-                        @manpower.Executive
-                    </td>
-                    <td class="align-right">
-                        @if (manpower.Total != 0)
-                        {
-                            @((manpower.Executive * 100.00 / manpower.Total).ToString("0.0") + "%")
-                        }
-                        else
-                        {
-                            @("0.0%")
-                        }
-                    </td>
-                    <td class="align-right">
-                        @manpower.Staff
-                    </td>
-                    <td class="align-right">
-                        @if (manpower.Total != 0)
-                        {
-                            @((manpower.Staff * 100.00 / manpower.Total).ToString("0.0") + "%")
-                        }
-                        else
-                        {
-                            @("0.0%")
-                        }
-                    </td>
-                    <td class="align-right">
-                        @manpower.Worker
-                    </td>
-                    <td class="align-right">
-                        @if (manpower.Total != 0)
-                        {
-                            @((manpower.Worker * 100.00 / manpower.Total).ToString("0.0") + "%")
-                        }
-                        else
-                        {
-                            @("0.0%")
-                        }
-                    </td>
+                    <td class="align-left">@manpower.GroupName</td>
+                    <td class="align-right">@manpower.TotalExpat</td>
+                    <td class="align-right">@manpower.TotalLocal</td>
+                    <td class="align-right">@manpower.Total</td>
+                    <td class="align-right">@manpower.Management</td>
+                    <td class="align-right">@manpower.AVGManagement.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.ExecutiveWithPosition</td>
+                    <td class="align-right">@manpower.AVGExecutiveWithPosition.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Executive</td>
+                    <td class="align-right">@manpower.AVGExecutive.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Staff</td>
+                    <td class="align-right">@manpower.AVGStaff.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Worker</td>
+                    <td class="align-right">@manpower.AVGWorker.ToString("0.0%")</td>
                 </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 42)
+            @RazorHelper.DisplayNoInformation(colspan: 15)
         }
     </tbody>
     <tfoot>

@@ -7,9 +7,9 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
-    using Models.Report;
 
     public interface IReportService
     {
@@ -26,10 +26,6 @@
         IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
         IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria);
-
-        IEnumerable<ManpowerModel> GetManpower(int year);
-
-        IEnumerable<ManpowerCategoryModel> GetManpowerCategory(int year);
 
         IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
 

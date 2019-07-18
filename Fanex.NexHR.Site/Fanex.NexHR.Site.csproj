@@ -311,6 +311,7 @@
     <Content Include="wwwroot\sources\js\pages\report\dailyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\report\monthlyovertime.js" />
+    <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -327,7 +328,6 @@
     <Content Include="Scripts\Views\Employee\employee.index.js" />
     <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
     <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
-    <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\message.edit.js" />
@@ -1054,6 +1054,7 @@
     <Content Include="wwwroot\dist\js\report.workinghours.summary.js.map" />
     <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx" />
     <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js.map" />
+    <Content Include="ExcelTemplates\ManpowerCategory.xlsx" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1064,6 +1065,7 @@
     <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\dailyovertime.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\manpower.scss" />
     <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
@@ -1273,7 +1275,6 @@
     <Content Include="Views\Report\Manpower.cshtml" />
     <Content Include="ExcelTemplates\ManpowerReportTemplate.xls" />
     <Content Include="Views\Report\ManpowerCategory.cshtml" />
-    <Content Include="ExcelTemplates\ManpowerCategoryReportTemplate.xls" />
     <Content Include="Views\Department\Create.cshtml" />
     <Content Include="Views\Department\Edit.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />

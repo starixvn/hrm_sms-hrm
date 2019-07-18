@@ -301,29 +301,5 @@
 
             return PartialView("_SectionSupervisorDetails", supervisors);
         }
-
-        [HttpGet]
-        public ActionResult Manpower(int? year)
-        {
-            var model = new ManpowerViewModel
-            {
-                Year = year ?? DateTime.Now.Year
-            };
-            model.Manpowers = reportService.GetManpower(model.Year);
-
-            return View(model);
-        }
-
-        [HttpGet]
-        public ActionResult ManpowerCategory(int? year)
-        {
-            var model = new ManpowerCategoryViewModel
-            {
-                Year = year ?? DateTime.Now.Year
-            };
-            model.Manpowers = reportService.GetManpowerCategory(model.Year);
-
-            return View(model);
-        }
     }
 }

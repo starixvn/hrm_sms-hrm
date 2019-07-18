@@ -116,24 +116,6 @@
             return supervisors;
         }
 
-        public IEnumerable<ManpowerModel> GetManpower(int year)
-        {
-            var criteria = new GetManpowerCriteria
-            {
-                Year = year
-            };
-            return baseService.GetData<ManpowerModel>(criteria);
-        }
-
-        public IEnumerable<ManpowerCategoryModel> GetManpowerCategory(int year)
-        {
-            var criteria = new GetManpowerCategoryCriteria
-            {
-                Year = year
-            };
-            return baseService.GetData<ManpowerCategoryModel>(criteria);
-        }
-
         public IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria)
         {
             return baseService.GetData<WeekendLeaveSummary>(criteria).ToList();

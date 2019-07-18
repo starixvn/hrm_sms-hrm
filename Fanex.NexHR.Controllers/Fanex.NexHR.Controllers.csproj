@@ -136,7 +136,6 @@
     <Compile Include="Export\ExportAttendanceController.cs" />
     <Compile Include="Export\ExportCalendarController.cs" />
     <Compile Include="Export\ExportSupervisorController.cs" />
-    <Compile Include="Export\ExportManpowerControlle.cs" />
     <Compile Include="Export\ExportRequestController.cs" />
     <Compile Include="Export\ExportLeaveSummaryController.cs" />
     <Compile Include="Export\ExportDisciplineController.cs" />
@@ -168,6 +167,7 @@
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Report\DailyWorkingHoursController.cs" />
+    <Compile Include="Report\ManpowerReportController.cs" />
     <Compile Include="Report\OvertimeReportController.cs" />
     <Compile Include="Report\WeeklyWorkingHoursController.cs" />
     <Compile Include="Report\MonthlyWorkingHoursController.cs" />

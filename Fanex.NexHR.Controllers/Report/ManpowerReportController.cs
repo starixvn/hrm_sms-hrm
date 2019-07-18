@@ -1,0 +1,57 @@
+﻿namespace Fanex.NexHR.Controllers
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels.Report;
+
+    [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
+    public class ManpowerReportController : BaseController
+    {
+        private readonly IManpowerReportService reportService;
+
+        public ManpowerReportController(
+            ISessionService sessionService,
+            IManpowerReportService reportService) : base(sessionService)
+        {
+            this.reportService = reportService;
+        }
+
+        public ActionResult Manpower(int? year)
+        {
+            var model = new ManpowerViewModel
+            {
+                Year = year ?? DateTime.Now.Year
+            };
+            model.Manpowers = reportService.GetManpower(model.Year);
+
+            return View("~/Views/Report/Manpower.cshtml", model);
+        }
+
+        public ActionResult ManpowerCategory(int? year)
+        {
+            var model = new ManpowerCategoryViewModel
+            {
+                Year = year ?? DateTime.Now.Year
+            };
+            model.Manpowers = reportService.GetManpowerCategory(model.Year);
+
+            return View("~/Views/Report/ManpowerCategory.cshtml", model);
+        }
+
+        public ActionResult ExportManpowerCategory(int year)
+        {
+            IEnumerable<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(year);
+            byte[] bytes = reportService.ExportManpowerCategory(manpowers, year);
+
+            var fileName = $"Manpower Category Report - {year}.xlsx";
+            return File(bytes, "application/xlsx", fileName);
+        }
+    }
+}

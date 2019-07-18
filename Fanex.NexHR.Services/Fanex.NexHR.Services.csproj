@@ -193,7 +193,6 @@
     <Compile Include="ExportExcel\Discipline\IExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Employee\ExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\Employee\IExportExcelEmployeeInfoService.cs" />
-    <Compile Include="ExportExcel\Manpower\ExportExcelManpowerCategoryService.cs" />
     <Compile Include="ExportExcel\Manpower\ExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
@@ -207,6 +206,7 @@
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
+    <Compile Include="Implement\Report\ManpowerReportService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
