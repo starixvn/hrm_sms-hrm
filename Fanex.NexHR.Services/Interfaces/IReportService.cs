@@ -27,9 +27,9 @@
 
         IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria);
 
-        IList<ManpowerModel> GetManpower(GetManpowerCriteria criteria);
+        IEnumerable<ManpowerModel> GetManpower(int year);
 
-        IList<ManpowerCategoryModel> GetManpowerCategory(GetManpowerCategoryCriteria criteria);
+        IEnumerable<ManpowerCategoryModel> GetManpowerCategory(int year);
 
         IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
 

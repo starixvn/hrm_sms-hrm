@@ -5,12 +5,12 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Resources;
 
     public interface IExportExcelManpowerCategoryService
     {
-        void Export(IList<ManpowerCategoryModel> manpowers, int year);
+        void Export(IEnumerable<ManpowerCategoryModel> manpowers, int year);
     }
 
     public class ExportExcelManpowerCategoryService : IExportExcelManpowerCategoryService
@@ -21,7 +21,7 @@
         private const int TotalColumns = 10;
         private const string ManpowerCategoryTemplatePath = @"~\ExcelTemplates\ManpowerCategoryReportTemplate.xls";
 
-        public void Export(IList<ManpowerCategoryModel> manpowers, int year)
+        public void Export(IEnumerable<ManpowerCategoryModel> manpowers, int year)
         {
             string templatePath = HttpContext.Current.Server.MapPath(ManpowerCategoryTemplatePath);
             string fileName = "ManpowerCategoryReport_" + DateTime.Now.ToString("yyyyMMdd");
@@ -45,7 +45,7 @@
             writer.Render();
         }
 
-        private void FillContentRowReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
+        private void FillContentRowReport(IEnumerable<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
 
@@ -86,7 +86,7 @@
             return record;
         }
 
-        private void FillContentRowFooterReport(IList<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
+        private void FillContentRowFooterReport(IEnumerable<ManpowerCategoryModel> manpowers, ref ExcelTemplateWriter writer)
         {
             int total = manpowers.Sum(t => t.Total);
             int management = manpowers.Sum(t => t.Management);

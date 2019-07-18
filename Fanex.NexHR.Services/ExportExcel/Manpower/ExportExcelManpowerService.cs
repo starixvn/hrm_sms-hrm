@@ -5,12 +5,12 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Resources;
 
     public interface IExportExcelManpowerService
     {
-        void Export(IList<ManpowerModel> manpowers, int year);
+        void Export(IEnumerable<ManpowerModel> manpowers, int year);
     }
 
     public class ExportExcelManpowerService : IExportExcelManpowerService
@@ -21,7 +21,7 @@
         public const int TotalColumns = 54;
         private const string ManpowerTemplatePath = @"~\ExcelTemplates\ManpowerReportTemplate.xls";
 
-        public void Export(IList<ManpowerModel> manpowers, int year)
+        public void Export(IEnumerable<ManpowerModel> manpowers, int year)
         {
             string templatePath = HttpContext.Current.Server.MapPath(ManpowerTemplatePath);
             string fileName = "ManpowerReport_" + DateTime.Now.ToString("yyyyMMdd");
@@ -45,7 +45,7 @@
             writer.Render();
         }
 
-        private void FillContentRowReport(IList<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
+        private void FillContentRowReport(IEnumerable<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
 
@@ -148,7 +148,7 @@
             return record;
         }
 
-        private void FillContentRowFooterReport(IList<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
+        private void FillContentRowFooterReport(IEnumerable<ManpowerModel> manpowers, int year, ref ExcelTemplateWriter writer)
         {
             int month = 1;
             var record = new

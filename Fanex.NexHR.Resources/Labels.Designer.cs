@@ -2446,7 +2446,16 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manpower and Job Category Report.
+        ///   Looks up a localized string similar to Manpower.
+        /// </summary>
+        public static string Manpower {
+            get {
+                return ResourceManager.GetString("Manpower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manpower Category.
         /// </summary>
         public static string ManpowerCategory {
             get {
@@ -2460,15 +2469,6 @@ namespace Fanex.NexHR.Resources {
         public static string ManpowerCategoryReportTitle {
             get {
                 return ResourceManager.GetString("ManpowerCategoryReportTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Manpower report.
-        /// </summary>
-        public static string ManpowerReport {
-            get {
-                return ResourceManager.GetString("ManpowerReport", resourceCulture);
             }
         }
         

@@ -6,14 +6,8 @@
     {
         public int Year { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Report_ManpowerCategory";
-        }
+        public override string GetSettingKey() => "Report_ManpowerCategory";
 
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
+        public override bool IsValid() => Year > 0;
     }
 }

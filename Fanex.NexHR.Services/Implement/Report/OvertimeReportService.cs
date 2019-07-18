@@ -25,8 +25,8 @@
         private const byte MaximumWidth = 50;
 
         public OvertimeReportService(
-            IBaseService baseService,
-            IOvertimeReportRepository overtimeReportRepository)
+                IBaseService baseService,
+                IOvertimeReportRepository overtimeReportRepository)
         {
             this.baseService = baseService;
             this.overtimeReportRepository = overtimeReportRepository;
@@ -330,41 +330,13 @@
                 endNormalDayColumn = 12,
                 startHolidayColumn = 13
             };
-            var fromDate = dateRanges.Min(x => x.Date);
-            var toDate = dateRanges.Max(x => x.Date);
-            var rowIndex = 1;
+            var rowIndex = 3;
             var colIndex = 1;
 
             // title & header
-            template.Cells[rowIndex, colIndex, rowIndex + 1, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalFixedColumns]);
-            worksheet.Cells[rowIndex, colIndex].Value = string.Format(
-                worksheet.Cells[rowIndex, colIndex].Value.ToString(),
-                fromDate.ToString(DateFormat),
-                toDate.ToString(DateFormat));
-            colIndex = templateIndex.startNormalDayColumn;
-            foreach (DateRange date in dateRanges)
-            {
-                if (date.IsHoliday)
-                {
-                    template.Cells[rowIndex, templateIndex.startHolidayColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                    worksheet.Cells[rowIndex, colIndex].Value = date.Date.ToString("dd-MMM");
-                    template.Cells[rowIndex + 1, templateIndex.startHolidayColumn].Copy(worksheet.Cells[rowIndex + 1, colIndex]);
-                }
-                else
-                {
-                    var toColumn = colIndex + 3;
-                    template.Cells[rowIndex, templateIndex.startNormalDayColumn, rowIndex, templateIndex.endNormalDayColumn]
-                        .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, toColumn]);
-                    worksheet.Cells[rowIndex, colIndex].Value = date.Date.ToString("dd-MMM");
-                    template.Cells[rowIndex + 1, templateIndex.startNormalDayColumn, rowIndex + 1, templateIndex.endNormalDayColumn]
-                        .Copy(worksheet.Cells[rowIndex + 1, colIndex, rowIndex + 1, toColumn]);
-                }
-
-                colIndex += date.IsHoliday ? 1 : 3;
-            }
+            WriteHeaderOvertimeRecord(template, worksheet, dateRanges);
 
             // data
-            rowIndex += 2;
             var rowNum = 1;
             IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
             foreach (DailyOvertimeDetails employee in employees)
@@ -421,6 +393,51 @@
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
             worksheet.View.FreezePanes(templateIndex.startBodyRow, templateIndex.startNormalDayColumn);
+        }
+
+        private static void WriteHeaderOvertimeRecord(
+            ExcelWorksheet template,
+            ExcelWorksheet worksheet,
+            IEnumerable<DateRange> dateRanges)
+        {
+            const byte TotalFixedColumns = 9;
+            var templateIndex = new
+            {
+                startHeaderRow = 2,
+                startBodyRow = 3,
+                startNormalDayColumn = 10,
+                endNormalDayColumn = 12,
+                startHolidayColumn = 13
+            };
+            var colIndex = 1;
+            var fromDate = dateRanges.Min(x => x.Date);
+            var toDate = dateRanges.Max(x => x.Date);
+            template.Cells[1, colIndex, templateIndex.startHeaderRow, TotalFixedColumns].Copy(worksheet.Cells[1, colIndex, templateIndex.startHeaderRow, TotalFixedColumns]);
+            worksheet.Cells[1, colIndex].Value = string.Format(
+                worksheet.Cells[1, colIndex].Value.ToString(),
+                fromDate.ToString(DateFormat),
+                toDate.ToString(DateFormat));
+            colIndex = templateIndex.startNormalDayColumn;
+            foreach (DateRange date in dateRanges)
+            {
+                if (date.IsHoliday)
+                {
+                    template.Cells[1, templateIndex.startHolidayColumn].Copy(worksheet.Cells[1, colIndex]);
+                    worksheet.Cells[1, colIndex].Value = date.Date.ToString("dd-MMM");
+                    template.Cells[templateIndex.startHeaderRow, templateIndex.startHolidayColumn].Copy(worksheet.Cells[templateIndex.startHeaderRow, colIndex]);
+                }
+                else
+                {
+                    var toColumn = colIndex + 3;
+                    template.Cells[1, templateIndex.startNormalDayColumn, 1, templateIndex.endNormalDayColumn]
+                        .Copy(worksheet.Cells[1, colIndex, 1, toColumn]);
+                    worksheet.Cells[1, colIndex].Value = date.Date.ToString("dd-MMM");
+                    template.Cells[templateIndex.startHeaderRow, templateIndex.startNormalDayColumn, templateIndex.startHeaderRow, templateIndex.endNormalDayColumn]
+                        .Copy(worksheet.Cells[templateIndex.startHeaderRow, colIndex, templateIndex.startHeaderRow, toColumn]);
+                }
+
+                colIndex += date.IsHoliday ? 1 : 3;
+            }
         }
 
         private static void WriteSummaryOvertime(

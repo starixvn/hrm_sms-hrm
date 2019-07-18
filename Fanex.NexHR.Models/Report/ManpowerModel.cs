@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Models
+﻿namespace Fanex.NexHR.Models.Report
 {
     public class ManpowerModel
     {

@@ -309,14 +309,7 @@
             {
                 Year = year ?? DateTime.Now.Year
             };
-
-            var criteria = new GetManpowerCriteria
-            {
-                Year = model.Year
-            };
-
-            IList<ManpowerModel> manpowers = reportService.GetManpower(criteria);
-            model.Manpowers = manpowers;
+            model.Manpowers = reportService.GetManpower(model.Year);
 
             return View(model);
         }
@@ -328,14 +321,7 @@
             {
                 Year = year ?? DateTime.Now.Year
             };
-
-            var criteria = new GetManpowerCategoryCriteria
-            {
-                Year = model.Year
-            };
-
-            IList<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(criteria);
-            model.Manpowers = manpowers;
+            model.Manpowers = reportService.GetManpowerCategory(model.Year);
 
             return View(model);
         }

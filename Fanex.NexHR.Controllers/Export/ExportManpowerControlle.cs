@@ -3,9 +3,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Report;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
 
     public class ExportManpowerController : BaseExportController
@@ -27,12 +25,7 @@
 
         public ActionResult Manpower(int year)
         {
-            var criteria = new GetManpowerCriteria
-            {
-                Year = year
-            };
-
-            IList<ManpowerModel> manpowers = reportService.GetManpower(criteria);
+            IEnumerable<ManpowerModel> manpowers = reportService.GetManpower(year);
             exportExcelManpowerService.Export(manpowers, year);
 
             return new EmptyResult();
@@ -40,12 +33,7 @@
 
         public ActionResult ManpowerCategory(int year)
         {
-            var criteria = new GetManpowerCategoryCriteria
-            {
-                Year = year
-            };
-
-            IList<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(criteria);
+            IEnumerable<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(year);
             exportExcelManpowerCategoryService.Export(manpowers, year);
 
             return new EmptyResult();

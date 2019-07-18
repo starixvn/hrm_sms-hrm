@@ -269,20 +269,9 @@
             }
             else if (dailyWorking.TotalWorkingHours > 0)
             {
-                value = dailyWorking.TotalWorkingHoursToDisplay;
-
-                if (dailyWorking.IsHoliday)
-                {
-                    backgroundColor = Constants.HolidayBackgroundColor;
-                }
-                else if (dailyWorking.IsOffDay)
-                {
-                    backgroundColor = Constants.OffDayBackgroundColor;
-                }
-                else
-                {
-                    backgroundColor = string.Empty;
-                }
+                var tupple = GetValueOnWorkDay(dailyWorking);
+                value = tupple.Item1;
+                backgroundColor = tupple.Item2;
             }
             else if (dailyWorking.IsMissingCheckIn)
             {
@@ -342,6 +331,27 @@
                 {
                     value = string.Format("{0}½", dailyWorking.LeaveType.Code);
                 }
+            }
+
+            return new Tuple<string, string>(value, backgroundColor);
+        }
+
+        private static Tuple<string, string> GetValueOnWorkDay(DailyWorking dailyWorking)
+        {
+            var backgroundColor = string.Empty;
+            var value = dailyWorking.TotalWorkingHoursToDisplay;
+
+            if (dailyWorking.IsHoliday)
+            {
+                backgroundColor = Constants.HolidayBackgroundColor;
+            }
+            else if (dailyWorking.IsOffDay)
+            {
+                backgroundColor = Constants.OffDayBackgroundColor;
+            }
+            else
+            {
+                backgroundColor = string.Empty;
             }
 
             return new Tuple<string, string>(value, backgroundColor);

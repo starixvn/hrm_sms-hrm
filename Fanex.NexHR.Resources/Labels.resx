@@ -1095,8 +1095,8 @@
   <data name="Existing" xml:space="preserve">
     <value>Existing</value>
   </data>
-  <data name="ManpowerReport" xml:space="preserve">
-    <value>Manpower report</value>
+  <data name="Manpower" xml:space="preserve">
+    <value>Manpower</value>
   </data>
   <data name="NewHire" xml:space="preserve">
     <value>New Hire</value>
@@ -1120,7 +1120,7 @@
     <value>Local</value>
   </data>
   <data name="ManpowerCategory" xml:space="preserve">
-    <value>Manpower and Job Category Report</value>
+    <value>Manpower Category</value>
   </data>
   <data name="ManpowerCategoryReportTitle" xml:space="preserve">
     <value>SMS TOTAL MANPOWER AND JOB CATEGORY REPORT</value>
