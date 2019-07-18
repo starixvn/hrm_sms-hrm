@@ -37,10 +37,6 @@
                     }
                 </select>
             </div>
-            <div class="grid_1 gridlabel">@Labels.Title</div>
-            <div class="grid_5">
-                @Html.DropDownList("title", (List<SelectListItem>)ViewBag.JobTitles, new { @class = "title-select", multiple = "multiple" })
-            </div>
             <div class="clear">
             </div>
             <div class="space">
@@ -49,12 +45,10 @@
             </div>
             <div class="space">
             </div>
-            <div class="grid_2 gridlabel">
-                Category
-            </div>
+            <div class="grid_2 gridlabel">Category</div>
             <div class="grid_3">
                 @{
-    var category = new List<SelectListItem>
+                    var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Expat", Value = "0"},

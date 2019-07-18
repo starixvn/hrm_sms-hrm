@@ -28,19 +28,16 @@
         private readonly IReportService reportService;
         private readonly ITeamService teamService;
         private readonly IExportExcelService exportExcelService;
-        private readonly ILookupDataService lookupDataService;
 
         public ReportController(
             ISessionService sessionService,
             IReportService reportSevice,
             ITeamService teamService,
-            IExportExcelService exportExcelService,
-            ILookupDataService lookupDataService) : base(sessionService)
+            IExportExcelService exportExcelService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.teamService = teamService;
             this.exportExcelService = exportExcelService;
-            this.lookupDataService = lookupDataService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
@@ -243,8 +240,7 @@
                     FromDate = filterModel.FromDate,
                     ToDate = filterModel.ToDate,
                     GroupIds = filterModel.TeamIds,
-                    IsLocal = filterModel.IsLocal,
-                    JobTitleId = filterModel.JobTitleIds
+                    IsLocal = filterModel.IsLocal
                 };
                 List<WorkingCalendarSummary> calendars = reportService.CalendarSummaryList(criteria).ToList();
                 string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
@@ -265,13 +261,6 @@
                 ViewBag.Groups = teamService.GetAll();
                 ViewBag.DefaultFromDate = model.FromDate;
                 ViewBag.DefaultToDate = model.ToDate;
-                IList<LookupData> listJobTitles = lookupDataService.GetAll(Constants.JobTitle);
-                ViewBag.JobTitles = listJobTitles.Select(j => new SelectListItem
-                {
-                    Text = j.Name,
-                    Value = j.Id.ToString(),
-                    Selected = string.IsNullOrEmpty(j.Id.ToString())
-                }).ToList();
 
                 return View(model);
             }

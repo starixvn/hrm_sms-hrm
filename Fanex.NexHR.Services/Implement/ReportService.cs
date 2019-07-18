@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Report;
@@ -99,7 +99,7 @@
             IList<WorkingCalendarSummary> calendars = null;
             if (criteria != null && criteria.IsValid())
             {
-                calendars = reportRepository.CalendarSummaryList(criteria);
+                calendars = baseService.GetData<WorkingCalendarSummary>(criteria).ToList();
             }
 
             return calendars;

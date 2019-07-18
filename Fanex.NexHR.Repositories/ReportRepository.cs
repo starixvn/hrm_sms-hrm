@@ -115,17 +115,6 @@
             }
         }
 
-        public IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria)
-        {
-            IList<WorkingCalendarSummary> calendars = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                calendars = db.Query<WorkingCalendarSummary>(criteria.GetSpParams()).ToList();
-            }
-
-            return calendars;
-        }
-
         public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)
         {
             using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))

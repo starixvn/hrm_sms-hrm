@@ -16,8 +16,6 @@
 
         IList<TimeRecordModel> GetTimeRecords(ICriteria criteria);
 
-        IList<WorkingCalendarSummary> CalendarSummaryList(ICriteria criteria);
-
         IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria);
 
         IList<SectionSupervisorReportModel> GetSectionSupervisor(ICriteria criteria);
