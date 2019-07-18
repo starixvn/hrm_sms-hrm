@@ -94,17 +94,6 @@
             return timeRecords;
         }
 
-        public IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria)
-        {
-            IList<WorkingCalendarSummary> calendars = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                calendars = baseService.GetData<WorkingCalendarSummary>(criteria).ToList();
-            }
-
-            return calendars;
-        }
-
         public IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
         {
             IList<SupervisorReportModel> supervisors = null;

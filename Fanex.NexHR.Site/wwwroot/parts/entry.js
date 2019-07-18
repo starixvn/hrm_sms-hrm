@@ -57,6 +57,7 @@ module.exports = {
         [`${jsDistPath}/report.yearlyovertime`]: `${jsSourcePath}/report/yearlyovertime.js`,
         [`${jsDistPath}/report.dailyovertime`]: `${jsSourcePath}/report/dailyovertime.js`,
         [`${jsDistPath}/report.workinghours.summary`]: `${jsSourcePath}/report/workinghours.summary.js`,
+        [`${jsDistPath}/report.workingcalendar.summary`]: `${jsSourcePath}/report/workingcalendar.summary.js`,
         [`${jsDistPath}/overtime.myrequest`]: `${jsSourcePath}/overtime/myrequest.js`,
         [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`,
         [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`,

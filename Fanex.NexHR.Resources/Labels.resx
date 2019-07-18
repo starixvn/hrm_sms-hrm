@@ -1776,4 +1776,7 @@
   <data name="OvertimeDetailsReport" xml:space="preserve">
     <value>Overtime Details Report</value>
   </data>
+  <data name="WorkingCalendarSummary" xml:space="preserve">
+    <value>Working Calendar Summary</value>
+  </data>
 </root>

@@ -269,6 +269,7 @@
     <Content Include="wwwroot\dist\js\report.monthlyovertime.js" />
     <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js" />
     <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js" />
     <Content Include="wwwroot\dist\js\report.workinghours.summary.js" />
     <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\styles\account.editprofile.css" />
@@ -305,6 +306,7 @@
     <Content Include="wwwroot\sources\js\pages\overtime\hr.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\report\workingcalendar.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\workinghours.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
@@ -328,7 +330,6 @@
     <Content Include="Scripts\Views\Report\report.manpower.category.js" />
     <Content Include="Scripts\Views\Report\report.manpower.js" />
     <Content Include="Scripts\Views\employee.message.js" />
-    <Content Include="Scripts\Views\employee.workingcalendarsummary.js" />
     <Content Include="Scripts\Views\message.edit.js" />
     <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
@@ -1051,6 +1052,8 @@
     <Content Include="Views\Report\WorkingHoursSummary.cshtml" />
     <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx" />
     <Content Include="wwwroot\dist\js\report.workinghours.summary.js.map" />
+    <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx" />
+    <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1237,7 +1240,6 @@
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
     <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
-    <Content Include="ExcelTemplates\WorkingCalendarSummaryTemplate.xls" />
     <Content Include="Views\Message\Index.cshtml" />
     <Content Include="Views\Message\Create.cshtml" />
     <Content Include="Views\Message\Edit.cshtml" />

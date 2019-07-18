@@ -291,12 +291,6 @@
       <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
-    <resourceSet name="workingcalendarsummaryjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/employee.workingcalendarsummary.js" />
-    </resourceSet>
-
     <resourceSet name="monthpickcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />

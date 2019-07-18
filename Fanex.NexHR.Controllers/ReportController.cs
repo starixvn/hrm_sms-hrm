@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -20,24 +18,20 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Report;
-    using NPOI.HSSF.UserModel;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
     {
         private readonly IReportService reportService;
         private readonly ITeamService teamService;
-        private readonly IExportExcelService exportExcelService;
 
         public ReportController(
             ISessionService sessionService,
             IReportService reportSevice,
-            ITeamService teamService,
-            IExportExcelService exportExcelService) : base(sessionService)
+            ITeamService teamService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.teamService = teamService;
-            this.exportExcelService = exportExcelService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
@@ -230,42 +224,6 @@
             return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
         }
 
-        public ActionResult WorkingCalendarSummary(ReportFilterViewModel filterModel)
-        {
-            if (filterModel.IsExportExcel)
-            {
-                var criteria = new GetEmployeeWorkingCalendarByDateCriteria
-                {
-                    EmployeeId = filterModel.EmployeeId,
-                    FromDate = filterModel.FromDate,
-                    ToDate = filterModel.ToDate,
-                    GroupIds = filterModel.TeamIds,
-                    IsLocal = filterModel.IsLocal
-                };
-                List<WorkingCalendarSummary> calendars = reportService.CalendarSummaryList(criteria).ToList();
-                string fileName = "TotalWorkingHourSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
-                var hssfworkbook = exportExcelService.ExportWorkingCalendarSummary(calendars, filterModel.FromDate, filterModel.ToDate);
-                return ExcelFile(hssfworkbook, fileName);
-            }
-            else
-            {
-                var model = new WorkingCalendarSummaryViewModel
-                {
-                    Employee = filterModel.Employee,
-                    EmployeeId = filterModel.EmployeeId,
-                    FromDate = DateTime.Now.Date.ToString(Constants.DateFormat),
-                    ToDate = DateTime.Now.Date.ToString(Constants.DateFormat),
-                    IsLocal = filterModel.IsLocal
-                };
-
-                ViewBag.Groups = teamService.GetAll();
-                ViewBag.DefaultFromDate = model.FromDate;
-                ViewBag.DefaultToDate = model.ToDate;
-
-                return View(model);
-            }
-        }
-
         public ActionResult UnpaidLeaveSummary()
         {
             var model = new LeaveSummaryViewModel
@@ -349,7 +307,7 @@
         {
             var model = new ManpowerViewModel
             {
-                Year = year.HasValue ? year.Value : DateTime.Now.Year
+                Year = year ?? DateTime.Now.Year
             };
 
             var criteria = new GetManpowerCriteria
@@ -368,7 +326,7 @@
         {
             var model = new ManpowerCategoryViewModel
             {
-                Year = year.HasValue ? year.Value : DateTime.Now.Year
+                Year = year ?? DateTime.Now.Year
             };
 
             var criteria = new GetManpowerCategoryCriteria
@@ -380,15 +338,6 @@
             model.Manpowers = manpowers;
 
             return View(model);
-        }
-
-        private ActionResult ExcelFile(HSSFWorkbook hssfworkbook, string fileName)
-        {
-            using (var output = new MemoryStream())
-            {
-                hssfworkbook.Write(output);
-                return File(output.ToArray(), "application/vnd.ms-excel", fileName);
-            }
         }
     }
 }

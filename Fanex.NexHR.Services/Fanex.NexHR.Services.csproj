@@ -201,7 +201,6 @@
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveDetailService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
     <Compile Include="Implement\ExtensionNumberService.cs" />
-    <Compile Include="ExportExcel\ReportExporting.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\MenuService.cs" />
@@ -209,6 +208,7 @@
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
+    <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />

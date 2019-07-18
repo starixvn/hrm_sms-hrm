@@ -22,8 +22,8 @@
             string templatePath = HttpContext.Current.Server.MapPath(TemplatePath);
             string reportName = Labels.DisciplineSummaryReportName;
             string reportTitle;
-            string startDate = criteria.FromDate.ToString(Constants.DateFormat);
-            string endDate = criteria.ToDate.ToString(Constants.DateFormat);
+            string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+            string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
             if (criteria.EmployeeId != null)
             {

@@ -14,7 +14,5 @@
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
 
         HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate);
-
-        HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate);
     }
 }

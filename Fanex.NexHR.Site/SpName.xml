@@ -75,7 +75,9 @@
     <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByMonth" SpName="Report_EmployeeCalendarByMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1"></Setting>
+    <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1">
+      <Mapping DataField="GroupName" ObjectProperty="Section" />
+    </Setting>
     <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />

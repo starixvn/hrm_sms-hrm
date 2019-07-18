@@ -6,7 +6,6 @@
     using System.IO;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -24,14 +23,6 @@
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
-
-        public HSSFWorkbook ExportWorkingCalendarSummary(List<WorkingCalendarSummary> calendars, DateTime fromDate, DateTime toDate)
-        {
-            var exportExcel = new ReportExporting();
-            HSSFWorkbook hssfworkbook = exportExcel.ExportWorkingCalendarSummary(calendars, fromDate, toDate);
-
-            return hssfworkbook;
-        }
 
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
         {
@@ -165,17 +156,17 @@
             var rowDate = sheet.GetRow(1);
             ICell cellFromDate = rowDate.GetCell(2);
             ICell cellToDate = rowDate.GetCell(4);
-            cellFromDate.SetCellValue(fromDate.ToString(Constants.DateFormat));
-            cellToDate.SetCellValue(toDate.ToString(Constants.DateFormat));
+            cellFromDate.SetCellValue(fromDate.ToDateMonthYearFormatedDate());
+            cellToDate.SetCellValue(toDate.ToDateMonthYearFormatedDate());
 
             var rowHeaderDate = sheet.GetRow(3);
-            rowHeaderDate.GetCell(5).SetCellValue(fromDate.ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1).ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2).ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3).ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4).ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5).ToString(Constants.DateFormat));
-            rowHeaderDate.GetCell(11).SetCellValue(toDate.ToString(Constants.DateFormat));
+            rowHeaderDate.GetCell(5).SetCellValue(fromDate.ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1).ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2).ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3).ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4).ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5).ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(11).SetCellValue(toDate.ToDateMonthYearFormatedDate());
 
             var rowHeaderDay = sheet.GetRow(4);
             rowHeaderDay.GetCell(5).SetCellValue(fromDate.ToString("ddd"));

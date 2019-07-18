@@ -1,113 +1,84 @@
-﻿/****** Object:  Stored Procedure dbo.Report_EmployeeCalendarByDateRange    Script Date: 7/20/2016 10:19:16 AM ******/
-/****** Object:  Stored Procedure dbo.Report_EmployeeCalendarByDateRange    Script Date: 7/19/2016 5:22:19 PM ******/
-
-CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] 
-	@EmployeeId INT = NULL
-	,@FromDate DATETIME
-	,@ToDate DATETIME
-	,@GroupIds VARCHAR(1000) = ''
-	,@JobTitleId VARCHAR(1000) = ''
+﻿
+CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @EmployeeId INT = NULL
+	,@FromDate DATE
+	,@ToDate DATE
+	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
-	,@IsDebug BIT = 0
 AS
 /*
 Created: 20140711@Quinn.Vo
 Task: Get employee calendar by date range.
-DB: NexEPA
-Original: 
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
-
 */
-SET NOCOUNT ON;
-
-CREATE TABLE #GroupsList (GroupId INT)
-
-SET @groupids = ISNULL(@groupids, '')
-
-IF @groupids <> ''
-	INSERT INTO #GroupsList (GroupId)
-	SELECT val
-	FROM fnc_strSplit(@groupids, ',')
-ELSE
 BEGIN
-	INSERT INTO #GroupsList (GroupId)
-	SELECT GRoupID
-	FROM [Group] g WITH (NOLOCK)
-END
+	SET NOCOUNT ON;
 
-CREATE TABLE #JobTitleList (JobTitleId INT)
+	CREATE TABLE #tblGroupIds (GroupId INT)
 
-IF ISNULL(@JobTitleId, '') <> ''
-	INSERT INTO #JobTitleList (JobTitleId)
-	SELECT val
-	FROM fnc_strSplit(@JobTitleId, ',')
-ELSE
-BEGIN
-	INSERT INTO #JobTitleList (JobTitleId)
-	SELECT ID
-	FROM dbo.LookupData lk WITH (NOLOCK)
-	WHERE LookupId = 1
-END
+	IF ISNULL(@GroupIds, '') <> ''
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT GroupId
+		FROM dbo.[Group] WITH (NOLOCK)
+		WHERE IsDeleted = 0
+	END
 
-CREATE TABLE #Calendar (WorkDate DATETIME)
-
-WHILE (@FromDate <= @ToDate)
-BEGIN
-	INSERT INTO #Calendar (WorkDate)
-	VALUES (@FromDate)
-
-	SET @FromDate = DATEADD(d, 1, @FromDate)
-END
-
-SELECT e.EmpId
-	,e.NickName
-	,e.FullName
-	,g.GroupId
-	,g.Code
-	,g.NAME
-	,cl.WorkDate
-	,(CASE WHEN ec.WorkDate IS NULL THEN ''
-		WHEN ec.IsHoliday = 1 THEN 'PH'
-		WHEN ec.IsOffDay = 1 THEN 'OFF'
-		WHEN ec.IsLeaveDay = 1 THEN (lv.code + CASE WHEN lv2.LeaveTypeId IS NOT NULL THEN '/' + lv2.code WHEN ec.LeaveDay = 1 THEN '' WHEN ec.LeaveDay = 0.5 THEN '½' ELSE '' END)
-		WHEN s.code IS NOT NULL THEN s.code
-		ELSE '' END
-	) AS Schedule
-FROM #Calendar AS cl
-	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON 1 = 1
-	INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.EmpId = e.EmpId
-	AND ec.WorkDate = cl.WorkDate
-	LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON ec.ShiftId = s.ShiftID
-	LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON ec.LeaveTypeId = lv.LeaveTypeId
-	LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON ec.LeaveTypeId2 = lv2.LeaveTypeId
-WHERE e.[Enabled] = 1
-	AND e.isDeleted = 0
-	AND (
-		@EmployeeId IS NULL
-		OR e.empid = @EmployeeId
-		)
-	AND (
-		@JobTitleId = ''
-		OR e.JobTitleId IN (
-			SELECT JobTitleId
-			FROM #JobTitleList
+	SELECT emp.EmpId AS EmployeeId
+		,emp.Code
+		,emp.NickName
+		,emp.FullName
+		,g.GroupId
+		,g.Code AS GroupCode
+		,g.[Name] AS GroupName
+		,empca.WorkDate
+		,(CASE 
+			WHEN empca.WorkDate IS NULL THEN ''
+			WHEN empca.IsHoliday = 1 THEN 'PH'
+			WHEN empca.IsOffDay = 1 THEN 'OFF'
+			WHEN empca.IsLeaveDay = 1 THEN (
+					lv.Code + CASE 
+					WHEN lv2.LeaveTypeId IS NOT NULL THEN '/' + lv2.Code
+					WHEN empca.LeaveDay = 1 THEN ''
+					WHEN empca.LeaveDay = 0.5 THEN '½'
+					ELSE '' END
+					)
+			WHEN s.Code IS NOT NULL THEN s.Code
+			ELSE '' END
+			) AS Shift
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
+		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = emp.EmpId
+		AND empca.WorkDate BETWEEN @FromDate
+			AND @ToDate
+		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON empca.ShiftId = s.ShiftID
+		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON empca.LeaveTypeId = lv.LeaveTypeId
+		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
+	WHERE emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+		AND (
+			@EmployeeId IS NULL
+			OR emp.EmpId = @EmployeeId
 			)
-		)
-	AND (
-		@GroupIds = ''
-		OR e.GroupId IN (
-			SELECT GroupId
-			FROM #GroupsList
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tblgr
+			WHERE tblgr.GroupId = emp.GroupId
 			)
-		)
-	AND (@IsLocal IS NULL OR es.IsLocal = @IsLocal)
-ORDER BY e.NickName
-	,cl.WorkDate
+		AND (
+			@IsLocal IS NULL
+			OR empsum.IsLocal = @IsLocal
+			)
+	ORDER BY emp.NickName
+		,empca.WorkDate
 
-DROP TABLE #Calendar
-DROP TABLE #GroupsList
-DROP TABLE #JobTitleList
+	DROP TABLE #tblGroupIds
+END

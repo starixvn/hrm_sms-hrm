@@ -4894,6 +4894,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Working Calendar Summary.
+        /// </summary>
+        public static string WorkingCalendarSummary {
+            get {
+                return ResourceManager.GetString("WorkingCalendarSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Working day.
         /// </summary>
         public static string WorkingDay {

@@ -171,6 +171,7 @@
     <Compile Include="Report\OvertimeReportController.cs" />
     <Compile Include="Report\WeeklyWorkingHoursController.cs" />
     <Compile Include="Report\MonthlyWorkingHoursController.cs" />
+    <Compile Include="Report\WorkingCalendarSummaryReportController.cs" />
     <Compile Include="Report\WorkingHoursSummaryReportController.cs" />
     <Compile Include="Request\ChangeShiftController.cs" />
     <Compile Include="Request\CheckInOutController.cs" />

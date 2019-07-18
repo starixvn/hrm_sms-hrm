@@ -62,6 +62,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
             container.RegisterType<IOvertimeReportService, OvertimeReportService>();
             container.RegisterType<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
+            container.RegisterType<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

@@ -135,8 +135,7 @@
     <Compile Include="Report\EmployeeAttendanceModel.cs" />
     <Compile Include="Report\EmployeeAttendanceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Report\ReportFilterViewModel.cs" />
-    <Compile Include="Calendar\WorkingCalendarSummaryViewModel.cs" />
+    <Compile Include="Report\WorkingCalendarSummaryViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarsViewModel.cs" />
     <Compile Include="Calendar\WorkingScheduleViewModel.cs" />
   </ItemGroup>

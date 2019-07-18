@@ -5,26 +5,14 @@
 
     public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     {
-        public int? EmployeeId { get; set; }
-
         public DateTime FromDate { get; set; }
-
         public DateTime ToDate { get; set; }
-
         public string GroupIds { get; set; }
-
-        public string JobTitleId { get; set; }
-
+        public int? EmployeeId { get; set; }
         public byte? IsLocal { get; set; }
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
 
-        public override string GetSettingKey()
-        {
-            return "Report_EmployeeCalendarByDateRange";
-        }
+        public override string GetSettingKey() => "Report_EmployeeCalendarByDateRange";
     }
 }

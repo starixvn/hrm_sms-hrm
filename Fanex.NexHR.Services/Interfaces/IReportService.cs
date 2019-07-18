@@ -23,8 +23,6 @@
 
         IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
 
-        IList<WorkingCalendarSummary> CalendarSummaryList(GetEmployeeWorkingCalendarByDateCriteria criteria);
-
         IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
         IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria);

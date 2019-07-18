@@ -320,7 +320,7 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const ushort TotalFixedColumns = 9;
+            const byte TotalFixedColumns = 9;
             var templateIndex = new
             {
                 startBodyRow = 3,

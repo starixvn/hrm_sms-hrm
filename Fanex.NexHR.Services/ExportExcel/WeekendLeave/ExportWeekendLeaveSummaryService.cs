@@ -25,8 +25,8 @@
             string templatePath = HttpContext.Current.Server.MapPath(WeekendLeaveSummaryTemplatePath);
             string reportName = Labels.WeekendLeaveSummary;
             string reportTitle;
-            string startDate = criteria.FromDate.ToString(Constants.DateFormat);
-            string endDate = criteria.ToDate.ToString(Constants.DateFormat);
+            string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+            string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
             if (criteria.EmployeeId != null)
             {

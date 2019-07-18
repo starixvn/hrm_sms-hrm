@@ -3,8 +3,8 @@
 @model ShiftStatisticViewModel
 @{
     ViewBag.Title = @Labels.ShiftStatisticReport;
-    var displayFrom = (Model.FromDate).ToString(Constants.DateFormat);
-    var displayTo = (Model.ToDate).ToString(Constants.DateFormat);
+    var displayFrom = Model.FromDate.ToDateMonthYearFormatedDate();
+    var displayTo = Model.ToDate.ToDateMonthYearFormatedDate();
 }
 @section css{
     @Url.CombresLink("shiftstatisticcss")
