@@ -56,7 +56,8 @@
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Total Working Hours");
                     WriteWorkingHours(template, worksheet, param, workingHours);
 
-                    template = templatePackage.Workbook.Worksheets[2];
+                    const byte OvertimeSheetIndex = 2;
+                    template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Details Report");
                     WriteOvertimeDetails(template, worksheet, param, overtimes);
 

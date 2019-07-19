@@ -1,13 +1,15 @@
 ﻿namespace Fanex.NexHR.ViewModels.Request
 {
-    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Models.Request;
 
     public class LateInEarlyOutRequestViewModel
     {
+        private const byte MaximumMinute = 60;
+
         public long RequestId { get; set; }
 
         [Required]
@@ -29,7 +31,7 @@
         public string Remark { get; set; }
 
         [Required]
-        [Range(1, 60, ErrorMessage = "The Minute field must be between 1 and 60")]
+        [Range(1, MaximumMinute, ErrorMessage = "The Minute field must be between 1 and 60")]
         public int Minute { get; set; }
 
         [Required]

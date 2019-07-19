@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
@@ -102,17 +101,6 @@
 
             var value = (DateTime)dateTime;
             return string.Format(Labels.TimeFormat, value.Hour.ToString().PadLeft(PaddingLeftWidth, '0'), value.Minute.ToString().PadLeft(PaddingLeftWidth, '0'));
-        }
-
-        public static void CopyTo(this object s, object t)
-        {
-            foreach (var pS in s.GetType().GetProperties())
-            {
-                foreach (var pT in t.GetType().GetProperties().Where(pT => pT.Name == pS.Name))
-                {
-                    pT.GetSetMethod().Invoke(t, new[] { pS.GetGetMethod().Invoke(s, null) });
-                }
-            }
         }
 
         public static string ReadTextFile(string filePath)

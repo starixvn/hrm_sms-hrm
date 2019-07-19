@@ -189,19 +189,7 @@
                 ApprovedDate = reader.ToDateTime("ApprovedDate"),
                 VerifiedDate = reader.ToDateTime("VerifiedDate"),
                 ProcessedDate = reader.ToDateTime("ProcessedDate"),
-                Requester = new Employee
-                {
-                    Id = reader.ToInt("RequesterId"),
-                    NickName = reader.ToString("RequesterNickName"),
-                    FullName = reader.ToString("RequesterFullName"),
-                    AnnualLeaveBalance = reader.ToDecimal("AnnualLeaveBalance"),
-                    Team = new Team
-                    {
-                        Id = reader.ToInt("GroupId"),
-                        Code = reader.ToString("GroupCode"),
-                        Name = reader.ToString("GroupName")
-                    }
-                },
+                Requester = GetRequester(reader),
                 ModifiedBy = new Employee
                 {
                     Id = reader.ToInt("ModifiedById"),
@@ -249,6 +237,23 @@
             };
 
             return entity;
+        }
+
+        private Employee GetRequester(IDataReader reader)
+        {
+            return new Employee
+            {
+                Id = reader.ToInt("RequesterId"),
+                NickName = reader.ToString("RequesterNickName"),
+                FullName = reader.ToString("RequesterFullName"),
+                AnnualLeaveBalance = reader.ToDecimal("AnnualLeaveBalance"),
+                Team = new Team
+                {
+                    Id = reader.ToInt("GroupId"),
+                    Code = reader.ToString("GroupCode"),
+                    Name = reader.ToString("GroupName")
+                }
+            };
         }
     }
 }

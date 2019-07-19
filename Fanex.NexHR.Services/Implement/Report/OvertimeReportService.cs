@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -14,7 +13,6 @@
     using Fanex.NexHR.Repositories;
     using OfficeOpenXml;
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class OvertimeReportService : IOvertimeReportService
     {
         private readonly IBaseService baseService;
@@ -85,9 +83,10 @@
         public byte[] ExportYearlyOvertime(IEnumerable<YearlyOvertime> overtimes, GetYearlyOvertimeParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/YearlyOvertime.xlsx");
-            const ushort TotalColumns = 17;
-            const ushort StartMonthColumn = 5;
-            const ushort StartBodyRow = 4;
+            const byte TotalColumns = 17;
+            const byte TotalHeaderRows = 2;
+            const byte StartMonthColumn = 5;
+            const byte StartBodyRow = 4;
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
@@ -103,10 +102,9 @@
 
                     // header
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
-
                     var calendarType = param.Calendar == (byte)CalendarType.Fiscal ? "Fiscal Calendar" : "Normal Calendar";
                     worksheet.Cells[rowIndex, StartMonthColumn].Value = string.Format("Overtime Summary In {0} ({1})", param.Year, calendarType);
-                    rowIndex += 2;
+                    rowIndex += TotalHeaderRows;
 
                     // data
                     var rowNum = 1;
@@ -165,11 +163,13 @@
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Raw Data");
                     WriteRawData(template, worksheet, dateRanges, dailyOvertimes);
 
-                    template = templatePackage.Workbook.Worksheets[2];
+                    const byte OvertimeSheetIndex = 2;
+                    template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Record");
                     WriteOvertimeRecord(template, worksheet, dateRanges, dailyOvertimes);
 
-                    template = templatePackage.Workbook.Worksheets[3];
+                    const byte SummarySheetIndex = 3;
+                    template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Summary OT");
                     WriteSummaryOvertime(template, worksheet, dateRanges, dailyOvertimes);
 
@@ -181,8 +181,8 @@
         public byte[] ExportDailyOvertimeDetails(IEnumerable<DailyOvertimeDetails> overtimes, GetDailyOvertimeDetailsParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyOvertimeDetails.xlsx");
-            const ushort TotalColumns = 15;
-            const ushort StartBodyRow = 3;
+            const byte TotalColumns = 15;
+            const byte StartBodyRow = 3;
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
@@ -245,7 +245,7 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const ushort TotalColumns = 15;
+            const byte TotalColumns = 15;
             var templateIndex = new
             {
                 startBodyRow = 3,
@@ -446,7 +446,7 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const ushort TotalColumns = 4;
+            const byte TotalColumns = 4;
             var templateIndex = new
             {
                 startBodyRow = 3,
