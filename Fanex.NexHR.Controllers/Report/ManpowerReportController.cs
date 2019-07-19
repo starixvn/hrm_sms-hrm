@@ -45,6 +45,15 @@
             return View("~/Views/Report/ManpowerCategory.cshtml", model);
         }
 
+        public ActionResult ExportManpower(int year)
+        {
+            IEnumerable<ManpowerModel> manpowers = reportService.GetManpower(year);
+            byte[] bytes = reportService.ExportManpower(manpowers, year);
+
+            var fileName = $"Manpower Report - {year}.xlsx";
+            return File(bytes, "application/xlsx", fileName);
+        }
+
         public ActionResult ExportManpowerCategory(int year)
         {
             IEnumerable<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(year);

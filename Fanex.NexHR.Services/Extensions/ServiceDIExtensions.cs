@@ -71,7 +71,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportDisciplineDetailService, ExportDisciplineDetailService>();
             container.RegisterType<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
             container.RegisterType<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();
-            container.RegisterType<IExportExcelManpowerService, ExportExcelManpowerService>();
             container.RegisterType<IExportExcelEmployeeSupervisor, ExportExcelEmployeeSupervisor>();
             container.RegisterType<IExportExcelSectionSupervisorService, ExportExcelSectionSupervisorService>();
             container.RegisterType<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();

@@ -193,7 +193,6 @@
     <Compile Include="ExportExcel\Discipline\IExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Employee\ExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\Employee\IExportExcelEmployeeInfoService.cs" />
-    <Compile Include="ExportExcel\Manpower\ExportExcelManpowerService.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelEmployeeSupervisor.cs" />
     <Compile Include="ExportExcel\Supervisor\ExportExcelSectionSupervisorService.cs" />
     <Compile Include="ExportExcel\ExportExcelUnpaidLeaveSummaryReportService.cs" />

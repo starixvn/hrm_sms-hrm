@@ -3,40 +3,39 @@
 
 @model ManpowerViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.Manpower;
+    HtmlHelper.ClientValidationEnabled = false;
 }
 @section css{
-    @Url.CombresLink("manpowerreportcss")
+    <link href="~/wwwroot/dist/styles/report.manpower.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("manpowerreportjs")
+    <script src="~/wwwroot/dist/js/report.manpower.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a> <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>
-    @ViewBag.Title
-</h2>
-@using (Html.BeginGetForm())
-{
-    <div class="grid_1 gridlabel">
-        @Labels.Year
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.YearPicker("Year", 2010, Model.Year)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
     </div>
-    <div class="grid_2">
-        @Html.YearPicker("Year", 2010, Model.Year)
-    </div>
-    <div class="grid_6">
-        <input type="submit" value="@Labels.Submit" id="btnSubmit" />
-        <input type="button" value="Excel" id="btnExcel" />
-    </div>
-}
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<table id="data" class="table table-custom persist-area">
-    <thead class="persist-header">
+</form>
+<table id="data" class="table table-custom">
+    <thead>
         <tr>
             <th rowspan="2">@Labels.SymbolCount</th>
             <th rowspan="2">@Labels.Team</th>
@@ -57,18 +56,10 @@
         <tr>
             @for (int i = 0; i <= 12; i++)
             {
-                <th>
-                    @Labels.ProbationResigned
-                </th>
-                <th>
-                    @Labels.ConfirmedResigned
-                </th>
-                <th>
-                    @Labels.NewHire
-                </th>
-                <th>
-                    @Labels.Existing
-                </th>
+                <th>@Labels.ProbationResigned</th>
+                <th>@Labels.ConfirmedResigned</th>
+                <th>@Labels.NewHire</th>
+                <th>@Labels.Existing</th>
             }
         </tr>
     </thead>
@@ -79,24 +70,12 @@
             foreach (ManpowerModel manpower in Model.Manpowers)
             {
                 <tr>
-                    <td>
-                        @(index++)
-                    </td>
-                    <td class="tooltip" title="@manpower.GroupName">
-                        @manpower.GroupCode
-                    </td>
-                    <td class="align-right">
-                        @manpower.ProbationResigned
-                    </td>
-                    <td class="align-right">
-                        @manpower.ConfirmedResigned
-                    </td>
-                    <td class="align-right">
-                        @manpower.NewHire
-                    </td>
-                    <td class="align-right">
-                        @manpower.ActiveUser
-                    </td>
+                    <td>@(index++)</td>
+                    <td class="align-left">@manpower.GroupName</td>
+                    <td class="align-right">@manpower.ProbationResigned</td>
+                    <td class="align-right">@manpower.ConfirmedResigned</td>
+                    <td class="align-right">@manpower.NewHire</td>
+                    <td class="align-right">@manpower.ActiveUser</td>
                     @RenderCell(manpower.ProbationResignedJan, Model.Year, 1)
                     @RenderCell(manpower.ConfirmedResignedJan, Model.Year, 1)
                     @RenderCell(manpower.NewHireJan, Model.Year, 1)
