@@ -23,13 +23,14 @@
                         },
                         splitOn: "GroupId");
 
-                    IEnumerable<DailyWorking> dailyWorkings = multi.Read<DailyWorking, EntityBase<int>, DailyWorking>(
-                        (dailyWorking, leave) =>
+                    IEnumerable<DailyWorking> dailyWorkings = multi.Read<DailyWorking, EntityBase<int>, EntityBase<int>, DailyWorking>(
+                        (dailyWorking, leave, leave2) =>
                         {
                             dailyWorking.LeaveType = leave;
+                            dailyWorking.LeaveType2 = leave2;
                             return dailyWorking;
                         },
-                        splitOn: "LeaveTypeId");
+                        splitOn: "LeaveTypeId, LeaveTypeId2");
 
                     MappingData(monthlyWorkings, dailyWorkings);
 

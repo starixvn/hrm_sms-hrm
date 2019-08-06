@@ -1779,4 +1779,7 @@
   <data name="WorkingCalendarSummary" xml:space="preserve">
     <value>Working Calendar Summary</value>
   </data>
+  <data name="AttendanceMonthlyDetails" xml:space="preserve">
+    <value>Attendance Monthly Details</value>
+  </data>
 </root>

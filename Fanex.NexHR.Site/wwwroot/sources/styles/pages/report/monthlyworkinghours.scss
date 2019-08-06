@@ -1,12 +1,10 @@
 ﻿@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
-@import '../../../libs/monthPicker/monPickr-0.0.3.css';
 
 @import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/buttons-new';
 @import '../../layout/filter';
 @import '../../layout/table';
-@import '../../layout/shift.color';
 @import '../../vendors/multiselect';
 @import '../../vendors/autocomplete';
 
@@ -19,5 +17,13 @@
     .cell-fullname {
         width: 150px;
         min-width: 150px;
+    }
+
+    .pending {
+        color: red;
+    }
+
+    .unpaidleave {
+        background-color: #f8f89c;
     }
 }

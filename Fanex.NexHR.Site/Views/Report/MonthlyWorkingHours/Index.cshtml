@@ -2,7 +2,11 @@
 @model MonthlyFilterViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.EmployeeMonthlyWorkingHours;
+    ViewBag.Title = Labels.AttendanceMonthlyDetails;
+
+    var today = DateTime.Today;
+    var minDate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd");
+    var maxDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)).ToString("yyyy/MM/dd");
 }
 @section css{
     <link href="~/wwwroot/dist/styles/report.monthlyworkinghours.css" rel="stylesheet" />
@@ -17,19 +21,37 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 
-@Html.Hidden("MinDate", DateTime.Now.AddYears(-1).ToDateMonthYearFormatedDate())
-@Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.SectionIds)
-    @Html.HiddenFor(model => model.Month)
-    @Html.HiddenFor(model => model.Year)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Month, new { @class = "control-label" })
+                @Html.Label(Labels.FromDate, new { @class = "control-label" })
             </div>
-            <div class="select-form">
-                <div id="MonthControl"></div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = minDate,
+                        maxdate = maxDate,
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = minDate,
+                        maxdate = maxDate,
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -38,21 +60,6 @@
             </div>
             <div class="select-form">
                 @RazorHelper.CategoryDropDownList("IsLocal", classHTML: "form-control", selectedId: string.Empty)
-            </div>
-        </div>
-        <div class="form-group form-group--m">
-            <div class="label-form">
-                @Html.Label(Labels.Calendar, new { @class = "control-label" })
-            </div>
-            <div class="select-form">
-                @{
-                    var calendarType = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = Labels.Fiscal, Value = "1"},
-                        new SelectListItem() {Text = Labels.Normal, Value = "0"},
-                    };
-                }
-                @Html.DropDownListFor(model => model.Calendar, calendarType, new { @class = "form-control" })
             </div>
         </div>
     </div>

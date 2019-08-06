@@ -36,9 +36,8 @@
 
             var model = new MonthlyFilterViewModel
             {
-                Month = today.Month,
-                Year = today.Year,
-                Calendar = (byte)CalendarType.Fiscal,
+                FromDate = new DateTime(today.Year, today.Month, 1),
+                ToDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)),
                 Sections = sections.Select(x => new EntityBase<int>
                 {
                     Id = x.Id,

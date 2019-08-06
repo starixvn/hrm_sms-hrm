@@ -17,7 +17,13 @@
         [StringValue("Business Trip")]
         BusinessTrip = 9,
 
+        [StringValue("Paternity Leave")]
+        PaternityLeave = 14,
+
         [StringValue("Unpaid Leave")]
-        UnpaidLeave = 25
+        UnpaidLeave = 25,
+
+        [StringValue("Unpaid Leave (Insurance)")]
+        UnpaidLeaveInsurance = 41
     }
 }

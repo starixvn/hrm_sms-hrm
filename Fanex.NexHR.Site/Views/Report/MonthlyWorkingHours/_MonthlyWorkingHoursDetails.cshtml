@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models.Report.MonthlyWorkingHours
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Report.MonthlyWorkingHours
 @model IEnumerable<MonthlyWorking>
 @{
     var fromDate = (DateTime)ViewBag.FromDate;
@@ -44,53 +45,46 @@
                             if (dailyWorking.IsHoliday)
                             {
                                 value = "PH";
-                                className = "holiday";
                             }
                             else if (dailyWorking.IsOffDay)
                             {
                                 value = "OFF";
-                                className = "offday";
                             }
                             else
                             {
-                                value = dailyWorking.LeaveType.Code;
-                                switch (dailyWorking.LeaveType.Id)
+                                if(dailyWorking.RequestStatusId == (byte)CurrentRequestStatus.Pending)
                                 {
-                                    case (int)LeaveTypes.AnnualLeave:
-                                        className = "annualleave";
-                                        break;
-                                    case (int)LeaveTypes.UnpaidLeave:
-                                        className = "unpaidleave";
-                                        break;
-                                    case (int)LeaveTypes.BusinessTrip:
-                                        className = "businesstrip";
-                                        break;
-                                    case (int)LeaveTypes.WeddingLeave:
-                                        className = "weddingleave";
-                                        break;
-                                    default:
-                                        className = "leaveday";
-                                        break;
+                                    className = "pending";
+                                }
+
+                                if(dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
+                                    || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                    || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
+                                    || (dailyWorking.LeaveType2 != null 
+                                        && (dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeave
+                                            || dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                            || dailyWorking.LeaveType2.Id == (int)LeaveTypes.PaternityLeave)))
+                                {
+                                    className += " unpaidleave";
                                 }
 
                                 if (dailyWorking.IsLeaveHalfDay)
                                 {
                                     value = string.Format("{0} ½", dailyWorking.LeaveType.Code);
                                 }
+                                else
+                                {
+                                    value = dailyWorking.LeaveType.Code;
+                                    if(dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
+                                    {
+                                        value = string.Format("{0} / {1}", dailyWorking.LeaveType.Code, dailyWorking.LeaveType2.Code);
+                                    }
+                                }
                             }
                         }
                         else if (dailyWorking.TotalWorkingHours > 0)
                         {
                             value = dailyWorking.TotalWorkingHoursToDisplay;
-
-                            if (dailyWorking.IsHoliday)
-                            {
-                                className = "holiday";
-                            }
-                            else if (dailyWorking.IsOffDay)
-                            {
-                                className = "offday";
-                            }
                         }
                         else if (dailyWorking.IsMissingCheckIn)
                         {
@@ -107,12 +101,10 @@
                         else if (dailyWorking.IsHoliday)
                         {
                             value = "PH";
-                            className = "holiday";
                         }
                         else if (dailyWorking.IsOffDay)
                         {
                             value = "OFF";
-                            className = "offday";
                         }
                         <td class="@className">@value</td>
                     }

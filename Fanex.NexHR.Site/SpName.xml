@@ -81,6 +81,9 @@
     <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+      <Mapping DataField="LeaveCode" ObjectProperty="Code" />
+      <Mapping DataField="LeaveName" ObjectProperty="Name" />
     </Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>

@@ -457,6 +457,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attendance Monthly Details.
+        /// </summary>
+        public static string AttendanceMonthlyDetails {
+            get {
+                return ResourceManager.GetString("AttendanceMonthlyDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attendance report.
         /// </summary>
         public static string AttendanceReport {

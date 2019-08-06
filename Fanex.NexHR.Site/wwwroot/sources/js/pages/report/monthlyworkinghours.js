@@ -2,10 +2,9 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 import 'floatthead/dist/jquery.floatThead';
-import '../../../libs/monthPicker/monPickr-0.0.3';
 import axios from 'axios';
 
-import { axiosError, blockUI, unblockUI, floatThead } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
 import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
@@ -16,9 +15,8 @@ $(document).ready(function () {
             url: _global.root + 'MonthlyWorkingHours/GetMonthlyWorkingHours',
             method: 'GET',
             params: {
-                month: $('#Month').val(),
-                year: $('#Year').val(),
-                calendar: $('#Calendar').val(),
+                fromDate: $('#FromDate').val(),
+                toDate: $('#ToDate').val(),
                 sectionIds: $('#SectionIds').val(),
                 isLocal: $('#Category').val(),
                 employeeId: $('#EmployeeId').val()
@@ -30,23 +28,9 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
-    let monthPicker = $('#MonthControl');
-    monthPicker.monPickr({
-        showDateRange: false,
-        sortDesc: true,
-        minDate: $('#MinDate').val(),
-        maxDate: $('#MaxDate').val(),
-        today: undefined,
-        month: undefined,
-        afterChangeMonth: function () {
-            const month = monthPicker.monPickr('getMonth', 'MM');
-            const year = monthPicker.monPickr('getMonth', 'yyyy');
-            $('#Month').val(month);
-            $('#Year').val(year);
-        }
-    });
+    initDatepicker();
+    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
-    $('.monpickr-dropdown').hide();
     $('#Section').multiselect({
         minWidth: 170,
         checkAllText: 'Check',

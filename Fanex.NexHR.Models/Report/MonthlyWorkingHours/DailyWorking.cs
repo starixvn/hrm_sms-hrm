@@ -17,6 +17,8 @@
         public decimal LeaveDay { get; set; }
 
         public EntityBase<int> LeaveType { get; set; }
+        public EntityBase<int> LeaveType2 { get; set; }
+        public byte RequestStatusId { get; set; }
 
         public bool IsLeaveHalfDay => IsLeaveDay && LeaveDay == Constants.HalfDayOffValue;
 
