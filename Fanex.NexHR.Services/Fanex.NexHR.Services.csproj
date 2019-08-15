@@ -204,6 +204,7 @@
     <Compile Include="Implement\MenuService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
+    <Compile Include="Implement\Report\MonthlyWorkingHoursService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
     <Compile Include="Implement\Report\ManpowerReportService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
@@ -264,7 +265,6 @@
     <Compile Include="Interfaces\ILeaveTypeService.cs" />
     <Compile Include="Implement\LeaveTypeService.cs" />
     <Compile Include="Interfaces\IScheduleArrangeService.cs" />
-    <Compile Include="Interfaces\Report\IEmployeeWorkingHoursService.cs" />
     <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implement\RequestService.cs" />

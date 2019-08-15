@@ -59,10 +59,12 @@
 
                                 if(dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
                                     || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                    || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
                                     || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
                                     || (dailyWorking.LeaveType2 != null 
                                         && (dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeave
                                             || dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                            || dailyWorking.LeaveType2.Id == (int)LeaveTypes.MaternityLeave
                                             || dailyWorking.LeaveType2.Id == (int)LeaveTypes.PaternityLeave)))
                                 {
                                     className += " unpaidleave";

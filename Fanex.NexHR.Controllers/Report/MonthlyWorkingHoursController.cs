@@ -81,7 +81,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);
 
-            var fileName = $"Monthly working hours {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"Attendance Monthly Details {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
             return File(bytes, "application/xlsx", fileName);
         }
     }

@@ -17,11 +17,20 @@
         [StringValue("Business Trip")]
         BusinessTrip = 9,
 
+        [StringValue("Maternity Leave")]
+        MaternityLeave = 12,
+
         [StringValue("Paternity Leave")]
         PaternityLeave = 14,
 
+        [StringValue("Bereavement Leave")]
+        BereavementLeave = 21,
+
         [StringValue("Unpaid Leave")]
         UnpaidLeave = 25,
+
+        [StringValue("Compensation Leave")]
+        CompensationLeave = 27,
 
         [StringValue("Unpaid Leave (Insurance)")]
         UnpaidLeaveInsurance = 41
