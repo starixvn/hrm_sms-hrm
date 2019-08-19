@@ -24,6 +24,7 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
+        private const string ShortDateFormat = "dd MMM yyyy";
         private readonly IEmployeeWorkingHoursRepository repository;
         private readonly ILeaveTypeService leaveTypeService;
         private readonly Color RedColor = ColorTranslator.FromHtml(Constants.RedColor);
@@ -48,7 +49,6 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                    const string ShortDateFormat = "dd MMM yyyy";
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Employee's Weekly Working Hours");
                     var rowIndex = 1;
@@ -249,20 +249,20 @@
         {
             bool isUnpaidLeave = false;
 
-            if (dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
-                || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
-                || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave)
+            if (dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave
+                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.MaternityLeave
+                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.PaternityLeave)
             {
                 isUnpaidLeave = true;
             }
 
 #pragma warning disable S1067 // Expressions should not be too complex
             if (dailyWorking.LeaveType2 != null
-                && (dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeave
-                    || dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                    || dailyWorking.LeaveType2.Id == (int)LeaveTypes.MaternityLeave
-                    || dailyWorking.LeaveType2.Id == (int)LeaveTypes.PaternityLeave))
+                && (dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave
+                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.MaternityLeave
+                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.PaternityLeave))
 #pragma warning restore S1067 // Expressions should not be too complex
             {
                 isUnpaidLeave = true;

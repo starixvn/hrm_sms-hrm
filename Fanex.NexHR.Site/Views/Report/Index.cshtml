@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Fanex.NexHR.Resources
+@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Reports;
 }
@@ -31,7 +32,7 @@
         <tr>
             <td>2</td>
             <td class="align-left">
-                @Html.ActionLink(Labels.AttendanceMonthlyDetails, "index", "MonthlyWorkingHours")
+                @Html.ActionLink(Labels.AttendanceMonthlyDetail, "index", "MonthlyWorkingHours")
             </td>
         </tr>
         <tr>

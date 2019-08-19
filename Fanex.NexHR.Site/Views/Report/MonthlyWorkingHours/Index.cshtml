@@ -1,8 +1,9 @@
-﻿@using Fanex.NexHR.ViewModels.Report.WorkingHours
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Report.WorkingHours
 @model MonthlyFilterViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.AttendanceMonthlyDetails;
+    ViewBag.Title = Labels.AttendanceMonthlyDetail;
 
     var today = DateTime.Today;
     var minDate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd");

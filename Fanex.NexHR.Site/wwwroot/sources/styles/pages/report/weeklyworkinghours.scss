@@ -5,7 +5,6 @@
 @import '../../components/buttons-new';
 @import '../../layout/filter';
 @import '../../layout/table';
-@import '../../layout/shift.color';
 @import '../../vendors/weekpicker';
 @import '../../vendors/multiselect';
 @import '../../vendors/autocomplete';
@@ -16,5 +15,15 @@ form.filter {
             display: inline;
             width: 80px !important;
         }
+    }
+}
+
+.table {
+    .pending {
+        color: red;
+    }
+
+    .unpaidleave {
+        background-color: #f8f89c;
     }
 }

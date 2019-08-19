@@ -22,14 +22,16 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 13;
-        private const ushort TotalUPLColumns = 5;
+        private const ushort TotalFixedColumns = 14;
+        private const ushort TotalUPLColumns = 4;
         private const ushort StartDateColumnIndex = 19;
-        private const ushort StartUPLColumnIndex = 14;
+        private const ushort StartUPLColumnIndex = 15;
         private const ushort EndUPLColumnIndex = 18;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
+
+        private IEnumerable<LeaveType> LeaveTypes { get; set; }
 
         public IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
         {
@@ -48,27 +50,15 @@
         public byte[] ExportMonthlyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/MonthlyWorkingHours.xlsx");
-            IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
-            var totalDays = (int)(toDate - fromDate).TotalDays;
-            TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns + (totalDays > 0 ? totalDays + 1 : 0);
-
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    const string ShortDateFormat = "dd MMM yyyy";
+                    LeaveTypes = leaveTypeService.GetAll();
+
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Monthly Details");
-
-                    // title
-                    template.Cells[1, 1, 1, TotalFixedColumns].Copy(worksheet.Cells[1, 1, 1, TotalFixedColumns]);
-                    worksheet.Cells[1, 1].Value = $"Attendance Monthly Details {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
-
-                    // header
-                    WriteHeader(template, worksheet, fromDate, toDate);
-
-                    // data
-                    WriteBody(template, worksheet, monthlyWorkings, fromDate, toDate);
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Monthly Detail");
+                    WriteDetailsSheet(template, worksheet, monthlyWorkings, fromDate, toDate);
 
                     worksheet.Cells.AutoFitColumns();
                     worksheet.View.FreezePanes(StartBodyRowIndex, 6);
@@ -76,6 +66,28 @@
                     return xlPackage.GetAsByteArray();
                 }
             }
+        }
+
+        private void WriteDetailsSheet(
+            ExcelWorksheet template,
+            ExcelWorksheet worksheet,
+            IEnumerable<MonthlyWorking> monthlyWorkings,
+            DateTime fromDate,
+            DateTime toDate)
+        {
+            IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
+            var totalDays = (int)(toDate - fromDate).TotalDays;
+            TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns + (totalDays > 0 ? totalDays + 1 : 0);
+
+            // title
+            template.Cells[1, 1, 1, TotalFixedColumns].Copy(worksheet.Cells[1, 1, 1, TotalFixedColumns]);
+            worksheet.Cells[1, 1].Value = $"Attendance Monthly Detail {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
+
+            // header
+            WriteHeader(template, worksheet, fromDate, toDate);
+
+            // data
+            WriteBody(template, worksheet, monthlyWorkings, fromDate, toDate);
         }
 
         private void WriteHeader(ExcelWorksheet template, ExcelWorksheet worksheet, DateTime fromDate, DateTime toDate)
@@ -116,7 +128,6 @@
             DateTime fromDate,
             DateTime toDate)
         {
-            IList<LeaveType> leaveTypes = leaveTypeService.GetAll();
             var rowIndex = StartBodyRowIndex;
             var rowNum = 1;
             foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
@@ -136,25 +147,30 @@
                 IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
                 const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"*{1}½*\")/2)";
-                // payment leaves
-                var annualLeaveColumnIndex = colIndex;
-                var leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.AnnualLeave).Code;
+
+                var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
                 var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.BusinessTrip).Code;
+                // payment leaves
+                var annualLeaveColumnIndex = colIndex;
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.AnnualLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.BereavementLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.BusinessTrip).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.CompensationLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.BereavementLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.WeddingLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.CompensationLeave).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.WeddingLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
@@ -172,16 +188,13 @@
                     excelAddress = $"{worksheet.Cells[rowIndex, startColumnIndex].Address}:{worksheet.Cells[rowIndex, endColumnIndex].Address}";
 
                     var unpaidLeaveColumnIndex = colIndex;
-                    leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.UnpaidLeave).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave).Code;
                     worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                    leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.UnpaidLeaveInsurance).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance).Code;
                     worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                    leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.PaternityLeave).Code;
-                    worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
-
-                    leaveCode = leaveTypes.First(x => x.Id == (int)LeaveTypes.MaternityLeave).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.PaternityLeave).Code;
                     worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                     excelAddress = $"{worksheet.Cells[rowIndex, unpaidLeaveColumnIndex].Address}:{worksheet.Cells[rowIndex, colIndex++].Address}";
