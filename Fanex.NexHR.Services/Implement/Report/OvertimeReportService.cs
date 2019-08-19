@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
@@ -17,7 +18,6 @@
     {
         private readonly IBaseService baseService;
         private readonly IOvertimeReportRepository overtimeReportRepository;
-        private const string SumFormula = "SUM({0})";
         private const string DateFormat = "dd-MMM-yyyy";
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
@@ -141,7 +141,7 @@
                     {
                         colIndex = StartMonthColumn + i;
                         var excelAddress = $"{worksheet.Cells[StartBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                        worksheet.Cells[rowIndex, colIndex].Formula = string.Format(SumFormula, excelAddress);
+                        worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                     }
 
                     worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
@@ -306,7 +306,7 @@
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
                     var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(SumFormula, excelAddress);
+                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
@@ -387,7 +387,7 @@
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
                     var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(SumFormula, excelAddress);
+                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
@@ -495,7 +495,7 @@
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
                     var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(SumFormula, excelAddress);
+                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 

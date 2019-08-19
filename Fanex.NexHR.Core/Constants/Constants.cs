@@ -40,5 +40,7 @@
         public const string RedColor = "#ff0000";
         public const string OffDayBackgroundColor = "#f8f89c";
         public const string HolidayBackgroundColor = "#f3aa4b";
+
+        public const string SummaryFormula = "SUM({0})";
     }
 }
