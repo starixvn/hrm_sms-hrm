@@ -295,33 +295,15 @@
 
         private static string GetMessageForKeepInViewByHour(RequestEntity request, bool isNoFormat)
         {
-            string msgTemplate;
-            string messageDetail;
-
+            var msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHoursWithNoFormat : RequestFormatConstants.MsgKeepInViewByHours;
             var minutes = (request.ToTime - request.FromTime).TotalMinutes;
             var hours = minutes / 60.0;
-            if (minutes > OneHourValue)
-            {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHoursWithNoFormat : RequestFormatConstants.MsgKeepInViewByHours;
-                messageDetail = string.Format(
+            return string.Format(
                     msgTemplate,
                     request.FromDate.ToDateMonthYearFormatedDate(),
                     request.FromTime.ToShortTime(),
                     request.ToTime.ToShortTime(),
                     hours.ToString("0.#"));
-            }
-            else
-            {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHourWithNoFormat : RequestFormatConstants.MsgKeepInViewByHour;
-                messageDetail = string.Format(
-                    msgTemplate,
-                    request.FromDate.ToDateMonthYearFormatedDate(),
-                    request.FromTime.ToShortTime(),
-                    request.ToTime.ToShortTime(),
-                    hours.ToString("0.#"));
-            }
-
-            return messageDetail;
         }
 
         private static string GetLeaveDayDetail(RequestEntity request)
@@ -332,22 +314,7 @@
 
         private static string GetTotalDay(decimal totalDays)
         {
-            var messageDetail = string.Empty;
-
-            if (totalDays > 1)
-            {
-                messageDetail = string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#"));
-            }
-            else if (totalDays > 0)
-            {
-                messageDetail = string.Format(RequestFormatConstants.MsgTotalLeaveDay, totalDays.ToString("0.#"));
-            }
-            else
-            {
-                messageDetail = string.Empty;
-            }
-
-            return messageDetail;
+            return totalDays != 0 ? string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#")) : string.Empty;
         }
     }
 }

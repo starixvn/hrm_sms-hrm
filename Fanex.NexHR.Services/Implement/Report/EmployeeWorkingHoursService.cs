@@ -9,6 +9,7 @@
     using System.Web;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Repositories;
     using OfficeOpenXml;
@@ -24,17 +25,21 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const string ShortDateFormat = "dd MMM yyyy";
         private readonly IEmployeeWorkingHoursRepository repository;
         private readonly ILeaveTypeService leaveTypeService;
+        private readonly IBaseService baseService;
+
+        private const string ShortDateFormat = "dd MMM yyyy";
         private readonly Color RedColor = ColorTranslator.FromHtml(Constants.RedColor);
         private int TotalColumns { get; set; }
 
         public EmployeeWorkingHoursService(
             IEmployeeWorkingHoursRepository repository,
+            IBaseService baseService,
             ILeaveTypeService leaveTypeService)
         {
             this.repository = repository;
+            this.baseService = baseService;
             this.leaveTypeService = leaveTypeService;
         }
 

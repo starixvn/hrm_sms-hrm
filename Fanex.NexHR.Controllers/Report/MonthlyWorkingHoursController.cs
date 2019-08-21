@@ -78,8 +78,7 @@
                 EmployeeId = model.EmployeeId,
                 IsLocal = model.IsLocal
             };
-            IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
-            byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);
+            byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param);
 
             var fileName = $"Attendance Monthly Detail {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
             return File(bytes, "application/xlsx", fileName);

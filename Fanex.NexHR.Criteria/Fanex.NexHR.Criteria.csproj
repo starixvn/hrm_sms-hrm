@@ -141,7 +141,8 @@
     <Compile Include="Postnatal\GetPostnatalCriteria.cs" />
     <Compile Include="Postnatal\InsertPostnatalCriteria.cs" />
     <Compile Include="Postnatal\UpdatePostnatalCriteria.cs" />
-    <Compile Include="Report\GetMonthlyWorkingHoursCriteria.cs" />
+    <Compile Include="Report\MonthlyWorkingHours\GetEmployeeRequestCriteria.cs" />
+    <Compile Include="Report\MonthlyWorkingHours\GetMonthlyWorkingHoursCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />

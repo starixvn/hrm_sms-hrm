@@ -15,12 +15,10 @@
 
         public const string MsgKeepInViewOneDayWithNoFormat = "{0} (1 day)";
         public const string MsgKeepInViewHalfdayWithNoFormat = "{0} ({1} - {2}) 0.5 day";
-        public const string MsgKeepInViewByHourWithNoFormat = "{0} ({1} - {2}) 1 hour";
-        public const string MsgKeepInViewByHoursWithNoFormat = "{0} ({1} - {2}) {3} hours";
+        public const string MsgKeepInViewByHoursWithNoFormat = "{0} ({1} - {2}) {3} hour(s)";
 
         public const string MsgLeave = "<span class='req leave'>{0}</span> {1}";
-        public const string MsgTotalLeaveDay = "{0} day";
-        public const string MsgTotalLeaveDays = "{0} days";
+        public const string MsgTotalLeaveDays = "{0} day(s)";
 
         public const string MsgChangeShiftOneDay = "<span class='req changeshift'>{0} <span class='arr'>&rarr;</span> {1}</span> {2}";
         public const string MsgChangeShift = "<span class='req changeshift'>{0}</span>";
@@ -31,7 +29,6 @@
         public const string MsgKeepInViewOneDay = "<span class='req keepinview'>{0}</span> 1 day";
         public const string MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> 0.5 day";
 
-        public const string MsgKeepInViewByHour = "<span class='req keepinview'>{0} ({1} - {2})</span> 1 hour";
-        public const string MsgKeepInViewByHours = "<span class='req keepinview'>{0} ({1} - {2})</span> {3} hours";
+        public const string MsgKeepInViewByHours = "<span class='req keepinview'>{0} ({1} - {2})</span> {3} hour(s)";
     }
 }

@@ -6,7 +6,9 @@
     using System.IO;
     using System.Linq;
     using System.Web;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
@@ -16,7 +18,9 @@
     {
         IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
 
-        byte[] ExportMonthlyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings);
+        IEnumerable<EmployeeRequest> GetEmployeeRequests(GetMonthlyWorkingHoursParam param);
+
+        byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -47,23 +51,43 @@
             return repository.GetMonthlyWorkingHours(criteria);
         }
 
-        public byte[] ExportMonthlyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
+        public IEnumerable<EmployeeRequest> GetEmployeeRequests(GetMonthlyWorkingHoursParam param)
+        {
+            var criteria = new GetEmployeeRequestCriteria
+            {
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                GroupIds = param.SectionIds,
+                EmployeeId = param.EmployeeId,
+                IsLocal = param.IsLocal
+            };
+
+            return baseService.GetData<EmployeeRequest>(criteria);
+        }
+
+        public byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/MonthlyWorkingHours.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
+                    IEnumerable<MonthlyWorking> monthlyWorkings = GetMonthlyWorkingHours(param);
                     LeaveTypes = leaveTypeService.GetAll();
 
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Monthly Detail");
-                    WriteDetailsSheet(template, worksheet, monthlyWorkings, fromDate, toDate);
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Details");
+                    WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
 
                     const byte SummarySheetIndex = 2;
                     template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
-                    WriteSummarySheet(template, worksheet, monthlyWorkings, fromDate, toDate);
+                    WriteSummarySheet(template, worksheet, monthlyWorkings, param);
+
+                    const byte RequestSheetIndex = 3;
+                    template = templatePackage.Workbook.Worksheets[RequestSheetIndex];
+                    worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
+                    WriteRequestSheet(template, worksheet, param);
 
                     return xlPackage.GetAsByteArray();
                 }
@@ -74,36 +98,35 @@
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
             IEnumerable<MonthlyWorking> monthlyWorkings,
-            DateTime fromDate,
-            DateTime toDate)
+            GetMonthlyWorkingHoursParam param)
         {
-            IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
-            var totalDays = (int)(toDate - fromDate).TotalDays;
+            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
+            var totalDays = (int)(param.ToDate - param.FromDate).TotalDays;
             TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns + (totalDays > 0 ? totalDays + 1 : 0);
 
             // title
             template.Cells[1, 1, 1, TotalFixedColumns].Copy(worksheet.Cells[1, 1, 1, TotalFixedColumns]);
             worksheet.Cells[1, 1].Value = string.Format(
                 worksheet.Cells[1, 1].Value.ToString(),
-                fromDate.ToString(ShortDateFormat),
-                toDate.ToString(ShortDateFormat));
+                param.FromDate.ToString(ShortDateFormat),
+                param.ToDate.ToString(ShortDateFormat));
 
             // header
-            WriteHeader(template, worksheet, fromDate, toDate);
+            WriteHeader(template, worksheet, param);
 
             // data
-            WriteBody(template, worksheet, monthlyWorkings, fromDate, toDate);
+            WriteBody(template, worksheet, monthlyWorkings, param);
 
             worksheet.Cells.AutoFitColumns();
             worksheet.View.FreezePanes(StartBodyRowIndex, 6);
         }
 
-        private void WriteHeader(ExcelWorksheet template, ExcelWorksheet worksheet, DateTime fromDate, DateTime toDate)
+        private void WriteHeader(ExcelWorksheet template, ExcelWorksheet worksheet, GetMonthlyWorkingHoursParam param)
         {
             template.Cells[StartHeaderRowIndex, 1, EndHeaderRowIndex, TotalFixedColumns]
                 .Copy(worksheet.Cells[StartHeaderRowIndex, 1, EndHeaderRowIndex, TotalFixedColumns]);
 
-            IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
+            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             var colIndex = (int)StartUPLColumnIndex;
             foreach (DateTime month in months)
             {
@@ -114,7 +137,7 @@
                 colIndex = colIndex + TotalUPLColumns;
             }
 
-            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+            for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
             {
                 template.Cells[StartHeaderRowIndex, StartDateColumnIndex, EndHeaderRowIndex, StartDateColumnIndex]
                     .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex]);
@@ -133,8 +156,7 @@
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
             IEnumerable<MonthlyWorking> monthlyWorkings,
-            DateTime fromDate,
-            DateTime toDate)
+            GetMonthlyWorkingHoursParam param)
         {
             var rowIndex = StartBodyRowIndex;
             var rowNum = 1;
@@ -152,7 +174,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
 
-                IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
+                IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
                 const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"*{1}½*\")/2)";
 
@@ -225,8 +247,7 @@
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
             IEnumerable<MonthlyWorking> monthlyWorkings,
-            DateTime fromDate,
-            DateTime toDate)
+            GetMonthlyWorkingHoursParam param)
         {
             const byte DefaultColumns = 8;
             var templateIndex = new
@@ -239,7 +260,7 @@
                 weddingLeaveColumn = 5,
                 compensationLeaveColumn = 9
             };
-            IEnumerable<DateTime> months = GetMonthsBetween(fromDate, toDate);
+            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
             var rowIndex = 1;
             var colIndex = 1;
@@ -248,8 +269,8 @@
             template.Cells[1, 1, 1, DefaultColumns].Copy(worksheet.Cells[1, 1, 1, DefaultColumns]);
             worksheet.Cells[1, 1].Value = string.Format(
                 worksheet.Cells[1, 1].Value.ToString(),
-                fromDate.ToString(ShortDateFormat),
-                toDate.ToString(ShortDateFormat));
+                param.FromDate.ToString(ShortDateFormat),
+                param.ToDate.ToString(ShortDateFormat));
 
             // header
             WriteHeaderSummary(template, worksheet, months, templateIndex);
@@ -345,6 +366,58 @@
 
                 rowIndex++;
             }
+        }
+
+        private void WriteRequestSheet(
+            ExcelWorksheet template,
+            ExcelWorksheet worksheet,
+            GetMonthlyWorkingHoursParam param)
+        {
+            IEnumerable<EmployeeRequest> requests = GetEmployeeRequests(param);
+            var templateIndex = new
+            {
+                headerRow = 2,
+                bodyRow = 3
+            };
+            TotalColumns = 9;
+            var rowIndex = 1;
+            var colIndex = 1;
+
+            // title
+            template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            rowIndex++;
+
+            // header
+            template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+            // data
+            var rowNum = 1;
+            rowIndex++;
+            foreach (EmployeeRequest request in requests)
+            {
+                colIndex = 1;
+                var status = (CurrentRequestStatus)request.RequestStatusId;
+                template.Cells[templateIndex.bodyRow, colIndex, templateIndex.bodyRow, TotalColumns]
+                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+                worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.FullName;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Nickname;
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    request.RequestTypeId == (short)RequestType.Leave ? request.LeaveType : request.RequestTypeId.RequestTypeToText();
+                worksheet.Cells[rowIndex, colIndex++].Value = request.RequestDetails;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Remark;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.CreatedDate.ToDetailFormatedDate();
+                worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
+
+                rowIndex++;
+            }
+
+            const byte MinimumWidth = 10;
+            const byte MaximumWidth = 50;
+            worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+            worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
 
         private static IEnumerable<DateTime> GetMonthsBetween(DateTime fromDate, DateTime toDate)
