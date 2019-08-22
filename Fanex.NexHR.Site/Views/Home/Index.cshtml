@@ -1,3 +1,5 @@
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Models.Dashboard
 @model IEnumerable<SummaryRequest>
 @{
@@ -42,23 +44,23 @@
                         {
                             case (ushort)RequestType.CheckIn:
                             case (ushort)RequestType.CheckOut:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout")
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.LateIn:
                             case (ushort)RequestType.EarlyOut:
                                 @RazorHelper.DisplayZeroCell(item.TotalPending)
                                 break;
                             case (ushort)RequestType.ChangeShift:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift")
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Leave:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave")
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.KeepInView:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView")
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Overtime:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "overtime")
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "overtime", new { @class = "pending" })
                                 break;
                         }
                     }

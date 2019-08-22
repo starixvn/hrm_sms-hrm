@@ -6,4 +6,9 @@
 
 table.table.table-custom {
     width: 500px;
+
+    .pending {
+        color: red;
+        font-weight: bold;
+    }
 }
