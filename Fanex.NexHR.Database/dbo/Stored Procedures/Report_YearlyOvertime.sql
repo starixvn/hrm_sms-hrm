@@ -37,6 +37,7 @@ BEGIN
 		,NormalHours DECIMAL(18, 2)
 		,OffHours DECIMAL(18, 2)
 		,PublicHours DECIMAL(18, 2)
+		,SpecialHours DECIMAL(18, 2)
 		)
 
 	IF ISNULL(@GroupIds, '') <> ''
@@ -86,12 +87,14 @@ BEGIN
 		,NormalHours
 		,OffHours
 		,PublicHours
+		,SpecialHours
 		)
 	SELECT req.EmpId
 		,tbl.[Month]
 		,SUM(req.NormalHours)
 		,SUM(req.OffHours)
 		,SUM(req.PublicHours)
+		,SUM(ISNULL(req.SpecialHours, 0))
 	FROM dbo.OTDailyRequest AS req WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
 		AND emp.[Enabled] = 1
@@ -134,7 +137,7 @@ BEGIN
 			,gr.[Name] AS GroupName
 			,gr.Code AS GroupCode
 			,cl.[Month] AS [Month]
-			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours) AS TotalHours
+			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours + otsum.SpecialHours) AS TotalHours
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 			CROSS JOIN #tblMonth AS cl

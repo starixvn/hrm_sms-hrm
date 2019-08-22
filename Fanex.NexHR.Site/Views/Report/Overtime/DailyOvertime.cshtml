@@ -1,4 +1,7 @@
-﻿@using Fanex.NexHR.Models.Report.Overtime
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Report.Overtime
 @using Fanex.NexHR.ViewModels.Report.Overtime
 @model DailyOvertimeDetailsViewModel
 @{
@@ -99,6 +102,7 @@
             <th>@Labels.NormalDay</th>
             <th>@Labels.OffDay</th>
             <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
             <th>@Labels.Remark</th>
             <th>@Labels.Status</th>
         </tr>
@@ -140,6 +144,12 @@
                             @request.PublicHours
                         }
                     </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
                     <td class="align-left">@request.Remark</td>
                     <td>
                         @if (request.StatusId != 0)
@@ -153,7 +163,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 13)
+            @RazorHelper.DisplayNoInformation(colspan: 14)
         }
     </tbody>
 </table>

@@ -14,6 +14,7 @@
     [CreatedBy]    INT             NULL,
     [CreatedDate]  DATETIME        NULL,
     [IsUpdated]    BIT             CONSTRAINT [DF_OTDailyRequest_IsUpdated] DEFAULT ((0)) NULL,
+    [SpecialHours] DECIMAL(3, 1) NULL, 
     CONSTRAINT [PK_OvertimeDailyRequest] PRIMARY KEY CLUSTERED ([OvertimeDate] ASC, [EmpId] ASC) ON [EmpRequest]
 );
 

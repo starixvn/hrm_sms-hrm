@@ -1782,4 +1782,7 @@
   <data name="AttendanceMonthlyDetail" xml:space="preserve">
     <value>Attendance Monthly Detail</value>
   </data>
+  <data name="SpecialOT" xml:space="preserve">
+    <value>Special OT</value>
+  </data>
 </root>

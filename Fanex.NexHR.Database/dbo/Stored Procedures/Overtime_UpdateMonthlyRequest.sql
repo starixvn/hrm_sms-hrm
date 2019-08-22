@@ -17,7 +17,7 @@ Revisions:
 Param's Explanation:
     @DailyDetailsXml:
         <Root><Row WorkDate="2019-01-01" ShiftId="1" TimeIn="07:46" TimeOut=17:00"
-	       ActualWorkingHours="9" NormalHours="1" OffHours="1" PublicHours="1" Remark="remark" /></Root>
+	       ActualWorkingHours="9" NormalHours="1" OffHours="1" PublicHours="1" SpecialHours="1" Remark="remark" /></Root>
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -46,9 +46,10 @@ BEGIN
 		,TimeIn NVARCHAR(10)
 		,[TimeOut] NVARCHAR(10)
 		,ActualWorkingHours DECIMAL(18, 2)
-		,NormalHours DECIMAL(18, 2)
-		,OffHours DECIMAL(18, 2)
-		,PublicHours DECIMAL(18, 2)
+		,NormalHours DECIMAL(3, 1)
+		,OffHours DECIMAL(3, 1)
+		,PublicHours DECIMAL(3, 1)
+		,SpecialHours DECIMAL(3, 1)
 		,Remark NVARCHAR(2000)
 		)
 
@@ -67,6 +68,7 @@ BEGIN
 			,NormalHours
 			,OffHours
 			,PublicHours
+			,SpecialHours
 			,Remark
 			)
 		SELECT WorkDate
@@ -77,8 +79,9 @@ BEGIN
 			,NormalHours
 			,OffHours
 			,PublicHours
+			,SpecialHours
 			,Remark
-		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, ShiftId INT, TimeIn VARCHAR(10), [TimeOut] VARCHAR(10), ActualWorkingHours DECIMAL(18, 2), NormalHours DECIMAL(18, 2), OffHours DECIMAL(18, 2), PublicHours DECIMAL(18, 2), Remark NVARCHAR(2000)) AS Data
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, ShiftId INT, TimeIn VARCHAR(10), [TimeOut] VARCHAR(10), ActualWorkingHours DECIMAL(18, 2), NormalHours DECIMAL(3, 1), OffHours DECIMAL(3, 1), PublicHours DECIMAL(3, 1), SpecialHours DECIMAL(3, 1), Remark NVARCHAR(2000)) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler
 	END TRY
@@ -124,6 +127,7 @@ BEGIN
 	WHERE NormalHours = 0
 		AND OffHours = 0
 		AND PublicHours = 0
+		AND SpecialHours = 0
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -151,6 +155,7 @@ BEGIN
 			,NormalHours
 			,OffHours
 			,PublicHours
+			,SpecialHours
 			,CurrentStatus
 			,VerifierId
 			,ApproverId
@@ -165,6 +170,7 @@ BEGIN
 			,SUM(NormalHours)
 			,SUM(OffHours)
 			,SUM(PublicHours)
+			,SUM(SpecialHours)
 			,1 AS CurrentStatus
 			,@VerifierId
 			,@ApproverId
@@ -181,7 +187,7 @@ BEGIN
 			,1 AS HRStatus
 			,@ActorId
 			,@ModifiedDate
-		FROM #tblDailyOvertime rd
+		FROM #tblDailyOvertime
 
 		SELECT @RequestId = CAST(SCOPE_IDENTITY() AS BIGINT)
 	END
@@ -212,6 +218,7 @@ BEGIN
 			,ot.NormalHours = rd.NormalHours
 			,ot.OffHours = rd.OffHours
 			,ot.PublicHours = rd.PublicHours
+			,ot.SpecialHours = rd.SpecialHours
 			,ot.ModifiedBy = @ActorId
 			,ot.ModifiedDate = @ModifiedDate
 		FROM dbo.OTMonthlyRequest AS ot WITH (ROWLOCK, UPDLOCK)
@@ -219,6 +226,7 @@ BEGIN
 				SELECT SUM(ISNULL(rd.NormalHours, 0)) NormalHours
 					,SUM(ISNULL(rd.OffHours, 0)) OffHours
 					,SUM(ISNULL(rd.PublicHours, 0)) PublicHours
+					,SUM(ISNULL(rd.SpecialHours, 0)) SpecialHours
 				FROM #tblDailyOvertime AS rd
 				) AS rd
 		WHERE RequestId = @RequestId
@@ -239,6 +247,7 @@ BEGIN
 		,NormalHours
 		,OffHours
 		,PublicHours
+		,SpecialHours
 		,Remark
 		,[Status]
 		,CreatedBy
@@ -255,6 +264,7 @@ BEGIN
 		,NormalHours
 		,OffHours
 		,PublicHours
+		,SpecialHours
 		,Remark
 		,1
 		,@ActorId

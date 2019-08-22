@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Models.Overtime
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core
+@using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
 @model MemberMonthlyOvertimeRequestViewModel
 @{
@@ -69,7 +71,7 @@
 <table class="table table-custom" id="data">
     <thead>
         <tr>
-            <th colspan="12">
+            <th colspan="13">
                 <div style="float:right;">
                     <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
                     <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
@@ -90,6 +92,7 @@
             <th>@Labels.NormalDay</th>
             <th>@Labels.OffDay</th>
             <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
             <th>@Labels.Verifier</th>
             <th>@Labels.Approver</th>
             <th>@Labels.Status</th>
@@ -132,6 +135,12 @@
                             @request.PublicHours
                         }
                     </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
                     <td>@request.Verifier.Nickname</td>
                     <td>@request.Approver.Nickname</td>
                     <td>@request.Status</td>
@@ -145,7 +154,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 12);
+            @RazorHelper.DisplayNoInformation(colspan: 13);
         }
     </tbody>
     <tfoot>
@@ -154,6 +163,7 @@
             <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
             <td colspan="5"></td>
         </tr>
     </tfoot>

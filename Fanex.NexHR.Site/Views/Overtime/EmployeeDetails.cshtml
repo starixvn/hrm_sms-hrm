@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models.Overtime
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Overtime
 @model MonthlyOvertimeRequest
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -67,6 +68,7 @@
             <th>@Labels.NormalDay</th>
             <th>@Labels.OffDay</th>
             <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
             <th>@Labels.Remark</th>
             <th></th>
         </tr>
@@ -118,6 +120,12 @@
                             @request.PublicHours
                         }
                     </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
                     <td class="align-left">@request.Remark</td>
                     @if (request.TotalShiftHours != 0 && ((request.ActualWorkingHours >= request.TotalShiftHours + 1)
                         || ((request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours)
@@ -142,18 +150,11 @@
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td class="align-right" colspan="5">
-                @Labels.TotalOvertimeHours:
-            </td>
-            <td>
-                @Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")
-            </td>
-            <td>
-                @Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")
-            </td>
-            <td>
-                @Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")
-            </td>
+            <td class="align-right" colspan="5">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.SpecialHours).ToString("0.00")</td>
             <td></td>
             <td></td>
         </tr>

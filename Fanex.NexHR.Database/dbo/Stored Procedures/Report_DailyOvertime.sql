@@ -27,6 +27,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,emp.Code
+		,gr.GroupId
 		,gr.Code AS GroupCode
 		,gr.[Name] AS GroupName
 		,ot.OvertimeDate AS WorkDate
@@ -38,6 +39,7 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.Remark
 		,empca.IsHoliday
 		,empca.IsOffDay

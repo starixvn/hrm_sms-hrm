@@ -61,7 +61,8 @@ BEGIN
 		,request.NormalHours
 		,request.OffHours
 		,request.PublicHours
-		,request.CurrentStatus StatusId
+		,request.SpecialHours
+		,request.CurrentStatus AS StatusId
 		,verifier.EmpId AS VerifierId
 		,verifier.NickName
 		,verifier.FullName
@@ -69,7 +70,7 @@ BEGIN
 		,approver.NickName
 		,approver.FullName
 	FROM #tblMonth AS cl
-		LEFT JOIN [dbo].[OTMonthlyRequest] AS request WITH (NOLOCK) ON request.[Month] = cl.[Month]
+		LEFT JOIN dbo.OTMonthlyRequest AS request WITH (NOLOCK) ON request.[Month] = cl.[Month]
 		AND request.[Month] BETWEEN @fromdate
 			AND @todate
 		AND request.EmpId = @EmployeeId

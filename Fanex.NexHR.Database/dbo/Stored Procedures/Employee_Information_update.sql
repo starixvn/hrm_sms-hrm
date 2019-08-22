@@ -36,6 +36,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@AnnualLeaveBalance NUMERIC(18, 1) = 0
 	,@KeepInViewBalance NUMERIC(18, 1) = 0
 	,@CanOT BIT
+	,@SpecialOT DECIMAL(3, 1) = NULL
 	,@IsLocal BIT
 	,@WorkingDays INT
 	,@WorkingHours INT
@@ -176,6 +177,7 @@ BEGIN
 		,@AnnualLeaveBalance_old NUMERIC(18, 1) = 0
 		,@KeepInViewBalance_old NUMERIC(18, 1) = 0
 		,@CanOT_old BIT
+		,@SpecialOT_old DECIMAL(3, 1) = NULL
 		,@IsLocal_old BIT
 		,@WorkingDays_old INT
 		,@WorkingHours_old INT
@@ -270,6 +272,7 @@ BEGIN
 	WHERE EmployeeId = @EmpId
 
 	SELECT TOP 1 @CanOT_old = [CanOT]
+		,@SpecialOT_old = SpecialOT
 		,@IsLocal_old = [IsLocal]
 		,@WorkingDays_old = [WorkingDays]
 		,@WorkingHours_old = [WorkingHours]
@@ -340,6 +343,7 @@ BEGIN
 			,@AnnualLeaveBalance = @AnnualLeaveBalance
 			,@KeepInViewBalance = @KeepInViewBalance
 			,@CanOT = @CanOT
+			,@SpecialOT = @SpecialOT
 			,@IsLocal = @IsLocal
 			,@WorkingDays = @WorkingDays
 			,@WorkingHours = @WorkingHours
@@ -437,6 +441,7 @@ BEGIN
 		+ '@Qualification="' + coalesce(cast(@Qualification_Old AS NVARCHAR(250)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Qualification AS NVARCHAR(250)), space(1)) + '" '
 		+ '@Major="' + coalesce(cast(@Major_Old AS NVARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@Major AS NVARCHAR(100)), space(1)) + '" '
 		+ '@CanOT="' + coalesce(cast(@CanOT_old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@CanOT AS VARCHAR(100)), space(1)) + '" '
+		+ '@SpecialOT="' + coalesce(cast(@SpecialOT_old AS VARCHAR(100)), space(1)) + '" ' + '"#@#' + coalesce(cast(@SpecialOT AS VARCHAR(100)), space(1)) + '" '
 		+ '@IsLocal="' + coalesce(cast(@IsLocal_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@IsLocal AS VARCHAR(100)), space(1)) + '" '
 		+ '@WorkingDays="' + coalesce(cast(@WorkingDays_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@WorkingDays AS VARCHAR(100)), space(1)) + '" '
 		+ '@WorkingHours="' + coalesce(cast(@WorkingHours_old AS VARCHAR(1000)), space(1)) + '" ' + '"#@#' + coalesce(cast(@WorkingHours AS VARCHAR(100)), space(1)) + '" '

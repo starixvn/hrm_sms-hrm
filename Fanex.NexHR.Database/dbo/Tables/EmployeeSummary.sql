@@ -16,6 +16,7 @@
     [MilitaryFromDate]   DATETIME        NULL,
     [MilitaryToDate]     DATETIME        NULL,
     [Remark]             NVARCHAR (200)  NULL,
+    [SpecialOT] DECIMAL(3, 1) NULL, 
     CONSTRAINT [PK_EmployeeSummary] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
 

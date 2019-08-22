@@ -632,6 +632,7 @@
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
                 CanOT = model.CanOT,
+                SpecialOT = model.SpecialOT,
                 WorkingDays = model.WorkingDays,
                 WorkingHours = model.WorkingHours,
                 IsTopManager = model.IsTopManager,

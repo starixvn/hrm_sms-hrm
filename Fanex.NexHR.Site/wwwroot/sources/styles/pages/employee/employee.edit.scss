@@ -11,6 +11,7 @@
         font-weight: bold;
         text-transform: uppercase;
         cursor: pointer;
+        padding: 5px 10px;
 
         span.fa {
             width: 16px;
@@ -66,7 +67,7 @@ fieldset {
     min-width: 110px;
 }
 
-#WorkingDays, #WorkingHours, #OffDaysbyWeek {
+#WorkingDays, #WorkingHours, #OffDaysbyWeek, #SpecialOT {
     width: 90px;
 }
 

@@ -181,7 +181,7 @@
         public byte[] ExportDailyOvertimeDetails(IEnumerable<DailyOvertimeDetails> overtimes, GetDailyOvertimeDetailsParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyOvertimeDetails.xlsx");
-            const byte TotalColumns = 15;
+            const byte TotalColumns = 16;
             const byte StartBodyRow = 3;
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -225,6 +225,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.PublicHours;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.SpecialHours;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Remark;
                         worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
 
@@ -245,11 +246,11 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalColumns = 15;
+            const byte TotalColumns = 16;
             var templateIndex = new
             {
-                startBodyRow = 3,
-                startSummaryRow = 4,
+                bodyRow = 3,
+                summaryRow = 4,
                 startSummaryColumn = 11
             };
             var fromDate = dateRanges.Min(x => x.Date);
@@ -275,7 +276,7 @@
             {
                 var status = (CurrentRequestStatus)overtime.StatusId;
                 colIndex = 1;
-                template.Cells[templateIndex.startBodyRow, 1, templateIndex.startBodyRow, TotalColumns]
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalColumns]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
@@ -291,6 +292,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.PublicHours;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.SpecialHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Remark;
                 worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
 
@@ -300,18 +302,18 @@
             // summary
             if (dailyOvertimes.Any())
             {
-                template.Cells[templateIndex.startSummaryRow, 1, templateIndex.startSummaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-                const byte TotalSummaryColumns = 3;
+                template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+                const byte TotalSummaryColumns = 4;
                 for (var i = 0; i < TotalSummaryColumns; i++)
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
-                    var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
                     worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-            worksheet.View.FreezePanes(templateIndex.startBodyRow, 1);
+            worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
 
         private static void WriteOvertimeRecord(
@@ -323,18 +325,19 @@
             const byte TotalFixedColumns = 9;
             var templateIndex = new
             {
-                startBodyRow = 3,
-                startSummaryRow = 4,
+                headerRow = 2,
+                bodyRow = 3,
+                summaryRow = 4,
                 startSummaryColumn = 6,
                 startNormalDayColumn = 10,
                 endNormalDayColumn = 12,
-                startHolidayColumn = 13
+                holidayColumn = 13
             };
             var rowIndex = 3;
             var colIndex = 1;
 
             // title & header
-            WriteHeaderOvertimeRecord(template, worksheet, dateRanges);
+            WriteHeaderOvertimeRecord(template, worksheet, dateRanges, templateIndex);
 
             // data
             var rowNum = 1;
@@ -343,7 +346,7 @@
             {
                 IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.EmployeeId == employee.EmployeeId);
                 colIndex = 1;
-                template.Cells[templateIndex.startBodyRow, 1, templateIndex.startBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
@@ -353,24 +356,24 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.OffHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.PublicHours);
-                worksheet.Cells[rowIndex, colIndex++].Value = 0;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.SpecialHours);
 
                 foreach (DateRange date in dateRanges)
                 {
                     DailyOvertimeDetails overtime = overtimes.FirstOrDefault(x => x.WorkDate.Date == date.Date.Date);
                     if (date.IsHoliday)
                     {
-                        template.Cells[templateIndex.startBodyRow, templateIndex.startNormalDayColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                        template.Cells[templateIndex.bodyRow, templateIndex.startNormalDayColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime?.PublicHours;
                     }
                     else
                     {
                         var toColumn = colIndex + 3;
-                        template.Cells[templateIndex.startBodyRow, templateIndex.startNormalDayColumn, templateIndex.startBodyRow, templateIndex.endNormalDayColumn]
+                        template.Cells[templateIndex.bodyRow, templateIndex.startNormalDayColumn, templateIndex.bodyRow, templateIndex.endNormalDayColumn]
                             .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, toColumn]);
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime?.NormalHours;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime?.OffHours;
-                        worksheet.Cells[rowIndex, colIndex++].Value = 0;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime?.SpecialHours;
                     }
                 }
 
@@ -381,38 +384,31 @@
             if (employees.Any())
             {
                 const byte TotalSummaryColumns = 4;
-                template.Cells[templateIndex.startSummaryRow, 1, templateIndex.startSummaryRow, TotalFixedColumns]
+                template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalFixedColumns]
                     .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
                 for (var i = 0; i < TotalSummaryColumns; i++)
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
-                    var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
                     worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-            worksheet.View.FreezePanes(templateIndex.startBodyRow, templateIndex.startNormalDayColumn);
+            worksheet.View.FreezePanes(templateIndex.bodyRow, templateIndex.startNormalDayColumn);
         }
 
         private static void WriteHeaderOvertimeRecord(
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
-            IEnumerable<DateRange> dateRanges)
+            IEnumerable<DateRange> dateRanges,
+            dynamic templateIndex)
         {
             const byte TotalFixedColumns = 9;
-            var templateIndex = new
-            {
-                startHeaderRow = 2,
-                startBodyRow = 3,
-                startNormalDayColumn = 10,
-                endNormalDayColumn = 12,
-                startHolidayColumn = 13
-            };
             var colIndex = 1;
             var fromDate = dateRanges.Min(x => x.Date);
             var toDate = dateRanges.Max(x => x.Date);
-            template.Cells[1, colIndex, templateIndex.startHeaderRow, TotalFixedColumns].Copy(worksheet.Cells[1, colIndex, templateIndex.startHeaderRow, TotalFixedColumns]);
+            template.Cells[1, colIndex, templateIndex.headerRow, TotalFixedColumns].Copy(worksheet.Cells[1, colIndex, templateIndex.headerRow, TotalFixedColumns]);
             worksheet.Cells[1, colIndex].Value = string.Format(
                 worksheet.Cells[1, colIndex].Value.ToString(),
                 fromDate.ToString(DateFormat),
@@ -422,9 +418,9 @@
             {
                 if (date.IsHoliday)
                 {
-                    template.Cells[1, templateIndex.startHolidayColumn].Copy(worksheet.Cells[1, colIndex]);
+                    template.Cells[1, templateIndex.holidayColumn].Copy(worksheet.Cells[1, colIndex]);
                     worksheet.Cells[1, colIndex].Value = date.Date.ToString("dd-MMM");
-                    template.Cells[templateIndex.startHeaderRow, templateIndex.startHolidayColumn].Copy(worksheet.Cells[templateIndex.startHeaderRow, colIndex]);
+                    template.Cells[templateIndex.headerRow, templateIndex.holidayColumn].Copy(worksheet.Cells[templateIndex.headerRow, colIndex]);
                 }
                 else
                 {
@@ -432,8 +428,8 @@
                     template.Cells[1, templateIndex.startNormalDayColumn, 1, templateIndex.endNormalDayColumn]
                         .Copy(worksheet.Cells[1, colIndex, 1, toColumn]);
                     worksheet.Cells[1, colIndex].Value = date.Date.ToString("dd-MMM");
-                    template.Cells[templateIndex.startHeaderRow, templateIndex.startNormalDayColumn, templateIndex.startHeaderRow, templateIndex.endNormalDayColumn]
-                        .Copy(worksheet.Cells[templateIndex.startHeaderRow, colIndex, templateIndex.startHeaderRow, toColumn]);
+                    template.Cells[templateIndex.headerRow, templateIndex.startNormalDayColumn, templateIndex.headerRow, templateIndex.endNormalDayColumn]
+                        .Copy(worksheet.Cells[templateIndex.headerRow, colIndex, templateIndex.headerRow, toColumn]);
                 }
 
                 colIndex += date.IsHoliday ? 1 : 3;
@@ -446,11 +442,11 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalColumns = 4;
+            const byte TotalColumns = 5;
             var templateIndex = new
             {
-                startBodyRow = 3,
-                startSummaryRow = 4,
+                bodyRow = 3,
+                summaryRow = 4,
                 startSummaryColumn = 2
             };
             var fromDate = dateRanges.Min(x => x.Date);
@@ -476,12 +472,13 @@
             {
                 IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.Section == section);
                 colIndex = 1;
-                template.Cells[templateIndex.startBodyRow, 1, templateIndex.startBodyRow, TotalColumns]
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalColumns]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
                 worksheet.Cells[rowIndex, colIndex++].Value = section;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.OffHours);
-                worksheet.Cells[rowIndex, colIndex].Value = overtimes.Sum(x => x.PublicHours);
+                worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.PublicHours);
+                worksheet.Cells[rowIndex, colIndex].Value = overtimes.Sum(x => x.SpecialHours);
 
                 rowIndex++;
             }
@@ -489,18 +486,18 @@
             // summary
             if (sections.Any())
             {
-                template.Cells[templateIndex.startSummaryRow, 1, templateIndex.startSummaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-                const byte TotalSummaryColumns = 3;
+                template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+                const byte TotalSummaryColumns = 4;
                 for (var i = 0; i < TotalSummaryColumns; i++)
                 {
                     colIndex = templateIndex.startSummaryColumn + i;
-                    var excelAddress = $"{worksheet.Cells[templateIndex.startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
                     worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-            worksheet.View.FreezePanes(templateIndex.startBodyRow, 1);
+            worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
     }
 }

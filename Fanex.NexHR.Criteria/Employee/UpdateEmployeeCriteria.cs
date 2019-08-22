@@ -89,6 +89,7 @@
         public decimal KeepInViewBalance { get; set; }
 
         public bool CanOT { get; set; }
+        public decimal? SpecialOT { get; set; }
 
         public bool IsLocal { get; set; }
 

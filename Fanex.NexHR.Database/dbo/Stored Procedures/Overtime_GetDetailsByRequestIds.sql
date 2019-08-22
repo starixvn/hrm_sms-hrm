@@ -34,6 +34,7 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.Remark
 		,ot.[Status] AS StatusId
 		,empca.IsHoliday

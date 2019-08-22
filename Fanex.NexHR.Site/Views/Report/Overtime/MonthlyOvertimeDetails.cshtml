@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Models.Report.Overtime
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Report.Overtime
 @model IEnumerable<DailyOvertimeDetails>
 @{
     var month = (DateTime)ViewBag.Month;
@@ -33,6 +35,7 @@
             <th>@Labels.NormalDay</th>
             <th>@Labels.OffDay</th>
             <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
             <th>@Labels.Remark</th>
             <th>@Labels.Status</th>
         </tr>
@@ -84,6 +87,12 @@
                             @request.PublicHours
                         }
                     </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
                     <td class="align-left">@request.Remark</td>
                     <td>
                         @if (request.StatusId != 0)
@@ -97,21 +106,16 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 12)
+            @RazorHelper.DisplayNoInformation(colspan: 11)
         }
     </tbody>
     <tfoot>
         <tr class="summary">
             <td class="align-right" colspan="5">@Labels.TotalOvertimeHours:</td>
-            <td>
-                @Model.Sum(t => t.NormalHours).ToString("0.00")
-            </td>
-            <td>
-                @Model.Sum(t => t.OffHours).ToString("0.00")
-            </td>
-            <td>
-                @Model.Sum(t => t.PublicHours).ToString("0.00")
-            </td>
+            <td>@Model.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.SpecialHours).ToString("0.00")</td>
             <td></td>
             <td></td>
         </tr>

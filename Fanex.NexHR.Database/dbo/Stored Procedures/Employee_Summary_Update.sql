@@ -3,6 +3,7 @@ CREATE PROCEDURE [dbo].[Employee_Summary_Update] @EmpID INT
 	,@AnnualLeaveBalance NUMERIC(18, 1) = 0
 	,@KeepInViewBalance NUMERIC(18, 1) = 0
 	,@CanOT BIT = 0
+	,@SpecialOT DECIMAL(3, 1) = NULL
 	,@IsLocal BIT = 0
 	,@WorkingDays INT = 0
 	,@WorkingHours INT = 0
@@ -36,6 +37,7 @@ BEGIN
 
 		UPDATE [dbo].[EmployeeSummary] WITH (ROWLOCK)
 		SET [CanOT] = @CanOT
+			,SpecialOT = @SpecialOT
 			,[IsLocal] = @IsLocal
 			,[WorkingDays] = @WorkingDays
 			,[WorkingHours] = @WorkingHours

@@ -145,15 +145,18 @@
         [DataType(DataType.Date)]
         public DateTime? CompanyDate { get; set; }
 
-        [Range(1, 31, ErrorMessage = "Working Days must be between 1 and 31")]
+        [Range(1, 31, ErrorMessage = "Working Days must be between 1 and 31.")]
         public int WorkingDays { get; set; }
 
-        [Range(1, 24, ErrorMessage = "Working Days must be between 1 and 24")]
+        [Range(1, 24, ErrorMessage = "Working Days must be between 1 and 24.")]
         public int WorkingHours { get; set; }
 
         public decimal KeepInViewBalance { get; set; }
 
         public bool CanOT { get; set; }
+
+        [Range(0, 24, ErrorMessage = "Special OT must be between 0 and 24.")]
+        public decimal? SpecialOT { get; set; }
 
         [Display(Name = "Special User")]
         public bool IsTopManager { get; set; }
@@ -169,7 +172,7 @@
 
         public bool IsShowLeftNavigation { get; set; }
 
-        [Range(0, 5, ErrorMessage = "Number of Offdays must be between 0 and 5")]
+        [Range(0, 5, ErrorMessage = "Number of Offdays must be between 0 and 5.")]
         public decimal OffDaysbyWeek { get; set; }
 
         public string Unit { get; set; }

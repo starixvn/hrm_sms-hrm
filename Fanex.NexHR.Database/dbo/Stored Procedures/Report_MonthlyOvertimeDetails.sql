@@ -39,6 +39,7 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.[Remark]
 		,empca.IsHoliday
 		,empca.IsOffDay

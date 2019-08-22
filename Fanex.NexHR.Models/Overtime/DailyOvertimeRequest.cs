@@ -26,6 +26,7 @@
         public decimal NormalHours { get; set; }
         public decimal OffHours { get; set; }
         public decimal PublicHours { get; set; }
+        public decimal SpecialHours { get; set; }
         public string Remark { get; set; }
 
         [XmlIgnore]

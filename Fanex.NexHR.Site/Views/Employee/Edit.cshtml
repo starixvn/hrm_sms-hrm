@@ -1,5 +1,5 @@
-﻿@using Fanex.NexHR.Models
-
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
 @model Employee
 
 @{
@@ -481,6 +481,14 @@
                 <div class="label marginlable">@Labels.AllowClaimOT</div>
                 <div class="input">
                     @Html.CheckBoxFor(model => model.CanOT)
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">Special OT</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.SpecialOT)
+                    @Html.ValidationMessageFor(model => model.SpecialOT)
                 </div>
                 <div class="clear"></div>
             </li>

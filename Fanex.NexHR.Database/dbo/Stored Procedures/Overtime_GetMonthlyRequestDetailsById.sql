@@ -47,11 +47,13 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.CurrentStatus AS StatusId
 		,emp.EmpId AS EmployeeId
 		,emp.NickName
 		,emp.FullName
 		,empsum.WorkingHours
+		,empsum.SpecialOT
 		,ot.VerifierId
 		,verifier.NickName
 		,verifier.FullName
@@ -75,6 +77,7 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.[Remark]
 		,empca.IsHoliday
 		,empca.IsOffDay

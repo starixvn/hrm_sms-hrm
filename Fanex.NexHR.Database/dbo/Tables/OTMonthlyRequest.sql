@@ -19,6 +19,7 @@
     [ModifiedDate]   DATETIME        NULL,
     [CreatedDate]    DATETIME        NULL,
     [CreatedBy]      INT             NULL,
+    [SpecialHours] DECIMAL(18, 2) NULL, 
     CONSTRAINT [PK_OTMonthlyRequest1] PRIMARY KEY CLUSTERED ([Month] ASC, [EmpId] ASC) ON [EmpRequest]
 );
 

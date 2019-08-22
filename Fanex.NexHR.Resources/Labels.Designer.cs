@@ -4084,6 +4084,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Special OT.
+        /// </summary>
+        public static string SpecialOT {
+            get {
+                return ResourceManager.GetString("SpecialOT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to StackTrace.
         /// </summary>
         public static string StackTrace {

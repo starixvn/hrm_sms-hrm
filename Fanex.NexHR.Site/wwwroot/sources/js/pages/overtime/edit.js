@@ -55,6 +55,9 @@ $(document).ready(function () {
 
         totalHours = calculateTotalOTHours($('.cell-overtime input.publicHours'));
         $('#sumpublic').text(totalHours.toFixed(2));
+
+        totalHours = calculateTotalOTHours($('.cell-overtime input.specialHours'));
+        $('#sumspecial').text(totalHours.toFixed(2));
     };
 
     let validation = function () {
@@ -62,18 +65,32 @@ $(document).ready(function () {
         const approverId = $('#ApproverId').val();
 
         if (verifierId === '' && approverId === '') {
-            return 3;
+            toastr.error('Please select Verifier and Approver.', '', toastOptions());
+            return false;
         }
 
         if (verifierId === null || verifierId === '') {
-            return 1;
+            toastr.error('Please select a Verifier.', '', toastOptions());
+            return false;
         }
 
         if (approverId === null || approverId === '') {
-            return 2;
+            toastr.error('Please select an Approver.', '', toastOptions());
+            return false;
         }
 
-        return 0;
+        $('input.remark').each(function () {
+            let row = $(this).closest('tr');
+            const normalHours = parseFloat(row.find('input.normalHours').val());
+            const specialHours = parseFloat(row.find('input.specialHours').val());
+
+            if (normalHours !== 0 && specialHours !== 0) {
+                toastr.error('Can not claim both normal and special.', '', toastOptions());
+                return false;
+            }
+        });
+
+        return true;
     };
 
     $('form').areYouSure();
@@ -84,7 +101,7 @@ $(document).ready(function () {
         const workingHours = parseFloat($('#WorkingHours').val());
         const totalHours = parseFloat(row.find('.totalHours').html().trim());
 
-        if ($this.hasClass('normalHours')) {
+        if ($this.hasClass('normalHours') || $this.hasClass('specialHours')) {
             if (totalHours >= workingHours) {
                 const limit = parseFloat((totalHours - workingHours + 0.09).toFixed(2));
                 rangeTextBox($this, 0, limit);
@@ -100,9 +117,8 @@ $(document).ready(function () {
     });
 
     $('#btnSave').on('click', function () {
-        const validationResult = validation();
-
-        if (validationResult === 0) {
+        const isValid = validation();
+        if (isValid) {
             let model = {
                 employeeId: $('#EmployeeId').val(),
                 verifierId: $('#VerifierId').val(),
@@ -121,6 +137,7 @@ $(document).ready(function () {
                     normalHours: row.find('input.normalHours').val(),
                     offHours: row.find('input.offHours').val(),
                     publicHours: row.find('input.publicHours').val(),
+                    specialHours: row.find('input.specialHours').val(),
                     remark: $(this).val()
                 });
             });
@@ -143,18 +160,6 @@ $(document).ready(function () {
                     toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
-        } else {
-            switch (validationResult) {
-                case 1:
-                    toastr.error('Please select a Verifier.', '', toastOptions());
-                    break;
-                case 2:
-                    toastr.error('Please select an Approver.', '', toastOptions());
-                    break;
-                default:
-                    toastr.error('Please select Verifier and Approver.', '', toastOptions());
-                    break;
-            }
         }
     });
 });

@@ -74,11 +74,12 @@ BEGIN
 	END
 
 	SELECT req.RequestId
-		,req.empID
+		,req.EmpId
 		,req.[Month]
 		,req.NormalHours
 		,req.OffHours
 		,req.PublicHours
+		,req.SpecialHours
 		,(CASE 
 			WHEN att.RequestId IS NOT NULL THEN 1
 			ELSE 0 END
