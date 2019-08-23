@@ -35,7 +35,8 @@
             {
                 Month = today.Month,
                 Year = today.Year,
-                Calendar = (byte)CalendarType.Fiscal
+                Calendar = (byte)CalendarType.Fiscal,
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
             return View("~/Views/Report/Overtime/MonthlyOvertime.cshtml", model);
@@ -50,7 +51,8 @@
                 Year = model.Year,
                 Calendar = model.Calendar,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId
+                Employee = model.Employee,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             model.Overtimes = overtimeReportService.GetYearlyOvertime(param);
 
@@ -85,8 +87,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             model.Overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
 
@@ -95,8 +98,14 @@
 
         public ActionResult ExportMonthlyOvertime(MonthlyFilterViewModel model)
         {
-            Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple
-                = overtimeReportService.GetMonthlyOvertime(model.FromDate, model.ToDate, model.EmployeeId);
+            var param = new GetMonthlyOvertimeParam
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                Employee = model.Employee,
+                EmployeeStatusId = model.EmployeeStatusId
+            };
+            Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple = overtimeReportService.GetMonthlyOvertime(param);
             DateTime requestDate = new DateTime(model.Year, model.Month, 1);
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
 
@@ -111,7 +120,8 @@
                 Year = model.Year,
                 Calendar = model.Calendar,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId
+                Employee = model.Employee,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<YearlyOvertime> overtimes = overtimeReportService.GetYearlyOvertime(param);
             byte[] bytes = overtimeReportService.ExportYearlyOvertime(overtimes, param);
@@ -127,8 +137,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
             byte[] bytes = overtimeReportService.ExportDailyOvertimeDetails(overtimes, param);

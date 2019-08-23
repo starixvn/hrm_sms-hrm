@@ -77,7 +77,7 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
+                Employee = model.Employee,
                 IsLocal = model.IsLocal
             };
             return overtimeReportService.GetDailyOvertimeDetails(param);

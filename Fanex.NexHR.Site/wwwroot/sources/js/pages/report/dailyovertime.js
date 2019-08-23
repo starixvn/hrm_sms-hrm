@@ -4,7 +4,6 @@ import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 import 'floatthead/dist/jquery.floatThead';
 
 import { floatThead, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
-import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
     initDatepicker();

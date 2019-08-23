@@ -1,9 +1,10 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_DailyOvertime] @fromDate DATE
 	,@toDate DATE
-	,@EmployeeId INT = NULL
 	,@groupIds VARCHAR(MAX) = NULL
 	,@isLocal BIT = NULL
+	,@Employee NVARCHAR(200) = NULL
+	,@EmployeeStatusId TINYINT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-10
@@ -16,6 +17,12 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	DECLARE
+		-- employee status
+		@Enable TINYINT = 1
+		,@Disabled TINYINT = 2
+		,@Deleted TINYINT = 3
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
@@ -54,8 +61,25 @@ BEGIN
 	WHERE ot.OvertimeDate BETWEEN @fromDate
 			AND @toDate
 		AND (
-			@EmployeeId IS NULL
-			OR ot.EmpId = @EmployeeId
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
+		AND (
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
 		AND (
 			@isLocal IS NULL

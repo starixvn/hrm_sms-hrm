@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.Overtime;
 
@@ -12,8 +13,8 @@
         public string SectionIds { get; set; }
         public IEnumerable<EntityBase<int>> Sections { get; set; }
         public string Employee { get; set; }
-        public int? EmployeeId { get; set; }
         public byte? IsLocal { get; set; }
+        public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
         public IEnumerable<DailyOvertimeDetails> Overtimes { get; set; } = new List<DailyOvertimeDetails>();
     }
 }

@@ -37,7 +37,8 @@
                 Year = param.Year,
                 CalendarType = param.Calendar,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId
+                Employee = param.Employee,
+                EmployeeStatusId = param.EmployeeStatusId
             };
             return baseService.GetData<YearlyOvertime>(criteria);
         }
@@ -53,16 +54,14 @@
             return baseService.GetData<DailyOvertimeDetails>(criteria);
         }
 
-        public Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(
-            DateTime fromDate,
-            DateTime toDate,
-            int? employeeId = null)
+        public Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(GetMonthlyOvertimeParam param)
         {
             var criteria = new GetMonthlyOvertimeReportCriteria
             {
-                EmployeeId = employeeId,
-                FromDate = fromDate,
-                ToDate = toDate
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                Employee = param.Employee,
+                EmployeeStatusId = param.EmployeeStatusId
             };
             return overtimeReportRepository.GetMonthlyOvertime(criteria);
         }
@@ -74,8 +73,9 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId,
-                IsLocal = param.IsLocal
+                Employee = param.Employee,
+                IsLocal = param.IsLocal,
+                EmployeeStatusId = param.EmployeeStatusId
             };
             return baseService.GetData<DailyOvertimeDetails>(criteria);
         }

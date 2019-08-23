@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.ViewModels.Report.Overtime
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core
+@using Fanex.NexHR.ViewModels.Report.Overtime
 @model MonthlyFilterViewModel
 @{
     ViewBag.Title = Labels.MonthlyOvertimeReport;
@@ -50,11 +52,19 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Employee, new { @class = "control-label" })
+                @Html.Label(Labels.Keyword, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Employee", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
-                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.TextBoxFor(model => model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @RazorHelper.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId)
             </div>
         </div>
         <div class="form-group form-group--m">

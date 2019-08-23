@@ -1,7 +1,8 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @FromDate DATE
 	,@ToDate DATE
-	,@EmployeeId INT = NULL
+	,@Employee NVARCHAR(200) = NULL
+	,@EmployeeStatusId TINYINT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-09
@@ -17,6 +18,10 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @fromDatetmp DATE = @FromDate
+		-- employee status
+		,@Enable TINYINT = 1
+		,@Disabled TINYINT = 2
+		,@Deleted TINYINT = 3
 		-- request status
 		,@VerifyStatusId TINYINT = 2
 		,@ApproveStatusId TINYINT = 4
@@ -84,8 +89,27 @@ BEGIN
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND ot.OvertimeDate = empca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
-	WHERE @EmployeeId IS NULL
-		OR emp.EmpId = @EmployeeId
+	WHERE (
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
+		AND (
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
+			)
 	ORDER BY tmp.WorkDate
 		,emp.NickName
 

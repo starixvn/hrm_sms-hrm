@@ -11,7 +11,8 @@
         public int Month { get; set; }
         public int Year { get; set; }
         public byte Calendar { get; set; }
-        public int? EmployeeId { get; set; }
+        public string Employee { get; set; }
+        public byte? EmployeeStatusId { get; set; }
 
         public DateTime FromDate
         {
