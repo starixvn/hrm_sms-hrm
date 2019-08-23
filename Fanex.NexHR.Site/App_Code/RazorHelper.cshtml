@@ -13,6 +13,16 @@
     </select>
 }
 
+@helper UserStatusDropDownList(string id, string classHTML = "", byte? selectedId = (byte)EmployeeStatus.Enabled)
+{
+    <select id="@id" name="@id" class="@classHTML">
+        <option selected=@(!selectedId.HasValue) value="@string.Empty">-- All --</option>
+        <option selected=@(selectedId == (byte)EmployeeStatus.Enabled) value="@((byte)EmployeeStatus.Enabled)">@Labels.Enable</option>
+        <option selected=@(selectedId == (byte)EmployeeStatus.Disabled) value="@((byte)EmployeeStatus.Disabled)">@Labels.Disabled</option>
+        <option selected=@(selectedId == (byte)EmployeeStatus.Deleted) value="@((byte)EmployeeStatus.Deleted)">@Labels.Deleted</option>
+    </select>
+}
+
 @helper DisplayNoInformation(int colspan)
 {
     <tr>

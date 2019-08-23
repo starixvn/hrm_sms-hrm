@@ -169,6 +169,7 @@
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\CalendarType.cs" />
     <Compile Include="Enums\DateRangeOption.cs" />
+    <Compile Include="Enums\EmployeeStatus.cs" />
     <Compile Include="Enums\LateInEarlyOutReasons.cs" />
     <Compile Include="Enums\CheckInOutReasons.cs" />
     <Compile Include="Enums\Command.cs" />

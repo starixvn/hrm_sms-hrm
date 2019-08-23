@@ -1,8 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
-	,@EmployeeId INT = NULL
+	,@Employee NVARCHAR(200) = NULL
 	,@IsLocal BIT = NULL
+	,@EmployeeStatusId TINYINT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-06-24
@@ -19,6 +20,10 @@ BEGIN
 	DECLARE @fromDatetmp DATE
 		,@Today DATE = GETDATE()
 		,@GeneralLeaveId TINYINT = 0
+		-- employee status
+		,@Enable TINYINT = 1
+		,@Disabled TINYINT = 2
+		,@Deleted TINYINT = 3
 		-- work type
 		,@OffDay TINYINT = 1
 		,@LeaveDay TINYINT = 2
@@ -37,6 +42,19 @@ BEGIN
 
 	CREATE TABLE #tblDate (WorkDate DATE)
 
+	CREATE TABLE #tblHalfDayRequest (
+		EmployeeId INT
+		,RequestedDate DATE
+		,FromTime DATETIME
+		,ToTime DATETIME
+		,LeaveTypeId INT
+		,Code VARCHAR(10)
+		,[Name] NVARCHAR(100)
+		,WorkType TINYINT
+		,TotalDays DECIMAL(2, 1)
+		,StatusId TINYINT
+		)
+
 	IF ISNULL(@GroupIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
@@ -53,11 +71,26 @@ BEGIN
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-	WHERE emp.[Enabled] = 1
-		AND emp.isDeleted = 0
+	WHERE (
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
 		AND (
-			@EmployeeId IS NULL
-			OR emp.EmpId = @EmployeeId
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
 		AND (
 			@IsLocal IS NULL
@@ -78,6 +111,37 @@ BEGIN
 
 		SET @fromDatetmp = DATEADD(DAY, 1, @fromDatetmp)
 	END
+
+	INSERT INTO #tblHalfDayRequest (
+		EmployeeId
+		,RequestedDate
+		,FromTime
+		,ToTime
+		,LeaveTypeId
+		,Code
+		,[Name]
+		,WorkType
+		,TotalDays
+		,StatusId
+		)
+	SELECT emp.EmployeeId
+		,tbldate.WorkDate
+		,lrd.FromTime
+		,lrd.ToTime
+		,lrd.LeaveType
+		,lv.Code
+		,lv.[Name]
+		,lrd.WorkType
+		,0.5 AS TotalDays
+		,wkr.CurrentStatus
+	FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
+		INNER JOIN #tblEmployeeIds AS emp ON wkr.EmpId = emp.EmployeeId
+		INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
+		AND lrd.IsHalfDay = 1
+		AND lrd.WorkType = @LeaveDay
+		INNER JOIN #tblDate AS tbldate ON lrd.OnDate = tbldate.WorkDate
+		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lrd.LeaveType = lv.LeaveTypeId
+	WHERE wkr.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 
 	SELECT emp.EmpId AS EmployeeId
 		,tbldate.WorkDate
@@ -141,9 +205,15 @@ BEGIN
 				AND empatt.TotalWorkHours IS NULL THEN 1
 			ELSE 0 END
 			) AS IsAbsent
+		,spwkr.RequestStatusId
 		,lv.LeaveTypeId
 		,lv.Code
 		,lv.[Name]
+		,CAST(NULL AS DATETIME) AS FromTime
+		,CAST(NULL AS DATETIME) AS ToTime
+		,lv2.LeaveTypeId AS LeaveTypeId2
+		,lv2.Code AS LeaveCode
+		,lv2.[Name] AS LeaveName
 	INTO #tblDailyWorking
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
@@ -152,6 +222,7 @@ BEGIN
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND tbldate.WorkDate = empca.WorkDate
 		AND empca.IsPublic = 1
+		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
 		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON emp.EmpId = empatt.EmpId
 		AND tbldate.WorkDate = empatt.AttendanceDate
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON (
@@ -166,13 +237,12 @@ BEGIN
 		SELECT lrd.EmpId
 			,lrd.LeaveType
 			,lrd.WorkType
-			,(CASE lrd.IsHalfDay
-				WHEN 1 THEN 0.5
-				ELSE 1 END
-				) AS TotalDays
+			,1 AS TotalDays
+			,wkr.CurrentStatus AS RequestStatusId
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
 			AND lrd.OnDate = tbldate.WorkDate
+			AND lrd.IsHalfDay = 0
 		WHERE wkr.EmpId = emp.EmpId
 			AND lrd.WorkType IN (@OffDay, @LeaveDay)
 			AND wkr.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -182,6 +252,7 @@ BEGIN
 			,lr.LeaveType
 			,@LeaveDay AS WorkType
 			,1 AS TotalDays
+			,wkr.CurrentStatus AS RequestStatusId
 		FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wkr.RequestId = lr.RequestId
 			AND wkr.EmpId = emp.EmpId
@@ -199,6 +270,33 @@ BEGIN
 				)
 		) AS spwkr
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON spwkr.LeaveType = lv.LeaveTypeId
+
+	UPDATE tbl
+	SET tbl.IsLeaveDay = 1
+		,tbl.LeaveDay = rq.TotalDays
+		,tbl.LeaveTypeId = rq.LeaveTypeId
+		,tbl.Code = rq.Code
+		,tbl.[Name] = rq.[Name]
+		,tbl.FromTime = rq.FromTime
+		,tbl.ToTime = rq.ToTime
+		,tbl.RequestStatusId = rq.StatusId
+	FROM #tblDailyWorking AS tbl
+		INNER JOIN #tblHalfDayRequest AS rq ON tbl.EmployeeId = rq.EmployeeId
+		AND tbl.WorkDate = rq.RequestedDate
+	WHERE tbl.LeaveTypeId IS NULL
+
+	UPDATE tbl
+	SET tbl.LeaveDay = tbl.LeaveDay + rq.TotalDays
+		,tbl.LeaveTypeId2 = rq.LeaveTypeId
+		,tbl.LeaveCode = rq.Code
+		,tbl.[LeaveName] = rq.[Name]
+		,tbl.FromTime = rq.FromTime
+		,tbl.ToTime = rq.ToTime
+	FROM #tblDailyWorking AS tbl
+		INNER JOIN #tblHalfDayRequest AS rq ON tbl.EmployeeId = rq.EmployeeId
+		AND tbl.WorkDate = rq.RequestedDate
+	WHERE tbl.FromTime <> rq.FromTime
+		AND tbl.ToTime <> rq.ToTime
 
 	SELECT emp.EmpId AS EmployeeId
 		,emp.Code
@@ -225,4 +323,6 @@ BEGIN
 	DROP TABLE #tblEmployeeIds
 
 	DROP TABLE #tblDate
+
+	DROP TABLE #tblHalfDayRequest
 END

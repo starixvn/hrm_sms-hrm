@@ -565,6 +565,7 @@
     <Build Include="dbo\Stored Procedures\Holiday_AutoGenerate.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMemberMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsById.sql" />
+    <Build Include="dbo\Stored Procedures\Report_MonthlyWorkingHours_EmployeeRequest.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

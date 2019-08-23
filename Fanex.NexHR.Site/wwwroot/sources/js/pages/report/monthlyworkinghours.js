@@ -5,7 +5,6 @@ import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
-import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
     let query = function () {
@@ -19,7 +18,8 @@ $(document).ready(function () {
                 toDate: $('#ToDate').val(),
                 sectionIds: $('#SectionIds').val(),
                 isLocal: $('#Category').val(),
-                employeeId: $('#EmployeeId').val()
+                employee: $('#Employee').val(),
+                employeeStatusId: $('#EmployeeStatusId').val()
             },
             responseType: 'html'
         }).then(response => {

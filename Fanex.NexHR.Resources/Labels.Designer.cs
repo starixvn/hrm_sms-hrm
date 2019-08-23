@@ -1024,6 +1024,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string Deleted {
+            get {
+                return ResourceManager.GetString("Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleted Users.
         /// </summary>
         public static string DeletedUsers {
@@ -1074,6 +1083,15 @@ namespace Fanex.NexHR.Resources {
         public static string Details {
             get {
                 return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
             }
         }
         
@@ -1479,6 +1497,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeWeeklyWorkingHours {
             get {
                 return ResourceManager.GetString("EmployeeWeeklyWorkingHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable.
+        /// </summary>
+        public static string Enable {
+            get {
+                return ResourceManager.GetString("Enable", resourceCulture);
             }
         }
         
@@ -4665,6 +4692,15 @@ namespace Fanex.NexHR.Resources {
         public static string UploadFileExists {
             get {
                 return ResourceManager.GetString("UploadFileExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Status.
+        /// </summary>
+        public static string UserStatus {
+            get {
+                return ResourceManager.GetString("UserStatus", resourceCulture);
             }
         }
         

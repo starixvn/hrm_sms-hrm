@@ -39,6 +39,7 @@
             {
                 FromDate = today.FirstDayOfWeek(),
                 ToDate = today.LastDayOfWeek(),
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
                 Sections = sections.Select(x => new EntityBase<int>
                 {
                     Id = x.Id,
@@ -58,8 +59,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             ViewBag.FromDate = param.FromDate;
@@ -76,8 +78,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             byte[] bytes = workingHoursService.ExportWeeklyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);

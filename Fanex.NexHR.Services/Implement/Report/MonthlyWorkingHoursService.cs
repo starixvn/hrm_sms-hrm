@@ -44,8 +44,9 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId,
-                IsLocal = param.IsLocal
+                Employee = param.Employee,
+                IsLocal = param.IsLocal,
+                EmployeeStatusId = param.EmployeeStatusId
             };
 
             return repository.GetMonthlyWorkingHours(criteria);
@@ -58,8 +59,9 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId,
-                IsLocal = param.IsLocal
+                Employee = param.Employee,
+                IsLocal = param.IsLocal,
+                EmployeeStatusId = param.EmployeeStatusId
             };
 
             return baseService.GetData<EmployeeRequest>(criteria);

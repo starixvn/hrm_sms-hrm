@@ -35,6 +35,7 @@
             var model = new WeeklyFilterViewModel
             {
                 FromDate = DateTime.Today,
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
                 Sections = sections.Select(x => new EntityBase<int>
                 {
                     Id = x.Id,
@@ -54,8 +55,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.FromDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             byte[] bytes = workingHoursService.ExportDailyWorkingHours(param.FromDate, monthlyWorkings);
