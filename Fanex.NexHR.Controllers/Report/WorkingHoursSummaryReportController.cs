@@ -41,8 +41,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             model.WorkingHours = reportService.GetWorkingHoursSummary(param);
 
@@ -59,8 +60,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<WorkingHoursSummary> workingHours = reportService.GetWorkingHoursSummary(param);
             IEnumerable<DailyOvertimeDetails> overtimes = GetOvertimeDetails(model);
@@ -78,7 +80,8 @@
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
                 Employee = model.Employee,
-                IsLocal = model.IsLocal
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             return overtimeReportService.GetDailyOvertimeDetails(param);
         }

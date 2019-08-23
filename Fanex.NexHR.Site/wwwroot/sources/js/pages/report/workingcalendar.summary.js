@@ -3,7 +3,6 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 
 import { initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
-import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
     initDatepicker();

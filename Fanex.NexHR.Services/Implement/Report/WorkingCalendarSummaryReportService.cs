@@ -36,7 +36,7 @@
                 ToDate = param.ToDate,
                 IsLocal = param.IsLocal,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId
+                Employee = param.Employee
             };
             return baseService.GetData<WorkingCalendarSummary>(criteria);
         }

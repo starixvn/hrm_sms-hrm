@@ -37,6 +37,7 @@
             {
                 FromDate = today,
                 ToDate = today,
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
                 Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code })
             };
 
@@ -51,8 +52,9 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
-                EmployeeId = model.EmployeeId,
-                IsLocal = model.IsLocal
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             IEnumerable<WorkingCalendarSummary> calendars = reportService.GetWorkingCalendarSummary(param);
             byte[] bytes = reportService.Export(param, calendars);

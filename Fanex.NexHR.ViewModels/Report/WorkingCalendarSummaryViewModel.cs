@@ -11,7 +11,7 @@
         public byte? IsLocal { get; set; }
         public string SectionIds { get; set; }
         public string Employee { get; set; }
-        public int? EmployeeId { get; set; }
+        public byte? EmployeeStatusId { get; set; }
 
         public IEnumerable<EntityBase<int>> Sections { get; set; }
     }

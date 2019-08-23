@@ -37,7 +37,8 @@
                 ToDate = param.ToDate,
                 IsLocal = param.IsLocal,
                 GroupIds = param.SectionIds,
-                EmployeeId = param.EmployeeId
+                Employee = param.Employee,
+                EmployeeStatusId = param.EmployeeStatusId
             };
             return baseService.GetData<WorkingHoursSummary>(criteria);
         }

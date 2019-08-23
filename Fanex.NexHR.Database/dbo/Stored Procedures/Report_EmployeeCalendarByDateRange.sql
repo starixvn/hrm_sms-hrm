@@ -1,9 +1,10 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @EmployeeId INT = NULL
-	,@FromDate DATE
+CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
+	,@Employee NVARCHAR(200) = NULL
+	,@EmployeeStatusId TINYINT = NULL
 AS
 /*
 Created: 20140711@Quinn.Vo
@@ -16,6 +17,11 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	DECLARE -- employee status
+		@Enable TINYINT = 1
+		,@Disabled TINYINT = 2
+		,@Deleted TINYINT = 3
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
@@ -62,11 +68,26 @@ BEGIN
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON empca.ShiftId = s.ShiftID
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON empca.LeaveTypeId = lv.LeaveTypeId
 		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
-	WHERE emp.[Enabled] = 1
-		AND emp.isDeleted = 0
+	WHERE (
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
 		AND (
-			@EmployeeId IS NULL
-			OR emp.EmpId = @EmployeeId
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
 		AND EXISTS (
 			SELECT 1

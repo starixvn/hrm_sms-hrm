@@ -1,4 +1,7 @@
-﻿@using Fanex.NexHR.Models.Report
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Report
 @using Fanex.NexHR.ViewModels.Report
 @using Fanex.NexHR.ViewModels.Request
 @model WorkingHoursSummaryViewModel
@@ -31,30 +34,14 @@
             </div>
             <div class="select-form">
                 <select id="Date" name="Date" class="form-control">
-                    <option value="0">
-                        @Labels.DateRange
-                    </option>
-                    <option value="1">
-                        @Labels.ToDay
-                    </option>
-                    <option value="2">
-                        @Labels.Yesterday
-                    </option>
-                    <option value="3">
-                        @Labels.CurrentWeek
-                    </option>
-                    <option value="4">
-                        @Labels.LastWeek
-                    </option>
-                    <option value="5">
-                        @Labels.CurrentMonth
-                    </option>
-                    <option value="6">
-                        @Labels.LastMonth
-                    </option>
-                    <option value="7">
-                        @Labels.SinceLastMonth
-                    </option>
+                    <option value="0">@Labels.DateRange</option>
+                    <option value="@((byte)DateRangeOption.Today)">@Labels.ToDay</option>
+                    <option value="@((byte)DateRangeOption.Yesterday)">@Labels.Yesterday</option>
+                    <option value="@((byte)DateRangeOption.CurrentWeek)">@Labels.CurrentWeek</option>
+                    <option value="@((byte)DateRangeOption.LastWeek)">@Labels.LastWeek</option>
+                    <option value="@((byte)DateRangeOption.CurrentMonth)">@Labels.CurrentMonth</option>
+                    <option value="@((byte)DateRangeOption.LastMonth)">@Labels.LastMonth</option>
+                    <option value="@((byte)DateRangeOption.SinceLastMonth)">@Labels.SinceLastMonth</option>
                 </select>
             </div>
         </div>
@@ -109,11 +96,21 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Employee, new { @class = "control-label" })
+                @Html.Label(Labels.Keyword, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Employee", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
-                @Html.HiddenFor(model => model.EmployeeId)
+                @Html.TextBoxFor(model => model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @RazorHelper.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId)
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -129,8 +126,8 @@
             <th colspan="2">Contract Working Agreement</th>
             <th colspan="2">Actual Working Time in/out</th>
             <th colspan="7">Total Working Days for Salary Payment</th>
-            <th colspan="5">Unpaid Leave</th>
-            <th colspan="5">Overtime</th>
+            <th colspan="5">@Labels.UnpaidLeave</th>
+            <th colspan="5">@Labels.Overtime</th>
         <tr>
         <tr>
             <th rowspan="2">@Labels.SymbolCount</th>

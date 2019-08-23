@@ -16,7 +16,7 @@
         public byte? IsLocal { get; set; }
         public string SectionIds { get; set; }
         public string Employee { get; set; }
-        public int? EmployeeId { get; set; }
+        public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
 
         public IEnumerable<EntityBase<int>> Sections { get; set; }
         public IEnumerable<WorkingHoursSummary> WorkingHours { get; set; } = new List<WorkingHoursSummary>();
