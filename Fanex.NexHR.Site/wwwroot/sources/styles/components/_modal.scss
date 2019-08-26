@@ -17,6 +17,10 @@
         }
     }
 
+    .modal-content {
+        @include border-radius(4px);
+    }
+
     .btn {
         background-image: none;
         height: unset;

@@ -1,4 +1,5 @@
-﻿@model Employee
+﻿@using Fanex.NexHR.Resources
+@model Employee
 
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -20,230 +21,160 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
         <div class="panel panel-default">
-            <div class="panel-heading">
-                PERSONAL INFORMATION
-            </div>
+            <div class="panel-heading">PERSONAL INFORMATION</div>
             <ul class="list-group">
                 <li class="list-group-item">
                     <div class="label">@Labels.FullName:</div>
                     <div class="pcontent bold">@Model.FullName</div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
                     <div class="label">@Labels.Nick:</div>
                     <div class="pcontent bold">@Model.NickName</div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.ChineseName:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.ChineseName:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.ChineseName, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        D.O.B:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">D.O.B:</div>
+                    <div class="pcontent">
                         @{
                             var birthdayYearRange = "1945:" + DateTime.Now.Year.ToString();
                         }
                         @Html.TextBox(Html.NameFor(model => model.DateOfBirth).ToString(), Model.DateOfBirth.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", yearrange = birthdayYearRange})
                         <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.PlaceOfBirth:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.PlaceOfBirth:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.PlaceOfBirth, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Ethnic:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Ethnic:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.Ethnic, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Native:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Native:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.Native, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Religion:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Religion:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.Religion, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Gender:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Gender:</div>
+                    <div class="pcontent">
                         @Html.DropDownListFor(model => model.Gender, (IList<SelectListItem>)ViewBag.Genders, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Nationality:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Nationality:</div>
+                    <div class="pcontent">
                         @Html.DropDownListFor(model => model.CountryCode, (IList<SelectListItem>)ViewBag.Countries, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Marriage:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Marriage:</div>
+                    <div class="pcontent">
                         @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.CardNo:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.CardNo:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.CardNo, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        Issue ID Card Date:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">Issue ID Card Date:</div>
+                    <div class="pcontent">
                         @{ 
                             var idIssueYearRange = "1960:" + DateTime.Now.Year.ToString();
                         }
                         @Html.TextBox(Html.NameFor(model => model.DateOfIdCard).ToString(), Model.DateOfIdCard.HasValue ? Model.DateOfIdCard.Value.ToString("dd MMM, yyyy") : null, new { @class = "datepicker form-control" , yearrange = @idIssueYearRange })
                         <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        Issue ID Card Place:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">Issue ID Card Place:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.PlaceOfIdCard, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.PassportNo:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.PassportNo:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.PassportNo, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.PassportExp:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.PassportExp:</div>
+                    <div class="pcontent">
                         @Html.TextBox(Html.NameFor(model => model.PassportExp).ToString(), Model.PassportExp.HasValue ? Model.PassportExp.Value.ToString("dd MMM, yyyy") : null, new { @class = "datepicker form-control" })
                         <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Qualification:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Qualification:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.Qualification, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Major:
-                    </div>
-                    <div class="pcontent allowEdit">
+                    <div class="label label-edit">@Labels.Major:</div>
+                    <div class="pcontent">
                         @Html.TextBoxFor(model => model.Major, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
                     <div class="label label-edit">@Labels.Email:</div>
                     <div class="pcontent">
                         @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Phone:
-                    </div>
+                    <div class="label label-edit">@Labels.Phone:</div>
                     <div class="pcontent">
                         @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Skype:
-                    </div>
+                    <div class="label label-edit">@Labels.Skype:</div>
                     <div class="pcontent">
                         @Html.TextBoxFor(model => model.Skype, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.LetsTalk:
-                    </div>
+                    <div class="label label-edit">@Labels.LetsTalk:</div>
                     <div class="pcontent">
                         @Html.TextBoxFor(model => model.LetsTalk, new { @class = "form-control" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.Address:
-                    </div>
+                    <div class="label label-edit">@Labels.Address:</div>
                     <div class="pcontent">
                         @Html.TextAreaFor(model => model.Address, new { @class = "form-control text-erea" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label label-edit">
-                        @Labels.CurrentAddress:
-                    </div>
+                    <div class="label label-edit">@Labels.CurrentAddress:</div>
                     <div class="pcontent">
                         @Html.TextAreaFor(model => model.CurrentAddress, new { @class = "form-control text-erea" })
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="submitWrapper">
-                        <div class="align-right">
-                            <button type="submit" class="btn btn-primary">@Labels.Save</button>
-                        </div>
+                    <div class="align-right">
+                        <button type="submit" class="btn btn-primary">@Labels.Save</button>
                     </div>
                 </li>
             </ul>
@@ -251,7 +182,6 @@
     </div>
 }
 <div class="rightjob">
-
     <div class="panel panel-default">
         <div class="panel-heading">
             EMERGENCY
@@ -284,9 +214,7 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item">
-                <div class="label label-edit">
-                    Attachments
-                </div>
+                <div class="label label-edit">Attachments</div>
                 <div class="pcontent">
                     @Html.TextBox("Attachments", null, new { @class = "form-control", @type = "file", @multiple = "multiple" })
                     <p class="note">* The file(s) upload must be less than 5 MB</p>

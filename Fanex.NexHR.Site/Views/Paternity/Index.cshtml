@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Fanex.NexHR.Resources
+@{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Employee Paternity";
 }
@@ -17,7 +18,7 @@
     @using (Html.BeginForm())
     {
         <div class="form-horizontal clearfix">
-            <div class="form-group form-group--s">
+            <div class="form-group form-group--m">
                 <div class="label-form">
                     @Html.Label(@Labels.Year, new { @class = "control-label" })
                 </div>
@@ -25,10 +26,10 @@
                     @Html.YearPicker("Year", 2010, DateTime.Now.Year)
                 </div>
             </div>
-            <div class="form-group form-group--l">
+            <div class="form-group form-group--m">
                 <div class="button-group">
-                    <input class="button" type="submit" id="submit" value="@Labels.Submit" />
-                    <input class="button" id="add-paternity" value="Add Paternity" type="button" />
+                    <input class="btn btn-primary" type="submit" id="submit" value="@Labels.Submit" />
+                    <input class="btn btn-primary" id="add-paternity" value="Add Paternity" type="button" />
                 </div>
             </div>
         </div>

@@ -1,14 +1,12 @@
-﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
-@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
-
-@import '../../abstracts/variables';
+﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../layout/filter';
 @import '../../layout/toastr';
 @import '../../layout/table';
-@import '../../components/buttons';
+@import '../../components/buttons-new';
 @import '../../components/validation';
 @import '../../components/modal';
+@import '../../components/jquery-ui-dialog';
 
 .clear {
     clear: both;
@@ -22,17 +20,16 @@
 .form-control {
     height: 30px;
     padding: 4px 8px;
+    @include border-radius(2px);
 }
 
 .label {
     float: left;
     text-align: right;
-    padding-left: 10px;
     margin-right: 10px;
     width: 120px;
     color: #000;
     font-size: 12px;
-    padding-top: 2px;
 }
 
 .label-edit {
@@ -51,7 +48,8 @@
         }
 
         textarea {
-            height: 80px !important;
+            min-height: 80px;
+            resize: vertical;
         }
     }
 
@@ -59,34 +57,8 @@
         padding: 5px 10px;
     }
 
-    .submitWrapper {
-        margin-top: 10px;
-    }
-
-    .formrow {
-        padding: 5px 10px 5px 5px;
-        float: left;
-    }
-
-    .formrow .input {
-        margin-left: 0;
-    }
-
-    .formrow {
-        margin: 0;
-    }
-
-    .formrow .label {
-        width: 150px;
-    }
-
-    .formrow .input {
-        margin-left: 160px;
-    }
-
     .align-right {
         text-align: right;
-        padding-bottom: 10px;
     }
 
     .datepicker {
@@ -112,7 +84,8 @@
     }
 
     .note {
-        line-height: 2px;
+        margin: 5px 0;
+        line-height: 4px;
         padding: 5px;
         font-style: italic;
         color: #2f2e2e;
@@ -142,4 +115,12 @@
     top: 12px;
     font-size: 1.6rem;
     color: #A63C45;
+}
+
+.table {
+    .action-column {
+        a {
+            cursor: pointer;
+        }
+    }
 }

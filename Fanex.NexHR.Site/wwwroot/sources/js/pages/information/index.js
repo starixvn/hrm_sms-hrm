@@ -2,43 +2,43 @@
 import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import toastr from 'toastr';
-import { confirm, alert } from '../../shared/common.functions';
+import { confirm, alert, toastOptions } from '../../shared/common.functions';
 
 var editAccount = (function ($) {
     const domElement = {
-        EditInformationForm: "#info-update",
-        Attachments: "#Attachments",
-        DeleteFile: ".delete-file-upload",
-        ListFileUpload: "#upload-list",
-        Relationship: "#relationship",
-        Emergency: "#emergency",
-        BtnAddRelationship: "#btn-add-relationship",
-        BtnAddEmergency: "#btn-add-emergency",
-        CreateForm: "#create-form",
-        EditForm: "#edit-form"
+        EditInformationForm: '#info-update',
+        Attachments: '#Attachments',
+        DeleteFile: '.delete-file-upload',
+        ListFileUpload: '#upload-list',
+        Relationship: '#relationship',
+        Emergency: '#emergency',
+        BtnAddRelationship: '#btn-add-relationship',
+        BtnAddEmergency: '#btn-add-emergency',
+        CreateForm: '#create-form',
+        EditForm: '#edit-form'
     };
 
     const constants = {
         FileMaxSize: 5242880,
-        CreateRelationshipUrl: "/Information/InsertRelationship",
-        EditRelationshipUrl: "/Information/EditRelationship/",
-        CreateEmergencyUrl: "/Information/InsertEmergency",
-        EditEmergencyUrl: "/Information/EditEmergency/",
-		DeleteRelationship: "/Information/DeleteRelationship/",
-		DeleteEmergency: "/Information/DeleteEmergency/"
+        CreateRelationshipUrl: _global.root + 'Information/InsertRelationship',
+        EditRelationshipUrl: _global.root + 'Information/EditRelationship/',
+        CreateEmergencyUrl: _global.root + 'Information/InsertEmergency',
+        EditEmergencyUrl: _global.root + 'Information/EditEmergency/',
+        DeleteRelationship: _global.root + 'Information/DeleteRelationship/',
+        DeleteEmergency: _global.root + 'Information/DeleteEmergency/'
     };
 
     function updateInformationEvent() {
-        $(domElement.EditInformationForm).on("submit", function (e) {
+        $(domElement.EditInformationForm).on('submit', function (e) {
             e.preventDefault();
             removeErrorMsg($(domElement.EditInformationForm));
             $.ajax({
-                url: $(domElement.EditInformationForm).attr("action"),
-                method: $(domElement.EditInformationForm).attr("method"),
+                url: $(domElement.EditInformationForm).attr('action'),
+                method: $(domElement.EditInformationForm).attr('method'),
                 data: $(domElement.EditInformationForm).serialize(),
                 success: function (result) {
                     if (result.IsSuccessful) {
-                        toastr.success("Updated information sucessfully!!!");
+                        toastr.success('Updated information sucessfully!', '', toastOptions());
                     } else {
                         showErrorMsg($(domElement.EditInformationForm), result.Message);
                     }
@@ -50,9 +50,9 @@ var editAccount = (function ($) {
     function setAddEmergencyButton() {
         var isAllowInsert = $('#emergency input[name=isAllowInsert]').is(':checked');
         if (isAllowInsert) {
-            $(domElement.BtnAddEmergency).removeAttr("disabled");
+            $(domElement.BtnAddEmergency).removeAttr('disabled');
         } else {
-            $(domElement.BtnAddEmergency).attr("disabled", true);
+            $(domElement.BtnAddEmergency).attr('disabled', true);
         }
     }
 
@@ -62,7 +62,7 @@ var editAccount = (function ($) {
             if (files.length > 0 && validateFileUpload(files)) {
                 uploadFiles(files);
             } else {
-                toastr.error("File(s) invalid!");
+                toastr.error('File(s) invalid!', '', toastOptions());
             }
         });
     }
@@ -86,25 +86,25 @@ var editAccount = (function ($) {
         }
 
         $.ajax({
-            type: "POST",
-            url: "/File/MyProfileUploadFile",
+            type: 'POST',
+            url: _global.root + 'File/MyProfileUploadFile',
             contentType: false,
             processData: false,
             data: fd,
             success: function (result) {
                 getFileUpload();
                 if (result.isSuccessful) {
-                    toastr.success("File upload successfully !");
+                    toastr.success('File upload successfully!', '', toastOptions());
                 } else {
-                    toastr.error(result.message);
+                    toastr.error(result.message, '', toastOptions());
                     $(domElement.Attachments).val('');
                 }
             },
             error: function (xhr, status, p3, p4) {
-                var err = "Error " + " " + status + " " + p3 + " " + p4;
-                if (xhr.responseText && xhr.responseText[0] === "{")
+                var err = 'Error ' + ' ' + status + ' ' + p3 + ' ' + p4;
+                if (xhr.responseText && xhr.responseText[0] === '{')
                     err = JSON.parse(xhr.responseText).Message;
-                toastr.error(err);
+                toastr.error(err, '', toastOptions());
             }
         });
     }
@@ -115,22 +115,22 @@ var editAccount = (function ($) {
             confirm('Are you sure to want to delete this file?', function () {
                 var fileName = $btn.attr('data-file-name');
                 $.ajax({
-                    type: "POST",
-                    url: "/File/DeleteMyProfileUploadedFile",
+                    type: 'POST',
+                    url: _global.root + 'File/DeleteMyProfileUploadedFile',
                     data: { fileName },
                     success: function (result) {
                         if (result.isSuccessful) {
-                            toastr.success("Deleted file successfully!");
+                            toastr.success('Deleted file successfully!', '', toastOptions());
                             getFileUpload();
                         } else {
-                            toastr.error(result.message);
+                            toastr.error(result.message, '', toastOptions());
                         }
                     },
                     error: function (xhr, status, p3, p4) {
-                        var err = "Error " + " " + status + " " + p3 + " " + p4;
-                        if (xhr.responseText && xhr.responseText[0] === "{")
+                        var err = 'Error ' + ' ' + status + ' ' + p3 + ' ' + p4;
+                        if (xhr.responseText && xhr.responseText[0] === '{')
                             err = JSON.parse(xhr.responseText).Message;
-                        toastr.error(err);
+                        toastr.error(err, '', toastOptions());
                     }
                 });
             });
@@ -150,9 +150,9 @@ var editAccount = (function ($) {
 
     function getFileUpload() {
         $.ajax({
-            type: "GET",
-            url: "/Information/GetFileUploaded",
-            contentType: "html",
+            type: 'GET',
+            url: _global.root + 'Information/GetFileUploaded',
+            contentType: 'html',
             success: function (data) {
                 $(domElement.ListFileUpload).html(data);
                 initUploadFileHandler();
@@ -163,52 +163,45 @@ var editAccount = (function ($) {
 
     function getRelationship() {
         $.ajax({
-            type: "GET",
-            url: "/Information/GetEmployeeRelationship",
-            contentType: "html",
+            type: 'GET',
+            url: _global.root + 'Information/GetEmployeeRelationship',
+            contentType: 'html',
             success: function (data) {
                 $(domElement.Relationship).html(data);
                 initEditEvent($(domElement.Relationship),
                     constants.EditRelationshipUrl,
-                    "Edit Relationship",
-                    function () {
-                        getRelationship();
-                    });
+                    'Edit Relationship',
+                    function () { getRelationship(); });
                 initDeleteEvent($(domElement.Relationship),
-					constants.DeleteRelationship,
-					function() {
-						getRelationship();
-					});
+                    'Do you want to delete this relationship?',
+                    constants.DeleteRelationship,
+                    function () { getRelationship(); });
             }
         });
     }
 
     function getEmergency() {
         $.ajax({
-            type: "GET",
-            url: "/Information/GetEmployeeEmergency",
-            contentType: "html",
+            type: 'GET',
+            url: _global.root + 'Information/GetEmployeeEmergency',
+            contentType: 'html',
             success: function (data) {
                 $(domElement.Emergency).html(data);
-                setAddEmergencyButton(); 
+                setAddEmergencyButton();
                 initEditEvent($(domElement.Emergency),
                     constants.EditEmergencyUrl,
-                    "Edit Emergency",
-                    function () {
-                        getEmergency();
-                    });
+                    'Edit Emergency',
+                    function () { getEmergency(); });
                 initDeleteEvent($(domElement.Emergency),
-					constants.DeleteEmergency,
-					function() {
-						getEmergency();
-                    });
-                
+                    'Do you want to delete this emergency?',
+                    constants.DeleteEmergency,
+                    function () { getEmergency(); });
             }
         });
     }
 
     function initEditEvent($table, baseUrl, title, onEditSuccess) {
-        $table.find('.edit-icon').on("click", function () {
+        $table.find('.edit-icon').on('click', function () {
             var id = $(this).data('id');
             if (id > 0) {
                 $.get(baseUrl + id, function (data) {
@@ -219,41 +212,47 @@ var editAccount = (function ($) {
                         height: 'auto',
                         width: 'auto',
                         modal: true,
-                        buttons: {
-                            'Submit': function () {
-                                $.ajax({
-                                    method: $(domElement.EditForm).find('form').attr("method"),
-                                    url: $(domElement.EditForm).find('form').attr("action"),
-                                    data: $(domElement.EditForm).find('form').serialize(),
-                                    success: function (data) {
-                                        if (data.IsSuccessful) {
-                                            $(domElement.EditForm).dialog('close');
-                                            toastr.success("Updated successfully!");
-                                            if (onEditSuccess) {
-                                                onEditSuccess();
+                        buttons: [
+                            {
+                                text: 'Submit',
+                                class: 'btn btn-primary',
+                                click: function () {
+                                    $.ajax({
+                                        method: $(domElement.EditForm).find('form').attr('method'),
+                                        url: $(domElement.EditForm).find('form').attr('action'),
+                                        data: $(domElement.EditForm).find('form').serialize(),
+                                        success: function (data) {
+                                            if (data.IsSuccessful) {
+                                                $(domElement.EditForm).dialog('close');
+                                                toastr.success('Updated successfully!', '', toastOptions());
+                                                if (onEditSuccess) {
+                                                    onEditSuccess();
+                                                }
+                                            } else {
+                                                showErrorMsg($(domElement.EditForm), data.Message);
                                             }
-                                        } else {
-                                            showErrorMsg($(domElement.EditForm), data.Message);
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             },
-                            'Cancel': function () {
-                                $(this).dialog('close');
+                            {
+                                text: 'Cancel',
+                                class: 'btn btn-default',
+                                click: function () {
+                                    $(this).dialog('close');
+                                }
                             }
-                        }
+                        ]
                     });
                 });
             }
         });
     }
-	
-	
 
     function initButtonInsertEvent($btn, onCreateSuccess) {
-        $btn.on("click", function () {
-            var url = $(this).attr("data-url");
-            var title = $(this).attr("title");
+        $btn.on('click', function () {
+            var url = $(this).attr('data-url');
+            var title = $(this).attr('title');
             $.get(url, function (data) {
                 $(domElement.CreateForm).html(data);
                 initDatePicker($(domElement.CreateForm));
@@ -262,47 +261,55 @@ var editAccount = (function ($) {
                     height: 'auto',
                     width: 'auto',
                     modal: true,
-                    buttons: {
-                        'Submit': function () {
-                            $.ajax({
-                                method: $(domElement.CreateForm).find('form').attr("method"),
-                                url: $(domElement.CreateForm).find('form').attr("action"),
-                                data: $(domElement.CreateForm).find('form').serialize(),
-                                success: function (data) {
-                                    if (data.IsSuccessful) {
-                                        $(domElement.CreateForm).dialog('close');
-                                        if (onCreateSuccess) {
-                                            onCreateSuccess();
+                    buttons: [
+                        {
+                            text: 'Submit',
+                            class: 'btn btn-primary',
+                            click: function () {
+                                $.ajax({
+                                    method: $(domElement.CreateForm).find('form').attr('method'),
+                                    url: $(domElement.CreateForm).find('form').attr('action'),
+                                    data: $(domElement.CreateForm).find('form').serialize(),
+                                    success: function (data) {
+                                        if (data.IsSuccessful) {
+                                            $(domElement.CreateForm).dialog('close');
+                                            if (onCreateSuccess) {
+                                                onCreateSuccess();
+                                            }
+                                            toastr.success('Created successfully!', '', toastOptions());
+                                        } else {
+                                            showErrorMsg($(domElement.CreateForm), data.Message);
                                         }
-                                        toastr.success("Created successfully!");
-                                    } else {
-                                        showErrorMsg($(domElement.CreateForm), data.Message);
                                     }
-                                }
-                            });
+                                });
+                            }
                         },
-                        'Cancel': function () {
-                            $(this).dialog('close');
+                        {
+                            text: 'Cancel',
+                            class: 'btn btn-default',
+                            click: function () {
+                                $(this).dialog('close');
+                            }
                         }
-                    }
+                    ]
                 });
             });
         });
     }
 
-    function initDeleteEvent($table, url, onDeleteSuccess) {
-        $table.find('.delete-icon').on("click", function () {
-            var id = $(this).data("id");
-            confirm("Do you want to delete this?", function () {
+    function initDeleteEvent($table, title, url, onDeleteSuccess) {
+        $table.find('.delete-icon').on('click', function () {
+            var id = $(this).data('id');
+            confirm(title, function () {
                 $.ajax({
-                    method: "POST",
+                    method: 'POST',
                     url: url + id,
                     success: function (data) {
                         if (data.IsSuccessful) {
                             onDeleteSuccess();
-                            toastr.success("Deleted successfully!");
+                            toastr.success('Deleted successfully!', '', toastOptions());
                         } else {
-                            toastr.error(data.message);
+                            toastr.error(data.message, '', toastOptions());
                         }
                     }
                 });
@@ -315,7 +322,7 @@ var editAccount = (function ($) {
             $dialog.find('.datepicker').each(function (index, element) {
                 var yearRange = $(element).attr('yearrange');
                 $(element).datepicker({
-                    dateFormat: "dd M, yy",
+                    dateFormat: 'dd M, yy',
                     yearRange: yearRange,
                     changeMonth: true,
                     changeYear: true
@@ -331,9 +338,6 @@ var editAccount = (function ($) {
                     return false;
                 });
             });
-            
-
-            
         }
     }
 

@@ -1062,6 +1062,7 @@
     <Content Include="wwwroot\dist\js\report.manpower.category.js.map" />
     <Content Include="wwwroot\dist\js\report.manpower.js.map" />
     <Content Include="wwwroot\dist\styles\report.manpower.js.map" />
+    <Content Include="wwwroot\sources\styles\components\_jquery-ui-dialog.scss" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />

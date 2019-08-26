@@ -2,9 +2,8 @@
 import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
-import 'jquery-contextmenu/dist/jquery.contextMenu';
 
-import { floatingHeader, showMessage, fadeOutMessage, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import { floatingHeader, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
 import '../../date';
 
 var postnatal = (function ($) {
@@ -24,7 +23,6 @@ var postnatal = (function ($) {
             url: url,
             dataType: 'html',
             beforeSend: function () {
-                showMessage('Processing');
                 blockUI();
             },
             success: function (data) {
@@ -38,7 +36,6 @@ var postnatal = (function ($) {
                 alert(textStatus + ': ' + errorThrown);
             },
             complete: function () {
-                fadeOutMessage();
                 unblockUI();
             }
         });
@@ -127,6 +124,7 @@ var postnatal = (function ($) {
             buttons: [
                 {
                     text: 'Submit',
+                    class: 'btn btn-primary',
                     click: function (e) {
                         removeMsg($(domElement.CreateDialog));
                         if (validateAddPostnatal(domElement.CreateDialog)) {
@@ -151,19 +149,12 @@ var postnatal = (function ($) {
                 },
                 {
                     text: 'Cancel',
+                    class: 'btn btn-default',
                     click: function () {
                         $(this).dialog('close');
                     }
                 }
             ],
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
@@ -195,6 +186,7 @@ var postnatal = (function ($) {
             buttons: [
                 {
                     text: 'Submit',
+                    class: 'btn btn-primary',
                     click: function () {
                         removeMsg($(domElement.EditDialog));
                         if (validateAddPostnatal(domElement.EditDialog)) {
@@ -219,19 +211,12 @@ var postnatal = (function ($) {
                 },
                 {
                     text: 'Cancel',
+                    class: 'btn btn-default',
                     click: function () {
                         $(this).dialog('close');
                     }
                 }
             ],
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
@@ -280,7 +265,7 @@ var postnatal = (function ($) {
                     }
                 }
             }
-        }).autocomplete('widget').addClass('search-employee-autocomplete');
+        });
     }
 
     function initEditEvent() {
@@ -297,7 +282,7 @@ var postnatal = (function ($) {
         $selector.on('click', function (event) {
             event.preventDefault();
             var postnatalId = $(this).data('id');
-            confirm("Are you sure you want to remove this?", function () {
+            confirm("Are you sure you want to remove this postnatal?", function () {
                 $.ajax({
                     type: 'POST',
                     url: _global.root + 'postnatal/delete/' + postnatalId,

@@ -1,15 +1,16 @@
-﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
-@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
-
+﻿@import '../../abstracts/mixins';
 @import '../../vendors/multiselect';
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../components/validation';
-@import '../../components/buttons';
+@import '../../components/buttons-new';
+@import '../../components/jquery-ui-dialog';
 
-form {
-    .button {
-        width: 100px;
+.table {
+    .action-column {
+        a {
+            cursor: pointer;
+        }
     }
 }
 
@@ -37,6 +38,7 @@ form {
 
         textarea.form-control {
             height: 100px;
+            resize: vertical;
         }
     }
 }

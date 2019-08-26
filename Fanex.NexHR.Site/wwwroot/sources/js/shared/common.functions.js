@@ -22,24 +22,33 @@ function fadeOutMessage() {
 
 function confirm(message, callback, options) {
     const defaults = {
-        title: 'SMSHRM',
+        title: 'SMS HRM',
         modal: true,
         resizable: false,
-        buttons: {
-            OK: function () {
-                $(this).dialog('close');
-                if (callback !== null) {
-                    callback();
-                }
+        buttons: [
+            {
+                text: 'OK',
+                class: 'btn btn-primary',
+                click: function () {
+                    $(this).dialog('close');
+                    if (callback !== null) {
+                        callback();
+                    }
 
-                return true;
+                    return true;
+                }
             },
-            Cancel: function () {
-                $(this).dialog('close');
-                return false;
+            {
+                text: 'Cancel',
+                class: 'btn btn-default',
+                click: function () {
+                    $(this).dialog('close');
+                    return false;
+                }
             }
-        },
-        minHeight: 50,
+        ],
+        minWidth: 300,
+        minHeight: 100,
         dialogClass: 'modal-shadow'
     };
 

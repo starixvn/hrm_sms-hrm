@@ -1,22 +1,25 @@
 ﻿.error, .alert, .notice, .success, .info, .validation-summary-errors {
-    border: 1px solid #DDDDDD;
+    border: 1px solid #ddd;
     margin-bottom: 1em;
-    padding: 0.8em;
+    padding: 4px;
 }
 
 .warning {
     background: none repeat scroll 0 0 #F7E36F;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #ddd;
     margin-bottom: 1em;
-    padding: 0.8em;
+    padding: 4px;
 }
 
-.validation-summary-errors ul {
-    margin-left: 20px !important;
-}
+.validation-summary-errors {
+    ul {
+        margin: 0;
+        padding: 0 20px;
 
-.validation-summary-errors ul li {
-    margin: 4px 0;
+        li {
+            margin: 4px 0;
+        }
+    }
 }
 
 .error a, .alert a, .notice a, .success a, .info a, .validation-summary-errors a {
@@ -35,7 +38,7 @@
     background: none repeat scroll 0 0 #cae3bf !important;
     border: 1px solid #9DB886 !important;
     color: #3C763D !important;
-    padding: 0.8em 0.8em 0.8em 1.8em !important;
+    padding: 4px;
 }
 
 .info {

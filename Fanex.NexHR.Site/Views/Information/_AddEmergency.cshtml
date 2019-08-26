@@ -12,7 +12,7 @@
                 @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("FullName", Model.FullName, new { @class = "form-control" })
+                @Html.TextBox("FullName", Model.FullName, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
                 @Html.LabelFor(model => model.Relationship, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Relationship", Model.Relationship, new { @class = "form-control" })
+                @Html.TextBox("Relationship", Model.Relationship, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
     </div>
@@ -34,11 +34,11 @@
                 @Html.LabelFor(model => model.BirthDay, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @{ 
+                @{
                     var birthdayYearRange = "1945:" + DateTime.Now.Year.ToString();
                 }
                 @Html.TextBox(Html.NameFor(model => model.BirthDay).ToString(), Model.BirthDay.ToString("dd MMM yyyy")
-               , new { @class = "datepicker form-control", maxDate = DateTime.Now, yearrange = @birthdayYearRange })
+                    , new { @class = "datepicker form-control", maxDate = DateTime.Now, yearrange = @birthdayYearRange })
                 <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
             </div>
         </div>
@@ -52,10 +52,10 @@
             <div class="select-form">
                 @{
                     var gender = new List<SelectListItem>
-                                    {
-                                        new SelectListItem() {Text = "Female", Value = "0"},
-                                        new SelectListItem() {Text = "Male", Value = "1"},
-                                    };
+                    {
+                        new SelectListItem() {Text = "Female", Value = "0"},
+                        new SelectListItem() {Text = "Male", Value = "1"},
+                    };
                 }
                 @Html.DropDownList("Gender", gender, new { @class = "form-control" })
             </div>
@@ -68,7 +68,7 @@
                 @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Phone", Model.Phone, new { @class = "form-control" })
+                @Html.TextBox("Phone", Model.Phone, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
     </div>

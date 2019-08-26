@@ -1,66 +1,67 @@
-﻿@using Fanex.NexHR.Models
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
 @model IList<EmployeePostnatal>
 
-    <table class="table table-custom" id="data">
-        <thead>
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th>@Labels.FullName</th>
-                <th>@Labels.NickName</th>
-                <th>@Labels.From</th>
-                <th>@Labels.To</th>
-                <th>@Labels.CreatedBy</th>
-                <th>@Labels.CreatedDate</th>
-                <th>@Labels.Remark</th>
-                @if (ViewBag.IsHost)
-                {
-                    <th>@Labels.Action</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @{int index = 1;}
-            @if (Model != null && Model.Count > 0)
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Remark</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{int index = 1;}
+        @if (Model != null && Model.Count > 0)
+        {
+
+            foreach (EmployeePostnatal postnatal in Model)
             {
 
-                foreach (EmployeePostnatal postnatal in Model)
-                {
-
-                    <tr>
-                        <td>@(index++)</td>
-                        <td class="align-left">@postnatal.Fullname</td>
-                        <td>@postnatal.Nickname</td>
-                        <td>@postnatal.FromDate.ToString("dd MMM yyyy")</td>
-                        <td>@postnatal.ToDate.ToString("dd MMM yyyy")</td>
-                        <td>@postnatal.Creator</td>
-                        <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
-                        @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
-                        {
-                            <td>
-                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>-</td>
-                        }
-                        @if (ViewBag.IsHost)
-                        {
-                            <td>
-                                <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="Edit">
-                                    <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
-                                </a>
-                                <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="Delete">
-                                    <i class="fa fa-trash fa-lg icon-delete pointer"></i>
-                                </a>
-                            </td>
-                        }
-                    </tr>
-                }
+                <tr>
+                    <td>@(index++)</td>
+                    <td class="align-left">@postnatal.Fullname</td>
+                    <td>@postnatal.Nickname</td>
+                    <td>@postnatal.FromDate.ToString("dd MMM yyyy")</td>
+                    <td>@postnatal.ToDate.ToString("dd MMM yyyy")</td>
+                    <td>@postnatal.Creator</td>
+                    <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
+                    @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
+                    {
+                        <td>
+                            <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
+                            </a>
+                            <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="Delete">
+                                <i class="fa fa-trash fa-lg icon-delete pointer"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
             }
-            else
-            {
-                @RazorHelper.DisplayNoInformation(colspan: 9);
-            }
-        </tbody>
-    </table>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 9);
+        }
+    </tbody>
+</table>

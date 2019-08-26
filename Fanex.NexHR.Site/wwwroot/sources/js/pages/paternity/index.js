@@ -2,9 +2,8 @@
 import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
-import 'jquery-contextmenu/dist/jquery.contextMenu';
 
-import { showMessage, fadeOutMessage, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import { confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
 
 var paternity = (function ($) {
     var domElement = {
@@ -23,7 +22,6 @@ var paternity = (function ($) {
             url: url,
             dataType: 'html',
             beforeSend: function () {
-                showMessage('Processing');
                 blockUI();
             },
             success: function (data) {
@@ -36,7 +34,6 @@ var paternity = (function ($) {
                 alert(textStatus + ': ' + errorThrown);
             },
             complete: function () {
-                fadeOutMessage();
                 unblockUI();
             }
         });
@@ -132,6 +129,7 @@ var paternity = (function ($) {
             buttons: [
                 {
                     text: 'Submit',
+                    class: 'btn btn-primary',
                     click: function () {
                         removeMsg($(domElement.CreateDialog));
                         if (validateAddPaternity()) {
@@ -156,19 +154,12 @@ var paternity = (function ($) {
                 },
                 {
                     text: 'Cancel',
+                    class: 'btn btn-default',
                     click: function () {
                         $(this).dialog('close');
                     }
                 }
             ],
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
@@ -200,6 +191,7 @@ var paternity = (function ($) {
             buttons: [
                 {
                     text: 'Submit',
+                    class: 'btn btn-primary',
                     click: function () {
                         removeMsg($(domElement.EditDialog));
                         if (validateAddPaternity()) {
@@ -225,19 +217,12 @@ var paternity = (function ($) {
                 },
                 {
                     text: 'Cancel',
+                    class: 'btn btn-default',
                     click: function () {
                         $(this).dialog('close');
                     }
                 }
             ],
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
@@ -286,7 +271,7 @@ var paternity = (function ($) {
                     }
                 }
             }
-        }).autocomplete('widget').addClass('search-employee-autocomplete');
+        });
     }
 
     function initEditEvent() {
@@ -303,7 +288,7 @@ var paternity = (function ($) {
         $selector.on('click', function (event) {
             event.preventDefault();
             var PaternityId = $(this).data('id');
-            confirm("Are you sure you want to remove this?", function () {
+            confirm("Are you sure you want to remove this paternity?", function () {
                 $.ajax({
                     type: 'POST',
                     url: _global.root + 'Paternity/delete/' + PaternityId,
@@ -345,4 +330,4 @@ var paternity = (function ($) {
 
 $(document).ready(function () {
     paternity.initPaternity();
-})
+});
