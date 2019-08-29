@@ -7,7 +7,7 @@
     using Fanex.NexHR.Core.Services;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public class HRMPermissionAttribute : Attribute, IAuthorizationFilter
+    public class HRMPermissionAttribute : FilterAttribute, IAuthorizationFilter
     {
         public HRMPermissionAttribute(Policy policy, string functionKey)
         {
