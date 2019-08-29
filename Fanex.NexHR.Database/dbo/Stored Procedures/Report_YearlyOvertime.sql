@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @Year INT
+CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @ActorId INT
+	,@Year INT
 	,@CalendarType TINYINT = 0
 	,@GroupIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
@@ -27,6 +28,8 @@ BEGIN
 		-- request status
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
+
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
@@ -86,26 +89,14 @@ BEGIN
 		SET @fromMonth = @fromMonth + 1
 	END
 
-	INSERT INTO #tblOvertimeSummary (
-		EmployeeId
-		,[Month]
-		,NormalHours
-		,OffHours
-		,PublicHours
-		,SpecialHours
-		)
-	SELECT req.EmpId
-		,tbl.[Month]
-		,SUM(req.NormalHours)
-		,SUM(req.OffHours)
-		,SUM(req.PublicHours)
-		,SUM(ISNULL(req.SpecialHours, 0))
-	FROM dbo.OTDailyRequest AS req WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
-		INNER JOIN #tblMonth AS tbl ON req.OvertimeDate BETWEEN tbl.FromDate
-			AND tbl.ToDate
-	WHERE req.[Status] IN (@ApprovedStatusId, @ProcessedStatusId)
-		AND (
+	INSERT INTO #tblEmployeeIds (EmployeeId)
+	SELECT emp.EmpId
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
+	WHERE (
 			@EmployeeStatusId IS NULL
 			OR (
 				@EmployeeStatusId = @Enable
@@ -126,6 +117,32 @@ BEGIN
 			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
 			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE tbl.GroupId = emp.GroupId
+			)
+
+	INSERT INTO #tblOvertimeSummary (
+		EmployeeId
+		,[Month]
+		,NormalHours
+		,OffHours
+		,PublicHours
+		,SpecialHours
+		)
+	SELECT req.EmpId
+		,tbl.[Month]
+		,SUM(req.NormalHours)
+		,SUM(req.OffHours)
+		,SUM(req.PublicHours)
+		,SUM(ISNULL(req.SpecialHours, 0))
+	FROM dbo.OTDailyRequest AS req WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
+		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN #tblMonth AS tbl ON req.OvertimeDate BETWEEN tbl.FromDate
+			AND tbl.ToDate
+	WHERE req.[Status] IN (@ApprovedStatusId, @ProcessedStatusId)
 	GROUP BY req.EmpId
 		,tbl.[Month]
 
@@ -159,39 +176,16 @@ BEGIN
 			,cl.[Month] AS [Month]
 			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours + otsum.SpecialHours) AS TotalHours
 		FROM dbo.Employee AS emp WITH (NOLOCK)
+			INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 			CROSS JOIN #tblMonth AS cl
 			INNER JOIN #tblOvertimeSummary AS otsum ON emp.EmpId = otsum.EmployeeId
 			AND cl.[Month] = otsum.[Month]
-		WHERE (
-				@EmployeeStatusId IS NULL
-				OR (
-					@EmployeeStatusId = @Enable
-					AND emp.[Enabled] = 1
-					AND emp.isDeleted = 0
-					)
-				OR (
-					@EmployeeStatusId = @Disabled
-					AND emp.[Enabled] = 0
-					AND emp.isDeleted = 0
-					)
-				OR (
-					@EmployeeStatusId = @Deleted
-					AND emp.isDeleted = 1
-					)
-				)
-			AND (
-				emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
-				OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
-				)
-			AND EXISTS (
-				SELECT 1
-				FROM #tblGroupIds AS tblgr
-				WHERE emp.GroupId = tblgr.GroupId
-				)
 		) AS tmp
 	PIVOT(MAX(TotalHours) FOR [Month] IN ([1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12])) AS tmp2
 	ORDER BY NickName
+
+	DROP TABLE #tblEmployeeIds
 
 	DROP TABLE #tblGroupIds
 

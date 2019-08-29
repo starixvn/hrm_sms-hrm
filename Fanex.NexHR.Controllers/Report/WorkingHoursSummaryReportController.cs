@@ -13,7 +13,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
 
-    [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
+    [HRMPermission(Policy.Read, FunctionKey.AttendanceStatisticReport)]
     public class WorkingHoursSummaryReportController : BaseController
     {
         private readonly IWorkingHoursSummaryReportService reportService;
@@ -38,6 +38,7 @@
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetWorkingHoursSummaryParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
@@ -57,6 +58,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
@@ -76,6 +78,7 @@
         {
             var param = new GetDailyOvertimeDetailsParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,

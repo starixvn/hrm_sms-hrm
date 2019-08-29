@@ -4,6 +4,7 @@
 
     public class GetMonthlyWorkingHoursParam
     {
+        public int ActorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string SectionIds { get; set; }

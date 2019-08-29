@@ -34,6 +34,7 @@
         {
             var criteria = new GetYearlyOvertimeReportCriteria
             {
+                ActorId = param.ActorId,
                 Year = param.Year,
                 CalendarType = param.Calendar,
                 GroupIds = param.SectionIds,
@@ -58,6 +59,7 @@
         {
             var criteria = new GetMonthlyOvertimeReportCriteria
             {
+                ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 Employee = param.Employee,
@@ -70,6 +72,7 @@
         {
             var criteria = new GetDailyOvertimeReportCriteria
             {
+                ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 GroupIds = param.SectionIds,

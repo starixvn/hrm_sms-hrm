@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_DailyOvertime] @fromDate DATE
+CREATE PROCEDURE [dbo].[Report_DailyOvertime] @ActorId INT
+	,@fromDate DATE
 	,@toDate DATE
 	,@groupIds VARCHAR(MAX) = NULL
 	,@isLocal BIT = NULL
@@ -53,6 +54,10 @@ BEGIN
 		,ot.[Status] AS StatusId
 	FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = ot.EmpId
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId

@@ -163,7 +163,7 @@
     <Compile Include="PaternityController.cs" />
     <Compile Include="PostnatalController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportController.cs">
+    <Compile Include="Report\ReportController.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Report\DailyWorkingHoursController.cs" />

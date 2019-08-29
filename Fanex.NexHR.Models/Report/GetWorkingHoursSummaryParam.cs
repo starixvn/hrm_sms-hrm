@@ -4,6 +4,7 @@
 
     public class GetWorkingHoursSummaryParam
     {
+        public int ActorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public byte? IsLocal { get; set; }

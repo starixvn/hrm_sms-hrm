@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @FromDate DATE
+﻿CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @ActorId INT
+	,@FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
@@ -71,6 +72,10 @@ BEGIN
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
 	WHERE (
 			@EmployeeStatusId IS NULL
 			OR (

@@ -10,8 +10,6 @@
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
-
-    [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
     public class ManpowerReportController : BaseController
     {
         private readonly IManpowerReportService reportService;
@@ -23,6 +21,7 @@
             this.reportService = reportService;
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.ManpowerReport)]
         public ActionResult Manpower(int? year)
         {
             var model = new ManpowerViewModel
@@ -34,6 +33,7 @@
             return View("~/Views/Report/Manpower.cshtml", model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.ManpowerCategoryReport)]
         public ActionResult ManpowerCategory(int? year)
         {
             var model = new ManpowerCategoryViewModel
@@ -45,6 +45,7 @@
             return View("~/Views/Report/ManpowerCategory.cshtml", model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.ManpowerReport)]
         public ActionResult ExportManpower(int year)
         {
             IEnumerable<ManpowerModel> manpowers = reportService.GetManpower(year);
@@ -54,6 +55,7 @@
             return File(bytes, "application/xlsx", fileName);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.ManpowerCategoryReport)]
         public ActionResult ExportManpowerCategory(int year)
         {
             IEnumerable<ManpowerCategoryModel> manpowers = reportService.GetManpowerCategory(year);

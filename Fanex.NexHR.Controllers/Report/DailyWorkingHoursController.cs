@@ -13,7 +13,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.WorkingHours;
 
-    [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
+    [HRMPermission(Policy.Read, FunctionKey.AttendanceDailyReport)]
     public class DailyWorkingHoursController : BaseController
     {
         private readonly ITeamService teamService;
@@ -52,6 +52,7 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.FromDate,
                 SectionIds = model.SectionIds,

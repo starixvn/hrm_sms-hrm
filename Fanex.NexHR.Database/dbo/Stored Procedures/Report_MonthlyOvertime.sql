@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @FromDate DATE
+CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @ActorId INT
+	,@FromDate DATE
 	,@ToDate DATE
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -26,6 +27,8 @@ BEGIN
 		,@VerifyStatusId TINYINT = 2
 		,@ApproveStatusId TINYINT = 4
 		,@ProcessStatusId TINYINT = 6
+
+	CREATE TABLE #tblEmployeeIds (EmpId INT)
 
 	CREATE TABLE #tblDate (
 		WorkDate DATE
@@ -59,6 +62,37 @@ BEGIN
 	FROM #tblDate
 	ORDER BY WorkDate
 
+	INSERT INTO #tblEmployeeIds (EmpId)
+	SELECT emp.EmpId
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		AND empsum.IsLocal = 1
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
+	WHERE (
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
+		AND (
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
+			)
+
 	SELECT emp.EmpId AS EmployeeId
 		,emp.Code
 		,emp.NickName
@@ -83,35 +117,15 @@ BEGIN
 		INNER JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
 		AND ot.[Status] IN (@VerifyStatusId, @ApproveStatusId, @ProcessStatusId)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ot.EmpId = emp.EmpId
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-		AND empsum.IsLocal = 1
+		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND ot.OvertimeDate = empca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
-	WHERE (
-			@EmployeeStatusId IS NULL
-			OR (
-				@EmployeeStatusId = @Enable
-				AND emp.[Enabled] = 1
-				AND emp.isDeleted = 0
-				)
-			OR (
-				@EmployeeStatusId = @Disabled
-				AND emp.[Enabled] = 0
-				AND emp.isDeleted = 0
-				)
-			OR (
-				@EmployeeStatusId = @Deleted
-				AND emp.isDeleted = 1
-				)
-			)
-		AND (
-			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
-			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
-			)
 	ORDER BY tmp.WorkDate
 		,emp.NickName
 
 	DROP TABLE #tblDate
+
+	DROP TABLE #tblEmployeeIds
 END

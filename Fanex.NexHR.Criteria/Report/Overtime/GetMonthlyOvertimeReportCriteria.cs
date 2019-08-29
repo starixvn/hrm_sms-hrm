@@ -5,6 +5,7 @@
 
     public class GetMonthlyOvertimeReportCriteria : CriteriaBase
     {
+        public int ActorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string Employee { get; set; }
@@ -12,6 +13,6 @@
 
         public override string GetSettingKey() => "Report_MonthlyOvertime";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => ActorId > 0;
     }
 }

@@ -13,7 +13,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.Overtime;
 
-    [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
     public class OvertimeReportController : BaseController
     {
         private readonly ITeamService teamService;
@@ -28,6 +27,7 @@
             this.overtimeReportService = overtimeReportService;
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
         public ActionResult MonthlyOvertime()
         {
             var today = DateTime.Today;
@@ -42,12 +42,14 @@
             return View("~/Views/Report/Overtime/MonthlyOvertime.cshtml", model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
         {
             IEnumerable<Team> sections = teamService.GetAll();
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetYearlyOvertimeParam
             {
+                ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
                 SectionIds = model.SectionIds,
@@ -59,6 +61,7 @@
             return View("~/Views/Report/Overtime/YearlyOvertime.cshtml", model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
         public ActionResult MonthlyOvertimeDetails(int employeeId, byte month, int year, CalendarType calendar)
         {
             const byte FromDay = 10;
@@ -78,12 +81,14 @@
             return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
         public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
         {
             IEnumerable<Team> sections = teamService.GetAll();
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetDailyOvertimeDetailsParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
@@ -96,10 +101,12 @@
             return View("~/Views/Report/Overtime/DailyOvertime.cshtml", model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
         public ActionResult ExportMonthlyOvertime(MonthlyFilterViewModel model)
         {
             var param = new GetMonthlyOvertimeParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 Employee = model.Employee,
@@ -113,10 +120,12 @@
             return File(bytes, "application/xlsx", fileName);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult ExportYearlyOvertime(YearlyOvertimeViewModel model)
         {
             var param = new GetYearlyOvertimeParam
             {
+                ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
                 SectionIds = model.SectionIds,
@@ -130,10 +139,12 @@
             return File(bytes, "application/xlsx", fileName);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
         public ActionResult ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
         {
             var param = new GetDailyOvertimeDetailsParam
             {
+                ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,

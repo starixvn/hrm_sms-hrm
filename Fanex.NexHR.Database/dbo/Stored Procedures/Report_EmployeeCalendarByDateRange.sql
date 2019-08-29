@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @FromDate DATE
+CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
+	,@FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
@@ -60,6 +61,10 @@ BEGIN
 			ELSE '' END
 			) AS Shift
 	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = emp.EmpId

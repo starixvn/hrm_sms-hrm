@@ -4,6 +4,7 @@
 
     public class GetYearlyOvertimeReportCriteria : CriteriaBase
     {
+        public int ActorId { get; set; }
         public string GroupIds { get; set; }
         public int Year { get; set; }
         public byte CalendarType { get; set; }
@@ -12,6 +13,6 @@
 
         public override string GetSettingKey() => "Report_YearlyOvertime";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => ActorId > 0;
     }
 }

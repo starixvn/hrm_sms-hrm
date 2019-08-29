@@ -36,10 +36,6 @@
 
         public const string ShiftManagement = "ShiftManagement";
 
-        public const string ScheduleArrange = "ScheduleArrange";
-
-        public const string ReportHome = "ReportHome";
-
         public const string CanFilterUnpaidLeaveSummary = "CanFilterUnpaidLeaveSummary";
 
         public const string CanOnBehalfOthers = "CanOnBehalfOthers";
@@ -62,8 +58,21 @@
 
         public const string RequestStatisticEmployee = "RequestStatisticEmployee";
 
+        public const string ScheduleArrange = "ScheduleArrange";
         public const string EditScheduleUnlimited = "EditScheduleUnlimited";
         public const string EditScheduleFrom4WeeksAgo = "EditScheduleFrom4WeeksAgo";
         public const string EditScheduleFromNextWeek = "EditScheduleFromNextWeek";
+
+        public const string ReportHome = "ReportHome";
+        public const string AttendanceMonthlyReport = "AttendanceMonthlyReport";
+        public const string AttendanceWeeklyReport = "AttendanceWeeklyReport";
+        public const string AttendanceDailyReport = "AttendanceDailyReport";
+        public const string MonthlyOvertimeReport = "MonthlyOvertimeReport";
+        public const string YearlyOvertimeReport = "YearlyOvertimeReport";
+        public const string OvertimeReport = "OvertimeReport";
+        public const string AttendanceStatisticReport = "AttendanceStatisticReport";
+        public const string WorkingCalendarReport = "WorkingCalendarReport";
+        public const string ManpowerReport = "ManpowerReport";
+        public const string ManpowerCategoryReport = "ManpowerCategoryReport";
     }
 }

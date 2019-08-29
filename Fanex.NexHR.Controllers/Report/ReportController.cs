@@ -2,11 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Report;
@@ -37,7 +39,8 @@
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult Index()
         {
-            return View();
+            IEnumerable<FunctionSession> functions = sessionService.Functions.Where(x => x.IsRead || x.IsHost);
+            return View(functions);
         }
 
         public ActionResult Attendance()

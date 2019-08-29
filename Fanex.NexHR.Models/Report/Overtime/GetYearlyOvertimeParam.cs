@@ -2,6 +2,7 @@
 {
     public class GetYearlyOvertimeParam
     {
+        public int ActorId { get; set; }
         public int Year { get; set; }
         public string Employee { get; set; }
         public string SectionIds { get; set; }

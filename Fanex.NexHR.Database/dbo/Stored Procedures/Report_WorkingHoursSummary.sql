@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_WorkingHoursSummary] @FromDate DATE
+CREATE PROCEDURE [dbo].[Report_WorkingHoursSummary] @ActorId INT
+	,@FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = NULL
 	,@isLocal BIT = NULL
@@ -35,9 +36,60 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
-	INSERT INTO #tblGroupIds (GroupId)
-	SELECT val
-	FROM dbo.fnc_strSplit(@GroupIds, ',')
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+
+	IF ISNULL(@GroupIds, '') = ''
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT GroupId
+		FROM dbo.[Group] WITH (NOLOCK)
+		WHERE IsDeleted = 0
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+	END
+
+	INSERT INTO #tblEmployeeIds (EmployeeId)
+	SELECT emp.EmpId
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN (
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
+		) AS member ON emp.EmpId = member.EmpId
+	WHERE (
+			@EmployeeStatusId IS NULL
+			OR (
+				@EmployeeStatusId = @Enable
+				AND emp.[Enabled] = 1
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Disabled
+				AND emp.[Enabled] = 0
+				AND emp.isDeleted = 0
+				)
+			OR (
+				@EmployeeStatusId = @Deleted
+				AND emp.isDeleted = 1
+				)
+			)
+		AND (
+			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
+			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
+			)
+		AND (
+			@isLocal IS NULL
+			OR empsum.IsLocal = @isLocal
+			)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE tbl.GroupId = emp.GroupId
+			)
 
 	SELECT emp.EmpId AS EmployeeId
 		,emp.Code
@@ -199,6 +251,7 @@ BEGIN
 		,SUM(ISNULL(ot.OffHours, 0)) AS OffOvertimeHours
 		,SUM(ISNULL(ot.PublicHours, 0)) AS PublicOvertimeHours
 	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON emp.EmpId = empatt.EmpId
@@ -209,39 +262,6 @@ BEGIN
 		LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON ot.EmpId = emp.EmpId
 		AND empca.WorkDate = ot.OvertimeDate
 		AND ot.[Status] = @ApprovedStatusId
-	WHERE (
-			@EmployeeStatusId IS NULL
-			OR (
-				@EmployeeStatusId = @Enable
-				AND emp.[Enabled] = 1
-				AND emp.isDeleted = 0
-				)
-			OR (
-				@EmployeeStatusId = @Disabled
-				AND emp.[Enabled] = 0
-				AND emp.isDeleted = 0
-				)
-			OR (
-				@EmployeeStatusId = @Deleted
-				AND emp.isDeleted = 1
-				)
-			)
-		AND (
-			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
-			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
-			)
-		AND (
-			@isLocal IS NULL
-			OR empsum.IsLocal = @isLocal
-			)
-		AND (
-			ISNULL(@GroupIds, '') = ''
-			OR EXISTS (
-				SELECT 1
-				FROM #tblGroupIds AS tbl
-				WHERE emp.GroupId = tbl.GroupId
-				)
-			)
 	GROUP BY emp.EmpId
 		,emp.Code
 		,emp.NickName
@@ -252,4 +272,6 @@ BEGIN
 	ORDER BY emp.NickName
 
 	DROP TABLE #tblGroupIds
+
+	DROP TABLE #tblEmployeeIds
 END

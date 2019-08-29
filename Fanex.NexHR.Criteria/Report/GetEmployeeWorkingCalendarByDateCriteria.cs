@@ -5,6 +5,7 @@
 
     public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     {
+        public int ActorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public string GroupIds { get; set; }
@@ -12,7 +13,7 @@
         public byte? IsLocal { get; set; }
         public byte? EmployeeStatusId { get; set; }
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => ActorId > 0;
 
         public override string GetSettingKey() => "Report_EmployeeCalendarByDateRange";
     }
