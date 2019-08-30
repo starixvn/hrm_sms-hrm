@@ -10,6 +10,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.WorkingHours;
 
@@ -84,7 +85,7 @@
             };
             byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param);
 
-            var fileName = $"Attendance Monthly Detail {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"{Labels.AttendanceMonthlyDetail} {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
             return File(bytes, "application/xlsx", fileName);
         }
     }

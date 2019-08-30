@@ -3,7 +3,7 @@
 @model WeeklyFilterViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.EmployeeWeeklyWorkingHours;
+    ViewBag.Title = Labels.AttendanceWeeklyDetail;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/report.weeklyworkinghours.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <script src="~/wwwroot/dist/js/report.weeklyworkinghours.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">HR</a>
+    <a class="step">@Labels.Personal</a>
     <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }

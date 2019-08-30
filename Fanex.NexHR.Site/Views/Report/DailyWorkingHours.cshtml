@@ -1,9 +1,9 @@
-﻿﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Report.WorkingHours
 @model WeeklyFilterViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.EmployeeDailyWorkingHours;
+    ViewBag.Title = Labels.AttendanceDailyDetail;
     HtmlHelper.ClientValidationEnabled = false;
 }
 @section css{
@@ -13,7 +13,7 @@
     <script src="~/wwwroot/dist/js/report.dailyworkinghours.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">@Labels.HRSpace</a>
+    <a class="step">@Labels.Personal</a>
     <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }

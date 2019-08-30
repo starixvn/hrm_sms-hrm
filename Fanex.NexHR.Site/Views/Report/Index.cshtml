@@ -12,7 +12,7 @@
 @section js{
 }
 @section Breadcrumb {
-    <a class="step">HR</a>
+    <a class="step">@Labels.Personal</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@Labels.Reports</h2>
@@ -43,7 +43,7 @@
                         <tr>
                             <td>@(rowIndex++)</td>
                             <td class="align-left">
-                                @Html.ActionLink(Labels.EmployeeWeeklyWorkingHours, "index", "WeeklyWorkingHours")
+                                @Html.ActionLink(Labels.AttendanceWeeklyDetail, "index", "WeeklyWorkingHours")
                             </td>
                         </tr>
                         break;
@@ -51,7 +51,7 @@
                         <tr>
                             <td>@(rowIndex++)</td>
                             <td class="align-left">
-                                @Html.ActionLink(Labels.EmployeeDailyWorkingHours, "index", "DailyWorkingHours")
+                                @Html.ActionLink(Labels.AttendanceDailyDetail, "index", "DailyWorkingHours")
                             </td>
                         </tr>
                         break;

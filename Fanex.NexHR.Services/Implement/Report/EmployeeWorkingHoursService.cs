@@ -12,6 +12,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 
@@ -55,13 +56,13 @@
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Employee's Weekly Working Hours");
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
                     var rowIndex = 1;
                     var colIndex = 1;
 
                     // title
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                    worksheet.Cells[rowIndex, colIndex].Value = $"Employee's Weekly Working Hours {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
+                    worksheet.Cells[rowIndex, colIndex].Value = $"{Labels.AttendanceWeeklyDetail} {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
                     rowIndex++;
 
                     // header
@@ -119,13 +120,13 @@
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Employee's Daily Working Hours");
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
                     var rowIndex = 1;
                     var colIndex = 1;
 
                     // title
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                    worksheet.Cells[rowIndex, colIndex].Value = $"Employee's Daily Working Hours";
+                    worksheet.Cells[rowIndex, colIndex].Value = Labels.AttendanceDailyDetail;
                     rowIndex++;
 
                     // header

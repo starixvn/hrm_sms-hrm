@@ -1740,14 +1740,11 @@
   <data name="PromotionDate" xml:space="preserve">
     <value>Promotion Date</value>
   </data>
-  <data name="EmployeeMonthlyWorkingHours" xml:space="preserve">
-    <value>Employee's Monthly Working Hours</value>
+  <data name="AttendanceDailyDetail" xml:space="preserve">
+    <value>Attendance Daily Detail</value>
   </data>
-  <data name="EmployeeDailyWorkingHours" xml:space="preserve">
-    <value>Employee's Daily Working Hours</value>
-  </data>
-  <data name="EmployeeWeeklyWorkingHours" xml:space="preserve">
-    <value>Employee's Weekly Working Hours</value>
+  <data name="AttendanceWeeklyDetail" xml:space="preserve">
+    <value>Attendance Weekly Detail</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Week</value>

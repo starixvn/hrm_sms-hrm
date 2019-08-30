@@ -11,6 +11,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.WorkingHours;
 
@@ -87,7 +88,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             byte[] bytes = workingHoursService.ExportWeeklyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);
 
-            var fileName = $"Weekly working hours {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"{Labels.AttendanceWeeklyDetail} {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
             return File(bytes, "application/xlsx", fileName);
         }
     }
