@@ -1,0 +1,59 @@
+﻿.form-horizontal {
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin: 0;
+
+        .form-control {
+            font-size: 1.3rem;
+            height: 27px;
+            padding: 0 5px;
+        }
+
+        textarea.form-control {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .label-form {
+            width: 120px;
+
+            &.label--l {
+                width: 140px;
+            }
+
+            .control-label {
+                font-weight: normal;
+                padding-top: 0;
+                margin-bottom: 0;
+                text-align: left;
+            }
+        }
+
+        .select-form, .calendar-form, .input-form {
+            width: 200px;
+        }
+
+        .calendar-form {
+            display: flex;
+            align-items: center;
+
+            .form-control {
+                width: 120px;
+                background-color: #fff;
+            }
+
+            .icon-calendar {
+                margin-left: 2px;
+                font-size: 1.6rem;
+                color: #A63C45;
+            }
+        }
+
+        .field-validation-error {
+            color: #e80c4d;
+        }
+    }
+}

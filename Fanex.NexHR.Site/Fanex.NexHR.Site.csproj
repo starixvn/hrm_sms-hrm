@@ -254,6 +254,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.information.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
@@ -304,6 +305,9 @@
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
+    <Content Include="wwwroot\dist\vendors\chosen.css" />
+    <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\hr.details.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\member.details.js" />
@@ -319,6 +323,7 @@
     <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
+    <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\edit-account.js" />
@@ -359,7 +364,6 @@
     <Content Include="Scripts\chosen\chosen.proto.min.js" />
     <Content Include="Scripts\datatable\FixedColumns.js" />
     <Content Include="Scripts\datatable\jquery.dataTables.js" />
-    <Content Include="Scripts\Libs\birthdaypicker.js" />
     <Content Include="Scripts\Libs\fxHeader.js" />
     <Content Include="Scripts\Libs\jquery.tipsy.js" />
     <Content Include="Scripts\MultiSelect\ba.hashchange.js" />
@@ -746,7 +750,6 @@
     <Content Include="Scripts\Views\memo.js" />
     <Content Include="Scripts\Views\memo.edit.js" />
     <Content Include="Scripts\Views\Report\report.attendance.js" />
-    <Content Include="Scripts\Views\Employee\employee.edit.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -1063,6 +1066,10 @@
     <Content Include="wwwroot\dist\js\report.manpower.js.map" />
     <Content Include="wwwroot\dist\styles\report.manpower.js.map" />
     <Content Include="wwwroot\sources\styles\components\_jquery-ui-dialog.scss" />
+    <Content Include="wwwroot\sources\styles\components\_form-horizontal.scss" />
+    <Content Include="wwwroot\sources\styles\components\_birthday-picker.scss" />
+    <Content Include="wwwroot\dist\js\employee.edit.js.map" />
+    <Content Include="wwwroot\dist\vendors\chosen-manifest.json" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />

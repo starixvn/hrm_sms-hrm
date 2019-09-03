@@ -39,7 +39,8 @@ module.exports = env => {
             ]
         },
         entry: {
-            react: ['react', 'react-dom']
+            react: ['react', 'react-dom'],
+            chosen: ['chosen-js/chosen.css']
         },
         output: {
             filename: '[name].js',

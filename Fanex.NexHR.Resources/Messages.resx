@@ -348,4 +348,7 @@
   <data name="ValidateStringLengthMessage" xml:space="preserve">
     <value>{0} must not over than {1} characters</value>
   </data>
+  <data name="UpdatedSuccessfully" xml:space="preserve">
+    <value>Updated Successfully!</value>
+  </data>
 </root>

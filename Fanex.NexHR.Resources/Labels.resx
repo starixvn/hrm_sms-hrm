@@ -1794,4 +1794,7 @@
   <data name="UserStatus" xml:space="preserve">
     <value>User Status</value>
   </data>
+  <data name="NameCannotBeNullOrEmpty" xml:space="preserve">
+    <value>name cannot be null or empty.</value>
+  </data>
 </root>

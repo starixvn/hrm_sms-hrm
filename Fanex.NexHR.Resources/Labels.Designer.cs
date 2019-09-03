@@ -2842,6 +2842,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to name cannot be null or empty..
+        /// </summary>
+        public static string NameCannotBeNullOrEmpty {
+            get {
+                return ResourceManager.GetString("NameCannotBeNullOrEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nationality.
         /// </summary>
         public static string Nationality {

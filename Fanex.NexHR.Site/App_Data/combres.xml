@@ -95,18 +95,6 @@
       <resource path="~/styles/employee.create.css" />
     </resourceSet>
 
-    <resourceSet name="employeeeditcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/dist/styles/employee.edit.css" />
-      <resource path="~/scripts/chosen/chosen.css" />
-    </resourceSet>
-    <resourceSet name="employeeeditjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-      <resource path="~/scripts/views/employee/employee.edit.js" />
-      <resource path="~/scripts/Libs/birthdaypicker.js" />
-    </resourceSet>
-
     <resourceSet name="attendancereportcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/wwwroot/dist/styles/report.attendance.css" />

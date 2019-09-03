@@ -278,6 +278,161 @@
             return MvcHtmlString.Create(htmlString.ToString());
         }
 
+        #region checkbox
+
+        public static MvcHtmlString CheckBoxCustom(this HtmlHelper htmlHelper, string name)
+        {
+            return CheckBoxCustom(htmlHelper, name, false);
+        }
+
+        public static MvcHtmlString CheckBoxCustom(
+            this HtmlHelper htmlHelper,
+            string name,
+            bool isChecked)
+        {
+            BasicCheckBox(htmlHelper, name, isChecked, out string fullHtmlFieldName, out TagBuilder checkbox);
+            return ApplyTagLabel(fullHtmlFieldName, checkbox);
+        }
+
+        public static MvcHtmlString CheckBoxCustom(
+            this HtmlHelper htmlHelper,
+            string name,
+            object htmlAttributes)
+        {
+            return CheckBoxCustom(htmlHelper, name, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString CheckBoxCustom(
+            this HtmlHelper htmlHelper,
+            string name,
+            IDictionary<string, object> htmlAttributes)
+        {
+            string fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(name);
+
+            if (string.IsNullOrEmpty(fullHtmlFieldName))
+            {
+                throw new ArgumentException(Labels.NameCannotBeNullOrEmpty, nameof(name));
+            }
+
+            var checkbox = new TagBuilder("input");
+            checkbox.MergeAttribute("id", fullHtmlFieldName);
+            checkbox.MergeAttribute("name", fullHtmlFieldName);
+            checkbox.MergeAttribute("class", "checkbox-custom");
+            checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
+            checkbox.MergeAttribute("value", "true");
+
+            IDictionary<string, object> attributes = (htmlAttributes == null) ? new RouteValueDictionary() : new RouteValueDictionary(htmlAttributes);
+            checkbox.MergeAttributes(attributes);
+
+            return ApplyTagLabel(fullHtmlFieldName, checkbox);
+        }
+
+        public static MvcHtmlString CheckBoxCustom(
+            this HtmlHelper htmlHelper,
+            string name,
+            bool isChecked,
+            object htmlAttributes)
+        {
+            return CheckBoxCustom(htmlHelper, name, isChecked, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString CheckBoxCustom(
+            this HtmlHelper htmlHelper,
+            string name,
+            bool isChecked,
+            IDictionary<string, object> htmlAttributes)
+        {
+            BasicCheckBox(htmlHelper, name, isChecked, out string fullHtmlFieldName, out TagBuilder checkbox);
+
+            var attributes = (htmlAttributes == null) ? new RouteValueDictionary() : new RouteValueDictionary(htmlAttributes);
+            checkbox.MergeAttributes(attributes);
+
+            return ApplyTagLabel(fullHtmlFieldName, checkbox);
+        }
+
+        public static MvcHtmlString CheckBoxCustomFor<TModel>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, bool>> expression)
+        {
+            return CheckBoxCustomFor(htmlHelper, expression, null);
+        }
+
+        public static MvcHtmlString CheckBoxCustomFor<TModel>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, bool>> expression,
+            object htmlAttributes)
+        {
+            return CheckBoxCustomFor(htmlHelper, expression, HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes));
+        }
+
+        public static MvcHtmlString CheckBoxCustomFor<TModel>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, bool>> expression,
+            IDictionary<string, object> htmlAttributes)
+        {
+            ModelMetadata modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            string propertyName = expression.Body.ToString().Split('.').Last();
+
+            var checkbox = new TagBuilder("input");
+            checkbox.MergeAttribute("id", propertyName);
+            checkbox.MergeAttribute("name", propertyName);
+            checkbox.MergeAttribute("class", "checkbox-custom");
+            checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
+            checkbox.MergeAttribute("value", "true");
+            if (modelMetadata.Model != null && (bool)modelMetadata.Model)
+            {
+                checkbox.MergeAttribute("checked", "checked");
+            }
+
+            var attributes = (htmlAttributes == null) ? new RouteValueDictionary() : new RouteValueDictionary(htmlAttributes);
+            checkbox.MergeAttributes(attributes);
+
+            var label = new TagBuilder("label");
+            label.MergeAttribute("for", propertyName);
+
+            var hidden = new TagBuilder("input");
+            hidden.MergeAttribute("name", propertyName);
+            hidden.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.Hidden));
+            hidden.MergeAttribute("value", "false");
+
+            return MvcHtmlString.Create(checkbox.ToString(TagRenderMode.SelfClosing) + label + hidden.ToString(TagRenderMode.SelfClosing));
+        }
+
+        private static MvcHtmlString ApplyTagLabel(string fullHtmlFieldName, TagBuilder checkbox)
+        {
+            var label = new TagBuilder("label");
+            label.MergeAttribute("for", fullHtmlFieldName);
+
+            var hidden = new TagBuilder("input");
+            hidden.MergeAttribute("name", fullHtmlFieldName);
+            hidden.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.Hidden));
+            hidden.MergeAttribute("value", "false");
+
+            return MvcHtmlString.Create(checkbox.ToString(TagRenderMode.SelfClosing) + label + hidden.ToString(TagRenderMode.SelfClosing));
+        }
+
+        private static void BasicCheckBox(HtmlHelper htmlHelper, string name, bool isChecked, out string fullHtmlFieldName, out TagBuilder checkbox)
+        {
+            fullHtmlFieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(name);
+            if (string.IsNullOrEmpty(fullHtmlFieldName))
+            {
+                throw new ArgumentException(Labels.NameCannotBeNullOrEmpty, nameof(name));
+            }
+
+            checkbox = new TagBuilder("input");
+            checkbox.MergeAttribute("id", fullHtmlFieldName);
+            checkbox.MergeAttribute("name", fullHtmlFieldName);
+            checkbox.MergeAttribute("class", "checkbox-custom");
+            checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
+            checkbox.MergeAttribute("value", "true");
+            if (isChecked)
+            {
+                checkbox.MergeAttribute("checked", "checked");
+            }
+        }
+
+        #endregion checkbox
+
         private static void SetLinkValue(string noteValue, ref StringBuilder htmlString, bool isLastElement)
         {
             var tag = new TagBuilder("a");
@@ -417,7 +572,7 @@
             {
                 var valueList = values.GetType() == typeof(string[]) ? values as string[] : values.ToString().Split(new[] { ',' });
 
-                List<SelectListItem> list = new List<SelectListItem>();
+                var list = new List<SelectListItem>();
                 foreach (SelectListItem item in selectList)
                 {
                     item.Selected = (item.Value != null) && valueList.Contains(item.Value);
@@ -427,16 +582,16 @@
                 selectList = list;
             }
 
-            StringBuilder sb = new StringBuilder();
-            htmlAttributes = (htmlAttributes == null) ?
-               new RouteValueDictionary() : new RouteValueDictionary(htmlAttributes);
+            var sb = new StringBuilder();
+            htmlAttributes = (htmlAttributes == null) ? new RouteValueDictionary() : new RouteValueDictionary(htmlAttributes);
             htmlAttributes.Remove("checked");
             foreach (var item in selectList)
             {
-                TagBuilder input = new TagBuilder("input");
+                var input = new TagBuilder("input");
                 input.MergeAttributes(htmlAttributes);
                 input.MergeAttribute("type", "checkbox");
                 input.MergeAttribute("id", name + item.Value);
+                input.MergeAttribute("class", "checkbox-custom");
                 input.MergeAttribute("name", fullHtmlFieldName, replaceExisting: true);
                 input.MergeAttribute("value", item.Value ?? item.Text ?? string.Empty, replaceExisting: true);
                 if (item.Selected)
@@ -444,9 +599,18 @@
                     input.MergeAttribute("checked", "checked");
                 }
 
-                TagBuilder label = new TagBuilder("label");
-                label.InnerHtml = input.ToString(TagRenderMode.SelfClosing) + item.Text;
-                sb.Append(label.ToString());
+                var label = new TagBuilder("label")
+                {
+                    InnerHtml = item.Text
+                };
+                label.MergeAttribute("for", name + item.Value);
+
+                var div = new TagBuilder("div")
+                {
+                    InnerHtml = input.ToString(TagRenderMode.SelfClosing) + label
+                };
+                div.MergeAttribute("class", "checkbox");
+                sb.Append(div.ToString());
             }
 
             return sb;

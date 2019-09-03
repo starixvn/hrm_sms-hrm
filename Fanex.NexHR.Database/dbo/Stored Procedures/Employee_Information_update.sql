@@ -54,10 +54,6 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@HomePhone NVARCHAR(250) = ''
 	,@Qualification NVARCHAR(300) = ''
 	,@Major NVARCHAR(300) = ''
-	,@BankAccount NVARCHAR(100) = NULL
-	,@TaxCode NVARCHAR(150) = NULL
-	,@SocialInsuranceNo NVARCHAR(150) = NULL
-	,@RegisteredHospital NVARCHAR(250) = NULL
 	,@Contract1 TINYINT = NULL
 	,@FromDate1 DATETIME = NULL
 	,@ToDate1 DATETIME = NULL
@@ -196,10 +192,6 @@ BEGIN
 		,@HomePhone_old NVARCHAR(250) = ''
 		,@Qualification_old NVARCHAR(300) = ''
 		,@Major_old NVARCHAR(300) = ''
-		,@BankAccount_old NVARCHAR(100) = NULL
-		,@TaxCode_old NVARCHAR(150) = NULL
-		,@SocialInsuranceNo_old NVARCHAR(150) = NULL
-		,@RegisteredHospital_old NVARCHAR(250) = NULL
 		,@Contract1_old TINYINT = NULL
 		,@FromDate1_old DATETIME = NULL
 		,@ToDate1_old DATETIME = NULL
@@ -360,10 +352,6 @@ BEGIN
 			,@ErrMsg = @ErrMsg OUTPUT
 
 		EXEC [dbo].[Employee_Contract_Update] @EmpID = @EmpID
-			,@BankAccount = @BankAccount
-			,@TaxCode = @TaxCode
-			,@SocialInsuranceNo = @SocialInsuranceNo
-			,@RegisteredHospital = @RegisteredHospital
 			,@Contract1 = @Contract1
 			,@FromDate1 = @FromDate1
 			,@ToDate1 = @ToDate1

@@ -125,14 +125,6 @@
 
         public string Major { get; set; }
 
-        public string BankAccount { get; set; }
-
-        public string TaxCode { get; set; }
-
-        public string SocialInsuranceNo { get; set; }
-
-        public string RegisteredHospital { get; set; }
-
         public byte Contract1 { get; set; }
 
         public DateTime? FromDate1 { get; set; }

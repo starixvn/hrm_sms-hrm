@@ -61,16 +61,23 @@ function confirm(message, callback, options) {
 
 function alert(message, callback) {
     const defaults = {
-        title: 'SMSHRM',
+        title: 'SMS HRM',
         modal: true,
         resizable: false,
-        buttons: {
-            OK: function () {
-                $(this).dialog('close');
-                if (callback) callback();
-                return false;
+        buttons: [
+            {
+                text: 'OK',
+                class: 'btn btn-primary',
+                click: function () {
+                    $(this).dialog('close');
+                    if (callback) {
+                        callback();
+                    }
+
+                    return false;
+                }
             }
-        },
+        ],
         minHeight: 50,
         dialogClass: 'modal-shadow'
     };
@@ -244,15 +251,14 @@ function initDatepicker() {
     let maxdate = $('.datepicker').attr('maxdate');
     let disabledDates = $('.datepicker').attr('disabledDate');
 
-    if (disabledDates.length > 0) {
+    if (disabledDates && disabledDates.length > 0) {
         $('.datepicker').datepicker({
             dateFormat: 'dd M, yy',
             beforeShowDay: checkBadDates,
             changeMonth: true,
             changeYear: true
         });
-    }
-    else {
+    } else {
         $('.datepicker').datepicker({
             dateFormat: 'dd M, yy',
             changeMonth: true,
@@ -260,12 +266,12 @@ function initDatepicker() {
         });
     }
 
-    if (mindate !== 'null') {
+    if (mindate && mindate !== 'null') {
         mindate = mindate.split('/');
         $('.datepicker').datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
     }
 
-    if (maxdate !== 'null') {
+    if (mindate && maxdate !== 'null') {
         maxdate = maxdate.split('/');
         $('.datepicker').datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
     }

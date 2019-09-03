@@ -34,6 +34,10 @@ $(document).ready(function () {
         toggleLeftNavigation(false);
     }
 
+    $('.flash').animate({ opacity: 0.25 }, 3500, function () {
+        $(this).slideUp().remove();
+    });
+
     $('#searchIcon').on('click', function () {
         document.location = _global.root + 'employee/index?query=' + $('#searchbox').val();
     });
