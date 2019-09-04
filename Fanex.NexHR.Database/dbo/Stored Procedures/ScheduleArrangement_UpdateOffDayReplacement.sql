@@ -201,8 +201,8 @@ BEGIN
 	INSERT INTO #tblLeaveRequest (
 		EmployeeId
 		,WorkDate
-		,WorkType
 		,LeaveTypeId
+		,WorkType
 		,TotalDays
 		)
 	SELECT emp.EmployeeId
@@ -874,8 +874,12 @@ BEGIN
 
 	DELETE offrep
 	FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
-		INNER JOIN #tblEmployeeIds AS tblid ON offrep.EmployeeId = tblid.EmployeeId
-	WHERE EXISTS (
+		LEFT JOIN #tblEmployeeIds AS tblid ON offrep.EmployeeId = tblid.EmployeeId
+	WHERE (
+			@EmployeeIds IS NULL
+			OR tblid.EmployeeId IS NOT NULL
+			)
+		AND EXISTS (
 			SELECT 1
 			FROM #tblWeeklyHasHoliday AS tbl
 			WHERE offrep.ReplaceForDate BETWEEN tbl.FromDate

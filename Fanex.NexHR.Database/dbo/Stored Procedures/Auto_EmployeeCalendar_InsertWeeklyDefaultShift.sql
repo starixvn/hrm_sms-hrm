@@ -20,6 +20,8 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
+	DECLARE @tempDate DATE
+
 	IF @FromDate IS NULL
 	BEGIN
 		SET @FromDate = GETDATE()
@@ -30,14 +32,16 @@ BEGIN
 		SET @ToDate = DATEADD(MONTH, 4, @FromDate)
 	END
 
+	SET @tempDate = @FromDate
+
 	CREATE TABLE #tblDate (WorkDate DATE)
 
-	WHILE @FromDate <= @ToDate
+	WHILE @tempDate <= @ToDate
 	BEGIN
 		INSERT INTO #tblDate (WorkDate)
-		VALUES (@FromDate)
+		VALUES (@tempDate)
 
-		SET @FromDate = DATEADD(DAY, 1, @FromDate)
+		SET @tempDate = DATEADD(DAY, 1, @tempDate)
 	END
 
 	INSERT INTO dbo.EmployeeCalendar (

@@ -111,8 +111,11 @@ BEGIN
 
 	DECLARE @EmployeeIds VARCHAR(MAX)
 
-	SELECT DISTINCT @EmployeeIds = COALESCE(@EmployeeIds + ', ', '') + EmployeeId
-	FROM #tblWeeklySchedule
+	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
+	FROM (
+		SELECT DISTINCT EmployeeId
+		FROM #tblWeeklySchedule
+		) AS tbl
 
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
@@ -270,6 +273,12 @@ BEGIN
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
+
+	EXEC dbo.Log_WriteLog @LogActionId = 1002
+		,@LogDate = @ModifiedDate
+		,@Description = 'Update employee calendar'
+		,@TrackingValue = @WeeklyScheduleXml
+		,@UserId = @ActorId
 
 	IF @@ERROR <> 0
 	BEGIN
