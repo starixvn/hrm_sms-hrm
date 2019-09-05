@@ -180,8 +180,6 @@
         [Required]
         public override string Code { get; set; }
 
-        public bool AllowEditPersonalInformation { get; set; }
-
         public bool IsExpatUseHoliday { get; set; }
 
         public bool PasswordReset { get; set; }

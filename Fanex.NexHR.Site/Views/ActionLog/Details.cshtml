@@ -1,0 +1,58 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Log
+@model IEnumerable<LogObjectDetail>
+
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Log Details";
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/log.details.css" rel="stylesheet" />
+}
+@section js{
+}
+@section Breadcrumb
+{
+    <a class="step" href="javascript:;">Log Details</a>
+}
+
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.LogDate</th>
+            <th>@Labels.NickName</th>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            foreach (LogObjectDetail item in Model)
+            {
+                var rowIndex = 1;
+                foreach(FieldValue field in item.Fields)
+                {
+                    <tr>
+                        @if (rowIndex == 1)
+                        {
+                            var mergeRow = item.Fields.Count();
+                            <td class="align-left" rowspan="@mergeRow">@item.LogDate.ToDetailFormatedDate()</td>
+                            <td rowspan="@mergeRow">@item.Nickname</td>
+                        }
+                        <td>@field.FieldName</td>
+                        <td>@field.OldValue</td>
+                        <td>@field.Value</td>
+                    </tr>
+                    rowIndex++;
+                }
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(5)
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Core.Constants;
+﻿@using Fanex.NexHR.Core.Constants
+@using Fanex.NexHR.Resources
 
 @model Employee
 @{
@@ -8,510 +9,271 @@
     @Url.CombresLink("accountcss")
 }
 @section js{
-    @Url.CombresLink("accountjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a><span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.Personal</a><span class="step">@ViewBag.Title</span>
 }
-@using (Html.BeginForm("Index", "Account", FormMethod.Post))
-{
-    @Html.ValidationSummary()
-    if ((bool)ViewBag.IsUpdated)
-    {
-        <div class="success">@Messages.SavedSuccessfully</div>
-    }
-    <div class="leftpersonal">
-        <div class="avatarbox panel panel-default">
-            <div class="panel-heading">
-                <div class="avatar">
-                    <img class="img-employee" src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
-                </div>
-                <div class="pinfo">
-                    <span class="name">@Model.FullName</span>
-                    <p class="accinfo">
-                        @Model.DomainUsername<br>
-                        <br>
-                        Staff ID: @Model.Code
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                PERSONAL INFORMATION
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div class="label">@Labels.FullName:</div>
-                    <div class="pcontent role">@Model.FullName</div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label">@Labels.Nick:</div>
-                    <div class="pcontent role">@Model.NickName</div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.ChineseName:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.ChineseName)
-                        }
-                        else
-                        {
-                            @Model.ChineseName
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        D.O.B:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DatePickerFor(model => model.DateOfBirth)
-                        }
-                        else
-                        {
-                            @Model.DateOfBirth.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.PlaceOfBirth:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.PlaceOfBirth)
-                        }
-                        else
-                        {
-                            @Model.PlaceOfBirth
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Ethnic:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Ethnic)
-                        }
-                        else
-                        {
-                            @Model.Ethnic
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Native:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Native)
-                        }
-                        else
-                        {
-                            @Model.Native
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Religion:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Religion)
-                        }
-                        else
-                        {
-                            @Model.Religion
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Gender:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DropDownListFor(model => model.Gender, (IList<SelectListItem>)ViewBag.Genders)
-                        }
-                        else
-                        {
-                            @(Model.Gender == 1 ? Labels.Male : Labels.Female)
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Nationality:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DropDownListFor(model => model.CountryCode, (IList<SelectListItem>)ViewBag.Countries)
-                        }
-                        else
-                        {
-                            @Model.CountryName;
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Marriage:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages)
-                        }
-                        else
-                        {
-                            @Model.MarriageName
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.CardNo:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.CardNo)
-                        }
-                        else
-                        {
-                            @Model.CardNo
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        Date Of Issue Of ID Card:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DatePickerFor(model => model.DateOfIdCard)
-                        }
-                        else if (Model.DateOfIdCard.HasValue)
-                        {
-                            @Model.DateOfIdCard.Value.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        Place Of Issue Of ID Card:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.PlaceOfIdCard)
-                        }
-                        else
-                        {
-                            @Model.PlaceOfIdCard
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.PassportNo:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.PassportNo)
-                        }
-                        else
-                        {
-                            @Model.PassportNo
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.PassportExp:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.DatePickerFor(model => model.PassportExp)
-                        }
-                        else if (Model.PassportExp.HasValue)
-                        {
-                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Qualification:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Qualification)
-                        }
-                        else
-                        {
-                            @Model.Qualification
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Major:
-                    </div>
-                    <div class="pcontent @(Model.AllowEditPersonalInformation ? "allowEdit" : "role")">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Major)
-                        }
-                        else
-                        {
-                            @Model.Major
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                @if (Model.WorkingDays > 0)
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.WorkingDays:</div>
-                        <div class="pcontent">@Model.WorkingDays</div>
-                        <div class="clear"></div>
-                    </li>
-                }
-                @if (Model.WorkingHours > 0)
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.WorkingHours:</div>
-                        <div class="pcontent">@Model.WorkingHours</div>
-                        <div class="clear"></div>
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
-    <div class="rightjob">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                CONTACT DETAILS
-                <a class="pull-right" href="/Information/UpdateInformation"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div class="label">@Labels.Email:</div>
-                    <div class="pcontent">
-                        <a href="mailto:@Model.Email">@Model.Email</a>
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Phone:
-                    </div>
-                    <div class="pcontent">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Phone)
-                        }
-                        else
-                        {
-                            @Model.Phone
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Skype:
-                    </div>
-                    <div class="pcontent">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.Skype)
-                        }
-                        else
-                        {
-                            <a href="skype:@(Model.Skype)?chat">@Model.Skype</a>
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.LetsTalk:
-                    </div>
-                    <div class="pcontent">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextBoxFor(model => model.LetsTalk)
-                        }
-                        else
-                        {
-                            <a>@Model.LetsTalk</a>
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.Address:
-                    </div>
-                    <div class="pcontent">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextAreaFor(model => model.Address)
-                        }
-                        else
-                        {
-                            @Model.Address
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label @(Model.AllowEditPersonalInformation ? "allowEdit" : "")">
-                        @Labels.CurrentAddress:
-                    </div>
-                    <div class="pcontent">
-                        @if (Model.AllowEditPersonalInformation)
-                        {
-                            @Html.TextAreaFor(model => model.CurrentAddress)
-                        }
-                        else
-                        {
-                            @Model.CurrentAddress
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-            </ul>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                JOB INFORMATION
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <div class="label">@Labels.JobTitle:</div>
-                    <div class="pcontent role">@Model.JobTitle</div>
-                    <div class="clear"></div>
-                </li>
-                @if (Model.PromotionDate.HasValue)
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.PromotionDate:</div>
-                        <div class="pcontent role">@Model.PromotionDate.ToDateMonthYearFormatedDate()</div>
-                        <div class="clear"></div>
-                    </li>
-                }
-                <li class="list-group-item">
-                    <div class="label">@Labels.Section:</div>
-                    <div class="pcontent role">@Model.Team.Name</div>
-                    <div class="clear"></div>
-                </li>
-                @if (Model.SectionDate.HasValue)
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.SectionDate:</div>
-                        <div class="pcontent role">@Model.SectionDate.ToDateMonthYearFormatedDate()</div>
-                        <div class="clear"></div>
-                    </li>
-                }
-                <li class="list-group-item">
-                    <div class="label">@Labels.Roles</div>
-                    <div class="pcontent role">@Model.Roles2String</div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label">@Labels.GroupDate:</div>
-                    <div class="pcontent">
-                        @if (Model.JoinedDate.HasValue)
-                        {
-                            @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label">@Labels.CompanyDate:</div>
-                    <div class="pcontent">
-                        @if (Model.CompanyDate.HasValue)
-                        {
-                            @Model.CompanyDate.Value.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li class="list-group-item">
-                    <div class="label">@Labels.ConfirmedDate:</div>
-                    <div class="pcontent">
-                        @if (Model.ConfirmedDate.HasValue)
-                        {
-                            @Model.ConfirmedDate.ToDateMonthYearFormatedDate()
-                        }
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                @if (Model.ResignedDate.HasValue)
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.ResignedDate:</div>
-                        <div class="pcontent">
-                            @Model.ResignedDate.Value.ToDateMonthYearFormatedDate()
-                        </div>
-                        <div class="clear"></div>
-                    </li>
-                }
-                <li class="list-group-item">
-                    <div class="label">@Labels.Unit:</div>
-                    <div class="pcontent role">@Model.Unit</div>
-                    <div class="clear"></div>
-                </li>
-            </ul>
-        </div>
 
-        @if (Model.AllowEditPersonalInformation)
-        {
-            <div class="submitWrapper">
-                <div class="input">
-                    <input type="submit" value="@Labels.Save" class="button-primary submit" />
-                </div>
+<div class="leftpersonal">
+    <div class="avatarbox panel panel-default">
+        <div class="panel-heading">
+            <div class="avatar">
+                <img class="img-employee" src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
             </div>
-        }
+            <div class="pinfo">
+                <span class="name">@Model.FullName</span>
+                <p class="accinfo">
+                    @Model.DomainUsername
+                    <br />
+                    <br />
+                    Staff ID: @Model.Code
+                </p>
+            </div>
+        </div>
     </div>
-}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            PERSONAL INFORMATION
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="label">@Labels.FullName:</div>
+                <div class="pcontent role">@Model.FullName</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Nick:</div>
+                <div class="pcontent role">@Model.NickName</div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.ChineseName:</div>
+                <div class="pcontent">@Model.ChineseName</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">D.O.B:</div>
+                <div class="pcontent">@Model.DateOfBirth.ToDateMonthYearFormatedDate()</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.PlaceOfBirth:</div>
+                <div class="pcontent role">@Model.PlaceOfBirth</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Ethnic:</div>
+                <div class="pcontent role">@Model.Ethnic</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Native:</div>
+                <div class="pcontent role">@Model.Native</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Religion:</div>
+                <div class="pcontent role">@Model.Religion</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Gender:</div>
+                <div class="pcontent">@(Model.Gender == 1 ? Labels.Male : Labels.Female)</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Nationality:</div>
+                <div class="pcontent">@Model.CountryName</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Marriage:</div>
+                <div class="pcontent">@Model.MarriageName</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.CardNo:</div>
+                <div class="pcontent">@Model.CardNo</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.IDCardIssueDate:</div>
+                <div class="pcontent">
+                    @if (Model.DateOfIdCard.HasValue)
+                    {
+                        @Model.DateOfIdCard.Value.ToDateMonthYearFormatedDate()
+                    }
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.IDCardPlaceOfIssue:</div>
+                <div class="pcontent">@Model.PlaceOfIdCard</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.PassportNo:</div>
+                <div class="pcontent">@Model.PassportNo</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.PassportExp:</div>
+                <div class="pcontent">
+                    @if (Model.PassportExp.HasValue)
+                    {
+                        @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
+                    }
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Qualification:</div>
+                <div class="pcontent">@Model.Qualification</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Major:</div>
+                <div class="pcontent">@Model.Major</div>
+                <div class="clear"></div>
+            </li>
+            @if (Model.WorkingDays > 0)
+            {
+                <li class="list-group-item">
+                    <div class="label">@Labels.WorkingDays:</div>
+                    <div class="pcontent">@Model.WorkingDays</div>
+                    <div class="clear"></div>
+                </li>
+            }
+            @if (Model.WorkingHours > 0)
+            {
+                <li class="list-group-item">
+                    <div class="label">@Labels.WorkingHours:</div>
+                    <div class="pcontent">@Model.WorkingHours</div>
+                    <div class="clear"></div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+<div class="rightjob">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            CONTACT DETAILS
+            <a class="pull-right" href="/Information/UpdateInformation"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="label">@Labels.Email:</div>
+                <div class="pcontent">
+                    <a href="mailto:@Model.Email">@Model.Email</a>
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Phone:</div>
+                <div class="pcontent">@Model.Phone</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Skype:</div>
+                <div class="pcontent"><a href="skype:@(Model.Skype)?chat">@Model.Skype</a></div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.LetsTalk:</div>
+                <div class="pcontent">@Model.LetsTalk</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.Address:</div>
+                <div class="pcontent">@Model.Address</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.CurrentAddress:</div>
+                <div class="pcontent">@Model.CurrentAddress</div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">JOB INFORMATION</div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="label">@Labels.JobTitle:</div>
+                <div class="pcontent">@Model.JobTitle</div>
+                <div class="clear"></div>
+            </li>
+            @if (Model.PromotionDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="label">@Labels.PromotionDate:</div>
+                    <div class="pcontent">@Model.PromotionDate.ToDateMonthYearFormatedDate()</div>
+                    <div class="clear"></div>
+                </li>
+            }
+            <li class="list-group-item">
+                <div class="label">@Labels.Section:</div>
+                <div class="pcontent">@Model.Team.Name</div>
+                <div class="clear"></div>
+            </li>
+            @if (Model.SectionDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="label">@Labels.SectionDate:</div>
+                    <div class="pcontent">@Model.SectionDate.ToDateMonthYearFormatedDate()</div>
+                    <div class="clear"></div>
+                </li>
+            }
+            <li class="list-group-item">
+                <div class="label">@Labels.Roles</div>
+                <div class="pcontent">@Model.Roles2String</div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.GroupDate:</div>
+                <div class="pcontent">
+                    @if (Model.JoinedDate.HasValue)
+                    {
+                        @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                    }
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.CompanyDate:</div>
+                <div class="pcontent">
+                    @if (Model.CompanyDate.HasValue)
+                    {
+                        @Model.CompanyDate.Value.ToDateMonthYearFormatedDate()
+                    }
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <div class="label">@Labels.ConfirmedDate:</div>
+                <div class="pcontent">
+                    @if (Model.ConfirmedDate.HasValue)
+                    {
+                        @Model.ConfirmedDate.ToDateMonthYearFormatedDate()
+                    }
+                </div>
+                <div class="clear"></div>
+            </li>
+            @if (Model.ResignedDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="label">@Labels.ResignedDate:</div>
+                    <div class="pcontent">
+                        @Model.ResignedDate.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                    <div class="clear"></div>
+                </li>
+            }
+            <li class="list-group-item">
+                <div class="label">@Labels.Unit:</div>
+                <div class="pcontent">@Model.Unit</div>
+                <div class="clear"></div>
+            </li>
+        </ul>
+    </div>
+</div>

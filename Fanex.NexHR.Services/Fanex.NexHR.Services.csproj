@@ -201,6 +201,7 @@
     <Compile Include="Implement\ExtensionNumberService.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Implement\FunctionService.cs" />
+    <Compile Include="Implement\ActionLogService.cs" />
     <Compile Include="Implement\MenuService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />

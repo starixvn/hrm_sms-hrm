@@ -554,4 +554,7 @@
       <Mapping DataField="GroupName" ObjectProperty="Section" />
     </Setting>
   </Function>
+  <Function Name="Log">
+    <Setting Key="LogObject_GetById" SpName="LogObject_GetById" DbName="nexhrx" Plain="0" />
+  </Function>
 </Functions>

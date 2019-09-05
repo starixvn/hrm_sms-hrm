@@ -124,6 +124,7 @@
     <Compile Include="Holidays\GetHolidaysCriteria.cs" />
     <Compile Include="Holidays\CreateHolidayCriteria.cs" />
     <Compile Include="Holidays\EditHolidayCriteria.cs" />
+    <Compile Include="Log\GetLogObjectByIdCriteria.cs" />
     <Compile Include="Menu\DeleteMenuCriteria.cs" />
     <Compile Include="Menu\GetMenuByIdCriteria.cs" />
     <Compile Include="Menu\GetMenusCriteria.cs" />

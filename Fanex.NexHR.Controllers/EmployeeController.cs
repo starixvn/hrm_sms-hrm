@@ -625,7 +625,6 @@
                 IdCardNumber = model.CardNo,
                 PassportNo = model.PassportNo,
                 PassportExp = model.PassportExp,
-                ModifiedDate = DateTime.Now,
                 ModifiedBy = sessionService.Employee.Id,
                 Password = Encryptor.ComputeHash(authService.HashProvider, model.Password ?? string.Empty),
                 GroupId = model.Team.Id,

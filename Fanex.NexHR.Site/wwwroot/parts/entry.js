@@ -34,6 +34,7 @@ module.exports = {
         [`${styleDistPath}/overtime.details`]: `${styleSourcePath}/pages/overtime/details.scss`,
         [`${styleDistPath}/overtime.member.index`]: `${styleSourcePath}/pages/overtime/member.index.scss`,
         [`${styleDistPath}/overtime.member.details`]: `${styleSourcePath}/pages/overtime/member.details.scss`,
+        [`${styleDistPath}/log.details`]: `${styleSourcePath}/pages/log/details.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',

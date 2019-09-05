@@ -38,8 +38,6 @@
 
         public string Roles { get; set; }
 
-        public int ManagerId { get; set; }
-
         public DateTime? JoinedDate { get; set; }
 
         public DateTime? ConfirmedDate { get; set; }
@@ -56,15 +54,7 @@
 
         public byte Marriage { get; set; }
 
-        public DateTime? LastLogin { get; set; }
-
-        public int CreatedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
         public int ModifiedBy { get; set; }
-
-        public bool IsDeleted { get; set; }
 
         public string PermanentAddress { get; set; }
 
@@ -124,38 +114,6 @@
         public string Qualification { get; set; }
 
         public string Major { get; set; }
-
-        public byte Contract1 { get; set; }
-
-        public DateTime? FromDate1 { get; set; }
-
-        public DateTime? ToDate1 { get; set; }
-
-        public byte Contract2 { get; set; }
-
-        public DateTime? FromDate2 { get; set; }
-
-        public DateTime? ToDate2 { get; set; }
-
-        public byte Contract3 { get; set; }
-
-        public DateTime? FromDate3 { get; set; }
-
-        public DateTime? ToDate3 { get; set; }
-
-        public byte Contract4 { get; set; }
-
-        public DateTime? FromDate4 { get; set; }
-
-        public DateTime? ToDate4 { get; set; }
-
-        public byte Contract5 { get; set; }
-
-        public DateTime? FromDate5 { get; set; }
-
-        public DateTime? ToDate5 { get; set; }
-
-        public string History { get; set; }
 
         public string PickupRemark { get; set; }
 

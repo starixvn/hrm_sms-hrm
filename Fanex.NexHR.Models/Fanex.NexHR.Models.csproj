@@ -95,6 +95,8 @@
     <Compile Include="Calendar\EmployeeShiftModel.cs" />
     <Compile Include="Calendar\HalfDayOff.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
+    <Compile Include="Log\FieldValue.cs" />
+    <Compile Include="Log\LogObjectDetail.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeParam.cs" />
     <Compile Include="Report\WorkingCalendarSummary.cs" />

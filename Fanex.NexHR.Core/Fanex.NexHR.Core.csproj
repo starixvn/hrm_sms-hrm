@@ -161,6 +161,7 @@
     <Compile Include="Attributes\OutputAttribute.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Constants\LogObjectType.cs" />
     <Compile Include="Constants\SessionKey.cs" />
     <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="CustomJsonResult.cs" />

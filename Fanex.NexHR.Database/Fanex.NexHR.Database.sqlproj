@@ -434,8 +434,6 @@
     <Build Include="dbo\Stored Procedures\GroupSupervisor_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Update.sql" />
     <Build Include="dbo\Tables\WeekendLeaveTrans.sql" />
-    <Build Include="dbo\Tables\LogObjectDetail.sql" />
-    <Build Include="dbo\Tables\LogObject.sql" />
     <Build Include="dbo\Tables\KeepInViewByHourTrans.sql" />
     <Build Include="dbo\Tables\KeepInViewByDayTrans.sql" />
     <Build Include="dbo\Tables\GroupLeader.sql" />
@@ -509,7 +507,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_UpdateWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Shift_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByCode.sql" />
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Delete.sql" />
@@ -566,6 +563,9 @@
     <Build Include="dbo\Stored Procedures\Overtime_GetMemberMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsById.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyWorkingHours_EmployeeRequest.sql" />
+    <Build Include="dbo\Tables\LogObject.sql" />
+    <Build Include="dbo\Stored Procedures\LogObject_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\LogObject_GetById.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
