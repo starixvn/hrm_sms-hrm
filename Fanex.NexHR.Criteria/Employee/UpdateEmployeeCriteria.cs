@@ -13,7 +13,7 @@
 
         public string FullName { get; set; }
 
-        public string NickName { get; set; }
+        public string Nickname { get; set; }
 
         public string EmployeeCard { get; set; }
 
@@ -66,17 +66,9 @@
 
         public DateTime? PassportExp { get; set; }
 
-        public string Password { get; set; }
-
-        public bool PasswordReset { get; set; }
-
         public string ChineseName { get; set; }
 
         public string Unit { get; set; }
-
-        public decimal AnnualLeaveBalance { get; set; }
-
-        public decimal KeepInViewBalance { get; set; }
 
         public bool CanOT { get; set; }
         public decimal? SpecialOT { get; set; }

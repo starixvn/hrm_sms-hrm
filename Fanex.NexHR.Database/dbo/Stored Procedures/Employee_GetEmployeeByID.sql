@@ -103,6 +103,7 @@ BEGIN
 		,e_cs.[ToDate5]
 		,e_cs.History
 		,e.PasswordReset
+		,e.PickupRemark
 		,ISNULL(e.GroupID, - 1) AS [TeamID]
 		,g.Code
 		,g.[Name]

@@ -27,7 +27,7 @@
         private readonly IShiftService shiftService;
         private readonly IRequestService requestService;
         private readonly IRequestMailService requestMailService;
-        private readonly ILeaveTypeService leaveTypeService;
+        private readonly ICommonDataService commonDataService;
         private readonly ITeamService teamService;
         private readonly IBaseService baseService;
 
@@ -37,7 +37,7 @@
             IShiftService shiftService,
             IRequestService requestService,
             IRequestMailService requestMailService,
-            ILeaveTypeService leaveTypeService,
+            ICommonDataService commonDataService,
             ITeamService teamService,
             IBaseService baseService) : base(sessionService)
         {
@@ -47,7 +47,7 @@
             this.requestMailService = requestMailService;
             this.teamService = teamService;
             this.baseService = baseService;
-            this.leaveTypeService = leaveTypeService;
+            this.commonDataService = commonDataService;
         }
 
         [HttpPost]
@@ -255,7 +255,7 @@
         {
             request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
             request.ToDate = Utilities.SetTimeToEndOfDay(request.ToDate);
-            request.LeaveTypeCollection = leaveTypeService.GetAll();
+            request.LeaveTypeCollection = commonDataService.GetLeaveType();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {

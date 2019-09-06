@@ -17,17 +17,17 @@
 
     public class DisciplineController : BaseController
     {
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IDisciplineService disciplineService;
         private readonly IBaseService baseService;
 
         public DisciplineController(
             ISessionService sessionService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IDisciplineService disciplineService,
             IBaseService baseService) : base(sessionService)
         {
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.disciplineService = disciplineService;
             this.baseService = baseService;
         }
@@ -39,7 +39,7 @@
             {
                 model.FromDate = GetFromDate();
                 model.ToDate = GetToDate();
-                model.Teams = teamService.GetAll();
+                model.Teams = commonDataService.GetAllSection();
                 model.DisciplineTypes = GetDisciplineType(true);
                 model.DateRange = Utilities.GetDateRangeByQuarter();
             }
@@ -87,7 +87,7 @@
                     model.ReasonId = null;
                 }
 
-                model.Teams = teamService.GetAll();
+                model.Teams = commonDataService.GetAllSection();
                 model.DisciplineTypes = GetDisciplineType(false);
                 model.DateRange = Utilities.GetDateRangeByQuarter();
             }

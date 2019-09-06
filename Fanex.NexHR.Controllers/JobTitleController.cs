@@ -14,17 +14,17 @@
 
     public class JobTitleController : BaseExportController
     {
-        private readonly ILookupDataService lookupDataService;
+        private readonly ICommonDataService commonDataService;
         private readonly IJobTitleExportService jobTitleExportService;
         private readonly IBaseService baseService;
 
         public JobTitleController(
             ISessionService sessionService,
-            ILookupDataService lookupDataService,
+            ICommonDataService commonDataService,
             IJobTitleExportService jobTitleExportService,
             IBaseService baseService) : base(sessionService)
         {
-            this.lookupDataService = lookupDataService;
+            this.commonDataService = commonDataService;
             this.jobTitleExportService = jobTitleExportService;
             this.baseService = baseService;
         }
@@ -42,7 +42,7 @@
         [HRMPermission(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult GetJobTitles(string jobTitle)
         {
-            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(jobTitle);
+            IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
@@ -51,7 +51,7 @@
         [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
         public ActionResult ExportExcel(string jobTitle)
         {
-            IList<LookupData> jobTitles = lookupDataService.GetJobTitle(jobTitle);
+            IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
             jobTitleExportService.ExportJobTitle(jobTitles);
 
             return new EmptyResult();

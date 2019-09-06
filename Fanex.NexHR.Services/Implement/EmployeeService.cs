@@ -6,6 +6,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
@@ -28,15 +29,18 @@
         private readonly IEmployeeRepository employeeRepository;
         private readonly IRoleService roleService;
         private readonly IBaseService baseService;
+        private readonly IAuthService authService;
 
         public EmployeeService(
             IEmployeeRepository employeeRepository,
             IRoleService roleService,
-            IBaseService baseService)
+            IBaseService baseService,
+            IAuthService authService)
         {
             this.employeeRepository = employeeRepository;
             this.roleService = roleService;
             this.baseService = baseService;
+            this.authService = authService;
         }
 
         public string GenerateEmployeeCode()
@@ -172,12 +176,6 @@
             return baseService.GetData<DateTime>(criteria).ToList();
         }
 
-        public IList<Country> GetAllCountry()
-        {
-            var criteria = new GetAllCountryCriteria();
-            return baseService.GetData<Country>(criteria).ToList();
-        }
-
         public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)
         {
             var criteria = new GetEmployeeSupervisorCriteria
@@ -258,6 +256,94 @@
                 Password = model.Password,
                 PasswordReset = model.IsReset,
                 ModifiedBy = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Create(int actorId, CreateEmployeeParam param)
+        {
+            var criteria = new InsertEmployeeCriteria
+            {
+                Code = param.Code,
+                CreateBy = actorId,
+                DomainUsername = param.DomainUsername,
+                FullName = param.FullName,
+                Nickname = param.Nickname,
+                GroupId = param.GroupId,
+                Password = Encryptor.ComputeHash(authService.HashProvider, param.Code)
+            };
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            commandResult.OutputId = criteria.EmpId;
+
+            return commandResult;
+        }
+
+        public CommandResult Edit(int actorId, EditEmployeeParam param)
+        {
+            var criteria = new UpdateEmployeeCriteria
+            {
+                EmpId = param.EmployeeId,
+                Code = param.Code,
+                DomainUsername = param.DomainUsername,
+                FullName = param.FullName,
+                Nickname = param.Nickname,
+                EmployeeCard = param.EmployeeCard,
+                DateOfBirth = param.DateOfBirth,
+                Email = param.Email,
+                JobTitleId = param.JobTitleId,
+                Enabled = param.Enabled,
+                Phone = param.Phone,
+                Gender = param.Gender,
+                Roles = param.Roles,
+                JoinedDate = param.JoinedDate,
+                CompanyDate = param.CompanyDate,
+                ConfirmedDate = param.ConfirmedDate,
+                ResignedDate = param.ResignedDate,
+                Skype = param.Skype,
+                Yahoo = param.LetsTalk,
+                Marriage = param.Marriage,
+                PermanentAddress = param.PermanentAddress,
+                CurrentAddress = param.CurrentAddress,
+                IdCardNumber = param.IdCardNumber,
+                PassportNo = param.PassportNo,
+                PassportExp = param.PassportExp,
+                ModifiedBy = actorId,
+                GroupId = param.GroupId,
+                IsLocal = param.IsLocal,
+                CountryCode = param.CountryCode,
+                CanOT = param.CanOT,
+                SpecialOT = param.SpecialOT,
+                WorkingDays = param.WorkingDays,
+                WorkingHours = param.WorkingHours,
+                IsTopManager = param.IsTopManager,
+                OffDaysbyWeek = param.OffDaysbyWeek,
+                Unit = param.Unit,
+                PlaceOfbirth = param.PlaceOfBirth,
+                Ethnic = param.Ethnic,
+                Native = param.Native,
+                Religion = param.Religion,
+                DateOfIdCard = param.DateOfIdCard,
+                PlaceOfIdCard = param.PlaceOfIdCard,
+                HomePhone = param.HomePhone,
+                Qualification = param.Qualification,
+                Major = param.Major,
+                IsExpatUseHoliday = !param.IsLocal && param.IsExpatUseHoliday,
+                PickupRemark = param.PickupRemark,
+                PromotionDate = param.PromotionDate,
+                SectionDate = param.SectionDate,
+                MilitaryFromDate = param.MilitaryFromDate,
+                MilitaryToDate = param.MilitaryToDate
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Delete(int actorId, DeleteEmployeeParam param)
+        {
+            var criteria = new DeleteEmployeeCriteria
+            {
+                ActorId = actorId,
+                EmpId = param.EmployeeId,
+                ResignedDate = param.ResignedDate
             };
             return baseService.ExecuteNonQuery(criteria);
         }

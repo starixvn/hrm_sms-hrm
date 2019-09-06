@@ -27,7 +27,7 @@
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
         private readonly IEmployeeWorkingHoursRepository repository;
-        private readonly ILeaveTypeService leaveTypeService;
+        private readonly ICommonDataService commonDataService;
         private readonly IBaseService baseService;
 
         private const string ShortDateFormat = "dd MMM yyyy";
@@ -37,11 +37,11 @@
         public EmployeeWorkingHoursService(
             IEmployeeWorkingHoursRepository repository,
             IBaseService baseService,
-            ILeaveTypeService leaveTypeService)
+            ICommonDataService commonDataService)
         {
             this.repository = repository;
             this.baseService = baseService;
-            this.leaveTypeService = leaveTypeService;
+            this.commonDataService = commonDataService;
         }
 
         public byte[] ExportWeeklyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)

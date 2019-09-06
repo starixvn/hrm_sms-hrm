@@ -11,7 +11,6 @@
         }
 
         public int Code { get; set; }
-
         public string Message { get; set; }
 
         public bool IsSuccessful
@@ -21,5 +20,7 @@
                 return Code == 0;
             }
         }
+
+        public int OutputId { get; set; }
     }
 }

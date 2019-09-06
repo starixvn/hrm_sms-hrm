@@ -1797,4 +1797,22 @@
   <data name="NameCannotBeNullOrEmpty" xml:space="preserve">
     <value>name cannot be null or empty.</value>
   </data>
+  <data name="DomainUsername" xml:space="preserve">
+    <value>Domain Username</value>
+  </data>
+  <data name="EmployeeCard" xml:space="preserve">
+    <value>Employee Card</value>
+  </data>
+  <data name="MilitaryFromDate" xml:space="preserve">
+    <value>Military From Date</value>
+  </data>
+  <data name="MilitaryToDate" xml:space="preserve">
+    <value>Military To Date</value>
+  </data>
+  <data name="SpecialUser" xml:space="preserve">
+    <value>Special User</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
 </root>

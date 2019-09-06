@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
@@ -256,7 +257,7 @@
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
             IList<Team> sections = teamService.GetBySupervisor(sessionService.Employee.Id);
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
-            ViewBag.HeaderTitle = string.Format("{0} {1}", Enumerations.GetStringValue(leavingSummaryModel.LeaveType), leavingSummaryModel.Year);
+            ViewBag.HeaderTitle = string.Format("{0} {1}", EnumerationHelper.GetStringValue(leavingSummaryModel.LeaveType), leavingSummaryModel.Year);
             return PartialView("_ListLeaveSummary", leaveSummaryByTeamList);
         }
 

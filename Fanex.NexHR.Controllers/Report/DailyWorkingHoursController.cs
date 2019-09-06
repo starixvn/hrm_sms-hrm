@@ -17,22 +17,22 @@
     [HRMPermission(Policy.Read, FunctionKey.AttendanceDailyReport)]
     public class DailyWorkingHoursController : BaseController
     {
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeWorkingHoursService workingHoursService;
 
         public DailyWorkingHoursController(
             ISessionService sessionService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IEmployeeWorkingHoursService workingHoursService) : base(sessionService)
         {
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.workingHoursService = workingHoursService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             var model = new WeeklyFilterViewModel
             {
                 FromDate = DateTime.Today,

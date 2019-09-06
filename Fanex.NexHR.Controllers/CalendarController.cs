@@ -19,30 +19,27 @@
     public class CalendarController : BaseController
     {
         private readonly IWorkingCalendarService workingCalendarService;
-        private readonly ITeamService teamService;
         private readonly IShiftService shiftService;
-        private readonly ILookupDataService lookupDataService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
 
         public CalendarController(
             ISessionService sessionService,
             IWorkingCalendarService workingCalendarService,
-            ITeamService teamService,
             IShiftService shiftService,
-            ILookupDataService lookupDataService,
+            ICommonDataService commonDataService,
             IEmployeeService employeeService) : base(sessionService)
         {
             this.workingCalendarService = workingCalendarService;
-            this.teamService = teamService;
             this.shiftService = shiftService;
-            this.lookupDataService = lookupDataService;
+            this.commonDataService = commonDataService;
             this.employeeService = employeeService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
-            IList<Team> teams = teamService.GetAll();
+            IList<Team> teams = commonDataService.GetAllSection();
 
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
@@ -97,7 +94,7 @@
                 IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
                 ShiftId = shiftId ?? -1,
                 Shifts = shiftService.GetAll(),
-                Teams = teamService.GetAll()
+                Teams = commonDataService.GetAllSection()
             };
 
             return View(model);
@@ -154,8 +151,8 @@
 
         public ActionResult WorkingCalendars()
         {
-            IList<Team> sections = teamService.GetAll();
-            IList<SelectListItem> jobTitles = lookupDataService.GetAll(Constants.JobTitle)
+            IList<Team> sections = commonDataService.GetAllSection();
+            IList<SelectListItem> jobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle)
                 .Select(j => new SelectListItem
                 {
                     Text = j.Name,

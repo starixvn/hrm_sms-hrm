@@ -4,6 +4,7 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'chosen-js/chosen.jquery';
+import moment from 'moment';
 import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
@@ -171,12 +172,12 @@ $(document).ready(function () {
     });
 
     $('#month, #day, #year').change(function () {
-        var year = $('#year').val();
-        var month = $('#month').val();
-        var day = $('#day').val();
-        var date = new Date(year, month - 1, day);
+        const year = $('#year').val();
+        const month = $('#month').val();
+        const day = $('#day').val();
+        const date = new Date(year, month - 1, day);
 
-        $('#DateOfBirth').val(date.format('dd mmm yyyy'));
+        $('#DateOfBirth').val(moment(date).format('DD MMM YYYY'));
     });
 
     $uploadButton.click(function () {
@@ -195,7 +196,7 @@ $(document).ready(function () {
             axios({
                 url: _global.root + 'Employee/Delete',
                 method: 'POST',
-                data: stringify({ id: $('#Id').val(), resignedDate: resignedDate }),
+                data: stringify({ employeeId: $('#Id').val(), resignedDate: resignedDate }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'

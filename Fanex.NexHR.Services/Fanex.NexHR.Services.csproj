@@ -179,11 +179,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExportExcel\JobTitleExportService.cs" />
+    <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
     <Compile Include="Implement\AuthService.cs" />
+    <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
     <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />
@@ -201,7 +203,7 @@
     <Compile Include="Implement\ExtensionNumberService.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
     <Compile Include="Implement\FunctionService.cs" />
-    <Compile Include="Implement\ActionLogService.cs" />
+    <Compile Include="Implement\ActionLog\ActionLogService.cs" />
     <Compile Include="Implement\MenuService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
@@ -244,8 +246,6 @@
     <Compile Include="Implement\EmailService.cs" />
     <Compile Include="Implement\EmployeeService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
-    <Compile Include="Implement\LookupDataService.cs" />
-    <Compile Include="Interfaces\ILookupDataService.cs" />
     <Compile Include="Interfaces\IMemoService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
     <Compile Include="Implement\MemoService.cs" />
@@ -263,8 +263,6 @@
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Interfaces\IShiftService.cs" />
-    <Compile Include="Interfaces\ILeaveTypeService.cs" />
-    <Compile Include="Implement\LeaveTypeService.cs" />
     <Compile Include="Interfaces\IScheduleArrangeService.cs" />
     <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

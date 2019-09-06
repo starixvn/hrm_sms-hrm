@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Core.Constants
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
 @model IList<Employee>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
@@ -59,7 +61,7 @@
                     @if (hasPermissionToEdit)
                     {
                         <td>
-                            <a href="@Url.Action("details", "ActionLog", new { id = employee.Id, objectTypeId = LogObjectType.Employee })" title="View Log">
+                            <a href="@Url.Action("LogDetails", "employee", new { id = employee.Id })" title="View Log">
                                 <i class="fa fa-search fa-lg icon-edit"></i>
                             </a>
                         </td>
@@ -110,5 +112,5 @@
                 </td>
             </tr>
         </tfoot>
-                        }
+    }
 </table>

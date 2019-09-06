@@ -23,19 +23,19 @@
     {
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IOvertimeRequestService overtimeService;
 
         public OvertimeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IOvertimeRequestService overtimeService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.overtimeService = overtimeService;
         }
 
@@ -86,7 +86,7 @@
         {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             if (model.StatusId == -1)
             {
                 statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
@@ -129,7 +129,7 @@
         {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             if (model.StatusId == -1)
             {
                 statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);

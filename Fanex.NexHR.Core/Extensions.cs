@@ -11,6 +11,7 @@
     using System.Web.Routing;
     using System.Web.WebPages;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Resources;
 
     public static class Extensions
@@ -544,7 +545,7 @@
                 .Select(e => new SelectListItem
                 {
                     Value = Convert.ToUInt64(e).ToString(),
-                    Text = Enumerations.GetStringValue((Enum)(object)e),
+                    Text = EnumerationHelper.GetStringValue((Enum)(object)e),
                 }).ToList();
             if (!string.IsNullOrEmpty(optionLabel))
             {

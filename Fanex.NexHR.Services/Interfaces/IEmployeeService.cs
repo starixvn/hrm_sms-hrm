@@ -33,8 +33,6 @@
 
         IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 
-        IList<Country> GetAllCountry();
-
         EmployeeShift GetShiftByEmployeeId(int id);
 
         IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
@@ -68,5 +66,11 @@
         CommandResult EditPasswordResetStatus(int employeeId, bool status);
 
         CommandResult EditPassword(int actorId, EditPassword model);
+
+        CommandResult Create(int actorId, CreateEmployeeParam param);
+
+        CommandResult Edit(int actorId, EditEmployeeParam param);
+
+        CommandResult Delete(int actorId, DeleteEmployeeParam param);
     }
 }

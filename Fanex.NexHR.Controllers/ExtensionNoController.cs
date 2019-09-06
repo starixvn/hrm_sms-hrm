@@ -16,17 +16,17 @@
     public class ExtensionNoController : BaseController
     {
         private readonly IExtensionNumberService extensionNumberService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IBaseService baseService;
 
         public ExtensionNoController(
             ISessionService sessionService,
             IExtensionNumberService extensionNumberService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IBaseService baseService) : base(sessionService)
         {
             this.extensionNumberService = extensionNumberService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.baseService = baseService;
         }
 
@@ -156,7 +156,7 @@
             IList<SelectListItem> groups = null;
             if (isInternal)
             {
-                IList<Team> teams = teamService.GetAll();
+                IList<Team> teams = commonDataService.GetAllSection();
                 groups = teams.Select(x => new SelectListItem
                 {
                     Text = x.Name,

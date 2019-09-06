@@ -15,19 +15,19 @@
     {
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
 
         public ExportLeaveSummaryController(
             ISessionService sessionService,
             IReportService reportService,
             IExportExcelService exportExcelService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportExcelService = exportExcelService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService;
         }
 
@@ -50,7 +50,7 @@
                 SupervisorId = null
             };
             IList<LeaveSummary> leaveSummary = reportService.GetAnnualLeaveBalanceReport(criteria);
-            IList<Team> teams = teamService.GetAll();
+            IList<Team> teams = commonDataService.GetAllSection();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
             HSSFWorkbook hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
@@ -70,7 +70,7 @@
                 LeaveType = (int)model.LeaveType
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
-            IList<Team> teams = teamService.GetAll();
+            IList<Team> teams = commonDataService.GetAllSection();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
             exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
 

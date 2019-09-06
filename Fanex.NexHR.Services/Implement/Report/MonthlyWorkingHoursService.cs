@@ -77,7 +77,7 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     IEnumerable<MonthlyWorking> monthlyWorkings = GetMonthlyWorkingHours(param);
-                    LeaveTypes = leaveTypeService.GetAll();
+                    LeaveTypes = commonDataService.GetLeaveType();
 
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Details");

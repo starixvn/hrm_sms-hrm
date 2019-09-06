@@ -17,22 +17,22 @@
     public class WorkingCalendarSummaryReportController : BaseController
     {
         private readonly IWorkingCalendarSummaryReportService reportService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
 
         public WorkingCalendarSummaryReportController(
             ISessionService sessionService,
             IWorkingCalendarSummaryReportService reportService,
-            ITeamService teamService) : base(sessionService)
+            ICommonDataService commonDataService) : base(sessionService)
         {
             this.reportService = reportService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var today = DateTime.Today;
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             var model = new WorkingCalendarSummaryViewModel
             {
                 FromDate = today,

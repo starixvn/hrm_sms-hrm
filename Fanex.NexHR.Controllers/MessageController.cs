@@ -14,17 +14,17 @@
     public class MessageController : BaseController
     {
         private readonly IMessageService messageService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
 
         public MessageController(
             ISessionService sessionService,
             IMessageService messageService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IEmployeeService employeeService) : base(sessionService)
         {
             this.messageService = messageService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.employeeService = employeeService;
         }
 
@@ -73,7 +73,7 @@
                 IsLocalUser = null
             };
             ViewBag.Employees = employeeService.GetEmployees(criteria);
-            ViewBag.Groups = teamService.GetAll();
+            ViewBag.Groups = commonDataService.GetAllSection();
             var model = new Message { FromDate = DateTime.Now, ToDate = DateTime.Now };
 
             return View(model);
@@ -112,7 +112,7 @@
             };
 
             ViewBag.Employees = employeeService.GetEmployees(criteria);
-            ViewBag.Groups = teamService.GetAll();
+            ViewBag.Groups = commonDataService.GetAllSection();
 
             return View();
         }

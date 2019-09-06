@@ -12,13 +12,13 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
@@ -29,28 +29,25 @@
 
     public class EmployeeController : BaseController
     {
-        private readonly ITeamService teamService;
-        private readonly ILookupDataService lookupDataService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
-        private readonly IBaseService baseService;
         private readonly IRoleService roleService;
         private readonly IAuthService authService;
+        private readonly IEmployeeLogService employeeLogService;
 
         public EmployeeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
-            ITeamService teamService,
-            ILookupDataService lookupDataService,
-            IBaseService baseService,
+            ICommonDataService commonDataService,
             IRoleService roleService,
-            IAuthService authService) : base(sessionService)
+            IAuthService authService,
+            IEmployeeLogService employeeLogService) : base(sessionService)
         {
             this.employeeService = employeeService;
-            this.teamService = teamService;
-            this.lookupDataService = lookupDataService;
-            this.baseService = baseService;
+            this.commonDataService = commonDataService;
             this.roleService = roleService;
             this.authService = authService;
+            this.employeeLogService = employeeLogService;
         }
 
         public ActionResult Index()
@@ -58,7 +55,7 @@
             var model = new UserManagementViewModel
             {
                 IsEnable = true,
-                Groups = teamService.GetAll(),
+                Groups = commonDataService.GetAllSection(),
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
@@ -101,7 +98,7 @@
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
         {
-            IList<LookupData> listJobTitle = lookupDataService.GetAll(Constants.JobTitle);
+            IList<LookupData> listJobTitle = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
@@ -114,7 +111,7 @@
                 JobTitleId = jobTitleId,
                 GroupIds = groupIds,
                 IsEnable = true,
-                Groups = teamService.GetAll(),
+                Groups = commonDataService.GetAllSection(),
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
@@ -179,7 +176,7 @@
         [HRMPermission(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
-            ViewBag.Teams = teamService.GetAll();
+            ViewBag.Teams = commonDataService.GetAllSection();
             return View(new CreateEmployeeViewModel());
         }
 
@@ -190,29 +187,27 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                var criteria = new InsertEmployeeCriteria
+                var param = new CreateEmployeeParam
                 {
                     Code = model.Code,
-                    CreateBy = sessionService.Employee.Id,
-                    DomainUserName = model.DomainUsername,
+                    DomainUsername = model.DomainUsername,
                     FullName = model.FullName,
                     Nickname = model.Nickname,
-                    GroupId = model.TeamId,
-                    Password = Encryptor.ComputeHash(authService.HashProvider, model.Code)
+                    GroupId = model.TeamId
                 };
 
-                CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
-                if (result.IsSuccessful)
+                CommandResult commandResult = employeeService.Create(sessionService.Employee.Id, param);
+                if (commandResult.IsSuccessful)
                 {
-                    return RedirectToAction("Edit", new { id = criteria.EmpId });
+                    return RedirectToAction("Edit", new { id = commandResult.OutputId });
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
 
-            ViewBag.Teams = teamService.GetAll();
+            ViewBag.Teams = commonDataService.GetAllSection();
             return View(model);
         }
 
@@ -222,7 +217,7 @@
             Employee model = employeeService.GetEmployeeById(id);
             if (model != null)
             {
-                model.Coutries = employeeService.GetAllCountry();
+                model.Coutries = commonDataService.GetAllCountry();
 
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
                 model.Verifier = GetVerifiers(supervisors);
@@ -246,10 +241,10 @@
             {
                 if (ModelState.IsValid)
                 {
-                    UpdateEmployeeCriteria criteria = SetUpdateEmployeeCriteria(model);
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
+                    EditEmployeeParam param = MappingEditEmployeeParam(model);
+                    CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
 
-                    if (result.IsSuccessful)
+                    if (commandResult.IsSuccessful)
                     {
                         ViewBag.Updated = true;
                         UpdateUserSession(model.Id, model.Code);
@@ -257,11 +252,11 @@
                     else
                     {
                         ViewBag.Updated = false;
-                        ModelState.AddModelError(string.Empty, result.Message);
+                        ModelState.AddModelError(string.Empty, commandResult.Message);
                     }
                 }
 
-                model.Coutries = employeeService.GetAllCountry();
+                model.Coutries = commonDataService.GetAllCountry();
 
                 IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
                 model.Verifier = GetVerifiers(supervisors);
@@ -278,16 +273,11 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult Delete(int id, DateTime resignedDate)
+        public ActionResult Delete(DeleteEmployeeParam param)
         {
-            var criteria = new DeleteEmployeeCriteria
-            {
-                EmpId = id,
-                ResignedDate = resignedDate
-            };
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = employeeService.Delete(sessionService.Employee.Id, param);
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         [AllowAnonymous]
@@ -414,7 +404,7 @@
             int? titleId = null,
             bool? isLocal = null)
         {
-            var getEmployeeCriteria = new GetAllEmployeeCriteria
+            var criteria = new GetAllEmployeeCriteria
             {
                 Query = query,
                 GroupIds = groupIds,
@@ -423,7 +413,7 @@
                 TitleId = titleId,
                 IsLocalUser = isLocal
             };
-            IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria);
+            IList<Employee> employees = employeeService.GetEmployees(criteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
@@ -522,6 +512,15 @@
             return Json(newCode, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult LogDetails(int id)
+        {
+            Employee employee = employeeService.GetEmployeeById(id);
+            IEnumerable<LogObjectDetail> logs = employeeLogService.GetLogDetailById(id);
+            ViewBag.Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName);
+
+            return View("LogDetails", logs);
+        }
+
         private void UpdateUserSession(int employeeId, string code)
         {
             if (sessionService.Employee.Id == employeeId)
@@ -589,22 +588,22 @@
 
         private void ComposeViewBagsForEditEmployee()
         {
-            ViewBag.Groups = teamService.GetAll();
-            ViewBag.JobTitles = lookupDataService.GetAll(Constants.JobTitle);
+            ViewBag.Groups = commonDataService.GetAllSection();
+            ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
         }
 
-        private UpdateEmployeeCriteria SetUpdateEmployeeCriteria(Employee model)
+        private EditEmployeeParam MappingEditEmployeeParam(Employee model)
         {
-            var criteria = new UpdateEmployeeCriteria
+            return new EditEmployeeParam
             {
-                EmpId = model.Id,
+                EmployeeId = model.Id,
                 Code = model.Code.Trim(),
                 DomainUsername = model.DomainUsername,
                 FullName = model.FullName,
-                NickName = model.NickName,
+                Nickname = model.NickName,
                 EmployeeCard = model.EmployeeCard,
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
@@ -618,15 +617,13 @@
                 ConfirmedDate = model.ConfirmedDate,
                 ResignedDate = model.ResignedDate,
                 Skype = model.Skype,
-                Yahoo = model.LetsTalk,
+                LetsTalk = model.LetsTalk,
                 Marriage = model.Marriage,
                 PermanentAddress = model.Address,
                 CurrentAddress = model.CurrentAddress,
                 IdCardNumber = model.CardNo,
                 PassportNo = model.PassportNo,
                 PassportExp = model.PassportExp,
-                ModifiedBy = sessionService.Employee.Id,
-                Password = Encryptor.ComputeHash(authService.HashProvider, model.Password ?? string.Empty),
                 GroupId = model.Team.Id,
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
@@ -637,7 +634,7 @@
                 IsTopManager = model.IsTopManager,
                 OffDaysbyWeek = model.OffDaysbyWeek,
                 Unit = model.Unit,
-                PlaceOfbirth = model.PlaceOfBirth,
+                PlaceOfBirth = model.PlaceOfBirth,
                 Ethnic = model.Ethnic,
                 Native = model.Native,
                 Religion = model.Religion,
@@ -653,8 +650,6 @@
                 MilitaryFromDate = model.MilitaryFromDate,
                 MilitaryToDate = model.MilitaryToDate
             };
-
-            return criteria;
         }
 
         private static string BuildRole(IList<SystemRoleModel> roles)

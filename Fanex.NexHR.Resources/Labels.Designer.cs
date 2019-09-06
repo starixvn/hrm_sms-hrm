@@ -1312,6 +1312,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Domain Username.
+        /// </summary>
+        public static string DomainUsername {
+            get {
+                return ResourceManager.GetString("DomainUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Early Out.
         /// </summary>
         public static string EarlyOut {
@@ -1416,6 +1425,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeCalendar {
             get {
                 return ResourceManager.GetString("EmployeeCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee Card.
+        /// </summary>
+        public static string EmployeeCard {
+            get {
+                return ResourceManager.GetString("EmployeeCard", resourceCulture);
             }
         }
         
@@ -2554,6 +2572,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Member.
+        /// </summary>
+        public static string Member {
+            get {
+                return ResourceManager.GetString("Member", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Member Overtime.
         /// </summary>
         public static string MemberOvertime {
@@ -2586,6 +2613,24 @@ namespace Fanex.NexHR.Resources {
         public static string Message {
             get {
                 return ResourceManager.GetString("Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Military From Date.
+        /// </summary>
+        public static string MilitaryFromDate {
+            get {
+                return ResourceManager.GetString("MilitaryFromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Military To Date.
+        /// </summary>
+        public static string MilitaryToDate {
+            get {
+                return ResourceManager.GetString("MilitaryToDate", resourceCulture);
             }
         }
         
@@ -4116,6 +4161,15 @@ namespace Fanex.NexHR.Resources {
         public static string SpecialOT {
             get {
                 return ResourceManager.GetString("SpecialOT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special User.
+        /// </summary>
+        public static string SpecialUser {
+            get {
+                return ResourceManager.GetString("SpecialUser", resourceCulture);
             }
         }
         

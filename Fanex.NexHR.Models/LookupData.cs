@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Helpers;
 
     public class LookupData
     {
@@ -21,12 +21,6 @@
 
         public int CategoryId { get; set; }
 
-        public string CategoryName
-        {
-            get
-            {
-                return Enumerations.GetStringValue((JobTitleCategory)CategoryId);
-            }
-        }
+        public string CategoryName => EnumerationHelper.GetStringValue((JobTitleCategory)CategoryId);
     }
 }

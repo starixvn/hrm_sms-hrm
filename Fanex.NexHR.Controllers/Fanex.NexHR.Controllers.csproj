@@ -131,7 +131,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionLogController.cs" />
     <Compile Include="EmailController.cs" />
     <Compile Include="Export\BaseExportController.cs" />
     <Compile Include="Export\ExportAttendanceController.cs" />

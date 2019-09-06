@@ -142,9 +142,9 @@
                     @{
                         var gender = new List<SelectListItem>
                         {
-                            new SelectListItem() {Text = "Unknown", Value = ""},
-                            new SelectListItem() {Text = "Female", Value = "0"},
-                            new SelectListItem() {Text = "Male", Value = "1"}
+                            new SelectListItem() {Text = Labels.Unknown, Value = "2"},
+                            new SelectListItem() {Text = Labels.Female, Value = "0"},
+                            new SelectListItem() {Text = Labels.Male, Value = "1"}
                         };
                     }
                     @Html.DropDownListFor(model => model.Gender, gender, new { @class = "form-control" })
@@ -451,7 +451,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.SpecialOT, "Special OT", new { @class = "control-label" })
+                    @Html.LabelFor(model => model.SpecialOT, Labels.SpecialOT, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.SpecialOT, new { @class = "form-control" })
@@ -509,7 +509,7 @@
                 <div id="userRole" class="user-role">
                     <div class="checkbox">
                         <input type="checkbox" class="checkbox-custom" name="Member" id="Member" checked disabled />
-                        <label for="Member">Member</label>
+                        <label for="Member">@Labels.Member</label>
                     </div>
                     @Html.CheckBoxListFor(model => model.Roles2Array, roleItems)
                 </div>
@@ -565,8 +565,8 @@
                     @{
                         var empType = new List<SelectListItem>
                         {
-                            new SelectListItem() {Text = "Local", Value = "true"},
-                            new SelectListItem() {Text = "Expat", Value = "false"},
+                            new SelectListItem() {Text = Labels.Local, Value = "true"},
+                            new SelectListItem() {Text = Labels.Expat, Value = "false"},
                         };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, empType, new { @class = "form-control" })

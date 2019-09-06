@@ -1,9 +1,7 @@
-﻿/****** Object:  Stored Procedure dbo.Employee_Delete    Script Date: 7/20/2016 10:19:02 AM ******/
-/****** Object:  Stored Procedure dbo.Employee_Delete    Script Date: 7/19/2016 5:22:12 PM ******/
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿
 CREATE PROCEDURE [dbo].[Employee_Delete] @Empid INT
-	,@ResignedDate SMALLDATETIME
+	,@ActorId INT
+	,@ResignedDate DATE
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -20,43 +18,26 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF (@ResignedDate IS NULL)
+	UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
+	SET ResignedDate = @ResignedDate
+		,isDeleted = 1
+		,[Enabled] = 0
+		,ModifiedBy = @ActorId
+		,ModifiedDate = GETDATE()
+	WHERE Empid = @Empid
+
+	-- unused calendar
+	DELETE dbo.EmployeeCalendar WITH (ROWLOCK)
+	WHERE WorkDate >= @ResignedDate
+		AND EmpId = @Empid
+
+	DELETE dbo.EmployeeAttendance WITH (ROWLOCK)
+	WHERE AttendanceDate >= @ResignedDate
+		AND EmpId = @Empid
+
+	IF @@ERROR <> 0
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'The user cannot be deleted without resigned date'
-
-		RETURN
-	END
-
-	BEGIN TRY
-		BEGIN TRANSACTION;
-
-		UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
-		SET ResignedDate = @ResignedDate
-			,isDeleted = 1
-			,Enabled = 0
-			,ModifiedDate = GETDATE()
-		WHERE Empid = @Empid
-
-		-- delete unused calendar
-		DELETE dbo.EmployeeCalendar WITH (ROWLOCK)
-		WHERE WorkDate >= @ResignedDate
-			AND empid = @Empid
-
-		DELETE dbo.EmployeeAttendance WITH (ROWLOCK)
-		WHERE AttendanceDate >= @ResignedDate
-			AND empid = @Empid
-
-		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0
-			,@ErrCode = ''
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION;
-
-		SELECT @ErrCode = 100
 			,@ErrMsg = N'delete an employee failed.'
-	END CATCH;
+	END
 END

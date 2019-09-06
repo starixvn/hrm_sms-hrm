@@ -162,15 +162,16 @@
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Constants\LogObjectType.cs" />
+    <Compile Include="Constants\MappingDataType.cs" />
     <Compile Include="Constants\SessionKey.cs" />
     <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="CustomJsonResult.cs" />
     <Compile Include="DateTimeExtensions.cs" />
-    <Compile Include="Enumerations.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
     <Compile Include="Enums\CalendarType.cs" />
     <Compile Include="Enums\DateRangeOption.cs" />
     <Compile Include="Enums\EmployeeStatus.cs" />
+    <Compile Include="Enums\Gender.cs" />
     <Compile Include="Enums\LateInEarlyOutReasons.cs" />
     <Compile Include="Enums\CheckInOutReasons.cs" />
     <Compile Include="Enums\Command.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="CoreDIExtensions.cs" />
     <Compile Include="Filters\HRMAuthorizeAttribute.cs" />
     <Compile Include="Filters\HRMPermissionAttribute.cs" />
+    <Compile Include="Helpers\EnumerationHelper.cs" />
     <Compile Include="HSSFSheetExtensions.cs" />
     <Compile Include="JsonConverter.cs" />
     <Compile Include="Models\CommandResult.cs" />

@@ -95,6 +95,10 @@
     <Compile Include="Calendar\EmployeeShiftModel.cs" />
     <Compile Include="Calendar\HalfDayOff.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
+    <Compile Include="CreateEmployeeParam.cs" />
+    <Compile Include="DeleteEmployeeParam.cs" />
+    <Compile Include="EditEmployeeParam.cs" />
+    <Compile Include="Log\MappingFieldConfig.cs" />
     <Compile Include="Log\FieldValue.cs" />
     <Compile Include="Log\LogObjectDetail.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />

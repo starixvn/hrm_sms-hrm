@@ -22,14 +22,17 @@
     public class InformationController : BaseController
     {
         private readonly IBaseService baseService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
 
         public InformationController(
             ISessionService sessionService,
             IBaseService baseService,
+            ICommonDataService commonDataService,
             IEmployeeService employeeService) : base(sessionService)
         {
             this.baseService = baseService;
+            this.commonDataService = commonDataService;
             this.employeeService = employeeService;
         }
 
@@ -43,7 +46,7 @@
 
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
-            var countries = employeeService.GetAllCountry();
+            IList<Country> countries = commonDataService.GetAllCountry();
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
             ViewBag.Genders = new List<SelectListItem>

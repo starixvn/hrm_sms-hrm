@@ -15,15 +15,15 @@
 
     public class OvertimeReportController : BaseController
     {
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
         private readonly IOvertimeReportService overtimeReportService;
 
         public OvertimeReportController(
             ISessionService sessionService,
-            ITeamService teamService,
+            ICommonDataService commonDataService,
             IOvertimeReportService overtimeReportService) : base(sessionService)
         {
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
             this.overtimeReportService = overtimeReportService;
         }
 
@@ -45,7 +45,7 @@
         [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
         {
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetYearlyOvertimeParam
             {
@@ -84,7 +84,7 @@
         [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
         public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
         {
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetDailyOvertimeDetailsParam
             {

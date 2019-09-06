@@ -26,7 +26,7 @@
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
         private readonly IWorkingCalendarService workingCalendarService;
-        private readonly ILeaveTypeService leaveTypeService;
+        private readonly ICommonDataService commonDataService;
 
         public LeaveController(
             ISessionService sessionService,
@@ -35,14 +35,14 @@
             IBaseService baseService,
             IEmployeeService employeeService,
             IWorkingCalendarService workingCalendarService,
-            ILeaveTypeService leaveTypeService) : base(sessionService)
+            ICommonDataService commonDataService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.employeeService = employeeService;
             this.workingCalendarService = workingCalendarService;
-            this.leaveTypeService = leaveTypeService;
+            this.commonDataService = commonDataService;
         }
 
         public ActionResult Create()
@@ -55,7 +55,7 @@
                 FromDate = DateTime.Now.Date,
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
-                LeaveTypeList = leaveTypeService.GetAll(),
+                LeaveTypeList = commonDataService.GetLeaveType(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
             };
@@ -97,7 +97,7 @@
             }
 
             model.UnavailDates = GetUnavailDate(model);
-            model.LeaveTypeList = leaveTypeService.GetAll();
+            model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
             model.VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id);
 
@@ -134,7 +134,7 @@
             };
             var request = leaveRequestService.GetById(criteria);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-            model.LeaveTypeList = leaveTypeService.GetAll();
+            model.LeaveTypeList = commonDataService.GetLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Employee.Id, request);
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -227,7 +227,7 @@
             var model = new LeaveDetailViewModel
             {
                 LeaveRequestDetail = leaveRequestDetail,
-                LeaveTypeList = leaveTypeService.GetAll()
+                LeaveTypeList = commonDataService.GetLeaveType()
             };
 
             return View(model);

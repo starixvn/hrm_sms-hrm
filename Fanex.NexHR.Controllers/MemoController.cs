@@ -17,17 +17,17 @@
     {
         private const int UploadMemoType = 1;
         private readonly IMemoService memoService;
-        private readonly ILookupDataService lookupDataService;
+        private readonly ICommonDataService commonDataService;
         private readonly IEmailService emailService;
 
         public MemoController(
             ISessionService sessionService,
             IMemoService memoService,
-            ILookupDataService lookupDataService,
+            ICommonDataService commonDataService,
             IEmailService emailService) : base(sessionService)
         {
             this.memoService = memoService;
-            this.lookupDataService = lookupDataService;
+            this.commonDataService = commonDataService;
             this.emailService = emailService;
         }
 
@@ -36,7 +36,7 @@
         {
             var model = new MemoViewModel
             {
-                MemoCategories = lookupDataService.GetAll(Constants.MemoCategory)
+                MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory)
             };
             model.Memos = memoService.GetAll(model.Year, model.Category);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
@@ -48,7 +48,7 @@
         [HRMPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index(MemoViewModel model)
         {
-            model.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            model.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             model.Memos = memoService.GetAll(model.Year, model.Category);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
@@ -60,7 +60,7 @@
         public ActionResult Edit(int id)
         {
             Memo memo = memoService.GetById(id);
-            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            ViewBag.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             ViewBag.Updated = false;
 
             return View(memo);
@@ -71,7 +71,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Edit(Memo model)
         {
-            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            ViewBag.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             if (model.MemoType == UploadMemoType && string.IsNullOrEmpty(model.AttachFile))
             {
                 ViewBag.Updated = false;
@@ -116,7 +116,7 @@
                 MemoType = UploadMemoType
             };
 
-            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            ViewBag.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             ViewBag.Updated = false;
 
             return View(memo);
@@ -127,7 +127,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Memo)]
         public ActionResult Create(Memo model)
         {
-            ViewBag.MemoCategories = lookupDataService.GetAll(Constants.MemoCategory);
+            ViewBag.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             model.Contents = model.MemoType == UploadMemoType ? model.AttachFile : model.Contents;
 
             if (ModelState.IsValid)

@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
@@ -171,7 +171,7 @@
             }
         }
 
-        public string BreadcrumbText => Enumerations.GetStringValue(ViewType);
+        public string BreadcrumbText => EnumerationHelper.GetStringValue(ViewType);
 
         public string PageTitle
         {

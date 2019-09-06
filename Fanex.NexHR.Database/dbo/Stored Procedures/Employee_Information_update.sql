@@ -24,12 +24,8 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@IdCardNumber VARCHAR(20) = ''
 	,@PassportNo VARCHAR(35) = ''
 	,@PassportExp DATE = NULL
-	,@Password NVARCHAR(100) = ''
-	,@PasswordReset BIT = 0
 	,@ChineseName NVARCHAR(200) = NULL
 	,@Unit NVARCHAR(2000) = NULL
-	,@AnnualLeaveBalance NUMERIC(18, 1) = 0
-	,@KeepInViewBalance NUMERIC(18, 1) = 0
 	,@CanOT BIT
 	,@SpecialOT DECIMAL(3, 1) = NULL
 	,@IsLocal BIT
@@ -76,6 +72,8 @@ BEGIN
 		,@Code_exist NVARCHAR(50)
 		,@Roles_old VARCHAR(100)
 		,@IsDefaultSchedule_old BIT
+		,@AnnualLeaveBalance_old NUMERIC(18, 1) = 0
+		,@KeepInViewBalance_old NUMERIC(18, 1) = 0
 		,@xml XML
 		,@logData NVARCHAR(MAX)
 		,@logOldData NVARCHAR(MAX)
@@ -114,6 +112,8 @@ BEGIN
 	END
 
 	SELECT @IsDefaultSchedule_old = IsDefaultSchedule
+		,@AnnualLeaveBalance_old = AnnualLeaveBalance
+		,@KeepInViewBalance_old = KeepInViewBalance
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
 	WHERE EmpId = @EmpId
 
@@ -225,9 +225,9 @@ BEGIN
 		,@RoleIds = @Roles
 		,@ModifiedBy = @ModifiedBy
 
-	EXEC dbo.Employee_Summary_Update @EmpID = @EmpID
-		,@AnnualLeaveBalance = @AnnualLeaveBalance
-		,@KeepInViewBalance = @KeepInViewBalance
+	EXEC dbo.Employee_Summary_Update @EmpId = @EmpId
+		,@AnnualLeaveBalance = @AnnualLeaveBalance_old
+		,@KeepInViewBalance = @KeepInViewBalance_old
 		,@CanOT = @CanOT
 		,@SpecialOT = @SpecialOT
 		,@IsLocal = @IsLocal

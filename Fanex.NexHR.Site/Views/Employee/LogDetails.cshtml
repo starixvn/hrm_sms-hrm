@@ -8,20 +8,22 @@
     ViewBag.Title = "Log Details";
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/log.details.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/employee.log.details.css" rel="stylesheet" />
 }
 @section js{
 }
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">Log Details</a>
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <span class="step">Log Details</span>
 }
-
+<h2 class="page-title">@Labels.Employee: @ViewBag.Employee</h2>
 <table class="table table-custom">
     <thead>
         <tr>
             <th>@Labels.LogDate</th>
-            <th>@Labels.NickName</th>
+            <th>Actor</th>
             <th>Field</th>
             <th>Old Value</th>
             <th>New Value</th>
@@ -30,24 +32,28 @@
     <tbody>
         @if (Model.Any())
         {
+            var rowIndex = 1;
             foreach (LogObjectDetail item in Model)
             {
-                var rowIndex = 1;
-                foreach(FieldValue field in item.Fields)
+                var rowClass = rowIndex % 2 == 0 ? "odd" : "even";
+                var childRowIndex = 1;
+                foreach (FieldValue field in item.Fields)
                 {
-                    <tr>
-                        @if (rowIndex == 1)
+                    <tr class="@rowClass">
+                        @if (childRowIndex == 1)
                         {
                             var mergeRow = item.Fields.Count();
                             <td class="align-left" rowspan="@mergeRow">@item.LogDate.ToDetailFormatedDate()</td>
                             <td rowspan="@mergeRow">@item.Nickname</td>
                         }
-                        <td>@field.FieldName</td>
-                        <td>@field.OldValue</td>
-                        <td>@field.Value</td>
+                        <td class="align-left">@field.DisplayName</td>
+                        <td class="align-left">@field.OldValue</td>
+                        <td class="align-left">@field.Value</td>
                     </tr>
-                    rowIndex++;
+                    childRowIndex++;
                 }
+
+                rowIndex++;
             }
         }
         else

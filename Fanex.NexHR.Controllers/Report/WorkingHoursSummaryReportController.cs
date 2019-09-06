@@ -18,23 +18,23 @@
     {
         private readonly IWorkingHoursSummaryReportService reportService;
         private readonly IOvertimeReportService overtimeReportService;
-        private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
 
         public WorkingHoursSummaryReportController(
             ISessionService sessionService,
             IWorkingHoursSummaryReportService reportService,
             IOvertimeReportService overtimeReportService,
-            ITeamService teamService) : base(sessionService)
+            ICommonDataService commonDataService) : base(sessionService)
         {
             this.reportService = reportService;
             this.overtimeReportService = overtimeReportService;
-            this.teamService = teamService;
+            this.commonDataService = commonDataService;
         }
 
         [HttpGet]
         public ActionResult Index(WorkingHoursSummaryViewModel model)
         {
-            IEnumerable<Team> sections = teamService.GetAll();
+            IEnumerable<Team> sections = commonDataService.GetAllSection();
             model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetWorkingHoursSummaryParam
             {
