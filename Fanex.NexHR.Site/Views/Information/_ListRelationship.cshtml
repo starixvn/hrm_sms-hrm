@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models.EmployeeInformation
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.EmployeeInformation
 @model IList<EmployeeRelationship>
 
 <table class="table table-custom">
@@ -6,6 +7,7 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Name</th>
+            <th>@Labels.Phone</th>
             <th>@Labels.DateOfBirth</th>
             <th>@Labels.Gender</th>
             <th>@Labels.Action</th>
@@ -20,7 +22,8 @@
                 <tr>
                     <td>@index</td>
                     <td class="align-left">@r.FullName</td>
-                    <td>@r.DateOfBirth.ToString("dd MMM yyyy")</td>
+                    <th>@r.Phone</th>
+                    <td>@r.DateOfBirth.ToDateMonthYearFormatedDate()</td>
                     <td>
                         @if (r.Gender == 0)
                         {

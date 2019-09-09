@@ -254,8 +254,8 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
-    <Content Include="wwwroot\dist\js\employee.information.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
@@ -275,8 +275,8 @@
     <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js" />
     <Content Include="wwwroot\dist\js\report.workinghours.summary.js" />
     <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
-    <Content Include="wwwroot\dist\styles\account.editprofile.css" />
-    <Content Include="wwwroot\dist\styles\account.editprofile.js" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.css" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.js" />
     <Content Include="wwwroot\dist\styles\employee.log.details.css" />
     <Content Include="wwwroot\dist\styles\employee.log.details.js" />
     <Content Include="wwwroot\dist\styles\employee.postnatal.css" />
@@ -925,7 +925,7 @@
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\function.index.js" />
-    <Content Include="wwwroot\sources\js\pages\information\index.js" />
+    <Content Include="wwwroot\sources\js\pages\account\edit.profile.js" />
     <Content Include="wwwroot\sources\js\pages\home.index.js" />
     <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
@@ -1015,14 +1015,12 @@
     <Content Include="Views\Report\WeeklyWorkingHours\_WeeklyWorkingHoursDetails.cshtml" />
     <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
     <Content Include="ExcelTemplates\DailyWorkingHours.xlsx" />
-    <Content Include="wwwroot\dist\js\employee.information.js.map" />
     <Content Include="wwwroot\dist\js\employee.paternity.js.map" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js.map" />
     <Content Include="wwwroot\dist\js\home.index.js.map" />
     <Content Include="wwwroot\dist\js\report.dailyworkinghours.js.map" />
     <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js.map" />
     <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js.map" />
-    <Content Include="wwwroot\dist\styles\account.editprofile.js.map" />
     <Content Include="wwwroot\dist\styles\employee.postnatal.js.map" />
     <Content Include="wwwroot\dist\styles\home.index.js.map" />
     <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js.map" />
@@ -1072,8 +1070,10 @@
     <Content Include="wwwroot\sources\styles\components\_birthday-picker.scss" />
     <Content Include="wwwroot\dist\js\employee.edit.js.map" />
     <Content Include="wwwroot\dist\vendors\chosen-manifest.json" />
-    <Content Include="Views\Employee\LogDetails.cshtml" />
+    <Content Include="Views\Employee\ActivityLog.cshtml" />
     <Content Include="wwwroot\dist\styles\employee.log.details.js.map" />
+    <Content Include="wwwroot\dist\js\account.edit.profile.js.map" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1417,7 +1417,7 @@
     <Content Include="Views\Paternity\Index.cshtml" />
     <Content Include="wwwroot\sources\styles\components\_validation.scss" />
     <Content Include="Views\Information\UpdateInformation.cshtml" />
-    <Content Include="wwwroot\sources\styles\pages\account\profile-edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\account\edit.profile.scss" />
     <Content Include="Views\Information\_ListFileUploaded.cshtml" />
     <Content Include="ExcelTemplates\JobTitleSummary.xls" />
     <Content Include="Views\Report\_ListLeaveSummary.cshtml" />

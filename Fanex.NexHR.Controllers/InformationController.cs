@@ -72,7 +72,6 @@
         {
             ModelState.Clear();
             model.Id = sessionService.Employee.Id;
-            model.Modifier = new Employee { Id = sessionService.Employee.Id };
             var criteria = SetUpdatePersonalInfoCriteria(model);
 
             var result = baseService.ExecuteNonQuery(criteria);
@@ -80,34 +79,35 @@
             return Json(result);
         }
 
-        private UpdateEmployeePersonalInformationCriteria SetUpdatePersonalInfoCriteria(Employee employeeModel)
+        private UpdateEmployeePersonalInformationCriteria SetUpdatePersonalInfoCriteria(Employee employee)
         {
             var criteria = new UpdateEmployeePersonalInformationCriteria
             {
-                EmpId = employeeModel.Id,
-                DateOfBirth = employeeModel.DateOfBirth,
-                PlaceOfbirth = employeeModel.PlaceOfBirth,
-                Ethnic = employeeModel.Ethnic,
-                Native = employeeModel.Native,
-                Religion = employeeModel.Religion,
-                DateOfIdCard = employeeModel.DateOfIdCard,
-                PlaceOfIdCard = employeeModel.PlaceOfIdCard,
-                HomePhone = employeeModel.HomePhone,
-                Qualification = employeeModel.Qualification,
-                Major = employeeModel.Major,
-                Phone = employeeModel.Phone,
-                Gender = employeeModel.Gender,
-                Skype = employeeModel.Skype,
-                Yahoo = employeeModel.LetsTalk,
-                ChineseName = employeeModel.ChineseName,
-                Marriage = employeeModel.Marriage,
-                PermanentAddress = employeeModel.Address,
-                CurrentAddress = employeeModel.CurrentAddress,
-                IdCardNumber = employeeModel.CardNo,
-                PassportNo = employeeModel.PassportNo,
-                PassportExp = employeeModel.PassportExp,
-                ModifiedBy = employeeModel.Modifier.Id,
-                CountryCode = employeeModel.CountryCode
+                EmpId = employee.Id,
+                Email = employee.Email,
+                DateOfBirth = employee.DateOfBirth,
+                PlaceOfbirth = employee.PlaceOfBirth,
+                Ethnic = employee.Ethnic,
+                Native = employee.Native,
+                Religion = employee.Religion,
+                DateOfIdCard = employee.DateOfIdCard,
+                PlaceOfIdCard = employee.PlaceOfIdCard,
+                HomePhone = employee.HomePhone,
+                Qualification = employee.Qualification,
+                Major = employee.Major,
+                Phone = employee.Phone,
+                Gender = employee.Gender,
+                Skype = employee.Skype,
+                Yahoo = employee.LetsTalk,
+                ChineseName = employee.ChineseName,
+                Marriage = employee.Marriage,
+                PermanentAddress = employee.Address,
+                CurrentAddress = employee.CurrentAddress,
+                IdCardNumber = employee.CardNo,
+                PassportNo = employee.PassportNo,
+                PassportExp = employee.PassportExp,
+                ModifiedBy = sessionService.Employee.Id,
+                CountryCode = employee.CountryCode
             };
 
             return criteria;
@@ -152,7 +152,7 @@
         {
             var viewModel = new EmployeeRelationshipViewModel
             {
-                BirthDay = new DateTime(2000, 1,1 )
+                BirthDay = new DateTime(2000, 1, 1)
             };
 
             return PartialView("_AddRelationship", viewModel);

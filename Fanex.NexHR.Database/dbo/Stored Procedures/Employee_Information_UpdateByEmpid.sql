@@ -1,8 +1,7 @@
-﻿/****** Object:  Stored Procedure dbo.Employee_Information_UpdateByEmpid    Script Date: 7/20/2016 10:19:03 AM ******/
-/****** Object:  Stored Procedure dbo.Employee_Information_UpdateByEmpid    Script Date: 7/19/2016 5:22:12 PM ******/
-
+﻿
 CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
-	,@DOB SMALLDATETIME = NULL
+	,@DOB DATE = NULL
+	,@Email VARCHAR(50) = NULL
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL
 	,@Skype VARCHAR(100) = ''
@@ -12,7 +11,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
 	,@CurrentAddress NVARCHAR(250) = ''
 	,@IdCardNumber VARCHAR(20) = ''
 	,@PassportNo VARCHAR(35) = ''
-	,@PassportExp DATETIME = NULL
+	,@PassportExp DATE = NULL
 	,@ChineseName NVARCHAR(200) = NULL
 	,@ModifiedBy INT
 	,@CountryCode VARCHAR(5) = NULL
@@ -20,7 +19,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
 	,@Ethnic NVARCHAR(250) = ''
 	,@Native NVARCHAR(250) = ''
 	,@Religion NVARCHAR(250) = ''
-	,@DateOfIDCard DATETIME = NULL
+	,@DateOfIDCard DATE = NULL
 	,@PlaceOfIDCard NVARCHAR(250) = ''
 	,@HomePhone NVARCHAR(250) = ''
 	,@Qualification NVARCHAR(300) = ''
@@ -30,59 +29,127 @@ CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
 AS
 /*
 Created: TOM
-Task: UPDATE an employee Information 
+Task: update an employee information 
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:  
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+	
+	DECLARE @xml XML
+		,@logData NVARCHAR(MAX)
+		,@logOldData NVARCHAR(MAX)
+	
+	SET @xml = (
+			SELECT CAST(DOB AS DATE) AS '@DOB'
+				,Email AS '@Email'
+				,Phone AS '@Phone'
+				,Gender AS '@Gender'
+				,Skype AS '@Skype'
+				,Yahoo AS '@Yahoo'
+				,Marriage AS '@Marriage'
+				,PermanentAddress AS '@PermanentAddress'
+				,CurrentAddress AS '@CurrentAddress'
+				,IdCardNumber AS '@IdCardNumber'
+				,PassportNo AS '@PassportNo'
+				,PassportExp AS '@PassportExp'
+				,ChineseName AS '@ChineseName'
+				,PlaceOfbirth AS '@PlaceOfbirth'
+				,Ethnic AS '@Ethnic'
+				,[Native] AS '@Native'
+				,Religion AS '@Religion'
+				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,PlaceOfIDCard AS '@PlaceOfIDCard'
+				,HomePhone AS '@HomePhone'
+				,Qualification AS '@Qualification'
+				,Major AS '@Major'
+				,CountryCode AS '@CountryCode'
+			FROM dbo.Employee AS emp WITH (NOLOCK)
+				INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			WHERE emp.EmpId = @EmpId
+			FOR XML PATH('Row')
+				,TYPE
+			)
+	SET @logOldData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
+	UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
+	SET DOB = @DOB
+		,Email = @Email
+		,Phone = @Phone
+		,Gender = @Gender
+		,Skype = @Skype
+		,Yahoo = @Yahoo
+		,Marriage = @Marriage
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
+		,PermanentAddress = @PermanentAddress
+		,CurrentAddress = @CurrentAddress
+		,IdCardNumber = @IdCardNumber
+		,PassportNo = @PassportNo
+		,PassportExp = @PassportExp
+		,ChineseName = @ChineseName
+		,PlaceOfbirth = @PlaceOfbirth
+		,Ethnic = @Ethnic
+		,[Native] = @Native
+		,Religion = @Religion
+		,DateOfIDCard = @DateOfIDCard
+		,PlaceOfIDCard = @PlaceOfIDCard
+		,HomePhone = @HomePhone
+		,Qualification = @Qualification
+		,Major = @Major
+	WHERE EmpId = @EmpId
 
-		UPDATE dbo.Employee WITH (ROWLOCK)
-		SET DOB = @DOB
-			,Phone = @Phone
-			,Gender = @Gender
-			,Skype = @Skype
-			,Yahoo = @Yahoo
-			,Marriage = @Marriage
-			,ModifiedDate = GETDATE()
-			,ModifiedBy = @ModifiedBy
-			,PermanentAddress = @PermanentAddress
-			,CurrentAddress = @CurrentAddress
-			,IdCardNumber = @IdCardNumber
-			,PassportNo = @PassportNo
-			,PassportExp = @PassportExp
-			,ChineseName = @ChineseName
-			,PlaceOfbirth = @PlaceOfbirth
-			,Ethnic = @Ethnic
-			,[Native] = @Native
-			,Religion = @Religion
-			,DateOfIDCard = @DateOfIDCard
-			,PlaceOfIDCard = @PlaceOfIDCard
-			,HomePhone = @HomePhone
-			,Qualification = @Qualification
-			,Major = @Major
-		WHERE EmpId = @EmpId
+	UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
+	SET CountryCode = @CountryCode
+	WHERE EmpId = @EmpId
 
-		UPDATE [dbo].[EmployeeSummary] WITH (ROWLOCK)
-		SET CountryCode = @CountryCode
-		WHERE [EmpId] = @EmpId
-
-		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0
-			,@ErrCode = ''
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION
-
+	IF @@ERROR <> 0
+	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'Update Unsuccessfully!';
-	END CATCH
+			,@ErrMsg = N'Update Unsuccessfully!'
+	END
+	
+	SET @xml = (
+			SELECT CAST(DOB AS DATE) AS '@DOB'
+				,Email AS '@Email'
+				,Phone AS '@Phone'
+				,Gender AS '@Gender'
+				,Skype AS '@Skype'
+				,Yahoo AS '@Yahoo'
+				,Marriage AS '@Marriage'
+				,PermanentAddress AS '@PermanentAddress'
+				,CurrentAddress AS '@CurrentAddress'
+				,IdCardNumber AS '@IdCardNumber'
+				,PassportNo AS '@PassportNo'
+				,PassportExp AS '@PassportExp'
+				,ChineseName AS '@ChineseName'
+				,PlaceOfbirth AS '@PlaceOfbirth'
+				,Ethnic AS '@Ethnic'
+				,[Native] AS '@Native'
+				,Religion AS '@Religion'
+				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,PlaceOfIDCard AS '@PlaceOfIDCard'
+				,HomePhone AS '@HomePhone'
+				,Qualification AS '@Qualification'
+				,Major AS '@Major'
+				,CountryCode AS '@CountryCode'
+			FROM dbo.Employee AS emp WITH (NOLOCK)
+				INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			WHERE emp.EmpId = @EmpId
+			FOR XML PATH('Row')
+				,TYPE
+			)
+	SET @logData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
+	
+	EXEC dbo.ActivityLog_Insert @UserId = @ModifiedBy
+		,@ObjectTypeId = 1
+		,@ObjectId = @EmpId
+		,@OldData = @logOldData
+		,@Data = @logData
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 END

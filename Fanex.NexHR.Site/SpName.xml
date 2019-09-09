@@ -555,6 +555,6 @@
     </Setting>
   </Function>
   <Function Name="Log">
-    <Setting Key="LogObject_GetById" SpName="LogObject_GetById" DbName="nexhrx" Plain="0" />
+    <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="nexhrx" Plain="0" />
   </Function>
 </Functions>

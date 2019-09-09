@@ -5,7 +5,7 @@
 
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = "Log Details";
+    ViewBag.Title = Labels.ActivityLog;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/employee.log.details.css" rel="stylesheet" />
@@ -16,17 +16,17 @@
 {
     <a class="step" href="javascript:;">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
-    <span class="step">Log Details</span>
+    <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Employee: @ViewBag.Employee</h2>
 <table class="table table-custom">
     <thead>
         <tr>
             <th>@Labels.LogDate</th>
-            <th>Actor</th>
-            <th>Field</th>
-            <th>Old Value</th>
-            <th>New Value</th>
+            <th>@Labels.Actor</th>
+            <th>@Labels.Field</th>
+            <th>@Labels.OldValue</th>
+            <th>@Labels.NewValue</th>
         </tr>
     </thead>
     <tbody>

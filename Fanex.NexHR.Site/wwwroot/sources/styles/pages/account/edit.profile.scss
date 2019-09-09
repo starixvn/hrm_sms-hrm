@@ -1,8 +1,8 @@
 ﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
-@import '../../layout/filter';
 @import '../../layout/toastr';
 @import '../../layout/table';
+@import '../../components/form-horizontal';
 @import '../../components/buttons-new';
 @import '../../components/validation';
 @import '../../components/modal';
@@ -17,54 +17,19 @@
     height: 0;
 }
 
-.form-control {
-    height: 30px;
-    padding: 4px 8px;
-    @include border-radius(2px);
-}
-
-.label {
+.leftpersonal {
+    width: 400px;
     float: left;
-    text-align: right;
+    padding: 5px;
     margin-right: 10px;
-    width: 120px;
-    color: #000;
-    font-size: 12px;
-}
 
-.label-edit {
-    padding-top: 10px;
-}
-
-#info-update {
-    .leftpersonal {
-        width: 500px;
-        float: left;
-        padding: 5px;
-        margin-right: 10px;
-
-        input, select, textarea {
-            width: calc(100% - 130px);
+    .form-horizontal {
+        .list-group {
+            .list-group-item {
+                padding-top: 7px;
+                padding-bottom: 7px;
+            }
         }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-    }
-
-    .list-group-item {
-        padding: 5px 10px;
-    }
-
-    .align-right {
-        text-align: right;
-    }
-
-    .datepicker {
-        display: inline-block;
-        width: calc(100% - 155px) !important;
-        margin-right: 5px;
     }
 }
 
@@ -107,14 +72,6 @@
             }
         }
     }
-}
-
-.icon-calendar {
-    position: absolute;
-    right: 15px;
-    top: 12px;
-    font-size: 1.6rem;
-    color: #A63C45;
 }
 
 .table {

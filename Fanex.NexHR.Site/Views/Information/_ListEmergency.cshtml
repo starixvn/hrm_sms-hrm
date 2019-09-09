@@ -1,9 +1,10 @@
-﻿@using Fanex.NexHR.Models.EmployeeInformation
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.EmployeeInformation
 @model IList<EmployeeEmergency>
 @{
     var isAllowInsert = (bool)ViewBag.IsAllowInsert;
 }
-<input type="checkbox" name="isAllowInsert" checked="@isAllowInsert" hidden />
+<input type="checkbox" name="isAllowInsert" @(isAllowInsert ? "checked" : string.Empty) hidden />
 <table class="table table-custom">
     <thead>
         <tr>
@@ -27,7 +28,7 @@
                     <td class="align-left">@r.FullName</td>
                     <td>@r.Relationship</td>
                     <td>@r.Phone</td>
-                    <td>@r.DateOfBirth.ToString("dd MMM yyyy")</td>
+                    <td>@r.DateOfBirth.ToDateMonthYearFormatedDate()</td>
                     <td>
                         @if (r.Gender == 0)
                         {

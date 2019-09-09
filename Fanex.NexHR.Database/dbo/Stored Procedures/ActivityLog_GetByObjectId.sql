@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[LogObject_GetById] @ObjectTypeId TINYINT
+CREATE PROCEDURE [dbo].[ActivityLog_GetByObjectId] @ObjectTypeId TINYINT
 	,@ObjectId INT
 AS
 /*
@@ -20,7 +20,7 @@ BEGIN
 		,lo.LogDate
 		,lo.OldData
 		,lo.Data
-	FROM dbo.LogObject AS lo WITH (NOLOCK)
+	FROM dbo.ActivityLog AS lo WITH (NOLOCK)
 		LEFT JOIN dbo.Employee AS emp WITH (NOLOCK) ON lo.UserId = emp.EmpId
 	WHERE lo.ObjectTypeId = @ObjectTypeId
 		AND lo.ObjectId = @ObjectId

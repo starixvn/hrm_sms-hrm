@@ -9,14 +9,15 @@ AS
 Created: Tom.Vo@2013-10-23
 Task: delete an employee
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
 	SET ResignedDate = @ResignedDate

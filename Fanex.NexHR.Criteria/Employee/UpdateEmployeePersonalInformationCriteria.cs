@@ -7,6 +7,8 @@
     {
         public int EmpId { get; set; }
 
+        public string Email { get; set; }
+
         [SpParam(SqlParamName = "DOB")]
         public DateTime DateOfBirth { get; set; }
 
@@ -54,14 +56,8 @@
 
         public string Major { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_Information_UpdateByEmpId";
-        }
+        public override string GetSettingKey() => "Employee_Information_UpdateByEmpId";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }

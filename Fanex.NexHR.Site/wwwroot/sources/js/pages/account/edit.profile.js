@@ -2,7 +2,7 @@
 import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import toastr from 'toastr';
-import { confirm, alert, toastOptions } from '../../shared/common.functions';
+import { confirm, alert, toastOptions, initDatepicker } from '../../shared/common.functions';
 
 var editAccount = (function ($) {
     const domElement = {
@@ -206,7 +206,7 @@ var editAccount = (function ($) {
             if (id > 0) {
                 $.get(baseUrl + id, function (data) {
                     $(domElement.EditForm).html(data);
-                    initDatePicker($(domElement.EditForm));
+                    initDatepicker();
                     $(domElement.EditForm).dialog({
                         title: title,
                         height: 'auto',
@@ -255,7 +255,7 @@ var editAccount = (function ($) {
             var title = $(this).attr('title');
             $.get(url, function (data) {
                 $(domElement.CreateForm).html(data);
-                initDatePicker($(domElement.CreateForm));
+                initDatepicker();
                 $(domElement.CreateForm).dialog({
                     title: title,
                     height: 'auto',
@@ -317,30 +317,6 @@ var editAccount = (function ($) {
         });
     }
 
-    function initDatePicker($dialog) {
-        if ($dialog.find('.datepicker').length > 0) {
-            $dialog.find('.datepicker').each(function (index, element) {
-                var yearRange = $(element).attr('yearrange');
-                $(element).datepicker({
-                    dateFormat: 'dd M, yy',
-                    yearRange: yearRange,
-                    changeMonth: true,
-                    changeYear: true
-                });
-
-                $(element).attr('readonly', 'readonly');
-                $(element).keydown(function (e) {
-                    var tab = 9, enter = 13;
-                    if (e.keyCode === tab || e.keyCode === enter) {
-                        return true;
-                    }
-
-                    return false;
-                });
-            });
-        }
-    }
-
     function showErrorMsg($form, msg) {
         $form.find('.validation-summary-valid').find('ul:first').html('');
         var htmlObj = '<li>' + msg + '</li>';
@@ -355,7 +331,7 @@ var editAccount = (function ($) {
     }
 
     function init() {
-        initDatePicker($(domElement.EditInformationForm));
+        initDatepicker();
         getFileUpload();
         updateInformationEvent();
         getRelationship();

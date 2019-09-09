@@ -23,7 +23,7 @@
             <th class="resignedDate">@Labels.ResignedDate</th>
             @if (hasPermissionToEdit)
             {
-                <th>View Log</th>
+                <th>@Labels.ActivityLog</th>
                 <th>@Labels.Edit</th>
             }
         </tr>
@@ -61,7 +61,7 @@
                     @if (hasPermissionToEdit)
                     {
                         <td>
-                            <a href="@Url.Action("LogDetails", "employee", new { id = employee.Id })" title="View Log">
+                            <a href="@Url.Action("ActivityLog", "employee", new { id = employee.Id })" title="@Labels.ActivityLog">
                                 <i class="fa fa-search fa-lg icon-edit"></i>
                             </a>
                         </td>

@@ -1,6 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[LogObject_Insert] @UserId INT
-	,@ObjectTypeId TINYINT
-	,@ObjectId INT
+﻿
+CREATE PROCEDURE [dbo].[ActivityLog_Insert] @UserId INT
+	,@ActionId SMALLINT = NULL
+	,@ObjectTypeId TINYINT = NULL
+	,@ObjectId INT = NULL
 	,@OldData NVARCHAR(MAX) = NULL
 	,@Data NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
@@ -19,9 +21,10 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	INSERT INTO dbo.LogObject (
+	INSERT INTO dbo.ActivityLog (
 		LogDate
 		,UserId
+		,ActionId
 		,ObjectTypeId
 		,ObjectId
 		,OldData
@@ -30,6 +33,7 @@ BEGIN
 	VALUES (
 		GETDATE()
 		,@UserId
+		,@ActionId
 		,@ObjectTypeId
 		,@ObjectId
 		,@OldData

@@ -512,13 +512,14 @@
             return Json(newCode, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult LogDetails(int id)
+        [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+        public ActionResult ActivityLog(int id)
         {
             Employee employee = employeeService.GetEmployeeById(id);
             IEnumerable<LogObjectDetail> logs = employeeLogService.GetLogDetailById(id);
             ViewBag.Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName);
 
-            return View("LogDetails", logs);
+            return View("ActivityLog", logs);
         }
 
         private void UpdateUserSession(int employeeId, string code)

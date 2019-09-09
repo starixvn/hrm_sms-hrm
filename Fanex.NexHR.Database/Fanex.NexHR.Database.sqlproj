@@ -563,9 +563,9 @@
     <Build Include="dbo\Stored Procedures\Overtime_GetMemberMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestDetailsById.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyWorkingHours_EmployeeRequest.sql" />
-    <Build Include="dbo\Tables\LogObject.sql" />
-    <Build Include="dbo\Stored Procedures\LogObject_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\LogObject_GetById.sql" />
+    <Build Include="dbo\Tables\ActivityLog.sql" />
+    <Build Include="dbo\Stored Procedures\ActivityLog_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\ActivityLog_GetByObjectId.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

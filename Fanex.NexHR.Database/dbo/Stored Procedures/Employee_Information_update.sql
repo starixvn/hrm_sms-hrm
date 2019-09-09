@@ -58,13 +58,14 @@ AS
 Created: TOM
 Task: UPDATE an employee Information 
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @EmpId_exist INT
 		,@Nickname_exist NVARCHAR(20)
@@ -312,7 +313,7 @@ BEGIN
 			)
 	SET @logData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
 
-	EXEC dbo.LogObject_Insert @UserId = @ModifiedBy
+	EXEC dbo.ActivityLog_Insert @UserId = @ModifiedBy
 		,@ObjectTypeId = 1
 		,@ObjectId = @EmpId
 		,@OldData = @logOldData
