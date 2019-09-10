@@ -5,7 +5,7 @@
 @model Employee
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = "Edit";
+    ViewBag.Title = Labels.EditEmployeeInfo;
     var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
     var roleItems = roles.Select(i => new SelectListItem() { Text = i.Name, Value = i.RoleId.ToString() });
 }

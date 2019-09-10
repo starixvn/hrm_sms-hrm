@@ -1830,4 +1830,10 @@
   <data name="OldValue" xml:space="preserve">
     <value>Old Value</value>
   </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="EditEmployeeInfo" xml:space="preserve">
+    <value>Edit Employee Information</value>
+  </data>
 </root>

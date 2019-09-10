@@ -1,82 +1,75 @@
-﻿@using Fanex.NexHR.Models
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
 @using Fanex.NexHR.ViewModels.Employee
 @model CreateEmployeeViewModel
 @{
-    ViewBag.Title = "Create account";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.CreateAccount;
     var teams = (IList<Team>)ViewBag.Teams;
 }
 @section css{
-    @Url.CombresLink("employeecreatecss")
+    <link href="~/wwwroot/dist/styles/employee.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("accountjs")
+    <script src="~/wwwroot/dist/js/employee.create.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 @using (Html.BeginForm())
 {
-    <div class="bunhat" style="min-width: 700px">
+    <div class="card form-horizontal">
         @Html.ValidationSummary(true)
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FullName)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.FullName)
-                @Html.ValidationMessageFor(model => model.FullName)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @autocomplete = "off" })
             </div>
-            <div class="clear">
+            @Html.ValidationMessageFor(model => model.FullName)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Nickname, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Nickname, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Nickname)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.DomainUsername, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.DomainUsername, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.DomainUsername)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            <input type="button" class="btn btn-primary generate-code" id="generate" value="Generate" />
+            @Html.ValidationMessageFor(model => model.Code)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.TeamId, new SelectList(teams, "Id", "Name"), new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Nickname)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Nickname)
-                @Html.ValidationMessageFor(model => model.Nickname)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.DomainUsername)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.DomainUsername)
-                @Html.ValidationMessageFor(model => model.DomainUsername)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Code)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Code)
-                <input type="button" id="generate" value="Generate" />
-                @Html.ValidationMessageFor(model => model.Code)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.TeamId)
-            </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.TeamId, new SelectList(teams, "Id", "Name"))
-            </div>
-            <div class="formrow">
-                <div class="label">
-                </div>
-                <div class="input">
-                    <input type="submit" value="Next" />
-                </div>
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <input type="submit" class="btn btn-primary" value="Next" />
             </div>
         </div>
     </div>

@@ -53,16 +53,6 @@
       <resource path="~/scripts/views/request/request.constant.js" />
     </resourceSet>
 
-    <resourceSet name="accountjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/account.js" />
-    </resourceSet>
-
-    <resourceSet name="editcontactjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/edit-account.js" />
-    </resourceSet>
-
     <resourceSet name="employeecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/scripts/chosen/chosen.css" />
@@ -83,11 +73,6 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
       <resource path="~/scripts/views/employee/employee.index.js" />
-    </resourceSet>
-
-    <resourceSet name="employeecreatecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/employee.create.css" />
     </resourceSet>
 
     <resourceSet name="attendancereportcss" type="css">

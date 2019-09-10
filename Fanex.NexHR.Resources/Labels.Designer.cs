@@ -889,6 +889,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Account.
+        /// </summary>
+        public static string CreateAccount {
+            get {
+                return ResourceManager.GetString("CreateAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created By.
         /// </summary>
         public static string CreatedBy {
@@ -1371,6 +1380,15 @@ namespace Fanex.NexHR.Resources {
         public static string EditDivision {
             get {
                 return ResourceManager.GetString("EditDivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Employee Information.
+        /// </summary>
+        public static string EditEmployeeInfo {
+            get {
+                return ResourceManager.GetString("EditEmployeeInfo", resourceCulture);
             }
         }
         

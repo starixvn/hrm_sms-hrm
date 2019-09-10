@@ -255,6 +255,7 @@
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
+    <Content Include="wwwroot\dist\js\employee.create.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
@@ -279,6 +280,8 @@
     <Content Include="wwwroot\dist\styles\account.edit.profile.js" />
     <Content Include="wwwroot\dist\styles\account.index.css" />
     <Content Include="wwwroot\dist\styles\account.index.js" />
+    <Content Include="wwwroot\dist\styles\employee.create.css" />
+    <Content Include="wwwroot\dist\styles\employee.create.js" />
     <Content Include="wwwroot\dist\styles\employee.log.details.css" />
     <Content Include="wwwroot\dist\styles\employee.log.details.js" />
     <Content Include="wwwroot\dist\styles\employee.postnatal.css" />
@@ -311,6 +314,7 @@
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
     <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\hr.details.js" />
@@ -330,7 +334,6 @@
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
-    <Content Include="Scripts\Views\edit-account.js" />
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\external-group.js" />
@@ -376,7 +379,6 @@
     <Content Include="Scripts\MultiSelect\prettify.css" />
     <Content Include="Scripts\MultiSelect\prettify.js" />
     <Content Include="Scripts\MultiSelect\style.css" />
-    <Content Include="Scripts\Views\account.js" />
     <Content Include="Scripts\Views\addextensionno.js" />
     <Content Include="Scripts\Views\annualbalance.js" />
     <Content Include="Scripts\Views\extensionno.js" />
@@ -804,7 +806,6 @@
     <Content Include="Styles\memo.edit.css" />
     <Content Include="Styles\fullcalendar.css" />
     <Content Include="Styles\myrequest.css" />
-    <Content Include="Styles\employee.create.css" />
     <Content Include="Styles\employee.defaultschedule.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
@@ -1078,6 +1079,9 @@
     <Content Include="wwwroot\dist\styles\account.edit.profile.js.map" />
     <Content Include="wwwroot\dist\styles\account.index.js.map" />
     <Content Include="wwwroot\sources\styles\components\_form-filter.scss" />
+    <Content Include="wwwroot\sources\styles\components\_card.scss" />
+    <Content Include="wwwroot\dist\js\employee.create.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.create.js.map" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1086,6 +1090,7 @@
     <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\log.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\account\index.scss" />
+    <None Include="wwwroot\sources\styles\pages\employee\employee.create.scss" />
     <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />
