@@ -1,68 +1,69 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models
 @model IList<EmployeePaternity>
 
-    <table class="table table-custom" id="data">
-        <thead>
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th>@Labels.FullName</th>
-                <th>@Labels.NickName</th>
-                <th>Child's Born Date</th>
-                <th>Leave Day</th>
-                <th>@Labels.CreatedBy</th>
-                <th>@Labels.CreatedDate</th>
-                <th>@Labels.Remark</th>
-                @if (ViewBag.IsHost)
-                {
-                    <th>@Labels.Action</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @{int index = 1;}
-            @if (Model != null && Model.Count > 0)
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>Child's Born Date</th>
+            <th>Leave Day</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Remark</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{int index = 1;}
+        @if (Model != null && Model.Count > 0)
+        {
+
+            foreach (EmployeePaternity paternity in Model)
             {
 
-                foreach (EmployeePaternity paternity in Model)
-                {
-
-                    <tr>
-                        <td>@(index++)</td>
-                        <td class="align-left">@paternity.Fullname</td>
-                        <td>@paternity.Nickname</td>
-                        <td>@paternity.ChildBornDate.ToString("dd MMM yyyy")</td>
-                        <td>@paternity.LeaveDay</td>
-                        <td>@paternity.Creator</td>
-                        <td>@paternity.CreatedDate.ToString("dd MMM yyyy")</td>
-                        <td>
-                            @if (!string.IsNullOrWhiteSpace(paternity.Remark))
-                            {
-                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-
-                        @if (ViewBag.IsHost)
+                <tr>
+                    <td>@(index++)</td>
+                    <td class="align-left">@paternity.Fullname</td>
+                    <td>@paternity.Nickname</td>
+                    <td>@paternity.ChildBornDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@paternity.LeaveDay</td>
+                    <td>@paternity.Creator</td>
+                    <td>@paternity.CreatedDate.ToDateMonthYearFormatedDate()</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(paternity.Remark))
                         {
-                            <td class="action-column">
-                                <a data-id="@paternity.PaternityId" class="edit-paternity" title="Edit">
-                                    <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
-                                </a>
-                                <a data-id="@paternity.PaternityId" class="delete-paternity" title="Delete">
-                                    <i class="fa fa-trash fa-lg icon-delete pointer"></i>
-                                </a>
-                            </td>
+                            <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
                         }
-                    </tr>
-                }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@paternity.PaternityId" class="edit-paternity" title="@Labels.Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
+                            </a>
+                            <a data-id="@paternity.PaternityId" class="delete-paternity" title="@Labels.Delete">
+                                <i class="fa fa-trash fa-lg icon-delete pointer"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
             }
-            else
-            {
-                @RazorHelper.DisplayNoInformation(colspan: 8);
-            }
-        </tbody>
-    </table>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 8);
+        }
+    </tbody>
+</table>

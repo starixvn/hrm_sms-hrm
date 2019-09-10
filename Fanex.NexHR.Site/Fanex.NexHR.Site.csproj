@@ -277,6 +277,8 @@
     <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\styles\account.edit.profile.css" />
     <Content Include="wwwroot\dist\styles\account.edit.profile.js" />
+    <Content Include="wwwroot\dist\styles\account.index.css" />
+    <Content Include="wwwroot\dist\styles\account.index.js" />
     <Content Include="wwwroot\dist\styles\employee.log.details.css" />
     <Content Include="wwwroot\dist\styles\employee.log.details.js" />
     <Content Include="wwwroot\dist\styles\employee.postnatal.css" />
@@ -1074,6 +1076,8 @@
     <Content Include="wwwroot\dist\styles\employee.log.details.js.map" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js.map" />
     <Content Include="wwwroot\dist\styles\account.edit.profile.js.map" />
+    <Content Include="wwwroot\dist\styles\account.index.js.map" />
+    <Content Include="wwwroot\sources\styles\components\_form-filter.scss" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
@@ -1081,6 +1085,7 @@
     <Content Include="wwwroot\sources\styles\pages\overtime\edit.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\log.details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\account\index.scss" />
     <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />

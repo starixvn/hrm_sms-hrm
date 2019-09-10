@@ -12,7 +12,9 @@
     <script src="~/wwwroot/dist/js/account.edit.profile.js"></script>
 }
 @section Breadcrumb {
-    <a class="step" href="/Account/Index">Personal</a><span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("Index", "Account")">@Labels.MyProfile</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <div class="leftpersonal">
@@ -25,11 +27,11 @@
             <ul class="list-group">
                 <li class="list-group-item form-group">
                     <div class="label-form">@Labels.FullName</div>
-                    <div>@Model.FullName</div>
+                    <div class="bold">@Model.FullName</div>
                 </li>
                 <li class="list-group-item form-group">
                     <div class="label-form">@Labels.NickName</div>
-                    <div>@Model.NickName</div>
+                    <div class="bold">@Model.NickName</div>
                 </li>
                 <li class="list-group-item form-group">
                     <div class="label-form">@Labels.ChineseName</div>
@@ -87,7 +89,7 @@
                     </div>
                 </li>
                 <li class="list-group-item form-group">
-                    <div class="label-form">@Labels.CardNo:</div>
+                    <div class="label-form">@Labels.CardNo</div>
                     <div class="input-form">
                         @Html.TextBoxFor(model => model.CardNo, new { @class = "form-control" })
                     </div>

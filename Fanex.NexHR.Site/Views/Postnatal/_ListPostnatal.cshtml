@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models
 @model IList<EmployeePostnatal>
 
@@ -31,10 +32,10 @@
                     <td>@(index++)</td>
                     <td class="align-left">@postnatal.Fullname</td>
                     <td>@postnatal.Nickname</td>
-                    <td>@postnatal.FromDate.ToString("dd MMM yyyy")</td>
-                    <td>@postnatal.ToDate.ToString("dd MMM yyyy")</td>
+                    <td>@postnatal.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@postnatal.ToDate.ToDateMonthYearFormatedDate()</td>
                     <td>@postnatal.Creator</td>
-                    <td>@postnatal.CreatedDate.ToString("dd MMM yyyy")</td>
+                    <td>@postnatal.CreatedDate.ToDateMonthYearFormatedDate()</td>
                     @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
                     {
                         <td>
@@ -48,10 +49,10 @@
                     @if (ViewBag.IsHost)
                     {
                         <td class="action-column">
-                            <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="Edit">
+                            <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="@Labels.Edit">
                                 <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
                             </a>
-                            <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="Delete">
+                            <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="@Labels.Delete">
                                 <i class="fa fa-trash fa-lg icon-delete pointer"></i>
                             </a>
                         </td>

@@ -1,13 +1,14 @@
-﻿@model Employee
+﻿@using Fanex.NexHR.Resources
+@model Employee
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information";
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    @Url.CombresLink("accountcss")
+    <link href="~/wwwroot/dist/styles/employee.details.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("accountjs")
 }
 @section Breadcrumb {
     <a class="step">Personal</a>
@@ -22,210 +23,177 @@
     <span class="step">@ViewBag.Title</span>
 }
 <div class="leftpersonal">
-    <div class="avatarbox panel panel-default">
-        <div class="panel-heading">
+    <div class="panel panel-default">
+        <div class="panel-heading avatarbox">
             <div class="avatar">
-                <img class="img-employee" src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
+                <img src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
             </div>
             <div class="pinfo">
                 <span class="name">@Model.FullName</span>
                 <p class="accinfo">
-                    @Model.DomainUsername<br>
-                    <br>
+                    @Model.DomainUsername
+                    <br />
                     Staff ID: @Model.Code
                 </p>
             </div>
         </div>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            PERSONAL INFORMATION
-        </div>
+        <div class="panel-heading">PERSONAL INFORMATION</div>
         <ul class="list-group">
             <li class="list-group-item">
-                <div class="label">@Labels.FullName:</div>
-                <div class="pcontent">@Model.FullName</div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.FullName:</div>
+                <div class="pcontent bold">@Model.FullName</div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.Nick:</div>
-                <div class="pcontent">@Model.NickName</div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.Nick:</div>
+                <div class="pcontent bold">@Model.NickName</div>
             </li>
             @if (hasPermission)
             {
                 <li class="list-group-item">
-                    <div class="label">D.O.B:</div>
-                    <div class="pcontent">
+                    <div class="plabel">D.O.B:</div>
+                    <div class="pcontent bold">
                         @Model.DateOfBirth.ToDateMonthYearFormatedDate()
                     </div>
-                    <div class="clear"></div>
                 </li>
             }
             <li class="list-group-item">
-                <div class="label">@Labels.Gender:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.Gender:</div>
+                <div class="pcontent bold">
                     @(Model.Gender == 1 ? Labels.Male : Labels.Female)
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.Nationality:</div>
-                <div class="pcontent">@Model.CountryName</div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.Nationality:</div>
+                <div class="pcontent bold">@Model.CountryName</div>
             </li>
             @if (hasPermission)
             {
                 <li class="list-group-item">
-                    <div class="label">@Labels.Marriage:</div>
-                    <div class="pcontent">
+                    <div class="plabel">@Labels.Marriage:</div>
+                    <div class="pcontent bold">
                         @{
                             MarriageStatus status = (MarriageStatus)Model.Marriage;
                         }
                         @(Model.Marriage == null ? "Unknown" : status.ToString())
                     </div>
-                    <div class="clear"></div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label">@Labels.CardNo:</div>
-                    <div class="pcontent">@Model.CardNo</div>
-                    <div class="clear"></div>
+                    <div class="plabel">@Labels.CardNo:</div>
+                    <div class="pcontent bold">@Model.CardNo</div>
                 </li>
                 if (!string.IsNullOrEmpty(Model.PassportNo))
                 {
                     <li class="list-group-item">
-                        <div class="label">@Labels.PassportNo:</div>
-                        <div class="pcontent">@Model.PassportNo</div>
-                        <div class="clear"></div>
-                    </li>
-                }
-
-                if (Model.Gender != null && Model.Gender != 0 && (Model.MilitaryFromDate.HasValue || Model.MilitaryToDate.HasValue))
-                {
-                    <li class="list-group-item">
-                        <div class="label">@Labels.PassportExp:</div>
-                        <div class="pcontent">
-                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
-                        </div>
-                        <div class="clear"></div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="label">@Labels.PassportExp:</div>
-                        <div class="pcontent">
-                            @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
-                        </div>
-                        <div class="clear"></div>
+                        <div class="plabel">@Labels.PassportNo:</div>
+                        <div class="pcontent bold">@Model.PassportNo</div>
                     </li>
                 }
                 if (Model.PassportExp.HasValue)
                 {
                     <li class="list-group-item">
-                        <div class="label">@Labels.PassportExp:</div>
-                        <div class="pcontent">
+                        <div class="plabel">@Labels.PassportExp:</div>
+                        <div class="pcontent bold">
                             @Model.PassportExp.Value.ToDateMonthYearFormatedDate()
                         </div>
-                        <div class="clear"></div>
+                    </li>
+                }
+                if (Model.MilitaryFromDate.HasValue && Model.MilitaryToDate.HasValue)
+                {
+                    <li class="list-group-item">
+                        <div class="plabel">@Labels.MilitaryFromDate:</div>
+                        <div class="pcontent bold">
+                            @Model.MilitaryFromDate.Value.ToDateMonthYearFormatedDate()
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="plabel">@Labels.MilitaryToDate:</div>
+                        <div class="pcontent bold">
+                            @Model.MilitaryToDate.Value.ToDateMonthYearFormatedDate()
+                        </div>
                     </li>
                 }
                 if (Model.WorkingDays > 0)
                 {
                     <li class="list-group-item">
-                        <div class="label">@Labels.WorkingDays:</div>
-                        <div class="pcontent">
-                            @Model.WorkingDays
-                        </div>
-                        <div class="clear"></div>
+                        <div class="plabel">@Labels.WorkingDays:</div>
+                        <div class="pcontent bold">@Model.WorkingDays</div>
                     </li>
                 }
                 if (Model.WorkingHours > 0)
                 {
                     <li class="list-group-item">
-                        <div class="label"> Working Hours: </div>
-                        <div class="pcontent">@Model.WorkingHours</div>
-                        <div class="clear"> </div>
+                        <div class="plabel">@Labels.WorkingHours:</div>
+                        <div class="pcontent bold">@Model.WorkingHours</div>
                     </li>
                 }
             }
         </ul>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            JOB INFORMATION
-        </div>
+        <div class="panel-heading">JOB INFORMATION</div>
         <ul class="list-group">
             <li class="list-group-item">
-                <div class="label">@Labels.JobTitle:</div>
-                <div class="pcontent">@Model.JobTitle</div>
-
-                <div class="clear"></div>
+                <div class="plabel">@Labels.JobTitle:</div>
+                <div class="pcontent bold">@Model.JobTitle</div>
             </li>
             @if (Model.PromotionDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="label">@Labels.PromotionDate:</div>
-                    <div class="pcontent">@Model.PromotionDate.Value.ToDateMonthYearFormatedDate()</div>
-                    <div class="clear"></div>
+                    <div class="plabel">@Labels.PromotionDate:</div>
+                    <div class="pcontent bold">@Model.PromotionDate.Value.ToDateMonthYearFormatedDate()</div>
                 </li>
             }
             <li class="list-group-item">
-                <div class="label">@Labels.Section:</div>
-                <div class="pcontent">@Model.Team.Name</div>
-
-                <div class="clear"></div>
+                <div class="plabel">@Labels.Section:</div>
+                <div class="pcontent bold">@Model.Team.Name</div>
             </li>
             @if (Model.SectionDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="label">@Labels.SectionDate:</div>
-                    <div class="pcontent">@Model.SectionDate.Value.ToDateMonthYearFormatedDate()</div>
-                    <div class="clear"></div>
+                    <div class="plabel">@Labels.SectionDate:</div>
+                    <div class="pcontent bold">@Model.SectionDate.Value.ToDateMonthYearFormatedDate()</div>
                 </li>
             }
             <li class="list-group-item">
-                <div class="label">@Labels.Roles:</div>
-                <div class="pcontent role">
-                    @Model.Roles2String
-                </div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.Roles:</div>
+                <div class="pcontent bold">@Model.Roles2String</div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.GroupDate:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.GroupDate:</div>
+                <div class="pcontent bold">
                     @if (Model.JoinedDate.HasValue)
                     {
                         @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.CompanyDate:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.CompanyDate:</div>
+                <div class="pcontent bold">
                     @if (Model.CompanyDate.HasValue)
                     {
                         @Model.CompanyDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.ConfirmedDate:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.ConfirmedDate:</div>
+                <div class="pcontent bold">
                     @if (Model.ConfirmedDate.HasValue)
                     {
                         @Model.ConfirmedDate.Value.ToDateMonthYearFormatedDate()
                     }
                 </div>
-                <div class="clear"></div>
             </li>
             @if (Model.ResignedDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="label">@Labels.ResignedDate:</div>
-                    <div class="pcontent">
+                    <div class="plabel">@Labels.ResignedDate:</div>
+                    <div class="pcontent bold">
                         @Model.ResignedDate.Value.ToDateMonthYearFormatedDate()
                     </div>
-                    <div class="clear"></div>
                 </li>
             }
         </ul>
@@ -233,74 +201,60 @@
 </div>
 <div class="rightjob">
     <div class="panel panel-default">
-        <div class="panel-heading">
-            CONTACT DETAILS
-        </div>
+        <div class="panel-heading">CONTACT DETAILS</div>
         <ul class="list-group">
             <li class="list-group-item">
-                <div class="label">@Labels.Email:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.Email:</div>
+                <div class="pcontent bold">
                     <a href="mailto:@Model.Email">@Model.Email</a>
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.Phone:</div>
-                <div class="pcontent">@Model.Phone</div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.Phone:</div>
+                <div class="pcontent bold">@Model.Phone</div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.Skype:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.Skype:</div>
+                <div class="pcontent bold">
                     <a href="skype:@(Model.Skype)?chat">@Model.Skype</a>
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label">@Labels.LetsTalk:</div>
-                <div class="pcontent">
-                    @Model.LetsTalk
-                </div>
-                <div class="clear"></div>
+                <div class="plabel">@Labels.LetsTalk:</div>
+                <div class="pcontent bold">@Model.LetsTalk</div>
             </li>
             @if (hasPermission)
             {
                 <li class="list-group-item">
-                    <div class="label">@Labels.Address:</div>
-                    <div class="pcontent">@Model.Address</div>
-                    <div class="clear"></div>
+                    <div class="plabel">@Labels.Address:</div>
+                    <div class="pcontent bold">@Model.Address</div>
                 </li>
                 <li class="list-group-item">
-                    <div class="label">@Labels.CurrentAddress:</div>
-                    <div class="pcontent">@Model.CurrentAddress</div>
-                    <div class="clear"></div>
+                    <div class="plabel">@Labels.CurrentAddress:</div>
+                    <div class="pcontent bold">@Model.CurrentAddress</div>
                 </li>
             }
         </ul>
     </div>
     <div class="panel panel-default">
-        <div class="panel-heading">
-            ATTENDANCE REPORT
-        </div>
-        <ul class="list-group">
+        <div class="panel-heading">ATTENDANCE REPORT</div>
+        <ul class="list-group attendance">
             <li class="list-group-item">
-                <div class="label2">@Labels.AnualLeaveBalance:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.AnualLeaveBalance:</div>
+                <div class="pcontent bold">
                     @Model.AnnualLeaveBalance day(s)
                 </div>
-                <div class="clear"></div>
             </li>
             <li class="list-group-item">
-                <div class="label2">@Labels.KeepInViewBalance:</div>
-                <div class="pcontent">
+                <div class="plabel">@Labels.KeepInViewBalance:</div>
+                <div class="pcontent bold">
                     @Model.KeepInViewBalance day(s)
                 </div>
-                <div class="clear"></div>
             </li>
             @if (Model.IsDefaultSchedule)
             {
                 <li class="list-group-item">
-                    <div class="label2">
+                    <div class="plabel">
                         Default Working Calendar:
                     </div>
                     <div class="pcontent">
@@ -324,16 +278,15 @@
                             <div class="day">@Labels.Fri</div>
                             <div class="shift">@ViewBag.Fri</div>
                         </div>
-                        <div class="scheduleoff">
+                        <div class="schedule off">
                             <div class="day">@Labels.Sat</div>
                             <div class="shift">@ViewBag.Sat</div>
                         </div>
-                        <div class="scheduleoff">
+                        <div class="schedule off">
                             <div class="day">@Labels.Sun</div>
                             <div class="shift">@ViewBag.Sun</div>
                         </div>
                     </div>
-                    <div class="clear"></div>
                 </li>
             }
         </ul>
