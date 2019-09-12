@@ -31,7 +31,7 @@
                 <div id="week-picker"></div>
             </div>
         </div>
-        <div class="form-group form-group--l">
+        <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.Label(Labels.Category, new { @class = "control-label" })
             </div>
@@ -39,13 +39,11 @@
                 @RazorHelper.CategoryDropDownList("IsLocal", classHTML: "form-control", selectedId: string.Empty)
             </div>
         </div>
-        <div class="form-group form-group--l">
+        <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Section, new { @class = "control-label" })
+                <label class="control-label">@Labels.DepartmentSection</label>
             </div>
-            <div class="select-form">
-                @Html.DropDownList("Section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
-            </div>
+            <div class="select-form" id="Section"></div>
         </div>
     </div>
     <div class="form-horizontal clearfix">
@@ -66,7 +64,7 @@
                 @RazorHelper.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId)
             </div>
         </div>
-        <div class="form-group form-group--l">
+        <div class="form-group form-group--m">
             <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
             <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
         </div>

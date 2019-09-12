@@ -2,13 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
@@ -17,28 +15,23 @@
     public class WorkingCalendarSummaryReportController : BaseController
     {
         private readonly IWorkingCalendarSummaryReportService reportService;
-        private readonly ICommonDataService commonDataService;
 
         public WorkingCalendarSummaryReportController(
             ISessionService sessionService,
-            IWorkingCalendarSummaryReportService reportService,
-            ICommonDataService commonDataService) : base(sessionService)
+            IWorkingCalendarSummaryReportService reportService) : base(sessionService)
         {
             this.reportService = reportService;
-            this.commonDataService = commonDataService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
             var today = DateTime.Today;
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
             var model = new WorkingCalendarSummaryViewModel
             {
                 FromDate = today,
                 ToDate = today,
-                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
-                Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code })
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
             return View("~/Views/Report/WorkingCalendarSummary.cshtml", model);

@@ -1,12 +1,10 @@
-﻿@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
-
-@import '../../abstracts/variables';
+﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/buttons-new';
+@import '../../components/multiselect-treeview';
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../vendors/weekpicker';
-@import '../../vendors/multiselect';
 
 form.filter {
     .weekpicker-wrapper {
@@ -14,6 +12,12 @@ form.filter {
             display: inline;
             width: 80px !important;
         }
+    }
+}
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
     }
 }
 

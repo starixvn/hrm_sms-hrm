@@ -1,8 +1,12 @@
-﻿@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
-
-@import '../../abstracts/variables';
+﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/buttons-new';
+@import '../../components/multiselect-treeview';
 @import '../../layout/filter';
 @import '../../layout/table';
-@import '../../vendors/multiselect';
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}

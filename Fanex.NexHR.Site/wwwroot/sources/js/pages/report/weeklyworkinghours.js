@@ -1,11 +1,11 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 import 'floatthead/dist/jquery.floatThead';
 import '../../jquery-weekpicker';
 import moment from 'moment';
 import axios from 'axios';
 
+import '../../shared/multiselect-tree-view';
 import { axiosError, blockUI, unblockUI, floatThead } from '../../shared/common.functions';
 
 $(document).ready(function () {
@@ -54,24 +54,23 @@ $(document).ready(function () {
         $('#week-picker').toggle();
     });
 
-    $('#Section').multiselect({
-        minWidth: 180,
-        checkAllText: 'Check',
-        uncheckAllText: 'Uncheck'
-    });
+    axios(_global.root + 'Department/GetHierarchy')
+        .then(response => {
+            $('#Section').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true
+            });
 
-    $('#Section').on('change', function () {
-        const sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
-        $('#SectionIds').val(sectionIds);
-    });
+            $('#btnSearch').trigger('click');
+        }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
+        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $('#btnExcel').on('click', function () {
+        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         window.location.href = _global.root + 'WeeklyWorkingHours/ExportExcel?' + $('form.filter').serialize();
     });
-
-    query();
 });

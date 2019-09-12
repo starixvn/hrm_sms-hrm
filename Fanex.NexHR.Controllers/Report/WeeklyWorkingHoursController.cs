@@ -2,14 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -18,35 +16,24 @@
     [HRMPermission(Policy.Read, FunctionKey.AttendanceWeeklyReport)]
     public class WeeklyWorkingHoursController : BaseController
     {
-        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeWorkingHoursService workingHoursService;
 
         public WeeklyWorkingHoursController(
             ISessionService sessionService,
-            ICommonDataService commonDataService,
             IEmployeeWorkingHoursService workingHoursService) : base(sessionService)
         {
-            this.commonDataService = commonDataService;
             this.workingHoursService = workingHoursService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
             var today = DateTime.Today;
-
             var model = new WeeklyFilterViewModel
             {
                 FromDate = today.FirstDayOfWeek(),
                 ToDate = today.LastDayOfWeek(),
-                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
-                Sections = sections.Select(x => new EntityBase<int>
-                {
-                    Id = x.Id,
-                    Code = x.Code,
-                    Name = x.Name
-                })
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
             return View("~/Views/Report/WeeklyWorkingHours/Index.cshtml", model);

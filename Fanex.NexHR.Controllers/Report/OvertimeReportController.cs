@@ -2,28 +2,23 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.Overtime;
 
     public class OvertimeReportController : BaseController
     {
-        private readonly ICommonDataService commonDataService;
         private readonly IOvertimeReportService overtimeReportService;
 
         public OvertimeReportController(
             ISessionService sessionService,
-            ICommonDataService commonDataService,
             IOvertimeReportService overtimeReportService) : base(sessionService)
         {
-            this.commonDataService = commonDataService;
             this.overtimeReportService = overtimeReportService;
         }
 
@@ -45,8 +40,6 @@
         [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
         {
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
-            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetYearlyOvertimeParam
             {
                 ActorId = sessionService.Employee.Id,
@@ -84,8 +77,6 @@
         [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
         public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
         {
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
-            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             var param = new GetDailyOvertimeDetailsParam
             {
                 ActorId = sessionService.Employee.Id,

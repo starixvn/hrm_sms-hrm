@@ -1273,7 +1273,7 @@
     <value>Default Shift</value>
   </data>
   <data name="DepartmentSection" xml:space="preserve">
-    <value>Department/Section</value>
+    <value>Dept./Section</value>
   </data>
   <data name="EmployeeID" xml:space="preserve">
     <value>Employee ID</value>

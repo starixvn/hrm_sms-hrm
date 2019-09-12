@@ -2,13 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -17,32 +15,22 @@
     [HRMPermission(Policy.Read, FunctionKey.AttendanceDailyReport)]
     public class DailyWorkingHoursController : BaseController
     {
-        private readonly ICommonDataService commonDataService;
         private readonly IEmployeeWorkingHoursService workingHoursService;
 
         public DailyWorkingHoursController(
             ISessionService sessionService,
-            ICommonDataService commonDataService,
             IEmployeeWorkingHoursService workingHoursService) : base(sessionService)
         {
-            this.commonDataService = commonDataService;
             this.workingHoursService = workingHoursService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
             var model = new WeeklyFilterViewModel
             {
                 FromDate = DateTime.Today,
-                EmployeeStatusId = (byte)EmployeeStatus.Enabled,
-                Sections = sections.Select(x => new EntityBase<int>
-                {
-                    Id = x.Id,
-                    Code = x.Code,
-                    Name = x.Name
-                })
+                EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
             return View("~/Views/Report/DailyWorkingHours.cshtml", model);

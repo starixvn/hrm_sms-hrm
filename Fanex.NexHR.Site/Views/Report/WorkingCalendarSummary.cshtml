@@ -65,11 +65,9 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Section, new { @class = "control-label" })
+                <label class="control-label">@Labels.DepartmentSection</label>
             </div>
-            <div class="select-form">
-                @Html.DropDownList("Section", new SelectList(Model.Sections, "Id", "Name"), new { multiple = "multiple" })
-            </div>
+            <div class="select-form" id="Section"></div>
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">

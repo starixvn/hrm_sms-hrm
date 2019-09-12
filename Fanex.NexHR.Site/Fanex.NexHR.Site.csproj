@@ -331,6 +331,7 @@
     <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
@@ -1082,6 +1083,7 @@
     <Content Include="wwwroot\sources\styles\components\_card.scss" />
     <Content Include="wwwroot\dist\js\employee.create.js.map" />
     <Content Include="wwwroot\dist\styles\employee.create.js.map" />
+    <Content Include="wwwroot\sources\styles\components\_multiselect-treeview.scss" />
     <None Include="wwwroot\sources\styles\layout\_shift.color.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
     <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
