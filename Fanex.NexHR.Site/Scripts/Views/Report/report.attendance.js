@@ -106,17 +106,24 @@ function query() {
 }
 
 $(document).ready(function () {
-    $('form.form-filter #group').multiselect();
+    $.ajax({
+        url: _global.root + 'Department/GetHierarchy',
+        success: function (data) {
+            $('#Section').multiSelectTreeView({
+                data: data,
+                selectedItems: $('#GroupIds').val()
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
+
     $('#FromDate, #ToDate').attr('readonly', 'readonly');
 
     $('#FromDate').on("change", function () {
         var value = $(this).val();
         $('#ToDate').val(value);
-    });
-
-    $('form.form-filter #group').on('change', function () {
-        var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
-        $('#GroupIds').val(sectionIds);
     });
 
     $('form.form-filter #category').on('change', function () {
@@ -125,10 +132,12 @@ $(document).ready(function () {
 
     $('#btnSubmit').click(function (evt) {
         evt.preventDefault();
+        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $("#btnExcel").click(function () {
+        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         location.href = _global.root + "ExportAttendance/Attendance?" + $('.form-filter').serialize();
     });
 

@@ -1,4 +1,18 @@
-﻿form.form-filter {
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/multiselect-treeview';
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-button {
+        width: 90%;
+    }
+
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}
+
+form.form-filter {
     .grid_2 {
         line-height: 26px;
     }

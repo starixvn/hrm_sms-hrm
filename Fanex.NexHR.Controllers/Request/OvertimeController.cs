@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
@@ -23,19 +22,16 @@
     {
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
-        private readonly ICommonDataService commonDataService;
         private readonly IOvertimeRequestService overtimeService;
 
         public OvertimeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            ICommonDataService commonDataService,
             IOvertimeRequestService overtimeService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
-            this.commonDataService = commonDataService;
             this.overtimeService = overtimeService;
         }
 
@@ -86,7 +82,6 @@
         {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
             if (model.StatusId == -1)
             {
                 statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
@@ -107,7 +102,6 @@
                 EmployeeId = model.EmployeeId,
                 StatusIds = statusIds
             };
-            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
             ViewBag.CurrentUserId = sessionService.Employee.Id;
@@ -129,7 +123,6 @@
         {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-            IEnumerable<Team> sections = commonDataService.GetAllSection();
             if (model.StatusId == -1)
             {
                 statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
@@ -151,7 +144,6 @@
                 StatusIds = statusIds,
                 IsProcessor = true
             };
-            model.Sections = sections.Select(x => new EntityBase<int> { Id = x.Id, Name = x.Name, Code = x.Code });
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
             return View(model);

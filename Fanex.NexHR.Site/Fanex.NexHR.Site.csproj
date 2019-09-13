@@ -323,6 +323,7 @@
     <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\report\manpower.js" />
+    <Content Include="wwwroot\sources\js\pages\report\unpaid.leave.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\workingcalendar.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\workinghours.summary.js" />
     <Content Include="wwwroot\sources\js\pages\report\dailyovertime.js" />
@@ -392,12 +393,10 @@
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Request\employeerequest.js" />
-    <Content Include="Scripts\Views\Report\report.leavesumary.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\Team\team.edit.js" />
     <Content Include="Styles\account.css" />
-    <Content Include="Styles\annualbalance.css" />
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
     <Content Include="Styles\report.supervisor.css" />
@@ -1092,13 +1091,14 @@
     <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\log.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\account\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\index.scss" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.create.scss" />
     <None Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\dailyovertime.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\manpower.scss" />
-    <None Include="wwwroot\sources\styles\pages\unpaidleave\unpaid-leave.scss" />
+    <None Include="wwwroot\sources\styles\pages\report\unpaid.leave.summary.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
     <Content Include="wwwroot\webpack.config.vendor.js" />
@@ -1432,7 +1432,7 @@
     <Content Include="wwwroot\sources\styles\pages\account\edit.profile.scss" />
     <Content Include="Views\Information\_ListFileUploaded.cshtml" />
     <Content Include="ExcelTemplates\JobTitleSummary.xls" />
-    <Content Include="Views\Report\_ListLeaveSummary.cshtml" />
+    <Content Include="Views\Report\_UnpaidLeaveSummaryDetails.cshtml" />
     <None Include="wwwroot\sources\styles\pages\employee\employee.details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\employee.edit.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />

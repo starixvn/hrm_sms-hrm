@@ -8,8 +8,8 @@
 {
     <select id="@id" name="@id" class="@classHTML">
         <option selected=@(string.IsNullOrWhiteSpace(selectedId)) value="@string.Empty">-- All --</option>
-        <option selected=@(selectedId == "0") value="0">Expat</option>
-        <option selected=@(selectedId == "1") value="1">Local</option>
+        <option selected=@(selectedId == "1") value="1">@Labels.Local</option>
+        <option selected=@(selectedId == "0") value="0">@Labels.Expat</option>
     </select>
 }
 

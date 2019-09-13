@@ -243,22 +243,22 @@
             return View(model);
         }
 
-        public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel leavingSummaryModel)
+        public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
             var criteria = new GetUnpaidLeaveCriteria
             {
-                Year = leavingSummaryModel.Year,
-                EmpId = leavingSummaryModel.EmployeeId != -1 ? new int?(leavingSummaryModel.EmployeeId) : null,
-                GroupIds = leavingSummaryModel.SectionIds,
-                IsLocal = (byte?)leavingSummaryModel.Category,
+                Year = model.Year,
+                EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+                GroupIds = model.SectionIds,
+                IsLocal = (byte?)model.Category,
                 SupervisorId = sessionService.Employee.Id,
-                LeaveType = (int)leavingSummaryModel.LeaveType
+                LeaveType = (int)model.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
             IList<Team> sections = teamService.GetBySupervisor(sessionService.Employee.Id);
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
-            ViewBag.HeaderTitle = string.Format("{0} {1}", EnumerationHelper.GetStringValue(leavingSummaryModel.LeaveType), leavingSummaryModel.Year);
-            return PartialView("_ListLeaveSummary", leaveSummaryByTeamList);
+            ViewBag.HeaderTitle = string.Format("{0} {1}", EnumerationHelper.GetStringValue(model.LeaveType), model.Year);
+            return PartialView("_UnpaidLeaveSummaryDetails", leaveSummaryByTeamList);
         }
 
         public ActionResult EmployeeSupervisor()

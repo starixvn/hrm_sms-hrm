@@ -1,6 +1,5 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
 import '../../../libs/monthPicker/monPickr-0.0.3';
@@ -10,6 +9,7 @@ import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
 import { CommandRequest, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
+import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 $(document).ready(function () {
@@ -38,20 +38,13 @@ $(document).ready(function () {
         $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
     }
 
-    $('#Section').multiselect({
-        minWidth: 180,
-        checkAllText: 'Check',
-        uncheckAllText: 'Uncheck'
-    });
-
-    const sectionIds = $('#SectionIds').val().split(',');
-    $('#Section').val(sectionIds);
-    $('#Section').multiselect('refresh');
-
-    $('#Section').on('change', function () {
-        const sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
-        $('#SectionIds').val(sectionIds);
-    });
+    axios(_global.root + 'Department/GetHierarchy')
+        .then(response => {
+            $('#Section').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#SectionIds').val()
+            });
+        }).catch(axiosError);
 
     floatThead('table#data');
 
@@ -62,6 +55,7 @@ $(document).ready(function () {
         if (statusId === 0 && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
+            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
             $('form.filter').submit();
         }
     });
@@ -82,8 +76,8 @@ $(document).ready(function () {
         }).then(response => {
             let data = response.data;
             if (data.IsSuccessful) {
-                toastr.success('Updated Successfully!', '', toastOptions());
-                setTimeout(function () { $('form.filter').submit(); }, 1000);
+                toastr.success('Updated successfully!', '', toastOptions());
+                setTimeout(function () { $('#btnSearch').trigger('click'); }, 1000);
             } else {
                 toastr.error(data.Message, '', toastOptions());
             }

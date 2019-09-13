@@ -1,108 +1,74 @@
-﻿@model LeaveSummaryViewModel
+﻿@using Fanex.NexHR.Resources
+@model LeaveSummaryViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = "Unpaid Leave";
+    ViewBag.Title = Labels.UnpaidLeave;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/unpaidleave.index.css" rel="stylesheet" />
-    @*@Url.CombresLink("sitecss")*@
+    <link href="~/wwwroot/dist/styles/report.unpaid.leave.summary.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("leavesummaryjs")
+    <script src="~/wwwroot/dist/js/report.unpaid.leave.summary.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
 @if (hasPermission)
 {
-    <div class="filter">
-        @using (Html.BeginForm())
-        {
-            <div class="form-horizontal clearfix">
-                <div class="form-group form-group--s">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Year, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @Html.YearPicker("Year", 2010, DateTime.Now.Year)
-                    </div>
+    <form class="filter">
+        @Html.HiddenFor(model => model.SectionIds)
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Year, new { @class = "control-label" })
                 </div>
-
-                <div class="form-group form-group--s">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Category, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        <select id="Category" name="Category" class="category form-control">
-                            <option value="">-- All --</option>
-                            <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
-                            <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group form-group--s">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Section, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        <select id="SectionId" multiple="multiple" name="SectionId" class="form-control">
-                            @{
-                                var sectionIds = !string.IsNullOrEmpty(Model.SectionIds) ? Model.SectionIds.Split(',') : null;
-                                var selected = string.Empty;
-                                foreach (Team team in Model.Sections)
-                                {
-                                    selected = string.Empty;
-                                    if (sectionIds != null)
-                                    {
-                                        int pos = Array.IndexOf(sectionIds, team.Id.ToString());
-                                        if (pos > -1)
-                                        {
-                                            selected = "selected";
-                                        }
-                                    }
-                                    <option value="@team.Id">@team.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
+                <div class="select-form">
+                    @Html.YearPicker("Year", 2010, DateTime.Now.Year)
                 </div>
             </div>
 
-            <div class="form-horizontal clearfix">
-
-                <div class="form-group form-group--s">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Type, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @Html.EnumDropDownFor(model => model.LeaveType, null, null, new { @class = "form-control" })
-                    </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Category, new { @class = "control-label" })
                 </div>
-
-                <div class="form-group form-group--l">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Employee, new { @class = "control-label" })
-                    </div>
-                    <div class="input-form">
-                        @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
-                        @Html.HiddenFor(model => model.EmployeeId)
-                    </div>
-                </div>
-
-                <div class="form-group form-group--l">
-                    <div class="button-group">
-                        <input type="submit" value="@Labels.Submit" />
-                        <input type="button" value="Excel" id="btnExcel" />
-                    </div>
+                <div class="select-form">
+                    @RazorHelper.CategoryDropDownList("Category", classHTML: "form-control", selectedId: string.Empty)
                 </div>
             </div>
-        }
-    </div>
-    <div class="clear">
-    </div>
+
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.DepartmentSection</label>
+                </div>
+                <div class="select-form" id="Section"></div>
+            </div>
+        </div>
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Type, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.EnumDropDownFor(model => model.LeaveType, null, null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Employee, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                    @Html.HiddenFor(model => model.EmployeeId)
+                </div>
+            </div>
+
+            <div class="form-group form-group--m">
+                <input type="button" class="btn btn-primary" id="btnSearch" value="@Labels.Submit" />
+                <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
+            </div>
+        </div>
+    </form>
 }
 
-<div id="ListSummary">
-</div>
+<div id="UnpaidLeaveSummaryDetails"></div>

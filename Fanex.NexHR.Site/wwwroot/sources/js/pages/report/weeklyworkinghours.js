@@ -23,7 +23,7 @@ $(document).ready(function () {
                 employee: $('#Employee').val(),
                 employeeStatusId: $('#EmployeeStatusId').val()
             },
-            responseType: 'html'
+            responseType: 'text'
         }).then(response => {
             $('#WeeklyWorkingHoursDetails').html(response.data);
             floatThead('table#data');

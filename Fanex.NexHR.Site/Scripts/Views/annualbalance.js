@@ -1,30 +1,37 @@
-﻿'use strict';
-/*global _global*/
+﻿$(document).ready(function () {
+    $.ajax({
+        url: _global.root + 'Department/GetHierarchy',
+        success: function (data) {
+            $('#Section').multiSelectTreeView({
+                data: data,
+                selectedItems: $('#SectionIds').val()
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
 
-$(document).ready(function () {
-    $("#SectionId").multiselect();
-
-    $("form").submit(function (e) {
+    $('form').submit(function (e) {
         e.preventDefault();
-        $("#SectionId").val() != null ? $("#SectionId").val().join() : "";
-        var postToUrl = "AnnualLeaveBalance/index?year=";
+        var postToUrl = 'AnnualLeaveBalance/index?year=';
         var url = submitData(postToUrl);
         location.href = url;
     });
 
-    $("#btnExcel").click(function () {
-        var postToUrl = "ExportLeaveSummary/AnnualLeaveSummary?year=";
+    $('#btnExcel').click(function () {
+        var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummary?year=';
         var url = submitData(postToUrl);
         location.href = url;
     });
 
     var submitData = function (postToUrl) {
-        var sectionIds = $("#SectionId").val() != null ? $("#SectionId").val().join() : "";
-        var url = _global.root + postToUrl + $("#Year").val() +
-            "&SectionIds=" + sectionIds + "&Employee=" + $("#Employee").val() +
-            "&EmployeeId=" + $("#EmployeeId").val() +
-            "&MinAnnualBalance=" + $("#MinAnnualBalance").val() +
-            "&Category=" + $("#Category").val();
+        var sectionIds = $('#Section').multiSelectTreeView('getSelectedItems');
+        var url = _global.root + postToUrl + $('#Year').val() +
+            '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
+            '&EmployeeId=' + $('#EmployeeId').val() +
+            '&MinAnnualBalance=' + $('#MinAnnualBalance').val() +
+            '&Category=' + $('#Category').val();
 
         return url;
     };

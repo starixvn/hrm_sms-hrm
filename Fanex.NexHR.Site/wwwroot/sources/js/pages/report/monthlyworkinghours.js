@@ -21,7 +21,7 @@ $(document).ready(function () {
                 employee: $('#Employee').val(),
                 employeeStatusId: $('#EmployeeStatusId').val()
             },
-            responseType: 'html'
+            responseType: 'text'
         }).then(response => {
             $('#MonthlyWorkingHoursDetails').html(response.data);
             floatThead('table#data');

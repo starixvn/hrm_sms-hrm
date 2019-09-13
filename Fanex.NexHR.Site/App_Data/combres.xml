@@ -81,10 +81,11 @@
     </resourceSet>
     <resourceSet name="attendancereportjs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/report/report.attendance.js" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/views/date.filter.js" />
+      <resource path="~/scripts/views/report/report.attendance.js" />
     </resourceSet>
 
     <resourceSet name="timesheetcss" type="css">
@@ -276,6 +277,7 @@
 
     <resourceSet name="annualbalancejs" type="js">
       <resource reference="sitejs" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/annualbalanceadj.js" />
       <resource path="~/scripts/views/annualbalance.js" />
@@ -283,7 +285,7 @@
 
     <resourceSet name="annualbalancecss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/annualbalance.css" />
+      <resource path="~/wwwroot/dist/styles/annual.leave.balance.index.css" />
     </resourceSet>
 
     <resourceSet name="reportsupervisorcss" type="css">
@@ -309,12 +311,6 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/team/team.edit.js" />
       <resource path="~/scripts/chosen/chosen.jquery.js" />
-    </resourceSet>
-
-    <resourceSet name="leavesummaryjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/report/report.leavesumary.js" />
     </resourceSet>
 
     <resourceSet name="jobtitlecss" type="css">
