@@ -18,14 +18,17 @@
     public class ScheduleArrangeController : BaseController
     {
         private const string DateFormat = "dd-MMM-yyyy";
+        private readonly IRoleService roleService;
         private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly IExportExcelScheduleService exportExcelService;
 
         public ScheduleArrangeController(
             ISessionService sessionService,
+            IRoleService roleService,
             IScheduleArrangeService scheduleArrangeService,
             IExportExcelScheduleService exportExcelService) : base(sessionService)
         {
+            this.roleService = roleService;
             this.scheduleArrangeService = scheduleArrangeService;
             this.exportExcelService = exportExcelService;
         }
@@ -34,6 +37,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult Index()
         {
+            ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
+                .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
             return View();
         }
 

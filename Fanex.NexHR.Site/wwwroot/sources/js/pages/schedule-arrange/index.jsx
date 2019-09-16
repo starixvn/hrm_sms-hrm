@@ -450,7 +450,13 @@ export default class App extends Component {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
                         if (!member[attrName].isHoliday) {
-                            member[attrName] = { ...member[attrName], isOffDay: true, isOffDayReplacement: false, shift: null };
+                            member[attrName] = {
+                                ...member[attrName],
+                                isOffDay: true,
+                                isFixedOffDay: false,
+                                isOffDayReplacement: false,
+                                shift: null
+                            };
                         }
                     }
                 });
@@ -483,7 +489,13 @@ export default class App extends Component {
                         if (!member[attrName].isHoliday && member[attrName].shift !== null) {
                             const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                             const isModified = !originalSchedule.isOffDay ? true : originalSchedule.isModified;
-                            member[attrName] = { ...member[attrName], isOffDay: true, isOffDayReplacement: false, isModified };
+                            member[attrName] = {
+                                ...member[attrName],
+                                isOffDay: true,
+                                isFixedOffDay: false,
+                                isOffDayReplacement: false,
+                                isModified
+                            };
                         }
                     }
                 });
@@ -517,7 +529,13 @@ export default class App extends Component {
                             const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                             const isModified = originalSchedule.isOffDay ? true : originalSchedule.isModified;
                             selectWeekDays[attrName] = false;
-                            member[attrName] = { ...member[attrName], isOffDay: false, isOffDayReplacement: false, isModified };
+                            member[attrName] = {
+                                ...member[attrName],
+                                isOffDay: false,
+                                isFixedOffDay: false,
+                                isOffDayReplacement: false,
+                                isModified
+                            };
                         }
                     }
                 });
@@ -562,7 +580,14 @@ export default class App extends Component {
                             const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                             const isModified = !isEqual(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay
                                 ? true : originalSchedule.isModified;
-                            member[attrName] = { ...member[attrName], isOffDay, shift, isModified };
+                            const isFixedOffDay = isOffDay ? member[attrName].isFixedOffDay : false;
+                            member[attrName] = {
+                                ...member[attrName],
+                                isOffDay,
+                                isFixedOffDay,
+                                shift,
+                                isModified
+                            };
                         }
                     }
                 });
@@ -575,6 +600,45 @@ export default class App extends Component {
         }
 
         this.handleCloseShiftMultipleModal();
+    }
+
+    handleFixedOffDay = () => {
+        let schedules = [...this.state.schedules];
+        const selectedMembers = this.getSelectedMembers(schedules);
+        const totalItems = selectedMembers.length;
+
+        if (totalItems > 0) {
+            for (let index = 0; index < totalItems; index++) {
+                const { gindex, eindex } = selectedMembers[index];
+                let members = [...schedules[gindex].members];
+                let member = { ...members[eindex] };
+                const selectWeekDays = member.selectWeekDays;
+
+                this.scheduleAttrNames.forEach(attrName => {
+                    if (selectWeekDays[attrName]) {
+                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
+                        if (!member[attrName].isHoliday && member[attrName].shift !== null) {
+                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                            const isModified = !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified;
+                            member[attrName] = {
+                                ...member[attrName],
+                                isOffDay: true,
+                                isFixedOffDay: true,
+                                isOffDayReplacement: false,
+                                isModified
+                            };
+                        }
+                    }
+                });
+
+                members[eindex] = member;
+                schedules[gindex] = { ...schedules[gindex], members };
+            }
+
+            this.setState({ schedules });
+        } else {
+            toast.warn('Please choose at least one day to continue!');
+        }
     }
 
     handleSave = () => {
@@ -627,6 +691,7 @@ export default class App extends Component {
                                 shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
                                 isHoliday: schedule[attrName].isHoliday,
                                 isOffDay: schedule[attrName].isOffDay,
+                                isFixedOffDay: schedule[attrName].isFixedOffDay,
                                 isPublic: schedule.isPublic
                             });
                         }
@@ -1037,6 +1102,7 @@ export default class App extends Component {
                     onChangeOffdayOT={this.handleChangeOffDayOT}
                     onChangeWorkday={this.handleChangeWorkday}
                     onShiftMultiple={this.handleShiftMultiple}
+                    onFixedOffDay={this.handleFixedOffDay}
                     onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
                     onShowWeeklyDefaultShift={this.handleShowWeeklyDefaultShiftModal}
                     onUpdateRemark={this.handleUpdateRemark}

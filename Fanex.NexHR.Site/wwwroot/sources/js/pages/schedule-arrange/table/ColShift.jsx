@@ -132,10 +132,10 @@ export default class ColShift extends PureComponent {
         } else if (data.isOffDay) {
             classOfInput = 'offday';
             valueOfInput = data.shift !== null ? data.shift.code : 'Off';
-            if (data.isChangeShift || data.isOvertime) {
+            if (data.isFixedOffDay || data.isChangeShift || data.isOvertime) {
                 moreInfo = {
                     show: true,
-                    content: data.isChangeShift ? 'Change Shift' : 'Overtime'
+                    content: data.isFixedOffDay ? 'Off Day OT Fixed' : data.isChangeShift ? 'Change Shift' : 'Overtime'
                 };
             }
         } else if (data.isKeepInView) {

@@ -1,5 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateWeekly] @ActorId INT
+	,@FromDate DATE
+	,@ToDate DATE
 	,@WeeklyScheduleXml VARCHAR(MAX) = ''
 	,@DefaultShiftXml VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
@@ -13,7 +15,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @WeeklyScheduleXml=N'<ROOT><Row EmployeeId="1" WorkDate="2013-01-01" ShiftId="1" IsHoliday="1" IsOffDay="1" IsPublic="1" /></ROOT>
+    @WeeklyScheduleXml=N'<ROOT><Row EmployeeId="1" WorkDate="2013-01-01" ShiftId="1" IsHoliday="1" IsOffDay="1" IsFixedOffDay="1" IsPublic="1" /></ROOT>
     @DefaultShiftXml=N'<ROOT><Row EmployeeId="1" FromDate="2013-01-01" ShiftId="1" /></ROOT>
 
 */
@@ -39,6 +41,7 @@ BEGIN
 		,ShiftId INT NULL
 		,IsHoliday BIT
 		,IsOffDay BIT
+		,IsFixedOffDay BIT
 		,IsPublic BIT
 		)
 
@@ -65,6 +68,7 @@ BEGIN
 			,ShiftId
 			,IsHoliday
 			,IsOffDay
+			,IsFixedOffDay
 			,IsPublic
 			)
 		SELECT EmployeeId
@@ -73,10 +77,11 @@ BEGIN
 				WHEN ShiftId = '' THEN NULL
 				ELSE CONVERT(INT, ShiftId)
 				END
-			,ISNULL(IsHoliday, 0)
-			,ISNULL(IsOffDay, 0)
-			,ISNULL(IsPublic, 0)
-		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (EmployeeId INT, WorkDate DATE, ShiftId VARCHAR(100), IsHoliday BIT, IsOffDay BIT, IsPublic BIT) AS Data
+			,IsHoliday
+			,IsOffDay
+			,IsFixedOffDay
+			,IsPublic
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (EmployeeId INT, WorkDate DATE, ShiftId VARCHAR(100), IsHoliday BIT, IsOffDay BIT, IsFixedOffDay BIT, IsPublic BIT) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler
 
@@ -106,6 +111,14 @@ BEGIN
 		RETURN
 	END CATCH;
 
+	DECLARE @EmployeeIds VARCHAR(MAX)
+
+	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
+	FROM (
+		SELECT DISTINCT EmployeeId
+		FROM #tblWeeklySchedule
+		) AS tbl
+
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
 		INNER JOIN dbo.EmployeeAttendance AS ea WITH (NOLOCK) ON tblweekly.WorkDate = ea.AttendanceDate
@@ -133,7 +146,15 @@ BEGIN
 			ec.IsLeaveDay = 1
 			AND ec.LeaveDay = 1
 			)
-		OR ec.ChangeShiftId IS NOT NULL
+		OR EXISTS (
+			SELECT 1
+			FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
+				AND csrdt.OnDate = ec.WorkDate
+				INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
+				AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+			WHERE ec.EmpId = csr.EmpId
+			)
 		OR (
 			ec.IsKeepInView = 1
 			AND tblweekly.ShiftId IS NULL
@@ -144,124 +165,137 @@ BEGIN
 			AND tblweekly.IsOffDay = 0
 			)
 
-	BEGIN TRY
-		INSERT INTO #OTMonthlyRequest (
-			RequestId
-			,NormalHours
-			,OffHours
-			,PublicHours
-			)
-		SELECT ot.RequestId
-			,SUM(ISNULL(NormalHours, 0))
-			,SUM(ISNULL(OffHours, 0))
-			,SUM(ISNULL(PublicHours, 0))
-		FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
-			INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
-			AND ot.OvertimeDate = tblweekly.WorkDate
-		GROUP BY ot.RequestId
+	INSERT INTO #OTMonthlyRequest (
+		RequestId
+		,NormalHours
+		,OffHours
+		,PublicHours
+		)
+	SELECT ot.RequestId
+		,SUM(ISNULL(NormalHours, 0))
+		,SUM(ISNULL(OffHours, 0))
+		,SUM(ISNULL(PublicHours, 0))
+	FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
+		INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
+		AND ot.OvertimeDate = tblweekly.WorkDate
+	GROUP BY ot.RequestId
 
-		DELETE ot
-		FROM dbo.OTDailyRequest AS ot WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
-			AND ot.OvertimeDate = tblweekly.WorkDate
+	DELETE ot
+	FROM dbo.OTDailyRequest AS ot WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
+		AND ot.OvertimeDate = tblweekly.WorkDate
 
-		UPDATE otm
-		SET otm.NormalHours = ISNULL(otm.NormalHours, 0) - ISNULL(ot.NormalHours, 0)
-			,otm.OffHours = ISNULL(otm.OffHours, 0) - ISNULL(ot.OffHours, 0)
-			,otm.PublicHours = ISNULL(otm.PublicHours, 0) - ISNULL(ot.PublicHours, 0)
-		FROM dbo.OTMonthlyRequest AS otm WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #OTMonthlyRequest AS ot ON otm.RequestId = ot.RequestId
+	UPDATE otm
+	SET otm.NormalHours = ISNULL(otm.NormalHours, 0) - ISNULL(ot.NormalHours, 0)
+		,otm.OffHours = ISNULL(otm.OffHours, 0) - ISNULL(ot.OffHours, 0)
+		,otm.PublicHours = ISNULL(otm.PublicHours, 0) - ISNULL(ot.PublicHours, 0)
+	FROM dbo.OTMonthlyRequest AS otm WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #OTMonthlyRequest AS ot ON otm.RequestId = ot.RequestId
 
-		INSERT INTO dbo.tmpEmployeeAttendace (
-			EmpId
-			,WorkDate
-			,InsertedDate
-			)
-		SELECT tblweekly.EmployeeId
-			,tblweekly.WorkDate
-			,@ModifiedDate
-		FROM #tblWeeklySchedule AS tblweekly WITH (NOLOCK)
-			LEFT JOIN dbo.tmpEmployeeAttendace AS att WITH (NOLOCK) ON tblweekly.EmployeeId = att.EmpId
-			AND tblweekly.WorkDate = att.WorkDate
-		WHERE att.EmpId IS NULL
-			AND DATEDIFF(DD, tblweekly.WorkDate, GETDATE()) >= 0
+	INSERT INTO dbo.tmpEmployeeAttendace (
+		EmpId
+		,WorkDate
+		,InsertedDate
+		)
+	SELECT tblweekly.EmployeeId
+		,tblweekly.WorkDate
+		,@ModifiedDate
+	FROM #tblWeeklySchedule AS tblweekly WITH (NOLOCK)
+		LEFT JOIN dbo.tmpEmployeeAttendace AS att WITH (NOLOCK) ON tblweekly.EmployeeId = att.EmpId
+		AND tblweekly.WorkDate = att.WorkDate
+	WHERE att.EmpId IS NULL
+		AND DATEDIFF(DD, tblweekly.WorkDate, @Today) >= 0
 
-		UPDATE ec
-		SET ec.ShiftId = tblweekly.ShiftId
-			,ec.ModifiedDate = @ModifiedDate
-			,ec.ModifiedBy = @ActorId
-			,ec.IsOffDay = tblweekly.IsOffDay
-			,ec.IsHoliday = tblweekly.IsHoliday
-			,ec.IsPublic = tblweekly.IsPublic
-		FROM dbo.EmployeeCalendar AS ec WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON tblweekly.WorkDate = ec.WorkDate
-			AND tblweekly.EmployeeId = ec.EmpId
+	UPDATE empca
+	SET empca.ShiftId = tblweekly.ShiftId
+		,empca.IsOffDay = tblweekly.IsOffDay
+		,empca.IsFixedOffDay = tblweekly.IsFixedOffDay
+		,empca.IsHoliday = tblweekly.IsHoliday
+		,empca.IsPublic = tblweekly.IsPublic
+		,empca.ModifiedBy = @ActorId
+		,empca.ModifiedDate = @ModifiedDate
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON tblweekly.WorkDate = empca.WorkDate
+		AND tblweekly.EmployeeId = empca.EmpId
 
-		DELETE tblweekly
-		FROM #tblWeeklySchedule AS tblweekly
-			INNER JOIN dbo.EmployeeCalendar AS ec ON tblweekly.WorkDate = ec.WorkDate
-			AND tblweekly.EmployeeId = ec.EmpId
+	UPDATE empca
+	SET empca.IsFixedOffDay = 0
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+	WHERE empca.IsOffDay = 0
+		AND empca.IsFixedOffDay = 1
 
-		INSERT INTO dbo.EmployeeCalendar (
-			WorkDate
-			,EmpId
-			,ShiftId
-			,IsOffDay
-			,IsHoliday
-			,IsPublic
-			,ModifiedBy
-			,ModifiedDate
-			)
-		SELECT WorkDate
-			,EmployeeId
-			,ShiftId
-			,IsOffDay
-			,IsHoliday
-			,IsPublic
-			,@ActorId
-			,@ModifiedDate
-		FROM #tblWeeklySchedule
+	DELETE tblweekly
+	FROM #tblWeeklySchedule AS tblweekly
+		INNER JOIN dbo.EmployeeCalendar AS ec ON tblweekly.WorkDate = ec.WorkDate
+		AND tblweekly.EmployeeId = ec.EmpId
 
-		UPDATE ds
-		SET ds.ShiftId = tblds.ShiftId
-			,ds.ModifiedBy = @ActorId
-			,ds.ModifiedDate = @ModifiedDate
-		FROM dbo.ScheduleArrangementDefaultShift AS ds WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblDefaultShift AS tblds ON ds.FromDate = tblds.FromDate
-			AND ds.EmployeeId = tblds.EmployeeId
-			AND ISNULL(ds.ShiftId, -1) <> ISNULL(tblds.ShiftId, -1)
+	INSERT INTO dbo.EmployeeCalendar (
+		WorkDate
+		,EmpId
+		,ShiftId
+		,IsOffDay
+		,IsFixedOffDay
+		,IsHoliday
+		,IsPublic
+		,ModifiedBy
+		,ModifiedDate
+		)
+	SELECT WorkDate
+		,EmployeeId
+		,ShiftId
+		,IsOffDay
+		,IsFixedOffDay
+		,IsHoliday
+		,IsPublic
+		,@ActorId
+		,@ModifiedDate
+	FROM #tblWeeklySchedule
 
-		DELETE tblds
-		FROM #tblDefaultShift AS tblds
-		WHERE EXISTS (
-				SELECT 1
-				FROM dbo.ScheduleArrangementDefaultShift AS ds WITH (NOLOCK)
-				WHERE tblds.EmployeeId = ds.EmployeeId
-					AND tblds.FromDate = ds.FromDate
+	MERGE dbo.ScheduleArrangementDefaultShift AS [target]
+	USING #tblDefaultShift AS [source] ON (
+				[target].EmployeeId = [source].EmployeeId
+				AND [target].FromDate = [source].FromDate
 				)
+	WHEN MATCHED
+		AND ISNULL([target].ShiftId, 0) <> ISNULL([source].ShiftId, 0) THEN
+			UPDATE
+			SET [target].ShiftId = [source].ShiftId
+				,[target].ModifiedBy = @ActorId
+				,[target].ModifiedDate = @ModifiedDate
+	WHEN NOT MATCHED BY TARGET THEN
+			INSERT (
+				EmployeeId
+				,FromDate
+				,ShiftId
+				,ModifiedBy
+				,ModifiedDate
+				)
+			VALUES (
+				[source].EmployeeId
+				,[source].FromDate
+				,[source].ShiftId
+				,@ActorId
+				,@ModifiedDate
+				);
 
-		INSERT INTO dbo.ScheduleArrangementDefaultShift (
-			EmployeeId
-			,FromDate
-			,ShiftId
-			,ModifiedBy
-			,ModifiedDate
-			)
-		SELECT EmployeeId
-			,FromDate
-			,ShiftId
-			,@ActorId
-			,@ModifiedDate
-		FROM #tblDefaultShift
-		WHERE ShiftId IS NOT NULL
-	END TRY
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@EmployeeIds = @EmployeeIds
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
-	BEGIN CATCH
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Updated unsuccessfully!'
+	EXEC dbo.Log_WriteLog @LogActionId = 1002
+		,@LogDate = @ModifiedDate
+		,@Description = 'Update employee calendar'
+		,@TrackingValue = @WeeklyScheduleXml
+		,@UserId = @ActorId
 
-		RETURN
-	END CATCH;
+	IF @@ERROR <> 0
+	BEGIN
+		SELECT @ErrCode = 101
+			,@ErrMsg = N'Updated unsuccessfully!'
+	END
 
 	DROP TABLE #tblWeeklySchedule
 
