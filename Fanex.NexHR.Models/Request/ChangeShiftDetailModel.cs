@@ -15,5 +15,7 @@
         public string ToShift { get; set; }
 
         public string Remark { get; set; }
+
+        public DateTime ToDate { get; set; }
     }
 }

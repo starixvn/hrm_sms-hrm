@@ -9,17 +9,17 @@
 
     public class ChangeShiftCommand : CriteriaBase
     {
-        private readonly string _changeShiftDetailTpl = "<Request OnDate='{0}' FromShift='{1}' ToShift='{2}' Remark='{3}'></Request>";
+        private readonly string _changeShiftDetailTpl = "<Request OnDate='{0}' FromShift='{1}' ToShift='{2}' Remark='{3}' ToDate='{4}'></Request>";
 
         public int EmpId { get; set; }
-
-        public short RequestType { get; set; }
 
         public string Remark { get; set; }
 
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
+
+        public byte ChangeShiftType { get; set; }
 
         public int VerifierId { get; set; }
 
@@ -37,7 +37,7 @@
                 {
                     foreach (ChangeShiftDetailModel item in RequestDetail)
                     {
-                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShiftId, item.ToShiftId, HttpUtility.HtmlEncode(item.Remark));
+                        value.AppendFormat(_changeShiftDetailTpl, item.OnDate, item.FromShiftId, item.ToShiftId, HttpUtility.HtmlEncode(item.Remark), item.ToDate);
                     }
                 }
 
