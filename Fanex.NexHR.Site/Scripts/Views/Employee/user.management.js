@@ -36,6 +36,8 @@
     }
 
     function query() {
+        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+
         $.ajax({
             url: _global.root + 'employee/ListEmployee',
             type: 'POST',
@@ -84,14 +86,29 @@
             controllerPath = "ExportEmployee/EmployeeDetailsInfo?";
         }
 
+        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         url = _global.root + controllerPath + $('form.form-filter').serialize();
         location.href = url;
     }
 
     $(document).ready(function () {
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    selectedItems: $('#GroupIds').val()
+                });
+
+                query();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
+        });
+
         var jobTitleId = $('#JobTitleId').val();
         var dropDownTittle = $('#title');
-        $("#group").multiselect();
 
         dropDownTittle.val(jobTitleId);
         dropDownTittle.chosen();
@@ -108,11 +125,6 @@
             var decode = decodeURIComponent(q);
             $('#Keyword').val(decode);
         }
-
-        $('#group').on('change', function () {
-            var groupIds = $(this).val() !== null ? $(this).val().join(',') : '';
-            $('#GroupIds').val(groupIds);
-        });
 
         $('#title').on('change', function () {
             $('#JobTitleId').val($(this).val());
@@ -152,8 +164,6 @@
             $('#enabled').prop('checked', false);
             $('#disabled').prop('checked', false);
         });
-
-        query();
 
         $('#query').on("click", function (evt) {
             evt.preventDefault();

@@ -14,6 +14,7 @@ module.exports = {
         [`${styleDistPath}/schedule.arrange`]: `${styleSourcePath}/pages/calendar/schedulearrange.scss`,
         [`${styleDistPath}/shiftstatistic`]: `${styleSourcePath}/pages/calendar/shiftstatistic.scss`,
         [`${styleDistPath}/workingcalendars`]: `${styleSourcePath}/pages/calendar/workingcalendars.scss`,
+        [`${styleDistPath}/user.management`]: `${styleSourcePath}/pages/employee/user.management.scss`,
         [`${styleDistPath}/employee.index`]: `${styleSourcePath}/pages/employee/index.scss`,
         [`${styleDistPath}/employee.create`]: `${styleSourcePath}/pages/employee/create.scss`,
         [`${styleDistPath}/employee.details`]: `${styleSourcePath}/pages/employee/details.scss`,

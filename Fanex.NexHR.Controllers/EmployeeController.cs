@@ -110,7 +110,6 @@
                 JobTitleId = jobTitleId,
                 GroupIds = groupIds,
                 IsEnable = true,
-                Groups = commonDataService.GetAllSection(),
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage

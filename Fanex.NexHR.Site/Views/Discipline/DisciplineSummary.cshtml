@@ -1,4 +1,5 @@
-﻿@model DisciplineSummaryViewModel
+﻿@using Fanex.NexHR.Resources
+@model DisciplineSummaryViewModel
 @{
     ViewBag.Title = Labels.DisciplineSummary;
 }
@@ -13,13 +14,13 @@
 }
 <h2>@Labels.DisciplineSummary</h2>
 <form class="form-filter">
+    @Html.HiddenFor(model => model.TeamName)
     <div class="container_24 bunhat">
         <div class="space"></div>
         <div class="grid_2 gridlabel">@Labels.DateRange</div>
         <div class="grid_6">
             @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
         </div>
-
         <div class="grid_2 gridlabel">
             @Html.LabelFor(model => model.FromDate)
         </div>
@@ -32,15 +33,11 @@
         <div class="grid_4">
             @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
         </div>
-
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.TeamId)
-        </div>
-        <div class="grid_6">
+        <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
+        <div class="grid_6" id="Setion">
             @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
-            @Html.HiddenFor(model => model.TeamName)
         </div>
         <div class="grid_2 gridlabel">@Labels.Category</div>
         <div class="grid_4">
@@ -61,7 +58,6 @@
             @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
             @Html.HiddenFor(model => model.EmployeeId)
         </div>
-
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2 gridlabel">
@@ -76,7 +72,6 @@
         <div class="grid_6" style="padding-top: 5px;">
             @Html.CheckBoxFor(model => model.IsShowAll)
         </div>
-
         <div class="clear"></div>
         <div class="space"></div>
         <div class="clear"></div>

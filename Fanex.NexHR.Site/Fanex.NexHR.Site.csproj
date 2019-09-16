@@ -323,6 +323,8 @@
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
     <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
+    <Content Include="wwwroot\dist\styles\user.management.css" />
+    <Content Include="wwwroot\dist\styles\user.management.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
     <Content Include="wwwroot\dist\vendors\chosen.js" />
     <Content Include="wwwroot\sources\js\pages\employee\create.js" />
@@ -1523,6 +1525,8 @@
     <Content Include="wwwroot\sources\styles\pages\section\edit.discipline.manager.scss" />
     <Content Include="wwwroot\sources\styles\pages\section\edit.supervisor.scss" />
     <Content Include="wwwroot\sources\styles\pages\section\supervisor.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\user.management.scss" />
+    <Content Include="wwwroot\dist\styles\user.management.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />
