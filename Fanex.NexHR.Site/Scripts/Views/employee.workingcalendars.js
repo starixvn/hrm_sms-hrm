@@ -7,41 +7,45 @@ function exportExcel() {
         fromDate = $.datepicker.formatDate('d M, yy', from),
         toDate = $.datepicker.formatDate('d M, yy', to);
 
-    var url = _global.root + 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + fromDate + '&toDate=' + toDate + '&EmployeeId=' + $('#EmployeeId').val() +
-        '&SectionIds=' + $('#SectionIds').val() + '&JobTitleIds=' + $('#JobTitleIds').val() + '&IsLocal=' + $('#IsLocal').val();
+    var url = _global.root + 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + fromDate
+        + '&toDate=' + toDate
+        + '&EmployeeId=' + $('#EmployeeId').val()
+        + '&SectionIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
+        + '&JobTitleIds=' + $('#JobTitleIds').val()
+        + '&IsLocal=' + $('#IsLocal').val();
     location.href = url;
 }
 
-function getWorkingCalendarDetails(button, fromDate, toDate) {
+function getWorkingCalendarDetails(fromDate, toDate) {
     var workingCalendarContainer = $("#workingCalendarDetails");
 
     $.get(_global.root + 'calendar/WorkingCalendarDetails',
-    {
-        'EmployeeId': $('#EmployeeId').val(),
-        'fromDate': fromDate,
-        'toDate': toDate,
-        'SectionIds': $('#SectionIds').val(),
-        'JobTitleIds': $('#JobTitleIds').val(),
-        'IsLocal': $('#IsLocal').val()
-    })
-    .done(function (content) {
-        workingCalendarContainer.empty();
-        workingCalendarContainer.html(content).dataTable({
-            'sScrollY': '520px',
-            'sScrollX': '100%',
-            'sScrollXInner': '100%',
-            'bScrollCollapse': true,
-            'bFilter': true,
-            'bSort': false,
-            'bPaginate': true,
-            'sPaginationType': 'full_numbers',
-            'bInfo': true,
-            'bJQueryUI': true,
-            'bLengthChange': false,
-            'iDisplayLength': 50,
-            'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8] }]
+        {
+            'EmployeeId': $('#EmployeeId').val(),
+            'fromDate': fromDate,
+            'toDate': toDate,
+            'SectionIds': $('#Section').multiSelectTreeView('getSelectedItems'),
+            'JobTitleIds': $('#JobTitleIds').val(),
+            'IsLocal': $('#IsLocal').val()
+        })
+        .done(function (content) {
+            workingCalendarContainer.empty();
+            workingCalendarContainer.html(content).dataTable({
+                'sScrollY': '520px',
+                'sScrollX': '100%',
+                'sScrollXInner': '100%',
+                'bScrollCollapse': true,
+                'bFilter': true,
+                'bSort': false,
+                'bPaginate': true,
+                'sPaginationType': 'full_numbers',
+                'bInfo': true,
+                'bJQueryUI': true,
+                'bLengthChange': false,
+                'iDisplayLength': 50,
+                'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [2, 3, 4, 5, 6, 7, 8] }]
+            });
         });
-    });
 }
 
 $(document).ready(function () {
@@ -52,18 +56,25 @@ $(document).ready(function () {
     $('#displayTo, #EndDate').text($.datepicker.formatDate('d M, yy', new Date(toDate)));
     $('#StartDate, #EndDate').attr('readonly', 'readonly');
 
-    getWorkingCalendarDetails($('#submit'), fromDate, toDate);
+    $.ajax({
+        url: _global.root + 'Department/GetHierarchy',
+        success: function (data) {
+            $('#Section').multiSelectTreeView({
+                data: data,
+                selectedItems: $('#SectionIds').val()
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
 
-    $('#group').multiselect();
+    getWorkingCalendarDetails(fromDate, toDate);
+
     $('#title').multiselect({
         noneSelectedText: 'Select positions',
         selectedText: '# selected',
         selectedList: 0
-    });
-
-    $('form.form-filter #group').on('change', function () {
-        var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
-        $('#SectionIds').val(sectionIds);
     });
 
     $('form.form-filter #title').on('change', function () {
@@ -82,7 +93,7 @@ $(document).ready(function () {
             toNextDate = $('#ToNextDate').val();
 
         prepareDataToQuery(fromNextDate, toNextDate);
-        getWorkingCalendarDetails($(this), fromNextDate, toNextDate);
+        getWorkingCalendarDetails(fromNextDate, toNextDate);
     });
 
     //Click previous link
@@ -92,7 +103,7 @@ $(document).ready(function () {
             toPrevDate = $('#ToPreviousDate').val();
 
         prepareDataToQuery(fromPrevDate, toPrevDate);
-        getWorkingCalendarDetails($(this), fromPrevDate, toPrevDate);
+        getWorkingCalendarDetails(fromPrevDate, toPrevDate);
     });
 
     //Click submit button
@@ -102,7 +113,7 @@ $(document).ready(function () {
             toDate = $('#EndDate').val();
 
         prepareDataToQuery(fromDate, toDate);
-        getWorkingCalendarDetails($(this), fromDate, toDate);
+        getWorkingCalendarDetails(fromDate, toDate);
     });
 
     function prepareDataToQuery(fromPrevOrNexDate, toPrevOrNexDate) {

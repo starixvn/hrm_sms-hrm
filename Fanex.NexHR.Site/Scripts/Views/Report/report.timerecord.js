@@ -65,6 +65,7 @@
     }
 
     function query() {
+        $('#TeamIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         $.ajax({
             url: _global.root + 'Report/TimeRecordDetail',
             type: 'POST',
@@ -103,11 +104,17 @@
     }
 
     $(document).ready(function () {
-        $('#TeamIds').multiselect();
-
-        $('#TeamIds').on('change', function () {
-            var teamIds = $(this).val() !== null ? $(this).val().join(',') : '';
-            $('#TeamIds').val(teamIds);
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    isSelectedAll: true
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
         });
 
         $('#Employee').change(function () {

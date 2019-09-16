@@ -55,7 +55,6 @@
             var model = new UserManagementViewModel
             {
                 IsEnable = true,
-                Groups = commonDataService.GetAllSection(),
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };

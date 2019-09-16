@@ -1,11 +1,10 @@
 ﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
-@import '~jquery-ui-multiselect-widget/jquery.multiselect.css';
 
 @import '../../abstracts/mixins';
-@import '../../vendors/multiselect';
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../components/buttons';
+@import '../../components/multiselect-treeview';
 
 #dialogProcessRequest {
     form {
@@ -100,4 +99,10 @@ button.ui-multiselect {
 
 .approver-comment {
     font-size: 12px;
+}
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
 }

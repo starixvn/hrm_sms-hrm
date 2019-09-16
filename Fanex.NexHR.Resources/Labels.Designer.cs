@@ -1537,6 +1537,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee Supervisor.
+        /// </summary>
+        public static string EmployeeSupervisor {
+            get {
+                return ResourceManager.GetString("EmployeeSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee&apos;s view.
         /// </summary>
         public static string EmployeeView {
@@ -5061,6 +5070,15 @@ namespace Fanex.NexHR.Resources {
         public static string Worker {
             get {
                 return ResourceManager.GetString("Worker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working Calendars.
+        /// </summary>
+        public static string WorkingCalendars {
+            get {
+                return ResourceManager.GetString("WorkingCalendars", resourceCulture);
             }
         }
         

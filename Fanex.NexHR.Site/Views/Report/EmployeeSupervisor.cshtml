@@ -1,7 +1,8 @@
-﻿@model EmployeeAndSectionSupervisorViewModel
+﻿@using Fanex.NexHR.Resources
+@model EmployeeAndSectionSupervisorViewModel
 
 @{
-    ViewBag.Title = "Employee Supervisor";
+    ViewBag.Title = Labels.EmployeeSupervisor;
 }
 @section css{
     @Url.CombresLink("reportsupervisorcss")
@@ -10,13 +11,11 @@
     @Url.CombresLink("employeesupervisorreportjs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a>
+    <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
-
 <h2>@ViewBag.Title</h2>
-
 <form class="form-filter">
     @Html.HiddenFor(model => model.SectionIds)
     @Html.HiddenFor(model => model.IsLocal)
@@ -28,37 +27,22 @@
         <div class="grid_6">
             @Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
         </div>
-        <div class="grid_2 gridlabel">@Labels.Section</div>
-        <div class="grid_6">
-            <select id="section" multiple="multiple" class="team-select">
-                @foreach (Team item in Model.Sections)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </div>
-        <div class="grid_2 gridlabel">
-            @Labels.Category
-        </div>
+        <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
+        <div class="grid_6" id="Section"></div>
+        <div class="grid_2 gridlabel">@Labels.Category</div>
         <div class="grid_3">
             @RazorHelper.CategoryDropDownList("category", "category", "")
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
+        <div class="clear"></div>
+        <div class="space"></div>
+        <div class="clear"></div>
+        <div class="space"></div>
         <div class="grid_2 gridlabel">&nbsp;</div>
         <div class="grid_5">
             <input id="btnSubmit" type="button" value="@Labels.Submit" />
-            <input id="btnExcel" type="button" value="Excel" />
+            <input id="btnExcel" type="button" value="@Labels.Excel" />
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
 </form>
-<div id="EmployeeSupervisorDetails">
-</div>
+<div id="EmployeeSupervisorDetails"></div>

@@ -39,13 +39,10 @@
         [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatistic()
         {
-            IList<Team> teams = commonDataService.GetAllSection();
-
             var shiftStatisticViewModel = new ShiftStatisticViewModel
             {
                 FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek(),
-                Teams = teams
+                ToDate = DateTime.Now.LastDayOfWeek()
             };
 
             return View(shiftStatisticViewModel);
@@ -54,7 +51,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
         {
-            var getShiftCriteria = new GetShiftStatisticCriteria
+            var criteria = new GetShiftStatisticCriteria
             {
                 SupervisorId = sessionService.Employee.Id,
                 Fromtime = fromDate,
@@ -63,7 +60,7 @@
                 IsShowWholeCompany = isShowWholeCompany,
                 IsLocal = isLocal
             };
-            var shiftStatisticModels = workingCalendarService.GetShiftStatistic(getShiftCriteria);
+            IList<ShiftStatisticModel> shiftStatisticModels = workingCalendarService.GetShiftStatistic(criteria);
 
             var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
             {
@@ -151,7 +148,6 @@
 
         public ActionResult WorkingCalendars()
         {
-            IList<Team> sections = commonDataService.GetAllSection();
             IList<SelectListItem> jobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle)
                 .Select(j => new SelectListItem
                 {
@@ -167,7 +163,6 @@
             {
                 FromDate = DateTime.Now.FirstDayOfWeek(),
                 ToDate = DateTime.Now.LastDayOfWeek(),
-                Sections = sections,
                 JobTitles = jobTitles
             };
 

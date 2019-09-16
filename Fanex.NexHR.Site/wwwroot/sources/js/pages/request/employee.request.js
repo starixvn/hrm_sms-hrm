@@ -3,10 +3,10 @@ import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import 'jquery-ui-multiselect-widget/src/jquery.multiselect';
 
 import { floatingHeader, showMessage, fadeOutMessage, confirm, initFromDateOnChange } from '../../shared/common.functions';
 import '../../date';
+import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import './date.filter.new';
 
@@ -293,10 +293,9 @@ $(function () {
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
-            const teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '';
             const url = _global.root + 'ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
-                + '&TeamIds=' + teams
+                + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
                 + '&Employee=' + $('#Employee').val()
                 + '&EmployeeId=' + $('#EmployeeId').val()
                 + '&FromDate=' + $('#FromDate').val()
@@ -312,10 +311,17 @@ $(function () {
     $(document).ready(function () {
         $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
 
-        $('#TeamId').multiselect({
-            minWidth: 180,
-            checkAllText: 'Check',
-            uncheckAllText: 'Uncheck'
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    selectedItems: $('#TeamIds').val()
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
         });
 
         bindMenu('.hr-actions', 'hrMenu');
@@ -352,10 +358,9 @@ $(function () {
                 $('#submit').val('Submit');
                 e.preventDefault();
             } else {
-                const teams = $('#TeamId').val() !== null ? $('#TeamId').val().join() : '';
                 const url = _global.root + 'request/' + $('#ActionName').val()
                     + '?DateOption=' + $('#Date').val()
-                    + '&TeamIds=' + teams
+                    + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
                     + '&Employee=' + $('#Employee').val()
                     + '&EmployeeId=' + $('#EmployeeId').val()
                     + '&FromDate=' + $('#FromDate').val()

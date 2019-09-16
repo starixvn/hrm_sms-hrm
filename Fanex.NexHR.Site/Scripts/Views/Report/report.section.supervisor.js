@@ -3,6 +3,7 @@
 
 (function () {
     function query() {
+        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         $.ajax({
             url: _global.root + 'report/SectionSupervisorDetails',
             type: 'POST',
@@ -20,20 +21,27 @@
     }
 
     $(document).ready(function () {
-        $('form.form-filter #section').multiselect();
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    isSelectedAll: true
+                });
 
-        query();
-
-        $('form.form-filter #section').on('change', function () {
-            var sectionIds = $(this).val() !== null ? $(this).val().join(',') : '';
-            $('#SectionIds').val(sectionIds);
+                query();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
         });
 
-        $("form.form-filter #btnSubmit").on('click', function () {
+        $("#btnSubmit").on('click', function () {
             query();
         });
 
-        $('form.form-filter #btnExcel').on('click', function () {
+        $('#btnExcel').on('click', function () {
+            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
             window.location.href = _global.root + 'ExportSupervisor/SectionSupervisor?' + $('form.form-filter').serialize();
         });
     });

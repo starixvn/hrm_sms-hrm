@@ -121,7 +121,6 @@
             {
                 FromDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : fromDate.Value,
                 ToDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : toDate.Value,
-                Teams = teamService.GetAll(),
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage
             };
@@ -263,10 +262,7 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel
-            {
-                Sections = teamService.GetAll()
-            };
+            var model = new EmployeeAndSectionSupervisorViewModel();
 
             return View(model);
         }
@@ -287,10 +283,7 @@
 
         public ActionResult SectionSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel
-            {
-                Sections = teamService.GetAll()
-            };
+            var model = new EmployeeAndSectionSupervisorViewModel();
 
             return View(model);
         }

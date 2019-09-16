@@ -1,4 +1,5 @@
-﻿@model TimeRecordViewModel
+﻿@using Fanex.NexHR.Resources
+@model TimeRecordViewModel
 @{
     ViewBag.Title = @Labels.TimeRecord;
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -10,59 +11,48 @@
     @Url.CombresLink("timerecordjs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a> <span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.HRSpace</a> <span class="step">@ViewBag.Title</span>
 }
 <h2>@ViewBag.Title</h2>
-<div class="clear">
-</div>
+<div class="clear"></div>
 <div class="container_24 bunhat">
     <form class="form-filter">
         @if (hasPermission)
         {
-            <div class="grid_2">
+            <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.FromDate)
             </div>
             <div class="grid_4">
                 @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
             </div>
-            <div class="grid_2">
+            <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.ToDate)
             </div>
             <div class="grid_4">
                 @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="grid_2">
-                @Html.LabelFor(model => model.TeamIds, Labels.Team)
-            </div>
-            <div class="grid_6">
-                @Html.DropDownListFor(model => model.TeamIds, new SelectList(Model.Teams, "Id", "Code"), new { @multiple = "multiple" })
-            </div>
-            <div class="grid_2">
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
+            <div class="grid_6" id="Section"></div>
+            <div class="grid_2 gridlabel">
                 @Html.LabelFor(model => model.Employee)
             </div>
             <div class="grid_7">
                 @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
-            <div class="clear">
-            </div>
-            <div class="space">
-            </div>
-            <div class="grid_2 gridlabel">
-                @Labels.Category
-            </div>
+            <div class="clear"></div>
+            <div class="space"></div>
+            <div class="grid_2 gridlabel">@Labels.Category</div>
             <div class="grid_3">
                 @{
-            var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"},
-                        new SelectListItem() {Text = "Local", Value = "1"},
-                    };
+                    var category = new List<SelectListItem>
+                        {
+                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                            new SelectListItem() {Text = "Expat", Value = "0"},
+                            new SelectListItem() {Text = "Local", Value = "1"},
+                        };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
             </div>
@@ -72,33 +62,32 @@
             <div class="grid_2">
                 <input id="btnSubmit" type="button" value="@Labels.Submit" />
             </div>
-                    }
-                    else
-                    {
-                        <div class="grid_2">
-                            @Html.LabelFor(model => model.FromDate)
-                        </div>
-                        <div class="grid_4">
-                            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
-                        </div>
-                        <div class="grid_2">
-                            @Html.LabelFor(model => model.ToDate)
-                        </div>
-                        <div class="grid_4">
-                            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
-                        </div>
-                        <div class="grid_2">
-                            <input id="btnSubmit" type="button" value="@Labels.Submit" />
-                        </div>
-                    }
+        }
+        else
+        {
+            <div class="grid_2 gridlabel">
+                @Html.LabelFor(model => model.FromDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+            </div>
+            <div class="grid_2 gridlabel">
+                @Html.LabelFor(model => model.ToDate)
+            </div>
+            <div class="grid_4">
+                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+            </div>
+            <div class="grid_2">
+                <input id="btnSubmit" type="button" value="@Labels.Submit" />
+            </div>
+        }
         @Html.HiddenFor(model => model.ItemsPerPage)
         @Html.HiddenFor(model => model.CurrentPage)
+        @Html.HiddenFor(model => model.TeamIds)
     </form>
 </div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
+<div class="clear"></div>
+<div class="space"></div>
 <div id="TimeRecordContent"></div>
 <ul id="outMenu" class="hide">
     <li class="out">

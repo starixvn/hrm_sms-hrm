@@ -66,12 +66,12 @@
 
     <resourceSet name="contactlistcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/scripts/chosen/chosen.css" />
+      <resource path="~/wwwroot/dist/styles/employee.index.css" />
     </resourceSet>
     <resourceSet name="contactlistjs" type="js">
       <resource path="~/wwwroot/sources/js/date.js" />
       <resource reference="sitejs" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/scripts/views/employee/employee.index.js" />
     </resourceSet>
 
@@ -209,6 +209,7 @@
 
     <resourceSet name="shiftstatisticjs" type="js">
       <resource reference="sitejs" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/scripts/views/Calendar/report.shiftstatistic.js" />
     </resourceSet>
     <resourceSet name="shiftstatisticcss" type="css">
@@ -242,6 +243,7 @@
     <resourceSet name="workingcalendarsjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/datatable/jquery.dataTables.js" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
@@ -290,15 +292,17 @@
 
     <resourceSet name="reportsupervisorcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/report.supervisor.css" />
+      <resource path="~/wwwroot/dist/styles/report.employee.supervisor.css" />
     </resourceSet>
     <resourceSet name="employeesupervisorreportjs" type="js">
       <resource reference="sitejs" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/scripts/views/report/report.employee.supervisor.js" />
     </resourceSet>
     <resourceSet name="sectionsupervisorreportjs" type="js">
       <resource reference="sitejs" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/scripts/views/report/report.section.supervisor.js" />
     </resourceSet>
 
@@ -367,11 +371,12 @@
 
     <resourceSet name="timerecordcss" type="css">
       <resource reference="sitecss" />
-      <resource path="~/styles/timerecord.css" />
+      <resource path="~/wwwroot/dist/styles/report.time.record.css" />
     </resourceSet>
     <resourceSet name="timerecordjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
+      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
       <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
       <resource path="~/wwwroot/sources/js/date.js" />
       <resource path="~/scripts/views/date.filter.js" />

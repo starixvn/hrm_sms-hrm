@@ -1,4 +1,18 @@
-﻿#FromDate, #ToDate {
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/multiselect-treeview';
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-button {
+        width: 90%;
+    }
+
+    /*.multiselect-treeview-dropdown-list {
+        width: 220px;
+    }*/
+}
+
+#FromDate, #ToDate {
     width: 80px;
 }
 

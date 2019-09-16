@@ -65,11 +65,17 @@
     }
 
     $(document).ready(function () {
-        $("#group").multiselect();
-
-        $('#group').on('change', function () {
-            var groupIds = $(this).val() !== null ? $(this).val().join(',') : '';
-            $('#GroupIds').val(groupIds);
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    isSelectedAll: true
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
         });
 
         $('#category').on('change', function () {
@@ -104,6 +110,7 @@
         $('#query').on("click", function (evt) {
             evt.preventDefault();
             $('form.form-filter #CurrentPage').val('1');
+            $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
             query();
         });
     });

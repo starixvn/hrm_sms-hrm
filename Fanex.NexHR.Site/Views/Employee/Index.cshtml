@@ -27,25 +27,16 @@
             <div class="grid_7">
                 @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark })
             </div>
-            <div class="grid_2 gridlabel">
-                @Labels.Section
-            </div>
-            <div class="grid_6">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (Team item in Model.Groups)
-                    {
-                        <option value="@item.Id">@item.Name</option>
-                    }
-                </select>
-            </div>
+            <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
+            <div class="grid_4" id="Section"></div>
             <div class="grid_2 gridlabel">@Labels.Category</div>
             <div class="grid_3">
                 @{
                     var category = new List<SelectListItem>
                     {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = "Expat", Value = "0"},
-                        new SelectListItem() {Text = "Local", Value = "1"},
+                        new SelectListItem() {Text = Labels.Expat, Value = "0"},
+                        new SelectListItem() {Text = Labels.Local, Value = "1"},
                     };
                 }
                 @Html.DropDownList("category", category, new { @class = "category" })
@@ -56,12 +47,8 @@
         </div>
     </form>
 </div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<div class="clear">
-</div>
-<div class="space">
-</div>
+<div class="clear"></div>
+<div class="space"></div>
+<div class="clear"></div>
+<div class="space"></div>
 <div id="contact-list"></div>

@@ -1,6 +1,7 @@
-﻿@model EmployeeAndSectionSupervisorViewModel
+﻿@using Fanex.NexHR.Resources
+@model EmployeeAndSectionSupervisorViewModel
 @{
-    ViewBag.Title = "Section Supervisor";
+    ViewBag.Title = Labels.SectionSupervisor;
 }
 @section css{
     @Url.CombresLink("reportsupervisorcss")
@@ -9,7 +10,7 @@
     @Url.CombresLink("sectionsupervisorreportjs")
 }
 @section Breadcrumb {
-    <a class="step">HR</a>
+    <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
@@ -17,22 +18,13 @@
 <form class="form-filter">
     @Html.HiddenFor(model => model.SectionIds)
     <div class="container_24 bunhat">
-        <div class="grid_2 gridlabel">@Labels.Section</div>
-        <div class="grid_6">
-            <select id="section" multiple="multiple" class="team-select">
-                @foreach (Team item in Model.Sections)
-                {
-                    <option value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </div>
+        <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
+        <div class="grid_6" id="Section"></div>
         <div class="grid_5">
             <input id="btnSubmit" type="button" value="@Labels.Submit" />
-            <input id="btnExcel" type="button" value="Excel" />
+            <input id="btnExcel" type="button" value="@Labels.Excel" />
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
 </form>
-<div id="SectionSupervisorDetails">
-</div>
+<div id="SectionSupervisorDetails"></div>

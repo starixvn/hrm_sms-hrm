@@ -38,7 +38,7 @@
             @Html.Hidden("DateOption", Model.DateOption)
         </div>
         <div class="grid_2">@Labels.FromDate</div>
-        <div class="grid_6">
+        <div class="grid_4">
             @Html.DatePicker("FromDate", Model.FromDate, minDate: new DateTime(2010, 01, 01), maxDate: DateTime.Now)
         </div>
         <div class="grid_2">@Labels.ToDate</div>
@@ -65,7 +65,7 @@
             @Html.DropDownListFor(model => model.AttendanceType, types)
         </div>
         <div class="grid_2">@Labels.DepartmentSection</div>
-        <div class="grid_6" id="Section"></div>
+        <div class="grid_4" id="Section"></div>
         <div class="grid_2">
             @Html.LabelFor(model => model.EmployeeId)
         </div>
@@ -85,7 +85,6 @@
             @Html.CheckBoxFor(model => model.ExcludeDeletedUsers)
             <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
-        <div class="grid_2">&nbsp;</div>
         <div class="grid_6">
             <input type="button" value="@Labels.Submit" id="btnSubmit" />
             <input type="button" value="Excel" id="btnExcel" />
