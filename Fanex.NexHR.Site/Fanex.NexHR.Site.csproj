@@ -327,6 +327,7 @@
     <Content Include="wwwroot\dist\styles\user.management.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
     <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\edit.js" />
     <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
@@ -345,6 +346,7 @@
     <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\request\common-functions.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -1527,6 +1529,7 @@
     <Content Include="wwwroot\sources\styles\pages\section\supervisor.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\user.management.scss" />
     <Content Include="wwwroot\dist\styles\user.management.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\request\change-shift\create.scss" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

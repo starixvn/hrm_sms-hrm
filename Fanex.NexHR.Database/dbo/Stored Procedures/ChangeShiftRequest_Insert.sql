@@ -1,0 +1,383 @@
+﻿
+CREATE PROCEDURE [dbo].[ChangeShiftRequest_Insert] @EmpId INT
+	,@TypeId TINYINT
+	,@Remark NVARCHAR(2000)
+	,@FromDate DATE
+	,@ToDate DATE
+	,@CreatedBy INT
+	,@VerifierId INT = NULL
+	,@ApproverId INT = NULL
+	,@DetailXml NVARCHAR(MAX)
+	,@RequestId BIGINT = 0 OUTPUT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg NVARCHAR(200) = '' OUTPUT
+AS
+/*
+Created: Quinn.Vo@20190624
+Task: create a change shift request
+DB: HRM
+Original: 
+
+Revisions:    
+Param's Explanation:
+*/
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+
+	DECLARE @CreatedDate DATETIME = GETDATE()
+		,@RequestType TINYINT = 5
+		-- action type
+		,@VerifyRequest TINYINT = 2
+		,@ApproveRequest TINYINT = 3
+		,@OnBehalfRequest TINYINT = 5
+		,@IsTopManager BIT
+		-- change shift type
+		,@ChangeShift TINYINT = 1
+		,@MoveOffDay TINYINT = 2
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
+
+	CREATE TABLE #tblChangeShiftDetail (
+		OnDate DATE
+		,FromShift INT
+		,ToShift INT
+		,Remark NVARCHAR(2000)
+		,ToDate DATE
+		)
+
+	BEGIN TRY
+		DECLARE @DocHandler INT
+
+		EXEC sp_xml_preparedocument @DocHandler OUTPUT
+			,@DetailXml
+
+		INSERT INTO #tblChangeShiftDetail (
+			OnDate
+			,FromShift
+			,ToShift
+			,Remark
+			,ToDate
+			)
+		SELECT OnDate
+			,FromShift
+			,ToShift
+			,REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Remark, '&amp;', '&'), '&#39;', ''''), '&lt;', '<'), '&gt;', '>'), '&quot;', '"')
+			,ToDate
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (OnDate DATE, FromShift INT, ToShift INT, Remark NVARCHAR(2000), ToDate DATE) AS Data
+
+		EXEC sp_xml_removedocument @DocHandler
+	END TRY
+
+	BEGIN CATCH
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Change shift detail is invalid.'
+
+		RETURN
+	END CATCH
+
+	IF @TypeId = @ChangeShift
+		AND DATEDIFF(dd, @FromDate, @ToDate) > 14
+	BEGIN
+		SET @ErrCode = 101
+		SET @ErrMsg = 'Change shift is limited to 2 weeks.'
+
+		RETURN
+	END
+
+	SELECT @IsTopManager = IsTopManager
+	FROM dbo.EmployeeSummary WITH (NOLOCK)
+	WHERE EmpId = @EmpId
+
+	IF (
+			@ApproverId IS NULL
+			OR @VerifierId IS NULL
+			)
+		AND @IsTopManager = 0
+	BEGIN
+		SET @ErrCode = 102
+		SET @ErrMsg = 'Verifier, Approver is required.'
+
+		RETURN
+	END
+
+	IF @EmpId <> @CreatedBy
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @EmpId
+					AND EmpId = @CreatedBy
+					AND RequestType = @RequestType
+					AND ActionType = @OnBehalfRequest
+					AND ISNULL(IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @CreatedBy
+					AND gs.RequestType = @RequestType
+					AND gs.ActionType = @OnBehalfRequest
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
+		BEGIN
+			SET @ErrCode = 103
+			SET @ErrMsg = 'You do not have permision.'
+
+			RETURN
+		END
+	END
+
+	IF @IsTopManager = 0
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @VerifierId
+					AND EmpId = @EmpId
+					AND RequestType = @RequestType
+					AND ActionType = @VerifyRequest
+					AND ISNULL(IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @VerifierId
+					AND gs.RequestType = @RequestType
+					AND gs.ActionType = @VerifyRequest
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
+		BEGIN
+			SET @ErrCode = 104
+			SET @ErrMsg = 'Verifier is invalid.'
+
+			RETURN
+		END
+
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @ApproverId
+					AND EmpId = @EmpId
+					AND RequestType = @RequestType
+					AND ActionType = @ApproveRequest
+					AND ISNULL(IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @ApproverId
+					AND gs.RequestType = @RequestType
+					AND gs.ActionType = @ApproveRequest
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
+		BEGIN
+			SET @ErrCode = 105
+			SET @ErrMsg = 'Approver is invalid.'
+
+			RETURN
+		END
+	END
+
+	-- check if there is another request in the same date
+	IF @TypeId = @ChangeShift
+		AND (
+			EXISTS (
+				SELECT 1
+				FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+					INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wk.RequestId = cs.RequestId
+					AND cs.TypeId = @ChangeShift
+				WHERE wk.EmpId = @empid
+					AND wk.RequestType = @RequestType
+					AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+					AND (
+						@FromDate BETWEEN cs.FromDate
+							AND cs.ToDate
+						OR @ToDate BETWEEN cs.FromDate
+							AND cs.ToDate
+						OR cs.FromDate BETWEEN @FromDate
+							AND @ToDate
+						OR cs.ToDate BETWEEN @FromDate
+							AND @ToDate
+						)
+				)
+			OR (
+				EXISTS (
+					SELECT 1
+					FROM dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK)
+						INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON cs.TypeId = @MoveOffDay
+						AND csdt.RequestId = cs.RequestId
+						AND cs.EmpId = @EmpId
+						INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
+						AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+					WHERE csdt.OnDate BETWEEN @FromDate
+							AND @ToDate
+						OR csdt.ToDate BETWEEN @FromDate
+							AND @ToDate
+					)
+				)
+			)
+	BEGIN
+		SET @ErrCode = 106
+		SET @ErrMsg = 'There is another request in the same date.'
+
+		RETURN
+	END
+
+	IF @TypeId = @MoveOffDay
+		AND (
+			EXISTS (
+				SELECT 1
+				FROM #tblChangeShiftDetail AS csd
+					INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON cs.TypeId = @ChangeShift
+					AND cs.EmpId = @EmpId
+					AND csd.OnDate BETWEEN cs.FromDate
+						AND cs.ToDate
+					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
+					AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+				)
+			OR (
+				EXISTS (
+					SELECT 1
+					FROM #tblChangeShiftDetail AS csd
+						INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON csdt.EmpId = @EmpId
+						AND (
+							csd.OnDate = csdt.OnDate
+							OR csd.OnDate = csdt.ToDate
+							OR csd.ToDate = csdt.OnDate
+							OR csd.ToDate = csdt.ToDate
+							)
+						INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON cs.TypeId = @MoveOffDay
+						AND csdt.RequestId = cs.RequestId
+						INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
+						AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+					)
+				)
+			)
+	BEGIN
+		SET @ErrCode = 106
+		SET @ErrMsg = 'There is another request in the same date'
+
+		RETURN
+	END
+
+	INSERT INTO dbo.WorkingTimeRequest (
+		EmpId
+		,RequestType
+		,Remark
+		,CurrentStatus
+		,VerifierId
+		,ApproverId
+		,VerifiedStatus
+		,ApprovedStatus
+		,HRStatus
+		,CreatedDate
+		,CreatedBy
+		)
+	VALUES (
+		@EmpId
+		,@RequestType
+		,@Remark
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @VerifierId IS NOT NULL THEN @PendingStatusId
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NULL THEN @ApprovedStatusId
+			ELSE @PendingStatusId
+			END
+		,@VerifierId
+		,@ApproverId
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @VerifierId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
+			END
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
+			END
+		,@PendingStatusId
+		,@CreatedDate
+		,@CreatedBy
+		)
+
+	SELECT @RequestId = CAST(SCOPE_IDENTITY() AS BIGINT)
+
+	INSERT INTO dbo.ChangeShiftRequest (
+		RequestId
+		,EmpId
+		,FromDate
+		,ToDate
+		,TypeId
+		)
+	VALUES (
+		@RequestId
+		,@EmpId
+		,@FromDate
+		,@ToDate
+		,@TypeId
+		)
+
+	INSERT INTO dbo.ChangeShiftRequestDetail (
+		EmpId
+		,OnDate
+		,RequestId
+		,FromShift
+		,ToShift
+		,Remark
+		,ToDate
+		)
+	SELECT @EmpId
+		,OnDate
+		,@RequestId
+		,FromShift
+		,ToShift
+		,Remark
+		,ToDate
+	FROM #tblChangeShiftDetail
+
+	IF @ApproverId IS NULL
+		AND @VerifierId IS NULL
+		AND @IsTopManager = 1
+	BEGIN
+		EXEC dbo.ChangeShiftRequest_Approve @RequestId = @RequestId
+			,@RoleId = 3 -- approver
+			,@ProcessedBy = @CreatedBy
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
+
+	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
+
+	IF @@ERROR <> 0
+	BEGIN
+		DELETE dbo.WorkingTimeRequest
+		WHERE RequestId = @RequestId
+
+		DELETE dbo.ChangeShiftRequest
+		WHERE RequestId = @RequestId
+
+		DELETE dbo.ChangeShiftRequestDetail
+		WHERE RequestId = @RequestId
+
+		SELECT @ErrCode = 101
+			,@ErrMsg = N'Create unsuccessfully.'
+	END
+
+	DROP TABLE #tblChangeShiftDetail
+END

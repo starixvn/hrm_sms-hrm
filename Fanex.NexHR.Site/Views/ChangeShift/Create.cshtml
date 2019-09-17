@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.ViewModels.Request
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Request
 @model ChangeShiftViewModel
 @{
     ViewBag.Title = Labels.NewChangeShiftRequest;
@@ -10,7 +11,7 @@
     @Url.CombresLink("changeshiftjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "changeshift")">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "changeshift")">@Labels.MyChangeShiftRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
@@ -18,20 +19,20 @@
     @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift" }))
     {
         @Html.ValidationSummary()
-        <div class="validation-summary-errors" id="errors-model-state">
-        </div>
+        <div class="validation-summary-errors" id="errors-model-state"></div>
 
         if (Model.TotalRequestInMonth >= 1)
         {
-        <div class="ui-state-error ui-corner-all model-state">
-            <p>
-                <a href="@Url.Action("EmployeeView")">You've already requested for Change shift <b>@Model.TotalRequestInMonth</b>
-                    times since @DateTime.Now.ToString("MMM yyyy")</a>
-            </p>
-        </div>
+            <div class="ui-state-error ui-corner-all model-state">
+                <p>
+                    <a href="@Url.Action("EmployeeView")">
+                        You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
+                        times since @DateTime.Now.ToString("MMM yyyy")
+                    </a>
+                </p>
+            </div>
         }
-        
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)
@@ -41,7 +42,7 @@
                 @Html.ValidationMessageFor(model => model.Employee)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.FromDate)
@@ -52,7 +53,7 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.ToDate)
@@ -63,7 +64,7 @@
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId)
@@ -81,7 +82,7 @@
                 @Html.ValidationMessageFor(model => model.VerifierId)
             </div>
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.ApproverId)
@@ -106,18 +107,18 @@
                 @Html.TextAreaFor(model => model.Remark)
             </div>
         </div>
-        
+
         <div class="formrow" id="shiftDetailSchedule">
             @Html.Partial("ChangeShiftDetail", Model.ShiftDetails)
         </div>
-        
+
         <div class="formrow">
             <div class="label">
                 @Html.HiddenFor(model => model.EmployeeId)
                 @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
             </div>
             <div class="input">
-                <input type="button" name="submit" value="@Labels.Request" class="button-primary button"/>
+                <input type="button" name="submit" value="@Labels.Request" class="button-primary button" />
                 <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
             </div>
         </div>

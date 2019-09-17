@@ -566,6 +566,12 @@
     <Build Include="dbo\Tables\ActivityLog.sql" />
     <Build Include="dbo\Stored Procedures\ActivityLog_Insert.sql" />
     <Build Include="dbo\Stored Procedures\ActivityLog_GetByObjectId.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Approve.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Reject.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Reset.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_VoidBySA.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
