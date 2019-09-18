@@ -367,13 +367,14 @@ BEGIN
 							empca.IsFixedOffDay = 1
 							OR empca.IsOvertime = 1
 							)
-						)
-					AND NOT EXISTS (
-						SELECT 1
-						FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
-						WHERE emp.EmployeeId = offrep.EmployeeId
-							AND empca.WorkDate = offrep.WorkDate
-							AND empca.ModifierId IS NULL
+						AND NOT EXISTS (
+							SELECT 1
+							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
+							WHERE emp.EmployeeId = offrep.EmployeeId
+								AND empca.WorkDate = offrep.WorkDate
+								AND empca.ModifierId IS NULL
+								AND empca.IsOvertime = 0
+							)
 						)
 					)
 			) AS empca
@@ -386,6 +387,7 @@ BEGIN
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
+			AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
 			AND ISNULL(empca.IsFixedOffDay, 0) = 0
 			AND EXISTS (
@@ -404,6 +406,7 @@ BEGIN
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmployeeId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
+			AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
 			AND ISNULL(empca.IsFixedOffDay, 0) = 0
 			AND EXISTS (
@@ -879,10 +882,10 @@ BEGIN
 
 	DELETE offrep
 	FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
-		LEFT JOIN #tblEmployeeIds AS tblid ON offrep.EmployeeId = tblid.EmployeeId
-	WHERE (
-			@EmployeeIds IS NULL
-			OR tblid.EmployeeId IS NOT NULL
+	WHERE EXISTS (
+			SELECT 1
+			FROM #tblEmployeeWeekly AS emp
+			WHERE offrep.EmployeeId = emp.EmployeeId
 			)
 		AND EXISTS (
 			SELECT 1
