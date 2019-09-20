@@ -173,8 +173,10 @@ $(document).ready(function () {
     domElements.$typeId.on('change', function () {
         getChangeShiftDetails();
     });
-
-    $('input.datepicker').on('change', function () {
+    domElements.$fromDate.on('change', function () {
+        getChangeShiftDetails();
+    });
+    domElements.$toDate.on('change', function () {
         getChangeShiftDetails();
     });
 
@@ -184,20 +186,20 @@ $(document).ready(function () {
         $('#tblchangeshift tbody tr').each(function () {
             let $tr = $(this);
             details.push({
-                OnDate: $tr.find('.onDate').val(),
-                FromShiftId: $tr.find('.fromShiftId').val(),
-                ToShiftId: $tr.find('.toShiftId').val(),
-                Remark: $.trim($tr.find('.remark').val())
+                onDate: $tr.find('.onDate').val(),
+                fromShiftId: $tr.find('.fromShiftId').val(),
+                toShiftId: $tr.find('.toShiftId').val(),
+                remark: $.trim($tr.find('.remark').val())
             });
         });
         const model = {
-            EmployeeId: domElements.$employeeId.val(),
-            TypeId: domElements.$typeId.val(),
-            FromDate: domElements.$fromDate.val(),
-            ToDate: domElements.$toDate.val(),
-            Remark: $.trim(domElements.$remark.val()),
-            VerifierId: domElements.$verifierId.val(),
-            ApproverId: domElements.$approverId.val(),
+            employeeId: domElements.$employeeId.val(),
+            typeId: domElements.$typeId.val(),
+            fromDate: domElements.$fromDate.val(),
+            toDate: domElements.$toDate.val(),
+            remark: $.trim(domElements.$remark.val()),
+            verifierId: domElements.$verifierId.val(),
+            approverId: domElements.$approverId.val(),
             details: details
         };
 

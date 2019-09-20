@@ -202,7 +202,6 @@
     <Setting Key="WorkingTimeRequest_Delete" SpName="WorkingTimeRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Update" SpName="WorkingTimeRequest_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetAllByRequestID" SpName="WorkingTimeRequest_GetAllByRequestID" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID" SpName="WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" SpName="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveType" ObjectProperty="LeaveTypeId" />
       <Mapping DataField="OnDate" ObjectProperty="LeaveDate" />
@@ -560,6 +559,12 @@
     <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="ChangeShiftRequest_GetById" SpName="ChangeShiftRequest_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="ChangeShiftRequest_GetDetailById" SpName="ChangeShiftRequest_GetDetailById" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Insert" SpName="ChangeShiftRequest_Insert" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Update" SpName="ChangeShiftRequest_Update" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Delete" SpName="ChangeShiftRequest_Delete" DbName="nexhrx" Plain="0" />

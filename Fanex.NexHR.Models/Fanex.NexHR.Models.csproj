@@ -152,6 +152,7 @@
     <Compile Include="Report\WorkingHoursSummary.cs" />
     <Compile Include="Request\BaseRequest.cs" />
     <Compile Include="Request\ChangeShift\ChangeShiftDetail.cs" />
+    <Compile Include="Request\ChangeShift\ChangeShiftRequest.cs" />
     <Compile Include="Request\ChangeShift\CreateChangeShift.cs" />
     <Compile Include="Request\ChangeShift\EditChangeShift.cs" />
     <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestParam.cs" />

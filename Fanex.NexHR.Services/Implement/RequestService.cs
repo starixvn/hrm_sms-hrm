@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Core.Services;
@@ -68,28 +67,6 @@
             }
 
             return message;
-        }
-
-        public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
-        {
-            string result = string.Empty;
-
-            if ((toDate - fromDate).Days <= 0)
-            {
-                result = fromDate.ToDateMonthYearFormatedDate();
-            }
-            else if (fromDate.Year != toDate.Year)
-            {
-                result = fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
-            }
-            else
-            {
-                result = (fromDate.Month != toDate.Month) ?
-                fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
-                fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
-            }
-
-            return result;
         }
 
         public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
@@ -206,7 +183,7 @@
 
         private static string GetDateTimeForLeaveRequest(RequestEntity request)
         {
-            var leaveDate = GetMessageDateString(request.FromDate, request.ToDate);
+            var leaveDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
             if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
             {
@@ -232,7 +209,7 @@
             else
             {
                 msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
-                var date = GetMessageDateString(request.FromDate, request.ToDate);
+                var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 messageDetail = string.Format(msgTemplate, date);
             }
 
@@ -251,7 +228,7 @@
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
             var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
 
-            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
+            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
         }
 
         private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
@@ -259,7 +236,7 @@
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
             var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
 
-            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
+            return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
         }
 
         private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)

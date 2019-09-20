@@ -414,5 +414,27 @@
 
             return backgroundColor;
         }
+
+        public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
+        {
+            string result = string.Empty;
+
+            if ((toDate - fromDate).Days <= 0)
+            {
+                result = fromDate.ToDateMonthYearFormatedDate();
+            }
+            else if (fromDate.Year != toDate.Year)
+            {
+                result = fromDate.ToDateMonthYearFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate();
+            }
+            else
+            {
+                result = (fromDate.Month != toDate.Month) ?
+                fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
+                fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            return result;
+        }
     }
 }

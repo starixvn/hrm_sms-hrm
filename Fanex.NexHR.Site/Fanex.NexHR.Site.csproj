@@ -255,6 +255,8 @@
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
+    <Content Include="wwwroot\dist\js\changeshift.create.js" />
+    <Content Include="wwwroot\dist\js\changeshift.edit.js" />
     <Content Include="wwwroot\dist\js\employee.create.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
@@ -283,6 +285,8 @@
     <Content Include="wwwroot\dist\styles\account.index.js" />
     <Content Include="wwwroot\dist\styles\annual.leave.balance.index.css" />
     <Content Include="wwwroot\dist\styles\annual.leave.balance.index.js" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.css" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.js" />
     <Content Include="wwwroot\dist\styles\employee.create.css" />
     <Content Include="wwwroot\dist\styles\employee.create.js" />
     <Content Include="wwwroot\dist\styles\employee.index.css" />
@@ -327,6 +331,7 @@
     <Content Include="wwwroot\dist\styles\user.management.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
     <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\edit.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\edit.js" />
@@ -1188,7 +1193,7 @@
     <Content Include="Views\Leave\Update.cshtml" />
     <Content Include="Views\ChangeShift\Create.cshtml" />
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
-    <Content Include="Views\ChangeShift\Update.cshtml" />
+    <Content Include="Views\ChangeShift\Edit.cshtml" />
     <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
     <Content Include="Views\Report\Timesheet.cshtml" />
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
@@ -1308,7 +1313,7 @@
     <Content Include="Views\Report\_SectionSupervisorDetails.cshtml" />
     <Content Include="ExcelTemplates\SectionSupervisorTemplate.xls" />
     <Content Include="Views\Message\DetailByEmployee.cshtml" />
-    <Content Include="Views\ChangeShift\Detail.cshtml" />
+    <Content Include="Views\ChangeShift\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.local.config">
@@ -1529,6 +1534,9 @@
     <Content Include="wwwroot\sources\styles\pages\employee\user.management.scss" />
     <Content Include="wwwroot\dist\styles\user.management.js.map" />
     <Content Include="wwwroot\sources\styles\pages\request\change-shift\create.scss" />
+    <Content Include="wwwroot\dist\js\changeshift.create.js.map" />
+    <Content Include="wwwroot\dist\js\changeshift.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

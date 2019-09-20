@@ -6,14 +6,8 @@
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID";
-        }
+        public override string GetSettingKey() => "ChangeShiftRequest_GetDetailById";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
     }
 }

@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request.ChangeShift;
@@ -23,20 +22,17 @@
         private const string EmailTemplatePathForRequest = "~/app_data/emails/ChangeShift.Request.cshtml";
         private const string EmailTemplatePathForCancel = "~/app_data/emails/ChangeShift.Cancel.cshtml";
 
-        private readonly IEmployeeRepository employeeRepository;
         private readonly IChangeShiftRequestRepository changeShiftRepository;
         private readonly IBaseService baseService;
         private readonly IEmailService emailService;
         private readonly IRequestMailService requestMailService;
 
         public ChangeShiftRequestService(
-            IEmployeeRepository employeeRepository,
             IChangeShiftRequestRepository changeShiftRepository,
             IBaseService baseService,
             IEmailService emailService,
             IRequestMailService requestMailService)
         {
-            this.employeeRepository = employeeRepository;
             this.changeShiftRepository = changeShiftRepository;
             this.baseService = baseService;
             this.emailService = emailService;
@@ -67,6 +63,24 @@
             return changeShiftRepository.GetWorkingCalendarForRequest(criteria);
         }
 
+        public ChangeShiftRequest GetById(long requestId)
+        {
+            var criteria = new GetChangeShiftRequestByIdCriteria
+            {
+                RequestId = requestId
+            };
+            return changeShiftRepository.GetById(criteria);
+        }
+
+        public IEnumerable<ChangeShiftDetail> GetDetailById(long requestId)
+        {
+            var criteria = new GetChangeShiftRequestDetailByIdCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.GetData<ChangeShiftDetail>(criteria);
+        }
+
         public CommandResult Create(int actorId, CreateChangeShift model)
         {
             var criteria = new CreateChangeShiftRequestCriteria
@@ -91,6 +105,7 @@
         {
             var criteria = new EditChangeShiftRequestCriteria
             {
+                RequestId = model.RequestId,
                 EmployeeId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -113,86 +128,95 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<ChangeShiftDetail> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria)
+        public void SendMailAfterCreateRequest(long requestId)
         {
-            return baseService.GetData<ChangeShiftDetail>(criteria).ToList();
-        }
-
-        public void SendMailAfterCreateRequest(long requestId, CreateChangeShift model)
-        {
-            var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMail(requestId, model, emailTemplatePath));
-        }
-
-        public void SendMailAfterEditRequest(EditChangeShift model)
-        {
-            var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMail(model, emailTemplatePath));
-        }
-
-        public void SendMail(long requestId, CreateChangeShift model, string emailTemplatePath)
-        {
-            EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (int)SettingsSendMail.New);
-            var criteria = new GetEmployeeByIdCriteria
+            ChangeShiftRequest request = GetById(requestId);
+            if (request != null)
             {
-                EmpId = model.EmployeeId
-            };
-            Employee employee = employeeRepository.GetEmployeeById(criteria);
-            string forDate = RequestService.GetMessageDateString(model.FromDate, model.ToDate);
-            email.Subject = string.Format(
-                "{0} {1} {2}",
-                Messages.ChangeShiftEmailSubject,
-                employee.DisplayName,
-                forDate);
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (int)SettingsSendMail.New);
+                var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
+                email.Subject = string.Format(
+                    "{0} {1} {2}",
+                    Messages.ChangeShiftEmailSubject,
+                    request.Employee.DisplayName,
+                    forDate);
 
-            email.Body = Utilities.ReadTextFile(emailTemplatePath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                forDate,
-                model.Remark,
-                ConfigSettings.ApplicationDomain);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    forDate,
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
 
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
         }
 
-        public void SendMail(EditChangeShift model, string emailTemplatePath)
+        public void SendMailAfterEditRequest(long requestId)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(model.RequestId, (int)SettingsSendMail.Edit);
-            var criteria = new GetEmployeeByIdCriteria
+            ChangeShiftRequest request = GetById(requestId);
+            if (request != null)
             {
-                EmpId = model.EmployeeId
-            };
-            Employee employee = employeeRepository.GetEmployeeById(criteria);
-            string forDate = RequestService.GetMessageDateString(model.FromDate, model.ToDate);
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Edit);
+                var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
+                email.Subject = string.Format(
+                    "{0} {1} {2}",
+                    Messages.UpdatedChangeShiftEmailSubject,
+                    request.Employee.DisplayName,
+                    forDate);
 
-            email.Subject = string.Format(
-                "{0} {1} {2}",
-                Messages.UpdatedChangeShiftEmailSubject,
-                employee.DisplayName,
-                RequestService.GetMessageDateString(model.FromDate, model.ToDate));
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    forDate,
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
 
-            email.Body = Utilities.ReadTextFile(emailTemplatePath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                forDate,
-                model.Remark,
-                ConfigSettings.ApplicationDomain);
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
+        }
 
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
+        public void SendMailAfterDeleteRequest(long requestId)
+        {
+            ChangeShiftRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
+                var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
+
+                email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Employee.NickName);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.DisplayName,
+                    forDate,
+                    request.Remark);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
         }
     }
 }

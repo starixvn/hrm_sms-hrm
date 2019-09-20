@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
-    using System.Configuration;
     using System.Linq;
     using System.Web;
     using Core.Services;
@@ -30,9 +29,6 @@
         private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
-
-        private const string _EmailTemplatePathForChangeShiftCancelation = "~/app_data/emails/ChangeShiftCancelation.cshtml";
-        private readonly string SenderEmail = ConfigurationManager.AppSettings["Email"];
 
         #endregion constant
 
@@ -76,21 +72,6 @@
             BackgroundJob.Enqueue(() => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
         }
 
-        public void SendMailForDeleteSuccessfully(long requestId)
-        {
-            var criteria = new GetRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            RequestEntity request = requestRepository.GetRequestById(criteria);
-
-            if (request != null)
-            {
-                var templateEmailPath = GetEmailTemplatePathForCancelRequest(request.RequestType.Id);
-                BackgroundJob.Enqueue(() => SendMailForCancelRequest(request, templateEmailPath));
-            }
-        }
-
         public EmailModel GetMailToAndMailCC(long requestId, int action)
         {
             var emailModel = new EmailModel();
@@ -127,7 +108,7 @@
             }
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
-            emailModel.Sender = SenderEmail;
+            emailModel.Sender = ConfigSettings.EmailSetting;
             return emailModel;
         }
 
@@ -249,54 +230,6 @@
             }
 
             return action;
-        }
-
-        private static string GetEmailTemplatePathForCancelRequest(short requestType)
-        {
-            string templateEmailPath = string.Empty;
-
-            if (requestType == (short)RequestType.ChangeShift)
-            {
-                templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShiftCancelation);
-            }
-
-            return templateEmailPath;
-        }
-
-        public void SendMailForCancelRequest(RequestEntity request, string templateEmailPath)
-        {
-            var actionSendMail = (request.RequestType.Id == (short)RequestType.Leave && request.ReworkCount > 0)
-                ? (int)SettingsSendMail.Delete
-                : (int)SettingsSendMail.Cancel;
-
-            EmailModel email = GetMailToAndMailCC(request.Id, actionSendMail);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
-            {
-                HandleSendMailCancelRequest(request, templateEmailPath, email);
-            }
-        }
-
-        private void HandleSendMailCancelRequest(RequestEntity request, string templateEmailPath, EmailModel email)
-        {
-            if (request.RequestType.Id == (short)RequestType.ChangeShift)
-            {
-                SendMailForCancelChangeShiftRequest(request, email.SendTo, email.SendCC, email.SendToNickName, templateEmailPath);
-            }
-        }
-
-        private void SendMailForCancelChangeShiftRequest(
-            RequestEntity request,
-            string mailTo,
-            string sendCc,
-            string sendToNickName,
-            string templateEmailPath)
-        {
-            var subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.NickName);
-            var forDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(body, sendToNickName, request.Requester.DisplayName, forDate, request.Remark);
-
-            emailService.SendEmail(SenderEmail, mailTo, sendCc, subject, body);
         }
 
         private static string GetPassiveNameOfCommand(string command)
@@ -559,7 +492,7 @@
                 request.RequestedDate.ToShortTime(),
                 request.Remark);
 
-            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LateInEarlyOutRelatedMail(
@@ -583,7 +516,7 @@
                 isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
 
-            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void ChangeShiftRelatedMail(
@@ -595,7 +528,7 @@
             string templateEmailPath)
         {
             var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = RequestService.GetMessageDateString(request.FromDate, request.ToDate);
+            var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
@@ -606,7 +539,7 @@
                 forDate,
                 request.Remark);
 
-            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LeaveRelatedMail(
@@ -632,7 +565,7 @@
                 request.LeaveType.Name,
                 request.Remark);
 
-            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void KeepInViewRelatedMail(
@@ -661,7 +594,7 @@
                 shift != null ? shift.Name : string.Empty,
                 request.Remark);
 
-            emailService.SendEmail(SenderEmail, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
+            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
     }
 }

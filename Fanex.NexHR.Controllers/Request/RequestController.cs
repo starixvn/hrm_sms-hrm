@@ -127,18 +127,6 @@
             return View("EmployeeRequest", request);
         }
 
-        [HttpPost]
-        public JsonResult Delete(long id)
-        {
-            CommandResult commandResult = requestService.Delete(id);
-            if (commandResult.IsSuccessful)
-            {
-                requestMailService.SendMailForDeleteSuccessfully(id);
-            }
-
-            return Json(commandResult);
-        }
-
         public JsonResult GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria

@@ -38,16 +38,10 @@
 
         public int ProcessedStatus { get; set; }
 
-        public RequestStatus Status
+        public RequestStatus Status => new RequestStatus
         {
-            get
-            {
-                return new RequestStatus
-                {
-                    Id = CurrentStatus
-                };
-            }
-        }
+            Id = CurrentStatus
+        };
 
         public string RefNO { get; set; }
 

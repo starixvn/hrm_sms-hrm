@@ -3,11 +3,15 @@
     using System.Collections.Generic;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
 
     public interface IChangeShiftRequestRepository
     {
         IEnumerable<DailySchedule> GetWorkingCalendarForRequest(ICriteria criteria);
+
+        ChangeShiftRequest GetById(ICriteria criteria);
     }
 
     public class ChangeShiftRequestRepository : IChangeShiftRequestRepository
@@ -16,7 +20,7 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var dailySchedules = db.Query<DailySchedule, ShiftBase, DailySchedule>(
+                return db.Query<DailySchedule, ShiftBase, DailySchedule>(
                     (dailySchedule, shift) =>
                     {
                         dailySchedule.Shift = shift;
@@ -25,8 +29,24 @@
                     },
                     splitOn: "ShiftId",
                     parameterValues: criteria.GetSpParams());
+            }
+        }
 
-                return dailySchedules;
+        public ChangeShiftRequest GetById(ICriteria criteria)
+        {
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<ChangeShiftRequest, Employee, Employee, Employee, ChangeShiftRequest>(
+                    (request, employee, verifier, approver) =>
+                    {
+                        request.Employee = employee;
+                        request.VerifiedBy = verifier;
+                        request.ApprovedBy = approver;
+
+                        return request;
+                    },
+                    splitOn: "EmpId, VerifierId, ApproverId",
+                    parameters: criteria.GetSpParams());
             }
         }
     }

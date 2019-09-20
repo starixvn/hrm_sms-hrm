@@ -4,12 +4,11 @@
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
         $.post(_global.root + 'changeshift/delete' + "/" + id, function (response) {
-            if (response.IsSuccessful) {
+            if (response.isSuccessful) {
                 $('#row' + id).remove();
                 autoIndex();
-            }
-            else {
-                alert(response.Message);
+            } else {
+                alert(response.message);
                 return;
             }
         });

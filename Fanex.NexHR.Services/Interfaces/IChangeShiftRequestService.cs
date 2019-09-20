@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
 
@@ -13,16 +12,20 @@
 
         IEnumerable<DailySchedule> GetWorkingCalendarForRequest(GetWorkingCalendarForRequestParam param);
 
+        ChangeShiftRequest GetById(long requestId);
+
+        IEnumerable<ChangeShiftDetail> GetDetailById(long requestId);
+
         CommandResult Create(int actorId, CreateChangeShift model);
 
         CommandResult Edit(int actorId, EditChangeShift model);
 
         CommandResult Delete(long requestId);
 
-        IList<ChangeShiftDetail> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
+        void SendMailAfterCreateRequest(long requestId);
 
-        void SendMailAfterCreateRequest(long requestId, CreateChangeShift model);
+        void SendMailAfterEditRequest(long requestId);
 
-        void SendMailAfterEditRequest(EditChangeShift model);
+        void SendMailAfterDeleteRequest(long requestId);
     }
 }

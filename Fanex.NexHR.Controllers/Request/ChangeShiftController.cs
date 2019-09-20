@@ -10,8 +10,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
@@ -25,18 +23,15 @@
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
-        private readonly IEmployeeService employeeService;
 
         public ChangeShiftController(
             ISessionService sessionService,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
-            IEmployeeService employeeService,
             IShiftService shiftService) : base(sessionService)
         {
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
-            this.employeeService = employeeService;
             this.shiftService = shiftService;
         }
 
@@ -93,7 +88,7 @@
             CommandResult commandResult = changeShiftService.Create(sessionService.Employee.Id, model);
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailAfterCreateRequest(commandResult.OutputId, model);
+                changeShiftService.SendMailAfterCreateRequest(commandResult.OutputId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -101,41 +96,31 @@
 
         public ActionResult Edit(int id)
         {
-            var getRequestByIdcriteria = new GetRequestByIdCriteria
-            {
-                RequestId = id
-            };
-            RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.Id))
+            ChangeShiftRequest request = changeShiftService.GetById(id);
+            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
-            else
-            {
-                var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria
-                {
-                    RequestId = id
-                };
-                var changeShiftDetail = changeShiftService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-                VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
-                var model = new ChangeShiftViewModel
-                {
-                    RequestId = request.Id,
-                    Employee = sessionService.Employee.Nickname,
-                    EmployeeId = sessionService.Employee.Id,
-                    FromDate = request.FromDate.Date,
-                    ToDate = request.ToDate.Date,
-                    VerifierId = request.VerifiedBy.Id,
-                    ApproverId = request.ApprovedBy.Id,
-                    Remark = request.Remark,
-                    ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
-                    Verifiers = supervisor.Verifiers,
-                    Approvers = supervisor.Approvers
-                };
 
-                ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
-                return View(model);
-            }
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            var model = new ChangeShiftViewModel
+            {
+                RequestId = request.RequestId,
+                Employee = sessionService.Employee.DisplayName,
+                EmployeeId = sessionService.Employee.Id,
+                FromDate = request.FromDate.Date,
+                ToDate = request.ToDate.Date,
+                VerifierId = request.VerifiedBy.Id,
+                ApproverId = request.ApprovedBy.Id,
+                Remark = request.Remark,
+                Details = changeShiftService.GetDetailById(id),
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
+            };
+            ViewBag.IsTopManager = request.Employee.IsTopManager;
+            ViewBag.TypeId = request.TypeId;
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+            return View(model);
         }
 
         [HttpPost]
@@ -145,7 +130,7 @@
             CommandResult commandResult = changeShiftService.Edit(sessionService.Employee.Id, model);
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailAfterEditRequest(model);
+                changeShiftService.SendMailAfterEditRequest(model.RequestId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -153,46 +138,36 @@
 
         public CustomJsonResult Delete(long id)
         {
+            changeShiftService.SendMailAfterDeleteRequest(id);
             CommandResult commandResult = changeShiftService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public ActionResult Detail(int id)
+        public ActionResult Details(int id)
         {
-            var model = new ChangeShiftViewModel();
-
-            var getRequestByIdcriteria = new GetRequestByIdCriteria
+            ChangeShiftRequest request = changeShiftService.GetById(id);
+            if (request == null)
             {
-                RequestId = id
-            };
-            RequestEntity request = requestService.GetRequestById(getRequestByIdcriteria);
-            var getChangeShiftDetailCriteria = new GetChangeShiftRequestDetailByIdCriteria
-            {
-                RequestId = id
-            };
-            IList<ChangeShiftDetail> changeShiftDetail = changeShiftService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
-
-            if (request != null && changeShiftDetail != null)
-            {
-                Employee employee = employeeService.GetEmployeeById(request.Requester.Id);
-                VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
-                model = new ChangeShiftViewModel
-                {
-                    Employee = employee.NickName,
-                    EmployeeId = employee.Id,
-                    FromDate = request.FromDate.Date,
-                    ToDate = request.ToDate.Date,
-                    VerifierId = request.VerifiedBy.Id,
-                    ApproverId = request.ApprovedBy.Id,
-                    Remark = request.Remark,
-                    ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
-                    Status = request.Status,
-                    Verifiers = supervisor.Verifiers,
-                    Approvers = supervisor.Approvers
-                };
+                return RedirectToAction("PageNotFound", "Error");
             }
 
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            var model = new ChangeShiftViewModel
+            {
+                Employee = request.Employee.DisplayName,
+                EmployeeId = request.Employee.Id,
+                FromDate = request.FromDate.Date,
+                ToDate = request.ToDate.Date,
+                VerifierId = request.VerifiedBy.Id,
+                ApproverId = request.ApprovedBy.Id,
+                Remark = request.Remark,
+                Details = changeShiftService.GetDetailById(id),
+                Status = request.Status,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
+            };
+            ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
         }
@@ -264,24 +239,6 @@
             }
 
             return supervisor;
-        }
-
-        private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetail> model)
-        {
-            IList<ChangeShiftDetailViewModel> changeShiftDetails = null;
-            if (model != null)
-            {
-                changeShiftDetails = model.Select(item => new ChangeShiftDetailViewModel
-                {
-                    OnDate = item.OnDate,
-                    Schedule = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
-                    FromShiftId = item.FromShiftId,
-                    ToShiftId = item.ToShiftId,
-                    Remark = item.Remark
-                }).ToList();
-            }
-
-            return changeShiftDetails ?? new List<ChangeShiftDetailViewModel>();
         }
     }
 }

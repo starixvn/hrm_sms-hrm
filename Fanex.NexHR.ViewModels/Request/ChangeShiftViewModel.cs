@@ -6,6 +6,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
 
@@ -32,7 +33,7 @@
         [DataType(DataType.Date)]
         public DateTime ToDate { get; set; }
 
-        public IList<ChangeShiftDetailViewModel> ShiftDetails { get; set; } = new List<ChangeShiftDetailViewModel>();
+        public IEnumerable<ChangeShiftDetail> Details { get; set; } = new List<ChangeShiftDetail>();
 
         [Display(Name = nameof(Labels.VerifiedBy), ResourceType = typeof(Labels))]
         public int? VerifierId { get; set; }

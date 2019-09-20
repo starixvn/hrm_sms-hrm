@@ -1,6 +1,5 @@
 ﻿@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
-@using Fanex.NexHR.ViewModels.Request
 @model ChangeShiftViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -24,7 +23,7 @@
     @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift", @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
-        <div class="validation-summary-errors" id="errors-model-state" style="display: none;"></div>
+        <div class="validation-summary-errors" style="display: none;"></div>
         if (Model.TotalRequestInMonth > 0)
         {
             <div class="validation-summary-errors">
