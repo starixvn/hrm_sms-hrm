@@ -13,6 +13,7 @@
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
 
@@ -168,9 +169,9 @@
             return request;
         }
 
-        public IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
+        public IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
         {
-            return baseService.GetData<ChangeShiftDetailModel>(criteria).ToList();
+            return baseService.GetData<ChangeShiftDetail>(criteria).ToList();
         }
 
         public IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)

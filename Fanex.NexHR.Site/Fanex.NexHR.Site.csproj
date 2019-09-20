@@ -346,7 +346,6 @@
     <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
-    <Content Include="wwwroot\sources\js\pages\request\common-functions.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -1241,7 +1240,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Emails\LeaveApproval.cshtml" />
-    <Content Include="App_Data\Emails\ChangeShiftApproval.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOutApproval.cshtml" />
     <Content Include="App_Data\Emails\CheckInOutApproval.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewRequest.cshtml">
@@ -1252,7 +1251,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Emails\LeaveCancelation.cshtml" />
-    <Content Include="App_Data\Emails\ChangeShiftCancelation.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOutCancelation.cshtml" />
     <Content Include="App_Data\Emails\CheckInOutCancelation.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewCancelation.cshtml" />
@@ -1268,7 +1267,7 @@
     <Content Include="Views\Home\_MemberRequest.cshtml" />
     <Content Include="Views\Employee\ShiftManager.cshtml" />
     <Content Include="Views\Team\ShiftManager.cshtml" />
-    <Content Include="Views\ChangeShift\ChangeShiftDetail.cshtml" />
+    <Content Include="Views\ChangeShift\_ChangeShiftDetail.cshtml" />
     <Content Include="Views\Leave\LeaveRequestDetail.cshtml" />
     <Content Include="Views\KeepInView\Create.cshtml" />
     <Content Include="Views\KeepInView\Update.cshtml" />

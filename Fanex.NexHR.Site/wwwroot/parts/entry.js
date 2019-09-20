@@ -42,6 +42,7 @@ module.exports = {
         [`${styleDistPath}/overtime.member.index`]: `${styleSourcePath}/pages/overtime/member.index.scss`,
         [`${styleDistPath}/overtime.member.details`]: `${styleSourcePath}/pages/overtime/member.details.scss`,
         [`${styleDistPath}/annual.leave.balance.index`]: `${styleSourcePath}/pages/annual-leave-balance/index.scss`,
+        [`${styleDistPath}/changeshift.create`]: `${styleSourcePath}/pages/request/change-shift/create.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -77,6 +78,7 @@ module.exports = {
         [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`,
         [`${jsDistPath}/overtime.member.details`]: `${jsSourcePath}/overtime/member.details.js`,
         [`${jsDistPath}/overtime.hr.index`]: `${jsSourcePath}/overtime/hr.index.js`,
-        [`${jsDistPath}/overtime.hr.details`]: `${jsSourcePath}/overtime/hr.details.js`
+        [`${jsDistPath}/overtime.hr.details`]: `${jsSourcePath}/overtime/hr.details.js`,
+        [`${jsDistPath}/changeshift.create`]: `${jsSourcePath}/request/change-shift/create.js`
     }
 };

@@ -8,6 +8,7 @@
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
 
     public interface IRequestService
     {
@@ -25,7 +26,7 @@
 
         RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria);
 
-        IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
+        IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
 
         IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
 

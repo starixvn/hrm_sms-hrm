@@ -1,16 +1,21 @@
 ﻿namespace Fanex.NexHR.ViewModels.Request
 {
-    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Resources;
 
     public class ChangeShiftViewModel
     {
         public long RequestId { get; set; }
 
-        [Required]
+        [Display(Name = nameof(Labels.Reason), ResourceType = typeof(Labels))]
+        public byte TypeId { get; set; } = (byte)ChangeShiftType.ChangeShift;
+
         public string Employee { get; set; }
 
         [Required]
@@ -27,20 +32,19 @@
         [DataType(DataType.Date)]
         public DateTime ToDate { get; set; }
 
-        public IList<ChangeShiftDetailViewModel> ShiftDetails { get; set; }
+        public IList<ChangeShiftDetailViewModel> ShiftDetails { get; set; } = new List<ChangeShiftDetailViewModel>();
 
-        [Display(Name = "Verified by")]
+        [Display(Name = nameof(Labels.VerifiedBy), ResourceType = typeof(Labels))]
         public int? VerifierId { get; set; }
 
-        [Display(Name = "Approved by")]
+        [Display(Name = nameof(Labels.ApprovedBy), ResourceType = typeof(Labels))]
         public int? ApproverId { get; set; }
-
-        public int RequestType { get; set; }
 
         public RequestStatus Status { get; set; }
 
         public decimal TotalRequestInMonth { get; set; }
 
-        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
+        public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+        public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
     }
 }

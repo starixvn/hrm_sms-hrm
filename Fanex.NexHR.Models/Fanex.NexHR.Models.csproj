@@ -151,7 +151,10 @@
     <Compile Include="Report\WeekendLeaveSummary.cs" />
     <Compile Include="Report\WorkingHoursSummary.cs" />
     <Compile Include="Request\BaseRequest.cs" />
-    <Compile Include="Request\ChangeShiftDetailModel.cs" />
+    <Compile Include="Request\ChangeShift\ChangeShiftDetail.cs" />
+    <Compile Include="Request\ChangeShift\CreateChangeShift.cs" />
+    <Compile Include="Request\ChangeShift\EditChangeShift.cs" />
+    <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestParam.cs" />
     <Compile Include="Request\LateInEarlyOutModel.cs" />
     <Compile Include="Request\CheckInOutModel.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
@@ -257,9 +260,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Request\ChangeShift\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

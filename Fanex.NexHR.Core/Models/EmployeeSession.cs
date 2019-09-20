@@ -11,6 +11,7 @@
         public string Nickname { get; set; }
         public string Password { get; set; }
         public bool Enabled { get; set; }
+        public bool IsTopManager { get; set; }
         public string DisplayName => (string.IsNullOrWhiteSpace(Nickname) || string.IsNullOrWhiteSpace(FullName)) ? string.Empty : Nickname + " (" + FullName + ")";
     }
 }

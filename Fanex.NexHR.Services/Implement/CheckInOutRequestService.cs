@@ -2,15 +2,15 @@
 {
     using System.Collections.Generic;
     using System.Web;
-    using Core;
-    using Core.Enums;
-    using Criteria.Employee;
-    using Criteria.Request.CheckInOut;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.CheckInOut;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using Hangfire;
-    using Models;
-    using Resources;
 
     public class CheckInOutRequestService : ICheckInOutRequestService
     {
@@ -161,11 +161,11 @@
             if (request != null)
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCheckInOutCancelation);
-                BackgroundJob.Enqueue(() => SendMailForeleteRequest(request, templateEmailPath));
+                BackgroundJob.Enqueue(() => SendMailForDeleteRequest(request, templateEmailPath));
             }
         }
 
-        public void SendMailForeleteRequest(CheckInOutModel request, string templateEmailPath)
+        public void SendMailForDeleteRequest(CheckInOutModel request, string templateEmailPath)
         {
             EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))

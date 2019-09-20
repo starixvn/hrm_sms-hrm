@@ -1,0 +1,54 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Request.ChangeShift
+@model List<ChangeShiftDetail>
+
+@{
+    var typeId = (byte)ViewBag.TypeId;
+}
+
+<table id="tblchangeshift" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Schedule</th>
+            @if (typeId == (byte)ChangeShiftType.MoveOffDay)
+            {
+                <th class="moveToDate">@Labels.MoveToDate</th>
+            }
+            <th>@Labels.ChangeTo</th>
+            <th>@Labels.Remark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ var rowIndex = 0; }
+        @foreach (ChangeShiftDetail item in Model)
+        {
+            <tr>
+                <td>
+                    @item.OnDate.ToDayOfWeekFormatedDate()
+                    @Html.HiddenFor(model => item.FromShiftId, new { @class = "fromShiftId" })
+                    <input type="text" class="onDate" hidden value="@item.OnDate.ToDayOfWeekFormatedDate()" />
+                </td>
+                <td>@item.FromShift</td>
+                @if (typeId == (byte)ChangeShiftType.MoveOffDay)
+                {
+                    <td class="moveToDate">
+                        <div class="calendar-form">
+                            @{ var toDate = item.ToDate.HasValue ? item.ToDate.ToDateMonthYearFormatedDate() : string.Empty; }
+                            <input type="text" id="todate@(rowIndex)" name="todate@(rowIndex++)" class="datepicker form-control" value="@toDate"
+                                  mindate="@item.OnDate.LastDayOfWeek().AddDays(1).ToString("yyyy/MM/dd")" />
+                            <i class="icon-calendar fa fa-calendar"></i>
+                        </div>
+                    </td>
+                }
+                <td>
+                    @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId),
+                    new { @class = "toShiftId form-control" })
+                </td>
+                <td>@Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark" })</td>
+            </tr>
+        }
+    </tbody>
+</table>

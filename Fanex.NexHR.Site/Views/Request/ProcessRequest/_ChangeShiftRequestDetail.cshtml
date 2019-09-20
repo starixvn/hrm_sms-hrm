@@ -1,4 +1,8 @@
-﻿@model List<ChangeShiftDetailModel>
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Request
+@model List<ChangeShiftDetail>
 @section js{
     @Url.CombresLink("employeerequestjs_new")
 }
@@ -14,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (ChangeShiftDetailModel item in Model)
+        @foreach (ChangeShiftDetail item in Model)
         {
             var scheduleStatus = item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift;
             var disciplineTypeId = (int)DisciplineType.ChangeShift;

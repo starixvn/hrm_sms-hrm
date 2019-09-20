@@ -20,7 +20,7 @@
 @using (Html.BeginForm())
 {
     <div class="card form-horizontal">
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary()
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.FullName, new { @class = "control-label" })

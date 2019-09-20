@@ -1842,4 +1842,10 @@
   <data name="EmployeeSupervisor" xml:space="preserve">
     <value>Employee Supervisor</value>
   </data>
+  <data name="MoveOffDayToAnotherWeek" xml:space="preserve">
+    <value>Move Off Day to another week</value>
+  </data>
+  <data name="MoveToDate" xml:space="preserve">
+    <value>Move To Date</value>
+  </data>
 </root>

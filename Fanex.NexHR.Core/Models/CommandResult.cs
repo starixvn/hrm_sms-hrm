@@ -21,6 +21,6 @@
             }
         }
 
-        public int OutputId { get; set; }
+        public long OutputId { get; set; }
     }
 }

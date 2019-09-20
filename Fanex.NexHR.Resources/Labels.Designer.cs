@@ -2815,6 +2815,24 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Off Day to another week.
+        /// </summary>
+        public static string MoveOffDayToAnotherWeek {
+            get {
+                return ResourceManager.GetString("MoveOffDayToAnotherWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move To Date.
+        /// </summary>
+        public static string MoveToDate {
+            get {
+                return ResourceManager.GetString("MoveToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MultipleInsert.
         /// </summary>
         public static string MultipleInsert {

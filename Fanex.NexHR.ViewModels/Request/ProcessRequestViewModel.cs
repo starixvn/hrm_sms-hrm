@@ -5,6 +5,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
 
     public class ProcessRequestViewModel
     {
@@ -25,7 +26,7 @@
 
         public RequestEntity LateInEarlyOutDetail { get; set; }
 
-        public IList<ChangeShiftDetailModel> ChangeShiftDetails { get; set; }
+        public IList<ChangeShiftDetail> ChangeShiftDetails { get; set; }
 
         public IList<LeaveDisciplineModel> LeaveDisciplines { get; set; }
 

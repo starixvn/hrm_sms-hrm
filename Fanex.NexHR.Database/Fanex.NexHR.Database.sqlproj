@@ -289,7 +289,6 @@
     <Build Include="dbo\Stored Procedures\Message_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_ChangeShift.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_CheckInOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
@@ -352,7 +351,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_EmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_DeleteOtherDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_ChangeShiftRequest.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_GroupExternal.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_CheckInOutRequest.sql" />
@@ -572,6 +570,7 @@
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Reject.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Reset.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_VoidBySA.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetNumberOfRequest.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

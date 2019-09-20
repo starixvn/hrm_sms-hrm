@@ -3,7 +3,7 @@
 
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
-        $.post(_global.root + 'request/delete' + "/" + id, function (response) {
+        $.post(_global.root + 'changeshift/delete' + "/" + id, function (response) {
             if (response.IsSuccessful) {
                 $('#row' + id).remove();
                 autoIndex();
@@ -22,7 +22,7 @@ function processRequest(command, eventElement) {
 
     switch (command) {
         case 'Edit':
-            location.href = _global.root + requestType + "/Update/" + requestId;
+            location.href = _global.root + requestType + "/Edit/" + requestId;
             break;
         case 'Cancel':
             cancelRequest(requestId);
@@ -39,7 +39,6 @@ function bindMenu(element, menu) {
 }
 
 $(document).ready(function() {
-	// menu
     bindMenu('.Pending', 'pendingMenu');
 
     $(".viewhistory").click(function () {
@@ -55,4 +54,3 @@ $(document).ready(function() {
         });
     });
 });
-

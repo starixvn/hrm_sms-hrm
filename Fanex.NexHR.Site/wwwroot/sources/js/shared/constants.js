@@ -40,6 +40,10 @@ export const CurrentRequestStatus =
     Processed: 6,
     Void: 7
 };
+export const ChangeShiftType = {
+    ChangeShift: 1,
+    MoveOffDay: 2
+};
 export const Messages = {
     notAvailable: 'Not available',
     invalidInputData: 'Invalid input data',

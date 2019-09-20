@@ -4,15 +4,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
@@ -20,28 +22,22 @@
 
     public class ChangeShiftController : BaseController
     {
-        private readonly IChangeShiftRequestService changeShiftRequestService;
+        private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
-        private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
         private readonly IEmployeeService employeeService;
-        private readonly IWorkingCalendarService workingCalendarService;
 
         public ChangeShiftController(
             ISessionService sessionService,
-            IChangeShiftRequestService changeShiftRequestService,
+            IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
-            IBaseService baseService,
             IEmployeeService employeeService,
-            IShiftService shiftService,
-            IWorkingCalendarService workingCalendarService) : base(sessionService)
+            IShiftService shiftService) : base(sessionService)
         {
-            this.changeShiftRequestService = changeShiftRequestService;
+            this.changeShiftService = changeShiftService;
             this.requestService = requestService;
-            this.baseService = baseService;
             this.employeeService = employeeService;
             this.shiftService = shiftService;
-            this.workingCalendarService = workingCalendarService;
         }
 
         [HttpGet]
@@ -73,42 +69,37 @@
 
         public ActionResult Create()
         {
-            var currentDate = DateTime.Now.Date;
-            List<ChangeShiftDetailViewModel> shiftDetails = GetChangeShiftDetail(sessionService.Employee.Id, currentDate, toDate: currentDate);
-
+            var today = DateTime.Today;
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
             var model = new ChangeShiftViewModel
             {
-                Employee = sessionService.Employee.Nickname,
+                Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
-                FromDate = currentDate,
-                ToDate = currentDate,
-                ShiftDetails = shiftDetails,
-                TotalRequestInMonth = GetTotalRequestInMonth(sessionService.Employee.Id),
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                FromDate = today,
+                ToDate = today,
+                TotalRequestInMonth = changeShiftService.GetNumberOfRequest(sessionService.Employee.Id, today.FirstDayOfMonth(), today.LastDayOfMonth()),
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
 
-            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult Create(string shiftJson, string shiftDetailJson)
+        public CustomJsonResult Create(CreateChangeShift model)
         {
-            var criteria = JsonConverter.FromJson<InsertChangeShiftRequestCriteria>(shiftJson);
-            criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.CreatedBy = sessionService.Employee.Id;
-
-            CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
-            if (result.IsSuccessful)
+            CommandResult commandResult = changeShiftService.Create(sessionService.Employee.Id, model);
+            if (commandResult.IsSuccessful)
             {
-                changeShiftRequestService.SendMailForInsertSuccessfully(criteria);
+                changeShiftService.SendMailAfterCreateRequest(commandResult.OutputId, model);
             }
 
-            return Json(result);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public ActionResult Update(int id)
+        public ActionResult Edit(int id)
         {
             var getRequestByIdcriteria = new GetRequestByIdCriteria
             {
@@ -125,7 +116,8 @@
                 {
                     RequestId = id
                 };
-                var changeShiftDetail = changeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+                var changeShiftDetail = changeShiftService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+                VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
                 var model = new ChangeShiftViewModel
                 {
                     RequestId = request.Id,
@@ -137,7 +129,8 @@
                     ApproverId = request.ApprovedBy.Id,
                     Remark = request.Remark,
                     ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
-                    VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id),
+                    Verifiers = supervisor.Verifiers,
+                    Approvers = supervisor.Approvers
                 };
 
                 ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
@@ -147,19 +140,22 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public JsonResult Update(string shiftJson, string shiftDetailJson)
+        public CustomJsonResult Edit(EditChangeShift model)
         {
-            var criteria = JsonConverter.FromJson<UpdateChangeShiftRequestCriteria>(shiftJson);
-            criteria.RequestDetail = JsonConverter.FromJsonArray<ChangeShiftDetailModel>(shiftDetailJson);
-            criteria.ModifiedBy = sessionService.Employee.Id;
-
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            if (result.IsSuccessful)
+            CommandResult commandResult = changeShiftService.Edit(sessionService.Employee.Id, model);
+            if (commandResult.IsSuccessful)
             {
-                changeShiftRequestService.SendMailForUpdateSuccessfully(criteria);
+                changeShiftService.SendMailAfterEditRequest(model);
             }
 
-            return Json(result);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public CustomJsonResult Delete(long id)
+        {
+            CommandResult commandResult = changeShiftService.Delete(id);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult Detail(int id)
@@ -175,11 +171,12 @@
             {
                 RequestId = id
             };
-            IList<ChangeShiftDetailModel> changeShiftDetail = changeShiftRequestService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
+            IList<ChangeShiftDetail> changeShiftDetail = changeShiftService.GetChangeShiftRequestDetailById(getChangeShiftDetailCriteria);
 
             if (request != null && changeShiftDetail != null)
             {
                 Employee employee = employeeService.GetEmployeeById(request.Requester.Id);
+                VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
                 model = new ChangeShiftViewModel
                 {
                     Employee = employee.NickName,
@@ -191,7 +188,8 @@
                     Remark = request.Remark,
                     ShiftDetails = ConvertChangeShiftDetailToViewModel(changeShiftDetail),
                     Status = request.Status,
-                    VerifierAndApprover = GetVerifierApprover(employee.Id, request)
+                    Verifiers = supervisor.Verifiers,
+                    Approvers = supervisor.Approvers
                 };
             }
 
@@ -199,64 +197,41 @@
             return View(model);
         }
 
-        public ActionResult ChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
+        public ActionResult GetChangeShiftDetail(GetWorkingCalendarForRequestParam param)
         {
-            IList<ChangeShiftDetailViewModel> model = GetChangeShiftDetail(employeeId, fromDate, toDate);
-            IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
-            ViewBag.Shifts = shifts;
-            return PartialView("ChangeShiftDetail", model);
+            IEnumerable<DailySchedule> dailySchedules = changeShiftService.GetWorkingCalendarForRequest(param);
+            IList<ChangeShiftDetail> details = dailySchedules.Select(x => new ChangeShiftDetail
+            {
+                OnDate = x.WorkDate,
+                Remark = string.Empty,
+                FromShiftId = GetFromShiftId(x),
+                FromShift = GetFromShiftName(x)
+            }).ToList();
+
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
+            ViewBag.TypeId = param.TypeId;
+
+            return PartialView("_ChangeShiftDetail", details);
         }
 
-        private List<ChangeShiftDetailViewModel> GetChangeShiftDetail(int employeeId, DateTime fromDate, DateTime toDate)
+        private static int GetFromShiftId(DailySchedule dailySchedule)
         {
-            var changeShiftDetail = new List<ChangeShiftDetailViewModel>();
-            var criteria = new GetWorkingCalendarByDateRangeCriteria
+            if (dailySchedule.IsOffDay)
             {
-                FromDate = fromDate,
-                ToDate = toDate,
-                GroupIds = string.Empty,
-                EmpId = employeeId
-            };
-            IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
-            foreach (WorkingCalendarModel item in calendars)
-            {
-                int shiftId = item.Shift != null ? item.Shift.Id : 0;
-                var shiftDetail = new ChangeShiftDetailViewModel
-                {
-                    OnDate = item.WorkDate,
-                    Remark = string.Empty,
-                    ScheduleStatus = GetScheduleStatus(item),
-                    FromShiftId = item.IsOffDay ? -1 : shiftId
-                };
-                changeShiftDetail.Add(shiftDetail);
+                return Constants.OffDayShiftId;
             }
 
-            return changeShiftDetail;
+            return dailySchedule.Shift != null ? dailySchedule.Shift.Id : 0;
         }
 
-        private static string GetScheduleStatus(WorkingCalendarModel model)
+        private static string GetFromShiftName(DailySchedule dailySchedule)
         {
-            var schedule = string.Empty;
-            bool validChangeShift = !model.IsChangeShift && model.Shift != null;
-
-            if (model.IsOffDay)
+            if (dailySchedule.IsOffDay)
             {
-                schedule = Labels.Off;
-            }
-            else if (model.IsHoliday)
-            {
-                schedule = Labels.Holiday;
-            }
-            else if (!model.IsHoliday && !model.IsLeaveDay && !model.IsKeepInViewDay && validChangeShift)
-            {
-                schedule = model.Shift.Name;
-            }
-            else
-            {
-                schedule = Labels.NA;
+                return Labels.Off;
             }
 
-            return schedule;
+            return dailySchedule.Shift != null ? dailySchedule.Shift.Name : Labels.NA;
         }
 
         private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, RequestEntity request = null)
@@ -291,21 +266,7 @@
             return supervisor;
         }
 
-        private decimal GetTotalRequestInMonth(int employeeId)
-        {
-            var currentDate = DateTime.Now.Date;
-            var criteria = new GetNumberRequestInMonthCriteria
-            {
-                EmployeeId = employeeId,
-                RequestType = (int)RequestType.ChangeShift,
-                FromDate = new DateTime(currentDate.Year, currentDate.Month, 1),
-                ToDate = new DateTime(currentDate.Year, currentDate.Month, DateTime.DaysInMonth(currentDate.Year, currentDate.Month))
-            };
-            decimal numberRequests = requestService.GetNumberRequestInMonth(criteria);
-            return numberRequests;
-        }
-
-        private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetailModel> model)
+        private IList<ChangeShiftDetailViewModel> ConvertChangeShiftDetailToViewModel(IList<ChangeShiftDetail> model)
         {
             IList<ChangeShiftDetailViewModel> changeShiftDetails = null;
             if (model != null)
@@ -313,7 +274,7 @@
                 changeShiftDetails = model.Select(item => new ChangeShiftDetailViewModel
                 {
                     OnDate = item.OnDate,
-                    ScheduleStatus = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
+                    Schedule = item.FromShiftId == -1 ? Labels.Off : item.FromShift,
                     FromShiftId = item.FromShiftId,
                     ToShiftId = item.ToShiftId,
                     Remark = item.Remark

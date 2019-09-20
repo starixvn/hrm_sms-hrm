@@ -258,6 +258,9 @@ BEGIN
 		END
 	END
 
+	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
+		,@Comment = ''
+
 	IF @@ERROR <> 0
 	BEGIN
 		SELECT @ErrCode = 100

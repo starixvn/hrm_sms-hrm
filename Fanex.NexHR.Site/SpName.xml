@@ -184,8 +184,6 @@
     <Setting Key="LookupData_Update" SpName="LookupData_JobTitle_Update" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Shift">
-    <Setting Key="WorkingTimeRequest_Update_ChangeShiftRequest" SpName="WorkingTimeRequest_Update_ChangeShiftRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Insert_ChangeShift" SpName="WorkingTimeRequest_Insert_ChangeShift" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Shift_GetShifts" SpName="Shift_GetShifts" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftID" ObjectProperty="Id" />
     </Setting>
@@ -556,5 +554,14 @@
   </Function>
   <Function Name="Log">
     <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="nexhrx" Plain="0" />
+  </Function>
+  <Function Name="Change Shift">
+    <Setting Key="ChangeShiftRequest_GetNumberOfRequest" SpName="ChangeShiftRequest_GetNumberOfRequest" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="nexhrx" Plain="0">
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="ChangeShiftRequest_Insert" SpName="ChangeShiftRequest_Insert" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_Update" SpName="ChangeShiftRequest_Update" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_Delete" SpName="ChangeShiftRequest_Delete" DbName="nexhrx" Plain="0" />
   </Function>
 </Functions>

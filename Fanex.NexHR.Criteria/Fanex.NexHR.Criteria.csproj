@@ -148,6 +148,8 @@
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetNumberOfRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\DeleteCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByDateCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByIdCriteria.cs" />
@@ -188,7 +190,7 @@
     <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
     <Compile Include="Request\ApproveRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftDetailToIgnoreByIdCriteria.cs" />
-    <Compile Include="Request\ChangeShift\ChangeShiftCommand.cs" />
+    <Compile Include="Request\ChangeShift\DeleteChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\GetCheckInOutRequestToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\GetVerifierAndApproverCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
@@ -228,8 +230,8 @@
     <Compile Include="ExtensionNumber\UpdateExternalNumberCriteria.cs" />
     <Compile Include="Report\GetWorkingHoursSummaryReportCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestDetailByIdCriteria.cs" />
-    <Compile Include="Request\ChangeShift\InsertChangeShiftRequestCriteria.cs" />
-    <Compile Include="Request\ChangeShift\UpdateChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\CreateChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\EditChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\InsertCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\UpdateCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\DeleteRequestCriteria.cs" />

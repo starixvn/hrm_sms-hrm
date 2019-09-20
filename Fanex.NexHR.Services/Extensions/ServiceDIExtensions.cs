@@ -24,6 +24,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
             container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
             container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
+            container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();

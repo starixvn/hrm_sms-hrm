@@ -17,6 +17,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -138,13 +139,13 @@
             return Json(commandResult);
         }
 
-        public JsonResult GetEmployeesByActingUser(int role, string query)
+        public JsonResult GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
                 EmpId = sessionService.Employee.Id,
-                Role = (byte)role,
-                RequestType = null,
+                Role = role,
+                RequestType = requestType,
                 Query = query.Trim(),
                 IncludeLoginUser = true
             };
@@ -296,13 +297,13 @@
             return pending || verified;
         }
 
-        private IList<ChangeShiftDetailModel> GetChangeShiftDetailToIgnoreById(long requestId)
+        private IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(long requestId)
         {
             var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria
             {
                 RequestId = requestId
             };
-            IList<ChangeShiftDetailModel> changeShiftDetails = requestService.GetChangeShiftDetailToIgnoreById(criteria);
+            IList<ChangeShiftDetail> changeShiftDetails = requestService.GetChangeShiftDetailToIgnoreById(criteria);
 
             return changeShiftDetails.ToList();
         }

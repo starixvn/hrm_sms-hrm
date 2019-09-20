@@ -17,6 +17,16 @@
             return dt.FirstDayOfWeek().AddDays(6);
         }
 
+        public static DateTime FirstDayOfMonth(this DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, 1);
+        }
+
+        public static DateTime LastDayOfMonth(this DateTime dt)
+        {
+            return dt.FirstDayOfMonth().AddMonths(1).AddDays(-1);
+        }
+
         public static string ToFormatedDate(this DateTime? date)
         {
             if (date.HasValue)

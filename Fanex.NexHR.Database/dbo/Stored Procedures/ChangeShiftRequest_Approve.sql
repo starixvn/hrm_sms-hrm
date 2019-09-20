@@ -118,7 +118,7 @@ BEGIN
 		IF @RoleId = @ApproverRoleId
 			AND ISNULL(@IgnoredDetails, '') <> ''
 		BEGIN
-			EXECUTE dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
+			EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
 				,@RoleId = @RoleId
 				,@ModifiedBy = @ProcessedBy
 				,@IgnoredDetails = @IgnoredDetails
@@ -133,7 +133,7 @@ BEGIN
 			END
 		END
 
-		EXECUTE dbo.EmployeeCalendar_Insert @empid = @empid
+		EXEC dbo.EmployeeCalendar_Insert @empid = @empid
 			,@fromdate = @FromDate
 			,@todate = @ToDate
 			,@ErrCode = @ErrCode OUTPUT
@@ -258,7 +258,7 @@ BEGIN
 			WHERE RequestId = @RequestId
 		END
 
-		EXECUTE dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
+		EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 			,@Comment = @Comment
 
 		COMMIT TRANSACTION;
@@ -266,7 +266,7 @@ BEGIN
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Aprrove request failed.'
+			,@ErrMsg = 'Aprrove unsuccessfully.'
 
 		ROLLBACK TRANSACTION;
 	END CATCH;

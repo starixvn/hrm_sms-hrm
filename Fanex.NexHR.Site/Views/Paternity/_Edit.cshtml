@@ -1,4 +1,6 @@
-﻿@model Fanex.NexHR.ViewModels.Paternity.PaternityViewModel
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Paternity
+@model PaternityViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -6,58 +8,58 @@
 
 @section Breadcrumb {
     <a class="step">@Labels.EmployeeManagement</a>
-    <a class="step">Paternity</a>
+    <a class="step">@Labels.Paternity</a>
     <a class="step">@ViewBag.Title</a>
 }
-<div>
-    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
-    {
-        @Html.ValidationSummary()
-
-        <div class="form-horizontal clearfix">
-            <div class="form-group form-group--m">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
-                    @Html.HiddenFor(model => model.EmployeeId)
-                </div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
+{
+    @Html.ValidationSummary()
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>
-
-        <div class="form-horizontal clearfix">
-            <div class="form-group form-group--m">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.ChildBornDate, new { @class = "control-label" })
-                </div>
-                <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ChildBornDate).ToString(), Model.ChildBornDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = DateTime.Now, disableddate = "", @readonly = "readonly" })
-                    <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
-                </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ChildBornDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ChildBornDate", Model.ChildBornDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        @readonly = "readonly"
+                    })
+                <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
             </div>
         </div>
-
-        <div class="form-horizontal clearfix">
-            <div class="form-group form-group--m">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.LeaveDay, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    @Html.TextBox("LeaveDay", Model.LeaveDay, new { @class = "form-control", type = "number", min = 1 })
-                </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaveDay, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("LeaveDay", Model.LeaveDay, new { @class = "form-control", type = "number", min = 1 })
             </div>
         </div>
-
-        <div class="form-horizontal clearfix">
-            <div class="form-group form-group--m">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
-                </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
             </div>
         </div>
-    }
-</div>
+    </div>
+}

@@ -13,6 +13,7 @@
         public string MailGroup { get; set; }
 
         public int ActionType { get; set; }
+        public bool IsTopManager { get; set; }
 
         public string DisplayName
         {

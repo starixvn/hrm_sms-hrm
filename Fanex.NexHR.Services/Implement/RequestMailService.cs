@@ -65,12 +65,12 @@
 
         public void SendMailForProcessSuccessfully(long requestId, int processedBy, string action)
         {
-            var getRequestByIdCriteria = new GetRequestByIdCriteria
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
 
-            RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
+            RequestEntity request = requestRepository.GetRequestById(criteria);
             var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
 
             BackgroundJob.Enqueue(() => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
@@ -78,11 +78,11 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            var getRequestByIdCriteria = new GetRequestByIdCriteria
+            var criteria = new GetRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            RequestEntity request = requestRepository.GetRequestById(getRequestByIdCriteria);
+            RequestEntity request = requestRepository.GetRequestById(criteria);
 
             if (request != null)
             {

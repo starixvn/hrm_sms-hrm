@@ -1,125 +1,140 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Request
 @model ChangeShiftViewModel
 @{
-    ViewBag.Title = Labels.NewChangeShiftRequest;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.Create;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var today = DateTime.Today;
 }
 @section css{
-    @Url.CombresLink("changeshiftcss")
+    <link href="~/wwwroot/dist/styles/changeshift.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("changeshiftjs")
+    <script src="~/wwwroot/dist/js/changeshift.create.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "changeshift")">@Labels.MyChangeShiftRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-<div class="bunhat">
-    @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift" }))
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift", @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
-        <div class="validation-summary-errors" id="errors-model-state"></div>
-
-        if (Model.TotalRequestInMonth >= 1)
+        <div class="validation-summary-errors" id="errors-model-state" style="display: none;"></div>
+        if (Model.TotalRequestInMonth > 0)
         {
-            <div class="ui-state-error ui-corner-all model-state">
-                <p>
-                    <a href="@Url.Action("EmployeeView")">
-                        You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
-                        times since @DateTime.Now.ToString("MMM yyyy")
-                    </a>
-                </p>
+            <div class="validation-summary-errors">
+                <a href="@Url.Action("EmployeeView")">
+                    You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
+                    times since @DateTime.Now.ToString("MMM yyyy")
+                </a>
             </div>
         }
 
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Employee)
-                @Html.ValidationMessageFor(model => model.Employee)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Employee)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var types = new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = Labels.ChangeShift, Value = ((byte)ChangeShiftType.ChangeShift).ToString() },
+                        new SelectListItem() { Text = Labels.MoveOffDayToAnotherWeek, Value = ((byte)ChangeShiftType.MoveOffDay).ToString() }
+                    };
+                }
+                @Html.DropDownListFor(model => model.TypeId, types, new { @class = "form-control" })
             </div>
         </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FromDate)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.FromDate,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
-            </div>
-        </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ToDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.ToDate,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1))
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = new DateTime(today.Year, today.Month, 1).AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.VerifierId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = new DateTime(today.Year, today.Month, 1).AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @if (Model.Verifiers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
                 }
-
-                @Html.ValidationMessageFor(model => model.VerifierId)
             </div>
+            @Html.ValidationMessageFor(model => model.VerifierId)
         </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ApproverId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @if (Model.VerifierAndApprover.Approvers.Count() > 1)
+            <div class="select-form">
+                @if (Model.Approvers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
                 }
-                @Html.ValidationMessageFor(model => model.ApproverId)
             </div>
+            @Html.ValidationMessageFor(model => model.ApproverId)
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Remark)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextAreaFor(model => model.Remark)
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
             </div>
-        </div>
-
-        <div class="formrow" id="shiftDetailSchedule">
-            @Html.Partial("ChangeShiftDetail", Model.ShiftDetails)
         </div>
 
-        <div class="formrow">
-            <div class="label">
-                @Html.HiddenFor(model => model.EmployeeId)
-                @Html.Hidden("RequestType", (int)RequestType.ChangeShift)
-            </div>
-            <div class="input">
-                <input type="button" name="submit" value="@Labels.Request" class="button-primary button" />
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+        <div class="form-group" id="changeShiftDetails"></div>
+
+        <div class="form-group">
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>
     }

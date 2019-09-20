@@ -1,15 +1,28 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
+    using Fanex.NexHR.Models.ScheduleArrange;
 
     public interface IChangeShiftRequestService
     {
-        IList<ChangeShiftDetailModel> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
+        int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate);
 
-        void SendMailForInsertSuccessfully(InsertChangeShiftRequestCriteria criteria);
+        IEnumerable<DailySchedule> GetWorkingCalendarForRequest(GetWorkingCalendarForRequestParam param);
 
-        void SendMailForUpdateSuccessfully(UpdateChangeShiftRequestCriteria criteria);
+        CommandResult Create(int actorId, CreateChangeShift model);
+
+        CommandResult Edit(int actorId, EditChangeShift model);
+
+        CommandResult Delete(long requestId);
+
+        IList<ChangeShiftDetail> GetChangeShiftRequestDetailById(GetChangeShiftRequestDetailByIdCriteria criteria);
+
+        void SendMailAfterCreateRequest(long requestId, CreateChangeShift model);
+
+        void SendMailAfterEditRequest(EditChangeShift model);
     }
 }
