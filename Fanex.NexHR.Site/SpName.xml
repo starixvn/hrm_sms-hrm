@@ -569,5 +569,11 @@
     <Setting Key="ChangeShiftRequest_Insert" SpName="ChangeShiftRequest_Insert" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Update" SpName="ChangeShiftRequest_Update" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Delete" SpName="ChangeShiftRequest_Delete" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_GetHistoryById" SpName="ChangeShiftRequest_GetHistoryById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" />
+    </Setting>
   </Function>
 </Functions>

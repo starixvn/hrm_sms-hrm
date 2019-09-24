@@ -12,6 +12,8 @@
         IEnumerable<DailySchedule> GetWorkingCalendarForRequest(ICriteria criteria);
 
         ChangeShiftRequest GetById(ICriteria criteria);
+
+        IEnumerable<ChangeShiftRequest> GetHistoryById(ICriteria criteria);
     }
 
     public class ChangeShiftRequestRepository : IChangeShiftRequestRepository
@@ -47,6 +49,24 @@
                     },
                     splitOn: "EmpId, VerifierId, ApproverId",
                     parameters: criteria.GetSpParams());
+            }
+        }
+
+        public IEnumerable<ChangeShiftRequest> GetHistoryById(ICriteria criteria)
+        {
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                return db.Query<ChangeShiftRequest, Employee, Team, Employee, Employee, ChangeShiftRequest>(
+                    (request, employee, team, verifier, approver) =>
+                    {
+                        request.Employee = employee;
+                        request.Employee.Team = team;
+                        request.VerifiedBy = verifier;
+                        request.ApprovedBy = approver;
+                        return request;
+                    },
+                    splitOn: "EmpId, GroupId, VerifierId, ApproverId",
+                    parameterValues: criteria.GetSpParams());
             }
         }
     }

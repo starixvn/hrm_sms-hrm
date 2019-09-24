@@ -1537,6 +1537,7 @@
     <Content Include="wwwroot\dist\js\changeshift.create.js.map" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js.map" />
     <Content Include="wwwroot\dist\styles\changeshift.create.js.map" />
+    <Content Include="Views\ChangeShift\_ViewHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

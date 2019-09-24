@@ -85,6 +85,15 @@
             return dates;
         }
 
+        public IEnumerable<ChangeShiftRequest> GetHistoryById(long requestId)
+        {
+            var criteria = new GetChangeShiftRequestHistoryByIdCriteria
+            {
+                RequestId = requestId
+            };
+            return changeShiftRepository.GetHistoryById(criteria);
+        }
+
         public ChangeShiftRequest GetById(long requestId)
         {
             var criteria = new GetChangeShiftRequestByIdCriteria
@@ -101,9 +110,9 @@
                 RequestId = requestId
             };
             IEnumerable<ChangeShiftDetail> details = baseService.GetData<ChangeShiftDetail>(criteria);
-            foreach(ChangeShiftDetail detail in details)
+            foreach (ChangeShiftDetail detail in details)
             {
-                if(detail.FromShiftId == Constants.OffDayShiftId)
+                if (detail.FromShiftId == Constants.OffDayShiftId)
                 {
                     detail.FromShift = Labels.Off;
                 }

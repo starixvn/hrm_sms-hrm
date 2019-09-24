@@ -209,6 +209,12 @@
             return PartialView("_ChangeShiftDetail", details);
         }
 
+        public ActionResult ViewHistory(long id)
+        {
+            IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetHistoryById(id);
+            return PartialView("_ViewHistory", requests);
+        }
+
         private static int GetFromShiftId(DailySchedule dailySchedule)
         {
             if (dailySchedule.IsOffDay)

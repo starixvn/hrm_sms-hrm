@@ -149,6 +149,7 @@
     <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetDisableDateForMoveOffDayRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetNumberOfRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestCriteria.cs" />
