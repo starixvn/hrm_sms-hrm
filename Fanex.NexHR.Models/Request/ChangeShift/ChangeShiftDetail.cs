@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Request.ChangeShift
 {
     using System;
+    using System.Collections.Generic;
     using System.Xml.Serialization;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.XMLExtensions;
@@ -30,5 +31,8 @@
         [JsonIgnore]
         [XMLName("ToDate")]
         public string ToDateXml => ToDate.HasValue ? ToDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
+
+        [XmlIgnore]
+        public IEnumerable<DateTime> DisableDates { get; set; } = new List<DateTime>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿import $ from 'jquery/dist/jquery';
+import moment from 'moment';
 
 $.extend({
     getOrCreateDialog: function (id) {
@@ -236,13 +237,13 @@ function initDatepicker() {
 
         let checkBadDates = function (mydate) {
             let isEnable = true;
-            let disabledDates = $this.attr('disabledDate');
-            let myBadDates = disabledDates.split(',');
+            const disabledDates = $this.attr('disabledDate'),
+                myBadDates = disabledDates.split(',');
 
-            let checkdate = new Date(mydate).format('dd mmm, yyyy');
+            const checkdate = moment(mydate);
             for (let i = 0; i < myBadDates.length; i++) {
-                let date = new Date(myBadDates[i]).format('dd mmm, yyyy');
-                if (date === checkdate) {
+                const date = moment(myBadDates[i]);
+                if (date.isSame(checkdate)) {
                     isEnable = false;
                 }
             }

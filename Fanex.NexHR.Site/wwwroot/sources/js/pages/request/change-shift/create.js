@@ -12,7 +12,7 @@ import {
     axiosError, blockUI, unblockUI, initDatepicker,
     showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
 } from '../../../shared/common.functions';
-import { RequestType, RoleSystem } from '../../../shared/constants';
+import { RequestType, RoleSystem, ChangeShiftType, OffDayShiftId } from '../../../shared/constants';
 
 $(document).ready(function () {
     let domElements = {
@@ -75,6 +75,19 @@ $(document).ready(function () {
             unblockUI();
             $('#changeShiftDetails').html(response.data);
             initDatepicker();
+            $('#tblchangeshift input.datepicker').off('change').on('change', function () {
+                $('#tblchangeshift input.datepicker').each(function () {
+                    let disabledDate = $(this).attr('original-disabledDate');
+                    $('#tblchangeshift input.datepicker').not(this).each(function () {
+                        if ($(this).val) {
+                            disabledDate = disabledDate + ',' + moment($(this).val()).format('YYYY/MM/DD');
+                        }
+                    });
+
+                    $(this).attr('disabledDate', disabledDate);
+                });
+            });
+
             if ($('#tblchangeshift tbody tr').length > 0) {
                 domElements.$btnSubmit.prop('disabled', false);
             } else {
@@ -86,6 +99,7 @@ $(document).ready(function () {
         let isValid = true,
             errorMessages = [];
         const employeeId = parseInt(domElements.$employeeId.val(), 10),
+            typeId = parseInt(domElements.$typeId.val(), 10),
             fromDate = moment(domElements.$fromDate.val()),
             toDate = moment(domElements.$toDate.val()),
             approverId = domElements.$approverId.val(),
@@ -110,6 +124,16 @@ $(document).ready(function () {
 
         if ($.trim(domElements.$remark.val()).length === 0) {
             errorMessages.push('Remark field is required.');
+        }
+
+        if (typeId === ChangeShiftType.MoveOffDay) {
+            const moveToDates = $('#tblchangeshift input.datepicker').map(function () {
+                if (!$(this).val()) { return $(this).val(); }
+            });
+
+            if (moveToDates.length > 0) {
+                errorMessages.push('Move To Date field is required.');
+            }
         }
 
         if (errorMessages.length > 0) {
@@ -182,19 +206,21 @@ $(document).ready(function () {
 
     domElements.$btnSubmit.on('click', function () {
         hideValidationSummaryErrors(false);
+        const typeId = parseInt(domElements.$typeId.val(), 10);
         let details = [];
         $('#tblchangeshift tbody tr').each(function () {
             let $tr = $(this);
             details.push({
                 onDate: $tr.find('.onDate').val(),
                 fromShiftId: $tr.find('.fromShiftId').val(),
-                toShiftId: $tr.find('.toShiftId').val(),
-                remark: $.trim($tr.find('.remark').val())
+                toShiftId: typeId === ChangeShiftType.ChangeShift ? $tr.find('.toShiftId').val() : OffDayShiftId,
+                remark: $.trim($tr.find('.remark').val()),
+                toDate: $tr.find('.moveToDate').val()
             });
         });
         const model = {
             employeeId: domElements.$employeeId.val(),
-            typeId: domElements.$typeId.val(),
+            typeId: typeId,
             fromDate: domElements.$fromDate.val(),
             toDate: domElements.$toDate.val(),
             remark: $.trim(domElements.$remark.val()),

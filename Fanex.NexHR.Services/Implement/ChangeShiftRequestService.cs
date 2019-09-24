@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -63,6 +64,27 @@
             return changeShiftRepository.GetWorkingCalendarForRequest(criteria);
         }
 
+        public IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null)
+        {
+            var criteria = new GetDisableDateForMoveOffDayRequestCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = new DateTime(requestDate.Year, 1, 1),
+                ToDate = new DateTime(requestDate.Year, 12, 31),
+                RequestId = requestId
+            };
+            IList<DateTime> dates = baseService.GetData<DateTime>(criteria).ToList();
+            for (var day = requestDate.FirstDayOfWeek().Date; day.Date <= requestDate.LastDayOfWeek().Date; day = day.AddDays(1))
+            {
+                if (!dates.Any(x => x.Date == day.Date))
+                {
+                    dates.Add(day);
+                }
+            }
+
+            return dates;
+        }
+
         public ChangeShiftRequest GetById(long requestId)
         {
             var criteria = new GetChangeShiftRequestByIdCriteria
@@ -78,7 +100,21 @@
             {
                 RequestId = requestId
             };
-            return baseService.GetData<ChangeShiftDetail>(criteria);
+            IEnumerable<ChangeShiftDetail> details = baseService.GetData<ChangeShiftDetail>(criteria);
+            foreach(ChangeShiftDetail detail in details)
+            {
+                if(detail.FromShiftId == Constants.OffDayShiftId)
+                {
+                    detail.FromShift = Labels.Off;
+                }
+
+                if (detail.ToShiftId == Constants.OffDayShiftId)
+                {
+                    detail.ToShift = Labels.Off;
+                }
+            }
+
+            return details;
         }
 
         public CommandResult Create(int actorId, CreateChangeShift model)

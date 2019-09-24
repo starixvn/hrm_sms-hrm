@@ -76,7 +76,7 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
-
+            ViewBag.IsHost = true;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             return View(model);
         }
@@ -117,6 +117,16 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
+
+            if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
+            {
+                foreach (ChangeShiftDetail detail in model.Details)
+                {
+                    detail.DisableDates = changeShiftService.GetDisableDateForMoveOffDayRequest(model.EmployeeId, detail.OnDate, model.RequestId);
+                }
+            }
+
+            ViewBag.IsHost = true;
             ViewBag.IsTopManager = request.Employee.IsTopManager;
             ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
@@ -167,6 +177,7 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
+            ViewBag.IsHost = false;
             ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
@@ -183,6 +194,15 @@
                 FromShift = GetFromShiftName(x)
             }).ToList();
 
+            if(param.TypeId == (byte)ChangeShiftType.MoveOffDay)
+            {
+                foreach(ChangeShiftDetail detail in details)
+                {
+                    detail.DisableDates = changeShiftService.GetDisableDateForMoveOffDayRequest(param.EmployeeId, detail.OnDate, param.RequestId);
+                }
+            }
+
+            ViewBag.IsHost = true;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             ViewBag.TypeId = param.TypeId;
 

@@ -17,11 +17,10 @@ function cancelRequest(id) {
 
 function processRequest(command, eventElement) {
     var requestId = $(eventElement).attr('requestId');
-    var requestType = $("#RequestType").val();
 
     switch (command) {
         case 'Edit':
-            location.href = _global.root + requestType + "/Edit/" + requestId;
+            location.href = _global.root + 'changeshift/Edit/' + requestId;
             break;
         case 'Cancel':
             cancelRequest(requestId);

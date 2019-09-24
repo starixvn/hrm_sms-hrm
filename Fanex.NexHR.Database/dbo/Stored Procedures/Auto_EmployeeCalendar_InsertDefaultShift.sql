@@ -73,7 +73,9 @@ BEGIN
 			) AS IsHoliday
 		,1
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		CROSS APPLY (
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
+		AND empsum.IsDefaultSchedule = 0
+		OUTER APPLY (
 		SELECT TOP 1 shift.ShiftId
 		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
 		WHERE shift.EmployeeId = emp.EmpId
@@ -81,8 +83,6 @@ BEGIN
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
-		AND empsum.IsDefaultSchedule = 0
 		,#tblDate AS tblc
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate

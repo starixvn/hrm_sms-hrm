@@ -559,6 +559,7 @@
     <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="ChangeShiftRequest_MoveOffDay_GetDisableDate" SpName="ChangeShiftRequest_MoveOffDay_GetDisableDate" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_GetById" SpName="ChangeShiftRequest_GetById" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="VerifierId" ObjectProperty="Id" />

@@ -12,6 +12,8 @@
 
         IEnumerable<DailySchedule> GetWorkingCalendarForRequest(GetWorkingCalendarForRequestParam param);
 
+        IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null);
+
         ChangeShiftRequest GetById(long requestId);
 
         IEnumerable<ChangeShiftDetail> GetDetailById(long requestId);
