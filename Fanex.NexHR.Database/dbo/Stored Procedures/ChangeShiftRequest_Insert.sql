@@ -4,7 +4,7 @@ CREATE PROCEDURE [dbo].[ChangeShiftRequest_Insert] @EmpId INT
 	,@Remark NVARCHAR(2000)
 	,@FromDate DATE
 	,@ToDate DATE
-	,@CreatedBy INT
+	,@ActorId INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
 	,@DetailXml NVARCHAR(MAX)
@@ -20,6 +20,7 @@ Original:
 
 Revisions:    
 Param's Explanation:
+    @DetailXml: '<ROOT><Row OnDate={0} FromShiftId={1} ToShiftId={2} Remark={3} ToDate={4} /></ROOT>'
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -46,10 +47,10 @@ BEGIN
 
 	CREATE TABLE #tblChangeShiftDetail (
 		OnDate DATE
-		,FromShift INT
-		,ToShift INT
+		,FromShiftId INT
+		,ToShiftId INT
 		,Remark NVARCHAR(2000)
-		,ToDate DATE
+		,ToDate DATE NULL
 		)
 
 	BEGIN TRY
@@ -60,17 +61,20 @@ BEGIN
 
 		INSERT INTO #tblChangeShiftDetail (
 			OnDate
-			,FromShift
-			,ToShift
+			,FromShiftId
+			,ToShiftId
 			,Remark
 			,ToDate
 			)
 		SELECT OnDate
-			,FromShift
-			,ToShift
+			,FromShiftId
+			,ToShiftId
 			,REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Remark, '&amp;', '&'), '&#39;', ''''), '&lt;', '<'), '&gt;', '>'), '&quot;', '"')
-			,ToDate
-		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (OnDate DATE, FromShift INT, ToShift INT, Remark NVARCHAR(2000), ToDate DATE) AS Data
+			,CASE 
+				WHEN ISDATE(ToDate) = 1 THEN ToDate
+				ELSE NULL
+				END
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (OnDate DATE, FromShiftId INT, ToShiftId INT, Remark NVARCHAR(2000), ToDate VARCHAR(15)) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler
 	END TRY
@@ -107,13 +111,13 @@ BEGIN
 		RETURN
 	END
 
-	IF @EmpId <> @CreatedBy
+	IF @EmpId <> @ActorId
 	BEGIN
 		IF NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
 				WHERE OwnerId = @EmpId
-					AND EmpId = @CreatedBy
+					AND EmpId = @ActorId
 					AND RequestType = @RequestType
 					AND ActionType = @OnBehalfRequest
 					AND ISNULL(IsDeleted, 0) = 0
@@ -123,7 +127,7 @@ BEGIN
 				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
 					AND emp.EmpId = @EmpId
-				WHERE gs.OwnerId = @CreatedBy
+				WHERE gs.OwnerId = @ActorId
 					AND gs.RequestType = @RequestType
 					AND gs.ActionType = @OnBehalfRequest
 					AND ISNULL(gs.IsDeleted, 0) = 0
@@ -313,7 +317,7 @@ BEGIN
 			END
 		,@PendingStatusId
 		,@CreatedDate
-		,@CreatedBy
+		,@ActorId
 		)
 
 	SELECT @RequestId = CAST(SCOPE_IDENTITY() AS BIGINT)
@@ -345,8 +349,8 @@ BEGIN
 	SELECT @EmpId
 		,OnDate
 		,@RequestId
-		,FromShift
-		,ToShift
+		,FromShiftId
+		,ToShiftId
 		,Remark
 		,ToDate
 	FROM #tblChangeShiftDetail
@@ -357,7 +361,7 @@ BEGIN
 	BEGIN
 		EXEC dbo.ChangeShiftRequest_Approve @RequestId = @RequestId
 			,@RoleId = 3 -- approver
-			,@ProcessedBy = @CreatedBy
+			,@ActorId = @ActorId
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 	END
@@ -375,7 +379,7 @@ BEGIN
 		DELETE dbo.ChangeShiftRequestDetail
 		WHERE RequestId = @RequestId
 
-		SELECT @ErrCode = 101
+		SELECT @ErrCode = 107
 			,@ErrMsg = N'Create unsuccessfully.'
 	END
 

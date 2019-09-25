@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[Auto_EmployeeCalendar_InsertDefaultShift] @EmployeeId INT = NULL
 	,@FromDate DATE = NULL
 	,@ToDate DATE = NULL

@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
-	,@ProcessedBy INT
+	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -46,7 +46,7 @@ BEGIN
 
 	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET CurrentStatus = @VoidStatusId
-		,ModifiedBy = @ProcessedBy
+		,ModifiedBy = @ActorId
 		,ModifiedDate = @ProcessedDate
 	WHERE RequestId = @RequestId
 
@@ -58,7 +58,7 @@ BEGIN
 			SET empca.IsOffDay = 0
 				,empca.ChangeShiftId = NULL
 				,empca.ShiftId = csdt.FromShift
-				,empca.ModifiedBy = @ProcessedBy
+				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
@@ -71,7 +71,7 @@ BEGIN
 			UPDATE empca
 			SET empca.ShiftId = NULL
 				,empca.IsOffDay = 1
-				,empca.ModifiedBy = @ProcessedBy
+				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
@@ -84,7 +84,7 @@ BEGIN
 			UPDATE empca
 			SET empca.ChangeShiftId = NULL
 				,empca.ShiftId = empca.ChangeShiftId
-				,empca.ModifiedBy = @ProcessedBy
+				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
@@ -98,7 +98,7 @@ BEGIN
 		BEGIN
 			UPDATE empca
 			SET empca.IsOffDay = 1
-				,empca.ModifiedBy = @ProcessedBy
+				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
@@ -109,7 +109,7 @@ BEGIN
 
 			UPDATE empca
 			SET empca.IsOffDay = 0
-				,empca.ModifiedBy = @ProcessedBy
+				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.ToDate

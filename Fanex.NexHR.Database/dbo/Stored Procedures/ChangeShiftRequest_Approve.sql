@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Approve] @RequestId BIGINT
 	,@RoleId INT
-	,@ProcessedBy INT
+	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
 	,@IgnoredDetails NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
@@ -11,9 +11,9 @@ AS
 Created: Quinn.Vo@20190628
 Task: approve change shift request 
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -59,7 +59,7 @@ BEGIN
 	IF @RoleId = @VerifierRoleId
 		AND (
 			@StatusId <> @PendingStatusId
-			OR @VerifierId <> @ProcessedBy
+			OR @VerifierId <> @ActorId
 			)
 	BEGIN
 		SET @ErrCode = 100
@@ -71,7 +71,7 @@ BEGIN
 	IF @RoleId = @ApproverRoleId
 		AND (
 			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
-			OR @ApproverId <> @ProcessedBy
+			OR @ApproverId <> @ActorId
 			)
 	BEGIN
 		SET @ErrCode = 101
@@ -86,7 +86,7 @@ BEGIN
 			OR NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeRole WITH (NOLOCK)
-				WHERE EmployeeId = @ProcessedBy
+				WHERE EmployeeId = @ActorId
 					AND RoleId IN (@HRRoleId, @SystemAdminRoleId)
 				)
 			)
@@ -120,7 +120,7 @@ BEGIN
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
 				,@RoleId = @RoleId
-				,@ModifiedBy = @ProcessedBy
+				,@ModifiedBy = @ActorId
 				,@IgnoredDetails = @IgnoredDetails
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
@@ -151,9 +151,9 @@ BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 			SET CurrentStatus = @VerifiedStatusId
 				,VerifiedStatus = @VerifiedStatusId
-				,VerifierId = @ProcessedBy
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestId = @RequestId
 		END
@@ -163,9 +163,9 @@ BEGIN
 			SET CurrentStatus = @ApprovedStatusId
 				,ApprovedStatus = @VerifiedStatusId
 				,ApproverComment = @Comment
-				,ApproverId = @ProcessedBy
+				,ApproverId = @ActorId
 				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestId = @RequestId
 			
@@ -175,7 +175,7 @@ BEGIN
 				SET empca.IsOffDay = 1
 					,empca.ChangeShiftId = csdt.FromShift
 					,empca.ShiftId = NULL
-					,empca.ModifiedBy = @ProcessedBy
+					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 					,empca.IsPublic = 1
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -189,7 +189,7 @@ BEGIN
 				SET empca.ChangeShiftId = NULL
 					,empca.ShiftId = csdt.ToShift
 					,empca.IsOffDay = 0
-					,empca.ModifiedBy = @ProcessedBy
+					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 					,empca.IsPublic = 1
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -203,7 +203,7 @@ BEGIN
 				UPDATE empca
 				SET empca.ChangeShiftId = csdt.FromShift
 					,empca.ShiftId = csdt.ToShift
-					,empca.ModifiedBy = @ProcessedBy
+					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 					,empca.IsPublic = 1
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -218,7 +218,7 @@ BEGIN
 			BEGIN
 				UPDATE empca
 				SET empca.IsOffDay = 0
-					,empca.ModifiedBy = @ProcessedBy
+					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 					,empca.IsPublic = 1
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -230,7 +230,7 @@ BEGIN
 
 				UPDATE empca
 				SET empca.IsOffDay = 1
-					,empca.ModifiedBy = @ProcessedBy
+					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 					,empca.IsPublic = 1
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -241,7 +241,7 @@ BEGIN
 					AND empca.IsOffDay = 0
 			END
 
-			EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
 				,1
@@ -251,9 +251,9 @@ BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 			SET CurrentStatus = @ProcessedStatusId
 				,HRStatus = @VerifiedStatusId
-				,HRId = @ProcessedBy
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestId = @RequestId
 		END

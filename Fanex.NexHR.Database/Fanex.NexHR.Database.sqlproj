@@ -571,6 +571,15 @@
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Reset.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_VoidBySA.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetNumberOfRequest.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetHistoryById.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_MoveOffDay_GetDisableDate.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetCalendarForRequest.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_Update.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetDetailById.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_WriteLog.sql" />
+    <Build Include="dbo\Tables\ChangeShiftRequestHistory.sql" />
+    <Build Include="dbo\Tables\ChangeShiftRequestDetailHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
