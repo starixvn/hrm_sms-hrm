@@ -1,4 +1,8 @@
-﻿@model RequestViewModel
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Request
+@using Fanex.NexHR.Resources
+@model RequestViewModel
 @using Fanex.NexHR.Services
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -70,7 +74,7 @@
                                     <a href="@Url.Action("Detail", "Leave", new { requestId = request.Id })">@request.LeaveType.Name</a>
                                     break;
                                 case (int)RequestType.ChangeShift:
-                                    <a href="@Url.Action("Detail", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                    <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
                                     break;
                                 default:
                                     <a href="@Url.Action(Model.ActionName, "request", requestModel)">@request.RequestType.Name</a>
@@ -427,6 +431,13 @@
         case (int)RequestType.KeepInView:
             <td>
                 <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.Id">
+                    @Labels.View
+                </a>
+            </td>
+            break;
+        case (int)RequestType.ChangeShift:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/changeshift/viewhistory/@request.Id">
                     @Labels.View
                 </a>
             </td>

@@ -25,32 +25,42 @@
             @{int index = 1;}
             @foreach (ChangeShiftRequest request in Model)
             {
-            <tr id="row@(request.RequestId)">
-                <td>@(index++)</td>
-                <td class="tooltip" title="@request.Employee.Team.Name">
-                    @request.Employee.Team.Code
-                </td>
-                <td class="tooltip" title="@request.Employee.FullName">
-                    @request.Employee.NickName
-                </td>
-                <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
-                <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
-                <td>@request.CreatedDate.ToShortFormatedDate()</td>
-                @if (!string.IsNullOrWhiteSpace(request.Remark))
-                {
-                    <td class="tooltip" title="@request.Remark">
-                        <span class="icon remark" alt="remark"></span>
+                <tr id="row@(request.RequestId)">
+                    <td>@(index++)</td>
+                    <td>
+                        <span class="tooltip-tipsy" title="@request.Employee.Team.Name">@request.Employee.Team.Code</span>
                     </td>
-                }
-                else
-                {
-                    <td>-</td>
-                }
-                <td>@request.VerifiedBy.NickName</td>
-                <td>@request.ApprovedBy.NickName</td>
-                <td>@request.Status.ToString()</td>
-                <td>@request.InsertedDate.ToShortFormatedDate()</td>
-            </tr>
+                    <td>
+                        <span class="tooltip-tipsy" title="@request.Employee.FullName">@request.Employee.NickName</span>
+                    </td>
+                    <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@request.CreatedDate.ToShortFormatedDate()</td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    {
+                        <td>
+                            <span class="glyphicon glyphicon-comment tooltip-tipsy icon remark" title="@request.Remark"></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                    <td>
+                        @if (request.VerifiedBy != null)
+                        {
+                            @request.VerifiedBy.NickName
+                        }
+                    </td>
+                    <td>
+                        @if (request.ApprovedBy != null)
+                        {
+                            @request.ApprovedBy.NickName
+                        }
+                    </td>
+                    <td>@request.Status.ToString()</td>
+                    <td>@request.InsertedDate.ToShortFormatedDate()</td>
+                </tr>
             }
         </tbody>
     }
