@@ -193,7 +193,6 @@
             {
                 RequestId = param.RequestId,
                 RoleId = param.RoleId,
-                Comment = param.Comment,
                 ActorId = actorId
             };
             return baseService.ExecuteNonQuery(criteria);

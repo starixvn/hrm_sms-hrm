@@ -225,35 +225,35 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
-        public JsonResult ProcessRequest(ProcessRequestParam param)
+        public JsonResult ProcessRequest(ProcessRequestParam model)
         {
             CommandResult commandResult;
-            switch (param.Command)
+            switch (model.Command)
             {
                 case RequestCommand.Accept:
                 case RequestCommand.Approve:
                 case RequestCommand.Process:
-                    commandResult = changeShiftService.ApproveRequest(sessionService.Employee.Id, param);
+                    commandResult = changeShiftService.ApproveRequest(sessionService.Employee.Id, model);
                     break;
 
                 case RequestCommand.Reset:
-                    commandResult = changeShiftService.ResetRequest(sessionService.Employee.Id, param);
+                    commandResult = changeShiftService.ResetRequest(sessionService.Employee.Id, model);
                     break;
 
                 case RequestCommand.NotAccept:
                 case RequestCommand.Reject:
                 case RequestCommand.Void:
-                    commandResult = changeShiftService.RejectRequest(sessionService.Employee.Id, param);
+                    commandResult = changeShiftService.RejectRequest(sessionService.Employee.Id, model);
                     break;
 
                 default:
-                    commandResult = changeShiftService.VoidRequest(sessionService.Employee.Id, param);
+                    commandResult = changeShiftService.VoidRequest(sessionService.Employee.Id, model);
                     break;
             }
 
             if (commandResult.IsSuccessful)
             {
-                requestMailService.SendMailForProcessSuccessfully(param.RequestId, sessionService.Employee.Id, param.Command.ToString());
+                requestMailService.SendMailForProcessSuccessfully(model.RequestId, sessionService.Employee.Id, model.Command.ToString());
             }
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);

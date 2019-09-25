@@ -13,8 +13,6 @@ $(document).ready(function () {
 
     axios(_global.root + 'Department/GetHierarchy')
         .then(response => {
-            const sectionIds = $('#SectionIds').val();
-            console.log(sectionIds);
             $('#Section').multiSelectTreeView({
                 data: response.data,
                 selectedItems: sectionIds

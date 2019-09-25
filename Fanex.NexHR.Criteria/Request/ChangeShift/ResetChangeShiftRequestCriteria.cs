@@ -7,7 +7,6 @@
         public long RequestId { get; set; }
         public int ActorId { get; set; }
         public byte RoleId { get; set; }
-        public string Comment { get; set; }
 
         public override string GetSettingKey() => "ChangeShiftRequest_Reset";
 

@@ -3,48 +3,62 @@ import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
+import toastr from 'toastr';
+import axios from 'axios';
+import { stringify } from 'qs';
 
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import './date.filter.new';
-import { floatingHeader, confirm, initFromDateOnChange } from '../../shared/common.functions';
-import { RequestCommand } from '../../shared/constants';
+import './date.filter';
+import { axiosError, blockUI, unblockUI, floatingHeader, confirm, initDatepicker, initFromDateOnChange, toastOptions } from '../../shared/common.functions';
+import { RequestCommand, RequestType } from '../../shared/constants';
 
 $(function () {
-    function processRequest(requestId, roleId, command, comment, ignoredDetails) {
+    function processRequest(requestId, requestTypeId, roleId, command, comment, disciplines) {
+        blockUI();
         const model = {
-            RequestId: requestId,
-            RoleId: roleId,
-            Command: command,
-            Comment: comment,
-            Disciplines: JSON.stringify(ignoredDetails)
+            requestId: requestId,
+            roleId: roleId,
+            command: command,
+            comment: comment,
+            disciplines: disciplines
         };
+        let requestUrl = _global.root;
 
-        $.ajax({
-            type: 'POST',
-            url: _global.root + 'request/ProcessRequest',
-            data: model,
-            dataType: 'json',
-            success: function (response) {
-                if (response.Code !== 0) {
-                    alert(response.Message);
-                } else {
-                    window.location.reload();
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
+        switch (requestTypeId) {
+            case RequestType.ChangeShift:
+                requestUrl += 'ChangeShift/ProcessRequest';
+                break;
+            default:
+                requestUrl += 'request/ProcessRequest';
+                break;
+        }
+
+        axios({
+            url: requestUrl,
+            method: 'POST',
+            data: stringify({ model }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-        });
+        }).then(response => {
+            unblockUI();
+            const data = response.data;
+            if (data.IsSuccessful) {
+                window.location.reload();
+            } else {
+                toastr.error(data.Message, '', toastOptions());
+            }
+        }).catch(axiosError);
     }
 
-    function initDialogProcessRequest(requestId, roleId, employeeId, command, title) {
+    function renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title) {
         $('#dialogProcessRequest').dialog({
             title: title,
             height: 'auto',
             width: 'auto',
-            minWidth: '400',
             modal: true,
             buttons: [{
                 text: 'Confirm',
@@ -92,7 +106,7 @@ $(function () {
                             .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b> on each type of request.');
                     } else {
                         $(this).find('.validation-summary-valid').hide();
-                        processRequest(requestId, roleId, command, comment, ignoredDisciplines);
+                        processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines);
                         $(this).dialog('close');
                     }
                 }
@@ -107,7 +121,7 @@ $(function () {
         });
     }
 
-    function renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title) {
+    function renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, command, title) {
         const model = {
             RequestId: requestId,
             RoleId: roleId,
@@ -124,7 +138,7 @@ $(function () {
             success: function (data) {
                 $('#dialogProcessRequest').html(data);
 
-                initDialogProcessRequest(requestId, roleId, employeeId, command, title);
+                renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title);
 
                 let chkIgnoreAll = $('.chk-ignoreAll'),
                     chkRecordAll = $('.chk-recordAll'),
@@ -210,32 +224,35 @@ $(function () {
         switch (command) {
             case 'Accept':
                 title = 'Are you sure you want to verify?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Accept, title);
                 break;
             case 'NotAccept':
-                title = 'Are you sure you do not want to verify?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                title = 'Are you sure you don\'t want to verify?';
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.NotAccept, title);
                 break;
             case 'Approve':
                 title = 'Are you sure you want to approve?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
                 break;
             case 'Reject':
                 title = 'Are you sure you want to reject?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Reject, title);
                 break;
             case 'Process':
                 title = 'Are you sure you want to process?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Process, title);
                 break;
             case 'Void':
+                title = 'Are you sure you want to void?';
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Void, title);
+                break;
             case 'VoidBySA':
                 title = 'Are you sure you want to void?';
-                renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
+                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.VoidBySA, title);
                 break;
             case 'Reset':
                 confirm('Are you sure you want to reset?', function () {
-                    processRequest(requestId, roleId, command);
+                    processRequest(requestId, requestTypeId, roleId, RequestCommand.Reset);
                 });
                 break;
         }
@@ -311,20 +328,16 @@ $(function () {
     }
 
     $(document).ready(function () {
+        initDatepicker();
         $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
 
-        $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
-            success: function (data) {
+        axios(_global.root + 'Department/GetHierarchy')
+            .then(response => {
                 $('#Section').multiSelectTreeView({
-                    data: data,
+                    data: response.data,
                     selectedItems: $('#TeamIds').val()
                 });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            }).catch(axiosError);
 
         bindMenu('.hr-actions', 'hrMenu');
         bindMenu('.verifier-actions', 'verifierMenu');

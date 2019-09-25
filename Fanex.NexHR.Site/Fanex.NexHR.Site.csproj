@@ -991,7 +991,7 @@
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
     <Content Include="wwwroot\sources\js\shared\constants.js" />
     <Content Include="wwwroot\sources\js\shared\employee.search.in.team.js" />
-    <Content Include="wwwroot\sources\js\pages\request\date.filter.new.js" />
+    <Content Include="wwwroot\sources\js\pages\request\date.filter.js" />
     <Content Include="wwwroot\sources\js\pages\request\employee.request.js" />
     <Content Include="wwwroot\sources\js\shared\layouts\ToastLayout.jsx" />
     <Content Include="wwwroot\sources\styles\fonts\font.css" />
