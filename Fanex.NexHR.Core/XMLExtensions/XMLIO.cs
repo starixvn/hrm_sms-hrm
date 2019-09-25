@@ -14,7 +14,7 @@
         {
             var lambda = GetElement<T>(typeof(T));
 
-            if(source == null)
+            if(source == null || !source.Any())
             {
                 return new XElement("Root");
             }

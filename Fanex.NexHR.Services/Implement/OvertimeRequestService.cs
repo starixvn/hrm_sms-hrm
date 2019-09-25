@@ -5,6 +5,7 @@
     using System.Linq;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Overtime;
@@ -127,11 +128,11 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, string command, byte roleId)
+        public CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId)
         {
             var criteria = new EditMonthlyOvertimeRequestStatusCriteria
             {
-                CommandProcess = command,
+                RequestCommand = command,
                 RequestIds = requestIds,
                 ActorId = actorId,
                 RoleId = roleId

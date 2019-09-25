@@ -8,7 +8,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
-import { CommandRequest, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
+import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
@@ -115,14 +115,14 @@ $(document).ready(function () {
                     }).then(response => {
                         let isValid = response.data;
                         if (isValid) {
-                            onUpdateRequestStatus(requestIds.join(','), CommandRequest.Process, RoleSystem.HR);
+                            onUpdateRequestStatus(requestIds.join(','), RequestCommand.Process, RoleSystem.HR);
                         } else {
                             $confirmModal.find('.modal-body')
                                 .html('There are some overtimes are invalid. Are you sure you want to <strong>Process</strong> this request(s)?');
                             $confirmModal.modal('show');
                             $btnConfirm.off('click');
                             $btnConfirm.on('click', function () {
-                                onUpdateRequestStatus(requestIds.join(','), CommandRequest.Process, RoleSystem.HR);
+                                onUpdateRequestStatus(requestIds.join(','), RequestCommand.Process, RoleSystem.HR);
                             });
                         }
                     }).catch(axiosError);
@@ -151,7 +151,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Void</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Void, RoleSystem.HR);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Void, RoleSystem.HR);
                 });
             }
         } else {

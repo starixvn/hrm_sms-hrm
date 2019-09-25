@@ -2,7 +2,7 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum Command
+    public enum RequestCommand
     {
         [StringValue("Accept")]
         Accept = 1,

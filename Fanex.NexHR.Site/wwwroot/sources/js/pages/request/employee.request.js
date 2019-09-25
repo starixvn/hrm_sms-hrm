@@ -4,11 +4,12 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 
-import { floatingHeader, showMessage, fadeOutMessage, confirm, initFromDateOnChange } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import './date.filter.new';
+import { floatingHeader, confirm, initFromDateOnChange } from '../../shared/common.functions';
+import { RequestCommand } from '../../shared/constants';
 
 $(function () {
     function processRequest(requestId, roleId, command, comment, ignoredDetails) {
@@ -17,7 +18,7 @@ $(function () {
             RoleId: roleId,
             Command: command,
             Comment: comment,
-            IgnoredDisciplineDetails: JSON.stringify(ignoredDetails)
+            Disciplines: JSON.stringify(ignoredDetails)
         };
 
         $.ajax({
@@ -25,9 +26,6 @@ $(function () {
             url: _global.root + 'request/ProcessRequest',
             data: model,
             dataType: 'json',
-            beforeSend: function () {
-                showMessage('Processing');
-            },
             success: function (response) {
                 if (response.Code !== 0) {
                     alert(response.Message);
@@ -37,9 +35,6 @@ $(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                fadeOutMessage();
             }
         });
     }
@@ -48,7 +43,8 @@ $(function () {
         $('#dialogProcessRequest').dialog({
             title: title,
             height: 'auto',
-            minWidth: '300',
+            width: 'auto',
+            minWidth: '400',
             modal: true,
             buttons: [{
                 text: 'Confirm',
@@ -217,7 +213,7 @@ $(function () {
                 renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                 break;
             case 'NotAccept':
-                title = 'Are you sure you dont want to verify?';
+                title = 'Are you sure you do not want to verify?';
                 renderPartialViewProcessRequest(requestId, roleId, requestTypeId, employeeId, command, title);
                 break;
             case 'Approve':

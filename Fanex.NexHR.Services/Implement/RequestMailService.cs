@@ -171,37 +171,37 @@
         {
             var action = (int)SettingsSendMail.New;
 
-            if (command == Command.Accept.ToString())
+            if (command == RequestCommand.Accept.ToString())
             {
                 action = (int)SettingsSendMail.Verify;
             }
 
-            if (command == Command.NotAccept.ToString())
+            if (command == RequestCommand.NotAccept.ToString())
             {
                 action = (int)SettingsSendMail.NotVerify;
             }
 
-            if (command == Command.Approve.ToString())
+            if (command == RequestCommand.Approve.ToString())
             {
                 action = (int)SettingsSendMail.Approve;
             }
 
-            if (command == Command.Reject.ToString())
+            if (command == RequestCommand.Reject.ToString())
             {
                 action = (int)SettingsSendMail.Reject;
             }
 
-            if (command == Command.Process.ToString())
+            if (command == RequestCommand.Process.ToString())
             {
                 action = (int)SettingsSendMail.Process;
             }
 
-            if (command == Command.Void.ToString())
+            if (command == RequestCommand.Void.ToString())
             {
                 action = (int)SettingsSendMail.Void;
             }
 
-            if (command == Command.Reset.ToString())
+            if (command == RequestCommand.Reset.ToString())
             {
                 action = GetActionResetRequest(request.Status.Id);
             }
@@ -234,37 +234,37 @@
 
         private static string GetPassiveNameOfCommand(string command)
         {
-            if (command == Command.Accept.ToString())
+            if (command == RequestCommand.Accept.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant());
             }
 
-            if (command == Command.NotAccept.ToString())
+            if (command == RequestCommand.NotAccept.ToString())
             {
                 return string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant());
             }
 
-            if (command == Command.Approve.ToString())
+            if (command == RequestCommand.Approve.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant());
             }
 
-            if (command == Command.Reject.ToString())
+            if (command == RequestCommand.Reject.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant());
             }
 
-            if (command == Command.Process.ToString())
+            if (command == RequestCommand.Process.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant());
             }
 
-            if (command == Command.Void.ToString())
+            if (command == RequestCommand.Void.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
             }
 
-            if (command == Command.Reset.ToString())
+            if (command == RequestCommand.Reset.ToString())
             {
                 return string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant());
             }

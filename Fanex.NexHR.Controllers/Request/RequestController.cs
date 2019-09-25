@@ -179,7 +179,7 @@
             if (model != null
                 && model.RequestId != 0
                 && model.RoleId == (int)RoleSystem.Approver
-                && model.Command == Command.Approve.ToString())
+                && model.Command == RequestCommand.Approve.ToString())
             {
                 HandleProcessRequest(model);
             }
@@ -233,9 +233,9 @@
         {
             CommandResult result;
 
-            result = (model.Command == Command.Accept.ToString()
-                || model.Command == Command.Approve.ToString()
-                || model.Command == Command.Process.ToString())
+            result = (model.Command == RequestCommand.Accept.ToString()
+                || model.Command == RequestCommand.Approve.ToString()
+                || model.Command == RequestCommand.Process.ToString())
                 ? ApproveRequest(model) : Process(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);

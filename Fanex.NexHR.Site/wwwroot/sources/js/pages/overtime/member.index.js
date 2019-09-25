@@ -8,7 +8,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
-import { CommandRequest, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
+import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
@@ -107,7 +107,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Verify</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Accept, RoleSystem.Verifier);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Accept, RoleSystem.Verifier);
                 });
             }
         } else {
@@ -138,7 +138,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Not Verify</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.NotAccept, RoleSystem.Verifier);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.NotAccept, RoleSystem.Verifier);
                 });
             }
         } else {
@@ -169,7 +169,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Approve</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Approve, RoleSystem.Approver);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Approve, RoleSystem.Approver);
                 });
             }
         } else {
@@ -200,7 +200,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reject</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), CommandRequest.Reject, RoleSystem.Approver);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Reject, RoleSystem.Approver);
                 });
             }
         } else {

@@ -7,7 +7,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
-import { CommandRequest, RoleSystem } from '../../shared/constants';
+import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(document).ready(function () {
     const requestId = parseInt($('#RequestId').val(), 10);
@@ -44,7 +44,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Verify</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Accept, RoleSystem.Verifier);
+            onUpdateRequestStatus(requestId, RequestCommand.Accept, RoleSystem.Verifier);
         });
     });
 
@@ -52,7 +52,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Not Verify</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.NotAccept, RoleSystem.Verifier);
+            onUpdateRequestStatus(requestId, RequestCommand.NotAccept, RoleSystem.Verifier);
         });
     });
 
@@ -60,7 +60,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Reset, RoleSystem.Verifier);
+            onUpdateRequestStatus(requestId, RequestCommand.Reset, RoleSystem.Verifier);
         });
     });
 
@@ -68,7 +68,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Approve</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Approve, RoleSystem.Approver);
+            onUpdateRequestStatus(requestId, RequestCommand.Approve, RoleSystem.Approver);
         });
     });
 
@@ -76,7 +76,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reject</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Reject, RoleSystem.Approver);
+            onUpdateRequestStatus(requestId, RequestCommand.Reject, RoleSystem.Approver);
         });
     });
 
@@ -84,7 +84,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Reset, RoleSystem.Approver);
+            onUpdateRequestStatus(requestId, RequestCommand.Reset, RoleSystem.Approver);
         });
     });
 });

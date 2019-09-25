@@ -13,16 +13,17 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT rd.OnDate
-		,rd.FromShift AS FromShiftId
+	SELECT csdt.OnDate
+		,csdt.FromShift AS FromShiftId
 		,s1.Code AS FromShift
-		,rd.ToShift AS ToShiftId
+		,csdt.ToShift AS ToShiftId
 		,s2.Code AS ToShift
-		,rd.Remark
-		,rd.ToDate
-	FROM dbo.ChangeShiftRequestDetail AS rd WITH (NOLOCK)
-		LEFT JOIN dbo.Shift s1 WITH (NOLOCK) ON s1.ShiftID = rd.FromShift
-		LEFT JOIN dbo.Shift s2 WITH (NOLOCK) ON s2.ShiftID = rd.ToShift
-	WHERE rd.RequestID = @RequestId
-	ORDER BY rd.OnDate
+		,csdt.Remark
+		,csdt.ToDate
+	FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
+		INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
+		LEFT JOIN dbo.Shift AS s1 WITH (NOLOCK) ON s1.ShiftId = csdt.FromShift
+		LEFT JOIN dbo.Shift AS s2 WITH (NOLOCK) ON s2.ShiftId = csdt.ToShift
+	WHERE cs.RequestId = @RequestId
+	ORDER BY csdt.OnDate
 END

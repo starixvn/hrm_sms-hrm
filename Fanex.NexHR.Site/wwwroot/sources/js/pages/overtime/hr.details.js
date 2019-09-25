@@ -7,7 +7,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
-import { CommandRequest, RoleSystem } from '../../shared/constants';
+import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(document).ready(function () {
     const requestId = parseInt($('#RequestId').val(), 10);
@@ -57,14 +57,14 @@ $(document).ready(function () {
             }).then(response => {
                 let isValid = response.data;
                 if (isValid) {
-                    onUpdateRequestStatus(requestId, CommandRequest.Process, RoleSystem.HR);
+                    onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
                 } else {
                     $confirmModal.find('.modal-body')
                         .html('The request is invalid. Are you sure you want to <strong>Process</strong> this request?');
                     $confirmModal.modal('show');
                     $btnConfirm.off('click');
                     $btnConfirm.on('click', function () {
-                        onUpdateRequestStatus(requestId, CommandRequest.Process, RoleSystem.HR);
+                        onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
                     });
                 }
             }).catch(axiosError);
@@ -75,7 +75,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Void</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Void, RoleSystem.HR);
+            onUpdateRequestStatus(requestId, RequestCommand.Void, RoleSystem.HR);
         });
     });
 
@@ -83,7 +83,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            onUpdateRequestStatus(requestId, CommandRequest.Reset, RoleSystem.HR);
+            onUpdateRequestStatus(requestId, RequestCommand.Reset, RoleSystem.HR);
         });
     });
 });

@@ -19,13 +19,13 @@
         public override string GetSettingKey()
         {
             var key = string.Empty;
-            if (Action == Command.NotAccept.ToString()
-                || Action == Command.Reject.ToString()
-                || Action == Command.Void.ToString())
+            if (Action == RequestCommand.NotAccept.ToString()
+                || Action == RequestCommand.Reject.ToString()
+                || Action == RequestCommand.Void.ToString())
             {
                 key = "WorkingTimeRequest_RejectRequest";
             }
-            else if (Action == Command.Reset.ToString())
+            else if (Action == RequestCommand.Reset.ToString())
             {
                 key = "WorkingTimeRequest_ResetRequest";
             }

@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
@@ -23,16 +24,19 @@
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
+        private readonly IRequestMailService requestMailService;
 
         public ChangeShiftController(
             ISessionService sessionService,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
-            IShiftService shiftService) : base(sessionService)
+            IShiftService shiftService,
+            IRequestMailService requestMailService) : base(sessionService)
         {
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
             this.shiftService = shiftService;
+            this.requestMailService = requestMailService;
         }
 
         [HttpGet]
@@ -213,6 +217,46 @@
         {
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        public JsonResult ProcessRequest(ProcessRequestParam param)
+        {
+            CommandResult commandResult;
+            switch (param.Command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    commandResult = changeShiftService.ApproveRequest(sessionService.Employee.Id, param);
+                    break;
+
+                case RequestCommand.Reset:
+                    commandResult = changeShiftService.ResetRequest(sessionService.Employee.Id, param);
+                    break;
+
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    commandResult = changeShiftService.RejectRequest(sessionService.Employee.Id, param);
+                    break;
+
+                default:
+                    commandResult = changeShiftService.VoidRequest(sessionService.Employee.Id, param);
+                    break;
+            }
+
+            if (commandResult.IsSuccessful)
+            {
+                requestMailService.SendMailForProcessSuccessfully(param.RequestId, sessionService.Employee.Id, param.Command.ToString());
+            }
+
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         private static int GetFromShiftId(DailySchedule dailySchedule)

@@ -175,7 +175,7 @@
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="Enums\LateInEarlyOutReasons.cs" />
     <Compile Include="Enums\CheckInOutReasons.cs" />
-    <Compile Include="Enums\Command.cs" />
+    <Compile Include="Enums\RequestCommand.cs" />
     <Compile Include="Enums\DisciplineType.cs" />
     <Compile Include="Constants\FunctionKey.cs" />
     <Compile Include="Enums\JobTitleCategory.cs" />

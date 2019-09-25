@@ -10,31 +10,32 @@
         public string RequestIds { get; set; }
 
         [SpParam(Ignored = true)]
-        public string CommandProcess { get; set; }
+        public RequestCommand RequestCommand { get; set; }
 
-        public override string GetSettingKey() => GetSpKey(CommandProcess);
+        public override string GetSettingKey() => GetSpKey(RequestCommand);
 
         public override bool IsValid() => ActorId > 0 && !string.IsNullOrWhiteSpace(RequestIds);
 
-        private static string GetSpKey(string command)
+        private static string GetSpKey(RequestCommand command)
         {
-            string key = string.Empty;
+            var key = string.Empty;
+            switch (command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    key = "Overtime_ApproveRequest";
+                    break;
 
-            if (command == Command.Accept.ToString()
-                || command == Command.Approve.ToString()
-                || command == Command.Process.ToString())
-            {
-                key = "Overtime_ApproveRequest";
-            }
-            else if (command == Command.NotAccept.ToString()
-                || command == Command.Reject.ToString()
-                || command == Command.Void.ToString())
-            {
-                key = "Overtime_RejectRequest";
-            }
-            else
-            {
-                key = "Overtime_ResetRequest";
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    key = "Overtime_RejectRequest";
+                    break;
+
+                default:
+                    key = "Overtime_ResetRequest";
+                    break;
             }
 
             return key;

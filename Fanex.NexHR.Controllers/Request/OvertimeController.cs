@@ -174,7 +174,7 @@
         [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
         [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        public JsonResult EditMonthlyRequestStatus(string requestIds, string command, byte roleId)
+        public JsonResult EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
         {
             CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(sessionService.Employee.Id, requestIds, command, roleId);
             return Json(commandResult);

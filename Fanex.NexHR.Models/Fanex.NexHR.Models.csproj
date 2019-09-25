@@ -156,6 +156,7 @@
     <Compile Include="Request\ChangeShift\CreateChangeShift.cs" />
     <Compile Include="Request\ChangeShift\EditChangeShift.cs" />
     <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestParam.cs" />
+    <Compile Include="Request\DisciplineReview.cs" />
     <Compile Include="Request\LateInEarlyOutModel.cs" />
     <Compile Include="Request\CheckInOutModel.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Request\LeaveDisciplineDetailModel.cs" />
     <Compile Include="Request\LeaveDisciplineModel.cs" />
     <Compile Include="Request\LeaveModel.cs" />
+    <Compile Include="Request\ProcessRequestParam.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
     <Compile Include="Request\VerifierAndApproverForRequest.cs" />
     <Compile Include="ScheduleArrange\DailySchedule.cs" />

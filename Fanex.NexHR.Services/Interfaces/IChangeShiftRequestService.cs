@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
 
@@ -25,6 +26,14 @@
         CommandResult Edit(int actorId, EditChangeShift model);
 
         CommandResult Delete(long requestId);
+
+        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
 
         void SendMailAfterCreateRequest(long requestId);
 

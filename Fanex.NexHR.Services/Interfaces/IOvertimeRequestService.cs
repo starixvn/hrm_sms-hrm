@@ -2,9 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Overtime;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
 
     public interface IOvertimeRequestService
@@ -23,6 +22,6 @@
 
         CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
 
-        CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, string command, byte roleId);
+        CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId);
     }
 }

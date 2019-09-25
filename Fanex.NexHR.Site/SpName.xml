@@ -575,5 +575,9 @@
       <Mapping DataField="VerifierId" ObjectProperty="Id" />
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="ChangeShiftRequest_Approve" SpName="ChangeShiftRequest_Approve" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_Reset" SpName="ChangeShiftRequest_Reset" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_Reject" SpName="ChangeShiftRequest_Reject" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_VoidBySA" SpName="ChangeShiftRequest_VoidBySA" DbName="nexhrx" Plain="0" />
   </Function>
 </Functions>

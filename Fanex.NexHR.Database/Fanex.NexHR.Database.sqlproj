@@ -245,7 +245,6 @@
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetOtherDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftTypeDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Employee_ChangePassword.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForWorkDay.sql" />
