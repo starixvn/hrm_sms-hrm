@@ -194,9 +194,9 @@
                 FromShift = GetFromShiftName(x)
             }).ToList();
 
-            if(param.TypeId == (byte)ChangeShiftType.MoveOffDay)
+            if (param.TypeId == (byte)ChangeShiftType.MoveOffDay)
             {
-                foreach(ChangeShiftDetail detail in details)
+                foreach (ChangeShiftDetail detail in details)
                 {
                     detail.DisableDates = changeShiftService.GetDisableDateForMoveOffDayRequest(param.EmployeeId, detail.OnDate, param.RequestId);
                 }

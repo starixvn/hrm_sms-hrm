@@ -1,7 +1,5 @@
-﻿@model ProcessRequestViewModel
-@section js{
-    @Url.CombresLink("employeerequestjs_new")
-}
+﻿@using Fanex.NexHR.Core.Enums
+@model ProcessRequestViewModel
 <form>
     @Html.HiddenFor(model => model.RequestId)
     @Html.HiddenFor(model => model.EmployeeId)

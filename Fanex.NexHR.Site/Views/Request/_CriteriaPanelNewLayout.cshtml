@@ -42,7 +42,6 @@
                 @Html.Hidden("DateOption", Model.DateOption)
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
@@ -52,7 +51,6 @@
                 <i class="icon-calendar glyphicon glyphicon-calendar trigger-fromdate"></i>
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
@@ -62,7 +60,6 @@
                 <i class="icon-calendar glyphicon glyphicon-calendar trigger-todate"></i>
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form label--small">
                 <label class="control-label">@Labels.On</label>
@@ -78,7 +75,6 @@
                 @Html.DropDownListFor(model => model.IsFilterByAffectedDate, filteringDateType, new { @class = "form-control" })
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.StatusId, new { @class = "control-label" })
@@ -87,14 +83,12 @@
                 @RazorHelper.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: (Model.ViewType == RequestViewType.PersonalSpace), controlName: "statusId", htmlClass: "form-control")
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 <label class="control-label">@Labels.DepartmentSection</label>
             </div>
             <div class="select-form" id="Section"></div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
@@ -105,7 +99,6 @@
             </div>
         </div>
     </div>
-
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -133,7 +126,6 @@
                     var listTypes = new List<SelectListItem> { new SelectListItem { Value = "", Text = "All" } };
                     listTypes.AddRange(Model.LeaveTypeCollection.Select(l => new SelectListItem { Value = l.Id.ToString(), Text = l.Name }).ToList());
                 }
-
                 @Html.DropDownListFor(model => model.LeaveType, listTypes, new { @class = "form-control" })
             </div>
         </div>
@@ -152,7 +144,6 @@
                         new SelectListItem() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
                         new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
                     };
-
                     @Html.DropDownListFor(model => model.RequestType, requestTypes, new { @class = "form-control" })
                 }
             </div>
@@ -160,8 +151,8 @@
     </div>
     <div class="form-horizontal clearfix">
         <div class="button-group">
-            <input class="processing-submit" type="submit" id="submit" value="@Labels.Submit" />
-            <input type="button" value="@Labels.Excel" id="btnExcel" />
+            <input class="btn btn-primary" type="submit" id="submit" value="@Labels.Submit" />
+            <input type="button" value="@Labels.Excel" id="btnExcel" class="btn btn-excel" />
         </div>
     </div>
 }

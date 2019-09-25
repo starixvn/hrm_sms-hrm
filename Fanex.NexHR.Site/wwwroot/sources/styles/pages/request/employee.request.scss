@@ -3,8 +3,9 @@
 @import '../../abstracts/mixins';
 @import '../../layout/filter';
 @import '../../layout/table';
-@import '../../components/buttons';
+@import '../../components/buttons-new';
 @import '../../components/multiselect-treeview';
+@import '../../components/jquery-ui-dialog';
 
 #dialogProcessRequest {
     form {
@@ -32,16 +33,6 @@
                     border-color: #dddddd;
                 }
             }
-        }
-    }
-}
-
-.ui-dialog {
-    .ui-dialog-titlebar {
-        button.ui-dialog-titlebar-close {
-            background: #fff !important;
-            border: 1px solid #ccc;
-            border-bottom-color: #ccc;
         }
     }
 }

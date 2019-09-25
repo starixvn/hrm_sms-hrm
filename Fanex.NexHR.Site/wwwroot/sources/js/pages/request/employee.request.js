@@ -48,10 +48,12 @@ $(function () {
         $('#dialogProcessRequest').dialog({
             title: title,
             height: 'auto',
-            width: 'auto',
+            minWidth: '300',
             modal: true,
-            buttons: {
-                'Confirm': function () {
+            buttons: [{
+                text: 'Confirm',
+                class: 'btn btn-primary',
+                click: function () {
                     let ignoredDisciplines = [],
                         comment = $(this).find('textarea#Comment').val(),
                         isValid = true;
@@ -97,11 +99,15 @@ $(function () {
                         processRequest(requestId, roleId, command, comment, ignoredDisciplines);
                         $(this).dialog('close');
                     }
-                },
-                'Cancel': function () {
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn btn-default',
+                click: function () {
                     $(this).dialog('close');
                 }
-            }
+            }]
         });
     }
 
