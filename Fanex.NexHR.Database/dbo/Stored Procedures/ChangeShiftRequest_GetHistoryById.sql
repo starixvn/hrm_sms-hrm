@@ -39,5 +39,5 @@ BEGIN
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = r.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE r.RequestId = @RequestId
-	ORDER BY r.InsertedDate
+	ORDER BY r.LogDate DESC
 END

@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Reject] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId INT
+	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -155,7 +156,7 @@ BEGIN
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
-		,@Comment = ''
+		,@Comment = @Comment
 
 	IF @@ERROR <> 0
 	BEGIN

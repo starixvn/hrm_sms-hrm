@@ -4,39 +4,33 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using Core;
-    using Core.Enums;
-    using Criteria.Request;
-    using Criteria.Request.Leave;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Request;
+    using Fanex.NexHR.Criteria.Request.Leave;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using Hangfire;
-    using Models;
-    using Models.Request;
-    using Resources;
 
     public class LeaveRequestService : ILeaveRequestService
     {
         private const string _LeaveRequestEmailTpl = "~/app_data/emails/Leave.Request.cshtml";
         private const string _EmailTemplatePathForLeaveCancelation = "~/app_data/emails/LeaveCancelation.cshtml";
-        protected readonly IEmployeeRepository employeeRepository;
-        protected readonly IRequestRepository requestRepository;
-        protected readonly ILeaveRequestRepository leaveRequestRepository;
-        protected readonly IRequestMailService requestMailService;
-        protected readonly IEmailService emailService;
+        private readonly ILeaveRequestRepository leaveRequestRepository;
+        private readonly IRequestMailService requestMailService;
+        private readonly IEmailService emailService;
         private readonly IBaseService baseService;
 
         public LeaveRequestService(
-            IEmployeeRepository employeeRepository,
-            IRequestRepository requestRepository,
             ILeaveRequestRepository leaveRequestRepository,
             IRequestMailService requestMailService,
             IBaseService baseService,
             IEmailService emailService)
         {
-            this.employeeRepository = employeeRepository;
-            this.requestRepository = requestRepository;
             this.leaveRequestRepository = leaveRequestRepository;
             this.requestMailService = requestMailService;
             this.baseService = baseService;

@@ -177,9 +177,9 @@
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null
-                && model.RequestId != 0
-                && model.RoleId == (int)RoleSystem.Approver
-                && model.Command == RequestCommand.Approve.ToString())
+                && model.RequestId > 0
+                && model.RoleId == (byte)RoleSystem.Approver
+                && model.Command == RequestCommand.Approve)
             {
                 HandleProcessRequest(model);
             }
@@ -233,9 +233,9 @@
         {
             CommandResult result;
 
-            result = (model.Command == RequestCommand.Accept.ToString()
-                || model.Command == RequestCommand.Approve.ToString()
-                || model.Command == RequestCommand.Process.ToString())
+            result = (model.Command == RequestCommand.Accept
+                || model.Command == RequestCommand.Approve
+                || model.Command == RequestCommand.Process)
                 ? ApproveRequest(model) : Process(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -324,7 +324,7 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
-                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, model.Command);
+                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, sessionService.Employee, model.Command);
             }
 
             return result;
@@ -334,7 +334,7 @@
         {
             var criteria = new ProcessRequestCriteria
             {
-                Action = model.Command,
+                Command = model.Command,
                 RequestId = model.RequestId,
                 RoleId = model.RoleId,
                 Comment = model.Comment,
@@ -344,7 +344,7 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
-                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, criteria.ProcessedBy, criteria.Action);
+                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, sessionService.Employee, model.Command);
             }
 
             return result;

@@ -3,10 +3,9 @@
 
 function cancelRequest(id) {
     confirm('Are you sure you want to cancel this request?', function () {
-        $.post(_global.root + 'changeshift/delete' + "/" + id, function (response) {
+        $.post(_global.root + 'changeshift/delete' + '/' + id, function (response) {
             if (response.isSuccessful) {
-                $('#row' + id).remove();
-                autoIndex();
+                $('form #btnSearch').trigger('click');
             } else {
                 alert(response.message);
                 return;

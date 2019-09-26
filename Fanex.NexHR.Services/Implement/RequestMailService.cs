@@ -7,7 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
@@ -26,40 +26,26 @@
 
         private const string _EmailTemplatePathForCheckInOut = "~/app_data/emails/CheckInOutApproval.cshtml";
         private const string _EmailTemplatePathForLateInEarlyOut = "~/app_data/emails/LateInEarlyOutApproval.cshtml";
-        private const string _EmailTemplatePathForChangeShift = "~/app_data/emails/ChangeShiftApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
 
         #endregion constant
 
-        protected readonly IEmployeeRepository employeeRepository;
-        protected readonly IRequestRepository requestRepository;
-        protected readonly IBaseService baseService;
-        protected readonly IEmailService emailService;
+        private readonly IRequestRepository requestRepository;
+        private readonly IBaseService baseService;
+        private readonly IEmailService emailService;
 
         public RequestMailService(
-            IEmployeeRepository employeeRepository,
             IRequestRepository requestRepository,
             IBaseService baseService,
             IEmailService emailService)
         {
-            this.employeeRepository = employeeRepository;
             this.requestRepository = requestRepository;
             this.baseService = baseService;
             this.emailService = emailService;
         }
 
-        public RequestMailService(
-            IEmployeeRepository employeeRepository,
-            IEmailService emailService,
-            IRequestRepository requestRepository)
-        {
-            this.employeeRepository = employeeRepository;
-            this.emailService = emailService;
-            this.requestRepository = requestRepository;
-        }
-
-        public void SendMailForProcessSuccessfully(long requestId, int processedBy, string action)
+        public void SendMailForProcessSuccessfully(long requestId, EmployeeSession actor, RequestCommand command)
         {
             var criteria = new GetRequestByIdCriteria
             {
@@ -69,7 +55,7 @@
             RequestEntity request = requestRepository.GetRequestById(criteria);
             var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
 
-            BackgroundJob.Enqueue(() => SendMailProcess(action, request, processedBy, templateEmailPathForRelated));
+            BackgroundJob.Enqueue(() => SendMailProcess(command, request, actor, templateEmailPathForRelated));
         }
 
         public EmailModel GetMailToAndMailCC(long requestId, int action)
@@ -151,125 +137,121 @@
             }
         }
 
-        public void SendMailProcess(string command, RequestEntity request, int processBy, string templateEmailPathForRelated)
+        public void SendMailProcess(RequestCommand command, RequestEntity request, EmployeeSession actor, string templateEmailPathForRelated)
         {
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria { EmpId = request.Requester.Id };
-            var getProcessUserByIdCriteria = new GetEmployeeByIdCriteria { EmpId = processBy };
-            var employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-            var processUser = employeeRepository.GetEmployeeById(getProcessUserByIdCriteria);
-            var action = GetActionProcessRequest(request, command);
-            string commandGetPassiveName = GetPassiveNameOfCommand(command);
+            byte action = GetActionProcessRequest(request.Status.Id, command);
+            string commandMessage = GetCommandMessage(command);
             EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
 
             if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
-                SendToRelatedPeople(commandGetPassiveName, processUser, request, employee, emailModel, templateEmailPathForRelated);
+                SendToRelatedPeople(commandMessage, actor, request, emailModel, templateEmailPathForRelated);
             }
         }
 
-        private static int GetActionProcessRequest(RequestEntity request, string command)
+        public byte GetActionProcessRequest(byte requestStatusId, RequestCommand command)
         {
-            var action = (int)SettingsSendMail.New;
-
-            if (command == RequestCommand.Accept.ToString())
+            byte action;
+            switch (command)
             {
-                action = (int)SettingsSendMail.Verify;
-            }
+                case RequestCommand.Accept:
+                    action = (byte)SettingsSendMail.Verify;
+                    break;
 
-            if (command == RequestCommand.NotAccept.ToString())
-            {
-                action = (int)SettingsSendMail.NotVerify;
-            }
+                case RequestCommand.NotAccept:
+                    action = (byte)SettingsSendMail.NotVerify;
+                    break;
 
-            if (command == RequestCommand.Approve.ToString())
-            {
-                action = (int)SettingsSendMail.Approve;
-            }
+                case RequestCommand.Approve:
+                    action = (byte)SettingsSendMail.Approve;
+                    break;
 
-            if (command == RequestCommand.Reject.ToString())
-            {
-                action = (int)SettingsSendMail.Reject;
-            }
+                case RequestCommand.Reject:
+                    action = (byte)SettingsSendMail.Reject;
+                    break;
 
-            if (command == RequestCommand.Process.ToString())
-            {
-                action = (int)SettingsSendMail.Process;
-            }
+                case RequestCommand.Process:
+                    action = (byte)SettingsSendMail.Process;
+                    break;
 
-            if (command == RequestCommand.Void.ToString())
-            {
-                action = (int)SettingsSendMail.Void;
-            }
+                case RequestCommand.Void:
+                    action = (byte)SettingsSendMail.Void;
+                    break;
 
-            if (command == RequestCommand.Reset.ToString())
-            {
-                action = GetActionResetRequest(request.Status.Id);
+                case RequestCommand.Reset:
+                    action = GetActionResetRequest(requestStatusId);
+                    break;
+
+                default:
+                    action = (byte)SettingsSendMail.New;
+                    break;
             }
 
             return action;
         }
 
-        private static int GetActionResetRequest(byte statusId)
+        public string GetCommandMessage(RequestCommand command)
         {
-            byte action = 0;
+            string message;
+            switch (command)
+            {
+                case RequestCommand.Accept:
+                    message = string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.NotAccept:
+                    message = string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.Approve:
+                    message = string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.Reject:
+                    message = string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.Process:
+                    message = string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.Void:
+                    message = string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
+                    break;
+
+                case RequestCommand.Reset:
+                    message = string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant());
+                    break;
+
+                default:
+                    message = string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
+                    break;
+            }
+
+            return message;
+        }
+
+        private static byte GetActionResetRequest(byte statusId)
+        {
+            byte action;
             switch (statusId)
             {
                 case (byte)CurrentRequestStatus.Verified:
                 case (byte)CurrentRequestStatus.NotVerified:
-                    action = (int)SettingsSendMail.Reset1;
+                    action = (byte)SettingsSendMail.Reset1;
                     break;
 
                 case (byte)CurrentRequestStatus.Approved:
                 case (byte)CurrentRequestStatus.Rejected:
-                    action = (int)SettingsSendMail.Reset2;
+                    action = (byte)SettingsSendMail.Reset2;
                     break;
 
                 default:
-                    action = (int)SettingsSendMail.Reset3;
+                    action = (byte)SettingsSendMail.Reset3;
                     break;
             }
 
             return action;
-        }
-
-        private static string GetPassiveNameOfCommand(string command)
-        {
-            if (command == RequestCommand.Accept.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.NotAccept.ToString())
-            {
-                return string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.Approve.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.Reject.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.Process.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.Void.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
-            }
-
-            if (command == RequestCommand.Reset.ToString())
-            {
-                return string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant());
-            }
-
-            return string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
         }
 
         private static EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
@@ -395,10 +377,6 @@
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
                     break;
 
-                case (short)RequestType.ChangeShift:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForChangeShift);
-                    break;
-
                 case (short)RequestType.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
                     break;
@@ -417,47 +395,41 @@
 
         private void SendToRelatedPeople(
             string command,
-            Employee processUser,
+            EmployeeSession actor,
             RequestEntity request,
-            Employee employee,
             EmailModel emailModel,
             string templateEmailPath)
         {
             switch (request.RequestType.Id)
             {
                 case (short)RequestType.CheckIn:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckInSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, emailModel, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckInSubject, request.Requester.NickName, command, actor.Nickname);
+                    CheckInOutRelatedMail(command, actor, request, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.CheckOut:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckOutSubject, employee.NickName, command, processUser.NickName);
-                    CheckInOutRelatedMail(command, employee, processUser, request, emailModel, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckOutSubject, request.Requester.NickName, command, actor.Nickname);
+                    CheckInOutRelatedMail(command, actor, request, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.LateIn:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLateInSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, emailModel, true, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLateInSubject, request.Requester.NickName, command, actor.Nickname);
+                    LateInEarlyOutRelatedMail(command, actor, request, emailModel, true, templateEmailPath);
                     break;
 
                 case (short)RequestType.EarlyOut:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationEarlyOutSubject, employee.NickName, command, processUser.NickName);
-                    LateInEarlyOutRelatedMail(command, employee, processUser, request, emailModel, false, templateEmailPath);
-                    break;
-
-                case (short)RequestType.ChangeShift:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, employee.NickName, command, processUser.NickName);
-                    ChangeShiftRelatedMail(command, employee, processUser, request, emailModel, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Requester.NickName, command, actor.Nickname);
+                    LateInEarlyOutRelatedMail(command, actor, request, emailModel, false, templateEmailPath);
                     break;
 
                 case (short)RequestType.Leave:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, employee.NickName, command, processUser.NickName);
-                    LeaveRelatedMail(command, employee, processUser, request, emailModel, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, request.Requester.NickName, command, actor.Nickname);
+                    LeaveRelatedMail(command, actor, request, emailModel, templateEmailPath);
                     break;
 
                 case (short)RequestType.KeepInView:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, employee.NickName, command, processUser.NickName);
-                    KeepInViewRelatedMail(command, employee, processUser, request, emailModel, templateEmailPath);
+                    emailModel.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Requester.NickName, command, actor.Nickname);
+                    KeepInViewRelatedMail(command, actor, request, emailModel, templateEmailPath);
                     break;
 
                 default:
@@ -467,15 +439,14 @@
 
         private void CheckInOutRelatedMail(
             string command,
-            Employee employee,
-            Employee processUser,
+            EmployeeSession actor,
             RequestEntity request,
             EmailModel emailModel,
             string templateEmailPath)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
             {
-                EmployeeId = employee.Id,
+                EmployeeId = request.Requester.Id,
                 Date = request.FromDate
             };
             var shift = baseService.GetDataEntity<Shift>(criteria);
@@ -483,9 +454,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                employee.DisplayName,
+                request.Requester.DisplayName,
                 command,
-                processUser.DisplayName,
+                actor.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,
@@ -497,8 +468,7 @@
 
         private void LateInEarlyOutRelatedMail(
             string command,
-            Employee employee,
-            Employee processUser,
+            EmployeeSession actor,
             RequestEntity request,
             EmailModel emailModel,
             bool isLateIn,
@@ -508,9 +478,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                employee.DisplayName,
+                request.Requester.DisplayName,
                 command,
-                processUser.DisplayName,
+                actor.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
@@ -519,33 +489,9 @@
             emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
-        private void ChangeShiftRelatedMail(
-            string command,
-            Employee employee,
-            Employee processUser,
-            RequestEntity request,
-            EmailModel emailModel,
-            string templateEmailPath)
-        {
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
-            body = string.Format(
-                body,
-                emailModel.SendToNickName,
-                employee.DisplayName,
-                command,
-                processUser.DisplayName,
-                request.RequestType.Name,
-                forDate,
-                request.Remark);
-
-            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
-        }
-
         private void LeaveRelatedMail(
             string command,
-            Employee employee,
-            Employee processUser,
+            EmployeeSession actor,
             RequestEntity request,
             EmailModel emailModel,
             string templateEmailPath)
@@ -557,9 +503,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                employee.DisplayName,
+                request.Requester.DisplayName,
                 command,
-                processUser.DisplayName,
+                actor.DisplayName,
                 request.RequestType.Name,
                 forDate,
                 request.LeaveType.Name,
@@ -570,15 +516,14 @@
 
         private void KeepInViewRelatedMail(
             string command,
-            Employee employee,
-            Employee processUser,
+            EmployeeSession actor,
             RequestEntity request,
             EmailModel emailModel,
             string templateEmailPath)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
             {
-                EmployeeId = employee.Id,
+                EmployeeId = request.Requester.Id,
                 Date = request.FromDate
             };
             var shift = baseService.GetDataEntity<Shift>(criteria);
@@ -586,9 +531,9 @@
             body = string.Format(
                 body,
                 emailModel.SendToNickName,
-                employee.DisplayName,
+                request.Requester.DisplayName,
                 command,
-                processUser.DisplayName,
+                actor.DisplayName,
                 request.RequestType.Name,
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,

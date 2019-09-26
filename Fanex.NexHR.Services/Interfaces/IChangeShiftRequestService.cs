@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
@@ -40,5 +41,7 @@
         void SendMailAfterEditRequest(long requestId);
 
         void SendMailAfterDeleteRequest(long requestId);
+
+        void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

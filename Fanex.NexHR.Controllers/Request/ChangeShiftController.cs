@@ -24,43 +24,34 @@
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
-        private readonly IRequestMailService requestMailService;
 
         public ChangeShiftController(
             ISessionService sessionService,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
-            IShiftService shiftService,
-            IRequestMailService requestMailService) : base(sessionService)
+            IShiftService shiftService) : base(sessionService)
         {
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
             this.shiftService = shiftService;
-            this.requestMailService = requestMailService;
         }
 
         [HttpGet]
-        public ActionResult EmployeeView()
+        public ActionResult EmployeeView(int? year)
         {
-            return EmployeeView(DateTime.Now.Year);
-        }
-
-        [HttpPost]
-        public ActionResult EmployeeView(int year)
-        {
-            ViewBag.Year = year;
+            int tempYear = year ?? DateTime.Today.Year;
+            ViewBag.Year = tempYear;
             var criteria = new GetRequestCriteria
             {
                 EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31),
+                FromDate = new DateTime(tempYear, 1, 1),
+                ToDate = new DateTime(tempYear, 12, 31),
                 RequestType = (int)RequestFilter.ChangeShift,
                 IsQueryByCreatedDate = false,
                 RequestViewType = RequestViewType.CompanySpace,
                 SupervisorId = sessionService.Employee.Id,
                 IsLocal = null
             };
-
             IList<RequestEntity> entityList = requestService.GetRequests(criteria);
 
             return View(entityList);
@@ -253,7 +244,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                requestMailService.SendMailForProcessSuccessfully(model.RequestId, sessionService.Employee.Id, model.Command.ToString());
+                changeShiftService.SendMailAfterProcessRequest(model.RequestId, sessionService.Employee, model.Command);
             }
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);

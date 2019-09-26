@@ -23,6 +23,7 @@
     {
         private const string EmailTemplatePathForRequest = "~/app_data/emails/ChangeShift.Request.cshtml";
         private const string EmailTemplatePathForCancel = "~/app_data/emails/ChangeShift.Cancel.cshtml";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/ChangeShift.Approval.cshtml";
 
         private readonly IChangeShiftRequestRepository changeShiftRepository;
         private readonly IBaseService baseService;
@@ -228,7 +229,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (int)SettingsSendMail.New);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.New);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -260,7 +261,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Edit);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Edit);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -292,7 +293,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Employee.NickName);
@@ -301,6 +302,38 @@
                     email.Body,
                     email.SendToNickName,
                     request.Employee.DisplayName,
+                    forDate,
+                    request.Remark);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
+        }
+
+        public void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        {
+            ChangeShiftRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                string commandMessage = requestMailService.GetCommandMessage(command);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
+                var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
+
+                email.Subject = string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.DisplayName,
+                    commandMessage,
+                    actor.DisplayName,
+                    Labels.ChangeShift,
                     forDate,
                     request.Remark);
 

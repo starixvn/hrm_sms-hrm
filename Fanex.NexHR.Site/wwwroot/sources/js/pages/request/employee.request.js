@@ -69,10 +69,11 @@ $(function () {
                         isValid = true;
 
                     $(this).find('table.table tbody tr').each(function () {
-                        let chkIgnore = $(this).find('.chk-ignore'),
-                            chkRecord = $(this).find('.chk-record'),
-                            chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
-                            chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
+                        let $tr = $(this),
+                            chkIgnore = $tr.find('.chk-ignore'),
+                            chkRecord = $tr.find('.chk-record'),
+                            chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore'),
+                            chkWeekendLeaveRecord = $tr.find('.chk-weekend-record');
 
                         if (chkIgnore.length === 1) {
                             if (!chkIgnore.prop('checked') && !chkRecord.prop('checked')) {
@@ -121,7 +122,7 @@ $(function () {
         });
     }
 
-    function renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, command, title) {
+    function getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, command, title) {
         const model = {
             RequestId: requestId,
             RoleId: roleId,
@@ -224,31 +225,31 @@ $(function () {
         switch (command) {
             case 'Accept':
                 title = 'Are you sure you want to verify?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Accept, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Accept, title);
                 break;
             case 'NotAccept':
                 title = 'Are you sure you don\'t want to verify?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.NotAccept, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.NotAccept, title);
                 break;
             case 'Approve':
                 title = 'Are you sure you want to approve?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
                 break;
             case 'Reject':
                 title = 'Are you sure you want to reject?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Reject, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Reject, title);
                 break;
             case 'Process':
                 title = 'Are you sure you want to process?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Process, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Process, title);
                 break;
             case 'Void':
                 title = 'Are you sure you want to void?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.Void, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Void, title);
                 break;
             case 'VoidBySA':
                 title = 'Are you sure you want to void?';
-                renderPartialViewProcessRequest(requestId, requestTypeId, roleId, employeeId, RequestCommand.VoidBySA, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.VoidBySA, title);
                 break;
             case 'Reset':
                 confirm('Are you sure you want to reset?', function () {

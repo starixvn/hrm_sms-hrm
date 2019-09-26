@@ -45,10 +45,11 @@
                     }
                 }
                 <td class="violationIgnored">
-                    <input type="radio" data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                    <input type="radio" class="chk-ignore"
+                           data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                 </td>
                 <td class="violationRecorded">
-                    <input type="radio" />
+                    <input type="radio" class="chk-record" />
                 </td>
             </tr>
         }
