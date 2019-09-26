@@ -2,7 +2,6 @@
 
 import ColIndex from './ColIndex';
 import ColNickname from './ColNickname';
-import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
 export default class Row extends PureComponent {
@@ -13,7 +12,6 @@ export default class Row extends PureComponent {
             <div className="table-row">
                 <ColIndex data={data} />
                 <ColNickname employeeId={data.employeeId} nickname={data.nickname} remark={data.remark} />
-                <ColDefaultShift isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift} data={data.defaultShift} />
                 <ColShift isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift}
                     employeeId={data.employeeId} defaultShift={data.defaultShift} data={data.mondaySchedule}
                     scheduleAttrName={'mondaySchedule'}

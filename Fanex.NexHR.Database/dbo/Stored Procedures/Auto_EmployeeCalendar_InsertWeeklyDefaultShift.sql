@@ -49,6 +49,7 @@ BEGIN
 		,WorkDate
 		,ShiftId
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsPublic
 		)
@@ -90,6 +91,7 @@ BEGIN
 				AND shift.SatShift IS NULL THEN 1
 			ELSE 0 END
 			) AS IsOffDay
+		,0 AS IsFixedOffDay
 		,(CASE 
 			WHEN (
 					empsum.IsLocal = 1

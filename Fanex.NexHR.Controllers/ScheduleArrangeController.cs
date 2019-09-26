@@ -18,14 +18,17 @@
     public class ScheduleArrangeController : BaseController
     {
         private const string DateFormat = "dd-MMM-yyyy";
+        private readonly IRoleService roleService;
         private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly IExportExcelScheduleService exportExcelService;
 
         public ScheduleArrangeController(
             ISessionService sessionService,
+            IRoleService roleService,
             IScheduleArrangeService scheduleArrangeService,
             IExportExcelScheduleService exportExcelService) : base(sessionService)
         {
+            this.roleService = roleService;
             this.scheduleArrangeService = scheduleArrangeService;
             this.exportExcelService = exportExcelService;
         }
@@ -34,6 +37,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult Index()
         {
+            ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
+                .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
             return View();
         }
 
@@ -100,9 +105,9 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult EditRemark(int employeeId, string remark)
+        public ActionResult EditRemark(EditRemark model)
         {
-            CommandResult commandResult = scheduleArrangeService.EditRemark(sessionService.Employee.Id, employeeId, remark);
+            CommandResult commandResult = scheduleArrangeService.EditRemark(sessionService.Employee.Id, model);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

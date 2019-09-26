@@ -16,7 +16,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @WeeklyScheduleXml=N'<ROOT><Row EmployeeId="1" WorkDate="2013-01-01" ShiftId="1" IsHoliday="1" IsOffDay="1" IsPublic="1" /></ROOT>
+    @WeeklyScheduleXml=N'<ROOT><Row EmployeeId="1" WorkDate="2013-01-01" ShiftId="1" IsHoliday="1" IsOffDay="1" IsFixedOffDay="1" IsPublic="1" /></ROOT>
     @DefaultShiftXml=N'<ROOT><Row EmployeeId="1" FromDate="2013-01-01" ShiftId="1" /></ROOT>
 
 */
@@ -42,6 +42,7 @@ BEGIN
 		,ShiftId INT NULL
 		,IsHoliday BIT
 		,IsOffDay BIT
+		,IsFixedOffDay BIT
 		,IsPublic BIT
 		)
 
@@ -68,6 +69,7 @@ BEGIN
 			,ShiftId
 			,IsHoliday
 			,IsOffDay
+			,IsFixedOffDay
 			,IsPublic
 			)
 		SELECT EmployeeId
@@ -76,10 +78,11 @@ BEGIN
 				WHEN ShiftId = '' THEN NULL
 				ELSE CONVERT(INT, ShiftId)
 				END
-			,ISNULL(IsHoliday, 0)
-			,ISNULL(IsOffDay, 0)
-			,ISNULL(IsPublic, 0)
-		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (EmployeeId INT, WorkDate DATE, ShiftId VARCHAR(100), IsHoliday BIT, IsOffDay BIT, IsPublic BIT) AS Data
+			,IsHoliday
+			,IsOffDay
+			,IsFixedOffDay
+			,IsPublic
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (EmployeeId INT, WorkDate DATE, ShiftId VARCHAR(100), IsHoliday BIT, IsOffDay BIT, IsFixedOffDay BIT, IsPublic BIT) AS Data
 
 		EXEC sp_xml_removedocument @DocHandler
 
@@ -204,16 +207,23 @@ BEGIN
 	WHERE att.EmpId IS NULL
 		AND DATEDIFF(DD, tblweekly.WorkDate, @Today) >= 0
 
-	UPDATE ec
-	SET ec.ShiftId = tblweekly.ShiftId
-		,ec.IsOffDay = tblweekly.IsOffDay
-		,ec.IsHoliday = tblweekly.IsHoliday
-		,ec.IsPublic = tblweekly.IsPublic
-		,ec.ModifiedBy = @ActorId
-		,ec.ModifiedDate = @ModifiedDate
-	FROM dbo.EmployeeCalendar AS ec WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON tblweekly.WorkDate = ec.WorkDate
-		AND tblweekly.EmployeeId = ec.EmpId
+	UPDATE empca
+	SET empca.ShiftId = tblweekly.ShiftId
+		,empca.IsOffDay = tblweekly.IsOffDay
+		,empca.IsFixedOffDay = tblweekly.IsFixedOffDay
+		,empca.IsHoliday = tblweekly.IsHoliday
+		,empca.IsPublic = tblweekly.IsPublic
+		,empca.ModifiedBy = @ActorId
+		,empca.ModifiedDate = @ModifiedDate
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON tblweekly.WorkDate = empca.WorkDate
+		AND tblweekly.EmployeeId = empca.EmpId
+
+	UPDATE empca
+	SET empca.IsFixedOffDay = 0
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+	WHERE empca.IsOffDay = 0
+		AND empca.IsFixedOffDay = 1
 
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
@@ -225,6 +235,7 @@ BEGIN
 		,EmpId
 		,ShiftId
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsPublic
 		,ModifiedBy
@@ -234,6 +245,7 @@ BEGIN
 		,EmployeeId
 		,ShiftId
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsPublic
 		,@ActorId

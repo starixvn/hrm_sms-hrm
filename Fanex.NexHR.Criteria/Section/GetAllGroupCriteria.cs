@@ -2,12 +2,12 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetGroupBySupervisorCriteria : CriteriaBase
+    public class GetAllGroupCriteria : CriteriaBase
     {
-        public int SupervisorId { get; set; }
+        public bool IsDeleted { get; set; }
 
-        public override string GetSettingKey() => "Group_GetBySupervisor";
+        public override string GetSettingKey() => "Group_Get";
 
-        public override bool IsValid() => SupervisorId > 0;
+        public override bool IsValid() => true;
     }
 }

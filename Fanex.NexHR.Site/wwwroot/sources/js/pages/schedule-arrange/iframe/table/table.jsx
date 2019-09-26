@@ -56,7 +56,7 @@ export default class Table extends PureComponent {
                         data.length > 0 &&
                         data.map(section =>
                             <Fragment key={section.groupId}>
-                                <div className="row-section"><div className="row-section-wrapper">{section.name}</div></div>
+                                <div className="row-section"><div className="section-name">{section.name}</div></div>
                                 {
                                     section.members.map((member, index) => <Row key={`row${index}`} data={member} />)
                                 }

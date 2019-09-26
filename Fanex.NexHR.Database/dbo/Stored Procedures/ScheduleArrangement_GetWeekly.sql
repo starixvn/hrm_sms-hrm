@@ -47,6 +47,7 @@ BEGIN
 		,ShiftId INT
 		,IsChangeShift BIT
 		,IsOffDay BIT
+		,IsFixedOffDay BIT
 		,IsHoliday BIT
 		,IsKeepInView BIT
 		,LeaveTypeId INT
@@ -174,6 +175,7 @@ BEGIN
 		,ShiftId
 		,IsChangeShift
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsKeepInView
 		,LeaveTypeId
@@ -191,6 +193,7 @@ BEGIN
 			ELSE 0 END
 			) AS IsChangeShift
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsKeepInView
 		,LeaveTypeId
@@ -340,6 +343,7 @@ BEGIN
 			ELSE 0 END
 			) AS IsHoliday
 		,ec.IsOffDay
+		,ec.IsFixedOffDay
 		,(CASE 
 			WHEN spwkr.WorkDate IS NOT NULL THEN 1
 			ELSE 0 END

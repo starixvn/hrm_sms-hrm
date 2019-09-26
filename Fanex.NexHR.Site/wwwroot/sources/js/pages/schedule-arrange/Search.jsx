@@ -27,7 +27,7 @@ export default class Search extends Component {
         return (
             <div className="filter">
                 <div className="form-horizontal clearfix">
-                    <div className="form-group form-group--m">
+                    <div className="form-group form-group--l">
                         <div className="label-form">
                             <label className="control-label">Week</label>
                         </div>

@@ -2,6 +2,8 @@
 {
     public interface IBackgroundJobService
     {
+        void PublishSchedule();
+
         void InsertScheduleByDefaultShift();
 
         void InsertScheduleByWeeklyDefaultShift();

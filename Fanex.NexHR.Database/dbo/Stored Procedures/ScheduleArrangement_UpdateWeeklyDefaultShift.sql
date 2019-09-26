@@ -32,6 +32,10 @@ BEGIN
 		,@ModifiedDate DATETIME = GETDATE()
 		,@FromDate1 DATE = @FromDate
 		,@ToDate1 DATE = DATEADD(MONTH, 4, @FromDate)
+		-- work type
+		,@OffDay TINYINT = 1
+		,@LeaveDay TINYINT = 2
+		,@WorkDay TINYINT = 3
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
@@ -126,6 +130,21 @@ BEGIN
 					AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 				WHERE empca.EmpId = csr.EmpId
 				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
+					INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
+					AND empca.EmpId = lrd.EmpId
+					AND empca.WorkDate = lrd.OnDate
+					AND lrd.WorkType = @OffDay
+				WHERE wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+				)
+
+		UPDATE empca
+		SET empca.IsFixedOffDay = 0
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		WHERE empca.IsOffDay = 0
+			AND empca.IsFixedOffDay = 1
 
 		WHILE @FromDate1 <= @ToDate1
 		BEGIN
@@ -140,6 +159,7 @@ BEGIN
 			,WorkDate
 			,ShiftId
 			,IsOffDay
+			,IsFixedOffDay
 			,IsHoliday
 			,IsPublic
 			,ModifiedBy
@@ -183,6 +203,7 @@ BEGIN
 					AND shift.SatShift IS NULL THEN 1
 				ELSE 0 END
 				) AS IsOffDay
+			,0 AS IsFixedOffDay
 			,(CASE 
 				WHEN (
 						empsum.IsLocal = 1
@@ -191,7 +212,7 @@ BEGIN
 					AND holiday.Id IS NOT NULL THEN 1
 				ELSE 0 END
 				) AS IsHoliday
-			,1
+			,1 AS IsPublic
 			,@ActorId
 			,@ModifiedDate
 		FROM dbo.EmployeeDefaultShift AS shift WITH (NOLOCK)
@@ -230,6 +251,7 @@ BEGIN
 				ELSE shift.ShiftId END
 				)
 			,empca.IsOffDay = 0
+			,empca.IsFixedOffDay = 0
 			,empca.IsHoliday = CASE 
 				WHEN (
 						empsum.IsLocal = 1
@@ -264,6 +286,15 @@ BEGIN
 					INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
 					AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 				WHERE empca.EmpId = csr.EmpId
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
+					INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON wkr.RequestId = lrd.RequestId
+					AND empca.EmpId = lrd.EmpId
+					AND empca.WorkDate = lrd.OnDate
+					AND lrd.WorkType = @OffDay
+				WHERE wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 				)
 	END
 

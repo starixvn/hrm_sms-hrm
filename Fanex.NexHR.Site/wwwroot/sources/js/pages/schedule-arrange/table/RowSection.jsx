@@ -24,16 +24,21 @@ export default class RowSection extends PureComponent {
         this.props.onChangeSectionOrder('bottom', groupId);
     }
 
+    handleChangePublic = event => {
+        const { groupId } = this.props.data;
+        this.props.onChangePublics(groupId, event.target.checked);
+    }
+
     render() {
         const { isHost, draggableProvided, isDragging, shiftOptions } = this.props;
-        const { groupId, name, members } = this.props.data;
+        const { groupId, name, isPublic, members } = this.props.data;
 
         return (
             <div className={`${isDragging ? 'dragging' : ''}`}
                 ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} {...draggableProvided.dragHandleProps}
             >
                 <div className="row-section">
-                    <div className="row-section-wrapper">
+                    <div className="section-name">
                         <div>{name}</div>
                         {
                             isHost &&
@@ -50,6 +55,14 @@ export default class RowSection extends PureComponent {
                             </Dropdown>
                         }
                     </div>
+                    <div className="publish">
+                        <div className="checkbox">
+                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-publish${groupId}`}
+                                checked={isPublic} disabled={!isHost} onChange={this.handleChangePublic}
+                            />
+                            <label htmlFor={`ckb-publish${groupId}`}> Publish</label>
+                        </div>
+                    </div>
                 </div>
                 <DroppableMember isHost={isHost}
                     groupId={groupId} data={members}
@@ -58,7 +71,6 @@ export default class RowSection extends PureComponent {
                     onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                     onChangeShift={this.props.onChangeShift}
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
-                    onChangePublics={this.props.onChangePublics}
                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                     onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                     onUpdateRemark={this.props.onUpdateRemark}

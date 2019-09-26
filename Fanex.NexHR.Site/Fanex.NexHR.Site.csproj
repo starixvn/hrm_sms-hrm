@@ -254,6 +254,7 @@
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
+    <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
@@ -985,6 +986,7 @@
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />

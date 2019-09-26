@@ -48,6 +48,7 @@ BEGIN
 		,WorkDate
 		,ShiftId
 		,IsOffDay
+		,IsFixedOffDay
 		,IsHoliday
 		,IsPublic
 		)
@@ -62,6 +63,7 @@ BEGIN
 			ELSE shift.ShiftId END
 			) AS ShiftId
 		,0 AS IsOffDay
+		,0 AS IsFixedOffDay
 		,(CASE 
 			WHEN (
 					empsum.IsLocal = 1

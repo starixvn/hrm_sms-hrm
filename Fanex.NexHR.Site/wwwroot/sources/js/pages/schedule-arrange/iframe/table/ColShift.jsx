@@ -9,11 +9,13 @@ export default class ColShift extends PureComponent {
         const { employeeId, data, scheduleAttrName, defaultShift, isUsedWeeklyDefaultShift } = this.props;
         let classOfInput = '';
         let valueOfInput = '';
-        let isLeaveHalfday = false;
-        let leaveCodeHalfday = '';
         let classOfleavetype = '';
-        let fromTime = '';
-        let toTime = '';
+        let moreInfo = {
+            show: false,
+            isLeaveHalfDay: false,
+            leaveCode: '',
+            content: ''
+        };
 
         if (data.isLeaveOffDay) {
             valueOfInput = 'Off';
@@ -26,23 +28,6 @@ export default class ColShift extends PureComponent {
                 valueOfInput = 'Off';
                 classOfInput = 'offday';
             } else {
-                if (data.isLeaveHalfDay) {
-                    leaveCodeHalfday = data.leaveType.code + ' ½';
-                    fromTime = moment(data.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
-                    toTime = moment(data.leaveType.toTime).format('DD MMM, YYYY HH:mm');
-                    isLeaveHalfday = true;
-
-                    if (data.shift !== null) {
-                        valueOfInput = data.shift.code;
-                    }
-                } else {
-                    valueOfInput = data.leaveType.code;
-                    if (data.leaveType2 !== null && data.leaveType.code !== data.leaveType2.code) {
-                        classOfInput = 'leaveday leavehalfday2';
-                        valueOfInput = data.leaveType.code + ' / ' + data.leaveType2.code;
-                    }
-                }
-
                 if (data.leaveType !== null && (data.leaveType2 === null || data.leaveType.code === data.leaveType2.code)) {
                     switch (data.leaveType.id) {
                         case 2:
@@ -63,20 +48,51 @@ export default class ColShift extends PureComponent {
                     }
                 }
 
-                if (classOfleavetype !== '' && !isLeaveHalfday) {
+                if (data.isLeaveHalfDay) {
+                    const fromTime = moment(data.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
+                    const toTime = moment(data.leaveType.toTime).format('DD MMM, YYYY HH:mm');
+                    moreInfo = {
+                        show: true,
+                        isLeaveHalfDay: true,
+                        leaveCode: data.leaveType.code + ' ½',
+                        content: `From: ${fromTime}\r\nTo: ${toTime}`
+                    };
+
+                    if (data.shift !== null) {
+                        valueOfInput = data.shift.code;
+                    }
+                } else {
+                    valueOfInput = data.leaveType.code;
                     classOfInput = classOfleavetype;
+                    if (data.leaveType2 !== null && data.leaveType.code !== data.leaveType2.code) {
+                        classOfInput = 'leaveday leavehalfday2';
+                        valueOfInput = data.leaveType.code + ' / ' + data.leaveType2.code;
+                    }
                 }
             }
         } else if (data.isHoliday) {
-            classOfInput = `holiday ${data.isKeepInView ? 'iskeepinview' : data.isOvertime ? 'isovertime' : ''}`;
+            classOfInput = 'holiday';
             if (data.isOffDay) {
                 valueOfInput = 'Off';
             } else {
                 valueOfInput = data.shift !== null ? data.shift.code : 'PH';
             }
+
+            if (data.isFixedOffDay || data.isChangeShift || data.isOvertime) {
+                moreInfo = {
+                    show: true,
+                    content: data.isFixedOffDay ? 'Off Day OT Fixed' : data.isChangeShift ? 'Change Shift' : 'Overtime'
+                };
+            }
         } else if (data.isOffDay) {
-            classOfInput = `offday ${data.isKeepInView ? 'iskeepinview' : data.isOvertime ? 'isovertime' : ''}`;
+            classOfInput = 'offday';
             valueOfInput = data.shift !== null ? data.shift.code : 'Off';
+            if (data.isChangeShift || data.isOvertime) {
+                moreInfo = {
+                    show: true,
+                    content: data.isChangeShift ? 'Change Shift' : 'Overtime'
+                };
+            }
         } else if (data.isKeepInView) {
             classOfInput = 'keepinviewday';
         } else if (data.isChangeShift) {
@@ -101,7 +117,7 @@ export default class ColShift extends PureComponent {
             classOfInput += ' offdayreplacement';
         }
 
-        if (!data.isModified) {
+        if (!data.isModified && data.shift !== null) {
             classOfInput += ' is-default-shift';
         }
 
@@ -116,17 +132,21 @@ export default class ColShift extends PureComponent {
 
         return (
             <div className="table-cell cell-shift">
-                <div className={`cell-shift-wrapper ${isLeaveHalfday ? 'leavehalfday' : ''}`}>
+                <div className={`cell-shift-wrapper ${moreInfo.isLeaveHalfDay ? 'leavehalfday' : ''}`}>
                     {
-                        isLeaveHalfday &&
+                        moreInfo.show &&
                         <OverlayTrigger trigger={['hover']} placement={'top'}
                             overlay={
-                                <Tooltip id={`leavehalfday${scheduleAttrName}${employeeId}`}>
-                                    {`From: ${fromTime}`}<br />{`To: ${toTime}`}
+                                <Tooltip id={`moreInfo-${scheduleAttrName}${employeeId}`}>
+                                    {moreInfo.content}
                                 </Tooltip>
                             }
                         >
-                            <span className={`halfdaycode ${classOfleavetype}`}>{leaveCodeHalfday}</span>
+                            {
+                                moreInfo.isLeaveHalfDay
+                                    ? <span className={`halfdaycode ${classOfleavetype}`}>{moreInfo.leaveCode}</span>
+                                    : <i className="fa fa-info-circle" />
+                            }
                         </OverlayTrigger>
                     }
                     <ShiftAutocomplete shift={shift} className={classOfInput} isDisabled />

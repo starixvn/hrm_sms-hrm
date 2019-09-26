@@ -8,12 +8,6 @@ import ColDefaultShift from './ColDefaultShift';
 import ColShift from './ColShift';
 
 export default class Row extends PureComponent {
-    handleChangePublic = event => {
-        const { groupId, data } = this.props;
-        const employeeId = data.employeeId;
-        this.props.onChangePublics(groupId, employeeId, event.target.checked);
-    }
-
     handleChangeSelectWeekDay = (attrName, isChecked) => {
         const { groupId, data } = this.props;
         const employeeId = data.employeeId;
@@ -98,14 +92,6 @@ export default class Row extends PureComponent {
                     onChangeShift={this.handleChangeShift}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
                 />
-                <div className="table-cell cell-public">
-                    <div className="checkbox">
-                        <input type="checkbox" className={`checkbox-custom`} id={`ckb-public${data.employeeId}`}
-                            checked={data.isPublic} disabled={!isHost} onChange={this.handleChangePublic}
-                        />
-                        <label htmlFor={`ckb-public${data.employeeId}`} />
-                    </div>
-                </div>
                 <div className="table-cell cell-modifier">
                     {
                         data.modifier &&

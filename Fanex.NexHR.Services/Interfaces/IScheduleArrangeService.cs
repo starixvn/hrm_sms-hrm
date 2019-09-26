@@ -21,7 +21,7 @@
             IEnumerable<EditDailySchedule> weeklySchedules,
             IEnumerable<EditDefaultShift> defaultShifts);
 
-        CommandResult EditRemark(int actorId, int employeeId, string remark);
+        CommandResult EditRemark(int actorId, EditRemark model);
 
         CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders);
 

@@ -10,9 +10,9 @@ AS
 Created: Tim.Trinh@2019-05-14
 Task: update off day replacement
 DB: HRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 
 */
@@ -89,6 +89,7 @@ BEGIN
 		,IsOvertime BIT
 		,IsHoliday BIT
 		,IsOffDay BIT
+		,IsFixedOffDay BIT
 		,IsKeepInView BIT
 		,IsLeaveDay BIT
 		,LeaveTypeId INT
@@ -254,6 +255,7 @@ BEGIN
 		,IsOvertime
 		,IsHoliday
 		,IsOffDay
+		,IsFixedOffDay
 		,IsKeepInView
 		,IsLeaveDay
 		,LeaveTypeId
@@ -285,6 +287,10 @@ BEGIN
 			WHEN empca.IsOffDay IS NULL THEN 0
 			ELSE empca.IsOffDay END
 			) AS IsOffDay
+		,(CASE 
+			WHEN empca.IsFixedOffDay IS NULL THEN 0
+			ELSE empca.IsFixedOffDay END
+			) AS IsFixedOffDay
 		,(CASE 
 			WHEN empca.IsKeepInView IS NULL THEN 0
 			ELSE empca.IsKeepInView END
@@ -358,19 +364,17 @@ BEGIN
 					OR (
 						empca.IsOffDay = 1
 						AND (
-							(
-								empca.IsOvertime = 0
-								AND empca.ShiftId IS NULL
-								)
+							empca.IsFixedOffDay = 1
 							OR empca.IsOvertime = 1
 							)
-						)
-					AND NOT EXISTS (
-						SELECT 1
-						FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
-						WHERE emp.EmployeeId = offrep.EmployeeId
-							AND empca.WorkDate = offrep.WorkDate
-							AND empca.ModifierId IS NULL
+						AND NOT EXISTS (
+							SELECT 1
+							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
+							WHERE emp.EmployeeId = offrep.EmployeeId
+								AND empca.WorkDate = offrep.WorkDate
+								AND empca.ModifierId IS NULL
+								AND empca.IsOvertime = 0
+							)
 						)
 					)
 			) AS empca
@@ -383,7 +387,9 @@ BEGIN
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
+			AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
+			AND ISNULL(empca.IsFixedOffDay, 0) = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
@@ -400,7 +406,9 @@ BEGIN
 			INNER JOIN #tblEmployeeWeekly AS emp ON empca.EmployeeId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
+			AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
+			AND ISNULL(empca.IsFixedOffDay, 0) = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
@@ -410,6 +418,13 @@ BEGIN
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate
 				)
+
+		DELETE offr
+		FROM dbo.ScheduleArrangementOffDayReplacement AS offr WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN #tblEmployeeWeekly AS tbl ON offr.EmployeeId = tbl.EmployeeId
+			AND offr.ReplaceForDate BETWEEN tbl.FromDate
+				AND tbl.ToDate
+			AND tbl.TotalOffDaysUsed >= tbl.OffDaysByWeek
 
 		DELETE
 		FROM #tblEmployeeWeekly
@@ -516,6 +531,7 @@ BEGIN
 					AND IsLeaveDay = 0
 					AND IsLeaveOffDay = 0
 					AND IsOffDay = 1
+					AND IsFixedOffDay = 0
 					AND NOT EXISTS (
 						SELECT 1
 						FROM #tblResetOffDay
@@ -682,6 +698,7 @@ BEGIN
 						AND IsLeaveDay = 0
 						AND IsLeaveOffDay = 0
 						AND IsOffDay = 1
+						AND IsFixedOffDay = 0
 						AND NOT EXISTS (
 							SELECT 1
 							FROM #tblResetOffDay

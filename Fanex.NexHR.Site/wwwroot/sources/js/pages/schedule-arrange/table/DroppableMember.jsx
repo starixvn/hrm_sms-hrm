@@ -27,7 +27,6 @@ export default class DroppableMember extends PureComponent {
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                                                         onChangeShift={this.props.onChangeShift}
                                                         onChangeDefaultShift={this.props.onChangeDefaultShift}
-                                                        onChangePublics={this.props.onChangePublics}
                                                         onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                                                         onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                                         onUpdateRemark={this.props.onUpdateRemark}

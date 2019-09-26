@@ -45,8 +45,17 @@ export default class ShiftAutocomplete extends PureComponent {
         const shiftOptions = this.props.shiftOptions;
         let options = [];
 
-        if (value.trim().length > 0 && !isPasted) {
-            options = shiftOptions.filter(item => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, '')));
+        if (value.trim().length > 0) {
+            if (isPasted) {
+                const trimvalue = value.trim().toLowerCase().replace(/ /g, '');
+                const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === trimvalue);
+                if (index >= 0) {
+                    this.props.onChange(this.props.name, this.props.shiftOptions[index]);
+                }
+            } else {
+                options = shiftOptions.filter(item => item.code.toLowerCase().replace(/ /g, '')
+                    .startsWith(value.trim().toLowerCase().replace(/ /g, '')));
+            }
         }
 
         this.setState({
@@ -72,8 +81,11 @@ export default class ShiftAutocomplete extends PureComponent {
     }
 
     handleInputBlur = event => {
-        const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
+        if (this.props.isDisabled) {
+            return;
+        }
 
+        const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
         if (value.length > 0) {
             const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === value);
             if (index >= 0) {

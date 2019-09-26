@@ -406,8 +406,12 @@
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetWeekly.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetEmployee.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_GetGroup.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateOffDayReplacement.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateWeeklyDefaultShift.sql" />   
+    <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertWeeklyDefaultShift.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertDefaultShift.sql" />
+    <Build Include="dbo\Tables\ScheduleArrangementOffDayReplacement.sql" />
     <Build Include="dbo\Tables\EmployeePostnatal.sql" />
-    <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateWeeklyDefaultShift.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Update.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_GetMember.sql" />
