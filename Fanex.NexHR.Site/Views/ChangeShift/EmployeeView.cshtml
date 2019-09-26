@@ -55,10 +55,10 @@
             {
                 <tr id="row@(request.Id)">
                     <td>@(index++)</td>
-                    <td class="ddMMyyyy">@request.Id</td>
+                    <td><a href="@Url.Action("details", "changeshift", new { id = request.Id })">@request.Id</a></td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
-                    <td class="ddMMyyyyhhmm">@request.CreatedDate.ToShortFormatedDate()</td>
+                    <td>@request.CreatedDate.ToShortFormatedDate()</td>
                     @if (!string.IsNullOrWhiteSpace(request.Remark))
                     {
                         <td class="tooltip" title="@request.Remark">

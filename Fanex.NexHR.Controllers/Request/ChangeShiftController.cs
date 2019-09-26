@@ -92,7 +92,9 @@
         public ActionResult Edit(int id)
         {
             ChangeShiftRequest request = changeShiftService.GetById(id);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
