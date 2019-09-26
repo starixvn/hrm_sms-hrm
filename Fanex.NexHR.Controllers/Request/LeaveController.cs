@@ -85,11 +85,7 @@
 
         public ActionResult Update(long requestId)
         {
-            var criteria = new GetLeaveRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var request = leaveRequestService.GetById(criteria);
+            LeaveModel request = leaveRequestService.GetById(requestId);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId))
             {
@@ -128,11 +124,7 @@
 
         public ActionResult Detail(int requestId)
         {
-            var criteria = new GetLeaveRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var request = leaveRequestService.GetById(criteria);
+            LeaveModel request = leaveRequestService.GetById(requestId);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Employee.Id, request);
@@ -182,11 +174,7 @@
 
         public ActionResult ViewHistory(long id)
         {
-            var criteria = new GetLeaveRequestHistoryByIdCriteria
-            {
-                RequestId = id
-            };
-            var requests = leaveRequestService.GetHistoryById(criteria);
+            IList<LeaveModel> requests = leaveRequestService.GetHistoryById(id);
             return View(requests);
         }
 
@@ -215,12 +203,7 @@
             IList<LeaveDetailModel> leaveRequestDetail = new List<LeaveDetailModel>();
             if (requestId != -1)
             {
-                var leaveDetailCriteria = new GetLeaveRequestDetailByIdCriteria
-                {
-                    RequestId = requestId
-                };
-
-                leaveRequestDetail = leaveRequestService.GetLeaveRequestDetailById(leaveDetailCriteria);
+                leaveRequestDetail = leaveRequestService.GetLeaveRequestDetailById(requestId);
             }
 
             leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);

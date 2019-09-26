@@ -48,31 +48,31 @@
             return requests ?? new List<LeaveModel>();
         }
 
-        public LeaveModel GetById(GetLeaveRequestByIdCriteria criteria)
+        public LeaveModel GetById(long requestId)
         {
-            LeaveModel request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLeaveRequestByIdCriteria
             {
-                request = leaveRequestRepository.GetById(criteria);
-            }
-
-            return request ?? new LeaveModel();
+                RequestId = requestId
+            };
+            return leaveRequestRepository.GetById(criteria);
         }
 
-        public IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria)
+        public IList<LeaveDetailModel> GetLeaveRequestDetailById(long requestId)
         {
+            var criteria = new GetLeaveRequestDetailByIdCriteria
+            {
+                RequestId = requestId
+            };
             return baseService.GetData<LeaveDetailModel>(criteria).ToList();
         }
 
-        public IList<LeaveModel> GetHistoryById(GetLeaveRequestHistoryByIdCriteria criteria)
+        public IList<LeaveModel> GetHistoryById(long requestId)
         {
-            IList<LeaveModel> requests = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLeaveRequestHistoryByIdCriteria
             {
-                requests = leaveRequestRepository.GetHistoryById(criteria);
-            }
-
-            return requests ?? new List<LeaveModel>();
+                RequestId = requestId
+            };
+            return leaveRequestRepository.GetHistoryById(criteria);
         }
 
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)

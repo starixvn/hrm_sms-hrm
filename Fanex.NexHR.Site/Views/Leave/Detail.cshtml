@@ -1,5 +1,6 @@
-﻿@model LeaveRequestViewModel
-@using System.Web.Mvc.Html5
+﻿@using System.Web.Mvc.Html5
+@using Fanex.NexHR.Resources
+@model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.LeaveRequestDetail;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
@@ -29,8 +30,7 @@
         <div class="input">
             @Html.EditorFor(model => model.RefNo)
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -46,8 +46,7 @@
                 @Html.Label(Model.Employee)
             }
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -58,8 +57,7 @@
             @Html.HiddenFor(model => model.LeaveTypeName)
             <span id="leavetype-info" class="icon-info" title="@Model.LeaveTypeDescription"></span>
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div id="grbHalfDay" class="formrow">
         <div class="label">
@@ -68,8 +66,7 @@
         <div class="input">
             @Html.CheckBoxFor(model => model.HalfDayOff)
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -91,8 +88,7 @@
                 @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
             </span>
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -109,8 +105,7 @@
                 @Html.Html5Number(0, 59, 1, Model.ToTimeMinute, new { Name = "Minute", MaxLength = "2", id = "ToTimeMinute" })
             </span>
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div id="grbTotalDay" class="formrow">
         <div class="label">
@@ -119,8 +114,7 @@
         <div class="input">
             @Html.EditorFor(model => model.TotalDays)
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -129,8 +123,7 @@
         <div class="input">
             @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"))
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -139,8 +132,7 @@
         <div class="input">
             @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"))
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -149,8 +141,7 @@
         <div class="input">
             @Html.TextAreaFor(model => model.Remark)
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div class="label">
@@ -159,20 +150,16 @@
         <div class="input">
             @Html.DisplayFor(model => model.Status.Name)
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
     <div class="formrow">
         <div id="tbldetail"></div>
     </div>
     <div class="formrow">
-        <div class="label">
-            &nbsp;
-        </div>
+        <div class="label">&nbsp;</div>
         <div class="input">
             <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
         </div>
-        <div class="clear">
-        </div>
+        <div class="clear"></div>
     </div>
-</div>a
+</div>

@@ -11,11 +11,11 @@
     {
         IList<LeaveModel> GetByDate(GetLeaveRequestByDateCriteria criteria);
 
-        LeaveModel GetById(GetLeaveRequestByIdCriteria criteria);
+        LeaveModel GetById(long requestId);
 
-        IList<LeaveDetailModel> GetLeaveRequestDetailById(GetLeaveRequestDetailByIdCriteria criteria);
+        IList<LeaveDetailModel> GetLeaveRequestDetailById(long requestId);
 
-        IList<LeaveModel> GetHistoryById(GetLeaveRequestHistoryByIdCriteria criteria);
+        IList<LeaveModel> GetHistoryById(long requestId);
 
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
@@ -28,6 +28,5 @@
         DateTime GetFromTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
 
         DateTime GetToTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
-
     }
 }

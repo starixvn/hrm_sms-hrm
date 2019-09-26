@@ -423,14 +423,14 @@
     {
         case (int)RequestType.Leave:
             <td>
-                <a class="viewhistory" href="javascript:;" id="/request/viewhistorynewversion?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
+                <a class="viewhistory" href="javascript:;" id="/leave/viewhistory/@request.Id">
                     @Labels.View
                 </a>
             </td>
             break;
         case (int)RequestType.KeepInView:
             <td>
-                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.Id">
+                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@request.Id">
                     @Labels.View
                 </a>
             </td>
