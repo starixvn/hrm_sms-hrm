@@ -10,6 +10,9 @@
 @section css{
     <link href="~/wwwroot/dist/styles/changeshift.myrequest.css" rel="stylesheet" />
 }
+@section js{
+    <script src="~/wwwroot/dist/js/changeshift.myrequest.js"></script>
+}
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
@@ -52,7 +55,7 @@
             @{int index = 1;}
             @foreach (ChangeShiftRequest request in Model)
             {
-                <tr id="row@(request.RequestId)">
+                <tr>
                     <td>@(index++)</td>
                     <td><a href="@Url.Action("details", "changeshift", new { id = request.RequestId })">@request.RequestId</a></td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
@@ -120,7 +123,4 @@
             <a href="javascript:void(0);">@request.Status.ToString()</a>
             break;
     }
-}
-@section js{
-    <script src="~/wwwroot/dist/js/changeshift.myrequest.js"></script>
 }

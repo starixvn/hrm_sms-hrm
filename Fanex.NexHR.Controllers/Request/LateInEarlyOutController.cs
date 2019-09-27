@@ -35,6 +35,21 @@
             this.employeeService = employeeService;
         }
 
+        [HttpGet]
+        public ActionResult EmployeeView(int? year)
+        {
+            int tempYear = year ?? DateTime.Today.Year;
+            ViewBag.Year = tempYear;
+            var criteria = new GetLateInEarlyOutRequestByDateCriteria
+            {
+                EmpId = sessionService.Employee.Id,
+                FromDate = new DateTime(tempYear, 1, 1),
+                ToDate = new DateTime(tempYear, 12, 31)
+            };
+            IList<LateInEarlyOutModel> requests = lateInEarlyOutRequestService.GetByDate(criteria);
+            return View(requests);
+        }
+
         public ActionResult Create(DateTime? suggestedDate, bool? isLateIn)
         {
             var viewModel = new LateInEarlyOutRequestViewModel
@@ -95,12 +110,10 @@
 
         public ActionResult Update(int id)
         {
-            var criteria = new GetLateInEarlyOutRequestByIdCriteria
-            {
-                RequestId = id
-            };
-            var request = lateInEarlyOutRequestService.GetById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
+            LateInEarlyOutModel request = lateInEarlyOutRequestService.GetById(id);
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -167,49 +180,19 @@
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult EmployeeView()
-        {
-            return EmployeeView(DateTime.Now.Year);
-        }
-
         [HttpPost]
-        public ActionResult EmployeeView(int year)
+        public CustomJsonResult Delete(int id)
         {
-            ViewBag.Year = year;
-            var criteria = new GetLateInEarlyOutRequestByDateCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31)
-            };
-
-            var requests = lateInEarlyOutRequestService.GetByDate(criteria);
-            return View(requests);
-        }
-
-        [HttpPost]
-        public JsonResult Delete(int id)
-        {
-            var criteria = new DeleteLateInEarlyOutRequestCriteria
-            {
-                RequestId = id
-            };
-
             lateInEarlyOutRequestService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = lateInEarlyOutRequestService.Delete(id);
 
-            return Json(result);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult ViewHistory(long id)
         {
-            var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
-            {
-                RequestId = id
-            };
-            var requests = lateInEarlyOutRequestService.GetHistoryById(criteria);
-            return View(requests);
+            var requests = lateInEarlyOutRequestService.GetHistoryById(id);
+            return PartialView("_ViewHistory", requests);
         }
 
         public ActionResult GetActualLateInEarlyOut(int employeeId, DateTime workDate)

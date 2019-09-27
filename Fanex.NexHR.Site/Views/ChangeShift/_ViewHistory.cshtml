@@ -25,7 +25,7 @@
             @{int index = 1;}
             @foreach (ChangeShiftRequest request in Model)
             {
-                <tr id="row@(request.RequestId)">
+                <tr>
                     <td>@(index++)</td>
                     <td>
                         <span class="tooltip-tipsy" title="@request.Employee.Team.Name">@request.Employee.Team.Code</span>

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models.Request;
 
@@ -8,9 +9,11 @@
     {
         IList<LateInEarlyOutModel> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria);
 
-        LateInEarlyOutModel GetById(GetLateInEarlyOutRequestByIdCriteria criteria);
+        LateInEarlyOutModel GetById(long requestId);
 
-        IList<LateInEarlyOutModel> GetHistoryById(GetLateInEarlyOutRequestHistoryByIdCriteria criteria);
+        IList<LateInEarlyOutModel> GetHistoryById(long requestId);
+
+        CommandResult Delete(long requestId);
 
         EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria);
 

@@ -264,6 +264,7 @@
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js" />
     <Content Include="wwwroot\dist\js\overtime.edit.js" />
     <Content Include="wwwroot\dist\js\overtime.hr.details.js" />
     <Content Include="wwwroot\dist\js\overtime.hr.index.js" />
@@ -356,6 +357,7 @@
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -1031,7 +1033,7 @@
     <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
     <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
     <Content Include="wwwroot\sources\styles\components\_buttons-new.scss" />
-    <Content Include="Views\LateInEarlyOut\ViewHistory.cshtml" />
+    <Content Include="Views\LateInEarlyOut\_ViewHistory.cshtml" />
     <Content Include="Views\Report\WeeklyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\WeeklyWorkingHours\_WeeklyWorkingHoursDetails.cshtml" />
     <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
@@ -1518,6 +1520,7 @@
     <Content Include="wwwroot\sources\styles\components\_context-menu.scss" />
     <Content Include="wwwroot\dist\js\changeshift.myrequest.js.map" />
     <Content Include="wwwroot\dist\styles\changeshift.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

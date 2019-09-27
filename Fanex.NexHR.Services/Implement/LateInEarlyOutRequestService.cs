@@ -6,6 +6,7 @@
     using Core.Enums;
     using Criteria.Employee;
     using Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Repositories;
     using Hangfire;
@@ -48,31 +49,36 @@
             return requests ?? new List<LateInEarlyOutModel>();
         }
 
-        public LateInEarlyOutModel GetById(GetLateInEarlyOutRequestByIdCriteria criteria)
+        public LateInEarlyOutModel GetById(long requestId)
         {
-            LateInEarlyOutModel request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLateInEarlyOutRequestByIdCriteria
             {
-                request = lateInEarlyOutRequestRepository.GetById(criteria);
-            }
-
-            return request ?? new LateInEarlyOutModel();
+                RequestId = requestId
+            };
+            return lateInEarlyOutRequestRepository.GetById(criteria);
         }
 
-        public IList<LateInEarlyOutModel> GetHistoryById(GetLateInEarlyOutRequestHistoryByIdCriteria criteria)
+        public IList<LateInEarlyOutModel> GetHistoryById(long requestId)
         {
-            IList<LateInEarlyOutModel> requests = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
             {
-                requests = lateInEarlyOutRequestRepository.GetHistoryById(criteria);
-            }
-
-            return requests ?? new List<LateInEarlyOutModel>();
+                RequestId = requestId
+            };
+            return lateInEarlyOutRequestRepository.GetHistoryById(criteria);
         }
 
         public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
         {
             return baseService.GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
+        }
+
+        public CommandResult Delete(long requestId)
+        {
+            var criteria = new DeleteLateInEarlyOutRequestCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
@@ -159,12 +165,7 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            var criteria = new GetLateInEarlyOutRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var request = GetById(criteria);
-
+            LateInEarlyOutModel request = GetById(requestId);
             if (request != null)
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForLateInEarlyOutCancelation);

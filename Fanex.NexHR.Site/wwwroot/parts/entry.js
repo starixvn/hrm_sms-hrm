@@ -82,6 +82,7 @@ module.exports = {
         [`${jsDistPath}/overtime.hr.details`]: `${jsSourcePath}/overtime/hr.details.js`,
         [`${jsDistPath}/changeshift.create`]: `${jsSourcePath}/request/change-shift/create.js`,
         [`${jsDistPath}/changeshift.edit`]: `${jsSourcePath}/request/change-shift/edit.js`,
-        [`${jsDistPath}/changeshift.myrequest`]: `${jsSourcePath}/request/change-shift/myrequest.js`
+        [`${jsDistPath}/changeshift.myrequest`]: `${jsSourcePath}/request/change-shift/myrequest.js`,
+        [`${jsDistPath}/lateinearlyout.myrequest`]: `${jsSourcePath}/request/latein-earlyout/myrequest.js`
     }
 };
