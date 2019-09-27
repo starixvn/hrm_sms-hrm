@@ -1,13 +1,10 @@
 ﻿@import 'abstracts/variables';
 @import 'abstracts/mixins';
 
-@import 'vendors/contextmenu';
+@import 'components/panels';
 @import 'vendors/dataTables';
 @import 'vendors/jqueryUI';
-
 @import 'layout/table';
-
-@import 'components/panels';
 
 .list-group {
     margin-bottom: 20px;
@@ -31,5 +28,80 @@
         margin-bottom: 0;
         border-bottom-right-radius: 4px;
         border-bottom-left-radius: 4px;
+    }
+}
+
+.contextMenu {
+    position: absolute;
+    width: 150px;
+    z-index: 99999;
+    border: solid 1px #999;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    display: none;
+    box-shadow: 0 0 3px #999;
+
+    li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        &.accepted, &.approved, &.processed {
+            &:hover {
+                a, i.fa {
+                    color: #5eb85d;
+                }
+            }
+        }
+
+        &.notaccepted, &.rejected, &.reset, &.void {
+            &:hover {
+                a, i.fa {
+                    color: #da5350;
+                }
+            }
+        }
+
+        &.reseted, &.edit {
+            &:hover {
+                a, i.fa {
+                    color: #3985bd;
+                }
+            }
+        }
+
+        a {
+            color: #78828c;
+            text-decoration: none;
+            display: block;
+            line-height: 20px;
+            height: 20px;
+            background-position: 6px center;
+            background-repeat: no-repeat;
+            outline: none;
+            padding: 4px 5px;
+
+            i.fa {
+                padding-right: 5px;
+            }
+        }
+
+        &.disabled {
+            a {
+                color: #aaa;
+                cursor: default;
+            }
+        }
+
+        &.hover.disabled {
+            a {
+                background-color: transparent;
+            }
+        }
+
+        &.separator {
+            border-top: solid 1px #ccc;
+        }
     }
 }

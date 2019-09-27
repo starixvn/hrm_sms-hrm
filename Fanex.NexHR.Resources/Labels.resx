@@ -157,7 +157,7 @@
     <value>Leave</value>
   </data>
   <data name="NewRequest" xml:space="preserve">
-    <value>Make A New Request</value>
+    <value>New Request</value>
   </data>
   <data name="Off" xml:space="preserve">
     <value>OFF</value>
@@ -314,9 +314,6 @@
   </data>
   <data name="HolidayIn" xml:space="preserve">
     <value>Holiday In</value>
-  </data>
-  <data name="LateInEarlyOutRequest" xml:space="preserve">
-    <value>Late In Early Out Request</value>
   </data>
   <data name="EmployeeView" xml:space="preserve">
     <value>Employee's view</value>
@@ -756,9 +753,6 @@
   <data name="LeaveCount" xml:space="preserve">
     <value>Leave Count</value>
   </data>
-  <data name="LeaveTypeName" xml:space="preserve">
-    <value>Leave Type</value>
-  </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
   </data>
@@ -773,9 +767,6 @@
   </data>
   <data name="NoInfo" xml:space="preserve">
     <value>No information available</value>
-  </data>
-  <data name="KeepInViewRequest" xml:space="preserve">
-    <value>Keep In View Request</value>
   </data>
   <data name="KeepInView" xml:space="preserve">
     <value>Keep in view</value>
@@ -929,9 +920,6 @@
   </data>
   <data name="LeaveRequestDetail" xml:space="preserve">
     <value>Leave request details</value>
-  </data>
-  <data name="LeaveRequest" xml:space="preserve">
-    <value>Leave request</value>
   </data>
   <data name="NewLeaveRequest" xml:space="preserve">
     <value>New leave request</value>

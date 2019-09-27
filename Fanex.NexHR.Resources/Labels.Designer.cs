@@ -2194,15 +2194,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep In View Request.
-        /// </summary>
-        public static string KeepInViewRequest {
-            get {
-                return ResourceManager.GetString("KeepInViewRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Keyword.
         /// </summary>
         public static string Keyword {
@@ -2271,15 +2262,6 @@ namespace Fanex.NexHR.Resources {
         public static string LateInEarlyOut {
             get {
                 return ResourceManager.GetString("LateInEarlyOut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Late In Early Out Request.
-        /// </summary>
-        public static string LateInEarlyOutRequest {
-            get {
-                return ResourceManager.GetString("LateInEarlyOutRequest", resourceCulture);
             }
         }
         
@@ -2392,15 +2374,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leave request.
-        /// </summary>
-        public static string LeaveRequest {
-            get {
-                return ResourceManager.GetString("LeaveRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Leave request details.
         /// </summary>
         public static string LeaveRequestDetail {
@@ -2433,15 +2406,6 @@ namespace Fanex.NexHR.Resources {
         public static string LeaveType {
             get {
                 return ResourceManager.GetString("LeaveType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Leave Type.
-        /// </summary>
-        public static string LeaveTypeName {
-            get {
-                return ResourceManager.GetString("LeaveTypeName", resourceCulture);
             }
         }
         
@@ -3049,7 +3013,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make A New Request.
+        ///   Looks up a localized string similar to New Request.
         /// </summary>
         public static string NewRequest {
             get {

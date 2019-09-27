@@ -260,12 +260,12 @@ $(function () {
     }
 
     function renderIconOk(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<span class="processed"><i class="glyphicon glyphicon-ok"></i>' + item.name + '</span>');
+        $itemElement.html('<span class="processed"><i class="fa fa-check"></i>' + item.name + '</span>');
         return '';
     }
 
     function renderIconRemove(opt, $itemElement, itemKey, item) {
-        $itemElement.html('<span class="void"><i class="glyphicon glyphicon-remove"></i>' + item.name + '</span>');
+        $itemElement.html('<span class="void"><i class="fa fa-times"></i>' + item.name + '</span>');
         return '';
     }
 

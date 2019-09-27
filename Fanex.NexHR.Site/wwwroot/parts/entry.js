@@ -43,6 +43,7 @@ module.exports = {
         [`${styleDistPath}/overtime.member.details`]: `${styleSourcePath}/pages/overtime/member.details.scss`,
         [`${styleDistPath}/annual.leave.balance.index`]: `${styleSourcePath}/pages/annual-leave-balance/index.scss`,
         [`${styleDistPath}/changeshift.create`]: `${styleSourcePath}/pages/request/change-shift/create.scss`,
+        [`${styleDistPath}/changeshift.myrequest`]: `${styleSourcePath}/pages/request/change-shift/myrequest.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -80,6 +81,7 @@ module.exports = {
         [`${jsDistPath}/overtime.hr.index`]: `${jsSourcePath}/overtime/hr.index.js`,
         [`${jsDistPath}/overtime.hr.details`]: `${jsSourcePath}/overtime/hr.details.js`,
         [`${jsDistPath}/changeshift.create`]: `${jsSourcePath}/request/change-shift/create.js`,
-        [`${jsDistPath}/changeshift.edit`]: `${jsSourcePath}/request/change-shift/edit.js`
+        [`${jsDistPath}/changeshift.edit`]: `${jsSourcePath}/request/change-shift/edit.js`,
+        [`${jsDistPath}/changeshift.myrequest`]: `${jsSourcePath}/request/change-shift/myrequest.js`
     }
 };

@@ -151,18 +151,6 @@
       <resource path="~/scripts/views/Request/keepinview.viewlist.js" />
     </resourceSet>
 
-    <resourceSet name="changeshiftcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/employeechangeshift.css" />
-      <resource path="~/styles/request.changeshift.css" />
-    </resourceSet>
-    <resourceSet name="changeshiftjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Request/request.common.js" />
-      <resource path="~/scripts/views/Request/changeshift.request.js" />
-      <resource path="~/scripts/views/search.request.js" />
-    </resourceSet>
-
     <resourceSet name="holidayjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/holiday.js" />
@@ -259,12 +247,6 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />
       <resource path="~/scripts/views/Request/checkinout.byemployee.js" />
-    </resourceSet>
-
-    <resourceSet name="empchangeshiftjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Request/changeshift.byemployee.js" />
     </resourceSet>
 
     <resourceSet name="empleavejs" type="js">

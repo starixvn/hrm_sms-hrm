@@ -48,7 +48,7 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
-                <i class="icon-calendar glyphicon glyphicon-calendar trigger-fromdate"></i>
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -57,7 +57,7 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
-                <i class="icon-calendar glyphicon glyphicon-calendar trigger-todate"></i>
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
         <div class="form-group form-group--m">

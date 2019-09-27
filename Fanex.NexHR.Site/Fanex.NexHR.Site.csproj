@@ -258,6 +258,7 @@
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
+    <Content Include="wwwroot\dist\js\changeshift.myrequest.js" />
     <Content Include="wwwroot\dist\js\employee.create.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
@@ -288,6 +289,8 @@
     <Content Include="wwwroot\dist\styles\annual.leave.balance.index.js" />
     <Content Include="wwwroot\dist\styles\changeshift.create.css" />
     <Content Include="wwwroot\dist\styles\changeshift.create.js" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.css" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.js" />
     <Content Include="wwwroot\dist\styles\employee.create.css" />
     <Content Include="wwwroot\dist\styles\employee.create.js" />
     <Content Include="wwwroot\dist\styles\employee.index.css" />
@@ -352,6 +355,7 @@
     <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -406,13 +410,11 @@
     <Content Include="Scripts\Views\extensionno.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
-    <Content Include="Scripts\Views\Request\changeshift.byemployee.js" />
     <Content Include="Scripts\Views\Request\keepinview.create.js" />
     <Content Include="Scripts\Views\Request\keepinview.viewlist.js" />
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
-    <Content Include="Scripts\Views\Request\employeerequest.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Scripts\Views\Team\team.edit.js" />
@@ -421,7 +423,6 @@
     <Content Include="Styles\message.css" />
     <Content Include="Styles\shift.css" />
     <Content Include="Styles\keepinview.css" />
-    <Content Include="Styles\employeechangeshift.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
@@ -764,7 +765,6 @@
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
     <Content Include="Scripts\Views\Request\checkinout.byemployee.js" />
     <Content Include="Scripts\Views\search.request.js" />
-    <Content Include="Scripts\Views\Request\changeshift.request.js" />
     <Content Include="Scripts\Views\myworkingschedule.js" />
     <Content Include="Scripts\Views\Request\checkinout.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
@@ -795,7 +795,6 @@
     <Content Include="Styles\Images\delete-icon.png" />
     <Content Include="Styles\Images\edit-icon.png" />
     <Content Include="Styles\Images\tick-icon.png" />
-    <Content Include="Styles\request.changeshift.css" />
     <Content Include="Styles\request.leave.css" />
     <Content Include="Styles\request.css" />
     <Content Include="Styles\fixtable.css" />
@@ -1386,7 +1385,6 @@
     <Content Include="wwwroot\sources\styles\layout\_forms.scss" />
     <Content Include="wwwroot\sources\styles\layout\_grid.scss" />
     <Content Include="wwwroot\sources\styles\layout\_table.scss" />
-    <Content Include="wwwroot\sources\styles\vendors\_contextmenu.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_dataTables.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
     <Content Include="wwwroot\sources\styles\layout\_header.scss" />
@@ -1540,6 +1538,10 @@
     <Content Include="wwwroot\dist\js\changeshift.edit.js.map" />
     <Content Include="wwwroot\dist\styles\changeshift.create.js.map" />
     <Content Include="Views\ChangeShift\_ViewHistory.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\request\change-shift\myrequest.scss" />
+    <Content Include="wwwroot\sources\styles\components\_context-menu.scss" />
+    <Content Include="wwwroot\dist\js\changeshift.myrequest.js.map" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models.Request
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Request
 @using Fanex.NexHR.Core.Enums
 @model IList<KeepInViewModel>
     @{
@@ -30,7 +31,7 @@
             </div>
             <div class="grid_5">
                 <div class="button-icon">
-                    <span class="icon plus"></span>@Html.ActionLink(Labels.KeepInViewRequest, "Create")
+                    <span class="icon plus"></span>@Html.ActionLink(Labels.NewRequest, "Create")
                 </div>
             </div>
         </div>

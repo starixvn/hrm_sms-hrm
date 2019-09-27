@@ -63,7 +63,6 @@ body {
             left: 0;
 
             .section_breadcrumb {
-
                 .glyphicon {
                     transform: rotate(180deg);
                 }
@@ -153,33 +152,5 @@ body {
 
     .tipsy-arrow-e {
         border-left-color: #000;
-    }
-}
-
-.context-menu-list {
-    padding: 0;
-
-    > li {
-        padding: 5px 15px;
-        font-size: 13px;
-        color: #808080;
-
-        .glyphicon {
-            padding-right: 10px;
-        }
-
-        &:hover {
-            span {
-                color: #fff;
-            }
-        }
-
-        .void {
-            color: #da5350;
-        }
-
-        .processed {
-            color: #5eb85d;
-        }
     }
 }
