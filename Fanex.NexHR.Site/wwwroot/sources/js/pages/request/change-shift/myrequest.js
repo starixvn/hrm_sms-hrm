@@ -65,7 +65,7 @@ $(function () {
     }
 
     $(document).ready(function () {
-        $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
         bindMenu('.menu-actions');
 
         $('.viewhistory').click(function () {
@@ -75,7 +75,7 @@ $(function () {
                 responseType: 'text'
             }).then(response => {
                 $('#dialoghistorycontent').html(response.data);
-                $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 $('#dialoghistorycontent').dialog({
                     modal: true,
                     width: 1100,

@@ -330,7 +330,7 @@ $(function () {
 
     $(document).ready(function () {
         initDatepicker();
-        $('.tooltip-tipsy').tipsy({ html: true, gravity: 'e' });
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
         axios(_global.root + 'Department/GetHierarchy')
             .then(response => {
@@ -352,7 +352,7 @@ $(function () {
             const url = $(this).attr('id');
             $.get(url, function (data) {
                 $('#dialoghistorycontent').html(data);
-                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoNS });
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 $('#dialoghistorycontent').dialog({
                     modal: true,
                     height: 'auto',

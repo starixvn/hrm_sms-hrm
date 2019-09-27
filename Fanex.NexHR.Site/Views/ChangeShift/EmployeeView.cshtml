@@ -1,8 +1,8 @@
-﻿﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Core
 @using Fanex.NexHR.Core.Enums
-@using Fanex.NexHR.Models.Request
-@model IList<RequestEntity>
+@using Fanex.NexHR.Models.Request.ChangeShift
+@model IEnumerable<ChangeShiftRequest>
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.MyChangeShiftRequest;
@@ -46,15 +46,15 @@
             <th>@Labels.History</th>
         </tr>
     </thead>
-    @if (Model.Count > 0)
+    @if (Model.Count() > 0)
     {
         <tbody>
             @{int index = 1;}
-            @foreach (RequestEntity request in Model)
+            @foreach (ChangeShiftRequest request in Model)
             {
-                <tr id="row@(request.Id)">
+                <tr id="row@(request.RequestId)">
                     <td>@(index++)</td>
-                    <td><a href="@Url.Action("details", "changeshift", new { id = request.Id })">@request.Id</a></td>
+                    <td><a href="@Url.Action("details", "changeshift", new { id = request.RequestId })">@request.RequestId</a></td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.CreatedDate.ToShortFormatedDate()</td>
@@ -70,7 +70,7 @@
                     </td>
                     <td>@RenderStatus(request)</td>
                     <td>
-                        <a class="viewhistory" href="javascript:;" requestid="@request.Id">@Labels.View</a>
+                        <a class="viewhistory" href="javascript:;" requestid="@request.RequestId">@Labels.View</a>
                     </td>
                 </tr>
             }
@@ -82,7 +82,7 @@
     }
 </table>
 <div id="dialoghistorycontent"></div>
-@helper RenderStatus(RequestEntity request)
+@helper RenderStatus(ChangeShiftRequest request)
 {
     var verifier = request.VerifiedBy != null ? request.VerifiedBy.NickName : string.Empty;
     var approver = request.ApprovedBy != null ? request.ApprovedBy.NickName : string.Empty;
@@ -90,28 +90,28 @@
     switch (request.Status.Id)
     {
         case (byte)CurrentRequestStatus.Pending:
-            <a requestid="@request.Id" class="menu-actions" href="javascript:void(0);">
+            <a requestid="@request.RequestId" class="menu-actions" href="javascript:void(0);">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
             break;
         case (byte)CurrentRequestStatus.Verified:
         case (byte)CurrentRequestStatus.NotVerified:
-            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
                 title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Approved:
         case (byte)CurrentRequestStatus.Rejected:
-            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
                 title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Processed:
         case (byte)CurrentRequestStatus.Void:
-            <a requestid="@request.Id" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
                 title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>

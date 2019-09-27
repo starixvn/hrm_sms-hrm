@@ -87,6 +87,17 @@
             return dates;
         }
 
+        public IEnumerable<ChangeShiftRequest> GetByEmployee(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetChangeShiftRequestByEmployeeCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            return changeShiftRepository.GetByEmployee(criteria);
+        }
+
         public IEnumerable<ChangeShiftRequest> GetHistoryById(long requestId)
         {
             var criteria = new GetChangeShiftRequestHistoryByIdCriteria

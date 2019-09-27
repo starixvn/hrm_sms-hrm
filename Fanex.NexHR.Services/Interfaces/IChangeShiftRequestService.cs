@@ -16,6 +16,8 @@
 
         IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null);
 
+        IEnumerable<ChangeShiftRequest> GetByEmployee(int employeeId, DateTime fromDate, DateTime toDate);
+
         IEnumerable<ChangeShiftRequest> GetHistoryById(long requestId);
 
         ChangeShiftRequest GetById(long requestId);

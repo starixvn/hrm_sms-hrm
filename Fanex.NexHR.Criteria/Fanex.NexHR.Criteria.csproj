@@ -149,6 +149,7 @@
     <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestByEmployeeCriteria.cs" />
     <Compile Include="Request\ChangeShift\VoidChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\RejectChangeShiftRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\ResetChangeShiftRequestCriteria.cs" />

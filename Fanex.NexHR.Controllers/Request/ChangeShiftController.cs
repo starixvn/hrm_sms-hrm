@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
@@ -40,21 +39,11 @@
         public ActionResult EmployeeView(int? year)
         {
             int tempYear = year ?? DateTime.Today.Year;
+            var fromDate = new DateTime(tempYear, 1, 1);
+            var toDate = Utilities.SetTimeToEndOfDay(new DateTime(tempYear, 12, 31));
+            IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(sessionService.Employee.Id, fromDate, toDate);
             ViewBag.Year = tempYear;
-            var criteria = new GetRequestCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(tempYear, 1, 1),
-                ToDate = new DateTime(tempYear, 12, 31),
-                RequestType = (int)RequestFilter.ChangeShift,
-                IsQueryByCreatedDate = false,
-                RequestViewType = RequestViewType.CompanySpace,
-                SupervisorId = sessionService.Employee.Id,
-                IsLocal = null
-            };
-            IList<RequestEntity> entityList = requestService.GetRequests(criteria);
-
-            return View(entityList);
+            return View(requests);
         }
 
         public ActionResult Create()

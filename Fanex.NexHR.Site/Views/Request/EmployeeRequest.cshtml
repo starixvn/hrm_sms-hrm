@@ -90,17 +90,17 @@
                         <td>
                             <span class="tooltip-tipsy" original-title="@request.ApprovedBy.FullName">@request.ApprovedBy.NickName</span>
                         </td>
-                        @if (!string.IsNullOrWhiteSpace(request.Remark))
-                        {
-                            <td>
-                                <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@request.Remark"></span>
-                            </td>
-                        }
-                        else
-                        {
-                            <td>-</td>
-                        }
-                        <td class="ddMMyyyyhhmm">
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(request.Remark))
+                            {
+                                <span class="fa fa-comment tooltip-tipsy" original-title="@request.Remark"></span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>
                             @request.CreatedDate.ToDetailFormatedDate()
                         </td>
                         @RenderStatus(Model, request)
@@ -108,7 +108,7 @@
                         <td class="td-warning">
                             @if (request.IsWarning)
                             {
-                                <span class="icon-warning tooltip-tipsy" original-title="@Labels.RequestWarning"></span>
+                                <span class="fa fa-exclamation-triangle tooltip-tipsy" original-title="@Labels.RequestWarning"></span>
                             }
                         </td>
                     </tr>
@@ -421,33 +421,35 @@
 {
     switch (request.RequestType.Id)
     {
-        case (int)RequestType.Leave:
+        case (byte)RequestType.CheckIn:
+        case (byte)RequestType.CheckOut:
             <td>
-                <a class="viewhistory" href="javascript:;" id="/leave/viewhistory/@request.Id">
-                    @Labels.View
-                </a>
+                <a class="viewhistory" href="javascript:;" id="/checkinout/viewhistory/@request.Id">@Labels.View</a>
             </td>
             break;
-        case (int)RequestType.KeepInView:
+        case (byte)RequestType.LateIn:
+        case (byte)RequestType.EarlyOut:
             <td>
-                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@request.Id">
-                    @Labels.View
-                </a>
+                <a class="viewhistory" href="javascript:;" id="/lateinearlyout/viewhistory/@request.Id">@Labels.View</a>
             </td>
             break;
-        case (int)RequestType.ChangeShift:
+        case (byte)RequestType.ChangeShift:
             <td>
-                <a class="viewhistory" href="javascript:;" id="/changeshift/viewhistory/@request.Id">
-                    @Labels.View
-                </a>
+                <a class="viewhistory" href="javascript:;" id="/changeshift/viewhistory/@request.Id">@Labels.View</a>
+            </td>
+            break;
+        case (byte)RequestType.Leave:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/leave/viewhistory/@request.Id">@Labels.View</a>
+            </td>
+            break;
+        case (byte)RequestType.KeepInView:
+            <td>
+                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@request.Id">@Labels.View</a>
             </td>
             break;
         default:
-            <td>
-                <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory?id=@request.Id&type=@request.RequestType.FilterRequestHistory">
-                    @Labels.View
-                </a>
-            </td>
+            // nothing
             break;
     }
 }
