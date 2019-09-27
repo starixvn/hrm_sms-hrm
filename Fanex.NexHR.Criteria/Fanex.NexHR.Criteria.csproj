@@ -245,7 +245,6 @@
     <Compile Include="Request\CheckInOut\InsertCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\UpdateCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\DeleteRequestCriteria.cs" />
-    <Compile Include="Request\GetHistoryRequestCriteria.cs" />
     <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
     <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByRequestTypeCriteria.cs" />

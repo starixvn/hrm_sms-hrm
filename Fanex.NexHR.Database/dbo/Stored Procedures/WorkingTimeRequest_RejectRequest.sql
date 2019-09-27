@@ -1,6 +1,4 @@
 ﻿
-
-/****** Object:  Stored Procedure dbo.WorkingTimeRequest_RejectRequest    Script Date: 7/19/2016 5:22:22 PM ******/
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_RejectRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
@@ -12,9 +10,9 @@ AS
 Created: Tom.Vo@2013-11-08
 Task: reject a request form (main SP)
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -121,14 +119,6 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF @RequestType = 5
-			EXEC [dbo].[WorkingTimeRequest_RejectRequest_5] @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
 		ELSE IF @RequestType = 6
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_6] @RequestId = @RequestId
@@ -169,12 +159,7 @@ BEGIN
 		SET @now = GETDATE()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" '
-		+ 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" '
-		+ 'ProcessedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" '
-		+ 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_RejectRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" ' + 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" ' + 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" ' + 'ProcessedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" ' + 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" ' + 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
 
 		SELECT @Description = 'Reject Request:' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1))
 

@@ -1,6 +1,4 @@
 ﻿
-
-/****** Object:  Stored Procedure dbo.WorkingTimeRequest_VoidRequest_bySA    Script Date: 7/19/2016 5:22:24 PM ******/
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_VoidRequest_bySA] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
@@ -12,7 +10,7 @@ AS
 Created: 20151026@Quinn.Vo
 Task: Void request by SA
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
@@ -61,13 +59,6 @@ BEGIN
 		ELSE IF (@RequestType = 4) -- early out
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_4] @RequestId
-				,@ProcessedBy
-				,@ErrCode OUTPUT
-				,@ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 5) -- change shift
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_5] @RequestId
 				,@ProcessedBy
 				,@ErrCode OUTPUT
 				,@ErrMsg OUTPUT
@@ -148,11 +139,7 @@ BEGIN
 		SET @now = GETDATE()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + COALESCE(CAST(@RequestID AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" '
-		+ 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" '
-		+ 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_VoidRequest_bySA RequestID="' + COALESCE(CAST(@RequestID AS VARCHAR(50)), SPACE(1)) + '" ' + 'ProcessedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" ' + 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" ' + 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" ' + 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
 
 		SELECT @Description = 'Void Status Request by SA:' + COALESCE(CAST(@RequestID AS VARCHAR(50)), SPACE(1))
 

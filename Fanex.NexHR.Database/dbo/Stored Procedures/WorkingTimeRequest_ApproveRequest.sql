@@ -1,6 +1,4 @@
 ﻿
-
-/****** Object:  Stored Procedure dbo.WorkingTimeRequest_ApproveRequest    Script Date: 7/19/2016 5:22:21 PM ******/
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
 	,@ProcessedBy INT
 	,@RoleId INT
@@ -13,11 +11,11 @@ AS
 Created: Tom.Vo@2013-11-06
 Task: approve request form (main SP)
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
-    @IgnoredDetails: 
+    @IgnoredDetails:
         <ROOT>
             <Discipline WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed=''></Discipline>
         </ROOT>
@@ -51,26 +49,44 @@ BEGIN
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
 	WHERE RequestID = @RequestId
 
-	IF (@RoleId = 2 AND (@Status <> 1 OR @VerifierId <> @ProcessedBy))
+	IF @RoleId = 2
+		AND (
+			@Status <> 1
+			OR @VerifierId <> @ProcessedBy
+			)
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
+
 		RETURN
 	END
 
-	IF (@RoleId = 3 AND (@Status NOT IN (1, 2) OR @ApproverId <> @ProcessedBy))
+	IF @RoleId = 3
+		AND (
+			@Status NOT IN (1, 2)
+			OR @ApproverId <> @ProcessedBy
+			)
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
+
 		RETURN
 	END
 
-	IF (@RoleId = 6 AND (@Status <> 4
-		OR NOT EXISTS (SELECT 1 FROM dbo.EmployeeRole WHERE EmployeeId = @ProcessedBy AND RoleId IN (6, 7))
-	))
+	IF @RoleId = 6
+		AND (
+			@Status <> 4
+			OR NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeRole
+				WHERE EmployeeId = @ProcessedBy
+					AND RoleId IN (6, 7)
+				)
+			)
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
+
 		RETURN
 	END
 
@@ -114,24 +130,6 @@ BEGIN
 				)
 		BEGIN
 			SET @ErrCode = 105
-			SET @ErrMsg = 'Another approved request in the same date has existed'
-
-			RETURN
-		END
-	END
-	ELSE IF @RequestType IN (5)
-	BEGIN
-		IF EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-					INNER JOIN dbo.ChangeShiftRequest AS cr WITH (NOLOCK) ON r.RequestId = cr.RequestId
-				WHERE r.empid = @EmpId
-					AND r.RequestType = @RequestType
-					AND r.CurrentStatus = 6
-					AND cr.FromDate = @FromDate
-				)
-		BEGIN
-			SET @ErrCode = 106
 			SET @ErrMsg = 'Another approved request in the same date has existed'
 
 			RETURN
@@ -317,17 +315,6 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 5) -- change shift
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_5 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
 		ELSE IF (@RequestType = 6) -- leave
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_6 @RequestId = @RequestId
@@ -366,12 +353,7 @@ BEGIN
 		SET @now = GETDATE()
 
 		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'ApprovedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" '
-		+ 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" '
-		+ 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" '
-		+ 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" '
-		+ 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
+		SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" ' + 'ApprovedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" ' + 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" ' + 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" ' + 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" ' + 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
 
 		SELECT @Description = 'Approve Request:' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1))
 

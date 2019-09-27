@@ -1221,21 +1221,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Request\ViewHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Request\History\ViewCheckInOutRequestHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Request\History\ViewLateInEarlyOutRequestHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Request\History\ViewChangeShiftRequestHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Request\History\ViewLeaveRequestHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ExtensionNo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1286,7 +1271,6 @@
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
-    <Content Include="Views\Request\History\ViewKeepInViewRequestHistory.cshtml" />
     <Content Include="Views\Report\Overtime\MonthlyOvertimeDetails.cshtml" />
     <Content Include="Views\Overtime\MemberOvertime.cshtml" />
     <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
@@ -1296,7 +1280,6 @@
     <Content Include="Views\ExtensionNo\ManageExternalGroup.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
     <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
-    <Content Include="Views\Request\History\SharedPeformedBy.cshtml" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
@@ -1506,13 +1489,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
-    <Content Include="Views\Request\ViewHistoryNewVersion.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\SharedPeformedBy.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\ViewChangeShiftRequestHistory.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\ViewCheckInOutRequestHistory.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\ViewKeepInViewRequestHistory.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\ViewLateInEarlyOutRequestHistory.cshtml" />
-    <Content Include="Views\Request\HistoryNewVersion\ViewLeaveRequestHistory.cshtml" />
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\UI\_NewHeader.cshtml" />
     <Content Include="Views\UI\_NewNavBar.cshtml" />

@@ -30,23 +30,6 @@
             return entityList.FirstOrDefault();
         }
 
-        public IList<RequestEntity> GetHistoryRequest(ICriteria criteria)
-        {
-            IList<RequestEntity> entityList = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
-                    {
-                        entityList = FillData(reader);
-                    }
-                }
-            }
-
-            return entityList;
-        }
-
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();

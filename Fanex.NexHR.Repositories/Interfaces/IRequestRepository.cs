@@ -11,8 +11,6 @@
 
         IList<RequestEntity> GetRequests(ICriteria criteria);
 
-        IList<RequestEntity> GetHistoryRequest(ICriteria criteria);
-
         RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);

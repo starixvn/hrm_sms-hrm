@@ -103,20 +103,6 @@
             return View("EmployeeRequest", request);
         }
 
-        public ActionResult ViewHistory(long id, int type)
-        {
-            var criteria = new GetHistoryRequestCriteria
-            {
-                RequestId = id,
-                RequestType = type
-            };
-            IList<RequestEntity> requests = requestService.GetHistoryRequest(criteria);
-            ViewBag.EntityList = requests;
-            ViewBag.requestType = type;
-
-            return View();
-        }
-
         [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
@@ -348,20 +334,6 @@
             }
 
             return result;
-        }
-
-        public ActionResult ViewHistoryNewVersion(long id, int type)
-        {
-            var criteria = new GetHistoryRequestCriteria
-            {
-                RequestId = id,
-                RequestType = type
-            };
-            IList<RequestEntity> requests = requestService.GetHistoryRequest(criteria);
-            ViewBag.EntityList = requests;
-            ViewBag.requestType = type;
-
-            return View("ViewHistoryNewVersion");
         }
     }
 }

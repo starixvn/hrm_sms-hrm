@@ -16,8 +16,6 @@
 
         IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
 
-        IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria);
-
         decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
         VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);

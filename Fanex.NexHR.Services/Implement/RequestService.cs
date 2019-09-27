@@ -102,17 +102,6 @@
             return number;
         }
 
-        public IList<RequestEntity> GetHistoryRequest(GetHistoryRequestCriteria criteria)
-        {
-            IList<RequestEntity> histories = null;
-            if (criteria.IsValid())
-            {
-                histories = requestRepository.GetHistoryRequest(criteria);
-            }
-
-            return histories;
-        }
-
         public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType)
         {
             var criteria = new GetVerifierAndApproverCriteria

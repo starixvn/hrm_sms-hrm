@@ -173,7 +173,6 @@
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Role_GetRolesByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_6.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_5.sql" />
     <Build Include="dbo\Stored Procedures\Report_YearlyOvertime.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByUserId.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_4.sql" />
@@ -218,7 +217,6 @@
     <Build Include="dbo\Stored Procedures\AnnualLeave_GetByID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_4.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_GetTransByEmp.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_5.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertMultipleTransactions.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetSupervisorForRequest.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_6.sql" />
@@ -283,7 +281,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetChangeShiftDetailToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_Get.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestHistory.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Summary_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
@@ -317,7 +314,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_4.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyOvertimeDetails.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_5.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_6.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_SetOffDayForAllEmployees.sql" />
@@ -336,7 +332,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetByQuery.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_4.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorByEmpID.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_5.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAboveOffDayForShiftManager.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorRequestID.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_6.sql" />
