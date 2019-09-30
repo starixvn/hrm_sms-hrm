@@ -1,4 +1,6 @@
-﻿@model RequestEntity
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@model RequestEntity
 <table class="table table-custom">
     <thead>
         <tr>
@@ -13,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr id="row@(Model.Id)">
+        <tr>
             <td>@Model.FromDate.ToDateMonthYearFormatedDate()</td>
             <td>
                 @if (Model.FromShift != null)
@@ -27,7 +29,7 @@
             @if (!string.IsNullOrWhiteSpace(Model.Remark))
             {
                 <td>
-                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@Model.Remark"></span>
+                    <span class="fa fa-comment tooltip-tipsy" title="@Model.Remark"></span>
                 </td>
             }
             else
@@ -36,12 +38,12 @@
             }
             <td class="violationIgnored">
                 @{
-                    var disciplineTypeId = Model.RequestType.Id == (int)RequestType.LateIn ? (int)DisciplineType.LateIn : (int)DisciplineType.EarlyOut;
+                    var disciplineTypeId = Model.RequestType.Id == (byte)RequestType.LateIn ? (byte)DisciplineType.LateIn : (byte)DisciplineType.EarlyOut;
                 }
-                <input type="radio" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                <input type="radio" class="chk-ignore" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
             </td>
             <td class="violationRecorded">
-                <input type="radio" />
+                <input type="radio" class="chk-record" />
             </td>
         </tr>
     </tbody>

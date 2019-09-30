@@ -117,24 +117,6 @@ BEGIN
 			RETURN
 		END
 	END
-	ELSE IF @RequestType IN (3, 4)
-	BEGIN
-		IF EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-					INNER JOIN dbo.InOutRequest AS ior WITH (NOLOCK) ON r.RequestId = ior.RequestId
-				WHERE r.empid = @EmpId
-					AND r.RequestType = @RequestType
-					AND r.CurrentStatus = 6
-					AND ior.FromDate = @FromDate
-				)
-		BEGIN
-			SET @ErrCode = 105
-			SET @ErrMsg = 'Another approved request in the same date has existed'
-
-			RETURN
-		END
-	END
 
 	-- if not exist calendar
 	IF @RequestType IN (1, 2, 3, 4, 5)
@@ -285,28 +267,6 @@ BEGIN
 		ELSE IF (@RequestType = 2) -- check out
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_2 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 3) -- late in
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_3 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 4) -- early out
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_4 @RequestId = @RequestId
 				,@EmpId = @EmpId
 				,@RoleId = @RoleId
 				,@ProcessedBy = @ProcessedBy

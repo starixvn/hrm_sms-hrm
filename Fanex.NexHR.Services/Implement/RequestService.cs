@@ -2,11 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
@@ -18,8 +18,6 @@
 
     public class RequestService : IRequestService
     {
-        private const int OneHourValue = 60;
-
         private readonly IRequestRepository requestRepository;
         private readonly IBaseService baseService;
 
@@ -113,42 +111,40 @@
             return supervisor;
         }
 
-        public RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria)
+        public RequestEntity GetCheckInOutRequestToIgnoreById(long requestId)
         {
-            RequestEntity request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetCheckInOutRequestToIgnoreByIdCriteria
             {
-                request = requestRepository.GetRequestToIgnoreById(criteria);
-            }
-
-            return request;
+                RequestId = requestId
+            };
+            return requestRepository.GetRequestToIgnoreById(criteria);
         }
 
-        public RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria)
+        public RequestEntity GetLateInEarlyOutDetailToReviewDiscipline(long requestId)
         {
-            RequestEntity request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLateInEarlyOutDetailToReviewDisciplineCriteria
             {
-                request = requestRepository.GetRequestToIgnoreById(criteria);
-            }
-
-            return request;
+                RequestId = requestId
+            };
+            return requestRepository.GetRequestToIgnoreById(criteria);
         }
 
-        public IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria)
+        public IList<ChangeShiftDetail> GetChangeShiftDetailToReviewDiscipline(long requestId)
         {
+            var criteria = new GetChangeShiftDetailToReviewDisciplineCriteria
+            {
+                RequestId = requestId
+            };
             return baseService.GetData<ChangeShiftDetail>(criteria).ToList();
         }
 
-        public IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria)
+        public IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId)
         {
-            IList<LeaveDisciplineModel> disciplines = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetLeaveRequestDetailToIgnoreByIdCriteria
             {
-                disciplines = requestRepository.GetLeaveRequestToIgnoreById(criteria);
-            }
-
-            return disciplines ?? new List<LeaveDisciplineModel>();
+                RequestId = requestId
+            };
+            return requestRepository.GetLeaveRequestToIgnoreById(criteria);
         }
 
         public CommandResult Delete(long requestId)

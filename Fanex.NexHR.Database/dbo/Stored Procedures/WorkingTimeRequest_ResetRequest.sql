@@ -108,28 +108,6 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 3) -- late in
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ResetRequest_3 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@CurrentStatus = @CurrentStatus
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 4) -- early out
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ResetRequest_4 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@CurrentStatus = @CurrentStatus
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
 		ELSE IF (@RequestType = 6) -- leave
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ResetRequest_6 @RequestId = @RequestId

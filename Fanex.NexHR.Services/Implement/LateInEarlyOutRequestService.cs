@@ -1,23 +1,26 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
-    using Core;
-    using Core.Enums;
-    using Criteria.Employee;
-    using Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
+    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using Hangfire;
-    using Models;
-    using Models.Request;
-    using Resources;
 
     public class LateInEarlyOutRequestService : ILateInEarlyOutRequestService
     {
-        private const string LateInEarlyOutEmailTpl = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
-        private const string EmailTemplatePathForLateInEarlyOutCancelation = "~/app_data/emails/LateInEarlyOutCancelation.cshtml";
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/LateInEarlyOut.Cancel.cshtml";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/LateInEarlyOut.Approval.cshtml";
         private readonly IEmployeeRepository employeeRepository;
         private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
         private readonly IRequestMailService requestMailService;
@@ -38,18 +41,18 @@
             this.baseService = baseService;
         }
 
-        public IList<LateInEarlyOutModel> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
+        public IList<LateInEarlyOutRequest> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
         {
-            IList<LateInEarlyOutModel> requests = null;
+            IList<LateInEarlyOutRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
                 requests = lateInEarlyOutRequestRepository.GetByDate(criteria);
             }
 
-            return requests ?? new List<LateInEarlyOutModel>();
+            return requests ?? new List<LateInEarlyOutRequest>();
         }
 
-        public LateInEarlyOutModel GetById(long requestId)
+        public LateInEarlyOutRequest GetById(long requestId)
         {
             var criteria = new GetLateInEarlyOutRequestByIdCriteria
             {
@@ -58,7 +61,7 @@
             return lateInEarlyOutRequestRepository.GetById(criteria);
         }
 
-        public IList<LateInEarlyOutModel> GetHistoryById(long requestId)
+        public IList<LateInEarlyOutRequest> GetHistoryById(long requestId)
         {
             var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
             {
@@ -81,15 +84,63 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
+        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new ApproveLateInEarlyOutRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId,
+                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new ResetLateInEarlyOutRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new RejectLateInEarlyOutRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new VoidLateInEarlyOutRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
         public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
         {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
+            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
             BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria)
         {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(LateInEarlyOutEmailTpl);
+            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
             BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
@@ -165,15 +216,15 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            LateInEarlyOutModel request = GetById(requestId);
+            LateInEarlyOutRequest request = GetById(requestId);
             if (request != null)
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForLateInEarlyOutCancelation);
-                BackgroundJob.Enqueue(() => SendMailForeleteRequest(request, templateEmailPath));
+                var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                BackgroundJob.Enqueue(() => SendMailForDeleteRequest(request, templateEmailPath));
             }
         }
 
-        public void SendMailForeleteRequest(LateInEarlyOutModel request, string templateEmailPath)
+        public void SendMailForDeleteRequest(LateInEarlyOutRequest request, string templateEmailPath)
         {
             EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
@@ -190,6 +241,40 @@
                     request.Remark);
 
                 emailService.SendEmail(email.Sender, email.SendTo, email.SendCC, subject, body);
+            }
+        }
+
+        public void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        {
+            LateInEarlyOutRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                string commandMessage = requestMailService.GetCommandMessage(command);
+                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
+
+                email.Subject = request.RequestTypeId == (short)RequestType.LateIn
+                    ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Employee.NickName, commandMessage, actor.Nickname)
+                    : string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.DisplayName,
+                    commandMessage,
+                    actor.DisplayName,
+                    request.RequestTypeName,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
+                    request.Remark);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
     }

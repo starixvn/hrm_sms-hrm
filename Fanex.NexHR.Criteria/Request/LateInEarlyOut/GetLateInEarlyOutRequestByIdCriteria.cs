@@ -6,14 +6,8 @@
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "LateInEarlyOutRequest_GetById";
-        }
+        public override string GetSettingKey() => "LateInEarlyOutRequest_GetById";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
     }
 }

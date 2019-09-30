@@ -1,9 +1,9 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Approve] @RequestId BIGINT
-	,@RoleId INT
+	,@RoleId TINYINT
 	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
-	,@IgnoredDetails NVARCHAR(MAX) = NULL
+	,@DisciplineXml NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -15,6 +15,10 @@ Original:
 
 Revisions:
 Param's Explanation:
+    @DisciplineXml: 
+        <Root>
+            <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
+        </Root>
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -116,12 +120,12 @@ BEGIN
 		BEGIN TRANSACTION;
 
 		IF @RoleId = @ApproverRoleId
-			AND ISNULL(@IgnoredDetails, '') <> ''
+			AND ISNULL(@DisciplineXml, '') <> ''
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
 				,@RoleId = @RoleId
 				,@ModifiedBy = @ActorId
-				,@IgnoredDetails = @IgnoredDetails
+				,@IgnoredDetails = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 

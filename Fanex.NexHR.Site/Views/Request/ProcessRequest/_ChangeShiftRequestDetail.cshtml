@@ -8,7 +8,7 @@
     <thead>
         <tr>
             <th>@Labels.Date</th>
-            <th>@Labels.ScheduleStatus</th>
+            <th>@Labels.Schedule</th>
             <th>@Labels.ChangeTo</th>
             <th>@Labels.Remark</th>
             <th>@Labels.ViolationIgnored</th>
@@ -36,7 +36,7 @@
                     if (!string.IsNullOrWhiteSpace(item.Remark))
                     {
                         <td>
-                            <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" title="@item.Remark"></span>
+                            <span class="fa fa-comment tooltip-tipsy" title="@item.Remark"></span>
                         </td>
                     }
                     else

@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_VoidBySA] @RequestId BIGINT
-	,@ProcessedBy INT
-	,@RoleId INT
+	,@ActorId INT
+	,@RoleId TINYINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -9,19 +9,31 @@ AS
 Created: 20151026@Quinn.Vo
 Task: Void request late in/early out by SA
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @CurrentStatus INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@OnDate DATETIME
+		,@OnDate DATE
 		,@EmpId INT
 		,@RequestType TINYINT
+		-- request type
+		,@LateInRequestTypeId TINYINT = 3
+		,@EarlyOutRequestTypeId TINYINT = 4
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = li.EmpId
 		,@OnDate = OnDate
@@ -29,64 +41,53 @@ BEGIN
 		,@CurrentStatus = wk.CurrentStatus
 	FROM dbo.LateInEarlyOutRequest AS li WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON li.RequestId = wk.RequestId
-	WHERE li.RequestID = @RequestID
-
-	SET XACT_ABORT ON;
+	WHERE li.RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
 		EXEC dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 			,@RoleId = @RoleId
-			,@ModifiedBy = @ProcessedBy
+			,@ModifiedBy = @ActorId
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
-		IF (@ErrCode <> 0)
-		BEGIN
-			ROLLBACK TRANSACTION;
-
-			RETURN
-		END
-
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-		SET CurrentStatus = 7
-			,ModifiedBy = @ProcessedBy
+		SET CurrentStatus = @VoidStatusId
+			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
-		WHERE RequestID = @RequestID
+		WHERE RequestId = @RequestId
 
-		IF @CurrentStatus IN (4, 6)
+		IF @CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 		BEGIN
-			UPDATE EC
-			SET EC.LateIn = CASE 
-					WHEN @RequestType = 3 THEN 0
-					ELSE EC.LateIn
+			UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+			SET LateIn = CASE 
+					WHEN @RequestType = @LateInRequestTypeId THEN 0
+					ELSE LateIn
 					END
-				,EC.EarlyOut = CASE 
-					WHEN @RequestType = 4 THEN 0
-					ELSE EC.EarlyOut
+				,EarlyOut = CASE 
+					WHEN @RequestType = @EarlyOutRequestTypeId THEN 0
+					ELSE EarlyOut
 					END
-				,EC.ModifiedDate = @ProcessedDate
-			FROM EmployeeCalendar EC WITH (ROWLOCK, UPDLOCK)
+				,ModifiedDate = @ProcessedDate
 			WHERE WorkDate = @OnDate
-				AND EC.EmpID = @EmpId
+				AND EmpId = @EmpId
 
-			EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@OnDate
 				,@OnDate
 				,1
 		END
 
-		EXECUTE dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
+		EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
+			,@Comment = ''
 
 		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0;
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Void request failed'
+			,@ErrMsg = 'Void unsuccessfully.'
 
 		ROLLBACK TRANSACTION
 	END CATCH;

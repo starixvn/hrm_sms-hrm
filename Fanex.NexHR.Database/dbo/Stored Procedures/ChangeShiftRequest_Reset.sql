@@ -54,6 +54,12 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
 	WHERE cs.RequestId = @RequestId
 
+	EXEC dbo.WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		,@RoleId = @RoleId
+		,@ModifiedBy = @ActorId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
+
 	IF @RoleId = @VerifierRoleId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)

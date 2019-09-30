@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Reject] @RequestId BIGINT
 	,@ActorId INT
-	,@RoleId INT
+	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -47,6 +47,12 @@ BEGIN
 		,@TypeId = TypeId
 	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
+
+	EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		,@RoleId = @RoleId
+		,@ModifiedBy = @ActorId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN

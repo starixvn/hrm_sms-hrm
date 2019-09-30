@@ -27,14 +27,8 @@
 
         public int? ApproverId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "LateInEarlyOutRequest_Update";
-        }
+        public override string GetSettingKey() => "LateInEarlyOutRequest_Update";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0 && RequestId > 0;
-        }
+        public override bool IsValid() => EmpId > 0 && RequestId > 0;
     }
 }

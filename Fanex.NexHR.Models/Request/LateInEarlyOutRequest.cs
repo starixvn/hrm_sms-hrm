@@ -4,7 +4,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    public class LateInEarlyOutModel : BaseRequest
+    public class LateInEarlyOutRequest : BaseRequest
     {
         public DateTime OnDate { get; set; }
 
@@ -26,8 +26,10 @@
                 {
                     case (byte)LateInEarlyOutReasons.ManagementAllow:
                         return Labels.ManagementAllow;
+
                     case (byte)LateInEarlyOutReasons.Other:
                         return Labels.Other;
+
                     default:
                         return string.Empty;
                 }

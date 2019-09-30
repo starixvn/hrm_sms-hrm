@@ -49,20 +49,6 @@ BEGIN
 				,@ErrCode OUTPUT
 				,@ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 3) -- late in
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_3] @RequestId
-				,@ProcessedBy
-				,@ErrCode OUTPUT
-				,@ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 4) -- early out
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_4] @RequestId
-				,@ProcessedBy
-				,@ErrCode OUTPUT
-				,@ErrMsg OUTPUT
-		END
 		ELSE IF (@RequestType = 6) -- leave
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_6] @RequestId

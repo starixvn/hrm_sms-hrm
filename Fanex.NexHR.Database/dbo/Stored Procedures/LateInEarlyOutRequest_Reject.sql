@@ -2,109 +2,121 @@
 CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_Reject] @RequestId BIGINT
 	,@RoleId INT
 	,@Comment NVARCHAR(500) = ''
-	,@ProcessedBy INT
+	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Quinn.Vo@20190625
-Task: Reject late in/early out request 
+Task: reject late in/early out request 
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @EmpId INT
-		,@OnDate DATETIME
+		,@OnDate DATE
 		,@RequestType TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
+		-- request type
+		,@LateInRequestTypeId TINYINT = 3
+		,@EarlyOutRequestTypeId TINYINT = 4
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = li.EmpId
 		,@OnDate = OnDate
 		,@RequestType = wk.RequestType
 	FROM dbo.LateInEarlyOutRequest AS li WITH (NOLOCK)
-	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON li.RequestId = wk.RequestId
-	WHERE li.RequestID = @RequestID
-
-	SET XACT_ABORT ON;
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON li.RequestId = wk.RequestId
+	WHERE li.RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		EXECUTE dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 			,@RoleId = @RoleId
-			,@ModifiedBy = @ProcessedBy
+			,@ModifiedBy = @ActorId
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
-		IF (@ErrCode <> 0)
-		BEGIN
-			ROLLBACK TRANSACTION;
-
-			RETURN
-		END
-
-		IF @RoleID = 2 --Verifier
+		IF @RoleId = @VerifierRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 3
-				,VerifiedStatus = 3
-				,VerifierId = @ProcessedBy
+			SET CurrentStatus = @NotVerifiedStatusId
+				,VerifiedStatus = @NotVerifiedStatusId
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 3 --Approver
+		ELSE IF @RoleId = @ApproverRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 5
-				,ApprovedStatus = 3
-				,ApproverId = @ProcessedBy
+			SET CurrentStatus = @RejectedStatusId
+				,ApprovedStatus = @NotVerifiedStatusId
+				,ApproverId = @ActorId
 				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 6 --HR
+		ELSE IF @RoleId = @HRRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 7
-				,HRStatus = 3
-				,HRId = @ProcessedBy
+			SET CurrentStatus = @VoidStatusId
+				,HRStatus = @NotVerifiedStatusId
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 
-			UPDATE EC
-			SET LateIn = CASE WHEN @RequestType = 3 THEN 0 ELSE LateIn END
-				,EarlyOut = CASE WHEN @RequestType = 4 THEN 0 ELSE EarlyOut END
-				,EC.ModifiedDate = @ProcessedDate
-			FROM EmployeeCalendar EC WITH (ROWLOCK, UPDLOCK)
+			UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+			SET LateIn = CASE 
+					WHEN @RequestType = @LateInRequestTypeId THEN 0
+					ELSE LateIn
+					END
+				,EarlyOut = CASE 
+					WHEN @RequestType = @EarlyOutRequestTypeId THEN 0
+					ELSE EarlyOut
+					END
+				,ModifiedDate = @ProcessedDate
 			WHERE WorkDate = @OnDate
-				AND EC.EmpID = @EmpId
+				AND EmpId = @EmpId
 
-			EXECUTE dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@OnDate
 				,@OnDate
 				,1
 		END
-		
-		EXECUTE dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId, @Comment = @Comment
+
+		EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
+			,@Comment = @Comment
 
 		COMMIT TRANSACTION;
-
-		SET @ErrCode = 0
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject request failed'
+			,@ErrMsg = 'Reject unsuccessfully.'
 
 		ROLLBACK TRANSACTION;
 	END CATCH;

@@ -2,7 +2,7 @@
 @using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Request
-@model IList<LateInEarlyOutModel>
+@model IList<LateInEarlyOutRequest>
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.MyLateInEarlyOutRequest;
@@ -58,7 +58,7 @@
     {
         int index = 1;
         <tbody>
-            @foreach (LateInEarlyOutModel request in Model)
+            @foreach (LateInEarlyOutRequest request in Model)
             {
                 var totalMins = request.RequestTypeId == (byte)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
                 <tr>
@@ -103,10 +103,10 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 12);
+        @RazorHelper.DisplayNoInformation(colspan: 13);
     }
 </table>
-@helper RenderStatus(LateInEarlyOutModel request)
+@helper RenderStatus(LateInEarlyOutRequest request)
 {
     var verifier = request.VerifiedBy != null ? request.VerifiedBy.NickName : string.Empty;
     var approver = request.ApprovedBy != null ? request.ApprovedBy.NickName : string.Empty;

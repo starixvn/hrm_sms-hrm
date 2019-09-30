@@ -45,10 +45,8 @@
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert" SpName="WorkingTimeRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Insert_LateInEarlyOutRequest" SpName="WorkingTimeRequest_Insert_LateInEarlyOutRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert_CheckInOutRequest" SpName="WorkingTimeRequest_Insert_CheckInOutRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Update_CheckInOutRequest" SpName="WorkingTimeRequest_Update_CheckInOutRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Update_LateInEarlyOutRequest" SpName="WorkingTimeRequest_Update_LateInEarlyOutRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Update_KeepInViewRequest" SpName="WorkingTimeRequest_Update_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert_KeepInViewRequest" SpName="WorkingTimeRequest_Insert_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
@@ -250,12 +248,6 @@
       <Mapping DataField="RequesterId" ObjectProperty="Id" />
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="WorkingTimeRequest_GetLateInEarlyOutRequestToIgnoreById" SpName="WorkingTimeRequest_GetLateInEarlyOutRequestToIgnoreById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestType" ObjectProperty="Id" />
-      <Mapping DataField="RequesterId" ObjectProperty="Id" />
-      <Mapping DataField="ShiftId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="WorkingTimeRequest_GetChangeShiftDetailToIgnoreById" SpName="WorkingTimeRequest_GetChangeShiftDetailToIgnoreById" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="ExtensionNumber">
     <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="nexhrx" Plain="0"></Setting>
@@ -511,6 +503,11 @@
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="LateInEarlyOutRequest_GetDetailToReviewDiscipline" SpName="LateInEarlyOutRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequestType" ObjectProperty="Id" />
+      <Mapping DataField="RequesterId" ObjectProperty="Id" />
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
+    </Setting>
   </Function>
   <Function Name="Overtime">
     <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="nexhrx" Plain="0"></Setting>
@@ -585,5 +582,6 @@
     <Setting Key="ChangeShiftRequest_Reset" SpName="ChangeShiftRequest_Reset" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Reject" SpName="ChangeShiftRequest_Reject" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_VoidBySA" SpName="ChangeShiftRequest_VoidBySA" DbName="nexhrx" Plain="0" />
+    <Setting Key="ChangeShiftRequest_GetDetailToReviewDiscipline" SpName="ChangeShiftRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0" />
   </Function>
 </Functions>

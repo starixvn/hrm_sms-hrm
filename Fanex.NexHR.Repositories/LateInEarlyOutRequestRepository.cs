@@ -9,11 +9,11 @@
 
     public class LateInEarlyOutRequestRepository : ILateInEarlyOutRequestRepository
     {
-        public IList<LateInEarlyOutModel> GetByDate(ICriteria criteria)
+        public IList<LateInEarlyOutRequest> GetByDate(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<LateInEarlyOutModel, Employee, Employee, Employee, Employee, LateInEarlyOutModel>(
+                var entity = db.Query<LateInEarlyOutRequest, Employee, Employee, Employee, Employee, LateInEarlyOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -29,11 +29,11 @@
             }
         }
 
-        public LateInEarlyOutModel GetById(ICriteria criteria)
+        public LateInEarlyOutRequest GetById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<LateInEarlyOutModel, Employee, Employee, Employee, Employee, LateInEarlyOutModel>(
+                var entity = db.QueryEntity<LateInEarlyOutRequest, Employee, Employee, Employee, Employee, LateInEarlyOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -49,11 +49,11 @@
             }
         }
 
-        public IList<LateInEarlyOutModel> GetHistoryById(ICriteria criteria)
+        public IList<LateInEarlyOutRequest> GetHistoryById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<LateInEarlyOutModel, Employee, Team, Employee, Employee, Employee, LateInEarlyOutModel>(
+                var entity = db.Query<LateInEarlyOutRequest, Employee, Team, Employee, Employee, Employee, LateInEarlyOutRequest>(
                         (request, employee, team, verifier, approver, hr) =>
                         {
                             request.Employee = employee;

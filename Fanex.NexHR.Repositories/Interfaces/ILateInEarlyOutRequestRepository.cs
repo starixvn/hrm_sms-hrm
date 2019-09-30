@@ -6,10 +6,10 @@
 
     public interface ILateInEarlyOutRequestRepository
     {
-        IList<LateInEarlyOutModel> GetByDate(ICriteria criteria);
+        IList<LateInEarlyOutRequest> GetByDate(ICriteria criteria);
 
-        LateInEarlyOutModel GetById(ICriteria criteria);
+        LateInEarlyOutRequest GetById(ICriteria criteria);
 
-        IList<LateInEarlyOutModel> GetHistoryById(ICriteria criteria);
+        IList<LateInEarlyOutRequest> GetHistoryById(ICriteria criteria);
     }
 }

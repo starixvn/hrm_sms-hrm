@@ -25,7 +25,6 @@
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
 
         private const string _EmailTemplatePathForCheckInOut = "~/app_data/emails/CheckInOutApproval.cshtml";
-        private const string _EmailTemplatePathForLateInEarlyOut = "~/app_data/emails/LateInEarlyOutApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
 
@@ -372,11 +371,6 @@
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
                     break;
 
-                case (short)RequestType.LateIn:
-                case (short)RequestType.EarlyOut:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLateInEarlyOut);
-                    break;
-
                 case (short)RequestType.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
                     break;
@@ -410,16 +404,6 @@
                 case (short)RequestType.CheckOut:
                     emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckOutSubject, request.Requester.NickName, command, actor.Nickname);
                     CheckInOutRelatedMail(command, actor, request, emailModel, templateEmailPath);
-                    break;
-
-                case (short)RequestType.LateIn:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLateInSubject, request.Requester.NickName, command, actor.Nickname);
-                    LateInEarlyOutRelatedMail(command, actor, request, emailModel, true, templateEmailPath);
-                    break;
-
-                case (short)RequestType.EarlyOut:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Requester.NickName, command, actor.Nickname);
-                    LateInEarlyOutRelatedMail(command, actor, request, emailModel, false, templateEmailPath);
                     break;
 
                 case (short)RequestType.Leave:
@@ -461,29 +445,6 @@
                 request.FromDate.ToDateMonthYearFormatedDate(),
                 shift != null ? shift.Name : string.Empty,
                 request.RequestedDate.ToShortTime(),
-                request.Remark);
-
-            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
-        }
-
-        private void LateInEarlyOutRelatedMail(
-            string command,
-            EmployeeSession actor,
-            RequestEntity request,
-            EmailModel emailModel,
-            bool isLateIn,
-            string templateEmailPath)
-        {
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                emailModel.SendToNickName,
-                request.Requester.DisplayName,
-                command,
-                actor.DisplayName,
-                request.RequestType.Name,
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                isLateIn ? ("+" + request.TotalMins) : ("-" + request.TotalMins),
                 request.Remark);
 
             emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);

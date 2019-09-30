@@ -99,26 +99,6 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF @RequestType = 3
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_RejectRequest_3] @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF @RequestType = 4
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_RejectRequest_4] @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
 		ELSE IF @RequestType = 6
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_6] @RequestId = @RequestId

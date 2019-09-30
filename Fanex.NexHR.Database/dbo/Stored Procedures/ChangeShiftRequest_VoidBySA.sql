@@ -1,6 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
+	,@RoleId TINYINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -43,6 +44,12 @@ BEGIN
 	FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wk.RequestId = cs.RequestId
 	WHERE wk.RequestId = @RequestId
+
+	EXEC dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		,@RoleId = @RoleId
+		,@ModifiedBy = @ActorId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET CurrentStatus = @VoidStatusId
@@ -119,7 +126,7 @@ BEGIN
 				AND empca.IsOffDay = 1
 		END
 
-		EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 			,@FromDate
 			,@ToDate
 			,1

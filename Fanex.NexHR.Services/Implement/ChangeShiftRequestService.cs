@@ -336,7 +336,7 @@
                 EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
-                email.Subject = string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Employee.NickName, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,

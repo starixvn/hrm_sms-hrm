@@ -4,20 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -25,7 +21,6 @@
     public class RequestController : BaseController
     {
         private readonly IEmployeeService employeeService;
-        private readonly IShiftService shiftService;
         private readonly IRequestService requestService;
         private readonly IRequestMailService requestMailService;
         private readonly ICommonDataService commonDataService;
@@ -35,7 +30,6 @@
         public RequestController(
             ISessionService sessionService,
             IEmployeeService employeeService,
-            IShiftService shiftService,
             IRequestService requestService,
             IRequestMailService requestMailService,
             ICommonDataService commonDataService,
@@ -43,7 +37,6 @@
             IBaseService baseService) : base(sessionService)
         {
             this.employeeService = employeeService;
-            this.shiftService = shiftService;
             this.requestService = requestService;
             this.requestMailService = requestMailService;
             this.teamService = teamService;
@@ -179,33 +172,25 @@
             {
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    var getCheckInOutCriteria = new GetCheckInOutRequestToIgnoreByIdCriteria
-                    {
-                        RequestId = model.RequestId
-                    };
-                    model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(getCheckInOutCriteria);
+                    model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(model.RequestId);
                     break;
 
                 case (int)RequestType.LateIn:
                 case (int)RequestType.EarlyOut:
-                    var getLateInEarlyOutCriteria = new GetLateInEarlyOutRequestToIgnoreByIdCriteria
-                    {
-                        RequestId = model.RequestId
-                    };
-                    model.LateInEarlyOutDetail = requestService.GetlateInEarlyOutRequestToIgnoreById(getLateInEarlyOutCriteria);
+                    model.LateInEarlyOutDetail = requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (int)RequestType.ChangeShift:
-                    ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
-                    model.ChangeShiftDetails = GetChangeShiftDetailToIgnoreById(model.RequestId);
+                    model.ChangeShiftDetails = requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (int)RequestType.Leave:
-                    model.LeaveDisciplines = GetLeaveRequestDetailToIgnoreById(model.RequestId);
+                    model.LeaveDisciplines = requestService.GetLeaveRequestDetailToIgnoreById(model.RequestId);
                     break;
 
                 default:
-                    return;
+                    // nothing
+                    break;
             }
         }
 
@@ -271,29 +256,6 @@
                 && (t.ApprovedBy.Id == sessionService.Employee.Id || t.VerifiedBy.Id == sessionService.Employee.Id);
             bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == sessionService.Employee.Id);
             return pending || verified;
-        }
-
-        private IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(long requestId)
-        {
-            var criteria = new GetChangeShiftDetailToIgnoreByIdCriteria
-            {
-                RequestId = requestId
-            };
-            IList<ChangeShiftDetail> changeShiftDetails = requestService.GetChangeShiftDetailToIgnoreById(criteria);
-
-            return changeShiftDetails.ToList();
-        }
-
-        private IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId)
-        {
-            var leaveDetailCriteria = new GetLeaveRequestDetailToIgnoreByIdCriteria
-            {
-                RequestId = requestId
-            };
-
-            IList<LeaveDisciplineModel> disciplines = requestService.GetLeaveRequestDetailToIgnoreById(leaveDetailCriteria);
-
-            return disciplines;
         }
 
         private CommandResult ApproveRequest(ProcessRequestViewModel model)

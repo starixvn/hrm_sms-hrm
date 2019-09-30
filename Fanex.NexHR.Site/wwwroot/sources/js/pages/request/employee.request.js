@@ -27,6 +27,10 @@ $(function () {
         let requestUrl = _global.root;
 
         switch (requestTypeId) {
+            case RequestType.LateIn:
+            case RequestType.EarlyOut:
+                requestUrl += 'LateInEarlyOut/ProcessRequest';
+                break;
             case RequestType.ChangeShift:
                 requestUrl += 'ChangeShift/ProcessRequest';
                 break;

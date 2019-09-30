@@ -4,9 +4,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Request.ChangeShift;
-    using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
 
@@ -20,13 +17,13 @@
 
         VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);
 
-        RequestEntity GetCheckInOutRequestToIgnoreById(GetCheckInOutRequestToIgnoreByIdCriteria criteria);
+        RequestEntity GetCheckInOutRequestToIgnoreById(long requestId);
 
-        RequestEntity GetlateInEarlyOutRequestToIgnoreById(GetLateInEarlyOutRequestToIgnoreByIdCriteria criteria);
+        RequestEntity GetLateInEarlyOutDetailToReviewDiscipline(long requestId);
 
-        IList<ChangeShiftDetail> GetChangeShiftDetailToIgnoreById(GetChangeShiftDetailToIgnoreByIdCriteria criteria);
+        IList<ChangeShiftDetail> GetChangeShiftDetailToReviewDiscipline(long requestId);
 
-        IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(GetLeaveRequestDetailToIgnoreByIdCriteria criteria);
+        IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId);
 
         CommandResult Delete(long requestId);
     }

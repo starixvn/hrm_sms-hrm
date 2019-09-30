@@ -9,14 +9,8 @@
 
         public DateTime WorkDate { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "TimeSheet_GetLateInEarlyOut";
-        }
+        public override string GetSettingKey() => "TimeSheet_GetLateInEarlyOut";
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0;
-        }
+        public override bool IsValid() => EmployeeId > 0;
     }
 }

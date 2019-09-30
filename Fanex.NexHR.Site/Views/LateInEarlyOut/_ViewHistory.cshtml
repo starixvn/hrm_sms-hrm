@@ -1,8 +1,8 @@
 ﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Request
-@model IList<LateInEarlyOutModel>
-
+@model IList<LateInEarlyOutRequest>
 <table class="table table-custom">
     <thead>
         <tr>
@@ -26,7 +26,7 @@
     {
         <tbody>
             @{int index = 1;}
-            @foreach (LateInEarlyOutModel request in Model)
+            @foreach (LateInEarlyOutRequest request in Model)
             {
                 var totalMins = request.RequestTypeId == (int)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
                 <tr>
@@ -56,16 +56,17 @@
                     </td>
                     <td>@request.ShiftName</td>
                     <td>@request.ReasonName</td>
-                    @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    {
-                        <td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        {
                             <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                    }
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+
                     <td>@request.VerifiedBy.NickName</td>
                     <td>@request.ApprovedBy.NickName</td>
                     <td>@request.Status.ToString()</td>
@@ -76,6 +77,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 12);
+        @RazorHelper.DisplayNoInformation(colspan: 14);
     }
 </table>
