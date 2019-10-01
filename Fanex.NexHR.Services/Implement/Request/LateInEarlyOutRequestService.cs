@@ -226,7 +226,7 @@
 
         public void SendMailForDeleteRequest(LateInEarlyOutRequest request, string templateEmailPath)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
+            EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Employee.NickName);
@@ -254,7 +254,7 @@
                 string commandMessage = requestMailService.GetCommandMessage(command);
                 EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
 
-                email.Subject = request.RequestTypeId == (short)RequestType.LateIn
+                email.Subject = request.RequestTypeId == (byte)RequestType.LateIn
                     ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Employee.NickName, commandMessage, actor.Nickname)
                     : string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Employee.NickName, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
@@ -266,7 +266,7 @@
                     actor.DisplayName,
                     request.RequestTypeName,
                     request.OnDate.ToDateMonthYearFormatedDate(),
-                    request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
+                    request.RequestTypeId == (byte)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
                 BackgroundJob.Enqueue(() => emailService.SendEmail(

@@ -227,22 +227,22 @@
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
     <Compile Include="Interfaces\IPaternityService.cs" />
     <Compile Include="Interfaces\IPostnatalService.cs" />
-    <Compile Include="Interfaces\IRequestMailService.cs" />
+    <Compile Include="Interfaces\Request\IRequestMailService.cs" />
     <Compile Include="Interfaces\IRoleService.cs" />
     <Compile Include="Interfaces\IWorkingCalendarService.cs" />
-    <Compile Include="Implement\KeepInViewRequestService.cs" />
-    <Compile Include="Implement\ChangeShiftRequestService.cs" />
-    <Compile Include="Implement\CheckInOutRequestService.cs" />
+    <Compile Include="Implement\Request\KeepInViewRequestService.cs" />
+    <Compile Include="Implement\Request\ChangeShiftRequestService.cs" />
+    <Compile Include="Implement\Request\CheckInOutRequestService.cs" />
     <Compile Include="ExportExcel\ExportExcelService.cs" />
-    <Compile Include="Interfaces\IKeepInViewRequestService.cs" />
-    <Compile Include="Interfaces\IChangeShiftRequestService.cs" />
-    <Compile Include="Interfaces\ICheckInOutRequestService.cs" />
+    <Compile Include="Interfaces\Request\IKeepInViewRequestService.cs" />
+    <Compile Include="Interfaces\Request\IChangeShiftRequestService.cs" />
+    <Compile Include="Interfaces\Request\ICheckInOutRequestService.cs" />
     <Compile Include="ExportExcel\IExportExcelService.cs" />
-    <Compile Include="Interfaces\ILateInEarlyOutRequestService.cs" />
-    <Compile Include="Interfaces\ILeaveRequestService.cs" />
+    <Compile Include="Interfaces\Request\ILateInEarlyOutRequestService.cs" />
+    <Compile Include="Interfaces\Request\ILeaveRequestService.cs" />
     <Compile Include="Interfaces\IReportService.cs" />
-    <Compile Include="Implement\LateInEarlyOutRequestService.cs" />
-    <Compile Include="Implement\LeaveRequestService.cs" />
+    <Compile Include="Implement\Request\LateInEarlyOutRequestService.cs" />
+    <Compile Include="Implement\Request\LeaveRequestService.cs" />
     <Compile Include="Implement\EmailService.cs" />
     <Compile Include="Implement\EmployeeService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
@@ -254,19 +254,19 @@
     </Compile>
     <Compile Include="Implement\OvertimeRequestService.cs" />
     <Compile Include="Implement\ReportService.cs" />
-    <Compile Include="Implement\RequestMailService.cs" />
+    <Compile Include="Implement\Request\RequestMailService.cs" />
     <Compile Include="Implement\TeamService.cs" />
     <Compile Include="Implement\HolidayService.cs" />
     <Compile Include="Interfaces\IHolidayService.cs" />
     <Compile Include="Interfaces\IEmployeeService.cs" />
-    <Compile Include="Interfaces\IRequestService.cs">
+    <Compile Include="Interfaces\Request\IRequestService.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Interfaces\IShiftService.cs" />
     <Compile Include="Interfaces\IScheduleArrangeService.cs" />
     <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implement\RequestService.cs" />
+    <Compile Include="Implement\Request\RequestService.cs" />
     <Compile Include="Implement\ShiftService.cs" />
     <Compile Include="Implement\WorkingCalendarService.cs" />
     <Compile Include="Implement\ScheduleArrangeService.cs" />

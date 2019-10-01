@@ -179,7 +179,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update_byDefaultShift.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_RejectRequest.sql" />
     <Build Include="dbo\Stored Procedures\JobTitle_Get.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_bySA_2.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_DeleteTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctionsByRoleId.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_Get.sql" />
@@ -209,7 +208,6 @@
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportData.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioAdmin.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_2.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_DeleteTransaction.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_GetByID.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_GetTransByEmp.sql" />
@@ -265,7 +263,6 @@
     <Build Include="dbo\Stored Procedures\Message_GetById.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByRequestDate_AllType.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetSubTeam.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetCheckInOutRequestToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Information_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetDetailByEmployee.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetDetailToReviewDiscipline.sql" />
@@ -282,7 +279,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_CheckInOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_KeepInViewRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetByDateRange.sql" />
@@ -301,7 +297,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetMemberToAddOtherDiscipine.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetRangeDate.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetNumberRequestInmonth.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_2.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetShiftByDate.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Get.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
@@ -316,7 +311,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_2.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ForWaitingCase.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_ForRequestType.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetDetail.sql" />
@@ -338,7 +332,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_DeleteOtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_GroupExternal.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_CheckInOutRequest.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetForSync.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_KeepInViewRequest.sql" />
@@ -569,6 +562,7 @@
     <Build Include="dbo\Tables\ChangeShiftRequestHistory.sql" />
     <Build Include="dbo\Tables\ChangeShiftRequestDetailHistory.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetByEmployee.sql" />
+    <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetDetailToReviewDiscipline.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

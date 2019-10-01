@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
+    using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models.Request;
@@ -111,9 +112,9 @@
             return supervisor;
         }
 
-        public RequestEntity GetCheckInOutRequestToIgnoreById(long requestId)
+        public RequestEntity GetCheckInOutDetailToReviewDiscipline(long requestId)
         {
-            var criteria = new GetCheckInOutRequestToIgnoreByIdCriteria
+            var criteria = new GetCheckInOutDetailToReviewDisciplineCriteria
             {
                 RequestId = requestId
             };

@@ -45,8 +45,6 @@
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert" SpName="WorkingTimeRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Insert_CheckInOutRequest" SpName="WorkingTimeRequest_Insert_CheckInOutRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Update_CheckInOutRequest" SpName="WorkingTimeRequest_Update_CheckInOutRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Update_KeepInViewRequest" SpName="WorkingTimeRequest_Update_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert_KeepInViewRequest" SpName="WorkingTimeRequest_Insert_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
@@ -242,11 +240,6 @@
       <Mapping DataField="WorkDate" ObjectProperty="LeaveDate" />
     </Setting>
     <Setting Key="LeaveRequest_GetDetailToIgnore" SpName="LeaveRequest_GetDetailToIgnore" DbName="nexhrx" Plain="0">
-    </Setting>
-    <Setting Key="WorkingTimeRequest_GetCheckInOutRequestToIgnoreById" SpName="WorkingTimeRequest_GetCheckInOutRequestToIgnoreById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="RequestType" ObjectProperty="Id" />
-      <Mapping DataField="RequesterId" ObjectProperty="Id" />
-      <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
   </Function>
   <Function Name="ExtensionNumber">
@@ -474,6 +467,11 @@
       <Mapping DataField="VerifierId" ObjectProperty="Id" />
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
+    </Setting>
+    <Setting Key="CheckInOutRequest_GetDetailToReviewDiscipline" SpName="CheckInOutRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequestType" ObjectProperty="Id" />
+      <Mapping DataField="RequesterId" ObjectProperty="Id" />
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
   </Function>
   <Function Name="Late In Early Out">

@@ -159,10 +159,14 @@
     <Compile Include="Request\ChangeShift\GetDisableDateForMoveOffDayRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetNumberOfRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\ApproveCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\DeleteCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByDateCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByIdCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\CheckInOut\RejectCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\ResetCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\VoidCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
@@ -205,7 +209,7 @@
     <Compile Include="Request\ApproveRequestCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftDetailToReviewDisciplineCriteria.cs" />
     <Compile Include="Request\ChangeShift\DeleteChangeShiftRequestCriteria.cs" />
-    <Compile Include="Request\GetCheckInOutRequestToIgnoreByIdCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetCheckInOutDetailToReviewDisciplineCriteria.cs" />
     <Compile Include="Request\GetVerifierAndApproverCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutDetailToReviewDisciplineCriteria.cs" />

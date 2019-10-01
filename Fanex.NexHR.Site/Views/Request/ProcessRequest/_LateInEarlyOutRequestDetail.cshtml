@@ -26,16 +26,16 @@
             <td>@Model.RequestType.ToString()</td>
             <td>@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
             <td>@Model.CreatedDate.ToShortFormatedDate()</td>
-            @if (!string.IsNullOrWhiteSpace(Model.Remark))
-            {
-                <td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                {
                     <span class="fa fa-comment tooltip-tipsy" title="@Model.Remark"></span>
-                </td>
-            }
-            else
-            {
-                <td>-</td>
-            }
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
             <td class="violationIgnored">
                 @{
                     var disciplineTypeId = Model.RequestType.Id == (byte)RequestType.LateIn ? (byte)DisciplineType.LateIn : (byte)DisciplineType.EarlyOut;

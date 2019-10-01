@@ -1236,7 +1236,7 @@
     <Content Include="App_Data\Emails\LeaveApproval.cshtml" />
     <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOut.Approval.cshtml" />
-    <Content Include="App_Data\Emails\CheckInOutApproval.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Approval.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewRequest.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1247,7 +1247,7 @@
     <Content Include="App_Data\Emails\LeaveCancelation.cshtml" />
     <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\CheckInOutCancelation.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Cancel.cshtml" />
     <Content Include="App_Data\Emails\KeepInViewCancelation.cshtml" />
     <Content Include="App_Data\Emails\MessageNotification.cshtml" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />

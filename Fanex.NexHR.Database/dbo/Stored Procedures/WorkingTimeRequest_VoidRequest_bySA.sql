@@ -35,28 +35,14 @@ BEGIN
 
 	IF @ErrCode = 0
 	BEGIN
-		IF (@RequestType = 1) -- check in
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_1] @RequestId
-				,@ProcessedBy
-				,@ErrCode OUTPUT
-				,@ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 2) -- check out
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_2] @RequestId
-				,@ProcessedBy
-				,@ErrCode OUTPUT
-				,@ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 6) -- leave
+		IF @RequestType = 6 -- leave
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_6] @RequestId
 				,@ProcessedBy
 				,@ErrCode OUTPUT
 				,@ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 7) -- keep in view
+		ELSE IF @RequestType = 7 -- keep in view
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_VoidRequest_bySA_7] @RequestId
 				,@ProcessedBy

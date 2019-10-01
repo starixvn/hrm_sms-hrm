@@ -1,7 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[CheckInOutRequest_Reject]  @RequestId BIGINT
-	,@ProcessedBy INT
-	,@RoleId INT
+CREATE PROCEDURE [dbo].[CheckInOutRequest_Reject] @RequestId BIGINT
+	,@ActorId INT
+	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -10,102 +10,121 @@ AS
 Created: 20190522@Quinn.Vo
 Task: reject check in/out request
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-	DECLARE @OnDate DATETIME
+	DECLARE @OnDate DATE
 		,@EmpId INT
 		,@ProcessedDate DATETIME = GETDATE()
 		,@RequestType SMALLINT
+		-- request type
+		,@CheckInRequestTypeId TINYINT = 1
+		,@CheckOutRequestTypeId TINYINT = 2
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = mis.EmpId
 		,@OnDate = OnDate
 		,@RequestType = wk.RequestType
 	FROM dbo.CheckInOutRequest AS mis WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON mis.RequestId = wk.RequestId
-	WHERE mis.RequestID = @RequestId
-
-	SET XACT_ABORT ON;
+	WHERE mis.RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		-- reset discipline ignore
 		EXECUTE dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 			,@RoleId = @RoleId
-			,@ModifiedBy = @ProcessedBy
+			,@ModifiedBy = @ActorId
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
-		IF (@ErrCode <> 0)
+		IF @ErrCode <> 0
 		BEGIN
 			ROLLBACK TRANSACTION;
 
 			RETURN
 		END
 
-		IF @RoleID = 2 --Verifier
+		IF @RoleId = @VerifierRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 3
-				,VerifiedStatus = 3
-				,VerifierId = @ProcessedBy
+			SET CurrentStatus = @NotVerifiedStatusId
+				,VerifiedStatus = @NotVerifiedStatusId
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 3 --Approver
+		ELSE IF @RoleId = @ApproverRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 5
-				,ApprovedStatus = 3
-				,ApproverId = @ProcessedBy
+			SET CurrentStatus = @RejectedStatusId
+				,ApprovedStatus = @NotVerifiedStatusId
+				,ApproverId = @ActorId
 				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 6 --HR
+		ELSE IF @RoleId = @HRRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 7
-				,HRStatus = 3
-				,HRId = @ProcessedBy
+			SET CurrentStatus = @VoidStatusId
+				,HRStatus = @NotVerifiedStatusId
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestID = @RequestId
 
-			UPDATE EC
-			SET EC.RequestedCheckinTime = CASE WHEN @RequestType = 1 THEN 0 ELSE ec.RequestedCheckinTime END
-				,EC.RequestedCheckoutTime = CASE WHEN @RequestType = 2 THEN 0 ELSE ec.RequestedCheckoutTime END
-				,EC.ModifiedDate = @ProcessedDate
-			FROM EmployeeCalendar EC WITH (ROWLOCK, UPDLOCK)
+			UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+			SET RequestedCheckinTime = CASE 
+					WHEN @RequestType = @CheckInRequestTypeId THEN 0
+					ELSE RequestedCheckinTime
+					END
+				,RequestedCheckoutTime = CASE 
+					WHEN @RequestType = @CheckOutRequestTypeId THEN 0
+					ELSE RequestedCheckoutTime
+					END
+				,ModifiedBy = @ActorId
+				,ModifiedDate = @ProcessedDate
 			WHERE WorkDate = @OnDate
-				AND EC.EmpID = @EmpId
+				AND EmpId = @EmpId
 
-			EXECUTE dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@OnDate
 				,@OnDate
 				,1
 		END
 
-		EXECUTE dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId, @Comment = @Comment
+		EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
+			,@Comment = @Comment
 
 		COMMIT TRANSACTION;
-
-		SET @ErrCode = 0
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject request failed'
+			,@ErrMsg = 'Reject unsuccessfully.'
 
 		ROLLBACK TRANSACTION;
 	END CATCH;

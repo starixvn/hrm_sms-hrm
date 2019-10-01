@@ -1,4 +1,6 @@
-﻿@model RequestEntity
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@model RequestEntity
 <table class="table table-custom">
     <thead>
         <tr>
@@ -12,40 +14,34 @@
         </tr>
     </thead>
     <tbody>
-        <tr id="row@(Model.Id)">
-            <td>
-                @Model.RequestedDate.ToShortFormatedDate()
-            </td>
+        <tr>
+            <td>@Model.RequestedDate.ToShortFormatedDate()</td>
             <td>
                 @if (Model.FromShift != null)
                 {
                     @Model.FromShift.Name
                 }
             </td>
+            <td>@Model.RequestType.ToString()</td>
+            <td>@Model.CreatedDate.ToShortFormatedDate()</td>
             <td>
-                @Model.RequestType.ToString()
+                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                {
+                    <span class="fa fa-comment tooltip-tipsy" title="@Model.Remark"></span>
+                }
+                else
+                {
+                    <span>-</span>
+                }
             </td>
-            <td>
-                @Model.CreatedDate.ToShortFormatedDate()
-            </td>
-            @if (!string.IsNullOrWhiteSpace(Model.Remark))
-            {
-                <td>
-                    <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@Model.Remark"></span>
-                </td>
-            }
-            else
-            {
-                <td>-</td>
-            }
             <td class="violationIgnored">
                 @{
-                    var disciplineTypeId = (int)DisciplineType.MissingCheckInOut;
+                    var disciplineTypeId = (byte)DisciplineType.MissingCheckInOut;
                 }
-                <input type="radio" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                <input type="radio" class="chk-ignore" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
             </td>
             <td class="violationRecorded">
-                <input type="radio" />
+                <input type="radio" class="chk-record" />
             </td>
         </tr>
     </tbody>

@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
@@ -101,7 +103,7 @@
 
                     if (result.IsSuccessful)
                     {
-                        checkInOutRequestService.SendMailForInsertSuccessfully(criteria);
+                        checkInOutRequestService.SendMailAfterCreateRequest(model.RequestId);
                         ViewBag.Requested = true;
                     }
                     else
@@ -178,7 +180,7 @@
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
-                        checkInOutRequestService.SendMailForUpdateSuccessfully(criteria);
+                        checkInOutRequestService.SendMailAfterEditRequest(model.RequestId);
                         ViewBag.Updated = true;
                     }
                     else
@@ -194,7 +196,7 @@
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            checkInOutRequestService.SendMailForDeleteSuccessfully(id);
+            checkInOutRequestService.SendMailAfterDeleteRequest(id);
             CommandResult commandResult = checkInOutRequestService.Delete(id);
 
             return Json(commandResult);
@@ -204,6 +206,46 @@
         {
             IList<CheckInOutRequest> requests = checkInOutRequestService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        public JsonResult ProcessRequest(ProcessRequestParam model)
+        {
+            CommandResult commandResult;
+            switch (model.Command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    commandResult = checkInOutRequestService.ApproveRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.Reset:
+                    commandResult = checkInOutRequestService.ResetRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    commandResult = checkInOutRequestService.RejectRequest(sessionService.Employee.Id, model);
+                    break;
+
+                default:
+                    commandResult = checkInOutRequestService.VoidRequest(sessionService.Employee.Id, model);
+                    break;
+            }
+
+            if (commandResult.IsSuccessful)
+            {
+                checkInOutRequestService.SendMailAfterProcessRequest(model.RequestId, sessionService.Employee, model.Command);
+            }
+
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         private Shift GetShiftByDate(DateTime date)

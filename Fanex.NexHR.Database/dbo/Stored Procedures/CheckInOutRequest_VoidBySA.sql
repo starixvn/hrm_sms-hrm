@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[CheckInOutRequest_VoidBySA] @RequestId BIGINT
-	,@ProcessedBy INT
-	,@RoleId INT
+	,@ActorId INT
+	,@RoleId TINYINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -9,39 +9,50 @@ AS
 Created: 20190624@Quinn.Vo
 Task: void check in/out request by SA.
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @CurrentStatus INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@OnDate DATETIME
+		,@OnDate DATE
 		,@EmpId INT
 		,@RequestType SMALLINT
-	
+		-- request type
+		,@CheckInRequestTypeId TINYINT = 1
+		,@CheckOutRequestTypeId TINYINT = 2
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
+
 	SELECT @EmpId = mis.EmpId
 		,@OnDate = mis.OnDate
 		,@CurrentStatus = wk.CurrentStatus
 		,@RequestType = wk.RequestType
 	FROM dbo.CheckInOutRequest AS mis WITH (NOLOCK)
-	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON mis.RequestId = wk.RequestId
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON mis.RequestId = wk.RequestId
 	WHERE mis.RequestId = @RequestID
 
-	SET XACT_ABORT ON;
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		EXECUTE dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
+		EXEC dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 			,@RoleId = @RoleId
-			,@ModifiedBy = @ProcessedBy
+			,@ModifiedBy = @ActorId
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
-		IF (@ErrCode <> 0)
+		IF @ErrCode <> 0
 		BEGIN
 			ROLLBACK TRANSACTION;
 
@@ -49,37 +60,41 @@ BEGIN
 		END
 
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 7
-				,ModifiedBy = @ProcessedBy
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+		SET CurrentStatus = @VoidStatusId
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
 
-		IF @CurrentStatus IN (4, 6)
+		IF @CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 		BEGIN
-			UPDATE EC
-				SET EC.RequestedCheckinTime = CASE WHEN @RequestType = 1 THEN 0 ELSE RequestedCheckinTime END
-					,EC.RequestedCheckoutTime = CASE WHEN @RequestType = 2 THEN 0 ELSE RequestedCheckoutTime END
-					,EC.ModifiedDate = @ProcessedDate
-				FROM EmployeeCalendar EC WITH (ROWLOCK, UPDLOCK)
-				WHERE WorkDate = @OnDate
-					AND EC.EmpID = @EmpId
+			UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+			SET RequestedCheckinTime = CASE 
+					WHEN @RequestType = @CheckInRequestTypeId THEN 0
+					ELSE RequestedCheckinTime
+					END
+				,RequestedCheckoutTime = CASE 
+					WHEN @RequestType = @CheckOutRequestTypeId THEN 0
+					ELSE RequestedCheckoutTime
+					END
+				,ModifiedBy = @ActorId
+				,ModifiedDate = @ProcessedDate
+			WHERE WorkDate = @OnDate
+				AND EmpId = @EmpId
 
-			EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@OnDate
 				,@OnDate
 				,1
 		END
 
-		EXECUTE dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
+		EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
 
 		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0;
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Void request failed'
+			,@ErrMsg = 'Void unsuccessfully.'
 
 		ROLLBACK TRANSACTION
 	END CATCH;

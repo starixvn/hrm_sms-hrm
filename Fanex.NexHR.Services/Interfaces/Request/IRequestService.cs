@@ -17,7 +17,7 @@
 
         VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);
 
-        RequestEntity GetCheckInOutRequestToIgnoreById(long requestId);
+        RequestEntity GetCheckInOutDetailToReviewDiscipline(long requestId);
 
         RequestEntity GetLateInEarlyOutDetailToReviewDiscipline(long requestId);
 

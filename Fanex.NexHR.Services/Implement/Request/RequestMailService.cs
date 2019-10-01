@@ -24,7 +24,6 @@
         private const string _MailContentLeaveOneDay = "{0}";
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
 
-        private const string _EmailTemplatePathForCheckInOut = "~/app_data/emails/CheckInOutApproval.cshtml";
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
         private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
 
@@ -366,11 +365,6 @@
             string path;
             switch (requestType)
             {
-                case (short)RequestType.CheckIn:
-                case (short)RequestType.CheckOut:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForCheckInOut);
-                    break;
-
                 case (short)RequestType.Leave:
                     path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
                     break;
@@ -396,16 +390,6 @@
         {
             switch (request.RequestType.Id)
             {
-                case (short)RequestType.CheckIn:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckInSubject, request.Requester.NickName, command, actor.Nickname);
-                    CheckInOutRelatedMail(command, actor, request, emailModel, templateEmailPath);
-                    break;
-
-                case (short)RequestType.CheckOut:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationCheckOutSubject, request.Requester.NickName, command, actor.Nickname);
-                    CheckInOutRelatedMail(command, actor, request, emailModel, templateEmailPath);
-                    break;
-
                 case (short)RequestType.Leave:
                     emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, request.Requester.NickName, command, actor.Nickname);
                     LeaveRelatedMail(command, actor, request, emailModel, templateEmailPath);
@@ -419,35 +403,6 @@
                 default:
                     return;
             }
-        }
-
-        private void CheckInOutRelatedMail(
-            string command,
-            EmployeeSession actor,
-            RequestEntity request,
-            EmailModel emailModel,
-            string templateEmailPath)
-        {
-            var criteria = new GetEmployeeShiftByDateCriteria
-            {
-                EmployeeId = request.Requester.Id,
-                Date = request.FromDate
-            };
-            var shift = baseService.GetDataEntity<Shift>(criteria);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                emailModel.SendToNickName,
-                request.Requester.DisplayName,
-                command,
-                actor.DisplayName,
-                request.RequestType.Name,
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                shift != null ? shift.Name : string.Empty,
-                request.RequestedDate.ToShortTime(),
-                request.Remark);
-
-            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
 
         private void LeaveRelatedMail(

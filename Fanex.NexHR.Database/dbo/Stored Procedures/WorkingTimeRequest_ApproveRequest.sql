@@ -99,53 +99,7 @@ BEGIN
 	SELECT @FromDate = CONVERT(VARCHAR(10), @FromDate, 111)
 		,@ToDate = CONVERT(VARCHAR(10), @ToDate, 111)
 
-	IF @RequestType IN (1, 2)
-	BEGIN
-		IF EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-					INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-				WHERE r.empid = @EmpId
-					AND r.RequestType = @RequestType
-					AND r.CurrentStatus = 6
-					AND lr.FromDate = @FromDate
-				)
-		BEGIN
-			SET @ErrCode = 104
-			SET @ErrMsg = 'Another approved request in the same date has existed'
-
-			RETURN
-		END
-	END
-
-	-- if not exist calendar
-	IF @RequestType IN (1, 2, 3, 4, 5)
-		AND NOT EXISTS (
-			SELECT 1
-			FROM dbo.EmployeeCalendar WITH (NOLOCK)
-			WHERE empid = @empid
-				AND workdate = @fromdate
-			)
-	BEGIN
-		EXEC [dbo].[EmployeeCalendar_Insert] @empid = @empid
-			,@fromdate = @FromDate
-			,@todate = @fromdate
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-
-		IF @ErrCode <> 0
-		BEGIN
-			ROLLBACK TRANSACTION;
-
-			RETURN
-		END
-
-		SET @ErrCode = 107
-		SET @ErrMsg = 'The working calendar does not exist. Please contact HR for more info.'
-
-		RETURN
-	END
-	ELSE IF (@RequestType = 6)
+	IF @RequestType = 6
 	BEGIN
 		DECLARE @maxDate DATETIME
 			,@minDate DATETIME
@@ -252,30 +206,7 @@ BEGIN
 	BEGIN
 		SET @ProcessedDate = GETDATE()
 
-		-- call appropriate SP for each request form
-		IF (@RequestType = 1) -- check in
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_1 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 2) -- check out
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_2 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 6) -- leave
+		IF @RequestType = 6 -- leave
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_6 @RequestId = @RequestId
 				,@EmpId = @EmpId
@@ -286,7 +217,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 7) -- keep in view
+		ELSE IF @RequestType = 7 -- keep in view
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ApproveRequest_7 @RequestId = @RequestId
 				,@EmpId = @EmpId

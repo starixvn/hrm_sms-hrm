@@ -86,29 +86,7 @@ BEGIN
 		SET @ProcessedDate = GETDATE()
 
 		-- call appropriate SP for each request form
-		IF (@RequestType = 1) -- check in
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ResetRequest_1 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@CurrentStatus = @CurrentStatus
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 2) -- check out
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ResetRequest_2 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@CurrentStatus = @CurrentStatus
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF (@RequestType = 6) -- leave
+		IF @RequestType = 6 -- leave
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ResetRequest_6 @RequestId = @RequestId
 				,@EmpId = @EmpId
@@ -119,7 +97,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		ELSE IF (@RequestType = 7) -- keep in view
+		ELSE IF @RequestType = 7 -- keep in view
 		BEGIN
 			EXEC dbo.WorkingTimeRequest_ResetRequest_7 @RequestId = @RequestId
 				,@EmpId = @EmpId

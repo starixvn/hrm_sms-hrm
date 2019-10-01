@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Reset] @RequestId BIGINT
-	,@RoleId INT
+	,@RoleId TINYINT
 	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT

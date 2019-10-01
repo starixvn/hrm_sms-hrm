@@ -27,6 +27,10 @@ $(function () {
         let requestUrl = _global.root;
 
         switch (requestTypeId) {
+            case RequestType.CheckIn:
+            case RequestType.CheckOut:
+                requestUrl += 'CheckInOut/ProcessRequest';
+                break;
             case RequestType.LateIn:
             case RequestType.EarlyOut:
                 requestUrl += 'LateInEarlyOut/ProcessRequest';
@@ -142,7 +146,7 @@ $(function () {
             dataType: 'html',
             success: function (data) {
                 $('#dialogProcessRequest').html(data);
-
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title);
 
                 let chkIgnoreAll = $('.chk-ignoreAll'),

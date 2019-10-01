@@ -79,27 +79,7 @@ BEGIN
 	BEGIN
 		SET @ProcessedDate = GETDATE()
 
-		IF @RequestType = 1
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_RejectRequest_1] @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF @RequestType = 2
-		BEGIN
-			EXEC [dbo].[WorkingTimeRequest_RejectRequest_2] @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@RoleId = @RoleId
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF @RequestType = 6
+		IF @RequestType = 6
 		BEGIN
 			EXEC [dbo].[WorkingTimeRequest_RejectRequest_6] @RequestId = @RequestId
 				,@EmpId = @EmpId

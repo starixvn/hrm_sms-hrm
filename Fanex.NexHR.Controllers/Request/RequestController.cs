@@ -172,7 +172,7 @@
             {
                 case (int)RequestType.CheckIn:
                 case (int)RequestType.CheckOut:
-                    model.CheckInOutDetail = requestService.GetCheckInOutRequestToIgnoreById(model.RequestId);
+                    model.CheckInOutDetail = requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (int)RequestType.LateIn:

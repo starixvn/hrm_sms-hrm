@@ -3,7 +3,6 @@
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Request.ChangeShift
 @model List<ChangeShiftDetail>
-
 <table class="table table-custom">
     <thead>
         <tr>
@@ -18,35 +17,26 @@
     <tbody>
         @foreach (ChangeShiftDetail item in Model)
         {
-            var scheduleStatus = item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift;
-            var disciplineTypeId = (int)DisciplineType.ChangeShift;
+            var disciplineTypeId = (byte)DisciplineType.ChangeShift;
             <tr>
                 <td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
-                <td>@scheduleStatus</td>
-                @if (scheduleStatus == null || scheduleStatus.Equals(Labels.NA))
-                {
-                    <td>-</td>
-                    <td>-</td>
-                }
-                else
-                {
-                    <td>
-                        @(item.ToShiftId.Equals(-1) ? Labels.Off : item.ToShift)
-                    </td>
-                    if (!string.IsNullOrWhiteSpace(item.Remark))
+                <td>@(item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift)</td>
+                <td>
+                    @(item.ToShiftId.Equals(-1) ? Labels.Off : item.ToShift)
+                </td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(item.Remark))
                     {
-                        <td>
-                            <span class="fa fa-comment tooltip-tipsy" title="@item.Remark"></span>
-                        </td>
+                        <span class="fa fa-comment tooltip-tipsy" title="@item.Remark"></span>
                     }
                     else
                     {
-                        <td>-</td>
+                        <span>-</span>
                     }
-                }
+                </td>
                 <td class="violationIgnored">
                     <input type="radio" class="chk-ignore"
-                           data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                            data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
                 </td>
                 <td class="violationRecorded">
                     <input type="radio" class="chk-record" />
