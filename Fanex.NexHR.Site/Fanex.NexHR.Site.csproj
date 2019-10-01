@@ -259,6 +259,7 @@
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
     <Content Include="wwwroot\dist\js\changeshift.myrequest.js" />
+    <Content Include="wwwroot\dist\js\checkinout.myrequest.js" />
     <Content Include="wwwroot\dist\js\employee.create.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
@@ -357,6 +358,7 @@
     <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
@@ -765,7 +767,6 @@
     <Content Include="Scripts\Views\language.js" />
     <Content Include="Scripts\Views\Report\report.timesheet.js" />
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
-    <Content Include="Scripts\Views\Request\checkinout.byemployee.js" />
     <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\myworkingschedule.js" />
     <Content Include="Scripts\Views\Request\checkinout.request.js" />
@@ -1025,7 +1026,7 @@
     <Content Include="Views\Information\_EditEmergency.cshtml" />
     <Content Include="Views\Information\_ListEmergency.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
-    <Content Include="Views\CheckInOut\ViewHistory.cshtml" />
+    <Content Include="Views\CheckInOut\_ViewHistory.cshtml" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
     <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
@@ -1521,6 +1522,7 @@
     <Content Include="wwwroot\dist\js\changeshift.myrequest.js.map" />
     <Content Include="wwwroot\dist\styles\changeshift.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\checkinout.myrequest.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

@@ -243,12 +243,6 @@
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
     </resourceSet>
 
-    <resourceSet name="empcheckinoutjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Request/checkinout.byemployee.js" />
-    </resourceSet>
-
     <resourceSet name="empleavejs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/libs/jquery.contextmenu.js" />

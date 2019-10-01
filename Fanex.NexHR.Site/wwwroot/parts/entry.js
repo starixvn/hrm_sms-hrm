@@ -83,6 +83,7 @@ module.exports = {
         [`${jsDistPath}/changeshift.create`]: `${jsSourcePath}/request/change-shift/create.js`,
         [`${jsDistPath}/changeshift.edit`]: `${jsSourcePath}/request/change-shift/edit.js`,
         [`${jsDistPath}/changeshift.myrequest`]: `${jsSourcePath}/request/change-shift/myrequest.js`,
-        [`${jsDistPath}/lateinearlyout.myrequest`]: `${jsSourcePath}/request/latein-earlyout/myrequest.js`
+        [`${jsDistPath}/lateinearlyout.myrequest`]: `${jsSourcePath}/request/latein-earlyout/myrequest.js`,
+        [`${jsDistPath}/checkinout.myrequest`]: `${jsSourcePath}/request/checkinout/myrequest.js`
     }
 };

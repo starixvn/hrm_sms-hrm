@@ -51,9 +51,7 @@
                             @RazorHelper.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestTypeId);
                         }
                     </td>
-                    <td>
-                        @request.OnDate.ToDateMonthYearFormatedDate()
-                    </td>
+                    <td>@request.OnDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ShiftName</td>
                     <td>@request.ReasonName</td>
                     <td>
@@ -66,9 +64,18 @@
                             <span>-</span>
                         }
                     </td>
-
-                    <td>@request.VerifiedBy.NickName</td>
-                    <td>@request.ApprovedBy.NickName</td>
+                    <td>
+                        @if (request.VerifiedBy != null)
+                        {
+                            @request.VerifiedBy.NickName
+                        }
+                    </td>
+                    <td>
+                        @if (request.ApprovedBy != null)
+                        {
+                            @request.ApprovedBy.NickName
+                        }
+                    </td>
                     <td>@request.Status.ToString()</td>
                     <td>@request.InsertedDate.ToShortFormatedDate()</td>
                 </tr>

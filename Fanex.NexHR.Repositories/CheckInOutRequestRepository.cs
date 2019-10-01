@@ -9,11 +9,11 @@
 
     public class CheckInOutRequestRepository : ICheckInOutRequestRepository
     {
-        public IList<CheckInOutModel> GetByDate(ICriteria criteria)
+        public IList<CheckInOutRequest> GetByDate(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<CheckInOutModel, Employee, Employee, Employee, Employee, CheckInOutModel>(
+                var entity = db.Query<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -29,11 +29,11 @@
             }
         }
 
-        public CheckInOutModel GetById(ICriteria criteria)
+        public CheckInOutRequest GetById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<CheckInOutModel, Employee, Employee, Employee, Employee, CheckInOutModel>(
+                var entity = db.QueryEntity<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -49,11 +49,11 @@
             }
         }
 
-        public IList<CheckInOutModel> GetHistoryById(ICriteria criteria)
+        public IList<CheckInOutRequest> GetHistoryById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<CheckInOutModel, Employee, Team, Employee, Employee, Employee, CheckInOutModel>(
+                var entity = db.Query<CheckInOutRequest, Employee, Team, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, team, verifier, approver, hr) =>
                         {
                             request.Employee = employee;

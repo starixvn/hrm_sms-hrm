@@ -158,7 +158,7 @@
     <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestParam.cs" />
     <Compile Include="Request\DisciplineReview.cs" />
     <Compile Include="Request\LateInEarlyOutRequest.cs" />
-    <Compile Include="Request\CheckInOutModel.cs" />
+    <Compile Include="Request\CheckInOutRequest.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
     <Compile Include="Request\KeepInViewModel.cs" />
     <Compile Include="Request\LeaveDisciplineDetailModel.cs" />

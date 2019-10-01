@@ -4,7 +4,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    public class CheckInOutModel : BaseRequest
+    public class CheckInOutRequest : BaseRequest
     {
         public DateTime OnDate { get; set; }
 
@@ -22,12 +22,16 @@
                 {
                     case (byte)CheckInOutReasons.VanLate:
                         return Labels.VanLate;
+
                     case (byte)CheckInOutReasons.BusinessTrip:
                         return Labels.BusinessTrip;
+
                     case (byte)CheckInOutReasons.Forgot:
                         return Labels.Forgot;
+
                     case (byte)CheckInOutReasons.Other:
                         return Labels.Other;
+
                     default:
                         return string.Empty;
                 }

@@ -36,16 +36,16 @@
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.CreatedDate.ToShortFormatedDate()</td>
-                    @if (!string.IsNullOrWhiteSpace(request.Remark))
-                    {
-                        <td>
-                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                    }
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark" />
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
                     <td>
                         @if (request.VerifiedBy != null)
                         {

@@ -1,16 +1,19 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models.Request;
 
     public interface ICheckInOutRequestService
     {
-        IList<CheckInOutModel> GetByDate(GetCheckInOutRequestByDateCriteria criteria);
+        IList<CheckInOutRequest> GetByDate(GetCheckInOutRequestByDateCriteria criteria);
 
-        CheckInOutModel GetById(GetCheckInOutRequestByIdCriteria criteria);
+        CheckInOutRequest GetById(long requestId);
 
-        IList<CheckInOutModel> GetHistoryById(GetCheckInOutRequestHistoryByIdCriteria criteria);
+        IList<CheckInOutRequest> GetHistoryById(long requestId);
+
+        CommandResult Delete(long requestId);
 
         void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria);
 

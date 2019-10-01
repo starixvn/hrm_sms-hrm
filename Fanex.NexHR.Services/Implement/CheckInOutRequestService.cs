@@ -4,6 +4,8 @@
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
@@ -18,52 +20,60 @@
         private const string EmailTemplatePathForCheckInOutCancelation = "~/app_data/emails/CheckInOutCancelation.cshtml";
         private readonly IEmployeeRepository employeeRepository;
         private readonly ICheckInOutRequestRepository checkInOutRequestRepository;
+        private readonly IBaseService baseService;
         private readonly IRequestMailService requestMailService;
         private readonly IEmailService emailService;
 
         public CheckInOutRequestService(
             IEmployeeRepository employeeRepository,
             ICheckInOutRequestRepository checkInOutRequestRepository,
+            IBaseService baseService,
             IRequestMailService requestMailService,
             IEmailService emailService)
         {
             this.employeeRepository = employeeRepository;
             this.checkInOutRequestRepository = checkInOutRequestRepository;
+            this.baseService = baseService;
             this.requestMailService = requestMailService;
             this.emailService = emailService;
         }
 
-        public IList<CheckInOutModel> GetByDate(GetCheckInOutRequestByDateCriteria criteria)
+        public IList<CheckInOutRequest> GetByDate(GetCheckInOutRequestByDateCriteria criteria)
         {
-            IList<CheckInOutModel> requests = null;
+            IList<CheckInOutRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
                 requests = checkInOutRequestRepository.GetByDate(criteria);
             }
 
-            return requests ?? new List<CheckInOutModel>();
+            return requests ?? new List<CheckInOutRequest>();
         }
 
-        public CheckInOutModel GetById(GetCheckInOutRequestByIdCriteria criteria)
+        public CheckInOutRequest GetById(long requestId)
         {
-            CheckInOutModel request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetCheckInOutRequestByIdCriteria
             {
-                request = checkInOutRequestRepository.GetById(criteria);
-            }
-
-            return request ?? new CheckInOutModel();
+                RequestId = requestId
+            };
+            return checkInOutRequestRepository.GetById(criteria);
         }
 
-        public IList<CheckInOutModel> GetHistoryById(GetCheckInOutRequestHistoryByIdCriteria criteria)
+        public IList<CheckInOutRequest> GetHistoryById(long requestId)
         {
-            IList<CheckInOutModel> requests = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetCheckInOutRequestHistoryByIdCriteria
             {
-                requests = checkInOutRequestRepository.GetHistoryById(criteria);
-            }
+                RequestId = requestId
+            };
+            return checkInOutRequestRepository.GetHistoryById(criteria);
+        }
 
-            return requests ?? new List<CheckInOutModel>();
+        public CommandResult Delete(long requestId)
+        {
+            var criteria = new DeleteCheckInOutRequestCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public void SendMailForInsertSuccessfully(InsertCheckInOutRequestCriteria criteria)
@@ -152,12 +162,7 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            var criteria = new GetCheckInOutRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var request = GetById(criteria);
-
+            var request = GetById(requestId);
             if (request != null)
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCheckInOutCancelation);
@@ -165,7 +170,7 @@
             }
         }
 
-        public void SendMailForDeleteRequest(CheckInOutModel request, string templateEmailPath)
+        public void SendMailForDeleteRequest(CheckInOutRequest request, string templateEmailPath)
         {
             EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))

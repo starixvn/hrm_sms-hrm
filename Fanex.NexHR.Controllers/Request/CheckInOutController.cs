@@ -1,13 +1,15 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
 
@@ -35,23 +37,18 @@
         }
 
         [HttpGet]
-        public ActionResult EmployeeView()
+        public ActionResult EmployeeView(int? year)
         {
-            return EmployeeView(DateTime.Now.Year);
-        }
-
-        [HttpPost]
-        public ActionResult EmployeeView(int year)
-        {
-            ViewBag.Year = year;
+            int tempYear = year ?? DateTime.Today.Year;
+            ViewBag.Year = tempYear;
             var criteria = new GetCheckInOutRequestByDateCriteria
             {
                 EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31)
+                FromDate = new DateTime(tempYear, 1, 1),
+                ToDate = new DateTime(tempYear, 12, 31)
             };
 
-            var requests = checkInOutRequestService.GetByDate(criteria);
+            IList<CheckInOutRequest> requests = checkInOutRequestService.GetByDate(criteria);
             return View(requests);
         }
 
@@ -119,13 +116,10 @@
 
         public ActionResult Update(int id)
         {
-            var criteria = new GetCheckInOutRequestByIdCriteria
-            {
-                RequestId = id
-            };
-
-            var request = checkInOutRequestService.GetById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
+            CheckInOutRequest request = checkInOutRequestService.GetById(id);
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -200,25 +194,16 @@
         [HttpPost]
         public JsonResult Delete(int id)
         {
-            var criteria = new DeleteCheckInOutRequestCriteria
-            {
-                RequestId = id
-            };
-
             checkInOutRequestService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = checkInOutRequestService.Delete(id);
 
-            return Json(result);
+            return Json(commandResult);
         }
 
         public ActionResult ViewHistory(long id)
         {
-            var criteria = new GetCheckInOutRequestHistoryByIdCriteria
-            {
-                RequestId = id
-            };
-            var requests = checkInOutRequestService.GetHistoryById(criteria);
-            return View(requests);
+            IList<CheckInOutRequest> requests = checkInOutRequestService.GetHistoryById(id);
+            return PartialView("_ViewHistory", requests);
         }
 
         private Shift GetShiftByDate(DateTime date)

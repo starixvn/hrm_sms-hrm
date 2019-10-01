@@ -41,7 +41,7 @@
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
                 return db.Query<ChangeShiftRequest, Employee, Employee, Employee, Employee, ChangeShiftRequest>(
-                    (request, employee, verifier, hr, approver) =>
+                    (request, employee, verifier, approver, hr) =>
                     {
                         request.Employee = employee;
                         request.VerifiedBy = verifier;

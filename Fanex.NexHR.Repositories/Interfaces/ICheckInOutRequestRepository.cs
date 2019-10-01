@@ -6,10 +6,10 @@
 
     public interface ICheckInOutRequestRepository
     {
-        IList<CheckInOutModel> GetByDate(ICriteria criteria);
+        IList<CheckInOutRequest> GetByDate(ICriteria criteria);
 
-        CheckInOutModel GetById(ICriteria criteria);
+        CheckInOutRequest GetById(ICriteria criteria);
 
-        IList<CheckInOutModel> GetHistoryById(ICriteria criteria);
+        IList<CheckInOutRequest> GetHistoryById(ICriteria criteria);
     }
 }
