@@ -1,16 +1,19 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models.Request;
 
     public interface IKeepInViewRequestService
     {
-        IList<KeepInViewModel> GetByDate(GetKeepInViewRequestByDateCriteria criteria);
+        IList<KeepInViewRequest> GetByDate(GetKeepInViewRequestByDateCriteria criteria);
 
-        KeepInViewModel GetById(GetKeepInViewRequestByIdCriteria criteria);
+        KeepInViewRequest GetById(long requestId);
 
-        IList<KeepInViewModel> GetHistoryById(GetKeepInViewRequestHistoryByIdCriteria criteria);
+        IList<KeepInViewRequest> GetHistoryById(long requestId);
+
+        CommandResult Delete(long requestId);
 
         void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria);
 

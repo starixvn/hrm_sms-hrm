@@ -160,7 +160,7 @@
     <Compile Include="Request\LateInEarlyOutRequest.cs" />
     <Compile Include="Request\CheckInOutRequest.cs" />
     <Compile Include="Request\EmployeeLateInEarlyOutModel.cs" />
-    <Compile Include="Request\KeepInViewModel.cs" />
+    <Compile Include="Request\KeepInViewRequest.cs" />
     <Compile Include="Request\LeaveDisciplineDetailModel.cs" />
     <Compile Include="Request\LeaveDisciplineModel.cs" />
     <Compile Include="Request\LeaveModel.cs" />

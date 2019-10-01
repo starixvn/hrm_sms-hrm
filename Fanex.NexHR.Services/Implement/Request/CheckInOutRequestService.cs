@@ -20,20 +20,17 @@
         private const string EmailTemplatePathForRequest = "~/app_data/emails/CheckInOut.Request.cshtml";
         private const string EmailTemplatePathForCancel = "~/app_data/emails/CheckInOut.Cancel.cshtml";
         private const string EmailTemplatePathForApproval = "~/app_data/emails/CheckInOut.Approval.cshtml";
-        private readonly IEmployeeRepository employeeRepository;
         private readonly ICheckInOutRequestRepository checkInOutRequestRepository;
         private readonly IBaseService baseService;
         private readonly IRequestMailService requestMailService;
         private readonly IEmailService emailService;
 
         public CheckInOutRequestService(
-            IEmployeeRepository employeeRepository,
             ICheckInOutRequestRepository checkInOutRequestRepository,
             IBaseService baseService,
             IRequestMailService requestMailService,
             IEmailService emailService)
         {
-            this.employeeRepository = employeeRepository;
             this.checkInOutRequestRepository = checkInOutRequestRepository;
             this.baseService = baseService;
             this.requestMailService = requestMailService;

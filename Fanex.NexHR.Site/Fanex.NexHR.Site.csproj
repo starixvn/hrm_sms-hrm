@@ -265,6 +265,7 @@
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
+    <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js" />
     <Content Include="wwwroot\dist\js\overtime.edit.js" />
     <Content Include="wwwroot\dist\js\overtime.hr.details.js" />
@@ -359,6 +360,7 @@
     <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
@@ -415,7 +417,6 @@
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\keepinview.create.js" />
-    <Content Include="Scripts\Views\Request\keepinview.viewlist.js" />
     <Content Include="Scripts\Views\Request\leave.byemployee.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
@@ -1017,7 +1018,7 @@
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
-    <Content Include="Views\KeepInView\ViewHistory.cshtml" />
+    <Content Include="Views\KeepInView\_ViewHistory.cshtml" />
     <Content Include="Views\Leave\ViewHistory.cshtml" />
     <Content Include="Views\Information\_AddRelationship.cshtml" />
     <Content Include="Views\Information\_ListRelationship.cshtml" />
@@ -1491,7 +1492,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Request\_CriteriaPanelNewLayout.cshtml" />
+    <Content Include="Views\Request\_SearchForm.cshtml" />
     <Content Include="Views\Shared\_NewLayout.cshtml" />
     <Content Include="Views\UI\_NewHeader.cshtml" />
     <Content Include="Views\UI\_NewNavBar.cshtml" />
@@ -1523,6 +1524,7 @@
     <Content Include="wwwroot\dist\styles\changeshift.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\checkinout.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\keepinview.myrequest.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

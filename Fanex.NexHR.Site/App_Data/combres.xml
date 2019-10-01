@@ -145,12 +145,6 @@
       <resource path="~/scripts/views/Request/keepinview.create.js" />
     </resourceSet>
 
-    <resourceSet name="keepinviewviewlistjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Request/keepinview.viewlist.js" />
-    </resourceSet>
-
     <resourceSet name="holidayjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/holiday.js" />

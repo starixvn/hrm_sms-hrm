@@ -1,12 +1,13 @@
 ﻿namespace Fanex.NexHR.Controllers.Request
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
@@ -27,6 +28,21 @@
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
+        }
+
+        [HttpGet]
+        public ActionResult EmployeeView(int? year)
+        {
+            int tempYear = year ?? DateTime.Today.Year;
+            ViewBag.Year = tempYear;
+            var criteria = new GetKeepInViewRequestByDateCriteria
+            {
+                EmpId = sessionService.Employee.Id,
+                FromDate = new DateTime(tempYear, 1, 1),
+                ToDate = new DateTime(tempYear, 12, 31)
+            };
+            IList<KeepInViewRequest> requests = keepInViewRequestService.GetByDate(criteria);
+            return View(requests);
         }
 
         public ActionResult Create()
@@ -96,12 +112,10 @@
 
         public ActionResult Update(long id)
         {
-            var criteria = new GetKeepInViewRequestByIdCriteria
-            {
-                RequestId = id
-            };
-            KeepInViewModel request = keepInViewRequestService.GetById(criteria);
-            if (request == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id))
+            KeepInViewRequest request = keepInViewRequestService.GetById(id);
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -177,49 +191,18 @@
         }
 
         [HttpPost]
-        public JsonResult Delete(int id)
+        public CustomJsonResult Delete(int id)
         {
-            var criteria = new DeleteKeepInViewRequestCriteria
-            {
-                RequestId = id
-            };
-
             keepInViewRequestService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = keepInViewRequestService.Delete(id);
 
-            return Json(result);
-        }
-
-        [HttpGet]
-        public ActionResult EmployeeView()
-        {
-            return EmployeeView(DateTime.Now.Year);
-        }
-
-        [HttpPost]
-        public ActionResult EmployeeView(int year)
-        {
-            ViewBag.Year = year;
-
-            var criteria = new GetKeepInViewRequestByDateCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31)
-            };
-
-            var requests = keepInViewRequestService.GetByDate(criteria);
-            return View(requests);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult ViewHistory(long id)
         {
-            var criteria = new GetKeepInViewRequestHistoryByIdCriteria
-            {
-                RequestId = id
-            };
-            var requests = keepInViewRequestService.GetHistoryById(criteria);
-            return View(requests);
+            IList<KeepInViewRequest> requests = keepInViewRequestService.GetHistoryById(id);
+            return PartialView("_ViewHistory", requests);
         }
     }
 }

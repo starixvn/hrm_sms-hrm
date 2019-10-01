@@ -2,68 +2,78 @@
 {
     using System.Collections.Generic;
     using System.Web;
-    using Core;
-    using Core.Enums;
-    using Criteria.Employee;
-    using Criteria.Request.KeepInView;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Criteria.Request.KeepInView;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using Hangfire;
-    using Models;
-    using Resources;
 
-    public class KeepInViewRequestService: IKeepInViewRequestService
+    public class KeepInViewRequestService : IKeepInViewRequestService
     {
         private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
         private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
         protected readonly IEmployeeRepository employeeRepository;
         protected readonly IKeepInViewRequestRepository keepInViewRequestRepository;
+        private readonly IBaseService baseService;
         protected readonly IRequestMailService requestMailService;
         protected readonly IEmailService emailService;
 
         public KeepInViewRequestService(
             IEmployeeRepository employeeRepository,
             IKeepInViewRequestRepository keepInViewRequestRepository,
+            IBaseService baseService,
             IRequestMailService requestMailService,
             IEmailService emailService)
         {
             this.employeeRepository = employeeRepository;
             this.keepInViewRequestRepository = keepInViewRequestRepository;
+            this.baseService = baseService;
             this.requestMailService = requestMailService;
             this.emailService = emailService;
         }
 
-        public IList<KeepInViewModel> GetByDate(GetKeepInViewRequestByDateCriteria criteria)
+        public IList<KeepInViewRequest> GetByDate(GetKeepInViewRequestByDateCriteria criteria)
         {
-            IList<KeepInViewModel> requests = null;
+            IList<KeepInViewRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
                 requests = keepInViewRequestRepository.GetByDate(criteria);
             }
 
-            return requests ?? new List<KeepInViewModel>();
+            return requests ?? new List<KeepInViewRequest>();
         }
 
-        public KeepInViewModel GetById(GetKeepInViewRequestByIdCriteria criteria)
+        public KeepInViewRequest GetById(long requestId)
         {
-            KeepInViewModel request = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetKeepInViewRequestByIdCriteria
             {
-                request = keepInViewRequestRepository.GetById(criteria);
-            }
-
-            return request ?? new KeepInViewModel();
+                RequestId = requestId
+            };
+            return keepInViewRequestRepository.GetById(criteria);
         }
 
-        public IList<KeepInViewModel> GetHistoryById(GetKeepInViewRequestHistoryByIdCriteria criteria)
+        public IList<KeepInViewRequest> GetHistoryById(long requestId)
         {
-            IList<KeepInViewModel> requests = null;
-            if (criteria != null && criteria.IsValid())
+            var criteria = new GetKeepInViewRequestHistoryByIdCriteria
             {
-                requests = keepInViewRequestRepository.GetHistoryById(criteria);
-            }
+                RequestId = requestId
+            };
+            return keepInViewRequestRepository.GetHistoryById(criteria);
+        }
 
-            return requests ?? new List<KeepInViewModel>();
+        public CommandResult Delete(long requestId)
+        {
+            var criteria = new DeleteKeepInViewRequestCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria)
@@ -146,11 +156,7 @@
 
         public void SendMailForDeleteSuccessfully(long requestId)
         {
-            var criteria = new GetKeepInViewRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var request = GetById(criteria);
+            var request = GetById(requestId);
 
             if (request != null)
             {
@@ -159,7 +165,7 @@
             }
         }
 
-        public void SendMailForeleteRequest(KeepInViewModel request, string templateEmailPath)
+        public void SendMailForeleteRequest(KeepInViewRequest request, string templateEmailPath)
         {
             EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))

@@ -9,11 +9,11 @@
 
     public class KeepInViewRequestRepository: IKeepInViewRequestRepository
     {
-        public IList<KeepInViewModel> GetByDate(ICriteria criteria)
+        public IList<KeepInViewRequest> GetByDate(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<KeepInViewModel, Employee, Employee, Employee, Employee, KeepInViewModel>(
+                var entity = db.Query<KeepInViewRequest, Employee, Employee, Employee, Employee, KeepInViewRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -29,11 +29,11 @@
             }
         }
 
-        public KeepInViewModel GetById(ICriteria criteria)
+        public KeepInViewRequest GetById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<KeepInViewModel, Employee, Employee, Employee, Employee, KeepInViewModel>(
+                var entity = db.QueryEntity<KeepInViewRequest, Employee, Employee, Employee, Employee, KeepInViewRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Employee = employee;
@@ -49,11 +49,11 @@
             }
         }
 
-        public IList<KeepInViewModel> GetHistoryById(ICriteria criteria)
+        public IList<KeepInViewRequest> GetHistoryById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<KeepInViewModel, Employee, Team, Employee, Employee, Employee, KeepInViewModel>(
+                var entity = db.Query<KeepInViewRequest, Employee, Team, Employee, Employee, Employee, KeepInViewRequest>(
                         (request, employee, team, verifier, approver, hr) =>
                         {
                             request.Employee = employee;

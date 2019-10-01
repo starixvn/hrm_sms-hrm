@@ -194,12 +194,12 @@
         }
 
         [HttpPost]
-        public JsonResult Delete(int id)
+        public CustomJsonResult Delete(int id)
         {
             checkInOutRequestService.SendMailAfterDeleteRequest(id);
             CommandResult commandResult = checkInOutRequestService.Delete(id);
 
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult ViewHistory(long id)

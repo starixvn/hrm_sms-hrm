@@ -4,7 +4,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
-    public class KeepInViewModel : BaseRequest
+    public class KeepInViewRequest : BaseRequest
     {
         public byte KeepInViewTypeId { get; set; }
 

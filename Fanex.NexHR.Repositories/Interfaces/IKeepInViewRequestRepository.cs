@@ -6,10 +6,10 @@
 
     public interface IKeepInViewRequestRepository
     {
-        IList<KeepInViewModel> GetByDate(ICriteria criteria);
+        IList<KeepInViewRequest> GetByDate(ICriteria criteria);
 
-        KeepInViewModel GetById(ICriteria criteria);
+        KeepInViewRequest GetById(ICriteria criteria);
 
-        IList<KeepInViewModel> GetHistoryById(ICriteria criteria);
+        IList<KeepInViewRequest> GetHistoryById(ICriteria criteria);
     }
 }
