@@ -9,13 +9,13 @@
 
     public class LeaveRequestRepository: ILeaveRequestRepository
     {
-        public IList<LeaveModel> GetByDate(ICriteria criteria)
+        public IList<LeaveRequest> GetByDate(ICriteria criteria)
         {
             using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    var leaves = multi.Read<LeaveModel, LeaveType, Employee, Employee, Employee, Employee, LeaveModel>(
+                    var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
@@ -27,13 +27,13 @@
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").ToList();
 
-                    IEnumerable<LeaveDetailModel> leaveDetails = multi.Read<LeaveDetailModel>();
+                    IEnumerable<LeaveRequestDetail> leaveDetails = multi.Read<LeaveRequestDetail>();
                     return MappingLeaveDetail(leaves, leaveDetails);
                 }
             }
         }
 
-        private static IList<LeaveModel> MappingLeaveDetail(IList<LeaveModel> leaves, IEnumerable<LeaveDetailModel> leaveDetails)
+        private static IList<LeaveRequest> MappingLeaveDetail(IList<LeaveRequest> leaves, IEnumerable<LeaveRequestDetail> leaveDetails)
         {
             foreach (var leave in leaves)
             {
@@ -43,13 +43,13 @@
             return leaves;
         }
 
-        public LeaveModel GetById(ICriteria criteria)
+        public LeaveRequest GetById(ICriteria criteria)
         {
             using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    var leave = multi.Read<LeaveModel, LeaveType, Employee, Employee, Employee, Employee, LeaveModel> (
+                    var leave = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest> (
                         (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
@@ -61,7 +61,7 @@
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
 
-                    IEnumerable<LeaveDetailModel> leaveDetails = multi.Read<LeaveDetailModel>();
+                    IEnumerable<LeaveRequestDetail> leaveDetails = multi.Read<LeaveRequestDetail>();
                     leave.LeaveDetail = leaveDetails.ToList();
                     
                     return leave;
@@ -69,11 +69,11 @@
             }
         }
 
-        public IList<LeaveModel> GetHistoryById(ICriteria criteria)
+        public IList<LeaveRequest> GetHistoryById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<LeaveModel, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveModel>(
+                var entity = db.Query<LeaveRequest, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, team, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;

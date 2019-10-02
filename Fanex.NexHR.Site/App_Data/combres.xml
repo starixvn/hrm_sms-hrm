@@ -214,11 +214,6 @@
       <resource path="~/styles/Calendar/report.employeeshift.css" />
     </resourceSet>
 
-    <resourceSet name="myrequestcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/myrequest.css" />
-    </resourceSet>
-
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />
@@ -235,12 +230,6 @@
     <resourceSet name="monthpickcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-    </resourceSet>
-
-    <resourceSet name="empleavejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/jquery.contextmenu.js" />
-      <resource path="~/scripts/views/Request/leave.byemployee.js" />
     </resourceSet>
 
     <resourceSet name="managercheckinoutjs" type="js">

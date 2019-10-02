@@ -6,10 +6,10 @@
 
     public interface ILeaveRequestRepository
     {
-        IList<LeaveModel> GetByDate(ICriteria criteria);
+        IList<LeaveRequest> GetByDate(ICriteria criteria);
 
-        LeaveModel GetById(ICriteria criteria);
+        LeaveRequest GetById(ICriteria criteria);
 
-        IList<LeaveModel> GetHistoryById(ICriteria criteria);
+        IList<LeaveRequest> GetHistoryById(ICriteria criteria);
     }
 }

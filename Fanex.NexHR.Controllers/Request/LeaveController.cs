@@ -45,6 +45,24 @@
             this.commonDataService = commonDataService;
         }
 
+        [HttpGet]
+        public ActionResult EmployeeView(int? year)
+        {
+            int tempYear = year ?? DateTime.Today.Year;
+            var criteria = new GetLeaveRequestByDateCriteria
+            {
+                EmpId = sessionService.Employee.Id,
+                FromDate = new DateTime(tempYear, 1, 1),
+                ToDate = new DateTime(tempYear, 12, 31)
+            };
+
+            IList<LeaveRequest> leaves = leaveRequestService.GetByDate(criteria);
+
+            ViewBag.Year = tempYear;
+            ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
+            return View(leaves);
+        }
+
         public ActionResult Create()
         {
             var model = new LeaveRequestViewModel
@@ -70,7 +88,7 @@
         public ActionResult Create(string request, string requestDetails)
         {
             InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
-            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
+            List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = sessionService.Employee.Id;
 
@@ -83,9 +101,9 @@
             return Json(result);
         }
 
-        public ActionResult Update(long requestId)
+        public ActionResult Update(long id)
         {
-            LeaveModel request = leaveRequestService.GetById(requestId);
+            LeaveRequest request = leaveRequestService.GetById(id);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             if (model == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId))
             {
@@ -94,7 +112,7 @@
 
             model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = commonDataService.GetLeaveType();
-            model.EmployeeLeaveBalance = GetLeaveBalance(requestId, null);
+            model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
             model.VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id);
 
             ViewBag.IsView = false;
@@ -109,7 +127,7 @@
         public ActionResult Update(string request, string requestDetails)
         {
             UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
-            List<LeaveDetailModel> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveDetailModel>(requestDetails);
+            List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = sessionService.Employee.Id;
 
@@ -122,9 +140,9 @@
             return Json(result);
         }
 
-        public ActionResult Detail(int requestId)
+        public ActionResult Detail(long id)
         {
-            LeaveModel request = leaveRequestService.GetById(requestId);
+            LeaveRequest request = leaveRequestService.GetById(id);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.VerifierAndApprover = GetVerifierApprover(request.Employee.Id, request);
@@ -136,46 +154,18 @@
         }
 
         [HttpPost]
-        public JsonResult Delete(int id)
+        public CustomJsonResult Delete(long id)
         {
-            var criteria = new DeleteLeaveRequestCriteria
-            {
-                RequestId = id
-            };
-
             leaveRequestService.SendMailForDeleteSuccessfully(id);
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            CommandResult commandResult = leaveRequestService.Delete(id);
 
-            return Json(result);
-        }
-
-        [HttpGet]
-        public ActionResult EmployeeView()
-        {
-            return EmployeeView(DateTime.Now.Year);
-        }
-
-        [HttpPost]
-        public ActionResult EmployeeView(int year)
-        {
-            var criteria = new GetLeaveRequestByDateCriteria
-            {
-                EmpId = sessionService.Employee.Id,
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 12, 31)
-            };
-
-            var leaves = leaveRequestService.GetByDate(criteria);
-
-            ViewBag.Year = year;
-            ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
-            return View(leaves);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult ViewHistory(long id)
         {
-            IList<LeaveModel> requests = leaveRequestService.GetHistoryById(id);
-            return View(requests);
+            IList<LeaveRequest> requests = leaveRequestService.GetHistoryById(id);
+            return PartialView("_ViewHistory", requests);
         }
 
         public ActionResult GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
@@ -200,7 +190,7 @@
                 EmpId = employeeId
             };
             IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
-            IList<LeaveDetailModel> leaveRequestDetail = new List<LeaveDetailModel>();
+            IList<LeaveRequestDetail> leaveRequestDetail = new List<LeaveRequestDetail>();
             if (requestId != -1)
             {
                 leaveRequestDetail = leaveRequestService.GetLeaveRequestDetailById(requestId);
@@ -216,13 +206,13 @@
             return View(model);
         }
 
-        private List<LeaveDetailModel> ConvertToLeaveRequestDetail(
+        private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
             IList<WorkingCalendarModel> workingCalendars,
-            IList<LeaveDetailModel> leaveRequestDetailInput,
+            IList<LeaveRequestDetail> leaveRequestDetailInput,
             DateTime fromDate,
             DateTime toDate)
         {
-            var leaveRequestDetailOutput = new List<LeaveDetailModel>();
+            var leaveRequestDetailOutput = new List<LeaveRequestDetail>();
             if (fromDate <= toDate)
             {
                 var numberDays = (toDate - fromDate).Days + 1;
@@ -231,7 +221,7 @@
                 for (int i = 0; i < numberDays; i++)
                 {
                     tempDate = fromDate.AddDays(i);
-                    IEnumerable<LeaveDetailModel> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.OnDate == tempDate));
+                    IEnumerable<LeaveRequestDetail> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.OnDate == tempDate));
                     IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
 
                     if (tempWokingCalendars != null && tempWokingCalendars.Any())
@@ -250,12 +240,12 @@
         }
 
         private void AddLeaveRequestExistCalendar(
-           List<LeaveDetailModel> leaveRequestDetailOutput,
-           IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
+           List<LeaveRequestDetail> leaveRequestDetailOutput,
+           IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
            WorkingCalendarModel tempWokingCalendar)
         {
             string tempScheduleStatus = string.Empty;
-            LeaveDetailModel tempLeaveDetailModel = null;
+            LeaveRequestDetail tempLeaveDetailModel = null;
             var isOffOrHoliday = tempWokingCalendar.IsOffDay || tempWokingCalendar.IsHoliday;
 
             if (!tempWokingCalendar.IsLeaveDay)
@@ -280,7 +270,7 @@
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
             {
-                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
+                foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
@@ -292,7 +282,7 @@
             }
             else
             {
-                tempLeaveDetailModel = new LeaveDetailModel
+                tempLeaveDetailModel = new LeaveRequestDetail
                 {
                     OnDate = tempWokingCalendar.WorkDate,
                     ScheduleStatus = tempScheduleStatus,
@@ -305,16 +295,16 @@
         }
 
         private void AddLeaveRequestNotExistCalendar(
-            List<LeaveDetailModel> leaveRequestDetailOutput,
-            IEnumerable<LeaveDetailModel> tempLeaveDetailModels,
+            List<LeaveRequestDetail> leaveRequestDetailOutput,
+            IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
             DateTime workDate)
         {
             string tempScheduleStatus = Labels.NA;
-            LeaveDetailModel tempLeaveDetailModel = null;
+            LeaveRequestDetail tempLeaveDetailModel = null;
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
             {
-                foreach (LeaveDetailModel leaveDetail in tempLeaveDetailModels)
+                foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
@@ -325,7 +315,7 @@
             }
             else
             {
-                tempLeaveDetailModel = new LeaveDetailModel
+                tempLeaveDetailModel = new LeaveRequestDetail
                 {
                     OnDate = workDate,
                     ScheduleStatus = Labels.NA,
@@ -336,7 +326,7 @@
             }
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, LeaveModel request = null)
+        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, LeaveRequest request = null)
         {
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.Leave);
 
@@ -368,7 +358,7 @@
             return supervisor;
         }
 
-        private LeaveRequestViewModel ConvertRequestToModel(LeaveModel request)
+        private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
         {
             LeaveRequestViewModel model = null;
             if (request != null)

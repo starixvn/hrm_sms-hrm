@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
@@ -37,18 +38,18 @@
             this.emailService = emailService;
         }
 
-        public IList<LeaveModel> GetByDate(GetLeaveRequestByDateCriteria criteria)
+        public IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria)
         {
-            IList<LeaveModel> requests = null;
+            IList<LeaveRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
                 requests = leaveRequestRepository.GetByDate(criteria);
             }
 
-            return requests ?? new List<LeaveModel>();
+            return requests ?? new List<LeaveRequest>();
         }
 
-        public LeaveModel GetById(long requestId)
+        public LeaveRequest GetById(long requestId)
         {
             var criteria = new GetLeaveRequestByIdCriteria
             {
@@ -57,16 +58,16 @@
             return leaveRequestRepository.GetById(criteria);
         }
 
-        public IList<LeaveDetailModel> GetLeaveRequestDetailById(long requestId)
+        public IList<LeaveRequestDetail> GetLeaveRequestDetailById(long requestId)
         {
             var criteria = new GetLeaveRequestDetailByIdCriteria
             {
                 RequestId = requestId
             };
-            return baseService.GetData<LeaveDetailModel>(criteria).ToList();
+            return baseService.GetData<LeaveRequestDetail>(criteria).ToList();
         }
 
-        public IList<LeaveModel> GetHistoryById(long requestId)
+        public IList<LeaveRequest> GetHistoryById(long requestId)
         {
             var criteria = new GetLeaveRequestHistoryByIdCriteria
             {
@@ -78,6 +79,15 @@
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
             return baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
+        }
+
+        public CommandResult Delete(long requestId)
+        {
+            var criteria = new DeleteLeaveRequestCriteria
+            {
+                RequestId = requestId
+            };
+            return baseService.ExecuteNonQuery(criteria);
         }
 
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria)
@@ -113,7 +123,7 @@
             {
                 RequestId = requestId
             };
-            LeaveModel request = leaveRequestRepository.GetById(criteria);
+            LeaveRequest request = leaveRequestRepository.GetById(criteria);
 
             if (request != null)
             {
@@ -122,7 +132,7 @@
             }
         }
 
-        public void SendMailForCancelRequest(LeaveModel request, string templateEmailPath)
+        public void SendMailForCancelRequest(LeaveRequest request, string templateEmailPath)
         {
             EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
@@ -141,24 +151,24 @@
             }
         }
 
-        public DateTime GetFromTimeHalfDay(IList<LeaveDetailModel> leaveDetails)
+        public DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
             var fromTime = DateTime.Now;
-            if (leaveDetails.Any())
+            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == 1 && t.IsHalfDay);
+            if (leaveHalfDay != null)
             {
-                var leaveHalfDay = leaveDetails.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
                 fromTime = leaveHalfDay.FromTime;
             }
 
             return fromTime;
         }
 
-        public DateTime GetToTimeHalfDay(IList<LeaveDetailModel> leaveDetails)
+        public DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
             var toTime = DateTime.Now;
-            if (leaveDetails.Any())
+            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == 1 && t.IsHalfDay);
+            if (leaveHalfDay != null)
             {
-                var leaveHalfDay = leaveDetails.FirstOrDefault(t => (t.WorkType == 1 && t.IsHalfDay));
                 toTime = leaveHalfDay.ToTime;
             }
 

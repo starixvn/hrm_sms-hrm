@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
@@ -9,13 +10,13 @@
 
     public interface ILeaveRequestService
     {
-        IList<LeaveModel> GetByDate(GetLeaveRequestByDateCriteria criteria);
+        IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria);
 
-        LeaveModel GetById(long requestId);
+        LeaveRequest GetById(long requestId);
 
-        IList<LeaveDetailModel> GetLeaveRequestDetailById(long requestId);
+        IList<LeaveRequestDetail> GetLeaveRequestDetailById(long requestId);
 
-        IList<LeaveModel> GetHistoryById(long requestId);
+        IList<LeaveRequest> GetHistoryById(long requestId);
 
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
@@ -25,8 +26,10 @@
 
         void SendMailForDeleteSuccessfully(long requestId);
 
-        DateTime GetFromTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
+        DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
 
-        DateTime GetToTimeHalfDay(IList<LeaveDetailModel> leaveDetails);
+        DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
+
+        CommandResult Delete(long requestId);
     }
 }

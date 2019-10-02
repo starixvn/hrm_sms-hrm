@@ -24,8 +24,8 @@
     </thead>
     @if (Model != null && Model.Any())
     {
+        int index = 1;
         <tbody>
-            @{int index = 1;}
             @foreach (LateInEarlyOutRequest request in Model)
             {
                 var totalMins = request.RequestTypeId == (int)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;

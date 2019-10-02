@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Constants;
 
-    public class LeaveModel : BaseRequest
+    public class LeaveRequest : BaseRequest
     {
         public DateTime FromDate { get; set; }
 
@@ -14,7 +14,7 @@
 
         public LeaveType LeaveType { get; set; }
 
-        public IList<LeaveDetailModel> LeaveDetail { get; set; }
+        public IList<LeaveRequestDetail> LeaveDetail { get; set; }
 
         public bool IsHalfDay => TotalDays == Constants.HalfDayOffValue;
     }

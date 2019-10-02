@@ -267,6 +267,7 @@
     <Content Include="wwwroot\dist\js\home.index.js" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js" />
+    <Content Include="wwwroot\dist\js\leave.myrequest.js" />
     <Content Include="wwwroot\dist\js\overtime.edit.js" />
     <Content Include="wwwroot\dist\js\overtime.hr.details.js" />
     <Content Include="wwwroot\dist\js\overtime.hr.index.js" />
@@ -304,6 +305,8 @@
     <Content Include="wwwroot\dist\styles\employee.postnatal.js" />
     <Content Include="wwwroot\dist\styles\home.index.css" />
     <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.css" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.js" />
     <Content Include="wwwroot\dist\styles\overtime.details.css" />
     <Content Include="wwwroot\dist\styles\overtime.details.js" />
     <Content Include="wwwroot\dist\styles\overtime.edit.css" />
@@ -362,6 +365,7 @@
     <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\keepinview\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
@@ -417,7 +421,6 @@
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\keepinview.create.js" />
-    <Content Include="Scripts\Views\Request\leave.byemployee.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
@@ -826,7 +829,6 @@
     <Content Include="Styles\memo.details.css" />
     <Content Include="Styles\memo.edit.css" />
     <Content Include="Styles\fullcalendar.css" />
-    <Content Include="Styles\myrequest.css" />
     <Content Include="Styles\employee.defaultschedule.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
@@ -1019,7 +1021,7 @@
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
     <Content Include="Views\KeepInView\_ViewHistory.cshtml" />
-    <Content Include="Views\Leave\ViewHistory.cshtml" />
+    <Content Include="Views\Leave\_ViewHistory.cshtml" />
     <Content Include="Views\Information\_AddRelationship.cshtml" />
     <Content Include="Views\Information\_ListRelationship.cshtml" />
     <Content Include="Views\Information\_EditRelationship.cshtml" />
@@ -1525,6 +1527,9 @@
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\checkinout.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\request\leave\myrequest.scss" />
+    <Content Include="wwwroot\dist\js\leave.myrequest.js.map" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

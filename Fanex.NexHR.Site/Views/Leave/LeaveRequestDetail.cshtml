@@ -1,5 +1,6 @@
 ﻿@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Core.Constants;
+@using Fanex.NexHR.Core.Constants
+@using Fanex.NexHR.Models.Request;
 @model LeaveDetailViewModel
 @{
     Layout = null;
@@ -23,7 +24,7 @@
         double totalAnnualLeave = 0;
         double totalUnpaidLeave = 0;
         <tbody>
-            @foreach (LeaveDetailModel item in Model.LeaveRequestDetail)
+            @foreach (LeaveRequestDetail item in Model.LeaveRequestDetail)
             {
                 if (!item.IsOffOrHoliday)
                 {

@@ -90,8 +90,18 @@
                             <span>-</span>
                         }
                     </td>
-                    <td>@request.VerifiedBy.NickName</td>
-                    <td>@request.ApprovedBy.NickName</td>
+                    <td>
+                        @if (request.VerifiedBy != null)
+                        {
+                            @request.VerifiedBy.NickName
+                        }
+                    </td>
+                    <td>
+                        @if (request.ApprovedBy != null)
+                        {
+                            @request.ApprovedBy.NickName
+                        }
+                    </td>
                     <td>@request.CreatedDate.ToShortFormatedDate()</td>
                     <td>@RenderStatus(request)</td>
                     <td>

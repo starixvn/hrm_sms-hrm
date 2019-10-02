@@ -43,7 +43,7 @@
         public string RefNo { get; set; }
 
         [SpParam(Ignored = true)]
-        public IList<LeaveDetailModel> RequestDetail { get; set; }
+        public IList<LeaveRequestDetail> RequestDetail { get; set; }
 
         public string ListDetail
         {

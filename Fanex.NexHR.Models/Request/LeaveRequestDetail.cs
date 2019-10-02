@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class LeaveDetailModel
+    public class LeaveRequestDetail
     {
         public long RequestId { get; set; }
 

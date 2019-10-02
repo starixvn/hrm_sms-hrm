@@ -6,7 +6,7 @@
 
     public class LeaveDetailViewModel
     {
-        public IList<LeaveDetailModel> LeaveRequestDetail { get; set; }
+        public IList<LeaveRequestDetail> LeaveRequestDetail { get; set; }
 
         public IList<LeaveType> LeaveTypeList { get; set; }
     }
