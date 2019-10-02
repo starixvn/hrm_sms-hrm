@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models.Request;
@@ -15,10 +16,20 @@
 
         CommandResult Delete(long requestId);
 
-        void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria);
+        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
 
-        void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria);
+        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
 
-        void SendMailForDeleteSuccessfully(long requestId);
+        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
+
+        void SendMailCreateRequest(long requestId);
+
+        void SendMailEditRequest(long requestId);
+
+        void SendMailDeleteRequest(long requestId);
+
+        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

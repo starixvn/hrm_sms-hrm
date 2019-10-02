@@ -45,8 +45,6 @@
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert" SpName="WorkingTimeRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Update_KeepInViewRequest" SpName="WorkingTimeRequest_Update_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Insert_KeepInViewRequest" SpName="WorkingTimeRequest_Insert_KeepInViewRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ResetRequest_byMember" SpName="WorkingTimeRequest_ResetRequest_byMember" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetNumberRequestInMonth" SpName="WorkingTimeRequest_GetNumberRequestInMonth" DbName="nexhrx" Plain="0"></Setting>
@@ -407,6 +405,10 @@
     <Setting Key="KeepInViewRequest_Insert" SpName="KeepInViewRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="KeepInViewRequest_Update" SpName="KeepInViewRequest_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="KeepInViewRequest_Delete" SpName="KeepInViewRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="KeepInViewRequest_Approve" SpName="KeepInViewRequest_Approve" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="KeepInViewRequest_Reject" SpName="KeepInViewRequest_Reject" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="KeepInViewRequest_Reset" SpName="KeepInViewRequest_Reset" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="KeepInViewRequest_VoidBySA" SpName="KeepInViewRequest_VoidBySA" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="KeepInViewRequest_GetByDate" SpName="KeepInViewRequest_GetByDate" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="VerifierId" ObjectProperty="Id" />

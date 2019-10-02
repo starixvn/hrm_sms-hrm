@@ -6,7 +6,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request.KeepInView;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -16,22 +15,20 @@
 
     public class KeepInViewRequestService : IKeepInViewRequestService
     {
-        private const string _KeepInViewRequestEmailTpl = "~/app_data/emails/KeepInViewRequest.cshtml";
-        private const string _EmailTemplatePathForKeepInViewCancelation = "~/app_data/emails/KeepInViewCancelation.cshtml";
-        protected readonly IEmployeeRepository employeeRepository;
-        protected readonly IKeepInViewRequestRepository keepInViewRequestRepository;
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/KeepInView.Request.cshtml";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/KeepInView.Cancel.cshtml";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/KeepInView.Approval.cshtml";
+        private readonly IKeepInViewRequestRepository keepInViewRequestRepository;
         private readonly IBaseService baseService;
-        protected readonly IRequestMailService requestMailService;
-        protected readonly IEmailService emailService;
+        private readonly IRequestMailService requestMailService;
+        private readonly IEmailService emailService;
 
         public KeepInViewRequestService(
-            IEmployeeRepository employeeRepository,
             IKeepInViewRequestRepository keepInViewRequestRepository,
             IBaseService baseService,
             IRequestMailService requestMailService,
             IEmailService emailService)
         {
-            this.employeeRepository = employeeRepository;
             this.keepInViewRequestRepository = keepInViewRequestRepository;
             this.baseService = baseService;
             this.requestMailService = requestMailService;
@@ -76,110 +73,168 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria)
+        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
         {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
-        }
-
-        public void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria)
-        {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(_KeepInViewRequestEmailTpl);
-            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
-        }
-
-        public void SendMailForInsertSuccessfully(InsertKeepInViewRequestCriteria criteria, string templateEmailPath)
-        {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
+            var criteria = new ApproveKeepInViewRequestCriteria
             {
-                EmpId = criteria.EmpId
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
             };
-            Employee employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.InsertedKeepInViewEmailSubject,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate());
-
-            email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate(),
-                criteria.Remark,
-                ConfigSettings.ApplicationDomain);
-
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
+            return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailForUpdateSuccessfully(UpdateKeepInViewRequestCriteria criteria, string templateEmailPath)
+        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
+            var criteria = new ResetKeepInViewRequestCriteria
             {
-                EmpId = criteria.EmpId
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                ActorId = actorId
             };
-            Employee employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.UpdatedKeepInViewEmailSubject,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate());
-
-            email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate(),
-                criteria.Remark,
-                ConfigSettings.ApplicationDomain);
-
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
+            return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailForDeleteSuccessfully(long requestId)
+        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
         {
-            var request = GetById(requestId);
+            var criteria = new RejectKeepInViewRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
 
+        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new VoidKeepInViewRequestCriteria
+            {
+                RequestId = param.RequestId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public void SendMailCreateRequest(long requestId)
+        {
+            KeepInViewRequest request = GetById(requestId);
             if (request != null)
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInViewCancelation);
-                BackgroundJob.Enqueue(() => SendMailForeleteRequest(request, templateEmailPath));
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.New);
+
+                email.Subject = string.Format(
+                    "{0} {1} on {2}",
+                    Messages.InsertedKeepInViewEmailSubject,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate());
+
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
 
-        public void SendMailForeleteRequest(KeepInViewRequest request, string templateEmailPath)
+        public void SendMailEditRequest(long requestId)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (int)SettingsSendMail.Cancel);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            KeepInViewRequest request = GetById(requestId);
+            if (request != null)
             {
-                var subject = string.Format(Messages.MessageKeepInViewRequest, request.Employee.NickName);
-                var body = Utilities.ReadTextFile(templateEmailPath);
-                body = string.Format(
-                    body,
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Edit);
+                email.Subject = string.Format(
+                    "{0} {1} on {2}",
+                    Messages.UpdatedKeepInViewEmailSubject,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate());
+
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
+        }
+
+        public void SendMailDeleteRequest(long requestId)
+        {
+            KeepInViewRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                email.Subject = string.Format(Messages.MessageKeepInViewRequest, request.Employee.NickName);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
                     email.SendToNickName,
                     string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName),
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark);
 
-                emailService.SendEmail(email.Sender, email.SendTo, email.SendCC, subject, body);
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
+        }
+
+        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        {
+            KeepInViewRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                string commandMessage = requestMailService.GetCommandMessage(command);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
+                email.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.DisplayName,
+                    commandMessage,
+                    actor.DisplayName,
+                    request.RequestTypeName,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.ShiftName,
+                    request.Remark);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
     }

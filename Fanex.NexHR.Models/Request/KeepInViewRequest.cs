@@ -21,9 +21,11 @@
             get
             {
                 return KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay
-                    ? Labels.ByDay 
+                    ? Labels.ByDay
                     : Labels.ByHour;
             }
         }
+
+        public string ShiftName { get; set; }
     }
 }

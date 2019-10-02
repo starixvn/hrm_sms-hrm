@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
-    using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -21,20 +20,17 @@
         private const string EmailTemplatePathForRequest = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
         private const string EmailTemplatePathForCancel = "~/app_data/emails/LateInEarlyOut.Cancel.cshtml";
         private const string EmailTemplatePathForApproval = "~/app_data/emails/LateInEarlyOut.Approval.cshtml";
-        private readonly IEmployeeRepository employeeRepository;
         private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
         private readonly IRequestMailService requestMailService;
         private readonly IEmailService emailService;
         private readonly IBaseService baseService;
 
         public LateInEarlyOutRequestService(
-            IEmployeeRepository employeeRepository,
             ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
             IRequestMailService requestMailService,
             IEmailService emailService,
             IBaseService baseService)
         {
-            this.employeeRepository = employeeRepository;
             this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository;
             this.requestMailService = requestMailService;
             this.emailService = emailService;
@@ -132,119 +128,100 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria)
-        {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
-        }
-
-        public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria)
-        {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
-        }
-
-        public void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
-        {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
-            {
-                EmpId = criteria.EmpId
-            };
-            Employee employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.LateInEarlyOutEmailSubject,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate());
-
-            email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                criteria.RequestType == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
-                criteria.OnDate.ToDateMonthYearFormatedDate(),
-                criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                criteria.Remark,
-                ConfigSettings.ApplicationDomain);
-
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
-        }
-
-        public void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria, string templateEmailPath)
-        {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
-
-            var getEmployeeByIdCriteria = new GetEmployeeByIdCriteria
-            {
-                EmpId = criteria.EmpId
-            };
-            Employee employee = employeeRepository.GetEmployeeById(getEmployeeByIdCriteria);
-
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.UpdatedLateInEarlyOutEmailSubject,
-                employee.NickName,
-                criteria.OnDate.ToDateMonthYearFormatedDate());
-
-            email.Body = Utilities.ReadTextFile(templateEmailPath);
-            email.Body = string.Format(
-                email.Body,
-                email.SendToNickName,
-                employee.NickName,
-                criteria.RequestType == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
-                criteria.OnDate.ToDateMonthYearFormatedDate(),
-                criteria.RequestType == (short)RequestType.LateIn ? criteria.LateInMins : criteria.EarlyOutMins,
-                criteria.Remark,
-                ConfigSettings.ApplicationDomain);
-
-            emailService.SendEmail(
-                ConfigSettings.EmailSetting,
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
-        }
-
-        public void SendMailForDeleteSuccessfully(long requestId)
+        public void SendMailCreateRequest(long requestId)
         {
             LateInEarlyOutRequest request = GetById(requestId);
             if (request != null)
             {
-                var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                BackgroundJob.Enqueue(() => SendMailForDeleteRequest(request, templateEmailPath));
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.New);
+                email.Subject = string.Format(
+                    "{0} {1} on {2}",
+                    Messages.LateInEarlyOutEmailSubject,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate());
+
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    request.RequestTypeId == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
 
-        public void SendMailForDeleteRequest(LateInEarlyOutRequest request, string templateEmailPath)
+        public void SendMailEditRequest(long requestId)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Cancel);
-            if (!string.IsNullOrWhiteSpace(email.SendTo))
+            LateInEarlyOutRequest request = GetById(requestId);
+            if (request != null)
             {
-                var subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Employee.NickName);
-                var body = Utilities.ReadTextFile(templateEmailPath);
-                body = string.Format(
-                    body,
-                   email.SendToNickName,
-                    string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName),
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Edit);
+                email.Subject = string.Format(
+                    "{0} {1} on {2}",
+                    Messages.UpdatedLateInEarlyOutEmailSubject,
+                    request.Employee.NickName,
+                    request.OnDate.ToDateMonthYearFormatedDate());
+
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.NickName,
+                    request.RequestTypeId == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
+                    request.OnDate.ToDateMonthYearFormatedDate(),
+                    request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
+                    request.Remark,
+                    ConfigSettings.ApplicationDomain);
+
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
+            }
+        }
+
+        public void SendMailDeleteRequest(long requestId)
+        {
+            LateInEarlyOutRequest request = GetById(requestId);
+            if (request != null)
+            {
+                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                email.Subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Employee.NickName);
+                email.Body = Utilities.ReadTextFile(emailTemplatePath);
+                email.Body = string.Format(
+                    email.Body,
+                    email.SendToNickName,
+                    request.Employee.DisplayName,
                     request.RequestTypeName,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                emailService.SendEmail(email.Sender, email.SendTo, email.SendCC, subject, body);
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
 
-        public void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
             LateInEarlyOutRequest request = GetById(requestId);
             if (request != null)
@@ -252,7 +229,7 @@
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.LateIn
                     ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Employee.NickName, commandMessage, actor.Nickname)

@@ -167,10 +167,14 @@
     <Compile Include="Request\CheckInOut\RejectCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\ResetCheckInOutRequestCriteria.cs" />
     <Compile Include="Request\CheckInOut\VoidCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\ApproveKeepInViewRequestCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
     <Compile Include="Request\KeepInView\DeleteKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\RejectKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\ResetKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\VoidKeepInViewRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\ApproveLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\DeleteLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByDateCriteria.cs" />

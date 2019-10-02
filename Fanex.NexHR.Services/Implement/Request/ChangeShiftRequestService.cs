@@ -234,7 +234,7 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailAfterCreateRequest(long requestId)
+        public void SendMailCreateRequest(long requestId)
         {
             ChangeShiftRequest request = GetById(requestId);
             if (request != null)
@@ -266,13 +266,13 @@
             }
         }
 
-        public void SendMailAfterEditRequest(long requestId)
+        public void SendMailEditRequest(long requestId)
         {
             ChangeShiftRequest request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Edit);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Edit);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -298,13 +298,13 @@
             }
         }
 
-        public void SendMailAfterDeleteRequest(long requestId)
+        public void SendMailDeleteRequest(long requestId)
         {
             ChangeShiftRequest request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Cancel);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Employee.NickName);
@@ -325,7 +325,7 @@
             }
         }
 
-        public void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
             ChangeShiftRequest request = GetById(requestId);
             if (request != null)
@@ -333,7 +333,7 @@
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Employee.NickName, commandMessage, actor.Nickname);

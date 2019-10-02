@@ -3,13 +3,11 @@
     using System;
     using System.Linq;
     using System.Web;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
-    using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
@@ -25,21 +23,17 @@
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
 
         private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
-        private const string _EmailTemplatePathForKeepInView = "~/app_data/emails/KeepInViewApproval.cshtml";
 
         #endregion constant
 
         private readonly IRequestRepository requestRepository;
-        private readonly IBaseService baseService;
         private readonly IEmailService emailService;
 
         public RequestMailService(
             IRequestRepository requestRepository,
-            IBaseService baseService,
             IEmailService emailService)
         {
             this.requestRepository = requestRepository;
-            this.baseService = baseService;
             this.emailService = emailService;
         }
 
@@ -362,23 +356,7 @@
 
         private static string GetEmailTemplatePath(short requestType)
         {
-            string path;
-            switch (requestType)
-            {
-                case (short)RequestType.Leave:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave);
-                    break;
-
-                case (short)RequestType.KeepInView:
-                    path = HttpContext.Current.Server.MapPath(_EmailTemplatePathForKeepInView);
-                    break;
-
-                default:
-                    path = string.Empty;
-                    break;
-            }
-
-            return path;
+            return requestType == (short)RequestType.Leave ? HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave) : string.Empty;
         }
 
         private void SendToRelatedPeople(
@@ -388,20 +366,10 @@
             EmailModel emailModel,
             string templateEmailPath)
         {
-            switch (request.RequestType.Id)
+            if (request.RequestType.Id == (short)RequestType.Leave)
             {
-                case (short)RequestType.Leave:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, request.Requester.NickName, command, actor.Nickname);
-                    LeaveRelatedMail(command, actor, request, emailModel, templateEmailPath);
-                    break;
-
-                case (short)RequestType.KeepInView:
-                    emailModel.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Requester.NickName, command, actor.Nickname);
-                    KeepInViewRelatedMail(command, actor, request, emailModel, templateEmailPath);
-                    break;
-
-                default:
-                    return;
+                emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, request.Requester.NickName, command, actor.Nickname);
+                LeaveRelatedMail(command, actor, request, emailModel, templateEmailPath);
             }
         }
 
@@ -425,34 +393,6 @@
                 request.RequestType.Name,
                 forDate,
                 request.LeaveType.Name,
-                request.Remark);
-
-            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
-        }
-
-        private void KeepInViewRelatedMail(
-            string command,
-            EmployeeSession actor,
-            RequestEntity request,
-            EmailModel emailModel,
-            string templateEmailPath)
-        {
-            var criteria = new GetEmployeeShiftByDateCriteria
-            {
-                EmployeeId = request.Requester.Id,
-                Date = request.FromDate
-            };
-            var shift = baseService.GetDataEntity<Shift>(criteria);
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            body = string.Format(
-                body,
-                emailModel.SendToNickName,
-                request.Requester.DisplayName,
-                command,
-                actor.DisplayName,
-                request.RequestType.Name,
-                request.FromDate.ToDateMonthYearFormatedDate(),
-                shift != null ? shift.Name : string.Empty,
                 request.Remark);
 
             emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);

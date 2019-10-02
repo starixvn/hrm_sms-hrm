@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
@@ -97,7 +97,7 @@
 
                     if (result.IsSuccessful)
                     {
-                        lateInEarlyOutRequestService.SendMailForInsertSuccessfully(criteria);
+                        lateInEarlyOutRequestService.SendMailCreateRequest(result.OutputId);
                         ViewBag.Requested = true;
                     }
                     else
@@ -169,7 +169,7 @@
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
-                        lateInEarlyOutRequestService.SendMailForUpdateSuccessfully(criteria);
+                        lateInEarlyOutRequestService.SendMailEditRequest(model.RequestId);
                         ViewBag.Updated = true;
                     }
                     else
@@ -185,7 +185,7 @@
         [HttpPost]
         public CustomJsonResult Delete(int id)
         {
-            lateInEarlyOutRequestService.SendMailForDeleteSuccessfully(id);
+            lateInEarlyOutRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = lateInEarlyOutRequestService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -245,7 +245,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                lateInEarlyOutRequestService.SendMailAfterProcessRequest(model.RequestId, sessionService.Employee, model.Command);
+                lateInEarlyOutRequestService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
             }
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);

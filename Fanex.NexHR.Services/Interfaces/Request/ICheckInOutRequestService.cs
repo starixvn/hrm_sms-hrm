@@ -24,12 +24,12 @@
 
         CommandResult VoidRequest(int actorId, ProcessRequestParam param);
 
-        void SendMailAfterCreateRequest(long requestId);
+        void SendMailCreateRequest(long requestId);
 
-        void SendMailAfterEditRequest(long requestId);
+        void SendMailEditRequest(long requestId);
 
-        void SendMailAfterDeleteRequest(long requestId);
+        void SendMailDeleteRequest(long requestId);
 
-        void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

@@ -26,12 +26,12 @@
 
         CommandResult VoidRequest(int actorId, ProcessRequestParam param);
 
-        void SendMailForInsertSuccessfully(InsertLateInEarlyOutRequestCriteria criteria);
+        void SendMailCreateRequest(long requestId);
 
-        void SendMailForUpdateSuccessfully(UpdateLateInEarlyOutRequestCriteria criteria);
+        void SendMailEditRequest(long requestId);
 
-        void SendMailForDeleteSuccessfully(long requestId);
+        void SendMailDeleteRequest(long requestId);
 
-        void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

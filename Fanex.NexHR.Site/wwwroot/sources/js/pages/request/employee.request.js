@@ -38,6 +38,9 @@ $(function () {
             case RequestType.ChangeShift:
                 requestUrl += 'ChangeShift/ProcessRequest';
                 break;
+            case RequestType.KeepInView:
+                requestUrl += 'KeepInView/ProcessRequest';
+                break;
             default:
                 requestUrl += 'request/ProcessRequest';
                 break;

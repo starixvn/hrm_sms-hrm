@@ -280,7 +280,6 @@
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Insert_KeepInViewRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline.sql" />
@@ -334,7 +333,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetForSync.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_Update_KeepInViewRequest.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetEmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetForSync.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetGroupInfo.sql" />

@@ -103,7 +103,7 @@
 
                     if (result.IsSuccessful)
                     {
-                        checkInOutRequestService.SendMailAfterCreateRequest(model.RequestId);
+                        checkInOutRequestService.SendMailCreateRequest(model.RequestId);
                         ViewBag.Requested = true;
                     }
                     else
@@ -180,7 +180,7 @@
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
                     if (result.IsSuccessful)
                     {
-                        checkInOutRequestService.SendMailAfterEditRequest(model.RequestId);
+                        checkInOutRequestService.SendMailEditRequest(model.RequestId);
                         ViewBag.Updated = true;
                     }
                     else
@@ -196,7 +196,7 @@
         [HttpPost]
         public CustomJsonResult Delete(int id)
         {
-            checkInOutRequestService.SendMailAfterDeleteRequest(id);
+            checkInOutRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = checkInOutRequestService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -242,7 +242,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                checkInOutRequestService.SendMailAfterProcessRequest(model.RequestId, sessionService.Employee, model.Command);
+                checkInOutRequestService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
             }
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);

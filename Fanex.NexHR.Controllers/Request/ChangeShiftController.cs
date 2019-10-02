@@ -72,7 +72,7 @@
             CommandResult commandResult = changeShiftService.Create(sessionService.Employee.Id, model);
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailAfterCreateRequest(commandResult.OutputId);
+                changeShiftService.SendMailCreateRequest(commandResult.OutputId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -126,7 +126,7 @@
             CommandResult commandResult = changeShiftService.Edit(sessionService.Employee.Id, model);
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailAfterEditRequest(model.RequestId);
+                changeShiftService.SendMailEditRequest(model.RequestId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -134,7 +134,7 @@
 
         public CustomJsonResult Delete(long id)
         {
-            changeShiftService.SendMailAfterDeleteRequest(id);
+            changeShiftService.SendMailDeleteRequest(id);
             CommandResult commandResult = changeShiftService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -235,7 +235,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailAfterProcessRequest(model.RequestId, sessionService.Employee, model.Command);
+                changeShiftService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
             }
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);

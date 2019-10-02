@@ -123,7 +123,7 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailAfterCreateRequest(long requestId)
+        public void SendMailCreateRequest(long requestId)
         {
             CheckInOutRequest request = GetById(requestId);
             if (request != null)
@@ -157,7 +157,7 @@
             }
         }
 
-        public void SendMailAfterEditRequest(long requestId)
+        public void SendMailEditRequest(long requestId)
         {
             var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
             CheckInOutRequest request = GetById(requestId);
@@ -191,17 +191,17 @@
             }
         }
 
-        public void SendMailAfterDeleteRequest(long requestId)
+        public void SendMailDeleteRequest(long requestId)
         {
             CheckInOutRequest request = GetById(requestId);
             if (request != null)
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, (byte)SettingsSendMail.Cancel);
-                var subject = string.Format(Messages.MessageCheckInOutRequest, request.RequestTypeName, request.Employee.NickName);
-                var body = Utilities.ReadTextFile(templateEmailPath);
-                body = string.Format(
-                    body,
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                email.Subject = string.Format(Messages.MessageCheckInOutRequest, request.RequestTypeName, request.Employee.NickName);
+                email.Body = Utilities.ReadTextFile(templateEmailPath);
+                email.Body = string.Format(
+                    email.Body,
                     email.SendToNickName,
                     string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName),
                     request.RequestTypeName.ToLowerInvariant(),
@@ -210,11 +210,16 @@
                     request.RequestTime.ToShortTime(),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(email.Sender, email.SendTo, email.SendCC, subject, body));
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    email.SendTo,
+                    email.SendCC,
+                    email.Subject,
+                    email.Body));
             }
         }
 
-        public void SendMailAfterProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
             CheckInOutRequest request = GetById(requestId);
             if (request != null)
@@ -222,7 +227,7 @@
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToAndMailCC(request.RequestId, action);
+                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.CheckIn
                     ? string.Format(Messages.ApprovalNotificationCheckInSubject, request.Employee.NickName, commandMessage, actor.Nickname)
