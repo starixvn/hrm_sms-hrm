@@ -16,6 +16,7 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelService : IExportExcelService
     {
+        private const string DefaultSheetName = "sheet1";
         private const int _RowStartBodyLeaveSummary = 4;
         private const int _RowStartBodyWorkingTimeRequest = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
@@ -34,8 +35,8 @@
                 hssfworkbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "LeaveSummary");
+            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
+            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "LeaveSummary");
 
             //// render hearder
             var rowTakeLeave = sheet.GetRow(2);
@@ -117,8 +118,8 @@
                 hssfworkbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", title);
+            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
+            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, title);
             var rowIndex = _RowStartBodyWorkingTimeRequest;
             var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
 
@@ -149,8 +150,8 @@
                 hssfworkbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet("sheet1");
-            var sheet = hssfworkbook.CloneSheet("sheet1", "WorkingCalendar");
+            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
+            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "WorkingCalendar");
             var rowIndex = _RowStartBodyWorkingCalendar;
 
             var rowDate = sheet.GetRow(1);

@@ -32,6 +32,7 @@
 
         public const byte TotalWeekendLeaveLimit = 16;
         public const decimal HalfDayOffValue = 0.5M;
+        public const short DefaultRequestFilterStatusId = -2;
         public const short PendingAndVerifiedStatusId = -1;
         public const short OffDayShiftId = -1;
 

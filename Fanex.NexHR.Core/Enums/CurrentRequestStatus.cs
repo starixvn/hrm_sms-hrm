@@ -8,24 +8,24 @@
         NA = 0,
 
         [StringValue("Pending")]
-        Pending = 1,
+        Pending,
 
         [StringValue("Verified")]
-        Verified = 2,
+        Verified,
 
         [StringValue("NotVerified")]
-        NotVerified = 3,
+        NotVerified,
 
         [StringValue("Approved")]
-        Approved = 4,
+        Approved,
 
         [StringValue("Rejected")]
-        Rejected = 5,
+        Rejected,
 
         [StringValue("Processed")]
-        Processed = 6,
+        Processed,
 
         [StringValue("Void")]
-        Void = 7
+        Void
     }
 }

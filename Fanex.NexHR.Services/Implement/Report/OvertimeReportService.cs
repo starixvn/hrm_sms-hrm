@@ -408,6 +408,7 @@
             dynamic templateIndex)
         {
             const byte TotalFixedColumns = 9;
+            const byte TotalNormalDayColumns = 3;
             var colIndex = 1;
             var fromDate = dateRanges.Min(x => x.Date);
             var toDate = dateRanges.Max(x => x.Date);
@@ -427,7 +428,7 @@
                 }
                 else
                 {
-                    var toColumn = colIndex + 3;
+                    var toColumn = colIndex + TotalNormalDayColumns;
                     template.Cells[1, templateIndex.startNormalDayColumn, 1, templateIndex.endNormalDayColumn]
                         .Copy(worksheet.Cells[1, colIndex, 1, toColumn]);
                     worksheet.Cells[1, colIndex].Value = date.Date.ToString("dd-MMM");
@@ -435,7 +436,7 @@
                         .Copy(worksheet.Cells[templateIndex.headerRow, colIndex, templateIndex.headerRow, toColumn]);
                 }
 
-                colIndex += date.IsHoliday ? 1 : 3;
+                colIndex += date.IsHoliday ? 1 : TotalNormalDayColumns;
             }
         }
 

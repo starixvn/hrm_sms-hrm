@@ -40,7 +40,9 @@
             var sourceRow = sourceSheet.GetRow(sourceRowIndex);
             if (sourceRow == null)
             {
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                 return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
             }
 
             var newRow = sheet.GetRow(destRowIndex) ?? sheet.CreateRow(destRowIndex);

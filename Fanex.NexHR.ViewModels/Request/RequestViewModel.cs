@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Models;
@@ -17,7 +18,7 @@
         public int DateOption { get; set; }
 
         [Display(Name = "Status")]
-        public int StatusId { get; set; } = -2;
+        public int StatusId { get; set; } = Constants.DefaultRequestFilterStatusId;
 
         [Required]
         [DataType(DataType.Date)]
@@ -60,8 +61,7 @@
                 string statusIds;
                 switch (StatusId)
                 {
-                    case -1:
-                        // status = -1 --> pending and verified (1,2)
+                    case Constants.PendingAndVerifiedStatusId:
                         statusIds = "1,2";
                         break;
 
@@ -116,7 +116,7 @@
         {
             get
             {
-                if (StatusId == -2)
+                if (StatusId == Constants.DefaultRequestFilterStatusId)
                 {
                     isFilterByAffectedDate = ViewType != RequestViewType.PersonalSpace;
                 }

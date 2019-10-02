@@ -20,6 +20,7 @@
 
     public class RequestController : BaseController
     {
+        private const string EmployeeRequestViewName = "EmployeeRequest";
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly IRequestMailService requestMailService;
@@ -55,18 +56,13 @@
             return date;
         }
 
-        public PartialViewResult CriteriaPanel(RequestViewModel request)
-        {
-            return PartialView(request);
-        }
-
         [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
         [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
 
-            if (request.StatusId == -2)
+            if (request.StatusId == Constants.DefaultRequestFilterStatusId)
             {
                 request.StatusId = Constants.PendingAndVerifiedStatusId;
                 request.FromDate = DateTime.Now.Date.AddDays(-60);
@@ -74,36 +70,36 @@
             }
             GetRequests(request);
 
-            return View("EmployeeRequest", request);
+            return View(EmployeeRequestViewName, request);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
-            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
+            request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
             GetRequests(request);
 
-            return View("EmployeeRequest", request);
+            return View(EmployeeRequestViewName, request);
         }
 
         public ActionResult DailyView(RequestViewModel request)
         {
-            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
+            request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.CompanySpace;
             GetRequests(request);
 
-            return View("EmployeeRequest", request);
+            return View(EmployeeRequestViewName, request);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
         public ActionResult VoidRequest(RequestViewModel request)
         {
-            request.StatusId = request.StatusId == -2 ? 0 : request.StatusId;
+            request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.SASpace;
             GetRequests(request);
 
-            return View("EmployeeRequest", request);
+            return View(EmployeeRequestViewName, request);
         }
 
         public JsonResult GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)

@@ -1205,7 +1205,6 @@
     <Content Include="Views\Report\Timesheet.cshtml" />
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
     <Content Include="Views\UI\GlobalScript.cshtml" />
-    <Content Include="Views\Request\CriteriaPanel.cshtml" />
     <Content Include="Views\UI\StatusDropDownList.cshtml" />
     <Content Include="Views\LateInEarlyOut\EmployeeView.cshtml" />
     <Content Include="Views\ChangeShift\EmployeeView.cshtml" />
