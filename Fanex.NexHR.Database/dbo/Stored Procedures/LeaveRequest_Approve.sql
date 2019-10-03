@@ -1,10 +1,9 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestID BIGINT
-	,@RoleID INT
-	,@IgnoredDetails NVARCHAR(MAX) = NULL
+CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
+	,@RoleId TINYINT
+	,@DisciplineXml NVARCHAR(MAX) = NULL
 	,@Comment NVARCHAR(500) = ''
-	,@ProcessedBy INT
-	,@ProcessedDate DATETIME
+	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -12,63 +11,105 @@ AS
 Created: Quinn.Vo@20150925
 Task: approve leave request.
 DB: HRM_SMS
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
+    @DisciplineXml: 
+        <Root>
+            <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
+        </Root>
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @FromDate DATETIME
 		,@ToDate DATETIME
 		,@maxDate DATETIME
 		,@minDate DATETIME
 		,@result BIT
+		,@ProcessedDate DATETIME = GETDATE()
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 	DECLARE @EmpId INT
 		,@RequestType SMALLINT
-		,@Status TINYINT
+		,@StatusId TINYINT
 		,@TotalDay INT
 		,@VerifierId INT
 		,@ApproverId INT
 		,@HRId INT
-		,@VerifiedStatus INT
-		,@ApprovedStatus INT
-		,@HRStatus INT
 
-	-- get employee and requestype of the request
-	SELECT TOP 1 @EmpId = EmpId
-		,@Status = [CurrentStatus]
+	SELECT @EmpId = EmpId
+		,@StatusId = CurrentStatus
 		,@VerifierId = VerifierId
-		,@VerifiedStatus = VerifiedStatus
 		,@ApproverId = ApproverId
-		,@ApprovedStatus = ApprovedStatus
 		,@HRId = HRId
-		,@HRStatus = HRStatus
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE RequestID = @RequestId
+	WHERE RequestId = @RequestId
 
 	SELECT @FromDate = FromDate
 		,@ToDate = ToDate
-	FROM dbo.LeaveRequest lr WITH (NOLOCK)
-	WHERE lr.RequestID = @RequestID
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
-	IF (
-			@Status NOT IN (1, 2)
-				OR @ApproverId <> @ProcessedBy
+	IF @RoleId = @VerifierRoleId
+		AND (
+			@StatusId <> @PendingStatusId
+			OR @VerifierId <> @ActorId
 			)
 	BEGIN
-		SET @ErrCode = 103
+		SET @ErrCode = 100
+		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
+
+		RETURN
+	END
+
+	IF @RoleId = @ApproverRoleId
+		AND (
+			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
+			OR @ApproverId <> @ActorId
+			)
+	BEGIN
+		SET @ErrCode = 101
 		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
 
 		RETURN
 	END
 
-	SELECT @maxDate = MAX(workdate)
-		,@minDate = MIN(workdate)
+	IF @RoleId = @HRRoleId
+		AND (
+			@StatusId <> @ApprovedStatusId
+			OR NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeRole WITH (NOLOCK)
+				WHERE EmployeeId = @ActorId
+					AND RoleId IN (@HRRoleId, @SystemAdminRoleId)
+				)
+			)
+	BEGIN
+		SET @ErrCode = 102
+		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
+
+		RETURN
+	END
+
+	SELECT @maxDate = MAX(WorkDate)
+		,@minDate = MIN(WorkDate)
 	FROM dbo.EmployeeCalendar WITH (NOLOCK)
-	WHERE empid = @empid
-		AND workdate BETWEEN @fromdate
+	WHERE EmpId = @empid
+		AND WorkDate BETWEEN @fromdate
 			AND @todate
 
 	IF @minDate IS NULL
@@ -76,16 +117,11 @@ BEGIN
 		OR @fromdate <> @minDate
 		OR @todate <> @maxDate
 	BEGIN
-		EXEC [dbo].[EmployeeCalendar_Insert] @empid = @empid
+		EXEC dbo.EmployeeCalendar_Insert @empid = @empid
 			,@fromdate = @FromDate
 			,@todate = @todate
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
-
-		SET @ErrCode = 108
-		SET @ErrMsg = 'The working calendar does not exist. Please contact HR for more info.'
-
-		RETURN
 	END
 
 	DECLARE @TotalDays_tmp NUMERIC(5, 1)
@@ -95,46 +131,44 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.LeaveRequestDetail WITH (NOLOCK)
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 			)
 	BEGIN
 		SELECT @TotalDays_tmp = SUM(CASE lrd.IsHalfDay
 					WHEN 1 THEN 0.5
 					ELSE 1
 					END)
-		FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON lrd.OnDate = cl.WorkDate
-			AND lrd.EmpId = cl.EmpId
-			INNER JOIN dbo.LeaveType AS l WITH (NOLOCK) ON lrd.LeaveType = l.LeaveTypeId
-		WHERE lrd.RequestID = @RequestId
-			AND cl.IsHoliday = 0
-			AND cl.IsOffDay = 0
+		FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON lrd.OnDate = empca.WorkDate
+			AND lrd.EmpId = empca.EmpId
+			AND lrd.RequestId = @RequestId
 			AND lrd.WorkType = 2
-			AND l.IsALDeduction = 1
+			INNER JOIN dbo.LeaveType AS ltype WITH (NOLOCK) ON lrd.LeaveType = ltype.LeaveTypeId
+			AND ltype.IsALDeduction = 1
+		WHERE empca.IsHoliday = 0
+			AND empca.IsOffDay = 0
 	END
 	ELSE
 	BEGIN
 		SET @isRquestDetail = 0
 
 		SELECT @TotalDays_tmp = SUM(1)
-		FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON (
-				cl.WorkDate BETWEEN CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.FromDate, 111))
-					AND CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.ToDate, 111))
-				)
-			AND lr.EmpId = cl.EmpId
-			INNER JOIN dbo.LeaveType AS l WITH (NOLOCK) ON lr.LeaveType = l.LeaveTypeId
-		WHERE lr.RequestId = @RequestId
-			AND cl.IsHoliday = 0
-			AND cl.IsOffDay = 0
-			AND l.IsALDeduction = 1
+		FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
+			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.RequestId = @RequestId
+			AND lr.EmpId = empca.EmpId
+			AND empca.WorkDate BETWEEN CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.FromDate, 111))
+				AND CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.ToDate, 111))
+			INNER JOIN dbo.LeaveType AS ltype WITH (NOLOCK) ON lr.LeaveType = ltype.LeaveTypeId
+			AND ltype.IsALDeduction = 1
+		WHERE empca.IsHoliday = 0
+			AND empca.IsOffDay = 0
 	END
 
 	SET @TotalDays_tmp = ISNULL(@TotalDays_tmp, 0)
 
-	SELECT @TotalDays_tmpbal = SUM(tmp.TotalDays)
-	FROM dbo.tmpLeaveBalance AS tmp WITH (NOLOCK)
-	WHERE tmp.RequestID = @RequestId
+	SELECT @TotalDays_tmpbal = SUM(TotalDays)
+	FROM dbo.tmpLeaveBalance WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	IF (
 			@TotalDays_tmp <> @TotalDays_tmpbal
@@ -146,111 +180,85 @@ BEGIN
 			AND @TotalDays_tmpbal <> 0.5
 			)
 	BEGIN
-		SET @ErrCode = 108
+		SET @ErrCode = 103
 		SET @ErrMsg = 'Could not approved this request because this employee''s calendar have been changed.'
 
 		RETURN
 	END
 
-	SET XACT_ABORT ON;
-
 	BEGIN TRY
 		BEGIN TRANSACTION;
-		
-		IF @RoleID = 2 --Verifier
+
+		IF @RoleId = @VerifiedStatusId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 2
-				,VerifiedStatus = 2
-				,VerifierId = @ProcessedBy
+			SET CurrentStatus = @VerifiedStatusId
+				,VerifiedStatus = @VerifiedStatusId
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 3 --Approver
+		ELSE IF @RoleId = @ApprovedStatusId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 4
-				,ApprovedStatus = 2
+			SET CurrentStatus = @ApprovedStatusId
+				,ApprovedStatus = @VerifiedStatusId
 				,ApproverComment = @Comment
-				,ApproverId = @ProcessedBy
+				,ApproverId = @ActorId
 				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
-			
-			EXECUTE dbo.DisciplineRequestTrans_Insert @RequestId = @RequestId
-				,@ModifiedBy = @ProcessedBy
-				,@IgnoredDetails = @IgnoredDetails
+			WHERE RequestId = @RequestId
+
+			EXEC dbo.DisciplineRequestTrans_Insert @RequestId = @RequestId
+				,@ModifiedBy = @ActorId
+				,@IgnoredDetails = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 
-			EXECUTE dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
+			EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 				,@EmpId
-				,@ProcessedBy
+				,@ActorId
 
-			EXECUTE dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
+			EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
 				,@EmpId
 				,@FromDate
 				,@ToDate
-				,@ProcessedBy
+				,@ActorId
 
-			EXECUTE dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
-				,@EmpID = @EmpID
+			EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
+				,@EmpId = @EmpId
 				,@Status = 1
-				
-			EXECUTE [dbo].EmployeeAttendance_ProcessingAndInsert @EmpId
+
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
 				,1
 		END
-		ELSE IF @RoleID = 6 --HR
+		ELSE IF @RoleId = @HRRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 6
-				,HRStatus = 2
-				,HRId = @ProcessedBy
+			SET CurrentStatus = @ProcessedStatusId
+				,HRStatus = @VerifiedStatusId
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 		END
 
-		EXECUTE dbo.LeaveRequest_WriteLog @RequestID
-				,@Comment
+		EXEC dbo.LeaveRequest_WriteLog @RequestId
+			,@Comment
 
 		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0;
 	END TRY
 
 	BEGIN CATCH
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Approve process failed'
+		SELECT @ErrCode = 104
+			,@ErrMsg = 'Aprrove unsuccessfully.'
 
 		ROLLBACK TRANSACTION
 	END CATCH
-
-	IF @ErrCode = 0
-	BEGIN
-		-- write log
-		DECLARE @LogSPData VARCHAR(4000)
-			,@now DATETIME
-			,@Description VARCHAR(200)
-
-		SET @now = GETDATE()
-
-		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" ' + 'ApprovedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" ' + 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" ' + 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" ' + 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" ' + 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
-
-		SELECT @Description = 'Approve Request:' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1))
-
-		EXEC dbo.Log_WriteLog @LogActionID = 1
-			,@LogDate = @now
-			,@Description = @Description
-			,@TrackingValue = @LogSPData
-			,@UserID = @ProcessedBy
-			,@EmpID = @EmpID
-	END
 END

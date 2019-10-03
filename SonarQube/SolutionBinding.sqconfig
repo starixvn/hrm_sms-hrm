@@ -1,5 +1,5 @@
 {
-  "ServerUri": "http://sonarqube.nexdev.net/",
+  "ServerUri": "https://sonarqube.nexdev.net/",
   "Organization": null,
   "ProjectKey": "SMSHRM",
   "ProjectName": "Nexus / SMS HRM",

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
@@ -20,16 +21,26 @@
 
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
-        void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria);
-
-        void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria);
-
-        void SendMailForDeleteSuccessfully(long requestId);
-
         DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
 
         DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
 
         CommandResult Delete(long requestId);
+
+        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
+
+        void SendMailCreateRequest(InsertLeaveRequestCriteria criteria);
+
+        void SendMailEditRequest(UpdateLeaveRequestCriteria criteria);
+
+        void SendMailDeleteRequest(long requestId);
+
+        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

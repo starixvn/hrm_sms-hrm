@@ -1,105 +1,118 @@
 ﻿
 CREATE PROCEDURE [dbo].[LeaveRequest_Reject] @RequestId BIGINT
-	,@EmpId INT
-	,@ProcessedBy INT
-	,@ProcessedDate DATETIME
-	,@RoleID INT
+	,@ActorId INT
+	,@RoleId TINYINT
+	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Quinn.Vo@20150929
-Task: disapprove leave request
+Task: reject leave request
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @FromDate DATETIME
-		,@ToDate DATETIME
-
-	SELECT @FromDate = lr.FromDate
-		,@ToDate = lr.ToDate
-	FROM dbo.LeaveRequest lr WITH (NOLOCK)
-		LEFT JOIN dbo.LeaveRequestDetail lrd WITH (NOLOCK) ON lr.RequestId = lrd.RequestId
-	WHERE lr.RequestID = @RequestID
-
 	SET XACT_ABORT ON;
+
+	DECLARE @EmpId INT
+		,@FromDate DATETIME
+		,@ToDate DATETIME
+		,@ProcessedDate DATETIME = GETDATE()
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
+
+	SELECT @EmpId = lr.EmpId
+		,@FromDate = lr.FromDate
+		,@ToDate = lr.ToDate
+	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
+		LEFT JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON lr.RequestId = lrd.RequestId
+	WHERE lr.RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		IF @RoleID = 2 -- Not Verifier
+		IF @RoleId = @VerifierRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 3
-				,VerifiedStatus = 3
-				,VerifierId = @ProcessedBy
+			SET CurrentStatus = @NotVerifiedStatusId
+				,VerifiedStatus = @NotVerifiedStatusId
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 3 --Reject
+		ELSE IF @RoleId = @ApproverRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 5
-				,ApprovedStatus = 3
-				,ApproverId = @ProcessedBy
+			SET CurrentStatus = @RejectedStatusId
+				,ApprovedStatus = @NotVerifiedStatusId
+				,ApproverId = @ActorId
 				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleID = 6 --Void
+		ELSE IF @RoleId = @HRRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 7
-				,HRStatus = 3
-				,HRId = @ProcessedBy
+			SET CurrentStatus = @VoidStatusId
+				,HRStatus = @NotVerifiedStatusId
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
+			WHERE RequestId = @RequestId
 
-			EXECUTE dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
+			EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
-			EXECUTE [dbo].[WorkingTimeRequest_LeaveReject_RollbackCalendar] @RequestID
+			EXEC dbo.WorkingTimeRequest_LeaveReject_RollbackCalendar @RequestId
 				,@EmpId
-				,@ProcessedBy
+				,@ActorId
 
-			EXECUTE [dbo].[AnnualLeave_DeleteTransactionByRequestId] @RequestId
+			EXEC dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
 				,@ProcessedDate
-				,@ProcessedBy
+				,@ActorId
 
-			EXECUTE [dbo].EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
 				,1
 		END
 
-		EXECUTE dbo.LeaveRequest_DeleteWeekendLeaveTrans @RequestId = @RequestId
+		EXEC dbo.LeaveRequest_DeleteWeekendLeaveTrans @RequestId = @RequestId
 
-		EXECUTE dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId
+		EXEC dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId
 
-		EXECUTE [dbo].WorkingTimeRequest_Update_TmpLeaveBalance @Requestid = @Requestid
-			,@EmpID = @EmpID
+		EXEC dbo.WorkingTimeRequest_Update_TmpLeaveBalance @RequestId = @RequestId
+			,@EmpId = @EmpId
 			,@Status = 2
 
-		EXECUTE dbo.LeaveRequest_WriteLog @RequestID
+		EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
+			,@Comment = @Comment
 
 		COMMIT TRANSACTION;
-
-		SET @ErrCode = 0
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject request failed'
+			,@ErrMsg = 'Reject unsuccessfully.'
 
 		ROLLBACK TRANSACTION;
 	END CATCH;

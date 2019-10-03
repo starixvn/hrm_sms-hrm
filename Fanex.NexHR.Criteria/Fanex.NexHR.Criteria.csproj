@@ -183,12 +183,15 @@
     <Compile Include="Request\LateInEarlyOut\RejectLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\ResetLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\VoidLateInEarlyOutRequestCriteria.cs" />
+    <Compile Include="Request\Leave\ApproveLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByIdCriteria.cs" />
     <Compile Include="Request\Leave\DeleteLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\RejectLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\VoidLeaveRequestCriteria.cs" />
     <Compile Include="Role\GetRolesByUserIdCriteria.cs" />
     <Compile Include="Role\GetRolesCriteria.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />

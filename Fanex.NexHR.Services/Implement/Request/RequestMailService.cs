@@ -2,17 +2,13 @@
 {
     using System;
     using System.Linq;
-    using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
-    using Hangfire;
 
     public class RequestMailService : IRequestMailService
     {
@@ -22,32 +18,13 @@
         private const string _MailContentLeaveOneDay = "{0}";
         private const string _MailContentLeaveHalfDay = "{0} (0.5 day from {1} to {2})";
 
-        private const string _EmailTemplatePathForLeave = "~/app_data/emails/LeaveApproval.cshtml";
-
         #endregion constant
 
         private readonly IRequestRepository requestRepository;
-        private readonly IEmailService emailService;
 
-        public RequestMailService(
-            IRequestRepository requestRepository,
-            IEmailService emailService)
+        public RequestMailService(IRequestRepository requestRepository)
         {
             this.requestRepository = requestRepository;
-            this.emailService = emailService;
-        }
-
-        public void SendMailForProcessSuccessfully(long requestId, EmployeeSession actor, RequestCommand command)
-        {
-            var criteria = new GetRequestByIdCriteria
-            {
-                RequestId = requestId
-            };
-
-            RequestEntity request = requestRepository.GetRequestById(criteria);
-            var templateEmailPathForRelated = GetEmailTemplatePath(request.RequestType.Id);
-
-            BackgroundJob.Enqueue(() => SendMailProcess(command, request, actor, templateEmailPathForRelated));
         }
 
         public EmailModel GetMailToAndMailCC(long requestId, int action)
@@ -126,18 +103,6 @@
             if (relatedPeople.Approver != null)
             {
                 relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Approver.Email).ToList();
-            }
-        }
-
-        public void SendMailProcess(RequestCommand command, RequestEntity request, EmployeeSession actor, string templateEmailPathForRelated)
-        {
-            byte action = GetActionProcessRequest(request.Status.Id, command);
-            string commandMessage = GetCommandMessage(command);
-            EmailModel emailModel = GetMailToAndMailCC(request.Id, action);
-
-            if (!string.IsNullOrWhiteSpace(emailModel.SendTo))
-            {
-                SendToRelatedPeople(commandMessage, actor, request, emailModel, templateEmailPathForRelated);
             }
         }
 
@@ -352,50 +317,6 @@
             }
 
             return emailModel;
-        }
-
-        private static string GetEmailTemplatePath(short requestType)
-        {
-            return requestType == (short)RequestType.Leave ? HttpContext.Current.Server.MapPath(_EmailTemplatePathForLeave) : string.Empty;
-        }
-
-        private void SendToRelatedPeople(
-            string command,
-            EmployeeSession actor,
-            RequestEntity request,
-            EmailModel emailModel,
-            string templateEmailPath)
-        {
-            if (request.RequestType.Id == (short)RequestType.Leave)
-            {
-                emailModel.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject, request.Requester.NickName, command, actor.Nickname);
-                LeaveRelatedMail(command, actor, request, emailModel, templateEmailPath);
-            }
-        }
-
-        private void LeaveRelatedMail(
-            string command,
-            EmployeeSession actor,
-            RequestEntity request,
-            EmailModel emailModel,
-            string templateEmailPath)
-        {
-            var body = Utilities.ReadTextFile(templateEmailPath);
-            var forDate = request.TotalDays == Constants.HalfDayOffValue
-                ? GetStringDateForLeaveRequest(request.FromDate, request.FromTime, request.ToTime, request.TotalDays)
-                : GetStringDateForLeaveRequest(request.FromDate, fromDate: request.FromDate, toDate: request.ToDate, totalDays: request.TotalDays);
-            body = string.Format(
-                body,
-                emailModel.SendToNickName,
-                request.Requester.DisplayName,
-                command,
-                actor.DisplayName,
-                request.RequestType.Name,
-                forDate,
-                request.LeaveType.Name,
-                request.Remark);
-
-            emailService.SendEmail(ConfigSettings.EmailSetting, emailModel.SendTo, emailModel.SendCC, emailModel.Subject, body);
         }
     }
 }

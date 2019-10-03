@@ -1235,7 +1235,7 @@
     <Content Include="App_Data\Emails\EditMemoNotification.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Emails\LeaveApproval.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Approval.cshtml" />
     <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOut.Approval.cshtml" />
     <Content Include="App_Data\Emails\CheckInOut.Approval.cshtml" />
@@ -1246,7 +1246,7 @@
     <Content Include="App_Data\Emails\KeepInView.Approval.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Emails\LeaveCancelation.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Cancel.cshtml" />
     <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
     <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.cshtml" />
     <Content Include="App_Data\Emails\CheckInOut.Cancel.cshtml" />

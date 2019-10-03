@@ -374,8 +374,11 @@
     <Setting Key="LeaveRequest_Insert" SpName="LeaveRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_Update" SpName="LeaveRequest_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_Delete" SpName="LeaveRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LeaveRequest_Approve" SpName="LeaveRequest_Approve" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LeaveRequest_Reject" SpName="LeaveRequest_Reject" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LeaveRequest_Reset" SpName="LeaveRequest_Reset" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="LeaveRequest_VoidBySA" SpName="LeaveRequest_VoidBySA" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_GetLeaveBalance" SpName="LeaveRequest_GetLeaveBalance" DbName="nexhrx" Plain="0"></Setting>
-
     <Setting Key="LeaveRequest_GetById" SpName="LeaveRequest_GetById" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="EmpId" ObjectProperty="Id" />

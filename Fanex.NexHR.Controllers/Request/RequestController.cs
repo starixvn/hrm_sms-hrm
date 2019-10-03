@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -23,25 +22,19 @@
         private const string EmployeeRequestViewName = "EmployeeRequest";
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
-        private readonly IRequestMailService requestMailService;
         private readonly ICommonDataService commonDataService;
         private readonly ITeamService teamService;
-        private readonly IBaseService baseService;
 
         public RequestController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            IRequestMailService requestMailService,
             ICommonDataService commonDataService,
-            ITeamService teamService,
-            IBaseService baseService) : base(sessionService)
+            ITeamService teamService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
-            this.requestMailService = requestMailService;
             this.teamService = teamService;
-            this.baseService = baseService;
             this.commonDataService = commonDataService;
         }
 
@@ -190,24 +183,6 @@
             }
         }
 
-        [HttpPost]
-        [ValidateInput(false)]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
-        public JsonResult ProcessRequest(ProcessRequestViewModel model)
-        {
-            CommandResult result;
-
-            result = (model.Command == RequestCommand.Accept
-                || model.Command == RequestCommand.Approve
-                || model.Command == RequestCommand.Process)
-                ? ApproveRequest(model) : Process(model);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
@@ -252,46 +227,6 @@
                 && (t.ApprovedBy.Id == sessionService.Employee.Id || t.VerifiedBy.Id == sessionService.Employee.Id);
             bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == sessionService.Employee.Id);
             return pending || verified;
-        }
-
-        private CommandResult ApproveRequest(ProcessRequestViewModel model)
-        {
-            var criteria = new ApproveRequestCriteria
-            {
-                RequestId = model.RequestId,
-                RoleId = model.RoleId,
-                Comment = model.Comment,
-                IgnoredDisciplines = model.IgnoredDisciplines,
-                ProcessedBy = sessionService.Employee.Id
-            };
-
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            if (result.IsSuccessful)
-            {
-                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, sessionService.Employee, model.Command);
-            }
-
-            return result;
-        }
-
-        private CommandResult Process(ProcessRequestViewModel model)
-        {
-            var criteria = new ProcessRequestCriteria
-            {
-                Command = model.Command,
-                RequestId = model.RequestId,
-                RoleId = model.RoleId,
-                Comment = model.Comment,
-                ProcessedBy = sessionService.Employee.Id
-            };
-
-            CommandResult result = baseService.ExecuteNonQuery(criteria);
-            if (result.IsSuccessful)
-            {
-                requestMailService.SendMailForProcessSuccessfully(criteria.RequestId, sessionService.Employee, model.Command);
-            }
-
-            return result;
         }
     }
 }

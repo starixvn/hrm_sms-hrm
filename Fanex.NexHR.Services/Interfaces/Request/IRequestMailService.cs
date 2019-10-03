@@ -2,13 +2,10 @@
 {
     using System;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
 
     public interface IRequestMailService
     {
-        void SendMailForProcessSuccessfully(long requestId, EmployeeSession actor, RequestCommand command);
-
         EmailModel GetMailToAndMailCC(long requestId, int action);
 
         byte GetActionProcessRequest(byte requestStatusId, RequestCommand command);

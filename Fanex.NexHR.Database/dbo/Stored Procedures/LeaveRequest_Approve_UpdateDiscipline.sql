@@ -14,9 +14,9 @@ Original:
 Revisions:
 Param's Explanation:
     @IgnoredDetails: 
-        <ROOT>
-            <Discipline WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored=''></Discipline>
-        </ROOT>
+        <Root>
+            <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' />
+        </Root>
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -41,7 +41,7 @@ BEGIN
 				,EmployeeId
 				,DisciplineTypeId
 				,IsIgnored
-			FROM OPENXML(@DocHandler, '/ROOT/Discipline', 1) WITH (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored BIT) AS Data
+			FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored BIT) AS Data
 
 			EXEC sp_xml_removedocument @DocHandler
 		END TRY

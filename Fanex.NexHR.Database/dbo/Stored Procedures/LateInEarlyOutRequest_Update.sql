@@ -17,9 +17,9 @@ AS
 Created: Quinn.Vo@20190625
 Task: Edit a late in/early out request
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -48,13 +48,11 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			@RequestType IN (3)
-			AND (
-				@OnDate IS NULL
-				OR isnull(@LateInMins, 0) <= 0
-				OR isnull(@LateInMins, 0) > 150
-				)
+	IF @RequestType IN (3)
+		AND (
+			@OnDate IS NULL
+			OR isnull(@LateInMins, 0) <= 0
+			OR isnull(@LateInMins, 0) > 150
 			)
 	BEGIN
 		SET @ErrCode = 102
@@ -63,13 +61,11 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			@RequestType IN (4)
-			AND (
-				@OnDate IS NULL
-				OR isnull(@EarlyOutMins, 0) <= 0
-				OR isnull(@EarlyOutMins, 0) > 150
-				)
+	IF @RequestType IN (4)
+		AND (
+			@OnDate IS NULL
+			OR isnull(@EarlyOutMins, 0) <= 0
+			OR isnull(@EarlyOutMins, 0) > 150
 			)
 	BEGIN
 		SET @ErrCode = 103
@@ -78,18 +74,16 @@ BEGIN
 		RETURN;
 	END
 
-		IF (
-			@RequestType IN (3, 4)
-			AND EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-					INNER JOIN dbo.LateInEarlyOutRequest AS le WITH (NOLOCK) ON wk.RequestId = le.RequestId
-				WHERE wk.empid = @EmpId
-					AND wk.RequestId <> wk.RequestId
-					AND wk.RequestType = @RequestType
-					AND wk.CurrentStatus IN (1, 2, 4, 6)
-					AND le.OnDate = @OnDate
-				)
+	IF @RequestType IN (3, 4)
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+				INNER JOIN dbo.LateInEarlyOutRequest AS le WITH (NOLOCK) ON wk.RequestId = le.RequestId
+			WHERE wk.empid = @EmpId
+				AND wk.RequestId <> wk.RequestId
+				AND wk.RequestType = @RequestType
+				AND wk.CurrentStatus IN (1, 2, 4, 6)
+				AND le.OnDate = @OnDate
 			)
 	BEGIN
 		SET @ErrCode = 105
@@ -105,12 +99,10 @@ BEGIN
 	WHERE EmpId = @EmpId
 
 	IF (
-			(
-				@ApproverId IS NULL
-				OR @VerifierId IS NULL
-				)
-			AND @IsTopManager = 0
+			@ApproverId IS NULL
+			OR @VerifierId IS NULL
 			)
+		AND @IsTopManager = 0
 	BEGIN
 		SET @ErrCode = 106
 		SET @ErrMsg = 'Invalid parameter'
@@ -120,14 +112,12 @@ BEGIN
 
 	-- check the late in, ealry out min <=60 
 	IF (
-			(
-				@RequestType = 3
-				AND @LateInMins > 60
-				)
-			OR (
-				@RequestType = 4
-				AND @EarlyOutMins > 60
-				)
+			@RequestType = 3
+			AND @LateInMins > 60
+			)
+		OR (
+			@RequestType = 4
+			AND @EarlyOutMins > 60
 			)
 	BEGIN
 		SET @ErrCode = 108
@@ -157,26 +147,24 @@ BEGIN
 
 	IF @IsTopManager = 0
 	BEGIN
-		IF (
-				NOT EXISTS (
-					SELECT TOP 1 1
-					FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @VerifierId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = 2
-						AND sp.RequestType IN (3, 4)
-						AND ISNULL(sp.IsDeleted, 0) = 0
-					)
-				AND NOT EXISTS (
-					SELECT 1
-					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-					WHERE e.EmpId = @EmpId
-						AND g.OwnerId = @VerifierId
-						AND ISNULL(g.IsDeleted, 0) = 0
-						AND g.RequestType IN (3, 4)
-						AND g.ActionType = 2
-					)
+		IF NOT EXISTS (
+				SELECT TOP 1 1
+				FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
+				WHERE sp.OwnerId = @VerifierId
+					AND sp.EmpId = @EmpId
+					AND sp.ActionType = 2
+					AND sp.RequestType IN (3, 4)
+					AND ISNULL(sp.IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+				WHERE e.EmpId = @EmpId
+					AND g.OwnerId = @VerifierId
+					AND ISNULL(g.IsDeleted, 0) = 0
+					AND g.RequestType IN (3, 4)
+					AND g.ActionType = 2
 				)
 		BEGIN
 			SET @ErrCode = 108
@@ -185,26 +173,24 @@ BEGIN
 			RETURN;
 		END
 
-		IF (
-				NOT EXISTS (
-					SELECT 1
-					FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @ApproverId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = 3
-						AND sp.RequestType IN (3, 4)
-						AND ISNULL(sp.IsDeleted, 0) = 0
-					)
-				AND NOT EXISTS (
-					SELECT 1
-					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-					WHERE e.EmpId = @EmpId
-						AND g.OwnerId = @ApproverId
-						AND ISNULL(g.IsDeleted, 0) = 0
-						AND g.RequestType IN (3, 4)
-						AND g.ActionType = 3
-					)
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
+				WHERE sp.OwnerId = @ApproverId
+					AND sp.EmpId = @EmpId
+					AND sp.ActionType = 3
+					AND sp.RequestType IN (3, 4)
+					AND ISNULL(sp.IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+				WHERE e.EmpId = @EmpId
+					AND g.OwnerId = @ApproverId
+					AND ISNULL(g.IsDeleted, 0) = 0
+					AND g.RequestType IN (3, 4)
+					AND g.ActionType = 3
 				)
 		BEGIN
 			SET @ErrCode = 109
@@ -242,30 +228,23 @@ BEGIN
 	WHERE RequestId = @RequestId
 
 	UPDATE dbo.LateInEarlyOutRequest WITH (ROWLOCK, UPDLOCK)
-	SET [EmpId] = @EmpId
-		,[LateInMins] = @LateInMins
-		,[EarlyOutMins] = @EarlyOutMins
-		,[OnDate] = @OnDate
-		,[ReasonId] = @ReasonId
-	WHERE [RequestId] = @RequestId
+	SET EmpId = @EmpId
+		,LateInMins = @LateInMins
+		,EarlyOutMins = @EarlyOutMins
+		,OnDate = @OnDate
+		,ReasonId = @ReasonId
+	WHERE RequestId = @RequestId
 
-	IF (
-			@ApproverId IS NULL
-			AND @VerifierId IS NULL
-			AND @IsTopManager = 1
-			)
+	IF @ApproverId IS NULL
+		AND @VerifierId IS NULL
+		AND @IsTopManager = 1
 	BEGIN
-		EXECUTE dbo.LateInEarlyOutRequest_Approve @RequestID = @RequestID
-				,@EmpID = @EmpID
-				,@ProcessedBy = @EmpID
-				,@ProcessedDate = @ModifiedDate
-				,@RoleID = 3
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
+		EXEC dbo.LateInEarlyOutRequest_Approve @RequestId = @RequestId
+			,@ActorId = @EmpId
+			,@RoleId = 3
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
 
-	EXECUTE dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
-	
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
+	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 END

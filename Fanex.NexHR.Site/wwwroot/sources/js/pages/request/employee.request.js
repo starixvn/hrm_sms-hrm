@@ -42,7 +42,7 @@ $(function () {
                 requestUrl += 'KeepInView/ProcessRequest';
                 break;
             default:
-                requestUrl += 'request/ProcessRequest';
+                requestUrl += 'leave/ProcessRequest';
                 break;
         }
 

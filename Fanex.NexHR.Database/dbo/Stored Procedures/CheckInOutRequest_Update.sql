@@ -17,9 +17,9 @@ AS
 Created: Quinn.Vo@20190624
 Task: Update a check in/out request
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -42,18 +42,16 @@ BEGIN
 	END
 
 	-- check if there is another request in the same date
-	IF (
-			@RequestType IN (1, 2)
-			AND EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-					INNER JOIN dbo.CheckInOutRequest AS mis WITH (NOLOCK) ON wk.RequestId = mis.RequestId
-				WHERE wk.empid = @empid
-					AND RequestType = @RequestType
-					AND CurrentStatus IN (1, 2, 4, 6)
-					AND wk.RequestId <> @RequestId
-					AND datediff(d, mis.OnDate, @OnDate) = 0
-				)
+	IF @RequestType IN (1, 2)
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+				INNER JOIN dbo.CheckInOutRequest AS mis WITH (NOLOCK) ON wk.RequestId = mis.RequestId
+			WHERE wk.empid = @empid
+				AND RequestType = @RequestType
+				AND CurrentStatus IN (1, 2, 4, 6)
+				AND wk.RequestId <> @RequestId
+				AND datediff(d, mis.OnDate, @OnDate) = 0
 			)
 	BEGIN
 		SET @ErrCode = 101
@@ -67,12 +65,10 @@ BEGIN
 	WHERE EmpId = @EmpId
 
 	IF (
-			(
-				@ApproverId IS NULL
-				OR @VerifierId IS NULL
-				)
-			AND @IsTopManager = 0
+			@ApproverId IS NULL
+			OR @VerifierId IS NULL
 			)
+		AND @IsTopManager = 0
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'Invalid parameter'
@@ -82,26 +78,24 @@ BEGIN
 
 	IF @EmpId <> @ModifiedBy
 	BEGIN
-		IF (
-				NOT EXISTS (
-					SELECT 1
-					FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @EmpId
-						AND sp.EmpId = @ModifiedBy
-						AND sp.ActionType = 5
-						AND sp.RequestType IN (1, 2)
-						AND ISNULL(sp.IsDeleted, 0) = 0
-					)
-				AND NOT EXISTS (
-					SELECT 1
-					FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-						INNER JOIN Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-					WHERE gs.OwnerId = @ModifiedBy
-						AND e.EmpId = @EmpId
-						AND gs.ActionType = 5
-						AND gs.RequestType IN (1, 2)
-						AND ISNULL(gs.IsDeleted, 0) = 0
-					)
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
+				WHERE sp.OwnerId = @EmpId
+					AND sp.EmpId = @ModifiedBy
+					AND sp.ActionType = 5
+					AND sp.RequestType IN (1, 2)
+					AND ISNULL(sp.IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
+				WHERE gs.OwnerId = @ModifiedBy
+					AND e.EmpId = @EmpId
+					AND gs.ActionType = 5
+					AND gs.RequestType IN (1, 2)
+					AND ISNULL(gs.IsDeleted, 0) = 0
 				)
 		BEGIN
 			SET @ErrCode = 107
@@ -113,26 +107,24 @@ BEGIN
 
 	IF @IsTopManager = 0
 	BEGIN
-		IF (
-				NOT EXISTS (
-					SELECT 1
-					FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @VerifierId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = 2
-						AND sp.RequestType IN (1, 2)
-						AND ISNULL(sp.IsDeleted, 0) = 0
-					)
-				AND NOT EXISTS (
-					SELECT 1
-					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-					WHERE e.EmpId = @EmpId
-						AND g.OwnerId = @VerifierId
-						AND ISNULL(g.IsDeleted, 0) = 0
-						AND g.RequestType IN (1, 2)
-						AND g.ActionType = 2
-					)
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
+				WHERE sp.OwnerId = @VerifierId
+					AND sp.EmpId = @EmpId
+					AND sp.ActionType = 2
+					AND sp.RequestType IN (1, 2)
+					AND ISNULL(sp.IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+				WHERE e.EmpId = @EmpId
+					AND g.OwnerId = @VerifierId
+					AND ISNULL(g.IsDeleted, 0) = 0
+					AND g.RequestType IN (1, 2)
+					AND g.ActionType = 2
 				)
 		BEGIN
 			SET @ErrCode = 108
@@ -141,26 +133,24 @@ BEGIN
 			RETURN;
 		END
 
-		IF (
-				NOT EXISTS (
-					SELECT 1
-					FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @ApproverId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = 3
-						AND sp.RequestType IN (1, 2)
-						AND ISNULL(sp.IsDeleted, 0) = 0
-					)
-				AND NOT EXISTS (
-					SELECT 1
-					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-					WHERE e.EmpId = @EmpId
-						AND g.OwnerId = @ApproverId
-						AND ISNULL(g.IsDeleted, 0) = 0
-						AND g.RequestType IN (1, 2)
-						AND g.ActionType = 3
-					)
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
+				WHERE sp.OwnerId = @ApproverId
+					AND sp.EmpId = @EmpId
+					AND sp.ActionType = 3
+					AND sp.RequestType IN (1, 2)
+					AND ISNULL(sp.IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+				WHERE e.EmpId = @EmpId
+					AND g.OwnerId = @ApproverId
+					AND ISNULL(g.IsDeleted, 0) = 0
+					AND g.RequestType IN (1, 2)
+					AND g.ActionType = 3
 				)
 		BEGIN
 			SET @ErrCode = 109
@@ -205,20 +195,16 @@ BEGIN
 		,ReasonId = @ReasonId
 	WHERE RequestId = @RequestId
 
-	IF (
-			@ApproverId IS NULL
-			AND @VerifierId IS NULL
-			AND @IsTopManager = 1
-			)
+	IF @ApproverId IS NULL
+		AND @VerifierId IS NULL
+		AND @IsTopManager = 1
 	BEGIN
-			EXECUTE dbo.CheckInOutRequest_Approve @RequestID = @RequestID
-				,@ProcessedBy = @EmpID
-				,@RoleID = 3
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
+		EXEC dbo.CheckInOutRequest_Approve @RequestId = @RequestId
+			,@ActorId = @EmpId
+			,@RoleID = 3
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
 
-	EXECUTE dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
-
-	SET @ErrCode = 0
+	EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
 END

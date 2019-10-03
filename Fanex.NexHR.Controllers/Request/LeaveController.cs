@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
@@ -95,7 +96,7 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
             if (result.IsSuccessful)
             {
-                leaveRequestService.SendMailForInsertSuccessfully(criteria);
+                leaveRequestService.SendMailCreateRequest(criteria);
             }
 
             return Json(result);
@@ -134,7 +135,7 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
-                leaveRequestService.SendMailForUpdateSuccessfully(criteria);
+                leaveRequestService.SendMailEditRequest(criteria);
             }
 
             return Json(result);
@@ -156,7 +157,7 @@
         [HttpPost]
         public CustomJsonResult Delete(long id)
         {
-            leaveRequestService.SendMailForDeleteSuccessfully(id);
+            leaveRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = leaveRequestService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -166,6 +167,46 @@
         {
             IList<LeaveRequest> requests = leaveRequestService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        public JsonResult ProcessRequest(ProcessRequestParam model)
+        {
+            CommandResult commandResult;
+            switch (model.Command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    commandResult = leaveRequestService.ApproveRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.Reset:
+                    commandResult = leaveRequestService.ResetRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    commandResult = leaveRequestService.RejectRequest(sessionService.Employee.Id, model);
+                    break;
+
+                default:
+                    commandResult = leaveRequestService.VoidRequest(sessionService.Employee.Id, model);
+                    break;
+            }
+
+            if (commandResult.IsSuccessful)
+            {
+                leaveRequestService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
+            }
+
+            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
@@ -399,7 +440,7 @@
             {
                 if (model.LeaveTypeId == Constants.MaternityLeave)
                 {
-                    //// rule: user can make leave request (maternity leave) for 6 months.
+                    //// rule: user can make maternity leave for 6 months.
                     maxDate = maxDate.AddMonths(2);
                 }
 

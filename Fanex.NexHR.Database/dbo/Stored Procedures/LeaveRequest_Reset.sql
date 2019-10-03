@@ -1,10 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestID BIGINT
-	,@EmpId INT
-	,@ProcessedBy INT
-	,@ProcessedDate DATETIME
-	,@RoleID INT
-	,@CurrentStatus INT = NULL
+CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestId BIGINT
+	,@ActorId INT
+	,@RoleId TINYINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -18,158 +15,172 @@ Revisions:
 Param's Explanation:
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-	DECLARE @FromDate DATETIME
+	DECLARE @EmpId INT
+		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@VerifierId INT
 		,@ApproverId INT
+		,@CurrentStatus TINYINT
+		,@ProcessedDate DATETIME = GETDATE()
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@NotVerifiedStatusId TINYINT = 3
+		,@ApprovedStatusId TINYINT = 4
+		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
+		,@VoidStatusId TINYINT = 7
 
-	SELECT @FromDate = FromDate
+	SELECT @EmpId = lr.EmpId
+		,@FromDate = FromDate
 		,@ToDate = ToDate
 		,@VerifierId = VerifierId
 		,@ApproverId = ApproverId
 		,@CurrentStatus = wk.CurrentStatus
-	FROM dbo.LeaveRequest AS lv WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lv.RequestId = wk.RequestId
-	WHERE lv.RequestId = @RequestID
-
-	SET XACT_ABORT ON;
+	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lr.RequestId = wk.RequestId
+		AND wk.RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION;
 
-		IF @RoleID = 2 --Verifier
+		IF @RoleId = @VerifierRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 1
-				,VerifiedStatus = 1
-				,VerifierId = @ProcessedBy
+			SET CurrentStatus = @PendingStatusId
+				,VerifiedStatus = @PendingStatusId
+				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 
-			IF (@CurrentStatus = 3)
+			IF @CurrentStatus = @NotVerifiedStatusId
 			BEGIN
-				EXECUTE dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
-					,@EmpID = @EmpID
+				EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
+					,@EmpId = @EmpId
 					,@Status = 0
 
-				EXECUTE dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
-				EXECUTE dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 			END
 		END
-		ELSE IF @RoleID = 3 --Approver
+		ELSE IF @RoleId = @ApproverRoleId
 		BEGIN
-			IF (@VerifierId = @ApproverId)
+			IF @VerifierId = @ApproverId
 			BEGIN
 				UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-				SET CurrentStatus = 1
-					,VerifiedStatus = 1
-					,ApprovedStatus = 1
-					,VerifierId = @ProcessedBy
+				SET CurrentStatus = @PendingStatusId
+					,VerifiedStatus = @PendingStatusId
+					,ApprovedStatus = @PendingStatusId
+					,VerifierId = @ActorId
 					,VerifiedDate = @ProcessedDate
-					,ApproverId = @ProcessedBy
+					,ApproverId = @ActorId
 					,ApprovedDate = @ProcessedDate
-					,ModifiedBy = @ProcessedBy
+					,ModifiedBy = @ActorId
 					,ModifiedDate = @ProcessedDate
-				WHERE RequestID = @RequestID
+				WHERE RequestId = @RequestId
 			END
 			ELSE
 			BEGIN
 				UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 				SET CurrentStatus = CASE 
-						WHEN VerifiedStatus = 2 THEN 2
-						ELSE 1
+						WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
+						ELSE @PendingStatusId
 						END
-					,ApprovedStatus = 1
-					,ApproverId = @ProcessedBy
+					,ApprovedStatus = @PendingStatusId
+					,ApproverId = @ActorId
 					,ApprovedDate = @ProcessedDate
-					,ModifiedBy = @ProcessedBy
+					,ModifiedBy = @ActorId
 					,ModifiedDate = @ProcessedDate
 				WHERE RequestID = @RequestID
 			END
 
-			IF (@CurrentStatus = 4)
+			IF @CurrentStatus = @ApprovedStatusId
 			BEGIN
-				EXECUTE dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
+				EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
-				EXECUTE dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
+				EXEC dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
 					,@EmpId
-					,@ProcessedBy
+					,@ActorId
 
-				EXECUTE dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
+				EXEC dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
 					,@ProcessedDate
-					,@ProcessedBy
+					,@ActorId
 
-				EXECUTE EmployeeAttendance_ProcessingAndInsert @EmpId
+				EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
 					,@FromDate
 					,@ToDate
 					,1
 			END
 
-			IF (@CurrentStatus = 5)
+			IF @CurrentStatus = @RejectedStatusId
 			BEGIN
-				EXECUTE dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
-					,@EmpID = @EmpID
+				EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
+					,@EmpId = @EmpId
 					,@Status = 0
 
-				EXECUTE dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
-				EXECUTE dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 			END
 		END
-		ELSE IF @RoleID = 6 --HR
+		ELSE IF @RoleId = @HRRoleId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = 4
-				,HRStatus = 1
-				,HRId = @ProcessedBy
+			SET CurrentStatus = @ApprovedStatusId
+				,HRStatus = @PendingStatusId
+				,HRId = @ActorId
 				,HRDate = @ProcessedDate
-				,ModifiedBy = @ProcessedBy
+				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestId = @RequestId
 
-			IF (@CurrentStatus = 7)
+			IF @CurrentStatus = @VoidStatusId
 			BEGIN
-				
-				EXECUTE dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
-				EXECUTE dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
+				EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 
-				EXECUTE dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @RequestId
-					,@EmpID = @EmpID
+				EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @RequestId
+					,@EmpId = @EmpId
 					,@Status = 1
 
-				EXECUTE dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
+				EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 					,@EmpId
-					,@ProcessedBy
+					,@ActorId
 
-				EXECUTE dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
+				EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
 					,@EmpId
 					,@FromDate
 					,@ToDate
-					,@ProcessedBy
+					,@ActorId
 
-				EXECUTE EmployeeAttendance_ProcessingAndInsert @EmpId
+				EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
 					,@FromDate
 					,@ToDate
 					,1
 			END
 		END
 
-		EXECUTE dbo.LeaveRequest_WriteLog @RequestID
+		EXECUTE dbo.LeaveRequest_WriteLog @RequestId = @RequestId
+			,@Comment = ''
 
 		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0;
 	END TRY
 
 	BEGIN CATCH
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reset request failed'
+			,@ErrMsg = 'Reset unsuccessfully.'
 
 		ROLLBACK TRANSACTION
 	END CATCH;
