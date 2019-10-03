@@ -188,9 +188,6 @@
   </Function>
   <Function Name="WorkingTimeRequest">
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_RejectRequest" SpName="WorkingTimeRequest_RejectRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_ResetRequest" SpName="WorkingTimeRequest_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_VoidRequest_bySA" SpName="WorkingTimeRequest_VoidRequest_bySA" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetByEmployee" SpName="WorkingTimeRequest_GetByEmployee" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Delete" SpName="WorkingTimeRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Update" SpName="WorkingTimeRequest_Update" DbName="nexhrx" Plain="0"></Setting>

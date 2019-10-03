@@ -1,15 +1,15 @@
 ﻿
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
-	,@ProcessedBy INT
-	,@RoleId INT
+	,@ActorId INT
+	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
-	,@IgnoredDetails NVARCHAR(MAX) = NULL
+	,@DisciplineXml NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2013-11-06
-Task: approve request form (main SP)
+Task: approve request
 DB: HRM_SMS
 Original:
 
@@ -22,237 +22,129 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @EmpId INT
-		,@RequestType SMALLINT
-		,@Status TINYINT
-		,@FromDate DATETIME
-		,@ToDate DATETIME
-		,@TotalDay INT
+		,@RequestTypeId SMALLINT
+		,@StatusId TINYINT
 		,@VerifierId INT
 		,@ApproverId INT
-		,@HRId INT
-		,@VerifiedStatus INT
-		,@ApprovedStatus INT
-		,@HRStatus INT
-		,@ProcessedDate DATETIME
+		-- system role
+		,@VerifierRoleId TINYINT = 2
+		,@ApproverRoleId TINYINT = 3
+		,@HRRoleId TINYINT = 6
+		,@SystemAdminRoleId TINYINT = 7
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@ApprovedStatusId TINYINT = 4
+		-- request type
+		,@CheckInRequestTypeId TINYINT = 1
+		,@CheckOutRequestTypeId TINYINT = 2
+		,@LateInRequestTypeId TINYINT = 3
+		,@EarlyOutRequestTypeId TINYINT = 4
+		,@ChangeShiftRequestTypeId TINYINT = 5
+		,@LeaveRequestTypeId TINYINT = 6
+		,@KeepInViewRequestTypeId TINYINT = 7
 
-	-- get employee and requestype of the request
-	SELECT TOP 1 @EmpId = EmpId
-		,@Status = [CurrentStatus]
+	SELECT @EmpId = EmpId
+		,@RequestTypeId = RequestType
+		,@StatusId = CurrentStatus
 		,@VerifierId = VerifierId
-		,@VerifiedStatus = VerifiedStatus
 		,@ApproverId = ApproverId
-		,@ApprovedStatus = ApprovedStatus
-		,@HRId = HRId
-		,@HRStatus = HRStatus
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE RequestID = @RequestId
+	WHERE RequestId = @RequestId
 
-	IF @RoleId = 2
+	IF @RoleId = @VerifierRoleId
 		AND (
-			@Status <> 1
-			OR @VerifierId <> @ProcessedBy
+			@StatusId <> @PendingStatusId
+			OR @VerifierId <> @ActorId
 			)
 	BEGIN
-		SET @ErrCode = 103
-		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
+		SELECT @ErrCode = 100
+			,@ErrMsg = 'You can not verify this request.'
 
 		RETURN
 	END
 
-	IF @RoleId = 3
+	IF @RoleId = @ApproverRoleId
 		AND (
-			@Status NOT IN (1, 2)
-			OR @ApproverId <> @ProcessedBy
+			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
+			OR @ApproverId <> @ActorId
 			)
 	BEGIN
-		SET @ErrCode = 103
-		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
+		SELECT @ErrCode = 101
+			,@ErrMsg = 'You can not approve this request.'
 
 		RETURN
 	END
 
-	IF @RoleId = 6
+	IF @RoleId = @HRRoleId
 		AND (
-			@Status <> 4
+			@StatusId <> @ApprovedStatusId
 			OR NOT EXISTS (
 				SELECT 1
-				FROM dbo.EmployeeRole
-				WHERE EmployeeId = @ProcessedBy
-					AND RoleId IN (6, 7)
+				FROM dbo.EmployeeRole WITH (NOLOCK)
+				WHERE EmployeeId = @ActorId
+					AND RoleId IN (@HRRoleId, @SystemAdminRoleId)
 				)
 			)
 	BEGIN
-		SET @ErrCode = 103
-		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
+		SELECT @ErrCode = 102
+			,@ErrMsg = 'You can not process this request.'
 
 		RETURN
 	END
 
-	EXEC dbo.WorkingTimeRequest_GetRangeDateByRequestID @RequestId = @RequestId
-		,@FromDate = @FromDate OUTPUT
-		,@ToDate = @ToDate OUTPUT
-		,@TotalDay = @TotalDay OUTPUT
-		,@RequestType = @RequestType OUTPUT
-
-	SELECT @FromDate = CONVERT(VARCHAR(10), @FromDate, 111)
-		,@ToDate = CONVERT(VARCHAR(10), @ToDate, 111)
-
-	IF @RequestType = 6
+	IF @RequestTypeId = @CheckInRequestTypeId
+		OR @RequestTypeId = @CheckOutRequestTypeId
 	BEGIN
-		DECLARE @maxDate DATETIME
-			,@minDate DATETIME
-			,@result BIT
-
-		SELECT @maxDate = MAX(workdate)
-			,@minDate = MIN(workdate)
-		FROM dbo.EmployeeCalendar WITH (NOLOCK)
-		WHERE empid = @empid
-			AND workdate BETWEEN @fromdate
-				AND @todate
-
-		IF @minDate IS NULL
-			OR @maxDate IS NULL
-			OR @fromdate <> @minDate
-			OR @todate <> @maxDate
-		BEGIN
-			EXEC [dbo].[EmployeeCalendar_Insert] @empid = @empid
-				,@fromdate = @FromDate
-				,@todate = @todate
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-
-			SET @ErrCode = 108
-			SET @ErrMsg = 'The working calendar does not exist. Please contact HR for more info.'
-
-			RETURN
-		END
-
-		DECLARE @TotalDays_tmp NUMERIC(5, 1)
-			,@TotalDays_tmpbal NUMERIC(5, 1)
-			,@isRquestDetail BIT = 1
-
-		IF EXISTS (
-				SELECT 1
-				FROM dbo.LeaveRequestDetail WITH (NOLOCK)
-				WHERE RequestID = @RequestId
-				)
-		BEGIN
-			SELECT @TotalDays_tmp = SUM(CASE lrd.IsHalfDay
-						WHEN 1 THEN 0.5
-						ELSE 1
-						END)
-			FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON lrd.OnDate = cl.WorkDate
-				AND lrd.EmpId = cl.EmpId
-				INNER JOIN dbo.LeaveType AS l WITH (NOLOCK) ON lrd.LeaveType = l.LeaveTypeId
-			WHERE lrd.RequestID = @RequestId
-				AND cl.IsHoliday = 0
-				AND cl.IsOffDay = 0
-				AND lrd.WorkType = 2
-				AND l.IsALDeduction = 1
-		END
-		ELSE
-		BEGIN
-			SET @isRquestDetail = 0
-
-			SELECT @TotalDays_tmp = SUM(1)
-			FROM dbo.EmployeeCalendar AS cl WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON (
-					cl.WorkDate BETWEEN CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.FromDate, 111))
-						AND CONVERT(SMALLDATETIME, CONVERT(NVARCHAR(20), lr.ToDate, 111))
-					)
-				AND lr.EmpId = cl.EmpId
-				INNER JOIN dbo.LeaveType AS l WITH (NOLOCK) ON lr.LeaveType = l.LeaveTypeId
-			WHERE lr.RequestId = @RequestId
-				AND cl.IsHoliday = 0
-				AND cl.IsOffDay = 0
-				AND l.IsALDeduction = 1
-		END
-
-		SET @TotalDays_tmp = ISNULL(@TotalDays_tmp, 0)
-
-		SELECT @TotalDays_tmpbal = SUM(tmp.TotalDays)
-		FROM dbo.tmpLeaveBalance AS tmp WITH (NOLOCK)
-		WHERE tmp.RequestID = @RequestId
-
-		IF (
-				@TotalDays_tmp <> @TotalDays_tmpbal
-				AND @isRquestDetail = 1
-				)
-			OR (
-				@isRquestDetail = 0
-				AND @TotalDays_tmp <> @TotalDays_tmpbal
-				AND @TotalDays_tmpbal <> 0.5
-				)
-		BEGIN
-			SET @ErrCode = 108
-			SET @ErrMsg = 'Could not approved this request because this employee''s calendar have been changed.'
-
-			RETURN
-		END
+		EXEC dbo.CheckInOutRequest_Approve @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ActorId = @ActorId
+			,@DisciplineXml = @DisciplineXml
+			,@Comment = @Comment
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
-
-	--ignore
-	EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ProcessedBy
-		,@IgnoredDetails = @IgnoredDetails
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
-
-	IF @ErrCode = 0
+	ELSE IF @RequestTypeId = @LateInRequestTypeId
+		OR @RequestTypeId = @EarlyOutRequestTypeId
 	BEGIN
-		SET @ProcessedDate = GETDATE()
-
-		IF @RequestType = 6 -- leave
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_6 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
-		ELSE IF @RequestType = 7 -- keep in view
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_7 @RequestId = @RequestId
-				,@EmpId = @EmpId
-				,@RoleId = @RoleId
-				,@ProcessedBy = @ProcessedBy
-				,@ProcessedDate = @ProcessedDate
-				,@Comment = @Comment
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
+		EXEC dbo.LateInEarlyOutRequest_Approve @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ActorId = @ActorId
+			,@DisciplineXml = @DisciplineXml
+			,@Comment = @Comment
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
-	ELSE
+	ELSE IF @RequestTypeId = @ChangeShiftRequestTypeId
 	BEGIN
-		RETURN
+		EXEC dbo.ChangeShiftRequest_Approve @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ActorId = @ActorId
+			,@DisciplineXml = @DisciplineXml
+			,@Comment = @Comment
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
-
-	IF @ErrCode = 0
+	ELSE IF @RequestTypeId = @LeaveRequestTypeId
 	BEGIN
-		-- write log
-		DECLARE @LogSPData VARCHAR(4000)
-			,@now DATETIME
-			,@Description VARCHAR(200)
-
-		SET @now = GETDATE()
-
-		--Log general info
-		SELECT @LogSPData = '<WorkingTimeRequest_ApproveRequest RequestID="' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1)) + '" ' + 'ApprovedBy="' + COALESCE(CAST(@ProcessedBy AS VARCHAR(100)), SPACE(1)) + '" ' + 'ApprovedDate="' + COALESCE(CONVERT(VARCHAR(10), @ProcessedDate, 111), SPACE(1)) + '" ' + 'RoleID="' + COALESCE(CAST(@RoleId AS VARCHAR(100)), SPACE(1)) + '" ' + 'ErrCode="' + COALESCE(CAST(@ErrCode AS VARCHAR(50)), SPACE(1)) + '" ' + 'ErrMsg="' + COALESCE(CAST(@ErrMsg AS VARCHAR(4000)), SPACE(1)) + '" />'
-
-		SELECT @Description = 'Approve Request:' + COALESCE(CAST(@RequestId AS VARCHAR(50)), SPACE(1))
-
-		EXEC dbo.Log_WriteLog @LogActionID = 1
-			,@LogDate = @now
-			,@Description = @Description
-			,@TrackingValue = @LogSPData
-			,@UserID = @ProcessedBy
-			,@EmpID = @EmpID
+		EXEC dbo.LeaveRequest_Approve @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ActorId = @ActorId
+			,@DisciplineXml = @DisciplineXml
+			,@Comment = @Comment
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
+	ELSE IF @RequestTypeId = @KeepInViewRequestTypeId
+	BEGIN
+		EXEC dbo.KeepInViewRequest_Approve @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ActorId = @ActorId
+			,@Comment = @Comment
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
 END

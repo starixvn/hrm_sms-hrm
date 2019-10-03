@@ -1,13 +1,11 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
@@ -76,54 +74,6 @@
             var criteria = new DeleteLateInEarlyOutRequestCriteria
             {
                 RequestId = requestId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ApproveLateInEarlyOutRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId,
-                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ResetLateInEarlyOutRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new RejectLateInEarlyOutRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new VoidLateInEarlyOutRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
         }

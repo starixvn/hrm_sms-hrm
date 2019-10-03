@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Criteria.Request.CheckInOut;
@@ -21,13 +22,28 @@
     {
         private readonly IRequestRepository requestRepository;
         private readonly IBaseService baseService;
+        private readonly ICheckInOutRequestService checkInOutRequestService;
+        private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
+        private readonly IChangeShiftRequestService changeShiftRequestService;
+        private readonly ILeaveRequestService leaveRequestService;
+        private readonly IKeepInViewRequestService keepInViewRequestService;
 
         public RequestService(
             IRequestRepository requestRepository,
-            IBaseService baseService)
+            IBaseService baseService,
+            ICheckInOutRequestService checkInOutRequestService,
+            ILateInEarlyOutRequestService lateInEarlyOutRequestService,
+            IChangeShiftRequestService changeShiftRequestService,
+            ILeaveRequestService leaveRequestService,
+            IKeepInViewRequestService keepInViewRequestService)
         {
             this.requestRepository = requestRepository;
             this.baseService = baseService;
+            this.checkInOutRequestService = checkInOutRequestService;
+            this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
+            this.changeShiftRequestService = changeShiftRequestService;
+            this.leaveRequestService = leaveRequestService;
+            this.keepInViewRequestService = keepInViewRequestService;
         }
 
         public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
@@ -148,13 +164,83 @@
             return requestRepository.GetLeaveRequestToIgnoreById(criteria);
         }
 
-        public CommandResult Delete(long requestId)
+        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
         {
-            var criteria = new DeleteRequestCriteria
+            var criteria = new ApproveRequestCriteria
             {
-                RequestId = requestId
+                RequestId = param.RequestId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId,
+                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty
             };
             return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new RejectRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RequestTypeId = param.RequestTypeId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new ResetRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RequestTypeId = param.RequestTypeId,
+                RoleId = param.RoleId,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new VoidRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RequestTypeId = param.RequestTypeId,
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command)
+        {
+            switch (param.RequestTypeId)
+            {
+                case RequestType.CheckIn:
+                case RequestType.CheckOut:
+                    checkInOutRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    break;
+
+                case RequestType.LateIn:
+                case RequestType.EarlyOut:
+                    lateInEarlyOutRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    break;
+
+                case RequestType.ChangeShift:
+                    changeShiftRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    break;
+
+                case RequestType.Leave:
+                    leaveRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    break;
+
+                default:
+                    keepInViewRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    break;
+            }
         }
 
         private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)

@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
+	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -28,22 +29,18 @@ BEGIN
 		,@ChangeShift TINYINT = 1
 		,@MoveOffDay TINYINT = 2
 		-- request status
-		,@PendingStatusId TINYINT = 1
-		,@VerifiedStatusId TINYINT = 2
-		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	SELECT @StatusId = wk.CurrentStatus
+	SELECT @StatusId = r.CurrentStatus
 		,@FromDate = cs.FromDate
 		,@ToDate = cs.ToDate
-		,@EmpId = wk.EmpId
+		,@EmpId = r.EmpId
 		,@TypeId = cs.TypeId
-	FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wk.RequestId = cs.RequestId
-	WHERE wk.RequestId = @RequestId
+	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON r.RequestId = cs.RequestId
+		AND cs.RequestId = @RequestId
 
 	EXEC dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 		,@RoleId = @RoleId
@@ -133,7 +130,7 @@ BEGIN
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
-		,@Comment = ''
+		,@Comment = @Comment
 
 	IF @@ERROR <> 0
 	BEGIN

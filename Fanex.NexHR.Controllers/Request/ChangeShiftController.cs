@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Request;
@@ -199,46 +198,6 @@
         {
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
-        public JsonResult ProcessRequest(ProcessRequestParam model)
-        {
-            CommandResult commandResult;
-            switch (model.Command)
-            {
-                case RequestCommand.Accept:
-                case RequestCommand.Approve:
-                case RequestCommand.Process:
-                    commandResult = changeShiftService.ApproveRequest(sessionService.Employee.Id, model);
-                    break;
-
-                case RequestCommand.Reset:
-                    commandResult = changeShiftService.ResetRequest(sessionService.Employee.Id, model);
-                    break;
-
-                case RequestCommand.NotAccept:
-                case RequestCommand.Reject:
-                case RequestCommand.Void:
-                    commandResult = changeShiftService.RejectRequest(sessionService.Employee.Id, model);
-                    break;
-
-                default:
-                    commandResult = changeShiftService.VoidRequest(sessionService.Employee.Id, model);
-                    break;
-            }
-
-            if (commandResult.IsSuccessful)
-            {
-                changeShiftService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
-            }
-
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         private static int GetFromShiftId(DailySchedule dailySchedule)

@@ -24,86 +24,27 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	DECLARE @FromDate DATETIME
+	DECLARE @EmpId INT
+		,@TotalDay INT
+		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@maxDate DATETIME
 		,@minDate DATETIME
-		,@result BIT
 		,@ProcessedDate DATETIME = GETDATE()
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
 		,@HRRoleId TINYINT = 6
-		,@SystemAdminRoleId TINYINT = 7
 		-- request status
-		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
-		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
-		,@VoidStatusId TINYINT = 7
-	DECLARE @EmpId INT
-		,@RequestType SMALLINT
-		,@StatusId TINYINT
-		,@TotalDay INT
-		,@VerifierId INT
-		,@ApproverId INT
-		,@HRId INT
 
 	SELECT @EmpId = EmpId
-		,@StatusId = CurrentStatus
-		,@VerifierId = VerifierId
-		,@ApproverId = ApproverId
-		,@HRId = HRId
-	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE RequestId = @RequestId
-
-	SELECT @FromDate = FromDate
+		,@FromDate = FromDate
 		,@ToDate = ToDate
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
-
-	IF @RoleId = @VerifierRoleId
-		AND (
-			@StatusId <> @PendingStatusId
-			OR @VerifierId <> @ActorId
-			)
-	BEGIN
-		SET @ErrCode = 100
-		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
-
-		RETURN
-	END
-
-	IF @RoleId = @ApproverRoleId
-		AND (
-			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
-			OR @ApproverId <> @ActorId
-			)
-	BEGIN
-		SET @ErrCode = 101
-		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
-
-		RETURN
-	END
-
-	IF @RoleId = @HRRoleId
-		AND (
-			@StatusId <> @ApprovedStatusId
-			OR NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeRole WITH (NOLOCK)
-				WHERE EmployeeId = @ActorId
-					AND RoleId IN (@HRRoleId, @SystemAdminRoleId)
-				)
-			)
-	BEGIN
-		SET @ErrCode = 102
-		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
-
-		RETURN
-	END
 
 	SELECT @maxDate = MAX(WorkDate)
 		,@minDate = MIN(WorkDate)
@@ -186,79 +127,72 @@ BEGIN
 		RETURN
 	END
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
+	IF @RoleId = @VerifiedStatusId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @VerifiedStatusId
+			,VerifiedStatus = @VerifiedStatusId
+			,VerifierId = @ActorId
+			,VerifiedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+	END
+	ELSE IF @RoleId = @ApprovedStatusId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @ApprovedStatusId
+			,ApprovedStatus = @VerifiedStatusId
+			,ApproverComment = @Comment
+			,ApproverId = @ActorId
+			,ApprovedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
 
-		IF @RoleId = @VerifiedStatusId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @VerifiedStatusId
-				,VerifiedStatus = @VerifiedStatusId
-				,VerifierId = @ActorId
-				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
-		ELSE IF @RoleId = @ApprovedStatusId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @ApprovedStatusId
-				,ApprovedStatus = @VerifiedStatusId
-				,ApproverComment = @Comment
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
+		EXEC dbo.DisciplineRequestTrans_Insert @RequestId = @RequestId
+			,@ModifiedBy = @ActorId
+			,@IgnoredDetails = @DisciplineXml
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 
-			EXEC dbo.DisciplineRequestTrans_Insert @RequestId = @RequestId
-				,@ModifiedBy = @ActorId
-				,@IgnoredDetails = @DisciplineXml
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
+		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
+			,@EmpId
+			,@ActorId
 
-			EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
-				,@EmpId
-				,@ActorId
+		EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
+			,@EmpId
+			,@FromDate
+			,@ToDate
+			,@ActorId
 
-			EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
-				,@EmpId
-				,@FromDate
-				,@ToDate
-				,@ActorId
+		EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
+			,@EmpId = @EmpId
+			,@Status = 1
 
-			EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
-				,@EmpId = @EmpId
-				,@Status = 1
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			,@FromDate
+			,@ToDate
+			,1
+	END
+	ELSE IF @RoleId = @HRRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @ProcessedStatusId
+			,HRStatus = @VerifiedStatusId
+			,HRId = @ActorId
+			,HRDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+	END
 
-			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-				,@FromDate
-				,@ToDate
-				,1
-		END
-		ELSE IF @RoleId = @HRRoleId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @ProcessedStatusId
-				,HRStatus = @VerifiedStatusId
-				,HRId = @ActorId
-				,HRDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
+	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
+		,@Comment = @Comment
 
-		EXEC dbo.LeaveRequest_WriteLog @RequestId
-			,@Comment
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
+	IF @@ERROR <> 0
+	BEGIN
 		SELECT @ErrCode = 104
 			,@ErrMsg = 'Aprrove unsuccessfully.'
-
-		ROLLBACK TRANSACTION
-	END CATCH
+	END
 END

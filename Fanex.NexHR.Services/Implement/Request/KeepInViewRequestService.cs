@@ -73,52 +73,6 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ApproveKeepInViewRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ResetKeepInViewRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new RejectKeepInViewRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new VoidKeepInViewRequestCriteria
-            {
-                RequestId = param.RequestId,
-                Comment = param.Comment,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
         public void SendMailCreateRequest(long requestId)
         {
             KeepInViewRequest request = GetById(requestId);

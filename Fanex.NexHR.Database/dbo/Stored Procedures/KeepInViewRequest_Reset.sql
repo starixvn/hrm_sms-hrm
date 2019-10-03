@@ -20,7 +20,7 @@ BEGIN
 
 	DECLARE @OnDate DATE
 		,@EmpId INT
-		,@CurrentStatus TINYINT
+		,@StatusId TINYINT
 		,@VerifierId INT
 		,@ApproverId INT
 		,@TotalMinutes INT
@@ -29,131 +29,121 @@ BEGIN
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
 		,@HRRoleId TINYINT = 6
-		,@SystemAdminRoleId TINYINT = 7
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
-		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @OnDate = kiv.OnDate
-		,@EmpId = wkr.EmpId
-		,@VerifierId = wkr.VerifierId
-		,@ApproverId = wkr.ApproverId
-		,@CurrentStatus = wkr.CurrentStatus
+		,@EmpId = r.EmpId
+		,@VerifierId = r.VerifierId
+		,@ApproverId = r.ApproverId
+		,@StatusId = r.CurrentStatus
 		,@TotalMinutes = DATEDIFF(MI, kiv.FromTime, kiv.ToTime)
 	FROM dbo.KeepInViewRequest AS kiv WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON kiv.RequestId = wkr.RequestId
-		AND wkr.RequestId = @RequestId
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON kiv.RequestId = r.RequestId
+		AND r.RequestId = @RequestId
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
-
-		IF @RoleId = @VerifierRoleId
+	IF @RoleId = @VerifierRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @PendingStatusId
+			,VerifiedStatus = @PendingStatusId
+			,VerifierId = @ActorId
+			,VerifiedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+	END
+	ELSE IF @RoleId = @ApproverRoleId
+	BEGIN
+		IF @VerifierId = @ApproverId
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 			SET CurrentStatus = @PendingStatusId
 				,VerifiedStatus = @PendingStatusId
+				,ApprovedStatus = @PendingStatusId
 				,VerifierId = @ActorId
 				,VerifiedDate = @ProcessedDate
+				,ApproverId = @ActorId
+				,ApprovedDate = @ProcessedDate
 				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestId = @RequestId
 		END
-		ELSE IF @RoleId = @ApproverRoleId
-		BEGIN
-			IF @VerifierId = @ApproverId
-			BEGIN
-				UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-				SET CurrentStatus = @PendingStatusId
-					,VerifiedStatus = @PendingStatusId
-					,ApprovedStatus = @PendingStatusId
-					,VerifierId = @ActorId
-					,VerifiedDate = @ProcessedDate
-					,ApproverId = @ActorId
-					,ApprovedDate = @ProcessedDate
-					,ModifiedBy = @ActorId
-					,ModifiedDate = @ProcessedDate
-				WHERE RequestId = @RequestId
-			END
-			ELSE
-			BEGIN
-				UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-				SET CurrentStatus = CASE 
-						WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
-						ELSE @PendingStatusId
-						END
-					,ApprovedStatus = @PendingStatusId
-					,ApproverId = @ActorId
-					,ApprovedDate = @ProcessedDate
-					,ModifiedBy = @ActorId
-					,ModifiedDate = @ProcessedDate
-				WHERE RequestId = @RequestId
-			END
-
-			IF @CurrentStatus = @ApprovedStatusId
-			BEGIN
-				UPDATE empca
-				SET empca.IsKeepInView = 0
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
-					AND empca.EmpId = kiv.EmpId
-					AND kiv.RequestId = @RequestId
-
-				EXEC dbo.KeepInViewRequest_DeleteTrans @RequestId = @RequestId
-
-				EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-					,@OnDate
-					,@OnDate
-					,1
-			END
-		END
-		ELSE IF @RoleId = @HRRoleId
+		ELSE
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @ApprovedStatusId
-				,HRStatus = @PendingStatusId
-				,HRId = @ActorId
-				,HRDate = @ProcessedDate
+			SET CurrentStatus = CASE 
+					WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
+					ELSE @PendingStatusId
+					END
+				,ApprovedStatus = @PendingStatusId
+				,ApproverId = @ActorId
+				,ApprovedDate = @ProcessedDate
 				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
 			WHERE RequestId = @RequestId
-
-			IF @CurrentStatus = @VoidStatusId
-			BEGIN
-				UPDATE empca
-				SET empca.IsKeepInView = 1
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
-					AND empca.EmpId = kiv.EmpId
-					AND kiv.RequestId = @RequestId
-
-				EXEC dbo.KeepInViewRequest_InsertTrans @RequestId = @RequestId
-
-				EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-					,@OnDate
-					,@OnDate
-					,1
-			END
 		END
 
-		EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
-			,@Comment = ''
+		IF @StatusId = @ApprovedStatusId
+		BEGIN
+			UPDATE empca
+			SET empca.IsKeepInView = 0
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
+				AND empca.EmpId = kiv.EmpId
+				AND kiv.RequestId = @RequestId
 
-		COMMIT TRANSACTION;
-	END TRY
+			EXEC dbo.KeepInViewRequest_DeleteTrans @RequestId = @RequestId
 
-	BEGIN CATCH
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+				,@OnDate
+				,@OnDate
+				,1
+		END
+	END
+	ELSE IF @RoleId = @HRRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @ApprovedStatusId
+			,HRStatus = @PendingStatusId
+			,HRId = @ActorId
+			,HRDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+
+		IF @StatusId = @VoidStatusId
+		BEGIN
+			UPDATE empca
+			SET empca.IsKeepInView = 1
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
+				AND empca.EmpId = kiv.EmpId
+				AND kiv.RequestId = @RequestId
+
+			EXEC dbo.KeepInViewRequest_InsertTrans @RequestId = @RequestId
+
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+				,@OnDate
+				,@OnDate
+				,1
+		END
+	END
+
+	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
+		,@Comment = ''
+
+	IF @@ERROR <> 0
+	BEGIN
 		SELECT @ErrCode = 100
 			,@ErrMsg = 'Reset unsuccessfully.'
-
-		ROLLBACK TRANSACTION;
-	END CATCH;
+	END
 END

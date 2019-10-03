@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -153,6 +154,46 @@
             }
 
             return PartialView("_ProcessRequest", model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        public CustomJsonResult ProcessRequest(ProcessRequestParam model)
+        {
+            CommandResult commandResult;
+            switch (model.Command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    commandResult = requestService.ApproveRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.Reset:
+                    commandResult = requestService.ResetRequest(sessionService.Employee.Id, model);
+                    break;
+
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    commandResult = requestService.RejectRequest(sessionService.Employee.Id, model);
+                    break;
+
+                default:
+                    commandResult = requestService.VoidRequest(sessionService.Employee.Id, model);
+                    break;
+            }
+
+            if (commandResult.IsSuccessful)
+            {
+                requestService.SendMailProcessRequest(model, sessionService.Employee, model.Command);
+            }
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private void HandleProcessRequest(ProcessRequestViewModel model)

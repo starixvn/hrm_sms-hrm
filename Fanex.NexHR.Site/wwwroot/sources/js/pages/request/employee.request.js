@@ -12,42 +12,22 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import './date.filter';
 import { axiosError, blockUI, unblockUI, floatingHeader, confirm, initDatepicker, initFromDateOnChange, toastOptions } from '../../shared/common.functions';
-import { RequestCommand, RequestType } from '../../shared/constants';
+import { RequestCommand } from '../../shared/constants';
 
 $(function () {
     function processRequest(requestId, requestTypeId, roleId, command, comment, disciplines) {
         blockUI();
         const model = {
             requestId: requestId,
+            requestTypeId: requestTypeId,
             roleId: roleId,
             command: command,
             comment: comment,
             disciplines: disciplines
         };
-        let requestUrl = _global.root;
-
-        switch (requestTypeId) {
-            case RequestType.CheckIn:
-            case RequestType.CheckOut:
-                requestUrl += 'CheckInOut/ProcessRequest';
-                break;
-            case RequestType.LateIn:
-            case RequestType.EarlyOut:
-                requestUrl += 'LateInEarlyOut/ProcessRequest';
-                break;
-            case RequestType.ChangeShift:
-                requestUrl += 'ChangeShift/ProcessRequest';
-                break;
-            case RequestType.KeepInView:
-                requestUrl += 'KeepInView/ProcessRequest';
-                break;
-            default:
-                requestUrl += 'leave/ProcessRequest';
-                break;
-        }
 
         axios({
-            url: requestUrl,
+            url: _global.root + 'request/ProcessRequest',
             method: 'POST',
             data: stringify({ model }),
             headers: {
@@ -57,10 +37,10 @@ $(function () {
         }).then(response => {
             unblockUI();
             const data = response.data;
-            if (data.IsSuccessful) {
+            if (data.isSuccessful) {
                 window.location.reload();
             } else {
-                toastr.error(data.Message, '', toastOptions());
+                toastr.error(data.message, '', toastOptions());
             }
         }).catch(axiosError);
     }

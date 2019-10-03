@@ -18,14 +18,6 @@
 
         EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria);
 
-        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
-
         void SendMailCreateRequest(long requestId);
 
         void SendMailEditRequest(long requestId);

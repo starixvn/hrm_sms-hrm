@@ -18,76 +18,63 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	DECLARE @CurrentStatus INT
+	DECLARE @StatusId INT
 		,@ProcessedDate DATETIME = GETDATE()
 		,@FromDate DATETIME
 		,@ToDate DATETIME
-		,@RequestType SMALLINT
 		,@EmpId INT
 		-- request status
-		,@PendingStatusId TINYINT = 1
-		,@VerifiedStatusId TINYINT = 2
-		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	SELECT @CurrentStatus = wk.CurrentStatus
+	SELECT @StatusId = r.CurrentStatus
 		,@FromDate = lr.FromDate
-		,@RequestType = wk.RequestType
-		,@EmpId = wk.EmpId
-	FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
+		,@EmpId = r.EmpId
+	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		AND lr.RequestId = @RequestId
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
+	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+	SET CurrentStatus = @VoidStatusId
+		,HRId = @ActorId
+		,HRDate = @ProcessedDate
+		,ModifiedBy = @ActorId
+		,ModifiedDate = @ProcessedDate
+	WHERE RequestId = @RequestId
 
-		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-		SET CurrentStatus = @VoidStatusId
-			,HRId = @ActorId
-			,HRDate = @ProcessedDate
-			,ModifiedBy = @ActorId
-			,ModifiedDate = @ProcessedDate
-		WHERE RequestID = @RequestID
+	IF @StatusId IN (@ApprovedStatusId, @ProcessedStatusId)
+	BEGIN
+		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
-		IF @CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
-		BEGIN
-			EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
+		EXEC dbo.WorkingTimeRequest_LeaveReject_RollbackCalendar @RequestId
+			,@EmpId
+			,@ActorId
 
-			EXEC dbo.WorkingTimeRequest_LeaveReject_RollbackCalendar @RequestId
-				,@EmpId
-				,@ActorId
+		EXEC dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
+			,@ProcessedDate
+			,@ActorId
 
-			EXEC dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
-				,@ProcessedDate
-				,@ActorId
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			,@FromDate
+			,@ToDate
+			,1
+	END
 
-			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-				,@FromDate
-				,@ToDate
-				,1
-		END
+	EXEC dbo.WorkingTimeRequest_Update_TmpLeaveBalance @RequestId = @RequestId
+		,@EmpId = @EmpId
+		,@Status = 2
 
-		EXEC dbo.WorkingTimeRequest_Update_TmpLeaveBalance @RequestId = @RequestId
-			,@EmpId = @EmpId
-			,@Status = 2
+	EXEC dbo.WorkingTimeRequest_Update_TmpKIVLeaveBalance @RequestId = @RequestId
+		,@EmpId = @EmpId
+		,@Status = 2
 
-		EXEC dbo.WorkingTimeRequest_Update_TmpKIVLeaveBalance @RequestId = @RequestId
-			,@EmpId = @EmpId
-			,@Status = 2
+	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
+		,@Comment = @Comment
 
-		EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
-			,@Comment = @Comment
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
+	IF @@ERROR > 0
+	BEGIN
 		SELECT @ErrCode = 100
 			,@ErrMsg = 'Void unsuccessfully.'
-
-		ROLLBACK TRANSACTION
-	END CATCH;
+	END
 END

@@ -31,14 +31,9 @@ BEGIN
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
 		,@HRRoleId TINYINT = 6
-		,@SystemAdminRoleId TINYINT = 7
 		-- request status
-		,@PendingStatusId TINYINT = 1
-		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
-		,@ApprovedStatusId TINYINT = 4
 		,@RejectedStatusId TINYINT = 5
-		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = EmpId

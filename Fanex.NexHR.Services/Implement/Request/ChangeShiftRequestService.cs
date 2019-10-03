@@ -12,7 +12,6 @@
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Request.ChangeShift;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Repositories;
@@ -182,54 +181,6 @@
             var criteria = new DeleteChangeShiftRequestCriteria
             {
                 RequestId = requestId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ApproveChangeShiftRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId,
-                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult ResetRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new ResetChangeShiftRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new RejectChangeShiftRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult VoidRequest(int actorId, ProcessRequestParam param)
-        {
-            var criteria = new VoidChangeShiftRequestCriteria
-            {
-                RequestId = param.RequestId,
-                RoleId = param.RoleId,
-                Comment = param.Comment,
-                ActorId = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
         }

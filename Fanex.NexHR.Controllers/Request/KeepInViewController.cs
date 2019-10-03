@@ -6,7 +6,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request.KeepInView;
@@ -198,46 +197,6 @@
             CommandResult commandResult = keepInViewRequestService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
-        public JsonResult ProcessRequest(ProcessRequestParam model)
-        {
-            CommandResult commandResult;
-            switch (model.Command)
-            {
-                case RequestCommand.Accept:
-                case RequestCommand.Approve:
-                case RequestCommand.Process:
-                    commandResult = keepInViewRequestService.ApproveRequest(sessionService.Employee.Id, model);
-                    break;
-
-                case RequestCommand.Reset:
-                    commandResult = keepInViewRequestService.ResetRequest(sessionService.Employee.Id, model);
-                    break;
-
-                case RequestCommand.NotAccept:
-                case RequestCommand.Reject:
-                case RequestCommand.Void:
-                    commandResult = keepInViewRequestService.RejectRequest(sessionService.Employee.Id, model);
-                    break;
-
-                default:
-                    commandResult = keepInViewRequestService.VoidRequest(sessionService.Employee.Id, model);
-                    break;
-            }
-
-            if (commandResult.IsSuccessful)
-            {
-                keepInViewRequestService.SendMailProcessRequest(model.RequestId, sessionService.Employee, model.Command);
-            }
-
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ViewHistory(long id)

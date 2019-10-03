@@ -25,6 +25,14 @@
 
         IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId);
 
-        CommandResult Delete(long requestId);
+        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
+
+        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
+
+        void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
     }
 }

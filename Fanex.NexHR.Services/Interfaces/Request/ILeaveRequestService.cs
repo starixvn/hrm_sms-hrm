@@ -27,14 +27,6 @@
 
         CommandResult Delete(long requestId);
 
-        CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult ResetRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult RejectRequest(int actorId, ProcessRequestParam param);
-
-        CommandResult VoidRequest(int actorId, ProcessRequestParam param);
-
         void SendMailCreateRequest(InsertLeaveRequestCriteria criteria);
 
         void SendMailEditRequest(UpdateLeaveRequestCriteria criteria);

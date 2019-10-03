@@ -29,9 +29,6 @@ BEGIN
 		,@ToDate DATE
 		,@EmpId INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@StatusId TINYINT
-		,@VerifierId INT
-		,@ApproverId INT
 		-- change shift type
 		,@ChangeShift TINYINT = 1
 		,@MoveOffDay TINYINT = 2
@@ -39,239 +36,171 @@ BEGIN
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
 		,@HRRoleId TINYINT = 6
-		,@SystemAdminRoleId TINYINT = 7
 		-- request status
-		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
-		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
-		,@VoidStatusId TINYINT = 7
 
-	SELECT @EmpId = cs.EmpId
-		,@FromDate = cs.FromDate
-		,@ToDate = cs.ToDate
-		,@TypeId = cs.TypeId
-		,@StatusId = wk.CurrentStatus
-		,@VerifierId = wk.VerifierId
-		,@ApproverId = wk.ApproverId
-	FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
-	WHERE cs.RequestId = @RequestId
+	SELECT @EmpId = EmpId
+		,@FromDate = FromDate
+		,@ToDate = ToDate
+		,@TypeId = TypeId
+	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
-	IF @RoleId = @VerifierRoleId
-		AND (
-			@StatusId <> @PendingStatusId
-			OR @VerifierId <> @ActorId
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+				INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON r.RequestId = cs.RequestId
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
+				AND csdt.OnDate BETWEEN @FromDate
+					AND @ToDate
+			WHERE r.RequestId <> @RequestId
+				AND r.EmpId = @EmpId
+				AND r.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 			)
 	BEGIN
-		SET @ErrCode = 100
-		SET @ErrMsg = 'You can not verify this request. Please contact Administrator.'
+		SET @ErrCode = 103
+		SET @ErrMsg = 'Another approved request in the same date has existed.'
 
 		RETURN
 	END
 
 	IF @RoleId = @ApproverRoleId
-		AND (
-			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
-			OR @ApproverId <> @ActorId
-			)
+		AND ISNULL(@DisciplineXml, '') <> ''
 	BEGIN
-		SET @ErrCode = 101
-		SET @ErrMsg = 'You can not approve this request. Please contact Administrator.'
-
-		RETURN
-	END
-
-	IF @RoleId = @HRRoleId
-		AND (
-			@StatusId <> @ApprovedStatusId
-			OR NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeRole WITH (NOLOCK)
-				WHERE EmployeeId = @ActorId
-					AND RoleId IN (@HRRoleId, @SystemAdminRoleId)
-				)
-			)
-	BEGIN
-		SET @ErrCode = 102
-		SET @ErrMsg = 'You can not process this request. Please contact Administrator.'
-
-		RETURN
-	END
-
-	IF EXISTS (
-			SELECT 1
-			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-				INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wk.RequestId = cs.RequestId
-				AND cs.FromDate = @FromDate
-			WHERE wk.EmpId = @EmpId
-				AND wk.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
-			)
-	BEGIN
-		SET @ErrCode = 103
-		SET @ErrMsg = 'Another approved request in the same date has existed'
-
-		RETURN
-	END
-
-	BEGIN TRY
-		BEGIN TRANSACTION;
-
-		IF @RoleId = @ApproverRoleId
-			AND ISNULL(@DisciplineXml, '') <> ''
-		BEGIN
-			EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
-				,@RoleId = @RoleId
-				,@ModifiedBy = @ActorId
-				,@IgnoredDetails = @DisciplineXml
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-
-			IF @ErrCode <> 0
-			BEGIN
-				ROLLBACK TRANSACTION;
-
-				RETURN
-			END
-		END
-
-		EXEC dbo.EmployeeCalendar_Insert @empid = @empid
-			,@fromdate = @FromDate
-			,@todate = @ToDate
+		EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
+			,@RoleId = @RoleId
+			,@ModifiedBy = @ActorId
+			,@IgnoredDetails = @DisciplineXml
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
-		IF @ErrCode <> 0
+	EXEC dbo.EmployeeCalendar_Insert @empid = @empid
+		,@fromdate = @FromDate
+		,@todate = @ToDate
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
+
+	IF @RoleId = @VerifierRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @VerifiedStatusId
+			,VerifiedStatus = @VerifiedStatusId
+			,VerifierId = @ActorId
+			,VerifiedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+	END
+	ELSE IF @RoleId = @ApproverRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @ApprovedStatusId
+			,ApprovedStatus = @VerifiedStatusId
+			,ApproverComment = @Comment
+			,ApproverId = @ActorId
+			,ApprovedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+
+		IF @TypeId = @ChangeShift
 		BEGIN
-			ROLLBACK TRANSACTION;
+			UPDATE empca
+			SET empca.IsOffDay = 1
+				,empca.ChangeShiftId = csdt.FromShift
+				,empca.ShiftId = NULL
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+				,empca.IsPublic = 1
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
+				AND empca.EmpId = csdt.EmpId
+				AND csdt.ToShift = - 1
+				AND csdt.RequestId = @RequestId
+			WHERE empca.EmpId = @EmpId
 
-			RETURN
+			UPDATE empca
+			SET empca.ChangeShiftId = NULL
+				,empca.ShiftId = csdt.ToShift
+				,empca.IsOffDay = 0
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+				,empca.IsPublic = 1
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
+				AND empca.EmpId = csdt.EmpId
+				AND csdt.RequestId = @RequestId
+				AND csdt.ToShift <> - 1
+			WHERE empca.EmpId = @EmpId
+				AND empca.IsOffDay = 1
+
+			UPDATE empca
+			SET empca.ChangeShiftId = csdt.FromShift
+				,empca.ShiftId = csdt.ToShift
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+				,empca.IsPublic = 1
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
+				AND empca.EmpId = csdt.EmpId
+				AND csdt.RequestId = @RequestId
+				AND csdt.ToShift <> - 1
+			WHERE empca.EmpId = @EmpId
+				AND empca.IsOffDay = 0
+		END
+		ELSE
+		BEGIN
+			UPDATE empca
+			SET empca.IsOffDay = 0
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+				,empca.IsPublic = 1
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
+				AND empca.EmpId = csdt.EmpId
+				AND csdt.RequestId = @RequestId
+			WHERE empca.EmpId = @EmpId
+				AND empca.IsOffDay = 1
+
+			UPDATE empca
+			SET empca.IsOffDay = 1
+				,empca.ModifiedBy = @ActorId
+				,empca.ModifiedDate = @ProcessedDate
+				,empca.IsPublic = 1
+			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.ToDate
+				AND empca.EmpId = csdt.EmpId
+				AND csdt.RequestId = @RequestId
+			WHERE empca.EmpId = @EmpId
+				AND empca.IsOffDay = 0
 		END
 
-		IF @RoleId = @VerifierRoleId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @VerifiedStatusId
-				,VerifiedStatus = @VerifiedStatusId
-				,VerifierId = @ActorId
-				,VerifiedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
-		ELSE IF @RoleId = @ApproverRoleId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @ApprovedStatusId
-				,ApprovedStatus = @VerifiedStatusId
-				,ApproverComment = @Comment
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-			
-			IF @TypeId = @ChangeShift
-			BEGIN
-				UPDATE empca
-				SET empca.IsOffDay = 1
-					,empca.ChangeShiftId = csdt.FromShift
-					,empca.ShiftId = NULL
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-					,empca.IsPublic = 1
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.ToShift = - 1
-					AND csdt.RequestId = @RequestId
-				WHERE empca.EmpId = @EmpId
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			,@FromDate
+			,@ToDate
+			,1
+	END
+	ELSE IF @RoleId = @HRRoleId
+	BEGIN
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @ProcessedStatusId
+			,HRStatus = @VerifiedStatusId
+			,HRId = @ActorId
+			,HRDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
+	END
 
-				UPDATE empca
-				SET empca.ChangeShiftId = NULL
-					,empca.ShiftId = csdt.ToShift
-					,empca.IsOffDay = 0
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-					,empca.IsPublic = 1
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.RequestId = @RequestId
-					AND csdt.ToShift <> - 1
-				WHERE empca.EmpId = @EmpId
-					AND empca.IsOffDay = 1
+	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
+		,@Comment = @Comment
 
-				UPDATE empca
-				SET empca.ChangeShiftId = csdt.FromShift
-					,empca.ShiftId = csdt.ToShift
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-					,empca.IsPublic = 1
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.RequestId = @RequestId
-					AND csdt.ToShift <> - 1
-				WHERE empca.EmpId = @EmpId
-					AND empca.IsOffDay = 0
-			END
-			ELSE
-			BEGIN
-				UPDATE empca
-				SET empca.IsOffDay = 0
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-					,empca.IsPublic = 1
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.RequestId = @RequestId
-				WHERE empca.EmpId = @EmpId
-					AND empca.IsOffDay = 1
-
-				UPDATE empca
-				SET empca.IsOffDay = 1
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-					,empca.IsPublic = 1
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.ToDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.RequestId = @RequestId
-				WHERE empca.EmpId = @EmpId
-					AND empca.IsOffDay = 0
-			END
-
-			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-				,@FromDate
-				,@ToDate
-				,1
-		END
-		ELSE IF @RoleId = @HRRoleId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @ProcessedStatusId
-				,HRStatus = @VerifiedStatusId
-				,HRId = @ActorId
-				,HRDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
-
-		EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
-			,@Comment = @Comment
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
-		SELECT @ErrCode = 100
+	IF @@ERROR <> 0
+	BEGIN
+		SELECT @ErrCode = 104
 			,@ErrMsg = 'Aprrove unsuccessfully.'
-
-		ROLLBACK TRANSACTION;
-	END CATCH;
+	END
 END

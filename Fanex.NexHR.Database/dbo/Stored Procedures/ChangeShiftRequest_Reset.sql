@@ -33,26 +33,23 @@ BEGIN
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
 		,@HRRoleId TINYINT = 6
-		,@SystemAdminRoleId TINYINT = 7
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
-		,@RejectedStatusId TINYINT = 5
-		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = cs.EmpId
 		,@FromDate = cs.FromDate
 		,@ToDate = cs.ToDate
 		,@TypeId = cs.TypeId
-		,@StatusId = wk.CurrentStatus
-		,@VerifierId = wk.VerifierId
-		,@ApproverId = wk.ApproverId
+		,@StatusId = r.CurrentStatus
+		,@VerifierId = r.VerifierId
+		,@ApproverId = r.ApproverId
 	FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON cs.RequestId = wk.RequestId
-	WHERE cs.RequestId = @RequestId
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cs.RequestId = r.RequestId
+		AND cs.RequestId = @RequestId
 
 	EXEC dbo.WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline @RequestId = @RequestId
 		,@RoleId = @RoleId

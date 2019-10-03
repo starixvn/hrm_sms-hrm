@@ -6,6 +6,7 @@
     public class ProcessRequestParam
     {
         public long RequestId { get; set; }
+        public RequestType RequestTypeId { get; set; }
         public byte RoleId { get; set; }
         public int EmployeeId { get; set; }
         public RequestCommand Command { get; set; }
