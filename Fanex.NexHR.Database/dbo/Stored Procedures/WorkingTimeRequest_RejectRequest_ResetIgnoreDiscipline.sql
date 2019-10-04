@@ -222,7 +222,7 @@ BEGIN
 					WHEN r.DisciplineTypeId = 9 THEN 0
 					ELSE dis.IsConfirmedUnplannedLeave END
 					)
-				,dis.IsIgnoreWeekendLeave = (CASE 
+				,dis.IsIgnoredWeekendLeave = (CASE 
 					WHEN r.DisciplineTypeId = 10 THEN 0
 					ELSE dis.IsIgnoreWeekendLeave END
 					)

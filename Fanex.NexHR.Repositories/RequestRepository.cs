@@ -13,23 +13,6 @@
 
     public class RequestRepository : IRequestRepository
     {
-        public RequestEntity GetRequestById(ICriteria criteria)
-        {
-            IList<RequestEntity> entityList = null;
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
-                {
-                    if (reader != null)
-                    {
-                        entityList = FillData(reader);
-                    }
-                }
-            }
-
-            return entityList.FirstOrDefault();
-        }
-
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
@@ -54,27 +37,18 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    relatedPeople = new RequestRelatedPeopleModel();
-                    relatedPeople.Requester = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    relatedPeople.Verifier = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    relatedPeople.Approver = multi.Read<SupervisorNameModel>().FirstOrDefault();
-                    relatedPeople.ListHR = multi.Read<SupervisorNameModel>().ToList();
-                    relatedPeople.EmailSetting = multi.Read<EmailSettingsModel>().FirstOrDefault();
+                    relatedPeople = new RequestRelatedPeopleModel
+                    {
+                        Requester = multi.Read<SupervisorNameModel>().FirstOrDefault(),
+                        Verifier = multi.Read<SupervisorNameModel>().FirstOrDefault(),
+                        Approver = multi.Read<SupervisorNameModel>().FirstOrDefault(),
+                        ListHR = multi.Read<SupervisorNameModel>().ToList(),
+                        EmailSetting = multi.Read<EmailSettingsModel>().FirstOrDefault()
+                    };
                 }
             }
 
             return relatedPeople;
-        }
-
-        public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
-        {
-            decimal numberDay = 0;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                numberDay = (decimal)db.ExecuteScalar(criteria.GetSpParams());
-            }
-
-            return numberDay;
         }
 
         public VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria)
@@ -113,24 +87,22 @@
             }
         }
 
-        public IList<LeaveDisciplineModel> GetLeaveRequestToIgnoreById(ICriteria criteria)
+        public IList<LeaveDisciplineModel> GetLeaveRequestToReviewDiscipline(ICriteria criteria)
         {
-            IList<LeaveDisciplineModel> disciplines = null;
             using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IList<LeaveDisciplineDetailModel> leaveDetails;
-                    disciplines = multi.Read<LeaveDisciplineModel>().ToList();
-                    leaveDetails = multi.Read<LeaveDisciplineDetailModel>().ToList();
+                    IList<LeaveDisciplineModel> disciplines = multi.Read<LeaveDisciplineModel>().ToList();
+                    IList<LeaveDisciplineDetailModel> leaveDetails = multi.Read<LeaveDisciplineDetailModel>().ToList();
                     foreach (var discipline in disciplines)
                     {
                         discipline.LeaveDetail = leaveDetails.Where(t => t.WorkDate == discipline.WorkDate).ToList();
                     }
+
+                    return disciplines;
                 }
             }
-
-            return disciplines;
         }
 
         private IList<RequestEntity> FillData(IDataReader reader)

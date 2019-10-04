@@ -78,12 +78,10 @@ BEGIN
 		,@TmpFromDate = CAST(@FromDate AS DATE)
 		,@TmpToDate = CAST(@ToDate AS DATE)
 
-	IF (
-			@FromDate IS NULL
-			OR @ToDate IS NULL
-			OR @LeaveTypeID IS NULL
-			OR ISNULL(@TotalDays, 0) < 0
-			)
+	IF @FromDate IS NULL
+		OR @ToDate IS NULL
+		OR @LeaveTypeID IS NULL
+		OR ISNULL(@TotalDays, 0) < 0
 	BEGIN
 		SET @ErrCode = 104
 		SET @ErrMsg = 'Invalid parameter'
@@ -91,11 +89,9 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			@FromDate IS NOT NULL
-			AND @ToDate IS NOT NULL
-			AND YEAR(@FromDate) <> YEAR(@ToDate)
-			)
+	IF @FromDate IS NOT NULL
+		AND @ToDate IS NOT NULL
+		AND YEAR(@FromDate) <> YEAR(@ToDate)
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'You cannot submit a cross-year leave request. Please split them into 2 requests.'
@@ -103,27 +99,25 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			@EmpId <> @CreatedBy
-			AND NOT EXISTS (
-				SELECT 1
-				FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @EmpId
-					AND sp.EmpId = @CreatedBy
-					AND sp.ActionType = @OnbehalfActionType
-					AND sp.RequestType = @RequestType
-					AND ISNULL(sp.IsDeleted, 0) = 0
-				)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @CreatedBy
-					AND g.RequestType = @RequestType
-					AND g.ActionType = @OnbehalfActionType
-					AND ISNULL(g.IsDeleted, 0) = 0
-				)
+	IF @EmpId <> @CreatedBy
+		AND NOT EXISTS (
+			SELECT 1
+			FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
+			WHERE sp.OwnerId = @EmpId
+				AND sp.EmpId = @CreatedBy
+				AND sp.ActionType = @OnbehalfActionType
+				AND sp.RequestType = @RequestType
+				AND ISNULL(sp.IsDeleted, 0) = 0
+			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+				INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+			WHERE e.EmpId = @EmpId
+				AND g.OwnerId = @CreatedBy
+				AND g.RequestType = @RequestType
+				AND g.ActionType = @OnbehalfActionType
+				AND ISNULL(g.IsDeleted, 0) = 0
 			)
 	BEGIN
 		SET @ErrCode = 106
@@ -143,28 +137,26 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		IF (
-				@VerifierId IS NULL
-				OR (
-					NOT EXISTS (
-						SELECT 1
-						FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-						WHERE sp.OwnerId = @VerifierId
-							AND sp.EmpId = @EmpId
-							AND sp.ActionType = @VerifyActionType
-							AND sp.RequestType = @RequestType
-							AND ISNULL(sp.IsDeleted, 0) = 0
-						)
-					AND NOT EXISTS (
-						SELECT 1
-						FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-							INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-						WHERE e.EmpId = @EmpId
-							AND g.OwnerId = @VerifierId
-							AND g.RequestType = @RequestType
-							AND g.ActionType = @VerifyActionType
-							AND ISNULL(g.IsDeleted, 0) = 0
-						)
+		IF @VerifierId IS NULL
+			OR (
+				NOT EXISTS (
+					SELECT 1
+					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
+					WHERE sp.OwnerId = @VerifierId
+						AND sp.EmpId = @EmpId
+						AND sp.ActionType = @VerifyActionType
+						AND sp.RequestType = @RequestType
+						AND ISNULL(sp.IsDeleted, 0) = 0
+					)
+				AND NOT EXISTS (
+					SELECT 1
+					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+					WHERE e.EmpId = @EmpId
+						AND g.OwnerId = @VerifierId
+						AND g.RequestType = @RequestType
+						AND g.ActionType = @VerifyActionType
+						AND ISNULL(g.IsDeleted, 0) = 0
 					)
 				)
 		BEGIN
@@ -174,28 +166,26 @@ BEGIN
 			RETURN;
 		END
 
-		IF (
-				@ApproverId IS NULL
-				OR (
-					NOT EXISTS (
-						SELECT 1
-						FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-						WHERE sp.OwnerId = @ApproverId
-							AND sp.EmpId = @EmpId
-							AND sp.ActionType = @ApproveActionType
-							AND sp.RequestType = @RequestType
-							AND ISNULL(sp.IsDeleted, 0) = 0
-						)
-					AND NOT EXISTS (
-						SELECT 1
-						FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-							INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-						WHERE e.EmpId = @EmpId
-							AND g.OwnerId = @ApproverId
-							AND g.RequestType = @RequestType
-							AND g.ActionType = @ApproveActionType
-							AND ISNULL(g.IsDeleted, 0) = 0
-						)
+		IF @ApproverId IS NULL
+			OR (
+				NOT EXISTS (
+					SELECT 1
+					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
+					WHERE sp.OwnerId = @ApproverId
+						AND sp.EmpId = @EmpId
+						AND sp.ActionType = @ApproveActionType
+						AND sp.RequestType = @RequestType
+						AND ISNULL(sp.IsDeleted, 0) = 0
+					)
+				AND NOT EXISTS (
+					SELECT 1
+					FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
+						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
+					WHERE e.EmpId = @EmpId
+						AND g.OwnerId = @ApproverId
+						AND g.RequestType = @RequestType
+						AND g.ActionType = @ApproveActionType
+						AND ISNULL(g.IsDeleted, 0) = 0
 					)
 				)
 		BEGIN
@@ -206,19 +196,17 @@ BEGIN
 		END
 	END
 
-	IF (
-			@LeaveTypeID <> @PublicHolidayLeaveType
-			AND @TotalDays = 0.5
-			AND EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeCalendar WITH (NOLOCK)
-				WHERE EmpID = @EmpId
-					AND WorkDate = @FromDate
-					AND (
-						IsHoliday = 1
-						OR IsOffDay = 1
-						)
-				)
+	IF @LeaveTypeID <> @PublicHolidayLeaveType
+		AND @TotalDays = 0.5
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeCalendar WITH (NOLOCK)
+			WHERE EmpID = @EmpId
+				AND WorkDate = @FromDate
+				AND (
+					IsHoliday = 1
+					OR IsOffDay = 1
+					)
 			)
 	BEGIN
 		SET @ErrCode = 105
@@ -239,9 +227,11 @@ BEGIN
 						AND @TmpToDate
 				)
 		BEGIN
-			EXEC dbo.EmployeeCalendar_Insert_ByLeaveRequest @empid = @EmpID
+			EXEC dbo.EmployeeCalendar_Insert @EmpId = @EmpId
 				,@fromdate = @TmpFromDate
 				,@todate = @TmpToDate
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
 		INSERT INTO #LeaveRequestDetail (
@@ -374,10 +364,8 @@ BEGIN
 		END
 	END
 
-	IF (
-			ISNULL(@TotalDays_tmp, 0) <= 0
-			AND @LeaveTypeID <> @PublicHolidayLeaveType
-			)
+	IF ISNULL(@TotalDays_tmp, 0) <= 0
+		AND @LeaveTypeID <> @PublicHolidayLeaveType
 	BEGIN
 		SET @ErrCode = 105
 		SET @ErrMsg = 'Invalid leave days.'
@@ -385,79 +373,77 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-					INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-					LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
-						AND l.ToDate
-					AND c.empid = l.EmpId
-				WHERE r.empid = @empid
-					AND r.RequestType = @RequestType
-					AND CurrentStatus IN (1, 2, 4, 6)
-					AND (
-						(
-							@TotalDays >= 1
-							AND (
-								CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								)
-							)
-						OR (
-							@TotalDays < 1
-							AND TotalDays >= 1
-							AND (
-								CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
+					AND l.ToDate
+				AND c.empid = l.EmpId
+			WHERE r.empid = @empid
+				AND r.RequestType = @RequestType
+				AND CurrentStatus IN (1, 2, 4, 6)
+				AND (
+					(
+						@TotalDays >= 1
+						AND (
+							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
+							OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
 							)
 						)
-				)
-			OR EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-					INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-					INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
-					INNER JOIN #LeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
-				WHERE r.empid = @empid
-					AND r.RequestType = @RequestType
-					AND CurrentStatus IN (1, 2, 4, 6)
-					AND @TotalDays = 0.5
-					AND l.TotalDays = 0.5
-					AND (
-						(
-							ldt.FromTime BETWEEN ldtt.FromTime
-								AND ldtt.ToTime
-							)
-						OR (
-							ldt.ToTime BETWEEN ldtt.FromTime
-								AND ldtt.ToTime
-							)
-						OR (
-							ldtt.FromTime BETWEEN ldt.FromTime
-								AND ldt.ToTime
-							)
-						OR (
-							ldtt.ToTime BETWEEN ldt.FromTime
-								AND ldt.ToTime
+					OR (
+						@TotalDays < 1
+						AND TotalDays >= 1
+						AND (
+							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
+							OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
 							)
 						)
-					AND ldt.FromTime <> ldtt.ToTime
-					AND ldt.ToTime <> ldtt.FromTime
-				)
+					)
+			)
+		OR EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
+				INNER JOIN #LeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
+			WHERE r.empid = @empid
+				AND r.RequestType = @RequestType
+				AND CurrentStatus IN (1, 2, 4, 6)
+				AND @TotalDays = 0.5
+				AND l.TotalDays = 0.5
+				AND (
+					(
+						ldt.FromTime BETWEEN ldtt.FromTime
+							AND ldtt.ToTime
+						)
+					OR (
+						ldt.ToTime BETWEEN ldtt.FromTime
+							AND ldtt.ToTime
+						)
+					OR (
+						ldtt.FromTime BETWEEN ldt.FromTime
+							AND ldt.ToTime
+						)
+					OR (
+						ldtt.ToTime BETWEEN ldt.FromTime
+							AND ldt.ToTime
+						)
+					)
+				AND ldt.FromTime <> ldtt.ToTime
+				AND ldt.ToTime <> ldtt.FromTime
 			)
 	BEGIN
 		SET @ErrCode = 107
@@ -468,11 +454,11 @@ BEGIN
 
 	SELECT @AnnualLeaveDay = ISNULL(@AnnualLeaveDay, 0)
 
-	IF (@AnnualLeaveDay > 0)
+	IF @AnnualLeaveDay > 0
 	BEGIN
 		SELECT @AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpID, @ToDate, NULL)
 
-		IF (@AnnualLeaveDay > @AnnualLeaveBalance)
+		IF @AnnualLeaveDay > @AnnualLeaveBalance
 		BEGIN
 			SET @ErrCode = 108
 			SET @ErrMsg = 'You have not enough annual leave days to request'
@@ -483,11 +469,11 @@ BEGIN
 
 	SELECT @KIVLeaveDay = ISNULL(@KIVLeaveDay, 0)
 
-	IF (@KIVLeaveDay > 0)
+	IF @KIVLeaveDay > 0
 	BEGIN
 		SELECT @KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpID, @ToDate, NULL)
 
-		IF (@KIVLeaveDay > @KIVLeaveBalance)
+		IF @KIVLeaveDay > @KIVLeaveBalance
 		BEGIN
 			SET @ErrCode = 111
 			SET @ErrMsg = 'You have not enough Keep In View leave days to request'
@@ -496,11 +482,11 @@ BEGIN
 		END
 	END
 
-	IF (@KIVLeaveMinutes > 0)
+	IF @KIVLeaveMinutes > 0
 	BEGIN
 		SELECT @KIVByHourLeaveBalance = dbo.fnc_GetKIVByHourBalance(@EmpID, @FromDate, NULL)
 
-		IF (@KIVLeaveMinutes > @KIVByHourLeaveBalance)
+		IF @KIVLeaveMinutes > @KIVByHourLeaveBalance
 		BEGIN
 			SET @ErrCode = 111
 			SET @ErrMsg = 'You have not enough Keep In View leave hours balance to request'
@@ -509,13 +495,11 @@ BEGIN
 		END
 	END
 
-	IF (
-			EXISTS (
-				SELECT 1
-				FROM #LeaveRequestDetail
-				WHERE IsHalfDay = 1
-					AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType, @BusinessTripLeaveType, @KIVByHourLeaveType)
-				)
+	IF EXISTS (
+			SELECT 1
+			FROM #LeaveRequestDetail
+			WHERE IsHalfDay = 1
+				AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType, @BusinessTripLeaveType, @KIVByHourLeaveType)
 			)
 	BEGIN
 		SET @ErrCode = 112
@@ -524,14 +508,12 @@ BEGIN
 		RETURN;
 	END
 
-	IF (
-			EXISTS (
-				SELECT 1
-				FROM #LeaveRequestDetail
-				WHERE IsHalfDay = 1
-					AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-					AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
-				)
+	IF EXISTS (
+			SELECT 1
+			FROM #LeaveRequestDetail
+			WHERE IsHalfDay = 1
+				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
+				AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
 			)
 	BEGIN
 		SET @ErrCode = 113
@@ -541,72 +523,46 @@ BEGIN
 	END
 
 	-- check rule for leave during working hours
-	IF (
-			@LeaveTypeID = @BusinessDuringWorkingLeaveType
-			AND EXISTS (
+	IF @LeaveTypeID = @BusinessDuringWorkingLeaveType
+		AND EXISTS (
+			SELECT 1
+			FROM #LeaveRequestDetail
+			WHERE IsHalfDay = 1
+			)
+	BEGIN
+		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
+			OR EXISTS (
 				SELECT 1
 				FROM #LeaveRequestDetail
 				WHERE IsHalfDay = 1
-				)
-			)
-	BEGIN
-		IF (
-				DATEDIFF(DD, @FromDate, @ToDate) > 0
-				OR EXISTS (
-					SELECT 1
-					FROM #LeaveRequestDetail
-					WHERE IsHalfDay = 1
-						AND LeaveType = @BusinessDuringWorkingLeaveType
-						AND DATEDIFF(MI, FromTime, ToTime) > 120
-					)
+					AND LeaveType = @BusinessDuringWorkingLeaveType
+					AND DATEDIFF(MI, FromTime, ToTime) > 120
 				)
 		BEGIN
 			SET @ErrCode = 114
 			SET @ErrMsg = 'You can not request leave during working hours > 120 minutes.'
 		END
 
-		IF (
-				NOT EXISTS (
-					SELECT 1
-					FROM dbo.EmployeeCalendar WITH (NOLOCK)
-					WHERE EmpId = @EmpId
-						AND DATEDIFF(DD, @FromDate, WorkDate) = 0
-						AND ISNULL(ShiftId, 0) > 0
-					)
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeCalendar WITH (NOLOCK)
+				WHERE EmpId = @EmpId
+					AND DATEDIFF(DD, @FromDate, WorkDate) = 0
+					AND ISNULL(ShiftId, 0) > 0
 				)
 		BEGIN
 			SET @ErrCode = 115
 			SET @ErrMsg = 'You can not request because this date has not arranged shift yet.'
 		END
 
-		--ELSE
-		--BEGIN
-		--	IF EXISTS (
-		--			SELECT 1
-		--			FROM dbo.[Shift] AS s WITH (NOLOCK)
-		--				INNER JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON s.ShiftID = cl.ShiftId
-		--				AND cl.EmpId = @EmpId
-		--				AND DATEDIFF(DD, @FromDate, WorkDate) = 0
-		--				INNER JOIN #LeaveRequestDetail AS ldt ON DATEDIFF(MI, CASE 
-		--						WHEN IsInAfterDay = 1 THEN DATEADD(d, 1, WorkDate + ' ' + s.BeginCheckInTime)
-		--						ELSE CAST(WorkDate + ' ' + s.BeginCheckInTime AS DATETIME)
-		--						END, ldt.FromTime) = 0
-		--			)
-		--	BEGIN
-		--		SET @ErrCode = 117
-		--		SET @ErrMsg = 'You can not request leave during working hours at the begin of shift.'
-		--	END
-		--END
-		IF (
-				EXISTS (
-					SELECT 1
-					FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
-						INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON lv.RequestId = ldt.RequestId
-						INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
-					WHERE ldt.IsHalfDay = 1
-						AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
-						AND wk.CurrentStatus IN (1, 2, 4)
-					)
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+					INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON lv.RequestId = ldt.RequestId
+					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
+				WHERE ldt.IsHalfDay = 1
+					AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
+					AND wk.CurrentStatus IN (1, 2, 4)
 				)
 		BEGIN
 			SET @ErrCode = 118
@@ -707,29 +663,24 @@ BEGIN
 		FROM #LeaveRequestDetail rd
 
 		EXEC dbo.LeaveRequest_InsertTmpAnnualLeaveTrans @RequestId = @RequestId
-			,@EmpID = @EmpID
+			,@EmpId = @EmpId
 
 		EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
 		EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 
-		IF (
-				@ApproverId IS NULL
-				AND @VerifierId IS NULL
-				AND @IsTopManager = 1
-				)
+		IF @ApproverId IS NULL
+			AND @VerifierId IS NULL
+			AND @IsTopManager = 1
 		BEGIN
-			EXEC dbo.LeaveRequest_Approve @RequestID = @RequestID
-				,@ProcessedBy = @EmpID
-				,@ProcessedDate = @CreatedDate
-				,@RoleID = 3
+			EXEC dbo.LeaveRequest_Approve @RequestId = @RequestId
+				,@ActorId = @EmpId
+				,@RoleId = 3
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
 		EXEC dbo.LeaveRequest_WriteLog @RequestId
-
-		SELECT @ErrCode = 0;
 	END TRY
 
 	BEGIN CATCH

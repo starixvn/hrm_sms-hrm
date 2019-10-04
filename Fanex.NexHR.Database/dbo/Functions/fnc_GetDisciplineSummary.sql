@@ -135,7 +135,7 @@ BEGIN
 			,SUM(CASE 
 					WHEN (
 							IsWeekendLeave = 1
-							AND IsIgnoreWeekendLeave = 0
+							AND IsIgnoredWeekendLeave = 0
 							) THEN 3.5
 					ELSE 0
 					END) AS WeekendLeave

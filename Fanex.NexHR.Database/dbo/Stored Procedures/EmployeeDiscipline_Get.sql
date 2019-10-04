@@ -46,7 +46,7 @@ BEGIN
 		,[IsUnpaidLeave]
 		,[IsIgnoredUnpaidLeave]
 		,ISNULL([IsWeekendLeave], 0) AS [IsWeekendLeave]
-		,ISNULL([IsIgnoreWeekendLeave], 0) AS [IsWeekendLeave]
+		,ISNULL([IsIgnoredWeekendLeave], 0) AS [IsWeekendLeave]
 		,[IsUnpaidLeaveAbsent]
 		,[IsIgnoredUnpaidLeaveAbsent]
 		,[ModifiedDate]

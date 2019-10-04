@@ -7,18 +7,14 @@
 
     public interface IRequestRepository
     {
-        RequestEntity GetRequestById(ICriteria criteria);
-
         IList<RequestEntity> GetRequests(ICriteria criteria);
 
         RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
-
-        decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
         VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria);
 
         RequestEntity GetRequestToIgnoreById(ICriteria criteria);
 
-        IList<LeaveDisciplineModel> GetLeaveRequestToIgnoreById(ICriteria criteria);
+        IList<LeaveDisciplineModel> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
     }
 }

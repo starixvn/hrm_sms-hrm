@@ -170,7 +170,7 @@
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />
-    <Compile Include="Request\Leave\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailToReviewDisciplineCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByIdCriteria.cs" />
     <Compile Include="Request\Leave\DeleteLeaveRequestCriteria.cs" />
     <Compile Include="Request\VoidRequestCriteria.cs" />
@@ -273,7 +273,6 @@
     <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
-    <Compile Include="Request\GetRequestByIdCriteria.cs" />
     <Compile Include="Request\GetRequestCriteria.cs" />
     <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
     <Compile Include="Request\KeepInView\InsertKeepInViewRequestCriteria.cs" />

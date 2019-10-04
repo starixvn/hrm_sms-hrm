@@ -215,7 +215,7 @@
                     break;
 
                 case (int)RequestType.Leave:
-                    model.LeaveDisciplines = requestService.GetLeaveRequestDetailToIgnoreById(model.RequestId);
+                    model.LeaveDisciplines = requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 default:

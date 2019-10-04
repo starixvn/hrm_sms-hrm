@@ -9,11 +9,7 @@
 
     public interface IRequestService
     {
-        RequestEntity GetRequestById(GetRequestByIdCriteria criteria);
-
         IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
-
-        decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria);
 
         VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);
 
@@ -23,7 +19,7 @@
 
         IList<ChangeShiftDetail> GetChangeShiftDetailToReviewDiscipline(long requestId);
 
-        IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId);
+        IList<LeaveDisciplineModel> GetLeaveRequestDetailToReviewDiscipline(long requestId);
 
         CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
 

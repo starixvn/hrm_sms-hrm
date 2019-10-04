@@ -173,7 +173,7 @@ BEGIN
 				,dis.IsIgnoredUnpaidLeave = ignore.IsIgnoredUnpaidLeave
 				,dis.IsIgnoredWorkingUndertime = ignore.IsIgnoredWorkingUnderTime
 				,dis.IsIgnoredUnpaidLeaveAbsent = ignore.IsIgnoredUnpaidLeaveAbsent
-				,dis.IsIgnoreWeekendLeave = ignore.IsIgnoredWeekendLeave
+				,dis.IsIgnoredWeekendLeave = ignore.IsIgnoredWeekendLeave
 				,dis.IsConfirmed = ignore.IsConfirmed
 				,dis.IsOutOfControlReason = ignore.IsOutOfControlReason
 				,dis.ModifiedBy = @ModifiedBy

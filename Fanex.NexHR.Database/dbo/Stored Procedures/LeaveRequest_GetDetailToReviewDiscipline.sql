@@ -1,12 +1,13 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_GetDetailToIgnore] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_GetDetailToReviewDiscipline] @RequestId BIGINT
 AS
 /*
 Created: 20190426@Quinn.Vo
 Task: get leave request detail
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -18,14 +19,14 @@ BEGIN
 		,@KIVLeaveType INT = 10
 		,@UnpaidLeaveType INT = 25
 		,@LeaveWorkType TINYINT = 2
-		,@TotalDays DECIMAL(5,1)
+		,@TotalDays DECIMAL(5, 1)
 
 	SELECT @LeaveType = LeaveType
 		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	CREATE TABLE #LeaveDetail(
+	CREATE TABLE #LeaveDetail (
 		WorkDate DATETIME
 		,LeaveTypeId INT
 		,LeaveTypeName NVARCHAR(200)
@@ -34,11 +35,12 @@ BEGIN
 		,ToTime DATETIME
 		,IsFromAfterday BIT
 		,IsToAfterday BIT
-	)
+		)
 
-	IF (@LeaveType = @GeneralLeaveType OR @TotalDays = 0.5)
+	IF @LeaveType = @GeneralLeaveType
+		OR @TotalDays = 0.5
 	BEGIN
-		INSERT INTO #LeaveDetail(
+		INSERT INTO #LeaveDetail (
 			WorkDate
 			,LeaveTypeId
 			,LeaveTypeName
@@ -47,10 +49,10 @@ BEGIN
 			,ToTime
 			,IsFromAfterday
 			,IsToAfterday
-		)
+			)
 		SELECT ldt.OnDate
 			,lt.LeaveTypeId
-			,lt.Name
+			,lt.NAME
 			,ldt.IsHalfDay
 			,ldt.FromTime
 			,ldt.ToTime
@@ -62,42 +64,41 @@ BEGIN
 				WHEN CAST(ldt.ToTime AS DATE) > CAST(ldt.OnDate AS DATE) THEN 1
 				ELSE 0 END
 				) AS IsToAfterday
-		FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) 
-		LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = ldt.LeaveType
+		FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = ldt.LeaveType
 		WHERE ldt.RequestId = @RequestId
 			AND ldt.WorkType = @LeaveWorkType
 	END
-	ELSE IF (
-			@LeaveType = @AnnualLeaveType
-			OR @LeaveType = @KIVLeaveType
-			OR @LeaveType = @UnpaidLeaveType
-			)
+	ELSE IF @LeaveType = @AnnualLeaveType
+		OR @LeaveType = @KIVLeaveType
+		OR @LeaveType = @UnpaidLeaveType
 	BEGIN
-		INSERT INTO #LeaveDetail(
+		INSERT INTO #LeaveDetail (
 			WorkDate
 			,LeaveTypeId
 			,LeaveTypeName
 			,IsHalfDay
-		)
+			)
 		SELECT ca.WorkDate
 			,lt.LeaveTypeId
-			,lt.Name
+			,lt.NAME
 			,0 AS IsHalfDay
 		FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
-			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId 
-				AND ca.WorkDate BETWEEN lr.FromDate AND lr.ToDate
-		LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
+			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
+			AND ca.WorkDate BETWEEN lr.FromDate
+				AND lr.ToDate
+			LEFT JOIN dbo.LeaveType AS lt WITH (NOLOCK) ON lt.LeaveTypeId = lr.LeaveType
 		WHERE lr.RequestId = @RequestId
 	END
 
 	SELECT WorkDate
-			,IsOffOrHoliday
-			,ScheduleStatus
-			,IsUnpaidLeaveAbsent
-			,IsUnpaidLeave
-			,IsAbsent
-			,IsUnplannedLeave
-			,IsWeekendLeave
+		,IsOffOrHoliday
+		,ScheduleStatus
+		,IsUnpaidLeaveAbsent
+		,IsUnpaidLeave
+		,IsAbsent
+		,IsUnplannedLeave
+		,IsWeekendLeave
 	FROM dbo.fnc_GetDisciplineDetailByLeaveRequestId(@RequestId)
 	ORDER BY WorkDate
 

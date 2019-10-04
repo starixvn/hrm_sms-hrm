@@ -84,17 +84,6 @@
             return message;
         }
 
-        public RequestEntity GetRequestById(GetRequestByIdCriteria criteria)
-        {
-            RequestEntity request = null;
-            if (criteria.IsValid())
-            {
-                request = requestRepository.GetRequestById(criteria);
-            }
-
-            return request;
-        }
-
         public IList<RequestEntity> GetRequests(GetRequestCriteria criteria)
         {
             IList<RequestEntity> entityList = null;
@@ -104,17 +93,6 @@
             }
 
             return entityList;
-        }
-
-        public decimal GetNumberRequestInMonth(GetNumberRequestInMonthCriteria criteria)
-        {
-            decimal number = 0;
-            if (criteria.IsValid())
-            {
-                number = requestRepository.GetNumberRequestInMonth(criteria);
-            }
-
-            return number;
         }
 
         public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType)
@@ -155,13 +133,13 @@
             return baseService.GetData<ChangeShiftDetail>(criteria).ToList();
         }
 
-        public IList<LeaveDisciplineModel> GetLeaveRequestDetailToIgnoreById(long requestId)
+        public IList<LeaveDisciplineModel> GetLeaveRequestDetailToReviewDiscipline(long requestId)
         {
-            var criteria = new GetLeaveRequestDetailToIgnoreByIdCriteria
+            var criteria = new GetLeaveRequestDetailToReviewDisciplineCriteria
             {
                 RequestId = requestId
             };
-            return requestRepository.GetLeaveRequestToIgnoreById(criteria);
+            return requestRepository.GetLeaveRequestToReviewDiscipline(criteria);
         }
 
         public CommandResult ApproveRequest(int actorId, ProcessRequestParam param)

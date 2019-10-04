@@ -46,8 +46,6 @@
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_Insert" SpName="WorkingTimeRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_InsertDetail" SpName="WorkingTimeRequest_InsertDetail" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_ResetRequest_byMember" SpName="WorkingTimeRequest_ResetRequest_byMember" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_GetNumberRequestInMonth" SpName="WorkingTimeRequest_GetNumberRequestInMonth" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
       <Mapping DataField="GroupCode" ObjectProperty="Code" />
@@ -189,9 +187,6 @@
   <Function Name="WorkingTimeRequest">
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetByEmployee" SpName="WorkingTimeRequest_GetByEmployee" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Delete" SpName="WorkingTimeRequest_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_Update" SpName="WorkingTimeRequest_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_GetAllByRequestID" SpName="WorkingTimeRequest_GetAllByRequestID" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" SpName="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveType" ObjectProperty="LeaveTypeId" />
       <Mapping DataField="OnDate" ObjectProperty="LeaveDate" />
@@ -234,8 +229,7 @@
     <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" SpName="WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById" DbName="nexhrx" Plain="0">
       <Mapping DataField="WorkDate" ObjectProperty="LeaveDate" />
     </Setting>
-    <Setting Key="LeaveRequest_GetDetailToIgnore" SpName="LeaveRequest_GetDetailToIgnore" DbName="nexhrx" Plain="0">
-    </Setting>
+    <Setting Key="LeaveRequest_GetDetailToReviewDiscipline" SpName="LeaveRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="ExtensionNumber">
     <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="nexhrx" Plain="0"></Setting>

@@ -73,7 +73,7 @@ BEGIN
 
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
-		EXEC dbo.WorkingTimeRequest_LeaveReject_RollbackCalendar @RequestId
+		EXEC dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
 			,@EmpId
 			,@ActorId
 
