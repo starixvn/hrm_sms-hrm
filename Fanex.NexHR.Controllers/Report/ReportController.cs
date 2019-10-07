@@ -173,7 +173,7 @@
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
-            return View(model);
+            return View("WeekendLeaveSummary", model);
         }
 
         public ActionResult PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
@@ -199,14 +199,13 @@
             if (model != null)
             {
                 var today = DateTime.Today;
-
                 model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
                 model.Teams = teamService.GetAll();
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
-            return View(model);
+            return View("WeekendLeaveDetail", model);
         }
 
         public ActionResult PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
@@ -264,7 +263,7 @@
         {
             var model = new EmployeeAndSectionSupervisorViewModel();
 
-            return View(model);
+            return View("EmployeeSupervisor", model);
         }
 
         public ActionResult EmployeeSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
@@ -285,7 +284,7 @@
         {
             var model = new EmployeeAndSectionSupervisorViewModel();
 
-            return View(model);
+            return View("SectionSupervisor", model);
         }
 
         public ActionResult SectionSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)

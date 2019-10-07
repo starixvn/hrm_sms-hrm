@@ -1,10 +1,12 @@
-﻿@using Fanex.NexHR.ViewModels.Request
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.ViewModels.Request
 @model KeepInViewRequestViewModel
 @using Fanex.NexHR.Resources
 
 @{
     ViewBag.Title = @Labels.EditKeepInViewRequest;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
+    var today = DateTime.Today;
 }
 @section css{
     @Url.CombresLink("keepinviewcss")
@@ -17,7 +19,7 @@
     <a class="step" href="@Url.Action("employeeview", "keepinview")">@Labels.MyKeepInViewRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-    <h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2>
 <div class="bunhat">
     @using (Html.BeginForm())
     {
@@ -95,8 +97,8 @@
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.Date,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
+                today.FirstDayOfMonth().AddMonths(-1),
+                today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
                 unavailDates: Model.UnavailDates)
             </div>
             <div class="clear">

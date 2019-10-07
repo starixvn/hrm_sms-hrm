@@ -1,10 +1,12 @@
-﻿@using Fanex.NexHR.Core.Enums
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using System.Web.Mvc.Html5
 @using Fanex.NexHR.ViewModels.Request
 @model CheckInOutRequestViewModel
 @{
     ViewBag.Title = Labels.NewCheckInOutRequest;
+    var today = DateTime.Today;
 }
 @section css{
     @Url.CombresLink("checkinoutrequestcss")
@@ -13,8 +15,8 @@
     @Url.CombresLink("checkinoutrequestjs")
 }
 @section Breadcrumb {
-<a class="step">Personal</a> <a class="step" href="@Url.Action(" employeeview", "checkinout" )">@Labels.MyCheckInOutRequests</a>
-<a class="step">@ViewBag.Title</a>
+    <a class="step">Personal</a> <a class="step" href="@Url.Action(" employeeview", "checkinout" )">@Labels.MyCheckInOutRequests</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
 <div class="bunhat container_24">
@@ -67,7 +69,7 @@
                 @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate)
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.AttendantDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-6), DateTime.Now)
+                @Html.DatePickerFor(model => model.AttendantDate, today.FirstDayOfMonth().AddMonths(-6), today)
             </div>
         </div>
         <div class="clear">
@@ -79,7 +81,7 @@
                 @Labels.RequestTime
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.ForDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-6), DateTime.Now)
+                @Html.DatePickerFor(model => model.ForDate, today.FirstDayOfMonth().AddMonths(-6), today)
                 @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute" })

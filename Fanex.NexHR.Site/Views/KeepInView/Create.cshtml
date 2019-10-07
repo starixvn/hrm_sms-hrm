@@ -1,10 +1,12 @@
-﻿@using Fanex.NexHR.Core.Enums
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.ViewModels.Request
 @using Fanex.NexHR.Resources
 @model KeepInViewRequestViewModel
 @{
     ViewBag.Title = Labels.NewKeepInViewRequest;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
+    var today = DateTime.Today;
 }
 @section css{
     @Url.CombresLink("keepinviewcss")
@@ -48,10 +50,10 @@
                         </label>
                     </div>
                 </div>
-                </div>
-                <div class="clear">
-                </div>
             </div>
+            <div class="clear">
+            </div>
+        </div>
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.Employee)
@@ -85,8 +87,8 @@
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.Date,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2).AddDays(-1),
+                today.FirstDayOfMonth().AddMonths(-1),
+                today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
                 unavailDates: Model.UnavailDates)
             </div>
             <div class="clear">

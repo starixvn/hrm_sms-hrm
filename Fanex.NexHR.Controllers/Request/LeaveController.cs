@@ -393,14 +393,16 @@
                 };
             }
 
-            var minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-5);
-            var maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
+            var today = DateTime.Today;
+            var minDate = today.FirstDayOfMonth().AddMonths(-5);
+            var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
             if (model != null)
             {
                 if (model.LeaveTypeId == Constants.MaternityLeave)
                 {
                     //// rule: user can make maternity leave for 6 months.
-                    maxDate = maxDate.AddMonths(2);
+                    const byte ExtraMonthsCanRequest = 2;
+                    maxDate = maxDate.AddMonths(ExtraMonthsCanRequest);
                 }
 
                 model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;

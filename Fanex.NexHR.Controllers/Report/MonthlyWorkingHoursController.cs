@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
@@ -30,8 +31,8 @@
             var today = DateTime.Today;
             var model = new MonthlyFilterViewModel
             {
-                FromDate = new DateTime(today.Year, today.Month, 1),
-                ToDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)),
+                FromDate = today.FirstDayOfMonth(),
+                ToDate = today.LastDayOfMonth(),
                 EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 

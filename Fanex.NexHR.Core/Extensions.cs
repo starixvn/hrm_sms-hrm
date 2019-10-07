@@ -20,6 +20,7 @@
         private const string ClassHtmlAttribute = "class";
         private const string ValueHtmlAttribute = "value";
         private const string CheckedHtmlAttribute = "checked";
+        private const string CheckboxCustomHtmlClass = "checkbox-custom";
         private static readonly object _O = new object();
 
         public static MvcHtmlString RadioButtonList<TModel, TProperty>(
@@ -320,7 +321,7 @@
             var checkbox = new TagBuilder(InputTagBuilder);
             checkbox.MergeAttribute("id", fullHtmlFieldName);
             checkbox.MergeAttribute("name", fullHtmlFieldName);
-            checkbox.MergeAttribute(ClassHtmlAttribute, "checkbox-custom");
+            checkbox.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
             checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
             checkbox.MergeAttribute(ValueHtmlAttribute, "true");
 
@@ -379,7 +380,7 @@
             var checkbox = new TagBuilder(InputTagBuilder);
             checkbox.MergeAttribute("id", propertyName);
             checkbox.MergeAttribute("name", propertyName);
-            checkbox.MergeAttribute(ClassHtmlAttribute, "checkbox-custom");
+            checkbox.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
             checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
             checkbox.MergeAttribute(ValueHtmlAttribute, "true");
             if (modelMetadata.Model != null && (bool)modelMetadata.Model)
@@ -425,7 +426,7 @@
             checkbox = new TagBuilder(InputTagBuilder);
             checkbox.MergeAttribute("id", fullHtmlFieldName);
             checkbox.MergeAttribute("name", fullHtmlFieldName);
-            checkbox.MergeAttribute(ClassHtmlAttribute, "checkbox-custom");
+            checkbox.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
             checkbox.MergeAttribute("type", HtmlHelper.GetInputTypeString(InputType.CheckBox));
             checkbox.MergeAttribute(ValueHtmlAttribute, "true");
             if (isChecked)
@@ -594,7 +595,7 @@
                 input.MergeAttributes(htmlAttributes);
                 input.MergeAttribute("type", "checkbox");
                 input.MergeAttribute("id", name + item.Value);
-                input.MergeAttribute(ClassHtmlAttribute, "checkbox-custom");
+                input.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
                 input.MergeAttribute("name", fullHtmlFieldName, replaceExisting: true);
                 input.MergeAttribute(ValueHtmlAttribute, item.Value ?? item.Text ?? string.Empty, replaceExisting: true);
                 if (item.Selected)

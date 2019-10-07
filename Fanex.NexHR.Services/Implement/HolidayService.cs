@@ -131,8 +131,8 @@
         {
             var lunarHolidays = new List<Holiday>();
             var newYear1stOnSolarDay = ConvertLunarToSolarCalendar(year, 1, 1);
-
-            for (int i = -1; i < 4; i++)
+            const byte TotalOffDays = 5; // holiday from 30 Dec to 4 Jan
+            for (int i = -1; i < TotalOffDays - 1; i++)
             {
                 var tetHoliday = newYear1stOnSolarDay.AddDays(i);
                 var holiday = new Holiday

@@ -50,7 +50,7 @@
                 @Html.TextBox("OnDate", Model.OnDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>

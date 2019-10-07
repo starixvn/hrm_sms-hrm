@@ -432,12 +432,12 @@
 
             if (toDate >= fromDate)
             {
-                iterator = new DateTime(fromDate.Year, fromDate.Month, 1);
+                iterator = fromDate.FirstDayOfMonth();
                 limit = toDate;
 
                 while (iterator <= limit)
                 {
-                    months.Add(new DateTime(iterator.Year, iterator.Month, 1));
+                    months.Add(iterator.FirstDayOfMonth());
 
                     iterator = iterator.AddMonths(1);
                 }

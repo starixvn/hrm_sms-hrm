@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Core.Enums
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @model ChangeShiftViewModel
 @{
@@ -60,8 +61,8 @@
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
-                        maxdate = new DateTime(today.Year, today.Month, 1).AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -74,8 +75,8 @@
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
-                        maxdate = new DateTime(today.Year, today.Month, 1).AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
