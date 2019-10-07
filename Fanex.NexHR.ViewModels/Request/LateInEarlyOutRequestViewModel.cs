@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
 
     public class LateInEarlyOutRequestViewModel
     {
@@ -35,7 +35,7 @@
         public int Minute { get; set; }
 
         [Required]
-        public int RequestType { get; set; }
+        public byte RequestType { get; set; }
 
         [Required]
         public byte ReasonId { get; set; }
@@ -48,8 +48,9 @@
         [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
 
-        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
+        public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+        public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
 
-        public IList<DateTime> UnavailDates { get; set; }
+        public IEnumerable<DateTime> DisabledDates { get; set; }
     }
 }

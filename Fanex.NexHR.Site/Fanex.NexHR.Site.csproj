@@ -266,6 +266,8 @@
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.create.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.edit.js" />
     <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js" />
     <Content Include="wwwroot\dist\js\leave.myrequest.js" />
     <Content Include="wwwroot\dist\js\overtime.edit.js" />
@@ -305,6 +307,8 @@
     <Content Include="wwwroot\dist\styles\employee.postnatal.js" />
     <Content Include="wwwroot\dist\styles\home.index.css" />
     <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.css" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.js" />
     <Content Include="wwwroot\dist\styles\leave.myrequest.css" />
     <Content Include="wwwroot\dist\styles\leave.myrequest.js" />
     <Content Include="wwwroot\dist\styles\overtime.details.css" />
@@ -364,6 +368,8 @@
     <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\keepinview\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
@@ -775,7 +781,6 @@
     <Content Include="Scripts\Views\myworkingschedule.js" />
     <Content Include="Scripts\Views\Request\checkinout.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
-    <Content Include="Scripts\Views\Request\lateinearlyout.request.js" />
     <Content Include="Scripts\Views\holiday.edit.js" />
     <Content Include="Scripts\Views\holiday.js" />
     <Content Include="Scripts\Views\memo.js" />
@@ -1196,7 +1201,7 @@
     <Content Include="Views\Leave\Create.cshtml" />
     <Content Include="Views\Employee\Detail.cshtml" />
     <Content Include="Views\CheckInOut\Update.cshtml" />
-    <Content Include="Views\LateInEarlyOut\Update.cshtml" />
+    <Content Include="Views\LateInEarlyOut\Edit.cshtml" />
     <Content Include="Views\Leave\Update.cshtml" />
     <Content Include="Views\ChangeShift\Create.cshtml" />
     <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
@@ -1529,6 +1534,10 @@
     <Content Include="wwwroot\sources\styles\pages\request\leave\myrequest.scss" />
     <Content Include="wwwroot\dist\js\leave.myrequest.js.map" />
     <Content Include="wwwroot\dist\styles\leave.myrequest.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\request\latein-earlyout\create.scss" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.create.js.map" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

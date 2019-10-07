@@ -19,20 +19,20 @@
             {
                 switch (Id)
                 {
-                    case (int)RequestType.CheckIn:
-                    case (int)RequestType.CheckOut:
-                        return (int)RequestFilter.CheckInOut;
-                    case (int)RequestType.LateIn:
-                    case (int)RequestType.EarlyOut:
-                        return (int)RequestFilter.LateInEarlyOut;
-                    case (int)RequestType.ChangeShift:
-                        return (int)RequestFilter.ChangeShift;
-                    case (int)RequestType.Leave:
-                        return (int)RequestFilter.Leave;
-                    case (int)RequestType.KeepInView:
-                        return (int)RequestFilter.KeepInView;
+                    case (byte)RequestType.CheckIn:
+                    case (byte)RequestType.CheckOut:
+                        return (byte)RequestFilter.CheckInOut;
+                    case (byte)RequestType.LateIn:
+                    case (byte)RequestType.EarlyOut:
+                        return (byte)RequestFilter.LateInEarlyOut;
+                    case (byte)RequestType.ChangeShift:
+                        return (byte)RequestFilter.ChangeShift;
+                    case (byte)RequestType.Leave:
+                        return (byte)RequestFilter.Leave;
+                    case (byte)RequestType.KeepInView:
+                        return (byte)RequestFilter.KeepInView;
                     default:
-                        return (int)RequestFilter.All;
+                        return (byte)RequestFilter.All;
                 }
             }
         }
@@ -43,20 +43,20 @@
             {
                 switch (Id)
                 {
-                    case (int)RequestType.CheckIn:
-                    case (int)RequestType.CheckOut:
-                        return (int)RequestFilter.CheckInOut;
-                    case (int)RequestType.LateIn:
-                    case (int)RequestType.EarlyOut:
-                        return (int)RequestFilter.LateInEarlyOut;
-                    case (int)RequestType.ChangeShift:
-                        return (int)RequestFilter.ChangeShift;
-                    case (int)RequestType.Leave:
-                        return (int)RequestFilter.Leave;
-                    case (int)RequestType.KeepInView:
-                        return (int)RequestFilter.KeepInView;
+                    case (byte)RequestType.CheckIn:
+                    case (byte)RequestType.CheckOut:
+                        return (byte)RequestFilter.CheckInOut;
+                    case (byte)RequestType.LateIn:
+                    case (byte)RequestType.EarlyOut:
+                        return (byte)RequestFilter.LateInEarlyOut;
+                    case (byte)RequestType.ChangeShift:
+                        return (byte)RequestFilter.ChangeShift;
+                    case (byte)RequestType.Leave:
+                        return (byte)RequestFilter.Leave;
+                    case (byte)RequestType.KeepInView:
+                        return (byte)RequestFilter.KeepInView;
                     default:
-                        return (int)RequestFilter.All;
+                        return (byte)RequestFilter.All;
                 }
             }
         }

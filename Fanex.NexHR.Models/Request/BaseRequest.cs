@@ -10,7 +10,7 @@
 
         public Employee Employee { get; set; }
 
-        public int RequestTypeId { get; set; }
+        public byte RequestTypeId { get; set; }
 
         public string Remark { get; set; }
 
@@ -49,27 +49,47 @@
         {
             get
             {
+                var requestTypeName = string.Empty;
                 switch (RequestTypeId)
                 {
-                    case (int)RequestType.CheckIn:
-                        return Labels.CheckIn;
-                    case (int)RequestType.CheckOut:
-                        return Labels.CheckOut;
-                    case (int)RequestType.LateIn:
-                        return Labels.LateIn;
-                    case (int)RequestType.EarlyOut:
-                        return Labels.EarlyOut;
-                    case (int)RequestType.ChangeShift:
-                        return Labels.ChangeShift;
-                    case (int)RequestType.Leave:
-                        return Labels.Leave;
-                    case (int)RequestType.KeepInView:
-                        return Labels.KeepInView;
-                    case (int)RequestType.Overtime:
-                        return Labels.Overtime;
+                    case (byte)RequestType.CheckIn:
+                        requestTypeName = Labels.CheckIn;
+                        break;
+
+                    case (byte)RequestType.CheckOut:
+                        requestTypeName = Labels.CheckOut;
+                        break;
+
+                    case (byte)RequestType.LateIn:
+                        requestTypeName = Labels.LateIn;
+                        break;
+
+                    case (byte)RequestType.EarlyOut:
+                        requestTypeName = Labels.EarlyOut;
+                        break;
+
+                    case (byte)RequestType.ChangeShift:
+                        requestTypeName = Labels.ChangeShift;
+                        break;
+
+                    case (byte)RequestType.Leave:
+                        requestTypeName = Labels.Leave;
+                        break;
+
+                    case (byte)RequestType.KeepInView:
+                        requestTypeName = Labels.KeepInView;
+                        break;
+
+                    case (byte)RequestType.Overtime:
+                        requestTypeName = Labels.Overtime;
+                        break;
+
                     default:
-                        return string.Empty;
+                        requestTypeName = string.Empty;
+                        break;
                 }
+
+                return requestTypeName;
             }
         }
     }

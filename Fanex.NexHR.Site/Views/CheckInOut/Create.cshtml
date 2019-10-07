@@ -1,4 +1,6 @@
-﻿@using System.Web.Mvc.Html5
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using System.Web.Mvc.Html5
 @using Fanex.NexHR.ViewModels.Request
 @model CheckInOutRequestViewModel
 @{
@@ -164,7 +166,7 @@
                 @Html.Hidden("CrossDay")
                 @Html.Hidden("IsInAfterDay")
                 @Html.Hidden("IsOutAfterDay")
-                @Html.Hidden("RequestTypeId", (int)RequestType.CheckIn)
+                @Html.Hidden("RequestTypeId", (byte)RequestType.CheckIn)
             </div>
             <div class="input">
                 <input type="submit" value="@Labels.Request" />

@@ -1,129 +1,118 @@
-﻿@model LateInEarlyOutRequestViewModel
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@model LateInEarlyOutRequestViewModel
 @{
-    ViewBag.Title = Labels.NewLateInEarlyOutRequest;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.Create;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var today = DateTime.Today;
 }
 @section css{
-    @Url.CombresLink("lateinearlyoutcss")
+    <link href="~/wwwroot/dist/styles/lateinearlyout.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("lateinearlyoutjs")
+    <script src="~/wwwroot/dist/js/lateinearlyout.create.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
+    <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "lateinearlyout")">@Labels.MyLateInEarlyOutRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-<div class="bunhat">
-    @using (Html.BeginForm())
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    @using (Html.BeginForm("Create", "lateinearlyout", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        @Html.HiddenFor(model => model.EmployeeId)
 
-        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
-        {
-            <div class="success">@Messages.RequestCreated</div>
-            <input type="hidden" id="successed" value="true" />
-            <input type="hidden" id="year" value="@ViewBag.Year" />
-        }
-
-        <div id="model-state-error" class="ui-state-error ui-corner-all">
-            <p>@Labels.CannotCreateRequest</p>
-        </div>
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.RequestType)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RequestType, new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form request-type">
                 @Html.RadioButtonList(model => model.RequestType, Utilities.LateInEarlyOutTypes)
-                <div class="clear"></div>
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Employee)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.OnDate)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.OnDate,
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-1),
-                new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(4).AddDays(-1))
-                <span id="lateIn"> ※ Actual Late In: <span id="lateInHours">N/A</span></span>
-                <span id="earlyOut"> ※ Actual Early Out: <span id="earlyOutHours">N/A</span></span>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Minute)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.OnDate, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.Minute)
+            <div class="calendar-form">
+                @Html.TextBox("OnDate", Model.OnDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(today.Year, today.Month, 1).AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+            
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Minute, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Minute, new { @class = "form-control", @type ="number", @min = 1, @max = 60, @step = 1 })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Labels.Reason
-            </div>
-            <div class="input">
-                @RazorHelper.LateInEarlyOutReasonDropDownList()
+        <div class="form-group">
+            <div class="label-form">@Labels.Reason</div>
+            <div class="select-form">
+                @RazorHelper.LateInEarlyOutReasonDropDownList(htmlClass: "form-control")
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.VerifierId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @if (Model.VerifierAndApprover.Verifiers.Count() > 1)
+            <div class="select-form">
+                @if (Model.Verifiers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
                 }
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ApproverId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @if (Model.VerifierAndApprover.Approvers.Count() > 1)
+            <div class="input-form">
+                @if (Model.Approvers.Count() > 1)
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), new { @class = "dropdown" })
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
                 }
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Remark)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextAreaFor(model => model.Remark)
-            </div>
-            <div class="clear">
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.EmployeeId)
-                @Html.Hidden("RequestType", (int)RequestType.LateIn)
-            </div>
-            <div class="input">
-                <input type="submit" value="@Labels.Request" />
-                <a href="javascript:;"
-                   class="button" id="backPrevious">@Labels.Back</a>
+        <div class="form-group">
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>
     }

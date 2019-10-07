@@ -1,6 +1,8 @@
-﻿@using Fanex.NexHR.Core.Constants;
+﻿@using System.Web.Mvc.Html5
+@using Fanex.NexHR.Core.Constants
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Request
-@using System.Web.Mvc.Html5
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.NewLeaveRequest;
@@ -22,7 +24,7 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(model => model.EmployeeId)
-        @Html.Hidden("RequestType", (int)RequestType.Leave)
+        @Html.Hidden("RequestType", (byte)RequestType.Leave)
         @Html.Hidden("RequestId", -1)
         @Html.ValidationSummary()
 
@@ -47,7 +49,6 @@
                         <span class="numberbalance">@Model.EmployeeLeaveBalance.KeepInViewByHourBalance.ToString("0.#")</span> hour(s)
                     </span>
                 </span>
-
             </div>
         </div>
 
@@ -131,7 +132,6 @@
                     :
                     @Html.Html5Number(0, 59, 1, Model.ToTimeMinute, new { Name = "Minute", MaxLength = "2", id = "ToTimeMinute" })
                 </span>
-
             </div>
             <div class="clear">
             </div>
@@ -142,22 +142,20 @@
             </div>
             <div class="input">
                 @Html.EditorFor(model => model.TotalDays)
-
             </div>
             <div class="clear">
             </div>
         </div>
         @*<div id="grbMinutes" class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Minutes, Labels.Minutes)
-            </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Minutes)
-
-            </div>
-            <div class="clear">
-            </div>
-        </div>*@
+                <div class="label">
+                    @Html.LabelFor(model => model.Minutes, Labels.Minutes)
+                </div>
+                <div class="input">
+                    @Html.EditorFor(model => model.Minutes)
+                </div>
+                <div class="clear">
+                </div>
+            </div>*@
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)

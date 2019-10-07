@@ -248,7 +248,7 @@
             cellTeam.SetCellValue(item.Requester.Team.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
-            cellRequest.SetCellValue(item.RequestType.Id == (int)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
+            cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
 
             cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
             cellRemarks.SetCellValue(item.Remark);

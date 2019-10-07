@@ -50,16 +50,16 @@
                 var message = string.Empty;
                 switch (RequestTypeId)
                 {
-                    case (int)RequestType.Leave:
+                    case (byte)RequestType.Leave:
                         message = GetMessageForLeave();
                         break;
 
-                    case (int)RequestType.ChangeShift:
+                    case (byte)RequestType.ChangeShift:
                         message = GetMessageForChangeShift();
                         break;
 
-                    case (int)RequestType.CheckIn:
-                    case (int)RequestType.CheckOut:
+                    case (byte)RequestType.CheckIn:
+                    case (byte)RequestType.CheckOut:
                         message = GetMessageForCheckInOut();
                         break;
 
@@ -67,11 +67,11 @@
                         message = GetMessageForLateIn();
                         break;
 
-                    case (int)RequestType.EarlyOut:
+                    case (byte)RequestType.EarlyOut:
                         message = GetMessageForEarlyOut();
                         break;
 
-                    case (int)RequestType.KeepInView:
+                    case (byte)RequestType.KeepInView:
                         message = GetMessageForKeepInView();
                         break;
 

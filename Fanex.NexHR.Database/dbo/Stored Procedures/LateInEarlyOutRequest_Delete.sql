@@ -15,27 +15,25 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF (
-			NOT EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-				WHERE RequestID = @RequestId
-					AND CurrentStatus = 1
-				)
+	IF NOT EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+				AND CurrentStatus = 1
 			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'This Status Request have been changed. You cannot delete. '
+		SET @ErrMsg = 'Status is not pending, you can not delete this request.'
 
 		RETURN;
 	END
 
-	DELETE dbo.WorkingTimeRequest
-	WHERE RequestID = @RequestID
+	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
 
-	DELETE dbo.LateInEarlyOutRequest
-	WHERE RequestID = @RequestId
-
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
+	DELETE dbo.LateInEarlyOutRequest WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
+	
+	DELETE dbo.LateInEarlyOutRequestHistory WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
 END

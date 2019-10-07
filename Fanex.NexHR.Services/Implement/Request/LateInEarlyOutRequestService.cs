@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Web;
     using Fanex.NexHR.Core;
@@ -67,6 +68,18 @@
         public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
         {
             return baseService.GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
+        }
+
+        public IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param)
+        {
+            var criteria = new GetDisabledDateCriteria
+            {
+                EmployeeId = param.EmployeeId,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                RequestId = param.RequestId
+            };
+            return baseService.GetData<DateTime>(criteria);
         }
 
         public CommandResult Delete(long requestId)

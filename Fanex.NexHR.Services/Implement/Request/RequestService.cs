@@ -51,28 +51,28 @@
             string message;
             switch (request.RequestType.Id)
             {
-                case (int)RequestType.Leave:
+                case (byte)RequestType.Leave:
                     message = GetMessageForLeave(request, isNoFormat);
                     break;
 
-                case (int)RequestType.ChangeShift:
+                case (byte)RequestType.ChangeShift:
                     message = GetMessageForChangeShift(request, isNoFormat);
                     break;
 
-                case (int)RequestType.CheckIn:
-                case (int)RequestType.CheckOut:
+                case (byte)RequestType.CheckIn:
+                case (byte)RequestType.CheckOut:
                     message = GetMessageForCheckInOut(request, isNoFormat);
                     break;
 
-                case (int)RequestType.LateIn:
+                case (byte)RequestType.LateIn:
                     message = GetMessageForLateIn(request, isNoFormat);
                     break;
 
-                case (int)RequestType.EarlyOut:
+                case (byte)RequestType.EarlyOut:
                     message = GetMessageForEarlyOut(request, isNoFormat);
                     break;
 
-                case (int)RequestType.KeepInView:
+                case (byte)RequestType.KeepInView:
                     message = GetMessageForKeepInView(request, isNoFormat);
                     break;
 

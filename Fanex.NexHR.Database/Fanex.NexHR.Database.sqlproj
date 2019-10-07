@@ -527,6 +527,7 @@
     <Build Include="dbo\Tables\ChangeShiftRequestDetailHistory.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetByEmployee.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetDetailToReviewDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetDisableDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

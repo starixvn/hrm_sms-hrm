@@ -58,10 +58,10 @@
                         <td>
                             @switch (request.RequestType.Id)
                             {
-                                case (int)RequestType.Leave:
+                                case (byte)RequestType.Leave:
                                     <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
                                     break;
-                                case (int)RequestType.ChangeShift:
+                                case (byte)RequestType.ChangeShift:
                                     <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
                                     break;
                                 default:
@@ -129,7 +129,7 @@
 @helper RenderStatusHRSpace(RequestViewModel model, RequestEntity request)
 {
     var annualBalance = string.Empty;
-    if (request.RequestType.Id == (int)RequestType.Leave)
+    if (request.RequestType.Id == (byte)RequestType.Leave)
     {
         annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
     }
@@ -191,7 +191,7 @@
 @helper RenderStatusPersonalSpace(RequestViewModel model, RequestEntity request)
 {
     var annualBalance = string.Empty;
-    if (request.RequestType.Id == (int)RequestType.Leave)
+    if (request.RequestType.Id == (byte)RequestType.Leave)
     {
         annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
     }
@@ -290,7 +290,7 @@
 @helper RenderStatusSASpace(RequestViewModel model, RequestEntity request)
 {
     var annualBalance = string.Empty;
-    if (request.RequestType.Id == (int)RequestType.Leave)
+    if (request.RequestType.Id == (byte)RequestType.Leave)
     {
         annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
     }

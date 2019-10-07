@@ -7,9 +7,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Request.LateInEarlyOut;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -20,19 +18,16 @@
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
-        private readonly IEmployeeService employeeService;
 
         public LateInEarlyOutController(
             ISessionService sessionService,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
-            IBaseService baseService,
-            IEmployeeService employeeService) : base(sessionService)
+            IBaseService baseService) : base(sessionService)
         {
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
-            this.employeeService = employeeService;
         }
 
         [HttpGet]
@@ -50,65 +45,52 @@
             return View(requests);
         }
 
-        public ActionResult Create(DateTime? suggestedDate, bool? isLateIn)
+        public ActionResult Create()
         {
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn);
             var viewModel = new LateInEarlyOutRequestViewModel
             {
-                Employee = sessionService.Employee.Nickname,
+                Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
-                OnDate = suggestedDate ?? DateTime.Today,
+                OnDate = DateTime.Today,
                 Minute = DefaultMinutes,
                 ReasonId = (byte)LateInEarlyOutReasons.Other,
-                RequestType = (isLateIn.HasValue && !isLateIn.Value) ? (int)RequestType.EarlyOut : (int)RequestType.LateIn,
-                UnavailDates = GetUnavailDate(sessionService.Employee.Id),
-                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn),
+                RequestType = (byte)RequestType.LateIn,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
+            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Create(LateInEarlyOutRequestViewModel model)
+        public CustomJsonResult Create(LateInEarlyOutRequestViewModel model)
         {
-            if (model != null)
+            var criteria = new InsertLateInEarlyOutRequestCriteria
             {
-                CheckIsTopManager(model);
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.LateIn);
-                model.UnavailDates = GetUnavailDate(model.EmployeeId);
+                EmpId = model.EmployeeId,
+                OnDate = model.OnDate,
+                RequestType = model.RequestType,
+                Remark = model.Remark,
+                LateInMins = model.RequestType == (byte)RequestType.LateIn ? model.Minute : 0,
+                EarlyOutMins = model.RequestType == (byte)RequestType.EarlyOut ? model.Minute : 0,
+                ReasonId = model.ReasonId,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                CreatedBy = sessionService.Employee.Id
+            };
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
 
-                if (ModelState.IsValid)
-                {
-                    var criteria = new InsertLateInEarlyOutRequestCriteria
-                    {
-                        EmpId = model.EmployeeId,
-                        OnDate = model.OnDate,
-                        RequestType = model.RequestType,
-                        Remark = model.Remark,
-                        LateInMins = model.RequestType == (int)RequestType.LateIn ? model.Minute : 0,
-                        EarlyOutMins = model.RequestType == (int)RequestType.EarlyOut ? model.Minute : 0,
-                        ReasonId = model.ReasonId,
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        CreatedBy = sessionService.Employee.Id
-                    };
-                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
-
-                    if (result.IsSuccessful)
-                    {
-                        lateInEarlyOutRequestService.SendMailCreateRequest(result.OutputId);
-                        ViewBag.Requested = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            if (commandResult.IsSuccessful)
+            {
+                lateInEarlyOutRequestService.SendMailCreateRequest(commandResult.OutputId);
             }
 
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public ActionResult Update(int id)
+        public ActionResult Edit(int id)
         {
             LateInEarlyOutRequest request = lateInEarlyOutRequestService.GetById(id);
             if (request == null
@@ -118,11 +100,19 @@
                 return RedirectToAction("AccessDenied", "Error");
             }
 
-            var minutes = request.RequestTypeId == (int)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn);
+            var minutes = request.RequestTypeId == (byte)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
+            IEnumerable<DateTime> disabledDates = lateInEarlyOutRequestService.GetDisabledDate(new GetDisabledDateParam
+            {
+                EmployeeId = request.Employee.Id,
+                FromDate = request.OnDate,
+                ToDate = DateTime.Today,
+                RequestId = request.RequestId
+            });
             var viewModel = new LateInEarlyOutRequestViewModel
             {
                 RequestId = request.RequestId,
-                Employee = sessionService.Employee.Nickname,
+                Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
                 OnDate = request.OnDate,
                 Minute = minutes,
@@ -131,53 +121,40 @@
                 ReasonId = request.ReasonId,
                 ApproverId = request.ApprovedBy.Id,
                 VerifierId = request.VerifiedBy.Id,
-                UnavailDates = GetUnavailDate(sessionService.Employee.Id),
-                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn)
+                DisabledDates = disabledDates,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
 
+            ViewBag.IsTopManager = request.Employee.IsTopManager;
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Update(LateInEarlyOutRequestViewModel model)
+        public CustomJsonResult Edit(LateInEarlyOutRequestViewModel model)
         {
-            if (model != null)
+            var criteria = new UpdateLateInEarlyOutRequestCriteria
             {
-                CheckIsTopManager(model);
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.LateIn);
-                model.UnavailDates = GetUnavailDate(model.EmployeeId);
+                RequestId = model.RequestId,
+                EmpId = model.EmployeeId,
+                OnDate = model.OnDate,
+                RequestType = model.RequestType,
+                Remark = model.Remark,
+                ReasonId = model.ReasonId,
+                LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
+                EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                ModifiedBy = sessionService.Employee.Id
+            };
 
-                if (ModelState.IsValid)
-                {
-                    var criteria = new UpdateLateInEarlyOutRequestCriteria
-                    {
-                        RequestId = model.RequestId,
-                        EmpId = model.EmployeeId,
-                        OnDate = model.OnDate,
-                        RequestType = model.RequestType,
-                        Remark = model.Remark,
-                        ReasonId = model.ReasonId,
-                        LateInMins = model.RequestType == (short)RequestType.LateIn ? model.Minute : 0,
-                        EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        ModifiedBy = sessionService.Employee.Id
-                    };
-
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    if (result.IsSuccessful)
-                    {
-                        lateInEarlyOutRequestService.SendMailEditRequest(model.RequestId);
-                        ViewBag.Updated = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            if (commandResult.IsSuccessful)
+            {
+                lateInEarlyOutRequestService.SendMailEditRequest(model.RequestId);
             }
 
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -195,7 +172,7 @@
             return PartialView("_ViewHistory", requests);
         }
 
-        public ActionResult GetActualLateInEarlyOut(int employeeId, DateTime workDate)
+        public CustomJsonResult GetActualLateInEarlyOut(int employeeId, DateTime workDate)
         {
             var criteria = new GetActualLateInEarlyOutCriteria
             {
@@ -206,36 +183,13 @@
             EmployeeLateInEarlyOutModel lateInEarlyOut = lateInEarlyOutRequestService.GetActualLateInEarlyOut(criteria);
             lateInEarlyOut = lateInEarlyOut ?? new EmployeeLateInEarlyOutModel();
 
-            return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut }, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private IList<DateTime> GetUnavailDate(int employeeId)
+        public CustomJsonResult GetDisabledDate(GetDisabledDateParam param)
         {
-            var criteria = new GetUnavailableRequestDateCriteria
-            {
-                EmpId = employeeId,
-                FromDate = DateTime.Now.AddMonths(-1),
-                ToDate = DateTime.Now.AddMonths(1)
-            };
-            var unavailDates = employeeService.GetUnavailableDates(criteria);
-            return unavailDates;
-        }
-
-        private void CheckIsTopManager(LateInEarlyOutRequestViewModel model)
-        {
-            Employee employee = employeeService.GetEmployeeById(model.EmployeeId);
-            if (employee.IsTopManager)
-            {
-                foreach (var modelError in ModelState)
-                {
-                    string propertyName = modelError.Key;
-
-                    if (propertyName.Contains("VerifierId") || propertyName.Contains("ApproverId"))
-                    {
-                        ModelState[propertyName].Errors.Clear();
-                    }
-                }
-            }
+            IEnumerable<DateTime> disabledDates = lateInEarlyOutRequestService.GetDisabledDate(param);
+            return new CustomJsonResult { Data = disabledDates, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

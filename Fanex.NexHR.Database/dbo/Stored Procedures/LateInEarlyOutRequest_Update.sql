@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_Update] @RequestId BIGINT
 	,@EmpId INT
-	,@OnDate DATETIME
+	,@OnDate DATE
 	,@RequestType SMALLINT
 	,@ReasonId TINYINT
 	,@LateInMins INT = NULL
@@ -26,73 +26,48 @@ BEGIN
 	SET NOCOUNT ON
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
+		,@IsTopManager BIT
+		-- action type
+		,@VerifyRequest TINYINT = 2
+		,@ApproveRequest TINYINT = 3
+		,@OnBehalfRequest TINYINT = 5
+		-- request type
+		,@LateInRequestTypeId TINYINT = 3
+		,@EarlyOutRequestTypeId TINYINT = 4
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 
 	IF EXISTS (
 			SELECT 1
-			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-			WHERE r.RequestId = @RequestId
-				AND r.CurrentStatus <> 1
+			FROM dbo.WorkingTimeRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+				AND CurrentStatus <> @PendingStatusId
 			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'Process awaiting approval. You could not edit this request.'
+		SET @ErrMsg = 'Status is not pending, you can not edit this request.'
 
 		RETURN;
 	END
 
-	IF @RequestType NOT IN (3, 4)
-	BEGIN
-		SET @ErrCode = 101
-		SET @ErrMsg = 'Late in request has the invalid parameter'
-
-		RETURN;
-	END
-
-	IF @RequestType IN (3)
-		AND (
-			@OnDate IS NULL
-			OR isnull(@LateInMins, 0) <= 0
-			OR isnull(@LateInMins, 0) > 150
-			)
-	BEGIN
-		SET @ErrCode = 102
-		SET @ErrMsg = 'Late in request has the invalid parameter'
-
-		RETURN;
-	END
-
-	IF @RequestType IN (4)
-		AND (
-			@OnDate IS NULL
-			OR isnull(@EarlyOutMins, 0) <= 0
-			OR isnull(@EarlyOutMins, 0) > 150
-			)
-	BEGIN
-		SET @ErrCode = 103
-		SET @ErrMsg = 'Late out request has the invalid parameter'
-
-		RETURN;
-	END
-
-	IF @RequestType IN (3, 4)
-		AND EXISTS (
+	IF EXISTS (
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-				INNER JOIN dbo.LateInEarlyOutRequest AS le WITH (NOLOCK) ON wk.RequestId = le.RequestId
-			WHERE wk.empid = @EmpId
-				AND wk.RequestId <> wk.RequestId
+				INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON wk.RequestId = lieo.RequestId
+				AND lieo.OnDate = @OnDate
+			WHERE wk.EmpId = @EmpId
 				AND wk.RequestType = @RequestType
-				AND wk.CurrentStatus IN (1, 2, 4, 6)
-				AND le.OnDate = @OnDate
+				AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 			)
 	BEGIN
-		SET @ErrCode = 105
-		SET @ErrMsg = 'There is another request in the same range'
+		SET @ErrCode = 101
+		SET @ErrMsg = 'There is another request in the same date.'
 
 		RETURN;
 	END
-
-	DECLARE @IsTopManager BIT
 
 	SELECT @IsTopManager = IsTopManager
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
@@ -104,24 +79,8 @@ BEGIN
 			)
 		AND @IsTopManager = 0
 	BEGIN
-		SET @ErrCode = 106
-		SET @ErrMsg = 'Invalid parameter'
-
-		RETURN;
-	END
-
-	-- check the late in, ealry out min <=60 
-	IF (
-			@RequestType = 3
-			AND @LateInMins > 60
-			)
-		OR (
-			@RequestType = 4
-			AND @EarlyOutMins > 60
-			)
-	BEGIN
-		SET @ErrCode = 108
-		SET @ErrMsg = 'The maximun late in/early out minutes is 60'
+		SET @ErrCode = 102
+		SET @ErrMsg = 'Verifier, Approver is required.'
 
 		RETURN;
 	END
@@ -133,13 +92,23 @@ BEGIN
 				FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
 				WHERE sp.OwnerId = @EmpId
 					AND sp.EmpId = @ModifiedBy
-					AND sp.ActionType = 5
-					AND sp.RequestType IN (3, 4)
+					AND sp.ActionType = @OnBehalfRequest
+					AND sp.RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
 					AND ISNULL(sp.IsDeleted, 0) = 0
 				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @ModifiedBy
+					AND gs.ActionType = @OnBehalfRequest
+					AND gs.RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
 		BEGIN
-			SET @ErrCode = 107
-			SET @ErrMsg = 'You could not permision on this request.'
+			SET @ErrCode = 103
+			SET @ErrMsg = 'You do not have permision.'
 
 			RETURN;
 		END
@@ -149,52 +118,52 @@ BEGIN
 	BEGIN
 		IF NOT EXISTS (
 				SELECT TOP 1 1
-				FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @VerifierId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 2
-					AND sp.RequestType IN (3, 4)
-					AND ISNULL(sp.IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @VerifierId
+					AND EmpId = @EmpId
+					AND ActionType = @VerifyRequest
+					AND RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
+					AND ISNULL(IsDeleted, 0) = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @VerifierId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (3, 4)
-					AND g.ActionType = 2
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @VerifierId
+					AND gs.RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
+					AND gs.ActionType = @VerifyRequest
+					AND ISNULL(gs.IsDeleted, 0) = 0
 				)
 		BEGIN
-			SET @ErrCode = 108
-			SET @ErrMsg = 'invalid parameter verifierid.'
+			SET @ErrCode = 104
+			SET @ErrMsg = 'Verifier is invalid.'
 
 			RETURN;
 		END
 
 		IF NOT EXISTS (
 				SELECT 1
-				FROM dbo.EmployeeSupervisor AS sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @ApproverId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 3
-					AND sp.RequestType IN (3, 4)
-					AND ISNULL(sp.IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @ApproverId
+					AND EmpId = @EmpId
+					AND ActionType = @ApproveRequest
+					AND RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
+					AND ISNULL(IsDeleted, 0) = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @ApproverId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (3, 4)
-					AND g.ActionType = 3
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @ApproverId
+					AND gs.RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
+					AND gs.ActionType = @ApproveRequest
+					AND ISNULL(gs.IsDeleted, 0) = 0
 				)
 		BEGIN
-			SET @ErrCode = 109
-			SET @ErrMsg = 'invalid parameter ApproverId.'
+			SET @ErrCode = 105
+			SET @ErrMsg = 'Approver is invalid.'
 
 			RETURN;
 		END
@@ -204,24 +173,24 @@ BEGIN
 	SET Remark = @Remark
 		,CurrentStatus = CASE 
 			WHEN @IsTopManager = 1
-				AND @VerifierId IS NOT NULL THEN 1
+				AND @VerifierId IS NOT NULL THEN @PendingStatusId
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NOT NULL THEN 2
+				AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN 4
-			ELSE 1
+				AND @ApproverId IS NULL THEN @ApprovedStatusId
+			ELSE @PendingStatusId
 			END
 		,VerifierId = @VerifierId
 		,VerifiedStatus = CASE 
 			WHEN @IsTopManager = 1
-				AND @VerifierId IS NULL THEN 2
-			ELSE 1
+				AND @VerifierId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
 			END
 		,ApproverId = @ApproverId
 		,ApprovedStatus = CASE 
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN 2
-			ELSE 1
+				AND @ApproverId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
 			END
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = @ModifiedDate

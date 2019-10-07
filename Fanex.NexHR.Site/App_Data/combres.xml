@@ -111,16 +111,6 @@
       <resource path="~/scripts/views/search.request.js" />
     </resourceSet>
 
-    <resourceSet name="lateinearlyoutcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/request.css" />
-    </resourceSet>
-    <resourceSet name="lateinearlyoutjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Request/lateinearlyout.request.js" />
-      <resource path="~/scripts/views/search.request.js" />
-    </resourceSet>
-
     <resourceSet name="leavecss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/request.leave.css" />

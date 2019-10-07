@@ -35,7 +35,7 @@ $(function () {
 
         switch (command) {
             case 'Edit':
-                location.href = _global.root + 'lateinearlyout/update/' + requestId;
+                location.href = _global.root + 'lateinearlyout/edit/' + requestId;
                 break;
             case 'Cancel':
                 cancelRequest(requestId);

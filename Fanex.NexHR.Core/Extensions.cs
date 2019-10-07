@@ -474,28 +474,28 @@
         {
             switch (type)
             {
-                case (int)RequestType.CheckIn:
+                case (byte)RequestType.CheckIn:
                     return Labels.CheckIn;
 
-                case (int)RequestType.CheckOut:
+                case (byte)RequestType.CheckOut:
                     return Labels.CheckOut;
 
-                case (int)RequestType.LateIn:
+                case (byte)RequestType.LateIn:
                     return Labels.LateIn;
 
-                case (int)RequestType.EarlyOut:
+                case (byte)RequestType.EarlyOut:
                     return Labels.EarlyOut;
 
-                case (int)RequestType.ChangeShift:
+                case (byte)RequestType.ChangeShift:
                     return Labels.ChangeShift;
 
-                case (int)RequestType.Leave:
+                case (byte)RequestType.Leave:
                     return Labels.Leave;
 
                 case (int)RequestType.KeepInView:
                     return Labels.KeepInView;
 
-                case (int)RequestType.Overtime:
+                case (byte)RequestType.Overtime:
                     return Labels.Overtime;
 
                 default:

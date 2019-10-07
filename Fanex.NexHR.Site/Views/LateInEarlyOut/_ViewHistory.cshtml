@@ -28,7 +28,7 @@
         <tbody>
             @foreach (LateInEarlyOutRequest request in Model)
             {
-                var totalMins = request.RequestTypeId == (int)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
+                var totalMins = request.RequestTypeId == (byte)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
                 <tr>
                     <td>@(index++)</td>
                     <td>

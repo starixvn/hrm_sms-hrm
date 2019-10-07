@@ -42,7 +42,7 @@
         [Required]
         public int RequestTypeId { get; set; }
 
-        public string RequestTypeName => RequestTypeId == (int)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
+        public string RequestTypeName => RequestTypeId == (byte)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
 
         public byte ReasonId { get; set; }
 

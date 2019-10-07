@@ -200,21 +200,21 @@
         {
             switch (model.RequestTypeId)
             {
-                case (int)RequestType.CheckIn:
-                case (int)RequestType.CheckOut:
+                case (byte)RequestType.CheckIn:
+                case (byte)RequestType.CheckOut:
                     model.CheckInOutDetail = requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
-                case (int)RequestType.LateIn:
-                case (int)RequestType.EarlyOut:
+                case (byte)RequestType.LateIn:
+                case (byte)RequestType.EarlyOut:
                     model.LateInEarlyOutDetail = requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
-                case (int)RequestType.ChangeShift:
+                case (byte)RequestType.ChangeShift:
                     model.ChangeShiftDetails = requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
                     break;
 
-                case (int)RequestType.Leave:
+                case (byte)RequestType.Leave:
                     model.LeaveDisciplines = requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
                     break;
 

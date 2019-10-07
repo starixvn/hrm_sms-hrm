@@ -1,29 +1,19 @@
 ﻿
-
-/****** Object:  Stored Procedure dbo.Report_LeaveSummary    Script Date: 7/20/2016 10:19:17 AM ******/
-/****** Object:  Stored Procedure dbo.Report_LeaveSummary    Script Date: 7/19/2016 5:22:20 PM ******/
-/*
-declare @empid int, @groupid int,
-		@todate datetime, @year datetime
-set @todate = '2012/06/1'
-exec [dbo].[Report_LeaveSummary] 319, '', 2015
-*/
 CREATE PROCEDURE [dbo].[Report_LeaveSummary] @empid INT = NULL
 	,@groupids VARCHAR(max) = ''
 	,@year INT
 	,@isLocal BIT = NULL
-	,@SupervisorID INT = NULL
+	,@SupervisorId INT = NULL
 	,@role VARCHAR(max) = ''
 AS
 /*
 Created: Tom.Vo@2013-11-21
 Task: leave summary report
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
-
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -48,31 +38,25 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		IF (
-				EXISTS (
-					SELECT 1
-					FROM dbo.Employee AS e WITH (NOLOCK)
-						INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
-					WHERE EmpId = @SupervisorID
-						AND er.RoleId IN (2, 3, 4, 5, 6, 7)
-					)
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS e WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
+				WHERE EmpId = @SupervisorId
+					AND er.RoleId IN (2, 3, 4, 5, 6, 7)
 				)
 		BEGIN
 			INSERT INTO #GroupsList (GroupId)
-			SELECT GroupID
-			FROM [Group] g WITH (NOLOCK)
+			SELECT GroupId
+			FROM dbo.[Group] WITH (NOLOCK)
 		END
-				--ELSE
-				--BEGIN
-				--	SET @EmpId = @SupervisorId
-				--END
 	END
 
-	IF (@empid IS NULL)
+	IF @empid IS NULL
 	BEGIN
 		INSERT INTO #EmployeeId (EmpId)
 		SELECT EmpId
-		FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 0)
+		FROM dbo.fnc_GetEmployeeByActorId(@SupervisorId, 1, 0)
 	END
 	ELSE
 	BEGIN
@@ -99,12 +83,10 @@ BEGIN
 		WHERE ISNULL(Deleted, 0) = 0
 			AND FromDate <= @fromdate
 		) t ON e.EmpId = t.Empid
-	WHERE (
-			EXISTS (
-				SELECT 1
-				FROM #EmployeeId
-				WHERE e.EmpId = EmpId
-				)
+	WHERE EXISTS (
+			SELECT 1
+			FROM #EmployeeId
+			WHERE e.EmpId = EmpId
 			)
 		AND (
 			@isLocal IS NULL
@@ -126,15 +108,15 @@ BEGIN
 
 	SELECT w.EmpId AS EmpId
 		,SUM(CASE 
-				WHEN k.IsHalfDay = 1 THEN 0.5
+				WHEN kiv.IsHalfDay = 1 THEN 0.5
 				ELSE 1
 				END) AS OpenKIV
 	INTO #CreditKIV
 	FROM dbo.WorkingTimeRequest AS w WITH (NOLOCK)
-		INNER JOIN dbo.[KeepInViewRequest] AS k WITH (NOLOCK) ON w.RequestId = k.RequestId
-	WHERE w.CurrentStatus IN (4, 6)
-		AND k.FromDate BETWEEN @fromdate
+		INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON w.RequestId = kiv.RequestId
+		AND kiv.OnDate BETWEEN @fromdate
 			AND @todate
+	WHERE w.CurrentStatus IN (4, 6)
 	GROUP BY w.EmpId
 
 	-- KIV leave
@@ -311,25 +293,29 @@ BEGIN
 	INTO #CurrenBalace
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		LEFT JOIN (
-			SELECT EmpId, DeductDays, FromDate FROM dbo.LeaveTrans WITH (NOLOCK) WHERE YEAR(FromDate) = @year AND ISNULL(Deleted, 0) = 0) AS ded  ON e.EmpId = ded.EmpId
+		SELECT EmpId
+			,DeductDays
+			,FromDate
+		FROM dbo.LeaveTrans WITH (NOLOCK)
+		WHERE YEAR(FromDate) = @year
+			AND ISNULL(Deleted, 0) = 0
+		) AS ded ON e.EmpId = ded.EmpId
 		LEFT JOIN (
-			SELECT lt.EmpId
-				,SUM(CreditDays) CreditDays
-			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
-			WHERE FromDate >= @fromdate
-				AND FromDate < @todate
-				AND ISNULL(Deleted, 0) <> 1
-				AND CreditDays > 0
-				AND ISNULL(Deleted, 0) <> 1
-			GROUP BY lt.EmpId
+		SELECT lt.EmpId
+			,SUM(CreditDays) CreditDays
+		FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
+		WHERE FromDate >= @fromdate
+			AND FromDate < @todate
+			AND ISNULL(Deleted, 0) <> 1
+			AND CreditDays > 0
+			AND ISNULL(Deleted, 0) <> 1
+		GROUP BY lt.EmpId
 		) Cred ON e.EmpId = Cred.Empid
 		LEFT JOIN EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
-	WHERE (
-			EXISTS (
-				SELECT 1
-				FROM #EmployeeId
-				WHERE e.EmpId = EmpId
-				)
+	WHERE EXISTS (
+			SELECT 1
+			FROM #EmployeeId
+			WHERE e.EmpId = EmpId
 			)
 		AND (
 			@isLocal IS NULL
@@ -418,7 +404,7 @@ BEGIN
 		,JoinedDate
 		,ConfirmedDate
 		,g.GroupId
-		,g.NAME [Name]
+		,g.[Name]
 	FROM #OpenBalance AS op
 		LEFT JOIN #CreditKIV AS kiv ON op.EmpId = kiv.EmpId
 		LEFT JOIN #CurrentKIV AS dek ON op.EmpId = dek.EmpId

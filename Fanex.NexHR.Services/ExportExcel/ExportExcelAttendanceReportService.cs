@@ -132,7 +132,7 @@
             {
                 foreach (EmployeeAttendanceRequest item in attendance.RequestList)
                 {
-                    var actualLateInErlyOut = item.RequestType.Id == (int)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
+                    var actualLateInErlyOut = item.RequestType.Id == (byte)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
                     var request = GetRequestEntity(item, actualLateInErlyOut);
                     requestsBuilder.Append("- ");
                     requestsBuilder.Append(request.RequestType.Name);

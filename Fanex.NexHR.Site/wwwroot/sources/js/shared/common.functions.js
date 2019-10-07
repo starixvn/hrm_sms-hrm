@@ -237,39 +237,32 @@ function initDatepicker() {
 
         let checkBadDates = function (mydate) {
             let isEnable = true;
-            const disabledDates = $this.attr('disabledDate'),
-                myBadDates = disabledDates.split(',');
+            const disabledDates = $this.attr('disabledDate');
 
-            const checkdate = moment(mydate);
-            for (let i = 0; i < myBadDates.length; i++) {
-                const date = moment(myBadDates[i]);
-                if (date.isSame(checkdate)) {
-                    isEnable = false;
+            if (disabledDates && disabledDates.length > 0) {
+                const checkdate = moment(mydate),
+                    myBadDates = disabledDates.split(',');
+                for (let i = 0; i < myBadDates.length; i++) {
+                    const date = moment(myBadDates[i]);
+                    if (date.isSame(checkdate)) {
+                        isEnable = false;
+                    }
                 }
             }
 
             return [isEnable];
         };
 
-        // get minDate, maxDate, disabledDates
+        // get minDate, maxDate
         let mindate = $this.attr('mindate'),
-            maxdate = $this.attr('maxdate'),
-            disabledDates = $this.attr('disabledDate');
+            maxdate = $this.attr('maxdate');
 
-        if (disabledDates && disabledDates.length > 0) {
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                beforeShowDay: checkBadDates,
-                changeMonth: true,
-                changeYear: true
-            });
-        } else {
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                changeMonth: true,
-                changeYear: true
-            });
-        }
+        $this.datepicker({
+            dateFormat: 'dd M, yy',
+            beforeShowDay: checkBadDates,
+            changeMonth: true,
+            changeYear: true
+        });
 
         if (mindate && mindate !== 'null') {
             mindate = mindate.split('/');
