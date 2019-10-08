@@ -29,17 +29,6 @@
             this.shiftService = shiftService;
         }
 
-        public IEnumerable<EntityBase<int>> GetGroups(int actorId, bool isIFrame = false)
-        {
-            var criteria = new GetGroupCriteria
-            {
-                ActorId = actorId,
-                IsIFrame = isIFrame
-            };
-
-            return baseService.GetData<EntityBase<int>>(criteria);
-        }
-
         public IEnumerable<EmployeeSuggestion> GetEmployees(GetEmployeeFilter filter)
         {
             var criteria = new GetEmployeeCriteria

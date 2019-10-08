@@ -8,8 +8,6 @@
 
     public interface IScheduleArrangeService
     {
-        IEnumerable<EntityBase<int>> GetGroups(int actorId, bool isIFrame = false);
-
         IEnumerable<EmployeeSuggestion> GetEmployees(GetEmployeeFilter filter);
 
         IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter);

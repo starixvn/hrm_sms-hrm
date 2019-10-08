@@ -178,7 +178,7 @@
                 {
                     Id = y.Id,
                     Text = y.Name,
-                    IsChild = true
+                    IsLeaf = true
                 }).ToList()
             }).ToList();
             IEnumerable<MultiSelectViewModel> hierarchy = GetHierarchy(departments);

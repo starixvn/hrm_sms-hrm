@@ -11,7 +11,7 @@
         public bool Checked { get; set; }
         public bool Enable { get; set; } = true;
         public int? ParentId { get; set; }
-        public bool IsChild { get; set; }
+        public bool IsLeaf { get; set; }
         public IList<MultiSelectViewModel> Items { get; set; } = new List<MultiSelectViewModel>();
     }
 }

@@ -7,6 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import { axiosError, blockUI, unblockUI } from '../../../shared/common.functions';
+import buildData from '../../../shared/components/react-tree-multiselect/buildData';
 import { DateFormat } from '../../../shared/constants';
 import Search from './Search';
 import Table from './table/table';
@@ -35,10 +36,11 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        axios(_global.root + 'ScheduleArrange/GetGroups', { params: { isIFrame: true } })
+        axios(_global.root + 'department/GetHierarchy')
             .then(response => {
-                this.groupOptions = response.data.map(group => { group.checked = true; return group; });
-                const filter = { ...this.state.filter, groupIds: this.groupOptions.map(group => group.id).join(',') };
+                this.groupOptions = response.data;
+                const { floatData } = buildData(response.data);
+                const filter = { ...this.state.filter, groupIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
                 this.getWeeklyShedules(filter);
 

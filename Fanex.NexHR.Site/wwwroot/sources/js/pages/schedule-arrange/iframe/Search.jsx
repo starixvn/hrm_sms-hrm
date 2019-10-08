@@ -1,12 +1,13 @@
 ﻿import React, { Component } from 'react';
 
-import MultipleSelect from '@9softstudio/react-multiselect';
 import Autocomplete from '../../../shared/components/Autocomplete';
 import WeekPicker from '../../../shared/components/WeekPicker';
+import TreeMultiselect from '../../../shared/components/react-tree-multiselect/TreeMultiselect';
 
 export default class Search extends Component {
-    handleGroupChange = (selectedItem, selectedItemsKey) => {
-        this.props.onChange('groupIds', selectedItemsKey);
+    handleGroupChange = (selectedItems) => {
+        const ids = selectedItems.map(item => item.id);
+        this.props.onChange('groupIds', ids.join(','));
     }
 
     handleEmployeeChange = (value) => {
@@ -40,16 +41,13 @@ export default class Search extends Component {
                     </div>
                     <div className="form-group form-group--m">
                         <div className="label-form">
-                            <label className="control-label">Section</label>
+                            <label className="control-label">Dept./Section</label>
                         </div>
                         <div className="select-form">
-                            <MultipleSelect
-                                dataSource={this.props.groupOptions}
-                                keyField="id"
-                                valueField="name"
-                                statusField="checked"
+                            <TreeMultiselect
+                                data={this.props.groupOptions}
+                                isSelectedAll
                                 onChange={this.handleGroupChange}
-                                maxDisplayItemCount={0}
                             />
                         </div>
                     </div>

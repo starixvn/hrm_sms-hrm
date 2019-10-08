@@ -49,14 +49,6 @@
         }
 
         [AllowAnonymous]
-        public CustomJsonResult GetGroups(bool isIFrame = false)
-        {
-            IEnumerable<EntityBase<int>> groups = scheduleArrangeService.GetGroups(sessionService.Employee.Id, isIFrame);
-
-            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        [AllowAnonymous]
         public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
             filter.ActorId = sessionService.Employee.Id;

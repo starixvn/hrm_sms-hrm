@@ -326,9 +326,6 @@
   </Function>
   <Function Name="Schedule Arrange">
     <Setting Key="ScheduleArrangement_GetEmployee" SpName="ScheduleArrangement_GetEmployee" DbName="nexhrx" Plain="0" />
-    <Setting Key="ScheduleArrangement_GetGroup" SpName="ScheduleArrangement_GetGroup" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-    </Setting>
     <Setting Key="ScheduleArrangement_GetWeekly" SpName="ScheduleArrangement_GetWeekly" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
       <Mapping DataField="DefaultShiftId" ObjectProperty="Id" />

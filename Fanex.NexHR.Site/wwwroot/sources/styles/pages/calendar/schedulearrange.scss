@@ -1,6 +1,4 @@
-﻿@import '~@9softstudio/react-multiselect/dist/style.css';
-
-@import '../../abstracts/variables';
+﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../vendors/multiselect';
 @import '../../vendors/weekpicker';
@@ -12,6 +10,7 @@
 @import '../../components/icon';
 @import '../../components/modal';
 @import '../../components/react-autocomplete-wrapper';
+@import '../../components/multiselect-treeview';
 
 input[type="text"] {
     &.input-validation-error {
@@ -21,14 +20,9 @@ input[type="text"] {
 }
 
 .form-horizontal {
-    .multiple-select-container {
-        .multiple-select-label {
-            padding-left: 5px;
-            @include border-radius(4px);
-
-            .caret {
-                right: 5px;
-            }
+    .multiselect-treeview {
+        .multiselect-treeview-dropdown-list {
+            width: 220px;
         }
     }
 

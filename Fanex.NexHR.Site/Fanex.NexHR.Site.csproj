@@ -372,6 +372,9 @@
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeNode.js" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeMultiselect.js" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\buildData.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />

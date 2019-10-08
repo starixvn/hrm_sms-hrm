@@ -58,11 +58,7 @@
 
     multiSelectTreeView.prototype = {
         initialize: function () {
-            var me = this,
-                id = me.id;
-            me.isOpenning = false;
-            me.bodyId = 'multiselect-treeview-' + id;
-
+            var me = this;
             var html = me.render();
 
             //add global variable
@@ -111,7 +107,7 @@
                 html.push('<ul>'
                     + '<li class="multiselect-treeview-item">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '" data-is-child="' + data.isChild + '" '
+                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '" data-is-child="' + data.isLeaf + '" '
                     + (data.checked || options.isSelectedAll ? 'checked' : '') + ' />'
                     + '<label for="' + itemId + '">' + data.text + '</label>'
                     + '</div>');
@@ -141,7 +137,7 @@
                 var itemId = item.parentId + '-' + i;
                 html.push('<li class="multiselect-treeview-item is-child">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '"' + '" data-is-child="' + data.isChild + '" '
+                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '"' + '" data-is-child="' + data.isLeaf + '" '
                     + ' data-parentid="' + item.parentId + '"'
                     + ' ' + (data.checked || options.isSelectedAll ? 'checked' : '') + ' />'
                     + '<label for="' + itemId + '">' + data.text + '</label>'

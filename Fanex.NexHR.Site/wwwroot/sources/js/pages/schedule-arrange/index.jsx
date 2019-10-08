@@ -12,6 +12,7 @@ import { cloneDeep, isEqual, unset } from 'lodash';
 import { axiosError, blockUI, unblockUI, reorder } from '../../shared/common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
+import buildData from '../../shared/components/react-tree-multiselect/buildData';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
@@ -59,7 +60,7 @@ export default class App extends Component {
 
     componentDidMount() {
         const promises = [
-            axios(_global.root + 'ScheduleArrange/GetGroups'),
+            axios(_global.root + 'department/GetHierarchy'),
             axios(_global.root + 'Calendar/GetShift', {
                 params: {
                     query: '',
@@ -70,9 +71,10 @@ export default class App extends Component {
 
         Promise.all(promises)
             .then(([groupResponse, shiftResponse]) => {
-                this.groupOptions = groupResponse.data.map(group => { group.checked = true; return group; });
+                this.groupOptions = groupResponse.data;
+                const { floatData } = buildData(groupResponse.data);
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
-                const filter = { ...this.state.filter, groupIds: this.groupOptions.map(group => group.id).join(',') };
+                const filter = { ...this.state.filter, groupIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
                 this.getWeeklyShedules(filter);
 
