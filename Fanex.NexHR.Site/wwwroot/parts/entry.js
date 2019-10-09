@@ -36,6 +36,7 @@ module.exports = {
         [`${styleDistPath}/report.unpaid.leave.summary`]: `${styleSourcePath}/pages/report/unpaid.leave.summary.scss`,
         [`${styleDistPath}/report.time.record`]: `${styleSourcePath}/pages/report/time.record.scss`,
         [`${styleDistPath}/report.employee.supervisor`]: `${styleSourcePath}/pages/report/employee.supervisor.scss`,
+        [`${styleDistPath}/report.weekend.leave`]: `${styleSourcePath}/pages/report/weekend.leave.scss`,
         [`${styleDistPath}/overtime.myrequest`]: `${styleSourcePath}/pages/overtime/myrequest.scss`,
         [`${styleDistPath}/overtime.edit`]: `${styleSourcePath}/pages/overtime/edit.scss`,
         [`${styleDistPath}/overtime.details`]: `${styleSourcePath}/pages/overtime/details.scss`,

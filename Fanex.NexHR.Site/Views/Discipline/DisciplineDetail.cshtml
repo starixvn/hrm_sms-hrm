@@ -1,4 +1,5 @@
-﻿@model DisciplineSummaryViewModel
+﻿@using Fanex.NexHR.Resources
+@model DisciplineSummaryViewModel
 @{
     ViewBag.Title = Labels.DisciplineDetail;
 }
@@ -18,6 +19,8 @@
 <h2>@Labels.DisciplineDetail</h2>
 <form class="form-filter">
     <div class="container_24 bunhat">
+        @Html.HiddenFor(model => model.TeamId)
+        @Html.HiddenFor(model => model.TeamName)
         <div class="space"></div>
         <div class="grid_2 gridlabel">@Labels.DateRange</div>
         <div class="grid_6">
@@ -39,12 +42,9 @@
         <div class="clear"></div>
         <div class="space"></div>
         <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.TeamId)
+            @Html.LabelFor(model => model.TeamId, Labels.DepartmentSection)
         </div>
-        <div class="grid_6">
-            @Html.DropDownListFor(model => model.TeamId, new SelectList(Model.Teams, "Id", "Name"), Labels.All)
-            @Html.HiddenFor(model => model.TeamName)
-        </div>
+        <div class="grid_6" id="Section"></div>
         <div class="grid_3 gridlabel">@Labels.Category</div>
         <div class="grid_4">
             @{
@@ -80,15 +80,14 @@
         <div class="grid_4">
             @{
                 var ignoredStatus = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Ignored, Value = "true"},
-                    new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
-                };
+                            {
+                                new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                                new SelectListItem() {Text = Labels.Ignored, Value = "true"},
+                                new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
+                            };
             }
             @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category" })
         </div>
-
 
         <div class="clear"></div>
         <div class="space"></div>

@@ -4,7 +4,14 @@
 @import '../../components/card';
 @import '../../components/form-horizontal';
 @import '../../components/validation';
+@import '../../components/multiselect-treeview';
 
 .generate-code {
     margin-left: 10px;
+}
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
 }

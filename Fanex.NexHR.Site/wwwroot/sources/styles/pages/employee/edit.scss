@@ -6,6 +6,7 @@
 @import '../../components/birthday-picker';
 @import '../../components/jquery-ui-dialog';
 @import '../../components/validation';
+@import '../../components/multiselect-treeview';
 @import '../../layout/toastr';
 
 .form-edit-user {
@@ -48,6 +49,12 @@
                     }
                 }
             }
+        }
+    }
+
+    .multiselect-treeview {
+        .multiselect-treeview-dropdown-list {
+            width: 220px;
         }
     }
 }

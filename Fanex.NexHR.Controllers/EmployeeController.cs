@@ -174,7 +174,6 @@
         [HRMPermission(Policy.Host, FunctionKey.CreateAccount)]
         public ActionResult Create()
         {
-            ViewBag.Teams = commonDataService.GetAllSection();
             return View(new CreateEmployeeViewModel());
         }
 
@@ -205,7 +204,6 @@
                 }
             }
 
-            ViewBag.Teams = commonDataService.GetAllSection();
             return View(model);
         }
 
@@ -587,7 +585,6 @@
 
         private void ComposeViewBagsForEditEmployee()
         {
-            ViewBag.Groups = commonDataService.GetAllSection();
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
 
             ViewBag.Marriages = Utilities.Marriages;

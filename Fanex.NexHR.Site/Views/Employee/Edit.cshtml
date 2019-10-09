@@ -357,9 +357,8 @@
                 <div class="label-form">
                     @Html.LabelFor(model => model.Team.Id, Labels.DepartmentSection, new { @class = "control-label" })
                 </div>
-                <div class="select-form">
-                    @Html.DropDownListFor(model => model.Team.Id, new SelectList(ViewBag.Groups, "Id", "Name"), "--Select a Team--", new { @class = "form-control" })
-                </div>
+                @Html.HiddenFor(model => model.Team.Id)
+                <div class="select-form" id="Section"></div>
                 @Html.ValidationMessageFor(model => model.Team.Id)
             </li>
             <li class="list-group-item form-group">

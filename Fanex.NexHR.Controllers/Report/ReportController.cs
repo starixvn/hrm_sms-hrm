@@ -169,7 +169,6 @@
                 var today = DateTime.Today;
                 model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
-                model.Teams = teamService.GetAll();
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
@@ -201,7 +200,6 @@
                 var today = DateTime.Today;
                 model.FromDate = new DateTime(today.Year, 1, 1);
                 model.ToDate = today;
-                model.Teams = teamService.GetAll();
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
@@ -232,7 +230,6 @@
             {
                 Year = DateTime.Now.Year,
                 EmployeeId = -1,
-                Sections = teamService.GetBySupervisor(sessionService.Employee.Id),
                 LeaveType = UnpaidLeaveType.UnpaidLeave
             };
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)

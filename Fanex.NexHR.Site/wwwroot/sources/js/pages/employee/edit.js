@@ -10,6 +10,7 @@ import { stringify } from 'qs';
 import toastr from 'toastr';
 import '../../../libs/birthdaypicker';
 
+import '../../shared/multiselect-tree-view';
 import { axiosError, confirm, alert, initDatepicker, toastOptions } from '../../shared/common.functions';
 
 $(document).ready(function () {
@@ -136,6 +137,19 @@ $(document).ready(function () {
         maxAge: 75,
         defaultDate: $('#DateOfBirth').val()
     });
+
+    axios(_global.root + 'Department/GetHierarchy')
+        .then(response => {
+            $('#Section').multiSelectTreeView({
+                data: response.data,
+                noneSelectedText: 'Select a section',
+                singleSelection: true,
+                selectedItems: $('#Team_Id').val(),
+                onSelect: function () {
+                    $('#Team_Id').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                }
+            });
+        }).catch(axiosError);
 
     $('#postform').click(function () {
         var isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');

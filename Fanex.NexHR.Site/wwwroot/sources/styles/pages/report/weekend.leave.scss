@@ -1,0 +1,16 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+/*@import '../../components/buttons-new';*/
+@import '../../components/multiselect-treeview';
+/*@import '../../components/form-filter';*/
+/*@import '../../layout/table';*/
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-button {
+        width: 90%;
+    }
+
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}

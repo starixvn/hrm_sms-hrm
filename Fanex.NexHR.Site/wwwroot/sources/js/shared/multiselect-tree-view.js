@@ -9,7 +9,7 @@
         },
         getSelectedItems: function () {
             var $me = $(this);
-            var items = $me.find('input[data-is-child=true]:checked'),
+            var items = $me.find('input[data-is-leaf=true]:checked'),
                 totalItems = items.length,
                 values = [];
             for (var i = 0; i < totalItems; i++) {
@@ -35,6 +35,7 @@
 
     // Default options
     $.fn.multiSelectTreeView.defaults = {
+        singleSelection: false,
         noneSelectedText: 'Select options',
         selectedText: '# selected',
         selectedAllText: 'All selected',
@@ -67,9 +68,8 @@
             me.$updownicon = me.$multiSelect.find('.up-down-icon').first();
             me.$selectedtext = me.$multiSelect.find('.selected-text').first();
             me.$dropdownlist = me.$multiSelect.find('.multiselect-treeview-dropdown-list').first();
-            me.$checkboxwrappers = me.$multiSelect.find('.checkbox-wrapper');
             me.$selectAll = me.$multiSelect.find('#selectAll');
-            me.$checkboxes = me.$multiSelect.find('.multiselect-treeview-items input[type=checkbox]');
+            me.$checkboxes = me.$multiSelect.find('.multiselect-treeview-items input[type=checkbox]:not(:disabled)');
 
             me.registerEvents();
             me.updateSelectedItems();
@@ -83,15 +83,25 @@
                 + '<span class="up-down-icon"><span class="down"></span></span>'
                 + '</div>'
                 + '<div class="multiselect-treeview-dropdown-list hidden">'
-                + '<div class="multiselect-treeview-select-all">'
-                + '<div class="checkbox-wrapper">'
-                + '<input type="checkbox" id="selectAll" ' + (options.isSelectedAll ? 'checked' : '') + ' />'
-                + '<label for= "selectAll" > Select all</label>'
-                + '</div>'
-                + '</div>'
+                + me.renderCheckAll()
                 + me.renderItems()
                 + '</div>' +
                 '</div>';
+        },
+        renderCheckAll: function () {
+            var me = this,
+                options = me.options,
+                html = '';
+            if (!options.singleSelection) {
+                html = '<div class="multiselect-treeview-select-all">'
+                    + '<div class="checkbox-wrapper">'
+                    + '<input type="checkbox" id="selectAll" ' + (options.isSelectedAll ? 'checked' : '') + ' />'
+                    + '<label for= "selectAll" > Select all</label>'
+                    + '</div>'
+                    + '</div>';
+            }
+
+            return html;
         },
         renderItems: function () {
             var me = this,
@@ -100,19 +110,19 @@
                 totalItems = options.data.length;
             html.push('<div class="multiselect-treeview-items">');
             for (var i = 0; i < totalItems; i++) {
-                var data = options.data[i];
-                data.hasChild = data.items && data.items.length > 0;
-                var itemId = 'item-' + i;
+                var data = options.data[i],
+                    itemId = 'item-' + i,
+                    disabled = options.disabled || (options.singleSelection && !data.isLeaf);
 
                 html.push('<ul>'
                     + '<li class="multiselect-treeview-item">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '" data-is-child="' + data.isLeaf + '" '
-                    + (data.checked || options.isSelectedAll ? 'checked' : '') + ' />'
+                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '" data-is-leaf="' + data.isLeaf + '" '
+                    + (data.checked || options.isSelectedAll ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' />'
                     + '<label for="' + itemId + '">' + data.text + '</label>'
                     + '</div>');
 
-                if (data.hasChild) {
+                if (data.items && data.items.length > 0) {
                     html.push(me.renderChilds({
                         data: data.items,
                         parentId: itemId
@@ -132,18 +142,18 @@
                 totalItems = item.data.length;
             html.push('<ul>');
             for (var i = 0; i < totalItems; i++) {
-                var data = item.data[i];
-                data.hasChild = data.items && data.items.length > 0;
-                var itemId = item.parentId + '-' + i;
+                var data = item.data[i],
+                    itemId = item.parentId + '-' + i,
+                    disabled = options.disabled || (options.singleSelection && !data.isLeaf);
                 html.push('<li class="multiselect-treeview-item is-child">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '"' + '" data-is-child="' + data.isLeaf + '" '
+                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '"' + '" data-is-leaf="' + data.isLeaf + '" '
                     + ' data-parentid="' + item.parentId + '"'
-                    + ' ' + (data.checked || options.isSelectedAll ? 'checked' : '') + ' />'
+                    + ' ' + (data.checked || options.isSelectedAll ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' />'
                     + '<label for="' + itemId + '">' + data.text + '</label>'
                     + '</div>');
 
-                if (data.hasChild) {
+                if (data.items && data.items.length > 0) {
                     html.push(me.renderChilds({
                         data: data.items,
                         parentId: itemId
@@ -159,16 +169,19 @@
         updateSelectedText: function () {
             var me = this,
                 options = me.options,
-                $checkboxes = me.$checkboxes.filter('[data-is-child=true]'),
+                $checkboxes = me.$checkboxes.filter('[data-is-leaf=true]'),
                 $checked = $checkboxes.filter(':checked');
 
             if ($checked.length === 0) {
                 me.$selectedtext.text(options.noneSelectedText);
                 me.$selectAll.prop('checked', false);
+            } else if ($checkboxes.length === $checked.length) {
+                me.$selectedtext.text(options.selectedAllText);
+                me.$selectAll.prop('checked', true);
             } else {
-                if ($checkboxes.length === $checked.length) {
-                    me.$selectedtext.text(options.selectedAllText);
-                    me.$selectAll.prop('checked', true);
+                if (options.singleSelection) {
+                    var text = $($checked[0]).closest('.checkbox-wrapper').find('label').html();
+                    me.$selectedtext.text(text);
                 } else {
                     me.$selectedtext.text(options.selectedText.replace('#', $checked.length));
                     me.$selectAll.prop('checked', false);
@@ -178,7 +191,7 @@
         updateSelectedItems: function () {
             var me = this,
                 options = me.options,
-                checkboxes = me.$checkboxes.filter('[data-is-child=true]'),
+                checkboxes = me.$checkboxes.filter('[data-is-leaf=true]'),
                 totalItems = checkboxes.length;
 
             if (options.selectedItems && options.selectedItems.length > 0) {
@@ -228,18 +241,18 @@
 
                 me.updateSelectedText();
             });
-            me.$checkboxwrappers.on('click', function () {
-                var $checkbox = $(this).find('input[type=checkbox]').first(),
-                    isChecked = $checkbox.prop('checked');
-                $checkbox.prop('checked', !isChecked).change();
-            });
             me.$checkboxes.on('change', function () {
                 var $this = $(this),
                     isChecked = $this.prop('checked');
-                me.$checkboxes.filter('[data-parentid=' + $this.attr('id') + ']').prop('checked', isChecked).change();
-                updateParent.call($this.get(0));
 
-                if ($this.attr('data-is-child') === 'true') {
+                if (options.singleSelection) {
+                    me.$checkboxes.not(this).prop('checked', false);
+                } else {
+                    me.$checkboxes.filter('[data-parentid=' + $this.attr('id') + ']').prop('checked', isChecked).change();
+                    updateParent.call($this.get(0));
+                }
+
+                if ($this.attr('data-is-leaf') === 'true') {
                     options.onSelect.call(this);
                 }
 

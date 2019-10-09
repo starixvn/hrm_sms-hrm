@@ -264,8 +264,25 @@
 
     $(document).ready(function () {
         initEventForTeamDropdown();
-
         initEventForDateRangeDropdown();
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    noneSelectedText: 'Select a section',
+                    singleSelection: true,
+                    onSelect: function () {
+                        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                    }
+                });
+
+                query();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
+        });
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');
         });
@@ -279,7 +296,5 @@
             event.preventDefault();
             window.location.href = _global.root + 'ExportDiscipline/ExportDisciplineDetailReport?' + $('form.form-filter').serialize();
         });
-
-        query();
     });
 })();

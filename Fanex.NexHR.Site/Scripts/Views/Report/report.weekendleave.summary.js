@@ -34,10 +34,10 @@ function initEventForViewWeekendLeaveDetail() {
 
 function formatDate(date) {
     var monthNames = [
-      "Jan", "Feb", "Mar",
-      "Apr", "May", "Jun", "Jul",
-      "Aug", "Sep", "Oct",
-      "Nov", "Dec"
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"
     ];
 
     var day = date.getDate();
@@ -66,6 +66,25 @@ function query() {
 
 $(document).ready(function () {
     initEventForDateRangeDropdown();
+    $.ajax({
+        url: _global.root + 'Department/GetHierarchy',
+        success: function (data) {
+            $('#Section').multiSelectTreeView({
+                data: data,
+                noneSelectedText: 'Select a section',
+                singleSelection: true,
+                onSelect: function () {
+                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                }
+            });
+
+            query();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
+
     $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
         $('form.form-filter #DateRange').val('0');
     });
@@ -78,6 +97,4 @@ $(document).ready(function () {
         event.preventDefault();
         window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveSummaryReport?' + $('form.form-filter').serialize();
     });
-
-    query();
-})
+});

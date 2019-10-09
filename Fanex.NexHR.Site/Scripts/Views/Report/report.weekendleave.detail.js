@@ -18,49 +18,65 @@ function initEventForDateRangeDropdown() {
 }
 
 function formatDate(date) {
-	var monthNames = [
-      "Jan", "Feb", "Mar",
-      "Apr", "May", "Jun", "Jul",
-      "Aug", "Sep", "Oct",
-      "Nov", "Dec"
-	];
+    var monthNames = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"
+    ];
 
-	var day = date.getDate();
-	var monthIndex = date.getMonth();
-	var year = date.getFullYear();
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
 
-	return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
+    return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
 }
 
 function query() {
-	$.ajax({
-		url: _global.root + 'report/PartialListWeekendLeaveDetail',
-		data: $('form.form-filter').serialize(),
-		success: function (data) {
-			$('#weekend-leave-detail').html(data);
-			floatThead("table#data");
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			alert(textStatus + ': ' + errorThrown);
-		}
-	});
+    $.ajax({
+        url: _global.root + 'report/PartialListWeekendLeaveDetail',
+        data: $('form.form-filter').serialize(),
+        success: function (data) {
+            $('#weekend-leave-detail').html(data);
+            floatThead("table#data");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
 }
 
 $(document).ready(function () {
-	initEventForDateRangeDropdown();
-	$('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
-		$('form.form-filter #DateRange').val('0');
-	});
+    initEventForDateRangeDropdown();
+    $.ajax({
+        url: _global.root + 'Department/GetHierarchy',
+        success: function (data) {
+            $('#Section').multiSelectTreeView({
+                data: data,
+                noneSelectedText: 'Select a section',
+                singleSelection: true,
+                onSelect: function () {
+                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                }
+            });
 
-	$('form.form-filter #submit').on('click', function (event) {
-		event.preventDefault();
-		query();
-	});
+            query();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + ': ' + errorThrown);
+        }
+    });
+    $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
+        $('form.form-filter #DateRange').val('0');
+    });
 
-	$('form.form-filter #btnExcel').on('click', function (event) {
-	    event.preventDefault();
-	    window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveDetailReport?' + $('form.form-filter').serialize();
-	});
+    $('form.form-filter #submit').on('click', function (event) {
+        event.preventDefault();
+        query();
+    });
 
-	query();
-})
+    $('form.form-filter #btnExcel').on('click', function (event) {
+        event.preventDefault();
+        window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveDetailReport?' + $('form.form-filter').serialize();
+    });
+});

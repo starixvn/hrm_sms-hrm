@@ -57,10 +57,6 @@
     <CodeAnalysisRuleSet>Fanex.NexHR.Site.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <!-- Exclude the project from analysis -->
-    <SonarQubeExclude>True</SonarQubeExclude>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
       <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
@@ -335,6 +331,8 @@
     <Content Include="wwwroot\dist\styles\report.time.record.js" />
     <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.css" />
     <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.js" />
+    <Content Include="wwwroot\dist\styles\report.weekend.leave.css" />
+    <Content Include="wwwroot\dist\styles\report.weekend.leave.js" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.css" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.css" />
@@ -1541,6 +1539,8 @@
     <Content Include="wwwroot\dist\js\lateinearlyout.create.js.map" />
     <Content Include="wwwroot\dist\js\lateinearlyout.edit.js.map" />
     <Content Include="wwwroot\dist\styles\lateinearlyout.create.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\report\weekend.leave.scss" />
+    <Content Include="wwwroot\dist\styles\report.weekend.leave.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

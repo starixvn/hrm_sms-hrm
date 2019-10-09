@@ -1,4 +1,8 @@
-﻿@model IList<DisciplineDetailModel>
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models.Discipline
+@using Fanex.NexHR.Resources
+@model IList<DisciplineDetailModel>
 @{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
     var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;
@@ -321,6 +325,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 22);
+        @RazorHelper.DisplayNoInformation(colspan: 23);
     }
 </table>
