@@ -12,7 +12,9 @@ export default class AlertModal extends PureComponent {
     static defaultProps = {
         message: '',
         show: false,
-        onHide: function () { }
+        onHide: function () {
+            // This is intentional
+        }
     };
 
     render() {

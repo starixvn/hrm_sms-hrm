@@ -6,12 +6,12 @@ import TreeMultiselect from '../../shared/components/react-tree-multiselect/Tree
 import WeekPicker from '../../shared/components/WeekPicker';
 
 export default class Search extends Component {
-    handleGroupChange = (selectedItems) => {
+    handleGroupChange = selectedItems => {
         const ids = selectedItems.map(item => item.id);
         this.props.onChange('groupIds', ids.join(','));
     }
 
-    handleEmployeeChange = (value) => {
+    handleEmployeeChange = value => {
         this.props.onChange('employee', value);
     }
 

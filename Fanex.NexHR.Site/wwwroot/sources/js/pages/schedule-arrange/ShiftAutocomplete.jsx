@@ -20,7 +20,9 @@ export default class ShiftAutocomplete extends PureComponent {
         className: '',
         placeholder: '',
         isDisabled: false,
-        onChange: function () { }
+        onChange: function () {
+            // This is intentional
+        }
     };
 
     constructor(props) {
@@ -103,17 +105,16 @@ export default class ShiftAutocomplete extends PureComponent {
 
     render() {
         const { name, className, isDisabled, placeholder } = this.props;
-        const { value, options } = this.state;
 
         return (
             <Autocomplete
-                items={options}
+                items={this.state.options}
                 shouldItemRender={(item, value) => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''))}
                 getItemValue={item => item.code}
                 wrapperProps={{ className: 'react-autocomplete-wrapper' }}
                 wrapperStyle={{ display: 'block' }}
-                renderInput={(props) => <input type="text" {...props} />}
-                renderMenu={(items, value, style) => <div className="items" children={items} />}
+                renderInput={props => <input type="text" {...props} />}
+                renderMenu={items => <div className="items" children={items} />}
                 renderItem={(item, isHighlighted) => <div className={`item ${isHighlighted ? 'highlighted' : ''}`} key={item.id}>{item.code}</div>}
                 inputProps={{
                     name: name,
@@ -124,7 +125,7 @@ export default class ShiftAutocomplete extends PureComponent {
                     onPaste: this.handleInputPaste,
                     onBlur: this.handleInputBlur
                 }}
-                value={value}
+                value={this.state.value}
                 onChange={this.handleChange}
                 onSelect={this.handleSelect}
             />

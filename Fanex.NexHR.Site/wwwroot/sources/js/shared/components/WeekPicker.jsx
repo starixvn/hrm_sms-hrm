@@ -29,7 +29,7 @@ export default class WeekPicker extends PureComponent {
     }
 
     updateWeekPicker = () => {
-        let vm = this;
+        const vm = this;
 
         this.$el.weekpicker({
             firstDay: 1,

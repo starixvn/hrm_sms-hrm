@@ -16,8 +16,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        let fromDate = moment().day('Monday').format(DateFormat);
-        let toDate = moment(fromDate).add(6, 'days').format(DateFormat);
+        const fromDate = moment().day('Monday').format(DateFormat),
+            toDate = moment(fromDate).add(6, 'days').format(DateFormat);
 
         this.state = {
             filter: {
@@ -60,7 +60,7 @@ export default class App extends Component {
                 isIFrame: true
             }
         }).then(response => {
-            let employeeOptions = response.data.map(item => {
+            const employeeOptions = response.data.map(item => {
                 return {
                     id: item.employeeId,
                     value: `${item.nickname} (${item.fullName})`
@@ -87,14 +87,15 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
-            const filter = { ...this.state.filter, fromDate, toDate };
-            let { schedules } = response.data;
 
-            this.setState({ filter, schedules });
+            this.setState({
+                filter: { ...this.state.filter, fromDate, toDate },
+                schedules: response.data
+            });
         }).catch(axiosError).then(() => unblockUI());
     }
 
-    handleGetWeeklyShedules = (isCurrentWeek) => {
+    handleGetWeeklyShedules = isCurrentWeek => {
         const filter = isCurrentWeek
             ? { ...this.state.filter, fromDate: this.currentWeek.fromDate, toDate: this.currentWeek.toDate }
             : this.state.filter;

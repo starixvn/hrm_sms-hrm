@@ -47,7 +47,7 @@ export default class App extends Component {
                     isDelete: false
                 }
             }).then(response => {
-                let employeeOptions = response.data.map(item => {
+                const employeeOptions = response.data.map(item => {
                     return {
                         id: item.Id,
                         nickname: item.NickName,
@@ -81,8 +81,8 @@ export default class App extends Component {
 
     handleChangeOrder = (key, employeeId) => {
         let managers = [...this.state.managers];
-        const totalItems = managers.length;
-        let sourceIndex = managers.findIndex(item => item.ownerId === employeeId);
+        const totalItems = managers.length,
+            sourceIndex = managers.findIndex(item => item.ownerId === employeeId);
         let destinationIndex = 0;
 
         switch (key) {
@@ -91,9 +91,6 @@ export default class App extends Component {
                 break;
             case 'down':
                 destinationIndex = sourceIndex + 1;
-                break;
-            case 'top':
-                destinationIndex = 0;
                 break;
             case 'bottom':
                 destinationIndex = totalItems;
@@ -129,8 +126,7 @@ export default class App extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(response => {
-            let data = response.data;
-
+            const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');
             } else {

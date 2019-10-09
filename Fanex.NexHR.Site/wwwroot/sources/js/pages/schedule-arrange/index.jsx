@@ -23,8 +23,8 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        let fromDate = moment().day('Monday').format(DateFormat);
-        let toDate = moment(fromDate).add(6, 'days').format(DateFormat);
+        const fromDate = moment().day('Monday').format(DateFormat),
+            toDate = moment(fromDate).add(6, 'days').format(DateFormat);
 
         this.state = {
             isHost: false,
@@ -103,9 +103,9 @@ export default class App extends Component {
 
     isDirtyData = () => {
         let isDirty = false;
-        let schedules = cloneDeep(this.state.schedules);
-        let originalSchedules = cloneDeep(this.originalSchedules);
-        const totalItems = schedules.length;
+        const schedules = cloneDeep(this.state.schedules),
+            originalSchedules = cloneDeep(this.originalSchedules),
+            totalItems = schedules.length;
 
         outerloop:
         for (let gindex = 0; gindex < totalItems; gindex++) {
@@ -138,7 +138,7 @@ export default class App extends Component {
                 query: query
             }
         }).then(response => {
-            let employeeOptions = response.data.map(item => {
+            const employeeOptions = response.data.map(item => {
                 return {
                     id: item.employeeId,
                     value: `${item.nickname} (${item.fullName})`
@@ -164,7 +164,6 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
-            const filter = { ...this.state.filter, fromDate, toDate };
             let { isHost, schedules } = response.data;
 
             this.originalSchedules = schedules.map(group => {
@@ -185,7 +184,11 @@ export default class App extends Component {
                 return group;
             });
 
-            this.setState({ filter, isHost, schedules: cloneDeep(this.originalSchedules) });
+            this.setState({
+                filter: { ...this.state.filter, fromDate, toDate },
+                isHost,
+                schedules: cloneDeep(this.originalSchedules)
+            });
         }).catch(axiosError).then(() => unblockUI());
     }
 
@@ -203,9 +206,8 @@ export default class App extends Component {
             },
             responseType: 'blob'
         }).then(response => {
-            let url = window.URL.createObjectURL(new Blob([response.data]));
             let link = document.createElement('a');
-            link.href = url;
+            link.href = window.URL.createObjectURL(new Blob([response.data]));
             link.setAttribute('download', `Working shift ${fromDate} to ${toDate}.xlsx`);
             document.body.appendChild(link);
             link.click();
@@ -213,9 +215,9 @@ export default class App extends Component {
     }
 
     handleExportExcelDriverPickup = () => {
-        const filter = this.state.filter;
-        const fromDate = moment(filter.fromDate).format('DD-MMM-YYYY');
-        const toDate = moment(filter.toDate).format('DD-MMM-YYYY');
+        const filter = this.state.filter,
+            fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
+            toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
         axios(_global.root + 'ScheduleArrange/ExportExcelDriverPickup', {
             params: {
@@ -226,16 +228,15 @@ export default class App extends Component {
             },
             responseType: 'blob'
         }).then(response => {
-            let url = window.URL.createObjectURL(new Blob([response.data]));
             let link = document.createElement('a');
-            link.href = url;
+            link.href = window.URL.createObjectURL(new Blob([response.data]));
             link.setAttribute('download', `Schedule for Driver ${fromDate} to ${toDate}.xlsx`);
             document.body.appendChild(link);
             link.click();
         }).catch(axiosError);
     }
 
-    handleGetWeeklyShedules = (isCurrentWeek) => {
+    handleGetWeeklyShedules = isCurrentWeek => {
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
@@ -423,7 +424,7 @@ export default class App extends Component {
 
     getSelectedMembers = schedules => {
         let selectedMembers = [];
-        let totalItems = schedules.length;
+        const totalItems = schedules.length;
         for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
@@ -720,8 +721,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                let data = response.data;
-
+                const data = response.data;
                 if (data.isSuccessful) {
                     toast.success('Updated Successfully!');
 
@@ -874,8 +874,7 @@ export default class App extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(response => {
-            let data = response.data;
-
+            const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');
                 this.updateWeeklyDefaultShift(groupId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
@@ -889,9 +888,9 @@ export default class App extends Component {
 
     handleUpdateRemark = (groupId, employeeId, remark) => {
         let schedules = [...this.state.schedules];
-        let gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.groupId === groupId);
         let members = [...schedules[gindex].members];
-        let eindex = members.findIndex(item => item.employeeId === employeeId);
+        const eindex = members.findIndex(item => item.employeeId === employeeId);
 
         if (!isEqual(remark, this.originalSchedules[gindex].members[eindex].remark)) {
             axios({
@@ -903,8 +902,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                let data = response.data;
-
+                const data = response.data;
                 if (data.isSuccessful) {
                     toast.success('Updated Successfully!');
 
@@ -922,8 +920,8 @@ export default class App extends Component {
 
     handleEditGroupOrder = () => {
         let displayOrders = [];
-        let schedules = this.state.schedules;
-        const totalItems = schedules.length;
+        const schedules = this.state.schedules,
+            totalItems = schedules.length;
 
         for (let index = 0; index < totalItems; index++) {
             displayOrders.push({
@@ -942,8 +940,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                let data = response.data;
-
+                const data = response.data;
                 if (!data.isSuccessful) {
                     toast.error(data.message);
                 }
@@ -951,10 +948,10 @@ export default class App extends Component {
         }
     }
 
-    handleEditDisplayOrder = (gindex) => {
+    handleEditDisplayOrder = gindex => {
         let displayOrders = [];
-        let members = this.state.schedules[gindex].members;
-        const totalItems = members.length;
+        const members = this.state.schedules[gindex].members,
+            totalItems = members.length;
 
         for (let index = 0; index < totalItems; index++) {
             displayOrders.push({
@@ -973,8 +970,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                let data = response.data;
-
+                const data = response.data;
                 if (!data.isSuccessful) {
                     toast.error(data.message);
                 }
@@ -987,9 +983,9 @@ export default class App extends Component {
             return;
         }
 
-        const resultType = result.type;
-        const sourceIndex = result.source.index;
-        const destinationIndex = result.destination.index;
+        const resultType = result.type,
+            sourceIndex = result.source.index,
+            destinationIndex = result.destination.index;
         let schedules = [...this.state.schedules];
         if (resultType === 'droppableSection') {
             schedules = reorder(schedules, sourceIndex, destinationIndex);
@@ -1006,8 +1002,8 @@ export default class App extends Component {
 
     handleChangeSectionOrder = (key, groupId) => {
         let schedules = [...this.state.schedules];
-        const sourceIndex = schedules.findIndex(x => x.groupId === groupId);
-        const totalItems = schedules.length;
+        const sourceIndex = schedules.findIndex(x => x.groupId === groupId),
+            totalItems = schedules.length;
         let destinationIndex = 0;
 
         switch (key) {
@@ -1016,9 +1012,6 @@ export default class App extends Component {
                 break;
             case 'down':
                 destinationIndex = sourceIndex + 1;
-                break;
-            case 'top':
-                destinationIndex = 0;
                 break;
             case 'bottom':
                 destinationIndex = totalItems;
@@ -1036,9 +1029,9 @@ export default class App extends Component {
 
     handleChangeOrder = (key, groupId, employeeId) => {
         let schedules = [...this.state.schedules];
-        const index = schedules.findIndex(x => x.groupId === groupId);
-        const totalItems = schedules[index].members.length;
-        let sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
+        const index = schedules.findIndex(x => x.groupId === groupId),
+            totalItems = schedules[index].members.length,
+            sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
         let destinationIndex = 0;
 
         switch (key) {
@@ -1047,9 +1040,6 @@ export default class App extends Component {
                 break;
             case 'down':
                 destinationIndex = sourceIndex + 1;
-                break;
-            case 'top':
-                destinationIndex = 0;
                 break;
             case 'bottom':
                 destinationIndex = totalItems;

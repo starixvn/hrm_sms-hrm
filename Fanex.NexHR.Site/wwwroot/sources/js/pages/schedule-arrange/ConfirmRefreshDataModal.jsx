@@ -11,8 +11,12 @@ export default class ConfirmRefreshDataModal extends PureComponent {
 
     static defaultProps = {
         show: false,
-        onHide: function () { },
-        onSubmit: function () { }
+        onHide: function () {
+            // This is intentional
+        },
+        onSubmit: function () {
+            // This is intentional
+        }
     };
 
     handleSubmit = event => {

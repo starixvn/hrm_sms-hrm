@@ -14,8 +14,12 @@ export default class Autocomplete extends Component {
         sources: [],
         className: '',
         isDisabled: false,
-        onInput: function () { },
-        onChange: function () { }
+        onInput: function () {
+            // This is intentional
+        },
+        onChange: function () {
+            // This is intentional
+        }
     };
 
     componentDidMount() {
@@ -60,8 +64,6 @@ export default class Autocomplete extends Component {
         } else {
             if (this.$el.value === '') {
                 value = '';
-            } else {
-                value = 0;
             }
         }
 

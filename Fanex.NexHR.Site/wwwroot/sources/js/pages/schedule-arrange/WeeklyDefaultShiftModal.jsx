@@ -26,8 +26,12 @@ export default class WeeklyDefaultShiftModal extends Component {
         isUsedWeeklyDefaultShift: false,
         fromDate: '',
         shiftOptions: [],
-        onHide: function () { },
-        onSubmit: function () { }
+        onHide: function () {
+            // This is intentional
+        },
+        onSubmit: function () {
+            // This is intentional
+        }
     };
 
     constructor(props) {
@@ -48,8 +52,8 @@ export default class WeeklyDefaultShiftModal extends Component {
     }
 
     handleChangeShift = (name, shift) => {
-        const offday = { id: -1, code: 'Off' };
-        let data = { ...this.state.data, [name + 'Shift']: shift !== null ? shift : offday };
+        const offday = { id: -1, code: 'Off' },
+            data = { ...this.state.data, [name + 'Shift']: shift !== null ? shift : offday };
 
         this.setState({ data });
     }

@@ -45,8 +45,8 @@ export default class THead extends PureComponent {
                                 getItemValue={item => item.value}
                                 wrapperProps={{ className: 'react-autocomplete-wrapper' }}
                                 wrapperStyle={{ display: 'block' }}
-                                renderInput={(props) => <input type="text" {...props} />}
-                                renderMenu={(items, value, style) => <div className="items" children={items} />}
+                                renderInput={props => <input type="text" {...props} />}
+                                renderMenu={items => <div className="items" children={items} />}
                                 renderItem={(item, isHighlighted) =>
                                     <div className={`item ${isHighlighted ? 'highlighted' : ''}`} key={item.id}>
                                         {item.value}

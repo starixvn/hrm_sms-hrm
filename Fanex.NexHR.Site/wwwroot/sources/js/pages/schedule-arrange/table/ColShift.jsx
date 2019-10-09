@@ -20,7 +20,7 @@ export default class ColShift extends PureComponent {
         }
     }
 
-    handleChangeSelectWeekDay = (event) => {
+    handleChangeSelectWeekDay = event => {
         this.props.onChangeSelectWeekDay(this.props.scheduleAttrName, event.target.checked);
     }
 
