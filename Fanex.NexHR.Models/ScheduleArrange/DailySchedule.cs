@@ -2,7 +2,10 @@
 {
     using System;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Newtonsoft.Json;
 
+    [Serializable]
     public class DailySchedule
     {
         public int EmployeeId { get; set; }
@@ -15,7 +18,12 @@
         public bool IsOvertime { get; set; }
         public decimal LeaveDay { get; set; }
         public bool IsKeepInView { get; set; }
+
+        [JsonIgnore]
+        public byte? ChangeShiftTypeId { get; set; }
+
         public bool IsChangeShift { get; set; }
+        public bool IsMoveOffDay => IsChangeShift && ChangeShiftTypeId.HasValue && ChangeShiftTypeId.Value == (byte)ChangeShiftType.MoveOffDay;
         public bool IsOffDayReplacement { get; set; }
         public bool IsModified { get; set; }
         public bool IsFixedOffDay { get; set; }

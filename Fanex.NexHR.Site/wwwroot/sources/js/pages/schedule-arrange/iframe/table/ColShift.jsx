@@ -81,7 +81,9 @@ export default class ColShift extends PureComponent {
             if (data.isFixedOffDay || data.isChangeShift || data.isOvertime) {
                 moreInfo = {
                     show: true,
-                    content: data.isFixedOffDay ? 'Off Day OT Fixed' : data.isChangeShift ? 'Change Shift' : 'Overtime'
+                    content: data.isFixedOffDay
+                        ? 'Off Day OT Fixed'
+                        : data.isChangeShift ? `Change shift${data.isMoveOffDay ? ' - Move off day' : ''}` : 'Overtime'
                 };
             }
         } else if (data.isOffDay) {
@@ -90,7 +92,7 @@ export default class ColShift extends PureComponent {
             if (data.isChangeShift || data.isOvertime) {
                 moreInfo = {
                     show: true,
-                    content: data.isChangeShift ? 'Change Shift' : 'Overtime'
+                    content: data.isChangeShift ? `Change shift${data.isMoveOffDay ? ' - Move off day' : ''}` : 'Overtime'
                 };
             }
         } else if (data.isKeepInView) {

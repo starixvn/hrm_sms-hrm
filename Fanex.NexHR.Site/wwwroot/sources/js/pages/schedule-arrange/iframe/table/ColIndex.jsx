@@ -9,6 +9,7 @@ export default class ColIndex extends PureComponent {
         let totalOffDays = 0;
         this.scheduleAttrNames.forEach(attrName => {
             if (!data[attrName].isHoliday
+                && !data[objectKey].isMoveOffDay
                 && (data[attrName].isOffDay || data[attrName].isOffDayReplacement || data[attrName].isLeaveOffDay)) {
                 totalOffDays++;
             }

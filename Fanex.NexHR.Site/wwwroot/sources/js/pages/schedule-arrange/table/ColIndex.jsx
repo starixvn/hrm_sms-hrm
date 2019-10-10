@@ -7,6 +7,7 @@ export default class ColIndex extends PureComponent {
         let totalOffDays = 0;
         Object.keys(data.selectWeekDays).forEach(objectKey => {
             if (!data[objectKey].isHoliday
+                && !data[objectKey].isMoveOffDay
                 && (data[objectKey].isOffDay || data[objectKey].isOffDayReplacement || data[objectKey].isLeaveOffDay)) {
                 totalOffDays++;
             }

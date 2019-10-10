@@ -528,6 +528,8 @@
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetByEmployee.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetDetailToReviewDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetDisableDate.sql" />
+    <Build Include="dbo\Tables\tmpEmployeeCalendar.sql" />
+    <Build Include="dbo\Stored Procedures\tmpEmployeeCalendar_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

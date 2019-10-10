@@ -668,6 +668,7 @@ export default class App extends Component {
                     let totalOffDays = 0;
                     this.scheduleAttrNames.forEach(attrName => {
                         if (!schedule[attrName].isHoliday
+                            && !schedule[attrName].isMoveOffDay
                             && (schedule[attrName].isOffDay || schedule[attrName].isOffDayReplacement || schedule[attrName].isLeaveOffDay)) {
                             totalOffDays++;
                         }
