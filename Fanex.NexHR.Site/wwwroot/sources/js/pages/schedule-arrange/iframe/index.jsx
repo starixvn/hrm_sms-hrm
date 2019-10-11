@@ -90,7 +90,7 @@ export default class App extends Component {
 
             this.setState({
                 filter: { ...this.state.filter, fromDate, toDate },
-                schedules: response.data
+                schedules: response.data.schedules
             });
         }).catch(axiosError).then(() => unblockUI());
     }

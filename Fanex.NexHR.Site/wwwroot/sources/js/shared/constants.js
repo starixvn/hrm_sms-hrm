@@ -11,6 +11,18 @@ export const RequestType = {
     KeepInView: 7,
     Overtime: 8
 };
+export const LeaveType = {
+    GeneralLeave: 0,
+    AnnualLeave: 2,
+    WeddingLeave: 6,
+    BusinessTrip: 9,
+    MaternityLeave: 12,
+    PaternityLeave: 14,
+    BereavementLeave: 21,
+    UnpaidLeave: 25,
+    CompensationLeave: 27,
+    UnpaidLeaveInsurance: 41
+};
 export const RoleSystem = {
     Member: 1,
     Verifier: 2,

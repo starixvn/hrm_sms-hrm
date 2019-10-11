@@ -370,6 +370,7 @@
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\common.functions.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeNode.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeMultiselect.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\buildData.js" />

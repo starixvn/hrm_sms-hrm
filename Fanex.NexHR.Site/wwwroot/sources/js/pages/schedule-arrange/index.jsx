@@ -10,6 +10,7 @@ import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
 import { axiosError, blockUI, unblockUI, reorder } from '../../shared/common.functions';
+import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
@@ -372,10 +373,7 @@ export default class App extends Component {
 
         if (defaultShift !== null) {
             this.scheduleAttrNames.forEach(attrName => {
-                if (!members[eindex][attrName].isLeaveOffDay
-                    && !(members[eindex][attrName].isLeaveDay && !members[eindex][attrName].isLeaveHalfDay)
-                    && !members[eindex][attrName].isChangeShift
-                    && !members[eindex][attrName].isOvertime) {
+                if (!members[eindex][attrName].isDisabled) {
                     const shift = members[eindex][attrName].shift;
                     if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
                         if (shift !== null && isEqual(originalDefaultShift, shift)) {
@@ -664,15 +662,8 @@ export default class App extends Component {
                 unset(originalSchedule, 'selectWeekDays');
 
                 if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault = schedule.offDaysbyWeek;
-                    let totalOffDays = 0;
-                    this.scheduleAttrNames.forEach(attrName => {
-                        if (!schedule[attrName].isHoliday
-                            && !schedule[attrName].isMoveOffDay
-                            && (schedule[attrName].isOffDay || schedule[attrName].isOffDayReplacement || schedule[attrName].isLeaveOffDay)) {
-                            totalOffDays++;
-                        }
-                    });
+                    const totalOffDaysDefault = schedule.offDaysbyWeek,
+                        totalOffDays = getTotalOffDays(schedule);
 
                     if (totalOffDaysDefault < totalOffDays) {
                         isValidData = false;
@@ -810,10 +801,7 @@ export default class App extends Component {
                 const workDate = moment(members[eindex][attrName].workDate);
 
                 if (workDate.isSameOrAfter(fromDate)
-                    && !members[eindex][attrName].isLeaveOffDay
-                    && !members[eindex][attrName].isHoliday
-                    && !members[eindex][attrName].isChangeShift
-                    && !members[eindex][attrName].isOvertime) {
+                    && !members[eindex][attrName].isDisabled) {
                     members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay };
                     this.originalSchedules[gindex].members[eindex][attrName] =
                         { ...this.originalSchedules[gindex].members[eindex][attrName], shift, isOffDay };
@@ -826,10 +814,7 @@ export default class App extends Component {
                 this.scheduleAttrNames.forEach(attrName => {
                     const workDate = moment(members[eindex][attrName].workDate);
                     if (workDate.isSameOrAfter(fromDate)
-                        && !members[eindex][attrName].isLeaveOffDay
-                        && !(members[eindex][attrName].isLeaveDay && !members[eindex][attrName].isLeaveHalfDay)
-                        && !members[eindex][attrName].isChangeShift
-                        && !members[eindex][attrName].isOvertime
+                        && !members[eindex][attrName].isDisabled
                         && !members[eindex][attrName].isHoliday
                         && !members[eindex][attrName].isOffDay
                         && members[eindex][attrName].shift === null) {

@@ -1,17 +1,11 @@
 ﻿import React, { PureComponent } from 'react';
+import { getTotalOffDays } from '../common.functions';
 
 export default class ColIndex extends PureComponent {
     render() {
         const { data } = this.props;
-        const totalOffDaysDefault = data.offDaysbyWeek;
-        let totalOffDays = 0;
-        Object.keys(data.selectWeekDays).forEach(objectKey => {
-            if (!data[objectKey].isHoliday
-                && !data[objectKey].isMoveOffDay
-                && (data[objectKey].isOffDay || data[objectKey].isOffDayReplacement || data[objectKey].isLeaveOffDay)) {
-                totalOffDays++;
-            }
-        });
+        const totalOffDaysDefault = data.offDaysbyWeek,
+            totalOffDays = getTotalOffDays(data);
 
         return (
             <div className="table-cell cell-index">

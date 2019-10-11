@@ -2,8 +2,6 @@
 {
     using System;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
-    using Newtonsoft.Json;
 
     [Serializable]
     public class DailySchedule
@@ -19,20 +17,38 @@
         public decimal LeaveDay { get; set; }
         public bool IsKeepInView { get; set; }
 
-        [JsonIgnore]
         public byte? ChangeShiftTypeId { get; set; }
+        public DateTime? MoveOffFromDate { get; set; }
+        public DateTime? MoveOffToDate { get; set; }
+        public bool IsChangeShift => ChangeShiftTypeId.HasValue;
 
-        public bool IsChangeShift { get; set; }
-        public bool IsMoveOffDay => IsChangeShift && ChangeShiftTypeId.HasValue && ChangeShiftTypeId.Value == (byte)ChangeShiftType.MoveOffDay;
         public bool IsOffDayReplacement { get; set; }
         public bool IsModified { get; set; }
         public bool IsFixedOffDay { get; set; }
 
         public LeaveRequest LeaveType { get; set; }
         public LeaveRequest LeaveType2 { get; set; }
+        public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == Constants.HalfDayOffValue;
 
         public bool IsPublic { get; set; }
 
-        public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == Constants.HalfDayOffValue;
+        public bool IsDisabled
+        {
+            get
+            {
+                if (IsLeaveDay && !IsLeaveHalfDay)
+                {
+                    return true;
+                }
+                else if (IsChangeShift && MoveOffFromDate.HasValue)
+                {
+                    return true;
+                }
+                else
+                {
+                    return IsLeaveOffDay || IsOvertime;
+                }
+            }
+        }
     }
 }
