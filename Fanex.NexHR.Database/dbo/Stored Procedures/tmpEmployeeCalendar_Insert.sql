@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_Insert] @fromDate DATE
 	,@toDate DATE
-	,@empId INT = NULL
+	,@empIds VARCHAR(MAX) = NULL
 	,@isEnable BIT = NULL
 	,@isDelete BIT = NULL
 AS
@@ -29,6 +29,7 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
+	DECLARE @tblEmployeeIds TABLE (EmpId INT)
 
 	CREATE TABLE #tblEmployeeCalendar (
 		EmpId INT
@@ -48,6 +49,27 @@ BEGIN
 		,WorkType TINYINT
 		,LeaveDay DECIMAL(2, 1)
 		)
+
+	IF ISNULL(@empIds, '') <> ''
+	BEGIN
+		INSERT INTO @tblEmployeeIds (EmpId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@empIds, ',')
+	END
+	ELSE
+	BEGIN
+		INSERT INTO @tblEmployeeIds (EmpId)
+		SELECT EmpId
+		FROM dbo.Employee WITH (NOLOCK)
+		WHERE (
+				@isEnable IS NULL
+				OR [Enabled] = @isEnable
+				)
+			AND (
+				@isDelete IS NULL
+				OR isDeleted = @isDelete
+				)
+	END
 
 	WHILE @tempDate <= @toDate
 	BEGIN
@@ -92,23 +114,12 @@ BEGIN
 						END
 				END
 		FROM dbo.Employee AS emp WITH (NOLOCK)
+			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 1
 			INNER JOIN dbo.EmployeeDefaultShift AS empshift WITH (NOLOCK) ON emp.EmpId = empshift.EmpId
 			LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 			AND empca.WorkDate = @tempDate
-		WHERE (
-				@EmpId IS NULL
-				OR emp.EmpId = @EmpId
-				)
-			AND (
-				@isEnable IS NULL
-				OR emp.[Enabled] = @isEnable
-				)
-			AND (
-				@isDelete IS NULL
-				OR emp.isDeleted = @isDelete
-				)
 
 		INSERT INTO #tblEmployeeCalendar (
 			EmpId
@@ -124,6 +135,7 @@ BEGIN
 				END
 			,ISNULL(empca.IsOffDay, 0)
 		FROM dbo.Employee AS emp WITH (NOLOCK)
+			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 0
 			LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
@@ -136,18 +148,6 @@ BEGIN
 				AND empshift.FromDate <= @tempDate
 			ORDER BY empshift.FromDate DESC
 			) AS empshift
-		WHERE (
-				@EmpId IS NULL
-				OR emp.EmpId = @EmpId
-				)
-			AND (
-				@isEnable IS NULL
-				OR emp.[Enabled] = @isEnable
-				)
-			AND (
-				@isDelete IS NULL
-				OR emp.isDeleted = @isDelete
-				)
 
 		SET @tempDate = DATEADD(d, 1, @tempDate)
 	END
@@ -229,11 +229,11 @@ BEGIN
 			WHEN csdt.ToShift = @OffDayShiftId THEN NULL
 			ELSE csdt.ToShift END
 			)
-		,empca.IsChangeShift = 1
 		,empca.IsOffDay = (CASE 
 			WHEN csdt.ToShift = @OffDayShiftId THEN 1
 			ELSE empca.IsOffDay END
 			)
+		,empca.ChangeShiftTypeId = @ChangeShiftTypeId
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON empca.EmpId = r.EmpId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -248,8 +248,9 @@ BEGIN
 	SET empca.RequestId = r.RequestId
 		,empca.RequestTypeId = r.RequestType
 		,empca.ShiftId = NULL
-		,empca.IsChangeShift = 1
 		,empca.IsOffDay = 1
+		,empca.ChangeShiftTypeId = @MoveOfDayTypeId
+		,empca.MoveOffFromDate = csdt.OnDate
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON empca.EmpId = r.EmpId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -262,6 +263,8 @@ BEGIN
 
 	UPDATE empca
 	SET empca.IsOffDay = 0
+		,empca.ChangeShiftTypeId = @MoveOfDayTypeId
+		,empca.MoveOffToDate = csdt.ToDate
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON empca.EmpId = r.EmpId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -339,6 +342,7 @@ BEGIN
 		,0.5 AS LeaveDay
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON r.EmpId = emp.EmpId
+		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 		INNER JOIN dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK) ON r.RequestId = lrdt.RequestId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		AND lrdt.IsHalfDay = 1
@@ -346,18 +350,6 @@ BEGIN
 		AND lrdt.OnDate BETWEEN @fromDate
 			AND @toDate
 		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lrdt.LeaveType = lv.LeaveTypeId
-	WHERE (
-			@EmpId IS NULL
-			OR emp.EmpId = @EmpId
-			)
-		AND (
-			@isEnable IS NULL
-			OR emp.[Enabled] = @isEnable
-			)
-		AND (
-			@isDelete IS NULL
-			OR emp.isDeleted = @isDelete
-			)
 
 	UPDATE empca
 	SET empca.RequestId = rq.RequestId

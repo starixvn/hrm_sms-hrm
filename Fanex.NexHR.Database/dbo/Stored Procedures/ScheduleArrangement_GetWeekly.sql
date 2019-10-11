@@ -129,7 +129,7 @@ BEGIN
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromtime
 		,@toDate = @totime
-		,@empId = @EmpId
+		,@empIds = @EmpId
 		,@isEnable = 1
 		,@isDelete = 0
 
@@ -137,7 +137,6 @@ BEGIN
 		,tmpca.WorkDate
 		,tmpca.ShiftId
 		,tmpca.IsOvertime
-		,tmpca.IsChangeShift
 		,tmpca.IsOffDay
 		,tmpca.IsHoliday
 		,tmpca.IsKeepInView
@@ -156,30 +155,22 @@ BEGIN
 			WHEN offrep.EmployeeId IS NOT NULL THEN 1
 			ELSE 0 END
 			) AS IsOffDayReplacement
-		,cs.ChangeShiftTypeId
+		,tmpca.ChangeShiftTypeId
+		,tmpca.MoveOffFromDate
+		,tmpca.MoveOffToDate
 	INTO #tblEmployeeCalendar
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmpId = tmpca.EmpId
+		AND tmpca.WorkDate BETWEEN @fromTime AND @toTime
 		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND tmpca.WorkDate = empca.WorkDate
 		LEFT JOIN dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK) ON emp.EmpId = offrep.EmployeeId
 		AND tmpca.WorkDate = offrep.WorkDate
-		OUTER APPLY (
-		SELECT cs.TypeId AS ChangeShiftTypeId
-		FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
-			INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
-			AND tmpca.RequestId = cs.RequestId
-			AND tmpca.EmpId = cs.EmpId
-			AND (
-				tmpca.WorkDate = csdt.OnDate
-				OR tmpca.WorkDate = csdt.ToDate
-				)
-		) AS cs
 	WHERE @IsIFrame = 0
 		OR (
 			@IsIFrame = 1
-			AND empca.IsPublic = 1
+			AND ISNULL(empca.IsPublic, 0) = 1
 			)
 
 	IF @IsIFrame = 1
@@ -283,7 +274,8 @@ BEGIN
 		,empca.IsOvertime
 		,empca.IsLeaveOffDay
 		,empca.ChangeShiftTypeId
-		,empca.IsChangeShift
+		,empca.MoveOffFromDate
+		,empca.MoveOffToDate
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,empca.IsFixedOffDay
