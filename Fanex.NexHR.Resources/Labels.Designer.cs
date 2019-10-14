@@ -2950,24 +2950,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Change Shift Request.
-        /// </summary>
-        public static string NewChangeShiftRequest {
-            get {
-                return ResourceManager.GetString("NewChangeShiftRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Check In Out Request.
-        /// </summary>
-        public static string NewCheckInOutRequest {
-            get {
-                return ResourceManager.GetString("NewCheckInOutRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Hire.
         /// </summary>
         public static string NewHire {
@@ -2991,15 +2973,6 @@ namespace Fanex.NexHR.Resources {
         public static string NewKeepInViewRequest {
             get {
                 return ResourceManager.GetString("NewKeepInViewRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Late In Early Out Request.
-        /// </summary>
-        public static string NewLateInEarlyOutRequest {
-            get {
-                return ResourceManager.GetString("NewLateInEarlyOutRequest", resourceCulture);
             }
         }
         
@@ -3243,6 +3216,15 @@ namespace Fanex.NexHR.Resources {
         public static string OnBehalfRequest {
             get {
                 return ResourceManager.GetString("OnBehalfRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On Date.
+        /// </summary>
+        public static string OnDate {
+            get {
+                return ResourceManager.GetString("OnDate", resourceCulture);
             }
         }
         
@@ -4737,24 +4719,6 @@ namespace Fanex.NexHR.Resources {
         public static string UpdateLeaveRequest {
             get {
                 return ResourceManager.GetString("UpdateLeaveRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Update My Check In Out Request.
-        /// </summary>
-        public static string UpdateMyCheckInOutRequest {
-            get {
-                return ResourceManager.GetString("UpdateMyCheckInOutRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Update My Late In Early Out Request.
-        /// </summary>
-        public static string UpdateMyLateInEarlyOutRequest {
-            get {
-                return ResourceManager.GetString("UpdateMyLateInEarlyOutRequest", resourceCulture);
             }
         }
         

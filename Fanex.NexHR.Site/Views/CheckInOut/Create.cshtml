@@ -5,7 +5,7 @@
 @using Fanex.NexHR.ViewModels.Request
 @model CheckInOutRequestViewModel
 @{
-    ViewBag.Title = Labels.NewCheckInOutRequest;
+    ViewBag.Title = Labels.Create;
     var today = DateTime.Today;
 }
 @section css{
@@ -15,7 +15,7 @@
     @Url.CombresLink("checkinoutrequestjs")
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action(" employeeview", "checkinout" )">@Labels.MyCheckInOutRequests</a>
+    <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action(" employeeview", "checkinout" )">@Labels.MyCheckInOutRequests</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2>@ViewBag.Title</h2>
@@ -66,7 +66,7 @@
 
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate)
+                @Html.LabelFor(model => model.AttendantDate, Labels.OnDate)
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.AttendantDate, today.FirstDayOfMonth().AddMonths(-6), today)
