@@ -169,6 +169,7 @@
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByIdCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailToReviewDisciplineCriteria.cs" />
@@ -279,7 +280,6 @@
     <Compile Include="Request\KeepInView\UpdateKeepInViewRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\InsertLateInEarlyOutRequestCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\UpdateLateInEarlyOutRequestCriteria.cs" />
-    <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
     <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
     <Compile Include="Overtime\GetOvertimeDetailsByRequestIdsCriteria.cs" />

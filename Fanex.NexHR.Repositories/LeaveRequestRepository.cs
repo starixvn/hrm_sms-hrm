@@ -7,7 +7,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
-    public class LeaveRequestRepository: ILeaveRequestRepository
+    public class LeaveRequestRepository : ILeaveRequestRepository
     {
         public IList<LeaveRequest> GetByDate(ICriteria criteria)
         {
@@ -49,7 +49,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    var leave = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest> (
+                    var leave = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
@@ -63,7 +63,7 @@
 
                     IEnumerable<LeaveRequestDetail> leaveDetails = multi.Read<LeaveRequestDetail>();
                     leave.LeaveDetail = leaveDetails.ToList();
-                    
+
                     return leave;
                 }
             }

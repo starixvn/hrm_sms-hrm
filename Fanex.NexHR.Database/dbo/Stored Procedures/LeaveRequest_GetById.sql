@@ -1,20 +1,19 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_GetById] @RequestId INT
+CREATE PROCEDURE [dbo].[LeaveRequest_GetById] @RequestId BIGINT
 AS
 /*
 Created: Quinn.Vo@20190617
 Task: Get Leave request by RequestId.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		lr.RequestId
+	SELECT lr.RequestId
 		,lr.FromDate
 		,lr.ToDate
 		,lr.TotalDays
@@ -26,7 +25,7 @@ BEGIN
 		,wk.ApprovedDate
 		,wk.HRDate AS ProcessedDate
 		,lr.LeaveType AS LeaveTypeId
-		,lv.Name
+		,lv.[Name]
 		,lr.EmpId
 		,e.NickName
 		,e.FullName
@@ -40,12 +39,12 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
-	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lr.RequestId = wk.RequestId
-	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON lr.EmpId = e.EmpId
-	INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lr.LeaveType = lv.LeaveTypeId
-	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
-	LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
-	LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON lr.RequestId = wk.RequestId
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON lr.EmpId = e.EmpId
+		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lr.LeaveType = lv.LeaveTypeId
+		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
+		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
+		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
 	WHERE lr.RequestId = @RequestId
 
 	SELECT ldt.RequestId
@@ -53,11 +52,11 @@ BEGIN
 		,ldt.WorkType
 		--,ldt.ShiftId
 		,ldt.LeaveType AS LeaveTypeId
-		,lv.Name AS LeaveTypeName
+		,lv.[Name] AS LeaveTypeName
 		,ldt.IsHalfDay
 		,ldt.FromTime
 		,ldt.FromTime
 	FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
-	INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON ldt.LeaveType = lv.LeaveTypeId
+		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON ldt.LeaveType = lv.LeaveTypeId
 	WHERE ldt.RequestId = @RequestId
 END

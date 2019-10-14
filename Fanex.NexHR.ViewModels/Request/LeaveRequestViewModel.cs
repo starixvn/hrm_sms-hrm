@@ -7,6 +7,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using System.Linq;
+    using Fanex.NexHR.Models.Supervisor;
 
     public class LeaveRequestViewModel : IValidatableObject
     {
@@ -79,8 +80,6 @@
 
         public IList<LeaveType> LeaveTypeList { get; set; }
 
-        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
-
         public EmployeeLeaveBalance EmployeeLeaveBalance { get; set; }
 
         public RequestStatus Status { get; set; }
@@ -88,6 +87,9 @@
         public DateTime MinDate { get; set; }
 
         public DateTime MaxDate { get; set; }
+
+        public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+        public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

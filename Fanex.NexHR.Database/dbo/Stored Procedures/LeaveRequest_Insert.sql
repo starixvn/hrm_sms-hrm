@@ -1,11 +1,11 @@
 ﻿
 CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
-	,@FromDate DATETIME = NULL
-	,@ToDate DATETIME = NULL
-	,@LeaveTypeID INT = NULL
+	,@FromDate DATETIME
+	,@ToDate DATETIME
+	,@LeaveTypeId INT
 	,@TotalDays NUMERIC(5, 1) = NULL
 	,@Remark NVARCHAR(2000) = NULL
-	,@CreatedBy INT = NULL
+	,@CreatedBy INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
 	,@RefNo NVARCHAR(200) = ''
@@ -20,10 +20,10 @@ Task: insert a Leave mutilple request form
 DB: HRM_SMS
 Original: 
 
-Revisions:    
+Revisions:
 Param's Explanation:
-	- @ListDetail: '<ROOT><LeaveRequestDetail OnDate='{20130101}' ShiftID='{1}' LeaveType={2} IsHalfDay={0} WorkType={0} FromTime={20130101 00:00:01} ToTime={20130101 00:00:01}></LeaveRequestDetail></ROOT>'
-	- @WorkType :
+	- @ListDetail: '<Root><Row OnDate='' ShiftId='' LeaveType='' IsHalfDay='' WorkType='' FromTime='' ToTime=''></Row></Root>'
+	- @WorkType:
 			1. off
 			2. leave
 			3. work
@@ -54,14 +54,14 @@ BEGIN
 		,@KIVByHourLeaveBalance INT
 		,@TotalDays_tmp NUMERIC(5, 1)
 		,@IsHalfDay BIT
-		,@CreatedDate DATETIME
+		,@CreatedDate DATETIME = GETDATE()
 		,@TmpFromDate DATE
 		,@TmpToDate DATE
 		,@DocHandler INT
 
 	CREATE TABLE #LeaveRequestDetail (
-		OnDate DATETIME
-		,ShiftID INT
+		OnDate DATE
+		,ShiftId INT
 		,LeaveType INT
 		,WorkType TINYINT
 		,IsHalfDay BIT
@@ -74,7 +74,6 @@ BEGIN
 			ELSE 0
 			END
 		,@TotalDays_tmp = @TotalDays
-		,@CreatedDate = GETDATE()
 		,@TmpFromDate = CAST(@FromDate AS DATE)
 		,@TmpToDate = CAST(@ToDate AS DATE)
 
@@ -102,12 +101,12 @@ BEGIN
 	IF @EmpId <> @CreatedBy
 		AND NOT EXISTS (
 			SELECT 1
-			FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-			WHERE sp.OwnerId = @EmpId
-				AND sp.EmpId = @CreatedBy
-				AND sp.ActionType = @OnbehalfActionType
-				AND sp.RequestType = @RequestType
-				AND ISNULL(sp.IsDeleted, 0) = 0
+			FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+			WHERE OwnerId = @EmpId
+				AND EmpId = @CreatedBy
+				AND ActionType = @OnbehalfActionType
+				AND RequestType = @RequestType
+				AND ISNULL(IsDeleted, 0) = 0
 			)
 		AND NOT EXISTS (
 			SELECT 1
@@ -141,12 +140,12 @@ BEGIN
 			OR (
 				NOT EXISTS (
 					SELECT 1
-					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @VerifierId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = @VerifyActionType
-						AND sp.RequestType = @RequestType
-						AND ISNULL(sp.IsDeleted, 0) = 0
+					FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+					WHERE OwnerId = @VerifierId
+						AND EmpId = @EmpId
+						AND ActionType = @VerifyActionType
+						AND RequestType = @RequestType
+						AND ISNULL(IsDeleted, 0) = 0
 					)
 				AND NOT EXISTS (
 					SELECT 1
@@ -170,12 +169,12 @@ BEGIN
 			OR (
 				NOT EXISTS (
 					SELECT 1
-					FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-					WHERE sp.OwnerId = @ApproverId
-						AND sp.EmpId = @EmpId
-						AND sp.ActionType = @ApproveActionType
-						AND sp.RequestType = @RequestType
-						AND ISNULL(sp.IsDeleted, 0) = 0
+					FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+					WHERE OwnerId = @ApproverId
+						AND EmpId = @EmpId
+						AND ActionType = @ApproveActionType
+						AND RequestType = @RequestType
+						AND ISNULL(IsDeleted, 0) = 0
 					)
 				AND NOT EXISTS (
 					SELECT 1
@@ -196,7 +195,7 @@ BEGIN
 		END
 	END
 
-	IF @LeaveTypeID <> @PublicHolidayLeaveType
+	IF @LeaveTypeId <> @PublicHolidayLeaveType
 		AND @TotalDays = 0.5
 		AND EXISTS (
 			SELECT 1
@@ -250,7 +249,7 @@ BEGIN
 			,Data.IsHalfDay
 			,Data.FromTime
 			,Data.ToTime
-		FROM OPENXML(@DocHandler, '/ROOT/LeaveRequestDetail', 1) WITH (OnDate DATETIME, ShiftID INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (OnDate DATETIME, ShiftId INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
 			LEFT JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = data.OnDate
 			AND ec.EmpId = @EmpId
 
@@ -651,16 +650,16 @@ BEGIN
 			,[ToTime]
 			,WorkType
 			)
-		SELECT @RequestId RequestId
-			,@EmpId EmpId
-			,rd.OnDate
-			,ShiftID
+		SELECT @RequestId
+			,@EmpId
+			,OnDate
+			,ShiftId
 			,LeaveType
 			,IsHalfDay
 			,FromTime
 			,ToTime
 			,WorkType
-		FROM #LeaveRequestDetail rd
+		FROM #LeaveRequestDetail
 
 		EXEC dbo.LeaveRequest_InsertTmpAnnualLeaveTrans @RequestId = @RequestId
 			,@EmpId = @EmpId

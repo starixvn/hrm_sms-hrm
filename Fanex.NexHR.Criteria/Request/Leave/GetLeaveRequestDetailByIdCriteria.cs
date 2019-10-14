@@ -6,7 +6,7 @@
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey() => "WorkingTimeRequest_GetLeaveRequestDetailByRequestID";
+        public override string GetSettingKey() => "LeaveRequest_GetDetailById";
 
         public override bool IsValid() => RequestId > 0;
     }

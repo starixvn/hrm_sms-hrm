@@ -21,7 +21,8 @@ export const LeaveType = {
     BereavementLeave: 21,
     UnpaidLeave: 25,
     CompensationLeave: 27,
-    UnpaidLeaveInsurance: 41
+    UnpaidLeaveInsurance: 41,
+    KeepInViewByHour: 48
 };
 export const RoleSystem = {
     Member: 1,

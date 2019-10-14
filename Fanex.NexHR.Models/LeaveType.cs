@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.Models
 {
     public class LeaveType : EntityBase<int>
-    {        
+    {
         public short? IsAnnualQuota { get; set; }
 
         public bool? IsDefault { get; set; }

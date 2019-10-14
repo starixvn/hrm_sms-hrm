@@ -1,11 +1,12 @@
 ﻿@using System.Web.Mvc.Html5
+@using Fanex.NexHR.Core
 @using Fanex.NexHR.Core.Constants
 @using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Request
 @model LeaveRequestViewModel
 @{
-    ViewBag.Title = Labels.NewLeaveRequest;
+    ViewBag.Title = Labels.Create;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -146,28 +147,18 @@
             <div class="clear">
             </div>
         </div>
-        @*<div id="grbMinutes" class="formrow">
-                <div class="label">
-                    @Html.LabelFor(model => model.Minutes, Labels.Minutes)
-                </div>
-                <div class="input">
-                    @Html.EditorFor(model => model.Minutes)
-                </div>
-                <div class="clear">
-                </div>
-            </div>*@
         <div class="formrow">
             <div class="label">
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
             </div>
             <div class="input">
-                @if (Model.VerifierAndApprover.Verifiers.Count > 1)
+                @if (Model.Verifiers.Count > 1)
                 {
-                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier)
+                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier)
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"))
+                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"))
                 }
             </div>
             <div class="clear">
@@ -178,13 +169,13 @@
                 @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
             </div>
             <div class="input">
-                @if (Model.VerifierAndApprover.Approvers.Count > 1)
+                @if (Model.Approvers.Count > 1)
                 {
-                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover)
+                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover)
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"))
+                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"))
                 }
             </div>
             <div class="clear">
@@ -202,7 +193,7 @@
         </div>
 
         <div class="formrow">
-            <div id="tbldetail"></div>
+            <div id="leaveDetails"></div>
         </div>
         <div class="formrow">
             <div class="label">

@@ -4,7 +4,7 @@
 @using Fanex.NexHR.ViewModels.Request
 @model LeaveRequestViewModel
 @{
-    ViewBag.Title = Labels.UpdateLeaveRequest;
+    ViewBag.Title = Labels.Edit;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -50,7 +50,6 @@
                         <span class="numberbalance">@Model.EmployeeLeaveBalance.KeepInViewByHourBalance.ToString("0.#")</span> hour(s)
                     </span>
                 </span>
-
             </div>
         </div>
 
@@ -110,12 +109,6 @@
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.FromDate, Model.MinDate, Model.MaxDate, unavailDates: Model.UnavailDates)
-                @*<span class="time hide">
-                        @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
-                        @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
-                        @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
-                    </span>*@
-
                 <span class="time hide">
                     @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
                 </span>
@@ -129,7 +122,6 @@
                     @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
                     @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day")
                 </span>
-
             </div>
             <div class="clear">
             </div>
@@ -140,13 +132,6 @@
             </div>
             <div class="input">
                 @Html.DatePickerFor(model => model.ToDate, unavailDates: Model.UnavailDates)
-                @*<span class="time hide">
-                        @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
-                    </span>
-                    <span class="hide">
-                        @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
-                    </span>*@
-
                 <span class="time hide">
                     @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
                 </span>
@@ -174,7 +159,7 @@
                 @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"))
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"))
             </div>
             <div class="clear">
             </div>
@@ -184,7 +169,7 @@
                 @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
             </div>
             <div class="input">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"))
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"))
             </div>
             <div class="clear">
             </div>

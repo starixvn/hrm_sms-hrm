@@ -220,7 +220,6 @@
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetOtherDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailByRequestID.sql" />
     <Build Include="dbo\Stored Procedures\Employee_ChangePassword.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForWorkDay.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetNewRefNoByRequestType.sql" />
@@ -530,6 +529,7 @@
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetDisableDate.sql" />
     <Build Include="dbo\Tables\tmpEmployeeCalendar.sql" />
     <Build Include="dbo\Stored Procedures\tmpEmployeeCalendar_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_GetDetailById.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

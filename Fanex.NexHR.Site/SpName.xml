@@ -187,10 +187,6 @@
   <Function Name="WorkingTimeRequest">
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetByEmployee" SpName="WorkingTimeRequest_GetByEmployee" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" SpName="WorkingTimeRequest_GetLeaveRequestDetailByRequestID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="LeaveType" ObjectProperty="LeaveTypeId" />
-      <Mapping DataField="OnDate" ObjectProperty="LeaveDate" />
-    </Setting>
   </Function>
   <Function Name="Holiday">
     <Setting Key="Holiday_Insert" SpName="Holiday_Insert" DbName="nexhrx" Plain="0"></Setting>
@@ -375,6 +371,7 @@
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="LeaveRequest_GetDetailById" SpName="LeaveRequest_GetDetailById" DbName="nexhrx" Plain="0" />
     <Setting Key="LeaveRequest_GetByDate" SpName="LeaveRequest_GetByDate" DbName="nexhrx" Plain="0">
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="EmpId" ObjectProperty="Id" />

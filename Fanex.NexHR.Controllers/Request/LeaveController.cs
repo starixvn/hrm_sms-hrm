@@ -65,6 +65,7 @@
 
         public ActionResult Create()
         {
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = Constants.GeneralLeave,
@@ -75,7 +76,8 @@
                 TotalDays = 1,
                 LeaveTypeList = commonDataService.GetLeaveType(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
-                VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id)
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -105,7 +107,9 @@
         {
             LeaveRequest request = leaveRequestService.GetById(id);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-            if (model == null || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId))
+            if (model == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -113,7 +117,10 @@
             model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
-            model.VerifierAndApprover = GetVerifierApprover(sessionService.Employee.Id);
+
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
 
             ViewBag.IsView = false;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -145,7 +152,10 @@
             LeaveRequest request = leaveRequestService.GetById(id);
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
-            model.VerifierAndApprover = GetVerifierApprover(request.Employee.Id, request);
+
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -208,11 +218,11 @@
 
         private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
             IList<WorkingCalendarModel> workingCalendars,
-            IList<LeaveRequestDetail> leaveRequestDetailInput,
+            IList<LeaveRequestDetail> leaveDetails,
             DateTime fromDate,
             DateTime toDate)
         {
-            var leaveRequestDetailOutput = new List<LeaveRequestDetail>();
+            var details = new List<LeaveRequestDetail>();
             if (fromDate <= toDate)
             {
                 var numberDays = (toDate - fromDate).Days + 1;
@@ -221,27 +231,27 @@
                 for (int i = 0; i < numberDays; i++)
                 {
                     tempDate = fromDate.AddDays(i);
-                    IEnumerable<LeaveRequestDetail> tempLeaveDetailModels = leaveRequestDetailInput.Where(t => (t.OnDate == tempDate));
+                    IEnumerable<LeaveRequestDetail> tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
                     IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
 
                     if (tempWokingCalendars != null && tempWokingCalendars.Any())
                     {
                         WorkingCalendarModel tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
-                        AddLeaveRequestExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempWokingCalendar);
+                        AddLeaveRequestExistCalendar(details, tempLeaveDetailModels, tempWokingCalendar);
                     }
                     else
                     {
-                        AddLeaveRequestNotExistCalendar(leaveRequestDetailOutput, tempLeaveDetailModels, tempDate);
+                        AddLeaveRequestNotExistCalendar(details, tempLeaveDetailModels, tempDate);
                     }
                 }
             }
 
-            return leaveRequestDetailOutput.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
+            return details.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
         }
 
         private void AddLeaveRequestExistCalendar(
            List<LeaveRequestDetail> leaveRequestDetailOutput,
-           IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
+           IEnumerable<LeaveRequestDetail> leaveDetails,
            WorkingCalendarModel tempWokingCalendar)
         {
             string tempScheduleStatus = string.Empty;
@@ -268,9 +278,9 @@
                 tempScheduleStatus = tempWokingCalendar.Shift.Name;
             }
 
-            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            if (leaveDetails != null && leaveDetails.Any())
             {
-                foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
+                foreach (LeaveRequestDetail leaveDetail in leaveDetails)
                 {
                     tempLeaveDetailModel = leaveDetail;
                     tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
