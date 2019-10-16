@@ -1,8 +1,8 @@
 ﻿
 CREATE PROCEDURE [dbo].[CheckInOutRequest_Insert] @EmpId INT
-	,@RequestType SMALLINT
+	,@RequestType TINYINT
 	,@Remark NVARCHAR(2000) = NULL
-	,@OnDate DATETIME
+	,@OnDate DATE
 	,@RequestTime DATETIME
 	,@ReasonId TINYINT
 	,@CreatedBy INT = NULL
@@ -25,31 +25,64 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @IsTopManager BIT
+	DECLARE @CreatedDate DATETIME = GETDATE()
+		,@IsTopManager BIT
+		-- action type
+		,@VerifyRequest TINYINT = 2
+		,@ApproveRequest TINYINT = 3
+		,@OnBehalfRequest TINYINT = 5
+		-- request type
+		,@CheckInRequestTypeId TINYINT = 1
+		,@CheckOutRequestTypeId TINYINT = 2
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 
-	IF ABS(DATEDIFF(DD, @OnDate, @RequestTime)) > 1
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
+				INNER JOIN dbo.CheckInOutRequest AS cio WITH (NOLOCK) ON wk.RequestId = cio.RequestId
+				AND cio.OnDate = @OnDate
+			WHERE wk.empid = @empid
+				AND wk.RequestType = @RequestType
+				AND wk.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
+			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'Attendant date or Request time invalid.'
+		SET @ErrMsg = 'There is another request in the same date.'
 
 		RETURN;
 	END
 
-	-- check if there is another request in the same date
-	IF EXISTS (
-			SELECT 1
-			FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
-				INNER JOIN dbo.CheckInOutRequest AS mis WITH (NOLOCK) ON wk.RequestId = mis.RequestId
-			WHERE wk.empid = @empid
-				AND RequestType = @RequestType
-				AND CurrentStatus IN (1, 2, 4, 6)
-				AND datediff(d, mis.OnDate, @OnDate) = 0
-			)
+	IF @EmpId <> @CreatedBy
 	BEGIN
-		SET @ErrCode = 100
-		SET @ErrMsg = 'There is another request in the same date'
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @EmpId
+					AND EmpId = @CreatedBy
+					AND ActionType = @OnBehalfRequest
+					AND RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
+					AND ISNULL(IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+				WHERE gs.OwnerId = @CreatedBy
+					AND emp.EmpId = @EmpId
+					AND gs.ActionType = @OnBehalfRequest
+					AND gs.RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
+		BEGIN
+			SET @ErrCode = 101
+			SET @ErrMsg = 'You do not have permision.'
 
-		RETURN;
+			RETURN;
+		END
 	END
 
 	SELECT @IsTopManager = IsTopManager
@@ -62,91 +95,62 @@ BEGIN
 			)
 		AND @IsTopManager = 0
 	BEGIN
-		SET @ErrCode = 101
-		SET @ErrMsg = 'Invalid parameter'
+		SET @ErrCode = 102
+		SET @ErrMsg = 'Verifier, Approver is required.'
 
 		RETURN;
-	END
-
-	IF @EmpId <> @CreatedBy
-	BEGIN
-		IF NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @EmpId
-					AND sp.EmpId = @CreatedBy
-					AND sp.ActionType = 5
-					AND sp.RequestType IN (1, 2)
-					AND ISNULL(sp.IsDeleted, 0) = 0
-				)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-					INNER JOIN Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-				WHERE gs.OwnerId = @CreatedBy
-					AND e.EmpId = @EmpId
-					AND gs.ActionType = 5
-					AND gs.RequestType IN (1, 2)
-					AND ISNULL(gs.IsDeleted, 0) = 0
-				)
-		BEGIN
-			SET @ErrCode = 107
-			SET @ErrMsg = 'You could not permision on this request.'
-
-			RETURN;
-		END
 	END
 
 	IF @IsTopManager = 0
 	BEGIN
 		IF NOT EXISTS (
 				SELECT 1
-				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @VerifierId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 2
-					AND sp.RequestType IN (1, 2)
-					AND ISNULL(sp.IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @VerifierId
+					AND EmpId = @EmpId
+					AND ActionType = @VerifyRequest
+					AND RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
+					AND ISNULL(IsDeleted, 0) = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @VerifierId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (1, 2)
-					AND g.ActionType = 2
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+				WHERE emp.EmpId = @EmpId
+					AND gs.OwnerId = @VerifierId
+					AND ISNULL(gs.IsDeleted, 0) = 0
+					AND gs.RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
+					AND gs.ActionType = @VerifyRequest
 				)
 		BEGIN
-			SET @ErrCode = 108
-			SET @ErrMsg = 'invalid parameter verifierid.'
+			SET @ErrCode = 103
+			SET @ErrMsg = 'Verifier is invalid.'
 
 			RETURN;
 		END
 
 		IF NOT EXISTS (
 				SELECT 1
-				FROM dbo.EmployeeSupervisor sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @ApproverId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 3
-					AND ISNULL(sp.IsDeleted, 0) = 0
-					AND sp.RequestType IN (1, 2)
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @ApproverId
+					AND EmpId = @EmpId
+					AND ActionType = @ApproveRequest
+					AND ISNULL(IsDeleted, 0) = 0
+					AND RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @ApproverId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (1, 2)
-					AND g.ActionType = 3
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+				WHERE emp.EmpId = @EmpId
+					AND gs.OwnerId = @ApproverId
+					AND ISNULL(gs.IsDeleted, 0) = 0
+					AND gs.RequestType IN (@CheckInRequestTypeId, @CheckOutRequestTypeId)
+					AND gs.ActionType = @ApproveRequest
 				)
 		BEGIN
-			SET @ErrCode = 109
-			SET @ErrMsg = 'invalid parameter ApproverId.'
+			SET @ErrCode = 104
+			SET @ErrMsg = 'Approver is invalid.'
 
 			RETURN;
 		END
@@ -171,27 +175,27 @@ BEGIN
 		,@Remark
 		,CASE 
 			WHEN @IsTopManager = 1
-				AND @VerifierId IS NOT NULL THEN 1
+				AND @VerifierId IS NOT NULL THEN @PendingStatusId
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NOT NULL THEN 2
+				AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN 4
+				AND @ApproverId IS NULL THEN @ApprovedStatusId
 			ELSE 1
 			END
 		,@VerifierId
 		,@ApproverId
 		,CASE 
 			WHEN @IsTopManager = 1
-				AND @VerifierId IS NULL THEN 2
-			ELSE 1
+				AND @VerifierId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
 			END
 		,CASE 
 			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN 2
-			ELSE 1
+				AND @ApproverId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
 			END
-		,1
-		,GETDATE()
+		,@PendingStatusId
+		,@CreatedDate
 		,@CreatedBy
 		)
 
@@ -220,7 +224,7 @@ BEGIN
 	BEGIN
 		EXEC dbo.CheckInOutRequest_Approve @RequestId = @RequestId
 			,@ActorId = @EmpId
-			,@RoleID = 3
+			,@RoleId = 3
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 	END

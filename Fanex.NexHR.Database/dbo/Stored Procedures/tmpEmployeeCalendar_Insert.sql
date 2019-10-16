@@ -71,6 +71,21 @@ BEGIN
 				)
 	END
 
+	INSERT INTO #tblEmployeeCalendar (
+		EmpId
+		,WorkDate
+		,ShiftId
+		,IsOffDay
+		)
+	SELECT empca.EmpId
+		,WorkDate
+		,ShiftId
+		,IsOffDay
+	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
+		INNER JOIN @tblEmployeeIds AS emp ON empca.EmpId = emp.EmpId
+	WHERE empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+
 	WHILE @tempDate <= @toDate
 	BEGIN
 		INSERT INTO #tblEmployeeCalendar (
@@ -82,44 +97,42 @@ BEGIN
 		SELECT emp.EmpId
 			,@tempDate
 			,CASE 
-				WHEN empca.EmpId IS NOT NULL THEN empca.ShiftId
-				ELSE CASE 
-						WHEN DATEPART(dw, @tempDate) = 1 THEN empshift.SunShift
-						WHEN DATEPART(dw, @tempDate) = 2 THEN empshift.MonShift
-						WHEN DATEPART(dw, @tempDate) = 3 THEN empshift.TueShift
-						WHEN DATEPART(dw, @tempDate) = 4 THEN empshift.WedShift
-						WHEN DATEPART(dw, @tempDate) = 5 THEN empshift.ThuShift
-						WHEN DATEPART(dw, @tempDate) = 6 THEN empshift.FriShift
-						WHEN DATEPART(dw, @tempDate) = 7 THEN empshift.SatShift
-						END
+				WHEN DATEPART(dw, @tempDate) = 1 THEN empshift.SunShift
+				WHEN DATEPART(dw, @tempDate) = 2 THEN empshift.MonShift
+				WHEN DATEPART(dw, @tempDate) = 3 THEN empshift.TueShift
+				WHEN DATEPART(dw, @tempDate) = 4 THEN empshift.WedShift
+				WHEN DATEPART(dw, @tempDate) = 5 THEN empshift.ThuShift
+				WHEN DATEPART(dw, @tempDate) = 6 THEN empshift.FriShift
+				WHEN DATEPART(dw, @tempDate) = 7 THEN empshift.SatShift
 				END
 			,CASE 
-				WHEN empca.EmpId IS NOT NULL THEN empca.IsOffDay
-				ELSE CASE 
-						WHEN DATEPART(dw, @tempDate) = 1
-							AND ISNULL(empshift.SunShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 2
-							AND ISNULL(empshift.MonShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 3
-							AND ISNULL(empshift.TueShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 4
-							AND ISNULL(empshift.WedShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 5
-							AND ISNULL(empshift.ThuShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 6
-							AND ISNULL(empshift.FriShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						WHEN DATEPART(dw, @tempDate) = 7
-							AND ISNULL(empshift.SatShift, @OffDayShiftId) = @OffDayShiftId THEN 1
-						ELSE 0
-						END
+				WHEN DATEPART(dw, @tempDate) = 1
+					AND ISNULL(empshift.SunShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 2
+					AND ISNULL(empshift.MonShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 3
+					AND ISNULL(empshift.TueShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 4
+					AND ISNULL(empshift.WedShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 5
+					AND ISNULL(empshift.ThuShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 6
+					AND ISNULL(empshift.FriShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				WHEN DATEPART(dw, @tempDate) = 7
+					AND ISNULL(empshift.SatShift, @OffDayShiftId) = @OffDayShiftId THEN 1
+				ELSE 0
 				END
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 1
 			INNER JOIN dbo.EmployeeDefaultShift AS empshift WITH (NOLOCK) ON emp.EmpId = empshift.EmpId
-			LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
-			AND empca.WorkDate = @tempDate
+		WHERE NOT EXISTS (
+				SELECT 1
+				FROM #tblEmployeeCalendar AS tbl
+				WHERE tbl.EmpId = emp.EmpId
+					AND tbl.WorkDate = @tempDate
+				)
 
 		INSERT INTO #tblEmployeeCalendar (
 			EmpId
@@ -129,17 +142,12 @@ BEGIN
 			)
 		SELECT emp.EmpId
 			,@tempDate
-			,CASE 
-				WHEN empca.EmpId IS NOT NULL THEN empca.ShiftId
-				ELSE empshift.ShiftId
-				END
-			,ISNULL(empca.IsOffDay, 0)
+			,empshift.ShiftId
+			,0
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 0
-			LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
-			AND empca.WorkDate = @tempDate
 			OUTER APPLY (
 			SELECT TOP 1 empshift.ShiftId
 			FROM dbo.ScheduleArrangementDefaultShift AS empshift WITH (NOLOCK)
@@ -148,6 +156,12 @@ BEGIN
 				AND empshift.FromDate <= @tempDate
 			ORDER BY empshift.FromDate DESC
 			) AS empshift
+		WHERE NOT EXISTS (
+				SELECT 1
+				FROM #tblEmployeeCalendar AS tbl
+				WHERE tbl.EmpId = emp.EmpId
+					AND tbl.WorkDate = @tempDate
+				)
 
 		SET @tempDate = DATEADD(d, 1, @tempDate)
 	END

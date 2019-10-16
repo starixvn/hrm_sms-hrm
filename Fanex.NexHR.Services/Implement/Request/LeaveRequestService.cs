@@ -77,6 +77,18 @@
             return leaveRequestRepository.GetHistoryById(criteria);
         }
 
+        public IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param)
+        {
+            var criteria = new GetDisabledDateCriteria
+            {
+                EmployeeId = param.EmployeeId,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                RequestId = param.RequestId
+            };
+            return baseService.GetData<DateTime>(criteria);
+        }
+
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
             return baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);

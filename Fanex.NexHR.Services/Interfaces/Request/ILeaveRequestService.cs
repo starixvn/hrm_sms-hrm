@@ -19,6 +19,8 @@
 
         IList<LeaveRequest> GetHistoryById(long requestId);
 
+        IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
+
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
         DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);

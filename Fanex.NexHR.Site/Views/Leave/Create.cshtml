@@ -85,7 +85,7 @@
         </div>
         <div id="grbHalfDay" class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.HalfDayOff)
+                @Html.LabelFor(model => model.HalfDayOff, Labels.HalfDay)
             </div>
             <div class="input">
                 @Html.CheckBoxFor(model => model.HalfDayOff)
@@ -98,10 +98,7 @@
                 @Html.LabelFor(model => model.FromDate, Labels.FromDate)
             </div>
             <div class="input">
-                @Html.DatePickerFor(model => model.FromDate,
-            new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(-5),
-                     new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1),
-            unavailDates: new List<DateTime> { DateTime.Now.AddYears(-3) })
+                @Html.DatePickerFor(model => model.FromDate, Model.MinDate, Model.MaxDate, unavailDates: Model.UnavailDates)
                 <span class="time hide">
                     @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
                 </span>

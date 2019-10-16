@@ -159,6 +159,7 @@
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByDateCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestByIdCriteria.cs" />
     <Compile Include="Request\CheckInOut\GetCheckInOutRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetDisabledDateCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
     <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByIdCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\GetDisabledDateCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />

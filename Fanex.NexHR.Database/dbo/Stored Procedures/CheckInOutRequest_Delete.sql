@@ -7,7 +7,7 @@ AS
 Created: 20190611@Quinn.Vo
 Task: Delete check in/out request.
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
@@ -15,27 +15,27 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF (
-			NOT EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-				WHERE RequestID = @RequestID
-					AND CurrentStatus = 1
-				)
+	DECLARE @PendingStatusId TINYINT = 1
+
+	IF NOT EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+				AND CurrentStatus = @PendingStatusId
 			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'This Status Request have been changed. You cannot delete. '
+		SET @ErrMsg = 'Status is not pending, you can not delete this request.'
 
 		RETURN;
 	END
 
-	DELETE dbo.WorkingTimeRequest
-	WHERE RequestID = @RequestID
+	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
 
-	DELETE dbo.CheckInOutRequest
-	WHERE RequestID = @RequestID
+	DELETE dbo.CheckInOutRequest WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
 
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
+	DELETE dbo.CheckInOutRequestHistory WITH (ROWLOCK)
+	WHERE RequestId = @RequestId
 END

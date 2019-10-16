@@ -39,6 +39,10 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
 		,@VoidStatusId TINYINT = 7
+	DECLARE @tblChangeShiftDetail TABLE (
+		OnDate DATE
+		,ToDate DATE
+		)
 
 	SELECT @EmpId = cs.EmpId
 		,@FromDate = cs.FromDate
@@ -167,11 +171,6 @@ BEGIN
 				WHERE empca.EmpId = @EmpId
 					AND empca.IsOffDay = 1
 			END
-
-			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-				,@FromDate
-				,@ToDate
-				,1
 		END
 	END
 	ELSE IF @RoleId = @HRRoleId
@@ -253,20 +252,58 @@ BEGIN
 				WHERE empca.EmpId = @EmpId
 					AND empca.IsOffDay = 0
 			END
+		END
+	END
+
+	IF (
+			@RoleId = @ApproverRoleId
+			AND @StatusId = @ApprovedStatusId
+			)
+		OR (
+			@RoleId = @HRRoleId
+			AND @StatusId = @VoidStatusId
+			)
+	BEGIN
+		INSERT INTO @tblChangeShiftDetail (
+			OnDate
+			,ToDate
+			)
+		SELECT OnDate
+			,ToDate
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+
+		WHILE EXISTS (
+				SELECT 1
+				FROM @tblChangeShiftDetail
+				)
+		BEGIN
+			SELECT TOP 1 @FromDate = OnDate
+			FROM @tblChangeShiftDetail
 
 			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
-				,@ToDate
+				,@FromDate
 				,1
+
+			IF @TypeId = @MoveOffDay
+			BEGIN
+				SELECT TOP 1 @ToDate = ToDate
+				FROM @tblChangeShiftDetail
+				WHERE OnDate = @FromDate
+
+				EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+					,@ToDate
+					,@ToDate
+					,1
+			END
+
+			DELETE
+			FROM @tblChangeShiftDetail
+			WHERE OnDate = @FromDate
 		END
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reset unsuccessfully.'
-	END
 END

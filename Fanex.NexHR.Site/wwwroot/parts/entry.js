@@ -46,6 +46,7 @@ module.exports = {
         [`${styleDistPath}/changeshift.create`]: `${styleSourcePath}/pages/request/change-shift/create.scss`,
         [`${styleDistPath}/changeshift.myrequest`]: `${styleSourcePath}/pages/request/change-shift/myrequest.scss`,
         [`${styleDistPath}/lateinearlyout.create`]: `${styleSourcePath}/pages/request/latein-earlyout/create.scss`,
+        [`${styleDistPath}/checkinout.create`]: `${styleSourcePath}/pages/request/checkinout/create.scss`,
         [`${styleDistPath}/leave.myrequest`]: `${styleSourcePath}/pages/request/leave/myrequest.scss`,
 
         //
@@ -90,6 +91,8 @@ module.exports = {
         [`${jsDistPath}/lateinearlyout.create`]: `${jsSourcePath}/request/latein-earlyout/create.js`,
         [`${jsDistPath}/lateinearlyout.edit`]: `${jsSourcePath}/request/latein-earlyout/edit.js`,
         [`${jsDistPath}/checkinout.myrequest`]: `${jsSourcePath}/request/checkinout/myrequest.js`,
+        [`${jsDistPath}/checkinout.create`]: `${jsSourcePath}/request/checkinout/create.js`,
+        [`${jsDistPath}/checkinout.edit`]: `${jsSourcePath}/request/checkinout/edit.js`,
         [`${jsDistPath}/keepinview.myrequest`]: `${jsSourcePath}/request/keepinview/myrequest.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`
     }

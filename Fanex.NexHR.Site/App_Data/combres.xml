@@ -101,15 +101,6 @@
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
       <resource path="~/scripts/views/report/report.timesheet.js" />
     </resourceSet>
-    <resourceSet name="checkinoutrequestcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/request.checkinout.css" />
-    </resourceSet>
-    <resourceSet name="checkinoutrequestjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Request/checkinout.request.js" />
-      <resource path="~/scripts/views/search.request.js" />
-    </resourceSet>
 
     <resourceSet name="leavecss" type="css">
       <resource reference="sitecss" />

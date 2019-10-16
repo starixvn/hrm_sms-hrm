@@ -388,6 +388,7 @@
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Keep In View">
     <Setting Key="KeepInViewRequest_Insert" SpName="KeepInViewRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
@@ -463,6 +464,7 @@
       <Mapping DataField="RequesterId" ObjectProperty="Id" />
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="CheckInOutRequest_GetDisableDate" SpName="CheckInOutRequest_GetDisableDate" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Late In Early Out">
     <Setting Key="LateInEarlyOutRequest_Insert" SpName="LateInEarlyOutRequest_Insert" DbName="nexhrx" Plain="0"></Setting>

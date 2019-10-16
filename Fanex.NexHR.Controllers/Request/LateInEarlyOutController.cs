@@ -119,8 +119,8 @@
                 RequestType = request.RequestTypeId,
                 Remark = request.Remark,
                 ReasonId = request.ReasonId,
-                ApproverId = request.ApprovedBy.Id,
-                VerifierId = request.VerifiedBy.Id,
+                ApproverId = request.ApprovedBy?.Id,
+                VerifierId = request.VerifiedBy?.Id,
                 DisabledDates = disabledDates,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers

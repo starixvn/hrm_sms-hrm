@@ -17,6 +17,7 @@ export const LeaveType = {
     WeddingLeave: 6,
     BusinessTrip: 9,
     MaternityLeave: 12,
+    PublicHoliday: 13,
     PaternityLeave: 14,
     BereavementLeave: 21,
     UnpaidLeave: 25,

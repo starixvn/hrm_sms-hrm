@@ -21,6 +21,7 @@
 }
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
     @using (Html.BeginForm("Edit", "lateinearlyout", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()

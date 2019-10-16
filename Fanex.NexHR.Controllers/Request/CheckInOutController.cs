@@ -19,20 +19,17 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
-        private readonly IEmployeeService employeeService;
 
         public CheckInOutController(
             ISessionService sessionService,
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IEmployeeService employeeService,
             IShiftService shiftService) : base(sessionService)
         {
             this.checkInOutRequestService = checkInOutRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
-            this.employeeService = employeeService;
             this.shiftService = shiftService;
         }
 
@@ -52,69 +49,58 @@
             return View(requests);
         }
 
-        public ActionResult Create(DateTime? suggestedDate, bool? isMissingCheckIn)
+        public ActionResult Create()
         {
+            var today = DateTime.Today;
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn);
             var viewModel = new CheckInOutRequestViewModel
             {
-                Employee = sessionService.Employee.Nickname,
+                Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
-                ForDate = suggestedDate ?? DateTime.Today,
-                AttendantDate = suggestedDate ?? DateTime.Today,
+                ForDate = today,
+                AttendantDate = today,
                 Hour = DateTime.Now.Hour,
                 Minute = DateTime.Now.Minute,
-                RequestTypeId = (isMissingCheckIn.HasValue && !isMissingCheckIn.Value) ? (short)RequestType.CheckOut : (short)RequestType.CheckIn,
-                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn)
+                RequestTypeId = (byte)RequestType.CheckIn,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
 
-            Shift shift = GetShiftByDate(DateTime.Now);
+            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, today);
             CheckShiftFromToFormat(viewModel, shift);
-            viewModel.Shift = (shift == null) ? string.Empty : shift.Name;
+            viewModel.Shift = shift == null ? string.Empty : shift.Name;
+            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Create(CheckInOutRequestViewModel model)
+        public CustomJsonResult Create(CheckInOutRequestViewModel model)
         {
-            if (model != null)
+            var criteria = new InsertCheckInOutRequestCriteria
             {
-                CheckIsTopManager(model);
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.CheckIn);
+                EmpId = model.EmployeeId,
+                OnDate = model.AttendantDate,
+                RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                RequestType = model.RequestTypeId,
+                ReasonId = model.ReasonId,
+                RefNo = model.RefNO,
+                Remark = model.Remark,
+                CreatedBy = sessionService.Employee.Id,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId
+            };
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
 
-                if (ModelState.IsValid)
-                {
-                    var criteria = new InsertCheckInOutRequestCriteria
-                    {
-                        EmpId = model.EmployeeId,
-                        OnDate = model.AttendantDate,
-                        RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                        RequestType = model.RequestTypeId,
-                        ReasonId = model.ReasonId,
-                        RefNo = model.RefNO,
-                        Remark = model.Remark,
-                        CreatedBy = sessionService.Employee.Id,
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        Shift = model.Shift
-                    };
-                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
-
-                    if (result.IsSuccessful)
-                    {
-                        checkInOutRequestService.SendMailCreateRequest(model.RequestId);
-                        ViewBag.Requested = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            if (commandResult.IsSuccessful)
+            {
+                checkInOutRequestService.SendMailCreateRequest(commandResult.OutputId);
             }
 
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public ActionResult Update(int id)
+        public ActionResult Edit(long id)
         {
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
@@ -125,70 +111,66 @@
             }
             else
             {
-                Shift shift = GetShiftByDate(request.OnDate);
+                VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn);
+                IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(new GetDisabledDateParam
+                {
+                    EmployeeId = request.Employee.Id,
+                    FromDate = request.OnDate,
+                    ToDate = DateTime.Today,
+                    RequestId = request.RequestId
+                });
+                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.OnDate);
                 var viewModel = new CheckInOutRequestViewModel
                 {
                     RequestId = request.RequestId,
+                    RefNO = request.RefNO,
                     RequestTypeId = request.RequestTypeId,
-                    Employee = sessionService.Employee.Nickname,
+                    Employee = sessionService.Employee.DisplayName,
                     EmployeeId = sessionService.Employee.Id,
+                    AttendantDate = request.OnDate,
                     ForDate = request.RequestTime.Date,
                     Hour = request.RequestTime.Hour,
                     Minute = request.RequestTime.Minute,
                     ReasonId = request.ReasonId,
-                    Shift = (shift == null) ? string.Empty : shift.Name,
-                    ApproverId = request.ApprovedBy.Id,
-                    VerifierId = request.VerifiedBy.Id,
-                    RefNO = request.RefNO,
-                    AttendantDate = request.OnDate,
+                    Shift = shift == null ? string.Empty : shift.Name,
+                    ApproverId = request.ApprovedBy?.Id,
+                    VerifierId = request.VerifiedBy?.Id,
                     Remark = request.Remark,
-                    VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn)
+                    Verifiers = supervisor.Verifiers,
+                    Approvers = supervisor.Approvers,
+                    DisabledDates = disabledDates
                 };
-
+                ViewBag.IsTopManager = request.Employee.IsTopManager;
                 return View(viewModel);
             }
         }
 
         [HttpPost]
-        public ActionResult Update(CheckInOutRequestViewModel model)
+        public CustomJsonResult Edit(CheckInOutRequestViewModel model)
         {
-            if (model != null)
+            var criteria = new UpdateCheckInOutRequestCriteria
             {
-                CheckIsTopManager(model);
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.CheckIn);
+                RequestId = model.RequestId,
+                EmpId = model.EmployeeId,
+                OnDate = model.AttendantDate,
+                RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
+                RequestType = model.RequestTypeId,
+                ReasonId = model.ReasonId,
+                RefNo = model.RefNO,
+                Remark = model.Remark,
+                ModifiedBy = sessionService.Employee.Id,
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                Shift = model.Shift
+            };
 
-                if (ModelState.IsValid)
-                {
-                    var criteria = new UpdateCheckInOutRequestCriteria
-                    {
-                        RequestId = model.RequestId,
-                        EmpId = model.EmployeeId,
-                        OnDate = model.AttendantDate,
-                        RequestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                        RequestType = model.RequestTypeId,
-                        ReasonId = model.ReasonId,
-                        RefNo = model.RefNO,
-                        Remark = model.Remark,
-                        ModifiedBy = sessionService.Employee.Id,
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        Shift = model.Shift
-                    };
-
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    if (result.IsSuccessful)
-                    {
-                        checkInOutRequestService.SendMailEditRequest(model.RequestId);
-                        ViewBag.Updated = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            if (commandResult.IsSuccessful)
+            {
+                checkInOutRequestService.SendMailEditRequest(model.RequestId);
             }
 
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -206,11 +188,10 @@
             return PartialView("_ViewHistory", requests);
         }
 
-        private Shift GetShiftByDate(DateTime date)
+        public CustomJsonResult GetDisabledDate(GetDisabledDateParam param)
         {
-            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, date);
-
-            return shift;
+            IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(param);
+            return new CustomJsonResult { Data = disabledDates, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private static void CheckShiftFromToFormat(CheckInOutRequestViewModel viewModel, Shift shift)
@@ -228,23 +209,6 @@
                 {
                     viewModel.Hour = 0;
                     viewModel.Minute = 0;
-                }
-            }
-        }
-
-        private void CheckIsTopManager(CheckInOutRequestViewModel model)
-        {
-            Employee employee = employeeService.GetEmployeeById(model.EmployeeId);
-            if (employee.IsTopManager)
-            {
-                foreach (var modelError in ModelState)
-                {
-                    string propertyName = modelError.Key;
-
-                    if (propertyName.Contains("VerifierId") || propertyName.Contains("ApproverId"))
-                    {
-                        ModelState[propertyName].Errors.Clear();
-                    }
                 }
             }
         }

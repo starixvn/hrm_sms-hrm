@@ -6,11 +6,11 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class CheckInOutRequestViewModel : IValidatableObject
+    public class CheckInOutRequestViewModel
     {
         public long RequestId { get; set; }
 
@@ -62,31 +62,9 @@
         [Required(ErrorMessage = "The Approved by field is required.")]
         public int? ApproverId { get; set; }
 
-        public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
+        public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+        public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            IList<ValidationResult> result = new List<ValidationResult>();
-
-            if (string.IsNullOrEmpty(Shift))
-            {
-                var validation = new ValidationResult("Invalid shift", new[] { "Shift" });
-                result.Add(validation);
-            }
-
-            if (ForDate.Date > DateTime.Today)
-            {
-                var validation = new ValidationResult(Messages.NoFutureCheckInOutRequest, new[] { "ForDate" });
-                result.Add(validation);
-            }
-
-            if (string.IsNullOrEmpty(Shift))
-            {
-                var validation = new ValidationResult("Invalid shift", new[] { "Shift" });
-                result.Add(validation);
-            }
-
-            return result;
-        }
+        public IEnumerable<DateTime> DisabledDates { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
@@ -13,6 +14,8 @@
         CheckInOutRequest GetById(long requestId);
 
         IList<CheckInOutRequest> GetHistoryById(long requestId);
+
+        IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
 
         CommandResult Delete(long requestId);
 

@@ -32,6 +32,10 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
+	DECLARE @tblChangeShiftDetail TABLE (
+		OnDate DATE
+		,ToDate DATE
+		)
 
 	SELECT @StatusId = r.CurrentStatus
 		,@FromDate = cs.FromDate
@@ -123,18 +127,46 @@ BEGIN
 				AND empca.IsOffDay = 1
 		END
 
-		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-			,@FromDate
-			,@ToDate
-			,1
+		INSERT INTO @tblChangeShiftDetail (
+			OnDate
+			,ToDate
+			)
+		SELECT OnDate
+			,ToDate
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+
+		WHILE EXISTS (
+				SELECT 1
+				FROM @tblChangeShiftDetail
+				)
+		BEGIN
+			SELECT TOP 1 @FromDate = OnDate
+			FROM @tblChangeShiftDetail
+
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+				,@FromDate
+				,@FromDate
+				,1
+
+			IF @TypeId = @MoveOffDay
+			BEGIN
+				SELECT TOP 1 @ToDate = ToDate
+				FROM @tblChangeShiftDetail
+				WHERE OnDate = @FromDate
+
+				EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+					,@ToDate
+					,@ToDate
+					,1
+			END
+
+			DELETE
+			FROM @tblChangeShiftDetail
+			WHERE OnDate = @FromDate
+		END
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Void unsuccessfully.'
-	END
 END
