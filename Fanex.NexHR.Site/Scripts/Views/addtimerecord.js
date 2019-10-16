@@ -3,7 +3,7 @@
 
 $(document).ready(function () {
     var nickName = '';
-
+    $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
     $('#Employee').autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -40,7 +40,6 @@ $(document).ready(function () {
             nickName = ui.item.label;
             $('#EmpId').val(ui.item.value);
             $('#Employee').val(nickName);
-            
         },
         close: function () {
             $('#Employee').val(nickName);

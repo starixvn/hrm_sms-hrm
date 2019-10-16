@@ -45,7 +45,7 @@ function initTooltip() {
                 object.attr('data-isothours'),
                 object.attr('data-actualLateInEarlyOut'));
 
-            return "<div class='tooltip'>" +
+            return "<div>" +
                 "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
@@ -65,7 +65,7 @@ function initTooltip() {
         bodyHandler: function () {
             var object = $(this);
 
-            return "<div class='tooltip '>" + "<div class='overtime-tooltip'>" +
+            return "<div>" + "<div class='overtime-tooltip'>" +
                 object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
         }
     });
@@ -79,6 +79,7 @@ function query() {
         data: $('.form-filter').serialize(),
         success: function (response) {
             $('#timesheetDetails').html(response);
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
             initTooltip();
             floatThead('table#data');
         },

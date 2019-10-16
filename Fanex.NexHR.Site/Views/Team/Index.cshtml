@@ -1,5 +1,6 @@
 ﻿@model IList<Team>
     @{
+        Layout = "~/Views/Shared/_NewLayout.cshtml";
         ViewBag.Title = Labels.SectionManagement;
         var hasPermission = (bool)ViewBag.HasPermission;
         var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;

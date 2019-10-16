@@ -1,6 +1,7 @@
 ﻿@using Fanex.NexHR.Resources
 @model TimeRecordViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.TimeRecord;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
@@ -48,11 +49,11 @@
             <div class="grid_3">
                 @{
                     var category = new List<SelectListItem>
-                        {
-                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                            new SelectListItem() {Text = "Expat", Value = "0"},
-                            new SelectListItem() {Text = "Local", Value = "1"},
-                        };
+                                            {
+                                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                                new SelectListItem() {Text = "Expat", Value = "0"},
+                                                new SelectListItem() {Text = "Local", Value = "1"},
+                                            };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
             </div>

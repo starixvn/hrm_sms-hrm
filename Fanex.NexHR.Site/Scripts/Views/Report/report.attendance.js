@@ -63,7 +63,7 @@ function initTooltip() {
                 default:
                     status = "Approved";
             }
-            return "<div class='tooltip'>" + "<table class='table-tooltip checkinout'>" +
+            return "<div>" + "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
                 "<td class='col2'>" + result +
@@ -82,7 +82,7 @@ function initTooltip() {
         bodyHandler: function () {
             var object = $(this);
 
-            return "<div class='tooltip '>" + "<div class='overtime-tooltip'>" +
+            return "<div>" + "<div class='overtime-tooltip'>" +
                 object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
         }
     });

@@ -1,6 +1,7 @@
 ﻿@using Fanex.NexHR.Resources
 @model EmployeeAttendanceViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.AttendanceReport;
 }
 @section css{
@@ -53,14 +54,14 @@
         <div class="grid_4">
             @{
                 var types = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
-                    new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
-                    new SelectListItem() {Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString()},
-                    new SelectListItem() {Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString()},
-                    new SelectListItem() {Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString()},
-                    new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
-                };
+                            {
+                                new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
+                                new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
+                                new SelectListItem() {Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString()},
+                                new SelectListItem() {Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString()},
+                                new SelectListItem() {Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString()},
+                                new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
+                            };
             }
             @Html.DropDownListFor(model => model.AttendanceType, types)
         </div>

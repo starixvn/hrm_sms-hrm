@@ -38,37 +38,49 @@
                         {
                             <td>@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
                         }
-                        <td class="tooltip" title="@item.FullName">@item.NickName</td>
-                        <td class="tooltip" title="@item.Team">@item.TeamCode</td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@item.FullName">@item.NickName</span>
+                        </td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@item.Team">@item.TeamCode</span>
+                        </td>
 
                         @if (item.IsOffdayOT)
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                            var className = string.Format("{0} {1}", "tooltip mytimesheet-workinginoffday",
+                            var className = string.Format("{0} {1}", "tooltip-tipsy mytimesheet-workinginoffday",
                                 item.IsPublicHoliday ? "orange-highlight" : "");
-                            <td class="@className" title="@title"> @item.ShiftCode</td>
+                            <td>
+                                <span class="@className" title="@title">@item.ShiftCode</span>
+                            </td>
                         }
                         else
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                            var className = string.Format("{0} {1}", "tooltip",
+                            var className = string.Format("{0} {1}", "tooltip-tipsy",
                                 item.IsPublicHoliday ? "orange-highlight" : "");
-                            <td class="@className" title="@title">@item.ShiftCode</td>
+                            <td>
+                                <span class="@className" title="@title">@item.ShiftCode</span>
+                            </td>
                         }
                         @if (item.InFixed.HasValue)
                         {
-                            <td class="tooltip" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                                @item.InFixed.Value.ToString("HH:mm")
+                            <td>
+                                <span class="tooltip-tipsy" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.InFixed.Value.ToString("HH:mm")</span>
                             </td>
                         }
                         else
                         {
                             <td></td>
                         }
+
                         @if (item.OutFixed.HasValue)
                         {
-                            <td class="tooltip" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                                @item.OutFixed.Value.ToString("HH:mm")
+                            <td>
+                                <span class="tooltip-tipsy"
+                                      title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                                    @item.OutFixed.Value.ToString("HH:mm")
+                                </span>
                             </td>
                         }
                         else

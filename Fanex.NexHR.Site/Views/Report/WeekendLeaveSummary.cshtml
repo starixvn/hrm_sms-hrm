@@ -2,6 +2,7 @@
 @using Fanex.NexHR.ViewModels.Report
 @model WeekendLeaveViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.WeekendLeave;
 }
 @section css{
@@ -47,11 +48,11 @@
         <div class="grid_4">
             @{
                 var category = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                    new SelectListItem() {Text = Labels.Local, Value = "true"},
-                };
+                                {
+                                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                                    new SelectListItem() {Text = Labels.Local, Value = "true"},
+                                };
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>
@@ -73,8 +74,10 @@
 
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="prefix_3 grid_6">
+        <div class="prefix_2 grid_2">
             <input type="button" id="submit" value="@Labels.Submit" />
+        </div>
+        <div class="prefix_2 grid_2">
             <input type="button" value="Excel" id="btnExcel" />
         </div>
     </div>

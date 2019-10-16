@@ -3,6 +3,7 @@
 @model WeekendLeaveViewModel
 
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.WeekendLeave;
 }
 
@@ -50,11 +51,11 @@
         <div class="grid_4">
             @{
                 var category = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                    new SelectListItem() {Text = Labels.Local, Value = "true"},
-                };
+                            {
+                                new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                                new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                                new SelectListItem() {Text = Labels.Local, Value = "true"},
+                            };
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>
@@ -74,19 +75,21 @@
         <div class="grid_6">
             @{
                 var leaveType = new List<SelectListItem>
-                        {
-                            new SelectListItem() {Text = Labels.All, Value = "-1"},
-                            new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
-                            new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
-                        };
+                                    {
+                                        new SelectListItem() {Text = Labels.All, Value = "-1"},
+                                        new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
+                                        new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
+                                    };
             }
             @Html.DropDownListFor(model => model.LeaveTypeId, leaveType)
         </div>
 
         <div class="clear"></div>
         <div class="space"></div>
-        <div class="prefix_2 grid_6">
+        <div class="prefix_2 grid_2">
             <input type="button" id="submit" value="@Labels.Submit" />
+        </div>
+        <div class="prefix_2 grid_2">
             <input type="button" value="Excel" id="btnExcel" />
         </div>
     </div>

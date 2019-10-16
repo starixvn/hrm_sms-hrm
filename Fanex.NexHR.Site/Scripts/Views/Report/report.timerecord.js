@@ -73,6 +73,7 @@
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $('#TimeRecordContent').html(data);
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
                 if ($('table#data #pagination').length > 0) {
                     bindMenu('.in-action', 'inMenu');
