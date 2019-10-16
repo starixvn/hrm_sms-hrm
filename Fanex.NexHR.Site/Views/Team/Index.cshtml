@@ -66,7 +66,7 @@
                                 var count = 0;
                                 foreach (var leader in team.Leaders)
                                 {
-                                    <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                    <span class="tooltip-tipsy" title="@leader.FullName">@leader.NickName</span>
                                     if (count < team.Leaders.Count - 1)
                                     {
                                         <span>,</span>
@@ -87,7 +87,7 @@
                                 var count = 0;
                                 foreach (var leader in team.AssistantLeaders)
                                 {
-                                    <span class="tooltip" title="@leader.FullName">@leader.NickName</span>
+                                    <span class="tooltip-tipsy" title="@leader.FullName">@leader.NickName</span>
                                     if (count < team.AssistantLeaders.Count - 1)
                                     {
                                         <span>,</span>

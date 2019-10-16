@@ -18,7 +18,10 @@
 
     $(document).ready(function () {
         floatThead('table#data');
-
+        $('.tooltip-tipsy').tipsy({
+                    html: true,
+                    gravity: 'e'
+                });
         $('table#data a.deleteTeam').on('click', function () {
             var teamId = $(this).data('team-id');
             deleteTeam(teamId);
