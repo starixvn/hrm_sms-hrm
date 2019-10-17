@@ -63,7 +63,7 @@
                 @Html.TextBox("AttendantDate", Model.AttendantDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = Model.AttendantDate.ToString("yyyy/MM/dd"),
+                        mindate = Model.AttendantDate.AddMonths(-1).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd"),
                         disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
                     })

@@ -4,153 +4,131 @@
 @using Fanex.NexHR.Resources
 @model KeepInViewRequestViewModel
 @{
-    ViewBag.Title = Labels.NewKeepInViewRequest;
-    var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.Create;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
     var today = DateTime.Today;
 }
 @section css{
-    @Url.CombresLink("keepinviewcss")
+    <link href="~/wwwroot/dist/styles/keepinview.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("keepinviewcreatejs")
+    <script src="~/wwwroot/dist/js/keepinview.create.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "keepinview")">@Labels.MyKeepInViewRequest</a>
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "keepinview")">@Labels.MyKeepInViewRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-<div class="bunhat">
-    @using (Html.BeginForm())
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    @using (Html.BeginForm("create", "keepinview", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        @Html.Hidden("RequestType", (byte)RequestType.KeepInView)
         @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        @Html.HiddenFor(model => model.EmployeeId)
 
-        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
-        {
-            <div class="success">@Messages.RequestCreated</div>
-            <input type="hidden" id="successed" value="true" />
-            <input type="hidden" id="year" value="@Model.Date.Year" />
-        }
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.KeepInViewType, Labels.KIVType)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.KeepInViewType, Labels.KIVType, new { @class = "control-label" })
             </div>
-            <div class="input">
-                <div class="radio-form">
-                    <div class="radio">
-                        <label>
-                            @Html.RadioButtonFor(model => model.KeepInViewType, 1)
-                            @Labels.ByDay
-                        </label>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            @Html.RadioButtonFor(model => model.KeepInViewType, 2)
-                            @Labels.ByHour
-                        </label>
-                    </div>
+            <div class="input-form request-type">
+                <div class="radioButton">
+                    @Html.RadioButtonFor(model => model.KeepInViewType, (byte)KeepInViewTypes.KeepInViewByDay, new { id = "KeepInViewByDay" })
+                    <label for="KeepInViewByDay">@Labels.ByDay</label>
+                </div>
+                <div class="radioButton">
+                    @Html.RadioButtonFor(model => model.KeepInViewType, (byte)KeepInViewTypes.KeepInViewByHour, new { id = "KeepInViewByHour" })
+                    <label for="KeepInViewByHour">@Labels.ByHour</label>
                 </div>
             </div>
-            <div class="clear">
-            </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @if (hasOnBehalfOthersPermission)
+            <div class="input-form">
+                @if (hasOnBehalfRequestPermission)
                 {
-                    @Html.EditorFor(model => model.Employee)
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
                 }
                 else
                 {
-                    @Html.Label(Utilities.FormatString(Model.Employee))
+                    <strong>@Html.DisplayFor(model => model.Employee)</strong>
                 }
             </div>
-            <div class="clear">
+        </div>
+        <div id="groupHalfDay" class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HalfDay, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" name="HalfDay" id="HalfDay"
+                           @(Model.HalfDay ? "checked" : string.Empty) />
+                    <label for="HalfDay"></label>
+                </div>
             </div>
         </div>
-        <div id="grbHalfDay" class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.HalfDay)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Date, Labels.Date, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.CheckBoxFor(model => model.HalfDay)
-            </div>
-            <div class="clear">
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Date, Labels.Date)
-            </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.Date,
-                today.FirstDayOfMonth().AddMonths(-1),
-                today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
-                unavailDates: Model.UnavailDates)
-            </div>
-            <div class="clear">
+            <div class="calendar-form">
+                @Html.TextBox("Date", Model.Date.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
-        <div id="timeGroup" class="formrow">
-            <div class="label">
-                @Labels.Time
+        <div id="timeGroup" class="form-group" style="display: none;">
+            <div class="label-form">@Labels.Time</div>
+            <div class="select-form request-time">
+                @Html.DropDownList("FromTime", Utilities.TimeSteps(30), new { @class = "form-control" })
+                <span>~</span>
+                @Html.DropDownList("ToTime", Utilities.TimeSteps(30), new { @class = "form-control" })
             </div>
-            <div class="input">
-                <span class="time">
-                    @Html.DropDownList("FromTime", Utilities.TimeSteps(30))
-                </span><span>~</span> <span class="time">
-                    @Html.DropDownList("ToTime", Utilities.TimeSteps(30))
-                </span><span class="cross-day">
-                    @Html.CheckBoxFor(model => model.CrossDay)
+            <div>
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" name="CrossDay" id="CrossDay"
+                           @(Model.CrossDay ? "checked" : string.Empty) />
                     <label for="CrossDay">@Labels.CrossDay</label>
-                </span>
-            </div>
-            <div class="clear">
+                </div>
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.VerifierId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.VerifierAndApprover.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "dropdown" })
-            </div>
-            <div class="clear">
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.VerifierAndApprover.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "dropdown" })
-            </div>
-            <div class="clear">
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Remark, Labels.Remark)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextAreaFor(model => model.Remark)
-            </div>
-            <div class="clear">
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.HiddenFor(model => model.EmployeeId)
-                @Html.HiddenFor(model => model.Employee)
-            </div>
-            <div class="input">
-                <input type="submit" value="@Labels.Request" class="button-primary submit" />
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
-            </div>
-            <div class="clear">
+        <div class="form-group">
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>
     }

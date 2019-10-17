@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -60,6 +61,8 @@
                 Approvers = supervisor.Approvers
             };
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(viewModel);
         }
@@ -105,7 +108,7 @@
             IEnumerable<DateTime> disabledDates = lateInEarlyOutRequestService.GetDisabledDate(new GetDisabledDateParam
             {
                 EmployeeId = request.Employee.Id,
-                FromDate = request.OnDate,
+                FromDate = request.OnDate.AddMonths(-1),
                 ToDate = DateTime.Today,
                 RequestId = request.RequestId
             });

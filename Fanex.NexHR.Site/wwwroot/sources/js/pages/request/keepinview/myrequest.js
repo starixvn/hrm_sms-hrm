@@ -35,7 +35,7 @@ $(function () {
 
         switch (command) {
             case 'Edit':
-                location.href = _global.root + 'keepinview/update/' + requestId;
+                location.href = _global.root + 'keepinview/edit/' + requestId;
                 break;
             case 'Cancel':
                 cancelRequest(requestId);

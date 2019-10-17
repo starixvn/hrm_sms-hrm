@@ -532,6 +532,7 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_GetDetailById.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_GetDisableDate.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_GetDisableDate.sql" />
+    <Build Include="dbo\Stored Procedures\KeepInViewRequest_GetDisableDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

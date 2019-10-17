@@ -4,14 +4,14 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
 
-    public class InsertCheckInOutRequestCriteria : CriteriaBase
+    public class CreateCheckInOutRequestCriteria : CriteriaBase
     {
         [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }
 
-        public int RequestType { get; set; }
+        public byte RequestType { get; set; }
 
         public string Remark { get; set; }
 
@@ -29,17 +29,8 @@
 
         public string RefNo { get; set; }
 
-        [SpParam(Ignored = true)]
-        public string Shift { get; set; }
+        public override string GetSettingKey() => "CheckInOutRequest_Insert";
 
-        public override string GetSettingKey()
-        {
-            return "CheckInOutRequest_Insert";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0 && (RequestTime - OnDate).Days >= 0 && (RequestTime - OnDate).Days <= 1;
-        }
+        public override bool IsValid() => EmpId > 0 && (RequestTime - OnDate).Days >= 0 && (RequestTime - OnDate).Days <= 1;
     }
 }

@@ -417,6 +417,7 @@
       <Mapping DataField="ApproverId" ObjectProperty="Id" />
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
+    <Setting Key="KeepInViewRequest_GetDisableDate" SpName="KeepInViewRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Employee Relationship">
     <Setting Key="EmployeeRelationship_GetById" SpName="EmployeeRelationship_GetById" DbName="nexhrx" Plain="0"></Setting>

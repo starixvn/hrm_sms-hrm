@@ -40,7 +40,7 @@
         public int Minute { get; set; }
 
         [Required]
-        public int RequestTypeId { get; set; }
+        public byte RequestTypeId { get; set; }
 
         public string RequestTypeName => RequestTypeId == (byte)RequestType.CheckIn ? Labels.CheckIn : Labels.CheckOut;
 
@@ -65,6 +65,6 @@
         public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
         public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
 
-        public IEnumerable<DateTime> DisabledDates { get; set; }
+        public IEnumerable<DateTime> DisabledDates { get; set; } = new List<DateTime>();
     }
 }

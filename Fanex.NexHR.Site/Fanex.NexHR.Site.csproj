@@ -255,12 +255,16 @@
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
     <Content Include="wwwroot\dist\js\changeshift.myrequest.js" />
+    <Content Include="wwwroot\dist\js\checkinout.create.js" />
+    <Content Include="wwwroot\dist\js\checkinout.edit.js" />
     <Content Include="wwwroot\dist\js\checkinout.myrequest.js" />
     <Content Include="wwwroot\dist\js\employee.create.js" />
     <Content Include="wwwroot\dist\js\employee.edit.js" />
     <Content Include="wwwroot\dist\js\employee.paternity.js" />
     <Content Include="wwwroot\dist\js\employee.postnatal.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
+    <Content Include="wwwroot\dist\js\keepinview.create.js" />
+    <Content Include="wwwroot\dist\js\keepinview.edit.js" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
     <Content Include="wwwroot\dist\js\lateinearlyout.create.js" />
     <Content Include="wwwroot\dist\js\lateinearlyout.edit.js" />
@@ -293,6 +297,8 @@
     <Content Include="wwwroot\dist\styles\changeshift.create.js" />
     <Content Include="wwwroot\dist\styles\changeshift.myrequest.css" />
     <Content Include="wwwroot\dist\styles\changeshift.myrequest.js" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.css" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.js" />
     <Content Include="wwwroot\dist\styles\employee.create.css" />
     <Content Include="wwwroot\dist\styles\employee.create.js" />
     <Content Include="wwwroot\dist\styles\employee.index.css" />
@@ -303,6 +309,8 @@
     <Content Include="wwwroot\dist\styles\employee.postnatal.js" />
     <Content Include="wwwroot\dist\styles\home.index.css" />
     <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.css" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.js" />
     <Content Include="wwwroot\dist\styles\lateinearlyout.create.css" />
     <Content Include="wwwroot\dist\styles\lateinearlyout.create.js" />
     <Content Include="wwwroot\dist\styles\leave.myrequest.css" />
@@ -367,6 +375,8 @@
     <Content Include="wwwroot\sources\js\pages\request\checkinout\edit.js" />
     <Content Include="wwwroot\sources\js\pages\request\checkinout\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\keepinview\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\edit.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
@@ -431,7 +441,6 @@
     <Content Include="Scripts\Views\extensionno.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
-    <Content Include="Scripts\Views\Request\keepinview.create.js" />
     <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
@@ -441,7 +450,6 @@
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
     <Content Include="Styles\shift.css" />
-    <Content Include="Styles\keepinview.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
@@ -1274,7 +1282,7 @@
     <Content Include="Views\ChangeShift\_ChangeShiftDetail.cshtml" />
     <Content Include="Views\Leave\LeaveRequestDetail.cshtml" />
     <Content Include="Views\KeepInView\Create.cshtml" />
-    <Content Include="Views\KeepInView\Update.cshtml" />
+    <Content Include="Views\KeepInView\Edit.cshtml" />
     <Content Include="Views\KeepInView\EmployeeView.cshtml" />
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
@@ -1544,6 +1552,13 @@
     <Content Include="wwwroot\sources\styles\pages\report\weekend.leave.scss" />
     <Content Include="wwwroot\dist\styles\report.weekend.leave.js.map" />
     <Content Include="wwwroot\sources\styles\pages\request\checkinout\create.scss" />
+    <Content Include="wwwroot\dist\js\checkinout.create.js.map" />
+    <Content Include="wwwroot\dist\js\checkinout.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\request\keepinview\create.scss" />
+    <Content Include="wwwroot\dist\js\keepinview.create.js.map" />
+    <Content Include="wwwroot\dist\js\keepinview.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

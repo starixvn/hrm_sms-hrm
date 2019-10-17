@@ -47,70 +47,56 @@
 
         public ActionResult Create()
         {
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
             var model = new KeepInViewRequestViewModel
             {
-                Employee = sessionService.Employee.Nickname,
+                Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
                 Date = DateTime.Now.Date,
-                KeepInViewType = (int)KeepInViewTypes.KeepInViewByDay,
-                VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView)
+                KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
             };
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(KeepInViewRequestViewModel model)
+        public CustomJsonResult Create(KeepInViewRequestViewModel model)
         {
-            if (model != null)
+            var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
+            var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
+            var criteria = new CreateKeepInViewRequestCriteria
             {
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.KeepInView);
-                var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
-                var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
+                EmpId = model.EmployeeId,
+                OnDate = model.Date,
+                KeepInViewType = model.KeepInViewType,
+                IsHalfDay = model.HalfDay,
+                Remark = model.Remark,
+                FromTime = (fromTime < toTime && model.CrossDay)
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                ToTime = model.CrossDay
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                CreatedBy = sessionService.Employee.Id
+            };
 
-                if (ModelState.IsValid)
-                {
-                    var criteria = new InsertKeepInViewRequestCriteria
-                    {
-                        EmpId = model.EmployeeId,
-                        OnDate = model.Date,
-                        KeepInViewType = model.KeepInViewType,
-                        IsHalfDay = model.HalfDay,
-                        RefNo = model.RefNo,
-                        Remark = model.Remark,
-                        FromTime = (fromTime < toTime && model.CrossDay)
-                            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
-                            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
-                        ToTime = model.CrossDay
-                            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        CreatedBy = sessionService.Employee.Id
-                    };
-
-                    CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
-                    if (result.IsSuccessful)
-                    {
-                        keepInViewRequestService.SendMailCreateRequest(result.OutputId);
-                        ViewBag.Requested = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            if (commandResult.IsSuccessful)
+            {
+                keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
             }
 
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public ActionResult Update(long id)
+        public ActionResult Edit(long id)
         {
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
@@ -119,75 +105,66 @@
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
-            else
-            {
-                var viewModel = new KeepInViewRequestViewModel
-                {
-                    RequestId = id,
-                    RefNo = request.RefNO,
-                    HalfDay = request.IsHalfDay,
-                    Employee = sessionService.Employee.Nickname,
-                    EmployeeId = sessionService.Employee.Id,
-                    Date = request.OnDate,
-                    KeepInViewType = request.KeepInViewTypeId,
-                    ApproverId = request.ApprovedBy.Id,
-                    VerifierId = request.VerifiedBy.Id,
-                    Remark = request.Remark,
-                    CrossDay = (request.ToTime - request.OnDate).Days > 0,
-                    FromTime = request.FromTime.ToString("HH:mm"),
-                    ToTime = request.ToTime.ToString("HH:mm"),
-                    VerifierAndApprover = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView)
-                };
-                ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                    || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
-                return View(viewModel);
-            }
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
+            IEnumerable<DateTime> disabledDates = keepInViewRequestService.GetDisabledDate(new GetDisabledDateParam
+            {
+                EmployeeId = request.Employee.Id,
+                FromDate = request.OnDate.AddMonths(-1),
+                ToDate = DateTime.Today,
+                RequestId = request.RequestId
+            });
+            var viewModel = new KeepInViewRequestViewModel
+            {
+                RequestId = id,
+                RefNo = request.RefNO,
+                HalfDay = request.IsHalfDay,
+                Employee = request.Employee.DisplayName,
+                EmployeeId = request.Employee.Id,
+                Date = request.OnDate,
+                KeepInViewType = request.KeepInViewTypeId,
+                ApproverId = request.ApprovedBy?.Id,
+                VerifierId = request.VerifiedBy?.Id,
+                Remark = request.Remark,
+                CrossDay = (request.ToTime - request.OnDate).Days > 0,
+                FromTime = request.FromTime.ToString("HH:mm"),
+                ToTime = request.ToTime.ToString("HH:mm"),
+                DisabledDates = disabledDates,
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers
+            };
+            ViewBag.IsTopManager = request.Employee.IsTopManager;
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public ActionResult Update(KeepInViewRequestViewModel model)
+        public CustomJsonResult Edit(KeepInViewRequestViewModel model)
         {
-            if (model != null)
+            var criteria = new EditKeepInViewRequestCriteria
             {
-                model.VerifierAndApprover = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.KeepInView);
-
-                if (ModelState.IsValid)
-                {
-                    var criteria = new UpdateKeepInViewRequestCriteria
-                    {
-                        RequestId = model.RequestId,
-                        EmpId = model.EmployeeId,
-                        OnDate = model.Date,
-                        KeepInViewType = model.KeepInViewType,
-                        Remark = model.Remark,
-                        IsHalfDay = model.HalfDay,
-                        FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
-                        ToTime = model.CrossDay
+                RequestId = model.RequestId,
+                EmpId = model.EmployeeId,
+                OnDate = model.Date,
+                KeepInViewType = model.KeepInViewType,
+                Remark = model.Remark,
+                IsHalfDay = model.HalfDay,
+                FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                ToTime = model.CrossDay
                         ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
-                        VerifierId = model.VerifierId,
-                        ApproverId = model.ApproverId,
-                        ModifiedBy = sessionService.Employee.Id,
-                    };
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                ModifiedBy = sessionService.Employee.Id,
+            };
 
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    if (result.IsSuccessful)
-                    {
-                        keepInViewRequestService.SendMailEditRequest(model.RequestId);
-                        ViewBag.Updated = true;
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            if (commandResult.IsSuccessful)
+            {
+                keepInViewRequestService.SendMailEditRequest(model.RequestId);
             }
 
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-
-            return View(model);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -203,6 +180,12 @@
         {
             IList<KeepInViewRequest> requests = keepInViewRequestService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
+        }
+
+        public CustomJsonResult GetDisabledDate(GetDisabledDateParam param)
+        {
+            IEnumerable<DateTime> disabledDates = keepInViewRequestService.GetDisabledDate(param);
+            return new CustomJsonResult { Data = disabledDates, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

@@ -5,16 +5,15 @@ AS
 Created: Quinn.Vo@20190606
 Task: Get Keep In View request by RequestId.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		kiv.RequestId
+	SELECT kiv.RequestId
 		,kiv.KeepInViewType AS KeepInViewTypeId
 		,kiv.OnDate
 		,kiv.FromTime
@@ -27,9 +26,11 @@ BEGIN
 		,wk.VerifiedDate
 		,wk.ApprovedDate
 		,wk.HRDate AS ProcessedDate
+		,shift.[Name] AS ShiftName
 		,kiv.EmpId
-		,e.NickName
-		,e.FullName
+		,emp.NickName
+		,emp.FullName
+		,empsum.IsTopManager
 		,ve.EmpId AS VerifierId
 		,ve.NickName
 		,Ve.FullName
@@ -40,11 +41,14 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.KeepInViewRequest AS kiv WITH (NOLOCK)
-	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON kiv.RequestId = wk.RequestId
-	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON kiv.EmpId = e.EmpId
-	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
-	LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
-	LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
-
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON kiv.RequestId = wk.RequestId
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON kiv.EmpId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
+		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
+		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON kiv.EmpId = empca.EmpId
+		AND kiv.OnDate = empca.WorkDate
+		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON empca.ShiftId = shift.ShiftId
 	WHERE kiv.RequestId = @RequestId
 END

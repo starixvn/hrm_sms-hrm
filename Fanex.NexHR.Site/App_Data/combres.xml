@@ -115,17 +115,6 @@
       <resource path="~/scripts/views/Request/leavedetail.request.js" />
     </resourceSet>
 
-    <resourceSet name="keepinviewcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/keepinview.css" />
-    </resourceSet>
-
-    <resourceSet name="keepinviewcreatejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/search.request.js" />
-      <resource path="~/scripts/views/Request/keepinview.create.js" />
-    </resourceSet>
-
     <resourceSet name="holidayjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/holiday.js" />

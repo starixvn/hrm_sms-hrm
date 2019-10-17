@@ -1,74 +1,71 @@
 ﻿
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Insert] @EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
-	,@OnDate DATETIME = NULL
+	,@OnDate DATE
 	,@KeepInViewType TINYINT = NULL
 	,@IsHalfDay BIT = NULL
 	,@FromTime DATETIME = NULL
 	,@ToTime DATETIME = NULL
-	,@CreatedBy INT = NULL
+	,@CreatedBy INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
-	,@RefNo NVARCHAR(200) = ''
 	,@RequestId BIGINT = 0 OUTPUT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Quinn.Vo@20190522
-Task: insert a Keep inview request by day
+Task: insert keep inview request
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-	DECLARE @CreatedDate DATETIME
-		,@RequestType SMALLINT = 7
+	DECLARE @CreatedDate DATETIME = GETDATE()
+		,@KeepInViewRequestTypeId TINYINT = 7
+		,@RefNo NVARCHAR(200) = ''
+		,@IsTopManager BIT
+		-- action type
+		,@VerifyRequest TINYINT = 2
+		,@ApproveRequest TINYINT = 3
+		,@OnBehalfRequest TINYINT = 5
+		-- keep in view type
+		,@KeepInViewByDay TINYINT = 1
+		,@KeepInViewByHour TINYINT = 2
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 
-	SELECT @CreatedDate = GETDATE()
-
-	IF @KeepInViewType = 1
+	IF @KeepInViewType = @KeepInViewByDay
 		AND @IsHalfDay = 0
 	BEGIN
 		SELECT @FromTime = NULL
 			,@ToTime = NULL
 	END
 
-	IF (
-			@KeepInViewType = 2
-			OR @IsHalfDay = 1
-			)
-		AND (
-			@FromTime IS NULL
-			OR @ToTime IS NULL
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+				INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON r.RequestId = kiv.RequestId
+				AND kiv.OnDate = @OnDate
+			WHERE r.empid = @empid
+				AND r.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'Keep In request has the invalid parameter'
+		SET @ErrMsg = 'There is another request in the same date.'
 
 		RETURN;
 	END
 
-	IF EXISTS (
-			SELECT 1
-			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-				INNER JOIN dbo.[KeepInViewRequest] l WITH (NOLOCK) ON r.RequestId = l.RequestId
-			WHERE r.empid = @empid
-				AND r.CurrentStatus IN (1, 2, 4, 6)
-				AND DATEDIFF(DD, @OnDate, l.OnDate) = 0
-			)
-	BEGIN
-		SET @ErrCode = 105
-		SET @ErrMsg = 'There is another request in the same range'
-
-		RETURN;
-	END
-
-	IF @KeepInViewType = 1
+	IF @KeepInViewType = @KeepInViewByDay
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar WITH (NOLOCK)
@@ -80,16 +77,16 @@ BEGIN
 					)
 			)
 	BEGIN
-		SET @ErrCode = 106
-		SET @ErrMsg = CONVERT(NVARCHAR(100), @OnDate, 106) + '  not off date or holiday '
+		SET @ErrCode = 101
+		SET @ErrMsg = CONVERT(NVARCHAR(100), @OnDate, 106) + ' not off date or holiday.'
 
 		RETURN
 	END
 
 	IF EXISTS (
 			SELECT 1
-			FROM dbo.OTDailyRequest OT WITH (NOLOCK)
-			WHERE OT.OvertimeDate = @OnDate
+			FROM dbo.OTDailyRequest WITH (NOLOCK)
+			WHERE OvertimeDate = @OnDate
 				AND EmpId = @EmpId
 				AND (
 					NormalHours > 0
@@ -98,13 +95,40 @@ BEGIN
 					)
 			)
 	BEGIN
-		SET @ErrCode = 107
-		SET @ErrMsg = 'You have registered overtime on  ' + CONVERT(NVARCHAR(100), @OnDate, 106) + '.'
+		SET @ErrCode = 102
+		SET @ErrMsg = 'You have requested overtime on ' + CONVERT(NVARCHAR(100), @OnDate, 106) + '.'
 
 		RETURN
 	END
 
-	DECLARE @IsTopManager BIT
+	IF @EmpId <> @CreatedBy
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @EmpId
+					AND EmpId = @CreatedBy
+					AND ActionType = @OnBehalfRequest
+					AND RequestType = @KeepInViewRequestTypeId
+					AND ISNULL(IsDeleted, 0) = 0
+				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @CreatedBy
+					AND gs.ActionType = @OnBehalfRequest
+					AND gs.RequestType = @KeepInViewRequestTypeId
+					AND ISNULL(gs.IsDeleted, 0) = 0
+				)
+		BEGIN
+			SET @ErrCode = 103
+			SET @ErrMsg = 'You do not have permision.'
+
+			RETURN;
+		END
+	END
 
 	SELECT @IsTopManager = IsTopManager
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
@@ -116,91 +140,62 @@ BEGIN
 			)
 		AND @IsTopManager = 0
 	BEGIN
-		SET @ErrCode = 101
-		SET @ErrMsg = 'Keep In View request has the invalid parameter'
+		SET @ErrCode = 104
+		SET @ErrMsg = 'Verifier, Approver is required.'
 
 		RETURN;
-	END
-
-	IF @EmpId <> @CreatedBy
-	BEGIN
-		IF NOT EXISTS (
-				SELECT 1
-				FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @EmpId
-					AND sp.EmpId = @CreatedBy
-					AND sp.ActionType = 5
-					AND sp.RequestType IN (7)
-					AND ISNULL(sp.IsDeleted, 0) = 0
-				)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-					INNER JOIN Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-				WHERE gs.OwnerId = @CreatedBy
-					AND e.EmpId = @EmpId
-					AND gs.ActionType = 5
-					AND gs.RequestType IN (7)
-					AND ISNULL(gs.IsDeleted, 0) = 0
-				)
-		BEGIN
-			SET @ErrCode = 107
-			SET @ErrMsg = 'You could not permision on this request.'
-
-			RETURN;
-		END
 	END
 
 	IF @IsTopManager = 0
 	BEGIN
 		IF NOT EXISTS (
 				SELECT 1
-				FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @VerifierId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 2
-					AND sp.RequestType IN (7)
-					AND ISNULL(sp.IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @VerifierId
+					AND EmpId = @EmpId
+					AND ActionType = @VerifyRequest
+					AND RequestType = @KeepInViewRequestTypeId
+					AND ISNULL(IsDeleted, 0) = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @VerifierId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (7)
-					AND g.ActionType = 2
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @VerifierId
+					AND ISNULL(gs.IsDeleted, 0) = 0
+					AND gs.RequestType = @KeepInViewRequestTypeId
+					AND gs.ActionType = @VerifyRequest
 				)
 		BEGIN
-			SET @ErrCode = 108
-			SET @ErrMsg = 'invalid parameter verifierid.'
+			SET @ErrCode = 105
+			SET @ErrMsg = 'Verifier is invalid.'
 
 			RETURN;
 		END
 
 		IF NOT EXISTS (
 				SELECT 1
-				FROM [dbo].[EmployeeSupervisor] sp WITH (NOLOCK)
-				WHERE sp.OwnerId = @ApproverId
-					AND sp.EmpId = @EmpId
-					AND sp.ActionType = 3
-					AND sp.RequestType IN (7)
-					AND ISNULL(sp.IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
+				WHERE OwnerId = @ApproverId
+					AND EmpId = @EmpId
+					AND ActionType = @ApproveRequest
+					AND RequestType = @KeepInViewRequestTypeId
+					AND ISNULL(IsDeleted, 0) = 0
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.GroupSupervisor AS g WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON g.GroupId = e.GroupId
-				WHERE e.EmpId = @EmpId
-					AND g.OwnerId = @ApproverId
-					AND ISNULL(g.IsDeleted, 0) = 0
-					AND g.RequestType IN (7)
-					AND g.ActionType = 3
+				FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
+					AND emp.EmpId = @EmpId
+				WHERE gs.OwnerId = @ApproverId
+					AND ISNULL(gs.IsDeleted, 0) = 0
+					AND gs.RequestType = @KeepInViewRequestTypeId
+					AND gs.ActionType = @ApproveRequest
 				)
 		BEGIN
-			SET @ErrCode = 109
-			SET @ErrMsg = 'invalid parameter ApproverId.'
+			SET @ErrCode = 106
+			SET @ErrMsg = 'Approver is invalid.'
 
 			RETURN;
 		END
@@ -208,106 +203,91 @@ BEGIN
 
 	IF DATEDIFF(MI, @FromTime, @ToTime) < 60
 	BEGIN
-		SET @ErrCode = 110
+		SET @ErrCode = 107
 		SET @ErrMsg = 'Min of KIV is 60 minutes.'
 
 		RETURN;
 	END
 
-	EXEC [dbo].WorkingTimeRequest_GetNewRefNoByRequestType @RefNo = @RefNo OUTPUT
-		,@RequestType = 7
+	EXEC dbo.WorkingTimeRequest_GetNewRefNoByRequestType @RefNo = @RefNo OUTPUT
+		,@RequestType = @KeepInViewRequestTypeId
 
-	BEGIN TRY
-		INSERT INTO dbo.WorkingTimeRequest (
-			[EmpId]
-			,[RequestType]
-			,[Remark]
-			,[CurrentStatus]
-			,[VerifierId]
-			,[ApproverId]
-			,[VerifiedStatus]
-			,[ApprovedStatus]
-			,[HRStatus]
-			,[CreatedDate]
-			,[CreatedBy]
-			)
-		VALUES (
-			@EmpId
-			,@RequestType
-			,@Remark
-			,CASE 
-				WHEN @IsTopManager = 1
-					AND @VerifierId IS NOT NULL THEN 1
-				WHEN @IsTopManager = 1
-					AND @ApproverId IS NOT NULL THEN 2
-				WHEN @IsTopManager = 1
-					AND @ApproverId IS NULL THEN 4
-				ELSE 1
-				END
-			,@VerifierId
-			,@ApproverId
-			,CASE 
-				WHEN @IsTopManager = 1
-					AND @VerifierId IS NULL THEN 2
-				ELSE 1
-				END
-			,CASE 
-				WHEN @IsTopManager = 1
-					AND @ApproverId IS NULL THEN 2
-				ELSE 1
-				END
-			,1
-			,@CreatedDate
-			,@CreatedBy
-			)
+	INSERT INTO dbo.WorkingTimeRequest (
+		EmpId
+		,RequestType
+		,Remark
+		,CurrentStatus
+		,VerifierId
+		,ApproverId
+		,VerifiedStatus
+		,ApprovedStatus
+		,HRStatus
+		,CreatedDate
+		,CreatedBy
+		)
+	VALUES (
+		@EmpId
+		,@KeepInViewRequestTypeId
+		,@Remark
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @VerifierId IS NOT NULL THEN @PendingStatusId
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NULL THEN @ApprovedStatusId
+			ELSE @PendingStatusId
+			END
+		,@VerifierId
+		,@ApproverId
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @VerifierId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
+			END
+		,CASE 
+			WHEN @IsTopManager = 1
+				AND @ApproverId IS NULL THEN @VerifiedStatusId
+			ELSE @PendingStatusId
+			END
+		,@PendingStatusId
+		,@CreatedDate
+		,@CreatedBy
+		)
 
-		SELECT @RequestId = cast(SCOPE_IDENTITY() AS BIGINT)
+	SELECT @RequestId = cast(SCOPE_IDENTITY() AS BIGINT)
 
-		INSERT INTO [dbo].[KeepInViewRequest] (
-			[RequestId]
-			,[EmpId]
-			,[OnDate]
-			,[KeepInViewType]
-			,[IsHalfDay]
-			,[FromTime]
-			,[ToTime]
-			,[RefNo]
-			)
-		VALUES (
-			@RequestId
-			,@EmpId
-			,@OnDate
-			,@KeepInViewType
-			,@IsHalfDay
-			,@FromTime
-			,@ToTime
-			,@RefNo
-			)
+	INSERT INTO dbo.KeepInViewRequest (
+		RequestId
+		,EmpId
+		,OnDate
+		,KeepInViewType
+		,IsHalfDay
+		,FromTime
+		,ToTime
+		,RefNo
+		)
+	VALUES (
+		@RequestId
+		,@EmpId
+		,@OnDate
+		,@KeepInViewType
+		,@IsHalfDay
+		,@FromTime
+		,@ToTime
+		,@RefNo
+		)
 
-		IF @ApproverId IS NULL
-			AND @VerifierId IS NULL
-			AND @IsTopManager = 1
-		BEGIN
-			EXEC dbo.KeepInViewRequest_Approve @RequestId = @RequestId
-				,@ActorId = @EmpId
-				,@RoleId = 3
-				,@ErrCode = @ErrCode OUTPUT
-				,@ErrMsg = @ErrMsg OUTPUT
-		END
+	IF @ApproverId IS NULL
+		AND @VerifierId IS NULL
+		AND @IsTopManager = 1
+	BEGIN
+		EXEC dbo.KeepInViewRequest_Approve @RequestId = @RequestId
+			,@ActorId = @EmpId
+			,@RoleId = 3
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
-		EXEC dbo.KeepInViewRequest_WriteLog @RequestId
-	END TRY
-
-	BEGIN CATCH
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Create keep in view request failed.'
-
-		DELETE dbo.WorkingTimeRequest
-		WHERE RequestId = @RequestId
-
-		DELETE dbo.KeepInViewRequest
-		WHERE RequestId = @RequestId
-
-		RETURN
-	END CATCH;
+	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 END

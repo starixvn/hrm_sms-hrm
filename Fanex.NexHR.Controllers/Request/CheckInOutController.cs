@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -70,6 +71,8 @@
             CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(viewModel);
         }
@@ -77,7 +80,7 @@
         [HttpPost]
         public CustomJsonResult Create(CheckInOutRequestViewModel model)
         {
-            var criteria = new InsertCheckInOutRequestCriteria
+            var criteria = new CreateCheckInOutRequestCriteria
             {
                 EmpId = model.EmployeeId,
                 OnDate = model.AttendantDate,
@@ -115,7 +118,7 @@
                 IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(new GetDisabledDateParam
                 {
                     EmployeeId = request.Employee.Id,
-                    FromDate = request.OnDate,
+                    FromDate = request.OnDate.AddMonths(-1),
                     ToDate = DateTime.Today,
                     RequestId = request.RequestId
                 });
@@ -148,7 +151,7 @@
         [HttpPost]
         public CustomJsonResult Edit(CheckInOutRequestViewModel model)
         {
-            var criteria = new UpdateCheckInOutRequestCriteria
+            var criteria = new EditCheckInOutRequestCriteria
             {
                 RequestId = model.RequestId,
                 EmpId = model.EmployeeId,
@@ -160,8 +163,7 @@
                 Remark = model.Remark,
                 ModifiedBy = sessionService.Employee.Id,
                 VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                Shift = model.Shift
+                ApproverId = model.ApproverId
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

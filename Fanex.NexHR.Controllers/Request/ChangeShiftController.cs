@@ -61,6 +61,8 @@
             };
             ViewBag.IsHost = true;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
             return View(model);
         }
 

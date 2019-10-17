@@ -167,6 +167,7 @@
                 &:disabled + label:before {
                     box-shadow: none;
                     background-color: rgb(168, 168, 168);
+                    border-color: rgb(168, 168, 168);
                 }
             }
         }

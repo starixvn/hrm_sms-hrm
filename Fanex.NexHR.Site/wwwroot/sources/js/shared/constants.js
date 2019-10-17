@@ -59,6 +59,10 @@ export const ChangeShiftType = {
     ChangeShift: 1,
     MoveOffDay: 2
 };
+export const KeepInViewType = {
+    KeepInViewByDay: 1,
+    KeepInViewByHour: 2
+};
 export const Messages = {
     notAvailable: 'Not available',
     invalidInputData: 'Invalid input data',

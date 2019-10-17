@@ -47,6 +47,7 @@ module.exports = {
         [`${styleDistPath}/changeshift.myrequest`]: `${styleSourcePath}/pages/request/change-shift/myrequest.scss`,
         [`${styleDistPath}/lateinearlyout.create`]: `${styleSourcePath}/pages/request/latein-earlyout/create.scss`,
         [`${styleDistPath}/checkinout.create`]: `${styleSourcePath}/pages/request/checkinout/create.scss`,
+        [`${styleDistPath}/keepinview.create`]: `${styleSourcePath}/pages/request/keepinview/create.scss`,
         [`${styleDistPath}/leave.myrequest`]: `${styleSourcePath}/pages/request/leave/myrequest.scss`,
 
         //
@@ -94,6 +95,8 @@ module.exports = {
         [`${jsDistPath}/checkinout.create`]: `${jsSourcePath}/request/checkinout/create.js`,
         [`${jsDistPath}/checkinout.edit`]: `${jsSourcePath}/request/checkinout/edit.js`,
         [`${jsDistPath}/keepinview.myrequest`]: `${jsSourcePath}/request/keepinview/myrequest.js`,
+        [`${jsDistPath}/keepinview.create`]: `${jsSourcePath}/request/keepinview/create.js`,
+        [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`
     }
 };

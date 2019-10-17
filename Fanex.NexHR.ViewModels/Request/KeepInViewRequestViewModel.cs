@@ -1,10 +1,11 @@
 ﻿namespace Fanex.NexHR.ViewModels.Request
 {
-    using Fanex.NexHR.Models.Request;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
 
     public class KeepInViewRequestViewModel
     {
@@ -18,7 +19,7 @@
 
         public string RefNo { get; set; }
 
-        public short KeepInViewType { get; set; }
+        public byte KeepInViewType { get; set; }
 
         public bool HalfDay { get; set; }
 
@@ -47,6 +48,9 @@
 
         public VerifierAndApproverForRequest VerifierAndApprover { get; set; }
 
-        public IList<DateTime> UnavailDates { get; set; }
+        public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+        public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
+
+        public IEnumerable<DateTime> DisabledDates { get; set; } = new List<DateTime>();
     }
 }

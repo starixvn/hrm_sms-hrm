@@ -3,13 +3,13 @@
     using System;
     using Fanex.Data.Repository;
 
-    public class UpdateCheckInOutRequestCriteria : CriteriaBase
+    public class EditCheckInOutRequestCriteria : CriteriaBase
     {
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }
 
-        public int RequestType { get; set; }
+        public byte RequestType { get; set; }
 
         public string Remark { get; set; }
 
@@ -27,17 +27,8 @@
 
         public string RefNo { get; set; }
 
-        [SpParam(Ignored = true)]
-        public string Shift { get; set; }
+        public override string GetSettingKey() => "CheckInOutRequest_Update";
 
-        public override string GetSettingKey()
-        {
-            return "CheckInOutRequest_Update";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0 && ReasonId > 0 && (RequestTime - OnDate).Days >= 0 && (RequestTime - OnDate).Days <= 1;
-        }
+        public override bool IsValid() => EmpId > 0 && ReasonId > 0 && (RequestTime - OnDate).Days >= 0 && (RequestTime - OnDate).Days <= 1;
     }
 }
