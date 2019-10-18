@@ -6,44 +6,51 @@
     ViewBag.Title = Labels.EmployeeSupervisor;
 }
 @section css{
-    @Url.CombresLink("reportsupervisorcss")
+    <link href="~/wwwroot/dist/styles/report.employee.supervisor.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("employeesupervisorreportjs")
+    <script src="~/wwwroot/dist/js/report.employee.supervisor.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-<form class="form-filter">
-    @Html.HiddenFor(model => model.SectionIds)
-    @Html.HiddenFor(model => model.IsLocal)
-    @Html.HiddenFor(model => model.EmployeeId)
-    <div class="container_24 bunhat">
-        <div class="grid_2 gridlabel">
-            <label for="Employee">@Labels.Employee</label>
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        @Html.HiddenFor(model => model.SectionIds)
+        @Html.HiddenFor(model => model.IsLocal)
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+            </div>
         </div>
-        <div class="grid_6">
-            @Html.TextBox("Employee", "", new { placeholder = Messages.SearchEmployeeWatermark })
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DepartmentSection</label>
+            </div>
+            <div class="input-form">
+                <div class="grid_6" id="Section"></div>
+            </div>
         </div>
-        <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
-        <div class="grid_6" id="Section"></div>
-        <div class="grid_2 gridlabel">@Labels.Category</div>
-        <div class="grid_3">
-            @RazorHelper.CategoryDropDownList("category", "category", "")
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.CategoryDropDownList("category", "form-control", "")
+            </div>
         </div>
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="grid_2 gridlabel">&nbsp;</div>
-        <div class="grid_5">
-            <input id="btnSubmit" type="button" value="@Labels.Submit" />
-            <input id="btnExcel" type="button" value="@Labels.Excel" />
+        <div class="form-group form-group--m">
+            <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
+            <button id="btnExcel" type="button" class="btn btn-excel">@Labels.Excel</button>
         </div>
-        <div class="clear"></div>
     </div>
 </form>
 <div id="EmployeeSupervisorDetails"></div>
