@@ -26,7 +26,6 @@
         var assistIds = $('#AssistantLeaderIds').val();
         if (assistIds) {
             var arrValues = assistIds.split(",");
-            console.log(arrValues);
             $('#AssistantLeaders').val(arrValues);
         }
         $("#AssistantLeaders").chosen();

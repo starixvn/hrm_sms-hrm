@@ -27,6 +27,8 @@ module.exports = {
         [`${styleDistPath}/section.supervisor.index`]: `${styleSourcePath}/pages/section/supervisor.index.scss`,
         [`${styleDistPath}/section.edit.supervisor`]: `${styleSourcePath}/pages/section/edit.supervisor.scss`,
         [`${styleDistPath}/section.edit.discipline.manager`]: `${styleSourcePath}/pages/section/edit.discipline.manager.scss`,
+        [`${styleDistPath}/team.index`]: `${styleSourcePath}/pages/team/team.index.scss`,
+        [`${styleDistPath}/team.edit`]: `${styleSourcePath}/pages/team/team.edit.scss`,
         [`${styleDistPath}/report.monthlyworkinghours`]: `${styleSourcePath}/pages/report/monthlyworkinghours.scss`,
         [`${styleDistPath}/report.weeklyworkinghours`]: `${styleSourcePath}/pages/report/weeklyworkinghours.scss`,
         [`${styleDistPath}/report.monthlyovertime`]: `${styleSourcePath}/pages/report/monthlyovertime.scss`,
@@ -97,6 +99,8 @@ module.exports = {
         [`${jsDistPath}/keepinview.myrequest`]: `${jsSourcePath}/request/keepinview/myrequest.js`,
         [`${jsDistPath}/keepinview.create`]: `${jsSourcePath}/request/keepinview/create.js`,
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
-        [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`
+        [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
+        [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/team.index.js`,
+        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`
     }
 };

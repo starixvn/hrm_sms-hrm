@@ -6,21 +6,20 @@
     ViewBag.Title = "Edit Section's Informations";
 }
 @section css{
-    @Url.CombresLink("sitecss")
-
+    <link href="~/wwwroot/dist/styles/team.edit.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("teameditjs")
+    <script src="~/wwwroot/dist/js/team.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step">HR Space</a>
     <a class="step" href="@Url.Action("index", "team")">@Labels.SectionManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
-<h2>@Labels.Edit</h2>
+<h2 class="page-title">@Labels.Edit</h2>
 @using (Html.BeginForm())
 {
-    <div class="bunhat">
+    <div class="card form-horizontal">
         @Html.ValidationSummary(true)
         @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
@@ -32,40 +31,41 @@
         @Html.HiddenFor(model => model.ModifiedDate)
         @Html.HiddenFor(model => model.ModifiedBy)
 
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.TeamCode)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.TeamCode)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TeamCode)
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.TeamName)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamName, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.TeamName)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TeamName)
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.DepartmentId, Labels.Department)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.DepartmentId, Labels.Department, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"))
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name")
+               , new { @class = "form-control" })
                 @Html.ValidationMessage("DepartmentId")
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Leaders, "Head")
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Leaders, "Head", new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form">
                 @Html.HiddenFor(model => model.LeaderIds)
-                <select id="Leaders" data-placeholder="Choose leaders..." multiple class="chosen-select">
+                <select id="Leaders" data-placeholder="Choose leaders..." multiple class="form-control">
                     @foreach (var employee in Model.Employees)
                     {
                         <option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
@@ -74,13 +74,13 @@
                 @Html.ValidationMessage("LeaderIds")
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.AssistantLeaders, "Assist Head")
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AssistantLeaders, "Assist Head", new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form">
                 @Html.HiddenFor(model => model.AssistantLeaderIds)
-                <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="chosen-select">
+                <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="form-control">
                     @foreach (var employee in Model.Employees)
                     {
                         <option value="@employee.Id" selected="@Model.AssistantLeaders.Any(l => l.Id == employee.Id)">@(employee.NickName + " (" + employee.FullName + ")")</option>
@@ -88,21 +88,21 @@
                 </select>
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.MailGroup)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.MailGroup, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.MailGroup)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.MailGroup)
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
+        <div class="form-group">
+            <div class="label-form">
             </div>
-            <div class="input">
-                <input type="submit" value="@Labels.Update" />
-                <a href="@Url.Action("index","team")" class="button">@Labels.Back</a>
+            <div class="input-form">
+                <input type="submit" class="btn btn-primary" value="@Labels.Update" />
+                <a href="@Url.Action("index","team")" class="btn btn-success">@Labels.Back</a>
             </div>
         </div>
     </div>

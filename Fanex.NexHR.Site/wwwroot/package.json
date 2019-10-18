@@ -14,7 +14,7 @@
   },
   "author": "",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bootstrap": "^3.3.7",
     "chosen-js": "^1.8.7",
     "floatthead": "^2.1.3",

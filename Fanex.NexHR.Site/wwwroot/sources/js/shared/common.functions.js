@@ -359,6 +359,14 @@ function hideValidationSummaryErrors(isReset) {
     $('.validation-summary-valid').hide();
 }
 
+function autoIndex() {
+    var index = 0;
+    $('tr').each(function () {
+        $(this).children("td").eq(0).html(index);
+        index = index + 1;
+    });
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -376,5 +384,6 @@ export {
     initFromDateOnChange,
     setDateRange,
     showValidationSummaryErrors,
-    hideValidationSummaryErrors
+    hideValidationSummaryErrors,
+    autoIndex
 };

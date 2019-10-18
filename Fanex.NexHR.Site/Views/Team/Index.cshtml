@@ -6,26 +6,31 @@
         var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
     }
     @section css{
-        @Url.CombresLink("sitecss")
+        <link href="~/wwwroot/dist/styles/team.index.css" rel="stylesheet" />
     }
     @section js{
-        @Url.CombresLink("teamjs")
+        <script src="~/wwwroot/dist/js/team.index.js"></script>
     }
     @section Breadcrumb {
         <a class="step">HR Space</a><span class="step">@ViewBag.Title</span>
     }
-    <h2>@ViewBag.Title</h2>
-    @if (hasPermission)
-    {
-        <div class="button-icon">
-            <span class="icon plus"></span>@Html.ActionLink("New Section", "Create")
-        </div>
-    }
+    <h2 class="page-title">@ViewBag.Title</h2>
+    <div class="filter">
+        @if (hasPermission)
+        {
+            <div class="btn btn-success btn-create">
+                <span class="fa fa-plus"></span>
+                @Html.ActionLink("New Section", "Create")
+            </div>
+        }
 
-    @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "link-button" })
-    @Html.ActionLink("Section Permission Summary", "SectionSupervisor", "report", null, new { @class = "link-button" })
-    <div class="clear">
+        @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Section Permission Summary", "SectionSupervisor", "report", null, new { @class = "btn btn-primary" })
+
+        <div class="clear">
+        </div>
     </div>
+
     <div class="space">
     </div>
     <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
