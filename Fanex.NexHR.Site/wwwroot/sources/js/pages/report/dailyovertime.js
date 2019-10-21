@@ -15,7 +15,7 @@ $(document).ready(function () {
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
-                selectedItems: sectionIds
+                isSelectedAll: true
             });
         }).catch(axiosError);
 
