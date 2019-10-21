@@ -18,10 +18,10 @@
     <div class="filter">
         @if (hasPermission)
         {
-            <div class="btn btn-success btn-create">
+            <a href="/team/create" class="btn btn-request">
                 <span class="fa fa-plus"></span>
-                @Html.ActionLink("New Section", "Create")
-            </div>
+                New Section
+            </a>
         }
 
         @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })

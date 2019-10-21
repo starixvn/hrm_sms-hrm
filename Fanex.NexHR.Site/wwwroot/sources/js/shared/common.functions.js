@@ -253,16 +253,15 @@ function initDatepicker() {
             return [isEnable];
         };
 
-        // get minDate, maxDate
-        let mindate = $this.attr('mindate'),
-            maxdate = $this.attr('maxdate');
-
         $this.datepicker({
             dateFormat: 'dd M, yy',
             beforeShowDay: checkBadDates,
             changeMonth: true,
             changeYear: true
         });
+        // get minDate, maxDate
+        let mindate = $this.attr('mindate'),
+            maxdate = $this.attr('maxdate');
 
         if (mindate && mindate !== 'null') {
             mindate = mindate.split('/');

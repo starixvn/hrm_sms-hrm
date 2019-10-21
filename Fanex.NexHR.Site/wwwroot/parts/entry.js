@@ -83,6 +83,7 @@ module.exports = {
         [`${jsDistPath}/report.unpaid.leave.summary`]: `${jsSourcePath}/report/unpaid.leave.summary.js`,
         [`${jsDistPath}/report.employee.supervisor`]: `${jsSourcePath}/report/employee.supervisor.js`,
         [`${jsDistPath}/report.section.supervisor`]: `${jsSourcePath}/report/section.supervisor.js`,
+        [`${jsDistPath}/report.time.record`]: `${jsSourcePath}/report/timerecord.js`,
         [`${jsDistPath}/overtime.myrequest`]: `${jsSourcePath}/overtime/myrequest.js`,
         [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`,
         [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`,

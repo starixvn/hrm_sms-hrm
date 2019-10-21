@@ -129,6 +129,7 @@
             return View(model);
         }
 
+        [HttpPost]
         public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
             bool hasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);

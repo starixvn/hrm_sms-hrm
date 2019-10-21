@@ -351,6 +351,8 @@
     <Content Include="wwwroot\dist\styles\user.management.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
     <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\sources\js\pages\report\employee.supervisor.js" />
+    <Content Include="wwwroot\sources\js\pages\report\timerecord.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\edit.js" />
     <Content Include="wwwroot\sources\js\pages\request\change-shift\create.js" />
     <Content Include="wwwroot\sources\js\pages\employee\create.js" />
@@ -391,12 +393,6 @@
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\buildData.js" />
     <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen-sprite.png" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen.css" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen.jquery.js" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen.jquery.min.js" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen.proto.js" />
-    <Content Include="wwwroot\sources\libs\chosen\chosen.proto.min.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\addtimerecord.js" />
@@ -1569,6 +1565,7 @@
     <Content Include="wwwroot\dist\styles\keepinview.create.js.map" />
     <Content Include="wwwroot\sources\styles\pages\team\team.index.scss" />
     <Content Include="wwwroot\sources\styles\pages\team\team.edit.scss" />
+    <Content Include="wwwroot\sources\js\pages\report\section.supervisor.js" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

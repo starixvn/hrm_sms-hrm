@@ -6,87 +6,107 @@
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    @Url.CombresLink("timerecordcss")
+    <link href="~/wwwroot/dist/styles/report.time.record.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("timerecordjs")
+    <script src="~/wwwroot/dist/js/report.time.record.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a> <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-<div class="clear"></div>
-<div class="container_24 bunhat">
-    <form class="form-filter">
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    <div class="form-horizontal clearfix">
         @if (hasPermission)
         {
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.FromDate)
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.ToDate)
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.DepartmentSection</label>
+                </div>
+                <div class="input-form">
+                    <div class="grid_6" id="Section"></div>
+                </div>
             </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Employee", Model.Employee,
+                   new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                    @Html.HiddenFor(model => model.EmployeeId)
+                </div>
             </div>
             <div class="clear"></div>
-            <div class="space"></div>
-            <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
-            <div class="grid_6" id="Section"></div>
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.Employee)
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Category</label>
+                </div>
+                <div class="input-form">
+                    @{
+                        var category = new List<SelectListItem>
+                                                                                                                                                        {
+                                                                                                                                                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                                                                                                                                            new SelectListItem() {Text = "Expat", Value = "0"},
+                                                                                                                                                            new SelectListItem() {Text = "Local", Value = "1"},
+                                                                                                                                                        };
+                    }
+                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+                </div>
             </div>
-            <div class="grid_7">
-                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-                @Html.HiddenFor(model => model.EmployeeId)
-            </div>
-            <div class="clear"></div>
-            <div class="space"></div>
-            <div class="grid_2 gridlabel">@Labels.Category</div>
-            <div class="grid_3">
-                @{
-                    var category = new List<SelectListItem>
-                                            {
-                                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                                                new SelectListItem() {Text = "Expat", Value = "0"},
-                                                new SelectListItem() {Text = "Local", Value = "1"},
-                                            };
-                }
-                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
-            </div>
-            <div class="grid_3">
-                <br />
-            </div>
-            <div class="grid_2">
-                <input id="btnSubmit" type="button" value="@Labels.Submit" />
+            <div class="form-group form-group--m">
+                <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
             </div>
         }
         else
         {
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.FromDate)
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.ToDate)
-            </div>
-            <div class="grid_4">
-                @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
-            </div>
-            <div class="grid_2">
-                <input id="btnSubmit" type="button" value="@Labels.Submit" />
+            <div class="form-group form-group--m">
+                <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
             </div>
         }
         @Html.HiddenFor(model => model.ItemsPerPage)
         @Html.HiddenFor(model => model.CurrentPage)
         @Html.HiddenFor(model => model.TeamIds)
-    </form>
-</div>
+    </div>
+</form>
+
 <div class="clear"></div>
 <div class="space"></div>
 <div id="TimeRecordContent"></div>

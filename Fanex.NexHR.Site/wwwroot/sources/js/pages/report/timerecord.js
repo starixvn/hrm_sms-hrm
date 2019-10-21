@@ -1,0 +1,195 @@
+﻿import $ from 'jquery/dist/jquery';
+import 'jquery-ui-bundle/jquery-ui';
+import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
+import 'tipsy/src/javascripts/jquery.tipsy';
+import 'floatthead/dist/jquery.floatThead';
+import 'jquery-contextmenu/dist/jquery.contextMenu';
+import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert } from '../../shared/common.functions';
+import '../../date';
+import '../../shared/multiselect-tree-view';
+import '../../shared/employee.search.in.team';
+
+(function () {
+    function initPagination() {
+        var currentPage = $('table#data #pagination #CurrentPage').val(),
+            itemsOnPage = $('table#data #pagination #ItemsPerPage').val(),
+            totalItem = $('table#data #pagination #TotalItem').val();
+
+        currentPage = currentPage ? parseInt(currentPage, 10) : 1;
+        itemsOnPage = itemsOnPage ? parseInt(itemsOnPage, 10) : 1;
+        totalItem = totalItem ? parseInt(totalItem, 10) : 1;
+
+        $('table#data #pagination #numberlist').pagination({
+            items: totalItem,
+            itemsOnPage: itemsOnPage,
+            currentPage: currentPage,
+            displayedPages: 3,
+            prevText: '<i class="fa fa-angle-left"></i>',
+            nextText: '<i class="fa fa-angle-right"></i>',
+            ellipsePageSet: false,
+            cssStyle: 'compact-theme',
+            onPageClick: function (pageNumber) {
+                $('form.filter #CurrentPage').val(pageNumber);
+                query();
+            }
+        });
+    }
+
+    function processInOut(inoutType, eventElement) {
+        var recordTimeId = parseInt(eventElement.attr('data-id'), 10);
+        blockUI();
+
+        $.post(_global.root + 'time/ProcessInOut',
+            { inoutType: inoutType, recordTimeId: recordTimeId },
+            function (response) {
+                unblockUI();
+                if (response.IsSuccessful) {
+                    query();
+                } else {
+                    alert(response.Message);
+                    return;
+                }
+            });
+    }
+
+    function processCommand (command, options) {
+        const eventElement = options.$trigger;
+        switch (command) {
+            case 'in':
+                confirm('Are you sure you change to in?', function () {
+                    processInOut(0, eventElement);
+                });
+                break;
+            case 'out':
+                confirm('Are you sure you change to out?', function () {
+                    processInOut(1, eventElement);
+                });
+                break;
+        }
+    }
+
+    function bindMenu(element, menu) {
+        let item = {};
+        if (menu === 'inMenu') {
+            item = { 'in': { name: 'In' }};
+        } else {
+            item = { 'out': { name: 'Out' }};
+        }
+
+        $.contextMenu({
+            selector: element,
+            callback: processCommand,
+            trigger: 'left',
+            menu: menu,
+            items: item
+        });
+    }
+
+    function initDatepicker() {
+        $('.datepicker').each(function () {
+            let $this = $(this);
+
+            // get minDate, maxDate
+            let mindate = $this.attr('mindate'),
+                maxdate = $this.attr('maxdate');
+
+            if (mindate && mindate !== 'null') {
+                mindate = mindate.split('/');
+                $this.datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+            }
+
+            if (maxdate && maxdate !== 'null') {
+                maxdate = maxdate.split('/');
+                $this.datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
+            }
+
+            $this.datepicker({
+                dateFormat: 'dd M, yy',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $this.attr('readonly', 'readonly');
+            $this.keydown(function (e) {
+                const tab = 9, enter = 13;
+                if (e.keyCode === tab || e.keyCode === enter) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            $this.closest('.calendar-form').find('.icon-calendar').off('click').on('click', function () {
+                if ($this.datepicker('widget').is(':visible')) {
+                    $this.datepicker('hide');
+                } else {
+                    $this.datepicker('show');
+                }
+            });
+        });
+    }
+
+    function query() {
+        $('#TeamIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $.ajax({
+            url: _global.root + 'Report/TimeRecordDetail',
+            type: 'POST',
+            dataType: 'html',
+            data: $('form.filter').serialize(),
+            success: function (data) {
+                $('#TimeRecordContent').html(data);
+                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+
+                if ($('table#data #pagination').length > 0) {
+                    bindMenu('.in-action', 'inMenu');
+                    bindMenu('.out-action', 'outMenu');
+
+                    if ($('table#data #pagination').length > 0) {
+                        initPagination();
+
+                        $('#ItemsPerPageOption').on('change', function () {
+                            $('form.filter #ItemsPerPage').val($(this).val());
+                            $('form.filter #CurrentPage').val(1);
+                            query();
+                        });
+                    }
+                    floatThead('table#data');
+                }
+            },
+            error: function () {
+                alert(_messages.errorTryAgain);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: _global.root + 'Department/GetHierarchy',
+            success: function (data) {
+                $('#Section').multiSelectTreeView({
+                    data: data,
+                    isSelectedAll: true
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }
+        });
+
+        $('#Employee').change(function () {
+            if ($.trim($(this).val()).length === 0) {
+                $(this).val('');
+            }
+
+            return false;
+        });
+
+        $('#btnSubmit').on('click', function () {
+            $('form.filter #CurrentPage').val(1);
+            query();
+        });
+        initDatepicker();
+        initFromDateOnChange($('#FromDate'), $('#ToDate'));
+        query();
+    });
+})();
