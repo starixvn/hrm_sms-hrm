@@ -8,89 +8,106 @@
 }
 
 @section css{
-    @Url.CombresLink("disciplinecss")
+    <link href="~/wwwroot/dist/styles/report.weekendleave.detail.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("weekendleavedetailjs")
+    <script src="~/wwwroot/dist/js/report.weekendleave.detail.js"></script>
 }
 @section Breadcrumb {
     <a class="step" href="@Url.Action("weekendleavesummary", "report")">@Labels.WeekendLeaveSummary</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@Labels.WeekendLeaveDetail</h2>
-<form class="form-filter">
-    <div class="container_24 bunhat">
+<h2 class="page-title">@Labels.WeekendLeaveDetail</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
         @Html.HiddenFor(model => model.TeamId)
         @Html.HiddenFor(model => model.TeamName)
-        <div class="space"></div>
-        <div class="grid_2 gridlabel">@Labels.DateRange</div>
-        <div class="grid_6">
-            @Html.DropDownListFor(model => model.DateRange, Model.DateRange)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DateRange</label>
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.DateRange, Model.DateRange, new { @class = "form-control" })
+            </div>
         </div>
 
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.FromDate)
-        </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.FromDate, minDate: new DateTime(2010, 1, 1))
-        </div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.ToDate)
-        </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.ToDate, minDate: new DateTime(2010, 1, 1))
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.FromDate</label>
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
         </div>
 
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.TeamId, Labels.DepartmentSection)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.ToDate</label>
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
         </div>
-        <div class="grid_6" id="Section"></div>
-        <div class="grid_2 gridlabel">@Labels.Category</div>
-        <div class="grid_4">
-            @{
-                var category = new List<SelectListItem>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="input-form">
+                @{
+                    var category = new List<SelectListItem>
+                                                            {
+                                                            new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                                                            new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                                                            new SelectListItem() {Text = Labels.Local, Value = "true"},
+                                                            };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DepartmentSection</label>
+            </div>
+            <div class="input-form">
+                <div class="grid_6" id="Section"></div>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaveTypeId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var leaveType = new List<SelectListItem>
                             {
-                                new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                                new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                                new SelectListItem() {Text = Labels.Local, Value = "true"},
+                                new SelectListItem() {Text = Labels.All, Value = "-1"},
+                                new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
+                                new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
                             };
-            }
-            @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
-        </div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.Employee)
-        </div>
-        <div class="grid_7">
-            @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark })
-            @Html.HiddenFor(model => model.EmployeeId)
+                }
+                @Html.DropDownListFor(model => model.LeaveTypeId, leaveType, new { @class = "form-control" })
+            </div>
         </div>
 
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.LeaveTypeId)
-        </div>
-        <div class="grid_6">
-            @{
-                var leaveType = new List<SelectListItem>
-                                    {
-                                        new SelectListItem() {Text = Labels.All, Value = "-1"},
-                                        new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
-                                        new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
-                                    };
-            }
-            @Html.DropDownListFor(model => model.LeaveTypeId, leaveType)
-        </div>
-
-        <div class="clear"></div>
-        <div class="space"></div>
-        <div class="prefix_2 grid_2">
-            <input type="button" id="submit" value="@Labels.Submit" />
-        </div>
-        <div class="prefix_2 grid_2">
-            <input type="button" value="Excel" id="btnExcel" />
+        <div class="form-group form-group--m">
+            <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+            <button type="button" id="btnExcel" class="btn btn-excel">Excel</button>
         </div>
     </div>
 </form>
