@@ -4,30 +4,34 @@
     ViewBag.Title = "My timesheet";
 }
 @section css{
-    @Url.CombresLink("timesheetcss")
+    <link href="~/wwwroot/dist/styles/report.timesheet.css" rel="stylesheet" />
+
 }
 @section js{
-    @Url.CombresLink("timesheetjs")
+    <script src="~/wwwroot/dist/js/report.timesheet.js"></script>
 }
 @section Breadcrumb {
     <a class="step">Personal</a> <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 
-<form class="form-filter" action="" novalidate="novalidate">
-    <div class="container_24 bunhat">
-        <div class="grid_1 gridlabel">@Labels.Month</div>
-        <div class="grid_4">
-            <div id="monthPickr"></div>
-            <input type="hidden" id="Year" name="Year" value="@DateTime.Now.Year" />
-            <input type="hidden" id="Month" name="Month" value="@DateTime.Now.Month" />
-            <input type="hidden" id="maxDate" value="@DateTime.Now.GetMaxDate().ToString("yyyy/MM/dd")" />
-            @Html.HiddenFor(model => model.EmpId)
+<form class="filter" action="" novalidate="novalidate">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Month</label>
+            </div>
+            <div class="input-form">
+                <div id="monthPickr"></div>
+                <input type="hidden" id="Year" name="Year" value="@DateTime.Now.Year" />
+                <input type="hidden" id="Month" name="Month" value="@DateTime.Now.Month" />
+                <input type="hidden" id="maxDate" value="@DateTime.Now.GetMaxDate().ToString("yyyy/MM/dd")" />
+                @Html.HiddenFor(model => model.EmpId)
+            </div>
         </div>
-        <div class="grid_3">
-            <input type="submit" id="btnSubmit" value="@Labels.Submit" />
+        <div class="form-group form-group--m">
+            <button type="submit" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
         </div>
-        <div class="clear"></div>
     </div>
 </form>
 <div id="timesheetDetails">
