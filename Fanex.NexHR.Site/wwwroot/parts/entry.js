@@ -90,6 +90,7 @@ module.exports = {
         [`${jsDistPath}/report.timesheet`]: `${jsSourcePath}/report/timesheet.js`,
         [`${jsDistPath}/report.attendance`]: `${jsSourcePath}/report/attendance.js`,
         [`${jsDistPath}/report.weekendleave.detail`]: `${jsSourcePath}/report/weekendleave.detail.js`,
+        [`${jsDistPath}/report.weekendleave.summary`]: `${jsSourcePath}/report/weekendleave.summary.js`,
         [`${jsDistPath}/overtime.myrequest`]: `${jsSourcePath}/overtime/myrequest.js`,
         [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`,
         [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`,

@@ -58,11 +58,11 @@
             <div class="input-form">
                 @{
                     var category = new List<SelectListItem>
-                                                            {
-                                                            new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                                                            new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                                                            new SelectListItem() {Text = Labels.Local, Value = "true"},
-                                                            };
+                        {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                        new SelectListItem() {Text = Labels.Local, Value = "true"},
+                        };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
             </div>
@@ -95,11 +95,11 @@
             <div class="select-form">
                 @{
                     var leaveType = new List<SelectListItem>
-                            {
-                                new SelectListItem() {Text = Labels.All, Value = "-1"},
-                                new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
-                                new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
-                            };
+                                    {
+                                        new SelectListItem() {Text = Labels.All, Value = "-1"},
+                                        new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
+                                        new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
+                                    };
                 }
                 @Html.DropDownListFor(model => model.LeaveTypeId, leaveType, new { @class = "form-control" })
             </div>

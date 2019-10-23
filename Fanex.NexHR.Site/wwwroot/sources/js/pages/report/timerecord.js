@@ -4,7 +4,7 @@ import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert } from '../../shared/common.functions';
+import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -82,50 +82,6 @@ import '../../shared/employee.search.in.team';
             trigger: 'left',
             menu: menu,
             items: item
-        });
-    }
-
-    function initDatepicker() {
-        $('.datepicker').each(function () {
-            let $this = $(this);
-
-            // get minDate, maxDate
-            let mindate = $this.attr('mindate'),
-                maxdate = $this.attr('maxdate');
-
-            if (mindate && mindate !== 'null') {
-                mindate = mindate.split('/');
-                $this.datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
-            }
-
-            if (maxdate && maxdate !== 'null') {
-                maxdate = maxdate.split('/');
-                $this.datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
-            }
-
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                changeMonth: true,
-                changeYear: true
-            });
-
-            $this.attr('readonly', 'readonly');
-            $this.keydown(function (e) {
-                const tab = 9, enter = 13;
-                if (e.keyCode === tab || e.keyCode === enter) {
-                    return true;
-                }
-
-                return false;
-            });
-
-            $this.closest('.calendar-form').find('.icon-calendar').off('click').on('click', function () {
-                if ($this.datepicker('widget').is(':visible')) {
-                    $this.datepicker('hide');
-                } else {
-                    $this.datepicker('show');
-                }
-            });
         });
     }
 

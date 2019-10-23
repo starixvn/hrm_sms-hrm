@@ -247,7 +247,10 @@
     <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
+    <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
@@ -1056,6 +1059,7 @@
     <Content Include="Views\CheckInOut\_ViewHistory.cshtml" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
     <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
+    <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
@@ -1159,6 +1163,7 @@
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
     <Content Include="wwwroot\webpack.config.vendor.js" />
+    <Content Include="wwwroot\sources\styles\pages\report\weekendleave.detail.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">
@@ -1574,6 +1579,7 @@
     <Content Include="wwwroot\sources\styles\pages\team\team.edit.scss" />
     <Content Include="wwwroot\sources\js\pages\report\section.supervisor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\timesheet.scss" />
+    <Content Include="wwwroot\sources\styles\components\_tipsy-tooltip-table.scss" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />
