@@ -1,6 +1,11 @@
-﻿@import '../../abstracts/variables';
+﻿@import '../../../libs/SimplePagination/simplePagination.css';
+@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/multiselect-treeview';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../vendors/autocomplete';
+@import '../../components/buttons-new';
 
 .multiselect-treeview {
     .multiselect-treeview-dropdown-button {

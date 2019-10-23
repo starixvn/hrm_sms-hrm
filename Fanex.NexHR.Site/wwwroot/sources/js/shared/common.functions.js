@@ -60,6 +60,17 @@ function confirm(message, callback, options) {
     $confirm.dialog($.extend({}, defaults, options));
 }
 
+function getParam(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if (results === null)
+        return null;
+    else
+        return results[1];
+}
+
 function alert(message, callback) {
     const defaults = {
         title: 'SMS HRM',
@@ -389,6 +400,7 @@ export {
     initDatepicker,
     initFromDateOnChange,
     setDateRange,
+    getParam,
     showValidationSummaryErrors,
     hideValidationSummaryErrors,
     autoIndex
