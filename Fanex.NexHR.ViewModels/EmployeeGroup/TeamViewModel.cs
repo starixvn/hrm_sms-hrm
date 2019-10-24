@@ -31,7 +31,7 @@
         [Display(Name = "Leader", ResourceType = typeof(Labels))]
         public IList<Employee> Leaders { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Leaders field is required.")]
         public string LeaderIds { get; set; }
 
         [Display(Name = "Assistant Leader")]

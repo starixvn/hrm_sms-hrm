@@ -32,8 +32,8 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TeamCode)
             </div>
+            @Html.ValidationMessageFor(model => model.TeamCode)
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -41,8 +41,8 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.TeamName)
             </div>
+            @Html.ValidationMessageFor(model => model.TeamName)
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -50,8 +50,8 @@
             </div>
             <div class="input-form">
                 @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"), new { @class = "form-control" })
-                @Html.ValidationMessage("DepartmentId")
             </div>
+            @Html.ValidationMessage("DepartmentId")
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -65,8 +65,8 @@
                         <option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
                     }
                 </select>
-                @Html.ValidationMessage("LeaderIds")
             </div>
+            @Html.ValidationMessage("LeaderIds")
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -88,15 +88,15 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.MailGroup)
             </div>
+            @Html.ValidationMessageFor(model => model.MailGroup)
         </div>
         <div class="form-group">
             <div class="label-form">
             </div>
             <div class="input-form">
                 <input type="submit" class="btn btn-primary" value="@Labels.Add" />
-                <a href="@Url.Action("index","team")" class="btn btn-success">@Labels.Back</a>
+                <a href="@Url.Action("index","team")" class="btn btn-default">@Labels.Back</a>
             </div>
         </div>
     </div>

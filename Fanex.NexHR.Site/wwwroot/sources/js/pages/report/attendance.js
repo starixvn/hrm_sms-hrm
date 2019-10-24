@@ -117,6 +117,10 @@ function query() {
 }
 
 $(document).ready(function () {
+    $('#ExcludeDeletedUsers').on('change', function (event) {
+        $(this).val(event.target.checked);
+    });
+
     $.ajax({
         url: _global.root + 'Department/GetHierarchy',
         success: function (data) {

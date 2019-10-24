@@ -111,8 +111,10 @@
             select.itemsPerPageOption {
                 min-width: unset;
                 max-width: unset;
-                width: 60px;
+                width: 75px;
                 float: left;
+                height: 30px;
+                font-size: 13px;
             }
 
             .detailtext {
@@ -132,7 +134,7 @@
                         background: none;
                         cursor: pointer;
                         box-shadow: none;
-                        padding: 0 5px;
+                        padding: 4px 8px;
 
                         &.prev, &.next {
                             background: #78828c;
@@ -141,6 +143,10 @@
                     }
 
                     &.active {
+                        .current {
+                            border-color: #78828c;
+                        }
+
                         span {
                             background: #78828c;
                             color: #fff;

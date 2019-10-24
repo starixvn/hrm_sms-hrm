@@ -247,6 +247,7 @@
     <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
+    <Content Include="wwwroot\sources\js\pages\employee\index.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />

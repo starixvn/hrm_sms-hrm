@@ -12,11 +12,6 @@ import 'chosen-js/chosen.jquery';
         }
         $("#Leaders").chosen();
 
-        $("#Leaders").rules("add", {
-            required: true,
-            messages: { required: "The Leader field is required" }
-        });
-
         $('#Leaders').on("change", function () {
             var values = $(this).val();
             var leaderIds = values ? values.join(',') : '';
