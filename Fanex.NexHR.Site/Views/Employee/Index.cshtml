@@ -27,7 +27,8 @@
                 @Html.LabelFor(model => model.Keyword, Labels.Keyword, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Keyword, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.TextBoxFor(model => model.Keyword,
+               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
             </div>
         </div>
 
@@ -47,11 +48,11 @@
             <div class="input-form">
                 @{
                     var category = new List<SelectListItem>
-                            {
-                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                                new SelectListItem() {Text = "Expat", Value = "0"},
-                                new SelectListItem() {Text = "Local", Value = "1"},
-                            };
+                                            {
+                                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                                new SelectListItem() {Text = "Expat", Value = "0"},
+                                                new SelectListItem() {Text = "Local", Value = "1"},
+                                            };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", id = "category" })
             </div>

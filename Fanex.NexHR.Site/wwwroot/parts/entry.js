@@ -73,6 +73,7 @@ module.exports = {
         [`${jsDistPath}/employee.index`]: `${jsSourcePath}/employee/index.js`,
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
         [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,
+        [`${jsDistPath}/employee.user.management`]: `${jsSourcePath}/employee/user.management.js`,
         [`${jsDistPath}/account.edit.profile`]: `${jsSourcePath}/account/edit.profile.js`,
         [`${jsDistPath}/report.monthlyworkinghours`]: `${jsSourcePath}/report/monthlyworkinghours.js`,
         [`${jsDistPath}/report.weeklyworkinghours`]: `${jsSourcePath}/report/weeklyworkinghours.js`,
