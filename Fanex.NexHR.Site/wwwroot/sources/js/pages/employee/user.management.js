@@ -44,13 +44,14 @@ import 'chosen-js/chosen.jquery';
 
     function query() {
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-
+        blockUI();
         $.ajax({
             url: _global.root + 'employee/ListEmployee',
             type: 'POST',
             dataType: 'html',
             data: $('form.filter').serialize(),
             success: function (response) {
+                unblockUI();
                 $('#user-management').html(response);
                 checkDisabledUser();
 
@@ -78,6 +79,7 @@ import 'chosen-js/chosen.jquery';
                 floatThead('table#data');
             },
             error: function () {
+                unblockUI();
                 alert(_messages.errorTryAgain);
             }
         });

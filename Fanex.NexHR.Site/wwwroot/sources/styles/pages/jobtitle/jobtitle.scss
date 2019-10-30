@@ -1,0 +1,16 @@
+﻿@import '../../abstracts/mixins';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/validation';
+@import '../../components/buttons-new';
+@import '../../components/jquery-ui-dialog';
+
+#create-dialog, #edit-dialog {
+    .form-group {
+        width: 100%;
+
+        .input-form, .select-form {
+            width: calc(100% - 8rem);
+        }
+    }
+}

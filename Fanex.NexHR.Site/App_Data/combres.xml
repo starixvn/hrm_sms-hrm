@@ -172,16 +172,6 @@
       <resource path="~/wwwroot/dist/styles/annual.leave.balance.index.css" />
     </resourceSet>
 
-    <resourceSet name="jobtitlecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/employee.defaultschedule.css" />
-      <resource path="~/styles/jobtitle.css" />
-    </resourceSet>
-    <resourceSet name="jobtitle" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/JobTitle/jobtitle.js" />
-    </resourceSet>
-
     <resourceSet name="logincss" type="css">
       <resource path="~/styles/login.css" />
     </resourceSet>

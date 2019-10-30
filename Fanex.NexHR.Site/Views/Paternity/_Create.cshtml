@@ -1,15 +1,6 @@
 ﻿@using Fanex.NexHR.Core.Constants;
 @model Fanex.NexHR.ViewModels.Paternity.PaternityViewModel
 
-@{
-    ViewBag.Title = "Create";
-}
-
-@section Breadcrumb {
-    <a class="step">@Labels.EmployeeManagement</a>
-    <a class="step">Patenrity</a>
-    <a class="step">@ViewBag.Title</a>
-}
 <div>
     @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "create-form", @class = "dialog-form" }))
     {

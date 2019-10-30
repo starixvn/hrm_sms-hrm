@@ -2,18 +2,6 @@
 @using Fanex.NexHR.ViewModels.Postnatal
 @model PostnatalViewModel
 
-@{
-    ViewBag.Title = "Edit";
-}
-@section css{
-    @Url.CombresLink("disciplinecss")
-}
-
-@section Breadcrumb {
-    <a class="step">@Labels.EmployeeManagement</a>
-    <a class="step">@Labels.Postnatal</a>
-    <a class="step">@ViewBag.Title</a>
-}
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
 {
     @Html.ValidationSummary()

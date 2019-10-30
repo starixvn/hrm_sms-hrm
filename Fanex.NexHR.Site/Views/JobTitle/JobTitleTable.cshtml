@@ -4,65 +4,84 @@
     var totalColumn = hasPermission ? 8 : 6;
 }
 @model IList<LookupData>
-@if (Model.Any())
-{
-    for (var index = 0; index < Model.Count; index++)
-    {
-        var currentIndex = index + 1;
-        var job = Model[index];
-        <tr>
-            <td>
-                @currentIndex
-            </td>
-            <td class="align-left" style="width: 340px">
-                <span data-id="@job.Id">@job.Name</span>
-                @*<input type="text" value="@job.Name" id="txtJobTile_@job.Id" style="display:none;height:22px;width: 300px;" />*@
-            </td>
-            <td class="align-left">
-                @job.CategoryName
-            </td>
-            <td>
-                @job.TotalExpat
-            </td>
-            <td>
-                @job.TotalLocal
-            </td>
-            <td>
-                @if (job.Value != "0")
+    <table class="table table-custom" style="width: auto; min-width: 622px;">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.JobTitle</th>
+                <th>@Labels.Category</th>
+                <th>@Labels.TotalExpat</th>
+                <th>@Labels.TotalLocal</th>
+                <th>@Labels.Total</th>
+                @if (hasPermission)
                 {
-                    <a href="javascript:;" class="js-link-redirect-use-management" data-id="@job.Id">@job.Value</a>
+                    <th>@Labels.Edit</th>
+                    <th>@Labels.Delete</th>
                 }
-                else
-                {
-                    <span>0</span>
-                }
-            </td>
-            @if (hasPermission)
+            </tr>
+        </thead>
+        <tbody class="js-job-title-table-body">
+            @if (Model.Any())
             {
-                <td>
-                    <a href="javascript:;" class="js-link-edit-job" data-id=@job.Id data-category-id="@job.CategoryId" data-job-title="@job.Name">
-                        <i class="fa fa-pencil fa-lg icon-edit"></i>
-                    </a>
-                </td>
-                <td>
-                    @if (job.Value != "0")
+                for (var index = 0; index < Model.Count; index++)
+                {
+                    var currentIndex = index + 1;
+                    var job = Model[index];
+                    <tr>
+                        <td>
+                            @currentIndex
+                        </td>
+                        <td class="align-left" style="width: 340px">
+                            <span data-id="@job.Id">@job.Name</span>
+                            @*<input type="text" value="@job.Name" id="txtJobTile_@job.Id" style="display:none;height:22px;width: 300px;" />*@
+                        </td>
+                        <td class="align-left">
+                            @job.CategoryName
+                        </td>
+                        <td>
+                            @job.TotalExpat
+                        </td>
+                        <td>
+                            @job.TotalLocal
+                        </td>
+                        <td>
+                            @if (job.Value != "0")
+                            {
+                                <a href="javascript:;" class="js-link-redirect-use-management" data-id="@job.Id">@job.Value</a>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        @if (hasPermission)
                         {
-                        <a href="javascript:;" style="cursor:default">
-                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a href="javascript:;" class="ls-link-delete-job" data-id=@job.Id>
-                            <i class="fa fa-times fa-lg icon-delete"></i>
-                        </a>
-                    }
-                </td>
+                            <td>
+                                <a href="javascript:;" class="edit-jobtitle" data-id=@job.Id data-category-id="@job.CategoryId" data-job-title="@job.Name">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                @if (job.Value != "0")
+                                {
+                                    <a href="javascript:;" style="cursor:default">
+                                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="delete-jobtitle" data-id=@job.Id>
+                                        <i class="fa fa-times fa-lg icon-delete"></i>
+                                    </a>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
             }
-        </tr>
-    }
-}
-else
-{
-    @RazorHelper.DisplayNoInformation(colspan: totalColumn)
-}
+            else
+            {
+                @RazorHelper.DisplayNoInformation(colspan: totalColumn)
+            }
+        </tbody>
+    </table>

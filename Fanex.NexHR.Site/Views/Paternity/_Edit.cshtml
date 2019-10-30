@@ -2,15 +2,6 @@
 @using Fanex.NexHR.ViewModels.Paternity
 @model PaternityViewModel
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-@section Breadcrumb {
-    <a class="step">@Labels.EmployeeManagement</a>
-    <a class="step">@Labels.Paternity</a>
-    <a class="step">@ViewBag.Title</a>
-}
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
 {
     @Html.ValidationSummary()

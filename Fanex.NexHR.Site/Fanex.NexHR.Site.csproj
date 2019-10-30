@@ -248,6 +248,8 @@
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="wwwroot\sources\js\pages\employee\index.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
@@ -1060,6 +1062,7 @@
     <Content Include="Views\CheckInOut\_ViewHistory.cshtml" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
     <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\jobtitle\jobtitle.scss" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
