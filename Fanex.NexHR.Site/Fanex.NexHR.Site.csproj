@@ -1035,9 +1035,6 @@
     <Content Include="wwwroot\sources\js\pages\section\supervisor\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\shift-manager\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\Row.jsx" />
-    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\table.jsx" />
-    <Content Include="wwwroot\sources\js\pages\section\shift-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\table.jsx" />
