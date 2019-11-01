@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import moment from 'moment';
 
-import { axiosError, blockUI, unblockUI } from '../../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
 import buildData from '../../../shared/components/react-tree-multiselect/buildData';
 import { DateFormat } from '../../../shared/constants';
 import Search from './Search';
@@ -36,7 +36,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        axios(_global.root + 'department/GetHierarchy')
+        axios(resolveClientUrl('department/GetHierarchy'))
             .then(response => {
                 this.groupOptions = response.data;
                 const { floatData } = buildData(response.data);
@@ -53,7 +53,7 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
-        axios(_global.root + 'ScheduleArrange/GetEmployees', {
+        axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
             params: {
                 groupIds: this.state.filter.groupIds,
                 query: query,
@@ -77,7 +77,7 @@ export default class App extends Component {
 
         blockUI();
 
-        axios(_global.root + 'ScheduleArrange/GetWeeklySchedule', {
+        axios(resolveClientUrl('ScheduleArrange/GetWeeklySchedule'), {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,

@@ -5,7 +5,7 @@ import moment from 'moment';
 import axios from 'axios';
 
 import { LeaveType } from '../../shared/constants';
-import { axiosError, blockUI, unblockUI } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let calendarEl = document.getElementById('calendar');
@@ -24,7 +24,7 @@ $(document).ready(function () {
         },
         events: function (fetchInfo, successCallback, failureCallback) {
             blockUI();
-            axios(_global.root + 'calendar/GetWorkingSchedule', {
+            axios(resolveClientUrl('calendar/GetWorkingSchedule'), {
                 params: {
                     date: fetchInfo.start
                 }

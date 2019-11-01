@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, blockUI, unblockUI, reorder } from '../../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
@@ -30,7 +30,7 @@ export default class App extends Component {
     getSupervisors = () => {
         blockUI();
 
-        axios(_global.root + 'Team/GetSectionSupervisorByRoleId', {
+        axios(resolveClientUrl('Team/GetSectionSupervisorByRoleId'), {
             params: {
                 sectionId: this.sectionId,
                 roleId: this.roleId
@@ -42,7 +42,7 @@ export default class App extends Component {
 
     getEmployees = query => {
         if (query.trim().length > 1) {
-            axios(_global.root + 'employee/getemployees', {
+            axios(resolveClientUrl('employee/getemployees'), {
                 params: {
                     query,
                     enable: true,
@@ -153,7 +153,7 @@ export default class App extends Component {
         });
 
         axios({
-            url: _global.root + 'Team/EditSectionSupervisor',
+            url: resolveClientUrl('Team/EditSectionSupervisor'),
             method: 'POST',
             data: stringify({
                 sectionId: this.sectionId,
@@ -189,7 +189,7 @@ export default class App extends Component {
                     onChangeOrder={this.handleChangeOrder}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
-                <a className="btn btn-default" href={_global.root + `team/TeamSupervisor/${this.sectionId}`}>Back</a>
+                <a className="btn btn-default" href={resolveClientUrl(`team/TeamSupervisor/${this.sectionId}`)}>Back</a>
             </Fragment>
         );
     }

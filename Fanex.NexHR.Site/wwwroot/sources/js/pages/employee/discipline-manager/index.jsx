@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, blockUI, unblockUI, reorder } from '../../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 
@@ -29,7 +29,7 @@ export default class App extends Component {
     getDisciplineManagers = () => {
         blockUI();
 
-        axios(_global.root + 'Employee/GetDisciplineManagerByEmployeeId', {
+        axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
             params: {
                 employeeId: this.employeeId
             }
@@ -42,7 +42,7 @@ export default class App extends Component {
         if (query.trim().length > 1) {
             const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
 
-            axios(_global.root + 'employee/GetSupervisors', {
+            axios(resolveClientUrl('employee/GetSupervisors'), {
                 params: {
                     roleIds: this.roleId,
                     query,
@@ -112,7 +112,7 @@ export default class App extends Component {
         });
 
         axios({
-            url: _global.root + 'Employee/EditEmployeeSupervisor',
+            url: resolveClientUrl('Employee/EditEmployeeSupervisor'),
             method: 'POST',
             data: stringify({
                 employeeId: this.employeeId,
@@ -147,7 +147,7 @@ export default class App extends Component {
                     onChangeOrder={this.handleChangeOrder}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
-                <a className="btn btn-default" href={_global.root + `employee/edit/${this.employeeId}`}>Back</a>
+                <a className="btn btn-default" href={resolveClientUrl(`employee/edit/${this.employeeId}`)}>Back</a>
             </Fragment>
         );
     }

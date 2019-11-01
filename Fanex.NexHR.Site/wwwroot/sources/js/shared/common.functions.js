@@ -1,6 +1,8 @@
 ﻿import $ from 'jquery/dist/jquery';
 import moment from 'moment';
 
+const _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
+
 $.extend({
     getOrCreateDialog: function (id) {
         var $box = $('#' + id);
@@ -384,6 +386,10 @@ function autoIndex() {
     });
 }
 
+function resolveClientUrl(relativePath) {
+    return _rootUrl + relativePath;
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -403,5 +409,6 @@ export {
     getParam,
     showValidationSummaryErrors,
     hideValidationSummaryErrors,
-    autoIndex
+    autoIndex,
+    resolveClientUrl
 };

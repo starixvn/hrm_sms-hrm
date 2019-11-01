@@ -81,6 +81,7 @@
     </div>
 
     @Html.Action("GlobalScript", "UI")
+    @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/wwwroot/dist/vendors/react.js"></script>
     <script src="~/wwwroot/dist/js/main.js"></script>
     @RenderSection("js", false)

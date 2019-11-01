@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import { axiosError, blockUI, unblockUI, reorder } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../shared/common.functions';
 import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
@@ -61,8 +61,8 @@ export default class App extends Component {
 
     componentDidMount() {
         const promises = [
-            axios(_global.root + 'department/GetHierarchy'),
-            axios(_global.root + 'Calendar/GetShift', {
+            axios(resolveClientUrl('department/GetHierarchy')),
+            axios(resolveClientUrl('Calendar/GetShift'), {
                 params: {
                     query: '',
                     isShowOff: true
@@ -132,7 +132,7 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
-        axios(_global.root + 'ScheduleArrange/GetEmployees', {
+        axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
             params: {
                 groupIds: this.state.filter.groupIds,
                 query: query
@@ -154,7 +154,7 @@ export default class App extends Component {
             toDate = moment(filter.toDate).format(DateFormat);
         blockUI();
 
-        axios(_global.root + 'ScheduleArrange/GetWeeklySchedule', {
+        axios(resolveClientUrl('ScheduleArrange/GetWeeklySchedule'), {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -196,7 +196,7 @@ export default class App extends Component {
             fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
-        axios(_global.root + 'ScheduleArrange/ExportExcel', {
+        axios(resolveClientUrl('ScheduleArrange/ExportExcel'), {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -218,7 +218,7 @@ export default class App extends Component {
             fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
-        axios(_global.root + 'ScheduleArrange/ExportExcelDriverPickup', {
+        axios(resolveClientUrl('ScheduleArrange/ExportExcelDriverPickup'), {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -698,7 +698,7 @@ export default class App extends Component {
             blockUI();
 
             axios({
-                url: _global.root + 'ScheduleArrange/EditWeekly',
+                url: resolveClientUrl('ScheduleArrange/EditWeekly'),
                 method: 'POST',
                 data: stringify({ fromDate, toDate, weeklySchedules, defaultShifts }),
                 headers: {
@@ -845,7 +845,7 @@ export default class App extends Component {
         }
 
         axios({
-            url: _global.root + 'ScheduleArrange/EditWeeklyDefaultShift',
+            url: resolveClientUrl('ScheduleArrange/EditWeeklyDefaultShift'),
             method: 'POST',
             data: stringify({ weeklyDefaultShift, isUsedWeeklyDefaultShift }),
             headers: {
@@ -873,7 +873,7 @@ export default class App extends Component {
 
         if (!isEqual(remark, this.originalSchedules[gindex].members[eindex].remark)) {
             axios({
-                url: _global.root + 'ScheduleArrange/EditRemark',
+                url: resolveClientUrl('ScheduleArrange/EditRemark'),
                 method: 'POST',
                 data: stringify({ employeeId, remark }),
                 headers: {
@@ -911,7 +911,7 @@ export default class App extends Component {
 
         if (displayOrders.length > 0) {
             axios({
-                url: _global.root + 'ScheduleArrange/EditGroupOrder',
+                url: resolveClientUrl('ScheduleArrange/EditGroupOrder'),
                 method: 'POST',
                 data: stringify({ displayOrders }),
                 headers: {
@@ -941,7 +941,7 @@ export default class App extends Component {
 
         if (displayOrders.length > 0) {
             axios({
-                url: _global.root + 'ScheduleArrange/EditDisplayOrder',
+                url: resolveClientUrl('ScheduleArrange/EditDisplayOrder'),
                 method: 'POST',
                 data: stringify({ displayOrders }),
                 headers: {
@@ -971,7 +971,7 @@ export default class App extends Component {
             this.originalSchedules = reorder(schedules, sourceIndex, destinationIndex);
             this.setState({ schedules }, () => this.handleEditGroupOrder());
         } else if (resultType.includes('droppableMember')) {
-            const groupId = parseInt(resultType.split('-')[1]),
+            const groupId = parseInt(resultType.split('-')[1], 10),
                 index = schedules.findIndex(x => x.groupId === groupId);
             this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
             schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
