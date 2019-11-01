@@ -161,11 +161,11 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public JsonResult Delete(int id)
+        public CustomJsonResult Delete(int id)
         {
-            CommandResult result = teamService.Delete(sessionService.Employee.Id, id);
+            CommandResult commandResult = teamService.Delete(sessionService.Employee.Id, id);
 
-            return Json(result);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]

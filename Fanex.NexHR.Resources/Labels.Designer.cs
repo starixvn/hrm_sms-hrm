@@ -2995,6 +2995,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Section.
+        /// </summary>
+        public static string NewSection {
+            get {
+                return ResourceManager.GetString("NewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Value.
         /// </summary>
         public static string NewValue {

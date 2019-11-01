@@ -258,6 +258,8 @@
     <Content Include="wwwroot\dist\js\report.timesheet.js" />
     <Content Include="wwwroot\dist\js\report.weekendleave.detail.js" />
     <Content Include="wwwroot\dist\js\report.weekendleave.summary.js" />
+    <Content Include="wwwroot\dist\js\section.edit.js" />
+    <Content Include="wwwroot\dist\js\section.index.js" />
     <Content Include="wwwroot\dist\js\team.edit.js" />
     <Content Include="wwwroot\dist\js\team.index.js" />
     <Content Include="wwwroot\dist\styles\jobtitle.css" />
@@ -268,6 +270,10 @@
     <Content Include="wwwroot\dist\styles\report.timesheet.js" />
     <Content Include="wwwroot\dist\styles\report.weekendleave.detail.css" />
     <Content Include="wwwroot\dist\styles\report.weekendleave.detail.js" />
+    <Content Include="wwwroot\dist\styles\section.edit.css" />
+    <Content Include="wwwroot\dist\styles\section.edit.js" />
+    <Content Include="wwwroot\dist\styles\section.index.css" />
+    <Content Include="wwwroot\dist\styles\section.index.js" />
     <Content Include="wwwroot\dist\styles\team.edit.css" />
     <Content Include="wwwroot\dist\styles\team.edit.js" />
     <Content Include="wwwroot\dist\styles\team.index.css" />
@@ -422,8 +428,8 @@
     <Content Include="wwwroot\sources\js\pages\request\leave\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\common.functions.js" />
-    <Content Include="wwwroot\sources\js\pages\team\team.edit.js" />
-    <Content Include="wwwroot\sources\js\pages\team\team.index.js" />
+    <Content Include="wwwroot\sources\js\pages\section\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\section\index.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeNode.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeMultiselect.js" />
     <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\buildData.js" />
@@ -994,9 +1000,6 @@
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\shift-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\Row.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\function.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\edit.profile.js" />
     <Content Include="wwwroot\sources\js\pages\home.index.js" />
@@ -1099,6 +1102,10 @@
     <Content Include="wwwroot\dist\styles\report.weekendleave.detail.js.map" />
     <Content Include="wwwroot\dist\styles\team.edit.js.map" />
     <Content Include="wwwroot\dist\styles\team.index.js.map" />
+    <Content Include="wwwroot\dist\js\section.edit.js.map" />
+    <Content Include="wwwroot\dist\js\section.index.js.map" />
+    <Content Include="wwwroot\dist\styles\section.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\section.index.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
@@ -1615,8 +1622,8 @@
     <Content Include="wwwroot\dist\js\keepinview.create.js.map" />
     <Content Include="wwwroot\dist\js\keepinview.edit.js.map" />
     <Content Include="wwwroot\dist\styles\keepinview.create.js.map" />
-    <Content Include="wwwroot\sources\styles\pages\team\team.index.scss" />
-    <Content Include="wwwroot\sources\styles\pages\team\team.edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\edit.scss" />
     <Content Include="wwwroot\sources\js\pages\report\section.supervisor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\timesheet.scss" />
     <Content Include="wwwroot\sources\styles\components\_tipsy-tooltip-table.scss" />

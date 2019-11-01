@@ -1824,4 +1824,7 @@
   <data name="OnDate" xml:space="preserve">
     <value>On Date</value>
   </data>
+  <data name="NewSection" xml:space="preserve">
+    <value>New Section</value>
+  </data>
 </root>

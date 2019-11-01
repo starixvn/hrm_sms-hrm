@@ -8,7 +8,7 @@ import { stringify } from 'qs';
 import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
-import Table from './table/table';
+import Table from '../../section/supervisor/table/table';
 
 export default class App extends Component {
     constructor(props) {

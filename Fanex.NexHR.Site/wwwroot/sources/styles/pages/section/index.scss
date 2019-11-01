@@ -1,9 +1,6 @@
 ﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
-@import '../../layout/table';
-@import '../../layout/filter';
 @import '../../components/buttons-new';
-
-.btn-success a {
-    color: #fff;
-}
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/toastr';

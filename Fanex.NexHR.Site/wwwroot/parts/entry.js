@@ -24,11 +24,11 @@ module.exports = {
         [`${styleDistPath}/employee.postnatal`]: `${styleSourcePath}/pages/postnatal/postnatal.scss`,
         [`${styleDistPath}/report.attendance`]: `${styleSourcePath}/pages/report/report.attendance.scss`,
         [`${styleDistPath}/function.index`]: `${styleSourcePath}/pages/function.index.scss`,
+        [`${styleDistPath}/section.index`]: `${styleSourcePath}/pages/section/index.scss`,
+        [`${styleDistPath}/section.edit`]: `${styleSourcePath}/pages/section/edit.scss`,
         [`${styleDistPath}/section.supervisor.index`]: `${styleSourcePath}/pages/section/supervisor.index.scss`,
         [`${styleDistPath}/section.edit.supervisor`]: `${styleSourcePath}/pages/section/edit.supervisor.scss`,
         [`${styleDistPath}/section.edit.discipline.manager`]: `${styleSourcePath}/pages/section/edit.discipline.manager.scss`,
-        [`${styleDistPath}/team.index`]: `${styleSourcePath}/pages/team/team.index.scss`,
-        [`${styleDistPath}/team.edit`]: `${styleSourcePath}/pages/team/team.edit.scss`,
         [`${styleDistPath}/report.monthlyworkinghours`]: `${styleSourcePath}/pages/report/monthlyworkinghours.scss`,
         [`${styleDistPath}/report.weeklyworkinghours`]: `${styleSourcePath}/pages/report/weeklyworkinghours.scss`,
         [`${styleDistPath}/report.monthlyovertime`]: `${styleSourcePath}/pages/report/monthlyovertime.scss`,
@@ -64,6 +64,8 @@ module.exports = {
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function.index.js`,
+        [`${jsDistPath}/section.index`]: `${jsSourcePath}/section/index.js`,
+        [`${jsDistPath}/section.edit`]: `${jsSourcePath}/section/edit.js`,
         [`${jsDistPath}/section.edit.supervisor`]: `${jsSourcePath}/section/supervisor/index.jsx`,
         [`${jsDistPath}/section.edit.discipline.manager`]: `${jsSourcePath}/section/discipline-manager/index.jsx`,
         [`${jsDistPath}/section.edit.shift.manager`]: `${jsSourcePath}/section/shift-manager/index.jsx`,
@@ -115,8 +117,6 @@ module.exports = {
         [`${jsDistPath}/keepinview.create`]: `${jsSourcePath}/request/keepinview/create.js`,
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
-        [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/team.index.js`,
-        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`,
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`
     }
 };

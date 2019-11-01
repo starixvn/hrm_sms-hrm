@@ -1,23 +1,21 @@
-﻿@using Fanex.NexHR.ViewModels.EmployeeGroup
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.EmployeeGroup
 @model TeamViewModel
-
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = "Add new Section";
+    ViewBag.Title = Labels.Create;
 }
-
 @section css{
-    <link href="~/wwwroot/dist/styles/team.edit.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/section.edit.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/team.edit.js"></script>
+    <script src="~/wwwroot/dist/js/section.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step">HR Space</a>
     <a class="step" href="@Url.Action("index", "team")">Section Management</a>
     <span class="step">@ViewBag.Title</span>
 }
-
 <h2 class="page-title">@Labels.Create</h2>
 
 @using (Html.BeginForm())
