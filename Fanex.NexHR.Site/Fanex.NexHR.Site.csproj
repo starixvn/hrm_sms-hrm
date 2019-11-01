@@ -992,13 +992,7 @@
     <Content Include="wwwroot\sources\js\main.js" />
     <Content Include="wwwroot\sources\js\pages\report\monthlyworkinghours.js" />
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\Row.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\table.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\shift-manager\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\Row.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\table.jsx" />
-    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\table\table.jsx" />
@@ -1044,7 +1038,6 @@
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\table.jsx" />
-    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
