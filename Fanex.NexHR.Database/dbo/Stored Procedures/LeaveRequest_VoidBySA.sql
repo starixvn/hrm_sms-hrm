@@ -61,20 +61,14 @@ BEGIN
 			,1
 	END
 
-	EXEC dbo.WorkingTimeRequest_Update_TmpLeaveBalance @RequestId = @RequestId
+	EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
 		,@Status = 2
 
-	EXEC dbo.WorkingTimeRequest_Update_TmpKIVLeaveBalance @RequestId = @RequestId
+	EXEC dbo.LeaveRequest_UpdateTmpKIVLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
 		,@Status = 2
 
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR > 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Void unsuccessfully.'
-	END
 END

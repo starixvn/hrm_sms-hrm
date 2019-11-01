@@ -91,16 +91,10 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId
 
-	EXEC dbo.WorkingTimeRequest_Update_TmpLeaveBalance @RequestId = @RequestId
+	EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
 		,@Status = 2
 
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR > 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject unsuccessfully.'
-	END
 END

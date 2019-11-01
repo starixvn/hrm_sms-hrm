@@ -1,16 +1,16 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.ViewModels;
 
     public interface IWorkingCalendarRepository
     {
         IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria);
 
-        IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate);
+        IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);
 

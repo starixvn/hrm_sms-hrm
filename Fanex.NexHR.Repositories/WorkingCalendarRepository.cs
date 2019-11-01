@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.ViewModels;
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository
@@ -30,36 +30,21 @@
             }
         }
 
-        public IList<WorkingScheduleViewModel> GetWorkingSchedule(ICriteria criteria, DateTime workingDate)
+        public IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
-                {
-                    var dttWorkingSchedule = ds?.Tables[0];
-
-                    var list = new List<WorkingScheduleViewModel>();
-                    if (dttWorkingSchedule != null && dttWorkingSchedule.Rows.Count != 0)
+                return db.Query<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
+                    (dailySchedule, shift, leave, leave2) =>
                     {
-                        const int totalEmployeeInfoColumn = 5;
-                        var loopNum = (dttWorkingSchedule.Columns.Count - totalEmployeeInfoColumn) / 2;
-                        var index = totalEmployeeInfoColumn;
+                        dailySchedule.Shift = shift;
+                        dailySchedule.LeaveType = leave;
+                        dailySchedule.LeaveType2 = leave2;
 
-                        for (int i = 1; i <= loopNum; i++)
-                        {
-                            var workingDay = new WorkingScheduleViewModel
-                            {
-                                Title = dttWorkingSchedule.Rows[0][index++].ToString(),
-                                Start = new DateTime(workingDate.Year, workingDate.Month, i).ToShortDateString(),
-                                Color = dttWorkingSchedule.Rows[0][index++].ToString(),
-                            };
-
-                            list.Add(workingDay);
-                        }
-                    }
-
-                    return list;
-                }
+                        return dailySchedule;
+                    },
+                    splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2",
+                    parameterValues: criteria.GetSpParams());
             }
         }
 

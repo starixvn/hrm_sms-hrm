@@ -1,17 +1,19 @@
-﻿@model IList<WorkingScheduleViewModel>
-@section css{
-    @Url.CombresLink("workingschedulecss")
-}
-@section js{
-    @Url.CombresLink("workingschedulejs")
-}
+﻿@using Fanex.NexHR.Resources
 
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.MyWorkingSchedule;
 }
+@section css{
+    <link href="~/wwwroot/dist/styles/my.working.schedule.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/my.working.schedule.js"></script>
+}
 @section Breadcrumb {
-    <a class="step" href="#">Personal</a> <span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.Personal</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
-<h2>@Labels.MyWorkingSchedule</h2>
-<div id="calendar"></div>
+<h2 class="page-title">@Labels.MyWorkingSchedule</h2>
+<div id="calendar" class="fullcalendar-container"></div>

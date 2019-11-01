@@ -55,6 +55,7 @@ module.exports = {
         [`${styleDistPath}/checkinout.create`]: `${styleSourcePath}/pages/request/checkinout/create.scss`,
         [`${styleDistPath}/keepinview.create`]: `${styleSourcePath}/pages/request/keepinview/create.scss`,
         [`${styleDistPath}/leave.myrequest`]: `${styleSourcePath}/pages/request/leave/myrequest.scss`,
+        [`${styleDistPath}/my.working.schedule`]: `${styleSourcePath}/pages/calendar/my.working.schedule.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -115,6 +116,7 @@ module.exports = {
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
         [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/team.index.js`,
-        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`
+        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`,
+        [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`
     }
 };

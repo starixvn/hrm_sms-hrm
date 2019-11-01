@@ -102,16 +102,6 @@
       <resource path="~/scripts/views/memo.edit.js" />
     </resourceSet>
 
-    <resourceSet name="workingschedulecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/fullcalendar.css" />
-    </resourceSet>
-    <resourceSet name="workingschedulejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/libs/fullcalendar.js" />
-      <resource path="~/scripts/views/myworkingschedule.js" />
-    </resourceSet>
-
     <resourceSet name="shiftstatisticjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />

@@ -13,6 +13,7 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
 
@@ -134,16 +135,17 @@
             return View();
         }
 
-        public ActionResult GetWorkingSchedule(DateTime date, int id)
+        public ActionResult GetWorkingSchedule(DateTime date)
         {
-            var workingScheduleCriteria = new GetEmployeeCalendarByMonthCriteria
+            var criteria = new GetEmployeeCalendarByMonthCriteria
             {
-                ReportDate = date,
-                EmpId = id
+                EmpId = sessionService.Employee.Id,
+                FromDate = date,
+                ToDate = date.AddMonths(1).AddDays(-1)
             };
-            var workingSchedule = workingCalendarService.GetWorkingSchedule(workingScheduleCriteria);
+            IEnumerable<DailySchedule> workingSchedule = workingCalendarService.GetWorkingSchedule(criteria);
 
-            return Json(workingSchedule, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = workingSchedule, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult WorkingCalendars()

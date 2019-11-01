@@ -6,6 +6,7 @@
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.ViewModels;
 
@@ -57,15 +58,9 @@
             return employeeShifts ?? new List<EmployeeShiftModel>();
         }
 
-        public IList<WorkingScheduleViewModel> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
+        public IEnumerable<DailySchedule> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
         {
-            IList<WorkingScheduleViewModel> workingSchedule = null;
-            if (criteria.IsValid())
-            {
-                workingSchedule = workingCalendarRepository.GetWorkingSchedule(criteria, criteria.ReportDate);
-            }
-
-            return workingSchedule;
+            return workingCalendarRepository.GetWorkingSchedule(criteria);
         }
 
         public IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
