@@ -1,12 +1,11 @@
-﻿@import '../../abstracts/variables';
-@import '../../abstracts/mixins';
-@import '../../components/buttons-new';
-@import '../../components/card';
-@import '../../components/checkbox';
-@import '../../components/form-horizontal';
-@import '../../components/validation';
-@import '../../layout/toastr';
-@import '../../vendors/autocomplete';
+﻿@import '../../abstracts/_variables.scss';
+@import '../../abstracts/_mixins.scss';
+@import '../../components/_buttons-new.scss';
+@import '../../components/_card.scss';
+@import '../../components/_form-horizontal.scss';
+@import '../../components/_validation.scss';
+@import '../../vendors/_autocomplete.scss';
+@import '../../components/_checkbox.scss';
 
 .card {
     width: 800px;
@@ -25,15 +24,6 @@
                 font-weight: normal;
                 margin-left: 5px;
             }
-        }
-    }
-
-    .request-time {
-        display: flex;
-        align-items: center;
-
-        select {
-            max-width: 80px;
         }
     }
 }

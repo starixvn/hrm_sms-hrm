@@ -106,10 +106,11 @@
         public ActionResult Edit(int departmentId)
         {
             Department department = departmentService.GetById(departmentId);
-            IList<Department> parentDepartments = departmentService.GetParentDepartment(departmentId);
+             IList<Department> parentDepartments = departmentService.GetDepartment();
             var model = new EditDepartmentViewModel
             {
                 DeprtamentId = departmentId,
+
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,

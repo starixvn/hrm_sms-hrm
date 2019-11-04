@@ -1,4 +1,6 @@
 ﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @model DisciplineSummaryViewModel
 @{
     ViewBag.Title = Labels.DisciplineSummary;
@@ -12,7 +14,7 @@
 @section Breadcrumb {
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@Labels.DisciplineSummary</h2>
+<h2 class="page-title">@Labels.DisciplineSummary</h2>
 <form class="form-filter">
     @Html.HiddenFor(model => model.TeamId)
     @Html.HiddenFor(model => model.TeamName)
@@ -42,11 +44,11 @@
         <div class="grid_4">
             @{
                 var category = new List<SelectListItem>
-                {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                    new SelectListItem() {Text = Labels.Local, Value = "true"},
-                };
+                    {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                        new SelectListItem() {Text = Labels.Local, Value = "true"},
+                    };
             }
             @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category" })
         </div>

@@ -1,13 +1,14 @@
-﻿@model DepartmentViewModel
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@model DepartmentViewModel
 @{
-   // Layout = "~/View/Share/_NewLayout.cshtml";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.DepartmentManagement;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;
-
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
 }
 @section js{
     @Url.CombresLink("departmentjs")
@@ -15,43 +16,37 @@
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-
-@using (Html.BeginForm())
+<h2 class="page-title">@ViewBag.Title</h2>
+@using (Html.BeginForm("index", "department", FormMethod.Get, new { @class = "filter", style = "width: 600px;" }))
 {
     var gender = new List<SelectListItem>
-    {
-        new SelectListItem() {Text = "All", Value = ""},
-        new SelectListItem() {Text = "Active", Value = "0"},
-        new SelectListItem() {Text = "Inactive", Value = "1"}
-    };
+{
+new SelectListItem() {Text = "All", Value = ""},
+new SelectListItem() {Text = "Active", Value = "0"},
+new SelectListItem() {Text = "Inactive", Value = "1"}
+};
 
-    <div class="container_24 bunhat" style="width: auto; min-width: 490px;">
-        <div class="grid_1 gridlabel">
-            @Html.LabelFor(model => model.IsActive, @Labels.Status)
+<div class="form-horizontal clearfix">
+    <div class="form-group form-group--m">
+        <div class="label-form">
+            @Html.LabelFor(model => model.IsActive, @Labels.Status, new { @class = "control-label" })
         </div>
-        <div class="grid_2">
-            @Html.DropDownListFor(model => model.IsActive, gender)
+        <div class="select-form">
+            @Html.DropDownListFor(model => model.IsActive, gender, new { @class = "form-control" })
         </div>
-        <div class="grid_2">
-            <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-        </div>
+    </div>
+    <div class="form-group form-group--m">
+        <button type="button" id="submit" class="btn btn-primary">@Labels.Search</button>
         @if (hasPermission)
         {
-        <div class="grid_4">
-            <div class="button-icon">
-                <span class="icon plus"></span>@Html.ActionLink("New Division", "Create")
-            </div>
-        </div>
+            <a class="btn btn-request" href="@Url.Action("create", "department")">
+                <span class="fa fa-plus"></span> @Labels.NewDivision
+            </a>
         }
     </div>
-
+</div>
 }
-<div class="clear">
-</div>
-<div class="space">
-</div>
-<table class="table table-custom" style="width: auto; min-width: 500px;">
+<table class="table table-custom" style="width: auto; min-width: 600px;">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -84,7 +79,7 @@
                     </td>
                     @if (department.Manager != null)
                     {
-                        <td class="tooltip" title="@department.Manager.FullName">
+                        <td title="@department.Manager.FullName">
                             @department.Manager.NickName
                         </td>
                     }

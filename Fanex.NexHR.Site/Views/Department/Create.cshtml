@@ -1,91 +1,91 @@
-﻿@using Fanex.NexHR.ViewModels.Department
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Department
 @model AddDepartmentViewModel
 
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.AddNewDivision;
 }
 
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
 @section js{
     @Url.CombresLink("departmenteditjs")
 }
-@section Breadcrumb {
-    <a class="step">@Labels.SASpace</a>
-    <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
-    <span class="step">@ViewBag.Title</span>
-}
+    @section Breadcrumb {
+        <a class="step">@Labels.SASpace</a>
+        <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
+        <span class="step">@ViewBag.Title</span>
+    }
 
-<h2>@Labels.Create</h2>
+    <h2 class="page-title">@Labels.Create</h2>
+    <div class="card">
+        @using (Html.BeginForm("Create", "department", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
 
-@using (Html.BeginForm())
-{
-<div class="bunhat">
-    @Html.ValidationSummary(true)
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
 
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Code)
-        </div>
-        <div class="input">
-            @Html.TextBoxFor(model => model.Code, new { maxlength = "50" })
-            @Html.ValidationMessageFor(model => model.Code)
-        </div>
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ParentId, "Parent", new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"), Labels.SelectParent, new { @class = "form-control" })
+                    @Html.ValidationMessage("ParentId")
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Manager, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Manager", Model.Manager, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+
+                    @Html.ValidationMessage("Manager")
+
+                    @Html.HiddenFor(model => model.Manager)
+                    @Html.HiddenFor(model => model.ManagerId)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-custom" name="HalfDay" id="HalfDay"
+                               @(Model.IsActive ?"checked " : string.Empty ) />                            
+                        <label for="HalfDay"></label>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="form-group">
+                <div>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
+                    <button type="button" class="btn btn-success" onclick="window.history.back()">@Labels.Back</button>
+                </div>
+            </div>
+        }
     </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Name)
-        </div>
-        <div class="input">
-            @Html.TextBoxFor(model => model.Name, new { maxlength = "200" })
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-    </div>
-    
-     <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.ParentId, "Parent")
-        </div>
-        <div class="input">
-            @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"))
-            @Html.ValidationMessage("ParentId")
-        </div>
-    </div>
-
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Manager)
-        </div>
-        <div class="input">
-            @Html.TextBox("Manager", Model.Manager, new { placeholder = Messages.SearchEmployeeWatermark })
-            
-            @Html.ValidationMessage("Manager")
-            
-            @Html.HiddenFor(model => model.Manager)
-            @Html.HiddenFor(model => model.ManagerId)
-        </div>
-    </div>
-
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.IsActive)
-        </div>
-        <div class="input">
-            @Html.CheckBoxFor(model => model.IsActive)
-        </div>
-    </div>
-
-    <div class="formrow">
-        <div class="label">
-
-        </div>
-        <div class="input">
-            <input type="submit" value="@Labels.Add"/>
-            <a href="@Url.Action("index", "department")" class="button">@Labels.Back</a>
-        </div>
-    </div>
-
-</div>
-}

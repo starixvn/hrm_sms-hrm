@@ -2950,6 +2950,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Division.
+        /// </summary>
+        public static string NewDivision {
+            get {
+                return ResourceManager.GetString("NewDivision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Hire.
         /// </summary>
         public static string NewHire {
@@ -3990,6 +3999,15 @@ namespace Fanex.NexHR.Resources {
         public static string SelectMarriageStatus {
             get {
                 return ResourceManager.GetString("SelectMarriageStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -- Select a Parent --.
+        /// </summary>
+        public static string SelectParent {
+            get {
+                return ResourceManager.GetString("SelectParent", resourceCulture);
             }
         }
         
