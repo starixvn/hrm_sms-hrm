@@ -56,7 +56,9 @@ module.exports = {
         [`${styleDistPath}/keepinview.create`]: `${styleSourcePath}/pages/request/keepinview/create.scss`,
         [`${styleDistPath}/leave.myrequest`]: `${styleSourcePath}/pages/request/leave/myrequest.scss`,
         [`${styleDistPath}/my.working.schedule`]: `${styleSourcePath}/pages/calendar/my.working.schedule.scss`,
-
+        [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
+        [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
+       
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/home.index`]: `${jsSourcePath}/home.index.js`,

@@ -1,5 +1,6 @@
 ﻿@model DepartmentViewModel
 @{
+   // Layout = "~/View/Share/_NewLayout.cshtml";
     ViewBag.Title = @Labels.DepartmentManagement;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;

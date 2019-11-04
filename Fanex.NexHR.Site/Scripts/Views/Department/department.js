@@ -21,14 +21,17 @@ function filterDepartment() {
     var isActive = "";
     if (status == 0) {
         isActive = true;
-    } else {
+    }
+    else {
         isActive = false;
     }
 
     console.log(status);
-    if (status != 'undefined')
-    {
+    if (status != "") {
         window.location.href = _global.root + 'department/index?isActive=' + isActive;
+    }
+    else {
+        window.location.href = _global.root + 'department/index?isActive=null';
     }
 }
 
