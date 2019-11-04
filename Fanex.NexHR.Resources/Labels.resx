@@ -1824,15 +1824,13 @@
   <data name="OnDate" xml:space="preserve">
     <value>On Date</value>
   </data>
-<<<<<<< HEAD
   <data name="NewSection" xml:space="preserve">
     <value>New Section</value>
-=======
+  </data>
   <data name="NewDivision" xml:space="preserve">
     <value>New Division</value>
   </data>
   <data name="SelectParent" xml:space="preserve">
     <value>-- Select a Parent --</value>
->>>>>>> 123025 - change new layout of Division
   </data>
 </root>
