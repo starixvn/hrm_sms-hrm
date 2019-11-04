@@ -1016,7 +1016,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\THead.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx"><SonarQubeExclude>true</SonarQubeExclude></Content>
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftMultipleModal.jsx" />
