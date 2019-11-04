@@ -516,7 +516,10 @@ BEGIN
 		OR empca.LeaveDay = 0.5
 
 	UPDATE empca
-	SET empca.LeaveDay = empca.LeaveDay + rq.LeaveDay
+	SET empca.LeaveDay = CASE 
+			WHEN empca.LeaveDay = 1 THEN 1
+			ELSE empca.LeaveDay + rq.LeaveDay
+			END
 		,empca.IsLeaveDay = 1
 		,empca.LeaveTypeId2 = rq.LeaveTypeId
 		,empca.FromTime2 = rq.FromTime

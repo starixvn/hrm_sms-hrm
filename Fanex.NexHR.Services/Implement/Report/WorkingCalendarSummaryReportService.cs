@@ -5,9 +5,9 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Repositories;
     using OfficeOpenXml;
 
     public interface IWorkingCalendarSummaryReportService
@@ -21,11 +21,11 @@
     {
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
-        private readonly IBaseService baseService;
+        private readonly IReportRepository repository;
 
-        public WorkingCalendarSummaryReportService(IBaseService baseService)
+        public WorkingCalendarSummaryReportService(IReportRepository repository)
         {
-            this.baseService = baseService;
+            this.repository = repository;
         }
 
         public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param)
@@ -39,7 +39,7 @@
                 GroupIds = param.SectionIds,
                 Employee = param.Employee
             };
-            return baseService.GetData<WorkingCalendarSummary>(criteria);
+            return repository.GetWorkingCalendarSummary(criteria);
         }
 
         public byte[] Export(
@@ -97,7 +97,7 @@
                         {
                             WorkingCalendarSummary item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
                             template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                            worksheet.Cells[rowIndex, colIndex].Value = item?.Shift;
+                            worksheet.Cells[rowIndex, colIndex].Value = item != null ? GetShift(item) : string.Empty;
                             colIndex++;
                         }
 
@@ -109,6 +109,81 @@
                     return xlPackage.GetAsByteArray();
                 }
             }
+        }
+
+        private static string GetShift(WorkingCalendarSummary workingCalendar)
+        {
+            var shift = string.Empty;
+
+            if (workingCalendar.IsLeaveOffDay)
+            {
+                shift = "Off";
+            }
+            else if (workingCalendar.IsLeaveDay)
+            {
+                shift = GetShiftOnLeaveDay(workingCalendar);
+            }
+            else if (workingCalendar.IsHoliday)
+            {
+                shift = GetShiftOnHoliday(workingCalendar);
+            }
+            else if (workingCalendar.IsOffDay)
+            {
+                shift = workingCalendar.Shift != null ? workingCalendar.Shift.Code : "Off";
+            }
+            else
+            {
+                shift = workingCalendar.Shift?.Code;
+            }
+
+            return shift;
+        }
+
+        private static string GetShiftOnHoliday(WorkingCalendarSummary workingCalendar)
+        {
+            var shift = string.Empty;
+            if (workingCalendar.IsOffDay)
+            {
+                shift = "Off";
+            }
+            else if (workingCalendar.Shift != null)
+            {
+                shift = workingCalendar.Shift.Code;
+            }
+            else
+            {
+                shift = "PH";
+            }
+
+            return shift;
+        }
+
+        private static string GetShiftOnLeaveDay(WorkingCalendarSummary workingCalendar)
+        {
+            var shift = string.Empty;
+            if (workingCalendar.IsHoliday)
+            {
+                shift = "PH";
+            }
+            else if (workingCalendar.IsOffDay)
+            {
+                shift = "Off";
+            }
+            else if (workingCalendar.IsLeaveHalfDay)
+            {
+                shift = $"{workingCalendar.LeaveType.Code} ½";
+            }
+            else
+            {
+                shift = workingCalendar.LeaveType.Code;
+
+                if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Code != workingCalendar.LeaveType2.Code)
+                {
+                    shift = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
+                }
+            }
+
+            return shift;
         }
     }
 }

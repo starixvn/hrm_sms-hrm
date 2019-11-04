@@ -111,6 +111,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportRepository.cs" />
     <Compile Include="WorkingCalendarRepository.cs" />
+    <Compile Include="WorkingCalendarSummaryReportRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

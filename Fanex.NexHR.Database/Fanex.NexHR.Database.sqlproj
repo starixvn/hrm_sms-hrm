@@ -184,7 +184,7 @@
     <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
     <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
     <Build Include="dbo\Stored Procedures\Group_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByMonth.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetMonthlyByEmployeeId.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByWeekly.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetMemberByManager.sql" />
     <Build Include="dbo\Stored Procedures\Report_LeaveSummary.sql" />

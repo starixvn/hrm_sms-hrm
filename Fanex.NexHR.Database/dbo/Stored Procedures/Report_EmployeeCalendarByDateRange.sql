@@ -19,60 +19,33 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE -- employee status
-		@Enable TINYINT = 1
+	DECLARE @employeeIds VARCHAR(MAX) -- employee status
+		,@Enable TINYINT = 1
 		,@Disabled TINYINT = 2
 		,@Deleted TINYINT = 3
-
-	CREATE TABLE #tblGroupIds (GroupId INT)
+	DECLARE @tblGroupIds TABLE (GroupId INT)
+	DECLARE @tblEmployeeIds TABLE (EmpId INT)
 
 	IF ISNULL(@GroupIds, '') <> ''
-		INSERT INTO #tblGroupIds (GroupId)
+		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
 	ELSE
 	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
+		INSERT INTO @tblGroupIds (GroupId)
 		SELECT GroupId
 		FROM dbo.[Group] WITH (NOLOCK)
 		WHERE IsDeleted = 0
 	END
 
-	SELECT emp.EmpId AS EmployeeId
-		,emp.Code
-		,emp.NickName
-		,emp.FullName
-		,g.GroupId
-		,g.Code AS GroupCode
-		,g.[Name] AS GroupName
-		,empca.WorkDate
-		,(CASE 
-			WHEN empca.WorkDate IS NULL THEN ''
-			WHEN empca.IsHoliday = 1 THEN 'PH'
-			WHEN empca.IsOffDay = 1 THEN 'OFF'
-			WHEN empca.IsLeaveDay = 1 THEN (
-					lv.Code + CASE 
-					WHEN lv2.LeaveTypeId IS NOT NULL THEN '/' + lv2.Code
-					WHEN empca.LeaveDay = 1 THEN ''
-					WHEN empca.LeaveDay = 0.5 THEN '½'
-					ELSE '' END
-					)
-			WHEN s.Code IS NOT NULL THEN s.Code
-			ELSE '' END
-			) AS Shift
+	INSERT INTO @tblEmployeeIds (EmpId)
+	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
 		) AS member ON emp.EmpId = member.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
-		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = emp.EmpId
-		AND empca.WorkDate BETWEEN @FromDate
-			AND @ToDate
-		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON empca.ShiftId = s.ShiftID
-		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON empca.LeaveTypeId = lv.LeaveTypeId
-		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
 	WHERE (
 			@EmployeeStatusId IS NULL
 			OR (
@@ -96,15 +69,50 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblGroupIds AS tblgr
+			FROM @tblGroupIds AS tblgr
 			WHERE tblgr.GroupId = emp.GroupId
 			)
 		AND (
 			@IsLocal IS NULL
 			OR empsum.IsLocal = @IsLocal
 			)
+
+	SELECT @employeeIds = COALESCE(@employeeIds + ',', '') + CAST(EmpId AS VARCHAR(20))
+	FROM @tblEmployeeIds
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
+		,@toDate = @toDate
+		,@empIds = @employeeIds
+
+	SELECT emp.EmpId AS EmployeeId
+		,emp.Code
+		,emp.NickName
+		,emp.FullName
+		,g.[Name] AS Section
+		,empca.WorkDate
+		,empca.IsOffDay
+		,empca.IsHoliday
+		,empca.IsLeaveOffDay
+		,empca.IsLeaveDay
+		,empca.LeaveDay
+		,empca.ShiftId
+		,shift.Code
+		,shift.[Name]
+		,empca.LeaveTypeId
+		,lv1.Code
+		,lv1.[Name]
+		,lv2.LeaveTypeId AS LeaveTypeId2
+		,lv2.Code
+		,lv2.[Name]
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN @tblEmployeeIds AS member ON emp.EmpId = member.EmpId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
+		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
+		AND empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON shift.ShiftId = empca.ShiftId
+		LEFT JOIN dbo.LeaveType AS lv1 WITH (NOLOCK) ON empca.LeaveTypeId = lv1.LeaveTypeId
+		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
 	ORDER BY emp.NickName
 		,empca.WorkDate
-
-	DROP TABLE #tblGroupIds
 END

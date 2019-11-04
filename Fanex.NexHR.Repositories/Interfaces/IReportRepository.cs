@@ -6,7 +6,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
 
-    public interface IReportRepository
+    public partial interface IReportRepository
     {
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria);
 

@@ -13,7 +13,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
 
-    public class ReportRepository : IReportRepository
+    public partial class ReportRepository : IReportRepository
     {
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
         {

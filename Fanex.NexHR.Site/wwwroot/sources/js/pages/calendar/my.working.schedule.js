@@ -66,8 +66,7 @@ $(document).ready(function () {
                             }
 
                             if (item.isLeaveHalfDay) {
-                                const leaveCode = item.leaveType.code + ' ½';
-                                shift = item.shift !== null ? item.shift.code + '|' + leaveCode : leaveCode;
+                                shift = item.leaveType.code + ' ½';
                             } else {
                                 shift = item.leaveType.code;
 

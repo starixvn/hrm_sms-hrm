@@ -1,15 +1,12 @@
 ﻿namespace Fanex.NexHR.Models.Report
 {
-    using System;
+    using Fanex.NexHR.Models.ScheduleArrange;
 
-    public class WorkingCalendarSummary
+    public class WorkingCalendarSummary : DailySchedule
     {
-        public int EmployeeId { get; set; }
         public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
         public string Section { get; set; }
-        public DateTime WorkDate { get; set; }
-        public string Shift { get; set; }
     }
 }
