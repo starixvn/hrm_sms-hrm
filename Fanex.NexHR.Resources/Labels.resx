@@ -1833,4 +1833,7 @@
   <data name="SelectParent" xml:space="preserve">
     <value>-- Select a Parent --</value>
   </data>
+  <data name="DisciplineRule" xml:space="preserve">
+    <value>Discipline Rule</value>
+  </data>
 </root>

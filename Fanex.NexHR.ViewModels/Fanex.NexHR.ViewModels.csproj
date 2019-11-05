@@ -111,6 +111,7 @@
     <Compile Include="EmployeeGroup\TeamSupervisorViewModel.cs" />
     <Compile Include="Request\ProcessRequestViewModel.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
+    <Compile Include="Section\DisciplineRuleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Report\TimeRecordViewModel.cs" />
     <Compile Include="ExtensionNumber\ExtensionNumberViewModel.cs" />

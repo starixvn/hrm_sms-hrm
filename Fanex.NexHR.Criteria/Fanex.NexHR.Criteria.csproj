@@ -189,7 +189,9 @@
     <Compile Include="ScheduleArrange\GetEmployeeCriteria.cs" />
     <Compile Include="ScheduleArrange\GetWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
+    <Compile Include="Section\EditDisciplineRuleCriteria.cs" />
     <Compile Include="Section\GetAllGroupCriteria.cs" />
+    <Compile Include="Section\GetDisciplineRuleBySectionCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />

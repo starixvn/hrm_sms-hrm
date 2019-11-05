@@ -285,6 +285,7 @@
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
@@ -1103,6 +1104,7 @@
     <Content Include="wwwroot\dist\js\section.index.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.js.map" />
     <Content Include="wwwroot\dist\styles\section.index.js.map" />
+    <Content Include="Views\Team\DisciplineRule.cshtml" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
@@ -1208,6 +1210,7 @@
     <Content Include="wwwroot\webpack.config.js" />
     <Content Include="wwwroot\webpack.config.vendor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\weekendleave.detail.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\discipline.rule.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">
@@ -1604,9 +1607,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\sources\styles\pages\discipline\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

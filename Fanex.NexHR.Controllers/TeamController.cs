@@ -18,7 +18,9 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
+    using Fanex.NexHR.ViewModels.Section;
 
+    [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
     public class TeamController : BaseController
     {
         private readonly ITeamService teamService;
@@ -39,7 +41,6 @@
             this.employeeService = employeeService;
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index()
         {
             IList<Team> teams = teamService.GetAll();
@@ -168,7 +169,6 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult TeamSupervisor(int id)
         {
             IEnumerable<TeamSupervisorModel> supervisors = teamService.GetSupervisorByTeamId(id);
@@ -225,7 +225,6 @@
         }
 
         [HttpGet]
-        [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public CustomJsonResult GetDisciplineManagerBySectionId(int sectionId)
         {
             IEnumerable<Supervisor> supervisors = teamService.GetDisciplineManagerBySectionId(sectionId);
@@ -237,6 +236,29 @@
         public CustomJsonResult EditSectionSupervisor(int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
         {
             CommandResult commandResult = teamService.EditSectionSupervisor(sessionService.Employee.Id, sectionId, roleId, supervisors);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpGet]
+        public ActionResult DisciplineRule(int id)
+        {
+            Team section = teamService.GetById(id);
+            var model = new DisciplineRuleViewModel
+            {
+                SectionId = section.Id,
+                Section = section.Name,
+                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host),
+                DisciplineRules = teamService.GetDisciplineRuleBySection(id)
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public CustomJsonResult EditDisciplineRule(int sectionId, IEnumerable<DisciplineRule> disciplineRules)
+        {
+            CommandResult commandResult = teamService.EditDisciplineRule(sessionService.Employee.Id, sectionId, disciplineRules);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

@@ -106,5 +106,22 @@
             };
             return baseService.ExecuteNonQuery(criteria);
         }
+
+        public IEnumerable<DisciplineRule> GetDisciplineRuleBySection(int sectionId)
+        {
+            var criteria = new GetDisciplineRuleBySectionCriteria { SectionId = sectionId };
+            return baseService.GetData<DisciplineRule>(criteria);
+        }
+
+        public CommandResult EditDisciplineRule(int actorId, int sectionId, IEnumerable<DisciplineRule> disciplineRules)
+        {
+            var criteria = new EditDisciplineRuleCriteria
+            {
+                SectionId = sectionId,
+                ActorId = actorId,
+                DisciplineRuleXml = disciplineRules.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

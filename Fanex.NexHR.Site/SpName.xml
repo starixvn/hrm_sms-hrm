@@ -578,4 +578,8 @@
     <Setting Key="ChangeShiftRequest_VoidBySA" SpName="ChangeShiftRequest_VoidBySA" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_GetDetailToReviewDiscipline" SpName="ChangeShiftRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0" />
   </Function>
+  <Function Name="Discipline Rule">
+    <Setting Key="DisciplineRule_GetByGroupId" SpName="DisciplineRule_GetByGroupId" DbName="nexhrx" Plain="0" />
+    <Setting Key="DisciplineRule_Update" SpName="DisciplineRule_Update" DbName="nexhrx" Plain="0" />
+  </Function>
 </Functions>

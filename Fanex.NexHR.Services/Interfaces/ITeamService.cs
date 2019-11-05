@@ -24,5 +24,9 @@
         IEnumerable<Supervisor> GetDisciplineManagerBySectionId(int sectionId);
 
         CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
+
+        IEnumerable<DisciplineRule> GetDisciplineRuleBySection(int sectionId);
+
+        CommandResult EditDisciplineRule(int actorId, int sectionId, IEnumerable<DisciplineRule> disciplineRules);
     }
 }

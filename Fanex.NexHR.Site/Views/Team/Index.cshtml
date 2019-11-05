@@ -41,6 +41,7 @@
             <th>@Labels.TotalExpat</th>
             <th>@Labels.TotalLocal</th>
             <th>@Labels.Total</th>
+            <th>@Labels.DisciplineRule</th>
             @if (hasPermission)
             {
                 <th>@Labels.Edit</th>
@@ -116,6 +117,9 @@
                             <span>@team.NoOfMembers</span>
                         }
                     }
+                </td>
+                <td>
+                    <a href="@Url.Action("disciplinerule", "team", new { Id = team.Id })">Manage</a>
                 </td>
                 @if (hasPermission)
                 {
