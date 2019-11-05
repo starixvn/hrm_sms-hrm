@@ -57,6 +57,7 @@
             root: '/'
         };
     </script>
+    @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/wwwroot/dist/vendors/react.js"></script>
     <script src="~/wwwroot/dist/js/main.js"></script>
     @RenderSection("js", false)

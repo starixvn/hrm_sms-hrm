@@ -71,8 +71,8 @@ export default class App extends Component {
     }
 
     handleRemoveEmployee = employeeId => {
-        let managers = [...this.state.managers];
-        const index = managers.findIndex(item => item.ownerId === employeeId);
+        const managers = [...this.state.managers],
+            index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
     }

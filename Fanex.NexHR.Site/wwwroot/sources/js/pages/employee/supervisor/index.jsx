@@ -87,15 +87,15 @@ export default class App extends Component {
     }
 
     handleRemoveEmployee = employeeId => {
-        let supervisors = [...this.state.supervisors];
-        const index = supervisors.findIndex(item => item.ownerId === employeeId);
+        const supervisors = [...this.state.supervisors],
+            index = supervisors.findIndex(item => item.ownerId === employeeId);
         supervisors.splice(index, 1);
         this.setState({ supervisors });
     }
 
     handleChangePermissionOnRequest = (employeeId, requestType, isChecked) => {
-        let supervisors = [...this.state.supervisors];
-        const index = supervisors.findIndex(item => item.ownerId === employeeId);
+        const supervisors = [...this.state.supervisors],
+            index = supervisors.findIndex(item => item.ownerId === employeeId);
         supervisors[index] = { ...supervisors[index], [requestType]: isChecked };
         this.setState({ supervisors });
     }
