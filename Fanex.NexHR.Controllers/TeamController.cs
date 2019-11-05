@@ -100,6 +100,11 @@
         public ActionResult Edit(int id)
         {
             Team team = teamService.GetById(id);
+            if (team == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
             var model = new TeamViewModel
             {
                 TeamCode = team.Code,
@@ -244,6 +249,11 @@
         public ActionResult DisciplineRule(int id)
         {
             Team section = teamService.GetById(id);
+            if (section == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
             var model = new DisciplineRuleViewModel
             {
                 SectionId = section.Id,
