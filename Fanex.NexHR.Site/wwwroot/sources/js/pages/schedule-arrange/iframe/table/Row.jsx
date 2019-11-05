@@ -1,6 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 
-import ColIndex from './ColIndex';
+import ColIndex from '../../table/ColIndex';
 import ColNickname from './ColNickname';
 import ColShift from './ColShift';
 

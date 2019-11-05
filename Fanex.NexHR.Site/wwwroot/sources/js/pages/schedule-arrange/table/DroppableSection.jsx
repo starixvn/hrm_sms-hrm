@@ -10,7 +10,7 @@ export default class DroppableSection extends PureComponent {
         return (
             <Droppable droppableId="droppable" isDropDisabled={!isHost} type="droppableSection">
                 {
-                    (provided, snapshot) =>
+                    provided =>
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((section, gindex) =>
@@ -18,11 +18,11 @@ export default class DroppableSection extends PureComponent {
                                         index={gindex} isDragDisabled={!isHost}
                                     >
                                         {
-                                            (provided, snapshot) =>
+                                            (sectionProvided, sectionSnapshot) =>
                                                 <div>
-                                                    <RowSection draggableProvided={provided}
+                                                    <RowSection draggableProvided={sectionProvided}
                                                         isHost={isHost} data={section}
-                                                        shiftOptions={shiftOptions} isDragging={snapshot.isDragging}
+                                                        shiftOptions={shiftOptions} isDragging={sectionSnapshot.isDragging}
                                                         showRemarkPopover={this.props.showRemarkPopover}
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                                                         onChangeShift={this.props.onChangeShift}
@@ -34,7 +34,7 @@ export default class DroppableSection extends PureComponent {
                                                         onChangeSectionOrder={this.props.onChangeSectionOrder}
                                                         onChangeOrder={this.props.onChangeOrder}
                                                     />
-                                                    {provided.placeholder}
+                                                    {sectionProvided.placeholder}
                                                 </div>
                                         }
                                     </Draggable>

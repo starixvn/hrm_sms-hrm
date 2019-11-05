@@ -10,7 +10,7 @@ export default class DroppableMember extends PureComponent {
         return (
             <Droppable droppableId={`dropable${groupId}`} isDropDisabled={!isHost} type={`droppableMember-${groupId}`}>
                 {
-                    (provided, snapshot) =>
+                    provided =>
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((member, eindex) =>
@@ -18,11 +18,11 @@ export default class DroppableMember extends PureComponent {
                                         index={eindex} isDragDisabled={!isHost}
                                     >
                                         {
-                                            (provided, snapshot) =>
+                                            (memberProvided, memberSnapshot) =>
                                                 <div>
-                                                    <Row draggableProvided={provided}
+                                                    <Row draggableProvided={memberProvided}
                                                         isHost={isHost} groupId={groupId} data={member}
-                                                        shiftOptions={shiftOptions} isDragging={snapshot.isDragging}
+                                                        shiftOptions={shiftOptions} isDragging={memberSnapshot.isDragging}
                                                         showRemarkPopover={this.props.showRemarkPopover}
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                                                         onChangeShift={this.props.onChangeShift}
@@ -32,7 +32,7 @@ export default class DroppableMember extends PureComponent {
                                                         onUpdateRemark={this.props.onUpdateRemark}
                                                         onChangeOrder={this.props.onChangeOrder}
                                                     />
-                                                    {provided.placeholder}
+                                                    {memberProvided.placeholder}
                                                 </div>
                                         }
                                     </Draggable>
