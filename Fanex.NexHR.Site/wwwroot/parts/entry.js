@@ -125,7 +125,6 @@ module.exports = {
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`,
-        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`
     }

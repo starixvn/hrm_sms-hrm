@@ -44,14 +44,21 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
                 unblockUI();
                 $('#contact-list').html(response);
 
-                $('.nick').tooltip({
-                    track: true,
-                    delay: 0,
-                    showURL: false,
-                    bodyHandler: function () {
+                $('.nick').tipsy({
+                    html: true,
+                    gravity: 'w',
+                    className: 'nick-tooltip',
+                    opacity: 1,
+                    live: false,
+                    title: function () {
                         var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
                         return '<img width=80px; height=80px; src="' + path + '" />';
                     }
+                });
+
+                $('.tooltip-tipsy').tipsy({
+                    html: true,
+                    gravity: 'w'
                 });
 
                 if ($('table#data #pagination').length > 0) {

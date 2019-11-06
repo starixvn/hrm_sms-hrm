@@ -36,7 +36,7 @@ function initTooltip() {
         html: true,
         gravity: 'n',
         fade: true,
-        className: 'tipsy-tooltip',
+        className: 'table-tipsy',
         title: function () {
             var object = $(this);
             var result = getMessageDetail(
@@ -86,13 +86,18 @@ function initTooltip() {
         html: true,
         gravity: 'n',
         fade: true,
-        className: 'tipsy-tooltip',
+        className: 'table-tipsy',
         title: function () {
             var object = $(this);
 
             return "<div>" + "<div class='overtime-tooltip'>" +
                 object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
         }
+    });
+
+    $('.tooltip-tipsy').tipsy({
+        html: true,
+        gravity: 'w'
     });
 }
 

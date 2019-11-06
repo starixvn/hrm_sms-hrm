@@ -16,3 +16,16 @@
         width: 220px;
     }
 }
+
+.nick-tooltip {
+    opacity: 1 !important;
+
+    .tipsy-arrow {
+        border: none !important;
+    }
+
+    .tipsy-inner {
+        background-color: #fff !important;
+        padding: 0px;
+    }
+}
