@@ -1599,7 +1599,6 @@
     <Content Include="wwwroot\sources\styles\pages\section\edit.scss" />
     <Content Include="wwwroot\sources\js\pages\report\section.supervisor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\timesheet.scss" />
-    <Content Include="wwwroot\sources\styles\components\_tipsy-tooltip-table.scss" />
     <Content Include="wwwroot\sources\styles\pages\department\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
   </ItemGroup>
