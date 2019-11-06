@@ -15,6 +15,9 @@ module.exports = {
         [`${styleDistPath}/shiftstatistic`]: `${styleSourcePath}/pages/calendar/shiftstatistic.scss`,
         [`${styleDistPath}/workingcalendars`]: `${styleSourcePath}/pages/calendar/workingcalendars.scss`,
         [`${styleDistPath}/user.management`]: `${styleSourcePath}/pages/employee/user.management.scss`,
+        [`${styleDistPath}/annual.leavebalance.index`]: `${styleSourcePath}/pages/annual-leave-balance/index.scss`,
+        [`${styleDistPath}/annual.leavebalance.employee`]: `${styleSourcePath}/pages/annual-leave-balance/employee.scss`,
+        [`${styleDistPath}/annual.leavebalance.employee.create.edit`]: `${styleSourcePath}/pages/annual-leave-balance/employee.create.edit.scss`,
         [`${styleDistPath}/employee.index`]: `${styleSourcePath}/pages/employee/index.scss`,
         [`${styleDistPath}/employee.create`]: `${styleSourcePath}/pages/employee/create.scss`,
         [`${styleDistPath}/employee.details`]: `${styleSourcePath}/pages/employee/details.scss`,
@@ -122,5 +125,8 @@ module.exports = {
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`
+        [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/team.edit.js`,
+        [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
+        [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`
     }
 };

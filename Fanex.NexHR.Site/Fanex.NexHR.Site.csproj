@@ -243,11 +243,14 @@
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
+    <Content Include="Libs\FontAwesome\HELP-US-OUT.txt" />
     <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="wwwroot\dist\js\employee.index.js" />
     <Content Include="wwwroot\dist\js\employee.user.management.js" />
+    <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
+    <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\dist\js\jobtitle.js" />
     <Content Include="wwwroot\dist\js\my.working.schedule.js" />
     <Content Include="wwwroot\dist\js\report.attendance.js" />
@@ -1079,6 +1082,8 @@
     <Content Include="wwwroot\sources\styles\pages\jobtitle\jobtitle.scss" />
     <Content Include="wwwroot\sources\styles\pages\calendar\my.working.schedule.scss" />
     <Content Include="wwwroot\dist\js\employee.index.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\employee.scss" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\employee.create.edit.scss" />
     <Content Include="wwwroot\dist\js\employee.user.management.js.map" />
     <Content Include="wwwroot\dist\js\jobtitle.js.map" />
     <Content Include="wwwroot\dist\js\my.working.schedule.js.map" />

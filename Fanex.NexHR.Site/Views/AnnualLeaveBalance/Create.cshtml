@@ -1,61 +1,67 @@
 ﻿@using Fanex.NexHR.ViewModels.AnnualLeave
 @model AnnualLeaveTransactionViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.AdjustAnnualLeaveBalance;
-	var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
+    var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/annual.leavebalance.employee.create.edit.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("sitejs")
+    <script src="~/wwwroot/dist/js/annual.leavebalance.employee.create.edit.js"></script>
 }
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">HR</a> <span class="step"><a href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
-    </span><span class="step"><a href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@ViewBag.Employee.NickName's
-        annual leave balance</a> </span><span class="step">@Labels.Adjust</span>
+    <a class="step" href="javascript:;">HR</a>
+    <a class="step" href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
+    <a class="step" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">
+        @ViewBag.Employee.NickName's annual leave balance
+    </a>
+    <span class="step">@Labels.Adjust</span>
 }
 @using (Html.BeginForm())
 {
-<div class="bunhat" style="min-width: 400px">
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.TotalDays)
-        </div>
-        <div class="input">
-            @Html.EditorFor(model => model.TotalDays)
+    <div class="card form-horizontal">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TotalDays, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TotalDays, new { @class = "form-control" })
+            </div>
             @Html.ValidationMessageFor(model => model.TotalDays)
         </div>
-    </div>
 
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Description)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+            </div>
         </div>
-        <div class="input">
-            @Html.TextAreaFor(model => model.Description)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.AffectedFrom)
-        </div>
-        <div class="input">
-            @Html.DatePickerFor(model => model.AffectedFrom)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AffectedFrom, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.AffectedFrom).ToString(), Model.AffectedFrom.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+                @*@Html.DatePickerFor(model => model.AffectedFrom, new { @class = "form-control" })*@
+            </div>
             @Html.ValidationMessageFor(model => model.AffectedFrom)
         </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.HiddenFor(model => model.EmpId)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.HiddenFor(model => model.EmpId)
+            </div>
+            <div class="input-form">
+                <button type="submit" class="btn btn-primary" >@Labels.Adjust</button>
+                <a class="btn btn-default" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@Labels.Cancel</a>
+            </div>
         </div>
-        <div class="input">
-            <input type="submit" value="@Labels.Adjust"/>
-            <a class="button" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@Labels.Cancel</a>
-        </div>
     </div>
-</div>
 }

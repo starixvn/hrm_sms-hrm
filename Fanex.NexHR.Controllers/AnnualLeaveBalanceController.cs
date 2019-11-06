@@ -91,7 +91,8 @@
                 EmployeeIds = model.EmpIds,
                 Description = model.Description,
                 CreditDays = model.CreditDays,
-                DeductDays = model.DeductDays
+                DeductDays = model.DeductDays,
+                AffectedFrom = model.AffectedFrom
             };
             CommandResult commandResult = annualLeaveBalanceService.Adjust(sessionService.Employee.Id, annualLeave);
 

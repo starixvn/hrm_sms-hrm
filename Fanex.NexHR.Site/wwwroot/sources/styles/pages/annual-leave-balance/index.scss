@@ -1,25 +1,58 @@
 ﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
+@import '../../components/checkbox';
+@import '../../components/validation';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/buttons-new';
 @import '../../components/multiselect-treeview';
+@import '../../vendors/autocomplete';
 
 span.red {
     color: Red;
-}
-
-select.category {
-    min-width: 80px;
 }
 
 div.gridlabel {
     line-height: 28px;
 }
 
-.multiselect-treeview {
-    .multiselect-treeview-dropdown-button {
-        width: 90%;
+tr.selected {
+    background: #ffff00 !important;
+}
+
+#insertform, #resetform {
+    height: auto;
+
+    .form-group {
+        width: 100%;
+
+        .input-form {
+            width: calc(100% - 8rem);
+
+            textarea {
+                min-height: 100px;
+            }
+        }
+
+        .calendar-form {
+            width: calc(100% - 8rem);
+
+            input.form-control {
+                width: calc(100% - 3rem);
+            }
+
+            .icon-calendar {
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                font-size: 1.6rem;
+                color: #A63C45;
+            }
+        }
     }
 
-    .multiselect-treeview-dropdown-list {
-        width: 220px;
+    .button-area {
+        text-align: right;
+        margin-top: 10px;
     }
 }

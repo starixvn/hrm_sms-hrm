@@ -1,91 +1,120 @@
 ﻿@using Fanex.NexHR.Resources
 @model LeaveSummaryViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.AnualLeaveBalance;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
+
 @section css{
-    @Url.CombresLink("annualbalancecss")
+    <link href="~/wwwroot/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
 }
+
 @section js{
-    @Url.CombresLink("annualbalancejs")
+    <script src="~/wwwroot/dist/js/annual.leavebalance.index.js"></script>
 }
+
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
+
+<h2 class="page-title">@ViewBag.Title</h2>
+
 @if (hasPermissionToEdit)
 {
-    <div class="container_24 bunhat">
+    <div class="filter">
         @using (Html.BeginForm())
         {
-            @Html.HiddenFor(model => model.SectionIds)
-            <div class="grid_3 gridlabel">@Labels.Category</div>
-            <div class="grid_3">
-                <select id="Category" name="Category" class="category">
-                    <option value="">-- All --</option>
-                    <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
-                    <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
-                </select>
-            </div>
-            <div class="grid_1 gridlabel">
-                @Html.LabelFor(model => model.Year)
-            </div>
-            <div class="grid_2">
-                @Html.YearPickerFor(model => model.Year, 2010)
-            </div>
-            <div class="grid_2 gridlabel">
-                @Html.LabelFor(model => model.Employee)
-            </div>
-            <div class="grid_6">
-                @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, style = "width:183px;" })
-                @Html.HiddenFor(model => model.EmployeeId)
-            </div>
-            <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
-            <div class="grid_5" id="Section"></div>
-            <div class="clear"></div>
-            <div class="space"></div>
-            <div class="clear"></div>
-            <div class="space"></div>
-            <div class="grid_3 gridlabel">
-                @Html.Label(@Labels.MinBalance)
-            </div>
-            <div class="grid_3">
-                <select id="MinAnnualBalance" name="MinAnnualBalance" class="category">
-                    <option value="0">@Labels.None</option>
-                    @for (int i = 1; i <= 10; i++)
+            <div class="form-horizontal clearfix">
+                @Html.HiddenFor(model => model.SectionIds)
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.Category</label>
+                    </div>
+                    <div class="select-form">
+                        <select id="Category" name="Category" class="category form-control">
+                            <option value="">-- All --</option>
+                            <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
+                            <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @Html.YearPickerFor(model => model.Year, 2010)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                    </div>
+                    <div class="input-form">
+                        @Html.TextBox("Employee", Model.Employee,
+                     new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                        @Html.HiddenFor(model => model.EmployeeId)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.DepartmentSection</label>
+                    </div>
+                    <div class="input-form">
+                        <div class="grid_6" id="Section"></div>
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.Label(@Labels.MinBalance, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        <select id="MinAnnualBalance" name="MinAnnualBalance" class="category form-control">
+                            <option value="0">@Labels.None</option>
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                <option selected="@(Model.MinAnnualBalance == i)" value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Labels.Submit</button>
+                    <button type="button" class="btn btn-excel" id="btnExcel">Excel</button>
+                    @if (Model.IsShowCloseBalance)
                     {
-                        <option selected="@(Model.MinAnnualBalance == i)" value="@i">@i</option>
+                        <a href="javascript:;" class="btn btn-request" id="resetblc">
+                            <span class="fa fa-plus"></span>
+                            Close Balance
+                        </a>
                     }
-                </select>
-            </div>
-            <div class="grid_12">
-                <input type="submit" value="@Labels.Submit" class="processing-submit" />
-                <input type="button" value="Excel" id="btnExcel" />
-                @if (Model.IsShowCloseBalance)
-                {
-                    <div class="button-icon">
-                        <span class="icon plus"></span><a href="javascript:;" id="resetblc">Close Balance</a>
-                    </div>
-                }
-                @if (hasPermissionToEdit)
-                {
-                    <div class="button-icon">
-                        <span class="icon plus"></span><a href="javascript:;" id="addadj">Adjustment</a>
-                    </div>
-                }
+                    @if (hasPermissionToEdit)
+                    {
+                        <a href="javascript:;" class="btn btn-request" id="addadj">
+                            <span class="fa fa-plus"></span>
+                            Adjustment
+                        </a>
+                    }
+                </div>
             </div>
         }
     </div>
-    <div class="clear"></div>
 }
+
 <table class="table table-custom persist-area">
     <thead class="persist-header">
         <tr>
             @if (hasPermissionToEdit)
             {
                 <th rowspan="2">
-                    <input type="checkbox" class="checkuncheckall" />
+                    <input type="checkbox" class="checkbox-custom" id="checkuncheckall" name="checkuncheckall" />
+                    <label for="checkuncheckall"></label>
                 </th>
             }
             <th rowspan="2">@Labels.NickName</th>
@@ -149,10 +178,11 @@
                         @if (hasPermissionToEdit)
                         {
                             <td>
-                                <input type="checkbox" class="aba" data-id="@leave.Employee.Id" />
+                                <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.Employee.Id" data-id="@leave.Employee.Id" />
+                                <label for="checkbox-@leave.Employee.Id"></label>
                             </td>
                         }
-                        <td class="tooltip" title="@leave.Employee.FullName">
+                        <td class="tooltip-tipsy" title="@leave.Employee.FullName">
                             @leave.Employee.NickName
                         </td>
                         <td>

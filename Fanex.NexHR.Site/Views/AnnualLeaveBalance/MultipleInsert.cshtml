@@ -2,47 +2,48 @@
 @model AnnualLeaveBalanceMultiViewModel
 @{
     ViewBag.Title = Labels.MultipleInsert;
-	var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
+    var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }
-@using (Html.BeginForm())
+@using (Html.BeginForm("AnnualLeaveBalance", "Adjust", FormMethod.Post))
 {
-    <div class="validation-summary-errors" id="errors-model-state">
+    @Html.ValidationSummary()
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TotalDays, new { @class = "control-label" })
             </div>
-	
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.TotalDays)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TotalDays, new { @class = "form-control", autocomplete = "off", required = true })
+            </div>
         </div>
-        <div class="input">
-            @Html.EditorFor(model => model.TotalDays)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalLeave, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.LocalLeave, localLeaveTypes, new { @class = "form-control" })
+            </div>
         </div>
-    </div>
-	
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.Description)
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 5 })
+            </div>
         </div>
-        <div class="input">
-            @Html.TextAreaFor(model => model.Description)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AffectedFrom, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.AffectedFrom).ToString(), Model.AffectedFrom.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
         </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.LabelFor(model => model.AffectedFrom)
-        </div>
-        <div class="input">
-            @Html.DatePickerFor(model => model.AffectedFrom)
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.HiddenFor(model => model.EmpIds)
-        </div>
-        <div class="input">
-            <input type="button" value="@Labels.Add" id="insert" />
-            <input type="button" value="@Labels.Cancel" id="cancel" />
-        </div>
+        @Html.HiddenFor(model => model.EmpIds)
     </div>
 }

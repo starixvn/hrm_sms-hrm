@@ -1,26 +1,24 @@
-﻿@using (Html.BeginForm())
+﻿@using (Html.BeginForm("AnnualLeaveBalance", "Reset", FormMethod.Post))
 {
-    <div class="formrow">
-        <div class="label">
-            @Html.Label("Max Balance")
+    @Html.ValidationSummary()
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.Label("Max Balance", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("MinBalance", null, new { @class = "form-control", autocomplete = "off", required = true })
+            </div>
         </div>
-        <div class="input">
-            @Html.Editor("MinBalance")
-        </div>
-    </div>
-    
-    <div class="formrow">
-        <div class="label">
-            @Html.Label("Description")
-        </div>
-        <div class="input">
-            @Html.TextArea("DescriptionReset")
-        </div>
-    </div>   
-    <div class="formrow">
-        <div class="input">
-            <input type="submit" value="@Labels.Submit" id="insert" />
-            <input type="button" value="@Labels.Cancel" id="cancelReset" />
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.Label("Description", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextArea("DescriptionReset", new { @class = "form-control", rows = 5 })
+            </div>
         </div>
     </div>
 }

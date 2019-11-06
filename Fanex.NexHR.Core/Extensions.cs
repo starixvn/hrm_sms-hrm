@@ -75,7 +75,7 @@
 
             var htmlAttribute = new
             {
-                @class = "datepicker",
+                @class = "datepicker form-control",
                 mindate = validMinDate ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
                 maxdate = validMaxDate ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
                 disabledDate

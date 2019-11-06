@@ -1,41 +1,44 @@
 ﻿@using Fanex.NexHR.ViewModels.AnnualLeave
 @model AnnualLeaveBalanceViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Model.Employee.NickName + "'s annual leave balance";
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/annual.leavebalance.employee.css" rel="stylesheet" />
 }
-@section js{
-    @Url.CombresLink("sitejs")
-}
+
 @section Breadcrumb
 {
     <a class="step" href="javascript:;">HR</a>
-    <span class="step">
-        <a href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
-    </span>
+    <a class="step" href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
     <span class="step">@Model.Employee.NickName's annual leave balance</span>
 }
-<h2>@ViewBag.Title</h2>
-<div class="container_24 bunhat">
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="filter">
     @using (Html.BeginForm())
     {
-        <div class="grid_1 gridlabel">
-            @Html.LabelFor(model => model.Year)
-        </div>
-        <div class="grid_2">
-            @Html.YearPickerFor(model => model.Year, 2010)
-        </div>
-        <div class="grid_5">
-            @Html.CheckBoxFor(model => model.ExcludedRequestTrans)
-            @Html.LabelFor(model => model.ExcludedRequestTrans)
-            @Html.HiddenFor(model => model.EmployeeId)
-        </div>
-        <div class="grid_6">
-            <input type="submit" value="@Labels.View" />
-            <div class="button-icon">
-                <span class="icon plus"></span>@Html.ActionLink("Adjustment", "Create", new { id = Model.Employee.Id })
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.YearPickerFor(model => model.Year, 2010)
+                </div>
+            </div>
+
+            <div class="form-group form-group--m" style="margin-top: 10px;">
+                <input type="checkbox" class="checkbox-custom" id="ExcludedRequestTrans" name="ExcludedRequestTrans" value="true" />
+                @Html.LabelFor(model => model.ExcludedRequestTrans, new { @for = "ExcludedRequestTrans" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+            <div class="form-group form-group--m">
+                <button type="submit" class="btn btn-primary">@Labels.View</button>
+                <a href="@Url.Action("create", "annualleavebalance", new { id = Model.Employee.Id })" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    Adjustment
+                </a>
             </div>
         </div>
     }
@@ -84,9 +87,9 @@
             }
         </tbody>
 
-                }
-                else
-                {
-                    @RazorHelper.DisplayNoInformation(6)
-                }
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(6)
+    }
 </table>
