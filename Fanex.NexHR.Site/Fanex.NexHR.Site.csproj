@@ -487,11 +487,9 @@
     <Content Include="Scripts\Views\extensionno.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
-    <Content Include="Scripts\Views\JobTitle\jobtitle.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
     <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
-    <Content Include="Scripts\Views\Team\team.edit.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
@@ -503,7 +501,6 @@
     <Content Include="Styles\Images\signin_icon.png" />
     <Content Include="Styles\Images\titlebg.png" />
     <Content Include="Styles\Images\uicon.png" />
-    <Content Include="Styles\jobtitle.css" />
     <Content Include="Styles\font.css" />
     <Content Include="Styles\Images\asc.png" />
     <Content Include="Styles\Images\bg.png" />
@@ -1523,7 +1520,6 @@
     <Content Include="Views\Request\ProcessRequest\_CheckInOutRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_LateInEarlyOutRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
-    <Content Include="Scripts\Views\Team\team.index.js" />
     <Content Include="Views\Employee\_ListEmployee.cshtml" />
     <Content Include="Views\Team\DisciplineManager.cshtml" />
     <Content Include="Views\Employee\DisciplineManager.cshtml" />

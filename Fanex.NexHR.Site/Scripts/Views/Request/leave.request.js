@@ -135,7 +135,7 @@ var LeaveRequest = (function ($) {
             }
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
-            var leaveDetailContainer = $("#tbldetail");
+            var leaveDetailContainer = $("#leaveDetails");
             if (leaveDetailContainer.length > 0) {
                 $.get(_global.root + "Leave/LeaveRequestDetail",
                     { "employeeId": employeeId, "fromDate": fromDate, "toDate": toDate, "requestId": requestId })
@@ -663,7 +663,7 @@ var LeaveRequest = (function ($) {
                     LeaveRequest.leaveTypeId.val());
             }
             else {
-                var leaveDetailContainer = $("#tbldetail");
+                var leaveDetailContainer = $("#leaveDetails");
                 leaveDetailContainer.empty();
 
                 if (LeaveRequest.halfDayOff.prop('checked')) {
