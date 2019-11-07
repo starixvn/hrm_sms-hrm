@@ -281,6 +281,7 @@
     <Content Include="wwwroot\dist\styles\team.index.css" />
     <Content Include="wwwroot\dist\styles\team.index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
+    <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
     <Content Include="wwwroot\sources\js\pages\employee\index.js" />
     <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />

@@ -106,6 +106,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string Active {
+            get {
+                return ResourceManager.GetString("Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active Users.
         /// </summary>
         public static string ActiveUsers {
@@ -4021,7 +4030,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to -- Select a Parent --.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string SelectParent {
             get {

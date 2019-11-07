@@ -11,9 +11,6 @@
 @section css{
     <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
-@section js{
-    @Url.CombresLink("departmenteditjs")
-}
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
     <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
@@ -52,7 +49,7 @@
                 @Html.LabelFor(model => model.ParentId, "Parent", new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"), Labels.SelectParent, new { @class = "form-control" })
             </div>
         </div>
 
@@ -75,18 +72,14 @@
                 @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                <div class="checkbox">
-                    <input type="checkbox" class="checkbox-custom" name="HalfDay" id="HalfDay"
-                        @(Model.IsActive ? "checked" : string.Empty ) />
-                    <label for="HalfDay"></label>
-                </div>
+                <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsActive)</div>
             </div>
         </div>
 
         <div class="form-group">
             <div>
                 <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
-                <button type="button" class="btn btn-success" onclick="window.history.back()">@Labels.Back</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>
     }

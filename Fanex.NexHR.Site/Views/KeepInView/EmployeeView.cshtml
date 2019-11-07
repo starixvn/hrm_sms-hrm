@@ -120,21 +120,21 @@
         case (byte)CurrentRequestStatus.Verified:
         case (byte)CurrentRequestStatus.NotVerified:
             <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
-                title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Approved:
         case (byte)CurrentRequestStatus.Rejected:
             <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
-                title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Processed:
         case (byte)CurrentRequestStatus.Void:
             <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
-                title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;

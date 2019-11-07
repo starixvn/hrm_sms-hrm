@@ -33,14 +33,16 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.DivisionManagement)]
-        public ActionResult Index(bool? isActive)
+        public ActionResult Index(bool? isActive = null)
         {
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DivisionManagement, Policy.Host);
             var model = new DepartmentViewModel
             {
-                IsActive = isActive
+                IsActive = isActive,
+                Departments = departmentService.GetDepartment(isActive: isActive)
             };
 
-            return Index(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -104,9 +106,11 @@
 
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
-        {
+        {           
             Department department = departmentService.GetById(departmentId);
-             IList<Department> parentDepartments = departmentService.GetDepartment();
+            IList<Department> parentDepartments = departmentService.GetDepartment(); 
+            parentDepartments = parentDepartments.Where(t => t.Id != department.Id).ToList();
+
             var model = new EditDepartmentViewModel
             {
                 DeprtamentId = departmentId,
@@ -118,7 +122,8 @@
                 Manager = department.Manager.DisplayName,
                 ParentId = department.Parent == null ? 0 : department.Parent.Id,
                 ParentDepartments = parentDepartments
-            };
+             
+        };
             return View(model);
         }
 

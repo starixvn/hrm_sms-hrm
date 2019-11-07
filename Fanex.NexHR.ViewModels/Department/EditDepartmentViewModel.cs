@@ -27,6 +27,6 @@
 
         public bool IsActive { get; set; }
 
-        public IList<Department> ParentDepartments { get; set; }
+        public IList<Department> ParentDepartments { get; set; }      
     }
 }

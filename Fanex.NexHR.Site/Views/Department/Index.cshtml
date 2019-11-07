@@ -1,5 +1,6 @@
-﻿@using Fanex.NexHR.Core
+﻿@using Fanex.NexHR.Models
 @using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Department
 @model DepartmentViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -11,32 +12,32 @@
     <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("departmentjs")
+    <script src="~/wwwroot/dist/js/department.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@using (Html.BeginForm("index", "department", FormMethod.Get, new { @class = "filter", style = "width: 600px;" }))
+@using (Html.BeginForm("index", "department", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
 {
     var gender = new List<SelectListItem>
 {
-new SelectListItem() {Text = "All", Value = ""},
-new SelectListItem() {Text = "Active", Value = "0"},
-new SelectListItem() {Text = "Inactive", Value = "1"}
+new SelectListItem() {Text = "All", Value = "", Selected = !Model.IsActive.HasValue },
+new SelectListItem() {Text = "Active", Value = "true", Selected = Model.IsActive.HasValue && Model.IsActive.Value},
+new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsActive.HasValue  && !Model.IsActive.Value}
 };
 
 <div class="form-horizontal clearfix">
     <div class="form-group form-group--m">
         <div class="label-form">
-            @Html.LabelFor(model => model.IsActive, @Labels.Status, new { @class = "control-label" })
+            @Html.Label(@Labels.Status, new { @class = "control-label" })
         </div>
         <div class="select-form">
-            @Html.DropDownListFor(model => model.IsActive, gender, new { @class = "form-control" })
+            @Html.DropDownList("IsActive", gender, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group form-group--m">
-        <button type="button" id="submit" class="btn btn-primary">@Labels.Search</button>
+        <button type="submit" class="btn btn-primary">@Labels.Search</button>
         @if (hasPermission)
         {
             <a class="btn btn-request" href="@Url.Action("create", "department")">
@@ -46,7 +47,7 @@ new SelectListItem() {Text = "Inactive", Value = "1"}
     </div>
 </div>
 }
-<table class="table table-custom" style="width: auto; min-width: 600px;">
+<table class="table table-custom" id="data" style="width: auto; min-width: 700px;">
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
@@ -54,6 +55,7 @@ new SelectListItem() {Text = "Inactive", Value = "1"}
             <th>@Labels.Department</th>
             <th>@Labels.Manager</th>
             <th>@Labels.Parent</th>
+            <th>@Labels.Active</th>
             @if (hasPermission)
             {
                 <th>@Labels.Edit</th>
@@ -95,15 +97,20 @@ new SelectListItem() {Text = "Inactive", Value = "1"}
                     {
                         <td></td>
                     }
+                    <td>
+                        <input type="checkbox" class="checkbox-custom"
+                               @(department.IsActive ? "checked" : string.Empty) value="@department.IsActive" />
+                        <label></label>
+                    </td>
                     @if (hasPermission)
                     {
-                        <td class="cmd">
+                        <td>
                             <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
                         <td>
-                            <a href="javascript:;" onclick="deleteDepartment(@(department.Id));">
+                            <a href="javascript:;" class="deleteDepartment" data-id="@department.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>
