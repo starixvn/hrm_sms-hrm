@@ -21,6 +21,7 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	DECLARE @tempDate DATE
+	DECLARE @tblDate TABLE (WorkDate DATE)
 
 	IF @FromDate IS NULL
 	BEGIN
@@ -29,16 +30,14 @@ BEGIN
 
 	IF @ToDate IS NULL
 	BEGIN
-		SET @ToDate = DATEADD(MONTH, 4, @FromDate)
+		SET @ToDate = DATEADD(DAY, 6, @FromDate)
 	END
 
 	SET @tempDate = @FromDate
 
-	CREATE TABLE #tblDate (WorkDate DATE)
-
 	WHILE @tempDate <= @ToDate
 	BEGIN
-		INSERT INTO #tblDate (WorkDate)
+		INSERT INTO @tblDate (WorkDate)
 		VALUES (@tempDate)
 
 		SET @tempDate = DATEADD(DAY, 1, @tempDate)
@@ -107,7 +106,7 @@ BEGIN
 		AND ISNULL(emp.IsDeleted, 0) = 0
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		AND empsum.IsDefaultSchedule = 1
-		,#tblDate AS tblc
+		,@tblDate AS tblc
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
 	WHERE (
@@ -136,12 +135,4 @@ BEGIN
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Insert weekly default shift unsuccessfully!'
-	END
-
-	DROP TABLE #tblDate
 END

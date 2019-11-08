@@ -37,8 +37,8 @@
 
         public void InsertScheduleByWeeklyDefaultShift()
         {
-            var fromDate = DateTime.Now.Date;
-            var toDate = fromDate.AddMonths(4).AddDays(-1);
+            var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
+            var toDate = fromDate.AddDays(6);
             var criteria = new InsertScheduleByWeeklyDefaultShiftCriteria
             {
                 FromDate = fromDate,

@@ -18,8 +18,9 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
-	
+
 	DECLARE @tempDate DATE
+	DECLARE @tblDate TABLE (WorkDate DATE)
 
 	IF @FromDate IS NULL
 	BEGIN
@@ -30,14 +31,12 @@ BEGIN
 	BEGIN
 		SET @ToDate = DATEADD(DAY, 6, @FromDate)
 	END
-	
-	SET @tempDate = @FromDate
 
-	CREATE TABLE #tblDate (WorkDate DATE)
+	SET @tempDate = @FromDate
 
 	WHILE @tempDate <= @ToDate
 	BEGIN
-		INSERT INTO #tblDate (WorkDate)
+		INSERT INTO @tblDate (WorkDate)
 		VALUES (@tempDate)
 
 		SET @tempDate = DATEADD(DAY, 1, @tempDate)
@@ -84,7 +83,7 @@ BEGIN
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift
-		,#tblDate AS tblc
+		,@tblDate AS tblc
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
 	WHERE emp.[Enabled] = 1
@@ -106,12 +105,4 @@ BEGIN
 		,@ToDate = @ToDate
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Insert default shift unsuccessfully!'
-	END
-
-	DROP TABLE #tblDate
 END
