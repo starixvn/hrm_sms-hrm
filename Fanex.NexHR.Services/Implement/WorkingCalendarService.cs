@@ -23,37 +23,16 @@
             this.baseService = baseService;
         }
 
-        public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria)
-        {
-            IList<WorkingCalendarModel> calendars = null;
-            if (criteria.IsValid())
-            {
-                calendars = workingCalendarRepository.GetWorkingCalendarByDateRange(criteria);
-            }
-
-            return calendars;
-        }
-
         public IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria)
         {
-            IList<ShiftStatisticModel> shiftStatisticModels = null;
-
-            if (criteria.IsValid())
-            {
-                shiftStatisticModels = baseService.GetData<ShiftStatisticModel>(criteria).ToList();
-            }
+            IList<ShiftStatisticModel> shiftStatisticModels = baseService.GetData<ShiftStatisticModel>(criteria).ToList();
 
             return shiftStatisticModels ?? new List<ShiftStatisticModel>();
         }
 
         public IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria)
         {
-            IList<EmployeeShiftModel> employeeShifts = null;
-
-            if (criteria.IsValid())
-            {
-                employeeShifts = workingCalendarRepository.GetEmployeeShift(criteria);
-            }
+            IList<EmployeeShiftModel> employeeShifts = workingCalendarRepository.GetEmployeeShift(criteria);
 
             return employeeShifts ?? new List<EmployeeShiftModel>();
         }
@@ -65,13 +44,7 @@
 
         public IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
         {
-            IList<WorkingCalendarsViewModel> workingCalendarList = null;
-            if (criteria.IsValid())
-            {
-                workingCalendarList = workingCalendarRepository.GetWorkingCalendars(criteria);
-            }
-
-            return workingCalendarList;
+            return workingCalendarRepository.GetWorkingCalendars(criteria);
         }
     }
 }

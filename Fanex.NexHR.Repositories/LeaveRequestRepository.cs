@@ -90,5 +90,27 @@
                 return entity.ToList();
             }
         }
+
+        public IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(ICriteria criteria)
+        {
+            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            {
+                return db.Query<Models.ScheduleArrange.DailySchedule,
+                    Models.ScheduleArrange.ShiftBase,
+                    Models.ScheduleArrange.LeaveRequest,
+                    Models.ScheduleArrange.LeaveRequest,
+                    Models.ScheduleArrange.DailySchedule>(
+                    (dailySchedule, shift, leave, leave2) =>
+                    {
+                        dailySchedule.Shift = shift;
+                        dailySchedule.LeaveType = leave;
+                        dailySchedule.LeaveType2 = leave2;
+
+                        return dailySchedule;
+                    },
+                    splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2",
+                    parameterValues: criteria.GetSpParams());
+            }
+        }
     }
 }

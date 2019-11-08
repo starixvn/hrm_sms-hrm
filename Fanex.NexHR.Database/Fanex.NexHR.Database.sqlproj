@@ -258,7 +258,6 @@
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetChangedShift.sql" />
@@ -532,6 +531,7 @@
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_GetDisableDate.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRule_GetByGroupId.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRule_Update.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_GetCalendar.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

@@ -89,6 +89,17 @@
             return baseService.GetData<DateTime>(criteria);
         }
 
+        public IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(int employeeId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetEmployeeCalendarCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            return leaveRequestRepository.GetEmployeeCalendar(criteria);
+        }
+
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
             return baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);

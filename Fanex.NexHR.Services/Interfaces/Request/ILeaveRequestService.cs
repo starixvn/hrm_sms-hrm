@@ -21,6 +21,8 @@
 
         IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
 
+        IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(int employeeId, DateTime fromDate, DateTime toDate);
+
         EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
 
         DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);

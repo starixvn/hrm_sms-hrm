@@ -102,11 +102,6 @@
     <Setting Key="Group_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetHalfDayOff" SpName="EmployeeCalendar_GetHalfDayOff" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetByDateRange" SpName="EmployeeCalendar_GetByDateRange" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="ShiftId" ObjectProperty="Id" />
-      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-    </Setting>
     <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
@@ -391,6 +386,11 @@
       <Mapping DataField="HRId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
+    <Setting Key="LeaveRequest_GetCalendar" SpName="LeaveRequest_GetCalendar" DbName="nexhrx" Plain="0">
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+    </Setting>
   </Function>
   <Function Name="Keep In View">
     <Setting Key="KeepInViewRequest_Insert" SpName="KeepInViewRequest_Insert" DbName="nexhrx" Plain="0"></Setting>

@@ -11,25 +11,6 @@
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
-        public IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var workingCalendarList = db.Query<WorkingCalendarModel, Employee, Shift, LeaveType, WorkingCalendarModel>(
-                    (w, e, s, lv) =>
-                    {
-                        w.Employee = e;
-                        w.Shift = s;
-                        w.LeaveType = lv;
-                        return w;
-                    },
-                    splitOn: "EmpId, ShiftId, LeaveTypeId",
-                    parameterValues: criteria.GetSpParams());
-
-                return workingCalendarList.ToList();
-            }
-        }
-
         public IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))

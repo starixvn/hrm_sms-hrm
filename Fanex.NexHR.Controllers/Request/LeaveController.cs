@@ -25,7 +25,6 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
-        private readonly IWorkingCalendarService workingCalendarService;
         private readonly ICommonDataService commonDataService;
 
         public LeaveController(
@@ -34,14 +33,12 @@
             IRequestService requestService,
             IBaseService baseService,
             IEmployeeService employeeService,
-            IWorkingCalendarService workingCalendarService,
             ICommonDataService commonDataService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.employeeService = employeeService;
-            this.workingCalendarService = workingCalendarService;
             this.commonDataService = commonDataService;
         }
 
@@ -192,14 +189,7 @@
 
         public ActionResult LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
         {
-            var criteria = new GetWorkingCalendarByDateRangeCriteria
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                GroupIds = string.Empty,
-                EmpId = employeeId
-            };
-            IList<WorkingCalendarModel> calendars = workingCalendarService.GetWorkingCalendarByDateRange(criteria);
+            IEnumerable<Models.ScheduleArrange.DailySchedule> calendars = leaveRequestService.GetEmployeeCalendar(employeeId, fromDate, toDate);
             IList<LeaveRequestDetail> leaveRequestDetail = new List<LeaveRequestDetail>();
             if (requestId != -1)
             {
@@ -217,7 +207,7 @@
         }
 
         private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
-            IList<WorkingCalendarModel> workingCalendars,
+            IEnumerable<Models.ScheduleArrange.DailySchedule> calendars,
             IList<LeaveRequestDetail> leaveDetails,
             DateTime fromDate,
             DateTime toDate)
@@ -232,12 +222,11 @@
                 {
                     tempDate = fromDate.AddDays(i);
                     IEnumerable<LeaveRequestDetail> tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
-                    IEnumerable<WorkingCalendarModel> tempWokingCalendars = workingCalendars.Where(t => t.WorkDate.Date == tempDate);
+                    Models.ScheduleArrange.DailySchedule calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
 
-                    if (tempWokingCalendars != null && tempWokingCalendars.Any())
+                    if (calendar != null)
                     {
-                        WorkingCalendarModel tempWokingCalendar = tempWokingCalendars.FirstOrDefault();
-                        AddLeaveRequestExistCalendar(details, tempLeaveDetailModels, tempWokingCalendar);
+                        AddLeaveRequestExistCalendar(details, tempLeaveDetailModels, calendar);
                     }
                     else
                     {
@@ -252,30 +241,30 @@
         private void AddLeaveRequestExistCalendar(
            List<LeaveRequestDetail> leaveRequestDetailOutput,
            IEnumerable<LeaveRequestDetail> leaveDetails,
-           WorkingCalendarModel tempWokingCalendar)
+           Models.ScheduleArrange.DailySchedule calendar)
         {
             string tempScheduleStatus = string.Empty;
             LeaveRequestDetail tempLeaveDetailModel = null;
-            var isOffOrHoliday = tempWokingCalendar.IsOffDay || tempWokingCalendar.IsHoliday;
+            var isOffOrHoliday = calendar.IsOffDay || calendar.IsHoliday;
 
-            if (!tempWokingCalendar.IsLeaveDay)
+            if (!calendar.IsLeaveDay)
             {
                 tempScheduleStatus = Labels.NA;
             }
 
-            if (tempWokingCalendar.IsOffDay)
+            if (calendar.IsOffDay)
             {
                 tempScheduleStatus = Labels.OffDay;
             }
 
-            if (tempWokingCalendar.IsHoliday)
+            if (calendar.IsHoliday)
             {
                 tempScheduleStatus = Labels.Holiday;
             }
 
-            if (tempWokingCalendar.Shift != null)
+            if (calendar.Shift != null)
             {
-                tempScheduleStatus = tempWokingCalendar.Shift.Name;
+                tempScheduleStatus = calendar.Shift.Name;
             }
 
             if (leaveDetails != null && leaveDetails.Any())
@@ -294,7 +283,7 @@
             {
                 tempLeaveDetailModel = new LeaveRequestDetail
                 {
-                    OnDate = tempWokingCalendar.WorkDate,
+                    OnDate = calendar.WorkDate,
                     ScheduleStatus = tempScheduleStatus,
                     IsOffOrHoliday = isOffOrHoliday,
                     LeaveTypeId = Constants.AnnualLeave,

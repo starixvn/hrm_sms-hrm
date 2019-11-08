@@ -8,8 +8,6 @@
 
     public interface IWorkingCalendarRepository
     {
-        IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(ICriteria criteria);
-
         IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria);
 
         IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria);

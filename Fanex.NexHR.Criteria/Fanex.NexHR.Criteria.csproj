@@ -80,7 +80,6 @@
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
-    <Compile Include="Calendar\GetWorkingCalendarByDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Department\GetParentByDepartmentCriteria.cs" />
     <Compile Include="Department\UpdateDepartmentCriteria.cs" />
@@ -171,6 +170,7 @@
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByIdCriteria.cs" />
     <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestHistoryByIdCriteria.cs" />
     <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\GetEmployeeCalendarCriteria.cs" />
     <Compile Include="Request\Leave\GetDisabledDateCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
     <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />

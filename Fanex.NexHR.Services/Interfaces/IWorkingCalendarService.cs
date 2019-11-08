@@ -9,8 +9,6 @@
 
     public interface IWorkingCalendarService
     {
-        IList<WorkingCalendarModel> GetWorkingCalendarByDateRange(GetWorkingCalendarByDateRangeCriteria criteria);
-
         IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
 
         IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria);
