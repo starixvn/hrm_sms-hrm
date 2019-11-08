@@ -1,0 +1,78 @@
+﻿@using Fanex.NexHR.Resources
+@model List<ExtensionNoModel>
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.ExternalGroup;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/external.group.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/external.group.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "ExtensionNo")">@Labels.ExtensionNumber</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<a class="btn btn-request" href="javascript:;" id="btnCreate">
+    <span class="fa fa-plus"></span> New External Group
+</a>
+<table class="table table-custom" id="data" style="width: auto; min-width: 600px;">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.GroupName</th>
+            <th>@Labels.Edit</th>
+            <th>@Labels.Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int index = 1;
+            foreach (ExtensionNoModel item in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td class="align-left">@item.TeamName</td>
+                    <td>
+                        <a href="javascript:;" class="edit" data-id="@item.TeamId" data-name="@item.TeamName">
+                            <i class="fa fa-pencil fa-lg icon-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        @if (item.TotalMember > 0)
+                        {
+                            <a href="javascript:;" style="cursor:default">
+                                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="javascript:;" class="delete" data-id="@item.TeamId">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 4);
+        }
+    </tbody>
+</table>
+<div id="dialog-form" style="display: none;">
+    <form class="form-horizontal">
+        <div class="validation-summary-errors" style="display: none;"></div>
+        <div class="form-group">
+            <div class="label-form">Group Name</div>
+            <div class="input-form">
+                <input type="text" name="GroupName" id="GroupName" maxlength="100" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+    </form>
+</div>

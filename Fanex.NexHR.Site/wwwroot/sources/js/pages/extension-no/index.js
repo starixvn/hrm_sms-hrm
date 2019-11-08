@@ -1,8 +1,9 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
+import toastr from 'toastr';
 
-import { axiosError, floatThead, confirm, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, floatThead, confirm, resolveClientUrl, toastOptions } from '../../shared/common.functions';
 
 $(document).ready(function () {
     floatThead('table#data');

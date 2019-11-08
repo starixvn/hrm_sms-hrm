@@ -1,39 +1,41 @@
-﻿/****** Object:  Stored Procedure dbo.ExtensionNO_Update_GroupExternal    Script Date: 7/20/2016 10:19:08 AM ******/
-/****** Object:  Stored Procedure dbo.ExtensionNO_Update_GroupExternal    Script Date: 7/19/2016 5:22:15 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[ExtensionNO_Update_GroupExternal]
-	@ExtID int,
-	@FullName nvarchar(200)=NULL,
-
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg varchar(200) = '' OUTPUT	
+﻿
+CREATE PROCEDURE [dbo].[ExtensionNO_Update_GroupExternal] @ExtId INT
+	,@FullName NVARCHAR(200)
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2014-01-04
-Task: Update Employee Extensions Number
+Task: Update external group
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
-SET NOCOUNT ON
-
-DECLARE @IsGroup bit=0
-
-
-IF EXISTS(SELECT TOP 1 1 FROM [dbo].[ExtensionNumbers] exg WITH(NOLOCK) WHERE FullName = @FullName AND [IsGroup]=1  AND IsInternal = 0 AND ExtID <> @ExtID)
 BEGIN
-	SELECT @ErrCode = 100, @ErrMsg = N'Group Name exists on systems.'
-	RETURN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.ExtensionNumbers WITH (NOLOCK)
+			WHERE FullName = @FullName
+				AND IsGroup = 1
+				AND IsInternal = 0
+				AND ExtId <> @ExtId
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Group name has already existed.'
+
+		RETURN
+	END
+
+	UPDATE dbo.ExtensionNumbers WITH (ROWLOCK, UPDLOCK)
+	SET FullName = @FullName
+		,NickName = @FullName
+	WHERE ExtId = @ExtId
+		AND IsGroup = 1
+		AND IsInternal = 0
 END
-
-UPDATE [dbo].[ExtensionNumbers] WITH(ROWLOCK)
-SET [FullName]=@FullName
-	,[NickName]=[FullName] 
-WHERE ExtID = @ExtID AND [IsGroup]=1 AND IsInternal = 0
-
-SET @ErrCode=0
-
-
-

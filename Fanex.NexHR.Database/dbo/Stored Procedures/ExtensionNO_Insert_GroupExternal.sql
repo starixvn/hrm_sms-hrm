@@ -1,62 +1,62 @@
-﻿/****** Object:  Stored Procedure dbo.ExtensionNO_Insert_GroupExternal    Script Date: 7/20/2016 10:19:08 AM ******/
-/****** Object:  Stored Procedure dbo.ExtensionNO_Insert_GroupExternal    Script Date: 7/19/2016 5:22:15 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[ExtensionNO_Insert_GroupExternal]
-	@FullName nvarchar(200)=NULL,
-
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg varchar(200) = '' OUTPUT	
+﻿
+CREATE PROCEDURE [dbo].[ExtensionNO_Insert_GroupExternal] @FullName NVARCHAR(200)
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2014-01-04
-Task: Insert Employee Extensions Number
+Task: Insert external group
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
-SET NOCOUNT ON
-IF @FullName IS NULL
 BEGIN
-	SELECT @ErrCode = 100, @ErrMsg = N'Group NAME invalid.'
-	RETURN
-END
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-IF EXISTS(SELECT TOP 1 1 FROM [dbo].[ExtensionNumbers] exg WITH(NOLOCK) WHERE FullName = @FullName AND [IsGroup]=1  AND IsInternal = 0)
-BEGIN
-	SELECT @ErrCode = 101, @ErrMsg = N'Group NAME exists on systems.'
-	RETURN
-END
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.ExtensionNumbers WITH (NOLOCK)
+			WHERE FullName = @FullName
+				AND IsGroup = 1
+				AND IsInternal = 0
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Group name has already existed.'
 
-DECLARE @GroupID int
+		RETURN
+	END
 
-INSERT INTO [ExtensionNumbers]
-	(
-		[FullName]
-		,[NickName]
-		,[ExtensionNo]
+	DECLARE @GroupId INT
+
+	INSERT INTO dbo.ExtensionNumbers (
+		FullName
+		,NickName
+		,ExtensionNo
 		,IsInternal
-		,[IsGroup]
-		,[EmpID]
-		,[GroupID]
-		,[OrderNo]
-	)
-SELECT  @FullName [FullName]
-		,@FullName [NickName]
-		,'' [ExtensionNo]
-		,0 IsInternal
-		,1 [IsGroup]
-		,NULL [EmpID]
-		,NULL [GroupID]
-		,MAX([OrderNo]) FROM [dbo].[ExtensionNumbers] exg WITH(NOLOCK) WHERE [GroupID] <> @GroupID AND [IsInternal] = 1
+		,IsGroup
+		,EmpId
+		,GroupId
+		,OrderNo
+		)
+	SELECT @FullName
+		,@FullName
+		,'' AS ExtensionNo
+		,0 AS IsInternal
+		,1 AS IsGroup
+		,NULL AS EmpId
+		,NULL AS GroupId
+		,MAX(OrderNo)
+	FROM dbo.ExtensionNumbers WITH (NOLOCK)
+	WHERE GroupId <> @GroupId
+		AND IsInternal = 1
 
-set @GroupID  = cast(SCOPE_IDENTITY() as int)
+	SET @GroupId = SCOPE_IDENTITY()
 
-UPDATE  [dbo].[ExtensionNumbers] 
-SET GroupID = @GroupID
-WHERE ExtID = @GroupID
-
-SET @ErrCode=0
-
-
+	UPDATE dbo.ExtensionNumbers WITH (ROWLOCK, UPDLOCK)
+	SET GroupId = @GroupId
+	WHERE ExtId = @GroupId
+END

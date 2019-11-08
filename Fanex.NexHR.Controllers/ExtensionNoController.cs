@@ -142,7 +142,7 @@
         #region External Group
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public ActionResult ManageExternalGroup()
+        public ActionResult ExternalGroup()
         {
             IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: false);
 
@@ -179,30 +179,27 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult AddNewExternalGroup(string groupName)
+        public CustomJsonResult CreateExternalGroup(string groupName)
         {
             CommandResult commandResult = extensionNumberService.CreateExternalGroup(groupName);
-
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult DeleteExternalGroup(int groupId)
+        public CustomJsonResult DeleteExternalGroup(int id)
         {
-            CommandResult commandResult = extensionNumberService.DeleteExternalGroup(groupId);
-
-            return Json(commandResult);
+            CommandResult commandResult = extensionNumberService.DeleteExternalGroup(id);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult EditExternalGroup(int groupId, string groupName)
+        public CustomJsonResult EditExternalGroup(int groupId, string groupName)
         {
             CommandResult commandResult = extensionNumberService.EditExternalGroup(groupId, groupName);
-
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         #endregion External Group

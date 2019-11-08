@@ -11,6 +11,6 @@
 
         public override string GetSettingKey() => "ExtensionNO_Update_GroupExternal";
 
-        public override bool IsValid() => ExternalId > 0;
+        public override bool IsValid() => ExternalId > 0 && !string.IsNullOrWhiteSpace(FullName);
     }
 }

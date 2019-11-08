@@ -8,6 +8,6 @@
 
         public override string GetSettingKey() => "ExtensionNO_Insert_GroupExternal";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => !string.IsNullOrWhiteSpace(FullName);
     }
 }
