@@ -149,19 +149,6 @@
       <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
     </resourceSet>
 
-    <resourceSet name="annualbalancejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/annualbalanceadj.js" />
-      <resource path="~/scripts/views/annualbalance.js" />
-    </resourceSet>
-
-    <resourceSet name="annualbalancecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/dist/styles/annual.leave.balance.index.css" />
-    </resourceSet>
-
     <resourceSet name="logincss" type="css">
       <resource path="~/styles/login.css" />
     </resourceSet>

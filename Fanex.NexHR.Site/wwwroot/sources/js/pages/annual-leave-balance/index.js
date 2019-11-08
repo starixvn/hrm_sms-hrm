@@ -6,7 +6,6 @@ import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, initDatepic
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import '../../date';
 
 var _ids;
 var _checked = false;

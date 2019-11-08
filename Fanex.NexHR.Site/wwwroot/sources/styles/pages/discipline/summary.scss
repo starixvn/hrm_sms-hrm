@@ -1,0 +1,42 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/multiselect-treeview';
+@import '../../components/icon';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../vendors/autocomplete';
+@import '../../components/buttons-new';
+@import '../../components/validation';
+@import '../../components/checkbox';
+@import '../../components/jquery-ui-dialog';
+
+#dialogAddOtherDiscipline, #dialogViewOtherDiscipline {
+    .form-group {
+        width: 100%;
+
+        .label-form {
+            width: 10rem;
+        }
+
+        .select-form, .input-form, .calendar-form {
+            width: calc(100% - 10rem);
+
+            .datepicker {
+                width: calc(100% - 30px);
+                display: inline-block;
+            }
+
+            .icon-calendar {
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                font-size: 1.6rem;
+                color: #A63C45;
+            }
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+    }
+}
