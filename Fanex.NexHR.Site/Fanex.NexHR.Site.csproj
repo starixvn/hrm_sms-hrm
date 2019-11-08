@@ -284,6 +284,7 @@
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
     <Content Include="wwwroot\sources\js\pages\employee\index.js" />
     <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
@@ -489,7 +490,6 @@
     <Content Include="Scripts\MultiSelect\style.css" />
     <Content Include="Scripts\Views\addextensionno.js" />
     <Content Include="Scripts\Views\annualbalance.js" />
-    <Content Include="Scripts\Views\extensionno.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
@@ -1109,6 +1109,7 @@
     <Content Include="wwwroot\dist\styles\section.edit.js.map" />
     <Content Include="wwwroot\dist\styles\section.index.js.map" />
     <Content Include="Views\Team\DisciplineRule.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\extension-no\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\discipline\summary.scss" />
     <Content Include="wwwroot\sources\styles\pages\discipline\details.scss" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />

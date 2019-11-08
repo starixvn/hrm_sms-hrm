@@ -42,9 +42,9 @@
             return baseService.GetDataEntity<ExtensionNoModel>(criteria);
         }
 
-        public CommandResult DeleteExtensionNumberById(int id)
+        public CommandResult DeleteExtensionNumber(int extensionNoId)
         {
-            var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = id };
+            var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = extensionNoId };
             return baseService.ExecuteNonQuery(criteria);
         }
 

@@ -62,6 +62,7 @@ module.exports = {
         [`${styleDistPath}/my.working.schedule`]: `${styleSourcePath}/pages/calendar/my.working.schedule.scss`,
         [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
         [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
+        [`${styleDistPath}/extensionno.index`]: `${styleSourcePath}/pages/extension-no/index.scss`,
         [`${styleDistPath}/discipline.summary`]: `${styleSourcePath}/pages/discipline/summary.scss`,
         [`${styleDistPath}/discipline.details`]: `${styleSourcePath}/pages/discipline/details.scss`,
 
@@ -129,6 +130,7 @@ module.exports = {
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
+        [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`
         [`${jsDistPath}/discipline.summary`]: `${jsSourcePath}/discipline/summary.js`,
         [`${jsDistPath}/discipline.detail`]: `${jsSourcePath}/discipline/details.js`
     }

@@ -12,7 +12,7 @@
 
         ExtensionNoModel GetEmployeeExtensionNoById(int employeeExtensionNoId, bool isInternal);
 
-        CommandResult DeleteExtensionNumberById(int id);
+        CommandResult DeleteExtensionNumber(int extensionNoId);
 
         CommandResult CreateExternalGroup(string groupName);
 

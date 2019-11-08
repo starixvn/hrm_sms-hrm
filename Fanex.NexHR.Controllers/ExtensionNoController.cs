@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
@@ -84,9 +85,9 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public ActionResult Edit(bool isInternal, int employeeExtensionId)
+        public ActionResult Edit(int id, bool isInternal)
         {
-            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(employeeExtensionId, isInternal);
+            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(id, isInternal);
             IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(isInternal: isInternal);
 
             if (groups != null)
@@ -132,11 +133,10 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public JsonResult DeleteExtensionNumber(int employeeExtensionId)
+        public CustomJsonResult Delete(int id)
         {
-            CommandResult commandResult = extensionNumberService.DeleteExtensionNumberById(employeeExtensionId);
-
-            return Json(commandResult);
+            CommandResult commandResult = extensionNumberService.DeleteExtensionNumber(id);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         #region External Group

@@ -1,50 +1,40 @@
-﻿@using Fanex.NexHR.ViewModels.ExtensionNumber
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.ExtensionNumber
 @model List<ExtensionNumberViewModel>
-@section css{
-    @Url.CombresLink("extensionnocss")
-}
-@section js{
-    @Url.CombresLink("extensionnojs")
-}
 @{
-    ViewBag.Title = "Extension Numbers";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.ExtensionNumber;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 6 : 4;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/extensionno.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/extensionno.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 @if (hasPermission)
 {
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("New Extension Number", "Create")
-    </div>
-    <div class="button">@Html.ActionLink("Manage External Group", "ManageExternalGroup")</div>
+    <a class="btn btn-request" href="@Url.Action("create", "extensionno")">
+        <span class="fa fa-plus"></span> New Extension Number
+    </a>
+    <a class="btn btn-primary" href="@Url.Action("ManageExternalGroup", "extensionno")">Manage External Group</a>
 }
-<table class="data" id="data">
+<table class="table table-custom" id="data">
     <thead>
         <tr>
-            <th>
-                @Labels.No
-            </th>
-            <th>
-                @Labels.Nick
-            </th>
-            <th>
-                @Labels.FullName
-            </th>
-            <th>
-                Extension Number
-            </th>
+            <th>@Labels.No</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.ExtensionNumber</th>
             @if (hasPermission)
             {
-                <th>
-                    @Labels.Edit
-                </th>
-                <th>
-                    @Labels.Delete
-                </th>
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
             }
         </tr>
     </thead>
@@ -57,35 +47,27 @@
                 if (item.Extensions.Any())
                 {
                     <tr>
-                        <td class="rowdivider highlight left" colspan="@totalColumn">
+                        <td class="rowdivider align-left" colspan="@totalColumn">
                             <b>@item.Name.ToUpper()</b>
                         </td>
                     </tr>
                 }
                 foreach (ExtensionNoModel ext in item.Extensions)
                 {
-                    <tr id="@ext.EmployeeExtensionId">
-                        <td>
-                            @(index++)
-                        </td>
-                        <td class="left">
-                            @ext.FullName
-                        </td>
-                        <td>
-                            @ext.NickName
-                        </td>
-                        <td style="color: #0789D1;">
-                            @ext.ExtensionNo
-                        </td>
+                    <tr>
+                        <td>@(index++)</td>
+                        <td class="align-left">@ext.FullName</td>
+                        <td>@ext.NickName</td>
+                        <td style="color: #0789D1;">@ext.ExtensionNo</td>
                         @if (hasPermission)
                         {
                             <td>
-                                <a href="@Url.Action("Edit", "ExtensionNo", new { isInternal = ext.IsInternal, EmployeeExtensionId = ext.EmployeeExtensionId })">
+                                <a href="@Url.Action("Edit", "ExtensionNo", new { id = ext.EmployeeExtensionId, isInternal = ext.IsInternal })">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                             </td>
                             <td>
-                                <a href="javascript:;" id="deleteExt">
+                                <a href="javascript:;" class="delete" data-extension-no-id="@ext.EmployeeExtensionId">
                                     <i class="fa fa-times fa-lg icon-delete"></i>
                                 </a>
                             </td>

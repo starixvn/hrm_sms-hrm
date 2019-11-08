@@ -177,10 +177,6 @@
     <resourceSet name="extensionnocss" type="css">
       <resource reference="sitecss" />
     </resourceSet>
-    <resourceSet name="extensionnojs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/extensionno.js" />
-    </resourceSet>
 
     <resourceSet name="addextensionnojs" type="js">
       <resource reference="sitejs" />

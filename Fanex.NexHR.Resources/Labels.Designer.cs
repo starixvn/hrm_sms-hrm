@@ -1672,6 +1672,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension Number.
+        /// </summary>
+        public static string ExtensionNumber {
+            get {
+                return ResourceManager.GetString("ExtensionNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to External Group.
         /// </summary>
         public static string ExternalGroup {
