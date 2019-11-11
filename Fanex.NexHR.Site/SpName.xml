@@ -228,7 +228,10 @@
     <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExtensionNO_GetGroupInfo" SpName="ExtensionNO_GetGroupInfo" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExtensionNO_Insert_EmployeeInfo" SpName="ExtensionNO_Insert_EmployeeInfo" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="ExtensionNO_GetEmployeeInfo" SpName="ExtensionNO_GetEmployeeInfo" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="ExtensionNO_GetEmployeeInfo" SpName="ExtensionNO_GetEmployeeInfo" DbName="nexhrx" Plain="0">
+      <Mapping DataField="ExtId" ObjectProperty="ExtensionNoId" />
+      <Mapping DataField="EmpExtId" ObjectProperty="EmployeeExtensionId" />
+    </Setting>
     <Setting Key="ExtensionNO_Update_EmployeeInfo" SpName="ExtensionNO_Update_EmployeeInfo" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExtensionNO_DELETE_EmployeeInfo" SpName="ExtensionNO_DELETE_EmployeeInfo" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="ExtensionNO_Insert_GroupExternal" SpName="ExtensionNO_Insert_GroupExternal" DbName="nexhrx" Plain="0"></Setting>

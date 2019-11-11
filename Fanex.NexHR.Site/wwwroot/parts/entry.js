@@ -63,6 +63,7 @@ module.exports = {
         [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
         [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
         [`${styleDistPath}/extensionno.index`]: `${styleSourcePath}/pages/extension-no/index.scss`,
+        [`${styleDistPath}/extensionno.create`]: `${styleSourcePath}/pages/extension-no/create.scss`,
         [`${styleDistPath}/external.group`]: `${styleSourcePath}/pages/extension-no/external.group.scss`,
         [`${styleDistPath}/discipline.summary`]: `${styleSourcePath}/pages/discipline/summary.scss`,
         [`${styleDistPath}/discipline.details`]: `${styleSourcePath}/pages/discipline/details.scss`,
@@ -133,6 +134,7 @@ module.exports = {
         [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,       
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
         [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,
+        [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
         [`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/external.group.js`,
         [`${jsDistPath}/discipline.summary`]: `${jsSourcePath}/discipline/summary.js`,
         [`${jsDistPath}/discipline.detail`]: `${jsSourcePath}/discipline/details.js`

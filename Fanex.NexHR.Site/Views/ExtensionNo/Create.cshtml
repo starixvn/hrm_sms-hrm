@@ -1,81 +1,79 @@
-﻿@model ExtensionNoModel
+﻿@using Fanex.NexHR.Resources
+@model ExtensionNoModel
 @{
-    ViewBag.Title = "New Extension Number";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.Create;
 }
 @section css{
-    @Url.CombresLink("extensionnocss")
+    <link href="~/wwwroot/dist/styles/extensionno.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("addextensionnojs")
+    <script src="~/wwwroot/dist/js/extensionno.create.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Company</a>
-    <a class="step" href="@Url.Action("index", "ExtensionNo")">Extension Numbers</a>
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "ExtensionNo")">@Labels.ExtensionNumber</a>
     <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-<div class="bunhat container_24">
-    @{ Html.EnableClientValidation(false); }
-    @using (Html.BeginForm())
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsCreateForm" hidden checked />
+    @using (Html.BeginForm("Create", "ExtensionNo", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
-
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.IsInternal)
+        @Html.HiddenFor(model => model.EmpId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.IsInternal, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.CheckBoxFor(model => model.IsInternal)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.Label("Group")
-            </div>
-            <div class="input">
-                @Html.DropDownListFor(model => model.TeamId, new List<SelectListItem>())
+            <div class="input-form">
+                <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsInternal)</div>
             </div>
         </div>
-        <div class="formrow" id="EmployeeField">
-            <div class="label">
-                @Html.LabelFor(model => model.Employee)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.Label("Group", new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.Employee)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FullName)
-            </div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.FullName)
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.TeamId, new List<SelectListItem>(), new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.NickName)
+        <div class="form-group" id="EmployeeField">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.NickName)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ExtensionNo)
-            </div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.ExtensionNo)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.Hidden("EmpId")
-                @Html.Hidden("IsAddForm", "True")
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
             </div>
-            <div class="input">
-                <input type="submit" value="@Labels.Add" />
-                <a href="~/ExtensionNo/index" class="button">@Labels.Back</a>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.NickName, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.NickName, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ExtensionNo, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.ExtensionNo, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <button type="submit" id="btnSubmit" class="btn btn-primary">@Labels.Add</button>
+                <a class="btn btn-default" href="@Url.Action("index", "ExtensionNo")">@Labels.Back</a>
             </div>
         </div>
     }

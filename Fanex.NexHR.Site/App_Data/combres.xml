@@ -174,15 +174,6 @@
       <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>
 
-    <resourceSet name="extensionnocss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-
-    <resourceSet name="addextensionnojs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/addextensionno.js" />
-    </resourceSet>
-
     <resourceSet name="shiftcss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/shift.css" />

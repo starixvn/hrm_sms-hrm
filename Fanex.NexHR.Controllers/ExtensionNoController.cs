@@ -151,7 +151,7 @@
 
         [HttpGet]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public ActionResult GetGroupExtension(bool isInternal, int? groupId)
+        public CustomJsonResult GetGroupExtension(bool isInternal, int? groupId)
         {
             IList<SelectListItem> groups = null;
             if (isInternal)
@@ -173,7 +173,7 @@
                 }).ToList();
             }
 
-            return Json(groups, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
