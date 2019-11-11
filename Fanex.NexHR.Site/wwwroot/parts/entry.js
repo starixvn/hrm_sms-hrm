@@ -131,7 +131,7 @@ module.exports = {
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
-        [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,       
+        [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
         [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,
         [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
