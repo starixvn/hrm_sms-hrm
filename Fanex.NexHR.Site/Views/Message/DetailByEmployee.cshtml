@@ -1,16 +1,16 @@
 ﻿@using Fanex.NexHR.Models.Message
 @model Message
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     var messageSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = messageSubject + " - " + Labels.Message;
 }
 @section css{
-    @Url.CombresLink("messagecss")
-    @Url.CombresLink("memoedetailcss")
+    <link href="~/wwwroot/dist/styles/message.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("employeemessagejs")
 }
+
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>
     <a class="step" href="@Url.Action("ViewMessageOfEmployee", "message")">@Labels.Message</a>
@@ -63,7 +63,7 @@
             </tr>
         </tbody>
     </table>
-    <a href="/Message/ViewMessageOfEmployee" class="button">@Labels.Back</a>
+    <a href="/Message/ViewMessageOfEmployee" class="btn btn-primary">@Labels.Back</a>
 }
 else
 {
