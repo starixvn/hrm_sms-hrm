@@ -314,6 +314,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
@@ -1132,6 +1133,7 @@
     <Content Include="wwwroot\sources\styles\pages\discipline\details.scss" />
     <Content Include="wwwroot\sources\styles\pages\extension-no\external.group.scss" />
     <Content Include="wwwroot\sources\styles\pages\extension-no\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\message\message.scss" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js.map" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js.map" />
     <Content Include="wwwroot\dist\js\department.index.js.map" />
