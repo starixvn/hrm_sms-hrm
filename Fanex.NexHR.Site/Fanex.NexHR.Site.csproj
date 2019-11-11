@@ -243,7 +243,6 @@
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
-    <Content Include="Libs\FontAwesome\HELP-US-OUT.txt" />
     <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="Libs\SimplePagination\LICENSE.txt" />
     <Content Include="Libs\SimplePagination\simplePagination.css" />
@@ -293,8 +292,6 @@
     <Content Include="wwwroot\dist\js\report.weekendleave.summary.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
     <Content Include="wwwroot\dist\js\section.index.js" />
-    <Content Include="wwwroot\dist\js\team.edit.js" />
-    <Content Include="wwwroot\dist\js\team.index.js" />
     <Content Include="wwwroot\dist\styles\jobtitle.css" />
     <Content Include="wwwroot\dist\styles\jobtitle.js" />
     <Content Include="wwwroot\dist\styles\my.working.schedule.css" />
@@ -307,10 +304,6 @@
     <Content Include="wwwroot\dist\styles\section.edit.js" />
     <Content Include="wwwroot\dist\styles\section.index.css" />
     <Content Include="wwwroot\dist\styles\section.index.js" />
-    <Content Include="wwwroot\dist\styles\team.edit.css" />
-    <Content Include="wwwroot\dist\styles\team.edit.js" />
-    <Content Include="wwwroot\dist\styles\team.index.css" />
-    <Content Include="wwwroot\dist\styles\team.index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
     <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
@@ -332,7 +325,6 @@
     <Content Include="wwwroot\sources\libs\SimplePagination\simplePagination.css" />
     <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
-    <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
@@ -427,8 +419,6 @@
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.css" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.js" />
-    <Content Include="wwwroot\dist\styles\unpaidleave.index.css" />
-    <Content Include="wwwroot\dist\styles\unpaidleave.index.js" />
     <Content Include="wwwroot\dist\styles\user.management.css" />
     <Content Include="wwwroot\dist\styles\user.management.js" />
     <Content Include="wwwroot\dist\vendors\chosen.css" />
@@ -1128,14 +1118,10 @@
     <Content Include="wwwroot\dist\js\report.timesheet.js.map" />
     <Content Include="wwwroot\dist\js\report.weekendleave.detail.js.map" />
     <Content Include="wwwroot\dist\js\report.weekendleave.summary.js.map" />
-    <Content Include="wwwroot\dist\js\team.edit.js.map" />
-    <Content Include="wwwroot\dist\js\team.index.js.map" />
     <Content Include="wwwroot\dist\styles\jobtitle.js.map" />
     <Content Include="wwwroot\dist\styles\my.working.schedule.js.map" />
     <Content Include="wwwroot\dist\styles\report.timesheet.js.map" />
     <Content Include="wwwroot\dist\styles\report.weekendleave.detail.js.map" />
-    <Content Include="wwwroot\dist\styles\team.edit.js.map" />
-    <Content Include="wwwroot\dist\styles\team.index.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.js.map" />
     <Content Include="wwwroot\dist\js\section.index.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.js.map" />
@@ -1187,7 +1173,6 @@
     <Content Include="wwwroot\dist\styles\home.index.js.map" />
     <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js.map" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js.map" />
-    <Content Include="wwwroot\dist\styles\unpaidleave.index.js.map" />
     <Content Include="Views\Overtime\Details.cshtml" />
     <Content Include="Views\Overtime\Edit.cshtml" />
     <Content Include="Views\Overtime\EmployeeOvertime.cshtml" />
