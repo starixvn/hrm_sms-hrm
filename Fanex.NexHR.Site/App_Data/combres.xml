@@ -223,12 +223,7 @@
       <resource path="~/styles/discipline.css" />
       <resource path="~/wwwroot/dist/styles/report.weekend.leave.css" />
     </resourceSet>
-    <resourceSet name="disciplinesummaryjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/discipline/discipline.summary.js" />
-    </resourceSet>
+
     <resourceSet name="disciplinedetailjs" type="js">
       <resource reference="sitejs" />
       <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />

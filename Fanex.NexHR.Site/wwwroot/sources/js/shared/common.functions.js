@@ -390,6 +390,13 @@ function resolveClientUrl(relativePath) {
     return _rootUrl + relativePath;
 }
 
+function initTooltip() {
+    $('.tooltip-tipsy').tipsy({
+        html: true,
+        gravity: 'e'
+    });
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -410,5 +417,6 @@ export {
     showValidationSummaryErrors,
     hideValidationSummaryErrors,
     autoIndex,
-    resolveClientUrl
+    resolveClientUrl,
+    initTooltip
 };

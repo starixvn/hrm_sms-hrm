@@ -5,6 +5,7 @@ import 'floatthead/dist/jquery.floatThead';
 import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
+import '../../shared/employee.search.in.team';
 
 (function () {
     var $disciplineTableBody, $dialogAddOtherDiscipline, $dialogViewOtherDiscipline, $btnAddOtherDiscipline;
@@ -342,6 +343,7 @@ import '../../shared/multiselect-tree-view';
     }
 
     function query() {
+        blockUI();
         $.ajax({
             url: _global.root + 'discipline/PartialListDisciplineSummary',
             data: $('form.form-filter').serialize(),
@@ -350,6 +352,7 @@ import '../../shared/multiselect-tree-view';
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: 'w' });
                 initEventViewOtherDiscipline();
                 initEventForViewDisciplineDetail();
+                unblockUI();
             }
         });
     }
@@ -359,7 +362,7 @@ import '../../shared/multiselect-tree-view';
         $dialogAddOtherDiscipline = $('#dialogAddOtherDiscipline');
         $dialogViewOtherDiscipline = $('#dialogViewOtherDiscipline');
         $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
-
+        initDatepicker();
         initEventForTeamDropdown();
         initEventForDateRangeDropdown();
         initEventOnChangeFromDate();

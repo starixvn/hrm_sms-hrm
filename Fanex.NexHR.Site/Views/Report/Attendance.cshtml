@@ -66,12 +66,12 @@
             <div class="select-form">
                 @{
                     var types = new List<SelectListItem>            {                                                                                                            new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
-                                                                                                                                                                                                new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
-                                                                                                                                                                                                new SelectListItem() {Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString()},
-                                                                                                                                                                                                new SelectListItem() {Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString()},
-                                                                                                                                                                                                new SelectListItem() {Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString()},
-                                                                                                                                                                                                new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
-                                                                                                                                                                                                                                                };
+                                                                                                                                                                                                        new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
+                                                                                                                                                                                                        new SelectListItem() {Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString()},
+                                                                                                                                                                                                        new SelectListItem() {Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString()},
+                                                                                                                                                                                                        new SelectListItem() {Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString()},
+                                                                                                                                                                                                        new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
+                                                                                                                                                                                                                                                        };
                 }
                 @Html.DropDownListFor(model => model.AttendanceType, types, new { @class = "form-control" })
             </div>
@@ -117,8 +117,13 @@
         </div>
         <div class="clearfix"></div>
         <div class="form-group form-group--m">
-            <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
-            <button type="button" id="btnExcel" class="btn btn-excel">Excel</button>
+            <div class="label-form">
+                <label class="control-label"></label>
+            </div>
+            <div class="select-form">
+                <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+                <button type="button" id="btnExcel" class="btn btn-excel">Excel</button>
+            </div>
         </div>
     </div>
 </form>
