@@ -21,7 +21,6 @@
 <div class="card">
     @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.DeprtamentId)
 
         <div class="form-group">
@@ -29,7 +28,7 @@
                 @Html.LabelFor(model => model.Code, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control" })
+                @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
                 @Html.ValidationMessageFor(model => model.Code)
             </div>
         </div>
@@ -39,7 +38,7 @@
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control" })
+                @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
@@ -49,7 +48,7 @@
                 @Html.LabelFor(model => model.ParentId, "Parent", new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"), Labels.SelectParent, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ParentId, new SelectList(Model.ParentDepartments, "Id", "Name"), string.Empty, new { @class = "form-control" })
             </div>
         </div>
 
@@ -58,7 +57,7 @@
                 @Html.LabelFor(model => model.Manager, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Manager", Model.Manager, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.TextBox("Manager", Model.Manager, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
 
                 @Html.ValidationMessage("Manager")
 

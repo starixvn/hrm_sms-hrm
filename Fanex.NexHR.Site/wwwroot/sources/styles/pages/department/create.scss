@@ -7,23 +7,3 @@
 @import '../../vendors/_autocomplete.scss';
 @import '../../components/_checkbox.scss';
 
-.card {
-    width: 800px;
-
-    .request-type {
-        display: flex;
-
-        .radioButton {
-            margin-right: 10px;
-
-            input, label {
-                cursor: pointer;
-            }
-
-            label {
-                font-weight: normal;
-                margin-left: 5px;
-            }
-        }
-    }
-}

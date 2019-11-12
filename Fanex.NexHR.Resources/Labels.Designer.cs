@@ -4030,15 +4030,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string SelectParent {
-            get {
-                return ResourceManager.GetString("SelectParent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to --Select a Verifier--.
         /// </summary>
         public static string SelectVerifier {
