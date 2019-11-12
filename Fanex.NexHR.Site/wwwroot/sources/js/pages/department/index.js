@@ -1,6 +1,8 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
+import 'jquery-validation/dist/jquery.validate';
+import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 
