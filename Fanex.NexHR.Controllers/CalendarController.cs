@@ -38,45 +38,6 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult ShiftStatistic()
-        {
-            var shiftStatisticViewModel = new ShiftStatisticViewModel
-            {
-                FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek()
-            };
-
-            return View(shiftStatisticViewModel);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult ShiftStatisticContent(DateTime fromDate, DateTime toDate, string groupIds, bool isShowWholeCompany, byte? isLocal)
-        {
-            var criteria = new GetShiftStatisticCriteria
-            {
-                SupervisorId = sessionService.Employee.Id,
-                Fromtime = fromDate,
-                Totime = toDate,
-                GroupIds = groupIds,
-                IsShowWholeCompany = isShowWholeCompany,
-                IsLocal = isLocal
-            };
-            IList<ShiftStatisticModel> shiftStatisticModels = workingCalendarService.GetShiftStatistic(criteria);
-
-            var shiftStatisticContentViewModel = new ShiftStatisticContentViewModel
-            {
-                FromDate = fromDate,
-                ToDate = toDate,
-                ShiftStatisticModels = shiftStatisticModels,
-                GroupIds = groupIds,
-                IsShowWholeCompany = isShowWholeCompany,
-                IsLocal = isLocal
-            };
-
-            return View(shiftStatisticContentViewModel);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
         public ActionResult EmployeeShift(
             DateTime? workDate,
             int? shiftId,

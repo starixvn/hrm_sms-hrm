@@ -9,8 +9,6 @@
 
     public interface IWorkingCalendarService
     {
-        IList<ShiftStatisticModel> GetShiftStatistic(GetShiftStatisticCriteria criteria);
-
         IList<EmployeeShiftModel> GetEmployeeShift(GetEmployeeShiftDateCriteria criteria);
 
         IEnumerable<DailySchedule> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);

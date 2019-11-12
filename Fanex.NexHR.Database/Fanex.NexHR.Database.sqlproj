@@ -194,7 +194,7 @@
     <Build Include="dbo\Stored Procedures\Shift_GetShifts.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetShiftsByShiftID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForEmpId.sql" />
-    <Build Include="dbo\Stored Procedures\ShiftMng_RptShiftSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\Report_ShiftStatistic.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportData.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioAdmin.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest.sql" />

@@ -103,6 +103,8 @@
     <Compile Include="Log\LogObjectDetail.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeParam.cs" />
+    <Compile Include="Report\ShiftStatistic\GetShiftStatisticParam.cs" />
+    <Compile Include="Report\ShiftStatistic\ShiftStatistic.cs" />
     <Compile Include="Report\WorkingCalendarSummary.cs" />
     <Compile Include="Discipline\DisciplineDetailModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />

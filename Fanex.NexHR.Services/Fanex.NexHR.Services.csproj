@@ -211,6 +211,7 @@
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
     <Compile Include="Implement\Report\ManpowerReportService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
+    <Compile Include="Implement\Report\ShiftStatisticReportService.cs" />
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
     <Compile Include="Implement\RoleService.cs" />

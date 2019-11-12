@@ -256,6 +256,7 @@
     <Content Include="wwwroot\dist\js\extensionno.create.js" />
     <Content Include="wwwroot\dist\js\extensionno.index.js" />
     <Content Include="wwwroot\dist\js\external.group.js" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.js" />
     <Content Include="wwwroot\dist\js\section.discipline.rule.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.css" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.js" />
@@ -277,6 +278,8 @@
     <Content Include="wwwroot\dist\styles\extensionno.index.js" />
     <Content Include="wwwroot\dist\styles\external.group.css" />
     <Content Include="wwwroot\dist\styles\external.group.js" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.css" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.js" />
     <Content Include="wwwroot\dist\styles\section.discipline.rule.css" />
     <Content Include="wwwroot\dist\styles\section.discipline.rule.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
@@ -316,6 +319,7 @@
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
+    <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
@@ -852,7 +856,6 @@
     <Content Include="Scripts\tiny_mce\utils\mctabs.js" />
     <Content Include="Scripts\tiny_mce\utils\validate.js" />
     <Content Include="Scripts\Views\annualbalanceadj.js" />
-    <Content Include="Scripts\Views\criteria.js" />
     <Content Include="Scripts\Views\checkinout.bymanager.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Views\fixtable.js" />
@@ -1154,6 +1157,10 @@
     <Content Include="wwwroot\dist\styles\extensionno.index.js.map" />
     <Content Include="wwwroot\dist\styles\external.group.js.map" />
     <Content Include="wwwroot\dist\styles\section.discipline.rule.js.map" />
+    <Content Include="Views\Report\ShiftStatistic\Index.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\_ShiftStatistic.cshtml" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.js.map" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
@@ -1395,8 +1402,6 @@
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
     <Content Include="Views\ScheduleArrange\Index.cshtml" />
-    <Content Include="Views\Calendar\ShiftStatistic.cshtml" />
-    <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
@@ -1454,7 +1459,7 @@
     <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
-    <Content Include="wwwroot\sources\styles\pages\calendar\shiftstatistic.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
     <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
     <Content Include="wwwroot\sources\styles\main.scss" />
     <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />

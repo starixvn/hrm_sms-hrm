@@ -182,6 +182,7 @@
     <Compile Include="Request\RequestController.cs" />
     <Compile Include="ScheduleArrangeController.cs" />
     <Compile Include="ShiftController.cs" />
+    <Compile Include="Report\ShiftStatisticReportController.cs" />
     <Compile Include="TeamController.cs" />
     <Compile Include="TimeController.cs" />
     <Compile Include="UIController.cs">

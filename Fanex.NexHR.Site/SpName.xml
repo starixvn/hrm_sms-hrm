@@ -75,6 +75,7 @@
       <Mapping DataField="LeaveName" ObjectProperty="Name" />
     </Setting>
     <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="nexhrx" Plain="0" />
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" SpName="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" DbName="nexhrx" Plain="0"></Setting>
@@ -106,16 +107,6 @@
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="ShiftMng_RptShiftSchedule" SpName="ShiftMng_RptShiftSchedule" DbName="nexhrx" Plain="0">
-      <Mapping DataField="Code" ObjectProperty="ShiftCode" />
-      <Mapping DataField="Monday" ObjectProperty="WorkMonday" />
-      <Mapping DataField="Tuesday" ObjectProperty="WorkTuesday" />
-      <Mapping DataField="Wednesday" ObjectProperty="WorkWednesday" />
-      <Mapping DataField="Thursday" ObjectProperty="WorkThursday" />
-      <Mapping DataField="Friday" ObjectProperty="WorkFriday" />
-      <Mapping DataField="Saturday" ObjectProperty="WorkSaturday" />
-      <Mapping DataField="Sunday" ObjectProperty="WorkSunday" />
     </Setting>
     <Setting Key="Employee_Shift_GetByDate" SpName="Employee_Shift_GetByDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetUnavailRequestDate" SpName="EmployeeCalendar_GetUnavailRequestDate" DbName="nexhrx" Plain="0"></Setting>

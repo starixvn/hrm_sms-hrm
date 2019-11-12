@@ -44,23 +44,23 @@
                         {
                             case (ushort)RequestType.CheckIn:
                             case (ushort)RequestType.CheckOut:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { @class = "pending" })
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.LateIn:
                             case (ushort)RequestType.EarlyOut:
                                 @RazorHelper.DisplayZeroCell(item.TotalPending)
                                 break;
                             case (ushort)RequestType.ChangeShift:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { @class = "pending" })
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Leave:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { @class = "pending" })
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.KeepInView:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { @class = "pending" })
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Overtime:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "overtime", new { @class = "pending" })
+                                @Html.ActionLink(item.TotalPending.ToString(), "employeeview", "overtime", new { }, new { @class = "pending" })
                                 break;
                         }
                     }
