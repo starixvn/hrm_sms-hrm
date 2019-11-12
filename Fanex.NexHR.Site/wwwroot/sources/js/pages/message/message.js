@@ -1,10 +1,10 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import {initFromDateOnChange, confirm, initDatepicker } from '../../shared/common.functions';
+import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
+import { initFromDateOnChange, confirm, initDatepicker, autoIndex } from '../../shared/common.functions';
 import '../../date';
 
 var deleteMessage = function (messageId) {
@@ -28,7 +28,7 @@ var init = function () {
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
-    $('#message-detail').on('click', function () {
+    $('.message-detail').on('click', function () {
         var id = $(this).attr('data-id');
         detailMessage(id);
     });

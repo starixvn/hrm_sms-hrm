@@ -46,7 +46,7 @@
             <div class="input-form">
                 @{
                     var status = new List<SelectListItem>
-                            {
+                                    {
                         new SelectListItem() {Text = "-- All --", Value = string.Empty},
                         new SelectListItem() {Text = "Active", Value = "0"},
                         new SelectListItem() {Text = "Disabled", Value = "1"},
@@ -114,7 +114,7 @@
                         }
                     </td>
                     <td class="cmd" title="Delete">
-                        <a href="javascript:;" >
+                        <a href="javascript:;">
                             <i class="fa fa-times fa-lg icon-delete" data-id="@message.MessageId"></i>
                         </a>
                     </td>

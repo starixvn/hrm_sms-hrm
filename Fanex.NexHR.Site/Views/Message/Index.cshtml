@@ -1,126 +1,145 @@
 ﻿@using Fanex.NexHR.Models.Message
 @model GetMessageByCreatorParam
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Message;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    @Url.CombresLink("messagecss")
+    <link href="~/wwwroot/dist/styles/message.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("messagejs")
+    <script src="~/wwwroot/dist/js/message.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <span class="step">@ViewBag.Title</span>
 }
-
 <h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat" style="width: 920px;">
-        @Html.HiddenFor(model => model.IsDisabled)
-        <div class="grid_2 formrow message-label">
-            @Html.LabelFor(model => model.FromDate)
+<form class="filter" method="post">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @{
+                    DateTime defaultFromdDate = Model.FromDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromdDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
         </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.FromDate)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @{
+                    DateTime defaultToDate = Model.ToDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
         </div>
-        <div class="grid_2 formrow message-label">
-            @Html.LabelFor(model => model.ToDate)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Status</label>
+            </div>
+            <div class="input-form">
+                @{
+                    var status = new List<SelectListItem>
+                                            {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Active", Value = "0"},
+                        new SelectListItem() {Text = "Disabled", Value = "1"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsDisabled, status, new { @class = "category form-control" })
+            </div>
         </div>
-        <div class="grid_4">
-            @Html.DatePickerFor(model => model.ToDate)
-        </div>
-        <div class="grid_2 formrow message-label">
-            <label>@Labels.Status</label>
-        </div>
-        <div class="grid_3">
-            @RazorHelper.MessageStatusDropDownList(controlName: "status")
-        </div>
-        <div class="grid_6">
-            <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
+        <div class="form-group form-group--m">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
             @if (hasPermission)
             {
-                <div class="button-icon">
-                    <span class="icon plus"></span>@Html.ActionLink("Create Message", "Create")
-                </div>
+                <a href="@Url.Action("Create")" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    @Labels.CreateMessage
+                </a>
             }
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <table id="messageTable" class="table table-custom persist-area" style="width: 942px;">
-        <thead>
-            <tr>
+</form>
+<table id="messageTable" class="table table-custom">
+    <thead>
+        <tr>
+            <th>
+                @Labels.SymbolCount
+            </th>
+            <th>
+                @Labels.Subject
+            </th>
+            <th>
+                @Labels.Category
+            </th>
+            <th>
+                @Labels.SendTo
+            </th>
+            <th>
+                @Labels.CreatedDate
+            </th>
+            @if (hasPermission)
+            {
                 <th>
-                    @Labels.SymbolCount
+                    @Labels.Edit
                 </th>
                 <th>
-                    @Labels.Subject
+                    @Labels.Delete
                 </th>
-                <th>
-                    @Labels.Category
-                </th>
-                <th>
-                    @Labels.SendTo
-                </th>
-                <th>
-                    @Labels.CreatedDate
-                </th>
-                @if (hasPermission)
-                {
-                    <th>
-                        @Labels.Edit
-                    </th>
-                    <th>
-                        @Labels.Delete
-                    </th>
-                }
-            </tr>
-        </thead>
-        @if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
-        {
-            <tbody>
-                @{int index = 1;}
-                @foreach (Message message in ViewBag.Messages)
-                {
-                    <tr id="row_@message.MessageId">
-                        <td>
-                            @(index++)
+            }
+        </tr>
+    </thead>
+    @if (ViewBag.Messages != null && ViewBag.Messages.Count > 0)
+    {
+        <tbody>
+            @{int index = 1;}
+            @foreach (Message message in ViewBag.Messages)
+            {
+                <tr id="row_@message.MessageId">
+                    <td>
+                        @(index++)
+                    </td>
+                    <td class="left">
+                        <a href="/message/detail/@message.MessageId">@message.Subject</a>
+                    </td>
+                    <td>
+                        @message.CategoryName
+                    </td>
+                    <td class="send-to">
+                        @message.SendTo
+                    </td>
+                    <td>
+                        @message.CreatedDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    @if (hasPermission)
+                    {
+                        <td class="cmd" title="Edit">
+                            <a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
                         </td>
-                        <td class="left">
-                            <a href="/message/detail/@message.MessageId">@message.Subject</a>
+                        <td class="cmd" title="Delete">
+                            <a href="javascript:;">
+                                <i class="fa fa-times fa-lg icon-delete" data-id="@message.MessageId"></i>
+                            </a>
                         </td>
-                        <td>
-                            @message.CategoryName
-                        </td>
-                        <td class="send-to">
-                            @message.SendTo
-                        </td>
-                        <td>
-                            @message.CreatedDate.ToDateMonthYearFormatedDate()
-                        </td>
-                        @if (hasPermission)
-                        {
-                            <td class="cmd" title="Edit">
-                                <a href="@Url.Action("Edit", "message", new { Id = message.MessageId })">
-                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                </a>
-                            </td>
-                            <td class="cmd" title="Delete">
-                                <a href="javascript:;" onclick="deleteMessage(@message.MessageId)">
-                                    <i class="fa fa-times fa-lg icon-delete"></i>
-                                </a>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(7)
-        }
-    </table>
-}
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(7)
+    }
+</table>
