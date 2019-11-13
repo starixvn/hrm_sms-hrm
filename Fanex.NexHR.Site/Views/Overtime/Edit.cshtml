@@ -131,13 +131,20 @@
                             }
                         </td>
                         <td class="cell-overtime">
-                            @if (Model.MonthlyRequest.Requester.SpecialOT > 0 
+                            @if (Model.MonthlyRequest.Requester.SpecialOT > 0
                                 && request.ActualWorkingHours > 0
                                 && !request.IsKeepInView
                                 && !request.IsOffDay && !request.IsHoliday
-                                && request.ActualWorkingHours > (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
+                                && request.ActualWorkingHours >= (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
                             {
                                 @Html.TextBoxFor(model => request.SpecialHours, new { @class = "specialHours form-control", @maxlength = 5, autocomplete = "off" })
+                            }
+                            else
+                            {
+                                if (request.SpecialHours > 0)
+                                {
+                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = "specialHours form-control", @maxlength = 5, autocomplete = "off", @readonly = "readonly" })
+                                }
                             }
                         </td>
                         <td>

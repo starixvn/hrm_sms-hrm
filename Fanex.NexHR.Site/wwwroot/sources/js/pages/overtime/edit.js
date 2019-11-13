@@ -61,36 +61,34 @@ $(document).ready(function () {
     };
 
     let validation = function () {
+        let isValid = true;
         const verifierId = $('#VerifierId').val();
         const approverId = $('#ApproverId').val();
 
         if (verifierId === '' && approverId === '') {
             toastr.error('Please select Verifier and Approver.', '', toastOptions());
-            return false;
-        }
-
-        if (verifierId === null || verifierId === '') {
+            isValid = false;
+        } else if (verifierId === null || verifierId === '') {
             toastr.error('Please select a Verifier.', '', toastOptions());
-            return false;
-        }
-
-        if (approverId === null || approverId === '') {
+            isValid = false;
+        } else if (approverId === null || approverId === '') {
             toastr.error('Please select an Approver.', '', toastOptions());
-            return false;
+            isValid = false;
+        } else {
+            $('input.remark').each(function () {
+                let row = $(this).closest('tr');
+                const normalHours = parseFloat(row.find('input.normalHours').val());
+                const specialHours = parseFloat(row.find('input.specialHours').val());
+
+                if (normalHours !== 0 && specialHours !== 0) {
+                    toastr.error('Can not claim both normal and special.', '', toastOptions());
+                    isValid = false;
+                    return;
+                }
+            });
         }
 
-        $('input.remark').each(function () {
-            let row = $(this).closest('tr');
-            const normalHours = parseFloat(row.find('input.normalHours').val());
-            const specialHours = parseFloat(row.find('input.specialHours').val());
-
-            if (normalHours !== 0 && specialHours !== 0) {
-                toastr.error('Can not claim both normal and special.', '', toastOptions());
-                return false;
-            }
-        });
-
-        return true;
+        return isValid;
     };
 
     $('form').areYouSure();
