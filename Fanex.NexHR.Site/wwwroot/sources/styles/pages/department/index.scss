@@ -5,3 +5,14 @@
 @import '../../layout/_table.scss';
 @import '../../components/_jquery-ui-dialog.scss';
 @import '../../components/_checkbox.scss';
+
+.checkbox-custom {
+
+    & + label:before {
+        content: none;
+    }
+
+    & + label:after {
+        border-color: mediumseagreen;
+    }
+}
