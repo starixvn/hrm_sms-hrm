@@ -75,7 +75,6 @@
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
-    <Compile Include="Calendar\EmployeeShiftViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarDetailViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarFilterViewModel.cs" />
     <Compile Include="Department\AddDepartmentViewModel.cs" />
@@ -102,6 +101,7 @@
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\Overtime\MonthlyFilterViewModel.cs" />
     <Compile Include="Report\RequestMonitoringViewModel.cs" />
+    <Compile Include="Report\ShiftStatisticDetailViewModel.cs" />
     <Compile Include="Report\WeekendLeaveViewModel.cs" />
     <Compile Include="Report\WorkingHoursSummaryViewModel.cs" />
     <Compile Include="Report\WorkingHours\WeeklyFilterViewModel.cs" />
@@ -125,7 +125,6 @@
     <Compile Include="Overtime\MonthlyOvertimeRequestViewModel.cs" />
     <Compile Include="Request\RequestViewModel.cs" />
     <Compile Include="Request\ChangeShiftDetailViewModel.cs" />
-    <Compile Include="Calendar\ShiftStatisticContentViewModel.cs" />
     <Compile Include="Report\ShiftStatisticViewModel.cs" />
     <Compile Include="EmployeeGroup\TeamViewModel.cs" />
     <Compile Include="Time\TimeRecordViewModel.cs" />

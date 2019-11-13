@@ -15,7 +15,7 @@ $(document).ready(function () {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
                 sectionIds: $('#SectionIds').val(),
-                isLocal: $('#Category').val(),
+                isLocal: $('#IsLocal').val(),
                 IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
             },
             responseType: 'text'
@@ -44,6 +44,5 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcel?' + $('form.filter').serialize());
     });
 });

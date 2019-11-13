@@ -256,6 +256,8 @@
     <Content Include="wwwroot\dist\js\extensionno.create.js" />
     <Content Include="wwwroot\dist\js\extensionno.index.js" />
     <Content Include="wwwroot\dist\js\external.group.js" />
+    <Content Include="wwwroot\dist\js\message.js" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.js" />
     <Content Include="wwwroot\dist\js\section.discipline.rule.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.css" />
@@ -278,6 +280,8 @@
     <Content Include="wwwroot\dist\styles\extensionno.index.js" />
     <Content Include="wwwroot\dist\styles\external.group.css" />
     <Content Include="wwwroot\dist\styles\external.group.js" />
+    <Content Include="wwwroot\dist\styles\message.css" />
+    <Content Include="wwwroot\dist\styles\message.js" />
     <Content Include="wwwroot\dist\styles\report.shiftstatistic.css" />
     <Content Include="wwwroot\dist\styles\report.shiftstatistic.js" />
     <Content Include="wwwroot\dist\styles\section.discipline.rule.css" />
@@ -319,6 +323,7 @@
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
+    <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.js" />
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
@@ -475,7 +480,6 @@
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\Calendar\report.employeeshift.js" />
     <Content Include="Scripts\Views\Department\department.edit.js" />
     <Content Include="Scripts\Views\Department\department.js" />
     <Content Include="Scripts\Views\Employee\user.management.js" />
@@ -490,7 +494,6 @@
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
-    <Content Include="Styles\Calendar\report.employeeshift.css" />
     <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
@@ -520,8 +523,6 @@
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
-    <Content Include="Scripts\Views\Calendar\report.shiftstatistic.content.js" />
-    <Content Include="Scripts\Views\Calendar\report.shiftstatistic.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\message.css" />
@@ -1161,6 +1162,11 @@
     <Content Include="Views\Report\ShiftStatistic\_ShiftStatistic.cshtml" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.js.map" />
     <Content Include="wwwroot\dist\styles\report.shiftstatistic.js.map" />
+    <Content Include="Views\Report\ShiftStatistic\Details.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\_ShiftStatisticDetails.cshtml" />
+    <Content Include="wwwroot\dist\styles\message.js.map" />
+    <Content Include="wwwroot\dist\js\message.js.map" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
@@ -1445,8 +1451,6 @@
     </Content>
     <Content Include="Deployment.ignore" />
     <Content Include="Views\Report\DailyWorkingHours.cshtml" />
-    <Content Include="Views\Calendar\EmployeeShift.cshtml" />
-    <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
     <Content Include="Views\Report\Manpower.cshtml" />
     <Content Include="Views\Report\ManpowerCategory.cshtml" />

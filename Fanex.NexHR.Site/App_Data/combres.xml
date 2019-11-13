@@ -102,29 +102,6 @@
       <resource path="~/scripts/views/memo.edit.js" />
     </resourceSet>
 
-    <resourceSet name="shiftstatisticjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
-      <resource path="~/scripts/views/Calendar/report.shiftstatistic.js" />
-    </resourceSet>
-    <resourceSet name="shiftstatisticcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/dist/styles/shiftstatistic.css" />
-    </resourceSet>
-    <resourceSet name="shiftstatisticcontentjs" type="js">
-      <resource path="~/scripts/views/Calendar/report.shiftstatistic.content.js" />
-    </resourceSet>
-
-    <resourceSet name="employeeshiftjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/Calendar/report.employeeshift.js" />
-    </resourceSet>
-    <resourceSet name="employeeshiftcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/Calendar/report.employeeshift.css" />
-    </resourceSet>
-
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />

@@ -112,6 +112,7 @@ module.exports = {
         [`${jsDistPath}/report.weekendleave.detail`]: `${jsSourcePath}/report/weekendleave.detail.js`,
         [`${jsDistPath}/report.weekendleave.summary`]: `${jsSourcePath}/report/weekendleave.summary.js`,
         [`${jsDistPath}/report.shiftstatistic`]: `${jsSourcePath}/report/shiftstatistic.js`,
+        [`${jsDistPath}/report.shiftstatistic.details`]: `${jsSourcePath}/report/shiftstatistic.details.js`,
         [`${jsDistPath}/overtime.myrequest`]: `${jsSourcePath}/overtime/myrequest.js`,
         [`${jsDistPath}/overtime.edit`]: `${jsSourcePath}/overtime/edit.js`,
         [`${jsDistPath}/overtime.member.index`]: `${jsSourcePath}/overtime/member.index.js`,

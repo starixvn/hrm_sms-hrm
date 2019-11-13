@@ -8,6 +8,8 @@
     public interface IShiftStatisticReportService
     {
         IEnumerable<ShiftStatistic> GetShiftStatistic(GetShiftStatisticParam param);
+
+        IEnumerable<ShiftStatisticDetail> GetShiftStatisticDetail(GetShiftStatisticDetailParam param);
     }
 
     public class ShiftStatisticReportService : IShiftStatisticReportService
@@ -31,6 +33,21 @@
                 IsShowWholeCompany = param.IsShowWholeCompany
             };
             return baseService.GetData<ShiftStatistic>(criteria);
+        }
+
+        public IEnumerable<ShiftStatisticDetail> GetShiftStatisticDetail(GetShiftStatisticDetailParam param)
+        {
+            var criteria = new GetShiftStatisticDetailCriteria
+            {
+                SupervisorId = param.SupervisorId,
+                EmployeeId = param.EmployeeId,
+                WorkDate = param.WorkDate,
+                ShiftId = param.ShiftId,
+                SectionIds = param.SectionIds,
+                IsLocal = param.IsLocal,
+                IsShowWholeCompany = param.IsShowWholeCompany
+            };
+            return baseService.GetData<ShiftStatisticDetail>(criteria);
         }
     }
 }

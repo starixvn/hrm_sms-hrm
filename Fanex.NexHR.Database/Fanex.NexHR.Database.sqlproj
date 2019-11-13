@@ -156,7 +156,7 @@
     <Build Include="dbo\Stored Procedures\Report_Manpower.sql" />
     <Build Include="dbo\Stored Procedures\Report_ManpowerCategory.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetDetailsByRequestIds.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_Shift_GetByDate.sql" />
+    <Build Include="dbo\Stored Procedures\Report_ShiftStatisticDetail.sql" />
     <Build Include="dbo\Stored Procedures\Group_GetBySupervisor.sql" />
     <Build Include="dbo\Stored Procedures\Report_UnpaidLeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetEmployeeToRemindClaim.sql" />

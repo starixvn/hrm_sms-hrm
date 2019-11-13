@@ -78,7 +78,6 @@
     <Compile Include="BackgroundJob\PublishScheduleCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
-    <Compile Include="Calendar\GetEmployeeShiftDateCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Department\GetParentByDepartmentCriteria.cs" />
@@ -149,6 +148,7 @@
     <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
     <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
     <Compile Include="Report\ShiftStatistic\GetShiftStatisticCriteria.cs" />
+    <Compile Include="Report\ShiftStatistic\GetShiftStatisticDetailCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestByEmployeeCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestByIdCriteria.cs" />
     <Compile Include="Request\ChangeShift\GetChangeShiftRequestHistoryByIdCriteria.cs" />

@@ -76,6 +76,7 @@
     </Setting>
     <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="nexhrx" Plain="0" />
+    <Setting Key="Report_ShiftStatisticDetail" SpName="Report_ShiftStatisticDetail" DbName="nexhrx" Plain="0" />
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_CheckinOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" SpName="WorkingTimeRequest_GetRequestByCreateDate_LateInEarlyOutType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" SpName="WorkingTimeRequest_GetRequestByCreateDate_ChangeShiftType" DbName="nexhrx" Plain="0"></Setting>
@@ -108,7 +109,6 @@
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Employee_Shift_GetByDate" SpName="Employee_Shift_GetByDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetUnavailRequestDate" SpName="EmployeeCalendar_GetUnavailRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeForRelatedTeam" SpName="Employee_GetEmployeeForRelatedTeam" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_ChangePassword" SpName="Employee_ChangePassword" DbName="nexhrx" Plain="0"></Setting>

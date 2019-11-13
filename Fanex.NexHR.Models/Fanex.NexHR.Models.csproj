@@ -92,7 +92,6 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
-    <Compile Include="Calendar\EmployeeShiftModel.cs" />
     <Compile Include="Calendar\HalfDayOff.cs" />
     <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
@@ -103,8 +102,10 @@
     <Compile Include="Log\LogObjectDetail.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeParam.cs" />
+    <Compile Include="Report\ShiftStatistic\GetShiftStatisticDetailParam.cs" />
     <Compile Include="Report\ShiftStatistic\GetShiftStatisticParam.cs" />
     <Compile Include="Report\ShiftStatistic\ShiftStatistic.cs" />
+    <Compile Include="Report\ShiftStatistic\ShiftStatisticDetail.cs" />
     <Compile Include="Report\WorkingCalendarSummary.cs" />
     <Compile Include="Discipline\DisciplineDetailModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />

@@ -34,7 +34,7 @@ BEGIN
 		WHERE IsDeleted = 0
 	END
 
-	IF (@isShowWholeCompany = 0)
+	IF @isShowWholeCompany = 0
 	BEGIN
 		INSERT INTO @tblEmployeeId (EmpId)
 		SELECT es.OwnerId
@@ -75,6 +75,7 @@ BEGIN
 		,COUNT(1) AS Total
 	FROM dbo.Shift AS shift WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON shift.ShiftId = empca.ShiftId
+		AND ISNULL(empca.ShiftId, 0) <> 0
 		AND empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND empca.IsLeaveDay = 0

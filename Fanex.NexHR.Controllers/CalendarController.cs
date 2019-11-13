@@ -37,53 +37,6 @@
             this.employeeService = employeeService;
         }
 
-        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult EmployeeShift(
-            DateTime? workDate,
-            int? shiftId,
-            string teamIds,
-            bool? isShowWholeCompany,
-            byte? isLocal = null)
-        {
-            var model = new EmployeeShiftViewModel
-            {
-                TeamIds = teamIds ?? string.Empty,
-                WorkDate = workDate ?? DateTime.Now,
-                IsLocal = isLocal,
-                IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
-                ShiftId = shiftId ?? -1,
-                Shifts = shiftService.GetAll(),
-                Teams = commonDataService.GetAllSection()
-            };
-
-            return View(model);
-        }
-
-        [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
-        public ActionResult EmployeeShiftContent(
-            DateTime workDate,
-            int? shiftId,
-            string teamIds,
-            int? employeeId,
-            bool? isShowWholeCompany,
-            byte? isLocal = null)
-        {
-            var criteria = new GetEmployeeShiftDateCriteria
-            {
-                WorkDate = workDate,
-                ShiftId = shiftId,
-                EmployeeId = employeeId,
-                SupervisorId = sessionService.Employee.Id,
-                IsShowWholeCompany = isShowWholeCompany.HasValue && isShowWholeCompany.Value,
-                TeamIds = teamIds,
-                IsLocal = isLocal
-            };
-
-            IList<EmployeeShiftModel> employeeShifts = workingCalendarService.GetEmployeeShift(criteria);
-
-            return View(employeeShifts);
-        }
-
         public ActionResult GetShift(string query, bool isShowOff = false)
         {
             var shifts = shiftService.GetByQuery(query.Trim(), isShowOff);

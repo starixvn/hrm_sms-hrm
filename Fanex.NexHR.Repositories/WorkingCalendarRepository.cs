@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Data;
-    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.ViewModels;
 
@@ -73,25 +71,6 @@
 
                     return list;
                 }
-            }
-        }
-
-        public IList<EmployeeShiftModel> GetEmployeeShift(ICriteria criteria)
-        {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
-            {
-                var employeeShifts = db.Query<EmployeeShiftModel, Employee, Team, Shift, EmployeeShiftModel>(
-                    (es, e, t, sh) =>
-                    {
-                        e.Team = t;
-                        es.Employee = e;
-                        es.Shift = sh;
-                        return es;
-                    },
-                    splitOn: "EmpId, GroupId, ShiftId",
-                    parameterValues: criteria.GetSpParams()).ToList();
-
-                return employeeShifts;
             }
         }
     }
