@@ -106,11 +106,11 @@
                             {
                                 if (item.RequestTypeId == (ushort)RequestType.Overtime)
                                 {
-                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime")
+                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { @class = "pending" })
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("member", "request", requestModel)">@item.TotalPending.ToString()</a>
+                                    <a href="@Url.Action("member", "request", requestModel)" class="pending">@item.TotalPending.ToString()</a>
                                 }
                             }
                             else

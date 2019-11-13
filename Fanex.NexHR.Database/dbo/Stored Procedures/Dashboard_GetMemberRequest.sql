@@ -96,16 +96,18 @@ BEGIN
 			ISNULL(NormalHours, 0) <> 0
 			OR ISNULL(OffHours, 0) <> 0
 			OR ISNULL(PublicHours, 0) <> 0
+			OR ISNULL(SpecialHours, 0) <> 0
 			)
 
 	SELECT @TotalOvertimePendingByApprover = COUNT(1)
 	FROM dbo.OTMonthlyRequest WITH (NOLOCK)
 	WHERE ApproverId = @EmployeeId
-		AND CurrentStatus = @VerifiedStatusId
+		AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId)
 		AND (
 			ISNULL(NormalHours, 0) <> 0
 			OR ISNULL(OffHours, 0) <> 0
 			OR ISNULL(PublicHours, 0) <> 0
+			OR ISNULL(SpecialHours, 0) <> 0
 			)
 
 	-- pending

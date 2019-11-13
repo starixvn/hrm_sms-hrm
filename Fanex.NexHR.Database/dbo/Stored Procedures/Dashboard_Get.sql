@@ -30,11 +30,9 @@ BEGIN
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
-		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
 		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
-		,@VoidStatusId TINYINT = 7
 
 	SET @fromDate = CAST(YEAR(@Date) AS VARCHAR(4)) + '/' + CAST(MONTH(@Date) AS VARCHAR(2)) + '/01'
 	SET @toDate = DATEADD(DAY, - 1, DATEADD(MONTH, 1, @fromDate))
@@ -83,6 +81,7 @@ BEGIN
 			ISNULL(NormalHours, 0) <> 0
 			OR ISNULL(OffHours, 0) <> 0
 			OR ISNULL(PublicHours, 0) <> 0
+			OR ISNULL(SpecialHours, 0) <> 0
 			)
 
 	INSERT INTO @tblData (
@@ -116,7 +115,7 @@ BEGIN
 			WHEN RequestType = @LeaveTypeId THEN @LeaveTypeId
 			WHEN RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
 			END
-
+	
 	UNION
 	SELECT @OvertimeTypeId AS RequestTypeId
 		,0 AS TotalRequest
