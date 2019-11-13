@@ -156,7 +156,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
+                @Html.LabelFor(model => model.VerifierId, Labels.Verifier)
             </div>
             <div class="input">
                 @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"))
@@ -166,7 +166,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
+                @Html.LabelFor(model => model.ApproverId, Labels.Approver)
             </div>
             <div class="input">
                 @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"))

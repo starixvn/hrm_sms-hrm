@@ -5,6 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
     using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Resources;
 
     public class LateInEarlyOutRequestViewModel
     {
@@ -27,11 +28,11 @@
         public int EmployeeId { get; set; }
 
         [AllowHtml]
-        [Required(ErrorMessage = "The Remark field is required.")]
+        [Required(ErrorMessage = "Remark is required.")]
         public string Remark { get; set; }
 
         [Required]
-        [Range(1, MaximumMinute, ErrorMessage = "The Minute field must be between 1 and 60")]
+        [Range(1, MaximumMinute, ErrorMessage = "The Minute must be between 1 and 60")]
         public int Minute { get; set; }
 
         [Required]
@@ -40,12 +41,10 @@
         [Required]
         public byte ReasonId { get; set; }
 
-        [Display(Name = "Verified by")]
-        [Required(ErrorMessage = "The Verified by field is required.")]
+        [Display(Name = nameof(Labels.Verifier), ResourceType = typeof(Labels))]
         public int? VerifierId { get; set; }
 
-        [Display(Name = "Approved by")]
-        [Required(ErrorMessage = "The Approved by field is required.")]
+        [Display(Name = nameof(Labels.Approver), ResourceType = typeof(Labels))]
         public int? ApproverId { get; set; }
 
         public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();

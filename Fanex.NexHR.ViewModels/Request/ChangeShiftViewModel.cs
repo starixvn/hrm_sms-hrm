@@ -35,10 +35,10 @@
 
         public IEnumerable<ChangeShiftDetail> Details { get; set; } = new List<ChangeShiftDetail>();
 
-        [Display(Name = nameof(Labels.VerifiedBy), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.Verifier), ResourceType = typeof(Labels))]
         public int? VerifierId { get; set; }
 
-        [Display(Name = nameof(Labels.ApprovedBy), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.Approver), ResourceType = typeof(Labels))]
         public int? ApproverId { get; set; }
 
         public RequestStatus Status { get; set; }

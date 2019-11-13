@@ -51,15 +51,13 @@
         public string RefNO { get; set; }
 
         [AllowHtml]
-        [Required(ErrorMessage = "The Remark field is required.")]
+        [Required(ErrorMessage = "Remark is required.")]
         public string Remark { get; set; }
 
-        [Display(Name = "Verified by")]
-        [Required(ErrorMessage = "The Verified by field is required.")]
+        [Display(Name = nameof(Labels.Verifier), ResourceType = typeof(Labels))]
         public int? VerifierId { get; set; }
 
-        [Display(Name = "Approved by")]
-        [Required(ErrorMessage = "The Approved by field is required.")]
+        [Display(Name = nameof(Labels.Approver), ResourceType = typeof(Labels))]
         public int? ApproverId { get; set; }
 
         public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();

@@ -146,7 +146,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.VerifierId, Labels.VerifiedBy)
+                @Html.LabelFor(model => model.VerifierId, Labels.Verifier)
             </div>
             <div class="input">
                 @if (Model.Verifiers.Count > 1)
@@ -163,7 +163,7 @@
         </div>
         <div class="formrow">
             <div class="label">
-                @Html.LabelFor(model => model.ApproverId, Labels.ApprovedBy)
+                @Html.LabelFor(model => model.ApproverId, Labels.Approver)
             </div>
             <div class="input">
                 @if (Model.Approvers.Count > 1)
