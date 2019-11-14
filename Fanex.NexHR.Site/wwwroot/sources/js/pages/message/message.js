@@ -1,9 +1,6 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import 'jquery-contextmenu/dist/jquery.contextMenu';
-import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import { initFromDateOnChange, confirm, initDatepicker, autoIndex } from '../../shared/common.functions';
 import '../../date';
 
@@ -25,7 +22,6 @@ var detailMessage = function (messageId) {
 
 var init = function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('.message-detail').on('click', function () {

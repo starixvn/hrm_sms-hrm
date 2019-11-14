@@ -68,6 +68,8 @@ module.exports = {
         [`${styleDistPath}/discipline.summary`]: `${styleSourcePath}/pages/discipline/summary.scss`,
         [`${styleDistPath}/discipline.details`]: `${styleSourcePath}/pages/discipline/details.scss`,
         [`${styleDistPath}/message`]: `${styleSourcePath}/pages/message/message.scss`,
+        [`${styleDistPath}/message.create`]: `${styleSourcePath}/pages/message/create.scss`,
+
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -141,6 +143,7 @@ module.exports = {
         [`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/external.group.js`,
         [`${jsDistPath}/discipline.summary`]: `${jsSourcePath}/discipline/summary.js`,
         [`${jsDistPath}/discipline.detail`]: `${jsSourcePath}/discipline/details.js`,
-        [`${jsDistPath}/message`]: `${jsSourcePath}/message/message.js`
+        [`${jsDistPath}/message`]: `${jsSourcePath}/message/message.js`,
+        [`${jsDistPath}/message.create`]: `${jsSourcePath}/message/message.create.js`
     }
 };

@@ -321,6 +321,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\message\message.create.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
     <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.details.js" />
@@ -1157,6 +1158,7 @@
     <Content Include="wwwroot\dist\styles\external.group.js.map" />
     <Content Include="wwwroot\dist\styles\section.discipline.rule.js.map" />
     <Content Include="Views\Report\ShiftStatistic\Index.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\message\create.scss" />
     <Content Include="Views\Report\ShiftStatistic\_ShiftStatistic.cshtml" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.js.map" />
     <Content Include="wwwroot\dist\styles\report.shiftstatistic.js.map" />
@@ -1406,6 +1408,8 @@
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
     <Content Include="Views\ScheduleArrange\Index.cshtml" />
+    <Content Include="Views\Calendar\ShiftStatistic.cshtml" />
+    <Content Include="Views\Calendar\ShiftStatisticContent.cshtml" />
     <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
@@ -1449,6 +1453,8 @@
     </Content>
     <Content Include="Deployment.ignore" />
     <Content Include="Views\Report\DailyWorkingHours.cshtml" />
+    <Content Include="Views\Calendar\EmployeeShift.cshtml" />
+    <Content Include="Views\Calendar\EmployeeShiftContent.cshtml" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
     <Content Include="Views\Report\Manpower.cshtml" />
     <Content Include="Views\Report\ManpowerCategory.cshtml" />
@@ -1462,6 +1468,7 @@
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\shiftstatistic.scss" />
     <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
     <Content Include="wwwroot\sources\styles\main.scss" />
     <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />
@@ -1538,6 +1545,7 @@
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.supervisor.js.map" />
     <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
+    <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="Views\Paternity\_Create.cshtml" />
     <Content Include="Views\Paternity\_Edit.cshtml" />

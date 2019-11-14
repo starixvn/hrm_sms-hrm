@@ -17,7 +17,7 @@
 @{
     IList<Message> messages = ViewBag.Messages as IList<Message>;
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter" method="post">
     <div class="form-horizontal clearfix">
         @Html.HiddenFor(model => model.EmployeeId)
