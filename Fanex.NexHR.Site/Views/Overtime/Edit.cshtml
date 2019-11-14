@@ -14,8 +14,8 @@
     <script src="~/wwwroot/dist/js/overtime.edit.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>
-    <a class="step">Edit</a>
+    <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>
+    <a class="step">@Labels.Edit</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <form>
@@ -100,7 +100,20 @@
                         <td class="@className workdate" data-workdate="@request.WorkDate.ToString("dd-MMM-yyyy")">
                             @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
                         </td>
-                        <td class="shift" data-shiftid="@request.ShiftId">@request.ShiftCode</td>
+                        <td class="shift" data-shiftid="@request.ShiftId">
+                            @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+                            {
+                                @request.ShiftCode
+                            }
+                            else if (request.IsHoliday)
+                            {
+                                @Labels.Holiday
+                            }
+                            else if (request.IsOffDay)
+                            {
+                                @Labels.Off
+                            }
+                        </td>
                         <td class="timeIn">@request.TimeIn</td>
                         <td class="timeOut">@request.TimeOut</td>
                         <td class="totalHours">
@@ -112,7 +125,7 @@
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0
                                 && !request.IsKeepInView
-                                && !request.IsOffDay && !request.IsHoliday 
+                                && !request.IsOffDay && !request.IsHoliday
                                 && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
                             {
                                 @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", @maxlength = 5, autocomplete = "off" })

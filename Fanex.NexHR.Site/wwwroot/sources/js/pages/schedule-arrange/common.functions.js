@@ -96,7 +96,7 @@ function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDef
         shift.details = dailySchedule.changeShiftTypeId === ChangeShiftType.MoveOffDay ? `Move off day to ${moveOffDate}` : '';
     } else if (dailySchedule.isOvertime) {
         shift.class = 'overtime';
-        shift.value = dailySchedule.shift.code;
+        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
     } else {
         shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
     }

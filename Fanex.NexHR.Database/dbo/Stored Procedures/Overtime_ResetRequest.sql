@@ -83,7 +83,7 @@ BEGIN
 				WHEN req.CurrentStatus = @VoidStatusId THEN @PendingStatusId
 				ELSE @ApprovedStatusId
 				END
-			,ApproverId = @ActorId
+			,HRId = @ActorId
 			,HRDate = @ModifiedDate
 			,HRStatus = 0
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)

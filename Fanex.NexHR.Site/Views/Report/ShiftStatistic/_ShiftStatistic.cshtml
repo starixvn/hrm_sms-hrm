@@ -29,7 +29,7 @@
             @foreach (var shiftStatistic in shiftStatistics)
             {
                 i = 0;
-                url = "ShiftStatisticReport/details?SectionIds=" + @Model.SectionIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany
+                url = "/shiftstatisticreport/details?SectionIds=" + @Model.SectionIds + "&islocal=" + @Model.IsLocal + "&isShowWholeCompany=" + @Model.IsShowWholeCompany
                     + "&shiftId=" + shiftStatistic.ShiftId + "&workdate=";
                 <tr>
                     <td>@shiftStatistic.Code</td>
@@ -48,7 +48,7 @@
                 <td class="align-right">@Labels.Total:</td>
                 @{
                     i = 0;
-                    url = "ShiftStatisticReport/details?sectionIds=" + @Model.SectionIds + "&islocal=" + @Model.IsLocal
+                    url = "/shiftstatisticreport/details?sectionIds=" + @Model.SectionIds + "&islocal=" + @Model.IsLocal
                         + "&isShowWholeCompany=" + @Model.IsShowWholeCompany + "&shiftId=&workdate=";
                 }
                 @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))

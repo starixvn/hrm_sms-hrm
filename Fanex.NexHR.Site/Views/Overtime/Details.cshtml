@@ -11,7 +11,7 @@
 @section js{
 }
 @section Breadcrumb {
-    <a class="step">Personal</a>
+    <a class="step">@Labels.Personal</a>
     <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>
     <a class="step">@Labels.Details</a>
 }
@@ -55,7 +55,20 @@
                     <td class="@className">
                         @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
                     </td>
-                    <td>@request.ShiftCode</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+                        {
+                            @request.ShiftCode
+                        }
+                        else if (request.IsHoliday)
+                        {
+                            @Labels.Holiday
+                        }
+                        else if (request.IsOffDay)
+                        {
+                            @Labels.Off
+                        }
+                    </td>
                     <td>@request.TimeIn</td>
                     <td>@request.TimeOut</td>
                     <td>

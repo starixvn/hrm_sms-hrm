@@ -16,7 +16,6 @@ BEGIN
 	DECLARE @Month DATE
 		,@fromDate DATE
 		,@toDate DATE
-		,@tempDate DATE
 		,@EmployeeId INT
 
 	SELECT @Month = [Month]
@@ -30,17 +29,9 @@ BEGIN
 	SELECT @fromDate = CONVERT(VARCHAR(5), YEAR(@fromDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@fromDate)) + '/10'
 		,@toDate = CONVERT(VARCHAR(5), YEAR(@toDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@toDate)) + + '/09'
 
-	CREATE TABLE #tblDate (WorkDate DATE)
-
-	SELECT @tempDate = @fromDate
-
-	WHILE @tempDate <= @toDate
-	BEGIN
-		INSERT INTO #tblDate (WorkDate)
-		VALUES (@tempDate)
-
-		SET @tempDate = DATEADD(DD, 1, @tempDate)
-	END
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
+		,@toDate = @toDate
+		,@empIds = @EmployeeId
 
 	SELECT ot.RequestId
 		,ot.[Month]
@@ -67,7 +58,7 @@ BEGIN
 		INNER JOIN dbo.Employee AS approver WITH (NOLOCK) ON ot.ApproverId = approver.EmpId
 	WHERE ot.RequestId = @RequestId
 
-	SELECT tmp.WorkDate
+	SELECT empca.WorkDate
 		,COALESCE(sc.ShiftId, scl.ShiftId, s.ShiftId) AS ShiftId
 		,COALESCE(sc.Code, scl.Code, s.Code) AS ShiftCode
 		,COALESCE(sc.TotalHours, scl.TotalHours, s.TotalHours) AS TotalShiftHours
@@ -82,15 +73,16 @@ BEGIN
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,empca.IsKeepInView
-	FROM #tblDate AS tmp
-		LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
-		AND ot.EmpID = @EmployeeId
+	FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+		LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON empca.WorkDate = ot.OvertimeDate
+		AND ot.EmpId = empca.EmpId
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
-		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON empatt.AttendanceDate = tmp.WorkDate
-		AND empatt.EmpId = @EmployeeId
-		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.WorkDate = tmp.WorkDate
-		AND empca.EmpId = @EmployeeId
+		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON empatt.AttendanceDate = empca.WorkDate
+		AND empatt.EmpId = empca.EmpId
 		LEFT JOIN dbo.[Shift] AS sc WITH (NOLOCK) ON sc.ShiftId = empatt.ShiftId
 		LEFT JOIN dbo.[Shift] AS scl WITH (NOLOCK) ON scl.ShiftId = empca.ShiftId
-	ORDER BY tmp.WorkDate
+	WHERE empca.EmpId = @employeeId
+		AND empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+	ORDER BY empca.WorkDate
 END

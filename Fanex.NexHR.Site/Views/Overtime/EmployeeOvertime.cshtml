@@ -1,5 +1,6 @@
-﻿@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Core
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
 @model MemberMonthlyOvertimeRequestViewModel
@@ -14,7 +15,7 @@
     <script src="~/wwwroot/dist/js/overtime.hr.index.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 
 <div class="title">
@@ -141,11 +142,9 @@
                     </td>
                     <td>@request.Verifier.Nickname</td>
                     <td>@request.Approver.Nickname</td>
-                    <td>@request.Status</td>
+                    <td>@RenderStatus(request)</td>
                     <td>
-                        <a href="@Url.Action("EmployeeDetails", "Overtime", new { id = request.RequestId })">
-                            @Labels.View
-                        </a>
+                        <a href="@Url.Action("EmployeeDetails", "Overtime", new { id = request.RequestId })">@Labels.View</a>
                     </td>
                 </tr>
             }
@@ -193,8 +192,35 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="btnSendMail" class="btn btn-primary">Send</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Labels.Cancel</button>
             </div>
         </div>
     </div>
 </div>
+@helper RenderStatus(MonthlyOvertimeRequest request)
+{
+    switch (request.Status.Id)
+    {
+        case (byte)CurrentRequestStatus.Approved:
+            <a requestid="@request.RequestId" href="javascript:;" class="hr-pending">
+                @request.Status
+                <span class="caret"></span>
+            </a>
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+            <a requestid="@request.RequestId" href="javascript:;" class="hr-processed">
+                @request.Status
+                <span class="caret"></span>
+            </a>
+            break;
+        case (byte)CurrentRequestStatus.Void:
+            <a requestid="@request.RequestId" href="javascript:;" class="hr-void">
+                @request.Status
+                <span class="caret"></span>
+            </a>
+            break;
+        default:
+            @request.Status
+            break;
+    }
+}

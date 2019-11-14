@@ -207,11 +207,11 @@ $(function () {
     }
 
     function processCommand(command, options) {
-        const eventElement = options.$trigger;
-        const requestTypeId = parseInt(eventElement.attr('requestTypeId'), 10);
-        const requestId = parseInt(eventElement.attr('requestId'), 10);
-        const roleId = parseInt(eventElement.attr('roleId'), 10);
-        const employeeId = parseInt(eventElement.attr('employeeId'), 10);
+        const eventElement = options.$trigger,
+            requestTypeId = parseInt(eventElement.attr('requestTypeId'), 10),
+            requestId = parseInt(eventElement.attr('requestId'), 10),
+            roleId = parseInt(eventElement.attr('roleId'), 10),
+            employeeId = parseInt(eventElement.attr('employeeId'), 10);
         let title;
         switch (command) {
             case 'Accept':

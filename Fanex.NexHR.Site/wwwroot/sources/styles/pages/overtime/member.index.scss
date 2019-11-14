@@ -1,4 +1,5 @@
-﻿@import '../../../libs/monthPicker/monPickr-0.0.3.css';
+﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
+@import '../../../libs/monthPicker/monPickr-0.0.3.css';
 
 @import '../../abstracts/variables';
 @import '../../abstracts/mixins';
@@ -7,6 +8,7 @@
 @import '../../components/modal';
 @import '../../components/icon';
 @import '../../components/multiselect-treeview';
+@import '../../components/context-menu';
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../layout/shift.color';

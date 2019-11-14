@@ -1,7 +1,7 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
+import 'jquery-contextmenu/dist/jquery.contextMenu';
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
@@ -52,7 +52,7 @@ $(document).ready(function () {
         const statusId = parseInt($('#StatusId').val(), 10),
             month = $('#Month').val();
 
-        if (statusId === 0 && month === '') {
+        if ((statusId === 0 || statusId === CurrentRequestStatus.Processed) && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
             $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
@@ -64,11 +64,11 @@ $(document).ready(function () {
         $table.find('tbody input[type=checkbox]').prop('checked', event.target.checked);
     });
 
-    let onUpdateRequestStatus = function (requestIds, command, roleId) {
+    let onUpdateRequestStatus = function (requestIds, command) {
         axios({
             url: _global.root + 'overtime/EditMonthlyRequestStatus',
             method: 'POST',
-            data: stringify({ requestIds, command, roleId }),
+            data: stringify({ requestIds, command, roleId: RoleSystem.HR }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -84,13 +84,38 @@ $(document).ready(function () {
         }).catch(axiosError);
     };
 
+    let checkInvalidOvertime = function (requestIds) {
+        axios({
+            url: _global.root + 'overtime/CheckInvalidOvertime',
+            method: 'POST',
+            data: stringify({ requestIds: requestIds.join(',') }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            let isValid = response.data;
+            if (isValid) {
+                onUpdateRequestStatus(requestIds, RequestCommand.Process);
+            } else {
+                $confirmModal.find('.modal-body')
+                    .html('There are some overtimes are invalid. Are you sure you want to <strong>Process</strong> this request(s)?');
+                $confirmModal.modal('show');
+                $btnConfirm.off('click');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestIds, RequestCommand.Process);
+                });
+            }
+        }).catch(axiosError);
+    };
+
     $('#btnProcess').on('click', function () {
         let objSelected = $table.find('tbody input[type=checkbox]:checked');
         if (objSelected.length > 0) {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
                 let $obj = $(objSelected[i]);
-                if ($obj.data('statusid') === CurrentRequestStatus.Approved) {
+                if (parseInt($obj.data('statusid'), 10) === CurrentRequestStatus.Approved) {
                     requestIds.push($obj.data('requestid'));
                 } else {
                     toastr.error('The status of some requests is not approved.', '', toastOptions());
@@ -104,28 +129,7 @@ $(document).ready(function () {
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
                     $confirmModal.modal('hide');
-                    axios({
-                        url: _global.root + 'overtime/CheckInvalidOvertime',
-                        method: 'POST',
-                        data: stringify({ requestIds: requestIds.join(',') }),
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        }
-                    }).then(response => {
-                        let isValid = response.data;
-                        if (isValid) {
-                            onUpdateRequestStatus(requestIds.join(','), RequestCommand.Process, RoleSystem.HR);
-                        } else {
-                            $confirmModal.find('.modal-body')
-                                .html('There are some overtimes are invalid. Are you sure you want to <strong>Process</strong> this request(s)?');
-                            $confirmModal.modal('show');
-                            $btnConfirm.off('click');
-                            $btnConfirm.on('click', function () {
-                                onUpdateRequestStatus(requestIds.join(','), RequestCommand.Process, RoleSystem.HR);
-                            });
-                        }
-                    }).catch(axiosError);
+                    checkInvalidOvertime(requestIds.join(','));
                 });
             }
         } else {
@@ -139,7 +143,7 @@ $(document).ready(function () {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
                 let $obj = $(objSelected[i]);
-                if ($obj.data('statusid') === CurrentRequestStatus.Void) {
+                if (parseInt($obj.data('statusid'), 10) === CurrentRequestStatus.Void) {
                     requestIds.push($obj.data('requestid'));
                 } else {
                     toastr.error('The status of some requests is not approved.', '', toastOptions());
@@ -151,7 +155,7 @@ $(document).ready(function () {
                 $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Void</strong> this request(s)?');
                 $confirmModal.modal('show');
                 $btnConfirm.on('click', function () {
-                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Void, RoleSystem.HR);
+                    onUpdateRequestStatus(requestIds.join(','), RequestCommand.Void);
                 });
             }
         } else {
@@ -180,4 +184,67 @@ $(document).ready(function () {
             }).catch(axiosError);
         });
     });
+
+    let renderIconOk = function (opt, $itemElement, itemKey, item) {
+        $itemElement.html('<span class="processed"><i class="fa fa-check"></i>' + item.name + '</span>');
+        return '';
+    };
+    let renderIconRemove = function (opt, $itemElement, itemKey, item) {
+        $itemElement.html('<span class="void"><i class="fa fa-times"></i>' + item.name + '</span>');
+        return '';
+    };
+    let processCommand = function (command, options) {
+        const eventElement = options.$trigger,
+            requestId = parseInt(eventElement.attr('requestid'), 10);
+        switch (command) {
+            case 'Process':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Process</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    checkInvalidOvertime(requestId);
+                });
+                break;
+            case 'Void':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Void</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Void);
+                });
+                break;
+            case 'Reset':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Reset);
+                });
+                break;
+        }
+    };
+    let bindMenu = function (element, menu) {
+        let listItem = {};
+        switch (menu) {
+            case 'hrMenu':
+                listItem = {
+                    'Process': { name: 'Process', icon: renderIconOk },
+                    'Void': { name: 'Void', icon: renderIconRemove }
+                };
+                break;
+            case 'resetMenu':
+                listItem = {
+                    'Reset': { name: 'Reset', icon: renderIconRemove }
+                };
+                break;
+        }
+
+        $.contextMenu({
+            selector: element,
+            trigger: 'left',
+            callback: processCommand,
+            items: listItem
+        });
+    };
+
+    bindMenu('.hr-pending', 'hrMenu');
+    bindMenu('.hr-processed', 'resetMenu');
+    bindMenu('.hr-void', 'resetMenu');
 });

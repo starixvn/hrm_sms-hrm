@@ -1,7 +1,7 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
+import 'jquery-contextmenu/dist/jquery.contextMenu';
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
@@ -52,7 +52,7 @@ $(document).ready(function () {
         const statusId = parseInt($('#StatusId').val(), 10),
             month = $('#Month').val();
 
-        if (statusId === 0 && month === '') {
+        if ((statusId === 0 || statusId === CurrentRequestStatus.Processed) && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
             $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
@@ -89,9 +89,11 @@ $(document).ready(function () {
         if (objSelected.length > 0) {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
-                let $obj = $(objSelected[i]);
-                if ($obj.data('verifierid') === currentUserId) {
-                    if ($obj.data('statusid') === CurrentRequestStatus.Pending) {
+                const $obj = $(objSelected[i]),
+                    verifierId = parseInt($obj.data('verifierid'), 10),
+                    statusId = parseInt($obj.data('statusid'), 10);
+                if (verifierId === currentUserId) {
+                    if (statusId === CurrentRequestStatus.Pending) {
                         requestIds.push($obj.data('requestid'));
                     } else {
                         toastr.error('The status of some requests is not pending.', '', toastOptions());
@@ -120,9 +122,11 @@ $(document).ready(function () {
         if (objSelected.length > 0) {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
-                let $obj = $(objSelected[i]);
-                if ($obj.data('verifierid') === currentUserId) {
-                    if ($obj.data('statusid') === CurrentRequestStatus.Pending) {
+                const $obj = $(objSelected[i]),
+                    verifierId = parseInt($obj.data('verifierid'), 10),
+                    statusId = parseInt($obj.data('statusid'), 10);
+                if (verifierId === currentUserId) {
+                    if (statusId === CurrentRequestStatus.Pending) {
                         requestIds.push($obj.data('requestid'));
                     } else {
                         toastr.error('The status of some requests is not pending.', '', toastOptions());
@@ -151,9 +155,11 @@ $(document).ready(function () {
         if (objSelected.length > 0) {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
-                let $obj = $(objSelected[i]);
-                if ($obj.data('approverid') === currentUserId) {
-                    if ($obj.data('statusid') === CurrentRequestStatus.Pending || $obj.data('statusid') === CurrentRequestStatus.Verified) {
+                const $obj = $(objSelected[i]),
+                    approverId = parseInt($obj.data('approverid'), 10),
+                    statusId = parseInt($obj.data('statusid'), 10);
+                if (approverId === currentUserId) {
+                    if (statusId === CurrentRequestStatus.Pending || statusId === CurrentRequestStatus.Verified) {
                         requestIds.push($obj.data('requestid'));
                     } else {
                         toastr.error('The status of some requests is not pending or verified.', '', toastOptions());
@@ -182,9 +188,11 @@ $(document).ready(function () {
         if (objSelected.length > 0) {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
-                let $obj = $(objSelected[i]);
-                if ($obj.data('approverid') === currentUserId) {
-                    if ($obj.data('statusid') === CurrentRequestStatus.Pending || $obj.data('statusid') === CurrentRequestStatus.Verified) {
+                const $obj = $(objSelected[i]),
+                    approverId = parseInt($obj.data('approverid'), 10),
+                    statusId = parseInt($obj.data('statusid'), 10);
+                if (approverId === currentUserId) {
+                    if (statusId === CurrentRequestStatus.Pending || statusId === CurrentRequestStatus.Verified) {
                         requestIds.push($obj.data('requestid'));
                     } else {
                         toastr.error('The status of some requests is not pending or verified.', '', toastOptions());
@@ -207,4 +215,91 @@ $(document).ready(function () {
             toastr.error('Please choose at least one request to continue.', '', toastOptions());
         }
     });
+
+    let renderIconOk = function (opt, $itemElement, itemKey, item) {
+        $itemElement.html('<span class="processed"><i class="fa fa-check"></i>' + item.name + '</span>');
+        return '';
+    };
+    let renderIconRemove = function (opt, $itemElement, itemKey, item) {
+        $itemElement.html('<span class="void"><i class="fa fa-times"></i>' + item.name + '</span>');
+        return '';
+    };
+    let processCommand = function (command, options) {
+        const eventElement = options.$trigger,
+            requestId = parseInt(eventElement.attr('requestid'), 10),
+            roleId = parseInt(eventElement.attr('roleid'), 10);
+        switch (command) {
+            case 'Accept':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Verify</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Accept, roleId);
+                });
+                break;
+            case 'NotAccept':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Not Verify</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.NotAccept, roleId);
+                });
+                break;
+            case 'Approve':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Approve</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Approve, roleId);
+                });
+                break;
+            case 'Reject':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reject</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Reject, roleId);
+                });
+                break;
+            case 'Reset':
+                $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Reset</strong> this request?');
+                $confirmModal.modal('show');
+                $btnConfirm.on('click', function () {
+                    onUpdateRequestStatus(requestId, RequestCommand.Reset, roleId);
+                });
+                break;
+        }
+    };
+    let bindMenu = function (element, menu) {
+        let listItem = {};
+        switch (menu) {
+            case 'verifierMenu':
+                listItem = {
+                    'Accept': { name: 'Verified', icon: renderIconOk },
+                    'NotAccept': { name: 'Not Verified', icon: renderIconRemove }
+                };
+                break;
+            case 'approverMenu':
+                listItem = {
+                    'Approve': { name: 'Approve', icon: renderIconOk },
+                    'Reject': { name: 'Reject', icon: renderIconRemove }
+                };
+                break;
+            case 'resetMenu':
+                listItem = {
+                    'Reset': { name: 'Reset', icon: renderIconRemove }
+                };
+                break;
+        }
+
+        $.contextMenu({
+            selector: element,
+            trigger: 'left',
+            callback: processCommand,
+            items: listItem
+        });
+    };
+
+    bindMenu('.approver-pending', 'approverMenu');
+    bindMenu('.approver-approved', 'resetMenu');
+    bindMenu('.approver-rejected', 'resetMenu');
+    bindMenu('.verifier-pending', 'verifierMenu');
+    bindMenu('.verifier-verified', 'resetMenu');
+    bindMenu('.verifier-notverified', 'resetMenu');
 });

@@ -1,4 +1,6 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
 @model MemberMonthlyOvertimeRequestViewModel
@@ -18,7 +20,7 @@
     <script src="~/wwwroot/dist/js/overtime.member.index.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 @Html.Hidden("CurrentUserId", currentUserId)
@@ -75,8 +77,8 @@
                     <div style="float:right;">
                         @if (isVerifier)
                         {
-                            <input type="button" class="btn btn-primary" id="btnVerify" value="Verify" />
-                            <input type="button" class="btn btn-primary" id="btnNotVerify" value="Not Verify" />
+                            <input type="button" class="btn btn-primary" id="btnVerify" value="@Labels.Verify" />
+                            <input type="button" class="btn btn-primary" id="btnNotVerify" value="@Labels.NotVerify" />
                         }
                         @if (isApprover)
                         {
@@ -162,7 +164,7 @@
                     </td>
                     <td>@request.Verifier.Nickname</td>
                     <td>@request.Approver.Nickname</td>
-                    <td>@request.Status</td>
+                    <td>@RenderStatus(request, currentUserId)</td>
                     <td>
                         <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
                             @Labels.View
@@ -194,3 +196,66 @@
     </tfoot>
 </table>
 @Html.Partial("_ConfirmModal")
+@helper RenderStatus(MonthlyOvertimeRequest request, int currentUserId)
+{
+    if (request.Approver.EmployeeId == currentUserId)
+    {
+        switch (request.Status.Id)
+        {
+            case (byte)CurrentRequestStatus.Pending:
+            case (byte)CurrentRequestStatus.Verified:
+                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-pending">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Approved:
+                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-approved">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Rejected:
+                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-rejected">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            default:
+                @request.Status
+                break;
+        }
+    }
+    else if (request.Verifier.EmployeeId == currentUserId)
+    {
+        switch (request.Status.Id)
+        {
+            case (byte)CurrentRequestStatus.Pending:
+                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-pending">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Verified:
+                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-verified">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.NotVerified:
+                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-notverified">
+                    @request.Status
+                    <span class="caret"></span>
+                </a>
+                break;
+            default:
+                @request.Status
+                break;
+        }
+
+    }
+    else
+    {
+        @request.Status
+    }
+}

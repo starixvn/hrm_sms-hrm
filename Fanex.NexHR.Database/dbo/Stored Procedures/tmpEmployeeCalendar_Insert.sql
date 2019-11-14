@@ -21,7 +21,10 @@ BEGIN
 		-- work type
 		,@OffDay TINYINT = 1
 		,@LeaveDay TINYINT = 2
-		,@WorkDay TINYINT = 3
+		-- request type
+		,@ChangeShiftRequestTypeId TINYINT = 5
+		,@LeaveRequestTypeId TINYINT = 6
+		,@KeepInViewRequestTypeId TINYINT = 7
 		-- change shift type
 		,@ChangeShiftTypeId TINYINT = 1
 		,@MoveOfDayTypeId TINYINT = 2
@@ -253,6 +256,7 @@ BEGIN
 		AND (
 			(
 				empca.IsKeepInView = 1
+				AND empca.RequestTypeId = @KeepInViewRequestTypeId
 				AND kiv.RequestId IS NULL
 				)
 			OR (
@@ -293,6 +297,7 @@ BEGIN
 		AND (
 			(
 				empca.RequestId IS NOT NULL
+				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
 				AND cs.RequestId IS NULL
 				)
 			OR (
@@ -301,6 +306,7 @@ BEGIN
 				)
 			)
 
+	-- change shift - move off day
 	UPDATE empca
 	SET empca.RequestId = cs.RequestId
 		,empca.RequestTypeId = cs.RequestType
@@ -330,6 +336,8 @@ BEGIN
 		AND (
 			(
 				empca.RequestId IS NOT NULL
+				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+				AND empca.MoveOffToDate IS NOT NULL
 				AND cs.RequestId IS NULL
 				)
 			OR (
@@ -363,20 +371,24 @@ BEGIN
 			AND empca.EmpId = cs.EmpId
 			AND empca.WorkDate = csdt.ToDate
 			AND cs.TypeId = @MoveOfDayTypeId
+			AND (
+				csdt.OnDate BETWEEN @fromDate
+					AND @toDate
+				OR csdt.ToDate BETWEEN @fromDate
+					AND @toDate
+				)
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cs.RequestId = r.RequestId
 			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		) AS cs
-	WHERE empca.WorkDate BETWEEN @fromDate
-			AND @toDate
-		AND (
-			(
-				empca.RequestId IS NOT NULL
-				AND cs.RequestId IS NULL
-				)
-			OR (
-				empca.RequestId IS NULL
-				AND cs.RequestId IS NOT NULL
-				)
+	WHERE (
+			empca.RequestId IS NOT NULL
+			AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+			AND empca.MoveOffFromDate IS NOT NULL
+			AND cs.RequestId IS NULL
+			)
+		OR (
+			empca.RequestId IS NULL
+			AND cs.RequestId IS NOT NULL
 			)
 
 	-- leave request
@@ -415,6 +427,7 @@ BEGIN
 		AND (
 			(
 				empca.RequestId IS NOT NULL
+				AND empca.RequestTypeId = @LeaveRequestTypeId
 				AND lr.RequestId IS NULL
 				)
 			OR (
@@ -462,6 +475,7 @@ BEGIN
 		AND (
 			(
 				empca.RequestId IS NOT NULL
+				AND empca.RequestTypeId = @LeaveRequestTypeId
 				AND lr.RequestId IS NULL
 				)
 			OR (

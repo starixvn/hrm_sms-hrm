@@ -19,7 +19,7 @@
     <script src="~/wwwroot/dist/js/overtime.member.details.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 
 <h2 class="page-title">@ViewBag.Title</h2>
@@ -117,7 +117,20 @@
                     <td class="@className">
                         @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
                     </td>
-                    <td>@request.ShiftCode</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+                        {
+                            @request.ShiftCode
+                        }
+                        else if (request.IsHoliday)
+                        {
+                            @Labels.Holiday
+                        }
+                        else if (request.IsOffDay)
+                        {
+                            @Labels.Off
+                        }
+                    </td>
                     <td>@request.TimeIn</td>
                     <td>@request.TimeOut</td>
                     <td>

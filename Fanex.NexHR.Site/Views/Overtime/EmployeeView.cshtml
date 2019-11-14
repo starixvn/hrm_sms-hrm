@@ -16,7 +16,7 @@
     <script src="~/wwwroot/dist/js/overtime.myrequest.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Personal</a> <a class="step">@ViewBag.Title</a>
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 @using (Html.BeginForm("EmployeeView", "overtime", FormMethod.Get, new { @class = "filter" }))
