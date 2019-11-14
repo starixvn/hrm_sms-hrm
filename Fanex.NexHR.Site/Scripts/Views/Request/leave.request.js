@@ -202,7 +202,7 @@ var LeaveRequest = (function ($) {
                     var toDateTime;
 
                     if ($("#IsFromTimeAfterDay").prop('checked')) {
-                        fromDate.setDate(forDate.getDate() + 1);
+                        fromDate.setDate(fromDate.getDate() + 1);
                     }
 
                     if ($("#IsToTimeAfterDay").prop('checked')) {

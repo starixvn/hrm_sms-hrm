@@ -444,12 +444,9 @@ BEGIN
 			WHEN lr.RequestId IS NOT NULL THEN 1
 			ELSE 0
 			END
-		,empca.IsLeaveOffDay = CASE 
-			WHEN lr.RequestId IS NOT NULL THEN 1
-			ELSE 0
-			END
+		,empca.IsLeaveOffDay = 0
 		,empca.LeaveDay = CASE 
-			WHEN lr.RequestId IS NOT NULL THEN 1
+			WHEN lr.RequestId IS NOT NULL THEN lr.LeaveDay
 			ELSE 0
 			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -457,6 +454,10 @@ BEGIN
 		SELECT r.RequestId
 			,r.RequestType
 			,lr.LeaveType
+			,(CASE 
+				WHEN lr.TotalDays >= 1 THEN 1
+				ELSE lr.TotalDays END
+				) AS LeaveDay
 		FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 			AND lr.LeaveType <> @GeneralLeaveId
