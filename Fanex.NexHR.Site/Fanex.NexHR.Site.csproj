@@ -1469,7 +1469,6 @@
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
-    <Content Include="wwwroot\sources\styles\pages\calendar\shiftstatistic.scss" />
     <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
     <Content Include="wwwroot\sources\styles\main.scss" />
     <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />
