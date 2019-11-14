@@ -25,7 +25,7 @@ var bindingDataIfEditMode = function () {
         $('#ToDate').val($.datepicker.formatDate('d M, yy', newToDate));
     }
     if (messageEmployeeIds) {
-        $('#employee').val(messageEmployeeIds.split(','));
+        $('#Employees').val(messageEmployeeIds.split(','));
     }
     if (messageGroupIds) {
         $('#group').val(messageGroupIds.split(','));

@@ -1,29 +1,32 @@
 ﻿@using Fanex.NexHR.Models.Message
 @model Message
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     var message = ViewBag.Message as Message;
 }
 @{
     ViewBag.Title = @Labels.EditMessage;
 }
 @section css{
-    @Url.CombresLink("messagecss")
+    <link href="~/wwwroot/dist/styles/message.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("messageeditjs")
+    <script>
+        var GroupsCollection = @Html.Raw(Json.Encode(@ViewBag.Groups));
+    </script>
+    <script src="~/wwwroot/dist/js//message.create.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("Index", "message")">@Labels.Message</a>
-    <a class="step">@Labels.EditMessage</a>
+    <a class="step">@Labels.EditMessage</a  >
 }
-<h2>@Labels.EditMessage</h2>
+<h2 class="page-title">@Labels.EditMessage</h2>
 
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat">
-        <div class="validation-summary-errors" id="error" style="display:none;"></div>
-        <div id="messageInfo" class="success" style="display:none;">@Messages.SavedSuccessfully</div>
+<div class="card">
+    <form class="form-horizontal clearfix" method="post" id="CreateForm">
+        @Html.ValidationSummary()
+        <div id="messageInfo" class="success" style="display:none;">@Messages.UpdatedSuccessfully</div>
 
         @Html.Hidden("messageId", message.MessageId)
         @Html.Hidden("messageSubject", message.Subject)
@@ -33,49 +36,42 @@
         @Html.Hidden("messageEmployeeIds", message.EmployeeIds)
         @Html.Hidden("messageGroupIds", message.GroupIds)
         @Html.Hidden("messageCategory", message.Category)
-        @Html.HiddenFor(model => model.MessageId)
+
         @Html.HiddenFor(model => model.EmployeeIds)
         @Html.HiddenFor(model => model.GroupIds)
-        @Html.HiddenFor(model => model.Category)
         @Html.HiddenFor(model => model.SendToEmail)
-        @Html.HiddenFor(model => model.HasSendEmail)
 
-        <div class="grid_19 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.LabelFor(model => model.Subject)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Subject, new { @class = "control-label" })
             </div>
-            <div class="grid_16">
-                @Html.EditorFor(model => model.Subject)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control", @autocomplete = "off" })
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.LabelFor(model => model.Category)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @RazorHelper.MessageCategoryDropDownList(controlName: "category")
+            <div class="input-form">
+                @{
+                    var categories = new List<SelectListItem>
+                                                                                                                    {
+                        new SelectListItem() {Text = "Notification", Value = "0"},
+                        new SelectListItem() {Text = "Warning", Value = "1"},
+                        new SelectListItem() {Text = "Discipline", Value = "2"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.Category, categories, new { @class = "category form-control" })
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_19 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.Label(@Labels.SendToEmployee)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.SendToEmployee, new { @class = "control-label" })
             </div>
-            <div class="grid_16">
-                <select id="employee" data-placeholder="Choose a employee..." multiple class="chosen-select">
+            <div class="input-form">
+                @Html.HiddenFor(model => model.EmployeeIds)
+                <select id="Employees" data-placeholder="Choose employees..." multiple class="form-control">
                     @foreach (var employee in ViewBag.Employees)
                     {
                         <option value="@employee.Id" email="@employee.Email">@(employee.NickName + " (" + employee.FullName + ")")</option>
@@ -83,95 +79,63 @@
                 </select>
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_19 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.Label(@Labels.SendToGroup)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.SendToGroup, new { @class = "control-label" })
             </div>
-            <div class="grid_16">
-                <select id="group" multiple="multiple" class="team-select">
-                    @foreach (var group in ViewBag.Groups)
-                    {
-                        <option value="@group.Id" email="@group.MailGroup">@group.Name</option>
-                    }
-                </select>
+            <div class="input-form">
+                <div class="select-form" id="Groups"></div>
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div id="contentEditor">
-            <div class="grid_20 formrow">
-                <div class="grid_2">
-                    <div class="label">
-                        <label></label>
-                    </div>
-                </div>
-                <div class="grid_17">
-                    <input id="sendEmail" type="checkbox" />
-                    <span>@Labels.SendEmail</span>
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HasSendEmail, @Labels.SendEmail, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxCustomFor(model => model.HasSendEmail)
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.Label(@Labels.FromDate)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.FromDate, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.DatePickerFor(model => model.FromDate)
+            <div class="calendar-form">
+                @{
+                    DateTime defaultFromdDate = message.FromDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromdDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="grid_9 formrow">
-            <div class="grid_2">
-                <div class="label">
-                    @Html.Label(@Labels.ToDate)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.ToDate, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.DatePickerFor(model => model.ToDate)
+            <div class="calendar-form">
+                @{
+                    DateTime defaultToDate = message.ToDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div id="contentEditor">
-            <div class="grid_20 formrow">
-                <div class="grid_2">
-                    <div class="label">
-                        @Html.LabelFor(model => model.Contents)
-                    </div>
-                </div>
-                <div class="grid_17">
-                    @Html.TextAreaFor(model => model.Contents)
-                </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Contents, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="grid_2">
+        <div class="form-group form-group--m">
+            <div class="label-form">
                 <div class="label">&nbsp</div>
             </div>
-            <div class="grid_17">
+            <div class="input-form">
                 @Html.AntiForgeryToken()
-                <input type="submit" value="Save" class="button-primary submit" />
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+                <input type="button" value="Save" id="btnSubmit" class="btn btn-primary" />
+                <a href="javascript:;" class="btn btn-default" onclick="parent.history.back()">@Labels.Back</a>
             </div>
         </div>
-    </div>
-}
+    </form>
+</div>

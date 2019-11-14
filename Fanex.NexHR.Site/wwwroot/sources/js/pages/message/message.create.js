@@ -7,6 +7,37 @@ import '../../shared/multiselect-tree-view';
 import { initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors} from '../../shared/common.functions';
 import '../../date';
 
+function bindingDataIfEditMode() {
+    var messageId = $('#messageId').val(),
+        messageSubject = $('#messageSubject').val(),
+        messageContents = $('#messageContents').val(),
+        messageFromDate = $('#messageFromDate').val(),
+        messageToDate = $('#messageToDate').val(),
+        messageEmployeeIds = $('#messageEmployeeIds').val(),
+        messageGroupIds = $('#messageGroupIds').val(),
+        messageCategory = $('#messageCategory').val();
+
+    $('#Subject').val(messageSubject);
+    $('#Contents').val(messageContents);
+    $('#MessageId').val(messageId);
+    $('#category').val(messageCategory);
+
+    if (messageFromDate) {
+        var newFromDate = new Date(messageFromDate);
+        $('#FromDate').val($.datepicker.formatDate('d M, yy', newFromDate));
+    }
+    if (messageToDate) {
+        var newToDate = new Date(messageToDate);
+        $('#ToDate').val($.datepicker.formatDate('d M, yy', newToDate));
+    }
+    if (messageEmployeeIds) {
+        $('#Employees').val(messageEmployeeIds.split(','));
+    }
+    if (messageGroupIds) {
+        $('#GroupIds').val(messageGroupIds);
+    }
+};
+
 function initSearchEmployee() {
     const employeeIds = $('#EmployeeIds').val();
 
@@ -70,8 +101,9 @@ function GetSelectedGroupEmails() {
     let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
 
     var result = "";
-    for (var i = 0; i < selectedGroups.length; i++) {
-        let email = GroupsCollection.filter(group => group.Id = selectedGroups[i])[0].MailGroup;
+    var selectedArr = selectedGroups.split(',');
+    for (var i = 0; i < selectedArr.length; i++) {
+        let email = GroupsCollection.filter(group => group.Id.toString() == selectedArr[i])[0].MailGroup;
         if (email) {
             if (!result) {
                 result = email;
@@ -129,8 +161,8 @@ function Submit() {
         //validation
         let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
         let sendToEmail = getSendToEmails();
-        $('#CreateForm #SendToEmail').val(sendToEmail);
-        $('#CreateForm #GroupIds').val(selectedGroups);
+        $('#SendToEmail').val(sendToEmail);
+        $('#GroupIds').val(selectedGroups);
 
         var isValid = validateForm();
 
@@ -139,6 +171,7 @@ function Submit() {
 
         if (isValid) {
             hideValidationSummaryErrors(true);
+            debugger;
             $.ajax({
                 url: form.action,
                 type: "Post",
@@ -165,6 +198,7 @@ function Submit() {
 }
 
 $(document).ready(function () {
+    bindingDataIfEditMode();
     initSearchEmployee();
     initSearchGroup();
     initDatePicker();

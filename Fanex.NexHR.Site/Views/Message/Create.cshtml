@@ -20,6 +20,7 @@
 }
 
 <h2 class="page-title">@Labels.CreateMessage</h2>
+
 <div class="card">
     <form class="form-horizontal clearfix" method="post" id="CreateForm">
         @Html.ValidationSummary()
@@ -71,9 +72,6 @@
                 @Html.Label(@Labels.SendToGroup, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @*View/Request/_SearchForm - Department
-                Select Multiple
-                Add atribute email - email="@group.MailGroup*@
                 <div class="select-form" id="Groups"></div>
             </div>
         </div>
