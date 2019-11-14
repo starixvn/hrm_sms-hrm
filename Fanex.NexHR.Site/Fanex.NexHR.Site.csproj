@@ -256,6 +256,7 @@
     <Content Include="wwwroot\dist\js\extensionno.create.js" />
     <Content Include="wwwroot\dist\js\extensionno.index.js" />
     <Content Include="wwwroot\dist\js\external.group.js" />
+    <Content Include="wwwroot\dist\js\message.create.js" />
     <Content Include="wwwroot\dist\js\message.js" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.js" />
@@ -280,6 +281,8 @@
     <Content Include="wwwroot\dist\styles\extensionno.index.js" />
     <Content Include="wwwroot\dist\styles\external.group.css" />
     <Content Include="wwwroot\dist\styles\external.group.js" />
+    <Content Include="wwwroot\dist\styles\message.create.css" />
+    <Content Include="wwwroot\dist\styles\message.create.js" />
     <Content Include="wwwroot\dist\styles\message.css" />
     <Content Include="wwwroot\dist\styles\message.js" />
     <Content Include="wwwroot\dist\styles\report.shiftstatistic.css" />
@@ -1167,6 +1170,8 @@
     <Content Include="wwwroot\dist\styles\message.js.map" />
     <Content Include="wwwroot\dist\js\message.js.map" />
     <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js.map" />
+    <Content Include="wwwroot\dist\js\message.create.js.map" />
+    <Content Include="wwwroot\dist\styles\message.create.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
