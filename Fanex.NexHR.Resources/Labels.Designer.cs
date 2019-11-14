@@ -1528,6 +1528,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee Permission Summary.
+        /// </summary>
+        public static string EmployeePermissionSummary {
+            get {
+                return ResourceManager.GetString("EmployeePermissionSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee Personal Information.
         /// </summary>
         public static string EmployeePersonalInformation {
@@ -3990,6 +3999,15 @@ namespace Fanex.NexHR.Resources {
         public static string SectionManagement {
             get {
                 return ResourceManager.GetString("SectionManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Permission Summary.
+        /// </summary>
+        public static string SectionPermissionSummary {
+            get {
+                return ResourceManager.GetString("SectionPermissionSummary", resourceCulture);
             }
         }
         

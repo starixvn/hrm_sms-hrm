@@ -65,13 +65,15 @@
             </div>
             <div class="select-form">
                 @{
-                    var types = new List<SelectListItem>            {                                                                                                            new SelectListItem() {Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString()},
-                                                                                                                                                                                                        new SelectListItem() {Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString()},
-                                                                                                                                                                                                        new SelectListItem() {Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString()},
-                                                                                                                                                                                                        new SelectListItem() {Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString()},
-                                                                                                                                                                                                        new SelectListItem() {Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString()},
-                                                                                                                                                                                                        new SelectListItem() {Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString()},
-                                                                                                                                                                                                                                                        };
+                    var types = new List<SelectListItem>
+{
+new SelectListItem() { Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString() },
+new SelectListItem() { Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString() },
+new SelectListItem() { Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString() },
+new SelectListItem() { Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString() },
+new SelectListItem() { Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString() },
+new SelectListItem() { Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString() },
+};
                 }
                 @Html.DropDownListFor(model => model.AttendanceType, types, new { @class = "form-control" })
             </div>
@@ -111,7 +113,7 @@
             </div>
             <div class="input-form">
                 <input type="checkbox" class="checkbox-custom" id="ExcludeDeletedUsers"
-                       name="ExcludeDeletedUsers" value="true" />
+                       name="ExcludeDeletedUsers" value="true" checked />
                 <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
             </div>
         </div>

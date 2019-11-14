@@ -3,7 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
-    ViewBag.Title = Labels.EmployeeSupervisor;
+    ViewBag.Title = Labels.EmployeePermissionSummary;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/report.employee.supervisor.css" rel="stylesheet" />
@@ -13,7 +13,7 @@
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
-    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.Section</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>

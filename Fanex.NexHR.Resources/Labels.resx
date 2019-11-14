@@ -1839,4 +1839,10 @@
   <data name="ExtensionNumber" xml:space="preserve">
     <value>Extension Number</value>
   </data>
+  <data name="EmployeePermissionSummary" xml:space="preserve">
+    <value>Employee Permission Summary</value>
+  </data>
+  <data name="SectionPermissionSummary" xml:space="preserve">
+    <value>Section Permission Summary</value>
+  </data>
 </root>

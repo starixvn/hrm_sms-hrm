@@ -58,7 +58,7 @@ import 'chosen-js/chosen.jquery';
                 $('.nick').tipsy({
                     html: true,
                     gravity: 'nw',
-                    fade: true,
+                    fade: false,
                     className: 'avatar',
                     title: function () {
                         var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');

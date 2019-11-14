@@ -47,20 +47,20 @@
 
                         @if (item.IsOffdayOT)
                         {
-                            var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                            var className = string.Format("{0} {1}", "tooltip-tipsy mytimesheet-workinginoffday",
+                            var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                            var className = string.Format("{0} {1}", "mytimesheet-workinginoffday",
                                 item.IsPublicHoliday ? "orange-highlight" : "");
-                            <td>
-                                <span class="@className" title="@title">@item.ShiftCode</span>
+                            <td class="@className">
+                                <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
                         }
                         else
                         {
-                            var title = !string.IsNullOrEmpty(item.ShiftCode) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                            var className = string.Format("{0} {1}", "tooltip-tipsy",
+                            var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                            var className = string.Format("{0} {1}", "",
                                 item.IsPublicHoliday ? "orange-highlight" : "");
-                            <td>
-                                <span class="@className" title="@title">@item.ShiftCode</span>
+                            <td class="@className">
+                                <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
                         }
                         @if (item.InFixed.HasValue)

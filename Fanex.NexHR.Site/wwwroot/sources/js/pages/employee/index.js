@@ -43,27 +43,9 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
             success: function (response) {
                 unblockUI();
                 $('#contact-list').html(response);
-
-                $('.nick').tipsy({
-                    html: true,
-                    gravity: 'w',
-                    className: 'nick-tooltip',
-                    opacity: 1,
-                    live: false,
-                    title: function () {
-                        var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
-                        return '<img width=80px; height=80px; src="' + path + '" />';
-                    }
-                });
-
-                $('.tooltip-tipsy').tipsy({
-                    html: true,
-                    gravity: 'w'
-                });
-
+                initTipsyTooltip();
                 if ($('table#data #pagination').length > 0) {
                     initPagination();
-
                     $('#ItemsPerPageOption').on('change', function () {
                         $('form.filter #ItemsPerPage').val($(this).val());
                         $('form.filter #CurrentPage').val(1);
@@ -77,6 +59,25 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
                 unblockUI();
                 alert(textStatus + ': ' + errorThrown);
             }
+        });
+    }
+
+    function initTipsyTooltip() {
+        $('.nick').tipsy({
+            html: true,
+            fade: false,
+            gravity: 'w',
+            className: 'nick-tooltip',
+            live: false,
+            title: function () {
+                var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
+                return '<img width=80px; height=80px; src="' + path + '" />';
+            }
+        });
+
+        $('.tooltip-tipsy').tipsy({
+            html: true,
+            gravity: 'w'
         });
     }
 

@@ -39,7 +39,7 @@ form.form-filter {
     color: #E70B04;
 }
 
-table.table.table-custom {
+table.table-custom {
     tr.offdate {
         background: #ccc !important;
     }
@@ -50,6 +50,12 @@ table.table.table-custom {
 
     tr.highlight {
         background: #edeac7 !important;
+    }
+
+    td.orange-highlight {
+        background-color: #ff6a00 !important;
+        color: #fff !important;
+        font-weight: bold !important;
     }
 }
 
