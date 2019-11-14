@@ -1545,7 +1545,6 @@
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.supervisor.js.map" />
     <Content Include="wwwroot\dist\styles\section.supervisor.index.js.map" />
-    <Content Include="wwwroot\dist\styles\shiftstatistic.js.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
     <Content Include="Views\Paternity\_Create.cshtml" />
     <Content Include="Views\Paternity\_Edit.cshtml" />
