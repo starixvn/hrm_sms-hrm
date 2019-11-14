@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Core
+﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
 @model DisciplineSummaryViewModel
 @{
@@ -64,11 +63,11 @@
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-{
-new SelectListItem() {Text = Labels.All, Value = string.Empty},
-new SelectListItem() {Text = Labels.Expat, Value = "false"},
-new SelectListItem() {Text = Labels.Local, Value = "true"},
-};
+                    {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                        new SelectListItem() {Text = Labels.Local, Value = "true"}
+                    };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
             </div>
@@ -112,7 +111,7 @@ new SelectListItem() {Text = Labels.Local, Value = "true"},
             </div>
             <div class="select-form">
                 <input type="button" id="submit" class="btn btn-primary" value="@Labels.Submit" />
-                <input type="button" value="Excel" class="btn btn-excel" id="btnExcel" />
+                <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
             </div>
         </div>
     </div>

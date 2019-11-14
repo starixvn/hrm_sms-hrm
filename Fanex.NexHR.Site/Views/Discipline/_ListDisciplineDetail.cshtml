@@ -71,7 +71,7 @@
 
                         <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
                         <td>@item.Employee.GroupName</td>
-                        <td class="tooltip" title="@item.Employee.FullName">@item.Employee.NickName</td>
+                        <td class="tooltip-tipsy" title="@item.Employee.FullName">@item.Employee.NickName</td>
                         <td>@item.ShiftName</td>
                         <td>
                             @if (item.CheckIn.HasValue)
