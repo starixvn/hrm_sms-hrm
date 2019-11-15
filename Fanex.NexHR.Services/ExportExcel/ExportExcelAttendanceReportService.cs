@@ -78,7 +78,7 @@
                 writer.CopyCellStyle(RowHighlight, ShiftCodeColumn, rowIndex + RowStartHeader, desCol: ShiftCodeColumn);
             }
 
-            if (attendance.IsPublicHolidayOT)
+            if (attendance.IsPublicHoliday && !string.IsNullOrEmpty(attendance.ShiftCode))
             {
                 writer.CopyCellStyle(RowOffdate, ShiftCodeColumn, rowIndex + RowStartHeader, desCol: ShiftCodeColumn);
             }
