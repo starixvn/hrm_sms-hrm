@@ -58,7 +58,7 @@
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
                             var className = string.Format("{0} {1}", "",
-                                item.IsPublicHoliday ? "orange-highlight" : "");
+                                item.IsPublicHoliday && !string.IsNullOrEmpty(item.ExpectedInTime) ? "orange-highlight" : "");
                             <td class="@className">
                                 <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
