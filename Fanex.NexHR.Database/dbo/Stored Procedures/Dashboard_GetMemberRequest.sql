@@ -160,8 +160,7 @@ BEGIN
 				ELSE 0
 				END)
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE EmpId <> @EmployeeId
-		AND (
+	WHERE (
 			VerifierId = @EmployeeId
 			OR ApproverId = @EmployeeId
 			)
@@ -243,7 +242,6 @@ BEGIN
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
 	WHERE CreatedDate >= @fromdate
 		AND CreatedDate < @toDate
-		AND EmpId <> @EmployeeId
 		AND (
 			VerifierId = @EmployeeId
 			OR ApproverId = @EmployeeId
