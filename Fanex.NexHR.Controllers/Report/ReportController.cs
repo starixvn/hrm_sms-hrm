@@ -167,9 +167,9 @@
         {
             if (model != null)
             {
-                var today = DateTime.Today;
-                model.FromDate = new DateTime(today.Year, 1, 1);
-                model.ToDate = today;
+                var currentYear = DateTime.Today.Year;
+                model.FromDate = new DateTime(currentYear, 1, 1);
+                model.ToDate = new DateTime(currentYear + 1, 1, 1).AddDays(-1);
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
