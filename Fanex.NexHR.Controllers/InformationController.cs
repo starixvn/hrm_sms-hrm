@@ -98,7 +98,7 @@
                 Phone = employee.Phone,
                 Gender = employee.Gender,
                 Skype = employee.Skype,
-                Yahoo = employee.LetsTalk,
+                Yahoo = employee.Yahoo,
                 ChineseName = employee.ChineseName,
                 Marriage = employee.Marriage,
                 PermanentAddress = employee.Address,

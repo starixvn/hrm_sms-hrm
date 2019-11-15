@@ -613,7 +613,7 @@
                 ConfirmedDate = model.ConfirmedDate,
                 ResignedDate = model.ResignedDate,
                 Skype = model.Skype,
-                LetsTalk = model.LetsTalk,
+                Yahoo = model.Yahoo,
                 Marriage = model.Marriage,
                 PermanentAddress = model.Address,
                 CurrentAddress = model.CurrentAddress,

@@ -55,5 +55,6 @@
         public string Qualification { get; set; }
         public string Major { get; set; }
         public string PickupRemark { get; set; }
+        public string Yahoo { get; set; }
     }
 }
