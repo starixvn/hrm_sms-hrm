@@ -65,7 +65,8 @@
             new MappingFieldConfig { FieldName = "IsTopManager", DisplayName = Labels.SpecialUser, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "IsLocal", DisplayName = Labels.Category, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "IsExpatUseHoliday", DisplayName = Labels.ExpatApplicableHoliday, DataType = MappingDataType.Boolean },
-            new MappingFieldConfig { FieldName = "Enabled", DisplayName = Labels.EnabledUser, DataType = MappingDataType.Boolean }
+            new MappingFieldConfig { FieldName = "Enabled", DisplayName = Labels.EnabledUser, DataType = MappingDataType.Boolean },
+            new MappingFieldConfig { FieldName = "ChineseName", DisplayName = Labels.ChineseName }
         };
 
         private readonly ICommonDataService commonDataService;
