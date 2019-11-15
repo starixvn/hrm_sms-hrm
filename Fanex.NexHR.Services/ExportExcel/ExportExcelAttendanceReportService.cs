@@ -104,10 +104,10 @@
             {
                 Count = rowIndex,
                 AttendanceDate = attendanceDate,
-                Code = attendance.Code,
-                NickName = attendance.NickName,
-                FullName = attendance.FullName,
-                TeamCode = attendance.TeamCode,
+                attendance.Code,
+                attendance.NickName,
+                attendance.FullName,
+                attendance.TeamCode,
                 ShiftCode = shiftCode,
                 InFixed = inFixed,
                 OutFixed = outFixed,
@@ -117,7 +117,7 @@
                                 string.Empty : Utilities.MinuteToTime(attendance.EarlyOut),
                 Remark = requests,
                 Overtime = overtime,
-                Notes = attendance.Notes
+                attendance.Notes
             };
 
             return record;

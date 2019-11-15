@@ -11,7 +11,6 @@ import '../../date';
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
     createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
     var result = '';
-    blockUI();
     $.ajax({
         url: _global.root + "request/GetMessageDetailRequest",
         async: false,
@@ -27,7 +26,6 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
             result = data;
         }
     });
-    unblockUI();
     return result;
 }
 
