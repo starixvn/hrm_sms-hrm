@@ -484,21 +484,12 @@
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\Department\department.edit.js" />
-    <Content Include="Scripts\Views\Department\department.js" />
-    <Content Include="Scripts\Views\Employee\user.management.js" />
-    <Content Include="Scripts\Views\Employee\employee.index.js" />
-    <Content Include="Scripts\Views\Discipline\discipline.summary.js" />
-    <Content Include="Scripts\Views\Report\report.section.supervisor.js" />
     <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\message.edit.js" />
     <Content Include="Scripts\Views\message.js" />
-    <Content Include="Scripts\Views\Report\report.employee.supervisor.js" />
-    <Content Include="Scripts\Views\Report\report.weekendleave.summary.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
-    <Content Include="Styles\discipline.css" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />
@@ -861,11 +852,9 @@
     <Content Include="Scripts\tiny_mce\utils\mctabs.js" />
     <Content Include="Scripts\tiny_mce\utils\validate.js" />
     <Content Include="Scripts\Views\annualbalanceadj.js" />
-    <Content Include="Scripts\Views\checkinout.bymanager.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Views\fixtable.js" />
     <Content Include="Scripts\Views\language.js" />
-    <Content Include="Scripts\Views\Report\report.timesheet.js" />
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
     <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
@@ -873,7 +862,6 @@
     <Content Include="Scripts\Views\holiday.js" />
     <Content Include="Scripts\Views\memo.js" />
     <Content Include="Scripts\Views\memo.edit.js" />
-    <Content Include="Scripts\Views\Report\report.attendance.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -921,7 +909,6 @@
     <Content Include="Styles\Images\FullCalendar\ui-icons_ffffff_256x240.png" />
     <Content Include="Styles\memo.details.css" />
     <Content Include="Styles\memo.edit.css" />
-    <Content Include="Styles\employee.defaultschedule.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
@@ -1465,7 +1452,6 @@
     <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
-    <Content Include="Scripts\Views\Discipline\discipline.detail.js" />
     <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
     <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
@@ -1591,7 +1577,6 @@
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\Create.cshtml" />
     <Content Include="Views\Menu\Edit.cshtml" />
-    <Content Include="Scripts\Views\Report\report.timerecord.js" />
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
@@ -1611,7 +1596,6 @@
     <Content Include="Views\Report\WeekendLeaveSummary.cshtml" />
     <Content Include="Views\Report\_ListWeekendLeaveSummary.cshtml" />
     <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
-    <Content Include="Scripts\Views\Report\report.weekendleave.detail.js" />
     <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
     <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
     <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />

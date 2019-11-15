@@ -115,17 +115,6 @@
       <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
-    <resourceSet name="monthpickcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.css" />
-    </resourceSet>
-
-    <resourceSet name="managercheckinoutjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/checkinout.bymanager.js" />
-      <resource path="~/wwwroot/sources/libs/monthPicker/monPickr-0.0.3.js" />
-    </resourceSet>
-
     <resourceSet name="logincss" type="css">
       <resource path="~/styles/login.css" />
     </resourceSet>
@@ -185,27 +174,6 @@
     <resourceSet name="employeemessagejs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.message.js" />
-    </resourceSet>
-
-    <resourceSet name="departmentjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/department/department.js" />
-    </resourceSet>
-    <resourceSet name="departmenteditjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/department/department.edit.js" />
-    </resourceSet>
-    <resourceSet name="disciplinecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/discipline.css" />
-      <resource path="~/wwwroot/dist/styles/report.weekend.leave.css" />
-    </resourceSet>
-
-    <resourceSet name="disciplinedetailjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/discipline/discipline.detail.js" />
     </resourceSet>
 
     <resourceSet name="menujs" type="js">
