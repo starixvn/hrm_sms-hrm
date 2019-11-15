@@ -50,12 +50,11 @@ BEGIN
 	SELECT ldt.RequestId
 		,ldt.OnDate
 		,ldt.WorkType
-		--,ldt.ShiftId
 		,ldt.LeaveType AS LeaveTypeId
 		,lv.[Name] AS LeaveTypeName
 		,ldt.IsHalfDay
 		,ldt.FromTime
-		,ldt.FromTime
+		,ldt.ToTime
 	FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
 		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON ldt.LeaveType = lv.LeaveTypeId
 	WHERE ldt.RequestId = @RequestId

@@ -201,11 +201,11 @@ var LeaveRequest = (function ($) {
                     var fromDateTime;
                     var toDateTime;
 
-                    if ($("#IsFromTimeAfterDay").prop('checked')) {
+                    if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
                         fromDate.setDate(fromDate.getDate() + 1);
                     }
 
-                    if ($("#IsToTimeAfterDay").prop('checked')) {
+                    if (LeaveRequest.isToTimeAfterDay.prop('checked')) {
                         toDate.setDate(toDate.getDate() + 1);
                     }
 
@@ -242,10 +242,10 @@ var LeaveRequest = (function ($) {
             $.ajax({
                 type: 'POST',
                 dataType: "json",
-                url: '/Leave/Create',
+                url: _global.root + 'Leave/Create',
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
-                    if (response.Code === 0) {
+                    if (response.IsSuccessful) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
@@ -260,10 +260,10 @@ var LeaveRequest = (function ($) {
             $.ajax({
                 type: 'POST',
                 dataType: "json",
-                url: '/Leave/Update',
+                url: _global.root + 'Leave/Update',
                 data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
                 success: function (response) {
-                    if (response.Code === 0) {
+                    if (response.IsSuccessful) {
                         $('form').removeClass("dirty");
                         var successMsg = "Your request have been sent successfully!";
                         RequestCommon.showSuccessMsg(successMsg, "Leave/EmployeeView");
@@ -363,8 +363,8 @@ var LeaveRequest = (function ($) {
                         LeaveRequest.toTimeHour.val(arrTimeOut[0]);
                         LeaveRequest.toTimeMinute.val(arrTimeOut[1]);
 
-                        $("#IsFromTimeAfterDay").prop('checked', isFromAfterday);
-                        $("#IsToTimeAfterDay").prop('checked', isToAfterday);
+                        LeaveRequest.isFromTimeAfterDay.prop('checked', isFromAfterday);
+                        LeaveRequest.isToTimeAfterDay.prop('checked', isToAfterday);
 
                         if (isToAfterday) {
                             var toDate = new Date(LeaveRequest.fromDate.val());

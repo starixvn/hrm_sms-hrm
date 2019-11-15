@@ -209,7 +209,7 @@
         public DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
             var fromTime = DateTime.Now;
-            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == 1 && t.IsHalfDay);
+            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == (byte)WorkType.Leave && t.IsHalfDay);
             if (leaveHalfDay != null)
             {
                 fromTime = leaveHalfDay.FromTime;
@@ -221,7 +221,7 @@
         public DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
             var toTime = DateTime.Now;
-            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == 1 && t.IsHalfDay);
+            var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == (byte)WorkType.Leave && t.IsHalfDay);
             if (leaveHalfDay != null)
             {
                 toTime = leaveHalfDay.ToTime;

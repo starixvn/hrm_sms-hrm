@@ -23,7 +23,7 @@ Original:
 
 Revisions:    
 Param's Explanation:
-	- @ListDetail: '<ROOT><LeaveRequestDetail OnDate='{20130101}' ShiftID='{1}' LeaveType={2} IsHalfDay={0} WorkType={0} FromTime={20130101 00:00:01} ToTime={20130101 00:00:01}></LeaveRequestDetail></ROOT>'
+	- @ListDetail: '<ROOT><Row OnDate='' ShiftID='' LeaveType='' IsHalfDay='' WorkType='' FromTime='' ToTime='' /></ROOT>'
 	- @WorkType :
 			1. off
 			2. leave
@@ -279,7 +279,7 @@ BEGIN
 			,Data.IsHalfDay
 			,Data.FromTime
 			,Data.ToTime
-		FROM OPENXML(@DocHandler, '/ROOT/LeaveRequestDetail', 1) WITH (OnDate DATETIME, ShiftID INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
+		FROM OPENXML(@DocHandler, '/ROOT/Row', 1) WITH (OnDate DATETIME, ShiftID INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
 			LEFT JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = data.OnDate
 			AND ec.EmpId = @EmpId
 
