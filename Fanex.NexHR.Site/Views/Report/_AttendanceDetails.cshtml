@@ -49,7 +49,7 @@
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
                             var className = string.Format("{0} {1}", "mytimesheet-workinginoffday",
-                                item.IsPublicHoliday ? "holiday" : "");
+                                item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
                             <td class="@className">
                                 <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
@@ -58,7 +58,7 @@
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
                             var className = string.Format("{0} {1}", "",
-                                item.IsPublicHoliday && !string.IsNullOrEmpty(item.ExpectedInTime) ? "holiday" : "");
+                                item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
                             <td class="@className">
                                 <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
