@@ -3,6 +3,7 @@
 @import '../../components/checkbox';
 @import '../../layout/filter';
 @import '../../layout/table';
+@import '../../layout/shift.color';
 @import '../../components/buttons-new';
 @import '../../components/multiselect-treeview';
 @import '../../vendors/autocomplete';
@@ -73,13 +74,4 @@
 
 .tooltip-overtime {
     font-weight: bold;
-}
-
-.orange-highlight {
-    background-color: #f9cb9c;
-    font-weight: bold;
-}
-
-.status-highlight {
-    background-color: #f4c4a1 !important;
 }

@@ -49,7 +49,7 @@
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
                             var className = string.Format("{0} {1}", "mytimesheet-workinginoffday",
-                                item.IsPublicHoliday ? "orange-highlight" : "");
+                                item.IsPublicHoliday ? "holiday" : "");
                             <td class="@className">
                                 <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
@@ -58,7 +58,7 @@
                         {
                             var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
                             var className = string.Format("{0} {1}", "",
-                                item.IsPublicHoliday && !string.IsNullOrEmpty(item.ExpectedInTime) ? "orange-highlight" : "");
+                                item.IsPublicHoliday && !string.IsNullOrEmpty(item.ExpectedInTime) ? "holiday" : "");
                             <td class="@className">
                                 <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
                             </td>
@@ -111,7 +111,7 @@
                                 foreach (EmployeeAttendanceRequest request in item.RequestList)
                                 {
                                     var statusClass = request.CurrentStatus == 1 || request.CurrentStatus == 2 ?
-                                        " status-highlight" : string.Empty;
+                                        " pending-request" : string.Empty;
                                     var className = "tooltip-request req" + statusClass;
                                     <a href='#' class="@className"
                                        data-requesttype="@request.RequestType.Id"
