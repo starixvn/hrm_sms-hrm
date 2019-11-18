@@ -46,7 +46,7 @@
             new MappingFieldConfig { FieldName = "CurrentAddress", DisplayName = Labels.CurrentAddress },
             new MappingFieldConfig { FieldName = "PickupRemark", DisplayName = Labels.PickupRemark },
             new MappingFieldConfig { FieldName = "Skype", DisplayName = Labels.Skype },
-            new MappingFieldConfig { FieldName = "Yahoo", DisplayName = Labels.LetsTalk },
+            new MappingFieldConfig { FieldName = "LetsTalk", DisplayName = Labels.LetsTalk },
             new MappingFieldConfig { FieldName = "Unit", DisplayName = Labels.Unit },
             new MappingFieldConfig { FieldName = "GroupId", DisplayName = Labels.Section },
             new MappingFieldConfig { FieldName = "SectionDate", DisplayName = Labels.SectionDate, DataType = MappingDataType.Date },
