@@ -59,7 +59,7 @@
     <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary_xtest" DbName="nexhrx" Plain="0">
+    <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="nexhrx" Plain="0"></Setting>

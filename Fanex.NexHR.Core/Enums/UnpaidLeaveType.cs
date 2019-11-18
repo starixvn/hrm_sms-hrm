@@ -14,6 +14,6 @@
         Paternity = 3,
 
         [StringValue("Maternity Leave")]
-        Maternity = 3
+        Maternity = 4
     }
 }
