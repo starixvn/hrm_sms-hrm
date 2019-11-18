@@ -16,7 +16,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@ConfirmedDate DATE = NULL
 	,@ResignedDate DATE = NULL
 	,@Skype VARCHAR(100) = NULL
-	,@Yahoo VARCHAR(100) = NULL
+	,@LetsTalk VARCHAR(100) = NULL
 	,@Marriage TINYINT = 1
 	,@ModifiedBy INT
 	,@PermanentAddress NVARCHAR(250) = ''
@@ -138,7 +138,7 @@ BEGIN
 				,CAST(ConfirmedDate AS DATE) AS '@ConfirmedDate'
 				,CAST(ResignedDate AS DATE) AS '@ResignedDate'
 				,Skype AS '@Skype'
-				,Yahoo AS '@Yahoo'
+				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
 				,PermanentAddress AS '@PermanentAddress'
 				,CurrentAddress AS '@CurrentAddress'
@@ -197,7 +197,7 @@ BEGIN
 		,ConfirmedDate = @ConfirmedDate
 		,ResignedDate = @ResignedDate
 		,Skype = @Skype
-		,Yahoo = @Yahoo
+		,LetsTalk = @LetsTalk
 		,Marriage = @Marriage
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
@@ -270,7 +270,7 @@ BEGIN
 				,CAST(ConfirmedDate AS DATE) AS '@ConfirmedDate'
 				,CAST(ResignedDate AS DATE) AS '@ResignedDate'
 				,Skype AS '@Skype'
-				,Yahoo AS '@Yahoo'
+				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
 				,PermanentAddress AS '@PermanentAddress'
 				,CurrentAddress AS '@CurrentAddress'

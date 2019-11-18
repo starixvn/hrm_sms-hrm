@@ -25,8 +25,7 @@
         public DateTime? ResignedDate { get; set; }
         public DateTime? MilitaryFromDate { get; set; }
         public DateTime? MilitaryToDate { get; set; }
-        public string Skype { get; set; }
-        public string LetsTalk { get; set; }
+        public string Skype { get; set; }      
         public byte Marriage { get; set; }
         public string PermanentAddress { get; set; }
         public string CurrentAddress { get; set; }
@@ -55,6 +54,6 @@
         public string Qualification { get; set; }
         public string Major { get; set; }
         public string PickupRemark { get; set; }
-        public string Yahoo { get; set; }
+        public string LetsTalk { get; set; }
     }
 }

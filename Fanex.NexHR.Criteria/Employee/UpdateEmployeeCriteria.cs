@@ -50,7 +50,7 @@
 
         public string Skype { get; set; }
 
-        public string Yahoo { get; set; }
+        public string LetsTalk { get; set; }
 
         public byte Marriage { get; set; }
 

@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_UpdateByEmpid] @EmpId INT
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL
 	,@Skype VARCHAR(100) = ''
-	,@Yahoo VARCHAR(100) = ''
+	,@LetsTalk VARCHAR(100) = ''
 	,@Marriage TINYINT = 1
 	,@PermanentAddress NVARCHAR(250) = ''
 	,@CurrentAddress NVARCHAR(250) = ''
@@ -50,7 +50,7 @@ BEGIN
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,Skype AS '@Skype'
-				,Yahoo AS '@Yahoo'
+				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
 				,PermanentAddress AS '@PermanentAddress'
 				,CurrentAddress AS '@CurrentAddress'
@@ -82,7 +82,7 @@ BEGIN
 		,Phone = @Phone
 		,Gender = @Gender
 		,Skype = @Skype
-		,Yahoo = @Yahoo
+		,LetsTalk = @LetsTalk
 		,Marriage = @Marriage
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
@@ -119,7 +119,7 @@ BEGIN
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,Skype AS '@Skype'
-				,Yahoo AS '@Yahoo'
+				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
 				,PermanentAddress AS '@PermanentAddress'
 				,CurrentAddress AS '@CurrentAddress'

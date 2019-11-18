@@ -17,7 +17,7 @@
     [ConfirmedDate]    SMALLDATETIME  NULL,
     [ResignedDate]     SMALLDATETIME  NULL,
     [Skype]            VARCHAR (100)  NULL,
-    [Yahoo]            VARCHAR (100)  NULL,
+    [LetsTalk]         VARCHAR (100)  NULL,
     [Marriage]         TINYINT        NULL,
     [LastLogin]        DATETIME       NULL,
     [CreatedDate]      DATETIME       NOT NULL,

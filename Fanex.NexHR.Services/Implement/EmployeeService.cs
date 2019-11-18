@@ -300,7 +300,7 @@
                 ConfirmedDate = param.ConfirmedDate,
                 ResignedDate = param.ResignedDate,
                 Skype = param.Skype,
-                Yahoo = param.LetsTalk,
+                LetsTalk = param.LetsTalk,
                 Marriage = param.Marriage,
                 PermanentAddress = param.PermanentAddress,
                 CurrentAddress = param.CurrentAddress,

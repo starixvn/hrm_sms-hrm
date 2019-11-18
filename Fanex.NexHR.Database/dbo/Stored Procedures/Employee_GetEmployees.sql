@@ -127,7 +127,7 @@ BEGIN
       ,[ConfirmedDate]
       ,[ResignedDate]
       ,[Skype]
-      ,[Yahoo]
+      ,[LetsTalk]
       ,[Marriage]
       ,[LastLogin]
       ,e.[CreatedDate]

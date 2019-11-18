@@ -46,7 +46,7 @@ BEGIN
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,e.Skype
-		,e.Yahoo
+		,e.LetsTalk
 		,e.Marriage
 		,e.LastLogin
 		,@AnnualLeaveBalance AS AnnualLeaveBalance
