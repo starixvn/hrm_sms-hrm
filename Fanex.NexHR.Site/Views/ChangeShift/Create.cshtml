@@ -16,7 +16,8 @@
     <script src="~/wwwroot/dist/js/changeshift.create.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "changeshift")">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "changeshift", new { })">@Labels.MyChangeShiftRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>

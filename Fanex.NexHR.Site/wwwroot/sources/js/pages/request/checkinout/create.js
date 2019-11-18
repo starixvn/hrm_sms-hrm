@@ -232,7 +232,7 @@ $(document).ready(function () {
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
-                date: domElements.$fromDate.val()
+                date: domElements.$forDate.val()
             }
         }).then(response => {
             const shift = response.data;
