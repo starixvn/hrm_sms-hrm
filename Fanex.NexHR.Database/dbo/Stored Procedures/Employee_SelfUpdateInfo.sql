@@ -7,7 +7,7 @@ CREATE PROCEDURE [dbo].[Employee_SelfUpdateInfo]
 	@Email VARCHAR(50) = '',
 	@Phone VARCHAR(50) = '',
 	@Skype VARCHAR(100) = '',
-	@Yahoo VARCHAR(100) = '',
+	@LetsTalk VARCHAR(100) = '',
 	@Address NVARCHAR(250) ='',
 	@CurrentAddress NVARCHAR(250) = '',
 	@FilePath NVARCHAR(4000) = '',
@@ -31,7 +31,7 @@ BEGIN
 	   ,Email = @Email
 	   ,Phone = @Phone
 	   ,Skype = @Skype
-	   ,Yahoo = @Yahoo
+	   ,LetsTalk = @LetsTalk
 	   ,PermanentAddress = @Address
 	   ,CurrentAddress = @CurrentAddress
 	WHERE empId = @empId

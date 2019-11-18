@@ -80,7 +80,7 @@ BEGIN
 		,e.ConfirmedDate
 		,e.ResignedDate
 		,e.Skype
-		,e.Yahoo
+		,e.LetsTalk
 		,e.Marriage
 		,e.LastLogin
 		,e.CreatedDate
