@@ -103,13 +103,15 @@ function GetSelectedGroupEmails() {
     var result = "";
     var selectedArr = selectedGroups.split(',');
     for (var i = 0; i < selectedArr.length; i++) {
-        let email = GroupsCollection.filter(group => group.Id.toString() == selectedArr[i])[0].MailGroup;
-        if (email) {
-            if (!result) {
-                result = email;
-            }
-            else {
-                result += "," + email;
+        if (selectedArr[i]) {
+            let email = GroupsCollection.filter(group => group.Id.toString() == selectedArr[i])[0].MailGroup;
+            if (email) {
+                if (!result) {
+                    result = email;
+                }
+                else {
+                    result += "," + email;
+                }
             }
         }
     }
