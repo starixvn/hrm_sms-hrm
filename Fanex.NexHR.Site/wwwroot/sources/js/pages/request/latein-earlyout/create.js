@@ -63,7 +63,7 @@ $(document).ready(function () {
                 domElements.$approverId.html(options);
             }).catch(axiosError);
     };
-    let getDisabledDates = function () {
+    let getDisabledDates = function (callback) {
         axios({
             url: _global.root + 'lateinearlyout/GetDisabledDate',
             method: 'GET',
@@ -82,6 +82,9 @@ $(document).ready(function () {
             }
 
             domElements.$onDate.attr('disabledDate', disabledDate);
+            if (callback !== undefined && typeof callback === 'function') {
+                callback();
+            }
         }).catch(axiosError);
     };
     let showHideActualLateInEarlyOut = function () {
@@ -152,8 +155,7 @@ $(document).ready(function () {
         return isValid;
     };
 
-    getDisabledDates();
-    initDatepicker();
+    getDisabledDates(initDatepicker);
     showHideActualLateInEarlyOut();
 
     $('#Employee').autocomplete({

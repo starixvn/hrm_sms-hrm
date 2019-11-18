@@ -61,7 +61,7 @@ $(document).ready(function () {
                 domElements.$approverId.html(options);
             }).catch(axiosError);
     };
-    let getDisabledDates = function () {
+    let getDisabledDates = function (callback) {
         axios({
             url: _global.root + 'checkinout/GetDisabledDate',
             method: 'GET',
@@ -81,6 +81,10 @@ $(document).ready(function () {
 
             domElements.$attendantDate.attr('disabledDate', disabledDate);
             domElements.$forDate.attr('disabledDate', disabledDate);
+
+            if (callback !== undefined && typeof callback === 'function') {
+                callback();
+            }
         }).catch(axiosError);
     };
     let bindingHourAndMinute = function () {
@@ -172,8 +176,7 @@ $(document).ready(function () {
         return isValid;
     };
 
-    getDisabledDates();
-    initDatepicker();
+    getDisabledDates(initDatepicker);
 
     $('#Employee').autocomplete({
         source: function (request, response) {

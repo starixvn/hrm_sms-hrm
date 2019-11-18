@@ -74,6 +74,7 @@
                 @Html.TextBox("AttendantDate", Model.AttendantDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
+                        @readonly = "readonly",
                         mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })
@@ -86,6 +87,7 @@
                 @Html.TextBox("ForDate", Model.ForDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
+                        @readonly = "readonly",
                         mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })

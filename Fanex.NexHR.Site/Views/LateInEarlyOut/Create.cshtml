@@ -59,6 +59,7 @@
                 @Html.TextBox("OnDate", Model.OnDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
+                        @readonly = "readonly",
                         mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })

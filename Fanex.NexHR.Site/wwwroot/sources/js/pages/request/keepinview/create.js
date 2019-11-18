@@ -64,7 +64,7 @@ $(document).ready(function () {
                 domElements.$approverId.html(options);
             }).catch(axiosError);
     };
-    let getDisabledDates = function () {
+    let getDisabledDates = function (callback) {
         axios({
             url: _global.root + 'keepinview/getDisabledDate',
             method: 'GET',
@@ -83,6 +83,10 @@ $(document).ready(function () {
             }
 
             domElements.$date.attr('disabledDate', disabledDate);
+
+            if (callback !== undefined && typeof callback === 'function') {
+                callback();
+            }
         }).catch(axiosError);
     };
     let validateForm = function () {
@@ -246,6 +250,5 @@ $(document).ready(function () {
 
     $('form').areYouSure();
 
-    getDisabledDates();
-    initDatepicker();
+    getDisabledDates(initDatepicker);
 });

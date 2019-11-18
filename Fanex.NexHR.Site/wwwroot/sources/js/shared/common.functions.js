@@ -249,9 +249,38 @@ function initDatepicker() {
         let $this = $(this);
         const disabledDates = $this.attr('disabledDate');
 
+        if (disabledDates && disabledDates.length > 0) {
+            let checkBadDates = function (mydate) {
+                let isEnable = true;
+                if (disabledDates && disabledDates.length > 0) {
+                    const checkdate = moment(mydate),
+                        myBadDates = disabledDates.split(',');
+                    for (let i = 0; i < myBadDates.length; i++) {
+                        const date = moment(myBadDates[i]);
+                        if (date.isSame(checkdate)) {
+                            isEnable = false;
+                        }
+                    }
+                }
+
+                return [isEnable];
+            };
+            $this.datepicker({
+                dateFormat: 'dd M, yy',
+                beforeShowDay: checkBadDates,
+                changeMonth: true,
+                changeYear: true
+            });
+        } else {
+            $this.datepicker({
+                dateFormat: 'dd M, yy',
+                changeMonth: true,
+                changeYear: true
+            });
+        }
+
         let mindate = $this.attr('mindate'),
             maxdate = $this.attr('maxdate');
-
         if (mindate && mindate !== 'null') {
             mindate = mindate.split('/');
             $this.datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
@@ -260,37 +289,6 @@ function initDatepicker() {
         if (maxdate && maxdate !== 'null') {
             maxdate = maxdate.split('/');
             $this.datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
-        }
-
-        if (disabledDates && disabledDates.length > 0) {
-            let checkBadDates = function (mydate) {
-                    let isEnable = true;
-                    if (disabledDates && disabledDates.length > 0) {
-                        const checkdate = moment(mydate),
-                            myBadDates = disabledDates.split(',');
-                        for (let i = 0; i < myBadDates.length; i++) {
-                            const date = moment(myBadDates[i]);
-                            if (date.isSame(checkdate)) {
-                                isEnable = false;
-                            }
-                        }
-                    }
-
-                    return [isEnable];
-                };
-
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                beforeShowDay: checkBadDates,
-                changeMonth: true,
-                changeYear: true
-                });
-        } else {
-            $this.datepicker({
-                        dateFormat: 'dd M, yy',
-                        changeMonth: true,
-                        changeYear: true
-                    });
         }
 
         $this.attr('readonly', 'readonly');
