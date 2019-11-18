@@ -1,47 +1,52 @@
 ﻿@model MemoViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Company Memo";
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
-    @Url.CombresLink("memoeditcss")
+    <link href="~/wwwroot/dist/styles/memo.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("memojs")
+    <script src="~/wwwroot/dist/js/memo.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat" style="width: 878px;">
-        <div class="grid_1 gridlabel">
-            @Html.LabelFor(model => model.Year)
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter" method="post">
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.YearPickerFor(model => model.Year, 2010, isShowAll: true)
+            </div>
         </div>
-        <div class="grid_3">
-            @Html.YearPickerFor(model => model.Year, 2010, isShowAll: true)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.Category, new SelectList(Model.MemoCategories, "id", "Name"), new SelectListItem() { Value = "-1", Text = "All" }, new { @class = "form-control" })
+            </div>
         </div>
-        <div class="grid_2 gridlabel">
-            @Html.LabelFor(model => model.Category)
-        </div>
-        <div class="grid_4">
-            @Html.DropDownListFor(model => model.Category, new SelectList(Model.MemoCategories, "id", "Name"), new SelectListItem() { Value = "-1", Text = "All" }, new { @class = "aaaa" })
-        </div>
-        <div class="grid_6">
-            <input type="submit" id="submit" class="processing-submit" value="@Labels.Submit" />
+        <div class="form-group">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
             @if (hasPermission)
             {
-                <div class="button-icon">
-                    <span class="icon plus"></span>@Html.ActionLink("Create new Memo", "Create")
-                </div>
+                <a href="@Url.Action("Create")" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    @Labels.CreateMemo
+                </a>
             }
         </div>
     </div>
-    <div class="clear">
-    </div>
-    <table id="memo" class="table table-custom persist-area js-table-memo" style="width: 900px">
+    <table id="memo" class="table table-custom persist-area js-table-memo">
         <thead>
             <tr class="persist-header">
                 <th>@Labels.SymbolCount</th>
@@ -86,8 +91,8 @@
                                 </a>
                             </td>
                             <td class="cmd" title="Delete">
-                                <a href="javascript:;" class="js-link-delete-memo" data-id="@item.Id">
-                                    <i class="fa fa-times fa-lg icon-delete"></i>
+                                <a href="javascript:;">
+                                    <i class="fa fa-times fa-lg icon-delete" data-id="@item.Id"></i>
                                 </a>
                             </td>
                         }
@@ -100,4 +105,4 @@
             @RazorHelper.DisplayNoInformation(totalColumn)
         }
     </table>
-}
+</form>

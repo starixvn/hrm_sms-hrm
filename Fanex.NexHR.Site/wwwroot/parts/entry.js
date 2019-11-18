@@ -69,7 +69,7 @@ module.exports = {
         [`${styleDistPath}/discipline.details`]: `${styleSourcePath}/pages/discipline/details.scss`,
         [`${styleDistPath}/message`]: `${styleSourcePath}/pages/message/message.scss`,
         [`${styleDistPath}/message.create`]: `${styleSourcePath}/pages/message/create.scss`,
-
+        [`${styleDistPath}/memo`]: `${styleSourcePath}/pages/memo/memo.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -144,6 +144,7 @@ module.exports = {
         [`${jsDistPath}/discipline.summary`]: `${jsSourcePath}/discipline/summary.js`,
         [`${jsDistPath}/discipline.detail`]: `${jsSourcePath}/discipline/details.js`,
         [`${jsDistPath}/message`]: `${jsSourcePath}/message/message.js`,
-        [`${jsDistPath}/message.create`]: `${jsSourcePath}/message/message.create.js`
+        [`${jsDistPath}/message.create`]: `${jsSourcePath}/message/message.create.js`,
+        [`${jsDistPath}/memo`]: `${jsSourcePath}/memo/memo.js`
     }
 };
