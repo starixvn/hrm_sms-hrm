@@ -3,17 +3,7 @@
     public static class Constants
     {
         public const string JobTitle = "JT";
-
         public const string MemoCategory = "MC";
-
-        public const int GeneralLeave = 0;
-        public const int AnnualLeave = 2;
-        public const int UnpaidLeave = 25;
-        public const int UnpaidLeaveInsurance = 41;
-        public const int BusinessTrip = 9;
-        public const int MaternityLeave = 12;
-        public const int WeddingLeave = 6;
-        public const int CompensationLeave = 27;
 
         public const byte NumberMonthsInFutureCanLeaveRequest = 7;
 
@@ -30,6 +20,7 @@
         public const string BeginRootTag = "<ROOT>";
         public const string EndRootTag = "</ROOT>";
 
+        public const byte TotalMinuteInHour = 60;
         public const byte TotalWeekendLeaveLimit = 16;
         public const decimal HalfDayOffValue = 0.5M;
         public const short DefaultRequestFilterStatusId = -2;

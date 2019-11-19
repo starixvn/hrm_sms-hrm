@@ -249,7 +249,7 @@ BEGIN
 			,Data.IsHalfDay
 			,Data.FromTime
 			,Data.ToTime
-		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (OnDate DATETIME, ShiftId INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
+		FROM OPENXML(@DocHandler, '/ROOT/Row', 1) WITH (OnDate DATETIME, ShiftId INT, LeaveType INT, IsHalfDay BIT, WorkType TINYINT, FromTime DATETIME, ToTime DATETIME) AS Data
 			LEFT JOIN dbo.EmployeeCalendar ec WITH (NOLOCK) ON ec.WorkDate = data.OnDate
 			AND ec.EmpId = @EmpId
 
@@ -498,7 +498,7 @@ BEGIN
 			SELECT 1
 			FROM #LeaveRequestDetail
 			WHERE IsHalfDay = 1
-				AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType, @BusinessTripLeaveType, @KIVByHourLeaveType)
+				AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType, @KIVByHourLeaveType, @BusinessTripLeaveType, @BusinessDuringWorkingLeaveType)
 			)
 	BEGIN
 		SET @ErrCode = 112
@@ -522,7 +522,7 @@ BEGIN
 	END
 
 	-- check rule for leave during working hours
-	IF @LeaveTypeID = @BusinessDuringWorkingLeaveType
+	IF @LeaveTypeId = @BusinessDuringWorkingLeaveType
 		AND EXISTS (
 			SELECT 1
 			FROM #LeaveRequestDetail
@@ -561,7 +561,7 @@ BEGIN
 					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
 				WHERE ldt.IsHalfDay = 1
 					AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
-					AND wk.CurrentStatus IN (1, 2, 4)
+					AND wk.CurrentStatus IN (1, 2, 4, 6)
 				)
 		BEGIN
 			SET @ErrCode = 118

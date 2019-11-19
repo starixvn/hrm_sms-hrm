@@ -30,7 +30,7 @@
             {
                 if (!item.IsOffOrHoliday)
                 {
-                    if (item.LeaveTypeId == Constants.AnnualLeave)
+                    if (item.LeaveTypeId == (ushort)LeaveTypes.AnnualLeave)
                     {
                         if (item.IsHalfDay)
                         {
@@ -41,7 +41,7 @@
                             totalAnnualLeave += 1;
                         }
                     }
-                    if (item.LeaveTypeId == Constants.UnpaidLeave)
+                    if (item.LeaveTypeId == (ushort)LeaveTypes.UnpaidLeave)
                     {
                         if (item.IsHalfDay)
                         {

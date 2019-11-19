@@ -65,7 +65,7 @@
             VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
             var model = new LeaveRequestViewModel
             {
-                LeaveTypeId = Constants.GeneralLeave,
+                LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
                 Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
                 FromDate = DateTime.Now.Date,
@@ -289,7 +289,7 @@
                     OnDate = calendar.WorkDate,
                     ScheduleStatus = tempScheduleStatus,
                     IsOffOrHoliday = isOffOrHoliday,
-                    LeaveTypeId = Constants.AnnualLeave,
+                    LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
                     WorkType = (byte)WorkType.Leave
                 };
                 leaveRequestDetailOutput.Add(tempLeaveDetailModel);
@@ -321,7 +321,7 @@
                 {
                     OnDate = workDate,
                     ScheduleStatus = Labels.NA,
-                    LeaveTypeId = Constants.AnnualLeave,
+                    LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
                     WorkType = (byte)WorkType.Leave
                 };
                 leaveRequestDetailOutput.Add(tempLeaveDetailModel);
@@ -400,7 +400,7 @@
             var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
             if (model != null)
             {
-                if (model.LeaveTypeId == Constants.MaternityLeave)
+                if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
                 {
                     //// rule: user can make maternity leave for 6 months.
                     const byte ExtraMonthsCanRequest = 2;
@@ -434,7 +434,7 @@
                 ToDate = model.MaxDate
             };
 
-            IList<DateTime> unavailDates = model.LeaveTypeId == Constants.GeneralLeave
+            IList<DateTime> unavailDates = model.LeaveTypeId == (ushort)LeaveTypes.GeneralLeave
                 ? new List<DateTime> { DateTime.Now.AddYears(-3) }
                 : employeeService.GetUnavailableDates(criteria);
             return unavailDates;

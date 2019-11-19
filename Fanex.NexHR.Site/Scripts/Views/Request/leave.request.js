@@ -155,14 +155,15 @@ var LeaveRequest = (function ($) {
             var validate = LeaveRequest.validateForm();
             if (validate) {
                 RequestCommon.removeErrorMsg(false);
+                var leaveTypeId = LeaveRequest.leaveTypeId.val();
                 var leaveRequest = {
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
                     EmployeeName: LeaveRequest.employee.val(),
                     RequestType: 6,
                     FromDate: LeaveRequest.fromDate.val(),
-                    ToDate: (LeaveRequest.halfDayOff.prop('checked') ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val()),
-                    LeaveTypeId: LeaveRequest.leaveTypeId.val(),
+                    ToDate: LeaveRequest.halfDayOff.prop('checked') ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val(),
+                    LeaveTypeId: leaveTypeId,
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(':selected').text(),
                     TotalDays: LeaveRequest.totalDays.val(),
                     RefNo: $('#RefNo').val(),
@@ -175,7 +176,7 @@ var LeaveRequest = (function ($) {
                 var isHalfDay = false;
                 var fromTime = new Date();
                 var toTime = new Date();
-                if (LeaveRequest.leaveTypeId.val() === LeaveRequest.generalLeaveTypeId) {
+                if (leaveTypeId === LeaveRequest.generalLeaveTypeId) {
                     $('.tabledata tbody tr').each(function () {
                         leaveDate = $.trim($('td.tdleavedate', this).first().attr('data-date'));
                         isHalfDay = $('td input.chkhalfday', this).first().prop('checked');
@@ -214,13 +215,12 @@ var LeaveRequest = (function ($) {
                         toDate.setDate(toDate.getDate() + 1);
                     }
 
-                    if (LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveTypeId) {
+                    if (leaveTypeId === LeaveRequest.businessTripLeaveTypeId || leaveTypeId === LeaveRequest.keepInViewByHourLeaveTypeId) {
                         fromDateTime = fromDate.format('dd mmm, yyyy') + ' ' + LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
                             + ':' + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2);
                         toDateTime = toDate.format('dd mmm, yyyy') + ' ' + LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
                             + ':' + LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2);
-                    }
-                    else {
+                    } else {
                         fromDateTime = fromDate.format('dd mmm, yyyy') + ' ' + LeaveRequest.fromTime.val();
                         toDateTime = toDate.format('dd mmm, yyyy') + ' ' + LeaveRequest.toTime.val();
                     }

@@ -432,13 +432,13 @@
             var numberDays = 0;
             switch (leaveTypeId)
             {
-                case Constants.MaternityLeave:
-                case Constants.CompensationLeave:
+                case (ushort)LeaveTypes.MaternityLeave:
+                case (ushort)LeaveTypes.CompensationLeave:
                     numberDays = (toDate - fromDate).Days + 1;
                     break;
 
-                case Constants.UnpaidLeave:
-                case Constants.BusinessTrip:
+                case (ushort)LeaveTypes.UnpaidLeave:
+                case (ushort)LeaveTypes.BusinessTrip:
                     var criteria = new GetOffDateAndHolidayDateCriteria
                     {
                         EmpId = employeeId,
@@ -470,9 +470,9 @@
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
             var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
 
-            if (leaveTypeId.HasValue && (leaveTypeId.Value == Constants.UnpaidLeave
-                || leaveTypeId.Value == Constants.BusinessTrip
-                || leaveTypeId.Value == Constants.UnpaidLeaveInsurance))
+            if (leaveTypeId.HasValue && (leaveTypeId.Value == (ushort)LeaveTypes.UnpaidLeave
+                || leaveTypeId.Value == (ushort)LeaveTypes.BusinessTrip
+                || leaveTypeId.Value == (ushort)LeaveTypes.UnpaidLeaveInsurance))
             {
                 var criteria = new GetOffDateAndHolidayDateCriteria
                 {

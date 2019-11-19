@@ -5,6 +5,7 @@
     using System.Text;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;
 
@@ -49,7 +50,7 @@
         {
             get
             {
-                var value = new StringBuilder("<ROOT>");
+                var value = new StringBuilder(Constants.BeginRootTag);
 
                 if (RequestDetail != null)
                 {
@@ -68,7 +69,7 @@
                     }
                 }
 
-                return value.Append("</ROOT>").ToString();
+                return value.Append(Constants.BeginRootTag).ToString();
             }
         }
     }

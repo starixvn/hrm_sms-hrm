@@ -32,11 +32,11 @@
         [StringValue("Unpaid Leave")]
         UnpaidLeave = 25,
 
-        [StringValue("Compensation Leave")]
-        CompensationLeave = 26,
-
         [StringValue("Business during working")]
-        BusinessDuringWorking = 27,
+        BusinessDuringWorking = 26,
+
+        [StringValue("Compensation Leave")]
+        CompensationLeave = 27,
 
         [StringValue("Unpaid Leave (Insurance)")]
         UnpaidLeaveInsurance = 41,

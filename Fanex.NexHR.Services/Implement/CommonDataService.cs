@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Core.Services;
@@ -67,7 +66,7 @@
                 ExcludeNotShown = excludeNotShown
             };
             IList<LeaveType> leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
-            leaveTypes.Insert(0, new LeaveType { Id = Constants.GeneralLeave, Name = Labels.GeneralLeave });
+            leaveTypes.Insert(0, new LeaveType { Id = (ushort)LeaveTypes.GeneralLeave, Name = Labels.GeneralLeave });
 
             return leaveTypes;
         }

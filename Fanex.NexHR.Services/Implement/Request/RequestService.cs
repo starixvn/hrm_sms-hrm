@@ -325,7 +325,7 @@
         {
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewByHoursWithNoFormat : RequestFormatConstants.MsgKeepInViewByHours;
             var minutes = (request.ToTime - request.FromTime).TotalMinutes;
-            var hours = minutes / 60.0;
+            var hours = minutes / Constants.TotalMinuteInHour;
             return string.Format(
                     msgTemplate,
                     request.FromDate.ToDateMonthYearFormatedDate(),
@@ -336,8 +336,27 @@
 
         private static string GetLeaveDayDetail(RequestEntity request)
         {
-            return (request.LeaveType != null && request.LeaveType.Id == (int)LeaveTypes.GeneralLeave) ?
-                            request.LeaveCountDetails : GetTotalDay(request.TotalDays);
+            var result = string.Empty;
+            if (request.LeaveType != null)
+            {
+                switch (request.LeaveType.Id)
+                {
+                    case (ushort)LeaveTypes.GeneralLeave:
+                        result = request.LeaveCountDetails;
+                        break;
+
+                    case (ushort)LeaveTypes.KeepInViewByHour:
+                    case (ushort)LeaveTypes.BusinessDuringWorking:
+                        var minutes = (request.ToTime - request.FromTime).TotalMinutes;
+                        result = $"{(minutes / Constants.TotalMinuteInHour).ToString("0.#")} hour(s)";
+                        break;
+
+                    default:
+                        result = GetTotalDay(request.TotalDays);
+                        break;
+                }
+            }
+            return result;
         }
 
         private static string GetTotalDay(decimal totalDays)
