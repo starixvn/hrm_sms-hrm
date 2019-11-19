@@ -26,7 +26,7 @@
                 @{
                     DateTime defaultFromdDate = Model.FromDate ?? new DateTime();
                 }
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromdDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromdDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -38,7 +38,7 @@
                 @{
                     DateTime defaultToDate = Model.ToDate ?? new DateTime();
                 }
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -109,13 +109,13 @@
                     <td>
                         @(index++)
                     </td>
-                    <td class="left">
+                    <td class="align-left">
                         <a href="/message/detail/@message.MessageId">@message.Subject</a>
                     </td>
                     <td>
                         @message.CategoryName
                     </td>
-                    <td class="send-to">
+                    <td class="align-left send-to">
                         @message.SendTo
                     </td>
                     <td>

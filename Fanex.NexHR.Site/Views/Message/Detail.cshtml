@@ -18,7 +18,7 @@
 <h2 class="page-title">@Labels.Details</h2>
 @if (!ReferenceEquals(Model, null))
 {
-    <table class="table table-custom memo" style="width:50%;">
+    <table class="table table-custom" style="width:50%;">
         <thead>
             <tr>
                 <th colspan="4">
@@ -28,42 +28,42 @@
         </thead>
         <tbody>
             <tr>
-                <td class="left">
+                <td class="align-left">
                     @Labels.SendTo
                 </td>
-                <td class="left">
+                <td class="align-left">
                     <b>@Model.SendTo</b>
                 </td>
             </tr>
             <tr>
-                <td>
+                <td class="align-left">
                     @Labels.Category
                 </td>
-                <td>
+                <td class="align-left">
                     <b>@Model.CategoryName</b>
                 </td>
             </tr>
             <tr>
-                <td class="left" style="width:80px;">
+                <td class="align-left" style="width:80px;">
                     @Labels.FromDate
                 </td>
-                <td class="left">
+                <td class="align-left">
                     <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
                 </td>
             </tr>
             <tr>
-                <td>
+                <td class="align-left">
                     @Labels.ToDate
                 </td>
-                <td>
+                <td class="align-left">
                     <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
                 </td>
             </tr>
             <tr>
-                <td class="left">
+                <td class="align-left">
                     @Labels.Content
                 </td>
-                <td colspan="3">
+                <td colspan="3" class="align-left">
                     <b>@Model.Contents</b>
                 </td>
             </tr>
