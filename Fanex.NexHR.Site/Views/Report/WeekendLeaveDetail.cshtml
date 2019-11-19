@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Report
 @model WeekendLeaveViewModel
 
@@ -36,7 +37,12 @@
                 <label class="control-label">@Labels.FromDate</label>
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                    Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                    })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -46,7 +52,12 @@
                 <label class="control-label">@Labels.ToDate</label>
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                    Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                    })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -58,11 +69,11 @@
             <div class="input-form">
                 @{
                     var category = new List<SelectListItem>
-                        {
+                    {
                         new SelectListItem() {Text = Labels.All, Value = string.Empty},
                         new SelectListItem() {Text = Labels.Expat, Value = "false"},
                         new SelectListItem() {Text = Labels.Local, Value = "true"},
-                        };
+                    };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
             </div>
@@ -95,11 +106,11 @@
             <div class="select-form">
                 @{
                     var leaveType = new List<SelectListItem>
-                                    {
-                                        new SelectListItem() {Text = Labels.All, Value = "-1"},
-                                        new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
-                                        new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
-                                    };
+                    {
+                        new SelectListItem() {Text = Labels.All, Value = "-1"},
+                        new SelectListItem() {Text = Labels.AnnualLeave, Value = "2"},
+                        new SelectListItem() {Text = Labels.UnpaidLeave, Value = "25"},
+                    };
                 }
                 @Html.DropDownListFor(model => model.LeaveTypeId, leaveType, new { @class = "form-control" })
             </div>

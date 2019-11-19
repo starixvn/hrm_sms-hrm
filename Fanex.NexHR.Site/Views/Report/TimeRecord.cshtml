@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @model TimeRecordViewModel
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
@@ -24,7 +25,12 @@
                     @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                        Model.FromDate.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
@@ -33,7 +39,12 @@
                     @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                        Model.ToDate.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
@@ -51,7 +62,7 @@
                 </div>
                 <div class="input-form">
                     @Html.TextBox("Employee", Model.Employee,
-                   new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
                     @Html.HiddenFor(model => model.EmployeeId)
                 </div>
             </div>
@@ -63,11 +74,11 @@
                 <div class="input-form">
                     @{
                         var category = new List<SelectListItem>
-                                                                                                                                                        {
-                                                                                                                                                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                                                                                                                                                            new SelectListItem() {Text = "Expat", Value = "0"},
-                                                                                                                                                            new SelectListItem() {Text = "Local", Value = "1"},
-                                                                                                                                                        };
+                        {
+                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                            new SelectListItem() {Text = "Expat", Value = "0"},
+                            new SelectListItem() {Text = "Local", Value = "1"}
+                        };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
                 </div>
@@ -83,7 +94,12 @@
                     @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                        Model.FromDate.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
@@ -92,7 +108,12 @@
                     @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                        Model.ToDate.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
