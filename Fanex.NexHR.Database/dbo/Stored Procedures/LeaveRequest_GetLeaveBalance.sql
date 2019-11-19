@@ -1,12 +1,11 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_GetLeaveBalance] 
-	@EmpId INT
-	,@RequestID BIGINT = NULL
-	,@EffectedDay DATETIME = NULL
+CREATE PROCEDURE [dbo].[LeaveRequest_GetLeaveBalance] @EmpId INT
+	,@RequestId BIGINT = NULL
+	,@EffectedDay DATE = NULL
 AS
 /*
 Created: Quinn.Vo@20190417
-Task: Get  Avaible Balance Leave From Request ID
+Task: Get  Avaible Balance Leave From RequestId
 DB: HRM_SMS
 Original: 
 
@@ -23,18 +22,21 @@ BEGIN
 	END
 
 	DECLARE @KIVBalance NUMERIC(18, 2)
+		,@KIVByHourBalance NUMERIC(18, 2)
 		,@LeaveBalanceDay NUMERIC(18, 2)
 		,@CurrenLeaveDay NUMERIC(18, 2)
 		,@WeekedLeaveDayTaken NUMERIC(18, 2)
 
-	SELECT @KIVBalance = dbo.fnc_GetKIVByDayBalance(@EmpId, @EffectedDay, @RequestID)
-		,@LeaveBalanceDay = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@EffectedDay), @RequestID)
-		,@CurrenLeaveDay = dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @EffectedDay, @RequestID)
-		,@WeekedLeaveDayTaken = dbo.fnc_GetWeekendLeaveTaken(@EmpId, @EffectedDay, @RequestID)
+	SELECT @KIVBalance = dbo.fnc_GetKIVByDayBalance(@EmpId, @EffectedDay, @RequestId)
+		,@KIVByHourBalance = dbo.fnc_GetKIVByHourBalance(@EmpId, @EffectedDay, @RequestId)
+		,@LeaveBalanceDay = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@EffectedDay), @RequestId)
+		,@CurrenLeaveDay = dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @EffectedDay, @RequestId)
+		,@WeekedLeaveDayTaken = dbo.fnc_GetWeekendLeaveTaken(@EmpId, @EffectedDay, @RequestId)
 
 	SELECT @EmpId AS EmployeeId
 		,@LeaveBalanceDay AS AnnualBalance
 		,@KIVBalance AS KeepInViewBalance
+		,@KIVByHourBalance AS KeepInViewByHourBalance
 		,@CurrenLeaveDay AS CurrentLeaveBalanceDay
 		,@WeekedLeaveDayTaken AS WeekedLeaveDayTaken
 END

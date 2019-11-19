@@ -1,22 +1,21 @@
 ﻿
 CREATE PROCEDURE [dbo].[KeepInViewRequest_GetByDate] @EmpId INT
-	,@FromDate DATETIME
-	,@ToDate DATETIME
+	,@FromDate DATE
+	,@ToDate DATE
 AS
 /*
 Created: Quinn.Vo@20190604
 Task: Get Keep In View request by empId & date range.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		kiv.RequestId
+	SELECT kiv.RequestId
 		,kiv.KeepInViewType AS KeepInViewTypeId
 		,kiv.OnDate
 		,kiv.FromTime
@@ -42,14 +41,16 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.KeepInViewRequest AS kiv WITH (NOLOCK)
-	INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON kiv.RequestId = wk.RequestId
-	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON kiv.EmpId = e.EmpId
-	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
-	LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
-	LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
-
-	WHERE (@EmpId IS NULL OR kiv.EmpId = @EmpId)
-	AND kiv.OnDate BETWEEN @FromDate AND @ToDate
-
+		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON kiv.RequestId = wk.RequestId
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON kiv.EmpId = e.EmpId
+		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
+		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
+		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+	WHERE (
+			@EmpId IS NULL
+			OR kiv.EmpId = @EmpId
+			)
+		AND kiv.OnDate BETWEEN @FromDate
+			AND @ToDate
 	ORDER BY wk.CreatedDate DESC
 END

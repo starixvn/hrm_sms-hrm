@@ -416,15 +416,13 @@
 
         private EmployeeLeaveBalance GetLeaveBalance(long? requestId, int? year)
         {
-            var getLeaveBalanceCriteria = new GetLeaveBalanceCriteria
+            var criteria = new GetLeaveBalanceCriteria
             {
                 EmpId = sessionService.Employee.Id,
                 RequestId = requestId,
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };
-
-            EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(getLeaveBalanceCriteria);
-            return employeeLeaveBalance;
+            return leaveRequestService.GetLeaveBalance(criteria);
         }
 
         private IList<DateTime> GetUnavailDate(LeaveRequestViewModel model)

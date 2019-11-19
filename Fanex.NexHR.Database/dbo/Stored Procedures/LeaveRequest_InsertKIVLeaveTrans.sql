@@ -5,9 +5,9 @@ AS
 Created: Quinn.Vo@20150927
 Task: insert kiv temp leave balance.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 
 */
@@ -17,7 +17,8 @@ BEGIN
 	DECLARE @KIVLeaveDay NUMERIC(18, 2)
 		,@KIVLeaveHour INT
 		,@KeepInViewByDayLeaveType INT = 10
-		,@KeepInViewByHourLeaveType INT = 38
+		,@KeepInViewByHourLeaveType INT = 48
+		,@startTime DATETIME = GETDATE()
 
 	IF EXISTS (
 			SELECT 1
@@ -40,29 +41,23 @@ BEGIN
 		FROM dbo.KeepInViewByHourTrans
 		WHERE RequestId = @RequestId
 	END
-	
+
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.LeaveRequestDetail WITH (NOLOCK)
 			WHERE RequestId = @RequestId
 			)
 	BEGIN
-		SELECT @KIVLeaveDay = SUM(
-			CASE WHEN LeaveType = @KeepInViewByDayLeaveType
-				THEN
-					CASE 
-					WHEN IsHalfDay = 1 THEN 0.5
-					ELSE 1
-					END
-					ELSE
-					0
-					END
-					)
-			,@KIVLeaveHour = SUM(CASE WHEN LeaveType = @KeepInViewByHourLeaveType
-				THEN
-					DATEDIFF(MI, FromTime, ToTime)
-					ELSE
-					0
+		SELECT @KIVLeaveDay = SUM(CASE 
+					WHEN LeaveType = @KeepInViewByDayLeaveType THEN CASE 
+							WHEN IsHalfDay = 1 THEN 0.5
+							ELSE 1
+							END
+					ELSE 0
+					END)
+			,@KIVLeaveHour = SUM(CASE 
+					WHEN LeaveType = @KeepInViewByHourLeaveType THEN DATEDIFF(MI, FromTime, ToTime)
+					ELSE 0
 					END)
 		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
 		WHERE RequestId = @RequestId
@@ -82,7 +77,7 @@ BEGIN
 			AND LeaveType = @KeepInViewByDayLeaveType
 	END
 
-	IF (ISNULL(@KIVLeaveDay, 0) > 0)
+	IF ISNULL(@KIVLeaveDay, 0) > 0
 	BEGIN
 		INSERT INTO dbo.KeepInViewByDayTrans (
 			[EmpId]
@@ -97,12 +92,12 @@ BEGIN
 			,0
 			,ISNULL(@KIVLeaveDay, 0)
 			,YEAR(ToDate)
-			,GETDATE()
+			,@startTime
 		FROM dbo.LeaveRequest lr WITH (NOLOCK)
 		WHERE Requestid = @RequestId
 	END
 
-	IF (ISNULL(@KIVLeaveHour, 0) > 0)
+	IF ISNULL(@KIVLeaveHour, 0) > 0
 	BEGIN
 		INSERT INTO dbo.KeepInViewByHourTrans (
 			EmpId
@@ -117,7 +112,7 @@ BEGIN
 			,@RequestId
 			,0
 			,DATEDIFF(MI, ldt.FromTime, ldt.ToTime)
-			,GETDATE()
+			,@startTime
 		FROM dbo.LeaveRequestDetail ldt WITH (NOLOCK)
 		WHERE Requestid = @RequestId
 	END

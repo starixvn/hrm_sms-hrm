@@ -64,6 +64,7 @@ var LeaveRequest = (function ($) {
             LeaveRequest.requestId = $('#RequestId');
             LeaveRequest.annualBalance = $('#lblAnnualBalance');
             LeaveRequest.keepInViewBalance = $('#lblKeepInViewBalance');
+            LeaveRequest.keepInViewByHourBalance = $('#lblKeepInViewByHourBalance');
             LeaveRequest.currentLeaveBalance = $('#lblCurrentLeaveBalance');
             LeaveRequest.weekendLeaveTaken = $('#lblWeekendLeave');
             LeaveRequest.isFromTimeAfterDay = $('#IsFromTimeAfterDay');
@@ -591,6 +592,7 @@ var LeaveRequest = (function ($) {
                     if (response !== null) {
                         LeaveRequest.annualBalance.html(response.AnnualBalance);
                         LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
+                        LeaveRequest.keepInViewByHourBalance.html(response.KeepInViewByHourBalance);
                         LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
                         LeaveRequest.weekendLeaveTaken.html(response.WeekedLeaveDayTaken);
                     }

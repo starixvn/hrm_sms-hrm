@@ -47,15 +47,18 @@
 
         public ActionResult Create()
         {
+            var today = DateTime.Today;
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
             var model = new KeepInViewRequestViewModel
             {
                 Employee = sessionService.Employee.DisplayName,
                 EmployeeId = sessionService.Employee.Id,
-                Date = DateTime.Now.Date,
+                Date = today,
                 KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
                 Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers
+                Approvers = supervisor.Approvers,
+                MinDate = today.FirstDayOfMonth().AddMonths(-1),
+                MaxDate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
             };
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -107,13 +110,6 @@
             }
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
-            IEnumerable<DateTime> disabledDates = keepInViewRequestService.GetDisabledDate(new GetDisabledDateParam
-            {
-                EmployeeId = request.Employee.Id,
-                FromDate = request.OnDate.AddMonths(-1),
-                ToDate = DateTime.Today,
-                RequestId = request.RequestId
-            });
             var viewModel = new KeepInViewRequestViewModel
             {
                 RequestId = id,
@@ -129,10 +125,18 @@
                 CrossDay = (request.ToTime - request.OnDate).Days > 0,
                 FromTime = request.FromTime.ToString("HH:mm"),
                 ToTime = request.ToTime.ToString("HH:mm"),
-                DisabledDates = disabledDates,
                 Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers
+                Approvers = supervisor.Approvers,
+                MinDate = request.OnDate.AddMonths(-1),
+                MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
             };
+            viewModel.DisabledDates = keepInViewRequestService.GetDisabledDate(new GetDisabledDateParam
+            {
+                EmployeeId = request.Employee.Id,
+                FromDate = viewModel.MinDate,
+                ToDate = viewModel.MaxDate,
+                RequestId = request.RequestId
+            });
             ViewBag.IsTopManager = request.Employee.IsTopManager;
 
             return View(viewModel);

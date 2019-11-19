@@ -5,34 +5,39 @@ AS
 Created: 20190522@Quinn.Vo
 Task: Insert KIV transaction.
 DB: HRM
-Original: 
+Original:
 
-Revisions: 
+Revisions:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @OnDate DATETIME
+	DECLARE @OnDate DATE
 		,@IsHalfDay BIT
 		,@TotalMinutes INT
 		,@EmpId INT
 		,@KeepInViewType TINYINT
+		-- keep in view type
+		,@KeepInViewByDay TINYINT = 1
+		,@KeepInViewByHour TINYINT = 2
 
-	SELECT @OnDate = OnDate
+	SELECT @EmpId = EmpId
+		,@OnDate = OnDate
 		,@IsHalfDay = IsHalfDay
 		,@TotalMinutes = DATEDIFF(MI, FromTime, ToTime)
+		,@KeepInViewType = KeepInViewType
 	FROM dbo.KeepInViewRequest WITH (NOLOCK)
-	WHERE RequestID = @RequestID
+	WHERE RequestId = @RequestId
 
-	IF (@KeepInViewType = 1)
+	IF @KeepInViewType = @KeepInViewByDay
 	BEGIN
 		INSERT INTO dbo.KeepInViewByDayTrans (
-			[EmpId]
-			,[RequestId]
-			,[CreditDays]
-			,[DeductDays]
-			,[InYear]
-			,[InsertedDate]
+			EmpId
+			,RequestId
+			,CreditDays
+			,DeductDays
+			,InYear
+			,InsertedDate
 			)
 		VALUES (
 			@EmpId

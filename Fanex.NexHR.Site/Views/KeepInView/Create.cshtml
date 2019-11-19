@@ -8,7 +8,6 @@
     ViewBag.Title = Labels.Create;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
-    var today = DateTime.Today;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/keepinview.create.css" rel="stylesheet" />
@@ -81,8 +80,8 @@
                     new {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
-                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
-                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                        mindate = Model.MinDate.ToString("yyyy/MM/dd"),
+                        maxdate = Model.MaxDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>

@@ -6,7 +6,6 @@
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.Edit;
-    var today = DateTime.Today;
     var isTopManager = (bool)ViewBag.IsTopManager;
 }
 @section css{
@@ -75,8 +74,8 @@
                 @Html.TextBox("Date", Model.Date.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = Model.Date.AddMonths(-1).ToString("yyyy/MM/dd"),
-                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd"),
+                        mindate = Model.MinDate.ToString("yyyy/MM/dd"),
+                        maxdate = Model.MaxDate.ToString("yyyy/MM/dd"),
                         disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
