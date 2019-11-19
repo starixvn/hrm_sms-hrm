@@ -6,15 +6,17 @@ var LeaveRequestDetail = (function ($) {
         leaveWorkType: null,
         onDutyWorkType: null,
         offWorkType: null,
-        annualLeaveType: null,
-        unpaidLeaveType: null,
+        annualLeaveTypeId: null,
+        unpaidLeaveTypeId: null,
 
         init: function () {
-            LeaveRequestDetail.leaveWorkType = "2"; // hard code for worktype is leave
-            LeaveRequestDetail.onDutyWorkType = "3";
-            LeaveRequestDetail.offWorkType = "1";
-            LeaveRequestDetail.annualLeaveType = "2";
-            LeaveRequestDetail.unpaidLeaveType = "25";
+            LeaveRequestDetail.leaveWorkType = '2'; // hard code for worktype is leave
+            LeaveRequestDetail.onDutyWorkType = '3';
+            LeaveRequestDetail.offWorkType = '1';
+            LeaveRequestDetail.annualLeaveTypeId = '2';
+            LeaveRequestDetail.unpaidLeaveTypeId = '25';
+            LeaveRequestDetail.businessTripLeaveTypeId = '9';
+            LeaveRequestDetail.keepInViewByDayLeaveTypeId = '10';
 
             $("th.tdhalfday").width(100);
 
@@ -79,6 +81,10 @@ var LeaveRequestDetail = (function ($) {
             });
 
             $(".ddlleavetype").change(function () {
+                var leaveTypeId = $(this).val();
+                var trObject = $(this).parent().parent();
+
+                LeaveRequestDetail.showHideCheckboxHalfDay(trObject, leaveTypeId);
                 LeaveRequestDetail.getTotalLeave();
             });
 
@@ -86,7 +92,6 @@ var LeaveRequestDetail = (function ($) {
         },
         halfdayChange: function (trObject) {
             if (trObject.find(".chkhalfday").attr("checked")) {
-
                 $(".tdhalfday").show();
                 trObject.find(".addhalfday").first().html("+ Add a half").show();
                 var fromTimeObject = trObject.find(".ddlfromtime");
@@ -98,8 +103,7 @@ var LeaveRequestDetail = (function ($) {
                 trObject.find(".tdnumberleaves").html("0.5");
 
                 LeaveRequestDetail.fillTimeForHalfday(trObject);
-            }
-            else {
+            } else {
                 trObject.find(".addhalfday").first().html("");
                 trObject.find(".ddlfromtime").hide();
                 trObject.find(".ddltotime").hide();
@@ -118,8 +122,7 @@ var LeaveRequestDetail = (function ($) {
 
                 if (isShow) {
                     $(".tdhalfday").show();
-                }
-                else {
+                } else {
                     $(".tdhalfday").hide();
                 }
             }
@@ -215,11 +218,11 @@ var LeaveRequestDetail = (function ($) {
                 var currentObject = objectTr[i];
                 if ($(currentObject).find(".ddlWorkType").first().val() === LeaveRequestDetail.leaveWorkType) {
                     var leaveType = $(currentObject).find(".ddlleavetype").first().val();
-                    if (leaveType === LeaveRequestDetail.annualLeaveType) {
+                    if (leaveType === LeaveRequestDetail.annualLeaveTypeId) {
                         totalAnnualLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
                     }
 
-                    if (leaveType === LeaveRequestDetail.unpaidLeaveType) {
+                    if (leaveType === LeaveRequestDetail.unpaidLeaveTypeId) {
                         totalUnpaidLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
                     }
                 }
@@ -230,6 +233,17 @@ var LeaveRequestDetail = (function ($) {
         },
         enableControlForEdit: function () {
             LeaveRequestDetail.showHideHalfDay();
+        },
+        showHideCheckboxHalfDay: function (trObject, leaveTypeId) {
+            var $chkhalfday = trObject.find('.chkhalfday');
+            if (leaveTypeId === LeaveRequestDetail.annualLeaveTypeId
+                || leaveTypeId === LeaveRequestDetail.unpaidLeaveTypeId
+                || leaveTypeId === LeaveRequestDetail.businessTripLeaveTypeId
+                || leaveTypeId === LeaveRequestDetail.keepInViewByDayLeaveTypeId) {
+                $chkhalfday.show();
+            } else {
+                $chkhalfday.hide();
+            }
         },
         showHideHalfDay: function () {
             var isShow = false;
@@ -262,8 +276,7 @@ var LeaveRequestDetail = (function ($) {
 
             if (isShow) {
                 $(".tdhalfday").show();
-            }
-            else {
+            } else {
                 $(".tdhalfday").hide();
                 $(".ddlfromtime").hide();
                 $(".ddltotime").hide();

@@ -197,10 +197,13 @@
             }
 
             leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
+            IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
             var model = new LeaveDetailViewModel
             {
                 LeaveRequestDetail = leaveRequestDetail,
-                LeaveTypeList = commonDataService.GetLeaveType()
+                LeaveTypeList = leaveTypes.Where(x => x.Id != (int)LeaveTypes.GeneralLeave
+                                        && x.Id != (int)LeaveTypes.KeepInViewByHour
+                                        && x.Id != (int)LeaveTypes.BusinessDuringWorking).ToList()
             };
 
             return View(model);

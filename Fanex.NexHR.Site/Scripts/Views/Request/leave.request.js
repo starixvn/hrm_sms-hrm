@@ -39,6 +39,7 @@ var LeaveRequest = (function ($) {
             LeaveRequest.publicHolidayLeaveTypeId = '13';
             LeaveRequest.compensationLeaveTypeId = '27';
             LeaveRequest.businessTripLeaveTypeId = '9';
+            LeaveRequest.businessDuringWorkingLeaveTypeId = '26';
             LeaveRequest.keepInViewByDayLeaveTypeId = '10';
             LeaveRequest.unpaidLeaveTypeId = '25';
             LeaveRequest.keepInViewByHourLeaveTypeId = '48';
@@ -298,12 +299,18 @@ var LeaveRequest = (function ($) {
             }
         },
         enableControlForHalfday: function () {
-            if (LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveTypeId) {
+            var leaveTypeId = LeaveRequest.leaveTypeId.val();
+            if (leaveTypeId === LeaveRequest.businessTripLeaveTypeId) {
                 $('.time-businesstrip').show();
                 $('.time').hide();
-            } else if (LeaveRequest.leaveTypeId.val() === LeaveRequest.keepInViewByHourLeaveTypeId) {
+            } else if (leaveTypeId === LeaveRequest.keepInViewByHourLeaveTypeId) {
                 $('.time-businesstrip').show();
                 $('.time').hide();
+                $('#grbHalfDay').hide();
+                $('#grbTotalDay').hide();
+            } else if (leaveTypeId === LeaveRequest.businessDuringWorkingLeaveTypeId) {
+                $('.time-businesstrip').hide();
+                $('.time').show();
                 $('#grbHalfDay').hide();
                 $('#grbTotalDay').hide();
             } else {
@@ -627,9 +634,9 @@ var LeaveRequest = (function ($) {
         getDisableDate: function () {
             var minDate = new Date(LeaveRequest.fromDate.attr('minDate'));
             var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
-            var leaveType = LeaveRequest.leaveTypeId.val();
+            var leaveTypeId = LeaveRequest.leaveTypeId.val();
 
-            if (leaveType === LeaveRequest.generalLeaveTypeId) {
+            if (leaveTypeId === LeaveRequest.generalLeaveTypeId) {
                 $('#grbHalfDay').hide();
                 $('#grbTotalDay').hide();
                 $('.time').hide();
@@ -638,29 +645,30 @@ var LeaveRequest = (function ($) {
                 LeaveRequest.toDate.prop('readonly', false).datepicker('enable');
                 LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                 LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
-            } else if (LeaveRequest.leaveTypeId.val() === LeaveRequest.keepInViewByHourLeaveTypeId) {
+            } else if (leaveTypeId === LeaveRequest.keepInViewByHourLeaveTypeId
+                || leaveTypeId === LeaveRequest.businessDuringWorkingLeaveTypeId) {
                 LeaveRequest.halfDayOff.prop('checked', true);
                 $('#grbTotalDay').hide();
             } else {
                 $('#grbTotalDay').show();
-                if (LeaveRequest.leaveTypeId.val() === LeaveRequest.annualLeaveTypeId
-                    || LeaveRequest.leaveTypeId.val() === LeaveRequest.unpaidLeaveTypeId
-                    || LeaveRequest.leaveTypeId.val() === LeaveRequest.businessTripLeaveTypeId
-                    || LeaveRequest.leaveTypeId.val() === LeaveRequest.keepInViewByDayLeaveTypeId) {
+                if (leaveTypeId === LeaveRequest.annualLeaveTypeId
+                    || leaveTypeId === LeaveRequest.unpaidLeaveTypeId
+                    || leaveTypeId === LeaveRequest.businessTripLeaveTypeId
+                    || leaveTypeId === LeaveRequest.keepInViewByDayLeaveTypeId) {
                     $('#grbHalfDay').show();
                 } else {
                     LeaveRequest.halfDayOff.prop('checked', false);
                     LeaveRequest.bindHalfDay();
                     $('#grbHalfDay').hide();
                 }
-                if (leaveType === LeaveRequest.maternityLeaveTypeId) {
+                if (leaveTypeId === LeaveRequest.maternityLeaveTypeId) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
-                } else if (leaveType === LeaveRequest.publicHolidayLeaveTypeId) {
+                } else if (leaveTypeId === LeaveRequest.publicHolidayLeaveTypeId) {
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
-                } else if (leaveType === LeaveRequest.compensationLeaveTypeId) {
+                } else if (leaveTypeId === LeaveRequest.compensationLeaveTypeId) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 13));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
