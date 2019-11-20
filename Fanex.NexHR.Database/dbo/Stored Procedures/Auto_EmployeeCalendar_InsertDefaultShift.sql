@@ -19,7 +19,6 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	DECLARE @tempDate DATE
 	DECLARE @tblDate TABLE (WorkDate DATE)
 
 	IF @FromDate IS NULL
@@ -32,7 +31,7 @@ BEGIN
 		SET @ToDate = DATEADD(DAY, 6, @FromDate)
 	END
 
-	SET @tempDate = @FromDate
+	DECLARE @tempDate DATE = @FromDate
 
 	WHILE @tempDate <= @ToDate
 	BEGIN
@@ -71,7 +70,7 @@ BEGIN
 				AND holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			) AS IsHoliday
-		,1
+		,1 AS IsPublic
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		AND empsum.IsDefaultSchedule = 0
@@ -98,6 +97,51 @@ BEGIN
 			WHERE emp.EmpId = ec.EmpId
 				AND tblc.WorkDate = ec.WorkDate
 			)
+
+	UPDATE empca
+	SET empca.ShiftId = (CASE 
+			WHEN (
+					empsum.IsLocal = 1
+					OR empsum.IsExpatUseHoliday = 1
+					)
+				AND holiday.Id IS NOT NULL THEN NULL
+			ELSE shift.ShiftId END
+			)
+		,empca.IsHoliday = (CASE 
+			WHEN (
+					empsum.IsLocal = 1
+					OR empsum.IsExpatUseHoliday = 1
+					)
+				AND holiday.Id IS NOT NULL THEN 1
+			ELSE 0 END
+			)
+		,empca.IsPublic = 1
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND ISNULL(emp.IsDeleted, 0) = 0
+		AND (
+			@EmployeeId IS NULL
+			OR emp.EmpId = @EmployeeId
+			)
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
+		AND empsum.IsDefaultSchedule = 0
+		OUTER APPLY (
+		SELECT TOP 1 shift.ShiftId
+		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
+		WHERE shift.EmployeeId = emp.EmpId
+			AND shift.ShiftId > 0
+			AND shift.FromDate <= @FromDate
+		ORDER BY shift.FromDate DESC
+		) AS shift
+		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON empca.WorkDate BETWEEN holiday.FromDate
+			AND holiday.ToDate
+	WHERE empca.WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND empca.ShiftId IS NULL
+		AND empca.IsHoliday = 0
+		AND empca.IsOffDay = 0
+		AND empca.IsLeaveDay = 0
 
 	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
 		,@EmployeeIds = @EmployeeId

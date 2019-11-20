@@ -25,4 +25,5 @@ BEGIN
 	WHERE lo.ObjectTypeId = @ObjectTypeId
 		AND lo.ObjectId = @ObjectId
 		AND ISNULL(lo.OldData, '') <> ISNULL(lo.Data, '')
+	ORDER BY lo.LogDate DESC
 END
