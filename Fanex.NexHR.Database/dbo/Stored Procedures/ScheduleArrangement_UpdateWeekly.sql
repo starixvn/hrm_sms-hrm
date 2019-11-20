@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateWeekly] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -27,6 +26,9 @@ BEGIN
 	DECLARE @Today DATE = GETDATE()
 		,@ModifiedDate DATETIME = GETDATE()
 		,@DocHandler INT
+		-- change shift type
+		,@ChangeShiftTypeId TINYINT = 1
+		,@MoveOfDayTypeId TINYINT = 2
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
@@ -57,6 +59,7 @@ BEGIN
 		,NormalHours DECIMAL(18, 2)
 		,OffHours DECIMAL(18, 2)
 		,PublicHours DECIMAL(18, 2)
+		,SpecialHours DECIMAL(18, 2)
 		)
 
 	BEGIN TRY
@@ -120,50 +123,47 @@ BEGIN
 		FROM #tblWeeklySchedule
 		) AS tbl
 
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmployeeIds
+
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
-		INNER JOIN dbo.EmployeeAttendance AS ea WITH (NOLOCK) ON tblweekly.WorkDate = ea.AttendanceDate
-		AND tblweekly.EmployeeId = ea.EmpId
-		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = tblweekly.WorkDate
-		AND ec.EmpId = tblweekly.EmployeeId
-		AND ISNULL(ec.ShiftId, - 1) = ISNULL(tblweekly.ShiftId, - 1)
-		AND ec.IsOffDay = tblweekly.IsOffDay
-		AND ec.IsHoliday = tblweekly.IsHoliday
-		AND ec.IsPublic = tblweekly.IsPublic
+		INNER JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON tblweekly.WorkDate = empatt.AttendanceDate
+		AND tblweekly.EmployeeId = empatt.EmpId
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.WorkDate = tblweekly.WorkDate
+		AND empca.EmpId = tblweekly.EmployeeId
+		AND ISNULL(empca.ShiftId, - 1) = ISNULL(tblweekly.ShiftId, - 1)
+		AND empca.IsOffDay = tblweekly.IsOffDay
+		AND empca.IsHoliday = tblweekly.IsHoliday
+		AND empca.IsPublic = tblweekly.IsPublic
 	WHERE tblweekly.WorkDate <= @Today
 
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
-		INNER JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON tblweekly.WorkDate = ot.OvertimeDate
-		AND tblweekly.EmployeeId = ot.EmpId
-	WHERE tblweekly.WorkDate <= @Today
-		AND ot.[Status] IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
-
-	DELETE tblweekly
-	FROM #tblWeeklySchedule AS tblweekly
-		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON tblweekly.WorkDate = ec.WorkDate
-		AND tblweekly.EmployeeId = ec.EmpId
+		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON tblweekly.WorkDate = empca.WorkDate
+		AND tblweekly.EmployeeId = empca.EmpId
 	WHERE (
-			ec.IsLeaveDay = 1
-			AND ec.LeaveDay = 1
+			empca.IsLeaveDay = 1
+			AND empca.LeaveDay = 1
 			)
-		OR EXISTS (
-			SELECT 1
-			FROM dbo.ChangeShiftRequest AS csr WITH (NOLOCK)
-				INNER JOIN dbo.ChangeShiftRequestDetail AS csrdt WITH (NOLOCK) ON csr.RequestId = csrdt.RequestId
-				AND csrdt.OnDate = ec.WorkDate
-				INNER JOIN dbo.WorkingTimeRequest AS wkr WITH (NOLOCK) ON csr.RequestId = wkr.RequestId
-				AND wkr.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
-			WHERE ec.EmpId = csr.EmpId
+		OR empca.ChangeShiftTypeId = @ChangeShiftTypeId
+		OR (
+			empca.ChangeShiftTypeId = @MoveOfDayTypeId
+			AND empca.MoveOffFromDate IS NOT NULL
 			)
 		OR (
-			ec.IsKeepInView = 1
+			empca.IsKeepInView = 1
 			AND tblweekly.ShiftId IS NULL
 			)
 		OR (
-			ec.IsKeepInView = 1
+			empca.IsKeepInView = 1
 			AND tblweekly.IsHoliday = 0
 			AND tblweekly.IsOffDay = 0
+			)
+		OR (
+			tblweekly.WorkDate <= @Today
+			AND empca.IsOvertime = 1
 			)
 
 	INSERT INTO #OTMonthlyRequest (
@@ -171,11 +171,13 @@ BEGIN
 		,NormalHours
 		,OffHours
 		,PublicHours
+		,SpecialHours
 		)
 	SELECT ot.RequestId
-		,SUM(ISNULL(NormalHours, 0))
-		,SUM(ISNULL(OffHours, 0))
-		,SUM(ISNULL(PublicHours, 0))
+		,SUM(ISNULL(ot.NormalHours, 0))
+		,SUM(ISNULL(ot.OffHours, 0))
+		,SUM(ISNULL(ot.PublicHours, 0))
+		,SUM(ISNULL(ot.SpecialHours, 0))
 	FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
 		INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
 		AND ot.OvertimeDate = tblweekly.WorkDate
@@ -187,9 +189,10 @@ BEGIN
 		AND ot.OvertimeDate = tblweekly.WorkDate
 
 	UPDATE otm
-	SET otm.NormalHours = ISNULL(otm.NormalHours, 0) - ISNULL(ot.NormalHours, 0)
-		,otm.OffHours = ISNULL(otm.OffHours, 0) - ISNULL(ot.OffHours, 0)
-		,otm.PublicHours = ISNULL(otm.PublicHours, 0) - ISNULL(ot.PublicHours, 0)
+	SET otm.NormalHours = ISNULL(otm.NormalHours, 0) - ot.NormalHours
+		,otm.OffHours = ISNULL(otm.OffHours, 0) - ot.OffHours
+		,otm.PublicHours = ISNULL(otm.PublicHours, 0) - ot.PublicHours
+		,otm.SpecialHours = ISNULL(otm.SpecialHours, 0) - ot.SpecialHours
 	FROM dbo.OTMonthlyRequest AS otm WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #OTMonthlyRequest AS ot ON otm.RequestId = ot.RequestId
 
