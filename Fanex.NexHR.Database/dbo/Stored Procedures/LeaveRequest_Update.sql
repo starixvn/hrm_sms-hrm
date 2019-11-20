@@ -19,7 +19,7 @@ AS
 Created: Tom.Vo@2013-11-11
 Task: update leave request
 DB: HRM
-Original: 
+Original:
 
 Revisions:    
 Param's Explanation:
@@ -31,13 +31,16 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @RequestType SMALLINT = 6
 		,@AnnualLeaveType INT = 2
 		,@KIVLeaveType INT = 10
+		,@KIVByHourLeaveType INT = 48
 		,@PublicHolidayLeaveType INT = 13
 		,@UnpaidLeaveType INT = 25
 		,@BusinessTripLeaveType INT = 9
+		,@BusinessDuringWorkingLeaveType INT = 26
 		,@OnbehalfActionType TINYINT = 5
 		,@VerifyActionType TINYINT = 2
 		,@ApproveActionType TINYINT = 3
@@ -411,82 +414,79 @@ BEGIN
 		RETURN;
 	END
 
-	IF @RequestType = 6
-		AND (
-			EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-					INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-					LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
-						AND l.ToDate
-					AND c.empid = l.EmpId
-				WHERE r.empid = @empid
-					AND r.RequestType = @RequestType
-					AND r.RequestId <> @RequestId
-					AND CurrentStatus IN (1, 2, 4, 6)
-					AND (
-						(
-							@TotalDays >= 1
-							AND (
-								CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								)
-							)
-						OR (
-							@TotalDays < 1
-							AND TotalDays >= 1
-							AND (
-								CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
-									AND @TmpToDate
-								OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
-									AND CAST(l.ToDate AS DATE)
-								)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
+					AND l.ToDate
+				AND c.empid = l.EmpId
+			WHERE r.empid = @empid
+				AND r.RequestType = @RequestType
+				AND r.RequestId <> @RequestId
+				AND CurrentStatus IN (1, 2, 4, 6)
+				AND (
+					(
+						@TotalDays >= 1
+						AND (
+							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
+							OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
 							)
 						)
-				)
-			OR EXISTS (
-				SELECT 1
-				FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-					INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-					INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
-					INNER JOIN #LeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
-				WHERE r.empid = @empid
-					AND r.RequestType = @RequestType
-					AND r.RequestId <> @RequestId
-					AND CurrentStatus IN (1, 2, 4, 6)
-					AND @TotalDays = 0.5
-					AND l.TotalDays = 0.5
-					AND (
-						(
-							ldt.FromTime BETWEEN ldtt.FromTime
-								AND ldtt.ToTime
-							)
-						OR (
-							ldt.ToTime BETWEEN ldtt.FromTime
-								AND ldtt.ToTime
-							)
-						OR (
-							ldtt.FromTime BETWEEN ldt.FromTime
-								AND ldt.ToTime
-							)
-						OR (
-							ldtt.ToTime BETWEEN ldt.FromTime
-								AND ldt.ToTime
+					OR (
+						@TotalDays < 1
+						AND TotalDays >= 1
+						AND (
+							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
+								AND @TmpToDate
+							OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
+							OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
+								AND CAST(l.ToDate AS DATE)
 							)
 						)
-					AND ldt.FromTime <> ldtt.ToTime
-					AND ldt.ToTime <> ldtt.FromTime
-				)
+					)
+			)
+		OR EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
+				INNER JOIN #LeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
+			WHERE r.empid = @empid
+				AND r.RequestType = @RequestType
+				AND r.RequestId <> @RequestId
+				AND CurrentStatus IN (1, 2, 4, 6)
+				AND @TotalDays = 0.5
+				AND l.TotalDays = 0.5
+				AND (
+					(
+						ldt.FromTime BETWEEN ldtt.FromTime
+							AND ldtt.ToTime
+						)
+					OR (
+						ldt.ToTime BETWEEN ldtt.FromTime
+							AND ldtt.ToTime
+						)
+					OR (
+						ldtt.FromTime BETWEEN ldt.FromTime
+							AND ldt.ToTime
+						)
+					OR (
+						ldtt.ToTime BETWEEN ldt.FromTime
+							AND ldt.ToTime
+						)
+					)
+				AND ldt.FromTime <> ldtt.ToTime
+				AND ldt.ToTime <> ldtt.FromTime
 			)
 	BEGIN
 		SET @ErrCode = 104
@@ -538,7 +538,7 @@ BEGIN
 				SELECT 1
 				FROM #LeaveRequestDetail
 				WHERE IsHalfDay = 1
-					AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVLeaveType, @BusinessTripLeaveType)
+					AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVLeaveType, @KIVByHourLeaveType, @BusinessTripLeaveType, @BusinessDuringWorkingLeaveType)
 				)
 		BEGIN
 			SET @ErrCode = 112
@@ -562,7 +562,80 @@ BEGIN
 		END
 	END
 
-	SET XACT_ABORT ON;
+	-- check rule for leave during working hours
+	IF @LeaveTypeId = @BusinessDuringWorkingLeaveType
+		AND EXISTS (
+			SELECT 1
+			FROM #LeaveRequestDetail
+			WHERE IsHalfDay = 1
+			)
+	BEGIN
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+					INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON lv.RequestId = ldt.RequestId
+					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
+				WHERE ldt.RequestId <> @RequestId
+					AND ldt.IsHalfDay = 1
+					AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
+					AND wk.CurrentStatus IN (1, 2, 4, 6)
+				)
+		BEGIN
+			SET @ErrCode = 114
+			SET @ErrMsg = 'You had been reached maximum leave during working hours in month.'
+
+			RETURN
+		END
+
+		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
+			OR EXISTS (
+				SELECT 1
+				FROM #LeaveRequestDetail
+				WHERE IsHalfDay = 1
+					AND LeaveType = @BusinessDuringWorkingLeaveType
+					AND DATEDIFF(MI, FromTime, ToTime) > 120
+				)
+		BEGIN
+			SET @ErrCode = 115
+			SET @ErrMsg = 'You can not request leave during working hours > 120 minutes.'
+
+			RETURN
+		END
+
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+			,@toDate = @FromDate
+			,@empIds = @EmpId
+
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar WITH (NOLOCK)
+				WHERE EmpId = @EmpId
+					AND DATEDIFF(DD, @FromDate, WorkDate) = 0
+					AND ISNULL(ShiftId, 0) > 0
+				)
+		BEGIN
+			SET @ErrCode = 116
+			SET @ErrMsg = 'You can not request because this date has not arranged shift yet.'
+
+			RETURN
+		END
+
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+					INNER JOIN dbo.Shift AS shift WITH (NOLOCK) ON empca.ShiftId = shift.ShiftId
+					INNER JOIN #LeaveRequestDetail AS detail ON DATEDIFF(DD, detail.OnDate, empca.WorkDate) = 0
+					AND CONVERT(VARCHAR(5), detail.FromTime, 108) = shift.BeginCheckInTime
+				WHERE empca.EmpId = @EmpId
+					AND DATEDIFF(DD, @FromDate, empca.WorkDate) = 0
+				)
+		BEGIN
+			SET @ErrCode = 117
+			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
+		END
+	END
 
 	BEGIN TRY
 		BEGIN TRANSACTION Update_LeaveMultiRequest

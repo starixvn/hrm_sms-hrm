@@ -69,7 +69,7 @@
                     }
                 }
 
-                return value.Append(Constants.BeginRootTag).ToString();
+                return value.Append(Constants.EndRootTag).ToString();
             }
         }
     }

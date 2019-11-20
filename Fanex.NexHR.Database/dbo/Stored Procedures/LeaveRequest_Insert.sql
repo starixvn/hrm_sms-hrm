@@ -30,6 +30,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @RequestType SMALLINT = 6
 		,@AnnualLeaveType INT = 2
@@ -529,31 +530,6 @@ BEGIN
 			WHERE IsHalfDay = 1
 			)
 	BEGIN
-		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
-			OR EXISTS (
-				SELECT 1
-				FROM #LeaveRequestDetail
-				WHERE IsHalfDay = 1
-					AND LeaveType = @BusinessDuringWorkingLeaveType
-					AND DATEDIFF(MI, FromTime, ToTime) > 120
-				)
-		BEGIN
-			SET @ErrCode = 114
-			SET @ErrMsg = 'You can not request leave during working hours > 120 minutes.'
-		END
-
-		IF NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeCalendar WITH (NOLOCK)
-				WHERE EmpId = @EmpId
-					AND DATEDIFF(DD, @FromDate, WorkDate) = 0
-					AND ISNULL(ShiftId, 0) > 0
-				)
-		BEGIN
-			SET @ErrCode = 115
-			SET @ErrMsg = 'You can not request because this date has not arranged shift yet.'
-		END
-
 		IF EXISTS (
 				SELECT 1
 				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
@@ -564,15 +540,64 @@ BEGIN
 					AND wk.CurrentStatus IN (1, 2, 4, 6)
 				)
 		BEGIN
-			SET @ErrCode = 118
+			SET @ErrCode = 114
 			SET @ErrMsg = 'You had been reached maximum leave during working hours in month.'
+
+			RETURN
+		END
+
+		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
+			OR EXISTS (
+				SELECT 1
+				FROM #LeaveRequestDetail
+				WHERE IsHalfDay = 1
+					AND LeaveType = @BusinessDuringWorkingLeaveType
+					AND DATEDIFF(MI, FromTime, ToTime) > 120
+				)
+		BEGIN
+			SET @ErrCode = 115
+			SET @ErrMsg = 'You can not request leave during working hours > 120 minutes.'
+
+			RETURN
+		END
+
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+			,@toDate = @FromDate
+			,@empIds = @EmpId
+
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar WITH (NOLOCK)
+				WHERE EmpId = @EmpId
+					AND DATEDIFF(DD, @FromDate, WorkDate) = 0
+					AND ISNULL(ShiftId, 0) > 0
+				)
+		BEGIN
+			SET @ErrCode = 116
+			SET @ErrMsg = 'You can not request because this date has not arranged shift yet.'
+
+			RETURN
+		END
+
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+					INNER JOIN dbo.Shift AS shift WITH (NOLOCK) ON empca.ShiftId = shift.ShiftId
+					INNER JOIN #LeaveRequestDetail AS detail ON DATEDIFF(DD, detail.OnDate, empca.WorkDate) = 0
+					AND CONVERT(VARCHAR(5), detail.FromTime, 108) = shift.BeginCheckInTime
+				WHERE empca.EmpId = @EmpId
+					AND DATEDIFF(DD, @FromDate, empca.WorkDate) = 0
+				)
+		BEGIN
+			SET @ErrCode = 117
+			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
 		END
 	END
 
 	EXEC [dbo].WorkingTimeRequest_GetNewRefNoByRequestType @RefNo = @RefNo OUTPUT
 		,@RequestType = @RequestType
-
-	SET XACT_ABORT ON;
 
 	BEGIN TRY
 		INSERT INTO dbo.WorkingTimeRequest (
