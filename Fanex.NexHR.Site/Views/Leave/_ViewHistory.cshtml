@@ -1,7 +1,9 @@
 ﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Constants
+@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Request
-@model IList<LeaveRequest>
+@model IEnumerable<LeaveRequest>
 
 <table class="table table-custom">
     <thead>
@@ -37,7 +39,25 @@
                     <td>@request.LeaveType.Name</td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@request.TotalDays.ToString("0.0")</td>
+                    <td>
+                        @{ var totaldays = string.Empty; }
+                        @switch (request.LeaveType.Id)
+                        {
+                            case (ushort)LeaveTypes.KeepInViewByHour:
+                            case (ushort)LeaveTypes.BusinessDuringWorking:
+                                LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
+                                if (detail != null)
+                                {
+                                    var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
+                                    totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
+                                }
+                                break;
+                            default:
+                                totaldays = request.TotalDays.ToString("0.0");
+                                break;
+                        }
+                        @totaldays
+                    </td>
                     <td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
                         {

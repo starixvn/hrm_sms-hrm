@@ -171,7 +171,7 @@
 
         public ActionResult ViewHistory(long id)
         {
-            IList<LeaveRequest> requests = leaveRequestService.GetHistoryById(id);
+            IEnumerable<LeaveRequest> requests = leaveRequestService.GetHistoryById(id);
             return PartialView("_ViewHistory", requests);
         }
 

@@ -10,7 +10,7 @@
 
         LeaveRequest GetById(ICriteria criteria);
 
-        IList<LeaveRequest> GetHistoryById(ICriteria criteria);
+        IEnumerable<LeaveRequest> GetHistoryById(ICriteria criteria);
 
         IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(ICriteria criteria);
     }

@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
@@ -11,7 +10,10 @@ import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import './date.filter';
-import { axiosError, blockUI, unblockUI, floatingHeader, confirm, initDatepicker, initFromDateOnChange, toastOptions } from '../../shared/common.functions';
+import {
+    axiosError, blockUI, unblockUI, floatingHeader, confirm, initDatepicker,
+    initFromDateOnChange, toastOptions, resolveClientUrl
+} from '../../shared/common.functions';
 import { RequestCommand } from '../../shared/constants';
 
 $(function () {
@@ -27,7 +29,7 @@ $(function () {
         };
 
         axios({
-            url: _global.root + 'request/ProcessRequest',
+            url: resolveClientUrl('request/ProcessRequest'),
             method: 'POST',
             data: stringify({ model }),
             headers: {
@@ -124,7 +126,7 @@ $(function () {
 
         $.ajax({
             type: 'GET',
-            url: _global.root + 'request/PartialViewProcessRequest',
+            url: resolveClientUrl('request/PartialViewProcessRequest'),
             data: model,
             dataType: 'html',
             success: function (data) {
@@ -304,7 +306,7 @@ $(function () {
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
-            const url = _global.root + 'ExportRequest/' + action
+            const url = resolveClientUrl('ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
                 + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
                 + '&Employee=' + $('#Employee').val()
@@ -314,7 +316,7 @@ $(function () {
                 + '&StatusId=' + $('#statusId').val()
                 + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val()
                 + '&IsLocal=' + $('#IsLocal').val()
-                + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val();
+                + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val());
             location.href = url;
         });
     }
@@ -323,7 +325,7 @@ $(function () {
         initDatepicker();
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
-        axios(_global.root + 'Department/GetHierarchy')
+        axios(resolveClientUrl('Department/GetHierarchy'))
             .then(response => {
                 $('#Section').multiSelectTreeView({
                     data: response.data,
@@ -340,9 +342,13 @@ $(function () {
         bindMenu('.sa-void', 'voidMenu');
 
         $('.viewhistory').click(function () {
-            const url = $(this).attr('id');
-            $.get(url, function (data) {
-                $('#dialoghistorycontent').html(data);
+            blockUI();
+            axios({
+                url: $(this).attr('id'),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                $('#dialoghistorycontent').html(response.data);
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 $('#dialoghistorycontent').dialog({
                     modal: true,
@@ -350,7 +356,7 @@ $(function () {
                     width: 1100,
                     title: 'Request History'
                 });
-            });
+            }).catch(axiosError).then(() => unblockUI());
         });
 
         initFromDateOnChange($('#FromDate'), $('#ToDate'));
@@ -365,7 +371,7 @@ $(function () {
                 $('#submit').val('Submit');
                 e.preventDefault();
             } else {
-                const url = _global.root + 'request/' + $('#ActionName').val()
+                const url = resolveClientUrl('request/' + $('#ActionName').val()
                     + '?DateOption=' + $('#Date').val()
                     + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
                     + '&Employee=' + $('#Employee').val()
@@ -376,14 +382,12 @@ $(function () {
                     + '&RequestType=' + $("#RequestType").val()
                     + '&IsLocal=' + $('#IsLocal').val()
                     + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val()
-                    + '&leaveType=' + $('#LeaveType').val();
-
+                    + '&leaveType=' + $('#LeaveType').val());
                 location.href = url;
             }
         });
 
         floatingHeader();
-
         initEventExportExcel();
     });
 });

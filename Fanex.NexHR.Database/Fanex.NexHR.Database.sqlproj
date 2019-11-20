@@ -540,7 +540,4 @@
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Fanex.NexHR.Database.refactorlog" />
-  </ItemGroup>
 </Project>

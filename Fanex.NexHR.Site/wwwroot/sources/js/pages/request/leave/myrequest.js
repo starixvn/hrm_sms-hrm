@@ -6,13 +6,13 @@ import 'jquery-contextmenu/dist/jquery.contextMenu';
 import toastr from 'toastr';
 import axios from 'axios';
 
-import { axiosError, confirm, toastOptions } from '../../../shared/common.functions';
+import { axiosError, confirm, toastOptions, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
 
 $(function () {
     function cancelRequest(id) {
         confirm('Are you sure you want to cancel this request?', function () {
             axios({
-                url: _global.root + 'leave/delete' + '/' + id,
+                url: resolveClientUrl('leave/delete' + '/' + id),
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
@@ -35,7 +35,7 @@ $(function () {
 
         switch (command) {
             case 'Edit':
-                location.href = _global.root + 'leave/update/' + requestId;
+                location.href = resolveClientUrl('leave/update/' + requestId);
                 break;
             case 'Cancel':
                 cancelRequest(requestId);
@@ -69,8 +69,9 @@ $(function () {
         bindMenu('.menu-actions');
 
         $('.viewhistory').click(function () {
+            blockUI();
             axios({
-                url: _global.root + 'leave/ViewHistory/' + $(this).attr('requestid'),
+                url: resolveClientUrl('leave/ViewHistory/' + $(this).attr('requestid')),
                 method: 'GET',
                 responseType: 'text'
             }).then(response => {
@@ -81,7 +82,7 @@ $(function () {
                     width: 1100,
                     title: 'Request History'
                 });
-            }).catch(axiosError);
+            }).catch(axiosError).then(() => unblockUI());
         });
     });
 });

@@ -17,7 +17,7 @@
 
         IList<LeaveRequestDetail> GetLeaveRequestDetailById(long requestId);
 
-        IList<LeaveRequest> GetHistoryById(long requestId);
+        IEnumerable<LeaveRequest> GetHistoryById(long requestId);
 
         IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
 

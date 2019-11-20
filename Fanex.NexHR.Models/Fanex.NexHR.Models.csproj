@@ -167,7 +167,7 @@
     <Compile Include="Request\KeepInViewRequest.cs" />
     <Compile Include="Request\LeaveDisciplineDetailModel.cs" />
     <Compile Include="Request\LeaveDisciplineModel.cs" />
-    <Compile Include="Request\LeaveRequest.cs" />
+    <Compile Include="Request\Leave\LeaveRequest.cs" />
     <Compile Include="Request\ProcessRequestParam.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
     <Compile Include="Request\VerifierAndApproverForRequest.cs" />
@@ -203,7 +203,7 @@
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeShift.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="Request\LeaveRequestDetail.cs" />
+    <Compile Include="Request\Leave\LeaveRequestDetail.cs" />
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveSummaryByTeam.cs" />
     <Compile Include="Request\RequestEntity.cs" />

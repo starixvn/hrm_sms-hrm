@@ -68,7 +68,7 @@
             return baseService.GetData<LeaveRequestDetail>(criteria).ToList();
         }
 
-        public IList<LeaveRequest> GetHistoryById(long requestId)
+        public IEnumerable<LeaveRequest> GetHistoryById(long requestId)
         {
             var criteria = new GetLeaveRequestHistoryByIdCriteria
             {

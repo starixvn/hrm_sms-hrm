@@ -93,8 +93,12 @@
                         {
                             case (ushort)LeaveTypes.KeepInViewByHour:
                             case (ushort)LeaveTypes.BusinessDuringWorking:
-                                var minutes = (request.LeaveDetail.First().ToTime - request.LeaveDetail.First().FromTime).TotalMinutes;
-                                totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
+                                LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
+                                if(detail != null)
+                                {
+                                    var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
+                                    totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
+                                }
                                 break;
                             default:
                                 totaldays = request.TotalDays.ToString("0.0");
@@ -138,7 +142,7 @@
         }
     </tbody>
 </table>
-<div id="dialoghistorycontent" />
+<div id="dialoghistorycontent"></div>
 @helper RenderStatus(LeaveRequest request)
 {
     var verifier = request.VerifiedBy != null ? request.VerifiedBy.NickName : string.Empty;

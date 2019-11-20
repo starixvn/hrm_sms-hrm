@@ -4,6 +4,7 @@
 
     public class LeaveRequestDetail
     {
+        public long HistoryId { get; set; }
         public long RequestId { get; set; }
 
         public DateTime OnDate { get; set; }

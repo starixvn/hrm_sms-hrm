@@ -27,7 +27,7 @@
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").ToList();
 
-                    IEnumerable<LeaveRequestDetail> leaveDetails = multi.Read<LeaveRequestDetail>();
+                    var leaveDetails = multi.Read<LeaveRequestDetail>();
                     return MappingLeaveDetail(leaves, leaveDetails);
                 }
             }
@@ -69,11 +69,13 @@
             }
         }
 
-        public IList<LeaveRequest> GetHistoryById(ICriteria criteria)
+        public IEnumerable<LeaveRequest> GetHistoryById(ICriteria criteria)
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var entity = db.Query<LeaveRequest, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveRequest>(
+                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                {
+                    var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, team, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
@@ -84,10 +86,16 @@
                             request.ProcessedBy = hr;
                             return request;
                         },
-                        splitOn: "LeaveTypeId, EmpId, GroupId, VerifierId, ApproverId, HRId",
-                        parameterValues: criteria.GetSpParams());
+                        splitOn: "LeaveTypeId, EmpId, GroupId, VerifierId, ApproverId, HRId").ToList();
+                    var leaveDetails = multi.Read<LeaveRequestDetail>();
 
-                return entity.ToList();
+                    foreach (var leave in leaves)
+                    {
+                        leave.LeaveDetail = leaveDetails.Where(x => x.HistoryId == leave.HistoryId && x.RequestId == leave.RequestId).ToList();
+                    }
+
+                    return leaves;
+                }
             }
         }
 
