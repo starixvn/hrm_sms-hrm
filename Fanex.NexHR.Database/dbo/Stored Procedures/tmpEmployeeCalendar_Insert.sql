@@ -298,6 +298,7 @@ BEGIN
 			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+				AND empca.ChangeShiftTypeId = @ChangeShiftTypeId
 				AND cs.RequestId IS NULL
 				)
 			OR (
@@ -337,6 +338,7 @@ BEGIN
 			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+				AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
 				AND empca.MoveOffToDate IS NOT NULL
 				AND cs.RequestId IS NULL
 				)
@@ -383,8 +385,9 @@ BEGIN
 	WHERE (
 			empca.RequestId IS NOT NULL
 			AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+			AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
 			AND empca.MoveOffFromDate IS NOT NULL
-			AND cs.RequestId IS NULL
+			--AND cs.RequestId IS NULL
 			)
 		OR (
 			empca.RequestId IS NULL
