@@ -276,8 +276,6 @@
     <Build Include="dbo\Stored Procedures\Report_MonthlyOvertimeDetails.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_SetOffDayForAllEmployees.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_Update.sql" />
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
@@ -319,7 +317,6 @@
     <Build Include="dbo\Stored Procedures\Holiday_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_GetByYear.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_IgnoreDiscipline.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert_ByLeaveRequest.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_Update.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetAll.sql" />
@@ -444,7 +441,6 @@
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Approve.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetWeekendLeave.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_UpdateWeekWorking.sql" />
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Delete.sql" />
