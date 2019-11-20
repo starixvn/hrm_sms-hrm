@@ -32,23 +32,16 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Memo)]
-        public ActionResult Index()
+        public ActionResult Index(int? year, int category = -1)
         {
             var model = new MemoViewModel
             {
-                MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory)
+                MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory),
+                Category = category
             };
-            model.Memos = memoService.GetAll(model.Year, model.Category);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
-            return View(model);
-        }
+            model.Year = year ?? model.Year;
 
-        [HttpPost]
-        [HRMPermission(Policy.Read, FunctionKey.Memo)]
-        public ActionResult Index(MemoViewModel model)
-        {
-            model.MemoCategories = commonDataService.GetLookupDataByCode(Constants.MemoCategory);
             model.Memos = memoService.GetAll(model.Year, model.Category);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 

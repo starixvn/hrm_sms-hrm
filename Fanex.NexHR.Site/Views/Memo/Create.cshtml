@@ -1,186 +1,138 @@
 ﻿@model Memo
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Memo;
 }
 @section css{
-    @Url.CombresLink("memoeditcss")
+    <link href="~/wwwroot/dist/styles/memo.edit.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("memoeditjs")
+    <script src="~/wwwroot/dist/js/memo.edit.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">Company Space</a> 
+    <a class="step">Company Space</a>
     <a class="step" href="@Url.Action("Index", "memo")">Memo</a>
     <a class="step">Add new Memo</a>
 }
-<h2>@Labels.CreateMemo</h2>
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat">
-
-        <div class="validation-summary-errors" id="error"></div>
-        @if ((bool)ViewBag.Updated)
-        {
-            <div class="success flash">
-                Created Successful!</div>
-        }
+<h2 class="page-title">@Labels.CreateMemo</h2>
+<div class="card">
+    <form class="form-horizontal clearfix" method="post" id="createForm" action="Create">
+        @Html.ValidationSummary()
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.TotalPages)
         @Html.HiddenFor(model => model.AttachFile)
         @Html.HiddenFor(model => model.MemoType)
-        <div class="grid_20 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.Subject)
-                </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Subject, new { @class = "control-label" })
             </div>
-            <div class="grid_16">
-                @Html.EditorFor(model => model.Subject)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.RefNo)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RefNo, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.EditorFor(model => model.RefNo)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.RefNo, new { @class = "form-control" })
             </div>
         </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.Category)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.DropDownListFor(model => model.Category, new SelectList(ViewBag.MemoCategories, "Id", "Name"))
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.Category, new SelectList(ViewBag.MemoCategories, "Id", "Name"), new { @class = "form-control" })
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.ForInfo)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ForInfo, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.EditorFor(model => model.ForInfo)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.ForInfo, new { @class = "form-control" })
             </div>
         </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.SentDate)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentDate, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.DatePickerFor(model => model.SentDate)
-            </div>
-        </div>
-        <div class="clear">
-        </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.SentTo)
-                </div>
-            </div>
-            <div class="grid_6">
-                @Html.EditorFor(model => model.SentTo)
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.SentDate).ToString(), Model.SentDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
-        <div class="grid_10 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.SentFrom)
-                </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentTo, new { @class = "control-label" })
             </div>
-            <div class="grid_6">
-                @Html.EditorFor(model => model.SentFrom)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.SentTo, new { @class = "form-control" })
             </div>
         </div>
-        <div class="clear">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentFrom, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.SentFrom, new { @class = "form-control" })
+            </div>
         </div>
-        <div class="grid_20 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    @Html.LabelFor(model => model.SendMail)
-                </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SendMail, new { @class = "control-label" })
             </div>
             <div class="input">
-                @Html.CheckBoxFor(model => model.SendMail)
-                @Html.ValidationMessageFor(model => model.SendMail)
+                @Html.CheckBoxCustomFor(model => model.SendMail)
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="grid_20 formrow">
-            <div class="grid_3">
-                <br />
+        <div class="form-group form-group--l">
+            <div class="label-form">
             </div>
-            <div class="grid_16">
+            <div class="input-form">
                 @{
-        var types = new List<SelectListItem>
-            {
-                new SelectListItem() {Text = "Upload", Value = "1", Selected = true},
-                new SelectListItem() {Text = "FCK Editor", Value = "0"},
-            };    
+                    var types = new List<SelectListItem>{
+                    new SelectListItem() {Text = "Upload", Value = "1", Selected = true},
+                    new SelectListItem() {Text = "FCK Editor", Value = "0"},
+                    };
                 }
                 @Html.RadioButtonList(model => model.MemoType, types)
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div id="upload" class="formrow">
-            <div class="grid_3">
-                <br />
+        <div id="upload" class="form-group">
+            <div class="label-form">
             </div>
-            <div class="grid_16">
+            <div class="input-form">
                 <input type="file" id="fileName" size="55" multiple />
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="grid_20 formrow">
-            <div class="grid_3">
-                <div class="label">
-                    <label for="override">@Labels.Override</label>
-                </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                <label for="override" class="control-label">@Labels.Override</label>
             </div>
-            <div class="input">
-                <input id="override" type="checkbox">
+            <div class="input-form">
+                @Html.CheckBoxCustom("override")
             </div>
-        </div>
-        <div class="clear">
         </div>
         <div id="content">
-            <div class="grid_20 formrow">
-                <div class="grid_3">
-                    <div class="label">
-                        @Html.LabelFor(model => model.Contents)
-                    </div>
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Contents, new { @class = "control-label" })
                 </div>
-                <div class="grid_16">
-                    @Html.TextAreaFor(model => model.Contents)
+                <div class="input-field">
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
                 </div>
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="grid_20 formrow">
-            <div class="grid_3">
-                <br />
+        <div class="form-group form-group--l">
+            <div class="label-form">
             </div>
-            <div class="grid_16">
+            <div class="input-form">
                 @Html.AntiForgeryToken()
-                <input type="submit" value="Save" class="button-primary submit" />
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+                <input type="button" id="btnSubmit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-default" onclick="parent.history.back()">@Labels.Back</a>
             </div>
         </div>
-    </div>
-}
+    </form>
+</div>

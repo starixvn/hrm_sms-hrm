@@ -324,7 +324,9 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
+    <Content Include="wwwroot\sources\js\pages\memo\tinymce.plugins.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.create.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
@@ -1161,6 +1163,7 @@
     <Content Include="wwwroot\dist\js\message.create.js.map" />
     <Content Include="wwwroot\dist\styles\message.create.js.map" />
     <Content Include="wwwroot\sources\styles\pages\memo\memo.scss" />
+    <Content Include="wwwroot\sources\styles\pages\memo\memo.edit.scss" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />

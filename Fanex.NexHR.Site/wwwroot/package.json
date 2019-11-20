@@ -37,6 +37,7 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "16.8.6",
     "react-toastify": "^5.4.0",
+    "tinymce": "^5.1.2",
     "tipsy": "^1.0.0",
     "toastr": "^2.1.4"
   },
