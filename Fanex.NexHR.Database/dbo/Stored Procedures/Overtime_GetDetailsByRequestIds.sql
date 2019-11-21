@@ -47,8 +47,8 @@ BEGIN
 		AND empca.EmpId = ot.EmpId
 		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON empatt.AttendanceDate = ot.OvertimeDate
 		AND empatt.EmpId = ot.EmpId
-	WHERE ot.RequestID IN (
-			SELECT RequestID
+	WHERE ot.RequestId IN (
+			SELECT RequestId
 			FROM #tblRequestIds
 			)
 	ORDER BY emp.NickName

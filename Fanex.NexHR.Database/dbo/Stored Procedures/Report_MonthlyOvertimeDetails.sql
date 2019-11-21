@@ -17,12 +17,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @tempDate DATE = @fromDate
-
-	CREATE TABLE #tblDate (WorkDate DATE)
+	DECLARE @tblDate TABLE (WorkDate DATE)
 
 	WHILE @tempDate <= @toDate
 	BEGIN
-		INSERT INTO #tblDate (WorkDate)
+		INSERT INTO @tblDate (WorkDate)
 		VALUES (@tempDate)
 
 		SET @tempDate = DATEADD(DAY, 1, @tempDate)
@@ -44,7 +43,7 @@ BEGIN
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,ot.[Status] AS StatusId
-	FROM #tblDate AS tmp
+	FROM @tblDate AS tmp
 		CROSS JOIN dbo.Employee AS emp WITH (NOLOCK)
 		LEFT JOIN [dbo].OTDailyRequest AS ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
 		AND ot.EmpId = emp.EmpId

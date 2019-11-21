@@ -38,6 +38,7 @@
         public float NormalOvertimeHours { get; set; }
         public float OffOvertimeHours { get; set; }
         public float PublicOvertimeHours { get; set; }
-        public float TotalOvertimes => NormalOvertimeHours + OffOvertimeHours + PublicOvertimeHours;
+        public float SpecialOvertimeHours { get; set; }
+        public float TotalOvertimes => NormalOvertimeHours + OffOvertimeHours + PublicOvertimeHours + SpecialOvertimeHours;
     }
 }

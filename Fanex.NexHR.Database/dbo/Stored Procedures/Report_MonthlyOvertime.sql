@@ -27,17 +27,15 @@ BEGIN
 		,@VerifyStatusId TINYINT = 2
 		,@ApproveStatusId TINYINT = 4
 		,@ProcessStatusId TINYINT = 6
-
-	CREATE TABLE #tblEmployeeIds (EmpId INT)
-
-	CREATE TABLE #tblDate (
+	DECLARE @tblEmployeeId TABLE (EmpId INT)
+	DECLARE @tblDate TABLE (
 		WorkDate DATE
 		,IsHoliday BIT
 		)
 
 	WHILE @fromDatetmp <= @ToDate
 	BEGIN
-		INSERT INTO #tblDate (
+		INSERT INTO @tblDate (
 			WorkDate
 			,IsHoliday
 			)
@@ -59,10 +57,10 @@ BEGIN
 
 	SELECT WorkDate AS [Date]
 		,IsHoliday
-	FROM #tblDate
+	FROM @tblDate
 	ORDER BY WorkDate
 
-	INSERT INTO #tblEmployeeIds (EmpId)
+	INSERT INTO @tblEmployeeId (EmpId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -109,23 +107,20 @@ BEGIN
 		,ot.NormalHours
 		,ot.OffHours
 		,ot.PublicHours
+		,ot.SpecialHours
 		,ot.Remark
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,ot.[Status] AS StatusId
-	FROM #tblDate AS tmp WITH (NOLOCK)
+	FROM @tblDate AS tmp
 		INNER JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON tmp.WorkDate = ot.OvertimeDate
 		AND ot.[Status] IN (@VerifyStatusId, @ApproveStatusId, @ProcessStatusId)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ot.EmpId = emp.EmpId
-		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmpId
+		INNER JOIN @tblEmployeeId AS empid ON emp.EmpId = empid.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND ot.OvertimeDate = empca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
 	ORDER BY tmp.WorkDate
 		,emp.NickName
-
-	DROP TABLE #tblDate
-
-	DROP TABLE #tblEmployeeIds
 END

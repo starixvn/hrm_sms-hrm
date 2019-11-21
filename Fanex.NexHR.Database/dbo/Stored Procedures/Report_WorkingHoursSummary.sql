@@ -250,6 +250,7 @@ BEGIN
 		,SUM(ISNULL(ot.NormalHours, 0)) AS NormalOvertimeHours
 		,SUM(ISNULL(ot.OffHours, 0)) AS OffOvertimeHours
 		,SUM(ISNULL(ot.PublicHours, 0)) AS PublicOvertimeHours
+		,SUM(ISNULL(ot.SpecialHours, 0)) AS SpecialOvertimeHours
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId

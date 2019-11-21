@@ -92,6 +92,7 @@ BEGIN
 					NormalHours > 0
 					OR OffHours > 0
 					OR PublicHours > 0
+					OR SpecialHours > 0
 					)
 			)
 	BEGIN
@@ -212,82 +213,98 @@ BEGIN
 	EXEC dbo.WorkingTimeRequest_GetNewRefNoByRequestType @RefNo = @RefNo OUTPUT
 		,@RequestType = @KeepInViewRequestTypeId
 
-	INSERT INTO dbo.WorkingTimeRequest (
-		EmpId
-		,RequestType
-		,Remark
-		,CurrentStatus
-		,VerifierId
-		,ApproverId
-		,VerifiedStatus
-		,ApprovedStatus
-		,HRStatus
-		,CreatedDate
-		,CreatedBy
-		)
-	VALUES (
-		@EmpId
-		,@KeepInViewRequestTypeId
-		,@Remark
-		,CASE 
-			WHEN @IsTopManager = 1
-				AND @VerifierId IS NOT NULL THEN @PendingStatusId
-			WHEN @IsTopManager = 1
-				AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
-			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN @ApprovedStatusId
-			ELSE @PendingStatusId
-			END
-		,@VerifierId
-		,@ApproverId
-		,CASE 
-			WHEN @IsTopManager = 1
-				AND @VerifierId IS NULL THEN @VerifiedStatusId
-			ELSE @PendingStatusId
-			END
-		,CASE 
-			WHEN @IsTopManager = 1
-				AND @ApproverId IS NULL THEN @VerifiedStatusId
-			ELSE @PendingStatusId
-			END
-		,@PendingStatusId
-		,@CreatedDate
-		,@CreatedBy
-		)
+	BEGIN TRY
+		INSERT INTO dbo.WorkingTimeRequest (
+			EmpId
+			,RequestType
+			,Remark
+			,CurrentStatus
+			,VerifierId
+			,ApproverId
+			,VerifiedStatus
+			,ApprovedStatus
+			,HRStatus
+			,CreatedDate
+			,CreatedBy
+			)
+		VALUES (
+			@EmpId
+			,@KeepInViewRequestTypeId
+			,@Remark
+			,CASE 
+				WHEN @IsTopManager = 1
+					AND @VerifierId IS NOT NULL THEN @PendingStatusId
+				WHEN @IsTopManager = 1
+					AND @ApproverId IS NOT NULL THEN @VerifiedStatusId
+				WHEN @IsTopManager = 1
+					AND @ApproverId IS NULL THEN @ApprovedStatusId
+				ELSE @PendingStatusId
+				END
+			,@VerifierId
+			,@ApproverId
+			,CASE 
+				WHEN @IsTopManager = 1
+					AND @VerifierId IS NULL THEN @VerifiedStatusId
+				ELSE @PendingStatusId
+				END
+			,CASE 
+				WHEN @IsTopManager = 1
+					AND @ApproverId IS NULL THEN @VerifiedStatusId
+				ELSE @PendingStatusId
+				END
+			,@PendingStatusId
+			,@CreatedDate
+			,@CreatedBy
+			)
 
-	SELECT @RequestId = cast(SCOPE_IDENTITY() AS BIGINT)
+		SELECT @RequestId = cast(SCOPE_IDENTITY() AS BIGINT)
 
-	INSERT INTO dbo.KeepInViewRequest (
-		RequestId
-		,EmpId
-		,OnDate
-		,KeepInViewType
-		,IsHalfDay
-		,FromTime
-		,ToTime
-		,RefNo
-		)
-	VALUES (
-		@RequestId
-		,@EmpId
-		,@OnDate
-		,@KeepInViewType
-		,@IsHalfDay
-		,@FromTime
-		,@ToTime
-		,@RefNo
-		)
+		INSERT INTO dbo.KeepInViewRequest (
+			RequestId
+			,EmpId
+			,OnDate
+			,KeepInViewType
+			,IsHalfDay
+			,FromTime
+			,ToTime
+			,RefNo
+			)
+		VALUES (
+			@RequestId
+			,@EmpId
+			,@OnDate
+			,@KeepInViewType
+			,@IsHalfDay
+			,@FromTime
+			,@ToTime
+			,@RefNo
+			)
 
-	IF @ApproverId IS NULL
-		AND @VerifierId IS NULL
-		AND @IsTopManager = 1
-	BEGIN
-		EXEC dbo.KeepInViewRequest_Approve @RequestId = @RequestId
-			,@ActorId = @EmpId
-			,@RoleId = 3
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-	END
+		IF @ApproverId IS NULL
+			AND @VerifierId IS NULL
+			AND @IsTopManager = 1
+		BEGIN
+			EXEC dbo.KeepInViewRequest_Approve @RequestId = @RequestId
+				,@ActorId = @EmpId
+				,@RoleId = 3
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+		END
 
-	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
+		EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
+	END TRY
+
+	BEGIN CATCH
+		DELETE dbo.WorkingTimeRequest WITH (ROWLOCK)
+		WHERE RequestId = @RequestId
+
+		DELETE dbo.KeepInViewRequest WITH (ROWLOCK)
+		WHERE RequestId = @RequestId
+
+		DELETE dbo.KeepInViewRequestHistory WITH (ROWLOCK)
+		WHERE RequestId = @RequestId
+
+		SELECT @ErrCode = 108
+			,@ErrMsg = N'Create unsuccessfully.'
+	END CATCH
 END

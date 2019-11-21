@@ -126,7 +126,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = item.NormalOvertimeHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.OffOvertimeHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.PublicOvertimeHours;
-                worksheet.Cells[rowIndex, colIndex++].Value = 0;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.SpecialOvertimeHours;
                 worksheet.Cells[rowIndex, colIndex].Value = item.TotalOvertimes;
 
                 rowIndex++;
@@ -143,7 +143,7 @@
             GetWorkingHoursSummaryParam param,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalColumns = 15;
+            const byte TotalColumns = 16;
             const byte StartBodyRow = 3;
             var rowIndex = 1;
             var colIndex = 1;
@@ -181,6 +181,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.PublicHours;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.SpecialHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Remark;
                 worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
 

@@ -105,6 +105,7 @@ BEGIN
 					NormalHours > 0
 					OR OffHours > 0
 					OR PublicHours > 0
+					OR SpecialHours > 0
 					)
 			)
 	BEGIN
