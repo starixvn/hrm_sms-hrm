@@ -1,23 +1,34 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
-import { initFromDateOnChange, confirm, initDatepicker, autoIndex } from '../../shared/common.functions';
+import axios from 'axios'
+import { initFromDateOnChange, confirm, initDatepicker, autoIndex, axiosError, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 
 var deleteMessage = function (messageId) {
     confirm('Are you sure you want to delete this message?', function () {
-        $.post(_global.root + 'Message/Delete', { id: messageId }, function () {
+        axios({
+            url: resolveClientUrl('Message/Delete'),
+            method: "POST",
+            params: {
+                id: messageId
+            }
+        }).then(() => {
             $('#row_' + messageId).remove();
             autoIndex();
-        });
+        }).catch(axiosError);
     });
 };
 
 var detailMessage = function (messageId) {
-    $.post(_global.root + 'Message/EditMessageStatus', { id: messageId }, function () {
-    }).always(function () {
+    axios.post({
+        url: resolveClientUrl('Message/EditMessageStatus'),
+        params: {
+            id: messageId
+        }
+    }).then(() => {
         window.location.href = _global.root + 'message/detailByEmployee/' + messageId;
-    });
+    }).catch(axiosError);
 };
 
 var init = function () {

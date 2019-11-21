@@ -4,11 +4,12 @@ import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import 'chosen-js/chosen.jquery';
 import '../../shared/multiselect-tree-view';
-import { initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors} from '../../shared/common.functions';
+import axios from 'axios';
+import { initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, axiosError } from '../../shared/common.functions';
 import '../../date';
 
 function bindingDataIfEditMode() {
-    var messageId = $('#messageId').val(),
+    let messageId = $('#messageId').val(),
         messageSubject = $('#messageSubject').val(),
         messageContents = $('#messageContents').val(),
         messageFromDate = $('#messageFromDate').val(),
@@ -55,18 +56,15 @@ function initSearchEmployee() {
 }
 
 function initSearchGroup() {
-    $.ajax({
+    axios({
         url: _global.root + 'Department/GetHierarchy',
-        type: "Get",
-        success: function(response) {
-            $('#Groups').multiSelectTreeView({
-                data: response,
-                selectedItems: $('#GroupIds').val()
-            });
-        },
-        error: function () {
-        }
-    });
+        method: "GET"
+    }).then(response => {
+        $('#Groups').multiSelectTreeView({
+            data: response.data,
+            selectedItems: $('#GroupIds').val()
+        });
+    }).catch(axiosError);
 }
 
 function initDatePicker() {
@@ -100,8 +98,8 @@ function GetSelectedEmployeeEmails() {
 function GetSelectedGroupEmails() {
     let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
 
-    var result = "";
-    var selectedArr = selectedGroups.split(',');
+    let result = "";
+    let selectedArr = selectedGroups.split(',');
     for (var i = 0; i < selectedArr.length; i++) {
         if (selectedArr[i]) {
             let email = GroupsCollection.filter(group => group.Id.toString() == selectedArr[i])[0].MailGroup;
@@ -120,10 +118,10 @@ function GetSelectedGroupEmails() {
 }
 
 function getSendToEmails() {
-    var employeeEmails = GetSelectedEmployeeEmails();
-    var groupsEmail = GetSelectedGroupEmails();
+    let employeeEmails = GetSelectedEmployeeEmails();
+    let groupsEmail = GetSelectedGroupEmails();
 
-    var result = employeeEmails;
+    let result = employeeEmails;
 
     if (groupsEmail) {
         result = result + ',' + groupsEmail;
@@ -166,35 +164,30 @@ function Submit() {
         $('#SendToEmail').val(sendToEmail);
         $('#GroupIds').val(selectedGroups);
 
-        var isValid = validateForm();
+        let isValid = validateForm();
 
-        var form = $('#CreateForm');
-        var $error = $("#error");
+        let form = $('#CreateForm');
+        let $error = $("#error");
 
         if (isValid) {
-            hideValidationSummaryErrors(true);
             debugger;
-            $.ajax({
-                url: form.action,
-                type: "Post",
-                data: form.serialize(),
-                success: function (commandResult) {
-                    if (commandResult.Code === 0) {
-                        $('#messageInfo').show();
-                        setTimeout(function () {
-                            document.location = _global.root + "Message/Index";
-                        }, 2000);
-                    }
-                    else {
-                        $error.html(commandResult.Message);
-                        $error.show();
-                    }
-                },
-                error: function () {
-                    $error.html(_messages.errorTryAgain);
+            hideValidationSummaryErrors(true);
+            axios({
+                url: form[0].action,
+                method: "POST",
+                data: form.serialize()
+            }).then(response => {
+                if (response.data.Code === 0) {
+                    $('#messageInfo').show();
+                    setTimeout(function () {
+                        document.location = _global.root + "Message/Index";
+                    }, 2000);
+                }
+                else {
+                    $error.html(response.data.Message);
                     $error.show();
                 }
-            });
+            }).catch(axiosError);
         }
     });
 }

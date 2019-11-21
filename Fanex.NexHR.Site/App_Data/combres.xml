@@ -154,23 +154,6 @@
       <resource reference="sitejs" />
     </resourceSet>
 
-    <resourceSet name="messagecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/message.css" />
-      <resource path="~/scripts/chosen/chosen.css" />
-    </resourceSet>
-
-    <resourceSet name="messagejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/message.js" />
-    </resourceSet>
-
-    <resourceSet name="messageeditjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/message.edit.js" />
-      <resource path="~/scripts/chosen/chosen.jquery.js" />
-    </resourceSet>
-
     <resourceSet name="employeemessagejs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/employee.message.js" />

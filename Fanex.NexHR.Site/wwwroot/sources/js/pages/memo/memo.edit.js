@@ -1,9 +1,8 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
-import { initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, resolveClientUrl, axiosError, toastOptions } from '../../shared/common.functions';
+import { initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, resolveClientUrl, axiosError } from '../../shared/common.functions';
 import axios from 'axios';
-import toastr from 'toastr';
 import tinymce from 'tinymce/tinymce';
 import 'tinymce/themes/silver';
 import '../../date';

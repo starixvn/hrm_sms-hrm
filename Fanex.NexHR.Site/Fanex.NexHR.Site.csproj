@@ -488,8 +488,6 @@
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\employee.message.js" />
-    <Content Include="Scripts\Views\message.edit.js" />
-    <Content Include="Scripts\Views\message.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
@@ -523,7 +521,6 @@
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\jquery.dataTables.css" />
-    <Content Include="Styles\message.css" />
     <Content Include="Styles\shift.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
@@ -864,7 +861,6 @@
     <Content Include="Scripts\Views\holiday.edit.js" />
     <Content Include="Scripts\Views\holiday.js" />
     <Content Include="Scripts\Views\memo.js" />
-    <Content Include="Scripts\Views\memo.edit.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
