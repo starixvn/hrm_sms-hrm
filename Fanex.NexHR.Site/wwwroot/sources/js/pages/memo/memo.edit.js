@@ -269,12 +269,11 @@ $(function () {
 
     $(document).ready(function () {
         initValues();
-        changeMemoType("1");
         initDatePicker();
-        initTextEditor('Contents');
         initAttachFiles();
         initMemoType();
         initFormSubmitEvent();
         initDeleteAttachFileEvent();
+        initTextEditor('Contents');
     });
 });
