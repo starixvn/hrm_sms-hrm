@@ -21,8 +21,9 @@ var deleteMessage = function (messageId) {
 };
 
 var detailMessage = function (messageId) {
-    axios.post({
+    axios({
         url: resolveClientUrl('Message/EditMessageStatus'),
+        method: "POST",
         params: {
             id: messageId
         }
