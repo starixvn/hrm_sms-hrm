@@ -238,6 +238,8 @@
                 if (ModelState.IsValid)
                 {
                     EditEmployeeParam param = MappingEditEmployeeParam(model);
+
+
                     CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
 
                     if (commandResult.IsSuccessful)
@@ -677,25 +679,26 @@
 
         private static string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
         {
-            IList<int> roleIds = roles.Where(x => x.RoleId != (int)RoleSystem.Approver || x.RoleId != (int)RoleSystem.DisciplineManager)
-                .Select(x => x.RoleId).ToList();
+            IList<int> roleIds = roles.Where(x => x.RoleId != (int)RoleSystem.Approver && x.RoleId != (int)RoleSystem.DisciplineManager)
+                .Select(x => x.RoleId).ToList(); 
             roleIds.Add((int)RoleSystem.Approver);
-            roleIds.Add((int)RoleSystem.DisciplineManager);
-
-            return string.Join(",", roleIds);
+            var sortRoleIds = roleIds.OrderBy(t => t);
+            return string.Join(",", sortRoleIds);
         }
 
         private static string BuildSARole()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6}",
-                ((int)RoleSystem.OnBehalfRequest).ToString(),
+                "{0},{1},{2},{3},{4},{5},{6},{7}",
+                ((int)RoleSystem.Verifier).ToString(),
                 ((int)RoleSystem.Approver).ToString(),
-                ((int)RoleSystem.DisciplineManager).ToString(),
-                ((int)RoleSystem.HR).ToString(),
                 ((int)RoleSystem.ShiftManager).ToString(),
+                ((int)RoleSystem.OnBehalfRequest).ToString(),
+                ((int)RoleSystem.HR).ToString(),
                 ((int)RoleSystem.SystemAdmin).ToString(),
-                ((int)RoleSystem.Verifier).ToString());
+                ((int)RoleSystem.DisciplineManager).ToString(),             
+                ((int)RoleSystem.ShiftManager2).ToString());
+
         }
     }
 }

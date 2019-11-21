@@ -26,6 +26,9 @@
         SystemAdmin = 7,
 
         [StringValue("Discipline Manager")]
-        DisciplineManager = 8
+        DisciplineManager = 8,
+
+        [StringValue("Shift Manager")]
+        ShiftManager2 = 9
     }
 }

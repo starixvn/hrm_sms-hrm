@@ -121,6 +121,7 @@ BEGIN
 	SELECT @Roles_old = COALESCE(@Roles_old + ',', '') + CONVERT(NVARCHAR(2), RoleId)
 	FROM dbo.EmployeeRole WITH (NOLOCK)
 	WHERE EmployeeId = @EmpId
+	ORDER BY RoleID
 
 	SET @xml = (
 			SELECT Code AS '@Code'
