@@ -356,6 +356,7 @@
                         break;
                 }
             }
+
             return result;
         }
 

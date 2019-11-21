@@ -98,7 +98,7 @@
             else
             {
                 result = fromDate.Month != toDate.Month
-                    ? fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() 
+                    ? fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate()
                     : fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
             }
 
@@ -158,7 +158,7 @@
         private string GetMessageForLateIn()
         {
             var actualLateIn = ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + ActualLateInEarlyOut + "'");
-            return string.Format(RequestFormatConstants.MsgLateInWithNoFormat, 
+            return string.Format(RequestFormatConstants.MsgLateInWithNoFormat,
                 TotalMins,
                 FromShift,
                 GetMessageDateString(FromDate, ToDate),
@@ -208,7 +208,25 @@
 
         private string GetLeaveDayDetail()
         {
-            return LeaveTypeId == (byte)LeaveTypes.GeneralLeave ? LeaveCountDetails : GetTotalDay(TotalDays);
+            var result = string.Empty;
+            switch (LeaveTypeId)
+            {
+                case (ushort)LeaveTypes.GeneralLeave:
+                    result = LeaveCountDetails;
+                    break;
+
+                case (ushort)LeaveTypes.KeepInViewByHour:
+                case (ushort)LeaveTypes.BusinessDuringWorking:
+                    var minutes = (ToTime - FromTime).TotalMinutes;
+                    result = $"{(minutes / Constants.TotalMinuteInHour).ToString("0.#")} hour(s)";
+                    break;
+
+                default:
+                    result = GetTotalDay(TotalDays);
+                    break;
+            }
+
+            return result;
         }
 
         private static string GetTotalDay(decimal totalDays)

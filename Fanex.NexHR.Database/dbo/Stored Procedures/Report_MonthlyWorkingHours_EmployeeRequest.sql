@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours_EmployeeRequest] @ActorId INT
+﻿
+CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours_EmployeeRequest] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@Employee NVARCHAR(200) = NULL
@@ -133,19 +134,15 @@ BEGIN
 	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
 		INNER JOIN #tblEmployeeIds AS empid ON req.EmpId = empid.EmpId
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empid.EmpId
-		LEFT JOIN dbo.InOutRequest AS inout WITH (NOLOCK) ON req.RequestId = inout.RequestId
+		LEFT JOIN dbo.LateInEarlyOutRequest AS inout WITH (NOLOCK) ON req.RequestId = inout.RequestId
 		LEFT JOIN dbo.LeaveRequest AS leavereq WITH (NOLOCK) ON req.RequestId = leavereq.RequestId
 		LEFT JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON req.RequestId = kiv.RequestId
-		LEFT JOIN dbo.InoutMissRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
+		LEFT JOIN dbo.CheckInOutRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
 		LEFT JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON req.RequestId = cs.RequestId
 	WHERE (
 			req.RequestType IN (@LateInRequestTypeId, @EarlyOutRequestTypeId)
-			AND (
-				inout.FromDate BETWEEN @FromDate
+			AND inout.OnDate BETWEEN @FromDate
 					AND @ToDate
-				OR inout.ToDate BETWEEN @FromDate
-					AND @ToDate
-				)
 			)
 		OR (
 			req.RequestType = @LeaveRequestTypeId
@@ -204,8 +201,8 @@ BEGIN
 	SELECT req.RequestId
 		,req.EmpId
 		,req.RequestType
-		,inout.FromDate
-		,inout.ToDate
+		,inout.OnDate
+		,inout.OnDate
 		,0
 		,CASE 
 			WHEN req.RequestType = @LateInRequestTypeId THEN inout.LateInMins
@@ -217,9 +214,9 @@ BEGIN
 			END
 	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS reqid ON req.RequestId = reqid.RequestId
-		INNER JOIN dbo.InOutRequest AS inout WITH (NOLOCK) ON req.RequestId = inout.RequestId
+		INNER JOIN dbo.LateInEarlyOutRequest AS inout WITH (NOLOCK) ON req.RequestId = inout.RequestId
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON inout.EmpId = att.EmpId
-		AND inout.FromDate = att.AttendanceDate
+		AND inout.OnDate = att.AttendanceDate
 
 	INSERT INTO #tblRequestInDaily (
 		RequestId
@@ -320,13 +317,13 @@ BEGIN
 	SELECT req.RequestId
 		,req.EmpId
 		,req.RequestType
-		,mio.CheckTime
+		,mio.RequestTime
 		,mio.OnDate
 		,mio.OnDate
 		,1 AS TotalDays
 	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS reqid ON req.RequestId = reqid.RequestId
-		INNER JOIN dbo.InoutMissRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
+		INNER JOIN dbo.CheckInOutRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
 		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = mio.OnDate
 		AND ec.EmpId = mio.EmpId
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON mio.OnDate = att.AttendanceDate
@@ -346,14 +343,14 @@ BEGIN
 	SELECT req.RequestId
 		,req.EmpId
 		,req.RequestType
-		,mio.CheckTime
+		,mio.RequestTime
 		,mio.OnDate
 		,mio.OnDate
 		,1 AS TotalDays
 		,ec.ShiftID
 	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS reqid ON req.RequestId = reqid.RequestId
-		INNER JOIN dbo.InoutMissRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
+		INNER JOIN dbo.CheckInOutRequest AS mio WITH (NOLOCK) ON req.RequestId = mio.RequestId
 		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = mio.OnDate
 		AND ec.EmpId = mio.EmpId
 	WHERE req.CurrentStatus <> @ApprovedStatusId
@@ -490,9 +487,9 @@ BEGIN
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS rq ON r.RequestId = rq.RequestId
 		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID
-		LEFT JOIN dbo.InOutRequest AS inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
+		LEFT JOIN dbo.LateInEarlyOutRequest AS inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
 		LEFT JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-		LEFT JOIN dbo.InoutMissRequest AS inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
+		LEFT JOIN dbo.CheckInOutRequest AS inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
 		LEFT JOIN dbo.ChangeShiftRequest AS csr WITH (NOLOCK) ON r.RequestId = csr.RequestId
 		LEFT JOIN #tblGeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId
 		LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = r.EmpId
