@@ -10,9 +10,12 @@
 @import '../../components/_checkbox.scss';
 
 .card {
-    width : 800px;
+    width: 800px;
 }
 
+.icon-delete {
+    color: #da5350;
+}
 
 .form-horizontal {
     display: flex;
@@ -48,12 +51,15 @@
         }
     }
 
-    .input-form .radioButton {
-        margin-right: 25px;
+    .input-form {
+        .radioButton {
+            display: inline;
+            margin-right: 25px;
 
-        label {
-            padding: 5px;
-            font-weight: normal;
+            label {
+                padding: 5px;
+                font-weight: normal;
+            }
         }
 
         textarea {

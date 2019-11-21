@@ -16,7 +16,7 @@
 }
 <h2 class="page-title">@Labels.CreateMemo</h2>
 <div class="card">
-    <form class="form-horizontal clearfix" method="post" id="createForm" action="Create">
+    <form class="form-horizontal clearfix" method="post" id="editForm" action="Create">
         @Html.ValidationSummary()
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.TotalPages)
@@ -113,6 +113,14 @@
             </div>
             <div class="input-form">
                 @Html.CheckBoxCustom("override")
+            </div>
+        </div>
+        <div id="attach" class="form-group form-group--l">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <div id="allAttachFile">
+                </div>
             </div>
         </div>
         <div id="content">

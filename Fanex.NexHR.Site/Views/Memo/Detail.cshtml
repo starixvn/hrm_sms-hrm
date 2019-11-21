@@ -1,13 +1,11 @@
 ﻿@model Memo
 @{
+    Layout= "~/Views/Shared/_NewLayout.cshtml";
     var memoSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = memoSubject + " - " + Labels.Memo;
 }
 @section css{
-    @Url.CombresLink("memoedetailcss")
-}
-@section js{
-    @Url.CombresLink("memojs")
+    <link href="~/wwwroot/dist/styles/memo.css" rel="stylesheet"/>
 }
 @section Breadcrumb {
     <a class="step">Company Space</a>
@@ -16,7 +14,7 @@
 }
 @if (!ReferenceEquals(Model, null))
 {
-    <table class="data memo">
+    <table class="table table-custom">
         <thead>
             <tr>
                 <th colspan="4">
@@ -26,57 +24,57 @@
     </thead>
     <tbody>
         <tr>
-            <td class="left">
+            <td class="align-left">
                 <b>@Labels.To</b>
             </td>
-            <td class="left">
+            <td class="align-left">
                 @Model.SentTo
             </td>
-            <td>
+            <td class="align-left">
                 <b>@Labels.RefNo</b>
             </td>
-            <td>
+            <td class="align-left">
                 <b>@Model.RefNo</b>
             </td>
         </tr>
         <tr>
-            <td class="left">
+            <td class="align-left">
                 <b>@Labels.ForInfo</b>
             </td>
-            <td class="left">
+            <td class="align-left">
                 @Model.ForInfo
             </td>
-            <td>
+            <td class="align-left">
                 <b>@Labels.TotalPages</b>
             </td>
-            <td>
+            <td class="align-left">
                 @Model.TotalPages
             </td>
         </tr>
         <tr>
-            <td class="left">
+            <td class="align-left">
                 <b>@Labels.From</b>
             </td>
-            <td class="left">
+            <td class="align-left">
                 @Model.SentFrom
             </td>
-            <td>
+            <td class="align-left">
                 <b>@Labels.Date</b>
             </td>
-            <td class="ddMMyyyyhhmm">
+            <td class="ddMMyyyyhhmm align-left">
                 @Model.SentDate.ToDateMonthYearFormatedDate()
             </td>
         </tr>
         <tr>
-            <td class="left">
+            <td class="align-left">
                 <b>Category</b>
             </td>
-            <td colspan="3">
+            <td class="align-left" colspan="3">
                 <b>@Model.CategoryName</b>
             </td>
         </tr>
         <tr>
-            <td colspan="4" class="memocontent">
+            <td colspan="4" class="memoContents align-left">
                 @foreach (var item in Model.MemoDetailLink)
                 {
                     @Html.Raw(item)
@@ -85,7 +83,7 @@
         </tr>
     </tbody>
 </table>
-    <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+    <a href="javascript:;" class="btn btn-primary" onclick="parent.history.back()">@Labels.Back</a>
 }
 else
 {

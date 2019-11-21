@@ -860,7 +860,6 @@
     <Content Include="Scripts\Views\Request\leave.request.js" />
     <Content Include="Scripts\Views\holiday.edit.js" />
     <Content Include="Scripts\Views\holiday.js" />
-    <Content Include="Scripts\Views\memo.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>

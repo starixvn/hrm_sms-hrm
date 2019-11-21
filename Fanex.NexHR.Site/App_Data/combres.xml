@@ -81,27 +81,6 @@
       <resource path="~/scripts/views/holiday.edit.js" />
     </resourceSet>
 
-    <resourceSet name="memojs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/memo.js" />
-    </resourceSet>
-
-    <resourceSet name="memoedetailcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/memo.details.css" />
-    </resourceSet>
-
-    <resourceSet name="memoeditcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/memo.edit.css" />
-    </resourceSet>
-
-    <resourceSet name="memoeditjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/Tiny_mce/tiny_mce_src.js" />
-      <resource path="~/scripts/views/memo.edit.js" />
-    </resourceSet>
-
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />

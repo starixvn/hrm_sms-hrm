@@ -8,9 +8,29 @@ import 'tinymce/themes/silver';
 import '../../date';
 import '../memo/tinymce.plugins';
 
-
 $(function () {
-    var $attachedFileBlock, $memoType, $uploadBlock, $contentBlock, $fileList, $fileAttachContent, $memoContent, $fileUploader, $form, $memoTypeValue;
+    var $memoType, $contentBlock, $fileList, $fileAttachContent, $memoContent, $fileUploader, $form, $memoTypeValue, $attachedFileBlock;
+
+    function initAttachFiles() {
+        $fileList.html("");
+
+        var attachPath = $fileAttachContent.val();
+        if (attachPath) {
+            var attachPathFiles = attachPath.split(";");
+
+            for (var i = 0; i < attachPathFiles.length; i++) {
+                var attachLink = attachPathFiles[i],
+                    attachLinkSplit = attachLink.split('/'),
+                    attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
+                    pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
+								<a href="javascript:;">\
+									<i class="fa fa-times fa-lg icon-delete" data-id="'+ attachLink + '"></i>\
+								</a></div>';
+
+                $fileList.append(pattern);
+            }
+        }
+    }
 
     function initTextEditor(element) {
         tinymce.init({
@@ -38,14 +58,17 @@ $(function () {
         if (value === "1") {
             $contentBlock.hide();
             $fileUploader.show();
+            $attachedFileBlock.show();
         } else {
             $contentBlock.show();
             $fileUploader.hide();
+            $attachedFileBlock.hide();
         }
     }
 
     function initMemoType() {
-        $memoTypeValue = "1";
+        $memoTypeValue = $memoType.val();
+        changeMemoType($memoTypeValue);
         $memoType.change(function () {
             let value = $(this).val();
             $memoTypeValue = value;
@@ -99,11 +122,10 @@ $(function () {
     }
 
     function initValues() {
-        $attachedFileBlock = $("#attach");
+        $attachedFileBlock = $("#allAttachFile");
         $fileList = $("#allAttachFile");
         $fileAttachContent = $("#AttachFile");
         $memoType = $("input[name=MemoType]");
-        $uploadBlock = $("#upload");
         $contentBlock = $("#content");
         $memoContent = $("#Contents");
         $fileUploader = $("#fileName");
@@ -117,7 +139,7 @@ $(function () {
 
         let fd = new FormData();
         fd.append('categoryID', $("#Category").val());
-        fd.append('isOverride', $("#override").val());
+        fd.append('isOverride', $("#override")[0].checked);
 
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
@@ -159,21 +181,36 @@ $(function () {
                     document.location = resolveClientUrl("Memo/Index");
                 }).catch(axiosError);
             }
-
         }).catch(axiosError);
     };
 
     function initFormSubmitEvent() {
         $("#btnSubmit").click(function (e) {
             let isValid = validateForm();
-            $form = $('#createForm');
+            $form = $('#editForm');
 
             if (isValid) {
                 hideValidationSummaryErrors();
                 e.preventDefault();
                 $memoType.val($memoTypeValue);
                 if ($memoTypeValue === "1") {
-                    uploadFile();
+                    var attachFile = $fileList.children().length;
+
+                    if (attachFile === 0 || $fileUploader.val() !== "") {
+                        uploadFile();
+                    } else {
+                        axios({
+                            url: $form[0].action,
+                            method: "POST",
+                            data: $form.serialize(),
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                        }).then(response => {
+                            document.location = resolveClientUrl("Memo/Index");
+                        }).catch(axiosError);
+                    }
                 }
                 else {
                     $memoContent.val(tinymce.activeEditor.getContent());
@@ -193,12 +230,51 @@ $(function () {
         });
     }
 
+    function initDeleteAttachFileEvent() {
+        $('.icon-delete').on('click', function () {
+            var fileName = $(this).attr('data-id');
+
+            axios({
+                url: resolveClientUrl("file/Delete"),
+                method: "POST",
+                params: {
+                    FileName: fileName
+                }
+            }).then(response => {
+                if (response.status === 200) {
+                    var attachFiles = $fileAttachContent.val().split(";"), attachFileRemain = "";
+
+                    for (var i = 0; i < attachFiles.length; i++) {
+                        var attachFileItem = attachFiles[i];
+
+                        if (attachFileItem !== fileName) {
+                            if (attachFileRemain === "") {
+                                attachFileRemain = attachFileItem;
+                            }
+                            else {
+                                attachFileRemain += ";" + attachFileItem;
+                            }
+                        }
+                    }
+
+                    $fileAttachContent.val(attachFileRemain);
+                    initAttachFiles();
+                    initDeleteAttachFileEvent();
+                }
+            }).catch(axiosError => {
+                $errorBlock.html("Fail to remove attached file!");
+            });
+        });
+    }
+
     $(document).ready(function () {
         initValues();
         changeMemoType("1");
         initDatePicker();
         initTextEditor('Contents');
+        initAttachFiles();
         initMemoType();
         initFormSubmitEvent();
+        initDeleteAttachFileEvent();
     });
 });

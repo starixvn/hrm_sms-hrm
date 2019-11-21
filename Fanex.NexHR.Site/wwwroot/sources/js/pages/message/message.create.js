@@ -170,7 +170,6 @@ function Submit() {
         let $error = $("#error");
 
         if (isValid) {
-            debugger;
             hideValidationSummaryErrors(true);
             axios({
                 url: form[0].action,
