@@ -21,6 +21,9 @@ BEGIN
 		-- work type
 		,@OffDay TINYINT = 1
 		,@LeaveDay TINYINT = 2
+		-- leave type
+		,@MaternityLeaveId TINYINT = 12
+		,@PaternityLeaveId TINYINT = 14
 		-- request type
 		,@ChangeShiftRequestTypeId TINYINT = 5
 		,@LeaveRequestTypeId TINYINT = 6
@@ -463,6 +466,14 @@ BEGIN
 			AND empca.EmpId = r.EmpId
 			AND empca.WorkDate BETWEEN lr.FromDate
 				AND lr.ToDate
+			AND (
+				lr.LeaveType NOT IN (@MaternityLeaveId, @PaternityLeaveId)
+				OR (
+					lr.LeaveType IN (@MaternityLeaveId, @PaternityLeaveId)
+					AND empca.IsOffDay = 0
+					AND empca.IsHoliday = 0
+					)
+				)
 			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		WHERE NOT EXISTS (
 				SELECT 1

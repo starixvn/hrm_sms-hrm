@@ -17,8 +17,9 @@ Revisions:
 Param's Explanation:
 */
 BEGIN
-	DECLARE -- employee status
-		@Enable TINYINT = 1
+	DECLARE @employeeIds VARCHAR(MAX)
+		-- employee status
+		,@Enable TINYINT = 1
 		,@Disabled TINYINT = 2
 		,@Deleted TINYINT = 3
 		-- leave type
@@ -32,27 +33,28 @@ BEGIN
 		,@CompensationLeaveTypeId SMALLINT = 27
 		,@WeddingLeaveTypeId SMALLINT = 6
 		-- request status
-		,@ApprovedStatusId TINYINT = 6
-
-	CREATE TABLE #tblGroupIds (GroupId INT)
-
-	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+		,@PendingStatusId TINYINT = 1
+		,@VerifiedStatusId TINYINT = 2
+		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
+	DECLARE @tblGroupIds TABLE (GroupId INT)
+	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
 
 	IF ISNULL(@GroupIds, '') = ''
 	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
+		INSERT INTO @tblGroupIds (GroupId)
 		SELECT GroupId
 		FROM dbo.[Group] WITH (NOLOCK)
 		WHERE IsDeleted = 0
 	END
 	ELSE
 	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
+		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
 	END
 
-	INSERT INTO #tblEmployeeIds (EmployeeId)
+	INSERT INTO @tblEmployeeIds (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -87,9 +89,16 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblGroupIds AS tbl
+			FROM @tblGroupIds AS tbl
 			WHERE tbl.GroupId = emp.GroupId
 			)
+
+	SELECT @employeeIds = COALESCE(@employeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(20))
+	FROM @tblEmployeeIds
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
+		,@toDate = @toDate
+		,@empIds = @employeeIds
 
 	SELECT emp.EmpId AS EmployeeId
 		,emp.Code
@@ -99,16 +108,6 @@ BEGIN
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,SUM(ISNULL(empatt.TotalWorkHours, 0)) AS TotalWorkingHours
-		--,SUM(CASE 
-		--		WHEN ISNULL(empatt.TotalWorkHours, 0) = 0
-		--			OR (
-		--				empca.IsLeaveDay = 1
-		--				AND empca.LeaveDay = 1
-		--				) THEN 0
-		--		WHEN empca.IsLeaveDay = 0 THEN 1
-		--		WHEN empca.LeaveDay < 1 THEN 0.5
-		--		ELSE 0
-		--		END) AS ActualWorkingDays
 		,SUM(CASE 
 				WHEN empca.IsHoliday = 1
 					OR empca.IsOffDay = 1
@@ -252,17 +251,17 @@ BEGIN
 		,SUM(ISNULL(ot.PublicHours, 0)) AS PublicOvertimeHours
 		,SUM(ISNULL(ot.SpecialHours, 0)) AS SpecialOvertimeHours
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN @tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
-		INNER JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON emp.EmpId = empatt.EmpId
-		AND empatt.AttendanceDate BETWEEN @FromDate
+		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
+		AND empca.WorkDate BETWEEN @FromDate
 			AND @ToDate
-		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
-		AND empca.WorkDate = empatt.AttendanceDate
+		INNER JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON emp.EmpId = empatt.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
 		LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON ot.EmpId = emp.EmpId
 		AND empca.WorkDate = ot.OvertimeDate
-		AND ot.[Status] = @ApprovedStatusId
+		AND ot.[Status] IN (@PendingStatusId, @VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId)
 	GROUP BY emp.EmpId
 		,emp.Code
 		,emp.NickName
@@ -271,8 +270,4 @@ BEGIN
 		,empsum.WorkingHours
 		,gr.[Name]
 	ORDER BY emp.NickName
-
-	DROP TABLE #tblGroupIds
-
-	DROP TABLE #tblEmployeeIds
 END
