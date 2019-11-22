@@ -8,13 +8,13 @@
     window.alert = function () {
         $('<div class="dialogcontent">' + arguments[0]
             + '<input class="dialogokbutton" type="button" value="OK" onclick="$(\'.ui-dialog-content\').dialog(\'close\');" /></div>')
-        .dialog({
-            title: 'SMSHRM',
-            height: 120,
-            show: 'fade',
-            hide: 'fade',
-            modal: true
-        });
+            .dialog({
+                title: 'SMSHRM',
+                height: 120,
+                show: 'fade',
+                hide: 'fade',
+                modal: true
+            });
     };
 })();
 
@@ -62,7 +62,7 @@ function confirm(message, callback, options) {
 var dontBlock = false;
 $(document).ready(function () {
     $('.tooltip').tipsy({
-       // live: true,
+        // live: true,
         gravity: $.fn.tipsy.autoNS
     });
 
@@ -335,47 +335,6 @@ function dateToString(date) {
     return date.format("mm/dd/yyyy HH:MM:ss");
 }
 
-function initEditor(element, type) {
-    switch (type) {
-        case "basic":
-            tinyMCE.init({
-                mode: "exact",
-                elements: element,
-                theme: "advanced",
-                theme_advanced_toolbar_location: "top",
-                theme_advanced_toolbar_align: "left",
-                theme_advanced_statusbar_location: "bottom",
-                plugins: "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
-
-                theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontselect,fontsizeselect,|,forecolor,backcolor",
-                theme_advanced_buttons2: "bullist,numlist,|,outdent,indent,|,link,unlink,image,|,table,|,hr,|,sub,sup,|,charmap,emotions,|,ltr,rtl",
-                theme_advanced_buttons3: "",
-                content_css: '/styles/tinymce.css',
-                force_br_newlines: true,
-                force_p_newlines: false
-            });
-            break;
-        case "full":
-            tinyMCE.init({
-                mode: "exact",
-                elements: element,
-                theme: "advanced",
-                theme_advanced_toolbar_location: "top",
-                theme_advanced_toolbar_align: "left",
-                theme_advanced_statusbar_location: "bottom",
-                plugins: "safari,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
-
-                theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor",
-                theme_advanced_buttons2: "pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,|,insertdate,inserttime,preview,spellchecker",
-                theme_advanced_buttons3: "table,|,hr,removeformat,|,sub,sup,|,charmap,emotions,iespell,media,|,ltr,rtl,|,fullscreen",
-                content_css: '/styles/tinymce.css',
-                force_br_newlines: false,
-                force_p_newlines: true
-            });
-            break;
-    }
-}
-
 function removeSign(str) {
     str = str.toLowerCase();
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -598,14 +557,14 @@ $.fn.insertAtCaret = function (myValue) {
             sel.text = myValue;
             this.focus();
         }
-            //MOZILLA/NETSCAPE support
+        //MOZILLA/NETSCAPE support
         else if (this.selectionStart || this.selectionStart === '0') {
             var startPos = this.selectionStart;
             var endPos = this.selectionEnd;
             var scrollTop = this.scrollTop;
             this.value = this.value.substring(0, startPos)
-                            + myValue
-                            + this.value.substring(endPos, this.value.length);
+                + myValue
+                + this.value.substring(endPos, this.value.length);
             this.focus();
             this.selectionStart = startPos + myValue.length;
             this.selectionEnd = startPos + myValue.length;
@@ -692,9 +651,9 @@ function updateTableHeaders() {
 
         $(".persist-area").each(function () {
             var el = $(this),
-                    offset = el.offset(),
-                    scrollTop = $(window).scrollTop(),
-                    floatingHeader = $(".floatingHeader", this);
+                offset = el.offset(),
+                scrollTop = $(window).scrollTop(),
+                floatingHeader = $(".floatingHeader", this);
             if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
                 if (!isShowLeftMenu) {
                     floatingHeader.css({

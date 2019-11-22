@@ -41,7 +41,6 @@
       <resource path="~/scripts/libs/jquery.unobtrusive-ajax.js" />
       <resource path="~/scripts/libs/jquery.validate.js" />
       <resource path="~/scripts/libs/jquery.validate.unobtrusive.js" />
-      <resource path="~/scripts/libs/jquery.tmpl.js" />
       <resource path="~/scripts/libs/jquery.tooltip.js" />
       <resource path="~/scripts/libs/jquery.tipsy.js" />
       <resource path="~/scripts/libs/jquery.cookie.js" />
