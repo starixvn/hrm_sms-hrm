@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Models.Dashboard
 {
+    using System;
     using Fanex.NexHR.Core.Enums;
 
     public class MemberRequest
@@ -10,6 +11,8 @@
         public int TotalPending { get; set; }
         public int TotalApproved { get; set; }
         public int TotalRejected { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
 
         public ushort RequestFilterTypeId
         {

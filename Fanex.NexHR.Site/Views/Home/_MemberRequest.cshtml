@@ -1,9 +1,12 @@
-﻿@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Core
+﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Models.Dashboard
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Request
 @model IEnumerable<MemberRequest>
+@{ 
+    var today = DateTime.Now;
+}
 @if (Model.Any())
 {
     IEnumerable<MemberRequest> verifiers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Verifier);
@@ -34,8 +37,8 @@
                     var requestModel = new RequestViewModel
                     {
                         DateOption = 0,
-                        FromDate = DateTime.Now.AddMonths(-4).Date,
-                        ToDate = DateTime.Now,
+                        FromDate = item.FromDate.HasValue ? item.FromDate.Value : today.AddMonths(-4).Date,
+                        ToDate = item.ToDate.HasValue ? item.ToDate.Value : today,
                         RequestType = item.RequestFilterTypeId,
                         StatusId = (byte)CurrentRequestStatus.Pending,
                         TeamIds = string.Empty,
@@ -92,8 +95,8 @@
                     var requestModel = new RequestViewModel
                     {
                         DateOption = 0,
-                        FromDate = DateTime.Now.AddMonths(-4).Date,
-                        ToDate = DateTime.Now,
+                        FromDate = item.FromDate.HasValue ? item.FromDate.Value : today.AddMonths(-4).Date,
+                        ToDate = item.ToDate.HasValue ? item.ToDate.Value : today,
                         RequestType = item.RequestFilterTypeId,
                         StatusId = -1,
                         TeamIds = string.Empty,

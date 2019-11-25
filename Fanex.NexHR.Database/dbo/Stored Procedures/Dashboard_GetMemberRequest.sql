@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Dashboard_GetMemberRequest] @EmployeeId INT = NULL
+CREATE PROCEDURE [dbo].[Dashboard_GetMemberRequest] @EmployeeId INT
 	,@Date DATE
 AS
 /*
@@ -85,6 +85,8 @@ BEGIN
 		,TotalPending INT
 		,TotalApproved INT
 		,TotalRejected INT
+		,FromDate DATE
+		,ToDate DATE
 		)
 
 	-- overtime
@@ -117,6 +119,8 @@ BEGIN
 		,TotalPending
 		,TotalApproved
 		,TotalRejected
+		,FromDate
+		,ToDate
 		)
 	SELECT CASE 
 			WHEN VerifierId = @EmployeeId THEN @VerifierId
@@ -159,6 +163,8 @@ BEGIN
 						END = 1 THEN 1
 				ELSE 0
 				END)
+		,MIN(CreatedDate) AS FromDate
+		,MAX(CreatedDate) AS ToDate
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
 	WHERE (
 			VerifierId = @EmployeeId
@@ -189,6 +195,8 @@ BEGIN
 		,@TotalOvertimePendingByVerifier
 		,0
 		,0
+		,NULL
+		,NULL
 
 	-- approved
 	INSERT INTO #tblData (
@@ -278,6 +286,8 @@ BEGIN
 		,SUM(TotalPending) AS TotalPending
 		,SUM(TotalApproved) AS TotalApproved
 		,SUM(TotalRejected) AS TotalRejected
+		,MIN(data.FromDate) AS FromDate
+		,MAX(data.ToDate) AS ToDate
 	FROM (
 		SELECT tblrole.RoleId
 			,rqtype.Id AS RequestTypeId
