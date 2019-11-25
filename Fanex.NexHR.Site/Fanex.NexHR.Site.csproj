@@ -655,8 +655,6 @@
     <Content Include="Styles\Images\FullCalendar\ui-icons_3d80b3_256x240.png" />
     <Content Include="Styles\Images\FullCalendar\ui-icons_72a7cf_256x240.png" />
     <Content Include="Styles\Images\FullCalendar\ui-icons_ffffff_256x240.png" />
-    <Content Include="Styles\memo.details.css" />
-    <Content Include="Styles\memo.edit.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
