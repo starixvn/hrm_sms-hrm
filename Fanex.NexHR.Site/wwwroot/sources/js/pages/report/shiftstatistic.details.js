@@ -67,6 +67,6 @@ $(document).ready(function () {
             isLocal: $('#IsLocal').val(),
             IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
         }
-        window.location.href = _global.root + 'ShiftStatisticReport/ExportExcelStatisticDetails?' + parseParam(params);
+        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcelStatisticDetails?' + parseParam(params));
     });
 });

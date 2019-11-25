@@ -911,6 +911,7 @@
     <Content Include="wwwroot\dist\js\memo.js.map" />
     <Content Include="wwwroot\dist\styles\memo.edit.js.map" />
     <Content Include="wwwroot\dist\styles\memo.js.map" />
+    <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xls" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
