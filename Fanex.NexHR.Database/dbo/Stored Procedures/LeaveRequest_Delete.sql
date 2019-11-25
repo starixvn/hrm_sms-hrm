@@ -7,66 +7,51 @@ AS
 Created: Quinn.Vo@20190416
 Task: delete a leave request
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
-	DECLARE @CurrentStatus INT
+	DECLARE @PendingStatusId TINYINT = 1
 
-	SELECT TOP 1 @CurrentStatus = CurrentStatus
-	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE RequestID = @RequestID
-
-	IF (@CurrentStatus <> 1)
+	IF NOT EXISTS (
+			SELECT 1
+			FROM dbo.WorkingTimeRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+				AND CurrentStatus = @PendingStatusId
+			)
 	BEGIN
 		SET @ErrCode = 100
-		SET @ErrMsg = 'This Status Request have been changed. You cannot delete. '
+		SET @ErrMsg = 'Status is not pending, you can not delete this request.'
 
 		RETURN;
 	END
 
-	BEGIN TRY
-		BEGIN TRANSACTION
+	DELETE dbo.WorkingTimeRequest
+	WHERE RequestId = @RequestId
 
-		DELETE dbo.WorkingTimeRequest
-		WHERE RequestID = @RequestID
+	DELETE dbo.LeaveRequest
+	WHERE RequestId = @RequestId
 
-		DELETE dbo.LeaveRequest
-		WHERE RequestID = @RequestID
+	DELETE dbo.LeaveRequestDetail
+	WHERE RequestId = @RequestId
 
-		DELETE dbo.LeaveRequestDetail
-		WHERE RequestID = @RequestID
+	DELETE dbo.tmpLeaveBalance
+	WHERE RequestId = @RequestId
 
-		DELETE
-		FROM dbo.tmpLeaveBalance
-		WHERE RequestID = @RequestID
+	DELETE dbo.KeepInViewByDayTrans
+	WHERE RequestId = @RequestId
 
-		DELETE
-		FROM dbo.KeepInViewByDayTrans
-		WHERE RequestID = @RequestID
+	DELETE dbo.KeepInViewByHourTrans
+	WHERE RequestId = @RequestId
 
-		DELETE
-		FROM dbo.KeepInViewByHourTrans
-		WHERE RequestID = @RequestID
-
-		DELETE
-		FROM dbo.WeekendLeaveTrans
-		WHERE RequestID = @RequestID
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION;
-
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Delete request failed.'
-	END CATCH;
-
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
+	DELETE dbo.WeekendLeaveTrans
+	WHERE RequestId = @RequestId
+	
+	DELETE dbo.DisciplineRequestTrans
+	WHERE RequestId = @RequestId
 END

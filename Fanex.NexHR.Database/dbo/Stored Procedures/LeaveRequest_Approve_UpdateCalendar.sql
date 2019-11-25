@@ -1,8 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Approve_UpdateCalendar]
-	@RequestId BIGINT,
-	@EmpId INT,
-	@ProcessedBy INT
+CREATE PROCEDURE [dbo].[LeaveRequest_Approve_UpdateCalendar] @RequestId BIGINT
+	,@EmpId INT
+	,@ProcessedBy INT
 AS
 /*
 Created: Quinn.Vo@20150928
@@ -13,133 +12,197 @@ Original:
 Revisions:
 Param's Explanation:
 */
-
 BEGIN
 	SET NOCOUNT ON;
+
 	DECLARE @LeaveTypeId INT
-		,@TotalDays NUMERIC(5,1)
-		,@FromDate DATETIME
-		,@ToDate DATETIME
-		,@ProcessedDate DATETIME
-		,@IsSpecialLeave BIT
+		,@TotalDays NUMERIC(5, 1)
+		,@FromDate DATE
+		,@ToDate DATE
+		,@ProcessedDate DATETIME = GETDATE()
+		-- leave type
+		,@GeneralLeaveTypeId TINYINT = 0
+		,@HolidayLeaveTypeId TINYINT = 13
 
-	SELECT @FromDate = FromDate, 
-		@ToDate = ToDate, 
-		@LeaveTypeID = lr.LeaveType, 
-		@TotalDays = TotalDays,
-		@IsSpecialLeave = CASE WHEN lr.LeaveType = 0 THEN 1 ELSE 0 END,
-		@ProcessedDate = GETDATE()
-	FROM dbo.LeaveRequest lr WITH(NOLOCK)
-	WHERE lr.RequestID = @RequestId
+	SELECT @FromDate = FromDate
+		,@ToDate = ToDate
+		,@LeaveTypeId = LeaveType
+		,@TotalDays = TotalDays
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
-	-- update the working calendar to record the check-in time
-	IF(@TotalDays = 0)
+	IF @LeaveTypeId = @HolidayLeaveTypeId
 	BEGIN
-		IF(@LeaveTypeID = 13) --13: holiday
-		BEGIN
-			UPDATE dbo.EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-			SET ShiftId = NULL,
-				IsLeaveDay = 1,
-				LeaveTypeId = 13,
-				IsPublic = 1,
-				ModifiedDate = @ProcessedDate,
-				ModifiedBy = @ProcessedBy
-			WHERE EmpID = @EmpId
-				AND WorkDate BETWEEN CONVERT(VARCHAR(10), @FromDate, 111) AND CONVERT(VARCHAR(10), @ToDate, 111)
-		END 
+		UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+		SET ShiftId = NULL
+			,IsLeaveDay = 1
+			,LeaveTypeId = @HolidayLeaveTypeId
+			,IsPublic = 1
+			,ModifiedDate = @ProcessedDate
+			,ModifiedBy = @ProcessedBy
+		WHERE EmpId = @EmpId
+			AND WorkDate BETWEEN @FromDate
+				AND @ToDate
 	END
-    ELSE
+	ELSE IF NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveRequestDetail WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+			)
 	BEGIN
-		IF (@IsSpecialLeave = 0)
-		BEGIN
-			UPDATE dbo.EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-			SET IsLeaveDay = CASE WHEN @LeaveTypeID IS NULL OR @LeaveTypeID = 0 THEN 0 ELSE 1 END,
-				LeaveTypeID = CASE WHEN LeaveTypeID IS NULL THEN @LeaveTypeID ELSE LeaveTypeID END,
-				LeaveTypeID2 = CASE WHEN LeaveTypeID IS NOT NULL THEN @LeaveTypeID ELSE NULL END,
-				LeaveDay = 	CASE WHEN @LeaveTypeID IS NULL OR @LeaveTypeID = 0 THEN 0
-								WHEN  (LeaveDay IS NULL OR LeaveDay = 0) THEN 
-									CASE WHEN @TotalDays = 0.5 THEN 0.5
-									ELSE 1 END 
-							ELSE 1 END,
-				ModifiedDate = @ProcessedDate
-			WHERE EmpID = @EmpId 
-				AND IsOffDay = 0 AND IsHoliday = 0 AND IsKeepInView = 0
-				AND WorkDate BETWEEN CONVERT(VARCHAR(10), @FromDate, 111) AND CONVERT(VARCHAR(10), @ToDate, 111) -- cut off time before compare
+		UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+		SET IsLeaveDay = CASE 
+				WHEN @LeaveTypeId IS NULL
+					OR @LeaveTypeId = @GeneralLeaveTypeId THEN 0
+				ELSE 1
+				END
+			,LeaveTypeId = CASE 
+				WHEN LeaveTypeId IS NULL THEN @LeaveTypeId
+				ELSE LeaveTypeId
+				END
+			,LeaveTypeId2 = CASE 
+				WHEN LeaveTypeId IS NOT NULL THEN @LeaveTypeId
+				ELSE NULL
+				END
+			,LeaveDay = CASE 
+				WHEN @LeaveTypeId IS NULL
+					OR @LeaveTypeId = @GeneralLeaveTypeId THEN 0
+				WHEN LeaveDay IS NULL
+					OR LeaveDay = 0 THEN CASE 
+						WHEN @TotalDays = 0.5 THEN 0.5
+						ELSE 1
+						END
+				ELSE 1
+				END
+			,ModifiedBy = @ProcessedBy
+			,ModifiedDate = @ProcessedDate
+		WHERE EmpId = @EmpId
+			AND IsOffDay = 0
+			AND IsHoliday = 0
+			AND IsKeepInView = 0
+			AND WorkDate BETWEEN @FromDate
+				AND @ToDate
 
-			UPDATE dbo.EmployeeCalendar WITH(ROWLOCK,UPDLOCK)
-			SET IsPublic = 1
-				,ModifiedDate = @ProcessedDate
-				,ShiftId = CASE WHEN (IsOffDay = 1 OR IsHoliday = 1) THEN NULL ELSE ShiftId END
-			WHERE EmpID = @EmpId 
-				AND WorkDate BETWEEN CONVERT(VARCHAR(10), @FromDate, 111) AND CONVERT(VARCHAR(10), @ToDate, 111) -- cut off time before compare
-		END
-		ELSE
-		BEGIN
-			UPDATE EC
-			SET EC.IsLeaveDay = CASE WHEN lrd.LeaveType = 0 THEN 0 ELSE 1 END,
-				EC.LeaveTypeID = CASE WHEN EC.LeaveTypeID IS NULL THEN lrd.LeaveType ELSE EC.LeaveTypeID END,
-				EC.LeaveTypeID2 = CASE WHEN EC.LeaveTypeID IS NOT NULL THEN lrd.LeaveType ELSE NULL END,
-				EC.LeaveDay = 	CASE WHEN lrd.LeaveType = 0 THEN 0
-									WHEN (EC.LeaveDay IS NULL OR EC.LeaveDay = 0) THEN 
-										CASE WHEN lrd.IsHalfDay = 1 THEN 0.5
-										ELSE 1 END 
-							ELSE 1 END
-			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
-					ON EC.WorkDate = lrd.OnDate
-			WHERE EC.EmpID = @EmpId 
-				AND lrd.RequestId = @RequestID
-				AND EC.IsOffDay = 0 and EC.IsHoliday = 0 and EC.IsKeepInView = 0
-				AND EC.WorkDate BETWEEN CONVERT(VARCHAR(10), @FromDate, 111) and CONVERT(VARCHAR(10), @ToDate, 111) -- cut off time before compare
+		UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+		SET IsPublic = 1
+			,ShiftId = CASE 
+				WHEN IsOffDay = 1
+					OR IsHoliday = 1 THEN NULL
+				ELSE ShiftId
+				END
+			,ModifiedBy = @ProcessedBy
+			,ModifiedDate = @ProcessedDate
+		WHERE EmpId = @EmpId
+			AND WorkDate BETWEEN @FromDate
+				AND @ToDate
+	END
+	ELSE
+	BEGIN
+		UPDATE empca
+		SET empca.IsLeaveDay = CASE 
+				WHEN lrd.LeaveType = 0 THEN 0
+				ELSE 1
+				END
+			,empca.LeaveTypeId = CASE 
+				WHEN empca.LeaveTypeId IS NULL THEN lrd.LeaveType
+				ELSE empca.LeaveTypeId
+				END
+			,empca.LeaveTypeId2 = CASE 
+				WHEN empca.LeaveTypeId IS NOT NULL THEN lrd.LeaveType
+				ELSE NULL
+				END
+			,empca.LeaveDay = CASE 
+				WHEN lrd.LeaveType = 0 THEN 0
+				WHEN empca.LeaveDay IS NULL
+					OR empca.LeaveDay = 0 THEN CASE 
+						WHEN lrd.IsHalfDay = 1 THEN 0.5
+						ELSE 1
+						END
+				ELSE 1
+				END
+			,empca.ModifiedBy = @ProcessedBy
+			,empca.ModifiedDate = @ProcessedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON empca.WorkDate = lrd.OnDate
+			AND lrd.RequestId = @RequestId
+		WHERE empca.EmpId = @EmpId
+			AND empca.IsOffDay = 0
+			AND empca.IsHoliday = 0
+			AND empca.IsKeepInView = 0
+			AND empca.WorkDate BETWEEN @FromDate
+				AND @ToDate
 
-			UPDATE EC
-				SET EC.IsLeaveDay =  CASE WHEN EC.LeaveTypeID IS NULL OR EC.LeaveTypeID = 0 THEN 0 ELSE 1 END,
-					EC.LeaveTypeID = CASE WHEN EC.LeaveTypeID IS NULL THEN lrd.LeaveType ELSE EC.LeaveTypeID END,
-					EC.LeaveTypeID2 = CASE WHEN EC.LeaveTypeID IS NOT NULL THEN lrd.LeaveType ELSE NULL END,
-					EC.LeaveDay = 	CASE WHEN (EC.LeaveDay IS NULL OR EC.LeaveDay = 0) THEN 
-									CASE WHEN lrd.IsHalfDay = 1 THEN 0.5
-									ELSE 1 END 
-								ELSE 1 END
-				FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
-					INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
-						ON EC.WorkDate = lrd.OnDate AND EC.LeaveTypeId <> lrd.LeaveType
-				WHERE EC.EmpID = @EmpId 
-					AND lrd.RequestId = @RequestID
-					AND lrd.IsHalfDay = 1
-					AND EC.IsOffDay = 0 AND EC.IsHoliday = 0 AND EC.IsKeepInView = 0
-					AND EC.WorkDate BETWEEN convert(varchar(10),@FromDate,111) AND convert(varchar(10),@ToDate,111) -- cut off time before compare
+		UPDATE empca
+		SET empca.IsLeaveDay = CASE 
+				WHEN empca.LeaveTypeId IS NULL
+					OR empca.LeaveTypeId = 0 THEN 0
+				ELSE 1
+				END
+			,empca.LeaveTypeId = CASE 
+				WHEN empca.LeaveTypeId IS NULL THEN lrd.LeaveType
+				ELSE empca.LeaveTypeId
+				END
+			,empca.LeaveTypeId2 = CASE 
+				WHEN empca.LeaveTypeId IS NOT NULL THEN lrd.LeaveType
+				ELSE NULL
+				END
+			,empca.LeaveDay = CASE 
+				WHEN empca.LeaveDay IS NULL
+					OR empca.LeaveDay = 0 THEN CASE 
+						WHEN lrd.IsHalfDay = 1 THEN 0.5
+						ELSE 1
+						END
+				ELSE 1
+				END
+			,empca.ModifiedBy = @ProcessedBy
+			,empca.ModifiedDate = @ProcessedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON empca.WorkDate = lrd.OnDate
+			AND empca.LeaveTypeId <> lrd.LeaveType
+			AND lrd.RequestId = @RequestId
+			AND lrd.IsHalfDay = 1
+		WHERE empca.EmpId = @EmpId
+			AND empca.IsOffDay = 0
+			AND empca.IsHoliday = 0
+			AND empca.IsKeepInView = 0
+			AND empca.WorkDate BETWEEN @FromDate
+				AND @ToDate
 
-			UPDATE EC
-			SET EC.IsOffDay = 1,
-				EC.LeaveTypeId = NULL,
-				EC.LeaveTypeId2 = NULL,
-				EC.ShiftId = NULl
-			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
-					ON EC.WorkDate = lrd.OnDate 
-			WHERE EC.EmpID = @EmpId 
-				AND lrd.WorkType = 1
-				AND lrd.RequestId = @RequestID
+		UPDATE empca
+		SET empca.IsOffDay = 1
+			,empca.LeaveTypeId = NULL
+			,empca.LeaveTypeId2 = NULL
+			,empca.ShiftId = NULL
+			,empca.ModifiedBy = @ProcessedBy
+			,empca.ModifiedDate = @ProcessedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON empca.WorkDate = lrd.OnDate
+			AND lrd.WorkType = 1 -- off
+			AND lrd.RequestId = @RequestId
+		WHERE empca.EmpId = @EmpId
 
-			UPDATE EC
-			SET 
-				EC.LeaveTypeId = NULL,
-				EC.LeaveTypeId2 = NULL
-			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
-					ON EC.WorkDate = lrd.OnDate 
-			WHERE EC.EmpID = @EmpId 
-				AND lrd.WorkType = 3
-				AND lrd.RequestId = @RequestID
+		UPDATE empca
+		SET empca.LeaveTypeId = NULL
+			,empca.LeaveTypeId2 = NULL
+			,empca.ModifiedBy = @ProcessedBy
+			,empca.ModifiedDate = @ProcessedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON empca.WorkDate = lrd.OnDate
+			AND lrd.WorkType = 3 -- work
+			AND lrd.RequestId = @RequestId
+		WHERE empca.EmpId = @EmpId
 
-			UPDATE EC
-			SET EC.IsPublic = 1
-				,EC.ModifiedDate = @ProcessedDate
-				,EC.ShiftId = CASE WHEN IsHoliday = 1 THEN NULL ELSE EC.ShiftId END
-			FROM dbo.EmployeeCalendar EC WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN dbo.LeaveRequestDetail lrd WITH(NOLOCK)
-					ON EC.WorkDate = lrd.OnDate AND lrd.RequestId = @RequestID
-			WHERE EC.EmpID = @EmpId 
-		END
+		UPDATE empca
+		SET empca.IsPublic = 1
+			,empca.ShiftId = CASE 
+				WHEN empca.IsHoliday = 1 THEN NULL
+				ELSE empca.ShiftId
+				END
+			,empca.ModifiedBy = @ProcessedBy
+			,empca.ModifiedDate = @ProcessedDate
+		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveRequestDetail AS lrd WITH (NOLOCK) ON empca.WorkDate = lrd.OnDate
+			AND lrd.RequestId = @RequestId
+		WHERE empca.EmpId = @EmpId
 	END
 END

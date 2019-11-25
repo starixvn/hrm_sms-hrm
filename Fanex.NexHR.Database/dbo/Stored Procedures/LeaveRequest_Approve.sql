@@ -127,7 +127,7 @@ BEGIN
 		RETURN
 	END
 
-	IF @RoleId = @VerifiedStatusId
+	IF @RoleId = @VerifierRoleId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @VerifiedStatusId
@@ -138,7 +138,7 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF @RoleId = @ApprovedStatusId
+	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
@@ -150,9 +150,9 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 
-		EXEC dbo.DisciplineRequestTrans_Insert @RequestId = @RequestId
+		EXEC dbo.LeaveRequest_Approve_UpdateDiscipline @RequestId = @RequestId
 			,@ModifiedBy = @ActorId
-			,@IgnoredDetails = @DisciplineXml
+			,@DisciplineXml = @DisciplineXml
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 
