@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
 
@@ -17,14 +18,17 @@
     {
         private readonly IShiftStatisticReportService statisticReportService;
         private readonly IShiftService shiftService;
+        private readonly IExportExcelShiftStatisticService exportExcelService;
 
         public ShiftStatisticReportController(
             ISessionService sessionService,
             IShiftStatisticReportService statisticReportService,
-            IShiftService shiftService) : base(sessionService)
+            IShiftService shiftService,
+            IExportExcelShiftStatisticService exportExcelService) : base(sessionService)
         {
             this.statisticReportService = statisticReportService;
             this.shiftService = shiftService;
+            this.exportExcelService = exportExcelService;
         }
 
         public ActionResult Index()
@@ -73,6 +77,26 @@
             };
             IEnumerable<ShiftStatisticDetail> details = statisticReportService.GetShiftStatisticDetail(param);
             return PartialView("~/Views/Report/ShiftStatistic/_ShiftStatisticDetails.cshtml", details);
+        }
+
+        public ActionResult ExportExcelStatisticDetails(ShiftStatisticDetailViewModel model)
+        {
+            var param = new GetShiftStatisticDetailParam
+            {
+                SupervisorId = sessionService.Employee.Id,
+                WorkDate = model.WorkDate,
+                ShiftId = model.ShiftId,
+                EmployeeId = model.EmployeeId,
+                SectionIds = model.SectionIds,
+                IsShowWholeCompany = model.IsShowWholeCompany,
+                IsLocal = model.IsLocal
+            };
+
+            IEnumerable<ShiftStatisticDetail> details = statisticReportService.GetShiftStatisticDetail(param);
+            byte[] exportData = exportExcelService.ExportDetail(details);
+
+            var fileName = $"{Labels.ShiftStatisticReport}.xlsx";
+            return File(exportData, "application/xlsx", fileName);
         }
     }
 }

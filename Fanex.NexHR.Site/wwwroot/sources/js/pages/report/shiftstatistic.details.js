@@ -28,6 +28,18 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
+    const parseParam = (params) => {
+        var result = "";
+        for (var key in params) {
+            if (result != "") {
+                result += "&";
+            }
+            result += key + "=" + params[key];
+        }
+
+        return result;
+    }
+
     initDatepicker();
 
     axios(resolveClientUrl('Department/GetHierarchy'))
@@ -47,5 +59,14 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        var params =  {
+            workdate: $('#WorkDate').val(),
+            shiftId: $('#ShiftId').val(),
+            employeeId: $('#EmployeeId').val(),
+            sectionIds: $('#SectionIds').val(),
+            isLocal: $('#IsLocal').val(),
+            IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
+        }
+        window.location.href = _global.root + 'ShiftStatisticReport/ExportExcelStatisticDetails?' + parseParam(params);
     });
 });

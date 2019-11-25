@@ -178,6 +178,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
     <Compile Include="ExportExcel\JobTitleExportService.cs" />
     <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
