@@ -1,7 +1,7 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
-
+import { stringify } from 'qs';
 import '../../shared/employee.search.in.team';
 import '../../shared/multiselect-tree-view';
 import { axiosError, blockUI, unblockUI, floatThead, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
@@ -27,18 +27,6 @@ $(document).ready(function () {
             floatThead('table#data');
         }).catch(axiosError).then(() => unblockUI());
     };
-
-    const parseParam = (params) => {
-        var result = "";
-        for (var key in params) {
-            if (result != "") {
-                result += "&";
-            }
-            result += key + "=" + params[key];
-        }
-
-        return result;
-    }
 
     initDatepicker();
 
@@ -67,6 +55,6 @@ $(document).ready(function () {
             isLocal: $('#IsLocal').val(),
             IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
         }
-        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcelStatisticDetails?' + parseParam(params));
+        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcelStatisticDetails?' + stringify(params));
     });
 });
