@@ -43,5 +43,8 @@
         public int? TotalMins { get; set; }
 
         public int CurrentStatus { get; set; }
+
+        // keep in view
+        public byte KeepInViewTypeId { get; set; }
     }
 }

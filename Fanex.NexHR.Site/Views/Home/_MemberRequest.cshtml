@@ -48,7 +48,7 @@
                             {
                                 if (item.RequestTypeId == (ushort)RequestType.Overtime)
                                 {
-                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { @class = "pending" })
+                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
                                 }
                                 else
                                 {
@@ -106,7 +106,7 @@
                             {
                                 if (item.RequestTypeId == (ushort)RequestType.Overtime)
                                 {
-                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { @class = "pending" })
+                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
                                 }
                                 else
                                 {

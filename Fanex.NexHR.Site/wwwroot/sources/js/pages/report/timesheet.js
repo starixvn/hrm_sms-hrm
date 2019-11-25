@@ -1,8 +1,7 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'tipsy/src/javascripts/jquery.tipsy';
+﻿import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import '../../../libs/monthPicker/monPickr-0.0.3';
-import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert } from '../../shared/common.functions';
+import { axiosError, blockUI, floatThead, unblockUI, alert, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, createddate, fromShift, toShift,
@@ -10,7 +9,7 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, creat
     var result = '';
     blockUI();
     $.ajax({
-        url: _global.root + "request/GetMessageDetailRequest",
+        url: resolveClientUrl('request/GetMessageDetailRequest'),
         async: false,
         type: 'post',
         data: {
@@ -32,7 +31,7 @@ function initTooltip() {
         html: true,
         gravity: 'n',
         fade: true,
-        className: 'tipsy-tooltip',
+        className: 'tipsy-request',
         title: function () {
             var object = $(this);
             var result = getMessageDetail(
@@ -50,8 +49,7 @@ function initTooltip() {
                 object.attr('data-isothours'),
                 object.attr('data-actualLateInEarlyOut'));
 
-            return "<div class='tipsy-tooltip'>" +
-                "<table class='table-tooltip checkinout'>" +
+            return "<table class='table-tooltip checkinout'>" +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
                 "<td class='col2'>" + result +
@@ -59,7 +57,7 @@ function initTooltip() {
                 object.attr('data-createddate') +
                 "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
                 object.attr('data-remark') +
-                "</td></tr></table></div>";
+                "</td></tr></table>";
         }
     });
 
@@ -79,7 +77,7 @@ function initTooltip() {
 
 function query() {
     $.ajax({
-        url: _global.root + 'report/TimesheetDetails',
+        url: resolveClientUrl('report/TimesheetDetails'),
         type: 'POST',
         dataType: 'html',
         data: $('.filter').serialize(),
