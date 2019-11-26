@@ -17,18 +17,18 @@ $(document).ready(function () {
     function bindSARole(onload) {
         let combineSARole = $('#Roles2Array2, #Roles2Array3, #Roles2Array4, #Roles2Array5, #Roles2Array6,#Roles2Array8,#Roles2Array9');
         if ($('#Roles2Array7').prop('checked')) {
-            combineSARole.prop('checked', true).prop('disabled', true);
+            combineSARole.prop('checked', true).prop('readonly', 'readonly');
         } else if (!onload) {
-            combineSARole.prop('checked', false).prop('disabled', false);
+            combineSARole.prop('checked', false).prop('readonly', false);
         }
     }
 
     function bindDisciplineRole(onload) {
         let combineDisciplineRole = $('#Roles2Array3');
         if ($('#Roles2Array8').prop('checked')) {
-            combineDisciplineRole.prop('checked', true).prop('disabled', true);
+            combineDisciplineRole.prop('checked', true).prop('readonly', 'readonly');
         } else if (!onload) {
-            combineDisciplineRole.prop('checked', false).prop('disabled', false);
+            combineDisciplineRole.prop('checked', false).prop('readonly', false);
         }
     }
 
@@ -153,7 +153,6 @@ $(document).ready(function () {
 
     $('#postform').click(function () {
         var isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');
-
         if (isCheckedTopManager === true) {
             $('#formEditUser')[0].submit();
         } else {

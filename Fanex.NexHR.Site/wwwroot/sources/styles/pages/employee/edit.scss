@@ -36,6 +36,14 @@
 
                     .checkbox {
                         margin-right: 5px;
+
+                        .checkbox-custom[readonly] {
+                            pointer-events: none;
+
+                            & + label {
+                                pointer-events: none;
+                            }
+                        }
                     }
                 }
 

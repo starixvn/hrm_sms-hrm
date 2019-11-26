@@ -655,18 +655,7 @@
             var result = string.Empty;
             if (roles != null)
             {
-                if (roles.Any(i => i.RoleId == (int)RoleSystem.SystemAdmin))
-                {
-                    result = BuildSARole();
-                }
-                else if (roles.Any(i => i.RoleId == (int)RoleSystem.DisciplineManager))
-                {
-                    result = BuildDisciplineManagerRole(roles);
-                }
-                else
-                {
-                    result = string.Join(",", roles.Select(i => i.RoleId));
-                }
+                result = string.Join(",", roles.Select(i => i.RoleId));
             }
 
             return string.IsNullOrEmpty(result) ? BuildDefaultRole() : BuildDefaultRole() + "," + result;
@@ -675,30 +664,6 @@
         private static string BuildDefaultRole()
         {
             return ((int)RoleSystem.Member).ToString();
-        }
-
-        private static string BuildDisciplineManagerRole(IList<SystemRoleModel> roles)
-        {
-            IList<int> roleIds = roles.Where(x => x.RoleId != (int)RoleSystem.Approver && x.RoleId != (int)RoleSystem.DisciplineManager)
-                .Select(x => x.RoleId).ToList(); 
-            roleIds.Add((int)RoleSystem.Approver);
-            var sortRoleIds = roleIds.OrderBy(t => t);
-            return string.Join(",", sortRoleIds);
-        }
-
-        private static string BuildSARole()
-        {
-            return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7}",
-                ((int)RoleSystem.Verifier).ToString(),
-                ((int)RoleSystem.Approver).ToString(),
-                ((int)RoleSystem.ShiftManager).ToString(),
-                ((int)RoleSystem.OnBehalfRequest).ToString(),
-                ((int)RoleSystem.HR).ToString(),
-                ((int)RoleSystem.SystemAdmin).ToString(),
-                ((int)RoleSystem.DisciplineManager).ToString(),             
-                ((int)RoleSystem.ShiftManager2).ToString());
-
-        }
+        }       
     }
 }
