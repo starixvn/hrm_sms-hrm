@@ -65,6 +65,9 @@ export default class WeeklyDefaultShiftModal extends Component {
     render() {
         const { isUsedWeeklyDefaultShift, data } = this.state;
         const { isHost, show, nickname, shiftOptions } = this.props;
+        const getShiftClassName = function (objAttr) {
+            return data !== null && data[objAttr].id === OffDayShiftId ? 'offday' : '';
+        };
 
         return (
             <Modal keyboard={false} backdrop="static"
@@ -91,7 +94,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                             <div className="table-row">
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!this.props.isHost}
-                                        className={`${data !== null && data.monShift.id === OffDayShiftId ? 'offday' : ''}`} name="mon"
+                                        className={getShiftClassName('monShift')} name="mon"
                                         shift={data !== null ? data.monShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -99,7 +102,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.tueShift.id === OffDayShiftId ? 'offday' : ''}`} name="tue"
+                                        className={getShiftClassName('tueShift')} name="tue"
                                         shift={data !== null ? data.tueShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -107,7 +110,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.wedShift.id === OffDayShiftId ? 'offday' : ''}`} name="wed"
+                                        className={getShiftClassName('wedShift')} name="wed"
                                         shift={data !== null ? data.wedShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -115,7 +118,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.thuShift.id === OffDayShiftId ? 'offday' : ''}`} name="thu"
+                                        className={getShiftClassName('thuShift')} name="thu"
                                         shift={data !== null ? data.thuShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -123,7 +126,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.friShift.id === OffDayShiftId ? 'offday' : ''}`} name="fri"
+                                        className={getShiftClassName('friShift')} name="fri"
                                         shift={data !== null ? data.friShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -131,7 +134,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.satShift.id === OffDayShiftId ? 'offday' : ''}`} name="sat"
+                                        className={getShiftClassName('satShift')} name="sat"
                                         shift={data !== null ? data.satShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}
@@ -139,7 +142,7 @@ export default class WeeklyDefaultShiftModal extends Component {
                                 </div>
                                 <div className="table-cell cell-shift">
                                     <ShiftAutocomplete isDisabled={!isHost}
-                                        className={`${data !== null && data.sunShift.id === OffDayShiftId ? 'offday' : ''}`} name="sun"
+                                        className={getShiftClassName('sunShift')} name="sun"
                                         shift={data !== null ? data.sunShift : null}
                                         shiftOptions={shiftOptions}
                                         onChange={this.handleChangeShift}

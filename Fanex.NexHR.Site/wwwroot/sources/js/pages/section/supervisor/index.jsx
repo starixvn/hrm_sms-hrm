@@ -127,7 +127,7 @@ export default class App extends Component {
     }
 
     handleSave = () => {
-        let supervisors = [];
+        const supervisors = [];
         const requestTypes = [
             { key: 'leaves', value: RequestType.Leave },
             { key: 'changeShifts', value: RequestType.ChangeShift },

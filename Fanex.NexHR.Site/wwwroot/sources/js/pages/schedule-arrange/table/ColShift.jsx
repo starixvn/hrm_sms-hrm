@@ -78,7 +78,7 @@ export default class ColShift extends PureComponent {
                         className={shiftInfo.class}
                         placeholder={shiftInfo.placeholder}
                         isDisabled={shiftInfo.isDisabled}
-                        shiftOptions={data.isLeaveHalfDay || data.isChangeShift ? shiftOptions.filter(shift => shift.id !== OffDayShiftId) : shiftOptions}
+                        shiftOptions={data.isLeaveHalfDay || data.isChangeShift ? shiftOptions.filter(item => item.id !== OffDayShiftId) : shiftOptions}
                         onChange={this.handleChangeShift}
                     />
                     <div className={`checkbox ${shiftInfo.isShowCheckBox && this.state.isShowCheckbox ? '' : 'hidden'}`}>
