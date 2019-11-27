@@ -36,12 +36,19 @@
 
                     .checkbox {
                         margin-right: 5px;
+                        cursor: not-allowed;
 
                         .checkbox-custom[readonly] {
-                            pointer-events: none;
 
                             & + label {
                                 pointer-events: none;
+                                color: #b8b8b8;
+                            }
+
+                            & + label:before {
+                                box-shadow: none;
+                                background-color: rgb(168, 168, 168);
+                                border-color: rgb(168, 168, 168);
                             }
                         }
                     }
