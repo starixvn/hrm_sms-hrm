@@ -108,7 +108,7 @@
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
 
             var fileName = "Monthly Overtime Report " + requestDate.ToString("MMM-yyyy") + ".xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
@@ -127,7 +127,7 @@
             byte[] bytes = overtimeReportService.ExportYearlyOvertime(overtimes, param);
 
             var fileName = $"Yearly overtime report - {param.Year}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
@@ -150,7 +150,7 @@
                 "Overtime Details Report from {0} to {1}.xlsx",
                 param.FromDate.ToString("dd-MMM-yyyy"),
                 param.ToDate.ToString("dd-MMM-yyyy"));
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
     }
 }

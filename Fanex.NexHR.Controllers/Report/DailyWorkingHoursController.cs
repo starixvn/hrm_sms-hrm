@@ -53,7 +53,7 @@
             byte[] bytes = workingHoursService.ExportDailyWorkingHours(param.FromDate, monthlyWorkings);
 
             var fileName = $"{Labels.AttendanceDailyDetail} {param.FromDate.ToString("dd MMM yyyy")}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
     }
 }

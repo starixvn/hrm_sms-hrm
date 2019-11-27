@@ -54,7 +54,7 @@
             byte[] bytes = reportService.Export(param, calendars);
 
             var fileName = $"Working Calendar Summary {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
     }
 }

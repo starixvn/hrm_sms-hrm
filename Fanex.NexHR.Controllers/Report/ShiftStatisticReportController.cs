@@ -96,7 +96,7 @@
             byte[] exportData = exportExcelService.ExportDetail(details);
 
             var fileName = $"{Labels.ShiftStatisticReport}.xlsx";
-            return File(exportData, "application/xlsx", fileName);
+            return File(exportData, MimeType.XLSX, fileName);
         }
 
         public ActionResult ExportExcel(ShiftStatisticViewModel model)
@@ -115,7 +115,7 @@
             byte[] exportData = exportExcelService.Export(shiftStatistics);
 
             var fileName = $"{Labels.ShiftStatisticReport}.xlsx";
-            return File(exportData, "application/xlsx", fileName);
+            return File(exportData, MimeType.XLSX, fileName);
         }
     }
 }

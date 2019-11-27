@@ -140,7 +140,7 @@
             byte[] bytes = exportExcelService.Export(filter, weeklySchedules);
 
             var fileName = $"Working shift {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
 
         [HttpGet]
@@ -158,7 +158,7 @@
             byte[] bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
 
             var fileName = $"Schedule for Driver {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
 
         private bool CheckPermission(DateTime fromDate)

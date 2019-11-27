@@ -163,6 +163,7 @@
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Constants\LogObjectType.cs" />
     <Compile Include="Constants\MappingDataType.cs" />
+    <Compile Include="Constants\MimeType.cs" />
     <Compile Include="Constants\SessionKey.cs" />
     <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="CustomJsonResult.cs" />

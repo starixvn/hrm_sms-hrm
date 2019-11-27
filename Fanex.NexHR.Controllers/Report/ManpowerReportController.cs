@@ -52,7 +52,7 @@
             byte[] bytes = reportService.ExportManpower(manpowers, year);
 
             var fileName = $"Manpower Report - {year}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ManpowerCategoryReport)]
@@ -62,7 +62,7 @@
             byte[] bytes = reportService.ExportManpowerCategory(manpowers, year);
 
             var fileName = $"Manpower Category Report - {year}.xlsx";
-            return File(bytes, "application/xlsx", fileName);
+            return File(bytes, MimeType.XLSX, fileName);
         }
     }
 }
