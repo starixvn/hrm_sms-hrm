@@ -45,6 +45,6 @@
         public int CurrentStatus { get; set; }
 
         // keep in view
-        public byte KeepInViewTypeId { get; set; }
+        public byte? KeepInViewTypeId { get; set; }
     }
 }

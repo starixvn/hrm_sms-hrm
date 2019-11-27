@@ -202,7 +202,8 @@
                 FromShift = t.FromShift,
                 ToShift = t.ToShift,
                 TotalMins = t.Time,
-                CurrentStatus = t.CurrentStatus
+                CurrentStatus = t.CurrentStatus,
+                KeepInViewTypeId = t.KeepInViewTypeId
             };
             return request;
         }

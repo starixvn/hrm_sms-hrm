@@ -11,3 +11,42 @@
     font-size: 11px;
     border-radius: 2px;
 }
+
+.tipsy-request {
+    .tipsy-arrow {
+        border: unset;
+    }
+
+    .tipsy-inner {
+        max-width: unset;
+    }
+}
+
+table.table-tooltip {
+    min-width: 300px;
+
+    tr {
+        td {
+            padding: 5px 10px;
+            font-weight: normal;
+            height: 25px;
+
+            &.col1 {
+                width: 100px;
+                text-align: right;
+            }
+
+            &.col2 {
+                border-left: 1px solid #0789D1;
+            }
+
+            span.bold {
+                font-weight: bold;
+            }
+        }
+
+        &.hasborder {
+            border-bottom: 1px solid #0789D1;
+        }
+    }
+}

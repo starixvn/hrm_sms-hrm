@@ -1,117 +1,116 @@
 ﻿import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import '../../../libs/monthPicker/monPickr-0.0.3';
-import { axiosError, blockUI, floatThead, unblockUI, alert, resolveClientUrl } from '../../shared/common.functions';
+import axios from 'axios';
+import { parse } from 'qs';
+
+import { axiosError, blockUI, floatThead, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 
-function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime, createddate, fromShift, toShift,
-    totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
-    var result = '';
-    blockUI();
-    $.ajax({
-        url: resolveClientUrl('request/GetMessageDetailRequest'),
-        async: false,
-        type: 'post',
-        data: {
-            "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
-            "fromtime": fromTime, "totime": toTime, "createddate": createddate, "fromshiftCode": fromShift,
-            "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut
-        },
-        success: function (data) {
-            result = data;
-        }
-    });
-    unblockUI();
-    return result;
-}
+const timesheetModule = (function ($) {
+    function initTooltip() {
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
-function initTooltip() {
-    $(".tooltip-request").tipsy({
-        html: true,
-        gravity: 'n',
-        fade: true,
-        className: 'tipsy-request',
-        title: function () {
-            var object = $(this);
-            var result = getMessageDetail(
-                object.attr('data-requesttype'),
-                object.attr('data-fromdate'),
-                object.attr('data-todate'),
-                object.attr('data-fromtime'),
-                object.attr('data-totime'),
-                object.attr('data-createddate'),
-                object.attr('data-fromshift'),
-                object.attr('data-toshift'),
-                object.attr('data-totaldays'),
-                object.attr('data-totalmins'),
-                object.attr('data-ottype'),
-                object.attr('data-isothours'),
-                object.attr('data-actualLateInEarlyOut'));
+        $('.tooltip-request').tipsy({
+            html: true,
+            gravity: 'n',
+            fade: true,
+            className: 'tipsy-request',
+            title: function () {
+                const object = $(this);
+                let title = '';
+                $.ajax({
+                    url: resolveClientUrl('request/GetMessageDetailRequest'),
+                    async: false,
+                    type: 'post',
+                    data: {
+                        'requesttype': object.attr('data-requesttype'),
+                        'fromdate': object.attr('data-fromdate'),
+                        'todate': object.attr('data-todate'),
+                        'requestedDate': object.attr('data-fromdate'),
+                        'fromtime': object.attr('data-fromtime'),
+                        'totime': object.attr('data-totime'),
+                        'createddate': object.attr('data-createddate'),
+                        'fromshiftCode': object.attr('data-fromshift'),
+                        'toshiftcode': object.attr('data-toshift'),
+                        'totaldays': object.attr('data-totaldays'),
+                        'totalmins': object.attr('data-totalmins'),
+                        'overtimetype': object.attr('data-ottype'),
+                        'isOvertimehours': object.attr('data-isothours'),
+                        'actualLateInEarlyOut': object.attr('data-actualLateInEarlyOut'),
+                        'keepInViewType': object.attr('data-keepinviewtypeid')
+                    },
+                    success: function (data) {
+                        title = "<table class='table-tooltip'>" +
+                            "<tr class='hasborder'>" +
+                            "<td class='col1'>Details</td>" +
+                            "<td class='col2'>" + data +
+                            "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
+                            object.attr('data-createddate') +
+                            "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
+                            object.attr('data-remark') +
+                            "</td></tr></table>";
+                    }
+                });
 
-            return "<table class='table-tooltip checkinout'>" +
-                "<tr class='hasborder'>" +
-                "<td class='col1'>Details</td>" +
-                "<td class='col2'>" + result +
-                "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
-                object.attr('data-createddate') +
-                "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
-                object.attr('data-remark') +
-                "</td></tr></table>";
-        }
-    });
+                return title;
+            }
+        });
 
-    $('.tooltip-overtime').tipsy({
-        html: true,
-        gravity: 'n',
-        fade: true,
-        className: 'tipsy-tooltip',
-        title: function () {
-            var object = $(this);
+        $('.tooltip-overtime').tipsy({
+            html: true,
+            gravity: 'n',
+            fade: true,
+            className: 'tipsy-tooltip',
+            title: function () {
+                const object = $(this);
+                return "<div><div class='overtime-tooltip'>" + object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
+            }
+        });
+    }
 
-            return "<div>" + "<div class='overtime-tooltip'>" +
-                object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
-        }
-    });
-}
-
-function query() {
-    $.ajax({
-        url: resolveClientUrl('report/TimesheetDetails'),
-        type: 'POST',
-        dataType: 'html',
-        data: $('.filter').serialize(),
-        success: function (response) {
-            $('#timesheetDetails').html(response);
-            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+    function query() {
+        blockUI();
+        axios({
+            url: resolveClientUrl('report/TimesheetDetails'),
+            method: 'POST',
+            params: parse($('.filter').serialize()),
+            responseType: 'text'
+        }).then(response => {
+            $('#timesheetDetails').html(response.data);
             initTooltip();
             floatThead('table#data');
-        },
-        error: function () {
-            alert(_messages.errorTryAgain);
-        }
-    });
-}
+        }).catch(axiosError).then(() => unblockUI());
+    }
+
+    function initModule() {
+        $('#monthPickr').monPickr({
+            showDateRange: false,
+            today: new Date(),
+            minDate: '2010/1/1',
+            maxDate: $('#maxDate').val(),
+            sortDesc: true,
+            afterChangeMonth: function () {
+                const month = $('#monthPickr').monPickr("getMonth", "MM");
+                const year = $('#monthPickr').monPickr("getMonth", "yyyy");
+                $('#Month').val(month);
+                $('#Year').val(year);
+            }
+        });
+
+        $('#btnSubmit').click(function (evt) {
+            evt.preventDefault();
+            query();
+        });
+
+        query();
+    }
+
+    return {
+        initModule: initModule
+    };
+}(jQuery));
 
 $(document).ready(function () {
-    $('#monthPickr').monPickr({
-        showDateRange: false,
-        today: new Date(),
-        minDate: '2010/1/1',
-        maxDate: $('#maxDate').val(),
-        sortDesc: true,
-        afterChangeMonth: function () {
-            var Month = $('#monthPickr').monPickr("getMonth", "MM");
-            var Year = $('#monthPickr').monPickr("getMonth", "yyyy");
-            $('#Month').val(Month);
-            $('#Year').val(Year);
-        }
-    });
-
-    query();
-
-    $('#btnSubmit').click(function (evt) {
-        evt.preventDefault();
-        query();
-    });
+    timesheetModule.initModule();
 });

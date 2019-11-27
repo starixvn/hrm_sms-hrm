@@ -1,5 +1,6 @@
 ﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels
 @model IList<EmployeeAttendanceModel>
 <table id="data" class="table table-custom">
     <thead>
@@ -96,7 +97,7 @@
                         {
                             foreach (EmployeeAttendanceRequest request in item.RequestList)
                             {
-                                <a href='#' class="tooltip-request req"
+                                <a href='javascript:;' class="tooltip-request req"
                                     data-requesttype="@request.RequestType.Id"
                                     data-fromdate="@request.FromDate.ToFormatedDate()"
                                     data-todate="@request.ToDate.ToFormatedDate()"
@@ -108,6 +109,7 @@
                                     data-totaldays="@request.TotalDays"
                                     data-totalmins="@request.TotalMins"
                                     data-actualLateInEarlyOut="@(request.RequestType.Id == 3 ? item.LateIn : item.EarlyOut)"
+                                    data-keepinviewtypeid="@request.KeepInViewTypeId"
                                     data-remark='@request.Remark'>
                                     @request.RequestType.Name
                                 </a>
