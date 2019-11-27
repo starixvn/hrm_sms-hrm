@@ -1,14 +1,10 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
     using System.IO;
-    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Models.Report;
     using OfficeOpenXml;
-    using OfficeOpenXml.Style;
 
     public interface IExportExcelShiftStatisticService
     {
@@ -20,6 +16,7 @@
         public byte[] ExportDetail(IEnumerable<ShiftStatisticDetail> shiftDetails)
         {
             const int FirstDataTableRow = 3;
+            const int TotalDataTableCol = 6;
 
             string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/ShiftStatisticDetailTemplate.xlsx");
 
@@ -31,8 +28,16 @@
                 int colIndex = 1;
                 int count = 1;
 
+                var oddRowTableStyle = workSheet.Cells[FirstDataTableRow, 1, FirstDataTableRow, TotalDataTableCol];
+                var evenRowTableStyle = workSheet.Cells[FirstDataTableRow + 1, 1, FirstDataTableRow + 1, TotalDataTableCol];
+
                 foreach (var detail in shiftDetails)
                 {
+                    //Copy row style
+                    var rowTableStyle = rowIndex % 2 != 0 ? oddRowTableStyle : evenRowTableStyle;
+                    rowTableStyle.Copy(workSheet.Cells[rowIndex, 1, rowIndex, TotalDataTableCol]);
+
+                    //Fill data
                     workSheet.Cells[rowIndex, colIndex++].Value = count;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.WorkDate;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
