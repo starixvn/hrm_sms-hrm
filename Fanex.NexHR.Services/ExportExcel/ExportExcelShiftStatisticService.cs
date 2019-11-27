@@ -29,7 +29,7 @@
 
             shiftStatistics = shiftStatistics.OrderBy(statistic => statistic.WorkDate);
 
-            var tableTitles = shiftStatistics.GroupBy(shift => shift.WorkDate).ToArray() ;
+            var tableTitles = shiftStatistics.GroupBy(shift => shift.WorkDate).ToArray();
             var tableShifts = shiftStatistics.GroupBy(shift => shift.Code);
             int totalCol = tableTitles.Count();
             int totalTableRow = tableShifts.Count();
@@ -51,7 +51,7 @@
 
                     titleStyle.Copy(titleCell);
                     titleCell.Style.Font.Color.SetColor(title.Key.DayOfWeek == DayOfWeek.Saturday || title.Key.DayOfWeek == DayOfWeek.Sunday ? Color.Red : Color.White);
-                    titleCell.Value = title.Key.ToString("dd MM, yyyy (ddd)");
+                    titleCell.Value = title.Key.ToString("dd MMM, yyyy (ddd)");
                 }
 
                 //Table Summary
@@ -65,7 +65,6 @@
                 }
                 workSheet.Cells[SumaryTemplateRowIndex, 1, SumaryTemplateRowIndex, 2].Clear();
 
-
                 //Table data
                 var evenRowStyle = workSheet.Cells[FirstDataTableRow, 1];
                 var oddRowStyle = workSheet.Cells[FirstDataTableRow + 1, 1];
@@ -78,7 +77,7 @@
                     rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
                     workSheet.Cells[rowIndex, colIndex++].Value = shift.Key;
 
-                    for(int i = 0; i < totalCol; i++)
+                    for (int i = 0; i < totalCol; i++)
                     {
                         rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
                         var data = shiftStatistics.FirstOrDefault(shiftStatistic => shiftStatistic.Code == shift.Key && shiftStatistic.WorkDate == tableTitles[i].Key);
