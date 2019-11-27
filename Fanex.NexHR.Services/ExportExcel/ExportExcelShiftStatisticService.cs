@@ -1,7 +1,11 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
     using System.IO;
+    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Models.Report;
     using OfficeOpenXml;
@@ -9,10 +13,86 @@
     public interface IExportExcelShiftStatisticService
     {
         byte[] ExportDetail(IEnumerable<ShiftStatisticDetail> shiftDetails);
+
+        byte[] Export(IEnumerable<ShiftStatistic> shiftStatistics);
     }
 
+    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelShiftStatisticService : IExportExcelShiftStatisticService
     {
+        public byte[] Export(IEnumerable<ShiftStatistic> shiftStatistics)
+        {
+            const int FirstDataTableRow = 4;
+            const int DataTableTitleRow = 3;
+            const int DataTbaleTitleFirstCol = 2;
+            const int SumaryTemplateRowIndex = 6;
+
+            shiftStatistics = shiftStatistics.OrderBy(statistic => statistic.WorkDate);
+
+            var tableTitles = shiftStatistics.GroupBy(shift => shift.WorkDate).ToArray() ;
+            var tableShifts = shiftStatistics.GroupBy(shift => shift.Code);
+            int totalCol = tableTitles.Count();
+            int totalTableRow = tableShifts.Count();
+            int lastTableRow = totalTableRow + FirstDataTableRow;
+
+            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/ShiftStatisticTemplate.xlsx");
+
+            using (var excelPackage = new ExcelPackage(new FileInfo(templatePath)))
+            {
+                ExcelWorksheet workSheet = excelPackage.Workbook.Worksheets[1];
+
+                //Table Titles
+                int titleCol = DataTbaleTitleFirstCol;
+                var titleStyle = workSheet.Cells[DataTableTitleRow, DataTbaleTitleFirstCol];
+
+                foreach (var title in tableTitles)
+                {
+                    var titleCell = workSheet.Cells[DataTableTitleRow, titleCol++];
+
+                    titleStyle.Copy(titleCell);
+                    titleCell.Style.Font.Color.SetColor(title.Key.DayOfWeek == DayOfWeek.Saturday || title.Key.DayOfWeek == DayOfWeek.Sunday ? Color.Red : Color.White);
+                    titleCell.Value = title.Key.ToString("dd MM, yyyy (ddd)");
+                }
+
+                //Table Summary
+                var sumaryRowStyle = workSheet.Cells[SumaryTemplateRowIndex, 1];
+
+                sumaryRowStyle.Copy(workSheet.Cells[lastTableRow, 1]);
+                for (int i = 2; i <= totalCol + 1; i++)
+                {
+                    sumaryRowStyle.Copy(workSheet.Cells[lastTableRow, i]);
+                    workSheet.Cells[lastTableRow, i].Formula = "SUM(" + workSheet.Cells[FirstDataTableRow, i, lastTableRow - 1, i] + ")";
+                }
+                workSheet.Cells[SumaryTemplateRowIndex, 1, SumaryTemplateRowIndex, 2].Clear();
+
+
+                //Table data
+                var evenRowStyle = workSheet.Cells[FirstDataTableRow, 1];
+                var oddRowStyle = workSheet.Cells[FirstDataTableRow + 1, 1];
+                int rowIndex = FirstDataTableRow;
+                int colIndex = 1;
+
+                foreach (var shift in tableShifts)
+                {
+                    var rowTableStyle = rowIndex % 2 != 0 ? oddRowStyle : evenRowStyle;
+                    rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
+                    workSheet.Cells[rowIndex, colIndex++].Value = shift.Key;
+
+                    for(int i = 0; i < totalCol; i++)
+                    {
+                        rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
+                        var data = shiftStatistics.FirstOrDefault(shiftStatistic => shiftStatistic.Code == shift.Key && shiftStatistic.WorkDate == tableTitles[i].Key);
+                        workSheet.Cells[rowIndex, colIndex++].Value = data is null ? 0 : data.Total;
+                    }
+
+                    colIndex = 1;
+                    rowIndex++;
+                }
+
+                return excelPackage.GetAsByteArray();
+            }
+        }
+
         public byte[] ExportDetail(IEnumerable<ShiftStatisticDetail> shiftDetails)
         {
             const int FirstDataTableRow = 3;

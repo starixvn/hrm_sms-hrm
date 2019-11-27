@@ -98,5 +98,24 @@
             var fileName = $"{Labels.ShiftStatisticReport}.xlsx";
             return File(exportData, "application/xlsx", fileName);
         }
+
+        public ActionResult ExportExcel(ShiftStatisticViewModel model)
+        {
+            var param = new GetShiftStatisticParam
+            {
+                SupervisorId = sessionService.Employee.Id,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                SectionIds = model.SectionIds,
+                IsShowWholeCompany = model.IsShowWholeCompany,
+                IsLocal = model.IsLocal
+            };
+
+            var shiftStatistics = statisticReportService.GetShiftStatistic(param);
+            byte[] exportData = exportExcelService.Export(shiftStatistics);
+
+            var fileName = $"{Labels.ShiftStatisticReport}.xlsx";
+            return File(exportData, "application/xlsx", fileName);
+        }
     }
 }

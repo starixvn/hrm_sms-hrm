@@ -1,6 +1,6 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import axios from 'axios';
-
+import { stringify } from 'qs';
 import '../../shared/multiselect-tree-view';
 import { axiosError, blockUI, unblockUI, initDatepicker, initFromDateOnChange, resolveClientUrl } from '../../shared/common.functions';
 
@@ -44,5 +44,15 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+
+        var params = {
+            fromDate: $('#FromDate').val(),
+            toDate: $('#ToDate').val(),
+            sectionIds: $('#SectionIds').val(),
+            isLocal: $('#IsLocal').val(),
+            IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
+        }
+
+        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcel?' + stringify(params));
     });
 });
