@@ -72,7 +72,7 @@ export default class App extends Component {
     }
 
     handleChangeOrder = (key, employeeId) => {
-        let vm = this;
+        const vm = this;
         reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
             vm.setState({ managers });
         });
