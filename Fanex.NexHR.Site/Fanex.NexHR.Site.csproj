@@ -772,7 +772,6 @@
     <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\ConfirmRefreshDataModal.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\Search.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColDefaultShift.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColNickname.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColShift.jsx" />

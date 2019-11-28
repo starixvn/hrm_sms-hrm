@@ -72,15 +72,18 @@ export default class Search extends Component {
                         <button className="btn btn-primary" name="currentWeek" onClick={this.handleSubmit}>
                             Current Week
                         </button>
-                        <Dropdown id={`dropdownExportExcel`} componentClass="div">
-                            <Dropdown.Toggle useAnchor className="btn btn-excel">
-                                Excel
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <MenuItem onClick={this.props.onExportExcel}>Upload</MenuItem>
-                                <MenuItem onClick={this.props.onExportExcelDriverPickup}>Driver Pickup</MenuItem>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        {
+                            this.props.showExportExcel &&
+                            <Dropdown id={`dropdownExportExcel`} componentClass="div">
+                                <Dropdown.Toggle useAnchor className="btn btn-excel">
+                                    Excel
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <MenuItem onClick={this.props.onExportExcel}>Upload</MenuItem>
+                                    <MenuItem onClick={this.props.onExportExcelDriverPickup}>Driver Pickup</MenuItem>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        }
                     </div>
                 </div>
             </div>

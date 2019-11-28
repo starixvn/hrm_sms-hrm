@@ -9,7 +9,7 @@ import moment from 'moment';
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
 import buildData from '../../../shared/components/react-tree-multiselect/buildData';
 import { DateFormat } from '../../../shared/constants';
-import Search from './Search';
+import Search from '../Search';
 import Table from './table/table';
 
 export default class App extends Component {
@@ -125,6 +125,7 @@ export default class App extends Component {
         return (
             <Fragment>
                 <Search
+                    showExportExcel={false}
                     groupOptions={this.groupOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}

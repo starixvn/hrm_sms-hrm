@@ -1048,6 +1048,7 @@ export default class App extends Component {
             <Fragment>
                 <ToastLayout />
                 <Search
+                    showExportExcel
                     groupOptions={this.groupOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
