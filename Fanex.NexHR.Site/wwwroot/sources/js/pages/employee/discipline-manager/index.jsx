@@ -4,8 +4,8 @@ import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
-import { getSupervisors, editEmployeeSupervisor } from '../../section/supervisor/common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
+import { getSupervisors, editEmployeeSupervisor, reorderSupervisor } from '../../section/supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from '../../section/discipline-manager/table/table';
 
@@ -72,29 +72,10 @@ export default class App extends Component {
     }
 
     handleChangeOrder = (key, employeeId) => {
-        let managers = [...this.state.managers];
-        const totalItems = managers.length,
-            sourceIndex = managers.findIndex(item => item.ownerId === employeeId);
-        let destinationIndex = 0;
-
-        switch (key) {
-            case 'up':
-                destinationIndex = sourceIndex - 1;
-                break;
-            case 'down':
-                destinationIndex = sourceIndex + 1;
-                break;
-            case 'bottom':
-                destinationIndex = totalItems;
-                break;
-        }
-
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-            return;
-        }
-
-        managers = reorder(managers, sourceIndex, destinationIndex);
-        this.setState({ managers });
+        let vm = this;
+        reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
+            vm.setState({ managers });
+        });
     }
 
     handleSave = () => {

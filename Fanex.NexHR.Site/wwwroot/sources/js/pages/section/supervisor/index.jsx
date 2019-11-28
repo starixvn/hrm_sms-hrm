@@ -4,8 +4,8 @@ import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
-import { editSectionSupervisor } from './common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
+import { editSectionSupervisor, reorderSupervisor } from './common.functions';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
@@ -55,7 +55,7 @@ export default class App extends Component {
                         nickname: item.NickName,
                         fullName: item.FullName,
                         team: item.Team !== null ? item.Team.Code : '',
-                        value: `${item.NickName} (${item.FullName})`
+                        value: item.DisplayName
                     };
                 });
 
@@ -101,29 +101,10 @@ export default class App extends Component {
     }
 
     handleChangeOrder = (key, employeeId) => {
-        let supervisors = [...this.state.supervisors];
-        const totalItems = supervisors.length,
-            sourceIndex = supervisors.findIndex(item => item.ownerId === employeeId);
-        let destinationIndex = 0;
-
-        switch (key) {
-            case 'up':
-                destinationIndex = sourceIndex - 1;
-                break;
-            case 'down':
-                destinationIndex = sourceIndex + 1;
-                break;
-            case 'bottom':
-                destinationIndex = totalItems;
-                break;
-        }
-
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-            return;
-        }
-
-        supervisors = reorder(supervisors, sourceIndex, destinationIndex);
-        this.setState({ supervisors });
+        let vm = this;
+        reorderSupervisor(key, employeeId, [...this.state.supervisors], function (supervisors) {
+            vm.setState({ supervisors });
+        });
     }
 
     handleSave = () => {

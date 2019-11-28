@@ -1,9 +1,9 @@
 ﻿import React, { PureComponent } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { OffDayShiftId } from '../../../shared/constants';
 import { getColumnShiftInfo } from '../common.functions';
 import ShiftAutocomplete from '../ShiftAutocomplete';
+import TooltipRequestInfo from './TooltipRequestInfo';
 
 export default class ColShift extends PureComponent {
     constructor(props) {
@@ -58,19 +58,10 @@ export default class ColShift extends PureComponent {
                 <div className={`cell-shift-wrapper ${data.isLeaveHalfDay ? 'leavehalfday' : ''}`}>
                     {
                         shiftInfo.details !== '' &&
-                        <OverlayTrigger trigger={['hover']} placement={'top'}
-                            overlay={
-                                <Tooltip id={`moreInfo-${scheduleAttrName}${employeeId}`}>
-                                    {shiftInfo.details}
-                                </Tooltip>
-                            }
-                        >
-                            {
-                                data.isLeaveHalfDay
-                                    ? <span className={`halfdaycode ${shiftInfo.classOfLeave}`}>{shiftInfo.leaveCode}</span>
-                                    : <i className="fa fa-info-circle" />
-                            }
-                        </OverlayTrigger>
+                        <TooltipRequestInfo id={`moreInfo-${scheduleAttrName}${employeeId}`}
+                            requestInfo={shiftInfo}
+                            isLeaveHalfDay={data.isLeaveHalfDay}
+                        />
                     }
                     <ShiftAutocomplete
                         shift={shift}
