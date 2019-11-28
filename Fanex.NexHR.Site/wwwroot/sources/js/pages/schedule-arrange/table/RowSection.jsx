@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
-import { Dropdown, MenuItem } from 'react-bootstrap';
 
 import DroppableMember from './DroppableMember';
+import DropdownOrder from './DropdownOrder';
 
 export default class RowSection extends PureComponent {
     handleMoveUp = () => {
@@ -42,17 +42,12 @@ export default class RowSection extends PureComponent {
                         <div>{name}</div>
                         {
                             isHost &&
-                            <Dropdown id={`dropdownSection${groupId}`} componentClass="div" className="customize-order">
-                                <Dropdown.Toggle noCaret useAnchor>
-                                    <i className="icon icon-sortable" title="Customize order" />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
-                                    <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
-                                    <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
-                                    <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <DropdownOrder id={`dropdownSection${groupId}`}
+                                onMoveUp={this.handleMoveUp}
+                                onMoveDown={this.handleMoveDown}
+                                onMoveTop={this.handleMoveTop}
+                                onMoveBottom={this.handleMoveBottom}
+                            />
                         }
                     </div>
                     <div className="publish">

@@ -1,5 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
-import { OverlayTrigger, Tooltip, Dropdown, MenuItem } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
+import DropdownOrder from './DropdownOrder';
 
 export default class ColNickname extends PureComponent {
     constructor(props) {
@@ -102,17 +104,12 @@ export default class ColNickname extends PureComponent {
                         />
                         {
                             isHost &&
-                            <Dropdown id={`dropdown${employeeId}`} componentClass="div" className="customize-order">
-                                <Dropdown.Toggle noCaret useAnchor>
-                                    <i className="icon icon-sortable" title="Customize order" />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
-                                    <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
-                                    <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
-                                    <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <DropdownOrder id={`dropdown${employeeId}`}
+                                onMoveUp={this.handleMoveUp}
+                                onMoveDown={this.handleMoveDown}
+                                onMoveTop={this.handleMoveTop}
+                                onMoveBottom={this.handleMoveBottom}
+                            />
                         }
                     </div>
                 </div>

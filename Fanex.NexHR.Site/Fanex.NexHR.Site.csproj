@@ -341,6 +341,7 @@
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DropdownOrder.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
