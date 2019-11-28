@@ -169,7 +169,7 @@
                 template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate.ToDateMonthYearFormatedDate();
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;

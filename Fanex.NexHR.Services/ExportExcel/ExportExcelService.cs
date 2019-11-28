@@ -157,26 +157,26 @@
             var rowDate = sheet.GetRow(1);
             ICell cellFromDate = rowDate.GetCell(2);
             ICell cellToDate = rowDate.GetCell(4);
-            cellFromDate.SetCellValue(fromDate.ToDateMonthYearFormatedDate());
-            cellToDate.SetCellValue(toDate.ToDateMonthYearFormatedDate());
+            cellFromDate.SetCellValue(fromDate);
+            cellToDate.SetCellValue(toDate);
 
             var rowHeaderDate = sheet.GetRow(3);
-            rowHeaderDate.GetCell(5).SetCellValue(fromDate.ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1).ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2).ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3).ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4).ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5).ToDateMonthYearFormatedDate());
-            rowHeaderDate.GetCell(11).SetCellValue(toDate.ToDateMonthYearFormatedDate());
+            rowHeaderDate.GetCell(5).SetCellValue(fromDate);
+            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1));
+            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2));
+            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3));
+            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4));
+            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5));
+            rowHeaderDate.GetCell(11).SetCellValue(toDate);
 
             var rowHeaderDay = sheet.GetRow(4);
-            rowHeaderDay.GetCell(5).SetCellValue(fromDate.ToString("ddd"));
-            rowHeaderDay.GetCell(6).SetCellValue(fromDate.AddDays(1).ToString("ddd"));
-            rowHeaderDay.GetCell(7).SetCellValue(fromDate.AddDays(2).ToString("ddd"));
-            rowHeaderDay.GetCell(8).SetCellValue(fromDate.AddDays(3).ToString("ddd"));
-            rowHeaderDay.GetCell(9).SetCellValue(fromDate.AddDays(4).ToString("ddd"));
-            rowHeaderDay.GetCell(10).SetCellValue(fromDate.AddDays(5).ToString("ddd"));
-            rowHeaderDay.GetCell(11).SetCellValue(toDate.ToString("ddd"));
+            rowHeaderDay.GetCell(5).SetCellValue(fromDate);
+            rowHeaderDay.GetCell(6).SetCellValue(fromDate.AddDays(1));
+            rowHeaderDay.GetCell(7).SetCellValue(fromDate.AddDays(2));
+            rowHeaderDay.GetCell(8).SetCellValue(fromDate.AddDays(3));
+            rowHeaderDay.GetCell(9).SetCellValue(fromDate.AddDays(4));
+            rowHeaderDay.GetCell(10).SetCellValue(fromDate.AddDays(5));
+            rowHeaderDay.GetCell(11).SetCellValue(toDate);
 
             var index = 1;
             foreach (var item in workingCalendars)
@@ -252,7 +252,7 @@
 
             cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
             cellRemarks.SetCellValue(item.Remark);
-            cellCreateDate.SetCellValue(item.CreatedDate.ToShortFormatedDate());
+            cellCreateDate.SetCellValue(item.CreatedDate);
             cellStatus.SetCellValue(item.Status.Name);
         }
 

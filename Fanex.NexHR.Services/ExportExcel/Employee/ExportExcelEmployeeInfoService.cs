@@ -87,11 +87,6 @@
 
         private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
-            string groupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string companyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string confirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string resignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-
             var record = new
             {
                 Count = rowIndex,
@@ -99,10 +94,10 @@
                 FullName = employee.FullName,
                 NickName = employee.NickName,
                 Section = employee.Team.Name,
-                GroupDate = groupDate,
-                CompanyDate = companyDate,
-                ConfirmedDate = confirmedDate,
-                ResignedDate = resignedDate,
+                GroupDate = employee.JoinedDate,
+                CompanyDate = employee.CompanyDate,
+                ConfirmedDate = employee.ConfirmedDate,
+                ResignedDate = employee.ResignedDate,
                 DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
@@ -286,12 +281,12 @@
                 p.Employee.FullName,
                 p.Employee.NickName,
                 Gender = gender,
-                DOB = p.Employee.DateOfBirth.ToString("dd/MM/yyyy"),
+                DOB = p.Employee.DateOfBirth,
                 p.Employee.MarriageName,
                 p.Employee.Address,
                 p.Employee.CurrentAddress,
                 p.Employee.CardNo,
-                DateOfIDCard = p.Employee.DateOfIdCard.HasValue ? p.Employee.DateOfIdCard.Value.ToString("dd/MM/yyyy") : string.Empty,
+                DateOfIDCard = p.Employee.DateOfIdCard,
                 p.Employee.PlaceOfIdCard,
                 PlaceRegKCB = string.Empty,
                 p.Employee.Phone,

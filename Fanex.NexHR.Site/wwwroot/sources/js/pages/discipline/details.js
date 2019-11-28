@@ -20,48 +20,48 @@ import '../../shared/employee.search.in.team';
 
     function initEventForIgnoreDiscipline() {
         $('#discipline-detail table.discipline-detail td input.ignoredDiscipline:checkbox')
-        .on('click', function () {
-            var disciplineScore = parseFloat($(this).data('discipline-score')),
-                approverSubstractScore = parseFloat($(this).closest('tr').find('td.approverSubtractScore span').text()),
-                hasIgnored = $(this).data('has-ignored').toLowerCase() === 'true';
+            .on('click', function () {
+                var disciplineScore = parseFloat($(this).data('discipline-score')),
+                    approverSubstractScore = parseFloat($(this).closest('tr').find('td.approverSubtractScore span').text()),
+                    hasIgnored = $(this).data('has-ignored').toLowerCase() === 'true';
 
-            if ($(this).prop('checked')) {
-                approverSubstractScore = Math.abs(approverSubstractScore) - disciplineScore;
-            } else {
-                approverSubstractScore = Math.abs(approverSubstractScore) + disciplineScore;
-            }
+                if ($(this).prop('checked')) {
+                    approverSubstractScore = Math.abs(approverSubstractScore) - disciplineScore;
+                } else {
+                    approverSubstractScore = Math.abs(approverSubstractScore) + disciplineScore;
+                }
 
-            if ($(this).prop('checked') !== hasIgnored) {
-                $(this).data('changed', true);
-            } else {
-                $(this).data('changed', false);
-            }
+                if ($(this).prop('checked') !== hasIgnored) {
+                    $(this).data('changed', true);
+                } else {
+                    $(this).data('changed', false);
+                }
 
-            if (approverSubstractScore > 0) {
-                $(this).closest('tr').find('td.approverSubtractScore span').text(-approverSubstractScore.toFixed(1));
-                $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'red');
-            } else {
-                $(this).closest('tr').find('td.approverSubtractScore span').text('0.0');
-                $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'inherit');
-            }
-        });
+                if (approverSubstractScore > 0) {
+                    $(this).closest('tr').find('td.approverSubtractScore span').text(-approverSubstractScore.toFixed(1));
+                    $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'red');
+                } else {
+                    $(this).closest('tr').find('td.approverSubtractScore span').text('0.0');
+                    $(this).closest('tr').find('td.approverSubtractScore span').css('color', 'inherit');
+                }
+            });
 
         $('#discipline-detail table.discipline-detail td input.outOfControlReason:checkbox')
-        .on('click', function () {
-            var changed = !$(this).data('changed');
+            .on('click', function () {
+                var changed = !$(this).data('changed');
 
-            $(this).data('changed', changed);
-        });
+                $(this).data('changed', changed);
+            });
 
         $('#discipline-detail table.discipline-detail td input.violationRecorded:checkbox')
-        .on('click', function () {
-            var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
+            .on('click', function () {
+                var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
 
-            if ($(this).prop('checked') !== hasConfirmed) {
-                $(this).data('changed', true);
-            } else {
-                $(this).data('changed', false);
-            }
+                if ($(this).prop('checked') !== hasConfirmed) {
+                    $(this).data('changed', true);
+                } else {
+                    $(this).data('changed', false);
+                }
             });
 
         $('#checkAll').on('click', function () {
@@ -98,8 +98,7 @@ import '../../shared/employee.search.in.team';
                 }
             });
 
-            if (!isChanged)
-            {
+            if (!isChanged) {
                 if ($(this).find('td input.outOfControlReason').first().data('changed')) {
                     isChanged = true;
                 }
@@ -238,10 +237,10 @@ import '../../shared/employee.search.in.team';
 
     function formatDate(date) {
         var monthNames = [
-          "Jan", "Feb", "Mar",
-          "Apr", "May", "Jun", "Jul",
-          "Aug", "Sep", "Oct",
-          "Nov", "Dec"
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sep", "Oct",
+            "Nov", "Dec"
         ];
 
         var day = date.getDate();

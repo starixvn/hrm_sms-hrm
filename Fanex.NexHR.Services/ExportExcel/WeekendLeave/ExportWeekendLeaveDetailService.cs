@@ -97,7 +97,7 @@
                 Nick = weekendLeave.NickName,
                 Section = weekendLeave.GroupName,
                 Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,
-                LeaveDate = weekendLeave.LeaveDate.ToDateMonthYearFormatedDate(),
+                weekendLeave.LeaveDate,
                 weekendLeave.LeaveType,
                 LeaveDay = leaveDayQuantity
             };

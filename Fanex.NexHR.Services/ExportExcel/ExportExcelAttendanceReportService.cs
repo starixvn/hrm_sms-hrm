@@ -93,24 +93,21 @@
         {
             string requests = RequestsRemark(attendance);
 
-            string attendanceDate = attendance.AttendanceDate.HasValue ? attendance.AttendanceDate.Value.ToDayOfWeekFormatedDate() : string.Empty;
             string shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
-            string inFixed = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToShortTime() : string.Empty;
-            string outFixed = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToShortTime() : string.Empty;
             string totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
             string overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
 
             var record = new
             {
                 Count = rowIndex,
-                AttendanceDate = attendanceDate,
+                AttendanceDate = attendance.AttendanceDate,
                 attendance.Code,
                 attendance.NickName,
                 attendance.FullName,
                 attendance.TeamCode,
                 ShiftCode = shiftCode,
-                InFixed = inFixed,
-                OutFixed = outFixed,
+                InFixed = attendance.InFixed,
+                OutFixed = attendance.OutFixed,
                 TotalWorkHours = totalWorkHours,
                 LateIn = Utilities.MinuteToTime(attendance.LateIn),
                 EarlyOut = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?
