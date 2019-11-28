@@ -1,17 +1,10 @@
 ﻿import React, { PureComponent, Fragment } from 'react';
-import { Dropdown, MenuItem } from 'react-bootstrap';
 import moment from 'moment';
 
+import ColorDescription from '../../table/ColorDescription';
+
 export default class THead extends PureComponent {
-    dayOfWeeks = [
-        { name: 'mondaySchedule', value: 0 },
-        { name: 'tuesdaySchedule', value: 1 },
-        { name: 'wednesdaySchedule', value: 2 },
-        { name: 'thursdaySchedule', value: 3 },
-        { name: 'fridaySchedule', value: 4 },
-        { name: 'saturdaySchedule', value: 5 },
-        { name: 'sundaySchedule', value: 6 }
-    ];
+    dayOfWeeks = [0, 1, 2, 3, 4, 5, 6];
 
     render() {
         const { fromDate, toDate } = this.props;
@@ -24,26 +17,7 @@ export default class THead extends PureComponent {
                         <button className="btn prev-week fa fa-chevron-left" onClick={this.props.onPrevious} />
                         <button className="btn next-week fa fa-chevron-right" onClick={this.props.onNext} />
                         <span className="label-week">{`${fromDate} - ${toDate}`}</span>
-                        <Dropdown id={`dropdownColorDescription`} componentClass="span" className="dropdown-color">
-                            <Dropdown.Toggle noCaret className="btn">
-                                <img src="../wwwroot/sources/styles/images/pantone.svg" width="17" />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <MenuItem><span className="holiday" />Public Holiday</MenuItem>
-                                <MenuItem><span className="offday" />Off Day</MenuItem>
-                                <MenuItem><span className="offdayreplacement" />Off Replacement</MenuItem>
-                                <MenuItem><span className="keepinviewday" />Keep In View</MenuItem>
-                                <MenuItem><span className="changeshift" />Change Shift</MenuItem>
-                                <MenuItem><span className="overtime" />Overtime</MenuItem>
-                                <MenuItem><span className="annualleave" />Annual Leave</MenuItem>
-                                <MenuItem><span className="unpaidleave" />Unpaid Leave</MenuItem>
-                                <MenuItem><span className="businesstrip" />Business Trip</MenuItem>
-                                <MenuItem><span className="weddingleave" />Wedding Leave</MenuItem>
-                                <MenuItem><span className="leavehalfday2" />2 Leaves Half Day</MenuItem>
-                                <MenuItem><span className="leaveday" />Others Leave</MenuItem>
-                            </Dropdown.Menu>
-                        </Dropdown>
-
+                        <ColorDescription />
                     </div>
                 </div>
                 <div className="header">
@@ -54,8 +28,8 @@ export default class THead extends PureComponent {
                     {
                         this.dayOfWeeks.map(item => {
                             return (
-                                <div className="table-cell cell-shift" key={`dayOfWeeks${item.value}`}>
-                                    {moment(fromDate).add(item.value, 'days').format('D MMM, ddd')}
+                                <div className="table-cell cell-shift" key={`dayOfWeeks${item}`}>
+                                    {moment(fromDate).add(item, 'days').format('D MMM, ddd')}
                                 </div>
                             );
                         })
