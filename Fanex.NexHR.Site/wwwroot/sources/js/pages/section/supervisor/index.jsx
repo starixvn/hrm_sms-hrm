@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { stringify } from 'qs';
 
 import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
+import { editSectionSupervisor } from './common.functions';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
@@ -152,19 +152,7 @@ export default class App extends Component {
             });
         });
 
-        axios({
-            url: resolveClientUrl('Team/EditSectionSupervisor'),
-            method: 'POST',
-            data: stringify({
-                sectionId: this.sectionId,
-                roleId: this.roleId,
-                supervisors
-            }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
+        editSectionSupervisor(this.sectionId, this.roleId, supervisors).then(response => {
             const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');

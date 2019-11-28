@@ -78,7 +78,7 @@ export default class ShiftAutocomplete extends PureComponent {
         this.setState({ options: [] });
     }
 
-    handleInputPaste = event => {
+    handleInputPaste = () => {
         this.setState({ isPasted: true });
     }
 

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { stringify } from 'qs';
 
 import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
+import { getSupervisors, editSectionSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 
@@ -42,19 +42,13 @@ export default class App extends Component {
         if (query.trim().length > 1) {
             const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
 
-            axios(resolveClientUrl('employee/GetSupervisors'), {
-                params: {
-                    roleIds: this.roleId,
-                    query,
-                    excludeIds
-                }
-            }).then(response => {
+            getSupervisors(query, this.roleId, excludeIds).then(response => {
                 const employeeOptions = response.data.map(item => {
                     return {
                         id: item.Id,
                         nickname: item.NickName,
                         fullName: item.FullName,
-                        value: `${item.NickName} (${item.FullName})`
+                        value: item.DisplayName
                     };
                 });
 
@@ -111,19 +105,7 @@ export default class App extends Component {
             };
         });
 
-        axios({
-            url: resolveClientUrl('Team/EditSectionSupervisor'),
-            method: 'POST',
-            data: stringify({
-                sectionId: this.sectionId,
-                roleId: this.roleId,
-                supervisors
-            }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
+        editSectionSupervisor(this.sectionId, this.roleId, supervisors).then(response => {
             const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');

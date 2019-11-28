@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { stringify } from 'qs';
 
 import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../../shared/common.functions';
+import { editEmployeeSupervisor } from '../../section/supervisor/common.functions';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from '../../section/supervisor/table/table';
@@ -152,19 +152,7 @@ export default class App extends Component {
             });
         });
 
-        axios({
-            url: resolveClientUrl('Employee/EditEmployeeSupervisor'),
-            method: 'POST',
-            data: stringify({
-                employeeId: this.employeeId,
-                roleId: this.roleId,
-                supervisors
-            }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
+        editEmployeeSupervisor(this.employeeId, this.roleId, supervisors).then(response => {
             const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');
