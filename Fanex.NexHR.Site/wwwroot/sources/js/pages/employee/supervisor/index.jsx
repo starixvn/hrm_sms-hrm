@@ -6,9 +6,9 @@ import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
 import { editEmployeeSupervisor, reorderSupervisor } from '../../section/supervisor/common.functions';
+import Table from '../../section/supervisor/table/table';
 import { RequestType } from '../../../shared/constants';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
-import Table from '../../section/supervisor/table/table';
 
 export default class App extends Component {
     constructor(props) {

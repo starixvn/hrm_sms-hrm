@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
-import Autocomplete from 'react-autocomplete';
 
 import { RoleSystem } from '../../../../shared/constants';
+import EmployeeAutocomplete from './EmployeeAutocomplete';
 
 export default class THead extends PureComponent {
     constructor(props) {
@@ -13,15 +13,15 @@ export default class THead extends PureComponent {
         };
     }
 
+    handleSelect = (value, item) => {
+        this.setState({ value, employee: item });
+    }
+
     handleChange = event => {
         const value = event.target.value;
 
         this.setState({ value });
         this.props.onSearchEmployees(value);
-    }
-
-    handleSelect = (value, item) => {
-        this.setState({ value, employee: item });
     }
 
     handleAddEmployee = () => {
@@ -34,7 +34,6 @@ export default class THead extends PureComponent {
 
     render() {
         const { employeeOptions, roleId } = this.props;
-        const { value } = this.state;
         let roleName = '';
         switch (roleId) {
             case RoleSystem.Verifier:
@@ -54,23 +53,8 @@ export default class THead extends PureComponent {
                     <th colSpan={9}>
                         <div className="header-control">
                             <div>{roleName}</div>
-                            <Autocomplete
-                                items={employeeOptions}
-                                getItemValue={item => item.value}
-                                wrapperProps={{ className: 'react-autocomplete-wrapper' }}
-                                wrapperStyle={{ display: 'block' }}
-                                renderInput={props => <input type="text" {...props} />}
-                                renderMenu={items => <div className="items" children={items} />}
-                                renderItem={(item, isHighlighted) =>
-                                    <div className={`item ${isHighlighted ? 'highlighted' : ''}`} key={item.id}>
-                                        {item.value}
-                                    </div>
-                                }
-                                inputProps={{
-                                    className: 'form-control',
-                                    placeholder: 'nickname or full name'
-                                }}
-                                value={value}
+                            <EmployeeAutocomplete value={this.state.value}
+                                options={employeeOptions}
                                 onChange={this.handleChange}
                                 onSelect={this.handleSelect}
                             />

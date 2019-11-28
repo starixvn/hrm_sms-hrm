@@ -6,8 +6,8 @@ import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
 import { getSupervisors, editEmployeeSupervisor, reorderSupervisor } from '../../section/supervisor/common.functions';
-import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from '../../section/discipline-manager/table/table';
+import ToastLayout from '../../../shared/layouts/ToastLayout';
 
 export default class App extends Component {
     constructor(props) {
@@ -24,18 +24,6 @@ export default class App extends Component {
 
     componentDidMount() {
         this.getDisciplineManagers();
-    }
-
-    getDisciplineManagers = () => {
-        blockUI();
-
-        axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
-            params: {
-                employeeId: this.employeeId
-            }
-        }).then(response => {
-            this.setState({ managers: response.data });
-        }).catch(axiosError).then(() => unblockUI());
     }
 
     getEmployees = query => {
@@ -57,6 +45,18 @@ export default class App extends Component {
         } else {
             this.setState({ employeeOptions: [] });
         }
+    }
+
+    getDisciplineManagers = () => {
+        blockUI();
+
+        axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
+            params: {
+                employeeId: this.employeeId
+            }
+        }).then(response => {
+            this.setState({ managers: response.data });
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     handleAddEmployee = employee => {

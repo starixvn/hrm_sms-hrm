@@ -1,5 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
-import Autocomplete from 'react-autocomplete';
+
+import EmployeeAutocomplete from '../../supervisor/table/EmployeeAutocomplete';
 
 export default class THead extends PureComponent {
     constructor(props) {
@@ -40,23 +41,8 @@ export default class THead extends PureComponent {
                     <th colSpan={2}>
                         <div className="header-control">
                             <div>Employee</div>
-                            <Autocomplete
-                                items={employeeOptions}
-                                getItemValue={item => item.value}
-                                wrapperProps={{ className: 'react-autocomplete-wrapper' }}
-                                wrapperStyle={{ display: 'block' }}
-                                renderInput={props => <input type="text" {...props} />}
-                                renderMenu={items => <div className="items" children={items} />}
-                                renderItem={(item, isHighlighted) =>
-                                    <div className={`item ${isHighlighted ? 'highlighted' : ''}`} key={item.id}>
-                                        {item.value}
-                                    </div>
-                                }
-                                inputProps={{
-                                    className: 'form-control',
-                                    placeholder: 'nickname or full name'
-                                }}
-                                value={value}
+                            <EmployeeAutocomplete value={this.state.value}
+                                options={employeeOptions}
                                 onChange={this.handleChange}
                                 onSelect={this.handleSelect}
                             />

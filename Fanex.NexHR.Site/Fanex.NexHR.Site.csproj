@@ -346,6 +346,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColorDescription.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\table\EmployeeAutocomplete.jsx" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
