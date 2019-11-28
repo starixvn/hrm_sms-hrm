@@ -176,6 +176,13 @@ export default class App extends Component {
                         saturdaySchedule: false,
                         sundaySchedule: false
                     };
+                    schedule.totalOffDayReplacement = 0;
+
+                    Object.keys(schedule.selectWeekDays).forEach(objectKey => {
+                        if (schedule[objectKey].isOffDayReplacement) {
+                            schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
+                        }
+                    });
 
                     return schedule;
                 });
@@ -655,7 +662,7 @@ export default class App extends Component {
                 unset(originalSchedule, 'selectWeekDays');
 
                 if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault = schedule.offDaysbyWeek,
+                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement,
                         totalOffDays = getTotalOffDays(schedule);
 
                     if (totalOffDaysDefault < totalOffDays) {

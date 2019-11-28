@@ -221,6 +221,7 @@ BEGIN
 			ELSE 0 END
 			)
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS overtime WITH (NOLOCK) ON empca.EmpId = overtime.EmpId
 		AND empca.WorkDate = overtime.OvertimeDate
 	WHERE empca.WorkDate BETWEEN @fromDate
@@ -245,6 +246,7 @@ BEGIN
 			ELSE 1 END
 			)
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT kiv.RequestId
 			,r.RequestType
@@ -282,6 +284,7 @@ BEGIN
 			)
 		,empca.ChangeShiftTypeId = cs.ChangeShiftTypeId
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -322,6 +325,7 @@ BEGIN
 		,empca.MoveOffFromDate = NULL
 		,empca.MoveOffToDate = cs.ToDate
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -366,6 +370,7 @@ BEGIN
 		,empca.MoveOffFromDate = cs.OnDate
 		,empca.MoveOffToDate = NULL
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -415,6 +420,7 @@ BEGIN
 			ELSE 0
 			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -456,6 +462,7 @@ BEGIN
 			ELSE 0
 			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType

@@ -4,7 +4,7 @@ import { getTotalOffDays } from '../common.functions';
 export default class ColIndex extends PureComponent {
     render() {
         const { data } = this.props;
-        const totalOffDaysDefault = data.offDaysbyWeek,
+        const totalOffDaysDefault = data.offDaysbyWeek + data.totalOffDayReplacement,
             totalOffDays = getTotalOffDays(data);
 
         return (

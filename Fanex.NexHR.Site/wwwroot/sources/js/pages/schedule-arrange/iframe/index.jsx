@@ -87,10 +87,26 @@ export default class App extends Component {
             }
         }).then(response => {
             this.selectedWeek = { fromDate, toDate };
+            const attrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
+                'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+            const schedules = response.data.schedules.map(group => {
+                group.members.map(schedule => {
+                    schedule.totalOffDayReplacement = 0;
+                    attrNames.forEach(attrName => {
+                        if (schedule[attrName].isOffDayReplacement) {
+                            schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
+                        }
+                    });
+
+                    return schedule;
+                });
+
+                return group;
+            });
 
             this.setState({
                 filter: { ...this.state.filter, fromDate, toDate },
-                schedules: response.data.schedules
+                schedules: schedules
             });
         }).catch(axiosError).then(() => unblockUI());
     }
