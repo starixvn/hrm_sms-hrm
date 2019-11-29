@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 
 import DroppableMember from './DroppableMember';
-import DropdownOrder from './DropdownOrder';
+import DropdownOrder from '../../../shared/components/DropdownOrder';
 
 export default class RowSection extends PureComponent {
     handleMoveUp = () => {

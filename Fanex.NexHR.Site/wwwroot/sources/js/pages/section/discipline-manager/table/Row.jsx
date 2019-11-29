@@ -1,5 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+
+import DropdownOrder from '../../../../shared/components/DropdownOrder';
 
 export default class Row extends PureComponent {
     handleRemoveEmployee = () => {
@@ -35,17 +36,12 @@ export default class Row extends PureComponent {
                 <td className="align-left cell-name">
                     <div className="wrapper">
                         <div>{`${data.nickname} (${data.fullName})`}</div>
-                        <Dropdown id={`dropdown${data.ownerId}`} componentClass="div" className="customize-order">
-                            <Dropdown.Toggle noCaret useAnchor>
-                                <i className="icon icon-sortable" title="Customize order" />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <MenuItem onClick={this.handleMoveUp}>Up</MenuItem>
-                                <MenuItem onClick={this.handleMoveDown}>Down</MenuItem>
-                                <MenuItem onClick={this.handleMoveTop}>Top</MenuItem>
-                                <MenuItem onClick={this.handleMoveBottom}>Bottom</MenuItem>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <DropdownOrder id={`dropdown${data.ownerId}`}
+                            onMoveUp={this.handleMoveUp}
+                            onMoveDown={this.handleMoveDown}
+                            onMoveTop={this.handleMoveTop}
+                            onMoveBottom={this.handleMoveBottom}
+                        />
                     </div>
                 </td>
                 <td>

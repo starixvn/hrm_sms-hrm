@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import DropdownOrder from './DropdownOrder';
+import DropdownOrder from '../../../shared/components/DropdownOrder';
 
 export default class ColNickname extends PureComponent {
     constructor(props) {

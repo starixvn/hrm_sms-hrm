@@ -33,7 +33,6 @@ export default class THead extends PureComponent {
 
     render() {
         const { employeeOptions } = this.props;
-        const { value } = this.state;
 
         return (
             <thead>
