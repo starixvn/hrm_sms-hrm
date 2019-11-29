@@ -23,11 +23,13 @@ $(function () {
                     }
                 }).catch(axiosError);
             });
-
-            $('form').bind('submit', function () {
-                $(this).find(':input').removeAttr('disabled');
-            });
         })
+    }
+
+    function InitSubmitEvent() {
+        $('form').bind('submit', function () {
+            $(this).find(':input').removeAttr('disabled');
+        });
     }
 
     function InitInputAttr() {
@@ -43,7 +45,8 @@ $(function () {
     }
 
     $(document).ready(() => {
-        InitInputAttr();
         InitDeleteShiftEvent();
+        InitSubmitEvent();
+        InitInputAttr();
     });
 });
