@@ -9,6 +9,7 @@
             <th>@Labels.Request</th>
             <th>@Labels.Time</th>
             <th>@Labels.CreatedDate</th>
+            <th>@Labels.Reason</th>
             <th>@Labels.Remark</th>
             <th>@Labels.ViolationIgnored</th>
             <th>@Labels.ViolationRecorded</th>
@@ -26,6 +27,17 @@
             <td>@Model.RequestType.ToString()</td>
             <td>@RazorHelper.LateInEarlyOutTimeFormat(Model.TotalMins, Model.RequestType.Id)</td>
             <td>@Model.CreatedDate.ToShortFormatedDate()</td>
+            <td>
+                @switch (Model.ReasonId)
+                {
+                    case (byte)LateInEarlyOutReason.ManagementAllow:
+                        @Labels.ManagementAllow
+                        break;
+                    case (byte)LateInEarlyOutReason.Other:
+                        @Labels.Other
+                        break;
+                }
+            </td>
             <td>
                 @if (!string.IsNullOrWhiteSpace(Model.Remark))
                 {

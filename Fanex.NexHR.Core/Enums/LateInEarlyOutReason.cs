@@ -2,12 +2,12 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum LateInEarlyOutReasons
+    public enum LateInEarlyOutReason
     {
         [StringValue("Management Allow")]
         ManagementAllow = 1,
 
         [StringValue("Other")]
-        Other = 2
+        Other
     }
 }

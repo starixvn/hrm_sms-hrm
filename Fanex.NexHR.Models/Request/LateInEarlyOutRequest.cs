@@ -24,10 +24,10 @@
             {
                 switch (ReasonId)
                 {
-                    case (byte)LateInEarlyOutReasons.ManagementAllow:
+                    case (byte)LateInEarlyOutReason.ManagementAllow:
                         return Labels.ManagementAllow;
 
-                    case (byte)LateInEarlyOutReasons.Other:
+                    case (byte)LateInEarlyOutReason.Other:
                         return Labels.Other;
 
                     default:

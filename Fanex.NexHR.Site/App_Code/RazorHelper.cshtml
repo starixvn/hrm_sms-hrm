@@ -182,10 +182,10 @@
     </select>
 }
 
-@helper LateInEarlyOutReasonDropDownList(byte reasonId = (byte)LateInEarlyOutReasons.Other, string controlName = "reasonId", string htmlClass = "")
+@helper LateInEarlyOutReasonDropDownList(byte reasonId = (byte)LateInEarlyOutReason.Other, string controlName = "reasonId", string htmlClass = "")
 {
     <select name="@controlName" id="@controlName" class="@htmlClass">
-        <option selected="@(reasonId == (byte)LateInEarlyOutReasons.ManagementAllow)" value="@Convert.ToByte(LateInEarlyOutReasons.ManagementAllow)">@Labels.ManagementAllow</option>
-        <option selected="@(reasonId == (byte)LateInEarlyOutReasons.Other)" value="@Convert.ToByte(LateInEarlyOutReasons.Other)">@Labels.Other</option>
+        <option selected="@(reasonId == (byte)LateInEarlyOutReason.ManagementAllow)" value="@Convert.ToByte(LateInEarlyOutReason.ManagementAllow)">@Labels.ManagementAllow</option>
+        <option selected="@(reasonId == (byte)LateInEarlyOutReason.Other)" value="@Convert.ToByte(LateInEarlyOutReason.Other)">@Labels.Other</option>
     </select>
 }

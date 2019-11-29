@@ -55,7 +55,7 @@
                 EmployeeId = sessionService.Employee.Id,
                 OnDate = DateTime.Today,
                 Minute = DefaultMinutes,
-                ReasonId = (byte)LateInEarlyOutReasons.Other,
+                ReasonId = (byte)LateInEarlyOutReason.Other,
                 RequestType = (byte)RequestType.LateIn,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
