@@ -348,6 +348,7 @@
     <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\js\pages\section\shift-manager\ShiftManager.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\section\supervisor\Supervisor.jsx" />
     <Content Include="wwwroot\sources\js\pages\shift\edit.js" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\table\EmployeeAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
@@ -528,7 +529,6 @@
     <Content Include="Scripts\MultiSelect\prettify.css" />
     <Content Include="Scripts\MultiSelect\prettify.js" />
     <Content Include="Scripts\MultiSelect\style.css" />
-    <Content Include="Scripts\Views\annualbalance.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
@@ -607,7 +607,6 @@
     <Content Include="Scripts\Libs\jquery.highlight.js" />
     <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\modernizr.js" />
-    <Content Include="Scripts\Views\annualbalanceadj.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Views\fixtable.js" />
     <Content Include="Scripts\Views\language.js" />

@@ -5,12 +5,11 @@ import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import axios from 'axios';
 import { resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
 
-
 $(function () {
     function initDeleteShiftEvent() {
-        $('.js-delete-shift').on('click', function() {
+        $('.js-delete-shift').on('click', function () {
             const id = $(this).attr('data-id');
-            confirm('Are you sure you want to delete this shift?',() => {
+            confirm('Are you sure you want to delete this shift?', () => {
                 axios({
                     url: resolveClientUrl('shift/delete'),
                     method: "POST",
@@ -24,7 +23,7 @@ $(function () {
                     }
                 }).catch(axiosError);
             });
-        })
+        });
     }
 
     function initSubmitEvent() {
