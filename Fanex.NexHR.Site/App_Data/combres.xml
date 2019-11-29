@@ -118,18 +118,9 @@
       <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>
 
-    <resourceSet name="shiftcss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/shift.css" />
-    </resourceSet>
-
-    <resourceSet name="shifteditjs" type="js">
+    <resourceSet name="employeemessagejs" type="js">
       <resource reference="sitejs" />
-      <resource path="~/scripts/views/shift.edit.js" />
-    </resourceSet>
-
-    <resourceSet name="shiftcreatejs" type="js">
-      <resource reference="sitejs" />
+      <resource path="~/scripts/views/employee.message.js" />
     </resourceSet>
 
     <resourceSet name="menujs" type="js">

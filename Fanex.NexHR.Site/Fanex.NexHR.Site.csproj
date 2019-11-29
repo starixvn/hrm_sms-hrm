@@ -342,9 +342,11 @@
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\TooltipRequestInfo.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DropdownOrder.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColorDescription.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\shift\edit.js" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\table\EmployeeAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
@@ -498,6 +500,7 @@
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
+    <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />
@@ -1021,6 +1024,8 @@
     <Content Include="wwwroot\webpack.config.vendor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\weekendleave.detail.scss" />
     <Content Include="wwwroot\sources\styles\pages\section\discipline.rule.scss" />
+    <Content Include="wwwroot\sources\styles\pages\shift\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\shift\edit.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">

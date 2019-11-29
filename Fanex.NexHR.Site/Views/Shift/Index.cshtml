@@ -1,88 +1,88 @@
 ﻿@model ShiftByStatusViewModel
-@section css{
-    @Url.CombresLink("shiftcss")
-}
-@section js{
-    @Url.CombresLink("sitejs")
-}
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.ShiftInfo;
     var isHost = (bool)ViewBag.IsHost;
     var totalColumn = isHost ? 5 : 4;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/shift.index.css" rel="stylesheet" />
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginGetForm())
-{
-    <div class="bunhat container_24">
-        <div class="grid_1 gridlabel">
-            @Labels.Status
-        </div>
-        <div class="grid_3">
-            @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"))
-        </div>
-        <div class="grid_2">
-            <input type="submit" id="submit" value="@Labels.Submit" />
-        </div>
-        @if (isHost)
-        {
-            <div class="grid_3">
-                <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("New Shift", "Create")</div>
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.Label(Labels.Status, new { @class = "control-label" })
             </div>
-        }
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+            @if (isHost)
+            {
+                <a href="@Url.Action("Create")" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    @Labels.AddNewShift
+                </a>
+            }
+        </div>
     </div>
-}
-<div class="grid_24">
-    <table id="tblShift" class="table table-custom persist-area">
-        <thead class="persist-header">
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th class="left">@Labels.Shift</th>
-                <th>@Labels.In</th>
-                <th>@Labels.Out</th>
-                @if (isHost)
-                {
-                    <th>@Labels.Edit</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Shifts != null && Model.Shifts.Any())
+</form>
+
+<table id="tblShift" class="table table-custom table-shift">
+    <thead class="persist-header">
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th class="left">@Labels.Shift</th>
+            <th>@Labels.In</th>
+            <th>@Labels.Out</th>
+            @if (isHost)
             {
-                var i = 0;
-                foreach (Shift item in Model.Shifts)
-                {
-                    i++;
-                    <tr>
-                        <td>@i</td>
-                        <td class="align-left">
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                        </td>
-                        <td>
-                            @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                        </td>
-                        @if (isHost)
-                        {
-                            <td class="cmd">
-                                <a href="@Url.Action("Edit", "Shift", new { id = item.Id })">
-                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                </a>
-                            </td>
-                        }
-                    </tr>
-                }
+                <th>@Labels.Edit</th>
             }
-            else
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Shifts != null && Model.Shifts.Any())
+        {
+            var i = 0;
+            foreach (Shift item in Model.Shifts)
             {
-                @RazorHelper.DisplayNoInformation(colspan: totalColumn);
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td class="align-left">
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
+                    </td>
+                    <td>
+                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
+                    </td>
+                    @if (isHost)
+                    {
+                        <td class="cmd">
+                            <a href="@Url.Action("Edit", "Shift", new { id = item.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
             }
-        </tbody>
-    </table>
-</div>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: totalColumn);
+        }
+    </tbody>
+</table>
