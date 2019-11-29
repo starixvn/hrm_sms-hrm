@@ -1,12 +1,13 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
+import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import axios from 'axios';
-import { resolveClientUrl, confirm, axiosError } from '../../shared/common.functions';
+import { resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
 
 
 $(function () {
-    function InitDeleteShiftEvent() {
+    function initDeleteShiftEvent() {
         $('.js-delete-shift').on('click', function() {
             const id = $(this).attr('data-id');
             confirm('Are you sure you want to delete this shift?',() => {
@@ -26,13 +27,13 @@ $(function () {
         })
     }
 
-    function InitSubmitEvent() {
+    function initSubmitEvent() {
         $('form').bind('submit', function () {
             $(this).find(':input').removeAttr('disabled');
         });
     }
 
-    function InitInputAttr() {
+    function initInputAttr() {
         if ($("#IsUsed").val() === "True") {
             $("#Name").attr("disabled", "disabled");
             $("#HourTimeIn").attr("disabled", "disabled");
@@ -45,8 +46,8 @@ $(function () {
     }
 
     $(document).ready(() => {
-        InitDeleteShiftEvent();
-        InitSubmitEvent();
-        InitInputAttr();
+        initDeleteShiftEvent();
+        initSubmitEvent();
+        initInputAttr();
     });
 });
