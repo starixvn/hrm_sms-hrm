@@ -344,6 +344,7 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\TooltipRequestInfo.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DropdownOrder.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColorDescription.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\discipline-manager\DisciplineManager.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline.rule.js" />
     <Content Include="wwwroot\sources\js\pages\section\supervisor\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\shift\edit.js" />
