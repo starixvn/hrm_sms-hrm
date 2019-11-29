@@ -500,10 +500,8 @@
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
-    <Content Include="Scripts\Views\shift.edit.js" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />
@@ -534,7 +532,6 @@
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Styles\account.css" />
     <Content Include="Styles\jquery.dataTables.css" />
-    <Content Include="Styles\shift.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
