@@ -5,8 +5,8 @@ CREATE PROCEDURE [dbo].[Menu_Insert] @Name NVARCHAR(50)
 	,@ParentId INT = NULL
 	,@FunctionId INT = NULL
 	,@DisplayOrder INT = NULL
-	,@ErrorCode INT = 0 OUTPUT
-	,@ErrorMessage VARCHAR(200) = '' OUTPUT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: 20160609@Razor.Nguyen

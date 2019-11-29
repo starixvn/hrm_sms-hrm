@@ -1845,4 +1845,7 @@
   <data name="SectionPermissionSummary" xml:space="preserve">
     <value>Section Permission Summary</value>
   </data>
+  <data name="CreateMenu" xml:space="preserve">
+    <value>New Menu</value>
+  </data>
 </root>

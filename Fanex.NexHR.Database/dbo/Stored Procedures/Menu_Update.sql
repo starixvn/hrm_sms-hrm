@@ -6,8 +6,8 @@
                                     @FunctionId   INT = NULL,
                                     @DisplayOrder INT = NULL,
                                     @IsActive     BIT,
-                                    @ErrorCode    INT           = 0 OUTPUT,
-                                    @ErrorMessage VARCHAR(200)  = '' OUTPUT
+                                    @ErrCode    INT           = 0 OUTPUT,
+                                    @ErrMsg VARCHAR(200)  = '' OUTPUT
 AS
 
 /*

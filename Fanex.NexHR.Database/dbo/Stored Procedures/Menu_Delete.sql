@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[Menu_Delete] @MenuId       INT,
-                                     @ErrorCode    INT          = 0 OUTPUT,
-                                     @ErrorMessage VARCHAR(200) = '' OUTPUT
+                                     @ErrCode    INT          = 0 OUTPUT,
+                                     @ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 
 /*

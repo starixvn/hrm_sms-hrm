@@ -3,28 +3,30 @@
 
 @model IEnumerable<MenuViewModel>
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Menu Management";
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
-    @Url.CombresLink("menucss")
+    <link href="~/wwwroot/dist/styles/menu.index.css" rel="stylesheet"/>
 }
 @section js{
-    @Url.CombresLink("menujs")
+    <script src="~/wwwroot/dist/js/menu.index.js"></script>
 }
 @section Breadcrumb {
     <span class="step">@ViewBag.Title</span>
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 @if (hasPermission)
 {
-    <div class="button-icon">
-        <span class="icon plus"></span>@Html.ActionLink("New Menu", "Create")
-    </div>
+    <a href="@Url.Action("Create")" class="btn btn-request">
+        <span class="fa fa-plus"></span>
+        @Labels.CreateMenu
+    </a>
 }
 
-<table id="data" class="data persist-area">
+<table id="data" class="table table-custom">
     <thead>
         <tr>
             <th>Order. Name</th>
@@ -47,7 +49,7 @@
             @foreach (MenuViewModel menu in Model.Where(i => i.ParentMenu == null))
             {
                 <tr>
-                    <td class="rowdivider highlight left" colspan="@totalColumn">
+                    <td class="rowdivider align-left" colspan="@totalColumn">
                         <a href="@Url.Action("edit", "menu", new { Id = menu.MenuId })">
                             @(menu.DisplayOrder + ". " + menu.Text)
                         </a>
@@ -80,8 +82,8 @@
                                 </a>
                             </td>
                             <td class="cmd" title="Delete">
-                                <a href="javascript:;" onclick="deleteMenu(@chilmenu.MenuId);">
-                                    <i class="fa fa-times fa-lg icon-delete"></i>
+                                <a href="javascript:;">
+                                    <i class="fa fa-times fa-lg icon-delete" data-id="@chilmenu.MenuId"></i>
                                 </a>
                             </td>
                         }

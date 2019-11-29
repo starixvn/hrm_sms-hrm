@@ -73,6 +73,9 @@ module.exports = {
         [`${styleDistPath}/memo.edit`]: `${styleSourcePath}/pages/memo/memo.edit.scss`,
         [`${styleDistPath}/shift.index`]: `${styleSourcePath}/pages/shift/index.scss`,
         [`${styleDistPath}/shift.edit`]: `${styleSourcePath}/pages/shift/edit.scss`,
+        [`${styleDistPath}/menu.index`]: `${styleSourcePath}/pages/menu/index.scss`,
+        [`${styleDistPath}/menu.edit`]: `${styleSourcePath}/pages/menu/edit.scss`,
+
 
 
         //
@@ -151,7 +154,9 @@ module.exports = {
         [`${jsDistPath}/message.create`]: `${jsSourcePath}/message/message.create.js`,
         [`${jsDistPath}/memo`]: `${jsSourcePath}/memo/memo.js`,
         [`${jsDistPath}/memo.edit`]: `${jsSourcePath}/memo/memo.edit.js`,
-        [`${jsDistPath}/shift.edit`]: `${jsSourcePath}/shift/edit.js`
+        [`${jsDistPath}/shift.edit`]: `${jsSourcePath}/shift/edit.js`,
+        [`${jsDistPath}/menu.index`]: `${jsSourcePath}/menu/index.js`,
+        [`${jsDistPath}/menu.edit`]: `${jsSourcePath}/menu/edit.js`
 
     }
 };

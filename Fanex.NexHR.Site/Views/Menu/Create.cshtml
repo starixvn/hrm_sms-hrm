@@ -3,96 +3,97 @@
 
 @model MenuModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Create Menu";
 }
 @section css{
-    @Url.CombresLink("menucss")
+    <link href="~/wwwroot/dist/styles/menu.edit.css" rel="stylesheet"/>
 }
 @section js{
-    @Url.CombresLink("menujs")
+    <script src="~/wwwroot/dist/js/menu.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step" href="@Url.Action("Index", "menu")">Menu</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm())
-{
-    <div class="bunhat" style="min-width: 700px">
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <form method="post" class="form-horizontal clearfix" style="min-width: 700px">
         @Html.ValidationSummary(true)
 
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Name)<span style="color:red">*</span>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label" })<span style="color:red">*</span>
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Name)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Text)<span style="color:red">*</span>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Text, new { @class = "control-label" })<span style="color:red">*</span>
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Text)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Text, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Text)
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.Link)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Link, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.Link)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Link, new { @class = "form-control" })
             </div>
         </div>
 
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.ParentId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ParentId, new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form">
                 @{
                     var menus = new List<MenuViewModel>();
                     menus.Add(new MenuViewModel { MenuId = 0, Name = string.Empty });
                     menus.AddRange((List<MenuViewModel>)ViewBag.Menus);
                 }
-                @Html.DropDownListFor(model => model.ParentId, new SelectList(menus, "MenuId", "Name"))
+                @Html.DropDownListFor(model => model.ParentId, new SelectList(menus, "MenuId", "Name"), new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.FunctionId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FunctionId, new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form">
                 @{var functions = new List<FunctionModel>();
                     functions.Add(new FunctionModel { FunctionId = 0, Name = string.Empty });
                     functions.AddRange((List<FunctionModel>)ViewBag.Functions);
                 }
-                @Html.DropDownListFor(model => model.FunctionId, new SelectList(functions, "FunctionId", "Name"))
+                @Html.DropDownListFor(model => model.FunctionId, new SelectList(functions, "FunctionId", "Name"), new { @class = "form-control" })
             </div>
         </div>
-        <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.DisplayOrder)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.DisplayOrder, new { @class = "control-label" })
             </div>
-            <div class="input">
-                @Html.EditorFor(model => model.DisplayOrder)
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control field-order", @type = "number" })
             </div>
         </div>
 
-        <div class="formrow">
-            <div class="label">
+        <div class="form-group">
+            <div class="label-form">
                 &nbsp
             </div>
-            <div class="input">
-                <input type="submit" value="Save" class="button-primary submit" />
-                <a href="javascript:;" class="button" id="backPrevious">@Labels.Back</a>
+            <div class="input-form">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a href="javascript:;" class="btn btn-default" onclick="parent.history.back()">@Labels.Back</a>
             </div>
         </div>
-    </div>
-}
+    </form>
+</div>
+
 
 
 

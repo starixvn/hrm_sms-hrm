@@ -333,6 +333,8 @@
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
     <Content Include="wwwroot\sources\js\pages\memo\tinymce.plugins.js" />
+    <Content Include="wwwroot\sources\js\pages\menu\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\menu\index.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.create.js" />
     <Content Include="wwwroot\sources\js\pages\message\message.js" />
     <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
@@ -502,7 +504,6 @@
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
-    <Content Include="Scripts\Views\menu.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Styles\Images\collapsed.gif" />
@@ -688,7 +689,6 @@
     <Content Include="Scripts\Libs\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\Libs\jquery.validate.js" />
     <Content Include="Scripts\Libs\jquery.validate.unobtrusive.js" />
-    <Content Include="Styles\menu.css" />
     <Content Include="Styles\jquery.fixedheadertable.css" />
     <Content Include="Styles\jquery.fixedheadertable.theme.css" />
     <Content Include="Styles\tinymce.css" />
@@ -917,6 +917,8 @@
     <Content Include="wwwroot\dist\styles\memo.js.map" />
     <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xlsx" />
     <Content Include="ExcelTemplates\ShiftStatisticTemplate.xlsx" />
+    <Content Include="wwwroot\sources\styles\pages\menu\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\menu\edit.scss" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
