@@ -72,9 +72,33 @@ function reorderSupervisor(key, employeeId, supervisors, callback) {
     }
 }
 
+function moveUp(vm) {
+    const { ownerId } = vm.props.data;
+    vm.props.onChangeOrder('up', ownerId);
+}
+
+function moveDown(vm) {
+    const { ownerId } = vm.props.data;
+    vm.props.onChangeOrder('down', ownerId);
+}
+
+function moveTop(vm) {
+    const { ownerId } = vm.props.data;
+    vm.props.onChangeOrder('top', ownerId);
+}
+
+function moveBottom(vm) {
+    const { ownerId } = vm.props.data;
+    vm.props.onChangeOrder('bottom', ownerId);
+}
+
 export {
     getSupervisors,
     editEmployeeSupervisor,
     editSectionSupervisor,
-    reorderSupervisor
+    reorderSupervisor,
+    moveUp,
+    moveDown,
+    moveTop,
+    moveBottom
 };

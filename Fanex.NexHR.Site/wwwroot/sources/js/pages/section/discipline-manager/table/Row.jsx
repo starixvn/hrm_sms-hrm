@@ -1,31 +1,12 @@
 ﻿import React, { PureComponent } from 'react';
 
 import DropdownOrder from '../../../../shared/components/DropdownOrder';
+import { moveUp, moveDown, moveTop, moveBottom } from '../../supervisor/common.functions';
 
 export default class Row extends PureComponent {
     handleRemoveEmployee = () => {
         const { ownerId } = this.props.data;
         this.props.onRemoveEmployee(ownerId);
-    }
-
-    handleMoveUp = () => {
-        const { ownerId } = this.props.data;
-        this.props.onChangeOrder('up', ownerId);
-    }
-
-    handleMoveDown = () => {
-        const { ownerId } = this.props.data;
-        this.props.onChangeOrder('down', ownerId);
-    }
-
-    handleMoveTop = () => {
-        const { ownerId } = this.props.data;
-        this.props.onChangeOrder('top', ownerId);
-    }
-
-    handleMoveBottom = () => {
-        const { ownerId } = this.props.data;
-        this.props.onChangeOrder('bottom', ownerId);
     }
 
     render() {
@@ -37,10 +18,10 @@ export default class Row extends PureComponent {
                     <div className="wrapper">
                         <div>{`${data.nickname} (${data.fullName})`}</div>
                         <DropdownOrder id={`dropdown${data.ownerId}`}
-                            onMoveUp={this.handleMoveUp}
-                            onMoveDown={this.handleMoveDown}
-                            onMoveTop={this.handleMoveTop}
-                            onMoveBottom={this.handleMoveBottom}
+                            onMoveUp={() => moveUp(this)}
+                            onMoveDown={() => moveDown(this)}
+                            onMoveTop={() => moveTop(this)}
+                            onMoveBottom={() => moveBottom(this)}
                         />
                     </div>
                 </td>
