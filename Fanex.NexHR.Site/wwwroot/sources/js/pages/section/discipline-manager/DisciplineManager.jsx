@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
-import { getSupervisors, editSectionSupervisor, reorderSupervisor } from '../supervisor/common.functions';
+import { getSupervisors, editSectionSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 
