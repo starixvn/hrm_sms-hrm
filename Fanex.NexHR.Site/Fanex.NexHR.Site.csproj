@@ -498,7 +498,6 @@
     <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\menu.js" />
-    <Content Include="Scripts\Views\employee.message.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Scripts\Views\shift.edit.js" />

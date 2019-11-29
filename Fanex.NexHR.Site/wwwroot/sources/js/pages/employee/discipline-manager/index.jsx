@@ -59,6 +59,13 @@ export default class App extends Component {
         }).catch(axiosError).then(() => unblockUI());
     }
 
+    handleChangeOrder = (key, employeeId) => {
+        const vm = this;
+        reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
+            vm.setState({ managers });
+        });
+    }
+
     handleAddEmployee = employee => {
         const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
         this.setState({ managers, employeeOptions: [] });
@@ -69,13 +76,6 @@ export default class App extends Component {
             index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
-    }
-
-    handleChangeOrder = (key, employeeId) => {
-        const vm = this;
-        reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
-            vm.setState({ managers });
-        });
     }
 
     handleSave = () => {

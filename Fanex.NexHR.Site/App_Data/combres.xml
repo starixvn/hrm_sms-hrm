@@ -132,11 +132,6 @@
       <resource reference="sitejs" />
     </resourceSet>
 
-    <resourceSet name="employeemessagejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/employee.message.js" />
-    </resourceSet>
-
     <resourceSet name="menujs" type="js">
       <resource reference="sitejs" />
       <resource path="~/scripts/views/menu.js" />
