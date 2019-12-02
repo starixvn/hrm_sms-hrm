@@ -91,29 +91,18 @@ export default class DisciplineManager extends Component {
     }
 
     handleSave = () => {
-        const managers = [...this.state.managers];
+        const totalItems = this.state.managers.length;
+        const supervisors = [];
+        for (let i = 0; i < totalItems; i++) {
+            supervisors.push({
+                ownerId: this.state.managers[i].ownerId,
+                displayOrder: i + 1
+            });
+        }
         if (this.props.pageType === PageType.Section) {
-            editSectionSupervisor(
-                this.props.objectId,
-                this.roleId,
-                managers.map((item, index) => {
-                    return {
-                        ownerId: item.ownerId,
-                        displayOrder: index + 1
-                    };
-                }),
-                toast);
+            editSectionSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         } else {
-            editEmployeeSupervisor(
-                this.props.objectId,
-                this.roleId,
-                managers.map((item, index) => {
-                    return {
-                        ownerId: item.ownerId,
-                        displayOrder: index + 1
-                    };
-                }),
-                toast);
+            editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
     }
 
