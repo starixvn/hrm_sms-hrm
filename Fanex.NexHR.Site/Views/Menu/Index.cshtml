@@ -59,20 +59,22 @@
                 foreach (MenuViewModel chilmenu in Model.Where(i => i.ParentMenu != null && i.ParentMenu.MenuId == menu.MenuId))
                 {
                     <tr id="row_@chilmenu.MenuId">
-                        <td class="sub">
+                        <td class="sub align-left">
                             @(chilmenu.DisplayOrder + ". " + chilmenu.Text)
                         </td>
-                        <td>
+                        <td class="align-left">
                             @chilmenu.Link
                         </td>
-                        <td>
+                        <td class="align-left">
                             @(chilmenu.Function != null ? chilmenu.Function.Name : string.Empty)
                         </td>
                         <td>
                             @chilmenu.ParentMenu.Text
                         </td>
                         <td>
-                            @chilmenu.IsActive
+                            <input type="checkbox" class="checkbox-custom"
+                                   @(chilmenu.IsActive ? "checked" : string.Empty) value="@chilmenu.IsActive" />
+                            <label></label>
                         </td>
                         @if (hasPermission)
                         {
