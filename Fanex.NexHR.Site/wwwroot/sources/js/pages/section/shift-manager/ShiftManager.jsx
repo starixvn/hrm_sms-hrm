@@ -107,22 +107,11 @@ export default class ShiftManager extends Component {
                 displayOrder: index + 1
             };
         });
-
-        let promise;
         if (this.props.pageType === PageType.Section) {
-            promise = editSectionSupervisor(this.props.objectId, this.roleId, supervisors);
+            editSectionSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         } else {
-            promise = editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors);
+            editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
-
-        promise.then(response => {
-            const data = response.data;
-            if (data.isSuccessful) {
-                toast.success('Updated Successfully!');
-            } else {
-                toast.error(data.message);
-            }
-        }).catch(axiosError);
     }
 
     render() {

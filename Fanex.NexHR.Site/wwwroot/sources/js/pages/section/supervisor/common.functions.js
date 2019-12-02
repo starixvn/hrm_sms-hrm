@@ -1,7 +1,7 @@
 ﻿import axios from 'axios';
 import { stringify } from 'qs';
 
-import { reorder, resolveClientUrl } from '../../../shared/common.functions';
+import { reorder, resolveClientUrl, axiosError } from '../../../shared/common.functions';
 
 function getSupervisors(query, roleIds, excludeIds) {
     return axios(resolveClientUrl('employee/GetSupervisors'), {
@@ -13,8 +13,8 @@ function getSupervisors(query, roleIds, excludeIds) {
     });
 }
 
-function editEmployeeSupervisor(employeeId, roleId, supervisors) {
-    return axios({
+function editEmployeeSupervisor(employeeId, roleId, supervisors, toastObj) {
+    axios({
         url: resolveClientUrl('employee/EditEmployeeSupervisor'),
         method: 'POST',
         data: stringify({
@@ -26,11 +26,18 @@ function editEmployeeSupervisor(employeeId, roleId, supervisors) {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-    });
+    }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+            toastObj.success('Updated Successfully!');
+        } else {
+            toastObj.error(data.message);
+        }
+    }).catch(axiosError);
 }
 
-function editSectionSupervisor(sectionId, roleId, supervisors) {
-    return axios({
+function editSectionSupervisor(sectionId, roleId, supervisors, toastObj) {
+    axios({
         url: resolveClientUrl('Team/EditSectionSupervisor'),
         method: 'POST',
         data: stringify({
@@ -42,7 +49,14 @@ function editSectionSupervisor(sectionId, roleId, supervisors) {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-    });
+    }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+            toastObj.success('Updated Successfully!');
+        } else {
+            toastObj.error(data.message);
+        }
+    }).catch(axiosError);
 }
 
 function reorderSupervisor(key, employeeId, supervisors, callback) {
