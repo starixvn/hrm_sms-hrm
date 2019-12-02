@@ -52,25 +52,23 @@ export default class DisciplineManager extends Component {
 
     getDisciplineManagers = () => {
         blockUI();
-
-        let promise;
         if (this.props.pageType === PageType.Section) {
-            promise = axios(resolveClientUrl('Team/GetDisciplineManagerBySectionId'), {
+            axios(resolveClientUrl('Team/GetDisciplineManagerBySectionId'), {
                 params: {
                     sectionId: this.props.objectId
                 }
-            });
+            }).then(response => {
+                this.setState({ managers: response.data });
+            }).catch(axiosError).then(() => unblockUI());
         } else {
-            promise = axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
+            axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
                 params: {
                     employeeId: this.props.objectId
                 }
-            });
+            }).then(response => {
+                this.setState({ managers: response.data });
+            }).catch(axiosError).then(() => unblockUI());
         }
-
-        promise.then(response => {
-            this.setState({ managers: response.data });
-        }).catch(axiosError).then(() => unblockUI());
     }
 
     handleAddEmployee = employee => {
@@ -93,7 +91,8 @@ export default class DisciplineManager extends Component {
     }
 
     handleSave = () => {
-        const supervisors = this.state.managers.map((item, index) => {
+        const managers = [...this.state.managers];
+        const supervisors = managers.map((item, index) => {
             return {
                 ownerId: item.ownerId,
                 displayOrder: index + 1
