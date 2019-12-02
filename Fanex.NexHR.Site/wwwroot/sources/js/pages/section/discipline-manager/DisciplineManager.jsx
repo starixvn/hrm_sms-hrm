@@ -92,16 +92,28 @@ export default class DisciplineManager extends Component {
 
     handleSave = () => {
         const managers = [...this.state.managers];
-        const supervisors = managers.map((item, index) => {
-            return {
-                ownerId: item.ownerId,
-                displayOrder: index + 1
-            };
-        });
         if (this.props.pageType === PageType.Section) {
-            editSectionSupervisor(this.props.objectId, this.roleId, supervisors, toast);
+            editSectionSupervisor(
+                this.props.objectId,
+                this.roleId,
+                managers.map((item, index) => {
+                    return {
+                        ownerId: item.ownerId,
+                        displayOrder: index + 1
+                    };
+                }),
+                toast);
         } else {
-            editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
+            editEmployeeSupervisor(
+                this.props.objectId,
+                this.roleId,
+                managers.map((item, index) => {
+                    return {
+                        ownerId: item.ownerId,
+                        displayOrder: index + 1
+                    };
+                }),
+                toast);
         }
     }
 
