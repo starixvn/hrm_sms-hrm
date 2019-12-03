@@ -229,7 +229,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_AddOtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\Message_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetOtherDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\Message_EmployeeDelete.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById.sql" />
@@ -259,7 +258,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetChangedShift.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetById.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetHalfDayOff.sql" />
@@ -294,7 +292,6 @@
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_EmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_DeleteOtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_GroupExternal.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetForSync.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetEmployeeInfo.sql" />
@@ -316,7 +313,6 @@
     <Build Include="dbo\Stored Procedures\Holiday_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_GetByYear.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveRequest_IgnoreDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_Update.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetAll.sql" />
