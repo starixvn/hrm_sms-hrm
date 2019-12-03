@@ -47,9 +47,9 @@ BEGIN
 	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ActorId
+	EXEC dbo.ChangeShiftRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @NotVerifiedStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 

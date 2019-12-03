@@ -46,9 +46,9 @@ BEGIN
 		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON r.RequestId = cs.RequestId
 		AND cs.RequestId = @RequestId
 
-	EXEC dbo.WorkingTimeRequest_VoidRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ActorId
+	EXEC dbo.ChangeShiftRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @VoidStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 

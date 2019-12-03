@@ -70,17 +70,6 @@ BEGIN
 		RETURN
 	END
 
-	IF @RoleId = @ApproverRoleId
-		AND ISNULL(@DisciplineXml, '') <> ''
-	BEGIN
-		EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
-			,@RoleId = @RoleId
-			,@ModifiedBy = @ActorId
-			,@IgnoredDetails = @DisciplineXml
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-	END
-
 	EXEC dbo.EmployeeCalendar_Insert @empid = @empid
 		,@fromdate = @FromDate
 		,@todate = @ToDate
@@ -100,6 +89,16 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
+		IF ISNULL(@DisciplineXml, '') <> ''
+		BEGIN
+			EXEC dbo.ChangeShiftRequest_UpdateDiscipline @RequestId = @RequestId
+				,@ActorId = @ActorId
+				,@RequestStatusId = @ApprovedStatusId
+				,@DisciplineXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+		END
+
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
 			,ApprovedStatus = @VerifiedStatusId

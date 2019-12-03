@@ -528,6 +528,7 @@
     <Build Include="dbo\Stored Procedures\DisciplineRule_GetByGroupId.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRule_Update.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_GetCalendar.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_UpdateDiscipline.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
