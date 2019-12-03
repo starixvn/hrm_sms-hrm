@@ -42,9 +42,9 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cio.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	EXECUTE dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ActorId
+	EXEC dbo.CheckInOutRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @NotVerifiedStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
@@ -103,10 +103,4 @@ BEGIN
 
 	EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject unsuccessfully.'
-	END
 END

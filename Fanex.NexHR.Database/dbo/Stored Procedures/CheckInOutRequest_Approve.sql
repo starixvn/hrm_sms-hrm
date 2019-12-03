@@ -15,7 +15,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @DisciplineXml: 
+    @DisciplineXml:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
@@ -65,17 +65,6 @@ BEGIN
 		RETURN
 	END
 
-	IF @RoleId = @ApproverRoleId
-		AND ISNULL(@DisciplineXml, '') <> ''
-	BEGIN
-		EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
-			,@RoleId = @RoleId
-			,@ModifiedBy = @ActorId
-			,@IgnoredDetails = @DisciplineXml
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-	END
-
 	EXEC dbo.EmployeeCalendar_Insert @EmpId = @EmpId
 		,@fromdate = @OnDate
 		,@todate = @OnDate
@@ -95,6 +84,16 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
+		IF ISNULL(@DisciplineXml, '') <> ''
+		BEGIN
+			EXEC dbo.CheckInOutRequest_UpdateDiscipline @RequestId = @RequestId
+				,@ActorId = @ActorId
+				,@RequestStatusId = @ApprovedStatusId
+				,@DisciplineXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+		END
+
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
 			,ApprovedStatus = @VerifiedStatusId
@@ -137,10 +136,4 @@ BEGIN
 
 	EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 104
-			,@ErrMsg = 'Aprrove unsuccessfully.'
-	END
 END
