@@ -1,0 +1,343 @@
+﻿
+CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_UpdateDiscipline] @RequestId BIGINT
+	,@ActorId INT
+	,@RequestStatusId TINYINT
+	,@DisciplineXml NVARCHAR(MAX) = NULL
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg NVARCHAR(200) = '' OUTPUT
+AS
+/*
+Created: 20191203@Tim.Trinh
+Task: update discipline.
+DB: HRM
+Original:
+
+Revisions:
+Param's Explanation:
+    @DisciplineXml:
+        <Root>
+            <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
+        </Root>
+*/
+BEGIN
+	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
+
+	DECLARE @ModifiedDate DATETIME = GETDATE()
+		,@ReasonId TINYINT
+		-- late in/early out reason
+		,@ManagementAllowReasonId TINYINT = 1
+		-- request status
+		,@PendingStatusId TINYINT = 1
+		,@NotVerifiedStatusId TINYINT = 3
+		,@RejectedStatusId TINYINT = 5
+		,@VoidStatusId TINYINT = 7
+	DECLARE @tblDiscipline TABLE (
+		WorkDate DATE
+		,EmpId INT
+		,DisciplineTypeId INT
+		,IsIgnored BIT
+		,IsConfirmed BIT
+		)
+
+	-- reject request
+	IF @RequestStatusId = @NotVerifiedStatusId
+		OR @RequestStatusId = @RejectedStatusId
+		OR @RequestStatusId = @VoidStatusId
+	BEGIN
+		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
+
+		UPDATE dis
+		SET dis.IsLateIn = CASE 
+				WHEN drule.DisciplineTypeId = 3 THEN 0
+				ELSE dis.IsLateIn
+				END
+			,dis.IsEarlyOut = CASE 
+				WHEN drule.DisciplineTypeId = 4 THEN 0
+				ELSE dis.IsEarlyOut
+				END
+			,dis.ModifiedBy = @ActorId
+			,dis.ModifiedDate = @ModifiedDate
+		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
+			AND dis.EmpId = lieo.EmpId
+			AND dis.WorkDate = lieo.OnDate
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+			AND drule.DisciplineTypeId IN (3, 4)
+			AND empsum.IsLocal = drule.IsLocal
+			AND drule.Value = 1
+
+		UPDATE dis
+		SET dis.IsIgnoredLateIn = CASE 
+				WHEN drule.DisciplineTypeId = 3 THEN 0
+				ELSE dis.IsIgnoredLateIn
+				END
+			,dis.IsIgnoredEarlyOut = CASE 
+				WHEN drule.DisciplineTypeId = 4 THEN 0
+				ELSE dis.IsIgnoredEarlyOut
+				END
+		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
+			AND dis.EmpId = lieo.EmpId
+			AND dis.WorkDate = lieo.OnDate
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+			AND drule.DisciplineTypeId IN (3, 4)
+			AND empsum.IsLocal = drule.IsLocal
+			AND drule.Value = 1
+
+		UPDATE dis
+		SET dis.IsOutOfControlLateIn = CASE 
+				WHEN drule.DisciplineTypeId = 3 THEN 0
+				ELSE dis.IsOutOfControlLateIn
+				END
+			,dis.IsOutOfControlEarlyOut = CASE 
+				WHEN drule.DisciplineTypeId = 4 THEN 0
+				ELSE dis.IsOutOfControlEarlyOut
+				END
+		FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
+			AND dis.EmpId = lieo.EmpId
+			AND dis.WorkDate = lieo.OnDate
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+			AND drule.DisciplineTypeId IN (3, 4)
+			AND empsum.IsLocal = drule.IsLocal
+			AND drule.Value = 1
+
+		RETURN
+	END
+
+	-- reset request
+	IF @RequestStatusId = @PendingStatusId
+	BEGIN
+		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
+
+		UPDATE dis
+		SET dis.IsLateIn = CASE 
+				WHEN drule.DisciplineTypeId = 3 THEN 1
+				ELSE dis.IsLateIn
+				END
+			,dis.IsEarlyOut = CASE 
+				WHEN drule.DisciplineTypeId = 4 THEN 1
+				ELSE dis.IsEarlyOut
+				END
+			,dis.IsDeleted = 0
+			,dis.ModifiedBy = @ActorId
+			,dis.ModifiedDate = @ModifiedDate
+		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
+			AND dis.EmpId = lieo.EmpId
+			AND dis.WorkDate = lieo.OnDate
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
+			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+			AND drule.DisciplineTypeId IN (3, 4)
+			AND empsum.IsLocal = drule.IsLocal
+			AND drule.Value = 1
+
+		RETURN
+	END
+
+	-- approve request
+	IF ISNULL(@DisciplineXml, '') <> ''
+	BEGIN
+		BEGIN TRY
+			DECLARE @DocHandler INT
+
+			EXEC sp_xml_preparedocument @DocHandler OUTPUT
+				,@DisciplineXml
+
+			INSERT INTO @tblDiscipline (
+				WorkDate
+				,EmpId
+				,DisciplineTypeId
+				,IsIgnored
+				,IsConfirmed
+				)
+			SELECT DISTINCT WorkDate
+				,EmployeeId
+				,DisciplineTypeId
+				,IsIgnored
+				,IsConfirmed
+			FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored BIT, IsConfirmed BIT) AS Data
+
+			EXEC sp_xml_removedocument @DocHandler
+		END TRY
+
+		BEGIN CATCH
+			SELECT @ErrCode = 1
+				,@ErrMsg = N'Parameter invalid.'
+
+			RETURN
+		END CATCH
+	END
+
+	BEGIN TRY
+		IF EXISTS (
+				SELECT 1
+				FROM @tblDiscipline
+				)
+		BEGIN
+			SELECT @ReasonId = ReasonId
+			FROM dbo.LateInEarlyOutRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+
+			INSERT INTO dbo.DisciplineRequestTrans (
+				EmpId
+				,WorkDate
+				,RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,IsOutOfControl
+				,ModifiedBy
+				,ModifiedDate
+				)
+			SELECT EmpId
+				,WorkDate
+				,@RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,CASE 
+					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE 0
+					END
+				,@ActorId
+				,@ModifiedDate
+			FROM @tblDiscipline
+
+			-- update
+			UPDATE dis
+			SET dis.IsLateIn = CASE 
+					WHEN tbl.DisciplineTypeId = 3 THEN 1
+					ELSE 0
+					END
+				,dis.IsEarlyOut = CASE 
+					WHEN tbl.DisciplineTypeId = 4 THEN 1
+					ELSE 0
+					END
+				,dis.IsDeleted = 0
+				,dis.ModifiedBy = @ActorId
+				,dis.ModifiedDate = @ModifiedDate
+			FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
+				AND dis.EmpId = tbl.EmpId
+
+			UPDATE dis
+			SET dis.IsIgnoredLateIn = CASE 
+					WHEN tbl.DisciplineTypeId = 3 THEN tbl.IsIgnored
+					ELSE 0
+					END
+				,dis.IsIgnoredEarlyOut = CASE 
+					WHEN tbl.DisciplineTypeId = 4 THEN tbl.IsIgnored
+					ELSE 0
+					END
+			FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
+				AND dis.EmpId = tbl.EmpId
+
+			UPDATE dis
+			SET dis.IsOutOfControlLateIn = CASE 
+					WHEN tbl.DisciplineTypeId = 3
+						AND @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE 0
+					END
+				,dis.IsOutOfControlEarlyOut = CASE 
+					WHEN tbl.DisciplineTypeId = 4
+						AND @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE 0
+					END
+			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
+				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
+				AND dis.EmpId = tbl.EmpId
+
+			-- insert
+			INSERT INTO dbo.Discipline (
+				EmpId
+				,WorkDate
+				,IsLateIn
+				,IsEarlyOut
+				,ModifiedBy
+				,ModifiedDate
+				)
+			SELECT EmpId
+				,WorkDate
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 3 THEN 1
+					ELSE 0
+					END
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 4 THEN 1
+					ELSE 0
+					END
+				,@ActorId
+				,@ModifiedDate
+			FROM @tblDiscipline AS tbl
+			WHERE NOT EXISTS (
+					SELECT 1
+					FROM dbo.Discipline AS dis WITH (NOLOCK)
+					WHERE dis.EmpId = tbl.EmpId
+						AND dis.WorkDate = tbl.WorkDate
+					)
+
+			INSERT INTO dbo.DisciplineIgnore (
+				EmpId
+				,WorkDate
+				,IsIgnoredLateIn
+				,IsIgnoredEarlyOut
+				)
+			SELECT EmpId
+				,WorkDate
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 3 THEN IsIgnored
+					ELSE 0
+					END
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 4 THEN IsIgnored
+					ELSE 0
+					END
+			FROM @tblDiscipline AS tbl
+			WHERE NOT EXISTS (
+					SELECT 1
+					FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
+					WHERE dis.EmpId = tbl.EmpId
+						AND dis.WorkDate = tbl.WorkDate
+					)
+
+			INSERT INTO dbo.DisciplineOutOfControl (
+				EmpId
+				,WorkDate
+				,IsOutOfControlLateIn
+				,IsOutOfControlEarlyOut
+				)
+			SELECT EmpId
+				,WorkDate
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 3
+						AND @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE 0
+					END
+				,CASE 
+					WHEN tbl.DisciplineTypeId = 4
+						AND @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE 0
+					END
+			FROM @tblDiscipline AS tbl
+			WHERE NOT EXISTS (
+					SELECT 1
+					FROM dbo.DisciplineOutOfControl AS dis WITH (NOLOCK)
+					WHERE dis.EmpId = tbl.EmpId
+						AND dis.WorkDate = tbl.WorkDate
+					)
+		END
+	END TRY
+
+	BEGIN CATCH
+		SELECT @ErrCode = 1
+			,@ErrMsg = N'Update discipline unsuccessfully.'
+	END CATCH
+END

@@ -41,21 +41,21 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@VoidStatusId TINYINT = 7
 
-	SELECT @EmpId = lie.EmpId
-		,@OnDate = lie.OnDate
-		,@LateIn = lie.LateInMins
-		,@EarlyOut = lie.EarlyOutMins
+	SELECT @EmpId = lieo.EmpId
+		,@OnDate = lieo.OnDate
+		,@LateIn = lieo.LateInMins
+		,@EarlyOut = lieo.EarlyOutMins
 		,@RequestTypeId = r.RequestType
 		,@VerifierId = r.VerifierId
 		,@ApproverId = r.ApproverId
 		,@StatusId = r.CurrentStatus
-	FROM dbo.LateInEarlyOutRequest AS lie WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lie.RequestId = r.RequestId
+	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	EXEC dbo.WorkingTimeRequest_ResetRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ActorId
+	EXEC dbo.LateInEarlyOutRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @PendingStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
@@ -159,10 +159,4 @@ BEGIN
 
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
-
-	IF @@ERROR > 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reset unsuccessfully.'
-	END
 END

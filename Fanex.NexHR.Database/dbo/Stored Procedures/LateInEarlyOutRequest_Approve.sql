@@ -15,7 +15,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @DisciplineXml: 
+    @DisciplineXml:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
@@ -42,13 +42,13 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 
-	SELECT @EmpId = lie.EmpId
+	SELECT @EmpId = lieo.EmpId
 		,@OnDate = OnDate
 		,@LateIn = LateInMins
 		,@EarlyOut = EarlyOutMins
 		,@RequestType = r.RequestType
-	FROM dbo.LateInEarlyOutRequest AS lie WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lie.RequestId = r.RequestId
+	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
 	IF EXISTS (
@@ -73,17 +73,6 @@ BEGIN
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
-	IF @RoleId = @ApproverRoleId
-		AND ISNULL(@DisciplineXml, '') <> ''
-	BEGIN
-		EXEC dbo.WorkingTimeRequest_ApproveRequest_IgnoreDiscipline @RequestId = @RequestId
-			,@RoleId = @RoleId
-			,@ModifiedBy = @ActorId
-			,@IgnoredDetails = @DisciplineXml
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-	END
-
 	IF @RoleId = @VerifierRoleId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
@@ -97,6 +86,16 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
+		IF ISNULL(@DisciplineXml, '') <> ''
+		BEGIN
+			EXEC dbo.LateInEarlyOutRequest_UpdateDiscipline @RequestId = @RequestId
+				,@ActorId = @ActorId
+				,@RequestStatusId = @ApprovedStatusId
+				,@DisciplineXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+		END
+
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
 			,ApprovedStatus = @VerifiedStatusId
@@ -140,10 +139,4 @@ BEGIN
 
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 104
-			,@ErrMsg = 'Aprrove unsuccessfully.'
-	END
 END

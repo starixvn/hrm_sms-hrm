@@ -35,16 +35,16 @@ BEGIN
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 
-	SELECT @EmpId = lie.EmpId
-		,@OnDate = lie.OnDate
+	SELECT @EmpId = lieo.EmpId
+		,@OnDate = lieo.OnDate
 		,@RequestTypeId = r.RequestType
-	FROM dbo.LateInEarlyOutRequest AS lie WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lie.RequestId = r.RequestId
+	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	EXEC dbo.WorkingTimeRequest_RejectRequest_ResetIgnoreDiscipline @RequestId = @RequestId
-		,@RoleId = @RoleId
-		,@ModifiedBy = @ActorId
+	EXEC dbo.LateInEarlyOutRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @NotVerifiedStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
@@ -103,10 +103,4 @@ BEGIN
 
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR > 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject unsuccessfully.'
-	END
 END

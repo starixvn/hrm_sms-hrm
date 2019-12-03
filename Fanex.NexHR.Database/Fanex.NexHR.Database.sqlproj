@@ -530,6 +530,7 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_GetCalendar.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_UpdateDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_UpdateDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_UpdateDiscipline.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
