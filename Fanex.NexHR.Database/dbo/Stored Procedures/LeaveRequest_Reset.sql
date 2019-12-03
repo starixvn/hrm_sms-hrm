@@ -46,6 +46,12 @@ BEGIN
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
+	
+	EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @PendingStatusId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN
@@ -97,13 +103,11 @@ BEGIN
 				,ApprovedDate = @ProcessedDate
 				,ModifiedBy = @ActorId
 				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestID
+			WHERE RequestID = @RequestId
 		END
 
 		IF @StatusId = @ApprovedStatusId
 		BEGIN
-			EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
-
 			EXEC dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
 				,@EmpId
 				,@ActorId
@@ -112,7 +116,7 @@ BEGIN
 				,@ProcessedDate
 				,@ActorId
 
-			EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
 				,1
@@ -160,7 +164,7 @@ BEGIN
 				,@ToDate
 				,@ActorId
 
-			EXEC EmployeeAttendance_ProcessingAndInsert @EmpId
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
 				,1
@@ -169,10 +173,4 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
-
-	IF @@ERROR > 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reset unsuccessfully.'
-	END
 END

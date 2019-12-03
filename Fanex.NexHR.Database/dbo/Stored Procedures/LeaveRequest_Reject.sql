@@ -37,6 +37,12 @@ BEGIN
 		,@ToDate = ToDate
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
+	
+	EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @NotVerifiedStatusId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN
@@ -70,8 +76,6 @@ BEGIN
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
-
-		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
 		EXEC dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
 			,@EmpId

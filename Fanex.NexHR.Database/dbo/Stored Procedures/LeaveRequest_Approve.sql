@@ -15,7 +15,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @DisciplineXml: 
+    @DisciplineXml:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
@@ -150,11 +150,15 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 
-		EXEC dbo.LeaveRequest_Approve_UpdateDiscipline @RequestId = @RequestId
-			,@ModifiedBy = @ActorId
-			,@DisciplineXml = @DisciplineXml
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
+		IF ISNULL(@DisciplineXml, '') <> ''
+		BEGIN
+			EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
+				,@ActorId = @ActorId
+				,@RequestStatusId = @ApprovedStatusId
+				,@DisciplineXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+		END
 
 		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 			,@EmpId
@@ -189,10 +193,4 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 104
-			,@ErrMsg = 'Aprrove unsuccessfully.'
-	END
 END

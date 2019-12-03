@@ -35,6 +35,12 @@ BEGIN
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		AND lr.RequestId = @RequestId
 
+	EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@RequestStatusId = @VoidStatusId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
+
 	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET CurrentStatus = @VoidStatusId
 		,HRId = @ActorId
@@ -45,8 +51,6 @@ BEGIN
 
 	IF @StatusId IN (@ApprovedStatusId, @ProcessedStatusId)
 	BEGIN
-		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
-
 		EXEC dbo.LeaveRequest_Reject_RollbackCalendar @RequestId
 			,@EmpId
 			,@ActorId

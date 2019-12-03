@@ -402,7 +402,6 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpKIVLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpAnnualLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Update.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_Reset_UpdateDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reset.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reject_RollbackCalendar.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reject.sql" />
@@ -419,7 +418,7 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_DeleteWeekendLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_DeleteKIVLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_Approve_UpdateDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Approve_UpdateCalendar.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Approve.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_WriteLog.sql" />
