@@ -20,16 +20,16 @@
             {
                 switch (ReasonId)
                 {
-                    case (byte)CheckInOutReasons.VanLate:
+                    case (byte)CheckInOutReason.VanLate:
                         return Labels.VanLate;
 
-                    case (byte)CheckInOutReasons.BusinessTrip:
+                    case (byte)CheckInOutReason.BusinessTrip:
                         return Labels.BusinessTrip;
 
-                    case (byte)CheckInOutReasons.Forgot:
+                    case (byte)CheckInOutReason.Forgot:
                         return Labels.Forgot;
 
-                    case (byte)CheckInOutReasons.Other:
+                    case (byte)CheckInOutReason.Other:
                         return Labels.Other;
 
                     default:

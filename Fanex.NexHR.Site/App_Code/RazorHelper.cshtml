@@ -1,8 +1,6 @@
 ﻿@using Fanex.NexHR.Core.Enums;
-@using Fanex.NexHR.Core;
 @using Fanex.NexHR.Resources;
 @using Fanex.NexHR.Models;
-@using Fanex.NexHR.Models.Request;
 
 @helper CategoryDropDownList(string id, string classHTML = "", string selectedId = "")
 {
@@ -66,22 +64,6 @@
     }
 }
 
-@helper EmployeeProcessMenu()
-{
-    <ul id="pendingMenu" class="hide">
-        <li class="edit">
-            <a command="Edit" href="javascript:;">
-                <i class="fa fa-pencil fa-lg icon-edit"></i>@Labels.Edit
-            </a>
-        </li>
-        <li class="rejected">
-            <a command="Cancel" href="javascript:;">
-                <i class="fa fa-times fa-lg icon-delete"></i>@Labels.Cancel
-            </a>
-        </li>
-    </ul>
-}
-
 @helper MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
 {
     <select id="@name" name="@name" class="minWidthDropdown form-control">
@@ -136,49 +118,13 @@
     }
 }
 
-@helper RenderRequestStatus(BaseRequest request)
-{
-    switch (request.Status.Id)
-    {
-        case (byte)CurrentRequestStatus.Pending:
-            <td>
-                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip @request.Status.ToString()">@request.Status.ToString()</a>
-            </td>
-            break;
-        case (byte)CurrentRequestStatus.Verified:
-        case (byte)CurrentRequestStatus.NotVerified:
-            <td>
-                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>
-            break;
-        case (byte)CurrentRequestStatus.Approved:
-        case (byte)CurrentRequestStatus.Rejected:
-            <td>
-                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>
-            break;
-
-        case (byte)CurrentRequestStatus.Processed:
-        case (byte)CurrentRequestStatus.Void:
-            <td>
-                <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">@request.Status.ToString()</a>
-            </td>
-            break;
-        default:
-            <td>
-                <a href="javascript:void(0);" class="tooltip">@request.Status.ToString()</a>
-            </td>
-            break;
-    }
-}
-
-@helper CheckInOutReasonDropDownList(byte reasonId = (byte)CheckInOutReasons.Forgot, string controlName = "reasonId", string htmlClass = "")
+@helper CheckInOutReasonDropDownList(byte reasonId = (byte)CheckInOutReason.Forgot, string controlName = "reasonId", string htmlClass = "")
 {
     <select name="@controlName" id="@controlName" class="@htmlClass">
-        <option selected="@(reasonId == (byte)CheckInOutReasons.VanLate)" value="@Convert.ToByte(CheckInOutReasons.VanLate)">@Labels.VanLate</option>
-        <option selected="@(reasonId == (byte)CheckInOutReasons.BusinessTrip)" value="@Convert.ToByte(CheckInOutReasons.BusinessTrip)">@Labels.BusinessTrip</option>
-        <option selected="@(reasonId == (byte)CheckInOutReasons.Forgot)" value="@Convert.ToByte(CheckInOutReasons.Forgot)">@Labels.Forgot</option>
-        <option selected="@(reasonId == (byte)CheckInOutReasons.Other)" value="@Convert.ToByte(CheckInOutReasons.Other)">@Labels.Other</option>
+        <option selected="@(reasonId == (byte)CheckInOutReason.VanLate)" value="@Convert.ToByte(CheckInOutReason.VanLate)">@Labels.VanLate</option>
+        <option selected="@(reasonId == (byte)CheckInOutReason.BusinessTrip)" value="@Convert.ToByte(CheckInOutReason.BusinessTrip)">@Labels.BusinessTrip</option>
+        <option selected="@(reasonId == (byte)CheckInOutReason.Forgot)" value="@Convert.ToByte(CheckInOutReason.Forgot)">@Labels.Forgot</option>
+        <option selected="@(reasonId == (byte)CheckInOutReason.Other)" value="@Convert.ToByte(CheckInOutReason.Other)">@Labels.Other</option>
     </select>
 }
 

@@ -2,7 +2,7 @@
 {
     using Fanex.Common.Extensions;
 
-    public enum CheckInOutReasons
+    public enum CheckInOutReason
     {
         [StringValue("Van Late")]
         VanLate = 1,

@@ -175,7 +175,7 @@
     <Compile Include="Enums\EmployeeStatus.cs" />
     <Compile Include="Enums\Gender.cs" />
     <Compile Include="Enums\LateInEarlyOutReason.cs" />
-    <Compile Include="Enums\CheckInOutReasons.cs" />
+    <Compile Include="Enums\CheckInOutReason.cs" />
     <Compile Include="Enums\RequestCommand.cs" />
     <Compile Include="Enums\DisciplineType.cs" />
     <Compile Include="Constants\FunctionKey.cs" />
