@@ -1,83 +1,85 @@
 ﻿@model Holiday
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Holiday;
+    var today = DateTime.Today;
 }
+
 @section css{
-    @Url.CombresLink("holidayeditcss")
+    <link href="~/wwwroot/dist/styles/holiday.create.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("holidayeditjs")
+    <script src="~/wwwroot/dist/js/holiday.edit.js"></script>
 }
 
 @section Breadcrumb {
-    <a class="step">@Labels.CompanySpace</a> 
-    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a> 
-     <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
-    <a class="step">Edit Holiday</a>
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
+    <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
+    <a class="step">Add new Holiday</a>
 }
 
-<h2>@Labels.EditHoliday</h2>
+<h2 class="page-title">@Labels.CreateHoliday</h2>
 
-@using (Html.BeginForm())
-{
-    <div class="container_24 bunhat" style="min-width: 400px">
-    
-    @Html.ValidationSummary(true)
-    @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+<div class="card" style="width: 400px">
+    @using (Html.BeginForm("Edit", "holiday", FormMethod.Post))
     {
-        <div class="success flash">Edited Successful!</div> 
-    }
-        @Html.HiddenFor(model => model.Id)
-		<br />
-        <div class="formrow">
-			<div class="label">
-					@Html.LabelFor(model => model.HolidayName)
-				</div>
-			<div class="input">
-					@Html.EditorFor(model => model.HolidayName)
-					@Html.ValidationMessageFor(model => model.HolidayName)
-			</div>
-		</div>
-        <div class="formrow">
-			<div class="label">
-					Date(s)
-			</div>
-			<div class="input">
-					@{
-                        var numDay = (Model.ToDate- Model.FromDate).TotalDays + 1;    
-                    }
-                    <input type="number" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay">
-            </div>
-        </div>
-        <div class="formrow">
-			<div class="label">
-					@Html.LabelFor(model => model.FromDate)
-			</div>
-			<div class="input">
-					@Html.DatePickerFor(model => model.FromDate)
-					@Html.ValidationMessageFor(model => model.FromDate)
-            </div>
-        </div>
-        <div class="formrow">
-            <div class="label">
-                    @Html.LabelFor(model => model.ToDate)
-            </div>
-            <div class="input">
-                    @Html.DatePickerFor(model => model.ToDate)
-					@Html.ValidationMessageFor(model => model.ToDate)
-			</div>
-            <div>
-            
-            </div>
-        </div>
+        <div class="form-horizontal">
 
-        <div class="formrow">
-            <div class="label">&nbsp</div>
-            <div class="input">
-                @Html.AntiForgeryToken()
-                <input type="submit" value="Save" class="button-primary submit"/>
-                <a href="@Url.Action("index","holiday")" class="button">@Labels.Back</a>
+            @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+            {
+                <div class="success flash">Created Successful!</div>
+            }
+
+            @Html.HiddenFor(model => model.Id)
+
+            <br />
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.HolidayName, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => model.HolidayName)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label-form">
+                    Date(s)
+                </div>
+                <div class="input-form">
+                    @{
+                        var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;
+                    }
+                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay" />
+                </div>
+            </div>
+
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Save</button>
+                    <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+                </div>
             </div>
         </div>
-    </div>
-}  
+    }
+</div>

@@ -1848,4 +1848,7 @@
   <data name="CreateMenu" xml:space="preserve">
     <value>New Menu</value>
   </data>
+  <data name="NewHoliday" xml:space="preserve">
+    <value>New Holiday</value>
+  </data>
 </root>

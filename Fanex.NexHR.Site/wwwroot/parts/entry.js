@@ -75,6 +75,8 @@ module.exports = {
         [`${styleDistPath}/shift.edit`]: `${styleSourcePath}/pages/shift/edit.scss`,
         [`${styleDistPath}/menu.index`]: `${styleSourcePath}/pages/menu/index.scss`,
         [`${styleDistPath}/menu.edit`]: `${styleSourcePath}/pages/menu/edit.scss`,
+        [`${styleDistPath}/holiday.index`]: `${styleSourcePath}/pages/holiday/index.scss`,
+        [`${styleDistPath}/holiday.create`]: `${styleSourcePath}/pages/holiday/create.scss`,
 
 
 
@@ -156,7 +158,9 @@ module.exports = {
         [`${jsDistPath}/memo.edit`]: `${jsSourcePath}/memo/memo.edit.js`,
         [`${jsDistPath}/shift.edit`]: `${jsSourcePath}/shift/edit.js`,
         [`${jsDistPath}/menu.index`]: `${jsSourcePath}/menu/index.js`,
-        [`${jsDistPath}/menu.edit`]: `${jsSourcePath}/menu/edit.js`
+        [`${jsDistPath}/menu.edit`]: `${jsSourcePath}/menu/edit.js`,
+        [`${jsDistPath}/holiday.index`]: `${jsSourcePath}/holiday/index.js`,
+        [`${jsDistPath}/holiday.edit`]: `${jsSourcePath}/holiday/edit.js`
 
     }
 };

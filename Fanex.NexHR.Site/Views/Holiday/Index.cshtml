@@ -1,43 +1,45 @@
 ﻿@model IList<Holiday>
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Holiday";
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
-    @Url.CombresLink("holidaycss")
+    <link href="~/wwwroot/dist/styles/holiday.index.css" rel="stylesheet" />
+    @*@Url.CombresLink("holidaycss")*@
 }
 @section js{
-    @Url.CombresLink("holidayjs")
+    <script src="~/wwwroot/dist/js/holiday.index.js"></script>
+    @*@Url.CombresLink("holidayjs")*@
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <a class="step">@ViewBag.Title</a>
 }
-<h2>@ViewBag.Title</h2>
+<h2 class="page-title">@ViewBag.Title</h2>
 
-@using (Html.BeginGetForm())
-{
-    <div class="bunhat container_24">
-        <div class="grid_1 gridlabel">
-            @Labels.Year
-        </div>
-        <div class="grid_2">
-            @Html.YearPicker("year", 2010, (int)ViewBag.year)
-        </div>
-        <div class="grid_2">
-            <input type="button" id="submit" value="@Labels.Submit" class="processing-submit" />
-        </div>
-        @if (hasPermission)
-        {
-            <div class="grid_2">
-                <div class="button-icon"><span class="icon plus"></span>@Html.ActionLink("Holiday", "Create")</div>
+@using (Html.BeginForm("index", "holiday", FormMethod.Get, new { @class = "filter" }))
+{  
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Year, new { @class = "control-label" })
             </div>
-        }
+            <div class="select-form">
+                @Html.YearPicker("Year", 2014, (int)ViewBag.Year)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="submit" id="btnSearch" class="btn btn-primary">@Labels.Search</button>
+            <a class="btn btn-request" href="@Url.Action("create", "holiday")">
+                <span class="fa fa-plus"></span> @Labels.NewHoliday
+            </a>
+        </div>
     </div>
 }
-<table id="data" class="table table-custom persist-area">
+<table id="data" class="table table-custom">
     <thead>
         <tr class="persist-header">
             <th>@Labels.SymbolCount</th>
@@ -80,7 +82,7 @@
                             </a>
                         </td>
                         <td class="cmd">
-                            <a href="javascript:;" class="js-link-delete-holiday" data-id="@item.Id">
+                            <a href="javascript:;" class="deleteHoliday" data-id="@item.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>

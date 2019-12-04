@@ -339,6 +339,8 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\create.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\external.group.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
+    <Content Include="wwwroot\sources\js\pages\holiday\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
@@ -936,6 +938,8 @@
     <Content Include="wwwroot\dist\styles\menu.index.js.map" />
     <Content Include="wwwroot\dist\styles\shift.edit.js.map" />
     <Content Include="wwwroot\dist\styles\shift.index.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\holiday\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\holiday\create.scss" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
