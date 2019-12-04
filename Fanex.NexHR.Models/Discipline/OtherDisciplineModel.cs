@@ -14,7 +14,7 @@
 
         public float Score { get; set; }
 
-        public int DisciplineTypeId { get; set; }
+        public short DisciplineTypeId { get; set; }
 
         public string Name { get; set; }
 

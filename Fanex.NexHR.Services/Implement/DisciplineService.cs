@@ -55,11 +55,6 @@
             return baseService.GetData<OtherDisciplineModel>(criteria).ToList();
         }
 
-        public IList<OtherDisciplineModel> GetWeekendLeave(GetWeekendLeaveOfEmployeeCriteria criteria)
-        {
-            return baseService.GetData<OtherDisciplineModel>(criteria).ToList();
-        }
-
         public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)
         {
             return baseService.GetData<DisciplineTypeModel>(criteria).ToList();

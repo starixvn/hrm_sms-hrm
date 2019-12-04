@@ -1380,8 +1380,6 @@
     <Content Include="Views\Report\_ListWeekendLeaveSummary.cshtml" />
     <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
     <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
-    <Content Include="Views\Discipline\_AddWeekendLeave.cshtml" />
-    <Content Include="Views\Discipline\_ViewWeekendLeave.cshtml" />
     <Content Include="wwwroot\package.json" />
     <Content Include="wwwroot\.babelrc" />
     <Content Include="wwwroot\sources\styles\vendors\_multiselect.scss" />

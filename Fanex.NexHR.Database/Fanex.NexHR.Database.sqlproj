@@ -217,7 +217,7 @@
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetOtherDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\OtherDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\Employee_ChangePassword.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForWorkDay.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetNewRefNoByRequestType.sql" />
@@ -226,7 +226,7 @@
     <Build Include="dbo\Stored Procedures\Employee_Export_InformationBasic.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByCreateDate_AllType.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Export_InformationFull.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_AddOtherDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\OtherDiscipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\Message_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetOtherDisciplineType.sql" />
@@ -272,7 +272,7 @@
     <Build Include="dbo\Stored Procedures\Employee_Get.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyOvertimeDetails.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummary.sql" />
+    <Build Include="dbo\Stored Procedures\Report_DisciplineSummary.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
@@ -290,7 +290,7 @@
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAbsent.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetLateInEarlyOut.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_EmployeeInfo.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_DeleteOtherDiscipline.sql" />
+    <Build Include="dbo\Stored Procedures\OtherDiscipline_Delete.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_GroupExternal.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetForSync.sql" />
@@ -434,7 +434,6 @@
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_DeleteTrans.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Delete.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Approve.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetWeekendLeave.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Insert.sql" />
@@ -526,6 +525,7 @@
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_UpdateDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\CheckInOutRequest_UpdateDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_UpdateDiscipline.sql" />
+    <Build Include="dbo\Tables\OtherDiscipline.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

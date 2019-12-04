@@ -94,7 +94,6 @@
     <Compile Include="Discipline\GetMemberToAddOtherDiscipineBySupervisorIdCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
-    <Compile Include="Discipline\GetWeekendLeaveOfEmployeeCriteria.cs" />
     <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
     <Compile Include="EmployeeEmergency\DeleteEmergencyCriteria.cs" />

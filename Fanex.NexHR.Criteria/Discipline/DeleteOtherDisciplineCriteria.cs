@@ -8,20 +8,12 @@
         [SpParam(SqlParamName = "EmpId")]
         public int EmployeeId { get; set; }
 
-        public int DisciplineTypeId { get; set; }
-
         public DateTime WorkDate { get; set; }
+        public short DisciplineTypeId { get; set; }
+        public int ActorId { get; set; }
 
-        public int ModifiedBy { get; set; }
+        public override bool IsValid() => EmployeeId > 0 && ActorId > 0;
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0 && DisciplineTypeId != 0 && ModifiedBy > 0 && WorkDate != default(DateTime);
-        }
-
-        public override string GetSettingKey()
-        {
-            return "EmployeeDiscipline_DeleteOtherDiscipline";
-        }
+        public override string GetSettingKey() => "OtherDiscipline_Delete";
     }
 }

@@ -22,19 +22,7 @@
             <td>@item.UnpaidLeaveAbsent</td>
             <td>@item.ChangeShift</td>
             <td>@item.UnplannedLeave</td>
-            <td>
-                @if (item.WeekendLeave > 0)
-                {
-                    <a class="other-discipline viewWeekendLeave" style="color: red"
-                        data-empid="@item.Employee.EmployeeId" data-nickname="@item.Employee.NickName">
-                        -@item.WeekendLeave
-                    </a>
-                }
-                else
-                {
-                    <span>-</span>
-                }
-            </td>
+            <td>@item.WeekendLeave</td>
             <td>
                 @if (item.OtherDisciplineScore > 0)
                 {

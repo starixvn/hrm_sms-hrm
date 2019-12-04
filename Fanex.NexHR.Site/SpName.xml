@@ -274,18 +274,17 @@
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Discipline">
-    <Setting Key="EmployeeDiscipline_GetOtherDiscipline" SpName="EmployeeDiscipline_GetOtherDiscipline" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_AddOtherDiscipline" SpName="EmployeeDiscipline_AddOtherDiscipline" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_DeleteOtherDiscipline" SpName="EmployeeDiscipline_DeleteOtherDiscipline" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="OtherDiscipline_Get" SpName="OtherDiscipline_Get" DbName="nexhrx" Plain="0" />
+    <Setting Key="OtherDiscipline_Insert" SpName="OtherDiscipline_Insert" DbName="nexhrx" Plain="0" />
+    <Setting Key="OtherDiscipline_Delete" SpName="OtherDiscipline_Delete" DbName="nexhrx" Plain="0" />
     <Setting Key="DisciplineType_GetOtherDisciplineType" SpName="DisciplineType_GetOtherDisciplineType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="DisciplineType_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_GetSummary" SpName="EmployeeDiscipline_GetSummary" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_DisciplineSummary" SpName="Report_DisciplineSummary" DbName="nexhrx" Plain="0" />
     <Setting Key="EmployeeDiscipline_GetDetail" SpName="EmployeeDiscipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_UpdateIgnored" SpName="EmployeeDiscipline_UpdateIgnored" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeDiscipline_GetMemberToAddOtherDiscipine" SpName="EmployeeDiscipline_GetMemberToAddOtherDiscipine" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="EmployeeDiscipline_GetWeekendLeave" SpName="EmployeeDiscipline_GetWeekendLeave" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="RoleManagement">
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>

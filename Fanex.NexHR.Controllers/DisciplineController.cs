@@ -175,7 +175,7 @@
                 DisciplineTypeId = model.DisciplineTypeId,
                 Score = model.MinusScore,
                 Comment = model.Comment,
-                CreatedBy = sessionService.Employee.Id
+                ActorId = sessionService.Employee.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -188,7 +188,7 @@
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = sessionService.Employee.Id;
+                criteria.ActorId = sessionService.Employee.Id;
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)

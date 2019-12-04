@@ -13,8 +13,6 @@
 
         IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria);
 
-        IList<OtherDisciplineModel> GetWeekendLeave(GetWeekendLeaveOfEmployeeCriteria criteria);
-
         IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
 
         IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);

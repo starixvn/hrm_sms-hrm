@@ -9,17 +9,10 @@
         public int EmployeeId { get; set; }
 
         public DateTime FromDate { get; set; }
-
         public DateTime ToDate { get; set; }
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0 && FromDate <= ToDate;
-        }
+        public override bool IsValid() => EmployeeId > 0 && FromDate <= ToDate;
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeDiscipline_GetOtherDiscipline";
-        }
+        public override string GetSettingKey() => "OtherDiscipline_Get";
     }
 }

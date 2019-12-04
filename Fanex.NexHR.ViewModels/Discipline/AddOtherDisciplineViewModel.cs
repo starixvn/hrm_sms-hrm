@@ -19,7 +19,7 @@
 
         [Required(ErrorMessage = "Other discipline type is required.")]
         [Display(Name = "Discipline Type")]
-        public int DisciplineTypeId { get; set; }
+        public short DisciplineTypeId { get; set; }
 
         [Display(Name = "Minus Score")]
         public decimal MinusScore { get; set; }
