@@ -49,7 +49,6 @@ pipeline {
     always{
       archiveArtifacts "*.xml,*.email"
       step([$class: 'ACIPluginPublisher', name: '*.xml', shownOnProjectPage: false])
-      cobertura coberturaReportFile: "cobertura.xml", onlyStable: false
     }
 
     unsuccessful{
