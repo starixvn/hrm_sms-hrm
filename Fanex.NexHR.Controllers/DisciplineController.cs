@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -64,7 +65,7 @@
 
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
-            return PartialView("_ListDisciplineSummary", disciplines);
+            return PartialView("_DisciplineSummaryGrid", disciplines);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
@@ -127,7 +128,7 @@
             ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
             ViewBag.HasPermissionToUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
-            return PartialView("_ListDisciplineDetail", disciplines);
+            return PartialView("_DisciplineDetailGrid", disciplines);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
@@ -141,7 +142,9 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id);
+            ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
+                && sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
@@ -217,12 +220,7 @@
 
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)
         {
-            var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
-            {
-                SupervisorId = sessionService.Employee.Id,
-                Query = keyword
-            };
-            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(criteria);
+            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id, keyword);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }

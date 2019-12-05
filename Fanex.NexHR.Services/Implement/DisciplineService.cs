@@ -44,8 +44,13 @@
             return disciplines;
         }
 
-        public IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
+        public IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(int supervisorId, string query = null)
         {
+            var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
+            {
+                SupervisorId = supervisorId,
+                Query = query
+            };
             return baseService.GetData<EmployeeInfoModel>(criteria);
         }
 

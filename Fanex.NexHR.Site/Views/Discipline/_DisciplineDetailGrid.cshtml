@@ -63,9 +63,10 @@
                     @if (hasPermissionToUpdateOutOfControlReason)
                     {
                         <td>
-                            <input type="checkbox" class="checkbox-custom outOfControlReason" id="checkbox-@item.Employee.EmployeeId"
-                                    name="checkbox-@item.Employee.EmployeeId" checked="@item.IsOutOfControlReason" data-changed="false" data-originchecked="@item.IsOutOfControlReason" />
-                            <label for="checkbox-@item.Employee.EmployeeId"></label>
+                            <input type="checkbox" class="checkbox-custom outOfControlReason" id="checkbox-@index-@item.Employee.EmployeeId"
+                                name="checkbox-@index-@item.Employee.EmployeeId" checked="@item.IsOutOfControlReason" data-changed="false"
+                                data-originchecked="@item.IsOutOfControlReason" />
+                            <label for="checkbox-@index-@item.Employee.EmployeeId"></label>
                         </td>
                     }
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>

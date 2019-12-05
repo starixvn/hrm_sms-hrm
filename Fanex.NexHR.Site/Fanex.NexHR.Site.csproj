@@ -1343,11 +1343,11 @@
     <Content Include="Libs\SimplePagination\README.md" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
-    <Content Include="Views\Discipline\_ListDisciplineSummary.cshtml" />
+    <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
     <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
     <Content Include="Views\Discipline\_ViewOtherDiscipline.cshtml" />
     <Content Include="Views\Discipline\DisciplineDetail.cshtml" />
-    <Content Include="Views\Discipline\_ListDisciplineDetail.cshtml" />
+    <Content Include="Views\Discipline\_DisciplineDetailGrid.cshtml" />
     <Content Include="Views\Request\_ProcessRequest.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_LeaveRequestDetail.cshtml" />
     <Content Include="Views\Request\ProcessRequest\_CheckInOutRequestDetail.cshtml" />

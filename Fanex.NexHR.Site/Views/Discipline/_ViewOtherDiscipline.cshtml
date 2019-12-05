@@ -1,10 +1,11 @@
-﻿@model IList<OtherDisciplineModel>
+﻿@using Fanex.NexHR.Models.Discipline
+@using Fanex.NexHR.Resources
+@model IList<OtherDisciplineModel>
 @{
     var isHost = (bool)ViewBag.IsHost;
 }
 
 @Html.Hidden("IsSuccessful", false)
-
 <table class="table table-custom">
     <thead>
         <tr>
@@ -13,7 +14,10 @@
             <th>@Labels.DisciplineType</th>
             <th>@Labels.MinusScore</th>
             <th>@Labels.Comment</th>
-            <th>@Labels.Delete</th>
+            @if (isHost)
+            {
+                <th>@Labels.Delete</th>
+            }
         </tr>
     </thead>
     @if (Model.Any())
@@ -29,15 +33,16 @@
                     <td>@item.Name</td>
                     <td>@item.Score</td>
                     <td>@item.Comment</td>
-                    <td>
-                        @if (isHost)
-                        {
+
+                    @if (isHost)
+                    {
+                        <td>
                             <a href="javascript:;" class="deleteOtherDiscipline" data-row-index="@index" data-empid="@item.EmployeeId"
-                               data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">
+                                data-workdate="@item.WorkDate.ToDateMonthYearFormatedDate()" data-disciplinetype="@item.DisciplineTypeId">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
-                        }
-                    </td>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

@@ -16,6 +16,6 @@
 
         IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);
 
-        IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria);
+        IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(int supervisorId, string query = null);
     }
 }

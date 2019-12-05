@@ -149,6 +149,7 @@ import '../../shared/employee.search.in.team';
                 },
                 {
                     text: 'Cancel',
+                    class: 'btn btn-default',
                     click: function () {
                         $(this).dialog('close');
                     }
@@ -159,21 +160,12 @@ import '../../shared/employee.search.in.team';
                     query();
                 }
             },
-            show: {
-                effect: 'fade',
-                duration: 300
-            },
-            hide: {
-                effect: 'fade',
-                duration: 200
-            },
-            minWidth: 460,
-            dialogClass: 'modal-shadow'
+            minWidth: 460
         });
     }
 
     function initEventViewOtherDiscipline() {
-        $disciplineTableBody.find('a.viewOtherDiscipline').on('click', function () {
+        $disciplineTableBody.find('a.other-discipline').on('click', function () {
             var empId = parseInt($(this).data('empid'), 10),
                 nickname = $(this).data('nickname');
 
@@ -198,16 +190,7 @@ import '../../shared/employee.search.in.team';
                                     query();
                                 }
                             },
-                            show: {
-                                effect: 'fade',
-                                duration: 300
-                            },
-                            hide: {
-                                effect: 'fade',
-                                duration: 200
-                            },
-                            minWidth: 500,
-                            dialogClass: 'modal-shadow'
+                            minWidth: 500
                         });
                     }
                 });
