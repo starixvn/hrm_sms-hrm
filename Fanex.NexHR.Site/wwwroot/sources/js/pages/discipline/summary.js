@@ -1,8 +1,7 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker, initFromDateOnChange, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -68,7 +67,7 @@ import '../../shared/employee.search.in.team';
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'discipline/GetMemberToAddOtherDiscipline',
+                    url: resolveClientUrl('discipline/GetMemberToAddOtherDiscipline'),
                     data: {
                         keyword: request.term
                     },
@@ -76,7 +75,7 @@ import '../../shared/employee.search.in.team';
                         response($.map(data, function (item) {
                             return {
                                 label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
+                                value: item.EmployeeId
                             };
                         }));
                     }
@@ -116,13 +115,6 @@ import '../../shared/employee.search.in.team';
         });
     }
 
-    function initEventOnChangeFromDate() {
-        $('#FromDate').on("change", function () {
-            var fromDate = $(this).val();
-            $('#ToDate').val(fromDate);
-        });
-    }
-
     function initAddOtherDisciplineDialog() {
         initAutocomplete($dialogAddOtherDiscipline);
         initDatepicker();
@@ -141,7 +133,7 @@ import '../../shared/employee.search.in.team';
                         if (validateAddOtherDiscipline()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'discipline/AddOtherDiscipline',
+                                url: resolveClientUrl('discipline/AddOtherDiscipline'),
                                 data: $('#frmAddOtherDiscipline').serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
@@ -180,16 +172,6 @@ import '../../shared/employee.search.in.team';
         });
     }
 
-    function initEventForTeamDropdown() {
-        $('form.form-filter #TeamId').on('change', function () {
-            var teamId = $('form.form-filter #TeamId').val();
-
-            if (teamId.length > 0) {
-                $('form.form-filter #TeamName').val($('form.form-filter #TeamId option:selected').text());
-            }
-        });
-    }
-
     function initEventViewOtherDiscipline() {
         $disciplineTableBody.find('a.viewOtherDiscipline').on('click', function () {
             var empId = parseInt($(this).data('empid'), 10),
@@ -198,7 +180,7 @@ import '../../shared/employee.search.in.team';
             if (empId > 0) {
                 $.ajax({
                     type: 'GET',
-                    url: _global.root + 'discipline/ViewOtherDiscipline',
+                    url: resolveClientUrl('discipline/ViewOtherDiscipline'),
                     dataType: 'html',
                     data: {
                         employeeId: empId,
@@ -243,9 +225,9 @@ import '../../shared/employee.search.in.team';
                 fromDate = $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
                 toDate = $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val();
 
-            window.open(_global.root + 'discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
+            window.open(resolveClientUrl('discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
                 + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
-                + '&isLocal=' + isLocal + '&reasonId=' + reasonId + '&fromSummaryPage=true', '_blank');
+                + '&isLocal=' + isLocal + '&reasonId=' + reasonId + '&fromSummaryPage=true'), '_blank');
         });
     }
 
@@ -261,7 +243,7 @@ import '../../shared/employee.search.in.team';
                 rowIndex = $(this).data('row-index');
 
             confirm('Are you sure you want to delete this other discipline?', function () {
-                $.post(_global.root + 'discipline/DeleteOtherDiscipline', {
+                $.post(resolveClientUrl('discipline/DeleteOtherDiscipline'), {
                     employeeId: empId,
                     workDate: workdate,
                     disciplineTypeId: disciplineTypeId
@@ -317,7 +299,7 @@ import '../../shared/employee.search.in.team';
 
             $.ajax({
                 type: 'GET',
-                url: _global.root + 'discipline/PartialAddOtherDiscipline',
+                url: resolveClientUrl('discipline/PartialAddOtherDiscipline'),
                 dataType: 'html',
                 success: function (data) {
                     $dialogAddOtherDiscipline.html(data);
@@ -345,7 +327,7 @@ import '../../shared/employee.search.in.team';
     function query() {
         blockUI();
         $.ajax({
-            url: _global.root + 'discipline/PartialListDisciplineSummary',
+            url: resolveClientUrl('discipline/getDisciplineSummaryGrid'),
             data: $('form.form-filter').serialize(),
             success: function (data) {
                 $disciplineTableBody.html(data);
@@ -363,11 +345,10 @@ import '../../shared/employee.search.in.team';
         $dialogViewOtherDiscipline = $('#dialogViewOtherDiscipline');
         $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
         initDatepicker();
-        initEventForTeamDropdown();
+        initFromDateOnChange($('#FromDate'), $('#ToDate'));
         initEventForDateRangeDropdown();
-        initEventOnChangeFromDate();
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,
@@ -375,6 +356,11 @@ import '../../shared/employee.search.in.team';
                     singleSelection: true,
                     onSelect: function () {
                         $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                        if ($('#TeamId').val().length > 0) {
+                            $('form.form-filter #TeamName').val($('#Section .selected-text').text());
+                        } else {
+                            $('form.form-filter #TeamName').val('');
+                        }
                     }
                 });
 
@@ -396,7 +382,7 @@ import '../../shared/employee.search.in.team';
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-            window.location.href = _global.root + 'ExportDiscipline/ExportDisciplineSummaryReport?' + $('form.form-filter').serialize();
+            window.location.href = resolveClientUrl('ExportDiscipline/ExportDisciplineSummaryReport?' + $('form.form-filter').serialize());
         });
 
         floatThead("table#data");

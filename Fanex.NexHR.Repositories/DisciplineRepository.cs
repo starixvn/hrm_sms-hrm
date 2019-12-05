@@ -44,7 +44,7 @@
         {
             return disciplines.Select(discipline =>
             {
-                double? totalHours = discipline.TotalHours;
+                decimal? totalHours = discipline.TotalHours;
                 int? lateIn = discipline.LateIn;
                 int? earlyOut = discipline.EarlyOut;
                 DateTime? checkIn = discipline.CheckIn;
@@ -66,7 +66,6 @@
                         FullName = discipline.FullName,
                         Code = discipline.Code,
                         IsLocal = discipline.IsLocal,
-                        GroupId = discipline.GroupId,
                         GroupName = discipline.GroupName,
                         GroupCode = discipline.GroupCode
                     },
@@ -82,8 +81,6 @@
                     WeekendLeave = GetWeekendLeave(discipline),
                     EmployeeComment = discipline.EmployeeComment,
                     ApproverComment = discipline.ApproverComment,
-                    Confirmed = discipline.IsConfirmed,
-                    HasConfirmed = discipline.HasConfirmed,
                     IsOutOfControlReason = discipline.IsOutOfControlReason
                 };
             }).ToList();
@@ -239,7 +236,8 @@
                 disciplineDetail.UnplannedLeave,
                 disciplineDetail.UnpaidLeave,
                 disciplineDetail.UnpaidLeaveAbsent,
-                disciplineDetail.ChangeShift
+                disciplineDetail.ChangeShift,
+                disciplineDetail.WeekendLeave
             };
 
             foreach (DisciplineModel violation in violations.Where(violation => violation != null && violation.HasViolated))
@@ -249,10 +247,9 @@
             }
         }
 
-        private static string ConvertNumberToTime(double number)
+        private static string ConvertNumberToTime(decimal number)
         {
-            double numberMinutes = Math.Round(number);
-
+            decimal numberMinutes = Math.Round(number);
             var timeSpan = new TimeSpan(0, (int)numberMinutes, 0);
             string time = number > 0 ? timeSpan.ToString(@"hh\:mm") : string.Empty;
 

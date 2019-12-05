@@ -1,6 +1,5 @@
 ﻿
-
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetDetail] @FromDate DATE
+CREATE PROCEDURE [dbo].[Report_DisciplineDetail] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
 	,@GroupId INT = NULL
@@ -10,12 +9,12 @@ CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetDetail] @FromDate DATE
 	,@HasIgnored BIT = NULL
 AS
 /*
-Created: 20160420@Tim.Trinh
-Task: Get discipline detail of employees.
+Created: 20191204@Tim.Trinh
+Task: get discipline detail
 DB: SMSHRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -40,25 +39,11 @@ BEGIN
 		,@UnpaidLeaveAbsentId INT = 8
 		,@UnplannedLeaveId INT = 9
 		,@WeekendLeaveId INT = 10
-
-	CREATE TABLE #tblRoles (RoleId INT)
+	DECLARE @tblRole TABLE (RoleId INT)
 
 	CREATE TABLE #tblDisciplineDetail (
-		WorkDate DATE
-		,ShiftName NVARCHAR(100)
-		,CheckIn DATETIME
-		,CheckOut DATETIME
-		,TotalHours FLOAT
-		,LateIn INT
-		,EarlyOut INT
-		,EmployeeId INT
-		,Code NVARCHAR(20)
-		,NickName NVARCHAR(20)
-		,FullName NVARCHAR(100)
-		,IsLocal BIT
-		,GroupId INT
-		,GroupName NVARCHAR(150)
-		,GroupCode NVARCHAR(20)
+		EmployeeId INT
+		,WorkDate DATE
 		,ChangeShiftId INT
 		,ChangeShiftValue INT
 		,ChangeShiftScore DECIMAL(5, 2)
@@ -121,36 +106,21 @@ BEGIN
 		,WeekendLeaveHasApprovedBy BIT
 		,EmployeeComment NVARCHAR(MAX)
 		,ApproverComment NVARCHAR(MAX)
-		,IsConfirmed BIT
-		,HasConfirmed BIT
 		,IsOutOfControlReason BIT
-		);
+		)
 
-	INSERT INTO #tblRoles (RoleId)
+	INSERT INTO @tblRole (RoleId)
 	SELECT RoleId
 	FROM dbo.[EmployeeRole] WITH (NOLOCK)
 	WHERE EmployeeId = @ApproverId;
 
 	SELECT @HasEditDisciplineRole = 1
-	FROM #tblRoles WITH (NOLOCK)
+	FROM @tblRole
 	WHERE RoleId = 8 -- edit discipline
 
 	INSERT INTO #tblDisciplineDetail
-	SELECT DISTINCT dis.WorkDate
-		,dis.ShiftName
-		,dis.CheckIn
-		,dis.CheckOut
-		,dis.TotalHours
-		,dis.LateIn
-		,dis.EarlyOut
-		,emp.EmpId AS EmployeeId
-		,emp.Code
-		,emp.NickName
-		,emp.FullName
-		,empSum.IsLocal
-		,gr.GroupId
-		,gr.[Name] AS GroupName
-		,gr.Code AS GroupCode
+	SELECT DISTINCT emp.EmpId
+		,dis.WorkDate
 		,@ChangeShiftId AS ChangeShiftId
 		,dis.IsChangeShift AS ChangeShiftValue
 		,dbo.fncGetDisciplineScoreById(@ChangeShiftId) AS ChangeShiftScore
@@ -166,7 +136,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS ChangeShiftHasViolated
-		,ISNULL(dis.IsIgnoredChangeShift, 0) AS ChangeShiftHasIgnored
+		,ignored.IsIgnoredChangeShift AS ChangeShiftHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -187,7 +157,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS MissingCheckInOutHasViolated
-		,ISNULL(dis.IsIgnoredMissingCheckInOut, 0) AS MissingCheckInOutHasIgnored
+		,ignored.IsIgnoredMissingCheckInOut AS MissingCheckInOutHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND (dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1) THEN 1
@@ -208,7 +178,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS LateInHasViolated
-		,ISNULL(dis.IsIgnoredLateIn, 0) AS LateInHasIgnored
+		,ignored.IsIgnoredLateIn AS LateInHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -229,7 +199,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS EarlyOutHasViolated
-		,ISNULL(dis.IsIgnoredEarlyOut, 0) AS EarlyOutHasIgnored
+		,ignored.IsIgnoredEarlyOut AS EarlyOutHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -250,14 +220,14 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS AbsentHasViolated
-		,ISNULL(dis.IsIgnoredAbsent, 0) AS AbsentHasIgnored
+		,ignored.IsIgnoredAbsent AS AbsentHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS AbsentHasApprovedBy
 		,@UnplannedLeaveId AS UnplannedLeaveId
-		,ISNULL(dis.IsUnplannedLeave, 0) AS UnplannedLeaveValue
+		,dis.IsUnplannedLeave AS UnplannedLeaveValue
 		,dbo.fncGetDisciplineScoreById(@UnplannedLeaveId) AS UnplannedLeaveScore
 		,(CASE 
 			WHEN dis.IsUnplannedLeave = 1
@@ -271,7 +241,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS UnplannedLeaveHasViolated
-		,ISNULL(dis.IsIgnoredUnplannedLeave, 0) AS UnplannedLeaveHasIgnored
+		,ignored.IsIgnoredUnplannedLeave AS UnplannedLeaveHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -292,7 +262,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS UnpaidLeaveHasViolated
-		,ISNULL(dis.IsIgnoredUnpaidLeave, 0) AS UnpaidLeaveHasIgnored
+		,ignored.IsIgnoredUnpaidLeave AS UnpaidLeaveHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -313,7 +283,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS WorkingUnderTimeHasViolated
-		,ISNULL(dis.IsIgnoredWorkingUndertime, 0) AS WorkingUnderTimeHasIgnored
+		,ignored.IsIgnoredWorkingUndertime AS WorkingUnderTimeHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -334,14 +304,14 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS UnpaidLeaveAbsentHasViolated
-		,ISNULL(dis.IsIgnoredUnpaidLeaveAbsent, 0) AS UnpaidLeaveAbsentHasIgnored
+		,ignored.IsIgnoredUnpaidLeaveAbsent AS UnpaidLeaveAbsentHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS UnpaidLeaveAbsentHasApprovedBy
 		,@WeekendLeaveId AS WeekendLeaveId
-		,ISNULL(dis.IsWeekendLeave, 0) AS WeekendLeaveValue
+		,dis.IsWeekendLeave AS WeekendLeaveValue
 		,dbo.fncGetDisciplineScoreById(@WeekendLeaveId) AS WeekendLeaveScore
 		,(CASE 
 			WHEN dis.IsWeekendLeave = 1
@@ -355,7 +325,7 @@ BEGIN
 					) THEN 1
 			ELSE 0 END
 			) AS WeekendLeaveHasViolated
-		,ISNULL(dis.IsIgnoredWeekendLeave, 0) AS WeekendLeaveHasIgnored
+		,ignored.IsIgnoredWeekendLeave AS WeekendLeaveHasIgnored
 		,(CASE 
 			WHEN @HasEditDisciplineRole = 1
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
@@ -363,24 +333,16 @@ BEGIN
 			) AS WeekendLeaveHasApprovedBy
 		,dis.EmployeeComment
 		,dis.ApproverComment
-		,(CASE 
-			WHEN ISNULL(dis.IsConfirmed, '') = '' THEN 0
-			ELSE dis.IsConfirmed END
-			) AS IsConfirmed
-		,(CASE 
-			WHEN @HasEditDisciplineRole = 1
-				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
-			ELSE 0 END
-			) AS HasConfirmed
-		,ISNULL(dis.IsOutOfControlReason, 0)
-	FROM dbo.EmployeeDiscipline AS dis WITH (NOLOCK)
+		,dis.IsOutOfControlReason
+	FROM dbo.Discipline AS dis WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.EmployeeSummary AS empSum WITH (NOLOCK) ON emp.EmpId = empSum.EmpId
+		INNER JOIN dbo.DisciplineIgnore AS ignored WITH (NOLOCK) ON dis.EmpId = ignored.EmpId
+		AND dis.WorkDate = ignored.WorkDate
 	WHERE emp.[Enabled] = 1
 		AND emp.IsDeleted = 0
-		AND ISNULL(dis.IsDeleted, 0) = 0
-		AND dis.DisciplineType > 0
+		AND dis.IsDeleted = 0
 		AND dis.WorkDate BETWEEN @FromDate
 			AND @ToDate
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
@@ -397,7 +359,7 @@ BEGIN
 			OR dis.IsWeekendLeave > 0
 			)
 		AND (
-			ISNULL(@ReasonId, '') = ''
+			@ReasonId IS NULL
 			OR (
 				@ReasonId = @ChangeShiftId
 				AND dis.IsChangeShift = 1
@@ -508,7 +470,7 @@ BEGIN
 				)
 			OR (
 				@ReasonId = @WeekendLeaveId
-				AND dis.IsIgnoredWeekendLeave = 1
+				AND dis.IsWeekendLeave = 1
 				AND EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
@@ -523,7 +485,7 @@ BEGIN
 		AND (
 			EXISTS (
 				SELECT 1
-				FROM #tblRoles WITH (NOLOCK)
+				FROM @tblRole
 				WHERE RoleId IN (6, 7) -- HR, SA
 				)
 			OR EXISTS (
@@ -579,7 +541,7 @@ BEGIN
 			OR (
 				EXISTS (
 					SELECT 1
-					FROM #tblRoles WITH (NOLOCK)
+					FROM @tblRole
 					WHERE RoleId = 1 -- Employee
 					)
 				AND emp.EmpId = @ApproverId
@@ -596,43 +558,43 @@ BEGIN
 				AND (
 					(
 						dis.IsChangeShift = 1
-						AND dis.IsIgnoredChangeShift = 1
+						AND ignored.IsIgnoredChangeShift = 1
 						)
 					OR (
 						dis.IsMissingCheckInOut = 1
-						AND dis.IsIgnoredMissingCheckInOut = 1
+						AND ignored.IsIgnoredMissingCheckInOut = 1
 						)
 					OR (
 						dis.IsLateIn = 1
-						AND dis.IsIgnoredLateIn = 1
+						AND ignored.IsIgnoredLateIn = 1
 						)
 					OR (
 						dis.IsEarlyOut = 1
-						AND dis.IsIgnoredEarlyOut = 1
+						AND ignored.IsIgnoredEarlyOut = 1
 						)
 					OR (
 						dis.IsAbsent = 1
-						AND dis.IsIgnoredAbsent = 1
+						AND ignored.IsIgnoredAbsent = 1
 						)
 					OR (
 						dis.IsUnplannedLeave = 1
-						AND dis.IsIgnoredUnplannedLeave = 1
+						AND ignored.IsIgnoredUnplannedLeave = 1
 						)
 					OR (
 						dis.IsUnpaidLeave = 1
-						AND dis.IsIgnoredUnpaidLeave = 1
+						AND ignored.IsIgnoredUnpaidLeave = 1
 						)
 					OR (
 						dis.IsWorkingUnderTime = 1
-						AND dis.IsIgnoredWorkingUndertime = 1
+						AND ignored.IsIgnoredWorkingUndertime = 1
 						)
 					OR (
 						dis.IsUnpaidLeaveAbsent = 1
-						AND dis.IsIgnoredUnpaidLeaveAbsent = 1
+						AND ignored.IsIgnoredUnpaidLeaveAbsent = 1
 						)
 					OR (
 						dis.IsWeekendLeave = 1
-						AND dis.IsIgnoredWeekendLeave = 1
+						AND ignored.IsIgnoredWeekendLeave = 1
 						)
 					)
 				)
@@ -641,54 +603,71 @@ BEGIN
 				AND (
 					(
 						dis.IsChangeShift = 1
-						AND dis.IsIgnoredChangeShift = 0
+						AND ignored.IsIgnoredChangeShift = 0
 						)
 					OR (
 						dis.IsMissingCheckInOut = 1
-						AND dis.IsIgnoredMissingCheckInOut = 0
+						AND ignored.IsIgnoredMissingCheckInOut = 0
 						)
 					OR (
 						dis.IsLateIn = 1
-						AND dis.IsIgnoredLateIn = 0
+						AND ignored.IsIgnoredLateIn = 0
 						)
 					OR (
 						dis.IsEarlyOut = 1
-						AND dis.IsIgnoredEarlyOut = 0
+						AND ignored.IsIgnoredEarlyOut = 0
 						)
 					OR (
 						dis.IsAbsent = 1
-						AND dis.IsIgnoredAbsent = 0
+						AND ignored.IsIgnoredAbsent = 0
 						)
 					OR (
 						dis.IsUnplannedLeave = 1
-						AND dis.IsIgnoredUnplannedLeave = 0
+						AND ignored.IsIgnoredUnplannedLeave = 0
 						)
 					OR (
 						dis.IsUnpaidLeave = 1
-						AND dis.IsIgnoredUnpaidLeave = 0
+						AND ignored.IsIgnoredUnpaidLeave = 0
 						)
 					OR (
 						dis.IsWorkingUnderTime = 1
-						AND dis.IsIgnoredWorkingUndertime = 0
+						AND ignored.IsIgnoredWorkingUndertime = 0
 						)
 					OR (
 						dis.IsUnpaidLeaveAbsent = 1
-						AND dis.IsIgnoredUnpaidLeaveAbsent = 0
+						AND ignored.IsIgnoredUnpaidLeaveAbsent = 0
 						)
 					OR (
 						dis.IsWeekendLeave = 1
-						AND dis.IsIgnoredWeekendLeave = 0
+						AND ignored.IsIgnoredWeekendLeave = 0
 						)
 					)
 				)
 			)
 	ORDER BY dis.WorkDate DESC
 
-	SELECT dis.*
+	SELECT emp.EmpId AS EmployeeId
+		,emp.Code
+		,emp.NickName
+		,emp.FullName
+		,empsum.IsLocal
+		,gr.Code AS GroupCode
+		,gr.[Name] AS GroupName
+		,shift.Code AS ShiftName
+		,empatt.InFixed AS CheckIn
+		,empatt.OutFixed AS CheckOut
+		,empatt.LateIn
+		,empatt.EarlyOut
+		,empatt.TotalWorkHours AS TotalHours
+		,dis.*
 	FROM #tblDisciplineDetail AS dis WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmployeeId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON dis.EmployeeId = empatt.EmpId
+		AND dis.WorkDate = empatt.AttendanceDate
+		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON empatt.ShiftId = shift.ShiftId
 	ORDER BY dis.WorkDate DESC
 
-	DROP TABLE #tblRoles
-
 	DROP TABLE #tblDisciplineDetail
-END;
+END

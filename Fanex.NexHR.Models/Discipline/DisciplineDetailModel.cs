@@ -48,10 +48,6 @@
 
         public string EmployeeComment { get; set; }
 
-        public bool Confirmed { get; set; }
-
-        public bool HasConfirmed { get; set; }
-
         public bool IsWeekend
         {
             get

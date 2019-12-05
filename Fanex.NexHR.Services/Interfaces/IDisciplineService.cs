@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Criteria.Discipline;
-    using Models;
     using Models.Discipline;
 
     public interface IDisciplineService
@@ -17,6 +16,6 @@
 
         IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);
 
-        IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria);
+        IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria);
     }
 }

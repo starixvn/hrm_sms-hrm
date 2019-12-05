@@ -1,14 +1,14 @@
 ﻿
-CREATE PROCEDURE [dbo].[EmployeeDiscipline_GetMemberToAddOtherDiscipine] @SupervisorId INT
-	,@Query NVARCHAR(100)
+CREATE PROCEDURE [dbo].[OtherDiscipline_GetMember] @SupervisorId INT
+	,@Query NVARCHAR(100) = NULL
 AS
 /*
-Created: 20160526@Tim.Trinh
+Created: 20191205@Tim.Trinh
 Task: Get member by Supervisor.
 DB: SMSHRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -17,7 +17,7 @@ BEGIN
 	IF (ISNULL(@Query, '') <> '')
 		SET @Query = '%' + @Query + '%'
 
-	SELECT DISTINCT emp.EmpId
+	SELECT DISTINCT emp.EmpId AS EmployeeId
 		,emp.NickName
 		,emp.FullName
 	FROM dbo.Employee AS emp WITH (NOLOCK)
@@ -32,7 +32,7 @@ BEGIN
 			OR (
 				es.OwnerId = @SupervisorId
 				AND es.EmpId <> @SupervisorId
-				AND es.ActionType IN (8)
+				AND es.ActionType = 8
 				)
 			)
 		AND (
@@ -43,14 +43,14 @@ BEGIN
 		AND emp.[Enabled] = 1
 	
 	UNION
-	SELECT DISTINCT emp.EmpId
+	SELECT DISTINCT emp.EmpId AS EmployeeId
 		,emp.NickName
 		,emp.FullName
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.GroupSupervisor AS gs WITH (NOLOCK) ON emp.GroupId = gs.GroupId
 	WHERE gs.OwnerId = @SupervisorId
 		AND emp.EmpId <> @SupervisorId
-		AND gs.ActionType IN (8)
+		AND gs.ActionType = 8
 		AND (
 			emp.NickName LIKE '%' + @query + '%'
 			OR emp.FullName LIKE '%' + @query + '%'

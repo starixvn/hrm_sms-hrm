@@ -63,6 +63,18 @@ export const KeepInViewType = {
     KeepInViewByDay: 1,
     KeepInViewByHour: 2
 };
+export const DisciplineType = {
+    ChangeShift: 1,
+    MissingCheckInOut: 2,
+    LateIn: 3,
+    EarlyOut: 4,
+    Absent: 5,
+    UnpaidLeave: 6,
+    WorkingUnderTime: 7,
+    UnpaidLeaveAbsent: 8,
+    UnplannedLeave: 9,
+    WeekendLeave: 10
+};
 export const Messages = {
     notAvailable: 'Not available',
     invalidInputData: 'Invalid input data',

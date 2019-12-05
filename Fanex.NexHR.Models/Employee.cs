@@ -77,7 +77,7 @@
         [DataType(DataType.Date)]
         public DateTime? ResignedDate { get; set; }
 
-        public string Skype { get; set; }    
+        public string Skype { get; set; }
 
         public string LetsTalk { get; set; }
 
@@ -235,7 +235,6 @@
 
         [Display(Name = "Pickup Remark")]
         public string PickupRemark { get; set; }
-
 
         private string[] GetRoles2Array()
         {

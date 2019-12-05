@@ -1,23 +1,16 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker, initTooltip } from '../../shared/common.functions';
+import axios from 'axios';
+import { stringify, parse } from 'qs';
+
+import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, initDatepicker, initFromDateOnChange, initTooltip, resolveClientUrl } from '../../shared/common.functions';
+import { DisciplineType } from '../../shared/constants';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 (function () {
-    function initEventForTeamDropdown() {
-        $('form.form-filter #TeamId').on('change', function () {
-            var teamId = $('form.form-filter #TeamId').val();
-
-            if (teamId.length > 0) {
-                $('form.form-filter #TeamName').val($('form.form-filter #TeamId option:selected').text());
-            }
-        });
-    }
-
     function initEventForIgnoreDiscipline() {
         $('#discipline-detail table.discipline-detail td input.ignoredDiscipline:checkbox')
             .on('click', function () {
@@ -53,17 +46,6 @@ import '../../shared/employee.search.in.team';
                 $(this).data('changed', changed);
             });
 
-        $('#discipline-detail table.discipline-detail td input.violationRecorded:checkbox')
-            .on('click', function () {
-                var hasConfirmed = $(this).data('confirmed').toLowerCase() === 'true';
-
-                if ($(this).prop('checked') !== hasConfirmed) {
-                    $(this).data('changed', true);
-                } else {
-                    $(this).data('changed', false);
-                }
-            });
-
         $('#checkAll').on('click', function () {
             var isChecked = $(this).prop('checked');
 
@@ -86,10 +68,9 @@ import '../../shared/employee.search.in.team';
     }
 
     function getDataChanged() {
-        var ignoredDisciplines = [];
-
+        const ignoredDisciplines = [];
         $('#discipline-detail table.discipline-detail').find('tbody tr').each(function () {
-            var approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text()),
+            let approverSubstractScore = parseFloat($(this).find('td.approverSubtractScore span').text()),
                 isChanged = false;
 
             $(this).find('td input.ignoredDiscipline').each(function () {
@@ -105,7 +86,7 @@ import '../../shared/employee.search.in.team';
             }
 
             if (isChanged) {
-                var ignoredDiscipline = {
+                let ignoredDiscipline = {
                     WorkDate: '',
                     EmployeeId: false,
                     IsIgnoredChangeShift: false,
@@ -125,40 +106,41 @@ import '../../shared/employee.search.in.team';
                 ignoredDiscipline.IsOutOfControlReason = $(this).find('td input.outOfControlReason').prop('checked');
 
                 $(this).find('td input.ignoredDiscipline').each(function () {
-                    var disciplineTypeId = $(this).data('discipline-type-id');
-                    ignoredDiscipline.WorkDate = $(this).data('workdate');
-                    ignoredDiscipline.EmployeeId = $(this).data('employee-id');
+                    const $checkbox = $(this);
+                    const disciplineTypeId = parseInt($checkbox.data('discipline-type-id'), 10);
+                    ignoredDiscipline.WorkDate = $checkbox.data('workdate');
+                    ignoredDiscipline.EmployeeId = $checkbox.data('employee-id');
 
                     switch (disciplineTypeId) {
-                        case 1:
-                            ignoredDiscipline.IsIgnoredChangeShift = $(this).prop('checked');
+                        case DisciplineType.ChangeShift:
+                            ignoredDiscipline.IsIgnoredChangeShift = $checkbox.prop('checked');
                             break;
-                        case 2:
-                            ignoredDiscipline.IsIgnoredMissingCheckInOut = $(this).prop('checked');
+                        case DisciplineType.MissingCheckInOut:
+                            ignoredDiscipline.IsIgnoredMissingCheckInOut = $checkbox.prop('checked');
                             break;
-                        case 3:
-                            ignoredDiscipline.IsIgnoredLateIn = $(this).prop('checked');
+                        case DisciplineType.LateIn:
+                            ignoredDiscipline.IsIgnoredLateIn = $checkbox.prop('checked');
                             break;
-                        case 4:
-                            ignoredDiscipline.IsIgnoredEarlyOut = $(this).prop('checked');
+                        case DisciplineType.EarlyOut:
+                            ignoredDiscipline.IsIgnoredEarlyOut = $checkbox.prop('checked');
                             break;
-                        case 5:
-                            ignoredDiscipline.IsIgnoredAbsent = $(this).prop('checked');
+                        case DisciplineType.Absent:
+                            ignoredDiscipline.IsIgnoredAbsent = $checkbox.prop('checked');
                             break;
-                        case 6:
-                            ignoredDiscipline.IsIgnoredUnpaidLeave = $(this).prop('checked');
+                        case DisciplineType.UnpaidLeave:
+                            ignoredDiscipline.IsIgnoredUnpaidLeave = $checkbox.prop('checked');
                             break;
-                        case 7:
-                            ignoredDiscipline.IsIgnoredWorkingUnderTime = $(this).prop('checked');
+                        case DisciplineType.WorkingUnderTime:
+                            ignoredDiscipline.IsIgnoredWorkingUnderTime = $checkbox.prop('checked');
                             break;
-                        case 8:
-                            ignoredDiscipline.IsIgnoredUnpaidLeaveAbsent = $(this).prop('checked');
+                        case DisciplineType.UnpaidLeaveAbsent:
+                            ignoredDiscipline.IsIgnoredUnpaidLeaveAbsent = $checkbox.prop('checked');
                             break;
-                        case 9:
-                            ignoredDiscipline.IsIgnoredUnplannedLeave = $(this).prop('checked');
+                        case DisciplineType.UnplannedLeave:
+                            ignoredDiscipline.IsIgnoredUnplannedLeave = $checkbox.prop('checked');
                             break;
-                        case 10:
-                            ignoredDiscipline.IsIgnoredWeekendLeave = $(this).prop('checked');
+                        case DisciplineType.WeekendLeave:
+                            ignoredDiscipline.IsIgnoredWeekendLeave = $checkbox.prop('checked');
                             break;
                     }
                 });
@@ -175,28 +157,26 @@ import '../../shared/employee.search.in.team';
             var ignoredDisciplines = getDataChanged();
 
             if (ignoredDisciplines.length > 0) {
-                ignoredDisciplines = JSON.stringify({ 'ignoredDisciplineDetails': ignoredDisciplines });
-
                 confirm('Are you sure you want to save?',
                     function () {
-                        $.ajax({
-                            type: 'POST',
-                            dataType: 'json',
-                            url: _global.root + 'discipline/UpdateIgnoredDiscipline',
-                            data: ignoredDisciplines,
-                            contentType: 'application/json; charset=utf-8',
-                            success: function (result) {
-                                if (result.IsSuccessful) {
-                                    alert('Updated Successfully!');
-                                    resetOriginChecked();
-                                } else {
-                                    alert(result.Message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                alert(textStatus + ': ' + errorThrown);
+                        axios({
+                            url: resolveClientUrl('discipline/EditDisciplineIgnore'),
+                            method: 'POST',
+                            data: stringify({ ignoreDetails: ignoredDisciplines }),
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/x-www-form-urlencoded'
                             }
-                        });
+                        }).then(response => {
+                            let data = response.data;
+
+                            if (data.isSuccessful) {
+                                alert('Updated Successfully!');
+                                resetOriginChecked();
+                            } else {
+                                alert(data.message);
+                            }
+                        }).catch(axiosError);
                     });
             }
         });
@@ -206,26 +186,26 @@ import '../../shared/employee.search.in.team';
         $('form.form-filter #DateRange').on('change', function () {
             var dateRange = $('form.form-filter #DateRange').val();
 
-            if (parseInt(dateRange) !== 0) {
-                var quarter = dateRange.charAt(0);
-                var year = dateRange.substring(1, dateRange.length);
+            if (parseInt(dateRange, 10) !== 0) {
+                const quarter = parseInt(dateRange.charAt(0), 10),
+                    year = parseInt(dateRange.substring(1, dateRange.length), 10);
 
-                var fromDate = new Date($('form.form-filter #FromDate').val());
-                var toDate = new Date($('form.form-filter #ToDate').val());
-                switch (parseInt(quarter)) {
+                let fromDate = new Date($('form.form-filter #FromDate').val()),
+                    toDate = new Date($('form.form-filter #ToDate').val());
+                switch (quarter) {
                     case 1: // First Half Year 1H
-                        fromDate.setFullYear(parseInt(year), 0, 1);
-                        toDate.setFullYear(parseInt(year), 5, 30);
+                        fromDate.setFullYear(year, 0, 1);
+                        toDate.setFullYear(year, 5, 30);
                         break;
 
                     case 2: // Second Half Year 2H
-                        fromDate.setFullYear(parseInt(year), 6, 1);
-                        toDate.setFullYear(parseInt(year), 11, 31);
+                        fromDate.setFullYear(year, 6, 1);
+                        toDate.setFullYear(year, 11, 31);
                         break;
 
                     default:
-                        fromDate.setFullYear(parseInt(year), 0, 1);
-                        toDate.setFullYear(parseInt(year), 11, 31);
+                        fromDate.setFullYear(year, 0, 1);
+                        toDate.setFullYear(year, 11, 31);
                         break;
                 }
 
@@ -236,62 +216,60 @@ import '../../shared/employee.search.in.team';
     }
 
     function formatDate(date) {
-        var monthNames = [
+        const monthNames = [
             "Jan", "Feb", "Mar",
             "Apr", "May", "Jun", "Jul",
             "Aug", "Sep", "Oct",
             "Nov", "Dec"
         ];
 
-        var day = date.getDate();
-        var monthIndex = date.getMonth();
-        var year = date.getFullYear();
+        const day = date.getDate(),
+            monthIndex = date.getMonth(),
+            year = date.getFullYear();
 
         return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
     }
 
     function query() {
         blockUI();
-        $.ajax({
-            url: _global.root + 'discipline/PartialListDisciplineDetail',
-            data: $('form.form-filter').serialize(),
-            success: function (data) {
-                $('#discipline-detail').html(data);
-                floatThead("table#data");
-                initEventForIgnoreDiscipline();
-                initEventForSaveChange();
-                initTooltip();
-                unblockUI();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                unblockUI();
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+        axios({
+            url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
+            method: 'GET',
+            params: parse($('form.form-filter').serialize()),
+            responseType: 'text'
+        }).then(response => {
+            $('#discipline-detail').html(response.data);
+            floatThead("table#data");
+            initEventForIgnoreDiscipline();
+            initEventForSaveChange();
+            initTooltip();
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     $(document).ready(function () {
-        initEventForTeamDropdown();
         initEventForDateRangeDropdown();
         initDatepicker();
-        $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
-            success: function (data) {
+        initFromDateOnChange($('#FromDate'), $('#ToDate'));
+
+        axios(resolveClientUrl('Department/GetHierarchy'))
+            .then(response => {
                 $('#Section').multiSelectTreeView({
-                    data: data,
+                    data: response.data,
                     noneSelectedText: 'Select a section',
                     singleSelection: true,
                     onSelect: function () {
                         $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                        if ($('#TeamId').val().length > 0) {
+                            $('form.form-filter #TeamName').val($('#Section .selected-text').text());
+                        } else {
+                            $('form.form-filter #TeamName').val('');
+                        }
                     }
                 });
 
                 query();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            }).catch(axiosError);
+
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');
         });
@@ -303,7 +281,7 @@ import '../../shared/employee.search.in.team';
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-            window.location.href = _global.root + 'ExportDiscipline/ExportDisciplineDetailReport?' + $('form.form-filter').serialize();
+            window.location.href = resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport?' + $('form.form-filter').serialize());
         });
     });
 })();

@@ -9,8 +9,8 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Discipline;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
@@ -46,7 +46,7 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
-        public ActionResult PartialListDisciplineSummary(DisciplineSummaryViewModel model)
+        public ActionResult GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineSummaryCriteria
             {
@@ -109,7 +109,7 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
-        public ActionResult PartialListDisciplineDetail(DisciplineSummaryViewModel model)
+        public ActionResult GetDisciplineDetailGrid(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineDetailCriteria
             {
@@ -202,18 +202,17 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.Discipline)]
-        public JsonResult UpdateIgnoredDiscipline(IList<IgnoredDisciplineModel> ignoredDisciplineDetails)
+        public CustomJsonResult EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails)
         {
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
-                IgnoredDisciplines = ignoredDisciplineDetails,
+                IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
                 HasUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-                ModifiedBy = sessionService.Employee.Id,
+                ActorId = sessionService.Employee.Id,
             };
-
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
-            return Json(commandResult, JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)
@@ -223,8 +222,7 @@
                 SupervisorId = sessionService.Employee.Id,
                 Query = keyword
             };
-
-            IList<Employee> employees = disciplineService.GetMemberToAddOtherDiscipline(criteria);
+            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(criteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }

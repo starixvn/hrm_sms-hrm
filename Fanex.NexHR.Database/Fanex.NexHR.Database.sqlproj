@@ -236,7 +236,7 @@
     <Build Include="dbo\Stored Procedures\Message_GetByCreator.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployees.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetByEmployee.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_UpdateIgnored.sql" />
+    <Build Include="dbo\Stored Procedures\Discipline_UpdateIgnore.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetById.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByRequestDate_AllType.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetSubTeam.sql" />
@@ -266,7 +266,7 @@
     <Build Include="dbo\Stored Procedures\Shift_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetOffDate_HolidayDate.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_UpdateType.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetMemberToAddOtherDiscipine.sql" />
+    <Build Include="dbo\Stored Procedures\OtherDiscipline_GetMember.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetRangeDate.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetShiftByDate.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Get.sql" />
@@ -279,7 +279,7 @@
     <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ForWaitingCase.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_ForRequestType.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetDetail.sql" />
+    <Build Include="dbo\Stored Procedures\Report_DisciplineDetail.sql" />
     <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAboveOffDayForEmployee.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetByQuery.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorByEmpID.sql" />

@@ -27,14 +27,8 @@
         [SpParam(Ignored = true)]
         public string GroupName { get; set; }
 
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate && ApproverId > 0;
-        }
+        public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeDiscipline_GetDetail";
-        }
+        public override string GetSettingKey() => "Report_DisciplineDetail";
     }
 }

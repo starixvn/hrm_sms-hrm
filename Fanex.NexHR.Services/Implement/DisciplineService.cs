@@ -5,7 +5,6 @@
     using Core.Services;
     using Criteria.Discipline;
     using Fanex.NexHR.Repositories;
-    using Models;
     using Models.Discipline;
 
     public class DisciplineService : IDisciplineService
@@ -45,9 +44,9 @@
             return disciplines;
         }
 
-        public IList<Employee> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
+        public IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(GetMemberToAddOtherDiscipineBySupervisorIdCriteria criteria)
         {
-            return baseService.GetData<Employee>(criteria).ToList();
+            return baseService.GetData<EmployeeInfoModel>(criteria);
         }
 
         public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)

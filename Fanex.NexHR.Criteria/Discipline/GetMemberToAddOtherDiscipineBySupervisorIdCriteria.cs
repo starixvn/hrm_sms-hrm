@@ -15,7 +15,7 @@
 
         public override string GetSettingKey()
         {
-            return "EmployeeDiscipline_GetMemberToAddOtherDiscipine";
+            return "OtherDiscipline_GetMember";
         }
     }
 }

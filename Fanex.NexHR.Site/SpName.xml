@@ -280,11 +280,9 @@
     <Setting Key="DisciplineType_GetOtherDisciplineType" SpName="DisciplineType_GetOtherDisciplineType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="DisciplineType_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_DisciplineSummary" SpName="Report_DisciplineSummary" DbName="nexhrx" Plain="0" />
-    <Setting Key="EmployeeDiscipline_GetDetail" SpName="EmployeeDiscipline_GetDetail" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_UpdateIgnored" SpName="EmployeeDiscipline_UpdateIgnored" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeDiscipline_GetMemberToAddOtherDiscipine" SpName="EmployeeDiscipline_GetMemberToAddOtherDiscipine" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-    </Setting>
+    <Setting Key="Report_DisciplineDetail" SpName="Report_DisciplineDetail" DbName="nexhrx" Plain="0" />
+    <Setting Key="Discipline_UpdateIgnore" SpName="Discipline_UpdateIgnore" DbName="nexhrx" Plain="0" />
+    <Setting Key="OtherDiscipline_GetMember" SpName="OtherDiscipline_GetMember" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="RoleManagement">
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>

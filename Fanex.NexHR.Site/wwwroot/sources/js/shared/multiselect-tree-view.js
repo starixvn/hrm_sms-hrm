@@ -252,11 +252,11 @@
                     updateParent.call($this.get(0));
                 }
 
+                me.updateSelectedText();
+
                 if ($this.attr('data-is-leaf') === 'true') {
                     options.onSelect.call(this);
                 }
-
-                me.updateSelectedText();
             });
 
             // hide dropdown
