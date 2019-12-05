@@ -1,4 +1,5 @@
-﻿@model Holiday
+﻿@using Fanex.NexHR.Resources
+@model Holiday
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Holiday;
@@ -16,19 +17,19 @@
     <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
-    <a class="step">Add new Holiday</a>
+    <a class="step">Edit Holiday</a>
 }
 
-<h2 class="page-title">@Labels.CreateHoliday</h2>
+<h2 class="page-title">@Labels.EditHoliday</h2>
 
 <div class="card" style="width: 400px">
-    @using (Html.BeginForm("Edit", "holiday", FormMethod.Post))
+    @Html.ValidationSummary()
+    @using (Html.BeginForm("edit", "holiday", FormMethod.Post))
     {
         <div class="form-horizontal">
-
             @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
             {
-                <div class="success flash">Created Successful!</div>
+                <div class="success flash">Edited Successful!</div>
             }
 
             @Html.HiddenFor(model => model.Id)
@@ -40,8 +41,8 @@
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", @autocomplete = "off" })
-                    @Html.ValidationMessageFor(model => model.HolidayName)
                 </div>
+                @Html.ValidationMessageFor(model => model.HolidayName)
             </div>
             <div class="form-group">
                 <div class="label-form">
@@ -51,8 +52,9 @@
                     @{
                         var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;
                     }
-                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay" />
+                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay"/>
                 </div>
+                <span class="field-validation-valid" data-valmsg-for="numDay" data-valmsg-replace="true"></span>
             </div>
 
             <div class="form-group form-group--m">
@@ -77,7 +79,7 @@
             <div class="form-group">
                 <div>
                     <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Save</button>
-                    <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+                    <a href="@Url.Action("index","holiday")" class="btn btn-default">@Labels.Back</a>
                 </div>
             </div>
         </div>

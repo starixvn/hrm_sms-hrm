@@ -58,10 +58,6 @@
                     ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-            }
 
             return View(model);
         }
@@ -91,10 +87,6 @@
                 {
                     ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
             return View(model);

@@ -10,6 +10,7 @@
     public class Holiday : EntityBase<int>
     {
         [AllowHtml]
+        [Required]
         public string HolidayName { get; set; }
 
         [DataType(DataType.Date)]

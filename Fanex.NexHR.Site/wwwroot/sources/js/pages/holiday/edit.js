@@ -1,10 +1,9 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
-import 'chosen-js/chosen.jquery';
-import '../../shared/multiselect-tree-view';
-import { initFromDateOnChange, initDatepicker} from '../../shared/common.functions';
+import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import '../../date';
 import moment from 'moment';
+import { initFromDateOnChange, initDatepicker } from '../../shared/common.functions';
 
 var editHoliday = (function ($) {
     var me = {};

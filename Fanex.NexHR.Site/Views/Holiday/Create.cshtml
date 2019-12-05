@@ -22,64 +22,65 @@
 <h2 class="page-title">@Labels.CreateHoliday</h2>
 
 <div class="card" style="width: 400px">
+    @Html.ValidationSummary()
     @using (Html.BeginForm("Create", "holiday", FormMethod.Post))
     {
-    <div class="form-horizontal">
+        <div class="form-horizontal">
+            @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+            {
+                <div class="success flash">Created Successful!</div>
+            }
+            
+            @Html.HiddenFor(model => model.Id)
 
-        @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
-        {
-            <div class="success flash">Created Successful!</div>
-        }
-
-        @Html.HiddenFor(model => model.Id)
-
-        <br />
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.HolidayName, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", @autocomplete = "off" })
+            <br />
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.HolidayName, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", @autocomplete = "off" })
+                </div>
                 @Html.ValidationMessageFor(model => model.HolidayName)
             </div>
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                Date(s)
+            <div class="form-group">
+                <div class="label-form">
+                    Date(s)
+                </div>
+                <div class="input-form">
+                    @{
+                        var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;
+                    }
+                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay" />
+                </div>
+                <span class="field-validation-valid" data-valmsg-for="numDay" data-valmsg-replace="true"></span>
             </div>
-            <div class="input-form">
-                @{
-                    var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;
-                }
-                <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay" />
-            </div>
-        </div>
 
-        <div class="form-group form-group--m">
-            <div class="label-form">
-                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-            <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
-                <i class="icon-calendar fa fa-calendar"></i>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
             </div>
-        </div>
-        <div class="form-group form-group--m">
-            <div class="label-form">
-                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
-            </div>
-            <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
-                <i class="icon-calendar fa fa-calendar"></i>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div>
-                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
-                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            <div class="form-group">
+                <div>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
+                    <a href="@Url.Action("index","holiday")" class="btn btn-default">@Labels.Back</a>
+                </div>
             </div>
         </div>
-    </div>
     }
 </div>
