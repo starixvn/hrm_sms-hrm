@@ -50,12 +50,29 @@ BEGIN
 
 		UPDATE dis
 		SET dis.IsMissingCheckInOut = 0
+			,dis.IsOutOfControlReason = CASE 
+				WHEN outofctrl.EmpId IS NULL
+					OR (
+						outofctrl.IsOutOfControlChangeShift = 0
+						AND outofctrl.IsOutOfControlLateIn = 0
+						AND outofctrl.IsOutOfControlEarlyOut = 0
+						AND outofctrl.IsOutOfControlAbsent = 0
+						AND outofctrl.IsOutOfControlUnpaidLeave = 0
+						AND outofctrl.IsOutOfControlWorkingUnderTime = 0
+						AND outofctrl.IsOutOfControlUnpaidLeaveAbsent = 0
+						AND outofctrl.IsOutOfControlUnplannedLeave = 0
+						AND outofctrl.IsOutOfControlWeekendLeave = 0
+						) THEN 0
+				ELSE dis.IsOutOfControlReason
+				END
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
 		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.CheckInOutRequest AS cio WITH (NOLOCK) ON cio.RequestId = @RequestId
 			AND dis.EmpId = cio.EmpId
 			AND dis.WorkDate = cio.OnDate
+			LEFT JOIN dbo.DisciplineOutOfControl AS outofctrl WITH (NOLOCK) ON dis.EmpId = outofctrl.EmpId
+			AND dis.WorkDate = outofctrl.WorkDate
 		WHERE EXISTS (
 				SELECT 1
 				FROM dbo.Employee AS emp WITH (NOLOCK)
@@ -83,7 +100,7 @@ BEGIN
 					AND drule.Value = 1
 				WHERE dis.EmpId = emp.EmpId
 				)
-		
+
 		UPDATE dis
 		SET dis.IsOutOfControlMissingCheckInOut = 0
 		FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
@@ -202,6 +219,10 @@ BEGIN
 			-- update
 			UPDATE dis
 			SET dis.IsMissingCheckInOut = 1
+				,dis.IsOutOfControlReason = CASE 
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					ELSE dis.IsOutOfControlReason
+					END
 				,dis.IsDeleted = 0
 				,dis.ModifiedBy = @ActorId
 				,dis.ModifiedDate = @ModifiedDate
@@ -232,12 +253,17 @@ BEGIN
 				EmpId
 				,WorkDate
 				,IsMissingCheckInOut
+				,IsOutOfControlReason
 				,ModifiedBy
 				,ModifiedDate
 				)
 			SELECT EmpId
 				,WorkDate
 				,1
+				,CASE 
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					ELSE 0
+					END
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline AS tbl

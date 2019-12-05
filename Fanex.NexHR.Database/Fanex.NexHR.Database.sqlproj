@@ -85,7 +85,6 @@
     <Build Include="dbo\Tables\tmpLeaveBalance.sql" />
     <Build Include="dbo\Tables\WorkingTimeRequest.sql" />
     <Build Include="dbo\Tables\WorkingTimeRequestHistory.sql" />
-    <Build Include="dbo\Tables\EmployeeDiscipline.sql" />
     <Build Include="dbo\Tables\MessageEmployee.sql" />
     <Build Include="dbo\Tables\MessageGroup.sql" />
     <Build Include="dbo\Tables\GroupSupervisor.sql" />
@@ -250,7 +249,6 @@
     <Build Include="dbo\Stored Procedures\Message_Insert.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_GetDetailToReviewDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Summary_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Update.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
@@ -388,7 +386,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeEmergency_Edit.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeEmergency_Delete.sql" />
     <Build Include="dbo\Functions\fnc_GetKIVByDayBalance.sql" />
-    <Build Include="dbo\Functions\fnc_GetDisciplineSummary.sql" />
     <Build Include="dbo\Functions\fnc_GetDisciplineDetailByLeaveRequestId.sql" />
     <Build Include="dbo\Functions\fnc_GetEmployeeByActorId.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportFromBioStar.sql" />
@@ -434,7 +431,6 @@
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_DeleteTrans.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Delete.sql" />
     <Build Include="dbo\Stored Procedures\KeepInViewRequest_Approve.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeDiscipline_GetSummaryByPeriod.sql" />
     <Build Include="dbo\Stored Procedures\Employee_CheckResetPassword.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Delete.sql" />

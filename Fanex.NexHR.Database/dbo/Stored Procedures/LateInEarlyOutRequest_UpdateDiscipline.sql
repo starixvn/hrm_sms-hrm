@@ -49,12 +49,36 @@ BEGIN
 
 		UPDATE dis
 		SET dis.IsLateIn = CASE 
-				WHEN drule.DisciplineTypeId = 3 THEN 0
+				WHEN r.RequestType = 3 THEN 0
 				ELSE dis.IsLateIn
 				END
 			,dis.IsEarlyOut = CASE 
-				WHEN drule.DisciplineTypeId = 4 THEN 0
+				WHEN r.RequestType = 4 THEN 0
 				ELSE dis.IsEarlyOut
+				END
+			,dis.IsOutOfControlReason = CASE 
+				WHEN outofctrl.EmpId IS NULL
+					OR (
+						outofctrl.IsOutOfControlChangeShift = 0
+						AND outofctrl.IsOutOfControlMissingCheckInOut = 0
+						AND (
+							(
+								r.RequestType = 3
+								AND outofctrl.IsOutOfControlEarlyOut = 0
+								)
+							OR (
+								r.RequestType = 4
+								AND outofctrl.IsOutOfControlLateIn = 0
+								)
+							)
+						AND outofctrl.IsOutOfControlAbsent = 0
+						AND outofctrl.IsOutOfControlUnpaidLeave = 0
+						AND outofctrl.IsOutOfControlWorkingUnderTime = 0
+						AND outofctrl.IsOutOfControlUnpaidLeaveAbsent = 0
+						AND outofctrl.IsOutOfControlUnplannedLeave = 0
+						AND outofctrl.IsOutOfControlWeekendLeave = 0
+						) THEN 0
+				ELSE dis.IsOutOfControlReason
 				END
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
@@ -62,52 +86,96 @@ BEGIN
 			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
 			AND dis.EmpId = lieo.EmpId
 			AND dis.WorkDate = lieo.OnDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (3, 4)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
+			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
+			LEFT JOIN dbo.DisciplineOutOfControl AS outofctrl WITH (NOLOCK) ON dis.EmpId = outofctrl.EmpId
+			AND dis.WorkDate = outofctrl.WorkDate
+		WHERE EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS emp WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND (
+						(
+							drule.DisciplineTypeId = 3
+							AND r.RequestType = 3
+							)
+						OR (
+							drule.DisciplineTypeId = 4
+							AND r.RequestType = 4
+							)
+						)
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.Value = 1
+				WHERE dis.EmpId = emp.EmpId
+				)
 
 		UPDATE dis
 		SET dis.IsIgnoredLateIn = CASE 
-				WHEN drule.DisciplineTypeId = 3 THEN 0
+				WHEN r.RequestType = 3 THEN 0
 				ELSE dis.IsIgnoredLateIn
 				END
 			,dis.IsIgnoredEarlyOut = CASE 
-				WHEN drule.DisciplineTypeId = 4 THEN 0
+				WHEN r.RequestType = 4 THEN 0
 				ELSE dis.IsIgnoredEarlyOut
 				END
 		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
 			AND dis.EmpId = lieo.EmpId
 			AND dis.WorkDate = lieo.OnDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (3, 4)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
+			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
+		WHERE EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS emp WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND (
+						(
+							drule.DisciplineTypeId = 3
+							AND r.RequestType = 3
+							)
+						OR (
+							drule.DisciplineTypeId = 4
+							AND r.RequestType = 4
+							)
+						)
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.Value = 1
+				WHERE dis.EmpId = emp.EmpId
+				)
 
 		UPDATE dis
 		SET dis.IsOutOfControlLateIn = CASE 
-				WHEN drule.DisciplineTypeId = 3 THEN 0
+				WHEN r.RequestType = 3 THEN 0
 				ELSE dis.IsOutOfControlLateIn
 				END
 			,dis.IsOutOfControlEarlyOut = CASE 
-				WHEN drule.DisciplineTypeId = 4 THEN 0
+				WHEN r.RequestType = 4 THEN 0
 				ELSE dis.IsOutOfControlEarlyOut
 				END
 		FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
 			AND dis.EmpId = lieo.EmpId
 			AND dis.WorkDate = lieo.OnDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (3, 4)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
+			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
+		WHERE EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS emp WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND (
+						(
+							drule.DisciplineTypeId = 3
+							AND r.RequestType = 3
+							)
+						OR (
+							drule.DisciplineTypeId = 4
+							AND r.RequestType = 4
+							)
+						)
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.Value = 1
+				WHERE dis.EmpId = emp.EmpId
+				)
 
 		RETURN
 	END
@@ -119,11 +187,11 @@ BEGIN
 
 		UPDATE dis
 		SET dis.IsLateIn = CASE 
-				WHEN drule.DisciplineTypeId = 3 THEN 1
+				WHEN r.RequestType = 3 THEN 1
 				ELSE dis.IsLateIn
 				END
 			,dis.IsEarlyOut = CASE 
-				WHEN drule.DisciplineTypeId = 4 THEN 1
+				WHEN r.RequestType = 4 THEN 1
 				ELSE dis.IsEarlyOut
 				END
 			,dis.IsDeleted = 0
@@ -133,12 +201,26 @@ BEGIN
 			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
 			AND dis.EmpId = lieo.EmpId
 			AND dis.WorkDate = lieo.OnDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (3, 4)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
+			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
+		WHERE EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS emp WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND (
+						(
+							drule.DisciplineTypeId = 3
+							AND r.RequestType = 3
+							)
+						OR (
+							drule.DisciplineTypeId = 4
+							AND r.RequestType = 4
+							)
+						)
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.Value = 1
+				WHERE dis.EmpId = emp.EmpId
+				)
 
 		RETURN
 	END
@@ -220,6 +302,10 @@ BEGIN
 					WHEN tbl.DisciplineTypeId = 4 THEN 1
 					ELSE 0
 					END
+				,dis.IsOutOfControlReason = CASE 
+					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
+					ELSE dis.IsOutOfControlReason
+					END
 				,dis.IsDeleted = 0
 				,dis.ModifiedBy = @ActorId
 				,dis.ModifiedDate = @ModifiedDate
@@ -261,6 +347,7 @@ BEGIN
 				,WorkDate
 				,IsLateIn
 				,IsEarlyOut
+				,IsOutOfControlReason
 				,ModifiedBy
 				,ModifiedDate
 				)
@@ -272,6 +359,10 @@ BEGIN
 					END
 				,CASE 
 					WHEN tbl.DisciplineTypeId = 4 THEN 1
+					ELSE 0
+					END
+				,CASE 
+					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
 					ELSE 0
 					END
 				,@ActorId
