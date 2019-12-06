@@ -124,12 +124,14 @@ $(function () {
             Command: command
         };
 
+        blockUI();
         $.ajax({
             type: 'GET',
             url: resolveClientUrl('request/PartialViewProcessRequest'),
             data: model,
             dataType: 'html',
             success: function (data) {
+                unblockUI();
                 $('#dialogProcessRequest').html(data);
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title);
@@ -143,33 +145,38 @@ $(function () {
                     chkWeekendLeaveIgnores = $('.chk-weekend-ignore'),
                     chkWeekendLeaveRecords = $('.chk-weekend-record');
 
-                chkIgnoreAll.on('click', function () {
-                    let checked = $(this).prop('checked');
+                chkIgnoreAll.on('change', function () {
+                    const checked = $(this).prop('checked');
                     chkRecordAll.prop('checked', !checked);
                     chkIgnores.prop('checked', checked);
                     chkRecords.prop('checked', !checked);
                 });
 
-                chkRecordAll.on('click', function () {
-                    let checked = $(this).prop('checked');
+                chkRecordAll.on('change', function () {
+                    const checked = $(this).prop('checked');
                     chkIgnoreAll.prop('checked', !checked);
                     chkRecords.prop('checked', checked);
                     chkIgnores.prop('checked', !checked);
                 });
 
-                chkWeekendLeaveIgnoreAll.on('click', function () {
-                    let checked = $(this).prop('checked');
+                chkWeekendLeaveIgnoreAll.on('change', function () {
+                    const checked = $(this).prop('checked');
                     chkWeekendLeaveRecordAll.prop('checked', !checked);
                     chkWeekendLeaveIgnores.prop('checked', checked);
                     chkWeekendLeaveRecords.prop('checked', !checked);
                 });
 
-                chkWeekendLeaveRecordAll.on('click', function () {
-                    let checked = $(this).prop('checked');
+                chkWeekendLeaveRecordAll.on('change', function () {
+                    const checked = $(this).prop('checked');
                     chkWeekendLeaveIgnoreAll.prop('checked', !checked);
                     chkWeekendLeaveRecords.prop('checked', checked);
                     chkWeekendLeaveIgnores.prop('checked', !checked);
                 });
+
+                let updateParent = function ($parent, $childs) {
+                    const $childschecked = $childs.filter(':checked');
+                    $parent.prop('checked', $childs.length === $childschecked.length);
+                };
 
                 $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
                     let chkIgnore = $(this).find('.chk-ignore'),
@@ -177,32 +184,41 @@ $(function () {
                         chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
                         chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
 
-                    chkIgnore.on('click', function () {
+                    chkIgnore.on('change', function () {
+                        updateParent(chkIgnoreAll, chkIgnores);
                         if ($(this).prop('checked')) {
                             chkRecord.prop('checked', false);
+                            updateParent(chkRecordAll, chkRecords);
                         }
                     });
 
-                    chkRecord.on('click', function () {
+                    chkRecord.on('change', function () {
+                        updateParent(chkRecordAll, chkRecords);
                         if ($(this).prop('checked')) {
                             chkIgnore.prop('checked', false);
+                            updateParent(chkIgnoreAll, chkIgnores);
                         }
                     });
 
-                    chkWeekendLeaveIgnore.on('click', function () {
+                    chkWeekendLeaveIgnore.on('change', function () {
+                        updateParent(chkWeekendLeaveIgnoreAll, chkWeekendLeaveIgnores);
                         if ($(this).prop('checked')) {
                             chkWeekendLeaveRecord.prop('checked', false);
+                            updateParent(chkWeekendLeaveRecordAll, chkWeekendLeaveRecords);
                         }
                     });
 
-                    chkWeekendLeaveRecord.on('click', function () {
+                    chkWeekendLeaveRecord.on('change', function () {
+                        updateParent(chkWeekendLeaveRecordAll, chkWeekendLeaveRecords);
                         if ($(this).prop('checked')) {
                             chkWeekendLeaveIgnore.prop('checked', false);
+                            updateParent(chkWeekendLeaveIgnoreAll, chkWeekendLeaveIgnores);
                         }
                     });
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                unblockUI();
                 alert(textStatus + ': ' + errorThrown);
             }
         });
