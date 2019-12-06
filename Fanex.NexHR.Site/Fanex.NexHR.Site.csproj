@@ -309,6 +309,7 @@
     <Content Include="wwwroot\dist\styles\shift.edit.js" />
     <Content Include="wwwroot\dist\styles\shift.index.css" />
     <Content Include="wwwroot\dist\styles\shift.index.js" />
+    <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\dist\js\jobtitle.js" />
@@ -941,6 +942,7 @@
     <Content Include="wwwroot\sources\styles\pages\holiday\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\holiday\create.scss" />
     <Content Include="wwwroot\dist\js\holiday.edit.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\account\changepwd.scss" />
     <Content Include="wwwroot\dist\js\holiday.index.js.map" />
     <Content Include="wwwroot\dist\styles\holiday.create.js.map" />
     <Content Include="wwwroot\dist\styles\holiday.index.js.map" />

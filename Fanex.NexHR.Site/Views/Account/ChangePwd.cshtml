@@ -1,59 +1,58 @@
 ﻿@using Fanex.NexHR.ViewModels.Employee
 @model ChangePasswordViewModel
 @{
-	ViewBag.Title = "Change Password";
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	string changePwdOK = ViewBag.ChangePwdOK;
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = "Change Password";
+    string changePwdOK = ViewBag.ChangePwdOK;
 }
 @section css{
-    @Url.CombresLink("sitecss")
+    <link href="~/wwwroot/dist/styles/account.changepwd.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("changepwdjs")
+    <script src="~/wwwroot/dist/js/account.changepwd.js"></script>
 }
 @section Breadcrumb {
     <span class="step">@ViewBag.Title</span>
 }
 
-<h2>@ViewBag.Title</h2>
-@using (Html.BeginForm("ChangePwd", "Account", FormMethod.Post))
-{
-	@Html.AntiForgeryToken();
-	@Html.ValidationSummary();
-	if (!string.IsNullOrWhiteSpace(changePwdOK))
-	{
-		<div class="success">@changePwdOK</div>
-	}
-    <div class="container_24 bunhat" style="min-width:400px">
-		<div class="formrow">
-			<div class="label">
-				@Html.LabelFor(model => model.Password)
-			</div>
-			<div class="input">
-				@Html.PasswordFor(model => model.Password)
-			</div>
-		</div>
-		<div class="formrow">
-			<div class="label">
-				@Html.LabelFor(model => model.NewPassword)
-			</div>
-			<div class="input">
-				@Html.PasswordFor(model => model.NewPassword)
-			</div>
-		</div>
-		<div class="formrow">
-			<div class="label">
-				@Html.LabelFor(model => model.ConfirmPassword)
-			</div>
-			<div class="input">
-				@Html.PasswordFor(model => model.ConfirmPassword)
-			</div>
-		</div>
-		<div class="formrow">
-			<div class="label">&nbsp;</div>
-			<div class="input">
-				<input type="submit" value="Submit" />
-			</div>
-		</div>
-    </div>
-}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card" style="width: 400px;">
+    @using (Html.BeginForm("changepwd", "account", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary();
+        @Html.AntiForgeryToken();
+        if (!string.IsNullOrWhiteSpace(changePwdOK))
+        {
+            <div class="success">@changePwdOK</div>
+        }
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.NewPassword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.NewPassword, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Submit</button>
+            </div>
+        </div>
+    }
+</div>
