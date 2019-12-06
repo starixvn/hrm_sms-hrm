@@ -42,6 +42,7 @@ BEGIN
 		,WorkDate DATE
 		,ShiftId INT
 		,IsOffDay BIT
+		,IsHoliday BIT
 		)
 
 	CREATE TABLE #tblHalfDayRequest (
@@ -82,11 +83,13 @@ BEGIN
 		,WorkDate
 		,ShiftId
 		,IsOffDay
+		,IsHoliday
 		)
 	SELECT empca.EmpId
-		,WorkDate
-		,ShiftId
-		,IsOffDay
+		,empca.WorkDate
+		,empca.ShiftId
+		,empca.IsOffDay
+		,empca.IsHoliday
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN @tblEmployeeIds AS emp ON empca.EmpId = emp.EmpId
 	WHERE empca.WorkDate BETWEEN @fromDate
@@ -99,6 +102,7 @@ BEGIN
 			,WorkDate
 			,ShiftId
 			,IsOffDay
+			,IsHoliday
 			)
 		SELECT emp.EmpId
 			,@tempDate
@@ -128,6 +132,7 @@ BEGIN
 					AND ISNULL(empshift.SatShift, @OffDayShiftId) = @OffDayShiftId THEN 1
 				ELSE 0
 				END
+			,0
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -139,16 +144,33 @@ BEGIN
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
 				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+				WHERE emp.EmpId = empca.EmpId
+					AND empca.WorkDate = @tempDate
+					AND ISNULL(empca.ShiftId, 0) = ISNULL(CASE 
+							WHEN DATEPART(dw, @tempDate) = 1 THEN empshift.SunShift
+							WHEN DATEPART(dw, @tempDate) = 2 THEN empshift.MonShift
+							WHEN DATEPART(dw, @tempDate) = 3 THEN empshift.TueShift
+							WHEN DATEPART(dw, @tempDate) = 4 THEN empshift.WedShift
+							WHEN DATEPART(dw, @tempDate) = 5 THEN empshift.ThuShift
+							WHEN DATEPART(dw, @tempDate) = 6 THEN empshift.FriShift
+							WHEN DATEPART(dw, @tempDate) = 7 THEN empshift.SatShift
+							END, 0)
+				)
 
 		INSERT INTO #tblEmployeeCalendar (
 			EmpId
 			,WorkDate
 			,ShiftId
 			,IsOffDay
+			,IsHoliday
 			)
 		SELECT emp.EmpId
 			,@tempDate
 			,empshift.ShiftId
+			,0
 			,0
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
@@ -168,6 +190,13 @@ BEGIN
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
 				)
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+				WHERE emp.EmpId = empca.EmpId
+					AND empca.WorkDate = @tempDate
+					AND ISNULL(empca.ShiftId, 0) = ISNULL(empshift.ShiftId, 0)
+				)
 
 		SET @tempDate = DATEADD(d, 1, @tempDate)
 	END
@@ -181,18 +210,21 @@ BEGIN
 			UPDATE
 			SET [target].ShiftId = [source].ShiftId
 				,[target].IsOffDay = [source].IsOffDay
+				,[target].IsHoliday = [source].IsHoliday
 	WHEN NOT MATCHED BY TARGET THEN
 			INSERT (
 				EmpId
 				,WorkDate
 				,ShiftId
 				,IsOffDay
+				,IsHoliday
 				)
 			VALUES (
 				[source].EmpId
 				,[source].WorkDate
 				,[source].ShiftId
 				,[source].IsOffDay
+				,[source].IsHoliday
 				);
 
 	UPDATE empca
@@ -213,6 +245,24 @@ BEGIN
 			AND holiday.ToDate
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
+		AND (
+			(
+				empca.IsHoliday = 1
+				AND holiday.Id IS NULL
+				)
+			OR (
+				empca.IsHoliday = 0
+				AND (
+					empsum.IsLocal = 1
+					OR (
+						empsum.IsLocal = 0
+						AND empsum.IsExpatUseHoliday = 1
+						)
+					)
+				AND holiday.Id IS NOT NULL
+				)
+			)
+	RETURN
 
 	-- overtime
 	UPDATE empca
@@ -440,6 +490,7 @@ BEGIN
 			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @LeaveRequestTypeId
+				AND empca.LeaveDay = 1
 				AND lr.RequestId IS NULL
 				)
 			OR (
@@ -494,6 +545,7 @@ BEGIN
 			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @LeaveRequestTypeId
+				AND empca.LeaveDay = 1
 				AND lr.RequestId IS NULL
 				)
 			OR (
@@ -532,6 +584,22 @@ BEGIN
 		AND lrdt.OnDate BETWEEN @fromDate
 			AND @toDate
 		INNER JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lrdt.LeaveType = lv.LeaveTypeId
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+			WHERE r.EmpId = empca.EmpId
+				AND lrdt.OnDate = empca.WorkDate
+				AND (
+					empca.LeaveDay = 1
+					OR (
+						empca.LeaveDay = 0.5
+						AND (
+							empca.LeaveTypeId = lrdt.LeaveType
+							OR empca.LeaveTypeId2 = lrdt.LeaveType
+							)
+						)
+					)
+			)
 
 	UPDATE empca
 	SET empca.RequestId = rq.RequestId
