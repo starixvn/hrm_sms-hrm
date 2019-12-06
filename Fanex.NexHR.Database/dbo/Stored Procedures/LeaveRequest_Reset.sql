@@ -35,6 +35,7 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
 		,@RejectedStatusId TINYINT = 5
+		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = lr.EmpId
@@ -46,12 +47,15 @@ BEGIN
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
-	
-	EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
-		,@ActorId = @ActorId
-		,@RequestStatusId = @PendingStatusId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+
+	IF @StatusId <> @ProcessedStatusId
+	BEGIN
+		EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@RequestStatusId = @PendingStatusId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN

@@ -5,18 +5,20 @@ CREATE PROCEDURE [dbo].[Discipline_Insert] @FromDate DATETIME
 AS
 /*
 Created: 20160418@Quinn.Vo
-Task: Insert employee attendance discipline.
-DB: Redmine
-Original: 
+Task: insert discipline.
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @SyncFromDate DATETIME = '2016-01-01 00:00:00.000'
-	DECLARE @TotalWorkHoursWeekend DECIMAL(18, 2)
+	DECLARE @ModifiedDate DATETIME = GETDATE()
+		,@TotalWorkHoursWeekend DECIMAL(18, 2)
 		,@TotalWorkHours DECIMAL(18, 2)
 		,@LateInMins INT
 		,@EarlyOutMins INT
@@ -78,42 +80,42 @@ BEGIN
 		,WorkDate
 	
 	UNION
-	SELECT empA.EmpId
+	SELECT empatt.EmpId
 		,AttendanceDate
 		,0
 		,0
-	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
-		AND empA.AttendanceDate = empC.WorkDate
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
+	FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
+		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 2
-	WHERE AttendanceDate >= @SyncFromDate
-		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
-		AND empA.AttendanceDate BETWEEN @FromDate
+		AND rul.Value = 1
+	WHERE empatt.AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
+		AND empatt.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(empA.ShiftId, '') <> ''
-		AND empC.LeaveDay <> 1
+		AND ISNULL(empatt.ShiftId, '') <> ''
 		AND (
 			(
-				ISNULL(InFixed, '') = ''
-				AND ISNULL(OutFixed, '') <> ''
-				AND GETDATE() > empA.ExpectedInTime
+				ISNULL(empatt.InFixed, '') = ''
+				AND ISNULL(empatt.OutFixed, '') <> ''
+				AND @ModifiedDate > empatt.ExpectedInTime
 				)
 			OR (
-				ISNULL(InFixed, '') <> ''
-				AND ISNULL(OutFixed, '') = ''
-				AND GETDATE() > empA.ExpectedOutTime
+				ISNULL(empatt.InFixed, '') <> ''
+				AND ISNULL(empatt.OutFixed, '') = ''
+				AND @ModifiedDate > empatt.ExpectedOutTime
 				)
 			)
-		AND ISNULL(rul.Value, 0) = 1
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
-			WHERE EmpId = empA.EmpId
-				AND WorkDate = empA.AttendanceDate
+			WHERE EmpId = empatt.EmpId
+				AND WorkDate = empatt.AttendanceDate
 				AND DisciplineTypeId = 2
 			)
 
@@ -145,31 +147,31 @@ BEGIN
 		AND DisciplineTypeId = 3
 	
 	UNION
-	SELECT empA.EmpId
+	SELECT empatt.EmpId
 		,AttendanceDate
 		,0
 		,0
-	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.[EmpId] = empC.EmpId
-		AND empA.AttendanceDate = empC.WorkDate
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
+	FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
+		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 3
-	WHERE AttendanceDate >= @SyncFromDate
-		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
-		AND empA.AttendanceDate BETWEEN @FromDate
+		AND rul.Value = 1
+	WHERE empatt.AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
+		AND empatt.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(empA.ShiftId, '') <> ''
-		AND empC.LeaveDay <> 1
-		AND empA.LateIn > @LateInMins
-		AND ISNULL(rul.Value, 0) = 1
+		AND ISNULL(empatt.ShiftId, '') <> ''
+		AND empatt.LateIn > @LateInMins
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
-			WHERE EmpId = empA.EmpId
-				AND WorkDate = empA.AttendanceDate
+			WHERE EmpId = empatt.EmpId
+				AND WorkDate = empatt.AttendanceDate
 				AND DisciplineTypeId = 3
 			)
 
@@ -201,32 +203,32 @@ BEGIN
 		AND DisciplineTypeId = 4
 	
 	UNION
-	SELECT empA.EmpId
+	SELECT empatt.EmpId
 		,AttendanceDate
 		,0
 		,0
-	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
-		AND empA.AttendanceDate = empC.WorkDate
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
+	FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
+		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 4
-	WHERE AttendanceDate >= @SyncFromDate
-		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
-		AND empA.AttendanceDate BETWEEN @FromDate
+		AND rul.Value = 1
+	WHERE empatt.AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
+		AND empatt.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(empA.ShiftId, '') <> ''
-		AND empC.LeaveDay <> 1
-		AND ISNULL(empC.IsOffDay, 0) = 0
-		AND empA.EarlyOut > @EarlyOutMins
-		AND ISNULL(rul.Value, 0) = 1
+		AND ISNULL(empatt.ShiftId, '') <> ''
+		AND ISNULL(empca.IsOffDay, 0) = 0
+		AND empatt.EarlyOut > @EarlyOutMins
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.DisciplineRequestTrans WITH (NOLOCK)
-			WHERE EmpId = empA.EmpId
-				AND WorkDate = empA.AttendanceDate
+			WHERE EmpId = empatt.EmpId
+				AND WorkDate = empatt.AttendanceDate
 				AND DisciplineTypeId = 4
 			)
 
@@ -258,8 +260,8 @@ BEGIN
 		AND DisciplineTypeId = 1
 
 	CREATE TABLE #WorkingUnderTimeDiscipline (
-		[WorkDate] DATE
-		,[EmpId] INT
+		WorkDate DATE
+		,EmpId INT
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
@@ -271,37 +273,34 @@ BEGIN
 		,IsOutOfControl
 		)
 	SELECT AttendanceDate
-		,empA.EmpId
-		,ISNULL(drt.IsIgnored, 0)
-		,ISNULL(drt.IsOutOfControl, 0)
-	FROM dbo.EmployeeAttendance AS empA WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeCalendar AS empC WITH (NOLOCK) ON empA.EmpId = empC.EmpId
-		AND empA.AttendanceDate = empC.WorkDate
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
+		,empatt.EmpId
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
+		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 7
-		LEFT JOIN dbo.DisciplineRequestTrans AS drt  WITH (NOLOCK) ON drt.EmpId = empA.EmpId
-			AND drt.WorkDate = empA.AttendanceDate
-			AND drt.DisciplineTypeId = 7
-	WHERE AttendanceDate >= @SyncFromDate
-		AND ISNULL(@EmpId, empA.EmpId) = empA.EmpId
-		AND empA.AttendanceDate BETWEEN @FromDate
+		AND rul.Value = 1
+	WHERE empatt.AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
+		AND empatt.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(empA.ShiftId, '') <> ''
-		AND empC.LeaveDay <> 1
+		AND ISNULL(empatt.ShiftId, '') <> ''
 		AND (
 			(
-				DATEPART(DW, empA.AttendanceDate) IN (1, 7) -- Sunday or Saturday
-				AND TotalWorkHours < @TotalWorkHoursWeekend
+				DATEPART(DW, empatt.AttendanceDate) IN (1, 7) -- Sunday or Saturday
+				AND empatt.TotalWorkHours < @TotalWorkHoursWeekend
 				)
 			OR (
-				DATEPART(DW, empA.AttendanceDate) NOT IN (1, 7)
-				AND TotalWorkHours < @TotalWorkHours
+				DATEPART(DW, empatt.AttendanceDate) NOT IN (1, 7)
+				AND empatt.TotalWorkHours < @TotalWorkHours
 				)
 			)
-		AND ISNULL(rul.Value, 0) = 1
 
 	CREATE TABLE #UnpaidLeaveAbsentDiscipline (
 		EmpId INT
@@ -399,18 +398,18 @@ BEGIN
 	FROM dbo.EmployeeAttendance AS att WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON att.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
+		AND rul.Value = 1
 	WHERE att.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND att.[EmpId] = att.[EmpId]
-		AND ISNULL(att.[ShiftId], '') <> ''
-		AND ISNULL(att.[InFixed], '') = ''
-		AND ISNULL(att.[OutFixed], '') = ''
-		AND GETDATE() > att.[ExpectedOutTime]
+		AND att.EmpId = att.EmpId
+		AND ISNULL(att.ShiftId, '') <> ''
+		AND ISNULL(att.InFixed, '') = ''
+		AND ISNULL(att.OutFixed, '') = ''
+		AND @ModifiedDate > att.ExpectedOutTime
 		AND ISNULL(att.LeaveDay, 0) <> 1
-		AND ISNULL(rul.Value, 0) = 1
 
 	CREATE TABLE #UnplannedDiscipline (
 		EmpId INT
@@ -564,7 +563,7 @@ BEGIN
 		AND DisciplineTypeId = 10
 	GROUP BY EmpId
 		,WorkDate
-		
+
 	CREATE TABLE #Discipline (
 		[EmpId] [int] NOT NULL
 		,[WorkDate] [date] NOT NULL
@@ -647,81 +646,81 @@ BEGIN
 			WHEN (
 					upa.EmpId IS NOT NULL
 					AND ISNULL(upa.IsIgnored, 0) = 0
-					) THEN 3.5
+					) THEN dbo.fncGetDisciplineScoreById(8)
 			ELSE 0 END + CASE 
 			WHEN (
 					upl.EmpId IS NOT NULL
 					AND ISNULL(upl.IsIgnored, 0) = 0
-					) THEN 3.5
+					) THEN dbo.fncGetDisciplineScoreById(9)
 			ELSE 0 END + CASE 
 			WHEN (
 					ab.EmpId IS NOT NULL
 					AND upa.EmpId IS NULL
 					AND ISNULL(ab.IsIgnored, 0) = 0
-					) THEN 3.5
+					) THEN dbo.fncGetDisciplineScoreById(5)
 			ELSE 0 END + CASE 
 			WHEN (
 					up.EmpId IS NOT NULL
 					AND upa.EmpId IS NULL
 					AND ab.EmpId IS NULL
 					AND ISNULL(up.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(6)
 			ELSE 0 END + CASE 
 			WHEN (
 					la.EmpId IS NOT NULL
 					AND ISNULL(la.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(3)
 			ELSE 0 END + CASE 
 			WHEN (
 					ear.EmpId IS NOT NULL
 					AND ISNULL(ear.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(4)
 			ELSE 0 END + CASE 
 			WHEN (
 					wud.EmpId IS NOT NULL
-					AND ISNULL(dis.IsIgnoredWorkingUndertime, 0) = 0
-					) THEN 2.5
+					AND ISNULL(wud.IsIgnored, 0) = 0
+					) THEN dbo.fncGetDisciplineScoreById(7)
 			ELSE 0 END + CASE 
 			WHEN (
 					mis.EmpId IS NOT NULL
 					AND ISNULL(mis.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(2)
 			ELSE 0 END + CASE 
 			WHEN (
 					chs.EmpId IS NOT NULL
 					AND ISNULL(chs.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(1)
 			ELSE 0 END + CASE 
 			WHEN (
 					wld.EmpId IS NOT NULL
 					AND ISNULL(wld.IsIgnored, 0) = 0
-					) THEN 2.5
+					) THEN dbo.fncGetDisciplineScoreById(10)
 			ELSE 0 END
 			)
 		,(
-				SELECT CASE 
-						WHEN rq.Remark <> '' THEN ('- ' + dt.NAME + ': ' + rq.Remark + '. ')
-						ELSE ''
-						END
-				FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
-					INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
-					INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
-				WHERE drt.EmpId = cal.EmpId
-					AND drt.WorkDate = cal.WorkDate
-				FOR XML PATH('')
-				) AS [EmployeeComment]
+			SELECT CASE 
+					WHEN rq.Remark <> '' THEN ('- ' + dt.[Name] + ': ' + rq.Remark + '. ')
+					ELSE ''
+					END
+			FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+				INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
+				INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
+			WHERE drt.EmpId = cal.EmpId
+				AND drt.WorkDate = cal.WorkDate
+			FOR XML PATH('')
+			) AS EmployeeComment
 		,(
-				SELECT CASE 
-						WHEN rq.ApproverComment <> '' THEN ('- ' + dt.NAME + ': ' + rq.ApproverComment + '. ')
-						ELSE ''
-						END
-				FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
-					INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
-					INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
-				WHERE drt.EmpId = cal.EmpId
-					AND drt.WorkDate = cal.WorkDate
-				FOR XML PATH('')
-				) AS ApproverComment
+			SELECT CASE 
+					WHEN rq.ApproverComment <> '' THEN ('- ' + dt.[Name] + ': ' + rq.ApproverComment + '. ')
+					ELSE ''
+					END
+			FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+				INNER JOIN dbo.WorkingTimeRequest AS rq WITH (NOLOCK) ON drt.RequestId = rq.RequestId
+				INNER JOIN dbo.DisciplineType AS dt WITH (NOLOCK) ON drt.DisciplineTypeId = dt.DisciplineTypeId
+			WHERE drt.EmpId = cal.EmpId
+				AND drt.WorkDate = cal.WorkDate
+			FOR XML PATH('')
+			) AS ApproverComment
 		,CASE 
 			WHEN mis.EmpId IS NULL THEN 0
 			ELSE 1
@@ -793,7 +792,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeCalendar AS cal WITH (NOLOCK) ON e.EmpId = cal.EmpId
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON e.EmpId = att.EmpId
 		AND cal.WorkDate = att.AttendanceDate
-		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cal.ShiftId = sh.ShiftID
+		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cal.ShiftId = sh.ShiftId
 		LEFT JOIN #UnpaidLeaveAbsentDiscipline AS upa WITH (NOLOCK) ON e.EmpId = upa.EmpId
 		AND cal.WorkDate = upa.WorkDate
 		LEFT JOIN #AbsentDiscipline AS ab WITH (NOLOCK) ON e.EmpId = ab.EmpId
@@ -814,8 +813,6 @@ BEGIN
 		AND cal.WorkDate = mis.WorkDate
 		LEFT JOIN #ChangeShiftDiscipline AS chs WITH (NOLOCK) ON e.EmpId = chs.EmpId
 		AND cal.WorkDate = chs.WorkDate
-		LEFT JOIN dbo.EmployeeDiscipline AS dis WITH (NOLOCK) ON e.EmpId = dis.EmpId
-		AND cal.WorkDate = dis.WorkDate
 	WHERE ISNULL(e.isDeleted, 0) = 0
 		AND e.[Enabled] = 1
 		AND ISNULL(@EmpId, e.EmpId) = e.EmpId
@@ -850,7 +847,7 @@ BEGIN
 		,edi.IsUnpaidLeaveAbsent = dis.IsUnpaidLeaveAbsent
 		,edi.IsWeekendLeave = dis.IsWeekendLeave
 		,edi.IsDeleted = 0
-		,edi.ModifiedDate = GETDATE()
+		,edi.ModifiedDate = @ModifiedDate
 	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON edi.EmpId = dis.EmpId
 		AND edi.WorkDate = dis.WorkDate
@@ -866,7 +863,7 @@ BEGIN
 		,edi.IsUnpaidLeaveAbsent = 0
 		,edi.IsWeekendLeave = 0
 		,edi.IsDeleted = 1
-		,edi.ModifiedDate = GETDATE()
+		,edi.ModifiedDate = @ModifiedDate
 	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
@@ -877,7 +874,7 @@ BEGIN
 		AND edi.WorkDate BETWEEN @FromDate
 			AND @ToDate
 		AND ISNULL(@EmpId, edi.EmpId) = edi.EmpId
-		
+
 	INSERT dbo.Discipline (
 		EmpId
 		,[WorkDate]
@@ -915,7 +912,7 @@ BEGIN
 		,dis.IsWeekendLeave
 		,0
 		,NULL
-		,GETDATE()
+		,@ModifiedDate
 	FROM #Discipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
@@ -965,9 +962,8 @@ BEGIN
 		,IsIgnoredUnpaidLeaveAbsent
 		,IsIgnoredWeekendLeave
 		)
-	SELECT
-		EmpId
-		,WorkDate 
+	SELECT EmpId
+		,WorkDate
 		,IsIgnoredMissingCheckInOut
 		,IsIgnoredLateIn
 		,IsIgnoredEarlyOut
@@ -1015,7 +1011,7 @@ BEGIN
 
 	INSERT INTO dbo.DisciplineOutOfControl (
 		EmpId
-		,WorkDate 
+		,WorkDate
 		,IsOutOfControlMissingCheckInOut
 		,IsOutOfControlLateIn
 		,IsOutOfControlEarlyOut
@@ -1027,9 +1023,8 @@ BEGIN
 		,IsOutOfControlUnpaidLeaveAbsent
 		,IsOutOfControlWeekendLeave
 		)
-	SELECT 
-		EmpId
-		,WorkDate 
+	SELECT EmpId
+		,WorkDate
 		,IsOutOfControlMissingCheckInOut
 		,IsOutOfControlLateIn
 		,IsOutOfControlEarlyOut

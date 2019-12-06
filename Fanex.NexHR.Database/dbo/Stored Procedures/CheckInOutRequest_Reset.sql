@@ -38,6 +38,7 @@ BEGIN
 		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = cio.EmpId
@@ -51,11 +52,14 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cio.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	EXEC dbo.CheckInOutRequest_UpdateDiscipline @RequestId = @RequestId
-		,@ActorId = @ActorId
-		,@RequestStatusId = @PendingStatusId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	IF @StatusId <> @ProcessedStatusId
+	BEGIN
+		EXEC dbo.CheckInOutRequest_UpdateDiscipline @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@RequestStatusId = @PendingStatusId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN

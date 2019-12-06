@@ -37,15 +37,23 @@ BEGIN
 		,IsConfirmed BIT
 		)
 
-	-- reject request
-	IF @RequestStatusId = @NotVerifiedStatusId
+	-- reset/reject request
+	IF @RequestStatusId = @PendingStatusId
+		OR @RequestStatusId = @NotVerifiedStatusId
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
 		UPDATE dis
-		SET dis.IsChangeShift = 0
+		SET dis.IsChangeShift = CASE 
+				WHEN @RequestStatusId = @PendingStatusId THEN 1
+				ELSE 0
+				END
+			,dis.IsDeleted = CASE 
+				WHEN @RequestStatusId = @PendingStatusId THEN 1
+				ELSE dis.IsDeleted
+				END
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
 		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
@@ -68,36 +76,6 @@ BEGIN
 		UPDATE dis
 		SET dis.IsIgnoredChangeShift = 0
 		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON cs.RequestId = @RequestId
-			AND dis.EmpId = cs.EmpId
-			AND cs.TypeId = 1 -- change shift
-			INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
-			AND dis.WorkDate = csdt.OnDate
-		WHERE EXISTS (
-				SELECT 1
-				FROM dbo.Employee AS emp WITH (NOLOCK)
-					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-					AND drule.DisciplineTypeId = 1
-					AND empsum.IsLocal = drule.IsLocal
-					AND drule.Value = 1
-				WHERE dis.EmpId = emp.EmpId
-				)
-
-		RETURN
-	END
-
-	-- reset request
-	IF @RequestStatusId = @PendingStatusId
-	BEGIN
-		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
-
-		UPDATE dis
-		SET dis.IsChangeShift = 1
-			,dis.IsDeleted = 0
-			,dis.ModifiedBy = @ActorId
-			,dis.ModifiedDate = @ModifiedDate
-		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON cs.RequestId = @RequestId
 			AND dis.EmpId = cs.EmpId
 			AND cs.TypeId = 1 -- change shift

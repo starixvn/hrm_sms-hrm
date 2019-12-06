@@ -10,7 +10,7 @@ AS
 Created: 20191203@Tim.Trinh
 Task: update discipline
 DB: HRM
-Original:
+Original: 
 
 Revisions:
 Param's Explanation:
@@ -64,82 +64,10 @@ BEGIN
 		,IsWeekendLeave
 	FROM dbo.fnc_GetDisciplineDetailByLeaveRequestId(@RequestId)
 
-	-- reject request
+	-- reset/reject request
 	IF @RequestStatusId = @NotVerifiedStatusId
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
-	BEGIN
-		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
-
-		UPDATE dis
-		SET dis.IsAbsent = CASE 
-				WHEN drule.DisciplineTypeId = 5 THEN 0
-				ELSE dis.IsAbsent
-				END
-			,dis.IsUnpaidLeave = CASE 
-				WHEN drule.DisciplineTypeId = 6 THEN 0
-				ELSE dis.IsUnpaidLeave
-				END
-			,dis.IsUnpaidLeaveAbsent = CASE 
-				WHEN drule.DisciplineTypeId = 8 THEN 0
-				ELSE dis.IsUnpaidLeaveAbsent
-				END
-			,dis.IsUnplannedLeave = CASE 
-				WHEN drule.DisciplineTypeId = 9 THEN 0
-				ELSE dis.IsUnplannedLeave
-				END
-			,dis.IsWeekendLeave = CASE 
-				WHEN drule.DisciplineTypeId = 10 THEN 0
-				ELSE dis.IsWeekendLeave
-				END
-			,dis.ModifiedBy = @ActorId
-			,dis.ModifiedDate = @ModifiedDate
-		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN @tblDisciplineDetail AS tbl ON dis.EmpId = tbl.EmpId
-			AND dis.WorkDate = tbl.WorkDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (5, 6, 8, 9, 10)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
-
-		UPDATE dis
-		SET dis.IsIgnoredAbsent = CASE 
-				WHEN drule.DisciplineTypeId = 5 THEN 0
-				ELSE dis.IsIgnoredAbsent
-				END
-			,dis.IsIgnoredUnpaidLeave = CASE 
-				WHEN drule.DisciplineTypeId = 6 THEN 0
-				ELSE dis.IsIgnoredUnpaidLeave
-				END
-			,dis.IsIgnoredUnpaidLeaveAbsent = CASE 
-				WHEN drule.DisciplineTypeId = 8 THEN 0
-				ELSE dis.IsIgnoredUnpaidLeaveAbsent
-				END
-			,dis.IsIgnoredUnplannedLeave = CASE 
-				WHEN drule.DisciplineTypeId = 9 THEN 0
-				ELSE dis.IsIgnoredUnplannedLeave
-				END
-			,dis.IsIgnoredWeekendLeave = CASE 
-				WHEN drule.DisciplineTypeId = 10 THEN 0
-				ELSE dis.IsIgnoredWeekendLeave
-				END
-		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN @tblDisciplineDetail AS tbl ON dis.EmpId = tbl.EmpId
-			AND dis.WorkDate = tbl.WorkDate
-			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON dis.EmpId = emp.EmpId
-			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-			INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-			AND drule.DisciplineTypeId IN (5, 6, 8, 9, 10)
-			AND empsum.IsLocal = drule.IsLocal
-			AND drule.Value = 1
-
-		RETURN
-	END
-
-	-- reset request
-	IF @RequestStatusId = @PendingStatusId
 	BEGIN
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
@@ -149,10 +77,23 @@ BEGIN
 			,dis.IsUnpaidLeaveAbsent = tbl.IsUnpaidLeaveAbsent
 			,dis.IsUnplannedLeave = tbl.IsUnplannedLeave
 			,dis.IsWeekendLeave = tbl.IsWeekendLeave
-			,dis.IsDeleted = 0
+			,dis.IsDeleted = CASE 
+				WHEN @RequestStatusId = @PendingStatusId THEN 1
+				ELSE dis.IsDeleted
+				END
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
 		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN @tblDisciplineDetail AS tbl ON dis.EmpId = tbl.EmpId
+			AND dis.WorkDate = tbl.WorkDate
+
+		UPDATE dis
+		SET dis.IsIgnoredAbsent = 0
+			,dis.IsIgnoredUnpaidLeave = 0
+			,dis.IsIgnoredUnpaidLeaveAbsent = 0
+			,dis.IsIgnoredUnplannedLeave = 0
+			,dis.IsIgnoredWeekendLeave = 0
+		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN @tblDisciplineDetail AS tbl ON dis.EmpId = tbl.EmpId
 			AND dis.WorkDate = tbl.WorkDate
 

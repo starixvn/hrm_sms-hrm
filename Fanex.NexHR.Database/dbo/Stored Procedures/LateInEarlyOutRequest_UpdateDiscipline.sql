@@ -40,8 +40,9 @@ BEGIN
 		,IsConfirmed BIT
 		)
 
-	-- reject request
-	IF @RequestStatusId = @NotVerifiedStatusId
+	-- reset/reject request
+	IF @RequestStatusId = @PendingStatusId
+		OR @RequestStatusId = @NotVerifiedStatusId
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
@@ -49,11 +50,17 @@ BEGIN
 
 		UPDATE dis
 		SET dis.IsLateIn = CASE 
-				WHEN r.RequestType = 3 THEN 0
+				WHEN r.RequestType = 3 THEN CASE 
+						WHEN @RequestStatusId = @PendingStatusId THEN 1
+						ELSE 0
+						END
 				ELSE dis.IsLateIn
 				END
 			,dis.IsEarlyOut = CASE 
-				WHEN r.RequestType = 4 THEN 0
+				WHEN r.RequestType = 4 THEN CASE 
+						WHEN @RequestStatusId = @PendingStatusId THEN 1
+						ELSE 0
+						END
 				ELSE dis.IsEarlyOut
 				END
 			,dis.IsOutOfControlReason = CASE 
@@ -79,6 +86,10 @@ BEGIN
 						AND outofctrl.IsOutOfControlWeekendLeave = 0
 						) THEN 0
 				ELSE dis.IsOutOfControlReason
+				END
+			,dis.IsDeleted = CASE 
+				WHEN @RequestStatusId = @PendingStatusId THEN 1
+				ELSE dis.IsDeleted
 				END
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
@@ -153,51 +164,6 @@ BEGIN
 				ELSE dis.IsOutOfControlEarlyOut
 				END
 		FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
-			AND dis.EmpId = lieo.EmpId
-			AND dis.WorkDate = lieo.OnDate
-			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
-		WHERE EXISTS (
-				SELECT 1
-				FROM dbo.Employee AS emp WITH (NOLOCK)
-					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-					AND (
-						(
-							drule.DisciplineTypeId = 3
-							AND r.RequestType = 3
-							)
-						OR (
-							drule.DisciplineTypeId = 4
-							AND r.RequestType = 4
-							)
-						)
-					AND empsum.IsLocal = drule.IsLocal
-					AND drule.Value = 1
-				WHERE dis.EmpId = emp.EmpId
-				)
-
-		RETURN
-	END
-
-	-- reset request
-	IF @RequestStatusId = @PendingStatusId
-	BEGIN
-		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
-
-		UPDATE dis
-		SET dis.IsLateIn = CASE 
-				WHEN r.RequestType = 3 THEN 1
-				ELSE dis.IsLateIn
-				END
-			,dis.IsEarlyOut = CASE 
-				WHEN r.RequestType = 4 THEN 1
-				ELSE dis.IsEarlyOut
-				END
-			,dis.IsDeleted = 0
-			,dis.ModifiedBy = @ActorId
-			,dis.ModifiedDate = @ModifiedDate
-		FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON lieo.RequestId = @RequestId
 			AND dis.EmpId = lieo.EmpId
 			AND dis.WorkDate = lieo.OnDate

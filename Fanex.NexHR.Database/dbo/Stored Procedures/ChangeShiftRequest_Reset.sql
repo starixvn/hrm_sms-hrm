@@ -38,6 +38,7 @@ BEGIN
 		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 	DECLARE @tblChangeShiftDetail TABLE (
 		OnDate DATE
@@ -55,11 +56,14 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cs.RequestId = r.RequestId
 		AND cs.RequestId = @RequestId
 
-	EXEC dbo.ChangeShiftRequest_UpdateDiscipline @RequestId = @RequestId
-		,@ActorId = @ActorId
-		,@RequestStatusId = @PendingStatusId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	IF @StatusId <> @ProcessedStatusId
+	BEGIN
+		EXEC dbo.ChangeShiftRequest_UpdateDiscipline @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@RequestStatusId = @PendingStatusId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN

@@ -39,6 +39,7 @@ BEGIN
 		,@VerifiedStatusId TINYINT = 2
 		,@NotVerifiedStatusId TINYINT = 3
 		,@ApprovedStatusId TINYINT = 4
+		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
 	SELECT @EmpId = lieo.EmpId
@@ -53,11 +54,14 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	EXEC dbo.LateInEarlyOutRequest_UpdateDiscipline @RequestId = @RequestId
-		,@ActorId = @ActorId
-		,@RequestStatusId = @PendingStatusId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	IF @StatusId <> @ProcessedStatusId
+	BEGIN
+		EXEC dbo.LateInEarlyOutRequest_UpdateDiscipline @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@RequestStatusId = @PendingStatusId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN
