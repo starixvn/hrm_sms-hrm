@@ -63,21 +63,6 @@
       <resource path="~/scripts/views/Request/leavedetail.request.js" />
     </resourceSet>
 
-    <resourceSet name="holidayjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/holiday.js" />
-    </resourceSet>
-    <resourceSet name="holidaycss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-    <resourceSet name="holidayeditcss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-    <resourceSet name="holidayeditjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/holiday.edit.js" />
-    </resourceSet>
-
     <resourceSet name="workingcalendarscss" type="css">
       <resource reference="sitecss" />
       <resource path="~/styles/jquery.dataTables.css" />
@@ -115,6 +100,5 @@
       <resource reference="sitejs" />
       <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>
-    
   </resourceSets>
 </combres>

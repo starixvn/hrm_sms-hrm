@@ -618,13 +618,10 @@
     <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\modernizr.js" />
     <Content Include="Scripts\Views\date.filter.js" />
-    <Content Include="Scripts\Views\fixtable.js" />
     <Content Include="Scripts\Views\language.js" />
     <Content Include="Scripts\Views\employee.workingcalendars.js" />
     <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
-    <Content Include="Scripts\Views\holiday.edit.js" />
-    <Content Include="Scripts\Views\holiday.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
