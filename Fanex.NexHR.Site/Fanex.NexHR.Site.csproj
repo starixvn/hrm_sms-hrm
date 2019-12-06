@@ -243,9 +243,6 @@
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
-    <Content Include="Libs\SimplePagination\jquery.simplePagination.js" />
-    <Content Include="Libs\SimplePagination\LICENSE.txt" />
-    <Content Include="Libs\SimplePagination\simplePagination.css" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
     <Content Include="wwwroot\dist\js\department.index.js" />
@@ -1338,9 +1335,6 @@
     <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
     <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
     <Content Include="package.json" />
-    <Content Include="Libs\SimplePagination\.gitignore" />
-    <Content Include="Libs\SimplePagination\bower.json" />
-    <Content Include="Libs\SimplePagination\README.md" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

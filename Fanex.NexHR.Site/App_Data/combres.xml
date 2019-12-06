@@ -28,7 +28,6 @@
       <resource path="~/Scripts/MultiSelect/style.css" />
       <resource path="~/Scripts/MultiSelect/prettify.css" />
       <resource path="~/Libs/FontAwesome/css/font-awesome.min.css" />
-      <resource path="~/Libs/SimplePagination/simplePagination.css" />
       <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="sitejs" type="js">
@@ -47,7 +46,6 @@
       <resource path="~/Scripts/MultiSelect/prettify.js" />
       <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
       <resource path="~/Libs/FloatThead/jquery.floatThead.min.js" />
-      <resource path="~/Libs/SimplePagination/jquery.simplePagination.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
     </resourceSet>
