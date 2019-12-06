@@ -4,5 +4,7 @@
 @import '../../components/_card.scss';
 @import '../../components/_form-horizontal.scss';
 @import '../../components/_validation.scss';
-@import '../../vendors/_autocomplete.scss';
-@import '../../components/_checkbox.scss';
+
+.card {
+    width: 650px;
+}
