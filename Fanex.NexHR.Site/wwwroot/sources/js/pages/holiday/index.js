@@ -20,7 +20,7 @@ function deleteHoliday(holidayId) {
             if (data.IsSuccessful) {
                 location.reload();
             } else {
-                alert(data.Message)   
+                alert(data.Message);
             }
         }).catch(axiosError);
     });
@@ -33,5 +33,4 @@ $(document).ready(function () {
         const holidayId = $(this).data('id');
         deleteHoliday(holidayId);
     });
-
 });

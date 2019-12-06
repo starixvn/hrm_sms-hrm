@@ -3,7 +3,6 @@
 @{
     Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Holiday;
-    var today = DateTime.Today;
 }
 
 @section css{
@@ -17,7 +16,7 @@
     <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
-    <a class="step">Edit Holiday</a>
+    <a class="step">@Labels.EditHoliday</a>
 }
 
 <h2 class="page-title">@Labels.EditHoliday</h2>
@@ -52,7 +51,7 @@
                     @{
                         var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;
                     }
-                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay"/>
+                    <input type="number" class="form-control" style="width:55px" name="numDay" id="numDay" min="1" max="15" step="1" value="@numDay" />
                 </div>
                 <span class="field-validation-valid" data-valmsg-for="numDay" data-valmsg-replace="true"></span>
             </div>
