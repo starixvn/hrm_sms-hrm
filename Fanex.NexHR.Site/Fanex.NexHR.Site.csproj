@@ -253,6 +253,8 @@
     <Content Include="wwwroot\dist\js\extensionno.create.js" />
     <Content Include="wwwroot\dist\js\extensionno.index.js" />
     <Content Include="wwwroot\dist\js\external.group.js" />
+    <Content Include="wwwroot\dist\js\holiday.edit.js" />
+    <Content Include="wwwroot\dist\js\holiday.index.js" />
     <Content Include="wwwroot\dist\js\memo.edit.js" />
     <Content Include="wwwroot\dist\js\memo.js" />
     <Content Include="wwwroot\dist\js\menu.edit.js" />
@@ -283,6 +285,10 @@
     <Content Include="wwwroot\dist\styles\extensionno.index.js" />
     <Content Include="wwwroot\dist\styles\external.group.css" />
     <Content Include="wwwroot\dist\styles\external.group.js" />
+    <Content Include="wwwroot\dist\styles\holiday.create.css" />
+    <Content Include="wwwroot\dist\styles\holiday.create.js" />
+    <Content Include="wwwroot\dist\styles\holiday.index.css" />
+    <Content Include="wwwroot\dist\styles\holiday.index.js" />
     <Content Include="wwwroot\dist\styles\memo.css" />
     <Content Include="wwwroot\dist\styles\memo.edit.css" />
     <Content Include="wwwroot\dist\styles\memo.edit.js" />
@@ -934,6 +940,10 @@
     <Content Include="wwwroot\dist\styles\shift.index.js.map" />
     <Content Include="wwwroot\sources\styles\pages\holiday\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\holiday\create.scss" />
+    <Content Include="wwwroot\dist\js\holiday.edit.js.map" />
+    <Content Include="wwwroot\dist\js\holiday.index.js.map" />
+    <Content Include="wwwroot\dist\styles\holiday.create.js.map" />
+    <Content Include="wwwroot\dist\styles\holiday.index.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
