@@ -19,6 +19,7 @@ BEGIN
 		,cio.RequestTime AS RequestedDate
 		,wkr.Remark
 		,wkr.CreatedDate
+		,cio.ReasonId
 		,shift.ShiftId
 		,shift.[Name]
 		,emp.EmpId AS RequesterId
