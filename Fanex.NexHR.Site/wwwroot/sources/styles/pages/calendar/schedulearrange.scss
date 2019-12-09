@@ -5,6 +5,7 @@
 @import '../../vendors/autocomplete';
 @import '../../layout/filter';
 @import '../../layout/toastify';
+@import '../../layout/shift.color';
 @import '../../components/buttons-new';
 @import '../../components/checkbox';
 @import '../../components/icon';
@@ -438,54 +439,6 @@ input[type="text"] {
     .table-weekly-default-shift {
         width: 840px;
     }
-}
-
-.holiday {
-    background-color: #f3aa4b !important;
-}
-
-.offday {
-    background-color: #f8f89c !important;
-}
-
-.offdayreplacement {
-    background-color: #fdfd45 !important;
-}
-
-.keepinviewday {
-    background-color: #ffacaa !important;
-}
-
-.changeshift {
-    background-color: #fbaa5e !important;
-}
-
-.overtime {
-    background-color: #b37574 !important;
-}
-
-.leavehalfday2 {
-    background-color: #d4e5d5 !important;
-}
-
-.leaveday {
-    background-color: #a9a7a7 !important;
-}
-
-.annualleave {
-    background-color: #c7f391 !important;
-}
-
-.unpaidleave {
-    background-color: #eacded !important;
-}
-
-.businesstrip {
-    background-color: #c1d6ed !important;
-}
-
-.weddingleave {
-    background-color: #7cd3e9 !important;
 }
 
 .tooltip {

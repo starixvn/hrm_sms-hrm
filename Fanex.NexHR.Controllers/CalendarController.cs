@@ -64,22 +64,13 @@
 
         public ActionResult WorkingCalendars()
         {
-            IList<SelectListItem> jobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle)
-                .Select(j => new SelectListItem
-                {
-                    Text = j.Name,
-                    Value = j.Id.ToString(),
-                    Selected = string.IsNullOrEmpty(j.Id.ToString())
-                }).ToList();
-
             ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
 
             var model = new WorkingCalendarFilterViewModel
             {
                 FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek(),
-                JobTitles = jobTitles
+                ToDate = DateTime.Now.LastDayOfWeek()
             };
 
             return View(model);
@@ -129,6 +120,18 @@
             };
 
             return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
+        }
+
+        public CustomJsonResult GetJobTitle()
+        {
+            IEnumerable<MultiSelectViewModel> jobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle).Select(x => new MultiSelectViewModel
+            {
+                Id = x.Id,
+                Text = x.Name,
+                IsLeaf = true
+            }).ToList();
+
+            return new CustomJsonResult { Data = jobTitles, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private static void CheckChangeShiff(IList<WorkingCalendarsViewModel> models, IList<UserChangedShift> userChangeShift, DateTime fromDate)

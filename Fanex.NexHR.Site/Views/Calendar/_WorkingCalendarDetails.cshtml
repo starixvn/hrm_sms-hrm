@@ -1,9 +1,68 @@
-﻿@model WorkingCalendarDetailViewModel
-@Html.Hidden("FromPreviousDate", (Model.FromDate).AddDays(-7))
-@Html.Hidden("ToPreviousDate", (Model.ToDate).AddDays(-7))
-@Html.Hidden("FromNextDate", (Model.FromDate).AddDays(7))
-@Html.Hidden("ToNextDate", (Model.ToDate).AddDays(7))
-<table id="data" class="table table-custom pretty">
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@model WorkingCalendarDetailViewModel
+@Html.Hidden("FromPreviousDate", Model.FromDate.AddDays(-7).ToDateMonthYearFormatedDate())
+@Html.Hidden("ToPreviousDate", Model.ToDate.AddDays(-7).ToDateMonthYearFormatedDate())
+@Html.Hidden("FromNextDate", Model.FromDate.AddDays(7).ToDateMonthYearFormatedDate())
+@Html.Hidden("ToNextDate", Model.ToDate.AddDays(7).ToDateMonthYearFormatedDate())
+
+<div class="toolbar">
+    <div class="search">
+        <input class="form-control quick-search" placeholder="quick search" />
+    </div>
+    <div>
+        <button id="prev-week" class="btn prev-week fa fa-chevron-left" title="Prev"></button>
+        <button id="next-week" class="btn next-week fa fa-chevron-right" title="Next"></button>
+        <span class="label-week">
+            <span>@Model.FromDate.ToDateMonthYearFormatedDate()</span> - <span>@Model.ToDate.ToDateMonthYearFormatedDate()</span>
+        </span>
+        <span class="dropdown-color dropdown">
+            <button id="dropdownColorDescription" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+                    type="button" class="btn dropdown-toggle btn-default">
+                <img src="~/wwwroot/sources/styles/images/pantone.svg" width="17">
+            </button>
+            <ul role="menu" class="dropdown-menu" aria-labelledby="dropdownColorDescription">
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="holiday"></span>Public Holiday</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="offday"></span>Off Day</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="offdayreplacement"></span>Off Replacement</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="keepinviewday"></span>Keep In View</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="changeshift"></span>Change Shift</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="overtime"></span>Overtime</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="annualleave"></span>Annual Leave</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="unpaidleave"></span>Unpaid Leave</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="businesstrip"></span>Business Trip</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="weddingleave"></span>Wedding Leave</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="leavehalfday2"></span>2 Leaves Half Day</a>
+                </li>
+                <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="leaveday"></span>Others Leave</a>
+                </li>
+            </ul>
+        </span>
+    </div>
+</div>
+<table id="data" class="table table-custom">
     <thead>
         @{
             int daysInMonth = Model.WorkingCalendars.Any() ? Model.WorkingCalendars[0].Days : DateTime.DaysInMonth(Model.Year, Model.Month);
@@ -47,12 +106,8 @@
         {
             var day = 1;
             <tr>
-                <th class="align-left">
-                    @employee.NickName
-                </th>
-                <th>
-                    @employee.Team
-                </th>
+                <td class="align-left">@employee.NickName</td>
+                <td class="align-left">@employee.Team</td>
                 @foreach (var workingday in employee.WorkingSchedule)
                 {
                     var shift = workingday.Title;
@@ -60,9 +115,9 @@
 
                     if (!string.IsNullOrEmpty(shift) && shift[0].Equals('_'))
                     {
-                        <th class="ChangeShift">
+                        <td class="ChangeShift">
                             @shift.Substring(1)
-                        </th>
+                        </td>
                     }
                     else if (!string.IsNullOrEmpty(shift) && shift[0].Equals('-'))
                     {
@@ -81,40 +136,40 @@
 
                         if (arrLeaves.Count() > 1)
                         {
-                            <th class="leaveday leavehalfday2">
+                            <td class="leaveday leavehalfday2">
                                 @leaves
-                            </th>
+                            </td>
                         }
                         else
                         {
-                            <th class="leaveday">
+                            <td class="leaveday">
                                 @leaves
-                            </th>
+                            </td>
                         }
                     }
                     else if (shift.Equals("AL"))
                     {
-                        <th class="leaveday annualleave">
+                        <td class="leaveday annualleave">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("UPL"))
                     {
-                        <th class="leaveday unpaidleave">
+                        <td class="leaveday unpaidleave">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("HAL"))
                     {
-                        <th class="leaveday">
+                        <td class="leaveday">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("OFF"))
                     {
-                        <th class="offday">
+                        <td class="offday">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("PH"))
                     {
@@ -124,21 +179,21 @@
                     }
                     else if (shift.Equals("BL") || shift.Equals("BL1") || shift.Equals("BL2") || shift.Equals("BL3"))
                     {
-                        <th class="leaveday">
+                        <td class="leaveday">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("BTL"))
                     {
-                        <th class="leaveday businesstrip">
+                        <td class="leaveday businesstrip">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.Equals("WL"))
                     {
-                        <th class="leaveday weddingleave">
+                        <td class="leaveday weddingleave">
                             @shift
-                        </th>
+                        </td>
                     }
                     else if (shift.IndexOf('/') > -1)
                     {
@@ -153,21 +208,21 @@
                         {
                             leaves = leaves.Substring(0, leaves.Length - 1);
                         }
-                        <th class="leaveday leavehalfday2" title="@leaves">
+                        <td class="leaveday leavehalfday2" title="@leaves">
                             @leaves
-                        </th>
+                        </td>
                     }
                     else if (shift.IndexOf("½") != -1)
                     {
-                        <th class="leaveday multitypeleave" style="background-color: @workingday.Color;">
+                        <td class="leaveday multitypeleave" style="background-color: @workingday.Color;">
                             @shift
-                        </th>
+                        </td>
                     }
                     else
                     {
-                        <th style="background-color: @workingday.Color;">
+                        <td style="background-color: @workingday.Color;">
                             @shift
-                        </th>
+                        </td>
                     }
                     day++;
                 }

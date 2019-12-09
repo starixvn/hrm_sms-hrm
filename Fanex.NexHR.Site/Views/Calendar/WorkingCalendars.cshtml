@@ -1,120 +1,92 @@
 ﻿@using Fanex.NexHR.Resources
 @model WorkingCalendarFilterViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+    ViewBag.Title = Labels.WorkingCalendars;
     var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
     var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
 }
 @section css{
-    @Url.CombresLink("workingcalendarscss")
+    <link href="~/wwwroot/dist/styles/workingcalendars.css" rel="stylesheet" />
 }
 @section js{
-    @Url.CombresLink("workingcalendarsjs")
-}
-@{
-    ViewBag.Title = Labels.WorkingCalendars;
+    <script src="~/wwwroot/dist/js/workingcalendar.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
     <span class="step">@ViewBag.Title</span>
 }
-<div style="float:right">
-    @if (hasPermissionToViewHoliday)
-    {
-        <a href="~/Holiday/index">Holiday</a>
-    }
-    @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
-    {
-        <span>||</span>
-    }
-    @if (hasPermissionToViewShift)
-    {
-        <a href="~/Shift/index">Shift</a>
-    }
+
+<div class="title">
+    <h2 class="page-title">@ViewBag.Title</h2>
+    <div>
+        @if (hasPermissionToViewHoliday)
+        {
+            <a href="~/Holiday/index">@Labels.Holiday</a>
+        }
+        @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
+        {
+            <span>||</span>
+        }
+        @if (hasPermissionToViewShift)
+        {
+            <a href="~/Shift/index">@Labels.Shift</a>
+        }
+    </div>
 </div>
-<h2>@ViewBag.Title</h2>
-<form class="form-filter">
-    @{
-        var displayFrom = Model.FromDate.ToDateMonthYearFormatedDate();
-        var displayTo = Model.ToDate.ToDateMonthYearFormatedDate();
-    }
+
+<form class="filter">
     @Html.HiddenFor(model => model.SectionIds)
     @Html.HiddenFor(model => model.JobTitleIds)
     @Html.HiddenFor(model => model.IsLocal)
-    <div class="container_24 bunhat">
-        <div class="grid_24">
-            <div class="grid_2 gridlabel">
-                @Html.Label("Week")
+    @Html.HiddenFor(model => model.EmployeeId)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(Labels.Week, new { @class = "control-label" })
             </div>
-            <div class="grid_7">
-                @Html.TextBox("StartDate", displayFrom, new { @class = "startDateOfWeek" })
-                @Html.TextBox("EndDate", displayTo, new { @class = "endDateOfWeek" })
-                <img class="weekPickerImg" src="~/images/calendar.png" />
-                <div class="week-picker"></div>
-            </div>
-            <div class="grid_2 gridlabel">@Labels.DepartmentSection</div>
-            <div class="grid_6" id="Section"></div>
-            <div class="grid_2 gridlabel">@Labels.JobTitle</div>
-            <div class="grid_6">
-                @Html.DropDownList("title", Model.JobTitles, new { @class = "title-select", multiple = "multiple" })
-            </div>
-            <div class="clear"></div>
-            <div class="space"></div>
-            <div class="clear"></div>
-            <div class="grid_2 gridlabel">@Labels.Employee</div>
-            <div class="grid_7">
-                @Html.TextBox("Employee", string.Empty, new { placeholder = Messages.SearchEmployeeWatermark })
-                @Html.HiddenFor(model => model.EmployeeId)
-            </div>
-            <div class="grid_2 gridlabel">@Labels.Category</div>
-            <div class="grid_3">
-                @RazorHelper.CategoryDropDownList("category", "category", "")
-            </div>
-            <div class="grid_2 gridlabel">
-                <input type="button" value="@Labels.Submit" id="submit" />
-            </div>
-            <div class="grid_1 gridlabel">
-                <input type="button" value="Excel" id="exportExcel" />
+            <div class="calendar-form weekpicker-wrapper">
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "fromDate form-control", @readonly = true })
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "toDate form-control", @readonly = true })
+                <i class="icon-calendar fa fa-calendar"></i>
+                <div id="week-picker"></div>
             </div>
         </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DepartmentSection</label>
+            </div>
+            <div class="select-form" id="Section"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.JobTitle</label>
+            </div>
+            <div class="select-form" id="JobTitle"></div>
+        </div>
     </div>
-    <div class="clear"></div>
-    <div class="space"></div>
-    <div class="clear"></div>
-    <div class="grid_1 gridlabel" style="float: right;">
-        <a id="prev" class="lnkPrevious" href="javascript:;">&lt;&lt; Previous</a>
-        || <span id="displayFrom" class="highlight-date"></span>- <span id="displayTo" class="highlight-date">
-        </span> ||
-        <a id="next" class="lnkNext" href="javascript:;">Next &gt;&gt; </a>
-        @Html.Hidden("OriginalFromDate", Model.FromDate)
-        @Html.Hidden("OriginalToDate", Model.ToDate)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", string.Empty,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @RazorHelper.CategoryDropDownList("IsLocal", "form-control", "")
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
     </div>
 </form>
-
-<table id="workingCalendarDetails" class="pretty"></table>
-<br />
-<div class="container_24" id="colordef">
-    <div class="grid_2 holiday tooltip" title="Public Holiday">
-        PH
-    </div>
-    <div class="grid_2 offday tooltip" title="Off Day">
-        OFF
-    </div>
-    <div class="grid_2 leaveday annualleave tooltip alpha" title="Annual Leave">
-        AL
-    </div>
-    <div class="grid_2 leaveday unpaidleave tooltip alpha" title="Unpaid Leave">
-        UPL
-    </div>
-    <div class="grid_2 leaveday businesstrip tooltip" title="Business Trip">
-        BTL
-    </div>
-    <div class="grid_2 leaveday weddingleave tooltip" title="Wedding Leave">
-        WL
-    </div>
-    <div class="grid_2 leaveday leavehalfday2 tooltip" title="2 Leave half day">
-        H/H
-    </div>
-    <div class="grid_2 changeshift tooltip" title="Change Shift">
-        CS
-    </div>
-</div>
+<div id="workingCalendarDetails"></div>

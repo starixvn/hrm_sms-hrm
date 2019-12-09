@@ -68,7 +68,7 @@
             me.$updownicon = me.$multiSelect.find('.up-down-icon').first();
             me.$selectedtext = me.$multiSelect.find('.selected-text').first();
             me.$dropdownlist = me.$multiSelect.find('.multiselect-treeview-dropdown-list').first();
-            me.$selectAll = me.$multiSelect.find('#selectAll');
+            me.$selectAll = me.$multiSelect.find('#' + me.id + '-selectAll');
             me.$checkboxes = me.$multiSelect.find('.multiselect-treeview-items input[type=checkbox]:not(:disabled)');
 
             me.registerEvents();
@@ -95,8 +95,8 @@
             if (!options.singleSelection) {
                 html = '<div class="multiselect-treeview-select-all">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="selectAll" ' + (options.isSelectedAll ? 'checked' : '') + ' />'
-                    + '<label for= "selectAll" > Select all</label>'
+                    + '<input type="checkbox" id="' + me.id + '-selectAll" ' + (options.isSelectedAll ? 'checked' : '') + ' />'
+                    + '<label for="' + me.id + '-selectAll" > Select all</label>'
                     + '</div>'
                     + '</div>';
             }
@@ -117,9 +117,9 @@
                 html.push('<ul>'
                     + '<li class="multiselect-treeview-item">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '" data-is-leaf="' + data.isLeaf + '" '
+                    + '<input type="checkbox" id="' + me.id + '-' + itemId + '" value="' + data.id + '" data-is-leaf="' + data.isLeaf + '" '
                     + (data.checked || options.isSelectedAll ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' />'
-                    + '<label for="' + itemId + '">' + data.text + '</label>'
+                    + '<label for="' + me.id + '-' + itemId + '">' + data.text + '</label>'
                     + '</div>');
 
                 if (data.items && data.items.length > 0) {
@@ -147,10 +147,10 @@
                     disabled = options.disabled || (options.singleSelection && !data.isLeaf);
                 html.push('<li class="multiselect-treeview-item is-child">'
                     + '<div class="checkbox-wrapper">'
-                    + '<input type="checkbox" id="' + itemId + '" value="' + data.id + '"' + '" data-is-leaf="' + data.isLeaf + '" '
+                    + '<input type="checkbox" id="' + me.id + '-' + itemId + '" value="' + data.id + '"' + '" data-is-leaf="' + data.isLeaf + '" '
                     + ' data-parentid="' + item.parentId + '"'
                     + ' ' + (data.checked || options.isSelectedAll ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' />'
-                    + '<label for="' + itemId + '">' + data.text + '</label>'
+                    + '<label for="' + me.id + '-' + itemId + '">' + data.text + '</label>'
                     + '</div>');
 
                 if (data.items && data.items.length > 0) {
@@ -261,10 +261,8 @@
 
             // hide dropdown
             $(document).delegate('html', 'click', function (e) {
-                var $target = $(e.target);
-                if (!$target.closest('.multiselect-treeview').length
-                    && !$target.parent().hasClass('multiselect-treeview')
-                    && !me.$dropdownlist.hasClass('hidden')) {
+                var $wrapper = $('#' + me.id);
+                if (!$wrapper.is(e.target) && $wrapper.has(e.target).length === 0 && $wrapper.is(':visible')) {
                     me.$updownicon.find('span').removeClass('up').addClass('down');
                     me.$dropdownlist.addClass('hidden');
                 }

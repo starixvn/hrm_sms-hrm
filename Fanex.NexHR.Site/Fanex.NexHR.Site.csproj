@@ -335,6 +335,7 @@
     <Content Include="wwwroot\dist\styles\section.edit.js" />
     <Content Include="wwwroot\dist\styles\section.index.css" />
     <Content Include="wwwroot\dist\styles\section.index.js" />
+    <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
     <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />

@@ -79,8 +79,6 @@ module.exports = {
         [`${styleDistPath}/holiday.create`]: `${styleSourcePath}/pages/holiday/create.scss`,
         [`${styleDistPath}/account.changepwd`]: `${styleSourcePath}/pages/account/changepwd.scss`,
 
-
-
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
         [`${jsDistPath}/home.index`]: `${jsSourcePath}/home.index.js`,
@@ -145,6 +143,7 @@ module.exports = {
         [`${jsDistPath}/keepinview.edit`]: `${jsSourcePath}/request/keepinview/edit.js`,
         [`${jsDistPath}/leave.myrequest`]: `${jsSourcePath}/request/leave/myrequest.js`,
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`,
+        [`${jsDistPath}/workingcalendar`]: `${jsSourcePath}/calendar/workingcalendar.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
         [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
@@ -163,6 +162,5 @@ module.exports = {
         [`${jsDistPath}/holiday.index`]: `${jsSourcePath}/holiday/index.js`,
         [`${jsDistPath}/holiday.edit`]: `${jsSourcePath}/holiday/edit.js`,
         [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`
-
     }
 };
