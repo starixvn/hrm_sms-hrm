@@ -233,8 +233,6 @@
     <Content Include="Images\Hongma-logo.png" />
     <Content Include="Images\SMS-logo.png" />
     <Content Include="Images\warning.png" />
-    <Content Include="Libs\FloatThead\jquery.floatThead.js" />
-    <Content Include="Libs\FloatThead\jquery.floatThead.min.js" />
     <Content Include="Libs\FontAwesome\css\font-awesome.css" />
     <Content Include="Libs\FontAwesome\css\font-awesome.min.css" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.eot" />
@@ -375,7 +373,6 @@
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
     <Content Include="wwwroot\sources\libs\SimplePagination\simplePagination.css" />
-    <Content Include="Scripts\datatable\jquery.tablesorter.js" />
     <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
@@ -531,27 +528,11 @@
     <Content Include="Images\signin_icon.png" />
     <Content Include="Images\titlebg.png" />
     <Content Include="Images\uicon.png" />
-    <Content Include="Scripts\chosen\chosen-sprite.png" />
-    <Content Include="Scripts\chosen\chosen.css" />
-    <Content Include="Scripts\chosen\chosen.jquery.js" />
-    <Content Include="Scripts\chosen\chosen.jquery.min.js" />
-    <Content Include="Scripts\chosen\chosen.proto.js" />
-    <Content Include="Scripts\chosen\chosen.proto.min.js" />
-    <Content Include="Scripts\datatable\FixedColumns.js" />
-    <Content Include="Scripts\datatable\jquery.dataTables.js" />
-    <Content Include="Scripts\Libs\fxHeader.js" />
     <Content Include="Scripts\Libs\jquery.tipsy.js" />
-    <Content Include="Scripts\MultiSelect\ba.hashchange.js" />
-    <Content Include="Scripts\MultiSelect\jquery.multiselect.css" />
-    <Content Include="Scripts\MultiSelect\jquery.multiselect.js" />
-    <Content Include="Scripts\MultiSelect\prettify.css" />
-    <Content Include="Scripts\MultiSelect\prettify.js" />
-    <Content Include="Scripts\MultiSelect\style.css" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Scripts\Views\Request\request.constant.js" />
     <Content Include="Scripts\Views\Request\leavedetail.request.js" />
     <Content Include="Styles\account.css" />
-    <Content Include="Styles\jquery.dataTables.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
@@ -627,24 +608,11 @@
     <Content Include="Scripts\Libs\modernizr.js" />
     <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Views\language.js" />
-    <Content Include="Scripts\Views\employee.workingcalendars.js" />
     <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Styles\Images\FullCalendar\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_222222_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_454545_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_888888_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Styles\Images\table_header_repeat.jpg" />
     <Content Include="Styles\login.css" />
     <Content Include="Styles\Images\arrow.png" />
@@ -653,7 +621,6 @@
     <Content Include="Styles\Images\tick-icon.png" />
     <Content Include="Styles\request.leave.css" />
     <Content Include="Styles\request.css" />
-    <Content Include="Styles\fixtable.css" />
     <Content Include="Styles\Images\approve.png" />
     <Content Include="Styles\Images\close.png" />
     <Content Include="Styles\Images\reject.png" />
@@ -661,20 +628,6 @@
     <Content Include="Styles\Images\bg-demo-docs-param.gif" />
     <Content Include="Styles\Images\demo-spindown-closed.gif" />
     <Content Include="Styles\Images\demo-spindown-open.gif" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_flat_15_cd0a0a_40x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_100_e4f1fb_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_50_3baae3_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_glass_80_d7ebf9_1x400.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_highlight-hard_70_000000_1x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_highlight-soft_100_deedf7_1x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_2694e8_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_3d80b3_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_72a7cf_256x240.png" />
-    <Content Include="Styles\Images\FullCalendar\ui-icons_ffffff_256x240.png" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
@@ -703,9 +656,6 @@
     <Content Include="Scripts\Libs\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\Libs\jquery.validate.js" />
     <Content Include="Scripts\Libs\jquery.validate.unobtrusive.js" />
-    <Content Include="Styles\jquery.fixedheadertable.css" />
-    <Content Include="Styles\jquery.fixedheadertable.theme.css" />
-    <Content Include="Styles\tinymce.css" />
     <Content Include="Views\AnnualLeaveBalance\Index.cshtml">
       <SubType>Code</SubType>
     </Content>

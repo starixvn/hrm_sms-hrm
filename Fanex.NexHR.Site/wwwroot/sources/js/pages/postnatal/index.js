@@ -1,9 +1,9 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
+import 'floatthead/dist/jquery.floatThead';
 
-import { floatingHeader, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import { floatThead, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
 import '../../date';
 
 var postnatal = (function ($) {
@@ -27,7 +27,7 @@ var postnatal = (function ($) {
             },
             success: function (data) {
                 $(domElement.Table).html(data);
-                floatingHeader();
+                floatThead('#data');
                 initEditEvent();
                 initDeleteEvent();
                 initToolTip();

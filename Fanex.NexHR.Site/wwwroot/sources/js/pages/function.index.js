@@ -1,9 +1,9 @@
-﻿import $ from 'jquery/dist/jquery';
+﻿import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, floatingHeader, toastOptions } from '../shared/common.functions';
+import { axiosError, floatThead, toastOptions } from '../shared/common.functions';
 
 let assignPermissionToRole = (function ($) {
     let $functionTable,
@@ -142,7 +142,7 @@ let assignPermissionToRole = (function ($) {
         $formFilter = $('#formFilter');
         $btnSubmit = $('#btnSubmit');
 
-        floatingHeader();
+        floatThead('#functionTable');
 
         registerEvents();
     }

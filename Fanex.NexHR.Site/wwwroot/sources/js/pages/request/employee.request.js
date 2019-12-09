@@ -2,6 +2,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
+import 'floatthead/dist/jquery.floatThead';
 import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
@@ -11,7 +12,7 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import './date.filter';
 import {
-    axiosError, blockUI, unblockUI, floatingHeader, confirm, initDatepicker,
+    axiosError, blockUI, unblockUI, floatThead, confirm, initDatepicker,
     initFromDateOnChange, toastOptions, resolveClientUrl
 } from '../../shared/common.functions';
 import { RequestCommand } from '../../shared/constants';
@@ -403,7 +404,7 @@ $(function () {
             }
         });
 
-        floatingHeader();
+        floatThead('#data');
         initEventExportExcel();
     });
 });

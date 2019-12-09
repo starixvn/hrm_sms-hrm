@@ -112,11 +112,6 @@
                     toggleLeftNavigation(true);
                     updateLeftNavigationSetting(true);
                 }
-
-                $(".content_scroll").scroll(updateTableHeaders).trigger("scroll");
-                $(window).resize(function () {
-                    updateTableHeaders();
-                });
             });
         });
     </script>

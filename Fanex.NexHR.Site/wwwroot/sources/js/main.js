@@ -1,7 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import { updateTableHeaders } from './shared/common.functions';
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     function toggleLeftNavigation(isShow) {
         let currentElement = $('#toggle-left-navigation');
 
@@ -57,11 +54,6 @@ $(document).ready(function () {
             toggleLeftNavigation(true);
             updateLeftNavigationSetting(true);
         }
-
-        $('.content_scroll').scroll(updateTableHeaders).trigger('scroll');
-        $(window).resize(function () {
-            updateTableHeaders();
-        });
     });
 
     const currentUrlSelected = $('#CurrentUrlSelected').val();

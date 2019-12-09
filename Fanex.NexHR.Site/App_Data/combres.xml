@@ -24,11 +24,7 @@
       <resource path="~/wwwroot/dist/styles/main.css" />
       <resource path="~/styles/themes/Aristo/jquery.ui.css" />
       <resource path="~/styles/font.css" />
-      <resource path="~/Scripts/MultiSelect/jquery.multiselect.css" />
-      <resource path="~/Scripts/MultiSelect/style.css" />
-      <resource path="~/Scripts/MultiSelect/prettify.css" />
       <resource path="~/Libs/FontAwesome/css/font-awesome.min.css" />
-      <resource path="~/scripts/chosen/chosen.css" />
     </resourceSet>
     <resourceSet name="sitejs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
@@ -43,9 +39,6 @@
       <resource path="~/scripts/libs/jquery.tooltip.js" />
       <resource path="~/scripts/libs/jquery.tipsy.js" />
       <resource path="~/scripts/libs/jquery.cookie.js" />
-      <resource path="~/Scripts/MultiSelect/prettify.js" />
-      <resource path="~/Scripts/MultiSelect/jquery.multiselect.js" />
-      <resource path="~/Libs/FloatThead/jquery.floatThead.min.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
       <resource path="~/scripts/views/request/request.constant.js" />
     </resourceSet>
@@ -61,19 +54,6 @@
     </resourceSet>
     <resourceSet name="leavedetailjs" type="js">
       <resource path="~/scripts/views/Request/leavedetail.request.js" />
-    </resourceSet>
-
-    <resourceSet name="workingcalendarscss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/jquery.dataTables.css" />
-      <resource path="~/wwwroot/dist/styles/workingcalendars.css" />
-    </resourceSet>
-    <resourceSet name="workingcalendarsjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/datatable/jquery.dataTables.js" />
-      <resource path="~/wwwroot/sources/js/shared/multiselect-tree-view.js" />
-      <resource path="~/wwwroot/sources/js/shared/employee.search.in.team.js" />
-      <resource path="~/scripts/views/employee.workingcalendars.js" />
     </resourceSet>
 
     <resourceSet name="logincss" type="css">

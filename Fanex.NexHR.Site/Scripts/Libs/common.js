@@ -150,8 +150,6 @@ $(document).ready(function () {
         });
     }
 
-    floatingHeader();
-
     $('.processing-submit').click(function () {
         actingButton('.processing-submit', true);
     });
@@ -167,25 +165,6 @@ function backToPreviousPageAction() {
     $("#backPrevious").click(function () {
         parent.history.back();
         return false;
-    });
-}
-
-function floatingHeader() {
-    var clonedHeaderRow;
-    $(".persist-area").each(function () {
-        clonedHeaderRow = $(".persist-header", this);
-        clonedHeaderRow
-            .before(clonedHeaderRow.clone())
-            .css("width", clonedHeaderRow.width())
-            .addClass("floatingHeader")
-            .removeClass("persist-header");
-    });
-
-    $(".content_scroll")
-        .scroll(updateTableHeaders)
-        .trigger("scroll");
-    $(window).resize(function () {
-        updateTableHeaders();
     });
 }
 
@@ -286,53 +265,11 @@ function getEncodePlainText(text) {
     if (text === null || typeof (text) !== "string") return null;
     return encodeURIComponent(text.replace(/<[^>]*>/g, ''));
 }
-function jsonToDate(jsonDate) {
-    var date = Date.parse(jsonDate);
-    return date.format("mm/dd/yyyy HH:MM:ss");
-}
-
-function jsonToFullDateTime(jsonDate) {
-    var date = Date.parse(jsonDate);
-    if (date !== null) {
-        return date.format("ddd, dd mmm, yyyy HH:MM:ss");
-    }
-    else {
-        return "";
-    }
-}
-
-function jsonToFullDateTime2(jsonDate) {
-    var date = new Date(jsonDate);
-    if (date !== null) {
-        return date.format("dd mmm, yyyy HH:MM:ss");
-    }
-    else {
-        return "";
-    }
-}
-
-function jsonToShortDate(jsonDate) {
-    var date = Date.parse(jsonDate);
-    return date.format("dd mmm, yyyy");
-}
-
-function jsonToDetailsDate(jsonDate) {
-    var date = Date.parse(jsonDate);
-    return date.format("ddd, dd mmm, yyyy");
-}
 
 function addDays(jsonDate, days) {
     var date = Date.parse(jsonDate);
     date.setDate(date.getDate() + days);
     return date.format("dd mmm, yyyy");
-}
-
-function jsonTojsDate(jsonDate) {
-    return Date.parse(jsonDate);
-}
-
-function dateToString(date) {
-    return date.format("mm/dd/yyyy HH:MM:ss");
 }
 
 function removeSign(str) {
@@ -608,174 +545,4 @@ function autoIndex() {
         $(this).children("td").eq(0).html(index);
         index = index + 1;
     });
-}
-
-function zeroPrefix(value) {
-    if (parseInt(value, 10) < 10) return "0" + parseInt(value, 10);
-    return value;
-}
-
-function totalHoursToTime(value) {
-    var display = '';
-    var hour = Math.floor(value);
-
-    if (hour > 0) {
-        display = hour < 10 ? '0' + hour + 'h' : hour + 'h';
-    }
-
-    var minute = Math.round((value - hour) * 60);
-    return minute < 10 ? display + '0' + minute + '\'' : display + minute + '\'';
-}
-
-function updateTableHeaders() {
-    if ($(".persist-area").val() !== undefined) {
-        var leftspace = 191;
-        var widthspace = $(".persist-area").width() + 18;
-        if ($.browser.safari) {
-            leftspace = 192;
-            widthspace = widthspace - 8;
-            if (widthspace < 1060)
-                widthspace = 1060;
-        }
-        else {
-            widthspace = widthspace - 17;
-            if (widthspace < 1051)
-                widthspace = 1051;
-        }
-
-        $('.floatingHeader').width(widthspace);
-        var left = $('table.persist-area thead tr:first').position()["left"];
-
-        var isShowLeftMenu = $("#toggle-left-navigation").hasClass("large-next");
-        var widthLeftMenu = isShowLeftMenu ? 190 : 0;
-
-        $(".persist-area").each(function () {
-            var el = $(this),
-                offset = el.offset(),
-                scrollTop = $(window).scrollTop(),
-                floatingHeader = $(".floatingHeader", this);
-            if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
-                if (!isShowLeftMenu) {
-                    floatingHeader.css({
-                        "visibility": "visible",
-                        "left": (leftspace + left)
-                    });
-                }
-                else {
-                    floatingHeader.css({
-                        "visibility": "visible",
-                        "left": left + 1
-                    });
-                }
-            } else {
-                floatingHeader.css({
-                    "visibility": "hidden"
-                });
-            }
-        });
-
-        var i = 0;
-        $("table .persist-header th").each(function () {
-            var x = $(this).width();
-            $($("table .floatingHeader th")[i]).width(x);
-            i++;
-        });
-    }
-}
-
-$(function () {
-    var startDate, endDate;
-
-    var selectCurrentWeek = function () {
-        window.setTimeout(function () {
-            $('.week-picker').find('.ui-datepicker-current-day a').addClass('ui-state-active');
-        }, 1);
-    };
-
-    $('.week-picker').datepicker({
-        showOtherMonths: true,
-        selectOtherMonths: true,
-        dateFormat: "dd M, yy",
-        firstDay: 1,
-        showOn: "button",
-        buttonImageOnly: true,
-        onSelect: function (dateText, inst) {
-            var date = $(this).datepicker('getDate');
-            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
-            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
-            var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
-            $('.startDateOfWeek').val($.datepicker.formatDate(dateFormat, startDate, inst.settings));
-            $('.endDateOfWeek').val($.datepicker.formatDate(dateFormat, endDate, inst.settings));
-            selectCurrentWeek();
-            $('.week-picker').hide();
-        },
-        beforeShowDay: function (date) {
-            var cssClass = '';
-            if (date >= startDate && date <= endDate)
-                cssClass = 'ui-datepicker-current-day';
-            return [true, cssClass];
-        },
-        onChangeMonthYear: function (year, month, inst) {
-            selectCurrentWeek();
-        }
-    });
-
-    $('.week-picker .ui-datepicker-calendar tr').live('mousemove', function () { $(this).find('td a').addClass('ui-state-hover'); });
-    $('.week-picker .ui-datepicker-calendar tr').live('mouseleave', function () { $(this).find('td a').removeClass('ui-state-hover'); });
-    $('.week-picker .ui-datepicker').addClass('custom-weekpicker');
-    $('.week-picker').hide();
-
-    $('.startDateOfWeek, .endDateOfWeek').attr('readonly', 'readonly');
-    $('.startDateOfWeek, .endDateOfWeek').keydown(function (e) {
-        var tab = 9, enter = 13;
-        if (e.keyCode === tab || e.keyCode === enter) {
-            return true;
-        }
-
-        return false;
-    });
-
-    $(document).click(function (e) {
-        var ele = $(e.target) ? $(e.target) : $(e.toElement);
-        if (ele.hasClass("weekPickerImg") || ele.hasClass("startDateOfWeek") || ele.hasClass("endDateOfWeek")) {
-            $('.week-picker').toggle();
-        }
-        else {
-            var elementParent = ele.parents();
-            if (!(elementParent.hasClass('ui-datepicker-next') || elementParent.hasClass('ui-datepicker-prev') || elementParent.hasClass("hasDatepicker"))) {
-                $('.week-picker').hide();
-            }
-        }
-    });
-});
-
-function floatThead(el) {
-    $(el).floatThead({
-        scrollContainer: function ($table) {
-            return $table.closest('.content_scroll');
-        },
-        position: 'fixed',
-        top: 72,
-        zIndex: 888
-    });
-
-    $(el).floatThead('reflow');
-}
-
-function verifyDangerousText(value) {
-    var valid = true;
-
-    if (value !== null) {
-        var regex = /<[a-zA-Z]/gi;
-
-        if (value === "&#" || value === "<?" || value === "</" || value === "<!" || regex.test(value)) {
-            valid = false;
-        }
-    }
-
-    if (!valid) {
-        alert(_messages.hostileInput);
-    }
-
-    return valid;
 }

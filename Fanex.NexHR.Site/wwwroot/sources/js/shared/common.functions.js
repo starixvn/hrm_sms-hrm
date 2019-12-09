@@ -103,67 +103,6 @@ function alert(message, callback) {
     $alert.dialog($.extend({}, defaults));
 }
 
-function updateTableHeaders() {
-    if ($('.persist-area').val() !== undefined) {
-        let widthspace = $('.persist-area').width() + 18;
-        widthspace = widthspace - 17;
-        if (widthspace < 1051) {
-            widthspace = 1051;
-        }
-
-        $('.floatingHeader').width(widthspace);
-
-        const isShowLeftMenu = $('#toggle-left-navigation').hasClass('large-next');
-
-        $('.persist-area').each(function () {
-            const el = $(this);
-            const offset = el.offset();
-            const scrollTop = $(window).scrollTop();
-            let floatingHeader = $('.floatingHeader', this);
-            if ((scrollTop > offset.top - 60) && (scrollTop < offset.top + el.height())) {
-                if (!isShowLeftMenu) {
-                    floatingHeader.css({
-                        'visibility': 'visible'
-                    });
-                } else {
-                    floatingHeader.css({
-                        'visibility': 'visible'
-                    });
-                }
-            } else {
-                floatingHeader.css({
-                    'visibility': 'hidden'
-                });
-            }
-        });
-
-        let i = 0;
-        $('table.persist-area thead th').each(function () {
-            let x = $(this).width();
-            $($('table.persist-area .floatingHeader th')[i]).width(x);
-            i++;
-        });
-    }
-}
-
-function floatingHeader() {
-    let clonedHeaderRow;
-    $('.persist-area').each(function () {
-        clonedHeaderRow = $('thead', this);
-        clonedHeaderRow
-            .before(clonedHeaderRow.clone())
-            .css('width', clonedHeaderRow.width())
-            .addClass('floatingHeader');
-    });
-
-    $('.content_scroll')
-        .scroll(updateTableHeaders)
-        .trigger('scroll');
-    $(window).resize(function () {
-        updateTableHeaders();
-    });
-}
-
 function blockUI() {
     document.getElementById('loadingProcess').style.display = 'block';
 }
@@ -399,8 +338,6 @@ export {
     showMessage,
     fadeOutMessage,
     confirm,
-    updateTableHeaders,
-    floatingHeader,
     blockUI,
     alert,
     unblockUI,
