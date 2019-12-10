@@ -56,21 +56,10 @@
       <resource path="~/scripts/views/Request/leavedetail.request.js" />
     </resourceSet>
 
-    <resourceSet name="logincss" type="css">
-      <resource path="~/styles/login.css" />
-    </resourceSet>
-    <resourceSet name="loginjs" type="js">
-      <resource path="~/scripts/libs/jquery.min.js" />
-      <resource path="~/scripts/libs/jquery.validate.js" />
-      <resource path="~/scripts/libs/jquery.validate.unobtrusive.js" />
-      <resource path="~/scripts/Views/login.js" />
-    </resourceSet>
-
     <resourceSet name="timesheetrecordcss" type="css">
       <resource reference="sitecss" />
     </resourceSet>
     <resourceSet name="timesheetrecordjs" type="js">
-      <resource path="~/scripts/views/addtimerecord.js" />
       <resource reference="sitejs" />
       <resource path="~/scripts/views/addtimerecord.js" />
     </resourceSet>

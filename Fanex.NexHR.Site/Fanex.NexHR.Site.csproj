@@ -241,6 +241,7 @@
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
+    <Content Include="wwwroot\dist\js\account.changepwd.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
     <Content Include="wwwroot\dist\js\department.index.js" />
@@ -253,6 +254,7 @@
     <Content Include="wwwroot\dist\js\external.group.js" />
     <Content Include="wwwroot\dist\js\holiday.edit.js" />
     <Content Include="wwwroot\dist\js\holiday.index.js" />
+    <Content Include="wwwroot\dist\js\login.js" />
     <Content Include="wwwroot\dist\js\memo.edit.js" />
     <Content Include="wwwroot\dist\js\memo.js" />
     <Content Include="wwwroot\dist\js\menu.edit.js" />
@@ -263,6 +265,9 @@
     <Content Include="wwwroot\dist\js\report.shiftstatistic.js" />
     <Content Include="wwwroot\dist\js\section.discipline.rule.js" />
     <Content Include="wwwroot\dist\js\shift.edit.js" />
+    <Content Include="wwwroot\dist\js\workingcalendar.js" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.css" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.css" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.css" />
@@ -346,6 +351,7 @@
     <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\login.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
     <Content Include="wwwroot\sources\js\pages\memo\tinymce.plugins.js" />
@@ -517,7 +523,6 @@
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
     <Content Include="Scripts\Views\addtimerecord.js" />
-    <Content Include="Scripts\Views\login.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Styles\Images\collapsed.gif" />
@@ -614,7 +619,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Styles\Images\table_header_repeat.jpg" />
-    <Content Include="Styles\login.css" />
     <Content Include="Styles\Images\arrow.png" />
     <Content Include="Styles\Images\delete-icon.png" />
     <Content Include="Styles\Images\edit-icon.png" />
@@ -625,9 +629,6 @@
     <Content Include="Styles\Images\close.png" />
     <Content Include="Styles\Images\reject.png" />
     <Content Include="Styles\report.timesheet.css" />
-    <Content Include="Styles\Images\bg-demo-docs-param.gif" />
-    <Content Include="Styles\Images\demo-spindown-closed.gif" />
-    <Content Include="Styles\Images\demo-spindown-open.gif" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
@@ -672,7 +673,6 @@
     <Content Include="Images\bullet.png" />
     <Content Include="Images\facebook.png" />
     <Content Include="Images\twitter.png" />
-    <Content Include="Images\windowsLive.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
@@ -794,8 +794,11 @@
     <Content Include="wwwroot\sources\styles\images\500\desktop.svg" />
     <Content Include="wwwroot\sources\styles\images\500\Error.svg" />
     <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
+    <Content Include="wwwroot\sources\styles\images\bgLogin.png" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\panel_bg.png" />
     <Content Include="wwwroot\sources\styles\images\pantone.svg" />
+    <Content Include="wwwroot\sources\styles\images\picon.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
@@ -807,6 +810,9 @@
     <Content Include="Views\Information\_AddEmergency.cshtml" />
     <Content Include="Views\Information\_EditEmergency.cshtml" />
     <Content Include="Views\Information\_ListEmergency.cshtml" />
+    <Content Include="wwwroot\sources\styles\images\titlebg.png" />
+    <Content Include="wwwroot\sources\styles\images\uicon.png" />
+    <Content Include="wwwroot\sources\styles\login.css" />
     <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
     <Content Include="Views\CheckInOut\_ViewHistory.cshtml" />
     <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
@@ -897,6 +903,10 @@
     <Content Include="wwwroot\dist\js\holiday.index.js.map" />
     <Content Include="wwwroot\dist\styles\holiday.create.js.map" />
     <Content Include="wwwroot\dist\styles\holiday.index.js.map" />
+    <Content Include="wwwroot\dist\js\account.changepwd.js.map" />
+    <Content Include="wwwroot\dist\js\workingcalendar.js.map" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.js.map" />
+    <Content Include="wwwroot\dist\js\login.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />

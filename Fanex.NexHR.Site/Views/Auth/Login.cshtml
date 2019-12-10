@@ -1,4 +1,6 @@
-﻿@model Fanex.NexHR.ViewModels.Employee.LoginViewModel
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@model Fanex.NexHR.ViewModels.Employee.LoginViewModel
 @{
     Layout = null;
     var title = string.Empty;
@@ -20,8 +22,7 @@
         }
         @title
     </title>
-    @Url.CombresLink("logincss")
-    @Url.CombresLink("loginjs")
+    <link href="~/wwwroot/sources/styles/login.css" rel="stylesheet" />
 </head>
 <body>
     <div id="panel">
@@ -70,5 +71,6 @@
     <div id="copyright">
         © @DateTime.Today.Year by Nexcel Solutions. All rights reserved
     </div>
+    <script src="~/wwwroot/dist/js/login.js"></script>
 </body>
 </html>
