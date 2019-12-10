@@ -1,25 +1,24 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import '../../jquery-weekpicker';
 import moment from 'moment';
 import axios from 'axios';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, floatThead } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
         blockUI();
 
         axios({
-            url: _global.root + 'WeeklyWorkingHours/GetWeeklyWorkingHours',
+            url: resolveClientUrl('WeeklyWorkingHours/GetWeeklyWorkingHours'),
             method: 'GET',
             params: {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
                 sectionIds: $('#SectionIds').val(),
-                isLocal: $('#Category').val(),
+                isLocal: $('#IsLocal').val(),
                 employee: $('#Employee').val(),
                 employeeStatusId: $('#EmployeeStatusId').val()
             },
@@ -41,7 +40,7 @@ $(document).ready(function () {
     $('#week-picker').weekpicker({
         firstDay: 1,
         currentText: $('#FromDate').val(),
-        onSelect: function (dateText, startDateText, startDate, endDate, inst) {
+        onSelect: function (dateText, startDateText, startDate, endDate) {
             $('#FromDate').val(moment(startDate).format('DD MMM, YYYY'));
             $('#ToDate').val(moment(endDate).format('DD MMM, YYYY'));
             $('#week-picker').hide();
@@ -54,7 +53,7 @@ $(document).ready(function () {
         $('#week-picker').toggle();
     });
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
@@ -71,6 +70,6 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = _global.root + 'WeeklyWorkingHours/ExportExcel?' + $('form.filter').serialize();
+        window.location.href = resolveClientUrl('WeeklyWorkingHours/ExportExcel?' + $('form.filter').serialize());
     });
 });

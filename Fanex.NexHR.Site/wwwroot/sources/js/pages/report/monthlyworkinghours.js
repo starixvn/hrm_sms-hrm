@@ -4,20 +4,20 @@ import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
         blockUI();
 
         axios({
-            url: _global.root + 'MonthlyWorkingHours/GetMonthlyWorkingHours',
+            url: resolveClientUrl('MonthlyWorkingHours/GetMonthlyWorkingHours'),
             method: 'GET',
             params: {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
                 sectionIds: $('#SectionIds').val(),
-                isLocal: $('#Category').val(),
+                isLocal: $('#IsLocal').val(),
                 employee: $('#Employee').val(),
                 employeeStatusId: $('#EmployeeStatusId').val()
             },
@@ -31,7 +31,7 @@ $(document).ready(function () {
     initDatepicker();
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
@@ -48,6 +48,6 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = _global.root + 'MonthlyWorkingHours/ExportExcel?' + $('form.filter').serialize();
+        window.location.href = resolveClientUrl('MonthlyWorkingHours/ExportExcel?' + $('form.filter').serialize());
     });
 });
