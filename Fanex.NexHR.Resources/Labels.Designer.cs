@@ -3472,6 +3472,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PH.
+        /// </summary>
+        public static string PH {
+            get {
+                return ResourceManager.GetString("PH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string Phone {

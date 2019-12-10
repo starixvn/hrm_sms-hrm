@@ -1,11 +1,13 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.ScheduleArrange;
-    using Fanex.NexHR.ViewModels;
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
@@ -27,49 +29,75 @@
             }
         }
 
-        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(ICriteria criteria)
+        public IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var list = new List<WorkingCalendarsViewModel>();
-
-                using (var ds = db.ExecuteDataSet(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    var dttWorkingCalendars = ds?.Tables[0];
-                    var totalColumns = dttWorkingCalendars != null ? dttWorkingCalendars.Columns.Count : 0;
+                    IEnumerable<WorkingCalendar> calendars = multi.Read<WorkingCalendar>();
 
-                    foreach (DataRow row in dttWorkingCalendars?.Rows)
+                    IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
+                        (dailySchedule, shift, leave, leave2) =>
+                        {
+                            dailySchedule.Shift = shift;
+                            dailySchedule.LeaveType = leave;
+                            dailySchedule.LeaveType2 = leave2;
+
+                            return dailySchedule;
+                        },
+                        splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2");
+
+                    MappingData(calendars, dailySchedules);
+
+                    return calendars;
+                }
+            }
+        }
+
+        private static void MappingData(
+            IEnumerable<WorkingCalendar> calendars,
+            IEnumerable<DailySchedule> dailySchedules)
+        {
+            foreach (WorkingCalendar calendar in calendars)
+            {
+                IEnumerable<DailySchedule> memberDailySchedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId);
+                foreach (DailySchedule dailySchedule in memberDailySchedules)
+                {
+                    switch (dailySchedule.WorkDate.DayOfWeek)
                     {
-                        var empWorkingCalendar = new WorkingCalendarsViewModel
-                        {
-                            EmpId = int.Parse(row["Empid"].ToString()),
-                            FullName = row["fullname"].ToString(),
-                            NickName = row["nickname"].ToString(),
-                            Team = row["Team"].ToString(),
-                            Positions = row["Positions"].ToString(),
-                            EmpCode = row["EmpCode"].ToString(),
-                            Days = (totalColumns - 6) / 2
-                        };
-                        var days = new List<string>();
-                        var workingSchedule = new List<WorkingScheduleViewModel>();
-                        var defaultColumn = 6;
-                        for (int i = 1; i <= empWorkingCalendar.Days; i++)
-                        {
-                            var workingDay = new WorkingScheduleViewModel
-                            {
-                                Title = row[defaultColumn++].ToString(),
-                                Color = row[defaultColumn++].ToString()
-                            };
-                            days.Add(workingDay.Title);
-                            workingSchedule.Add(workingDay);
-                        }
+                        case DayOfWeek.Monday:
+                            calendar.MondaySchedule = dailySchedule;
+                            break;
 
-                        empWorkingCalendar.WorkingDays = days;
-                        empWorkingCalendar.WorkingSchedule = workingSchedule;
-                        list.Add(empWorkingCalendar);
+                        case DayOfWeek.Tuesday:
+                            calendar.TuesdaySchedule = dailySchedule;
+                            break;
+
+                        case DayOfWeek.Wednesday:
+                            calendar.WednesdaySchedule = dailySchedule;
+                            break;
+
+                        case DayOfWeek.Thursday:
+                            calendar.ThursdaySchedule = dailySchedule;
+                            break;
+
+                        case DayOfWeek.Friday:
+                            calendar.FridaySchedule = dailySchedule;
+                            break;
+
+                        case DayOfWeek.Saturday:
+                            calendar.SaturdaySchedule = dailySchedule;
+                            break;
+
+                        case DayOfWeek.Sunday:
+                            calendar.SundaySchedule = dailySchedule;
+                            break;
+
+                        default:
+                            // nothing
+                            break;
                     }
-
-                    return list;
                 }
             }
         }

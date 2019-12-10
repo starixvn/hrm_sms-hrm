@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Repositories;
-    using Fanex.NexHR.ViewModels;
 
     public class WorkingCalendarService : IWorkingCalendarService
     {
@@ -20,7 +20,7 @@
             return workingCalendarRepository.GetWorkingSchedule(criteria);
         }
 
-        public IList<WorkingCalendarsViewModel> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
+        public IEnumerable<WorkingCalendar> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
         {
             return workingCalendarRepository.GetWorkingCalendars(criteria);
         }

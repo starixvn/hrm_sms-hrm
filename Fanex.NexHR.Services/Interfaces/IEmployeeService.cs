@@ -43,10 +43,6 @@
 
         AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId);
 
-        IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria);
-
-        IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria);
-
         int GetDateRange(GetDateRangeCriteria criteria);
 
         IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria);

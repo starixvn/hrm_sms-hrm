@@ -92,8 +92,6 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
-    <Compile Include="Calendar\HalfDayOff.cs" />
-    <Compile Include="Calendar\ShiftStatisticModel.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="EditEmployeeParam.cs" />
@@ -106,6 +104,7 @@
     <Compile Include="Report\ShiftStatistic\GetShiftStatisticParam.cs" />
     <Compile Include="Report\ShiftStatistic\ShiftStatistic.cs" />
     <Compile Include="Report\ShiftStatistic\ShiftStatisticDetail.cs" />
+    <Compile Include="Report\WorkingCalendar.cs" />
     <Compile Include="Report\WorkingCalendarSummary.cs" />
     <Compile Include="Discipline\DisciplineDetailModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryModel.cs" />
@@ -209,7 +208,6 @@
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
     <Compile Include="Request\RequestTypeModel.cs" />
-    <Compile Include="Calendar\ScheduleModel.cs" />
     <Compile Include="Supervisor\SupervisorModel.cs" />
     <Compile Include="Supervisor\SupervisorNameModel.cs" />
     <Compile Include="Team.cs" />
@@ -220,8 +218,6 @@
     <Compile Include="EntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shifts\Shift.cs" />
-    <Compile Include="UserChangedShift.cs" />
-    <Compile Include="Calendar\WorkingCalendarModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

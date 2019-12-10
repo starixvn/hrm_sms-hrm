@@ -75,7 +75,7 @@
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceViewModel.cs" />
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
-    <Compile Include="Calendar\WorkingCalendarDetailViewModel.cs" />
+    <Compile Include="Calendar\WorkingCalendarViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarFilterViewModel.cs" />
     <Compile Include="Department\AddDepartmentViewModel.cs" />
     <Compile Include="Department\DepartmentViewModel.cs" />
@@ -137,8 +137,6 @@
     <Compile Include="Report\EmployeeAttendanceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\WorkingCalendarSummaryViewModel.cs" />
-    <Compile Include="Calendar\WorkingCalendarsViewModel.cs" />
-    <Compile Include="Calendar\WorkingScheduleViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

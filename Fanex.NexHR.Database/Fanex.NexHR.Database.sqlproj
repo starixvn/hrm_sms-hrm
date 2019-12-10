@@ -256,9 +256,7 @@
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetChangedShift.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetHalfDayOff.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetNumberWorkDate.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Update.sql" />

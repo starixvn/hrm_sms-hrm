@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
 
     public interface IExportExcelService
@@ -13,6 +13,6 @@
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
 
-        HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate);
+        HSSFWorkbook ExportEmployeeWorkingCalendar(IEnumerable<WorkingCalendar> workingCalendars, DateTime fromDate, DateTime toDate);
     }
 }

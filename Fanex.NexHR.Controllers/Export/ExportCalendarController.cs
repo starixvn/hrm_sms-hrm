@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using NPOI.HSSF.UserModel;
@@ -36,7 +37,7 @@
                 IsLocal = model.IsLocal
             };
 
-            IList<WorkingCalendarsViewModel> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            IEnumerable<WorkingCalendar> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
             HSSFWorkbook hssfworkbook = exportExcelService.ExportEmployeeWorkingCalendar(workingCalendars, model.FromDate, model.ToDate);
 
             return ExcelFile(hssfworkbook, fileName);

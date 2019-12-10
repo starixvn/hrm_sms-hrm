@@ -8,8 +8,10 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.ViewModels;
+    using Fanex.NexHR.Models.ScheduleArrange;
+    using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -141,7 +143,7 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeWorkingCalendar(IList<WorkingCalendarsViewModel> workingCalendars, DateTime fromDate, DateTime toDate)
+        public HSSFWorkbook ExportEmployeeWorkingCalendar(IEnumerable<WorkingCalendar> workingCalendars, DateTime fromDate, DateTime toDate)
         {
             HSSFWorkbook hssfworkbook;
             var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWorkingCalendarFilePathExcelTemplate);
@@ -198,17 +200,17 @@
                 ICell cellShift7 = row.GetCell(11);
 
                 cellNo.SetCellValue(rowIndex - _RowStartBodyWorkingCalendar + 1);
-                cellEmployeeID.SetCellValue(item.EmpCode);
+                cellEmployeeID.SetCellValue(item.Code);
                 cellFullName.SetCellValue(item.FullName);
-                cellNickName.SetCellValue(item.NickName);
-                cellTeam.SetCellValue(item.Team);
-                cellShift1.SetCellValue(item.WorkingSchedule[0].Title);
-                cellShift2.SetCellValue(item.WorkingSchedule[1].Title);
-                cellShift3.SetCellValue(item.WorkingSchedule[2].Title);
-                cellShift4.SetCellValue(item.WorkingSchedule[3].Title);
-                cellShift5.SetCellValue(item.WorkingSchedule[4].Title);
-                cellShift6.SetCellValue(item.WorkingSchedule[5].Title);
-                cellShift7.SetCellValue(item.WorkingSchedule[6].Title);
+                cellNickName.SetCellValue(item.Nickname);
+                cellTeam.SetCellValue(item.Section);
+                cellShift1.SetCellValue(GetShift(item.MondaySchedule));
+                cellShift2.SetCellValue(GetShift(item.TuesdaySchedule));
+                cellShift3.SetCellValue(GetShift(item.WednesdaySchedule));
+                cellShift4.SetCellValue(GetShift(item.ThursdaySchedule));
+                cellShift5.SetCellValue(GetShift(item.FridaySchedule));
+                cellShift6.SetCellValue(GetShift(item.SaturdaySchedule));
+                cellShift7.SetCellValue(GetShift(item.SundaySchedule));
                 rowIndex++;
                 index++;
             }
@@ -260,6 +262,64 @@
         {
             var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
             writer.WriteRow(rowStart, record);
+        }
+
+        private static string GetShift(DailySchedule schedule)
+        {
+            var shift = string.Empty;
+            if (schedule.IsLeaveOffDay)
+            {
+                shift = Labels.Off;
+            }
+            else if (schedule.IsLeaveDay)
+            {
+                shift = GetShiftOnLeaveDay(schedule);
+            }
+            else if (schedule.IsHoliday)
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : Labels.PH;
+            }
+            else if (schedule.IsOffDay)
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : Labels.Off;
+            }
+            else
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
+            }
+
+            return shift;
+        }
+
+        private static string GetShiftOnLeaveDay(DailySchedule schedule)
+        {
+            var shift = string.Empty;
+            if (schedule.IsHoliday)
+            {
+                shift = Labels.PH;
+            }
+            else if (schedule.IsOffDay)
+            {
+                shift = Labels.Off;
+            }
+            else
+            {
+                if (schedule.IsLeaveHalfDay)
+                {
+                    shift = string.Format("{0} ½", schedule.LeaveType.Code);
+                }
+                else
+                {
+                    shift = schedule.LeaveType.Code;
+
+                    if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
+                    {
+                        shift = string.Format("{0} / {1}", schedule.LeaveType.Code, schedule.LeaveType2.Code);
+                    }
+                }
+            }
+
+            return shift;
         }
     }
 }

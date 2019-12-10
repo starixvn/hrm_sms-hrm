@@ -12,7 +12,6 @@
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
@@ -154,16 +153,6 @@
                 LeaveTransId = leaveTransId
             };
             return baseService.GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
-        }
-
-        public IList<UserChangedShift> GetUserChangedShift(GetUserChangedShiftCriteria criteria)
-        {
-            return baseService.GetData<UserChangedShift>(criteria).ToList();
-        }
-
-        public IList<HalfDayOff> GetHalfDayOffs(GetEmployeeHalfDayOffCriteria criteria)
-        {
-            return baseService.GetData<HalfDayOff>(criteria).ToList();
         }
 
         public int GetDateRange(GetDateRangeCriteria criteria)

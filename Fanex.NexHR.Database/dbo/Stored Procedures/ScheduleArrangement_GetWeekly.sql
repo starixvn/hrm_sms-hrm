@@ -20,6 +20,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @Today DATE = GETDATE()
+		,@EmployeeIds VARCHAR(MAX)
 		,@EditScheduleUnlimited VARCHAR(100) = 'EditScheduleUnlimited'
 		,@ShiftManagerRoleId TINYINT = 4
 		,@GeneralLeaveId TINYINT = 0
@@ -127,9 +128,12 @@ BEGIN
 				AND esum.IsTopManager = 1
 			)
 
+	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
+	FROM @tblEmployeeIds
+
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromtime
 		,@toDate = @totime
-		,@empIds = @EmpId
+		,@empIds = @EmployeeIds
 		,@isEnable = 1
 		,@isDelete = 0
 
@@ -161,7 +165,8 @@ BEGIN
 	INTO #tblEmployeeCalendar
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmpId = tmpca.EmpId
-		AND tmpca.WorkDate BETWEEN @fromTime AND @toTime
+		AND tmpca.WorkDate BETWEEN @fromTime
+			AND @toTime
 		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND tmpca.WorkDate = empca.WorkDate

@@ -65,7 +65,11 @@
     <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_GetWeekendLeaveDetail" SpName="Report_GetWeekendLeaveDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="nexhrx" Plain="0">
+      <Mapping DataField="ShiftId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+    </Setting>
     <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1" />
     <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
@@ -98,11 +102,9 @@
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_OvertimeType" SpName="WorkingTimeRequest_GetRequestByRequestDate_OvertimeType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_KeepInViewType" SpName="WorkingTimeRequest_GetRequestByRequestDate_KeepInViewType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetChangedShift" SpName="EmployeeCalendar_GetChangedShift" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeGroup_Insert" SpName="Group_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeGroup_Update" SpName="Group_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Group_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetHalfDayOff" SpName="EmployeeCalendar_GetHalfDayOff" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
