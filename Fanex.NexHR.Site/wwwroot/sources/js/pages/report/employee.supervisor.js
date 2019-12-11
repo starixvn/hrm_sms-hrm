@@ -1,32 +1,30 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { floatThead, alert } from '../../shared/common.functions';
+import { floatThead, alert, resolveClientUrl } from '../../shared/common.functions';
 
 (function () {
     function query() {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         $.ajax({
-            url: _global.root + 'report/EmployeeSupervisorDetails',
+            url: resolveClientUrl('report/EmployeeSupervisorDetails'),
             type: 'POST',
             dataType: 'html',
             data: $('form.filter').serialize(),
             success: function (response) {
                 $('#EmployeeSupervisorDetails').html(response);
-
                 floatThead('table#data');
             },
-            error: function () {
-                alert(_messages.errorTryAgain);
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
             }
         });
     }
 
     $(document).ready(function () {
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,
@@ -50,7 +48,7 @@ import { floatThead, alert } from '../../shared/common.functions';
 
         $('#btnExcel').on('click', function () {
             $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-            window.location.href = _global.root + 'ExportSupervisor/EmployeeSupervisor?' + $('form.filter').serialize();
+            window.location.href = resolveClientUrl('ExportSupervisor/EmployeeSupervisor?' + $('form.filter').serialize());
         });
     });
 })();

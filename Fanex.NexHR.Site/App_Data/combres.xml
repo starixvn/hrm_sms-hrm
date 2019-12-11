@@ -29,7 +29,6 @@
     <resourceSet name="sitejs" type="js">
       <resource path="~/scripts/libs/jquery.min.js" />
       <resource path="~/scripts/libs/jquery.ui.js" />
-      <resource path="~/scripts/views/language.js" />
       <resource path="~/scripts/libs/jquery.blockUI.js" />
       <resource path="~/scripts/libs/common.js" />
       <resource path="~/scripts/libs/jquery.highlight.js" />
@@ -40,20 +39,6 @@
       <resource path="~/scripts/libs/jquery.tipsy.js" />
       <resource path="~/scripts/libs/jquery.cookie.js" />
       <resource path="~/Scripts/Libs/PageCheckDirty.js" />
-      <resource path="~/scripts/views/request/request.constant.js" />
-    </resourceSet>
-
-    <resourceSet name="leavecss" type="css">
-      <resource reference="sitecss" />
-      <resource path="~/styles/request.leave.css" />
-    </resourceSet>
-    <resourceSet name="leavejs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/Request/request.common.js" />
-      <resource path="~/scripts/views/Request/leave.request.js" />
-    </resourceSet>
-    <resourceSet name="leavedetailjs" type="js">
-      <resource path="~/scripts/views/Request/leavedetail.request.js" />
     </resourceSet>
   </resourceSets>
 </combres>

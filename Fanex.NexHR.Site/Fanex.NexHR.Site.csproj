@@ -369,6 +369,8 @@
     <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
     <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\request.detail.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\TooltipRequestInfo.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColorDescription.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\discipline-manager\DisciplineManager.jsx" />
@@ -514,7 +516,6 @@
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\edit.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
-    <Content Include="wwwroot\sources\js\pages\request\leave\create.js" />
     <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\section\edit.js" />
@@ -526,8 +527,6 @@
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
-    <Content Include="Scripts\Views\Request\date.filter.new.js" />
-    <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Styles\Images\collapsed.gif" />
     <Content Include="Styles\Images\expanded.gif" />
     <Content Include="Images\icon-save.png" />
@@ -538,9 +537,6 @@
     <Content Include="Images\uicon.png" />
     <Content Include="Scripts\Libs\jquery.tipsy.js" />
     <Content Include="Scripts\Libs\PageCheckDirty.js" />
-    <Content Include="Scripts\Views\Request\request.constant.js" />
-    <Content Include="Scripts\Views\Request\leavedetail.request.js" />
-    <Content Include="Styles\account.css" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
@@ -614,8 +610,6 @@
     <Content Include="Scripts\Libs\jquery.highlight.js" />
     <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\modernizr.js" />
-    <Content Include="Scripts\Views\language.js" />
-    <Content Include="Scripts\Views\Request\leave.request.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -625,11 +619,9 @@
     <Content Include="Styles\Images\edit-icon.png" />
     <Content Include="Styles\Images\tick-icon.png" />
     <Content Include="Styles\request.leave.css" />
-    <Content Include="Styles\request.css" />
     <Content Include="Styles\Images\approve.png" />
     <Content Include="Styles\Images\close.png" />
     <Content Include="Styles\Images\reject.png" />
-    <Content Include="Styles\report.timesheet.css" />
     <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
@@ -676,7 +668,6 @@
     <Content Include="Images\twitter.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
@@ -1018,6 +1009,7 @@
     <Content Include="wwwroot\sources\styles\pages\section\discipline.rule.scss" />
     <Content Include="wwwroot\sources\styles\pages\shift\index.scss" />
     <Content Include="wwwroot\sources\styles\pages\shift\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\leave\create.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">

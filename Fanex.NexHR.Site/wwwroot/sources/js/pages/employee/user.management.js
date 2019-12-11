@@ -1,9 +1,8 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, confirm, alert, getParam } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } from '../../shared/common.functions';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import 'chosen-js/chosen.jquery';
@@ -46,7 +45,7 @@ import 'chosen-js/chosen.jquery';
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         blockUI();
         $.ajax({
-            url: _global.root + 'employee/ListEmployee',
+            url: resolveClientUrl('employee/ListEmployee'),
             type: 'POST',
             dataType: 'html',
             data: $('form.filter').serialize(),
@@ -61,7 +60,7 @@ import 'chosen-js/chosen.jquery';
                     fade: false,
                     className: 'avatar',
                     title: function () {
-                        var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
+                        var path = resolveClientUrl('employee/avatar/' + $(this).attr('data-code'));
                         return '<img width=80px; height=80px; src="' + path + '" />';
                     }
                 });
@@ -78,9 +77,9 @@ import 'chosen-js/chosen.jquery';
 
                 floatThead('table#data');
             },
-            error: function () {
+            error: function (jqXHR, textStatus, errorThrown) {
                 unblockUI();
-                alert(_messages.errorTryAgain);
+                alert(textStatus + ': ' + errorThrown);
             }
         });
     }
@@ -97,13 +96,13 @@ import 'chosen-js/chosen.jquery';
         }
 
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        url = _global.root + controllerPath + $('form.filter').serialize();
+        url = resolveClientUrl(controllerPath + $('form.filter').serialize());
         location.href = url;
     }
 
     $(document).ready(function () {
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,

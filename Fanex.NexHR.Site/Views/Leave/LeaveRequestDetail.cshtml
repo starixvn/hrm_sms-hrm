@@ -7,7 +7,7 @@
 @{
     Layout = null;
 }
-<table class="tabledata">
+<table class="tabledata table table-custom">
     <thead>
         <tr>
             <th>@Labels.Date</th>
@@ -78,7 +78,7 @@
                             workSelected = "selected";
                         }
                         <td>
-                            <select class="ddlWorkType">
+                            <select class="ddlWorkType form-control">
                                 <option value="2" @leaveSelected>@Labels.Leave</option>
                                 <option value="3" @workSelected>@Labels.OnDuty</option>
                                 @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
@@ -88,26 +88,27 @@
                             </select>
                         </td>
                         <td>
-                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId), new { @class = "ddlleavetype" })
+                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId),
+                                new { @class = "ddlleavetype form-control" })
                         </td>
                         <td>
                             @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })
                         </td>
                         <td>
-                            <span class="tdnumberleaves">
-                                @(item.IsHalfDay ? "0.5" : "1")
-                            </span>
+                            <span class="tdnumberleaves">@(item.IsHalfDay ? "0.5" : "1")</span>
                         </td>
                         <td>
                             <div class="timehalfday">
-                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), new { @class = "ddlfromtime" })
+                                @Html.DropDownListFor(m => item.FromTime, Utilities.TimeSteps(30, item.FromTime.ToShortTime()), 
+                                    new { @class = "ddlfromtime form-control" })
                                 @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
                                 *
                             </div>
                         </td>
                         <td>
                             <div class="timehalfday">
-                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()), new { @class = "ddltotime" })
+                                @Html.DropDownListFor(m => item.ToTime, Utilities.TimeSteps(30, item.ToTime.ToShortTime()),
+                                    new { @class = "ddltotime form-control" })
                                 @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
                                 *
                             </div>
@@ -129,12 +130,12 @@
         </tbody>
         <tfoot class="footleavedetail">
             <tr>
-                <td colspan="5">@Labels.TotalAnnualLeave: </td>
+                <td colspan="5" class="align-right">@Labels.TotalAnnualLeave: </td>
                 <td colspan="1" id="totalAnnualLeave">@totalAnnualLeave</td>
                 <td colspan="3"></td>
             </tr>
             <tr>
-                <td colspan="5">@Labels.TotalUnpaidLeave: </td>
+                <td colspan="5" class="align-right">@Labels.TotalUnpaidLeave: </td>
                 <td colspan="1" id="totalUnpaidLeave">@totalUnpaidLeave</td>
                 <td colspan="3"></td>
             </tr>
@@ -149,4 +150,4 @@
         </tbody>
     }
 </table>
-@Url.CombresLink("leavedetailjs")
+<script src="~/wwwroot/dist/js/leave.request.detail.js"></script>

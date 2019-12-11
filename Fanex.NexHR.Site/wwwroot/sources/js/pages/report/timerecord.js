@@ -1,10 +1,9 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -39,7 +38,7 @@ import '../../shared/employee.search.in.team';
         var recordTimeId = parseInt(eventElement.attr('data-id'), 10);
         blockUI();
 
-        $.post(_global.root + 'time/ProcessInOut',
+        $.post(resolveClientUrl('time/ProcessInOut'),
             { inoutType: inoutType, recordTimeId: recordTimeId },
             function (response) {
                 unblockUI();
@@ -52,7 +51,7 @@ import '../../shared/employee.search.in.team';
             });
     }
 
-    function processCommand (command, options) {
+    function processCommand(command, options) {
         const eventElement = options.$trigger;
         switch (command) {
             case 'in':
@@ -71,9 +70,9 @@ import '../../shared/employee.search.in.team';
     function bindMenu(element, menu) {
         let item = {};
         if (menu === 'inMenu') {
-            item = { 'in': { name: 'In' }};
+            item = { 'in': { name: 'In' } };
         } else {
-            item = { 'out': { name: 'Out' }};
+            item = { 'out': { name: 'Out' } };
         }
 
         $.contextMenu({
@@ -88,7 +87,7 @@ import '../../shared/employee.search.in.team';
     function query() {
         $('#TeamIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
         $.ajax({
-            url: _global.root + 'Report/TimeRecordDetail',
+            url: resolveClientUrl('Report/TimeRecordDetail'),
             type: 'POST',
             dataType: 'html',
             data: $('form.filter').serialize(),
@@ -112,15 +111,15 @@ import '../../shared/employee.search.in.team';
                     floatThead('table#data');
                 }
             },
-            error: function () {
-                alert(_messages.errorTryAgain);
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
             }
         });
     }
 
     $(document).ready(function () {
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,
@@ -144,6 +143,7 @@ import '../../shared/employee.search.in.team';
             $('form.filter #CurrentPage').val(1);
             query();
         });
+
         initDatepicker();
         initFromDateOnChange($('#FromDate'), $('#ToDate'));
         query();
