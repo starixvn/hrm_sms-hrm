@@ -242,6 +242,7 @@
     <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
     <Content Include="wwwroot\dist\js\account.changepwd.js" />
+    <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
     <Content Include="wwwroot\dist\js\department.index.js" />
@@ -268,6 +269,8 @@
     <Content Include="wwwroot\dist\js\workingcalendar.js" />
     <Content Include="wwwroot\dist\styles\account.changepwd.css" />
     <Content Include="wwwroot\dist\styles\account.changepwd.js" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.css" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.css" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.css" />
@@ -351,6 +354,7 @@
     <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\addtimerecord.js" />
     <Content Include="wwwroot\sources\js\pages\login.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
@@ -522,7 +526,6 @@
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
-    <Content Include="Scripts\Views\addtimerecord.js" />
     <Content Include="Scripts\Views\Request\date.filter.new.js" />
     <Content Include="Scripts\Views\Request\request.common.js" />
     <Content Include="Styles\Images\collapsed.gif" />
@@ -611,9 +614,7 @@
     <Content Include="Scripts\Libs\jquery.highlight.js" />
     <Content Include="Scripts\Libs\jquery.js" />
     <Content Include="Scripts\Libs\modernizr.js" />
-    <Content Include="Scripts\Views\date.filter.js" />
     <Content Include="Scripts\Views\language.js" />
-    <Content Include="Scripts\Views\search.request.js" />
     <Content Include="Scripts\Views\Request\leave.request.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
@@ -907,6 +908,9 @@
     <Content Include="wwwroot\dist\js\workingcalendar.js.map" />
     <Content Include="wwwroot\dist\styles\account.changepwd.js.map" />
     <Content Include="wwwroot\dist\js\login.js.map" />
+    <Content Include="wwwroot\sources\styles\pages\addtimerecord.scss" />
+    <Content Include="wwwroot\dist\js\addtimerecord.js.map" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />

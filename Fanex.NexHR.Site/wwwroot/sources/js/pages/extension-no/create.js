@@ -3,7 +3,7 @@ import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import axios from 'axios';
 
-import { axiosError, resolveClientUrl, toastOptions } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl } from '../../shared/common.functions';
 
 const modifiedExtensionNo = (function ($) {
     let domElements = {

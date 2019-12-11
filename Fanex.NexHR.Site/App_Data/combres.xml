@@ -55,13 +55,5 @@
     <resourceSet name="leavedetailjs" type="js">
       <resource path="~/scripts/views/Request/leavedetail.request.js" />
     </resourceSet>
-
-    <resourceSet name="timesheetrecordcss" type="css">
-      <resource reference="sitecss" />
-    </resourceSet>
-    <resourceSet name="timesheetrecordjs" type="js">
-      <resource reference="sitejs" />
-      <resource path="~/scripts/views/addtimerecord.js" />
-    </resourceSet>
   </resourceSets>
 </combres>

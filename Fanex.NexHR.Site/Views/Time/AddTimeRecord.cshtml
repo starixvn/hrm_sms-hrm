@@ -1,76 +1,62 @@
-﻿@model Fanex.NexHR.ViewModels.Time.TimeRecordViewModel
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
 @using System.Web.Mvc.Html5
-@section css{
-    @Url.CombresLink("timesheetrecordcss")
-}
-@section js{
-    @Url.CombresLink("timesheetrecordjs")
-}
+@model Fanex.NexHR.ViewModels.Time.TimeRecordViewModel
 @{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Timesheet record";
 }
-@section Breadcrumb {
-    <a class="step">TimeSheet</a> <span class="step">@ViewBag.Title</span>
+@section css{
+    <link href="~/wwwroot/dist/styles/addtimerecord.css" rel="stylesheet" />
 }
-<div class="bunhat container_24">
-    @using (Html.BeginForm())
+@section js{
+    <script src="~/wwwroot/dist/js/addtimerecord.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">Timesheet</a> <span class="step">@ViewBag.Title</span>
+}
+<div class="card">
+    @using (Html.BeginForm("addtimerecord", "time", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
-
         if (ViewBag.Requested != null && (bool)ViewBag.Requested)
         {
-        <div class="success">@Messages.RequestCreated</div>
-        <input type="hidden" id="successed" value="true" />
-        <input type="hidden" id="year" value="@ViewBag.Year" />
+            <div class="success">@Messages.RequestCreated</div>
         }
 
-        <div class="formrow">
-            <div class="label">
-                Employee
-            </div>
-            <div class="input">
-                @Html.TextBoxFor(x => x.Employee)
-                @Html.HiddenFor(model => model.Employee)
-                @Html.HiddenFor(model => model.EmpId)
+        @Html.HiddenFor(model => model.EmpId)
+        <div class="form-group">
+            <div class="label-form">@Labels.Employee</div>
+            <div class="input-form">
+                @Html.TextBoxFor(x => x.Employee, new { @class = "form-control", @autocomplete = "off" })
             </div>
         </div>
-    
-         <div class="formrow">
-            <div class="label">
-                @Html.LabelFor(model => model.InOutType)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.InOutType, new { @class = "control-label" })
             </div>
-            <div class="input">
+            <div class="input-form request-type">
                 @Html.RadioButtonList(model => model.InOutType, Utilities.CheckInOutTypes)
             </div>
         </div>
-        <div class="clear">
-        </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        </div>
-         <div class="formrow">
-            <div class="label">
-                @Labels.RequestTime
+        <div class="form-group">
+            <div class="label-form">@Labels.RequestTime</div>
+            <div class="calendar-form">
+                @Html.TextBox("ForDate", Model.ForDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly"
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
             </div>
-            <div class="input">
-                @Html.DatePickerFor(model => model.ForDate)
-                @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour" })
+            <div class="request-time">
+                @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour", @class = "form-control" })
                 :
-                @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute" })
+                @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute", @class = "form-control" })
             </div>
         </div>
-        
-        <div class="clear">
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Request" />
         </div>
-        <div class="space">
-        </div>
-        <div class="clear">
-        </div>
-        <div class="formrow">
-            <input type="submit" value="Request" id="sendRequest" />
-        </div>
-        
-        @Html.HiddenFor(model => model.EmpId)
     }
 </div>

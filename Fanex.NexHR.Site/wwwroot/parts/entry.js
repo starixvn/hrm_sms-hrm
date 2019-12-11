@@ -78,6 +78,7 @@ module.exports = {
         [`${styleDistPath}/holiday.index`]: `${styleSourcePath}/pages/holiday/index.scss`,
         [`${styleDistPath}/holiday.create`]: `${styleSourcePath}/pages/holiday/create.scss`,
         [`${styleDistPath}/account.changepwd`]: `${styleSourcePath}/pages/account/changepwd.scss`,
+        [`${styleDistPath}/addtimerecord`]: `${styleSourcePath}/pages/addtimerecord.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -162,6 +163,7 @@ module.exports = {
         [`${jsDistPath}/menu.edit`]: `${jsSourcePath}/menu/edit.js`,
         [`${jsDistPath}/holiday.index`]: `${jsSourcePath}/holiday/index.js`,
         [`${jsDistPath}/holiday.edit`]: `${jsSourcePath}/holiday/edit.js`,
-        [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`
+        [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`,
+        [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`
     }
 };
