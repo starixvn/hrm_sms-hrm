@@ -1,12 +1,4 @@
-﻿/*.header_wrap {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 10;
-}*/
-
-.header_wrap {
+﻿.header_wrap {
     background: #dcdcdc;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#e4e4e4), to(#dcdcdc));
     background-image: -moz-linear-gradient(#e4e4e4, #dcdcdc);

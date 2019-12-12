@@ -198,11 +198,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Avatars\avatar.jpg" />
-    <Content Include="Images\ajax-loader.gif" />
-    <Content Include="Images\bgLogin.png" />
-    <Content Include="Images\Hongma-logo.png" />
-    <Content Include="Images\SMS-logo.png" />
-    <Content Include="Images\warning.png" />
     <Content Include="wwwroot\dist\js\account.changepwd.js" />
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
@@ -488,72 +483,10 @@
     <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
     <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
-    <Content Include="Styles\Images\collapsed.gif" />
-    <Content Include="Styles\Images\expanded.gif" />
-    <Content Include="Images\icon-save.png" />
-    <Content Include="Images\panel_bg.png" />
-    <Content Include="Images\picon.png" />
-    <Content Include="Images\signin_icon.png" />
-    <Content Include="Images\titlebg.png" />
-    <Content Include="Images\uicon.png" />
-    <Content Include="Styles\Images\bgLogin.png" />
-    <Content Include="Styles\Images\excel.gif" />
-    <Content Include="Styles\Images\panel_bg.png" />
-    <Content Include="Styles\Images\picon.png" />
-    <Content Include="Styles\Images\signin_icon.png" />
-    <Content Include="Styles\Images\titlebg.png" />
-    <Content Include="Styles\Images\uicon.png" />
-    <Content Include="Styles\Images\asc.png" />
-    <Content Include="Styles\Images\bg.png" />
-    <Content Include="Styles\Images\desc.png" />
-    <Content Include="Styles\Images\disabled-delete.png" />
-    <Content Include="Styles\Images\icons.png" />
-    <Content Include="Styles\Images\tipsy.gif" />
-    <Content Include="Images\bg_home.jpg" />
-    <Content Include="Images\blue_numbers.png" />
-    <Content Include="Images\breadcrumb_bg.png" />
-    <Content Include="Images\calendar.gif" />
-    <Content Include="Images\calendar.png" />
-    <Content Include="Images\info.png" />
-    <Content Include="Images\irongrip.png" />
-    <Content Include="Images\lock.png" />
-    <Content Include="Images\slash-gray.png" />
-    <Content Include="Images\sprite_btn.png" />
-    <Content Include="Images\sprite_ico_2012-05-15.png" />
-    <Content Include="Images\sprite_v.png" />
     <Content Include="Index.aspx" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Styles\Images\table_header_repeat.jpg" />
-    <Content Include="Styles\Images\arrow.png" />
-    <Content Include="Styles\Images\delete-icon.png" />
-    <Content Include="Styles\Images\edit-icon.png" />
-    <Content Include="Styles\Images\tick-icon.png" />
-    <Content Include="Styles\Images\approve.png" />
-    <Content Include="Styles\Images\close.png" />
-    <Content Include="Styles\Images\reject.png" />
-    <Content Include="Styles\Images\bg.jpg" />
-    <Content Include="Styles\Images\calendar.png" />
-    <Content Include="Styles\Images\drop.png" />
-    <Content Include="Styles\Images\footer.jpg" />
-    <Content Include="Styles\Images\home.png" />
-    <Content Include="Styles\Images\logo.png" />
-    <Content Include="Styles\Images\menusplit.jpg" />
-    <Content Include="Styles\Images\search.jpg" />
-    <Content Include="Styles\Images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Styles\Images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Styles\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Styles\Images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Styles\Images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Styles\Images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Styles\Images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Styles\Images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Styles\Images\ui-icons_222222_256x240.png" />
-    <Content Include="Styles\Images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Styles\Images\ui-icons_454545_256x240.png" />
-    <Content Include="Styles\Images\ui-icons_888888_256x240.png" />
-    <Content Include="Styles\Images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Views\AnnualLeaveBalance\Index.cshtml">
@@ -568,9 +501,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\facebook.png" />
-    <Content Include="Images\twitter.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config">
@@ -692,9 +622,13 @@
     <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
     <Content Include="wwwroot\sources\styles\images\bgLogin.png" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\Hongma-logo.png" />
+    <Content Include="wwwroot\sources\styles\images\icons.png" />
     <Content Include="wwwroot\sources\styles\images\panel_bg.png" />
     <Content Include="wwwroot\sources\styles\images\pantone.svg" />
     <Content Include="wwwroot\sources\styles\images\picon.png" />
+    <Content Include="wwwroot\sources\styles\images\signin_icon.png" />
+    <Content Include="wwwroot\sources\styles\images\SMS-logo.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
@@ -1102,7 +1036,6 @@
     <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
     <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
-    <Content Include="wwwroot\sources\styles\main.scss" />
     <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />
     <Content Include="wwwroot\sources\styles\abstracts\_variables.scss" />
     <Content Include="wwwroot\sources\styles\base\_common.scss" />
@@ -1119,7 +1052,7 @@
     <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
     <Content Include="wwwroot\sources\styles\layout\_header.scss" />
     <Content Include="wwwroot\sources\styles\layout\_navbar.scss" />
-    <Content Include="wwwroot\sources\styles\main_new.scss" />
+    <Content Include="wwwroot\sources\styles\main.scss" />
     <Content Include="wwwroot\sources\js\shared\common.functions.js" />
     <Content Include="wwwroot\sources\styles\components\_checkbox.scss" />
     <Content Include="wwwroot\sources\styles\components\_modal.scss" />
