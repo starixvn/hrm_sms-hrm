@@ -212,6 +212,8 @@
     <Content Include="wwwroot\dist\js\external.group.js" />
     <Content Include="wwwroot\dist\js\holiday.edit.js" />
     <Content Include="wwwroot\dist\js\holiday.index.js" />
+    <Content Include="wwwroot\dist\js\leave.create.js" />
+    <Content Include="wwwroot\dist\js\leave.request.detail.js" />
     <Content Include="wwwroot\dist\js\login.js" />
     <Content Include="wwwroot\dist\js\memo.edit.js" />
     <Content Include="wwwroot\dist\js\memo.js" />
@@ -252,6 +254,9 @@
     <Content Include="wwwroot\dist\styles\holiday.create.js" />
     <Content Include="wwwroot\dist\styles\holiday.index.css" />
     <Content Include="wwwroot\dist\styles\holiday.index.js" />
+    <Content Include="wwwroot\dist\styles\images\icons.png" />
+    <Content Include="wwwroot\dist\styles\leave.create.css" />
+    <Content Include="wwwroot\dist\styles\leave.create.js" />
     <Content Include="wwwroot\dist\styles\memo.css" />
     <Content Include="wwwroot\dist\styles\memo.edit.css" />
     <Content Include="wwwroot\dist\styles\memo.edit.js" />
@@ -535,8 +540,6 @@
     <Content Include="wwwroot\dist\styles\images\sprite_ico_2012-05-15.png" />
     <Content Include="wwwroot\dist\styles\main.css" />
     <Content Include="wwwroot\dist\styles\main.js" />
-    <Content Include="wwwroot\dist\styles\main_new.css" />
-    <Content Include="wwwroot\dist\styles\main_new.js" />
     <Content Include="wwwroot\dist\styles\report.attendance.css" />
     <Content Include="wwwroot\dist\styles\report.attendance.js" />
     <Content Include="wwwroot\dist\styles\schedule.arrange.css" />
@@ -740,6 +743,9 @@
     <Content Include="wwwroot\sources\styles\pages\addtimerecord.scss" />
     <Content Include="wwwroot\dist\js\addtimerecord.js.map" />
     <Content Include="wwwroot\dist\styles\addtimerecord.js.map" />
+    <Content Include="wwwroot\dist\js\leave.create.js.map" />
+    <Content Include="wwwroot\dist\js\leave.request.detail.js.map" />
+    <Content Include="wwwroot\dist\styles\leave.create.js.map" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
@@ -1103,7 +1109,6 @@
     <Content Include="wwwroot\dist\styles\error.js.map" />
     <Content Include="wwwroot\dist\styles\function.index.js.map" />
     <Content Include="wwwroot\dist\styles\main.js.map" />
-    <Content Include="wwwroot\dist\styles\main_new.js.map" />
     <Content Include="wwwroot\dist\styles\report.attendance.js.map" />
     <Content Include="wwwroot\dist\styles\schedule.arrange.js.map" />
     <Content Include="wwwroot\dist\styles\section.edit.discipline.manager.js.map" />
