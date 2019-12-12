@@ -1,6 +1,5 @@
 ﻿@model Memo
 @{
-    Layout= "~/Views/Shared/_NewLayout.cshtml";
     var memoSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = memoSubject + " - " + Labels.Memo;
 }

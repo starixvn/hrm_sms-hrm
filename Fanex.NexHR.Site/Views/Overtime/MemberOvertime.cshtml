@@ -5,7 +5,6 @@
 @using Fanex.NexHR.ViewModels.Overtime
 @model MemberMonthlyOvertimeRequestViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Members' overtime";
     HtmlHelper.ClientValidationEnabled = false;
     var showCheckAll = Model.MemberRequests.Any(x => x.IsHost);

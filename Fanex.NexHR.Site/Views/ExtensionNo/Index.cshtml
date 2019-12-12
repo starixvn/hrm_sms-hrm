@@ -2,7 +2,6 @@
 @using Fanex.NexHR.ViewModels.ExtensionNumber
 @model List<ExtensionNumberViewModel>
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.ExtensionNumber;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 6 : 4;

@@ -1,7 +1,6 @@
 ﻿@using Fanex.NexHR.ViewModels.AnnualLeave
 @model AnnualLeaveTransactionViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Edit " + ViewBag.Employee.NickName + "'s annual leave balance";
     var localLeaveTypes = ViewBag.LocalLeaveTypes as IList<SelectListItem>;
 }

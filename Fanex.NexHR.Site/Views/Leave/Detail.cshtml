@@ -3,7 +3,6 @@
 @using Fanex.NexHR.Resources
 @model LeaveRequestViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Details;
 }
 @section css{
@@ -17,7 +16,6 @@
     <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-
 <h2 class="page-title">@Labels.Details</h2>
 <div class="card form-horizontal">
     @Html.HiddenFor(model => model.EmployeeId)

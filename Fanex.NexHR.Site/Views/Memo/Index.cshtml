@@ -1,6 +1,5 @@
 ﻿@model MemoViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Company Memo";
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;

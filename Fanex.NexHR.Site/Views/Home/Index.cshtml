@@ -3,7 +3,6 @@
 @using Fanex.NexHR.Models.Dashboard
 @model IEnumerable<SummaryRequest>
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Dashboard;
     var isResetPassword = (bool)ViewBag.IsResetPassword;
 }
@@ -17,7 +16,6 @@
     <a class="step">@Labels.Personal</a> <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.MySpace</h2>
-
 <table class="table table-custom">
     <thead>
         <tr>

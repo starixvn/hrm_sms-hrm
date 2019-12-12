@@ -5,7 +5,6 @@
 @using Fanex.NexHR.ViewModels.Request
 @model LeaveRequestViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Edit;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
@@ -20,7 +19,6 @@
     <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
     <a class="step">@ViewBag.Title</a>
 }
-
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card form-horizontal">
     @using (Html.BeginForm())

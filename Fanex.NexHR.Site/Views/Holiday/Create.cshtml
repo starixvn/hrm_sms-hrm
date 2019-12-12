@@ -1,26 +1,21 @@
 ﻿@using Fanex.NexHR.Resources
 @model Holiday
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.Holiday;
 }
-
 @section css{
     <link href="~/wwwroot/dist/styles/holiday.create.css" rel="stylesheet" />
 }
 @section js{
     <script src="~/wwwroot/dist/js/holiday.edit.js"></script>
 }
-
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>
     <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
     <a class="step" href="@Url.Action("index", "holiday")">@Labels.Holiday</a>
     <a class="step">@Labels.CreateHoliday</a>
 }
-
 <h2 class="page-title">@Labels.CreateHoliday</h2>
-
 <div class="card">
     @Html.ValidationSummary()
     @using (Html.BeginForm("Create", "holiday", FormMethod.Post))

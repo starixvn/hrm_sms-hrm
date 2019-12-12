@@ -2,10 +2,8 @@
 @using System.Web.Mvc.Html5
 @model CreateShiftModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.Shift;
 }
-
 @section css{
     <link href="~/wwwroot/dist/styles/shift.edit.css" rel="stylesheet" />
 }
@@ -17,9 +15,7 @@
     <a class="step" href="@Url.Action("index", "shift")">@Labels.ShiftManagement</a>
     <span class="step">@Labels.Create</span>
 }
-
 <h2 class="page-title">@Labels.Create</h2>
-
 <div class="card">
     <form class="form-horizontal clearfix" method="post">
         @Html.ValidationSummary()

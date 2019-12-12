@@ -2,8 +2,6 @@
 @using Fanex.NexHR.Models.Overtime
 @model MonthlyOvertimeRequest
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
-
     var verifier = string.Empty;
     var approver = string.Empty;
     ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + (Model.Month).ToString("MMM-yyyy") + ")";

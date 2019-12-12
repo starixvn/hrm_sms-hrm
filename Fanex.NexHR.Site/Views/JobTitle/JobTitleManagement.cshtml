@@ -1,90 +1,89 @@
 ﻿@model IList<SelectListItem>
-    @{
-        Layout = "~/Views/Shared/_NewLayout.cshtml";
-        ViewBag.Title = @Labels.JobTitleManagement;
-        var hasPermission = (bool)ViewBag.HasPermission;
-    }
-    @section css{
-        <link href="~/wwwroot/dist/styles/jobtitle.css" rel="stylesheet" />
-    }
-    @section js{
-        <script src="~/wwwroot/dist/js/jobtitle.js"></script>
+@{
+    ViewBag.Title = @Labels.JobTitleManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/jobtitle.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/jobtitle.js"></script>
 
-    }
-    @section Breadcrumb {
-        <a class="step" href="#">@ViewBag.Title</a>
-    }
-    <h2 class="page-title">@ViewBag.Title</h2>
-    <div class="filter">
-        <div class="form-horizontal clearfix">
-            <div class="form-group form-group--m">
-                <div class="label-form">
-                    @Html.Label(@Labels.Keyword, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    <input id="keyword" type="text" placeholder="@Messages.JobTitle" class="form-control" autocomplete="off" />
-                </div>
+}
+@section Breadcrumb {
+    <a class="step" href="#">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.Keyword, new { @class = "control-label" })
             </div>
-            <div class="form-group form-group--m">
-                <button class="btn btn-primary" type="button" id="btnGetJobtitle">@Labels.Submit</button>
-                @if (hasPermission)
-                {
-                    <button class="btn btn-excel" id="exportExcel" type="button">Excel</button>
-                    <button id="btnNewJobTitle" class="btn btn-request" type="button">
-                        <span class="fa fa-plus"></span> @Labels.NewJobTitle
-                    </button>
-                }
+            <div class="input-form">
+                <input id="keyword" type="text" placeholder="@Messages.JobTitle" class="form-control" autocomplete="off" />
             </div>
         </div>
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary" type="button" id="btnGetJobtitle">@Labels.Submit</button>
+            @if (hasPermission)
+            {
+                <button class="btn btn-excel" id="exportExcel" type="button">Excel</button>
+                <button id="btnNewJobTitle" class="btn btn-request" type="button">
+                    <span class="fa fa-plus"></span> @Labels.NewJobTitle
+                </button>
+            }
+        </div>
     </div>
+</div>
 
-    <div id="data"></div>
+<div id="data"></div>
 
-    <div id="create-dialog" title="Create an job title" style="display: none" class="dialog-form">
-        @Html.ValidationSummary()
-        <form>
-            <div class="form-horizontal clearfix">
-                <div class="form-group">
-                    <div class="label-form">
-                        <label class="control-label" for="name">@Labels.JobTitle</label>
-                    </div>
-                    <div class="input-form">
-                        <input type="text" name="name" id="name" class="form-control" />
-                    </div>
+<div id="create-dialog" title="Create an job title" style="display: none" class="dialog-form">
+    @Html.ValidationSummary()
+    <form>
+        <div class="form-horizontal clearfix">
+            <div class="form-group">
+                <div class="label-form">
+                    <label class="control-label" for="name">@Labels.JobTitle</label>
                 </div>
-                <div class="form-group">
-                    <div class="label-form">
-                        <label class="control-label" for="category">@Labels.Category</label>
-                    </div>
-                    <div class="select-form">
-                        @Html.DropDownList("categoryId", Model, null, new { @class = "form-control" })
-                    </div>
+                <div class="input-form">
+                    <input type="text" name="name" id="name" class="form-control" />
                 </div>
             </div>
-        </form>
-    </div>
-
-    <div id="edit-dialog" title="Create an job title" style="display: none" class="dialog-form">
-        @Html.ValidationSummary()
-        <form>
-            <div class="form-horizontal clearfix">
-                <div class="form-group">
-                    <div class="label-form">
-                        <label class="control-label" for="name">@Labels.JobTitle</label>
-                    </div>
-                    <div class="input-form">
-                        <input type="text" name="name" id="name" class="form-control" />
-                    </div>
+            <div class="form-group">
+                <div class="label-form">
+                    <label class="control-label" for="category">@Labels.Category</label>
                 </div>
-                <div class="form-group">
-                    <div class="label-form">
-                        <label class="control-label" for="category">@Labels.Category</label>
-                    </div>
-                    <div class="select-form">
-                        @Html.DropDownList("category", Model, null, new { @class = "form-control" })
-                        @Html.Hidden("jobtitleId")
-                    </div>
+                <div class="select-form">
+                    @Html.DropDownList("categoryId", Model, null, new { @class = "form-control" })
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
+
+<div id="edit-dialog" title="Create an job title" style="display: none" class="dialog-form">
+    @Html.ValidationSummary()
+    <form>
+        <div class="form-horizontal clearfix">
+            <div class="form-group">
+                <div class="label-form">
+                    <label class="control-label" for="name">@Labels.JobTitle</label>
+                </div>
+                <div class="input-form">
+                    <input type="text" name="name" id="name" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label-form">
+                    <label class="control-label" for="category">@Labels.Category</label>
+                </div>
+                <div class="select-form">
+                    @Html.DropDownList("category", Model, null, new { @class = "form-control" })
+                    @Html.Hidden("jobtitleId")
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

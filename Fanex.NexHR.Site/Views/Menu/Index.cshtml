@@ -1,9 +1,7 @@
 ﻿@using Fanex.NexHR.Models;
 @using Fanex.NexHR.ViewModels;
-
 @model IEnumerable<MenuViewModel>
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = "Menu Management";
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;

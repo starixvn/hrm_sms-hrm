@@ -21,6 +21,14 @@
         }
 
         [ChildActionOnly]
+        public ActionResult GlobalScript()
+        {
+            ViewBag.Employee = sessionService.Employee;
+            ViewBag.IsShowLeftNavigation = sessionService.IsShowLeftNavigation;
+            return PartialView();
+        }
+
+        [ChildActionOnly]
         public ActionResult Header()
         {
             var param = new GetMessageByEmployeeParam
@@ -32,50 +40,14 @@
             };
 
             ViewBag.Messages = messageService.GetMessageByEmployee(param);
-            return PartialView(sessionService.Employee);
-        }
-
-        [ChildActionOnly]
-        public ActionResult GlobalScript()
-        {
-            ViewBag.Employee = sessionService.Employee;
-            ViewBag.IsShowLeftNavigation = sessionService.IsShowLeftNavigation;
-            return PartialView();
+            return PartialView("_Header", sessionService.Employee);
         }
 
         [ChildActionOnly]
         public PartialViewResult NavBar()
         {
             var menus = GetNavBar();
-            return PartialView(menus);
-        }
-
-        [NonAction]
-        public IEnumerable<MenuItemSession> GetNagivationData()
-        {
-            return sessionService.MenuItems;
-        }
-
-        [ChildActionOnly]
-        public ActionResult NewHeader()
-        {
-            var param = new GetMessageByEmployeeParam
-            {
-                EmployeeId = sessionService.Employee.Id,
-                FromDate = DateTime.Today,
-                ToDate = DateTime.Today,
-                IsDisabled = 0
-            };
-
-            ViewBag.Messages = messageService.GetMessageByEmployee(param);
-            return PartialView("_NewHeader", sessionService.Employee);
-        }
-
-        [ChildActionOnly]
-        public PartialViewResult NewNavBar()
-        {
-            var menus = GetNavBar();
-            return PartialView("_NewNavBar", menus);
+            return PartialView("_NavBar", menus);
         }
 
         private IEnumerable<MenuItemSession> GetNavBar()
@@ -86,7 +58,7 @@
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = sessionService.MenuItems.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
 
-            var menus = GetNagivationData();
+            IEnumerable<MenuItemSession> menus = sessionService.MenuItems;
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(sessionService.Employee.Id).Count;
 
             ViewBag.SelectedMenu = selectedMenu;

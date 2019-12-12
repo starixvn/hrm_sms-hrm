@@ -1,10 +1,7 @@
 ﻿@using Fanex.NexHR.Models.Message
 @model Message
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     var message = ViewBag.Message as Message;
-}
-@{
     ViewBag.Title = @Labels.EditMessage;
 }
 @section css{

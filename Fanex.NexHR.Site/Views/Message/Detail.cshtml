@@ -1,7 +1,6 @@
 ﻿@using Fanex.NexHR.Models.Message
 @model Message
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     var messageSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = messageSubject + " - " + Labels.Message;
 }

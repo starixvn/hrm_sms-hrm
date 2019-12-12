@@ -1,25 +1,19 @@
 ﻿@using Fanex.NexHR.Resources
 @model LeaveSummaryViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Labels.AnualLeaveBalance;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
-
 @section css{
     <link href="~/wwwroot/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
 }
-
 @section js{
     <script src="~/wwwroot/dist/js/annual.leavebalance.index.js"></script>
 }
-
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
-
 <h2 class="page-title">@ViewBag.Title</h2>
-
 @if (hasPermissionToEdit)
 {
     <div class="filter">

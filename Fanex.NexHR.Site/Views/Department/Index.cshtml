@@ -3,7 +3,6 @@
 @using Fanex.NexHR.ViewModels.Department
 @model DepartmentViewModel
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.DepartmentManagement;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;

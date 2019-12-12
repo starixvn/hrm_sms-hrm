@@ -1,7 +1,6 @@
 ﻿@using Fanex.NexHR.Resources
 @model Employee
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information";
     var hasPermission = (bool)ViewBag.HasPermission;
 }

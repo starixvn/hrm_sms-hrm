@@ -2,12 +2,9 @@
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Department
 @model EditDepartmentViewModel
-
 @{
-    Layout = "~/Views/Shared/_NewLayout.cshtml";
     ViewBag.Title = @Labels.EditDivision;
 }
-
 @section css{
     <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
@@ -19,7 +16,6 @@
     <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
-
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
     @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal" }))

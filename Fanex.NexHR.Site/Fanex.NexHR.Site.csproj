@@ -573,7 +573,6 @@
     <Content Include="Images\twitter.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -985,7 +984,6 @@
     <Content Include="Views\Report\Timesheet.cshtml" />
     <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
     <Content Include="Views\UI\GlobalScript.cshtml" />
-    <Content Include="Views\UI\StatusDropDownList.cshtml" />
     <Content Include="Views\LateInEarlyOut\EmployeeView.cshtml" />
     <Content Include="Views\ChangeShift\EmployeeView.cshtml" />
     <Content Include="Views\Leave\EmployeeView.cshtml" />
@@ -994,8 +992,6 @@
     <Content Include="Views\AnnualLeaveBalance\Create.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\Edit.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleInsert.cshtml" />
-    <Content Include="Views\UI\Header.cshtml" />
-    <Content Include="Views\UI\NavBar.cshtml" />
     <Content Include="Views\Auth\Login.cshtml" />
     <Content Include="Views\Report\UnpaidLeaveSummary.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
@@ -1051,7 +1047,6 @@
     <Content Include="Views\Leave\Detail.cshtml" />
     <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
     <Content Include="Views\ScheduleArrange\Index.cshtml" />
-    <Content Include="Views\Shared\_SharedRequestStatus.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Time\AddTimeRecord.cshtml" />
     <Content Include="Views\Report\Overtime\MonthlyOvertimeDetails.cshtml" />
@@ -1237,9 +1232,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Request\_SearchForm.cshtml" />
-    <Content Include="Views\Shared\_NewLayout.cshtml" />
-    <Content Include="Views\UI\_NewHeader.cshtml" />
-    <Content Include="Views\UI\_NewNavBar.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\UI\_Header.cshtml" />
+    <Content Include="Views\UI\_NavBar.cshtml" />
     <Content Include="Views\Report\WeekendLeaveSummary.cshtml" />
     <Content Include="Views\Report\_ListWeekendLeaveSummary.cshtml" />
     <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
