@@ -58,23 +58,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
-    </Reference>
-    <Reference Include="Combres, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\combres.2.3.0.4\lib\net40\Combres.dll</HintPath>
-    </Reference>
-    <Reference Include="Combres.Mvc, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\combres.mvc.2.3.0.4\lib\net40\Combres.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.2.0\lib\net45\CommonServiceLocator.dll</HintPath>
-    </Reference>
-    <Reference Include="dotless.Core, Version=1.4.1.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
-      <HintPath>..\packages\dotless.1.4.1.0\lib\dotless.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="EcmaScript.NET, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EcmaScript.Net.1.0.1.0\lib\net20\EcmaScript.NET.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Common.1.1.0.1\lib\net40\Fanex.Common.dll</HintPath>
@@ -191,18 +176,8 @@
     <Reference Include="Unity.ServiceLocation, Version=2.0.3.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.2.0\lib\net45\Unity.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivator, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
-    </Reference>
-    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
-    </Reference>
-    <Reference Include="Yahoo.Yui.Compressor, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YUICompressor.NET.2.7.0.0\lib\NET20\Yahoo.Yui.Compressor.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\Combres.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\HangfireAuthorization.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -222,25 +197,12 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\combres.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_Data\combres_full_with_annotation.xml" />
-    <Content Include="App_Data\combres_minimal.xml" />
     <Content Include="Avatars\avatar.jpg" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\bgLogin.png" />
     <Content Include="Images\Hongma-logo.png" />
     <Content Include="Images\SMS-logo.png" />
     <Content Include="Images\warning.png" />
-    <Content Include="Libs\FontAwesome\css\font-awesome.css" />
-    <Content Include="Libs\FontAwesome\css\font-awesome.min.css" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.eot" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.svg" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff" />
-    <Content Include="Libs\FontAwesome\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Libs\FontAwesome\fonts\FontAwesome.otf" />
     <Content Include="wwwroot\dist\js\account.changepwd.js" />
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
@@ -385,7 +347,6 @@
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
     <Content Include="wwwroot\sources\libs\SimplePagination\simplePagination.css" />
-    <Content Include="Scripts\Libs\jquery.blockUI.js" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
@@ -535,8 +496,6 @@
     <Content Include="Images\signin_icon.png" />
     <Content Include="Images\titlebg.png" />
     <Content Include="Images\uicon.png" />
-    <Content Include="Scripts\Libs\jquery.tipsy.js" />
-    <Content Include="Scripts\Libs\PageCheckDirty.js" />
     <Content Include="Styles\Images\bgLogin.png" />
     <Content Include="Styles\Images\excel.gif" />
     <Content Include="Styles\Images\panel_bg.png" />
@@ -544,50 +503,12 @@
     <Content Include="Styles\Images\signin_icon.png" />
     <Content Include="Styles\Images\titlebg.png" />
     <Content Include="Styles\Images\uicon.png" />
-    <Content Include="Styles\font.css" />
     <Content Include="Styles\Images\asc.png" />
     <Content Include="Styles\Images\bg.png" />
     <Content Include="Styles\Images\desc.png" />
     <Content Include="Styles\Images\disabled-delete.png" />
     <Content Include="Styles\Images\icons.png" />
     <Content Include="Styles\Images\tipsy.gif" />
-    <Content Include="Styles\style.css" />
-    <Content Include="Styles\table.css" />
-    <Content Include="Styles\themes\Aristo\index.html" />
-    <Content Include="Styles\themes\Aristo\jquery.ui.css" />
-    <Content Include="Styles\themes\Aristo\images\bg_fallback.png" />
-    <Content Include="Styles\themes\Aristo\images\icon_sprite.png" />
-    <Content Include="Styles\themes\Aristo\images\progress_bar.gif" />
-    <Content Include="Styles\themes\Aristo\images\slider_handles.png" />
-    <Content Include="Styles\themes\Aristo\images\ui-icons_222222_256x240.png" />
-    <Content Include="Styles\themes\Aristo\images\ui-icons_454545_256x240.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Styles\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Styles\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Styles\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Styles\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Styles\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Styles\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Styles\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Styles\themes\base\jquery.ui.all.css" />
-    <Content Include="Styles\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Styles\themes\base\jquery.ui.base.css" />
-    <Content Include="Styles\themes\base\jquery.ui.button.css" />
-    <Content Include="Styles\themes\base\jquery.ui.core.css" />
-    <Content Include="Styles\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Styles\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Styles\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Styles\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Styles\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Styles\themes\base\jquery.ui.slider.css" />
-    <Content Include="Styles\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Styles\themes\base\jquery.ui.theme.css" />
     <Content Include="Images\bg_home.jpg" />
     <Content Include="Images\blue_numbers.png" />
     <Content Include="Images\breadcrumb_bg.png" />
@@ -601,15 +522,6 @@
     <Content Include="Images\sprite_ico_2012-05-15.png" />
     <Content Include="Images\sprite_v.png" />
     <Content Include="Index.aspx" />
-    <Content Include="Scripts\Libs\jquery.cookie.js" />
-    <Content Include="Scripts\Libs\jquery.contextmenu.js" />
-    <Content Include="Scripts\Libs\jquery.min.js" />
-    <Content Include="Scripts\Libs\jquery.tooltip.js" />
-    <Content Include="Scripts\Libs\common.js" />
-    <Content Include="Scripts\Libs\jquery.ui.js" />
-    <Content Include="Scripts\Libs\jquery.highlight.js" />
-    <Content Include="Scripts\Libs\jquery.js" />
-    <Content Include="Scripts\Libs\modernizr.js" />
     <Content Include="SpName.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -618,11 +530,9 @@
     <Content Include="Styles\Images\delete-icon.png" />
     <Content Include="Styles\Images\edit-icon.png" />
     <Content Include="Styles\Images\tick-icon.png" />
-    <Content Include="Styles\request.leave.css" />
     <Content Include="Styles\Images\approve.png" />
     <Content Include="Styles\Images\close.png" />
     <Content Include="Styles\Images\reject.png" />
-    <Content Include="Styles\960.css" />
     <Content Include="Styles\Images\bg.jpg" />
     <Content Include="Styles\Images\calendar.png" />
     <Content Include="Styles\Images\drop.png" />
@@ -644,12 +554,8 @@
     <Content Include="Styles\Images\ui-icons_454545_256x240.png" />
     <Content Include="Styles\Images\ui-icons_888888_256x240.png" />
     <Content Include="Styles\Images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Styles\jquery.ui.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\Libs\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\Libs\jquery.validate.js" />
-    <Content Include="Scripts\Libs\jquery.validate.unobtrusive.js" />
     <Content Include="Views\AnnualLeaveBalance\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -662,7 +568,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Styles\site.css" />
     <Content Include="Images\bullet.png" />
     <Content Include="Images\facebook.png" />
     <Content Include="Images\twitter.png" />
@@ -1219,7 +1124,6 @@
     <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
     <Content Include="wwwroot\sources\styles\layout\_header.scss" />
     <Content Include="wwwroot\sources\styles\layout\_navbar.scss" />
-    <Content Include="combres.readme" />
     <Content Include="wwwroot\sources\styles\main_new.scss" />
     <Content Include="wwwroot\sources\js\shared\common.functions.js" />
     <Content Include="wwwroot\sources\styles\components\_checkbox.scss" />
