@@ -69,7 +69,8 @@
                 ToDate = model.ToDate,
                 SectionIds = model.SectionIds,
                 Employee = model.Employee,
-                IsLocal = model.IsLocal
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
             };
             byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param);
 
