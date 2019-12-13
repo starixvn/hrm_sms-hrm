@@ -24,8 +24,13 @@
                     @Html.LabelFor(model => model.ChildBornDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ChildBornDate).ToString(), Model.ChildBornDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", maxdate = DateTime.Now.ToString("yyyy/MM/dd"), disableddate = "", @readonly = "readonly" })
-                    <i class="icon-calendar glyphicon glyphicon-calendar ui-datepicker-trigger"></i>
+                    @Html.TextBox("ChildBornDate", Model.ChildBornDate.ToDateMonthYearFormatedDate(),
+                    new {
+                       @class = "datepicker form-control",
+                       maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                       @readonly = "readonly"
+                    })
+                    <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
         </div>

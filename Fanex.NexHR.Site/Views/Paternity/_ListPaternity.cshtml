@@ -39,7 +39,7 @@
                     <td>
                         @if (!string.IsNullOrWhiteSpace(paternity.Remark))
                         {
-                            <span class="icon remark glyphicon glyphicon-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
                         }
                         else
                         {
@@ -51,10 +51,10 @@
                     {
                         <td class="action-column">
                             <a data-id="@paternity.PaternityId" class="edit-paternity" title="@Labels.Edit">
-                                <i class="fa fa-pencil fa-lg icon-edit pointer"></i>
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                             <a data-id="@paternity.PaternityId" class="delete-paternity" title="@Labels.Delete">
-                                <i class="fa fa-trash fa-lg icon-delete pointer"></i>
+                                <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>
                     }

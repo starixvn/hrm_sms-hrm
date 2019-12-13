@@ -1,11 +1,10 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 
-import { confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import { confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 
-var paternity = (function ($) {
+const paternityModule = (function ($) {
     var domElement = {
         AddButton: '#add-paternity',
         Table: '#list-paternity',
@@ -16,10 +15,9 @@ var paternity = (function ($) {
     };
 
     function query() {
-        var url = _global.root + "paternity/ListPaternity?year=" + $("#Year").val();
         $.ajax({
             type: 'GET',
-            url: url,
+            url: resolveClientUrl("paternity/ListPaternity?year=" + $("#Year").val()),
             dataType: 'html',
             beforeSend: function () {
                 blockUI();
@@ -75,51 +73,11 @@ var paternity = (function ($) {
     function initAddEvent() {
         $(domElement.AddButton).on("click", function (e) {
             e.preventDefault();
-            $.get(_global.root + "Paternity/create", function (data) {
+            $.get(resolveClientUrl("Paternity/create"), function (data) {
                 $(domElement.CreateDialog).html(data);
                 initEventAddPaternityModal();
             });
         });
-    }
-
-    function initDatePicker($dialog) {
-        if ($dialog.find('.datepicker').length > 0) {
-            var today = new Date();
-            var mindate = new Date(2010, 1, 1);
-            var maxdate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            var disabledDates = $('.datepicker').attr('disabledDate');
-
-            if (disabledDates.length > 0) {
-                $('.datepicker').datepicker({
-                    dateFormat: "dd M, yy",
-                    minDate: mindate,
-                    maxDate: maxdate,
-                    beforeShowDay: checkBadDates,
-                    changeMonth: true,
-                    changeYear: true
-                });
-            }
-            else {
-                $('.datepicker').datepicker({
-                    dateFormat: "dd M, yy",
-                    minDate: mindate,
-                    maxDate: maxdate,
-                    changeMonth: true,
-                    changeYear: true
-                });
-            }
-
-            $('.datepicker').attr('readonly', 'readonly');
-            $('.datepicker').keydown(function (e) {
-                var tab = 9, enter = 13;
-                if (e.keyCode === tab || e.keyCode === enter) {
-                    return true;
-                }
-
-                return false;
-            });
-        }
     }
 
     function initAddPaternityDialog() {
@@ -135,7 +93,7 @@ var paternity = (function ($) {
                         if (validateAddPaternity()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'Paternity/Create',
+                                url: resolveClientUrl('Paternity/Create'),
                                 data: $(domElement.CreateForm).serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
@@ -176,10 +134,10 @@ var paternity = (function ($) {
     }
 
     function initEditModel(PaternityId) {
-        $.get(_global.root + "Paternity/edit/" + PaternityId, function (data) {
+        $.get(resolveClientUrl("Paternity/edit/" + PaternityId), function (data) {
             $(domElement.EditDialog).html(data);
             initEventEditPaternity(PaternityId);
-            initDatePicker($(domElement.EditDialog));
+            initDatepicker();
             initAutoComplete($(domElement.EditDialog));
         });
     }
@@ -197,7 +155,7 @@ var paternity = (function ($) {
                         if (validateAddPaternity()) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'Paternity/Update/' + PaternityId,
+                                url: resolveClientUrl('Paternity/Update/' + PaternityId),
                                 data: $(domElement.EditForm).serialize(),
 
                                 success: function (result) {
@@ -234,7 +192,7 @@ var paternity = (function ($) {
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'Employee/GetMemberByGender',
+                    url: resolveClientUrl('Employee/GetMemberByGender'),
                     data: {
                         keyword: request.term,
                         gender: 1 //male
@@ -287,16 +245,16 @@ var paternity = (function ($) {
         var $selector = $('.delete-paternity');
         $selector.on('click', function (event) {
             event.preventDefault();
-            var PaternityId = $(this).data('id');
+            const paternityId = $(this).data('id');
             confirm("Are you sure you want to remove this paternity?", function () {
                 $.ajax({
                     type: 'POST',
-                    url: _global.root + 'Paternity/delete/' + PaternityId,
+                    url: resolveClientUrl('Paternity/delete/' + paternityId),
                     success: function (result) {
                         if (result.IsSuccessful) {
-                            alert('Remove employee Paternity successfully!', query);
+                            alert('Remove employee paternity successfully!', query);
                         } else {
-                            alert(result.message);
+                            alert(result.Message);
                         }
                     }
                 });
@@ -307,7 +265,7 @@ var paternity = (function ($) {
     function initEventAddPaternityModal() {
         initAddPaternityDialog($(domElement.CreateDialog));
         initAutoComplete($(domElement.CreateDialog));
-        initDatePicker($(domElement.CreateDialog));
+        initDatepicker();
     }
 
     function initSubmitFiler() {
@@ -317,17 +275,17 @@ var paternity = (function ($) {
         });
     }
 
-    function initPaternity() {
+    function initModule() {
         initSubmitFiler();
         query();
         initAddEvent();
     }
 
     return {
-        initPaternity
+        initModule
     };
 })(jQuery);
 
 $(document).ready(function () {
-    paternity.initPaternity();
+    paternityModule.initModule();
 });

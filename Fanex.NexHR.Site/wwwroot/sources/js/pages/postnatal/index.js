@@ -3,10 +3,10 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 
-import { floatThead, confirm, alert, blockUI, unblockUI } from '../../shared/common.functions';
+import { floatThead, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 
-var postnatal = (function ($) {
+const postnatalModule = (function ($) {
     var domElement = {
         AddButton: '#add-postnatal',
         Table: '#list-postnatal',
@@ -17,10 +17,9 @@ var postnatal = (function ($) {
     };
 
     function getPostnatal() {
-        var url = _global.root + "postnatal/ListPostnatal?year=" + $("#Year").val();
         $.ajax({
             type: 'GET',
-            url: url,
+            url: resolveClientUrl("postnatal/ListPostnatal?year=" + $("#Year").val()),
             dataType: 'html',
             beforeSend: function () {
                 blockUI();
@@ -78,43 +77,11 @@ var postnatal = (function ($) {
     function initAddEvent() {
         $(domElement.AddButton).on("click", function (e) {
             e.preventDefault();
-            $.get(_global.root + "postnatal/create", function (data) {
+            $.get(resolveClientUrl("postnatal/create"), function (data) {
                 $(domElement.CreateDialog).html(data);
                 initEventAddPostnatalModal();
             });
         });
-    }
-
-    function initDatePicker($dialog) {
-        if ($dialog.find('.datepicker').length > 0) {
-            var disabledDates = $('.datepicker').attr('disabledDate');
-
-            if (disabledDates.length > 0) {
-                $('.datepicker').datepicker({
-                    dateFormat: "dd M, yy",
-                    beforeShowDay: checkBadDates,
-                    changeMonth: true,
-                    changeYear: true
-                });
-            }
-            else {
-                $('.datepicker').datepicker({
-                    dateFormat: "dd M, yy",
-                    changeMonth: true,
-                    changeYear: true
-                });
-            }
-
-            $('.datepicker').attr('readonly', 'readonly');
-            $('.datepicker').keydown(function (e) {
-                var tab = 9, enter = 13;
-                if (e.keyCode === tab || e.keyCode === enter) {
-                    return true;
-                }
-
-                return false;
-            });
-        }
     }
 
     function initAddPostnatalDialog() {
@@ -130,7 +97,7 @@ var postnatal = (function ($) {
                         if (validateAddPostnatal(domElement.CreateDialog)) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'postnatal/Create',
+                                url: resolveClientUrl('postnatal/Create'),
                                 data: $(domElement.CreateForm).serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
@@ -171,10 +138,10 @@ var postnatal = (function ($) {
     }
 
     function initEditModel(postnatalId) {
-        $.get(_global.root + "postnatal/edit/" + postnatalId, function (data) {
+        $.get(resolveClientUrl("postnatal/edit/" + postnatalId), function (data) {
             $(domElement.EditDialog).html(data);
             initEventEditPostnatal(postnatalId);
-            initDatePicker($(domElement.EditDialog));
+            initDatepicker();
             initAutoComplete($(domElement.EditDialog));
         });
     }
@@ -192,7 +159,7 @@ var postnatal = (function ($) {
                         if (validateAddPostnatal(domElement.EditDialog)) {
                             $.ajax({
                                 type: 'POST',
-                                url: _global.root + 'postnatal/Update/' + postnatalId,
+                                url: resolveClientUrl('postnatal/Update/' + postnatalId),
                                 data: $(domElement.EditForm).serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
@@ -228,7 +195,7 @@ var postnatal = (function ($) {
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _global.root + 'employee/GetMemberByGender',
+                    url: resolveClientUrl('employee/GetMemberByGender'),
                     data: {
                         keyword: request.term,
                         gender: 0 //female
@@ -281,16 +248,16 @@ var postnatal = (function ($) {
         var $selector = $('.delete-postnatal');
         $selector.on('click', function (event) {
             event.preventDefault();
-            var postnatalId = $(this).data('id');
+            const postnatalId = $(this).data('id');
             confirm("Are you sure you want to remove this postnatal?", function () {
                 $.ajax({
                     type: 'POST',
-                    url: _global.root + 'postnatal/delete/' + postnatalId,
+                    url: resolveClientUrl('postnatal/delete/' + postnatalId),
                     success: function (result) {
                         if (result.IsSuccessful) {
                             alert('Remove employee postnatal successfully!', getPostnatal);
                         } else {
-                            alert(result.message);
+                            alert(result.Message);
                         }
                     }
                 });
@@ -301,7 +268,7 @@ var postnatal = (function ($) {
     function initEventAddPostnatalModal() {
         initAddPostnatalDialog($(domElement.CreateDialog));
         initAutoComplete($(domElement.CreateDialog));
-        initDatePicker($(domElement.CreateDialog));
+        initDatepicker();
     }
 
     function initSubmitFiler() {
@@ -311,17 +278,17 @@ var postnatal = (function ($) {
         });
     }
 
-    function initPostnatal() {
+    function initModule() {
         initSubmitFiler();
         getPostnatal();
         initAddEvent();
     }
 
     return {
-        initPostnatal
+        initModule
     };
 })(jQuery);
 
 $(document).ready(function () {
-    postnatal.initPostnatal();
+    postnatalModule.initModule();
 });
