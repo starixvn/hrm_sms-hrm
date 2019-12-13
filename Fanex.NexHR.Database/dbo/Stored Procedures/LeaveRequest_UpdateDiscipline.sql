@@ -65,18 +65,19 @@ BEGIN
 	FROM dbo.fnc_GetDisciplineDetailByLeaveRequestId(@RequestId)
 
 	-- reset/reject request
-	IF @RequestStatusId = @NotVerifiedStatusId
+	IF @RequestStatusId = @PendingStatusId
+		OR @RequestStatusId = @NotVerifiedStatusId
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
 		UPDATE dis
-		SET dis.IsAbsent = tbl.IsAbsent
-			,dis.IsUnpaidLeave = tbl.IsUnpaidLeave
-			,dis.IsUnpaidLeaveAbsent = tbl.IsUnpaidLeaveAbsent
-			,dis.IsUnplannedLeave = tbl.IsUnplannedLeave
-			,dis.IsWeekendLeave = tbl.IsWeekendLeave
+		SET dis.IsAbsent = 0
+			,dis.IsUnpaidLeave = 0
+			,dis.IsUnpaidLeaveAbsent = 0
+			,dis.IsUnplannedLeave = 0
+			,dis.IsWeekendLeave = 0
 			,dis.IsDeleted = CASE 
 				WHEN @RequestStatusId = @PendingStatusId THEN 1
 				ELSE dis.IsDeleted
