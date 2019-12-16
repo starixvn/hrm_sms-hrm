@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using Core.Constants;
@@ -9,6 +10,7 @@
     using Criteria.Postnatal;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using ViewModels.Postnatal;
 
@@ -31,11 +33,11 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult ListPostnatal(int year)
+        public ActionResult GetPostnatalGrid(int year)
         {
-            var postnatals = postnatalService.GetAll(year);
+            IList<EmployeePostnatal> postnatals = postnatalService.GetAll(year);
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
-            return PartialView("_ListPostnatal", postnatals);
+            return PartialView("_PostnatalGrid", postnatals);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
@@ -44,7 +46,7 @@
             var model = new PostnatalViewModel
             {
                 FromDate = DateTime.Now,
-                ToDate = DateTime.Now.AddYears(1)
+                ToDate = DateTime.Now
             };
             return PartialView("_Create", model);
         }
@@ -63,7 +65,8 @@
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
                     CreatedBy = sessionService.Employee.Id,
-                    Remark = model.Remark
+                    Remark = model.Remark,
+                    Minute = model.Minute
                 };
 
                 result = postnatalService.Insert(criteria);
@@ -79,7 +82,7 @@
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
-            var postnatal = postnatalService.GetById(id);
+            EmployeePostnatal postnatal = postnatalService.GetById(id);
             var model = new PostnatalViewModel
             {
                 EmployeeId = postnatal.EmpId,
@@ -106,7 +109,8 @@
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
                     ModifiedBy = sessionService.Employee.Id,
-                    Remark = model.Remark
+                    Remark = model.Remark,
+                    Minute = model.Minute
                 };
 
                 result = postnatalService.Update(criteria);

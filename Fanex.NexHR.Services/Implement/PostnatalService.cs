@@ -16,10 +16,20 @@
             this.baseService = baseService;
         }
 
-        public CommandResult Delete(int id)
+        public IList<EmployeePostnatal> GetAll(int year)
         {
-            var criteria = new DeletePostnatalCriteria { PostnatalId = id };
+            var criteria = new GetPostnatalCriteria { Year = year };
+            return baseService.GetData<EmployeePostnatal>(criteria).ToList();
+        }
 
+        public EmployeePostnatal GetById(int id)
+        {
+            var criteria = new GetPostnatalByIdCriteria { PostnatalId = id };
+            return baseService.GetDataEntity<EmployeePostnatal>(criteria);
+        }
+
+        public CommandResult Insert(InsertPostnatalCriteria criteria)
+        {
             return baseService.ExecuteNonQuery(criteria);
         }
 
@@ -28,32 +38,10 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<EmployeePostnatal> GetAll(int year)
+        public CommandResult Delete(int id)
         {
-            var criteria = new GetPostnatalCriteria { Year = year };
-            IList<EmployeePostnatal> postnatals = null;
-            if (criteria.IsValid())
-            {
-                postnatals = baseService.GetData<EmployeePostnatal>(criteria).ToList();
-            }
+            var criteria = new DeletePostnatalCriteria { PostnatalId = id };
 
-            return postnatals ?? new List<EmployeePostnatal>();
-        }
-
-        public EmployeePostnatal GetById(int id)
-        {
-            var criteria = new GetPostnatalByIdCriteria { PostnatalId = id };
-
-            EmployeePostnatal postnatal = null;
-            if (criteria.IsValid())
-            {
-                postnatal = baseService.GetDataEntity<EmployeePostnatal>(criteria);
-            }
-            return postnatal ?? new EmployeePostnatal();
-        }
-
-        public CommandResult Insert(InsertPostnatalCriteria criteria)
-        {
             return baseService.ExecuteNonQuery(criteria);
         }
     }

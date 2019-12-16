@@ -1056,7 +1056,7 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\InternalError.cshtml" />
     <Content Include="Views\Postnatal\Index.cshtml" />
-    <Content Include="Views\Postnatal\_ListPostnatal.cshtml" />
+    <Content Include="Views\Postnatal\_PostnatalGrid.cshtml" />
     <Content Include="Views\Postnatal\_Create.cshtml" />
     <Content Include="Views\Postnatal\_Edit.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />

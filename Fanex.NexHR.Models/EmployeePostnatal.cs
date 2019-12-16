@@ -29,5 +29,7 @@
         public DateTime? ModifiedDate { get; set; }
 
         public string Remark { get; set; }
+
+        public short Minute { get; set; }
     }
 }

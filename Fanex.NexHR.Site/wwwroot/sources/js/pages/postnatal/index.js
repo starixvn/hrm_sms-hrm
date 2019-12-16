@@ -2,12 +2,12 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
+import moment from 'moment';
 
 import { floatThead, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
-import '../../date';
 
 const postnatalModule = (function ($) {
-    var domElement = {
+    const domElement = {
         AddButton: '#add-postnatal',
         Table: '#list-postnatal',
         CreateDialog: '#dialogAddPostnatal',
@@ -19,7 +19,7 @@ const postnatalModule = (function ($) {
     function getPostnatal() {
         $.ajax({
             type: 'GET',
-            url: resolveClientUrl("postnatal/ListPostnatal?year=" + $("#Year").val()),
+            url: resolveClientUrl("postnatal/getPostnatalGrid?year=" + $("#Year").val()),
             dataType: 'html',
             beforeSend: function () {
                 blockUI();
@@ -48,22 +48,23 @@ const postnatalModule = (function ($) {
     }
 
     function validateAddPostnatal(form) {
-        var isValid = true,
+        let isValid = true,
             errorMsg = '',
             empId = $(form).find('#EmployeeId').val(),
             fromDate = $(form).find('#FromDate').val(),
-            toDate = $(form).find('#ToDate').val();
+            toDate = $(form).find('#ToDate').val(),
+            minute = $(form).find('#Minute').val();
 
-        if (empId && parseInt(empId, 10) <= 0) {
-            errorMsg += '<li>The Employee field is required.</li>';
+        if (!empId || parseInt(empId, 10) <= 0) {
+            errorMsg += '<li>Employee is required.</li>';
         }
 
-        if (fromDate === null || fromDate === '') {
-            errorMsg += '<li>From date field is required.</li>';
+        if (!moment(toDate).isSameOrAfter(moment(fromDate))) {
+            errorMsg += '<li>To Date must be greater than or equal to From Date.</li>';
         }
 
-        if (toDate === null || toDate === '') {
-            errorMsg += '<li>To date field is required.</li>';
+        if (minute === '' || parseInt(minute, 10) < 1 || parseInt(minute, 10) > 60) {
+            errorMsg += '<li>Minute must be an integer and between 1 and 60.</li>';
         }
 
         if (errorMsg.length > 0) {

@@ -6,23 +6,14 @@
     public class InsertPostnatalCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
-
         public DateTime FromDate { get; set; }
-
         public DateTime ToDate { get; set; }
-
         public int CreatedBy { get; set; }
-
         public string Remark { get; set; }
+        public short Minute { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Postnatal_Insert";
-        }
+        public override string GetSettingKey() => "Postnatal_Insert";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0 && FromDate <= ToDate && CreatedBy > 0;
-        }
+        public override bool IsValid() => EmpId > 0 && FromDate <= ToDate && CreatedBy > 0;
     }
 }

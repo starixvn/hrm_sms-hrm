@@ -56,6 +56,17 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
+                @Html.LabelFor(model => model.Minute, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Minute, new { @class = "form-control", @type = "number", @min = 1, @max = 60, @step = 1 })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
                 @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
             </div>
             <div class="input-form">

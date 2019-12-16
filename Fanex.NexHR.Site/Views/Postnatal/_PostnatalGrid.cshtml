@@ -11,9 +11,10 @@
             <th>@Labels.NickName</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
+            <th>@Labels.Minutes</th>
+            <th>@Labels.Remark</th>
             <th>@Labels.CreatedBy</th>
             <th>@Labels.CreatedDate</th>
-            <th>@Labels.Remark</th>
             @if (ViewBag.IsHost)
             {
                 <th>@Labels.Action</th>
@@ -34,18 +35,15 @@
                     <td>@postnatal.Nickname</td>
                     <td>@postnatal.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@postnatal.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@postnatal.Minute</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
+                        }
+                    </td>
                     <td>@postnatal.Creator</td>
                     <td>@postnatal.CreatedDate.ToDateMonthYearFormatedDate()</td>
-                    @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
-                    {
-                        <td>
-                            <span class="fa fa-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>-</td>
-                    }
                     @if (ViewBag.IsHost)
                     {
                         <td class="action-column">

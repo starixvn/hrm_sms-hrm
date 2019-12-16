@@ -5,7 +5,7 @@
 
     public class PostnatalViewModel
     {
-        [Range(1, int.MaxValue, ErrorMessage = "The Employee is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Employee is required")]
         public int EmployeeId { get; set; }
 
         [Display(Name = "Employee")]
@@ -13,13 +13,14 @@
 
         [Required(ErrorMessage = "From Date is required.")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime FromDate { get; set; }
 
         [Required(ErrorMessage = "To Date is required.")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime ToDate { get; set; }
+
+        [Required]
+        public short Minute { get; set; }
 
         public string Remark { get; set; }
     }
