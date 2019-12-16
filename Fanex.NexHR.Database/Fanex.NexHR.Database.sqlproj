@@ -139,7 +139,6 @@
     <Build Include="dbo\Stored Procedures\LookupData_JobTitle_Insert.sql" />
     <Build Include="dbo\Stored Procedures\LookupData_JobTitle_SELECT.sql" />
     <Build Include="dbo\Stored Procedures\LookupData_JobTitle_Update.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsertByArrangeShift.sql" />
     <Build Include="dbo\Stored Procedures\LookupData_Marriage_SELECT.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyOvertime.sql" />
@@ -164,7 +163,6 @@
     <Build Include="dbo\Stored Procedures\Department_GetByParentId.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_Get.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_Get.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenusByUserId.sql" />
@@ -254,7 +252,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_CheckExistedCalendar.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Insert.sql" />
