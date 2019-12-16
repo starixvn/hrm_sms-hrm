@@ -301,6 +301,47 @@ BEGIN
 				AND empatt.TotalWorkHours < @TotalWorkHours
 				)
 			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.EmployeePostnatal AS epos WITH (NOLOCK)
+			WHERE empca.EmpId = epos.EmpId
+				AND empca.WorkDate BETWEEN epos.FromDate
+					AND epos.ToDate
+			)
+	
+	UNION
+	SELECT AttendanceDate
+		,empatt.EmpId
+		,0
+		,0
+	FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
+		AND empatt.AttendanceDate = empca.WorkDate
+		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		AND es.IsLocal = rul.IsLocal
+		AND rul.DisciplineTypeId = 7
+		AND rul.Value = 1
+		INNER JOIN dbo.EmployeePostnatal AS epos WITH (NOLOCK) ON empca.EmpId = epos.EmpId
+		AND empca.WorkDate BETWEEN epos.FromDate
+			AND epos.ToDate
+	WHERE empatt.AttendanceDate >= @SyncFromDate
+		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
+		AND empatt.AttendanceDate BETWEEN @FromDate
+			AND @ToDate
+		AND ISNULL(empatt.ShiftId, '') <> ''
+		AND (
+			(
+				DATEPART(DW, empatt.AttendanceDate) IN (1, 7) -- Sunday or Saturday
+				AND empatt.TotalWorkHours < @TotalWorkHoursWeekend - epos.[Minute]
+				)
+			OR (
+				DATEPART(DW, empatt.AttendanceDate) NOT IN (1, 7)
+				AND empatt.TotalWorkHours < @TotalWorkHours - epos.[Minute]
+				)
+			)
 
 	CREATE TABLE #UnpaidLeaveAbsentDiscipline (
 		EmpId INT
