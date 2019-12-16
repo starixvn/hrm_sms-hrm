@@ -11,9 +11,9 @@
             <th>@Labels.NickName</th>
             <th>Child's Born Date</th>
             <th>Leave Day</th>
+            <th>@Labels.Remark</th>
             <th>@Labels.CreatedBy</th>
             <th>@Labels.CreatedDate</th>
-            <th>@Labels.Remark</th>
             @if (ViewBag.IsHost)
             {
                 <th>@Labels.Action</th>
@@ -34,8 +34,6 @@
                     <td>@paternity.Nickname</td>
                     <td>@paternity.ChildBornDate.ToDateMonthYearFormatedDate()</td>
                     <td>@paternity.LeaveDay</td>
-                    <td>@paternity.Creator</td>
-                    <td>@paternity.CreatedDate.ToDateMonthYearFormatedDate()</td>
                     <td>
                         @if (!string.IsNullOrWhiteSpace(paternity.Remark))
                         {
@@ -46,6 +44,8 @@
                             <span>-</span>
                         }
                     </td>
+                    <td>@paternity.Creator</td>
+                    <td>@paternity.CreatedDate.ToFormatedDate()</td>
 
                     @if (ViewBag.IsHost)
                     {
