@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Team
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class DeleteGroupCriteria : CriteriaBase

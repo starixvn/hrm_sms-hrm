@@ -54,67 +54,27 @@
         @foreach (Team team in Model)
         {
             <tr id="row@(team.Id)">
-                @Html.Hidden("groupid", team.Id)
                 <td>@(index++)</td>
                 <td>@team.Code</td>
                 <td>@team.Name</td>
                 <td>@team.Department.Name</td>
-                @if (team.Leaders.Any())
-                {
-                    <td>
-                        @{
-                            var count = 0;
-                            foreach (var leader in team.Leaders)
-                            {
-                                <span class="tooltip-tipsy" title="@leader.FullName">@leader.NickName</span>
-                                if (count < team.Leaders.Count - 1)
-                                {
-                                    <span>,</span>
-                                }
-                                count++;
-                            }
-                        }
-                    </td>
-                }
-                else
-                {
-                    <td></td>
-                }
-                @if (team.AssistantLeaders.Any())
-                {
-                    <td>
-                        @{
-                            var count = 0;
-                            foreach (var leader in team.AssistantLeaders)
-                            {
-                                <span class="tooltip-tipsy" title="@leader.FullName">@leader.NickName</span>
-                                if (count < team.AssistantLeaders.Count - 1)
-                                {
-                                    <span>,</span>
-                                }
-                                count++;
-                            }
-                        }
-                    </td>
-
-                }
-                else
-                {
-                    <td></td>
-                }
+                <td>
+                    @string.Join(", ", team.Leaders.Select(x => x.NickName))
+                </td>
+                <td>
+                    @string.Join(", ", team.AssistantLeaders.Select(x => x.NickName))
+                </td>
                 <td class="align-left">@team.MailGroup</td>
                 <td>@team.TotalExpat</td>
                 <td>@team.TotalLocal</td>
                 <td>
-                    @{
-                        if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
-                        {
-                            <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
-                        }
-                        else
-                        {
-                            <span>@team.NoOfMembers</span>
-                        }
+                    @if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
+                    {
+                        <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
+                    }
+                    else
+                    {
+                        <span>@team.NoOfMembers</span>
                     }
                 </td>
                 <td>

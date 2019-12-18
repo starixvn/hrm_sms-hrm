@@ -228,7 +228,6 @@
     <Build Include="dbo\Stored Procedures\Message_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetOtherDisciplineType.sql" />
     <Build Include="dbo\Stored Procedures\Message_EmployeeDelete.sql" />
-    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetLeaveRequestDetailToIgnoreById.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployeeByID.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetByCreator.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetEmployees.sql" />

@@ -52,7 +52,7 @@ BEGIN
 			)
 		SELECT ldt.OnDate
 			,lt.LeaveTypeId
-			,lt.NAME
+			,lt.[Name]
 			,ldt.IsHalfDay
 			,ldt.FromTime
 			,ldt.ToTime
@@ -81,7 +81,7 @@ BEGIN
 			)
 		SELECT ca.WorkDate
 			,lt.LeaveTypeId
-			,lt.NAME
+			,lt.[Name]
 			,0 AS IsHalfDay
 		FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
