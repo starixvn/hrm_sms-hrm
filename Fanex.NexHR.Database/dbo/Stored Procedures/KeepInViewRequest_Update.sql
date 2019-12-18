@@ -75,24 +75,6 @@ BEGIN
 		SET @ErrCode = 101
 		SET @ErrMsg = 'There is another request in the same date.'
 
-		RETURN;
-	END
-
-	IF @KeepInViewType = @KeepInViewByDay
-		AND NOT EXISTS (
-			SELECT 1
-			FROM dbo.EmployeeCalendar WITH (NOLOCK)
-			WHERE WorkDate = @OnDate
-				AND EmpId = @EmpId
-				AND (
-					IsHoliday = 1
-					OR IsOffDay = 1
-					)
-			)
-	BEGIN
-		SET @ErrCode = 102
-		SET @ErrMsg = CONVERT(NVARCHAR(100), @OnDate, 106) + ' not off date or holiday.'
-
 		RETURN
 	END
 
@@ -111,6 +93,24 @@ BEGIN
 	BEGIN
 		SET @ErrCode = 103
 		SET @ErrMsg = 'You have requested overtime on ' + CONVERT(NVARCHAR(100), @OnDate, 106) + '.'
+
+		RETURN
+	END
+
+	IF @KeepInViewType = @KeepInViewByDay
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeCalendar WITH (NOLOCK)
+			WHERE WorkDate = @OnDate
+				AND EmpId = @EmpId
+				AND (
+					IsHoliday = 1
+					OR IsOffDay = 1
+					)
+			)
+	BEGIN
+		SET @ErrCode = 102
+		SET @ErrMsg = CONVERT(NVARCHAR(100), @OnDate, 106) + ' not off date or holiday.'
 
 		RETURN
 	END

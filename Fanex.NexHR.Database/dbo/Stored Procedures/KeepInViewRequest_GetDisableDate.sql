@@ -50,10 +50,6 @@ BEGIN
 			AND LeaveDay = 1
 			)
 		OR IsLeaveOffday = 1
-		OR (
-			IsOffDay = 0
-			AND IsHoliday = 0
-			)
 		OR ChangeShiftTypeId IS NOT NULL
 		OR EXISTS (
 			SELECT 1
