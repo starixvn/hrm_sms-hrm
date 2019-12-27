@@ -63,7 +63,6 @@ BEGIN
 		,@RequestLeaveTimeEnd DATETIME
 		,@adjustLateIn INT
 		,@adjustEarlyOut INT
-		,@postnatalMinute SMALLINT
 
 	SET @i = 0
 	SET @attendaceDate = CONVERT(VARCHAR(10), @fromTime, 111)
@@ -89,7 +88,6 @@ BEGIN
 			,@RequestLeaveTimeEnd = NULL
 			,@adjustLateIn = 0
 			,@adjustEarlyOut = 0
-			,@postnatalMinute = 0
 
 		SELECT @WorkDate = WorkDate
 			,@ShiftId = ShiftId
@@ -107,7 +105,6 @@ BEGIN
 			,@EndCheckOutTime = EndCheckOutTime
 			,@BreakTimeMins = BreakTimeMins
 			,@LeaveDay = LeaveDay
-			,@postnatalMinute = PostnatalMinute
 		FROM #EmpCalendar
 		WHERE EmpId = @empId
 			AND WorkDate = @attendaceDate
@@ -211,37 +208,6 @@ BEGIN
 							END
 						END
 					END
-				END
-			END
-
-			-- handle postnatal
-			IF @postnatalMinute > 0
-				AND @ActualLateIn > 0
-			BEGIN
-				IF @postnatalMinute > @ActualLateIn
-				BEGIN
-					SET @postnatalMinute = @postnatalMinute - @ActualLateIn
-					SET @ActualLateIn = 0
-				END
-				ELSE
-				BEGIN
-					SET @ActualLateIn = @ActualLateIn - @postnatalMinute
-					SET @postnatalMinute = 0
-				END
-			END
-			
-			IF @postnatalMinute > 0
-				AND @ActualEarlyOut > 0
-			BEGIN
-				IF @postnatalMinute > @ActualEarlyOut
-				BEGIN
-					SET @postnatalMinute = @postnatalMinute - @ActualEarlyOut
-					SET @ActualEarlyOut = 0
-				END
-				ELSE
-				BEGIN
-					SET @ActualEarlyOut = @ActualEarlyOut - @postnatalMinute
-					SET @postnatalMinute = 0
 				END
 			END
 		END

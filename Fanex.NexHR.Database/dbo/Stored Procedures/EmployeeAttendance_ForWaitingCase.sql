@@ -158,7 +158,6 @@ BEGIN
 		,EndCheckOutTime DATETIME
 		,BreakTimeMins INT
 		,LeaveDay DECIMAL(18, 1)
-		,PostnatalMinute SMALLINT
 		)
 
 	INSERT INTO #EmpCalendar (
@@ -180,7 +179,6 @@ BEGIN
 		,EndCheckOutTime
 		,BreakTimeMins
 		,LeaveDay
-		,PostnatalMinute
 		)
 	SELECT e.EmpId
 		,e.WorkDate
@@ -212,20 +210,10 @@ BEGIN
 			END AS EndCheckOutTime
 		,BreakTimeMins
 		,LeaveDay
-		,CASE 
-			WHEN epos.EmpId IS NULL THEN 0
-			ELSE CASE 
-					WHEN ec.LeaveDay = 0.5 THEN epos.[Minute] / 2
-					ELSE epos.[Minute]
-					END
-			END
 	FROM @tblEmployee AS e
 		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.EmpId = e.EmpId
 		AND ec.WorkDate = e.WorkDate
 		LEFT JOIN dbo.Shift s WITH (NOLOCK) ON s.ShiftId = ec.ShiftId
-		LEFT JOIN dbo.EmployeePostnatal AS epos WITH (NOLOCK) ON ec.EmpId = epos.EmpId
-		AND ec.WorkDate BETWEEN epos.FromDate
-			AND epos.ToDate
 	ORDER BY e.EmpId
 		,e.WorkDate
 
