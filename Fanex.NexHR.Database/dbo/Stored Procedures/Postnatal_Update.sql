@@ -26,12 +26,16 @@ BEGIN
 			FROM dbo.EmployeePostnatal WITH (NOLOCK)
 			WHERE PostnatalId <> @PostnatalId
 				AND EmpId = @EmpId
-				AND FromDate = @FromDate
-				AND ToDate = @ToDate
+				AND (
+					@FromDate BETWEEN FromDate
+						AND ToDate
+					OR @ToDate BETWEEN FromDate
+						AND ToDate
+					)
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'The postnatal of this employee from' + CONVERT(VARCHAR(10), @FromDate, 103) + ' and ' + CONVERT(VARCHAR(10), @ToDate, 103) + ' has already exists'
+			,@ErrMsg = N'The postnatal of this employee is overlapping.'
 
 		RETURN
 	END
