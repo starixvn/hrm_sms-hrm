@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Discipline
 {
     using System;
+    using Fanex.Data;
     using Data.Repository;
 
     public class InsertOtherDisciplineCriteria : CriteriaBase

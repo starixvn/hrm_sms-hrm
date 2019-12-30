@@ -12,7 +12,7 @@
     {
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, MonthlyOvertimeRequest>(
                     (re, stt, verifier, approver) =>
@@ -23,15 +23,15 @@
                         return re;
                     },
                     "StatusId, VerifierId, ApproverId",
-                    criteria.GetSpParams());
+                    criteria);
             }
         }
 
         public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (GridReader multi = db.QueryMultiple(criteria))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var monthlyRequest = multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
                     (re, stt, requester, verifier, approver) =>
@@ -56,7 +56,7 @@
 
         public IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(ICriteria criteria)
         {
-            using (ObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, EntityBase<int>, Requester, Requester, MonthlyOvertimeRequest>(
                     (req, stt, requester, section, verifier, approver) =>
@@ -69,7 +69,7 @@
                         return req;
                     },
                     "StatusId, EmployeeId, GroupId, VerifierId, ApproverId",
-                    criteria.GetSpParams());
+                    criteria);
             }
         }
     }

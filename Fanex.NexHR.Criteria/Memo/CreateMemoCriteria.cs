@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Memo
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class CreateMemoCriteria : CriteriaBase

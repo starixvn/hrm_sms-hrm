@@ -5,6 +5,6 @@
 
     public interface IBaseRepository
     {
-        CommandResult ExecuteNonQuery(ICriteria criteria, bool hasGetOutputParams = false);
+        CommandResult ExecuteNonQuery(ICriteria criteria);
     }
 }

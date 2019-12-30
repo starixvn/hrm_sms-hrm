@@ -22,7 +22,7 @@
     {
         public IEnumerable<DailySchedule> GetWorkingCalendarForRequest(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<DailySchedule, ShiftBase, DailySchedule>(
                     (dailySchedule, shift) =>
@@ -32,13 +32,13 @@
                         return dailySchedule;
                     },
                     splitOn: "ShiftId",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
 
         public IEnumerable<ChangeShiftRequest> GetByEmployee(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<ChangeShiftRequest, Employee, Employee, Employee, Employee, ChangeShiftRequest>(
                     (request, employee, verifier, approver, hr) =>
@@ -51,13 +51,13 @@
                         return request;
                     },
                     splitOn: "EmpId, VerifierId, ApproverId, HRId",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
 
         public ChangeShiftRequest GetById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.QueryEntity<ChangeShiftRequest, Employee, Employee, Employee, ChangeShiftRequest>(
                     (request, employee, verifier, approver) =>
@@ -69,13 +69,13 @@
                         return request;
                     },
                     splitOn: "EmpId, VerifierId, ApproverId",
-                    parameters: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
 
         public IEnumerable<ChangeShiftRequest> GetHistoryById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<ChangeShiftRequest, Employee, Team, Employee, Employee, ChangeShiftRequest>(
                     (request, employee, team, verifier, approver) =>
@@ -87,7 +87,7 @@
                         return request;
                     },
                     splitOn: "EmpId, GroupId, VerifierId, ApproverId",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
     }

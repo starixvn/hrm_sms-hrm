@@ -10,7 +10,7 @@
     {
         public Department GetById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var department = db.QueryEntity<Department, Department, DepartmentHead, Department>(
                         (depart, parent, manager) =>
@@ -20,7 +20,7 @@
                             return depart;
                         },
                         splitOn: "ParentId, ManagerId",
-                        parameters: criteria.GetSpParams());
+                        parameterSet: criteria);
 
                 return department;
             }
@@ -28,7 +28,7 @@
 
         public IList<Department> GetDepartment(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var departments = db.Query<Department, Department, DepartmentHead, Department>(
                         (depart, parent, manager) =>
@@ -38,9 +38,9 @@
                             return depart;
                         },
                         splitOn: "ParentId, ManagerId",
-                        parameterValues: criteria.GetSpParams()).ToList();
+                        parameterSet: criteria);
 
-                return departments;
+                return departments.ToList();
             }
         }
     }

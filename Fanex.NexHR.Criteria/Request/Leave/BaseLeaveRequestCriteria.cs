@@ -3,13 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;
 
-    public class BaseLeaveRequestCriteria : CriteriaBase
+    public abstract class BaseLeaveRequestCriteria : CriteriaBase
     {
         private const string LeaveRequestDetailTpl =
             "<Row RequestId='{0}' EmpId='{1}' OnDate='{2}' "
@@ -72,5 +73,9 @@
                 return value.Append(Constants.EndRootTag).ToString();
             }
         }
+
+        public abstract override string GetSettingKey();
+
+        public abstract override bool IsValid();
     }
 }

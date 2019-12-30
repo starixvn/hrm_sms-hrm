@@ -38,13 +38,13 @@
             return default(T);
         }
 
-        public virtual CommandResult ExecuteNonQuery(ICriteria criteria, bool hasGetOutputParams = false)
+        public virtual CommandResult ExecuteNonQuery(ICriteria criteria)
         {
             var commandResult = new CommandResult();
 
             if (criteria != null && criteria.IsValid())
             {
-                commandResult = baseRepository.ExecuteNonQuery(criteria, hasGetOutputParams);
+                commandResult = baseRepository.ExecuteNonQuery(criteria);
             }
 
             return commandResult;

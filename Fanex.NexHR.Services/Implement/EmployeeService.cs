@@ -261,7 +261,7 @@
                 GroupId = param.GroupId,
                 Password = Encryptor.ComputeHash(authService.HashProvider, param.Code)
             };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             commandResult.OutputId = criteria.EmpId;
 
             return commandResult;

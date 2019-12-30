@@ -93,7 +93,7 @@
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId
             };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             if (commandResult.IsSuccessful)
             {

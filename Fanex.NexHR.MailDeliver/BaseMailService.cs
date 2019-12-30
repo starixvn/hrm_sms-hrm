@@ -245,7 +245,7 @@
                 MailDate = DateTime.Now
             };
 
-            baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            baseService.ExecuteNonQuery(criteria);
             email.MailId = criteria.MailId;
         }
 

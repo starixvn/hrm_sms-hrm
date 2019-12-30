@@ -10,7 +10,7 @@
     {
         public IEnumerable<MenuViewModel> GetMenus(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var menus = db.Query<MenuViewModel, FunctionModel, MenuModel, MenuViewModel>(
                     (m, f, mP) =>
@@ -21,7 +21,7 @@
                         return m;
                     },
                     splitOn: "FunctionId,MenuId",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
 
                 return menus;
             }

@@ -12,9 +12,9 @@
     {
         public IEnumerable<WeeklySchedule> GetWeeklySchedule(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<WeeklySchedule> weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, ShiftBase, WeeklySchedule>(
                         (weeklySchedule, team, defaultShift) =>

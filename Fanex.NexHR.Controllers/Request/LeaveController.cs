@@ -91,7 +91,7 @@
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = sessionService.Employee.Id;
 
-            CommandResult result = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailCreateRequest(criteria);

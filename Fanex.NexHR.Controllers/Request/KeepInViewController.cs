@@ -90,7 +90,7 @@
                 CreatedBy = sessionService.Employee.Id
             };
 
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);

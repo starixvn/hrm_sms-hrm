@@ -10,9 +10,9 @@
     {
         public Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var dateRanges = multi.Read<DateRange>();
                     var dailyOvertimes = multi.Read<DailyOvertimeDetails>();

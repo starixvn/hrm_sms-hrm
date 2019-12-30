@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class ResultCriteria : CriteriaBase
+    public class ResultCriteria
     {
         public ResultCriteria()
         {

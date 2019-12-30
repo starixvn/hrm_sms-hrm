@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Shift
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetEmployeeShiftByDateCriteria : CriteriaBase

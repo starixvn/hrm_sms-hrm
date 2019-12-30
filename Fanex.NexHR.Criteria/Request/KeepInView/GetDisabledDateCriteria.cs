@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request.KeepInView
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetDisabledDateCriteria : CriteriaBase

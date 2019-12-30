@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request.Leave
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetEmployeeCalendarCriteria : CriteriaBase

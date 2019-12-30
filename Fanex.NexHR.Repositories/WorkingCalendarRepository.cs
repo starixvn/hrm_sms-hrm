@@ -13,7 +13,7 @@
     {
         public IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                     (dailySchedule, shift, leave, leave2) =>
@@ -25,15 +25,15 @@
                         return dailySchedule;
                     },
                     splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
 
         public IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<WorkingCalendar> calendars = multi.Read<WorkingCalendar>();
 

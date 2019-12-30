@@ -2,28 +2,25 @@
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
     using Criteria;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Attributes;
     using Models;
 
     public class BaseRepository : IBaseRepository
     {
-        public CommandResult ExecuteNonQuery(ICriteria criteria, bool hasGetOutputParams = false)
+        public CommandResult ExecuteNonQuery(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                Hashtable hash = criteria.GetSpParams();
-                hash = new ResultCriteria().AddSpParams(hash);
-                int result = db.ExecuteNonQuery(hash);
-                if (result == -1 && hasGetOutputParams)
-                {
-                    SetValueForOutputProperty(criteria, hash);
-                }
+                const string ErrCode = "ErrCode";
+                const string ErrMsg = "ErrMsg";
+
+                db.SetParameterValue(ErrCode, 0);
+                db.SetParameterValue(ErrMsg, string.Empty);
+
+                db.ExecuteNonQuery(criteria);
+                Hashtable hash = db.GetOutputParams();
 
                 return GetCommandResult(hash);
             }
@@ -39,21 +36,6 @@
                 Code = (errCode is DBNull) ? 0 : Convert.ToInt32(errCode),
                 Message = (errMsg is DBNull) ? string.Empty : Convert.ToString(errMsg)
             };
-        }
-
-        private static void SetValueForOutputProperty(ICriteria criteria, Hashtable hash)
-        {
-            IEnumerable<PropertyInfo> properties = criteria.GetType().GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(OutputAttribute)));
-
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.CanWrite)
-                {
-                    var value = hash[property.Name.ToLowerInvariant()];
-                    property.SetValue(criteria, value, null);
-                }
-            }
         }
     }
 }

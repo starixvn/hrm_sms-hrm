@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request.ChangeShift
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Attributes;
 

@@ -11,9 +11,9 @@
     {
         public IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<MonthlyWorking> monthlyWorkings = multi.Read<MonthlyWorking, EntityBase<int>, MonthlyWorking>(
                         (monthlyWorking, section) =>

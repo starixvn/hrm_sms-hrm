@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Enums;
 

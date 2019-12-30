@@ -14,7 +14,7 @@
     {
         public Employee GetEmployeeById(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
@@ -34,7 +34,7 @@
 
         public Employee GetEmployeeByCode(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 Employee entity = db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -43,7 +43,7 @@
                             return e;
                         },
                         splitOn: "TeamId",
-                        parameters: criteria.GetSpParams());
+                        parameterSet: criteria);
 
                 return entity;
             }
@@ -51,9 +51,9 @@
 
         public IList<Employee> GetEmployees(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -79,7 +79,7 @@
 
                     if (totalitem != null)
                     {
-                        var hashParam = db.GetOuputParams();
+                        var hashParam = db.GetOutputParams();
                         totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
                     }
 
@@ -90,9 +90,9 @@
 
         public IList<Employee> GetEmployeesByRole(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
@@ -130,9 +130,9 @@
 
         public IList<EmployeeFullProfile> GetEmployeeFullInformation(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
                         (f, em) =>

@@ -16,9 +16,9 @@
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria.GetSpParams()))
+                using (IDataReader reader = db.ExecuteReader(criteria))
                 {
                     if (reader != null)
                     {
@@ -33,7 +33,7 @@
         public RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
         {
             RequestRelatedPeopleModel relatedPeople = null;
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
@@ -54,7 +54,7 @@
         public VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria)
         {
             VerifierAndApproverForRequest supervisor = null;
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
@@ -71,7 +71,7 @@
 
         public RequestEntity GetRequestToIgnoreById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.QueryEntity<RequestEntity, Shift, Employee, RequestTypeModel, RequestEntity>(
                     (request, shift, requester, type) =>
@@ -83,13 +83,13 @@
                         return request;
                     },
                     "ShiftId, RequesterId, RequestType",
-                    criteria.GetSpParams());
+                    criteria);
             }
         }
 
         public IList<LeaveDisciplineModel> GetLeaveRequestToReviewDiscipline(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {

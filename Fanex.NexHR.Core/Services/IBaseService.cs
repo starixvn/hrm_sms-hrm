@@ -10,6 +10,6 @@
 
         T GetDataEntity<T>(ICriteria criteria);
 
-        CommandResult ExecuteNonQuery(ICriteria criteria, bool hasGetOutputParams = false);
+        CommandResult ExecuteNonQuery(ICriteria criteria);
     }
 }

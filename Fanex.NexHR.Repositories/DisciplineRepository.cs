@@ -12,7 +12,7 @@
     {
         public IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<DisciplineSummaryModel, EmployeeInfoModel, DisciplineSummaryModel>(
                     (discipline, employee) =>
@@ -22,15 +22,15 @@
                         return discipline;
                     },
                     "EmployeeId",
-                    criteria.GetSpParams()).ToList();
+                    criteria).ToList();
             }
         }
 
         public IList<DisciplineDetailModel> GetDisciplineDetail(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                IList<dynamic> disciplines = db.Query<dynamic>(criteria.GetSpParams()).ToList();
+                IList<dynamic> disciplines = db.Query<dynamic>(criteria).ToList();
 
                 IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
                 CalculateScore(disciplineDetails);

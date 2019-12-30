@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request.LateInEarlyOut
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetDisabledDateCriteria : CriteriaBase

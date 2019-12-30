@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Criteria.Section
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class EditDisciplineRuleCriteria : CriteriaBase

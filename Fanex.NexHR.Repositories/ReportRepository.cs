@@ -20,7 +20,7 @@
             var listAttendance = new List<EmployeeAttendanceModel>();
             var currentAttendance = new EmployeeAttendanceModel();
 
-            using (ObjectDb objectDb = new ObjectDb(criteria.GetSettingKey()))
+            using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
                     (attendance, t) =>
@@ -44,7 +44,7 @@
                         return currentAttendance;
                     },
                     splitOn: "RequestType",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
 
             return listAttendance;
@@ -53,7 +53,7 @@
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
         {
             IList<LeaveSummary> entities = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 entities = db.Query<LeaveSummary, Employee, Team, LeaveSummary>(
                     (leave, emp, team) =>
@@ -63,7 +63,7 @@
                         return leave;
                     },
                        splitOn: "EmpId, GroupId",
-                       parameterValues: criteria.GetSpParams()).ToList();
+                       parameterSet: criteria).ToList();
             }
 
             return entities;
@@ -72,7 +72,7 @@
         public IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria)
         {
             IList<LeaveSummary> unpaidLeaves = null;
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 unpaidLeaves = db.Query<LeaveSummary, Employee, Team, LeaveSummary>(
                     (leave, emp, team) =>
@@ -82,7 +82,7 @@
                         return leave;
                     },
                        splitOn: "EmpId, GroupId",
-                       parameterValues: criteria.GetSpParams()).ToList();
+                       parameterSet: criteria).ToList();
             }
 
             return unpaidLeaves;
@@ -90,7 +90,7 @@
 
         public IList<TimeRecordModel> GetTimeRecords(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 IList<TimeRecordModel> timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
                     (t, e, g) =>
@@ -100,14 +100,14 @@
                         return t;
                     },
                     splitOn: "EmpId, GroupId",
-                    parameterValues: criteria.GetSpParams()).ToList();
+                    parameterSet: criteria).ToList();
 
                 PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(prop
                         => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLowerInvariant().Equals("totalitem"));
 
                 if (totalitem != null)
                 {
-                    var hashParam = db.GetOuputParams();
+                    var hashParam = db.GetOutputParams();
                     totalitem.SetValue(criteria, (int)hashParam["totalitem"], null);
                 }
 
@@ -117,9 +117,9 @@
 
         public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (GridReader multi = db.QueryMultiple(criteria))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, SectionModel, SupervisorReportModel>(
                     (su, section) =>
@@ -161,9 +161,9 @@
 
         public IList<SectionSupervisorReportModel> GetSectionSupervisor(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (GridReader multi = db.QueryMultiple(criteria))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     IList<SectionSupervisorReportModel> supervisors = multi.Read<SectionSupervisorReportModel>().ToList();
 

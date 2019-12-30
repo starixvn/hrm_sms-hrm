@@ -11,9 +11,9 @@
     {
         public IList<LeaveRequest> GetByDate(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
@@ -45,9 +45,9 @@
 
         public LeaveRequest GetById(ICriteria criteria)
         {
-            using (IObjectDb db = new ObjectDb(criteria.GetSettingKey()))
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var leave = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
@@ -71,9 +71,9 @@
 
         public IEnumerable<LeaveRequest> GetHistoryById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria.GetSpParams()))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveRequest>(
                         (request, leaveType, employee, team, verifier, approver, hr) =>
@@ -101,7 +101,7 @@
 
         public IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<Models.ScheduleArrange.DailySchedule,
                     Models.ScheduleArrange.ShiftBase,
@@ -117,7 +117,7 @@
                         return dailySchedule;
                     },
                     splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
     }

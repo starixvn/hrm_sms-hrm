@@ -4,7 +4,8 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Fanex.Data.Configuration;
+    using Fanex.Data;
+    using Fanex.Data.SqlServer;
     using Fanex.Logging;
     using Fanex.NexHR.Core.Providers;
     using Fanex.NexHR.Resources;
@@ -17,7 +18,12 @@
             UnityConfig.RegisterComponents();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            DbSettingProviderManager.Current.Start();
+            DbSettingProviderManager
+                .StartNewSession()
+                .WithSqlServer(
+                    resourcePath: "~/"
+                )
+                .Run();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
         }
 

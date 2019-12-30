@@ -15,7 +15,7 @@
     {
         public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<WorkingCalendarSummary, ShiftBase, LeaveRequest, LeaveRequest, WorkingCalendarSummary>(
                     (dailySchedule, shift, leave, leave2) =>
@@ -27,7 +27,7 @@
                         return dailySchedule;
                     },
                     splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2",
-                    parameterValues: criteria.GetSpParams());
+                    parameterSet: criteria);
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Report
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetEmployeeAttendanceCriteria : CriteriaBase

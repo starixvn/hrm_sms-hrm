@@ -11,7 +11,7 @@
     {
         public IList<CheckInOutRequest> GetByDate(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var entity = db.Query<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
@@ -23,7 +23,7 @@
                             return request;
                         },
                         splitOn: "EmpId, VerifierId, ApproverId, HRId",
-                        parameterValues: criteria.GetSpParams());
+                        parameterSet: criteria);
 
                 return entity.ToList();
             }
@@ -31,7 +31,7 @@
 
         public CheckInOutRequest GetById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var entity = db.QueryEntity<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
@@ -43,7 +43,7 @@
                             return request;
                         },
                         splitOn: "EmpId, VerifierId, ApproverId, HRId",
-                        parameters: criteria.GetSpParams());
+                        parameterSet: criteria);
 
                 return entity;
             }
@@ -51,7 +51,7 @@
 
         public IList<CheckInOutRequest> GetHistoryById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 var entity = db.Query<CheckInOutRequest, Employee, Team, Employee, Employee, Employee, CheckInOutRequest>(
                         (request, employee, team, verifier, approver, hr) =>
@@ -64,7 +64,7 @@
                             return request;
                         },
                         splitOn: "EmpId, GroupId, VerifierId, ApproverId, HRId",
-                        parameterValues: criteria.GetSpParams());
+                        parameterSet: criteria);
 
                 return entity.ToList();
             }

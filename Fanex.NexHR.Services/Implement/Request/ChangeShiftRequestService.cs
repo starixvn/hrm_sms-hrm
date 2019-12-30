@@ -152,7 +152,7 @@
                 DetailXml = model.Details.ToXML().ToString(),
                 ActorId = actorId
             };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria, hasGetOutputParams: true);
+            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             commandResult.OutputId = criteria.RequestId;
 
             return commandResult;

@@ -10,7 +10,7 @@
     {
         public Team GetById(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
@@ -44,7 +44,7 @@
 
         public IList<Team> GetAll(ICriteria criteria)
         {
-            using (var db = new ObjectDb(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {

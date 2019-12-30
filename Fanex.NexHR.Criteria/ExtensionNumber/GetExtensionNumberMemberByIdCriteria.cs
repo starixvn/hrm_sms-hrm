@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Criteria.ExtensionNumber
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetExtensionNumberMemberByIdCriteria : CriteriaBase
