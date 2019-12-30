@@ -52,6 +52,19 @@ BEGIN
 		RETURN
 	END
 
+	DECLARE @today DATE = GETDATE()
+		,@oldEmpId INT
+		,@oldWorkingHours TINYINT
+		,@oldFromDate DATE
+		,@oldToDate DATE
+
+	SELECT @oldEmpId = EmpId
+		,@oldWorkingHours = WorkingHours
+		,@oldFromDate = FromDate
+		,@oldToDate = ToDate
+	FROM dbo.EmployeePostnatal WITH (NOLOCK)
+	WHERE PostnatalId = @PostnatalId
+
 	UPDATE dbo.EmployeePostnatal WITH (ROWLOCK, UPDLOCK)
 	SET EmpId = @EmpId
 		,FromDate = @FromDate
@@ -61,4 +74,21 @@ BEGIN
 		,ModifiedDate = GETDATE()
 		,Remark = @Remark
 	WHERE PostnatalId = @PostnatalId
+
+	IF @oldEmpId <> @EmpId
+		OR @oldWorkingHours <> @WorkingHours
+		OR @oldFromDate <> @FromDate
+		OR @oldToDate <> @ToDate
+	BEGIN
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			,@FromDate
+			,@ToDate
+
+		IF @oldEmpId <> @EmpId
+		BEGIN
+			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @oldEmpId
+				,@oldFromDate
+				,@oldToDate
+		END
+	END
 END

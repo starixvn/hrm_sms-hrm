@@ -37,8 +37,10 @@ BEGIN
 
 		RETURN
 	END
-	
+
 	DECLARE @normalWorkingHours TINYINT
+		,@today DATE = GETDATE()
+
 	SELECT @normalWorkingHours = ISNULL(WorkingHours, 0)
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
 	WHERE EmpId = @EmpId
@@ -63,4 +65,15 @@ BEGIN
 		,GETDATE()
 		,@Remark
 		)
+
+	IF @FromDate <= @today
+	BEGIN
+		UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
+		SET WorkingHours = @WorkingHours
+		WHERE EmpId = @EmpId
+		
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
+			,@FromDate
+			,@ToDate
+	END
 END

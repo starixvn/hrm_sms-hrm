@@ -1,8 +1,5 @@
-﻿/****** Object:  Stored Procedure dbo.Message_GetByEmployee    Script Date: 7/20/2016 10:19:13 AM ******/
-/****** Object:  Stored Procedure dbo.Message_GetByEmployee    Script Date: 7/19/2016 5:22:17 PM ******/
-
-CREATE PROCEDURE [dbo].[Message_GetByEmployee] --375, '2013-01-01'
-	@EmployeeId INT
+﻿
+CREATE PROCEDURE [dbo].[Message_GetByEmployee] @EmployeeId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@IsDisabled BIT = NULL
@@ -10,10 +7,10 @@ AS
 /*
 Created: 20140714@Quinn.Vo
 Task: Get message by employee.
-DB: NexEPA
-Original: 
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -34,26 +31,22 @@ BEGIN
 		AND ms.MessageId = mse.MessageId
 	WHERE e.EmpId = @EmployeeId
 		AND (
-					@IsDisabled IS NULL
-					OR ms.IsDisabled = @IsDisabled
-				)
+			@IsDisabled IS NULL
+			OR ms.IsDisabled = @IsDisabled
+			)
 		AND (
 			@IsDisabled IS NULL
 			OR mse.IsDisabled IS NULL
 			OR mse.IsDisabled = @IsDisabled
-		)
+			)
 		AND (
 			ms.FromDate IS NULL
 			OR ms.ToDate IS NULL
-			OR ISNULL(mse.IsRead, 0) = 0
-			OR (
-				@FromDate BETWEEN ms.FromDate
-					AND ms.ToDate
-				)
-			OR (
-					ms.FromDate BETWEEN @FromDate
-					AND @ToDate
-				)
+			--OR ISNULL(mse.IsRead, 0) = 0
+			OR @FromDate BETWEEN ms.FromDate
+				AND ms.ToDate
+			OR ms.FromDate BETWEEN @FromDate
+				AND @ToDate
 			)
 	
 	UNION
@@ -75,15 +68,10 @@ BEGIN
 		AND (
 			m.FromDate IS NULL
 			OR m.ToDate IS NULL
-			OR me.IsRead = 0
-			OR (
-				@FromDate BETWEEN m.FromDate
-					AND m.ToDate
-				)
-			OR (
-					m.FromDate BETWEEN @FromDate
-					AND @ToDate
-				)
+			--OR me.IsRead = 0
+			OR @FromDate BETWEEN m.FromDate
+				AND m.ToDate
+			OR m.FromDate BETWEEN @FromDate
+				AND @ToDate
 			)
 END
-

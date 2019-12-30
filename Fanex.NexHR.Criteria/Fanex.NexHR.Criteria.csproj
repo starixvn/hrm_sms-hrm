@@ -76,6 +76,7 @@
     <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByWeeklyDefaultShiftCriteria.cs" />
     <Compile Include="BackgroundJob\PublishScheduleCriteria.cs" />
+    <Compile Include="BackgroundJob\UpdateWorkingHourPerDayCriteria.cs" />
     <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />

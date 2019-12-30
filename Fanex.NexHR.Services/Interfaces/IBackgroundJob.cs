@@ -9,5 +9,7 @@
         void InsertScheduleByWeeklyDefaultShift();
 
         void InsertHolidayAutomatically();
+
+        void UpdateWorkingHourPerDay();
     }
 }

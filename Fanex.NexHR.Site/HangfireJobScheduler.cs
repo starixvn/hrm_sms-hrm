@@ -11,6 +11,9 @@
         {
             IBackgroundJobService backgroundJob = DependencyResolver.Current.GetService<BackgroundJobService>();
 
+            RecurringJob.AddOrUpdate("UpdateWorkingHourPerDay",
+                () => backgroundJob.UpdateWorkingHourPerDay(), "01 00 * * *", TimeZoneInfo.Local); // everyday at 00:01AM
+
             RecurringJob.AddOrUpdate("PublishSchedule",
                 () => backgroundJob.PublishSchedule(), "05 00 * * *", TimeZoneInfo.Local); // everyday at 00:05AM
 

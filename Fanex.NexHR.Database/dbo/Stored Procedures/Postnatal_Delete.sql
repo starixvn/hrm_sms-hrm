@@ -27,6 +27,34 @@ BEGIN
 		RETURN
 	END
 
+	DECLARE @empId INT
+		,@workingHours TINYINT
+		,@fromDate DATE
+		,@toDate DATE
+
+	SELECT @empId = EmpId
+		,@workingHours = NormalWorkingHours
+		,@fromDate = FromDate
+		,@toDate = ToDate
+	FROM dbo.EmployeePostnatal WITH (NOLOCK)
+	WHERE PostnatalId = @PostnatalId
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = @empId
+				AND WorkingHours <> @workingHours
+			)
+	BEGIN
+		UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
+		SET WorkingHours = @workingHours
+		WHERE EmpId = @empId
+
+		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @empId
+			,@fromDate
+			,@toDate
+	END
+
 	DELETE
 	FROM dbo.EmployeePostnatal
 	WHERE PostnatalId = @PostnatalId

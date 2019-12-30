@@ -53,5 +53,12 @@
             var nowYear = DateTime.Now.Year;
             holidayService.AutoInsertHolidayOnYear(nowYear);
         }
+
+        public void UpdateWorkingHourPerDay()
+        {
+            var criteria = new UpdateWorkingHourPerDayCriteria();
+
+            baseService.ExecuteNonQuery(criteria);
+        }
     }
 }
