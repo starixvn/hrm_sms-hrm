@@ -517,6 +517,7 @@
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_UpdateDiscipline.sql" />
     <Build Include="dbo\Tables\OtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Auto_Postnatal_UpdateWorkingHour.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_AnnualBalance_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

@@ -11,5 +11,7 @@
         void InsertHolidayAutomatically();
 
         void UpdateWorkingHourPerDay();
+
+        void UpdateAnnualLeaveBalance();
     }
 }

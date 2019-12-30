@@ -25,6 +25,9 @@
 
             RecurringJob.AddOrUpdate("InsertHolidayAutomatically",
                 () => backgroundJob.InsertHolidayAutomatically(), "1 0 1 1 *", TimeZoneInfo.Local);
+
+            RecurringJob.AddOrUpdate("UpdateAnnualLeaveBalance",
+                () => backgroundJob.UpdateAnnualLeaveBalance(), "05 00 1 9 *", TimeZoneInfo.Local); // run once a year at 00:05AM of 1 September
         }
     }
 }
