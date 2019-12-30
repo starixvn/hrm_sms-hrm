@@ -102,15 +102,6 @@
                     splitOn: "EmpId, GroupId",
                     parameterSet: criteria).ToList();
 
-                PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(prop
-                        => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLowerInvariant().Equals("totalitem"));
-
-                if (totalitem != null)
-                {
-                    var hashParam = db.GetOutputParams();
-                    totalitem.SetValue(criteria, (int)hashParam["totalitem"], null);
-                }
-
                 return timeRecords;
             }
         }

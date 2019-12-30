@@ -6,7 +6,6 @@
 
     public class InsertLateInEarlyOutRequestCriteria : CriteriaBase
     {
-        [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }

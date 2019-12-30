@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections;
-    using Criteria;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Models;

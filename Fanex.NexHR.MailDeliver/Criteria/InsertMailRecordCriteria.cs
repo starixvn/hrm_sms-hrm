@@ -6,7 +6,6 @@
 
     public class InsertMailRecordCriteria : CriteriaBase
     {
-        [Output]
         public long MailId { get; set; }
 
         public int AppId { get; set; }

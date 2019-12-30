@@ -74,15 +74,6 @@
 
                     employees = GroupByRoles(employees, roles);
 
-                    PropertyInfo totalitem = criteria.GetType().GetProperties().FirstOrDefault(
-                        prop => Attribute.IsDefined(prop, typeof(OutputAttribute)) && prop.Name.ToLowerInvariant().Equals("totalrow"));
-
-                    if (totalitem != null)
-                    {
-                        var hashParam = db.GetOutputParams();
-                        totalitem.SetValue(criteria, (int)hashParam["totalrow"], null);
-                    }
-
                     return employees.ToList();
                 }
             }

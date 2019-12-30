@@ -5,7 +5,6 @@
 
     public class InsertEmployeeCriteria : CriteriaBase
     {
-        [Output]
         public int EmpId { get; set; }
         public string FullName { get; set; }
         public string Nickname { get; set; }

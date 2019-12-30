@@ -56,7 +56,6 @@
 
         public int? PageSize { get; set; }
 
-        [Output]
         public int? TotalRow { get; set; }
 
         public int? TitleId { get; set; }

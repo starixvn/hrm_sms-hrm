@@ -6,7 +6,6 @@
 
     public class CreateCheckInOutRequestCriteria : CriteriaBase
     {
-        [Output]
         public long RequestId { get; set; }
 
         public int EmpId { get; set; }

@@ -16,7 +16,6 @@
             "<Row RequestId='{0}' EmpId='{1}' OnDate='{2}' "
             + "LeaveType='{3}' IsHalfDay='{4}' WorkType='{5}' FromTime='{6}' ToTime='{7}'></Row>";
 
-        [Output]
         public long RequestId { get; set; }
 
         [SpParam(SqlParamName = "EmpId")]

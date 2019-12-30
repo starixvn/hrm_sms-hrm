@@ -156,14 +156,12 @@
   <ItemGroup>
     <Compile Include="Attributes\EmailAttribute.cs" />
     <Compile Include="Attributes\EmailValidationRule.cs" />
-    <Compile Include="Attributes\OutputAttribute.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Constants\LogObjectType.cs" />
     <Compile Include="Constants\MappingDataType.cs" />
     <Compile Include="Constants\MimeType.cs" />
     <Compile Include="Constants\SessionKey.cs" />
-    <Compile Include="Criteria\ResultCriteria.cs" />
     <Compile Include="CustomJsonResult.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Enums\ApprovedStatus.cs" />
@@ -277,6 +275,9 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Criteria\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -7,7 +7,6 @@
 
     public class CreateChangeShiftRequestCriteria : CriteriaBase
     {
-        [Output]
         public long RequestId { get; set; }
 
         [SpParam(SqlParamName = "EmpId")]

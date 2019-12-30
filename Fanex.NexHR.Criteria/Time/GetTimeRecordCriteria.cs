@@ -20,7 +20,6 @@
 
         public int? ItemsPerPage { get; set; }
 
-        [Output]
         public int? TotalItem { get; set; }
 
         public override string GetSettingKey()
