@@ -58,21 +58,19 @@
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-{
-new SelectListItem() {Text = "-- All --", Value = string.Empty},
-new SelectListItem() {Text = @Labels.Expat, Value = "0"},
-new SelectListItem() {Text = @Labels.Local, Value = "1"},
-};
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = @Labels.Expat, Value = "0"},
+                        new SelectListItem() {Text = @Labels.Local, Value = "1"},
+                    };
                 }
                 @Html.DropDownList("category", category, new { @class = "category form-control" })
             </div>
         </div>
 
-        <div class="form-group" id="usertype">
+        <div class="form-group user-status" id="usertype">
             <input type="radio" id="enabled" checked="checked" />
-            <label for="enabled">
-                @Labels.ActiveUsers
-            </label>
+            <label for="enabled">@Labels.ActiveUsers</label>
 
             <input type="radio" id="disabled" />
             <label for="disabled">@Labels.DisabledUsers</label>
@@ -85,8 +83,8 @@ new SelectListItem() {Text = @Labels.Local, Value = "1"},
             <button id="query" type="button" class="btn btn-primary">@Labels.Submit</button>
             <button type="button" id="basicExcel" class="btn btn-excel">Excel - Basic Info</button>
             <button type="button" id="detailsExcel" class="btn btn-excel">Excel - Details Info</button>
-            <a href="/Postnatal/Index" class="btn btn-request">Postnatal</a>
-            <a href="/Paternity/Index" class="btn btn-request">Paternity</a>
+            <a href="/Postnatal/Index" class="btn btn-request">@Labels.Postnatal</a>
+            <a href="/Paternity/Index" class="btn btn-request">@Labels.Paternity</a>
         </div>
     </div>
 </form>

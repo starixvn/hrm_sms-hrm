@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[Postnatal_Update] @PostnatalId INT
 	,@EmpId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@Minute SMALLINT
+	,@WorkingHours TINYINT
 	,@ModifiedBy INT
 	,@Remark NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
@@ -56,7 +56,7 @@ BEGIN
 	SET EmpId = @EmpId
 		,FromDate = @FromDate
 		,ToDate = @ToDate
-		,[Minute] = @Minute
+		,WorkingHours = @WorkingHours
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = GETDATE()
 		,Remark = @Remark

@@ -66,7 +66,7 @@
                     ToDate = model.ToDate,
                     CreatedBy = sessionService.Employee.Id,
                     Remark = model.Remark,
-                    Minute = model.Minute
+                    WorkingHours = model.WorkingHours ?? 0
                 };
 
                 result = postnatalService.Insert(criteria);
@@ -89,7 +89,8 @@
                 Employee = string.Format("{0} ({1})", postnatal.Nickname, postnatal.Fullname),
                 FromDate = postnatal.FromDate,
                 ToDate = postnatal.ToDate,
-                Remark = postnatal.Remark
+                Remark = postnatal.Remark,
+                WorkingHours = postnatal.WorkingHours
             };
             return PartialView("_Edit", model);
         }
@@ -110,7 +111,7 @@
                     ToDate = model.ToDate,
                     ModifiedBy = sessionService.Employee.Id,
                     Remark = model.Remark,
-                    Minute = model.Minute
+                    WorkingHours = model.WorkingHours ?? 0
                 };
 
                 result = postnatalService.Update(criteria);

@@ -7,11 +7,11 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
-            <th>@Labels.Minutes</th>
+            <th>@Labels.WorkingHoursPerDay</th>
             <th>@Labels.Remark</th>
             <th>@Labels.CreatedBy</th>
             <th>@Labels.CreatedDate</th>
@@ -28,14 +28,13 @@
 
             foreach (EmployeePostnatal postnatal in Model)
             {
-
                 <tr>
                     <td>@(index++)</td>
-                    <td class="align-left">@postnatal.Fullname</td>
                     <td>@postnatal.Nickname</td>
+                    <td class="align-left">@postnatal.Fullname</td>
                     <td>@postnatal.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@postnatal.ToDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@postnatal.Minute</td>
+                    <td>@postnatal.WorkingHours</td>
                     <td>
                         @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
                         {

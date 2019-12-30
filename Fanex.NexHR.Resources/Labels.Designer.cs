@@ -3517,6 +3517,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Postnatal.
+        /// </summary>
+        public static string Postnatal {
+            get {
+                return ResourceManager.GetString("Postnatal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Priority.
         /// </summary>
         public static string Priority {

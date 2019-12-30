@@ -11,7 +11,7 @@
         public DateTime ToDate { get; set; }
         public int ModifiedBy { get; set; }
         public string Remark { get; set; }
-        public short Minute { get; set; }
+        public byte WorkingHours { get; set; }
 
         public override string GetSettingKey() => "Postnatal_Update";
 

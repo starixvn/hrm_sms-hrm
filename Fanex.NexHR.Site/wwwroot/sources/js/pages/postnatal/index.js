@@ -10,8 +10,7 @@ const postnatalModule = (function ($) {
     const domElement = {
         AddButton: '#add-postnatal',
         Table: '#list-postnatal',
-        CreateDialog: '#dialogAddPostnatal',
-        EditDialog: '#dialogEditPostnatal',
+        $dialog: $('#dialog'),
         CreateForm: '#create-form',
         EditForm: '#edit-form'
     };
@@ -47,13 +46,13 @@ const postnatalModule = (function ($) {
         });
     }
 
-    function validateAddPostnatal(form) {
+    function validateAddPostnatal() {
         let isValid = true,
             errorMsg = '',
-            empId = $(form).find('#EmployeeId').val(),
-            fromDate = $(form).find('#FromDate').val(),
-            toDate = $(form).find('#ToDate').val(),
-            minute = $(form).find('#Minute').val();
+            empId = domElement.$dialog.find('#EmployeeId').val(),
+            fromDate = domElement.$dialog.find('#FromDate').val(),
+            toDate = domElement.$dialog.find('#ToDate').val(),
+            workingHours = domElement.$dialog.find('#WorkingHours').val();
 
         if (!empId || parseInt(empId, 10) <= 0) {
             errorMsg += '<li>Employee is required.</li>';
@@ -63,12 +62,12 @@ const postnatalModule = (function ($) {
             errorMsg += '<li>To Date must be greater than or equal to From Date.</li>';
         }
 
-        if (minute === '' || parseInt(minute, 10) < 1 || parseInt(minute, 10) > 60) {
-            errorMsg += '<li>Minute must be an integer and between 1 and 60.</li>';
+        if (workingHours === '' || parseInt(workingHours, 10) < 1 || parseInt(workingHours, 10) > 24) {
+            errorMsg += '<li>Working hours per day must be an integer and between 1 and 24.</li>';
         }
 
         if (errorMsg.length > 0) {
-            showErrorMsg($(form), errorMsg);
+            showErrorMsg(domElement.$dialog, errorMsg);
             isValid = false;
         }
 
@@ -79,14 +78,16 @@ const postnatalModule = (function ($) {
         $(domElement.AddButton).on("click", function (e) {
             e.preventDefault();
             $.get(resolveClientUrl("postnatal/create"), function (data) {
-                $(domElement.CreateDialog).html(data);
-                initEventAddPostnatalModal();
+                domElement.$dialog.html(data);
+                initAddPostnatalDialog();
+                initAutoComplete();
+                initDatepicker();
             });
         });
     }
 
     function initAddPostnatalDialog() {
-        $(domElement.CreateDialog).dialog({
+        domElement.$dialog.dialog({
             modal: true,
             title: 'Add Employee Postnatal',
             buttons: [
@@ -94,18 +95,18 @@ const postnatalModule = (function ($) {
                     text: 'Submit',
                     class: 'btn btn-primary',
                     click: function (e) {
-                        removeMsg($(domElement.CreateDialog));
-                        if (validateAddPostnatal(domElement.CreateDialog)) {
+                        removeMsg(domElement.$dialog);
+                        if (validateAddPostnatal()) {
                             $.ajax({
                                 type: 'POST',
                                 url: resolveClientUrl('postnatal/Create'),
                                 data: $(domElement.CreateForm).serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
-                                        $(domElement.CreateDialog).dialog('close');
+                                        domElement.$dialog.dialog('close');
                                         alert('Create employee postnatal successfully!', getPostnatal);
                                     } else {
-                                        showErrorMsg($(domElement.CreateDialog), '<li>' + result.Message + '</li>');
+                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
@@ -138,17 +139,8 @@ const postnatalModule = (function ($) {
             .show().addClass('validation-summary-errors').find('ul:first').append(msg);
     }
 
-    function initEditModel(postnatalId) {
-        $.get(resolveClientUrl("postnatal/edit/" + postnatalId), function (data) {
-            $(domElement.EditDialog).html(data);
-            initEventEditPostnatal(postnatalId);
-            initDatepicker();
-            initAutoComplete($(domElement.EditDialog));
-        });
-    }
-
     function initEventEditPostnatal(postnatalId) {
-        $(domElement.EditDialog).dialog({
+        domElement.$dialog.dialog({
             modal: true,
             title: 'Edit Employee Postnatal',
             buttons: [
@@ -156,18 +148,18 @@ const postnatalModule = (function ($) {
                     text: 'Submit',
                     class: 'btn btn-primary',
                     click: function () {
-                        removeMsg($(domElement.EditDialog));
-                        if (validateAddPostnatal(domElement.EditDialog)) {
+                        removeMsg(domElement.$dialog);
+                        if (validateAddPostnatal()) {
                             $.ajax({
                                 type: 'POST',
                                 url: resolveClientUrl('postnatal/Update/' + postnatalId),
                                 data: $(domElement.EditForm).serialize(),
                                 success: function (result) {
                                     if (result.IsSuccessful) {
-                                        $(domElement.EditDialog).dialog('close');
+                                        domElement.$dialog.dialog('close');
                                         alert('Update employee postnatal successfully!', getPostnatal);
                                     } else {
-                                        showErrorMsg($(domElement.EditDialog), '<li>' + result.Message + '</li>');
+                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
@@ -190,9 +182,9 @@ const postnatalModule = (function ($) {
         });
     }
 
-    function initAutoComplete($dialog) {
-        var $selectorName = $dialog.find('#Employee'),
-            $selectorId = $dialog.find('#EmployeeId');
+    function initAutoComplete() {
+        let $selectorName = domElement.$dialog.find('#Employee'),
+            $selectorId = domElement.$dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -237,11 +229,16 @@ const postnatalModule = (function ($) {
     }
 
     function initEditEvent() {
-        var $selector = $('.edit-postnatal');
-        $selector.on('click', function (event) {
+        $('.edit-postnatal').on('click', function (event) {
             event.preventDefault();
-            var postnatalId = $(this).data("id");
-            initEditModel(postnatalId);
+
+            const postnatalId = $(this).data('id');
+            $.get(resolveClientUrl('postnatal/edit/' + postnatalId), function (data) {
+                domElement.$dialog.html(data);
+                initEventEditPostnatal(postnatalId);
+                initAutoComplete();
+                initDatepicker();
+            });
         });
     }
 
@@ -264,12 +261,6 @@ const postnatalModule = (function ($) {
                 });
             });
         });
-    }
-
-    function initEventAddPostnatalModal() {
-        initAddPostnatalDialog($(domElement.CreateDialog));
-        initAutoComplete($(domElement.CreateDialog));
-        initDatepicker();
     }
 
     function initSubmitFiler() {

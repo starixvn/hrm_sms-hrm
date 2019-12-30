@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Postnatal_Insert] @EmpId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@Minute SMALLINT
+	,@WorkingHours TINYINT
 	,@CreatedBy INT
 	,@Remark NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
@@ -37,12 +37,18 @@ BEGIN
 
 		RETURN
 	END
+	
+	DECLARE @normalWorkingHours TINYINT
+	SELECT @normalWorkingHours = ISNULL(WorkingHours, 0)
+	FROM dbo.EmployeeSummary WITH (NOLOCK)
+	WHERE EmpId = @EmpId
 
 	INSERT INTO dbo.EmployeePostnatal (
 		EmpId
 		,FromDate
 		,ToDate
-		,[Minute]
+		,WorkingHours
+		,NormalWorkingHours
 		,CreatedBy
 		,CreatedDate
 		,Remark
@@ -51,7 +57,8 @@ BEGIN
 		@EmpId
 		,@FromDate
 		,@ToDate
-		,@Minute
+		,@WorkingHours
+		,@normalWorkingHours
 		,@CreatedBy
 		,GETDATE()
 		,@Remark

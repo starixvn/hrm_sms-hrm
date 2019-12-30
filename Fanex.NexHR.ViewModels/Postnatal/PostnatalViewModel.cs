@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Fanex.NexHR.Resources;
 
     public class PostnatalViewModel
     {
@@ -19,8 +20,9 @@
         [DataType(DataType.Date)]
         public DateTime ToDate { get; set; }
 
-        [Required]
-        public short Minute { get; set; }
+        [Required(ErrorMessage = "Working hours per day is required.")]
+        [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
+        public byte? WorkingHours { get; set; }
 
         public string Remark { get; set; }
     }

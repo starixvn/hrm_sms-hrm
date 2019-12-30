@@ -17,7 +17,7 @@ BEGIN
 	SELECT ep.PostnatalId
 		,ep.FromDate
 		,ep.ToDate
-		,ep.[Minute]
+		,ep.WorkingHours
 		,ep.EmpId
 		,ep.Remark
 		,e.NickName

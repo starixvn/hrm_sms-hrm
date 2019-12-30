@@ -30,6 +30,6 @@
 
         public string Remark { get; set; }
 
-        public short Minute { get; set; }
+        public byte WorkingHours { get; set; }
     }
 }

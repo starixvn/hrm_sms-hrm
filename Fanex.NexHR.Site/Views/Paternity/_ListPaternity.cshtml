@@ -7,8 +7,8 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
             <th>Child's Born Date</th>
             <th>Leave Day</th>
             <th>@Labels.Remark</th>
@@ -24,24 +24,18 @@
         @{int index = 1;}
         @if (Model != null && Model.Count > 0)
         {
-
             foreach (EmployeePaternity paternity in Model)
             {
-
                 <tr>
                     <td>@(index++)</td>
-                    <td class="align-left">@paternity.Fullname</td>
                     <td>@paternity.Nickname</td>
+                    <td class="align-left">@paternity.Fullname</td>
                     <td>@paternity.ChildBornDate.ToDateMonthYearFormatedDate()</td>
                     <td>@paternity.LeaveDay</td>
                     <td>
                         @if (!string.IsNullOrWhiteSpace(paternity.Remark))
                         {
                             <span class="fa fa-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
-                        }
-                        else
-                        {
-                            <span>-</span>
                         }
                     </td>
                     <td>@paternity.Creator</td>
