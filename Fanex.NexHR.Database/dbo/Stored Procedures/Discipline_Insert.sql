@@ -18,25 +18,16 @@ BEGIN
 
 	DECLARE @SyncFromDate DATETIME = '2016-01-01 00:00:00.000'
 	DECLARE @ModifiedDate DATETIME = GETDATE()
-		,@TotalWorkHoursWeekend DECIMAL(18, 2)
-		,@TotalWorkHours DECIMAL(18, 2)
-		,@LateInMins INT
-		,@EarlyOutMins INT
-		,@AnnualLeaveType INT
-		,@UnpaidLeaveType INT
-		,@GeneralLeaveType INT
-		,@KeepInViewLeaveType INT
-		,@PublicHolidayLeaveType INT
-
-	SELECT @TotalWorkHoursWeekend = 9.75
-		,@TotalWorkHours = 7
-		,@EarlyOutMins = 15
-		,@LateInMins = 0
-		,@AnnualLeaveType = 2
-		,@UnpaidLeaveType = 25
-		,@GeneralLeaveType = 0
-		,@KeepInViewLeaveType = 10
-		,@PublicHolidayLeaveType = 13
+		,@TotalWorkHoursWeekend_CheckInAfterDay DECIMAL(18, 2) = 11
+		,@TotalWorkHoursWeekend DECIMAL(18, 2) = 9.75
+		,@TotalWorkHours DECIMAL(18, 2) = 7
+		,@LateInMins INT = 0
+		,@EarlyOutMins INT = 15
+		,@AnnualLeaveType INT = 2
+		,@UnpaidLeaveType INT = 25
+		,@GeneralLeaveType INT = 0
+		,@KeepInViewLeaveType INT = 10
+		,@PublicHolidayLeaveType INT = 13
 
 	CREATE TABLE #MissingCheckInOutDiscipline (
 		EmpId INT
@@ -280,6 +271,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empatt.EmpId = empca.EmpId
 		AND empatt.AttendanceDate = empca.WorkDate
 		AND empca.LeaveDay <> 1
+		INNER JOIN dbo.Shift AS shift WITH (NOLOCK) ON empatt.ShiftId = shift.ShiftId
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
@@ -290,15 +282,32 @@ BEGIN
 		AND ISNULL(@EmpId, empatt.EmpId) = empatt.EmpId
 		AND empatt.AttendanceDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(empatt.ShiftId, '') <> ''
 		AND (
 			(
-				DATEPART(DW, empatt.AttendanceDate) IN (1, 7) -- Sunday or Saturday
-				AND empatt.TotalWorkHours < @TotalWorkHoursWeekend
+				shift.IsInAfterDay = 0
+				AND (
+					(
+						DATEPART(DW, empatt.AttendanceDate) IN (1, 7) -- Sunday or Saturday
+						AND empatt.TotalWorkHours < @TotalWorkHoursWeekend
+						)
+					OR (
+						DATEPART(DW, empatt.AttendanceDate) NOT IN (1, 7)
+						AND empatt.TotalWorkHours < @TotalWorkHours
+						)
+					)
 				)
 			OR (
-				DATEPART(DW, empatt.AttendanceDate) NOT IN (1, 7)
-				AND empatt.TotalWorkHours < @TotalWorkHours
+				shift.IsInAfterDay = 1
+				AND (
+					(
+						DATEPART(DW, empatt.AttendanceDate) IN (1, 2) -- Sunday or Monday
+						AND empatt.TotalWorkHours < @TotalWorkHoursWeekend_CheckInAfterDay
+						)
+					OR (
+						DATEPART(DW, empatt.AttendanceDate) NOT IN (1, 2)
+						AND empatt.TotalWorkHours < @TotalWorkHours
+						)
+					)
 				)
 			)
 

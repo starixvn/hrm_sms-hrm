@@ -252,7 +252,10 @@ BEGIN
 		AND weekendleave.GroupId = emp.GroupId
 		AND weekendleave.IsLocal = es.IsLocal
 		AND weekendleave.Value = 1
-	WHERE d.ModifiedDate > @LastModifiedDate
+	WHERE (
+			d.ModifiedDate > @LastModifiedDate
+			OR otherdis.ModifiedDate > @LastModifiedDate
+			)
 		AND d.IsDeleted = 0
 	GROUP BY d.EmpId
 		,d.WorkDate
