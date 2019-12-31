@@ -1,12 +1,9 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
 

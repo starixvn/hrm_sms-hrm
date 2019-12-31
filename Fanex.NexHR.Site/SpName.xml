@@ -10,8 +10,7 @@
   <Function Name="Employee">
     <Setting Key="Employee_CheckResetPassword" SpName="Employee_CheckResetPassword" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="TeamID" ObjectProperty="Id" />
+      <Mapping DataField="TeamId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
@@ -112,8 +111,8 @@
       <Mapping DataField="EmployeeId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0">
-      <Mapping DataField="groupId" ObjectProperty="Id" />
-      <Mapping DataField="leaderID" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="LeaderId" ObjectProperty="Id" />
       <Mapping DataField="LeaderNickName" ObjectProperty="NickName" />
       <Mapping DataField="LeaderFullName" ObjectProperty="FullName" />
       <Mapping DataField="AssistantLeaderId" ObjectProperty="Id" />
