@@ -66,8 +66,6 @@
         [DataType(DataType.Date)]
         public DateTime? SectionDate { get; set; }
 
-        public Employee Manager { get; set; }
-
         [DataType(DataType.Date)]
         public DateTime? JoinedDate { get; set; }
 

@@ -65,7 +65,7 @@
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="1" />
+    <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="nexhrx" Plain="0" />
     <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />

@@ -125,12 +125,13 @@
                     IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
                         (f, em) =>
                         {
+
                             f.Emergency = em;
                             return f;
                         },
                         splitOn: "EmergencyId");
 
-                    IEnumerable<EmployeeRelationship> relationships = multi.Read<EmployeeRelationship>();
+                    var relationships = multi.Read<EmployeeRelationship>();
 
                     profiles = GroupRelationship(profiles, relationships);
 
@@ -139,7 +140,9 @@
             }
         }
 
-        private static IEnumerable<EmployeeFullProfile> GroupRelationship(IEnumerable<EmployeeFullProfile> profiles, IEnumerable<EmployeeRelationship> relationships)
+        private static IEnumerable<EmployeeFullProfile> GroupRelationship(
+            IEnumerable<EmployeeFullProfile> profiles,
+            IEnumerable<EmployeeRelationship> relationships)
         {
             foreach (var profile in profiles)
             {
