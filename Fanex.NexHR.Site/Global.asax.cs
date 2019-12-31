@@ -6,7 +6,6 @@
     using System.Web.Routing;
     using Fanex.Data;
     using Fanex.Data.SqlServer;
-    using Fanex.Logging;
     using Fanex.NexHR.Core.Providers;
     using Fanex.NexHR.Resources;
 
@@ -25,6 +24,7 @@
                 )
                 .Run();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
+            log4net.Config.XmlConfigurator.Configure();
         }
 
         [ValidateInput(false)]
@@ -33,6 +33,8 @@
             if (!Request.IsLocal)
             {
                 Exception ex = Server.GetLastError().GetBaseException();
+                log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
                 string message = string.Format(
                     "{0}{1}{2}{3}{1}{4}{5}{1}{6}{7}{1}{8}{9}",
                     ex.Message,
@@ -46,7 +48,7 @@
                     Labels.StackTrace,
                     ex.StackTrace);
 
-                LogService.Error(message);
+                log.Error(message);
             }
         }
     }
