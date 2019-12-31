@@ -10,6 +10,7 @@
   <Function Name="Employee">
     <Setting Key="Employee_CheckResetPassword" SpName="Employee_CheckResetPassword" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">
+      <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="TeamId" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
