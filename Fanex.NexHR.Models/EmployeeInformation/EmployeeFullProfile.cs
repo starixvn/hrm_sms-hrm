@@ -6,7 +6,7 @@
 
     public class EmployeeFullProfile
     {
-        public int Id { get; set; }
+        public int EmpId { get; set; }
 
         public string Code { get; set; }
 
@@ -52,8 +52,9 @@
 
         public string Major { get; set; }
 
-        public Team Team { get; set; }
+        public int GroupId { get; set; }
 
+        public string GroupName { get; set; }
         public EmployeeEmergency Emergency { get; set; }
 
         public IEnumerable<EmployeeRelationship> Relationships { get; set; }

@@ -134,14 +134,13 @@
             {
                 using (var multi = db.QueryMultiple(criteria.GetSpParams()))
                 {
-                    IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, Team, EmployeeEmergency, EmployeeFullProfile>(
-                        (f, t, em) =>
+                    IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
+                        (f, em) =>
                         {
-                            f.Team = t;
                             f.Emergency = em;
                             return f;
                         },
-                        splitOn: "GroupId, EmergencyId");
+                        splitOn: "EmergencyId");
 
                     IEnumerable<EmployeeRelationship> relationships = multi.Read<EmployeeRelationship>();
 
@@ -156,7 +155,7 @@
         {
             foreach (var profile in profiles)
             {
-                profile.Relationships = relationships.Where(r => r.EmployeeId == profile.Id);
+                profile.Relationships = relationships.Where(r => r.EmployeeId == profile.EmpId);
             }
 
             return profiles;

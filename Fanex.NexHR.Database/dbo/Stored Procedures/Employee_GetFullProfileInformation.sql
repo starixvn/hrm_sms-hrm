@@ -68,7 +68,7 @@ BEGIN
 		,e.Qualification
 		,e.Major
 		,g.GroupId
-		,g.Name
+		,g.Name AS GroupName
 		,ee.Id AS EmergencyId
 		,ee.FullName
 		,ee.Gender

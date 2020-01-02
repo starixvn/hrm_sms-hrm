@@ -14,7 +14,6 @@
       <Mapping DataField="TeamID" ObjectProperty="Id" />
     </Setting>
     <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
       <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
       <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />

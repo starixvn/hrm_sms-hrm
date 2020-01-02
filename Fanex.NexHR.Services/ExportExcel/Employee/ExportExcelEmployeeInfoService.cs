@@ -276,7 +276,7 @@
             var record = new
             {
                 Index = currentRow - 2,
-                TeamName = p.Team.Name,
+                TeamName = p.GroupName,
                 p.Code,
                 p.FullName,
                 p.NickName,
