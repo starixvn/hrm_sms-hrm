@@ -268,32 +268,32 @@
         private static object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
         {
             var gender = "unknown";
-            if (p.Employee.Gender.HasValue)
+            if (p.Gender.HasValue)
             {
-                gender = p.Employee.Gender == 0 ? "Female" : "Male";
+                gender = p.Gender == 0 ? "Female" : "Male";
             }
 
             var record = new
             {
                 Index = currentRow - 2,
-                TeamName = p.Employee.Team.Name,
-                p.Employee.Code,
-                p.Employee.FullName,
-                p.Employee.NickName,
+                TeamName = p.Team.Name,
+                p.Code,
+                p.FullName,
+                p.NickName,
                 Gender = gender,
-                DOB = p.Employee.DateOfBirth,
-                p.Employee.MarriageName,
-                p.Employee.Address,
-                p.Employee.CurrentAddress,
-                p.Employee.CardNo,
-                DateOfIDCard = p.Employee.DateOfIdCard,
-                p.Employee.PlaceOfIdCard,
+                DOB = p.DateOfBirth,
+                p.MarriageName,
+                p.Address,
+                p.CurrentAddress,
+                p.CardNo,
+                DateOfIDCard = p.DateOfIdCard,
+                p.PlaceOfIdCard,
                 PlaceRegKCB = string.Empty,
-                p.Employee.Phone,
-                p.Employee.HomePhone,
-                p.Employee.Email,
-                p.Employee.Qualification,
-                p.Employee.Major,
+                p.Phone,
+                p.HomePhone,
+                p.Email,
+                p.Qualification,
+                p.Major,
                 Emergency = p.Emergency != null ? p.Emergency.Phone : string.Empty,
                 EmergencyFullName = p.Emergency != null ? p.Emergency.FullName : string.Empty
             };

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256)
+CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
 	,@groupIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -48,8 +48,7 @@ BEGIN
 			OR e.FullName LIKE '%' + @query + '%'
 			)
 
-	SELECT e.DomainUsername
-		,e.EmpId
+	SELECT e.EmpId
 		,e.Code
 		,e.FullName
 		,e.NickName
@@ -63,6 +62,7 @@ BEGIN
 		,e.DateOfIDCard
 		,e.PlaceOfIDCard
 		,e.PlaceOfbirth
+		,e.Phone
 		,e.HomePhone
 		,e.Email
 		,e.Qualification
