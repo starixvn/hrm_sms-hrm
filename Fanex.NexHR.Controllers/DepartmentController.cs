@@ -118,7 +118,7 @@
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,
-                ManagerId = department.Manager.Id,
+                ManagerId = department.Manager.EmpId,
                 Manager = department.Manager.DisplayName,
                 ParentId = department.Parent == null ? 0 : department.Parent.Id,
                 ParentDepartments = parentDepartments

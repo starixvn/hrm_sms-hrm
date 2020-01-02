@@ -69,33 +69,21 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
             foreach (Department department in Model.Departments)
             {
                 <tr id="row@(department.Id)">
+                    <td>@(index++)</td>
+                    <td>@department.Code</td>
+                    <td>@department.Name</td>
                     <td>
-                        @(index++)
+                        @if (department.Manager != null)
+                        {
+                            <span class="tooltip-tipsy" title="@department.Manager.FullName">@department.Manager.Nickname</span>
+                        }
                     </td>
                     <td>
-                        @department.Code
+                        @if (department.Parent != null)
+                        {
+                            @department.Parent.Name
+                        }
                     </td>
-                    <td>
-                        @department.Name
-                    </td>
-                    @if (department.Manager != null)
-                    {
-                        <td title="@department.Manager.FullName">
-                            @department.Manager.NickName
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    @if (department.Parent != null)
-                    {
-                        <td>@department.Parent.Name</td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
                     <td>
                         <input type="checkbox" class="checkbox-custom"
                                @(department.IsActive ? "checked" : string.Empty) value="@department.IsActive" />
@@ -109,7 +97,7 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
                             </a>
                         </td>
                         <td>
-                            <a href="javascript:;" class="deleteDepartment" data-id="@department.Id">
+                            <a href="javascript:;" class="delete" data-id="@department.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>

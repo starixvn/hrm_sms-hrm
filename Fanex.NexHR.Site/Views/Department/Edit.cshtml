@@ -56,10 +56,9 @@
                 @Html.LabelFor(model => model.Manager, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Manager", Model.Manager, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.TextBoxFor(model => model.Manager, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
             @Html.ValidationMessage("Manager")
-            @Html.HiddenFor(model => model.Manager)
             @Html.HiddenFor(model => model.ManagerId)
         </div>
 

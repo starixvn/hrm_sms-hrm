@@ -12,7 +12,7 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var department = db.QueryEntity<Department, Department, Employee, Department>(
+                var department = db.QueryEntity<Department, Department, DepartmentHead, Department>(
                         (depart, parent, manager) =>
                         {
                             depart.Manager = manager;
@@ -30,7 +30,7 @@
         {
             using (var db = new ObjectDb(criteria.GetSettingKey()))
             {
-                var departments = db.Query<Department, Department, Employee, Department>(
+                var departments = db.Query<Department, Department, DepartmentHead, Department>(
                         (depart, parent, manager) =>
                         {
                             depart.Manager = manager;

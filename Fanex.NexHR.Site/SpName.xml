@@ -223,12 +223,12 @@
     <Setting Key="Department_GetByParentId" SpName="Department_GetByParentId" DbName="nexhrx" Plain="0">
       <Mapping DataField="DepartmentId" ObjectProperty="Id" />
       <Mapping DataField="ParentId" ObjectProperty="Id" />
-      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+      <Mapping DataField="ManagerId" ObjectProperty="EmpId" />
     </Setting>
     <Setting Key="Department_GetById" SpName="Department_GetById" DbName="nexhrx" Plain="0">
       <Mapping DataField="DepartmentId" ObjectProperty="Id" />
       <Mapping DataField="ParentId" ObjectProperty="Id" />
-      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+      <Mapping DataField="ManagerId" ObjectProperty="EmpId" />
     </Setting>
     <Setting Key="Department_GetParent" SpName="Department_GetParent" DbName="nexhrx" Plain="0">
       <Mapping DataField="DepartmentId" ObjectProperty="Id" />
