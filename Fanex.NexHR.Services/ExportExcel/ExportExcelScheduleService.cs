@@ -41,7 +41,7 @@
                 };
                 for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
                 {
-                    columns.Add(day.ToString("dd-MMM"));
+                    columns.Add(day.ToString("dd-MMM-yyyy"));
                 }
 
                 int totalColumns = columns.Count;
