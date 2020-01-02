@@ -220,9 +220,7 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetNewRefNoByRequestType.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Contract_Update.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_Export_InformationBasic.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByCreateDate_AllType.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_Export_InformationFull.sql" />
     <Build Include="dbo\Stored Procedures\OtherDiscipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetByRole.sql" />
     <Build Include="dbo\Stored Procedures\Message_Delete.sql" />

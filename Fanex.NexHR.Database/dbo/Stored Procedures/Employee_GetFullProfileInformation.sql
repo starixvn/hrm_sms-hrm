@@ -10,9 +10,9 @@ AS
 Created: 20190620@Oliver.Dang
 Task: get employee full profile information
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
@@ -67,8 +67,7 @@ BEGIN
 		,e.Email
 		,e.Qualification
 		,e.Major
-		,g.GroupId
-		,g.Name AS GroupName
+		,g.[Name] AS GroupName
 		,ee.Id AS EmergencyId
 		,ee.FullName
 		,ee.Gender
