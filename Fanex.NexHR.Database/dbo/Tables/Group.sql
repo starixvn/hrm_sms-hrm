@@ -12,6 +12,7 @@
     [ModifiedBy]        INT            NULL,
     [IsDeleted]         BIT            CONSTRAINT [DF_Group_IsDeleted] DEFAULT ((0)) NULL,
     [MailGroup]         VARCHAR (50)   NULL,
+    [BasicAnnualLeaveBalance] TINYINT NULL, 
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([GroupId] ASC) ON [Employee]
 );
 

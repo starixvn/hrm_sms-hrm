@@ -15,6 +15,7 @@
         public string LeaderIds { get; set; }
 
         public string AssistantLeaderIds { get; set; }
+        public byte BasicAnnualLeaveBalance { get; set; }
 
         public int CreatedBy { get; set; }
 

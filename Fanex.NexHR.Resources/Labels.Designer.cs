@@ -565,6 +565,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Basic Annual Leave Balance.
+        /// </summary>
+        public static string BasicAnnualLeaveBalance {
+            get {
+                return ResourceManager.GetString("BasicAnnualLeaveBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Break.
         /// </summary>
         public static string BreakTimeMins {

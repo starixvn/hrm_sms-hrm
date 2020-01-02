@@ -37,6 +37,7 @@
             <th>@Labels.SectionHead</th>
             <th>@Labels.AssistantSectionHead</th>
             <th>@Labels.Email</th>
+            <th>@Labels.BasicAnnualLeaveBalance</th>
             <th>@Labels.TotalExpat</th>
             <th>@Labels.TotalLocal</th>
             <th>@Labels.Total</th>
@@ -58,13 +59,10 @@
                 <td>@team.Code</td>
                 <td>@team.Name</td>
                 <td>@team.Department.Name</td>
-                <td>
-                    @string.Join(", ", team.Leaders.Select(x => x.NickName))
-                </td>
-                <td>
-                    @string.Join(", ", team.AssistantLeaders.Select(x => x.NickName))
-                </td>
+                <td>@string.Join(", ", team.Leaders.Select(x => x.NickName))</td>
+                <td>@string.Join(", ", team.AssistantLeaders.Select(x => x.NickName))</td>
                 <td class="align-left">@team.MailGroup</td>
+                <td>@team.BasicAnnualLeaveBalance</td>
                 <td>@team.TotalExpat</td>
                 <td>@team.TotalLocal</td>
                 <td>

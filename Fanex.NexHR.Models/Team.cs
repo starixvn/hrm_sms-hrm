@@ -33,5 +33,7 @@
         public int TotalExpat { get; set; }
 
         public string MailGroup { get; set; }
+
+        public byte? BasicAnnualLeaveBalance { get; set; }
     }
 }

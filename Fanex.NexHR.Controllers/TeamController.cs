@@ -77,7 +77,8 @@
                     LeaderIds = model.LeaderIds,
                     AssistantLeaderIds = model.AssistantLeaderIds,
                     MailGroup = model.MailGroup,
-                    CreatedBy = sessionService.Employee.Id
+                    CreatedBy = sessionService.Employee.Id,
+                    BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -110,6 +111,7 @@
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
+                BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
                 Leaders = team.Leaders,
                 LeaderIds = string.Join(",", team.Leaders.Select(e => e.Id)),
                 AssistantLeaders = team.AssistantLeaders,
@@ -143,7 +145,8 @@
                         MailGroup = model.MailGroup,
                         LeaderIds = model.LeaderIds,
                         AssistantLeaderIds = model.AssistantLeaderIds,
-                        ModifiedBy = sessionService.Employee.Id
+                        ModifiedBy = sessionService.Employee.Id,
+                        BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -275,7 +278,7 @@
 
         private IList<Employee> GetAllEmployees()
         {
-            var getEmployeeCriteria = new GetAllEmployeeCriteria
+            var criteria = new GetAllEmployeeCriteria
             {
                 Query = null,
                 GroupIds = null,
@@ -284,7 +287,7 @@
                 TitleId = null,
                 IsLocalUser = null
             };
-            IList<Employee> employees = employeeService.GetEmployees(getEmployeeCriteria).ToList();
+            IList<Employee> employees = employeeService.GetEmployees(criteria).ToList();
 
             return employees;
         }

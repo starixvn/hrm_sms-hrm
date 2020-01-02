@@ -1857,4 +1857,7 @@
   <data name="Postnatal" xml:space="preserve">
     <value>Postnatal</value>
   </data>
+  <data name="BasicAnnualLeaveBalance" xml:space="preserve">
+    <value>Basic Annual Leave Balance</value>
+  </data>
 </root>

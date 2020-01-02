@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Group_Get] @groupId INT = NULL
-	,@isDeleted BIT = 0
+	,@isDeleted BIT = NULL
 AS
 /*
 Created: Tom.Vo@2013-10-21
@@ -9,7 +9,6 @@ DB: HRMS
 Original:
 
 Revisions:
-    Modified by Oliver Dang on 2019-05-15
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -19,6 +18,7 @@ BEGIN
 		,g.Code
 		,g.[Rank]
 		,g.MailGroup
+		,g.BasicAnnualLeaveBalance
 		,SUM(CASE 
 				WHEN esum.IsLocal IS NOT NULL THEN 1
 				ELSE 0
@@ -44,11 +44,15 @@ BEGIN
 			@groupId IS NULL
 			OR g.GroupId = @groupId
 			)
-		AND g.isDeleted = @isDeleted
+		AND (
+			@isDeleted IS NULL
+			OR g.isDeleted = @isDeleted
+			)
 	GROUP BY g.groupId
 		,g.[Name]
 		,g.Code
 		,g.MailGroup
+		,g.BasicAnnualLeaveBalance
 		,g.[Rank]
 		,de.DepartmentId
 		,de.Code
@@ -66,7 +70,10 @@ BEGIN
 			@groupId IS NULL
 			OR g.GroupId = @groupId
 			)
-		AND g.isDeleted = @isDeleted
+		AND (
+			@isDeleted IS NULL
+			OR g.isDeleted = @isDeleted
+			)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gl.EmployeeId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND emp.[Enabled] = 1
