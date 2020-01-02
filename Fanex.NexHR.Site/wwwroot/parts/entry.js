@@ -150,6 +150,7 @@ module.exports = {
         [`${jsDistPath}/workingcalendar`]: `${jsSourcePath}/calendar/workingcalendar.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
         [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
+        [`${jsDistPath}/department.edit`]: `${jsSourcePath}/department/edit.js`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
         [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,
         [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
