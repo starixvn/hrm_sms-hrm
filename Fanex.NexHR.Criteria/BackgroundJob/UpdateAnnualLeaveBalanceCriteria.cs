@@ -7,7 +7,7 @@
         public int Year { get; set; }
         public int? EmpId { get; set; }
 
-        public override string GetSettingKey() => "Auto_AnnualBalance_Update";
+        public override string GetSettingKey() => "Auto_AnnualLeaveBalance_Update";
 
         public override bool IsValid() => Year > 0;
     }

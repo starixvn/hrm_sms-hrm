@@ -292,7 +292,7 @@
     <Setting Key="Auto_EmployeeCalendar_InsertDefaultShift" SpName="Auto_EmployeeCalendar_InsertDefaultShift" DbName="nexhrx" Plain="0" />
     <Setting Key="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" SpName="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" DbName="nexhrx" Plain="0" />
     <Setting Key="Auto_Postnatal_UpdateWorkingHour" SpName="Auto_Postnatal_UpdateWorkingHour" DbName="nexhrx" Plain="0" />
-    <Setting Key="Auto_AnnualBalance_Update" SpName="Auto_AnnualBalance_Update" DbName="nexhrx" Plain="0" />
+    <Setting Key="Auto_AnnualLeaveBalance_Update" SpName="Auto_AnnualLeaveBalance_Update" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Postnatal">
     <Setting Key="Postnatal_Get" SpName="Postnatal_Get" DbName="nexhrx" Plain="0"></Setting>

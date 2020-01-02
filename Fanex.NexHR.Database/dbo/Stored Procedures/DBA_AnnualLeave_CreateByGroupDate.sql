@@ -21,14 +21,14 @@ BEGIN
 	DECLARE @CreatedDate DATETIME = GETDATE()
 		,@FromDate DATE = CONVERT(NVARCHAR(10), @Year) + '/01/01'
 		,@ToDate DATE
-	DECLARE @EmployeeBalance TABLE (
+	DECLARE @tblEmployeeBalance TABLE (
 		EmpId INT
 		,Amount DECIMAL(18, 2)
 		)
 
 	SELECT @ToDate = DATEADD(DD, - 1, DATEADD(YY, 1, @FromDate))
 
-	INSERT INTO @EmployeeBalance (
+	INSERT INTO @tblEmployeeBalance (
 		EmpId
 		,Amount
 		)
@@ -62,13 +62,13 @@ BEGIN
 		AND es.IsLocal = 1
 
 	DELETE
-	FROM @EmployeeBalance
+	FROM @tblEmployeeBalance
 	WHERE Amount = 0
 
 	UPDATE es
 	SET es.AnnualLeaveBalance = es.AnnualLeaveBalance + e.Amount
 	FROM dbo.EmployeeSummary AS es WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @EmployeeBalance AS e ON e.EmpId = es.EmpId
+		INNER JOIN @tblEmployeeBalance AS e ON e.EmpId = es.EmpId
 
 	INSERT INTO dbo.LeaveTrans (
 		EmpId
@@ -90,6 +90,6 @@ BEGIN
 		,@CreatedDate
 		,NULL AS CreatedBy
 		,0 AS Deleted
-	FROM @EmployeeBalance AS e
+	FROM @tblEmployeeBalance AS e
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 END
