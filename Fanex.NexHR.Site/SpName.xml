@@ -13,7 +13,6 @@
       <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="TeamID" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="Employee_SelfUpdateInfo" SpName="Employee_SelfUpdateInfo" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
@@ -87,9 +86,6 @@
     </Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeGroup_Insert" SpName="Group_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeGroup_Update" SpName="Group_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Group_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
@@ -138,8 +134,10 @@
     </Setting>
     <Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0">
-    </Setting>
+    <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0" />
+    <Setting Key="Section_Insert" SpName="Group_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_Update" SpName="Group_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Group_Delete" SpName="Group_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Lookup">
     <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="nexhrx" Plain="0"></Setting>

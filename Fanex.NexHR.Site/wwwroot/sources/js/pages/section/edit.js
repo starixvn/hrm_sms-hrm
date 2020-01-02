@@ -1,6 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-validation/dist/jquery.validate';
-import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
+﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import 'chosen-js/chosen.jquery';
 
 (function () {
@@ -32,11 +30,6 @@ import 'chosen-js/chosen.jquery';
     }
 
     $(document).ready(function () {
-        $('#LeaderIds').rules('add', {
-            required: true,
-            messages: { required: 'The Leader field is required' }
-        });
-
         initSearchLeader();
         initSearchAssistantLeader();
     });

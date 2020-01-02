@@ -348,7 +348,6 @@
     <Build Include="dbo\Stored Procedures\Paternity_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Paternity_Get.sql" />
     <Build Include="dbo\Stored Procedures\Paternity_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_SelfUpdateInfo.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetMemberByGender.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_UpdateOffDayReplacement.sql" />
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_InsertDefaultShift.sql" />

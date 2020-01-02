@@ -1,9 +1,11 @@
-﻿namespace Fanex.NexHR.Criteria.Team
+﻿namespace Fanex.NexHR.Criteria.Section
 {
     using Fanex.Data.Repository;
 
-    public class InsertNewGroupCriteria : CriteriaBase
+    public class EditSectionCriteria : CriteriaBase
     {
+        public int GroupId { get; set; }
+
         public string Code { get; set; }
 
         public string Name { get; set; }
@@ -17,18 +19,19 @@
         public string AssistantLeaderIds { get; set; }
         public byte BasicAnnualLeaveBalance { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {
-            return "EmployeeGroup_Insert";
+            return "Section_Update";
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(Code)
-                && !string.IsNullOrWhiteSpace(Name)
-                && !string.IsNullOrWhiteSpace(LeaderIds);
+            return GroupId > 0 &&
+                !string.IsNullOrWhiteSpace(Code) &&
+                !string.IsNullOrWhiteSpace(Name) &&
+                !string.IsNullOrWhiteSpace(LeaderIds);
         }
     }
 }

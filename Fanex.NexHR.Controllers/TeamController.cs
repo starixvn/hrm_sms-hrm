@@ -11,7 +11,7 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Models.Supervisor;
@@ -69,7 +69,7 @@
             model.Employees = GetAllEmployees();
             if (ModelState.IsValid)
             {
-                var criteria = new InsertNewGroupCriteria
+                var criteria = new CreateSectionCriteria
                 {
                     Code = model.TeamCode,
                     Name = model.TeamName,
@@ -136,7 +136,7 @@
                 model.Employees = GetAllEmployees();
                 if (ModelState.IsValid)
                 {
-                    var criteria = new UpdateGroupCriteria
+                    var criteria = new EditSectionCriteria
                     {
                         GroupId = model.Id,
                         Code = model.TeamCode,

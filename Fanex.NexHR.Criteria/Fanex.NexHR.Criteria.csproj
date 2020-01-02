@@ -114,7 +114,6 @@
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
-    <Compile Include="Employee\SelfUpdateContactCriteria.cs" />
     <Compile Include="Function\AssignFunctionToRoleCriteria.cs" />
     <Compile Include="Function\GetFunctionsByRoleIdCriteria.cs" />
     <Compile Include="Function\GetFunctionsCriteria.cs" />
@@ -218,7 +217,6 @@
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Section\GetSectionSupervisorByRoleIdCriteria.cs" />
     <Compile Include="Section\EditSectionSupervisorCriteria.cs" />
-    <Compile Include="Section\InsertTeamShiftManagerCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
@@ -304,8 +302,8 @@
     <Compile Include="Shift\EditShiftCriteria.cs" />
     <Compile Include="Section\DeleteGroupCriteria.cs" />
     <Compile Include="Section\GetGroupByIdCriteria.cs" />
-    <Compile Include="Section\InsertNewGroupCriteria.cs" />
-    <Compile Include="Section\UpdateGroupCriteria.cs" />
+    <Compile Include="Section\CreateSectionCriteria.cs" />
+    <Compile Include="Section\EditSectionCriteria.cs" />
     <Compile Include="Time\GetTimeRecordCriteria.cs" />
     <Compile Include="Time\InsertTimeRecordCriteria.cs" />
   </ItemGroup>

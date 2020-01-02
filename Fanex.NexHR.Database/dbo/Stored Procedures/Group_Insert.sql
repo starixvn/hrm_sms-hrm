@@ -1,27 +1,27 @@
 ﻿
-/****** Object:  Stored Procedure dbo.Group_Insert    Script Date: 7/20/2016 10:19:09 AM ******/
-/****** Object:  Stored Procedure dbo.Group_Insert    Script Date: 7/19/2016 5:22:16 PM ******/
 CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
-	,@Name VARCHAR(50)
+	,@Name VARCHAR(150)
 	,@DepartmentId INT
 	,@MailGroup VARCHAR(50) = ''
-	,@LeaderIds VARCHAR(50)
-	,@AssistantLeaderIds VARCHAR(50) = ''
+	,@LeaderIds VARCHAR(MAX)
+	,@AssistantLeaderIds VARCHAR(MAX) = ''
+	,@BasicAnnualLeaveBalance TINYINT
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: 20190515@Oliver.Dang
-Task: INSERT group 
+Task: insert group 
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	IF EXISTS (
 			SELECT 1
@@ -42,8 +42,8 @@ BEGIN
 		,DepartmentId
 		,MailGroup
 		,CreatedDate
-		,ModifiedDate
 		,CreatedBy
+		,BasicAnnualLeaveBalance
 		)
 	VALUES (
 		@Code
@@ -51,23 +51,14 @@ BEGIN
 		,@DepartmentId
 		,@MailGroup
 		,GETDATE()
-		,GETDATE()
 		,@CreatedBy
+		,@BasicAnnualLeaveBalance
 		)
 
-	DECLARE @id INT
+	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
 
-	IF @@ERROR <> 0
+	IF ISNULL(@LeaderIds, '') <> ''
 	BEGIN
-		SET @ID = 0
-
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Create Team failed.';
-	END
-	ELSE
-	BEGIN
-		SET @id = cast(SCOPE_IDENTITY() AS INT)
-
 		INSERT INTO dbo.GroupLeader (
 			GroupId
 			,EmployeeId
@@ -76,8 +67,11 @@ BEGIN
 		SELECT @id
 			,val
 			,1
-		FROM fnc_strSplit(@LeaderIds, ',')
+		FROM dbo.fnc_strSplit(@LeaderIds, ',')
+	END
 
+	IF ISNULL(@AssistantLeaderIds, '') <> ''
+	BEGIN
 		INSERT INTO dbo.GroupLeader (
 			GroupId
 			,EmployeeId
@@ -85,18 +79,33 @@ BEGIN
 			)
 		SELECT @id
 			,val
-			,NULL
-		FROM fnc_strSplit(@AssistantLeaderIds, ',')
-
-		IF @@ERROR <> 0
-		BEGIN
-			SET @ID = 0
-
-			SELECT @ErrCode = 1
-				,@ErrMsg = N'Create Team failed.';
-		END
+			,0
+		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
 	END
-
-	SELECT @ErrCode = 0
-		,@ErrMsg = ''
+	
+	DECLARE @xml XML
+		,@logData NVARCHAR(MAX)
+	
+	SET @xml = (
+			SELECT Code AS '@Code'
+				,[Name] AS '@Name'
+				,DepartmentId AS '@DepartmentId'
+				,@LeaderIds AS '@LeaderIds'
+				,@AssistantLeaderIds AS '@AssistantLeaderIds'
+				,MailGroup AS '@MailGroup'
+				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+			FROM dbo.[Group] WITH (NOLOCK)
+			WHERE GroupId = @id
+			FOR XML PATH('Row')
+				,TYPE
+			)
+	SET @logData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
+	
+	EXEC dbo.ActivityLog_Insert @UserId = @CreatedBy
+		,@ObjectTypeId = 2
+		,@ObjectId = @id
+		,@OldData = NULL
+		,@Data = @logData
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 END
