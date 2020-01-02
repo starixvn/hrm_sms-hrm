@@ -120,12 +120,12 @@ var jobTitle = (function($) {
     }
 
     function initEditEvent() {
-        $(domElement.EditJobtitle).on('click', function() {
+        $(domElement.EditJobtitle).on('click', function () {
             var jobId = $(this).attr('data-id'),
                 categoryId = $(this).attr('data-category-id'),
                 jobTitle = $(this).attr('data-job-title');
             $(domElement.EditDialog).find('input[name="name"]').val(jobTitle);
-            $(domElement.EditDialog).find('input[name="categoryId"]').val(categoryId);
+            $(domElement.EditDialog).find('select[name="category"]').val(categoryId);
 
             $(domElement.EditDialog).dialog({
                 modal: true,
@@ -134,8 +134,10 @@ var jobTitle = (function($) {
                     {
                         text: 'Submit',
                         class: 'btn btn-primary',
-                        click: function() {
-                           onEditJobtitle(jobId, categoryId, jobTitle);
+                        click: function () {
+                            var newJobTitle = $(domElement.EditDialog).find('input[name="name"]').val(),
+                                newCategoryId = $(domElement.EditDialog).find('select[name="category"]').val();
+                            onEditJobtitle(jobId, newCategoryId, newJobTitle);
                         }
                     },
                     {
