@@ -148,7 +148,7 @@
                 html.push('<li class="multiselect-treeview-item is-child">'
                     + '<div class="checkbox-wrapper">'
                     + '<input type="checkbox" id="' + me.id + '-' + itemId + '" value="' + data.id + '"' + '" data-is-leaf="' + data.isLeaf + '" '
-                    + ' data-parentid="' + item.parentId + '"'
+                    + ' data-parentid="' + me.id + '-' + item.parentId + '"'
                     + ' ' + (data.checked || options.isSelectedAll ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' />'
                     + '<label for="' + me.id + '-' + itemId + '">' + data.text + '</label>'
                     + '</div>');
