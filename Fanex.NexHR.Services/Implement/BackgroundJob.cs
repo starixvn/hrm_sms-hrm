@@ -70,5 +70,15 @@
 
             baseService.ExecuteNonQuery(criteria);
         }
+
+        public void UpdateAnnualLeaveBalanceForNewEmployee()
+        {
+            var criteria = new UpdateAnnualLeaveBalanceForNewEmployeeCriteria
+            {
+                Year = DateTime.Now.Year
+            };
+
+            baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

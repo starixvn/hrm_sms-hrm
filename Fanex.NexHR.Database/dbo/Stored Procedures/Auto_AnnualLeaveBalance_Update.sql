@@ -1,6 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Auto_AnnualLeaveBalance_Update] @Year INT
 	,@EmpId INT = NULL
+	,@IsDelete BIT = 0
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -17,13 +18,142 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	EXEC dbo.DBA_AnnualLeave_CreateAnnualBalance @Year = @Year
-		,@EmpId = @EmpId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	DECLARE @Description NVARCHAR(100) = 'Create annual balance leave in ' + CONVERT(NVARCHAR(10), @Year) + '.'
+	DECLARE @CreatedDate DATETIME = GETDATE()
+		,@FromDate DATE = CONVERT(NVARCHAR(10), @Year) + '/01/01'
+		,@ToDate DATE
 
-	EXEC dbo.DBA_AnnualLeave_CreateByGroupDate @Year = @Year
-		,@EmpId = @EmpId
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	SELECT @ToDate = DATEADD(YEAR, - 1, DATEADD(YEAR, 1, @FromDate))
+
+	DECLARE @tblEmployeeBalance TABLE (
+		EmpId INT
+		,Amount DECIMAL(5, 2)
+		)
+	DECLARE @tblLengthOfServiceBalance TABLE (
+		EmpId INT
+		,Amount DECIMAL(5, 2)
+		)
+
+	INSERT INTO @tblEmployeeBalance (
+		EmpId
+		,Amount
+		)
+	SELECT emp.EmpId
+		,ISNULL(gr.BasicAnnualLeaveBalance, 0)
+	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		AND ISNULL(emp.isDeleted, 0) = 0
+		AND emp.[Enabled] = 1
+		AND emp.ResignedDate IS NULL
+		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+	WHERE (
+			(
+				empsum.CompanyDate IS NOT NULL
+				AND empsum.CompanyDate <= @FromDate
+				)
+			OR empsum.IsLocal = 0
+			)
+		AND (
+			@EmpId IS NULL
+			OR emp.EmpId = @EmpId
+			)
+
+	INSERT INTO @tblLengthOfServiceBalance (
+		EmpId
+		,Amount
+		)
+	SELECT emp.EmpId
+		,CASE 
+			WHEN empsum.WorkingDays = 15 THEN (
+					((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) / 5) + CASE 
+					WHEN ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) % 5) = 4
+						AND MONTH(empsum.CompanyDate) < 7 THEN 1
+					ELSE 0 END
+					) / 2.0
+			ELSE ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) / 5) + CASE 
+					WHEN ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) % 5) = 4
+						AND MONTH(empsum.CompanyDate) < 7 THEN 1
+					ELSE 0
+					END
+			END
+	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		AND ISNULL(emp.isDeleted, 0) = 0
+		AND emp.[Enabled] = 1
+		AND emp.ResignedDate IS NULL
+	WHERE empsum.CompanyDate IS NOT NULL
+		AND empsum.CompanyDate <= @FromDate
+		AND (
+			@EmpId IS NULL
+			OR emp.EmpId = @EmpId
+			)
+		AND empsum.IsLocal = 1
+
+	MERGE @tblEmployeeBalance AS [target]
+	USING @tblLengthOfServiceBalance AS [source] ON ([target].EmpId = [source].EmpId)
+	WHEN MATCHED THEN
+			UPDATE
+			SET [target].Amount = [target].Amount + [source].Amount
+	WHEN NOT MATCHED BY TARGET THEN
+			INSERT (
+				EmpId
+				,Amount
+				)
+			VALUES (
+				[source].EmpId
+				,[source].Amount
+				);
+
+	DELETE
+	FROM @tblEmployeeBalance
+	WHERE Amount = 0
+
+	IF @IsDelete = 1
+	BEGIN
+		UPDATE empsum
+		SET AnnualLeaveBalance = empsum.AnnualLeaveBalance - lt.CreditDays
+		FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.LeaveTrans AS lt WITH (NOLOCK) ON empsum.EmpId = lt.EmpId
+			AND lt.FromDate = @FromDate
+			AND ISNULL(lt.Deleted, 0) = 0
+			AND lt.RequestId IS NULL
+		WHERE @EmpId IS NULL
+			OR empsum.EmpId = @EmpId
+
+		DELETE dbo.LeaveTrans
+		WHERE (
+				@EmpId IS NULL
+				OR EmpId = @EmpId
+				)
+			AND FromDate = @FromDate
+			AND CreditDays > 0
+			AND RequestId IS NULL
+	END
+
+	UPDATE empsum
+	SET empsum.AnnualLeaveBalance = empsum.AnnualLeaveBalance + emp.Amount
+	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblEmployeeBalance AS emp ON emp.EmpId = empsum.EmpId
+
+	INSERT INTO dbo.LeaveTrans (
+		EmpId
+		,[Description]
+		,FromDate
+		,ToDate
+		,DeductDays
+		,CreditDays
+		,CreatedDate
+		,CreatedBy
+		,Deleted
+		)
+	SELECT EmpId
+		,@Description
+		,@FromDate
+		,@ToDate
+		,0 AS DeductDays
+		,Amount AS CreditDays
+		,@CreatedDate
+		,NULL AS CreatedBy
+		,0 AS Deleted
+	FROM @tblEmployeeBalance
 END

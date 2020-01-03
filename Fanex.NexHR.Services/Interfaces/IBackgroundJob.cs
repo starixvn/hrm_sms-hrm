@@ -13,5 +13,7 @@
         void UpdateWorkingHourPerDay();
 
         void UpdateAnnualLeaveBalance();
+
+        void UpdateAnnualLeaveBalanceForNewEmployee();
     }
 }

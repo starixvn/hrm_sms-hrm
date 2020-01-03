@@ -147,10 +147,8 @@
     <Build Include="dbo\Stored Procedures\Memo_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Memo_Update.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_DeleteAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\TimeSheet_GetLateInEarlyOut.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_ApproveRequest.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_CreateAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\Report_Manpower.sql" />
     <Build Include="dbo\Stored Procedures\Report_ManpowerCategory.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetDetailsByRequestIds.sql" />
@@ -307,7 +305,6 @@
     <Build Include="dbo\Stored Procedures\Holiday_Update.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetByCode.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_AnnualLeave_CreateByGroupDate.sql" />
     <Build Include="dbo\Stored Procedures\LeaveType_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Log_WriteLog.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetVerifierAndApprover.sql" />
@@ -515,6 +512,7 @@
     <Build Include="dbo\Tables\OtherDiscipline.sql" />
     <Build Include="dbo\Stored Procedures\Auto_Postnatal_UpdateWorkingHour.sql" />
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_UpdateForNewEmployee.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
