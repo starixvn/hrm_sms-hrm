@@ -262,7 +262,6 @@ BEGIN
 				AND holiday.Id IS NOT NULL
 				)
 			)
-	RETURN
 
 	-- overtime
 	UPDATE empca
@@ -483,41 +482,12 @@ BEGIN
 			AND lrdt.WorkType IN (@OffDay, @LeaveDay)
 			AND lrdt.IsHalfDay = 0
 			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
-		) AS lr
-	WHERE empca.WorkDate BETWEEN @fromDate
-			AND @toDate
-		AND (
-			(
-				empca.RequestId IS NOT NULL
-				AND empca.RequestTypeId = @LeaveRequestTypeId
-				AND empca.LeaveDay = 1
-				AND lr.RequestId IS NULL
-				)
-			OR (
-				empca.RequestId IS NULL
-				AND lr.RequestId IS NOT NULL
-				)
-			)
-
-	UPDATE empca
-	SET empca.RequestId = lr.RequestId
-		,empca.RequestTypeId = lr.RequestType
-		,empca.LeaveTypeId = lr.LeaveType
-		,empca.IsLeaveDay = CASE 
-			WHEN lr.RequestId IS NOT NULL THEN 1
-			ELSE 0
-			END
-		,empca.IsLeaveOffDay = 0
-		,empca.LeaveDay = CASE 
-			WHEN lr.RequestId IS NOT NULL THEN 1
-			ELSE 0
-			END
-	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
-		OUTER APPLY (
+		
+		UNION
 		SELECT r.RequestId
 			,r.RequestType
 			,lr.LeaveType
+			,@LeaveDay AS WorkType
 		FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 			AND lr.LeaveType <> @GeneralLeaveId
