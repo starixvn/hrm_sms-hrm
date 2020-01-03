@@ -28,21 +28,19 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF (
-			EXISTS (
-				SELECT 1
-				FROM dbo.Department WITH (NOLOCK)
-				WHERE Code = @Code
-				)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.Department WITH (NOLOCK)
+			WHERE Code = @Code
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'Department code' + @Code + ' has already exists'
+			,@ErrMsg = N'Department code ' + @Code + ' has already exists'
 
 		RETURN
 	END
 
-	INSERT INTO dbo.Department(
+	INSERT INTO dbo.Department (
 		[Code]
 		,[Name]
 		,[ParentId]
@@ -60,15 +58,5 @@ BEGIN
 		,GETDATE()
 		,1
 		)
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Insert department failed.'
-	END
-	ELSE
-	BEGIN
-		SELECT @ErrCode = 0
-			,@ErrMsg = ''
-	END
 END
+

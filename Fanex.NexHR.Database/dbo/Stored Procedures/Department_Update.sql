@@ -29,40 +29,61 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF (
-			EXISTS (
-				SELECT 1
-				FROM dbo.Department WITH (NOLOCK)
-				WHERE Code = @Code
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.Department WITH (NOLOCK)
+			WHERE Code = @Code
 				AND DepartmentId <> @DepartmentId
-				)
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'Department code' + @Code + ' has already exists'
+			,@ErrMsg = N'Department code ' + @Code + ' has already exists'
 
 		RETURN
 	END
 
-	UPDATE dbo.Department WITH (ROWLOCK, UPDLOCK)
-	SET 
-		[Code] = @Code,
-		[Name] = @Name,
-		[ParentId] = @ParentId,
-		[ManagerId] = @ManagerId,
-		[IsActive] = @IsActive,
-		[ModifiedBy] = @ModifiedBy,
-		[ModifiedDate] = GETDATE()
-	WHERE DepartmentId = @DepartmentId
-
-	IF @@ERROR <> 0
+	IF EXISTS (
+		SELECT 1
+		FROM dbo.Department WITH (NOLOCK)
+		WHERE @IsActive = 0 -- Disable department
+			AND IsActive != @IsActive
+			AND DepartmentId = @DepartmentId
+		)
 	BEGIN
+		IF EXISTS (
+			SELECT 1
+			FROM dbo.Department WITH (NOLOCK)
+			WHERE [ParentId] = @DepartmentId
+			)
+		BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'Update department failed.'
+			,@ErrMsg = N'Cant disable the department having child departments'
+
+		RETURN
+		END
+
+		IF EXISTS (
+			SELECT 1
+			FROM dbo.Department AS dep WITH (NOLOCK)
+				INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON dep.DepartmentId = g.DepartmentId
+			WHERE dep.DepartmentId = @DepartmentId
+				AND g.IsDeleted != 1
+			)
+		BEGIN
+			SELECT @ErrCode = 1
+				,@ErrMsg = N'Cant disable the department having teams'
+
+			RETURN
+		END
 	END
-	ELSE
-	BEGIN
-		SELECT @ErrCode = 0
-			,@ErrMsg = ''
-	END
+
+	UPDATE dbo.Department WITH (ROWLOCK, UPDLOCK)
+	SET [Code] = @Code
+		,[Name] = @Name
+		,[ParentId] = @ParentId
+		,[ManagerId] = @ManagerId
+		,[IsActive] = @IsActive
+		,[ModifiedBy] = @ModifiedBy
+		,[ModifiedDate] = GETDATE()
+	WHERE DepartmentId = @DepartmentId
 END

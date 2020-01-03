@@ -10,14 +10,11 @@
     public class DepartmentService : IDepartmentService
     {
         private readonly IDepartmentRepository departmentRepository;
-        private readonly IBaseService baseService;
 
         public DepartmentService(
-            IDepartmentRepository departmentRepository,
-            IBaseService baseService)
+            IDepartmentRepository departmentRepository)
         {
             this.departmentRepository = departmentRepository;
-            this.baseService = baseService;
         }
 
         public Department GetById(int id)
@@ -50,16 +47,6 @@
             IList<Department> departments = departmentRepository.GetDepartment(criteria);
 
             return departments ?? new List<Department>();
-        }
-
-        public CommandResult Delete(int actorId, int id)
-        {
-            var criteria = new DeleteDepartmentCriteria
-            {
-                DepartmentId = id,
-                ModifiedBy = actorId,
-            };
-            return baseService.ExecuteNonQuery(criteria);
         }
     }
 }

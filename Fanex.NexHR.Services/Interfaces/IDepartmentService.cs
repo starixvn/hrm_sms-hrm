@@ -11,7 +11,5 @@
         IList<Department> GetDepartment(int? parentId = null, bool? isActive = true);
 
         IList<Department> GetParentDepartment(int departmentId);
-
-        CommandResult Delete(int actorId, int id);
     }
 }

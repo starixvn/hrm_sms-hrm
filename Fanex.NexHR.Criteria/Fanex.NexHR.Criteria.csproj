@@ -86,7 +86,6 @@
     <Compile Include="Department\UpdateDepartmentCriteria.cs" />
     <Compile Include="Department\InsertDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
-    <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
     <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\DeleteWeekendLeaveCriteria.cs" />

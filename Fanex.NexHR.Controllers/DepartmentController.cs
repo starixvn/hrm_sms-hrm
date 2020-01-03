@@ -118,15 +118,6 @@
             return Json(commandResult);
         }
 
-        [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
-        public JsonResult Delete(int departmentId)
-        {
-            CommandResult result = departmentService.Delete(sessionService.Employee.Id, departmentId);
-
-            return Json(result);
-        }
-
         public CustomJsonResult GetHierarchy()
         {
             IList<Team> sections = commonDataService.GetAllSection();
