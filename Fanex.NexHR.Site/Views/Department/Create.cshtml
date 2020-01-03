@@ -20,8 +20,9 @@
 
 <h2 class="page-title">@Labels.Create</h2>
 <div class="card">
-    @using (Html.BeginForm("Create", "department", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Create", "department", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
+        @Html.ValidationSummary()
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Code, new { @class = "control-label" })
@@ -74,7 +75,7 @@
 
         <div class="form-group">
             <div>
-                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
                 <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>

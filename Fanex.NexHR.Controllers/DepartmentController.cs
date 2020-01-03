@@ -71,50 +71,28 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
-        public ActionResult Create(AddDepartmentViewModel model)
+        public JsonResult Create(InsertDepartmentCriteria criteria)
         {
-            if (model != null)
+            var commandResult = new CommandResult();
+
+            if (criteria.IsValid())
             {
-                model.ParentDepartments = departmentService.GetDepartment();
-
-                if (ModelState.IsValid)
-                {
-                    var criteria = new InsertDepartmentCriteria
-                    {
-                        Code = model.Code,
-                        Name = model.Name,
-                        IsActive = model.IsActive,
-                        ParentId = model.ParentId,
-                        ManagerId = model.ManagerId,
-                        CreatedBy = sessionService.Employee.Id
-                    };
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-                    if (result.IsSuccessful)
-                    {
-                        return RedirectToAction("Index", "Department");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+                commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
-            return View(model);
+            return Json(commandResult);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
         public ActionResult Edit(int departmentId)
-        {           
+        {
             Department department = departmentService.GetById(departmentId);
-            IList<Department> parentDepartments = departmentService.GetDepartment(); 
+            IList<Department> parentDepartments = departmentService.GetDepartment();
             parentDepartments = parentDepartments.Where(t => t.Id != department.Id).ToList();
 
             var model = new EditDepartmentViewModel
             {
-                DeprtamentId = departmentId,
-
+                DepartmentId = departmentId,
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,
@@ -122,45 +100,22 @@
                 Manager = department.Manager.DisplayName,
                 ParentId = department.Parent == null ? 0 : department.Parent.Id,
                 ParentDepartments = parentDepartments
-             
-        };
+            };
             return View(model);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.DivisionManagement)]
-        public ActionResult Edit(EditDepartmentViewModel model)
+        public JsonResult Edit(UpdateDepartmentCriteria criteria)
         {
-            if (model != null)
+            var commandResult = new CommandResult();
+
+            if (criteria.IsValid())
             {
-                model.ParentDepartments = departmentService.GetParentDepartment(model.DeprtamentId);
-                if (ModelState.IsValid)
-                {
-                    var criteria = new UpdateDepartmentCriteria
-                    {
-                        DepartmentId = model.DeprtamentId,
-                        Code = model.Code,
-                        Name = model.Name,
-                        IsActive = model.IsActive,
-                        ParentId = model.ParentId ?? 0,
-                        ManagerId = model.ManagerId,
-                        ModifiedBy = sessionService.Employee.Id,
-                    };
-
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-
-                    if (result.IsSuccessful)
-                    {
-                        return RedirectToAction("Index", "Department");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
-                }
+                commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
-            return View(model);
+            return Json(commandResult);
         }
 
         [HttpPost]

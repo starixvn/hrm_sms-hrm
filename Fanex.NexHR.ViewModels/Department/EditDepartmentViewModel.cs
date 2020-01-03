@@ -8,7 +8,7 @@
     public class EditDepartmentViewModel
     {
         [Required]
-        public int DeprtamentId { get; set; }
+        public int DepartmentId { get; set; }
 
         [AllowHtml]
         [Required]

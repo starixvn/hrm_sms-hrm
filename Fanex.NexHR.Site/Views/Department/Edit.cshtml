@@ -18,10 +18,10 @@
 }
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
-    @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
-        @Html.HiddenFor(model => model.DeprtamentId)
-
+        @Html.HiddenFor(model => model.DepartmentId)
+        @Html.ValidationSummary()
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Code, new { @class = "control-label" })
@@ -29,7 +29,6 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
             </div>
-            @Html.ValidationMessageFor(model => model.Code)
         </div>
 
         <div class="form-group">
@@ -39,7 +38,6 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
             </div>
-            @Html.ValidationMessageFor(model => model.Name)
         </div>
 
         <div class="form-group">
@@ -58,7 +56,6 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Manager, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
-            @Html.ValidationMessage("Manager")
             @Html.HiddenFor(model => model.ManagerId)
         </div>
 
@@ -73,7 +70,7 @@
 
         <div class="form-group">
             <div>
-                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
                 <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>
