@@ -89,7 +89,7 @@ function validateFormData() {
         errorMessages.push('The Name field is required!');
     }
 
-    if (!$('#ManagerId').val()) {
+    if (!$('#ManagerId').val() || $('#ManagerId').val() == 0) {
         errorMessages.push('The Manager field is required!');
     }
 
