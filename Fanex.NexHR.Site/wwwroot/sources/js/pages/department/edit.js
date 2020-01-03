@@ -9,19 +9,19 @@ import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors
 function initManagerSearch() {
     $('#Manager').autocomplete({
         source: function (request, response) {
-            $.ajax({
+            axios({
                 url: resolveClientUrl('employee/getmemberbymanager'),
-                data: {
+                method: "GET",
+                params: {
                     keyword: request.term
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.Id
-                        };
-                    }));
                 }
+            }).then(result => {
+                response($.map(result.data, function (item) {
+                    return {
+                        label: item.NickName + ' (' + item.FullName + ')',
+                        value: item.Id
+                    };
+                }));
             });
         },
         minLength: 2,
