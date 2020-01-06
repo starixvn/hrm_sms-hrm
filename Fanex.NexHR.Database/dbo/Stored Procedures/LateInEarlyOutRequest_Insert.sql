@@ -24,9 +24,13 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	DECLARE @CreatedDate DATETIME = GETDATE()
 		,@IsTopManager BIT
+		-- leave type
+		,@AnnualLeaveTypeId TINYINT = 2
+		,@UnpaidLeaveTypeId TINYINT = 25
 		-- action type
 		,@VerifyRequest TINYINT = 2
 		,@ApproveRequest TINYINT = 3
@@ -154,6 +158,30 @@ BEGIN
 
 			RETURN;
 		END
+	END
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OnDate
+		,@toDate = @OnDate
+		,@empIds = @EmpId
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.tmpEmployeeCalendar WITH (NOLOCK)
+			WHERE EmpId = @EmpId
+				AND WorkDate = @OnDate
+				AND LeaveTypeId IN (@AnnualLeaveTypeId, @UnpaidLeaveTypeId)
+				AND IsLeaveDay = 1
+				AND LeaveDay = 0.5
+			)
+		AND (
+			@LateInMins > 30
+			OR @EarlyOutMins > 30
+			)
+	BEGIN
+		SET @ErrCode = 106
+		SET @ErrMsg = 'You can not request over 30 minutes on half day leave.'
+
+		RETURN
 	END
 
 	INSERT INTO dbo.WorkingTimeRequest (
