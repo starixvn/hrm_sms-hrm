@@ -44,42 +44,6 @@
             return View(functions);
         }
 
-        public ActionResult Attendance()
-        {
-            ViewBag.Groups = teamService.GetBySupervisor(sessionService.Employee.Id);
-            var model = new EmployeeAttendanceViewModel
-            {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now,
-                GroupIds = string.Empty,
-                DateOption = 0,
-                ExcludeDeletedUsers = true,
-                SupervisorId = sessionService.Employee.Id
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult AttendanceDetails(EmployeeAttendanceViewModel model)
-        {
-            var criteria = new GetEmployeeAttendanceCriteria
-            {
-                SupervisorId = model.SupervisorId,
-                Fromtime = model.FromDate,
-                Totime = model.ToDate,
-                AttendanceType = model.AttendanceType,
-                EmpId = model.EmployeeId,
-                Groupids = model.GroupIds,
-                ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
-                IsLocal = model.IsLocal
-            };
-
-            IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
-
-            return PartialView("_AttendanceDetails", employeeAttendances);
-        }
-
         [HttpGet]
         public ActionResult Timesheet()
         {

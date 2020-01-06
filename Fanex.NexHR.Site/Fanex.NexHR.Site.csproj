@@ -735,6 +735,8 @@
     <Content Include="wwwroot\dist\js\leave.request.detail.js.map" />
     <Content Include="wwwroot\dist\styles\leave.create.js.map" />
     <Content Include="wwwroot\dist\js\department.edit.js.map" />
+    <Content Include="Views\AttendanceReport\Index.cshtml" />
+    <Content Include="Views\AttendanceReport\_Details.cshtml" />
     <None Include="wwwroot\sources\styles\pages\report\attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />

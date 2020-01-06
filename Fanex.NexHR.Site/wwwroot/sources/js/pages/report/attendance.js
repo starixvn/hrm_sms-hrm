@@ -152,7 +152,7 @@ $(document).ready(function () {
 
     $("#btnExcel").click(function () {
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        location.href = _global.root + "ExportAttendance/Attendance?" + $('.filter').serialize();
+        location.href = _global.root + "AttendanceReport/ExportExcel?" + $('.filter').serialize();
     });
 
     query();
