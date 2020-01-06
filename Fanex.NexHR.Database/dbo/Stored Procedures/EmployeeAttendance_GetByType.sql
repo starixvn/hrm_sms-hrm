@@ -7,6 +7,7 @@ CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType] @fromtime DATE
 	,@isLocal BIT = NULL
 	,@SupervisorId INT = NULL
 	,@type SMALLINT
+	,@isRealDate BIT = 0
 AS
 /*
 Created: Tom.Vo@2013-10-31
@@ -37,6 +38,11 @@ BEGIN
 		,@VoidStatusId TINYINT = 7
 	DECLARE @tblGroupId TABLE (GroupId INT)
 	DECLARE @tblEmployeeId TABLE (EmpId INT)
+
+	IF(@isRealDate = 1)
+	BEGIN
+		SET @fromtime = DATEADD(d, -1, @fromtime)
+	END
 
 	IF ISNULL(@GroupIds, '') <> ''
 	BEGIN
@@ -344,6 +350,11 @@ BEGIN
 		,r.CurrentStatus
 
 	CREATE TABLE #CalendarDF (AttendanceDate DATETIME)
+
+	IF (@isRealDate = 1)
+	BEGIN
+		SET @fromtime = DATEADD(d, 1, @fromtime)
+	END
 
 	SET @StartDate = @fromtime
 	SET @EndDate = @totime
@@ -701,6 +712,7 @@ BEGIN
 			,c.LeaveTypeId
 			,c.LeaveTypeId2
 			,c.LeaveDay
+			,s3.IsInAfterDay
 			,(CASE 
 				WHEN a.RequestType = 3 THEN lieo.LateInMins
 				ELSE lieo.EarlyOutMins END
@@ -725,7 +737,12 @@ BEGIN
 			OR rd.RequestType <> 6
 		) AS r ON (
 			T.EmpId = r.EmpId
-			AND T.AttendanceDate = r.WorkDate
+			AND
+				(
+				(@isRealDate = 1 AND r.IsInAfterDay = 1 AND T.AttendanceDate = r.WorkDate + 1)
+				OR 
+				((@isRealDate = 0 OR @isRealDate IS NULL OR r.IsInAfterDay = 0) AND T.AttendanceDate = r.WorkDate)
+				)
 			)
 		LEFT JOIN LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeId = r.LeaveTypeId
 		LEFT JOIN LeaveType AS lv2 WITH (NOLOCK) ON lv2.LeaveTypeId = r.LeaveTypeId2

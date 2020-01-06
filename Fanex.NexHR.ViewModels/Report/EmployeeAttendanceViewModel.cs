@@ -30,6 +30,8 @@
 
         public byte? IsLocal { get; set; }
 
+        public bool? IsRealDate { get; set; }
+
         public int SupervisorId { get; set; }
     }
 }

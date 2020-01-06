@@ -40,6 +40,7 @@
                 @Html.Hidden("DateOption", Model.DateOption)
             </div>
         </div>
+
         <div class="form-group form-group--m">
             <div class="label-form">
                 <label class="control-label">@Labels.FromDate</label>
@@ -93,6 +94,7 @@
             </div>
         </div>
 
+
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
@@ -122,6 +124,17 @@
                 <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
             </div>
         </div>
+
+        <div class="form-group form-group--m" style="margin-top: 5px;">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <input type="checkbox" class="checkbox-custom" id="IsRealDate"
+                       name="IsRealDate" value="true" />
+                <label for="IsRealDate">@Labels.IsRealDate</label>
+            </div>
+        </div>
+
         <div class="clearfix"></div>
         <div class="form-group form-group--m">
             <div class="label-form">

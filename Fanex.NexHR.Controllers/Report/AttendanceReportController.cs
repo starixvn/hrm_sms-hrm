@@ -54,7 +54,8 @@
                 EmpId = model.EmployeeId,
                 Groupids = model.GroupIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
-                IsLocal = model.IsLocal
+                IsLocal = model.IsLocal,
+                IsRealDate = model.IsRealDate
             };
 
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);

@@ -20,7 +20,7 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
             "fromtime": fromTime, "totime": toTime,
             "createddate": createdDate, "fromshiftCode": fromShift,
             "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut
+            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut,
         },
         success: function (data) {
             result = data;

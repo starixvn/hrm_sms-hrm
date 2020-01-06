@@ -19,6 +19,8 @@
 
         public byte? IsLocal { get; set; }
 
+        public bool? IsRealDate { get; set; }
+
         [SpParam(SqlParamName = "Type")]
         public short AttendanceType { get; set; }
 

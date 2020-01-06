@@ -1860,4 +1860,7 @@
   <data name="BasicAnnualLeaveBalance" xml:space="preserve">
     <value>Basic Annual Leave Balance</value>
   </data>
+  <data name="IsRealDate" xml:space="preserve">
+    <value>Is real date</value>
+  </data>
 </root>
