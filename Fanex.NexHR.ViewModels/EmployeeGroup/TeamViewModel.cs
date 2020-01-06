@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.ViewModels.EmployeeGroup
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
@@ -39,19 +38,9 @@
 
         public string AssistantLeaderIds { get; set; }
 
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedDate { get; set; }
-
-        public int CreatedBy { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime ModifiedDate { get; set; }
-
         [Required]
         [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
         public byte? BasicAnnualLeaveBalance { get; set; }
-
-        public int ModifiedBy { get; set; }
 
         public IList<Department> Departments { get; set; }
 

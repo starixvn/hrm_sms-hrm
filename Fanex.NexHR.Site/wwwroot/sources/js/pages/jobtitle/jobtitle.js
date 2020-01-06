@@ -1,11 +1,10 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, confirm, alert, getParam } from '../../shared/common.functions';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
-import 'jquery-ui-bundle/jquery-ui';
+import 'floatthead/dist/jquery.floatThead';
+import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
 
-var jobTitle = (function($) {
-    var domElement = {
+const jobTitle = (function ($) {
+    const domElement = {
         Keyword: '#keyword',
         Table: '#data',
         CreateDialog: '#create-dialog',
@@ -22,9 +21,9 @@ var jobTitle = (function($) {
             getJobtitle();
         });
 
-        $(domElement.BtnExcel).on('click', function() {
-            var keyword = $(domElement.Keyword).val();
-            window.location.href = "/jobTitle/ExportExcel?keyword=" + keyword;
+        $(domElement.BtnExcel).on('click', function () {
+            const keyword = $(domElement.Keyword).val();
+            window.location.href = resolveClientUrl('jobTitle/ExportExcel?keyword=' + keyword);
         });
 
         $(domElement.Keyword).keyup(function (event) {
@@ -63,7 +62,7 @@ var jobTitle = (function($) {
     }
 
     function onCreateJobtitle() {
-        var data = {
+        const data = {
             name: $(domElement.CreateDialog).find('input[name="name"]').val(),
             categoryId: $(domElement.CreateDialog).find('select[name="categoryId"]').val()
         };
@@ -71,14 +70,13 @@ var jobTitle = (function($) {
         if (isValid($(domElement.CreateDialog))) {
             $.ajax({
                 method: 'POST',
-                url: _global.root + 'JobTitle/Insert',
+                url: resolveClientUrl('JobTitle/Insert'),
                 data: data,
                 success: function (response) {
                     if (response.IsSuccessful) {
                         $(domElement.CreateDialog).dialog("close");
-                        alert('Create job title successfully!', getJobtitle);
-                    }
-                    else {
+                        alert('Create successfully!', getJobtitle);
+                    } else {
                         alert(response.Message);
                     }
                 },
@@ -90,21 +88,23 @@ var jobTitle = (function($) {
     }
 
     function isValid($form) {
-        var isValid = true,
+        let isValid = true,
             errorMsg = '',
             jobTitle = $form.find('input[name="name"]').val(),
             categoryId = $form.find('select[name="categoryId"]').val();
         if (!jobTitle) {
-            errorMsg += '<li>The Job title field is required.</li>';
+            errorMsg += '<li>Job title is required.</li>';
         }
 
         if (!categoryId && parseInt(categoryId, 10) <= 0) {
-            errorMsg += '<li>The Category field is required.</li>';
+            errorMsg += '<li>Category is required.</li>';
         }
+
         if (errorMsg.length > 0) {
             showErrorMsg($form, errorMsg);
             isValid = false;
         }
+
         return isValid;
     }
 
@@ -116,12 +116,12 @@ var jobTitle = (function($) {
 
     function removeMsg($dialog) {
         $dialog.find('.validation-summary-valid')
-            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html("");
+            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html('');
     }
 
     function initEditEvent() {
         $(domElement.EditJobtitle).on('click', function () {
-            var jobId = $(this).attr('data-id'),
+            const jobId = $(this).attr('data-id'),
                 categoryId = $(this).attr('data-category-id'),
                 jobTitle = $(this).attr('data-job-title');
             $(domElement.EditDialog).find('input[name="name"]').val(jobTitle);
@@ -135,7 +135,7 @@ var jobTitle = (function($) {
                         text: 'Submit',
                         class: 'btn btn-primary',
                         click: function () {
-                            var newJobTitle = $(domElement.EditDialog).find('input[name="name"]').val(),
+                            const newJobTitle = $(domElement.EditDialog).find('input[name="name"]').val(),
                                 newCategoryId = $(domElement.EditDialog).find('select[name="category"]').val();
                             onEditJobtitle(jobId, newCategoryId, newJobTitle);
                         }
@@ -155,7 +155,7 @@ var jobTitle = (function($) {
     }
 
     function onEditJobtitle(jobId, categoryId, jobTitle) {
-        var data = {
+        const data = {
             id: jobId,
             name: jobTitle,
             categoryId: categoryId
@@ -164,14 +164,13 @@ var jobTitle = (function($) {
         if (isValid($(domElement.EditDialog))) {
             $.ajax({
                 method: 'POST',
-                url: _global.root + 'JobTitle/Update',
+                url: resolveClientUrl('JobTitle/Update'),
                 data: data,
                 success: function (response) {
                     if (response.IsSuccessful) {
                         $(domElement.EditDialog).dialog("close");
-                        alert('Edit job title successfully!', getJobtitle);
-                    }
-                    else {
+                        alert('Edit successfully!', getJobtitle);
+                    } else {
                         alert(response.Message);
                     }
                 },
@@ -184,20 +183,19 @@ var jobTitle = (function($) {
 
     function initDeleteEvent() {
         $(domElement.DelJobtitle).on('click', function() {
-            var jobTitleId = $(this).attr("data-id");
+            const jobTitleId = $(this).attr("data-id");
             confirm('Are you sure you want to delete?', function () {
                 $.ajax({
                     method: 'POST',
-                    url: _global.root + 'JobTitle/Delete',
+                    url: resolveClientUrl('JobTitle/Delete'),
                     data: {
                         id: jobTitleId
                     },
                     success: function(response) {
                         if (response.IsSuccessful) {
-                            alert('Delete successful !')
+                            alert('Delete successfully!');
                             getJobtitle();
-                        }
-                        else {
+                        } else {
                             alert(response.Message);
                         }
                     },
@@ -210,14 +208,12 @@ var jobTitle = (function($) {
     }
 
     function getJobtitle() {
-        var url = _global.root + 'jobTitle/GetJobTitles';
-        var keyword = $(domElement.Keyword).val();
         $.ajax({
             type: 'POST',
-            url: url,
+            url: resolveClientUrl('jobTitle/GetJobTitles'),
             dataType: 'html',
             data: {
-                jobTitle: keyword
+                jobTitle: $(domElement.Keyword).val()
             },
             beforeSend: function () {
                 blockUI();
@@ -245,7 +241,7 @@ var jobTitle = (function($) {
 
     return {
         initJobtitle
-    }
+    };
 })(jQuery);
 
 $(document).ready(function () {

@@ -26,11 +26,6 @@
             <div class="success flash">@Messages.UpdatedSuccessfully</div>
         }
 
-        @Html.HiddenFor(model => model.CreatedDate)
-        @Html.HiddenFor(model => model.CreatedBy)
-        @Html.HiddenFor(model => model.ModifiedDate)
-        @Html.HiddenFor(model => model.ModifiedBy)
-
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })

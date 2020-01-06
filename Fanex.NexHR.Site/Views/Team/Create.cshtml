@@ -21,8 +21,6 @@
 {
     <div class="card form-horizontal">
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.CreatedDate)
-        @Html.HiddenFor(model => model.CreatedBy)
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })

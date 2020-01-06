@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -116,8 +115,6 @@
                 LeaderIds = string.Join(",", team.Leaders.Select(e => e.Id)),
                 AssistantLeaders = team.AssistantLeaders,
                 AssistantLeaderIds = string.Join(",", team.AssistantLeaders.Select(e => e.Id)),
-                ModifiedDate = DateTime.Now,
-                ModifiedBy = sessionService.Employee.Id,
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
                 Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()
