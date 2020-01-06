@@ -72,7 +72,7 @@
             <div class="select-form">
                 @{
                     var types = new List<SelectListItem>
-                    {
+                            {
                         new SelectListItem() { Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString() },
                         new SelectListItem() { Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString() },
                         new SelectListItem() { Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString() },
@@ -124,6 +124,7 @@
                 <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
             </div>
         </div>
+        <div class="clearfix"></div>
 
         <div class="form-group form-group--m" style="margin-top: 5px;">
             <div class="label-form">
@@ -135,7 +136,6 @@
             </div>
         </div>
 
-        <div class="clearfix"></div>
         <div class="form-group form-group--m">
             <div class="label-form">
                 <label class="control-label"></label>
