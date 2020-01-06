@@ -272,7 +272,7 @@ BEGIN
 			)
 	BEGIN
 		SET @ErrCode = 106
-		SET @ErrMsg = 'There is another request in the same date'
+		SET @ErrMsg = 'There is another request in the same date.'
 
 		RETURN
 	END
@@ -367,21 +367,6 @@ BEGIN
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
-
-	IF @@ERROR <> 0
-	BEGIN
-		DELETE dbo.WorkingTimeRequest
-		WHERE RequestId = @RequestId
-
-		DELETE dbo.ChangeShiftRequest
-		WHERE RequestId = @RequestId
-
-		DELETE dbo.ChangeShiftRequestDetail
-		WHERE RequestId = @RequestId
-
-		SELECT @ErrCode = 107
-			,@ErrMsg = N'Create unsuccessfully.'
-	END
 
 	DROP TABLE #tblChangeShiftDetail
 END

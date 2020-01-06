@@ -1,16 +1,16 @@
 ﻿
-CREATE FUNCTION [dbo].[fnc_GetDisciplineDetailByLeaveRequestId] (
-	@RequestId BIGINT
+CREATE FUNCTION [dbo].[fnc_GetDisciplineDetailByLeaveRequestId] (@RequestId BIGINT)
+RETURNS @DisciplineDetail TABLE (
+	EmployeeId INT
+	,WorkDate DATETIME
+	,IsOffOrHoliday BIT
+	,ScheduleStatus NVARCHAR(MAX)
+	,IsUnpaidLeaveAbsent BIT
+	,IsUnpaidLeave BIT
+	,IsAbsent BIT
+	,IsUnplannedLeave BIT
+	,IsWeekendLeave BIT
 	)
-RETURNS @DisciplineDetail TABLE (EmployeeId INT, 
-	WorkDate DATETIME
-		,IsOffOrHoliday BIT
-		,ScheduleStatus NVARCHAR(MAX)
-		,IsUnpaidLeaveAbsent BIT
-		,IsUnpaidLeave BIT
-		,IsAbsent BIT
-		,IsUnplannedLeave BIT
-		,IsWeekendLeave BIT)
 AS
 /*
 Created: Quinn.Vo@20161130
@@ -30,34 +30,30 @@ BEGIN
 		,@UnpaidLeaveType INT = 25
 		,@PublicHolidayLeaveType INT = 13
 		,@LeaveWorkType TINYINT = 2
-		,@TotalDays DECIMAL(5,1)
+		,@TotalDays DECIMAL(5, 1)
 
 	SELECT @LeaveType = LeaveType
 		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	DECLARE @Absent TABLE(
+	DECLARE @Absent TABLE (
 		WorkDate DATE
 		,EmpId INT
 		)
-
-	DECLARE @UnplannedLeave TABLE(
+	DECLARE @UnplannedLeave TABLE (
 		WorkDate DATE
 		,EmpId INT
 		)
-
-	DECLARE @UnpaidLeaveAbsent TABLE(
+	DECLARE @UnpaidLeaveAbsent TABLE (
 		WorkDate DATE
 		,EmpId INT
 		)
-
-	DECLARE @UnpaidLeave TABLE(
+	DECLARE @UnpaidLeave TABLE (
 		WorkDate DATE
 		,EmpId INT
 		)
-
-	DECLARE @WeekendLeave TABLE(
+	DECLARE @WeekendLeave TABLE (
 		WorkDate DATE
 		,EmpId INT
 		)
@@ -331,14 +327,19 @@ BEGIN
 		) AS lea ON empC.[EmpId] = lea.[EmpId]
 		AND empC.[WorkDate] = lea.OnDate
 	WHERE ISNULL(rul.Value, 0) = 1
-	
-	INSERT INTO @WeekendLeave(WorkDate, EmpId)
-	SELECT DISTINCT WorkDate, EmpId
+
+	INSERT INTO @WeekendLeave (
+		WorkDate
+		,EmpId
+		)
+	SELECT DISTINCT WorkDate
+		,EmpId
 	FROM dbo.WeekendLeaveTrans WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 		AND IsDiscipline = 1
-	
-	IF (@LeaveType = @GeneralLeaveType OR @TotalDays = 0.5)
+
+	IF @LeaveType = @GeneralLeaveType
+		OR @TotalDays = 0.5
 	BEGIN
 		INSERT INTO @DisciplineDetail (
 			WorkDate
@@ -367,7 +368,8 @@ BEGIN
 				ELSE 0 END
 				) AS IsUnpaidLeaveAbsent
 			,(CASE 
-				WHEN up.WorkDate IS NULL OR upa.WorkDate IS NOT NULL THEN 0
+				WHEN up.WorkDate IS NULL
+					OR upa.WorkDate IS NOT NULL THEN 0
 				ELSE 1 END
 				) AS IsUnpaidLeave
 			,(CASE 
@@ -385,11 +387,12 @@ BEGIN
 				) AS IsWeekendLeave
 		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
-			INNER JOIN 
-				(SELECT DISTINCT RequestId, OnDate 
-					FROM dbo.LeaveRequestDetail WITH (NOLOCK) 
-					WHERE RequestId = @RequestId
-				) AS ldt ON lr.RequestId = ldt.RequestId
+			INNER JOIN (
+			SELECT DISTINCT RequestId
+				,OnDate
+			FROM dbo.LeaveRequestDetail WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+			) AS ldt ON lr.RequestId = ldt.RequestId
 			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON CAST(ldt.OnDate AS DATE) = CAST(ca.WorkDate AS DATE)
 			AND lr.EmpId = ca.EmpId
 			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
@@ -406,36 +409,34 @@ BEGIN
 		WHERE wk.RequestId = @RequestId
 			AND EXISTS (
 				SELECT 1
-				FROM @UnpaidLeaveAbsent 
+				FROM @UnpaidLeaveAbsent
 				
 				UNION
 				SELECT 1
-				FROM @UnpaidLeave 
-
+				FROM @UnpaidLeave
+				
 				UNION
 				SELECT 1
 				FROM @Absent
 				
 				UNION
 				SELECT 1
-				FROM @UnplannedLeave 
+				FROM @UnplannedLeave
 				
 				UNION
 				SELECT 1
 				FROM @UnpaidLeave
-
+				
 				UNION
 				SELECT 1
-				FROM @WeekendLeave 
+				FROM @WeekendLeave
 				)
 		ORDER BY ldt.OnDate
 	END
-	ELSE IF (
-			@LeaveType = @AnnualLeaveType
-			OR @LeaveType = @KeepInViewLeaveType
-			OR @LeaveType = @UnpaidLeaveType
-			OR @LeaveType = @PublicHolidayLeaveType
-			)
+	ELSE IF @LeaveType = @AnnualLeaveType
+		OR @LeaveType = @KeepInViewLeaveType
+		OR @LeaveType = @UnpaidLeaveType
+		OR @LeaveType = @PublicHolidayLeaveType
 	BEGIN
 		INSERT INTO @DisciplineDetail (
 			WorkDate
@@ -476,13 +477,14 @@ BEGIN
 				ELSE 0 END
 				) AS IsUnplannedLeave
 			,(CASE 
-			WHEN wkl.WorkDate IS NOT NULL THEN 1
-			ELSE 0 END
-			) AS IsWeekendLeave
+				WHEN wkl.WorkDate IS NOT NULL THEN 1
+				ELSE 0 END
+				) AS IsWeekendLeave
 		FROM dbo.WorkingTimeRequest AS wk WITH (NOLOCK)
 			INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wk.RequestId = lr.RequestId
-			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId 
-				AND ca.WorkDate BETWEEN lr.FromDate AND lr.ToDate
+			INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON lr.EmpId = ca.EmpId
+			AND ca.WorkDate BETWEEN lr.FromDate
+				AND lr.ToDate
 			LEFT JOIN dbo.Shift AS s WITH (NOLOCK) ON ca.ShiftId = s.ShiftID
 			LEFT JOIN @UnpaidLeaveAbsent AS upa ON ca.EmpId = upa.EmpId
 			AND upa.WorkDate = CAST(ca.WorkDate AS DATE)
@@ -495,14 +497,14 @@ BEGIN
 			LEFT JOIN @WeekendLeave AS wkl ON ca.EmpId = wkl.EmpId
 			AND CAST(ca.WorkDate AS DATE) = wkl.WorkDate
 		WHERE wk.RequestId = @RequestId
-		AND EXISTS (
+			AND EXISTS (
 				SELECT 1
 				FROM @UnpaidLeaveAbsent
 				
 				UNION
 				SELECT 1
 				FROM @UnpaidLeave
-
+				
 				UNION
 				SELECT 1
 				FROM @Absent
@@ -514,12 +516,15 @@ BEGIN
 				UNION
 				SELECT 1
 				FROM @UnpaidLeave
-
+				
 				UNION
 				SELECT 1
 				FROM @WeekendLeave
 				)
 	END
+
+	UPDATE @UnpaidLeave
+	SET WorkDate = GETDATE()
 
 	RETURN
 END

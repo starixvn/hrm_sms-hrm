@@ -113,10 +113,4 @@ BEGIN
 
 	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 104
-			,@ErrMsg = 'Aprrove unsuccessfully.'
-	END
 END

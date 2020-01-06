@@ -13,12 +13,14 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT EmpId AS Id
+	SELECT emp.EmpId AS Id
 		,Code
 		,FullName
 		,NickName
 		,[Password]
 		,[Enabled]
-	FROM dbo.Employee WITH (NOLOCK)
+		,empsum.IsTopManager
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 	WHERE Code = @code
 END

@@ -58,6 +58,10 @@ BEGIN
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE emp.[Enabled] = 1
 		AND emp.isDeleted = 0
+		AND (
+			@empId IS NULL
+			OR emp.EmpId = @empId
+			)
 		AND EXISTS (
 			SELECT 1
 			FROM @tblGroupIds AS tbl
@@ -87,6 +91,8 @@ BEGIN
 		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+	ORDER BY gr.[Name]
+		,emp.Code
 
 	SELECT emp.EmpId AS EmployeeId
 		,empca.WorkDate

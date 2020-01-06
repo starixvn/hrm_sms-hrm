@@ -361,11 +361,5 @@ BEGIN
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 108
-			,@ErrMsg = N'Update unsuccessfully.'
-	END
-
 	DROP TABLE #tblChangeShiftDetail
 END

@@ -10,19 +10,17 @@ CREATE PROCEDURE [dbo].[Menu_Insert] @Name NVARCHAR(50)
 AS
 /*
 Created: 20160609@Razor.Nguyen
-Task: Create Role Management Services
-DB: SPM
-Original: 
+Task: insert menu
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @IsActive BIT
-
-	SET @IsActive = 1
+	DECLARE @IsActive BIT = 1
 
 	INSERT INTO [dbo].[Menu]
 	VALUES (
@@ -33,5 +31,5 @@ BEGIN
 		,@FunctionId
 		,@DisplayOrder
 		,@IsActive
-		);
-END;
+		)
+END

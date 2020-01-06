@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Employee_GetEmployeeByID] --652
+﻿CREATE PROCEDURE [dbo].[Employee_GetEmployeeByID] --652
 	@Empid INT
 AS
 /*
@@ -21,7 +20,7 @@ BEGIN
 	SELECT @KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpID, @Today, NULL)
 		,@AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@Today), NULL)
 
-	SELECT e.EmpId as ID
+	SELECT e.EmpId
 		,e.Code
 		,e.DomainUsername
 		,e.FullName
@@ -38,7 +37,6 @@ BEGIN
 		,e.PromotionDate
 		,e.GroupId
 		,g.DepartmentId
-		,e.ManagerId
 		,e.JoinedDate
 		,e.ConfirmedDate
 		,e.ResignedDate

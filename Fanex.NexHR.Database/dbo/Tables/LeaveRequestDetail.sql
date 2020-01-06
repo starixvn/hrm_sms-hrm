@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[LeaveRequestDetail] (
     [RequestId] BIGINT   NOT NULL,
     [EmpId]     INT      NOT NULL,
-    [OnDate]    DATETIME NOT NULL,
+    [OnDate]    DATE     NOT NULL,
     [ShiftId]   INT      NULL,
     [LeaveType] INT      NULL,
     [IsHalfDay] BIT      NULL,
@@ -9,6 +9,8 @@
     [ToTime]    DATETIME NULL,
     [WorkType]  TINYINT  NULL
 ) ON [EmpRequest];
+
+
 
 
 

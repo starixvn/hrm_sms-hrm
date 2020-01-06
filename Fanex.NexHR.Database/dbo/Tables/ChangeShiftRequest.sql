@@ -1,9 +1,11 @@
 ﻿CREATE TABLE [dbo].[ChangeShiftRequest] (
-    [RequestId] BIGINT   NOT NULL,
-    [EmpId]     INT      NOT NULL,
-    [FromDate]  DATETIME NOT NULL,
-    [ToDate]    DATETIME NOT NULL,
-    [TypeId] TINYINT NOT NULL, 
+    [RequestId] BIGINT  NOT NULL,
+    [EmpId]     INT     NOT NULL,
+    [FromDate]  DATE    NOT NULL,
+    [ToDate]    DATE    NOT NULL,
+    [TypeId]    TINYINT CONSTRAINT [DF_ChangeShiftRequest_ChangeShiftType] DEFAULT ((1)) NOT NULL,
     CONSTRAINT [PK_ChangeShiftRequest] PRIMARY KEY CLUSTERED ([RequestId] ASC) ON [EmpRequest]
-);
+) ON [EmpRequest];
+
+
 

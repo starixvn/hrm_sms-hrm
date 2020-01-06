@@ -1,20 +1,21 @@
-﻿CREATE PROCEDURE [dbo].[Menu_Delete] @MenuId       INT,
-                                     @ErrCode    INT          = 0 OUTPUT,
-                                     @ErrMsg VARCHAR(200) = '' OUTPUT
+﻿
+CREATE PROCEDURE [dbo].[Menu_Delete] @MenuId INT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
-
 /*
 Created: 20160609@Razor.Nguyen
-Task: Create Role Management Services
-DB: SPM
-Original: 
+Task: delete menu
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 */
+BEGIN
+	SET NOCOUNT ON;
 
-     BEGIN
-         SET NOCOUNT ON;
-         DELETE FROM [dbo].[Menu]
-         WHERE [MenuId] = @MenuId;
-     END;
+	DELETE
+	FROM [dbo].[Menu]
+	WHERE [MenuId] = @MenuId
+END

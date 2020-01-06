@@ -25,7 +25,6 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @UnpaidLeaveType INT
-		,@employeeIds VARCHAR(MAX)
 		,@fromDate DATE = CAST(@year AS VARCHAR(5)) + '-01-01'
 		,@toDate DATE = CAST(@year AS VARCHAR(5)) + '-12-31'
 	DECLARE @tblGroupIds TABLE (GroupId INT)
@@ -77,13 +76,6 @@ BEGIN
 		INSERT INTO @tblEmployeeIds (EmpId)
 		VALUES (@EmpId)
 	END
-
-	SELECT @employeeIds = COALESCE(@employeeIds + ',', '') + CAST(EmpId AS VARCHAR(20))
-	FROM @tblEmployeeIds
-
-	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
-		,@toDate = @toDate
-		,@empIds = @employeeIds
 
 	SELECT SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 1
@@ -285,7 +277,7 @@ BEGIN
 		,g.GroupId
 		,g.Code
 		,g.[Name]
-	FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND ISNULL(emp.[Enabled], 0) = 1

@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[Department_Delete] @DepartmentId INT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
@@ -9,15 +8,10 @@ AS
 Created: 20151222@Quinn.Vo
 Task: delete Department.
 DB: HRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
-• @ErrCode:
-	= 0: Transaction recorded successfully.
-	> 0: Specific Error.
-• @ErrMsg: Error description.
-
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -65,10 +59,4 @@ BEGIN
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = GETDATE()
 	WHERE DepartmentId = @DepartmentId
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Delete department failed.'
-	END
 END

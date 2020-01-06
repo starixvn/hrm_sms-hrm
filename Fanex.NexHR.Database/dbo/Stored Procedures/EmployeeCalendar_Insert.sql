@@ -55,7 +55,7 @@ BEGIN
 			,WorkDate
 			,ShiftId
 			)
-		SELECT TOP 1 emp.EmpId
+		SELECT emp.EmpId
 			,@FromDate
 			,ShiftId
 		FROM dbo.Employee AS emp WITH (NOLOCK)

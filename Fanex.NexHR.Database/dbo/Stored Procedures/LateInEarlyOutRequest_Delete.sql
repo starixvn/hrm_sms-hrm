@@ -14,6 +14,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	IF NOT EXISTS (
 			SELECT 1

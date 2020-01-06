@@ -39,12 +39,4 @@ BEGIN
 		,@OldData
 		,@Data
 		)
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Insert log failed.'
-
-		RETURN
-	END
 END

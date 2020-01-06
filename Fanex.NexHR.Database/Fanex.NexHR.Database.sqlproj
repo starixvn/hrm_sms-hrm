@@ -336,7 +336,6 @@
     <Build Include="dbo\Stored Procedures\Postnatal_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Get.sql" />
     <Build Include="dbo\Stored Procedures\Postnatal_Delete.sql" />
-    <Build Include="dbo\Tables\EmployeeUploadFile.sql" />
     <Build Include="dbo\Tables\EmployeePaternity.sql" />
     <Build Include="dbo\Stored Procedures\Paternity_Update.sql" />
     <Build Include="dbo\Stored Procedures\Paternity_Insert.sql" />
@@ -452,7 +451,6 @@
     <Build Include="dbo\Stored Procedures\Menu_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenuById.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenus.sql" />
-    <Build Include="dbo\Stored Procedures\Menu_GetMenusById.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
     <Build Include="dbo\Stored Procedures\Employee_GetFullProfileInformation.sql" />
@@ -513,6 +511,7 @@
     <Build Include="dbo\Stored Procedures\Auto_Postnatal_UpdateWorkingHour.sql" />
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_Update.sql" />
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_UpdateForNewEmployee.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_UpdateIsPublic.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

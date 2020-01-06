@@ -21,32 +21,16 @@ BEGIN
 		,@OnBehalfRequestRoleId TINYINT = 5
 	DECLARE @q NVARCHAR(258) = '%' + ISNULL(@query, '') + '%'
 
-	CREATE TABLE #tblSupervisors (
-		OwnerId INT
-		,Nickname NVARCHAR(50)
-		,FullName NVARCHAR(100)
-		)
+	CREATE TABLE #tblSupervisors (OwnerId INT)
 
-	INSERT INTO #tblSupervisors (
-		OwnerId
-		,Nickname
-		,FullName
-		)
+	INSERT INTO #tblSupervisors (OwnerId)
 	SELECT EmpId
-		,NickName
-		,FullName
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE @includeLoginUser = 1
 		AND EmpId = @EmpId
 
-	INSERT INTO #tblSupervisors (
-		OwnerId
-		,Nickname
-		,FullName
-		)
+	INSERT INTO #tblSupervisors (OwnerId)
 	SELECT DISTINCT OwnerId
-		,emp.NickName
-		,emp.FullName
 	FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON es.OwnerId = emp.EmpId
 		AND emp.[Enabled] = 1
@@ -72,14 +56,8 @@ BEGIN
 			WHERE emp.EmpId = tbl.OwnerId
 			)
 
-	INSERT INTO #tblSupervisors (
-		OwnerId
-		,Nickname
-		,FullName
-		)
+	INSERT INTO #tblSupervisors (OwnerId)
 	SELECT DISTINCT emp.EmpId
-		,emp.NickName
-		,emp.FullName
 	FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON es.EmpId = emp.EmpId
 		AND emp.[Enabled] = 1
@@ -105,14 +83,8 @@ BEGIN
 			WHERE emp.EmpId = tbl.OwnerId
 			)
 
-	INSERT INTO #tblSupervisors (
-		OwnerId
-		,Nickname
-		,FullName
-		)
+	INSERT INTO #tblSupervisors (OwnerId)
 	SELECT DISTINCT emp.EmpId
-		,emp.NickName
-		,emp.FullName
 	FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
 		AND emp.[Enabled] = 1
@@ -138,9 +110,12 @@ BEGIN
 			)
 
 	SELECT OwnerId
-		,Nickname
-		,FullName
-	FROM #tblSupervisors
+		,emp.Nickname
+		,emp.FullName
+		,empsum.IsTopManager
+	FROM #tblSupervisors AS tbl
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON tbl.OwnerId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 	ORDER BY Nickname
 
 	DROP TABLE #tblSupervisors

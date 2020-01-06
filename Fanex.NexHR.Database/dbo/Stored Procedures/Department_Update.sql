@@ -1,8 +1,5 @@
-﻿/****** Object:  Stored Procedure dbo.Department_Update    Script Date: 7/20/2016 10:19:01 AM ******/
-/****** Object:  Stored Procedure dbo.Department_Update    Script Date: 7/19/2016 5:22:11 PM ******/
-
-CREATE PROCEDURE [dbo].[Department_Update] 
-	@DepartmentId INT
+﻿
+CREATE PROCEDURE [dbo].[Department_Update] @DepartmentId INT
 	,@Code VARCHAR(20)
 	,@Name VARCHAR(100)
 	,@ParentId INT = NULL
@@ -15,16 +12,10 @@ AS
 /*
 Created: 20151222@Quinn.Vo
 Task: Update Department.
-DB: NexEPA
-Original: 
+DB: HRM
+Original:
 
-Revisions:  
-Param's Explanation:
-• @ErrCode:
-	= 0: Transaction recorded successfully.
-	> 0: Specific Error.
-• @ErrMsg: Error description.
-
+Revisions:
 */
 BEGIN
 	SET NOCOUNT ON;

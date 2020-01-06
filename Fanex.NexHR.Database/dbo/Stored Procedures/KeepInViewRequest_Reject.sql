@@ -88,10 +88,4 @@ BEGIN
 
 	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = 'Reject unsuccessfully.'
-	END
 END

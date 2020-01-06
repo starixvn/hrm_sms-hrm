@@ -1,7 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveDetail]
-	-- Add the parameters for the stored procedure here
-	@FromDate DATE
+CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveDetail] @FromDate DATE
 	,@ToDate DATE
 	,@GroupId INT = NULL
 	,@EmployeeId INT = NULL
@@ -82,7 +80,7 @@ BEGIN
 			AND ldt.IsHalfDay = 1
 			INNER JOIN [dbo].[WorkingTimeRequest] AS rq WITH (NOLOCK) ON ldt.[RequestId] = rq.[RequestId]
 			AND rq.CurrentStatus IN (4, 6)
-			LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		WHERE emp.[Enabled] = 1
 			AND ISNULL(emp.IsDeleted, 0) = 0
 			AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
@@ -135,7 +133,7 @@ BEGIN
 			AND le.LeaveType = 0
 			INNER JOIN [dbo].[WorkingTimeRequest] AS rq WITH (NOLOCK) ON ldt.[RequestId] = rq.[RequestId]
 			AND rq.CurrentStatus IN (4, 6)
-			LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		WHERE emp.[Enabled] = 1
 			AND ISNULL(emp.IsDeleted, 0) = 0
 			AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
@@ -224,7 +222,7 @@ BEGIN
 				empC.LeaveTypeId = 2
 				OR empC.LeaveTypeId = 25
 				OR empC.LeaveTypeId2 = 2
-				OR empC.LeaveTypeId2 = 25 
+				OR empC.LeaveTypeId2 = 25
 				)
 			AND empC.WorkDate BETWEEN @FromDate
 				AND @ToDate
@@ -234,5 +232,5 @@ BEGIN
 				OR empC.LeaveTypeId2 = @LeaveTypeId
 				)
 		) a
-		ORDER BY LeaveDate DESC
+	ORDER BY LeaveDate DESC
 END

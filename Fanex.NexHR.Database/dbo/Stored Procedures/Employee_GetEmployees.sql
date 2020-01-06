@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256)
+﻿CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
 	,@groupIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -122,7 +121,6 @@ BEGIN
       ,[Enabled]
       ,[Phone]
       ,[Gender]
-      ,[ManagerId]
       ,[JoinedDate]
       ,[ConfirmedDate]
       ,[ResignedDate]

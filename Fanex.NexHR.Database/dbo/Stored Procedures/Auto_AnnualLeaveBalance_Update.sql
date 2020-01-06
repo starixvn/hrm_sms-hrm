@@ -23,7 +23,7 @@ BEGIN
 		,@FromDate DATE = CONVERT(NVARCHAR(10), @Year) + '/01/01'
 		,@ToDate DATE
 
-	SELECT @ToDate = DATEADD(YEAR, - 1, DATEADD(YEAR, 1, @FromDate))
+	SELECT @ToDate = DATEADD(DAY, - 1, DATEADD(YEAR, 1, @FromDate))
 
 	DECLARE @tblEmployeeBalance TABLE (
 		EmpId INT
@@ -117,17 +117,22 @@ BEGIN
 			AND lt.FromDate = @FromDate
 			AND ISNULL(lt.Deleted, 0) = 0
 			AND lt.RequestId IS NULL
-		WHERE @EmpId IS NULL
-			OR empsum.EmpId = @EmpId
-
-		DELETE dbo.LeaveTrans
-		WHERE (
-				@EmpId IS NULL
-				OR EmpId = @EmpId
+		WHERE EXISTS (
+				SELECT 1
+				FROM @tblEmployeeBalance AS tbl
+				WHERE empsum.EmpId = tbl.EmpId
 				)
-			AND FromDate = @FromDate
-			AND CreditDays > 0
-			AND RequestId IS NULL
+
+		DELETE lt
+		FROM dbo.LeaveTrans AS lt
+		WHERE lt.FromDate = @FromDate
+			AND lt.CreditDays > 0
+			AND lt.RequestId IS NULL
+			AND EXISTS (
+				SELECT 1
+				FROM @tblEmployeeBalance AS tbl
+				WHERE lt.EmpId = tbl.EmpId
+				)
 	END
 
 	UPDATE empsum

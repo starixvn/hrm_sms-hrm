@@ -46,10 +46,4 @@ BEGIN
 
 	DELETE dbo.ChangeShiftRequestDetailHistory WITH (ROWLOCK)
 	WHERE RequestId = @RequestId
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Delete unsuccessfully.'
-	END
 END

@@ -4,7 +4,7 @@
     [DomainUsername]   VARCHAR (50)   NULL,
     [FullName]         NVARCHAR (50)  NOT NULL,
     [NickName]         NVARCHAR (20)  NULL,
-    [DOB]              SMALLDATETIME  NOT NULL,
+    [DOB]              DATE           NOT NULL,
     [Email]            VARCHAR (50)   NULL,
     [JobTitleId]       INT            NULL,
     [Enabled]          BIT            CONSTRAINT [DF_Employee_Enabled] DEFAULT ((1)) NOT NULL,
@@ -13,11 +13,11 @@
     [GroupId]          INT            NULL,
     [Roles]            VARCHAR (20)   NULL,
     [ManagerId]        INT            NULL,
-    [JoinedDate]       SMALLDATETIME  NULL,
-    [ConfirmedDate]    SMALLDATETIME  NULL,
-    [ResignedDate]     SMALLDATETIME  NULL,
+    [JoinedDate]       DATE           NULL,
+    [ConfirmedDate]    DATE           NULL,
+    [ResignedDate]     DATE           NULL,
     [Skype]            VARCHAR (100)  NULL,
-    [Yahoo]         VARCHAR (100)  NULL,
+    [Yahoo]            VARCHAR (100)  NULL,
     [Marriage]         TINYINT        NULL,
     [LastLogin]        DATETIME       NULL,
     [CreatedDate]      DATETIME       NOT NULL,
@@ -36,7 +36,7 @@
     [Ethnic]           NVARCHAR (200) NULL,
     [Native]           NVARCHAR (200) NULL,
     [Religion]         NVARCHAR (200) NULL,
-    [DateOfIDCard]     DATETIME       NULL,
+    [DateOfIDCard]     DATE           NULL,
     [PlaceOfIDCard]    NVARCHAR (200) NULL,
     [HomePhone]        NVARCHAR (200) NULL,
     [Qualification]    NVARCHAR (300) NULL,
@@ -44,11 +44,13 @@
     [PasswordReset]    BIT            CONSTRAINT [DF_Employee_PasswordReset] DEFAULT ((0)) NULL,
     [EmployeeCard]     VARCHAR (10)   NULL,
     [PickupRemark]     NVARCHAR (200) NULL,
-    [SectionDate] DATE NULL, 
-    [PromotionDate] DATE NULL, 
-    [LetsTalk] VARCHAR(100) NULL, 
+    [SectionDate]      DATE           NULL,
+    [PromotionDate]    DATE           NULL,
+    [LetsTalk]         VARCHAR (100)  NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
+
+
 
 
 

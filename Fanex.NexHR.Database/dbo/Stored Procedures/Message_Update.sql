@@ -1,8 +1,5 @@
-﻿/****** Object:  Stored Procedure dbo.Message_Update    Script Date: 7/20/2016 10:19:13 AM ******/
-/****** Object:  Stored Procedure dbo.Message_Update    Script Date: 7/19/2016 5:22:18 PM ******/
-
-CREATE PROCEDURE [dbo].[Message_Update] 
-	@MessageId INT
+﻿
+CREATE PROCEDURE [dbo].[Message_Update] @MessageId INT
 	,@Subject VARCHAR(100)
 	,@Contents NVARCHAR(MAX)
 	,@Category TINYINT
@@ -17,77 +14,81 @@ AS
 /*
 Created: 20140714@Quinn.Vo
 Task: Update Message.
-DB: NexEPA
-Original: 
+DB: HRM
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
-• @ErrCode:
-	= 0: Transaction recorded successfully.
-	> 0: Specific Error.
-• @ErrMsg: Error description.
-
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	IF(@FromDate IS NOT NULL AND @ToDate IS NOT NULL AND @FromDate > @ToDate)
+	IF @FromDate IS NOT NULL
+		AND @ToDate IS NOT NULL
+		AND @FromDate > @ToDate
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'.The From Date must be less than To Date.'
+			,@ErrMsg = N'The From Date must be less than To Date.'
 
 		RETURN
 	END
 
-	DECLARE @Employees TABLE(
-		EmployeeId INT
-	)
-	DECLARE @Groups TABLE(
-		GroupId INT
-	)
+	DECLARE @tblEmployee TABLE (EmployeeId INT)
+	DECLARE @tblGroup TABLE (GroupId INT)
 
 	UPDATE dbo.[Message] WITH (ROWLOCK, UPDLOCK)
-	SET [Subject] = @Subject,
-		Contents = @Contents,
-		Category = @Category,
-		FromDate = @FromDate,
-		ToDate = @ToDate,
-		ModifiedBy = @ModifiedBy,
-		ModifiedDate = GETDATE()
+	SET [Subject] = @Subject
+		,Contents = @Contents
+		,Category = @Category
+		,FromDate = @FromDate
+		,ToDate = @ToDate
+		,ModifiedBy = @ModifiedBy
+		,ModifiedDate = GETDATE()
 	WHERE MessageId = @MessageId
 
-	DELETE FROM dbo.MessageGroup WHERE MessageId = @MessageId
-	IF(@GroupIds <> '')
-	BEGIN
-		INSERT INTO @Groups (GroupId)
-		SELECT val FROM fnc_strSplit (@GroupIds, ',')
+	DELETE dbo.MessageGroup WITH (ROWLOCK)
+	WHERE MessageId = @MessageId
 
-		INSERT INTO dbo.MessageGroup(MessageId, GroupId, Email)
-		SELECT @MessageId, g.GroupId, gr.MailGroup
-		FROM @Groups AS g INNER JOIN
-		dbo.[Group] AS gr ON g.GroupId = gr.GroupId
+	IF @GroupIds <> ''
+	BEGIN
+		INSERT INTO @tblGroup (GroupId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@GroupIds, ',')
+
+		INSERT INTO dbo.MessageGroup (
+			MessageId
+			,GroupId
+			,Email
+			)
+		SELECT @MessageId
+			,g.GroupId
+			,gr.MailGroup
+		FROM @tblGroup AS g
+			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON g.GroupId = gr.GroupId
 	END
 
-	DELETE FROM dbo.MessageEmployee WHERE MessageId = @MessageId
-	IF(@EmployeeIds <> '')
-	BEGIN
-		INSERT INTO @Employees (EmployeeId)
-		SELECT val FROM fnc_strSplit (@EmployeeIds, ',')
+	DELETE dbo.MessageEmployee WITH (ROWLOCK)
+	WHERE MessageId = @MessageId
 
-		INSERT INTO dbo.MessageEmployee(MessageId, EmployeeId, Email, IsDisabled, IsRead)
-		SELECT @MessageId, e.EmployeeId, ee.Email, 0, 0
-		FROM @Employees AS e INNER JOIN
-		dbo.Employee AS ee ON e.EmployeeId = ee.EmpId
-	END
+	IF @EmployeeIds <> ''
+	BEGIN
+		INSERT INTO @tblEmployee (EmployeeId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@EmployeeIds, ',')
 
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Update Message failed.'
-	END
-	ELSE
-	BEGIN
-		SELECT @ErrCode = 0
-			,@ErrMsg = ''
+		INSERT INTO dbo.MessageEmployee (
+			MessageId
+			,EmployeeId
+			,Email
+			,IsDisabled
+			,IsRead
+			)
+		SELECT @MessageId
+			,e.EmployeeId
+			,ee.Email
+			,0
+			,0
+		FROM @tblEmployee AS e
+			INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON e.EmployeeId = ee.EmpId
 	END
 END
