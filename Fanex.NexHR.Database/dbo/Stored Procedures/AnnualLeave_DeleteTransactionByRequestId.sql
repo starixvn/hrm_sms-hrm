@@ -1,8 +1,5 @@
-﻿/****** Object:  Stored Procedure dbo.AnnualLeave_DeleteTransactionByRequestId    Script Date: 7/20/2016 10:18:59 AM ******/
-/****** Object:  Stored Procedure dbo.AnnualLeave_DeleteTransactionByRequestId    Script Date: 7/19/2016 5:22:10 PM ******/
-
-CREATE PROCEDURE [dbo].[AnnualLeave_DeleteTransactionByRequestId] 
-	@RequestId INT
+﻿
+CREATE PROCEDURE [dbo].[AnnualLeave_DeleteTransactionByRequestId] @RequestId INT
 	,@ModifiedDate DATETIME
 	,@ModifiedBy INT
 AS
@@ -10,27 +7,27 @@ AS
 Created: Quinn.Vo@20150928
 Task: Delete leave transaction and calculate annual leave balance for employee
 DB: HRM
-Original: 
+Original:
 
 Revisions:
 Param's Explanation:
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
 
 	DECLARE @OldDeductDays NUMERIC(18, 1)
 		,@OldCreditDays NUMERIC(18, 1)
-		,@EmpID INT
+		,@EmpId INT
 		,@isDeleted BIT
 
-	SELECT @EmpID = EmpID
+	SELECT @EmpId = EmpId
 		,@OldDeductDays = ISNULL(DeductDays, 0)
 		,@OldCreditDays = ISNULL(CreditDays, 0)
 		,@isDeleted = Deleted
 	FROM dbo.LeaveTrans WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	IF (ISNULL(@isDeleted, 0) = 1) RETURN;
+	IF ISNULL(@isDeleted, 0) = 1 RETURN
 
 	UPDATE dbo.LeaveTrans WITH (ROWLOCK, UPDLOCK)
 	SET Deleted = 1

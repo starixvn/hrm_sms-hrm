@@ -254,7 +254,7 @@ BEGIN
 							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
 							WHERE emp.EmployeeId = offrep.EmployeeId
 								AND empca.WorkDate = offrep.WorkDate
-								AND empca.ModifierId IS NULL
+								--AND empca.ModifierId IS NULL
 								AND empca.IsOvertime = 0
 							)
 						)
@@ -269,14 +269,19 @@ BEGIN
 			INNER JOIN @tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
-			--AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
 			AND ISNULL(empca.IsFixedOffDay, 0) = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmpId = offrep.EmployeeId
-					--AND empca.ModifiedBy IS NULL
+					AND (
+						(
+							emp.TotalOffDaysUsed < emp.OffDaysByWeek
+							AND empca.ModifiedBy IS NULL
+							)
+						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+						)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate
@@ -288,14 +293,19 @@ BEGIN
 			INNER JOIN @tblEmployeeWeekly AS emp ON empca.EmployeeId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
-			--AND emp.TotalOffDaysUsed < emp.OffDaysByWeek
 		WHERE empca.IsOffDay = 1
 			AND empca.IsFixedOffDay = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmployeeId = offrep.EmployeeId
-					--AND empca.ModifierId IS NULL
+					AND (
+						(
+							emp.TotalOffDaysUsed < emp.OffDaysByWeek
+							AND empca.ModifierId IS NULL
+							)
+						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+						)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate

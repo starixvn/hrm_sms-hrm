@@ -1,7 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.AnnualLeave_InsertTransaction    Script Date: 7/20/2016 10:18:59 AM ******/
-/****** Object:  Stored Procedure dbo.AnnualLeave_InsertTransaction    Script Date: 7/19/2016 5:22:10 PM ******/
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿
 CREATE PROCEDURE [dbo].[AnnualLeave_InsertTransaction] @EmpId INT
 	,@RequestId INT = NULL
 	,@Description NVARCHAR(4000) = ''
@@ -18,14 +15,14 @@ AS
 Created: Tom.Vo@2013-10-29
 Task: record leave transaction and calculate annual leave balance for employee
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 
 */
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
 	IF EXISTS (
@@ -68,46 +65,30 @@ BEGIN
 		RETURN
 	END
 
-	BEGIN TRY
-		BEGIN TRANSACTION
+	INSERT INTO dbo.LeaveTrans (
+		EmpId
+		,RequestId
+		,[Description]
+		,FromDate
+		,ToDate
+		,DeductDays
+		,CreditDays
+		,CreatedDate
+		,CreatedBy
+		)
+	VALUES (
+		@EmpId
+		,@RequestId
+		,@Description
+		,@FromDate
+		,@ToDate
+		,@DeductDays
+		,@CreditDays
+		,@CreatedDate
+		,@CreatedBy
+		)
 
-		INSERT INTO dbo.LeaveTrans (
-			EmpId
-			,RequestId
-			,[Description]
-			,FromDate
-			,ToDate
-			,DeductDays
-			,CreditDays
-			,CreatedDate
-			,CreatedBy
-			)
-		VALUES (
-			@EmpId
-			,@RequestId
-			,@Description
-			,@FromDate
-			,@ToDate
-			,@DeductDays
-			,@CreditDays
-			,@CreatedDate
-			,@CreatedBy
-			)
-
-		UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
-		SET AnnualLeaveBalance = ISNULL(AnnualLeaveBalance, 0) + ISNULL(@CreditDays, 0) - ISNULL(@DeductDays, 0)
-		WHERE EmpId = @EmpId
-
-		COMMIT TRANSACTION;
-
-		SELECT @ErrCode = 0
-			,@ErrCode = ''
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION;
-
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'working calendar for an employee failed.'
-	END CATCH;
+	UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
+	SET AnnualLeaveBalance = ISNULL(AnnualLeaveBalance, 0) + ISNULL(@CreditDays, 0) - ISNULL(@DeductDays, 0)
+	WHERE EmpId = @EmpId
 END
