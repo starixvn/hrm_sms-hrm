@@ -109,10 +109,6 @@
     <Build Include="dbo\Tables\ExtensionNumbers.sql" />
     <Build Include="dbo\Tables\Group.sql" />
     <Build Include="dbo\Tables\Holiday.sql" />
-    <Build Include="dbo\Tables\InoutMissRequest.sql" />
-    <Build Include="dbo\Tables\InoutMissRequestHistory.sql" />
-    <Build Include="dbo\Tables\InOutRequest.sql" />
-    <Build Include="dbo\Tables\InOutRequestHistory.sql" />
     <Build Include="dbo\Tables\EmployeeRole.sql" />
     <Build Include="dbo\Tables\KeepInViewRequest.sql" />
     <Build Include="dbo\Tables\KeepInViewRequestHistory.sql" />
@@ -201,9 +197,7 @@
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertTransaction.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_Get.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_ResetMultipleTransactions.sql" />
-    <Build Include="dbo\Stored Procedures\AnnualLeave_RollbackTransferAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\Function_GetFunctions.sql" />
-    <Build Include="dbo\Stored Procedures\AnnualLeave_TransferAnnualBalance.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_UpdateTransaction.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_Get.sql" />
     <Build Include="dbo\Stored Procedures\Country_GetAll.sql" />
