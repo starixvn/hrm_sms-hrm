@@ -100,7 +100,7 @@ const LeaveRequest = (function ($) {
             LeaveRequest.isToTimeAfterDay = $('#IsToTimeAfterDay');
 
             LeaveRequest.autocomplete();
-
+            LeaveRequest.getLeaveTypeInfo();
             $('#errors-model-state').hide();
 
             // for edit
@@ -310,9 +310,17 @@ const LeaveRequest = (function ($) {
             LeaveRequest.getLeaveDetail();
             LeaveRequest.getLeaveBalance();
         },
-        leaveTypeChange: function () {
-            var description = LeaveRequest.leaveTypeId.children('option:selected').attr('title');
+        getLeaveTypeInfo: function () {
+            const description = LeaveRequest.leaveTypeId.children('option:selected').attr('title');
             LeaveRequest.leavetypeInfo.attr('title', description ? description : '');
+            if (description && description.length > 0) {
+                LeaveRequest.leavetypeInfo.show();
+            } else {
+                LeaveRequest.leavetypeInfo.hide();
+            }
+        },
+        leaveTypeChange: function () {
+            LeaveRequest.getLeaveTypeInfo();
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
         },
@@ -596,7 +604,7 @@ const LeaveRequest = (function ($) {
         },
         getApprover: function () {
             $.getJSON(resolveClientUrl('Request/GetApprovers'),
-            { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
+                { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
                 function (response) {
                     if (response !== null) {
                         var options = '';

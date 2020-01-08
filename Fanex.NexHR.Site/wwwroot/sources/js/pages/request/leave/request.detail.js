@@ -200,9 +200,9 @@ var LeaveRequestDetail = (function ($) {
             LeaveRequestDetail.getTotalLeave();
         },
         getTotalLeave: function () {
-            var totalAnnualLeave = 0;
-            var totalUnpaidLeave = 0;
-            var objectTr = $(".tabledata tbody tr");
+            let totalAnnualLeave = 0,
+                totalUnpaidLeave = 0,
+                objectTr = $(".tabledata tbody tr");
             for (var i = 0; i < objectTr.length; i++) {
                 var currentObject = objectTr[i];
                 if ($(currentObject).find(".ddlWorkType").first().val() === LeaveRequestDetail.leaveWorkType) {
@@ -294,6 +294,7 @@ var LeaveRequestDetail = (function ($) {
                 $("select").attr("disabled", "disabled");
                 $("textarea").attr("disabled", "disabled");
                 $(".tdhalfday").hide();
+                LeaveRequestDetail.getTotalLeave();
             }
         },
         showHideControlByWorkType: function () {

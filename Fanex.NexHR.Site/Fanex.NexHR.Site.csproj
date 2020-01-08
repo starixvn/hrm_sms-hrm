@@ -1105,7 +1105,6 @@
     <Content Include="Views\Report\_UnpaidLeaveSummaryDetails.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\employee\details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\edit.scss" />
-    <Content Include="wwwroot\sources\styles\pages\report\report.attendance.scss" />
     <Content Include="wwwroot\sources\styles\pages\error.scss" />
     <Content Include="wwwroot\sources\styles\pages\postnatal\postnatal.scss" />
     <Content Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
@@ -1183,7 +1182,6 @@
     <Content Include="wwwroot\dist\js\lateinearlyout.create.js.map" />
     <Content Include="wwwroot\dist\js\lateinearlyout.edit.js.map" />
     <Content Include="wwwroot\dist\styles\lateinearlyout.create.js.map" />
-    <Content Include="wwwroot\sources\styles\pages\report\weekend.leave.scss" />
     <Content Include="wwwroot\dist\styles\report.weekend.leave.js.map" />
     <Content Include="wwwroot\sources\styles\pages\request\checkinout\create.scss" />
     <Content Include="wwwroot\dist\js\checkinout.create.js.map" />

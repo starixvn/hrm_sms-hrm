@@ -307,29 +307,29 @@
     <Setting Key="LeaveRequest_VoidBySA" SpName="LeaveRequest_VoidBySA" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_GetLeaveBalance" SpName="LeaveRequest_GetLeaveBalance" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="LeaveRequest_GetById" SpName="LeaveRequest_GetById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+      <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="HRId" ObjectProperty="Id" Class="Employee" />
     </Setting>
     <Setting Key="LeaveRequest_GetDetailById" SpName="LeaveRequest_GetDetailById" DbName="nexhrx" Plain="0" />
     <Setting Key="LeaveRequest_GetByDate" SpName="LeaveRequest_GetByDate" DbName="nexhrx" Plain="0">
-      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+      <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="HRId" ObjectProperty="Id" Class="Employee" />
     </Setting>
     <Setting Key="LeaveRequest_GetHistoryById" SpName="LeaveRequest_GetHistoryById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="VerifierId" ObjectProperty="Id" />
-      <Mapping DataField="ApproverId" ObjectProperty="Id" />
-      <Mapping DataField="HRId" ObjectProperty="Id" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+      <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
+      <Mapping DataField="VerifierId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="ApproverId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="HRId" ObjectProperty="Id" Class="Employee" />
     </Setting>
     <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
     <Setting Key="LeaveRequest_GetCalendar" SpName="LeaveRequest_GetCalendar" DbName="nexhrx" Plain="0">
