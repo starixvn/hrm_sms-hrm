@@ -411,8 +411,6 @@
     <Content Include="wwwroot\dist\styles\report.time.record.js" />
     <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.css" />
     <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.js" />
-    <Content Include="wwwroot\dist\styles\report.weekend.leave.css" />
-    <Content Include="wwwroot\dist\styles\report.weekend.leave.js" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.css" />
     <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
     <Content Include="wwwroot\dist\styles\report.yearlyovertime.css" />
@@ -1182,7 +1180,6 @@
     <Content Include="wwwroot\dist\js\lateinearlyout.create.js.map" />
     <Content Include="wwwroot\dist\js\lateinearlyout.edit.js.map" />
     <Content Include="wwwroot\dist\styles\lateinearlyout.create.js.map" />
-    <Content Include="wwwroot\dist\styles\report.weekend.leave.js.map" />
     <Content Include="wwwroot\sources\styles\pages\request\checkinout\create.scss" />
     <Content Include="wwwroot\dist\js\checkinout.create.js.map" />
     <Content Include="wwwroot\dist\js\checkinout.edit.js.map" />
