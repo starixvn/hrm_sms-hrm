@@ -42,22 +42,13 @@
     <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="GroupCode" ObjectProperty="Code" />
-    </Setting>
+    <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0" />
     <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_Manpower" SpName="Report_Manpower" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_ManpowerCategory" SpName="Report_ManpowerCategory" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupName" ObjectProperty="Section" />
-    </Setting>
-    <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-    </Setting>
-    <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-    </Setting>
+    <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="nexhrx" Plain="0" />
+    <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="nexhrx" Plain="0" />
+    <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="nexhrx" Plain="0" />
     <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_GetWeekendLeaveDetail" SpName="Report_GetWeekendLeaveDetail" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="nexhrx" Plain="0"></Setting>
@@ -198,12 +189,9 @@
     <Setting Key="AnnualLeave_InsertMultipleTransactions" SpName="AnnualLeave_InsertMultipleTransactions" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="AnnualLeave_UpdateTransaction" SpName="AnnualLeave_UpdateTransaction" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="AnnualLeave_DeleteTransaction" SpName="AnnualLeave_DeleteTransaction" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="AnnualLeave_GetTransByEmp" SpName="AnnualLeave_GetTransByEmp" DbName="nexhrx" Plain="0">
-    </Setting>
-    <Setting Key="AnnualLeave_GetByID" SpName="AnnualLeave_GetByID" DbName="nexhrx" Plain="0">
-    </Setting>
-    <Setting Key="AnnualLeave_ResetMultipleTransactions" SpName="AnnualLeave_ResetMultipleTransactions" DbName="nexhrx" Plain="0">
-    </Setting>
+    <Setting Key="AnnualLeave_GetTransByEmp" SpName="AnnualLeave_GetTransByEmp" DbName="nexhrx" Plain="0" />
+    <Setting Key="AnnualLeave_GetByID" SpName="AnnualLeave_GetByID" DbName="nexhrx" Plain="0" />
+    <Setting Key="AnnualLeave_ResetMultipleTransactions" SpName="AnnualLeave_ResetMultipleTransactions" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Message">
     <Setting Key="Message_GetByCreator" SpName="Message_GetByCreator" DbName="nexhrx" Plain="0"></Setting>
@@ -490,16 +478,10 @@
     <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetEmployeeToRemindClaim" SpName="Overtime_GetEmployeeToRemindClaim" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Overtime_GetDetailsByRequestIds" SpName="Overtime_GetDetailsByRequestIds" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="nexhrx" Plain="0">
-      <Mapping DataField="Name" ObjectProperty="Section" />
-    </Setting>
+    <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="nexhrx" Plain="0" />
     <Setting Key="Report_MonthlyOvertimeDetails" SpName="Report_MonthlyOvertimeDetails" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Report_MonthlyOvertime" SpName="Report_MonthlyOvertime" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupName" ObjectProperty="Section" />
-    </Setting>
-    <Setting Key="Report_DailyOvertime" SpName="Report_DailyOvertime" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupName" ObjectProperty="Section" />
-    </Setting>
+    <Setting Key="Report_MonthlyOvertime" SpName="Report_MonthlyOvertime" DbName="nexhrx" Plain="0" />
+    <Setting Key="Report_DailyOvertime" SpName="Report_DailyOvertime" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Log">
     <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="nexhrx" Plain="0" />

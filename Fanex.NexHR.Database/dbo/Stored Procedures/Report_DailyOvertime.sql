@@ -31,13 +31,12 @@ BEGIN
 	SELECT val
 	FROM dbo.fnc_strSplit(@groupids, ',')
 
-	SELECT emp.EmpId AS EmployeeId
+	SELECT emp.EmpId
 		,emp.NickName
 		,emp.FullName
 		,emp.Code
 		,gr.GroupId
-		,gr.Code AS GroupCode
-		,gr.[Name] AS GroupName
+		,gr.[Name] AS Section
 		,ot.OvertimeDate AS WorkDate
 		,s.ShiftId
 		,s.Code AS ShiftCode

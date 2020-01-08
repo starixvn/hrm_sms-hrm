@@ -57,16 +57,16 @@
             var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
             var index = 1;
 
-            foreach (var item in leaveSummaryList)
+            foreach (LeaveSummaryByTeam item in leaveSummaryList)
             {
-                if (item.Team != null && item.LeaveSummaryInTeam.Count > 0)
+                if (item.LeaveSummaryInTeam.Count > 0)
                 {
                     //// add row team
                     var rowCopy = _RowStartBodyLeaveSummary + 2;
                     sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                     var rowTeam = sheet.GetRow(rowIndex);
                     var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(item.Team.Name.ToUpperInvariant());
+                    cellTeam.SetCellValue(item.Section.ToUpperInvariant());
                     sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 18);
                     rowTeam.Height = height;
 
@@ -79,8 +79,8 @@
                         row.Height = height;
 
                         row.GetCell(0).SetCellValue(index);
-                        row.GetCell(1).SetCellValue(leaveSummary.Employee.NickName);
-                        row.GetCell(2).SetCellValue(leaveSummary.Employee.FullName);
+                        row.GetCell(1).SetCellValue(leaveSummary.Nickname);
+                        row.GetCell(2).SetCellValue(leaveSummary.FullName);
                         row.GetCell(3).SetCellValue(leaveSummary.CreditKIV);
                         row.GetCell(4).SetCellValue(leaveSummary.AnnualLeaveCurrentYear);
                         row.GetCell(5).SetCellValue(leaveSummary.Jan);

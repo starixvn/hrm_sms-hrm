@@ -100,11 +100,11 @@ BEGIN
 		,@toDate = @toDate
 		,@empIds = @employeeIds
 
-	SELECT emp.EmpId AS EmployeeId
+	SELECT emp.EmpId
 		,emp.Code
 		,emp.FullName
 		,emp.NickName
-		,gr.[Name] AS GroupName
+		,gr.[Name] AS Section
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,SUM(ISNULL(empatt.TotalWorkHours, 0)) AS TotalWorkingHours

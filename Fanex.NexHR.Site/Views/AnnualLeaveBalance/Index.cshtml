@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Models
+@using Fanex.NexHR.Resources
 @model LeaveSummaryViewModel
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
@@ -49,7 +50,7 @@
                     </div>
                     <div class="input-form">
                         @Html.TextBox("Employee", Model.Employee,
-                     new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                            new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
                         @Html.HiddenFor(model => model.EmployeeId)
                     </div>
                 </div>
@@ -58,9 +59,7 @@
                     <div class="label-form">
                         <label class="control-label">@Labels.DepartmentSection</label>
                     </div>
-                    <div class="input-form">
-                        <div class="grid_6" id="Section"></div>
-                    </div>
+                    <div class="input-form" id="Section"></div>
                 </div>
 
                 <div class="form-group form-group--m">
@@ -140,7 +139,7 @@
     @*Check if exists*@
     @{
         bool checkSummaryList = true;
-        foreach (LeaveSummaryByTeam leaveSumaryByTeam in ViewBag.LeaveSummaryByTeamList)
+        foreach (LeaveSummaryByTeam leaveSumaryByTeam in Model.LeaveSumaries)
         {
             if (leaveSumaryByTeam.LeaveSummaryInTeam.Count > 0)
             {
@@ -156,13 +155,13 @@
     @if (checkSummaryList)
     {
         <tbody>
-            @foreach (LeaveSummaryByTeam item in ViewBag.LeaveSummaryByTeamList)
+            @foreach (LeaveSummaryByTeam item in Model.LeaveSumaries)
             {
                 if (item.LeaveSummaryInTeam.Count > 0)
                 {
                     <tr>
                         <td class="rowdivider align-left" colspan="19">
-                            <b>@item.Team.Name.ToUpper()</b>
+                            <b>@item.Section.ToUpper()</b>
                         </td>
                     </tr>
                 }
@@ -172,12 +171,12 @@
                         @if (hasPermissionToEdit)
                         {
                             <td>
-                                <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.Employee.Id" data-id="@leave.Employee.Id" />
-                                <label for="checkbox-@leave.Employee.Id"></label>
+                                <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.EmpId" data-id="@leave.EmpId" />
+                                <label for="checkbox-@leave.EmpId"></label>
                             </td>
                         }
-                        <td class="tooltip-tipsy" title="@leave.Employee.FullName">
-                            @leave.Employee.NickName
+                        <td>
+                            <span class="tooltip-tipsy" title="@leave.FullName">@leave.Nickname</span>
                         </td>
                         <td>
                             @if (leave.CreditKIV > 0)
@@ -186,189 +185,93 @@
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.AnnualLeaveCurrentYear > 0)
-                                {
-                                    <span>@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
-                                }
-                                if (leave.AnnualLeaveCurrentYear < 0)
-                                {
-                                    <span class="red">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
-                                }
+                            @if (leave.AnnualLeaveCurrentYear != 0)
+                            {
+                                <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Jan > 0)
-                                {
-                                    <span>@leave.Jan.ToString("0.0")</span>
-                                }
-                                if (leave.Jan < 0)
-                                {
-                                    <span class="red">@leave.Jan.ToString("0.0")</span>
-                                }
+                            @if (leave.Jan != 0)
+                            {
+                                <span class="@(leave.Jan < 0 ? "red" : string.Empty)">@leave.Jan.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Feb > 0)
-                                {
-                                    <span>@leave.Feb.ToString("0.0")</span>
-                                }
-                                if (leave.Feb < 0)
-                                {
-                                    <span class="red">@leave.Feb.ToString("0.0")</span>
-                                }
+                            @if (leave.Feb != 0)
+                            {
+                                <span class="@(leave.Feb < 0 ? "red" : string.Empty)">@leave.Feb.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Mar > 0)
-                                {
-                                    <span>@leave.Mar.ToString("0.0")</span>
-                                }
-                                if (leave.Mar < 0)
-                                {
-                                    <span class="red">@leave.Mar.ToString("0.0")</span>
-                                }
+                            @if (leave.Mar != 0)
+                            {
+                                <span class="@(leave.Mar < 0 ? "red" : string.Empty)">@leave.Mar.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Apr > 0)
-                                {
-                                    <span>@leave.Apr.ToString("0.0")</span>
-                                }
-                                if (leave.Apr < 0)
-                                {
-                                    <span class="red">@leave.Apr.ToString("0.0")</span>
-                                }
+                            @if (leave.Apr != 0)
+                            {
+                                <span class="@(leave.Apr < 0 ? "red" : string.Empty)">@leave.Apr.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.May > 0)
-                                {
-                                    <span>@leave.May.ToString("0.0")</span>
-                                }
-                                if (leave.May < 0)
-                                {
-                                    <span class="red">@leave.May.ToString("0.0")</span>
-                                }
+                            @if (leave.May != 0)
+                            {
+                                <span class="@(leave.May < 0 ? "red" : string.Empty)">@leave.May.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Jun > 0)
-                                {
-                                    <span>@leave.Jun.ToString("0.0")</span>
-                                }
-                                if (leave.Jun < 0)
-                                {
-                                    <span class="red">@leave.Jun.ToString("0.0")</span>
-                                }
+                            @if (leave.Jun != 0)
+                            {
+                                <span class="@(leave.Jun < 0 ? "red" : string.Empty)">@leave.Jun.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Jul > 0)
-                                {
-                                    <span>@leave.Jul.ToString("0.0")</span>
-                                }
-                                if (leave.Jul < 0)
-                                {
-                                    <span class="red">@leave.Jul.ToString("0.0")</span>
-                                }
+                            @if (leave.Jul != 0)
+                            {
+                                <span class="@(leave.Jul < 0 ? "red" : string.Empty)">@leave.Jul.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Aug > 0)
-                                {
-                                    <span>@leave.Aug.ToString("0.0")</span>
-                                }
-                                if (leave.Aug < 0)
-                                {
-                                    <span class="red">@leave.Aug.ToString("0.0")</span>
-                                }
+                            @if (leave.Aug != 0)
+                            {
+                                <span class="@(leave.Aug < 0 ? "red" : string.Empty)">@leave.Aug.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Sep > 0)
-                                {
-                                    <span>@leave.Sep.ToString("0.0")</span>
-                                }
-                                if (leave.Sep < 0)
-                                {
-                                    <span class="red">@leave.Sep.ToString("0.0")</span>
-                                }
+                            @if (leave.Sep != 0)
+                            {
+                                <span class="@(leave.Sep < 0 ? "red" : string.Empty)">@leave.Sep.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Oct > 0)
-                                {
-                                    <span>@leave.Oct.ToString("0.0")</span>
-                                }
-                                if (leave.Oct < 0)
-                                {
-                                    <span class="red">@leave.Oct.ToString("0.0")</span>
-                                }
+                            @if (leave.Oct != 0)
+                            {
+                                <span class="@(leave.Oct < 0 ? "red" : string.Empty)">@leave.Oct.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Nov > 0)
-                                {
-                                    <span>@leave.Nov.ToString("0.0")</span>
-                                }
-                                if (leave.Nov < 0)
-                                {
-                                    <span class="red">@leave.Nov.ToString("0.0")</span>
-                                }
+                            @if (leave.Nov != 0)
+                            {
+                                <span class="@(leave.Nov < 0 ? "red" : string.Empty)">@leave.Nov.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.Dec > 0)
-                                {
-                                    <span>@leave.Dec.ToString("0.0")</span>
-                                }
-                                if (leave.Dec < 0)
-                                {
-                                    <span class="red">@leave.Dec.ToString("0.0")</span>
-                                }
+                            @if (leave.Dec != 0)
+                            {
+                                <span class="@(leave.Dec < 0 ? "red" : string.Empty)">@leave.Dec.ToString("0.0")</span>
                             }
                         </td>
                         <td>
-                            @{
-                                if (leave.LeaveBalance >= 0)
-                                {
-                                    <span>@leave.LeaveBalance.ToString("0.0")</span>
-                                }
-                                if (leave.LeaveBalance < 0)
-                                {
-                                    <span class="red">@leave.LeaveBalance.ToString("0.0")</span>
-                                }
-                            }
+                            <span class="@(leave.LeaveBalance < 0 ? "red" : string.Empty)">@leave.LeaveBalance.ToString("0.0")</span>
                         </td>
                         <td>
-                            @{
-                                if (leave.KIVBalance >= 0)
-                                {
-                                    <span>@leave.KIVBalance.ToString("0.0")</span>
-                                }
-                                if (leave.KIVBalance < 0)
-                                {
-                                    <span class="red">@leave.KIVBalance.ToString("0.0")</span>
-                                }
-                            }
+                            <span class="@(leave.KIVBalance < 0 ? "red" : string.Empty)">@leave.KIVBalance.ToString("0.0")</span>
                         </td>
                         @if (hasPermissionToEdit)
                         {
                             <td>
-                                <a href="~/annualleavebalance/employee/@leave.Employee.Id">
+                                <a href="~/annualleavebalance/employee/@leave.EmpId">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                             </td>

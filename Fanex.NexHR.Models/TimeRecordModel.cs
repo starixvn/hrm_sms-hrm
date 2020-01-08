@@ -6,11 +6,12 @@
     public class TimeRecordModel
     {
         public int RecordTimeId { get; set; }
-
-        public Employee Employee { get; set; }
-
+        public int EmpId { get; set; }
+        public string Code { get; set; }
+        public string Nickname { get; set; }
+        public string FullName { get; set; }
+        public string Section { get; set; }
         public DateTime RecordTime { get; set; }
-
         public byte? InOutType { get; set; }
 
         public string GetInOutName

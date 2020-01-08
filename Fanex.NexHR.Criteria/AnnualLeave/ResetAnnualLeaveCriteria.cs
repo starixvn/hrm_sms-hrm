@@ -24,7 +24,7 @@
                 {
                     foreach (LeaveSummary leaveSummary in AnnualLeaves)
                     {
-                        value.AppendFormat(_AnnualLeaveTpl, leaveSummary.Employee.Id, leaveSummary.LeaveBalance);
+                        value.AppendFormat(_AnnualLeaveTpl, leaveSummary.EmpId, leaveSummary.LeaveBalance);
                     }
                 }
 

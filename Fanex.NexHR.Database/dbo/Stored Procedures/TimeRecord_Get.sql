@@ -1,35 +1,26 @@
 ﻿
 --[TimeRecord_Get] null, '2016-12-20', '2016-12-20'
 CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
-	,@FromDate DATETIME
-	,@ToDate DATETIME
+	,@FromDate DATE
+	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@PageIndex INT = NULL
 	,@ItemsPerPage INT = NULL
-	,@TotalItem INT = NULL OUT
-WITH RECOMPILE AS 
+	,@TotalItem INT = 0 OUT
+AS
 /*
 Created: Quinn.Vo@2014-01-24
 Task: Get Time Record
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 
 */
 BEGIN
-	SET NOCOUNT OFF;
-	set arithabort on;
-set concat_null_yields_null on;
-set ansi_nulls on;
-set cursor_close_on_commit off;
-set ansi_null_dflt_on on;
-set implicit_transactions off;
-set ansi_padding on;
-set ansi_warnings on;
-set quoted_identifier on;
+	SET NOCOUNT ON;
 
 	IF OBJECT_ID('tempdb..#tblTimeRecord') IS NOT NULL
 	BEGIN
@@ -42,36 +33,32 @@ set quoted_identifier on;
 		,InOutType TINYINT
 		,EmpId INT
 		,Code VARCHAR(20)
-		,NickName NVARCHAR(20)
+		,Nickname NVARCHAR(20)
 		,FullName NVARCHAR(50)
-		,GroupId INT
-		,GroupCode VARCHAR(20)
-		,[Name] NVARCHAR(50)
+		,Section NVARCHAR(50)
 		)
 
-	DECLARE @GroupsList TABLE (GroupId INT)
+	DECLARE @tblGroupId TABLE (GroupId INT)
 
-	INSERT INTO @GroupsList (GroupId)
+	INSERT INTO @tblGroupId (GroupId)
 	SELECT val
 	FROM fnc_strSplit(@GroupIds, ',')
 
 	INSERT INTO #tblTimeRecord
-	SELECT t.[Id]
+	SELECT t.Id
 		,t.RecordTime
 		,t.InOutType
 		,e.EmpId
 		,e.Code
 		,e.NickName
 		,e.FullName
-		,g.GroupId
-		,g.Code
 		,g.[Name]
 	FROM dbo.TimeRecord AS t WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON t.EmpID = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-	WHERE CONVERT(VARCHAR(10), RecordTime, 111) BETWEEN CONVERT(VARCHAR(10), @FromDate, 111)
-			AND CONVERT(VARCHAR(10), @ToDate, 111)
+	WHERE CAST(RecordTime AS DATE) BETWEEN @FromDate
+			AND @ToDate
 		AND (
 			@EmpId IS NULL
 			OR e.EmpId = @EmpId
@@ -80,7 +67,7 @@ set quoted_identifier on;
 			ISNULL(@GroupIds, '') = ''
 			OR e.GroupId IN (
 				SELECT GroupId
-				FROM @GroupsList
+				FROM @tblGroupId
 				)
 			)
 		AND (
@@ -94,15 +81,13 @@ set quoted_identifier on;
 		AND @ItemsPerPage IS NOT NULL
 	BEGIN
 		SELECT RecordTimeId
-		,RecordTime
-		,InOutType
-		,EmpId 
-		,Code 
-		,NickName 
-		,FullName 
-		,GroupId 
-		,GroupCode
-		,[Name]
+			,RecordTime
+			,InOutType
+			,EmpId
+			,Code
+			,Nickname
+			,FullName
+			,Section
 		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
 
@@ -111,15 +96,13 @@ set quoted_identifier on;
 	ELSE
 	BEGIN
 		SELECT RecordTimeId
-		,RecordTime
-		,InOutType
-		,EmpId 
-		,Code 
-		,NickName 
-		,FullName 
-		,GroupId 
-		,GroupCode
-		,[Name]
+			,RecordTime
+			,InOutType
+			,EmpId
+			,Code
+			,Nickname
+			,FullName
+			,Section
 		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC
 	END

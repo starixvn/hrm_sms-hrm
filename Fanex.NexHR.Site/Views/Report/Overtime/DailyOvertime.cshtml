@@ -159,7 +159,7 @@
                     <td>
                         @if (request.StatusId != 0)
                         {
-                            CurrentRequestStatus status = (CurrentRequestStatus)request.StatusId;
+                            var status = (CurrentRequestStatus)request.StatusId;
                             @status
                         }
                     </td>

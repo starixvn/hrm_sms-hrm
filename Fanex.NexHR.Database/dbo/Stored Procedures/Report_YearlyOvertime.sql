@@ -29,7 +29,7 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 
-	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+	CREATE TABLE #tblEmployeeIds (EmpId INT)
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
@@ -40,7 +40,7 @@ BEGIN
 		)
 
 	CREATE TABLE #tblOvertimeSummary (
-		EmployeeId INT
+		EmpId INT
 		,[Month] TINYINT
 		,NormalHours DECIMAL(18, 2)
 		,OffHours DECIMAL(18, 2)
@@ -89,7 +89,7 @@ BEGIN
 		SET @fromMonth = @fromMonth + 1
 	END
 
-	INSERT INTO #tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN (
@@ -124,7 +124,7 @@ BEGIN
 			)
 
 	INSERT INTO #tblOvertimeSummary (
-		EmployeeId
+		EmpId
 		,[Month]
 		,NormalHours
 		,OffHours
@@ -139,20 +139,19 @@ BEGIN
 		,SUM(ISNULL(req.SpecialHours, 0))
 	FROM dbo.OTDailyRequest AS req WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
-		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmpId
 		INNER JOIN #tblMonth AS tbl ON req.OvertimeDate BETWEEN tbl.FromDate
 			AND tbl.ToDate
 	WHERE req.[Status] IN (@ApprovedStatusId, @ProcessedStatusId)
 	GROUP BY req.EmpId
 		,tbl.[Month]
 
-	SELECT EmpId AS EmployeeId
+	SELECT EmpId
 		,Code
 		,NickName
 		,FullName
 		,GroupId
-		,GroupName AS [Name]
-		,GroupCode AS Code
+		,Section
 		,ISNULL([1], 0) AS Jan
 		,ISNULL([2], 0) AS Feb
 		,ISNULL([3], 0) AS Mar
@@ -171,15 +170,14 @@ BEGIN
 			,emp.NickName
 			,emp.FullName
 			,gr.GroupId
-			,gr.[Name] AS GroupName
-			,gr.Code AS GroupCode
+			,gr.[Name] AS Section
 			,cl.[Month] AS [Month]
 			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours + otsum.SpecialHours) AS TotalHours
 		FROM dbo.Employee AS emp WITH (NOLOCK)
-			INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+			INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmpId
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 			CROSS JOIN #tblMonth AS cl
-			INNER JOIN #tblOvertimeSummary AS otsum ON emp.EmpId = otsum.EmployeeId
+			INNER JOIN #tblOvertimeSummary AS otsum ON emp.EmpId = otsum.EmpId
 			AND cl.[Month] = otsum.[Month]
 		) AS tmp
 	PIVOT(MAX(TotalHours) FOR [Month] IN ([1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12])) AS tmp2

@@ -184,7 +184,7 @@ BEGIN
 			WHERE EmpId = ldt.EmpId
 			)
 
-	SELECT EmpId AS EmpId
+	SELECT EmpId
 		,SUM(DeductDays) AS DeductKIVDays
 		,SUM(CASE 
 				WHEN MONTH(WorkDate) = 1 THEN ISNULL(DeductDays, 0)
@@ -239,7 +239,7 @@ BEGIN
 	GROUP BY EmpId
 
 	-- calculate the balance form the first date of year to @todate
-	SELECT e.EmpId AS EmpId
+	SELECT e.EmpId
 		,(ISNULL(CreditDays, 0)) CreditDays
 		,SUM(ISNULL(DeductDays, 0)) DeductDays
 		,SUM(CASE 
@@ -338,8 +338,8 @@ BEGIN
 
 	-- show the report
 	SELECT ISNULL(OpenKIV, 0) AS CreditKIV
-		,ISNULL(OpenBalance, 0) [AnnualLeaveLastYear]
-		,ISNULL(CreditDays, 0) [AnnualLeaveCurrentYear]
+		,ISNULL(OpenBalance, 0) AS [AnnualLeaveLastYear]
+		,ISNULL(CreditDays, 0) AS [AnnualLeaveCurrentYear]
 		,(cb.Jan + ISNULL(dek.Jan, 0)) AS Jan
 		,(cb.Feb + ISNULL(dek.Feb, 0)) AS Feb
 		,(cb.Mar + ISNULL(dek.Mar, 0)) AS Mar
@@ -360,10 +360,8 @@ BEGIN
 		,FullName
 		,NickName
 		,g.[Rank]
-		,JoinedDate
-		,ConfirmedDate
 		,g.GroupId
-		,g.[Name]
+		,g.[Name] AS Section
 	FROM #CurrenBalace AS cb
 		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid
 		LEFT JOIN #CreditKIV AS crk ON cb.EmpId = crk.EmpId
@@ -401,8 +399,6 @@ BEGIN
 		,FullName
 		,NickName
 		,g.[Rank]
-		,JoinedDate
-		,ConfirmedDate
 		,g.GroupId
 		,g.[Name]
 	FROM #OpenBalance AS op

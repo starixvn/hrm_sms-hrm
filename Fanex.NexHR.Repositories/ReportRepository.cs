@@ -1,13 +1,10 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using System.Reflection;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
@@ -48,62 +45,6 @@
             }
 
             return listAttendance;
-        }
-
-        public IList<LeaveSummary> GetAnnualLeaveBalanceReport(ICriteria criteria)
-        {
-            IList<LeaveSummary> entities = null;
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                entities = db.Query<LeaveSummary, Employee, Team, LeaveSummary>(
-                    (leave, emp, team) =>
-                    {
-                        leave.Employee = emp;
-                        emp.Team = team;
-                        return leave;
-                    },
-                       splitOn: "EmpId, GroupId",
-                       parameterSet: criteria).ToList();
-            }
-
-            return entities;
-        }
-
-        public IList<LeaveSummary> GetUnpaidLeave(ICriteria criteria)
-        {
-            IList<LeaveSummary> unpaidLeaves = null;
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                unpaidLeaves = db.Query<LeaveSummary, Employee, Team, LeaveSummary>(
-                    (leave, emp, team) =>
-                    {
-                        leave.Employee = emp;
-                        emp.Team = team;
-                        return leave;
-                    },
-                       splitOn: "EmpId, GroupId",
-                       parameterSet: criteria).ToList();
-            }
-
-            return unpaidLeaves;
-        }
-
-        public IList<TimeRecordModel> GetTimeRecords(ICriteria criteria)
-        {
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                IList<TimeRecordModel> timeRecords = db.Query<TimeRecordModel, Employee, Team, TimeRecordModel>(
-                    (t, e, g) =>
-                    {
-                        t.Employee = e;
-                        e.Team = g;
-                        return t;
-                    },
-                    splitOn: "EmpId, GroupId",
-                    parameterSet: criteria).ToList();
-
-                return timeRecords;
-            }
         }
 
         public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)

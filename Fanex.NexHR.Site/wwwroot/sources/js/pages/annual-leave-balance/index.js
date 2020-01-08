@@ -1,19 +1,15 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
-import 'jquery-validation/dist/jquery.validate';
+﻿import 'jquery-ui-bundle/jquery-ui';
+import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, initDatepicker } from '../../shared/common.functions';
+import { alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
-var _ids;
-var _checked = false;
-
-var annualLeaveBalance = (function($) {
+const annualLeaveBalance = (function ($) {
     function getDepartment() {
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,
@@ -27,14 +23,12 @@ var annualLeaveBalance = (function($) {
     }
 
     function submitData(postToUrl) {
-        var sectionIds = $('#Section').multiSelectTreeView('getSelectedItems');
-        var url = _global.root + postToUrl + $('#Year').val() +
+        const sectionIds = $('#Section').multiSelectTreeView('getSelectedItems');
+        return resolveClientUrl(postToUrl + $('#Year').val() +
             '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
             '&EmployeeId=' + $('#EmployeeId').val() +
             '&MinAnnualBalance=' + $('#MinAnnualBalance').val() +
-            '&Category=' + $('#Category').val();
-
-        return url;
+            '&Category=' + $('#Category').val());
     }
 
     function initSubmitFilterEvent() {
@@ -55,21 +49,20 @@ var annualLeaveBalance = (function($) {
     }
 
     function initCheckAllEvent() {
-        $('#checkuncheckall').on('click', function () {
-            _checked = !_checked;
-            $('.aba').prop('checked', _checked);
-            $('.checkuncheckall').prop('checked', _checked);
-            if (_checked) {
+        $('#checkuncheckall').on('change', function () {
+            const checked = $(this).prop('checked');
+            $('.aba').prop('checked', checked);
+            $('.checkuncheckall').prop('checked', checked);
+            if (checked) {
                 $('tbody tr').addClass('selected');
-            }
-            else {
+            } else {
                 $('tbody tr').removeClass('selected');
             }
         });
     }
 
     function initCheckSingleRowEvent() {
-         $('.aba').click(function () {
+        $('.aba').click(function () {
             var tr = $(this).closest('tr');
             if (tr.hasClass('selected')) {
                 tr.removeClass();
@@ -81,21 +74,19 @@ var annualLeaveBalance = (function($) {
     }
 
     function initAdjustmentBtnEvent() {
-            $('#addadj').click(function () {
-                _ids = [];
-                $('.aba').each(function (index, item) {
-                    var checked = $(item).prop('checked');
-                    if (checked) {
-                        _ids.push($(item).attr('data-id'));
-                    }
-                });
+        $('#addadj').click(function () {
+            const empIds = [];
+            $('.aba').each(function (index, item) {
+                var checked = $(item).prop('checked');
+                if (checked) {
+                    empIds.push($(item).attr('data-id'));
+                }
+            });
+            $('#EmpIds').val(empIds);
 
-            $('#EmpIds').val(_ids);
-
-            if (_ids.length > 0) {
+            if (empIds.length > 0) {
                 handleInsertForm();
-            }
-            else {
+            } else {
                 alert('Please choose at least one employee to continue!');
             }
         });
@@ -110,53 +101,52 @@ var annualLeaveBalance = (function($) {
             },
             buttons: [
                 {
-                text: 'Submit',
-                class: 'btn btn-primary',
-                click: function () {
-                    var $form = $(this);
-                    if (validateInputInsertForm($form)) {
-                        removeMsg($form);
-                        var annualLeaveMuiltiple = {
-                            EmpIds: $("#EmpIds").val(),
-                            Description: $("#Description").val(),
-                            AffectedFrom: $("#AffectedFrom").val(),
-                            TotalDays: parseInt($("#TotalDays").val()),
-                            LocalLeave: $("#LocalLeave").val()
-                        };
-                        var annualJsonFormat = JSON.stringify(annualLeaveMuiltiple);
-                        $.ajax({
-                            type: 'POST',
-                            url: _global.root + 'AnnualLeaveBalance/Adjust',
-                            data: { annualLeaveJson: annualJsonFormat },
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.IsSuccessful) {
-                                    alert('Adjust successful');
-                                    setInterval(function() {
-                                            document.location = _global.root + 'annualleavebalance/index';
-                                        }, 2000)
-                                } else {
-                                    showErrorMsg($form, response.Message);
+                    text: 'Submit',
+                    class: 'btn btn-primary',
+                    click: function () {
+                        var $form = $(this);
+                        if (validateInputInsertForm($form)) {
+                            removeMsg($form);
+                            var annualLeaveMuiltiple = {
+                                EmpIds: $("#EmpIds").val(),
+                                Description: $form.find("#Description").val(),
+                                AffectedFrom: $form.find("#AffectedFrom").val(),
+                                TotalDays: parseInt($form.find("#TotalDays").val(), 10),
+                                LocalLeave: $form.find("#LocalLeave").val()
+                            };
+                            $.ajax({
+                                type: 'POST',
+                                url: resolveClientUrl('AnnualLeaveBalance/Adjust'),
+                                data: { annualLeaveJson: JSON.stringify(annualLeaveMuiltiple) },
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.IsSuccessful) {
+                                        alert('Adjust successfully.');
+                                        setInterval(function () {
+                                            document.location = resolveClientUrl('annualleavebalance/index');
+                                        }, 2000);
+                                    } else {
+                                        showErrorMsg($form, response.Message);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    class: 'btn btn-default',
+                    click: function () {
+                        $(this).dialog('close');
                     }
                 }
-            },
-            {
-                text: 'Cancel',
-                class: 'btn btn-default',
-                click: function () {
-                    $(this).dialog('close');
-                }
-            }
             ],
             dialogClass: 'modal-shadow'
         });
     }
 
     function initCloseBalanceButtonEvent() {
-            $('#resetblc').click(function () {
+        $('#resetblc').click(function () {
             $('#resetform').dialog({
                 modal: true,
                 width: 410,
@@ -164,52 +154,43 @@ var annualLeaveBalance = (function($) {
                     removeMsg($(this));
                 },
                 buttons: [{
-                        text: 'Submit',
-                        class: 'btn btn-primary',
-                        click: function () {
-                            var $form = $(this).find('form');
-                            if (validateInputResetForm($form)) {
-                                removeMsg($form);
-                                $.post(_global.root + 'AnnualLeaveBalance/Reset', $form.serialize(), function (response) {
-                                    if (response.IsSuccessful) {
-                                        alert('Close balance successful');
-                                        $('#resetform').dialog('close');
-                                    }
-                                    else
-                                    {
-                                        alert(response.Message);
-                                    }
-                                });
-                            }
+                    text: 'Submit',
+                    class: 'btn btn-primary',
+                    click: function () {
+                        var $form = $(this).find('form');
+                        if (validateInputResetForm($form)) {
+                            removeMsg($form);
+                            $.post(resolveClientUrl('AnnualLeaveBalance/Reset'), $form.serialize(), function (response) {
+                                if (response.IsSuccessful) {
+                                    alert('Close balance successful');
+                                    $('#resetform').dialog('close');
+                                } else {
+                                    alert(response.Message);
+                                }
+                            });
                         }
-                    },
-                    {
-                        text: 'Cancel',
-                        class: 'btn btn-default',
-                        click: function () {
-                            $(this).dialog('close');
-                        }
-                    }],
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    class: 'btn btn-default',
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }],
                 dialogClass: 'modal-shadow'
             });
         });
     }
 
     function validateInputInsertForm($form) {
-        var check = true;
-        var errorString = '';
-        var totalDays = parseInt($form.find('input[name="TotalDays"]').val());
+        const totalDays = parseInt($form.find('input[name="TotalDays"]').val(), 10);
+        if (totalDays === null || totalDays === '' || isNaN(totalDays)) {
+            showErrorMsg($form, 'Total days is required.');
+            return false;
+        }
 
-        if (totalDays == null || totalDays === "" || isNaN(totalDays)) {
-                errorString = "* The Total days field is required.";
-            }
-
-            if (errorString.length > 0) {
-                showErrorMsg($form, errorString);
-                return false;
-            }
-
-            return check;
+        return true;
     }
 
     function validateInputResetForm($form) {
@@ -218,7 +199,7 @@ var annualLeaveBalance = (function($) {
         var totalDays = parseInt($form.find('input[name="MinBalance"]').val());
 
         if (totalDays == null || totalDays === "" || isNaN(totalDays)) {
-                errorString = "* The Min balance field is required.";
+            errorString = "* The Min balance field is required.";
         }
 
         if (errorString.length > 0) {
@@ -249,6 +230,7 @@ var annualLeaveBalance = (function($) {
         initCheckSingleRowEvent();
         initAdjustmentBtnEvent();
         initCloseBalanceButtonEvent();
+        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
     }
 
     return {

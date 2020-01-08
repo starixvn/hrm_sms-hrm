@@ -275,8 +275,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,g.GroupId
-		,g.Code
-		,g.[Name]
+		,g.[Name] AS Section
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
@@ -304,7 +303,6 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,g.GroupId
-		,g.Code
 		,g.[Name]
 	HAVING SUM((CASE 
 				WHEN empca.IsOffday = 0
@@ -321,5 +319,4 @@ BEGIN
 				ELSE 0 END
 				)) > 0
 	ORDER BY g.[Name]
-		,g.Code
 END

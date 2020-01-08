@@ -51,9 +51,9 @@
         {
             int rowIndex = 1;
 
-            foreach (LeaveSummaryByTeam leaveSummary in leaveSummaries.Where(x => x.Team != null && x.LeaveSummaryInTeam != null && x.LeaveSummaryInTeam.Any()))
+            foreach (LeaveSummaryByTeam leaveSummary in leaveSummaries.Where(x => x.LeaveSummaryInTeam != null && x.LeaveSummaryInTeam.Any()))
             {
-                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Team.Name.ToUpperInvariant() });
+                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Section.ToUpperInvariant() });
 
                 foreach (LeaveSummary item in leaveSummary.LeaveSummaryInTeam)
                 {
@@ -74,8 +74,8 @@
             var record = new
             {
                 Count = rowIndex,
-                leaveSummary.Employee.NickName,
-                leaveSummary.Employee.FullName,
+                leaveSummary.Nickname,
+                leaveSummary.FullName,
                 Jan = leaveSummary.Jan * 1.00,
                 Feb = leaveSummary.Feb * 1.00,
                 Mar = leaveSummary.Mar * 1.00,

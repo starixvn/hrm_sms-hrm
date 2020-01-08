@@ -40,42 +40,25 @@
 
         public IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria)
         {
-            IList<LeaveSummary> annualLeaveBalance = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                annualLeaveBalance = reportRepository.GetAnnualLeaveBalanceReport(criteria);
-            }
-
-            return annualLeaveBalance;
+            return baseService.GetData<LeaveSummary>(criteria).ToList();
         }
 
         public IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria)
         {
-            IList<LeaveSummary> unpaidLeaves = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                unpaidLeaves = reportRepository.GetUnpaidLeave(criteria);
-            }
-
-            return unpaidLeaves;
+            return baseService.GetData<LeaveSummary>(criteria).ToList();
         }
 
         public IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
         {
             var leaveSummaryByTeams = new List<LeaveSummaryByTeam>();
-
             foreach (Team team in teams)
             {
                 var entity = new LeaveSummaryByTeam
                 {
-                    Team = team,
-                    LeaveSummaryInTeam = new List<LeaveSummary>()
+                    GroupId = team.Id,
+                    Section = team.Name,
+                    LeaveSummaryInTeam = leaveSummaryList.Where(x => x.GroupId == team.Id).ToList()
                 };
-
-                foreach (LeaveSummary leavesumary in leaveSummaryList.Where(x => x.Employee.Team.Name == team.Name))
-                {
-                    entity.LeaveSummaryInTeam.Add(leavesumary);
-                }
 
                 leaveSummaryByTeams.Add(entity);
             }
@@ -85,13 +68,7 @@
 
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
         {
-            IList<TimeRecordModel> timeRecords = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                timeRecords = reportRepository.GetTimeRecords(criteria);
-            }
-
-            return timeRecords;
+            return baseService.GetData<TimeRecordModel>(criteria).ToList();
         }
 
         public IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)

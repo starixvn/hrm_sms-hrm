@@ -344,10 +344,10 @@
 
             // data
             var rowNum = 1;
-            IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
+            IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmpId).Select(x => x.First()).OrderBy(x => x.Nickname);
             foreach (DailyOvertimeDetails employee in employees)
             {
-                IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.EmployeeId == employee.EmployeeId);
+                IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.EmpId == employee.EmpId);
                 colIndex = 1;
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
 

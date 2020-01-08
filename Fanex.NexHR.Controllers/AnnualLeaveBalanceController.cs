@@ -74,9 +74,7 @@
             IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
             model.Sections = teamService.GetBySupervisor(sessionService.Employee.Id);
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSumaries, model.Sections);
-            ViewBag.LeaveSummaryByTeamList = leaveSummaryByTeamList;
+            model.LeaveSumaries = reportService.GetLeaveByTeam(leaveSumaries, model.Sections);
 
             return View(model);
         }

@@ -35,9 +35,7 @@
             <div class="label-form">
                 <label class="control-label">@Labels.DepartmentSection</label>
             </div>
-            <div class="input-form">
-                <div class="grid_6" id="Section"></div>
-            </div>
+            <div class="input-form" id="Section"></div>
         </div>
 
         <div class="form-group form-group--m">
@@ -47,11 +45,11 @@
             <div class="input-form">
                 @{
                     var category = new List<SelectListItem>
-                                            {
-                                                new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                                                new SelectListItem() {Text = "Expat", Value = "0"},
-                                                new SelectListItem() {Text = "Local", Value = "1"},
-                                            };
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"},
+                        new SelectListItem() {Text = "Local", Value = "1"},
+                    };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", id = "category" })
             </div>
