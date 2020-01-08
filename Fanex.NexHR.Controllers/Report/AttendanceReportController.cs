@@ -39,7 +39,7 @@
                 SupervisorId = sessionService.Employee.Id
             };
 
-            return View(model);
+            return View("~/Views/Report/Attendance/Index.cshtml", model);
         }
 
         [HttpPost]
@@ -60,7 +60,7 @@
 
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
 
-            return PartialView("_Details", employeeAttendances);
+            return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
         }
 
         public ActionResult ExportExcel(EmployeeAttendanceViewModel model)

@@ -72,7 +72,7 @@
             <div class="select-form">
                 @{
                     var types = new List<SelectListItem>
-                            {
+                    {
                         new SelectListItem() { Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString() },
                         new SelectListItem() { Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString() },
                         new SelectListItem() { Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString() },
@@ -91,7 +91,6 @@
             </div>
             <div class="input-form" id="Section"></div>
         </div>
-
 
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -114,34 +113,21 @@
         </div>
 
         <div class="form-group form-group--m" style="margin-top: 5px;">
-            <div class="label-form">
-            </div>
-            <div class="input-form">
-                <input type="checkbox" class="checkbox-custom" id="ExcludeDeletedUsers"
-                       name="ExcludeDeletedUsers" value="true" checked />
-                <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
-            </div>
+            <input type="checkbox" class="checkbox-custom" id="ExcludeDeletedUsers"
+                   name="ExcludeDeletedUsers" value="true" checked />
+            <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
         </div>
         <div class="clearfix"></div>
 
         <div class="form-group form-group--m" style="margin-top: 5px;">
-            <div class="label-form">
-            </div>
-            <div class="input-form">
-                <input type="checkbox" class="checkbox-custom" id="IsRealDate"
-                       name="IsRealDate" value="true" />
-                <label for="IsRealDate">@Labels.IsRealDate</label>
-            </div>
+            <input type="checkbox" class="checkbox-custom" id="IsRealDate"
+                   name="IsRealDate" value="true" />
+            <label for="IsRealDate">@Labels.IsRealDate</label>
         </div>
 
         <div class="form-group form-group--m">
-            <div class="label-form">
-                <label class="control-label"></label>
-            </div>
-            <div class="select-form">
-                <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
-                <button type="button" id="btnExcel" class="btn btn-excel">Excel</button>
-            </div>
+            <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+            <button type="button" id="btnExcel" class="btn btn-excel">@Labels.Excel</button>
         </div>
     </div>
 </form>
