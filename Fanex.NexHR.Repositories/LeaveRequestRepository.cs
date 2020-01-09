@@ -15,14 +15,14 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
+                    var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
-                            request.Employee = employee;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").ToList();
@@ -49,14 +49,14 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var leave = multi.Read<LeaveRequest, LeaveType, Employee, Employee, Employee, Employee, LeaveRequest>(
+                    var leave = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
-                            request.Employee = employee;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
@@ -75,18 +75,17 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var leaves = multi.Read<LeaveRequest, LeaveType, Employee, Team, Employee, Employee, Employee, LeaveRequest>(
-                        (request, leaveType, employee, team, verifier, approver, hr) =>
+                    var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, LeaveRequest>(
+                        (request, leaveType, employee, verifier, approver, hr) =>
                         {
                             request.LeaveType = leaveType;
-                            request.Employee = employee;
-                            request.Employee.Team = team;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
-                        splitOn: "LeaveTypeId, EmpId, GroupId, VerifierId, ApproverId, HRId").ToList();
+                        splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").ToList();
                     var leaveDetails = multi.Read<LeaveRequestDetail>();
 
                     foreach (var leave in leaves)

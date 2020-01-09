@@ -19,17 +19,14 @@
     {
         private readonly IExportExcelService exportExcelService;
         private readonly IRequestService requestService;
-        private readonly ITeamService teamService;
 
         public ExportRequestController(
             ISessionService sessionService,
             IExportExcelService exportExcelService,
-            IRequestService requestService,
-            ITeamService teamService) : base(sessionService)
+            IRequestService requestService) : base(sessionService)
         {
             this.exportExcelService = exportExcelService;
             this.requestService = requestService;
-            this.teamService = teamService;
         }
 
         [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
@@ -43,7 +40,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRViewWorkingTimeRequest(RequestViewModel model)
         {
-            model.ToDate = Utilities.SetTimeToEndOfDay(model.ToDate);
+            model.ToDate = model.ToDate.ToEndOfDay();
             model.ViewType = RequestViewType.HRSpace;
 
             var criteria = new GetRequestCriteria
@@ -69,8 +66,7 @@
 
         public ActionResult VoidRequestWorkingTimeRequest(RequestViewModel request)
         {
-            request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
-            request.ToDate = Utilities.SetTimeToEndOfDay(request.ToDate);
+            request.ToDate = request.ToDate.ToEndOfDay();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {
@@ -107,7 +103,7 @@
 
         private ActionResult WorkingTimeRequest(RequestViewModel model)
         {
-            model.ToDate = Utilities.SetTimeToEndOfDay(model.ToDate);
+            model.ToDate = model.ToDate.ToEndOfDay();
             model.ViewType = RequestViewType.CompanySpace;
             var criteria = new GetRequestCriteria
             {

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_GetHistoryById] @RequestId INT
+CREATE PROCEDURE [dbo].[LeaveRequest_GetHistoryById] @RequestId BIGINT
 AS
 /*
 Created: Quinn.Vo@20190617
@@ -30,9 +30,7 @@ BEGIN
 		,lr.EmpId
 		,e.NickName
 		,e.FullName
-		,g.GroupId
-		,g.Code
-		,g.[Name]
+		,g.[Name] AS Section
 		,ve.EmpId AS VerifierId
 		,ve.NickName
 		,Ve.FullName

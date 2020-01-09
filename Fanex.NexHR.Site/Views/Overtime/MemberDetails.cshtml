@@ -41,12 +41,12 @@
     </div>
 
     <div>
-        @if (Model.Approver != null && Model.Approver.EmployeeId == currentUserId)
+        @if (Model.Approver != null && Model.Approver.EmpId == currentUserId)
         {
             switch (Model.Status.Id)
             {
                 case (byte)CurrentRequestStatus.Pending:
-                    if (Model.Verifier.EmployeeId == currentUserId)
+                    if (Model.Verifier.EmpId == currentUserId)
                     {
                         <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
                         <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
@@ -61,7 +61,7 @@
                     break;
             }
         }
-        else if (Model.Verifier != null && Model.Verifier.EmployeeId == currentUserId)
+        else if (Model.Verifier != null && Model.Verifier.EmpId == currentUserId)
         {
             switch (Model.Status.Id)
             {

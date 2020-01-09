@@ -107,17 +107,17 @@
         {
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
             else
             {
-                VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn);
+                VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.CheckIn);
                 IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(new GetDisabledDateParam
                 {
-                    EmployeeId = request.Employee.Id,
+                    EmployeeId = request.Requester.EmpId,
                     FromDate = request.OnDate.AddMonths(-1),
                     ToDate = DateTime.Today,
                     RequestId = request.RequestId
@@ -128,22 +128,22 @@
                     RequestId = request.RequestId,
                     RefNO = request.RefNO,
                     RequestTypeId = request.RequestTypeId,
-                    Employee = sessionService.Employee.DisplayName,
-                    EmployeeId = sessionService.Employee.Id,
+                    Employee = request.Requester.DisplayName,
+                    EmployeeId = request.Requester.EmpId,
                     AttendantDate = request.OnDate,
                     ForDate = request.RequestTime.Date,
                     Hour = request.RequestTime.Hour,
                     Minute = request.RequestTime.Minute,
                     ReasonId = request.ReasonId,
                     Shift = shift == null ? string.Empty : shift.Name,
-                    ApproverId = request.ApprovedBy?.Id,
-                    VerifierId = request.VerifiedBy?.Id,
+                    ApproverId = request.Approver?.EmpId,
+                    VerifierId = request.Verifier?.EmpId,
                     Remark = request.Remark,
                     Verifiers = supervisor.Verifiers,
                     Approvers = supervisor.Approvers,
                     DisabledDates = disabledDates
                 };
-                ViewBag.IsTopManager = request.Employee.IsTopManager;
+                ViewBag.IsTopManager = request.Requester.IsTopManager;
                 return View(viewModel);
             }
         }

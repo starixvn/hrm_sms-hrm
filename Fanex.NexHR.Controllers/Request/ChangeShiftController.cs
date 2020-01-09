@@ -39,7 +39,7 @@
         {
             int tempYear = year ?? DateTime.Today.Year;
             var fromDate = new DateTime(tempYear, 1, 1);
-            var toDate = Utilities.SetTimeToEndOfDay(new DateTime(tempYear, 12, 31));
+            var toDate = new DateTime(tempYear, 12, 31).ToEndOfDay();
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(sessionService.Employee.Id, fromDate, toDate);
             ViewBag.Year = tempYear;
             return View(requests);
@@ -83,22 +83,22 @@
         {
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
 
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(request.Requester.EmpId);
             var model = new ChangeShiftViewModel
             {
                 RequestId = request.RequestId,
-                Employee = sessionService.Employee.DisplayName,
-                EmployeeId = sessionService.Employee.Id,
+                Employee = request.Requester.DisplayName,
+                EmployeeId = request.Requester.EmpId,
                 FromDate = request.FromDate.Date,
                 ToDate = request.ToDate.Date,
-                VerifierId = request.VerifiedBy?.Id,
-                ApproverId = request.ApprovedBy?.Id,
+                VerifierId = request.Verifier?.EmpId,
+                ApproverId = request.Approver?.EmpId,
                 Remark = request.Remark,
                 Details = changeShiftService.GetDetailById(id),
                 Verifiers = supervisor.Verifiers,
@@ -114,7 +114,7 @@
             }
 
             ViewBag.IsHost = true;
-            ViewBag.IsTopManager = request.Employee.IsTopManager;
+            ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
@@ -149,15 +149,15 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(request.Requester.EmpId);
             var model = new ChangeShiftViewModel
             {
-                Employee = request.Employee.DisplayName,
-                EmployeeId = request.Employee.Id,
+                Employee = request.Requester.DisplayName,
+                EmployeeId = request.Requester.EmpId,
                 FromDate = request.FromDate.Date,
                 ToDate = request.ToDate.Date,
-                VerifierId = request.VerifiedBy.Id,
-                ApproverId = request.ApprovedBy.Id,
+                VerifierId = request.Verifier?.EmpId,
+                ApproverId = request.Approver?.EmpId,
                 Remark = request.Remark,
                 Details = changeShiftService.GetDetailById(id),
                 Status = request.Status,

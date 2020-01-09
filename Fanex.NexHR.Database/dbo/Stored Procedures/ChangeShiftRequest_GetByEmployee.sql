@@ -1,11 +1,11 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_GetByEmployee] @EmpId INT
-	,@FromDate DATETIME
-	,@ToDate DATETIME
+	,@FromDate DATE
+	,@ToDate DATE
 AS
 /*
 Created: Tim.Trinh@2019-09-27
-Task: get request
+Task: get change shift request
 DB: HRM_SMS
 Original:
 

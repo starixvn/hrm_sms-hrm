@@ -103,24 +103,24 @@
         {
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Employee.Id)
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
 
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.KeepInView);
             var viewModel = new KeepInViewRequestViewModel
             {
                 RequestId = id,
                 RefNo = request.RefNO,
                 HalfDay = request.IsHalfDay,
-                Employee = request.Employee.DisplayName,
-                EmployeeId = request.Employee.Id,
+                Employee = request.Requester.DisplayName,
+                EmployeeId = request.Requester.EmpId,
                 Date = request.OnDate,
                 KeepInViewType = request.KeepInViewTypeId,
-                ApproverId = request.ApprovedBy?.Id,
-                VerifierId = request.VerifiedBy?.Id,
+                ApproverId = request.Approver?.EmpId,
+                VerifierId = request.Verifier?.EmpId,
                 Remark = request.Remark,
                 CrossDay = (request.ToTime - request.OnDate).Days > 0,
                 FromTime = request.FromTime.ToString("HH:mm"),
@@ -132,12 +132,12 @@
             };
             viewModel.DisabledDates = keepInViewRequestService.GetDisabledDate(new GetDisabledDateParam
             {
-                EmployeeId = request.Employee.Id,
+                EmployeeId = request.Requester.EmpId,
                 FromDate = viewModel.MinDate,
                 ToDate = viewModel.MaxDate,
                 RequestId = request.RequestId
             });
-            ViewBag.IsTopManager = request.Employee.IsTopManager;
+            ViewBag.IsTopManager = request.Requester.IsTopManager;
 
             return View(viewModel);
         }

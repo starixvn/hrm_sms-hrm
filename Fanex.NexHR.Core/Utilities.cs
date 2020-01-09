@@ -87,11 +87,6 @@
             }
         }
 
-        public static DateTime SetTimeToEndOfDay(DateTime time)
-        {
-            return new DateTime(time.Year, time.Month, time.Day, 23, 59, 59);
-        }
-
         public static string GetTime(DateTime? dateTime)
         {
             if (dateTime == null)
@@ -335,9 +330,7 @@
         public static IList<SelectListItem> GetDateRangeByQuarter()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-
             var currentDate = DateTime.Today;
-
             for (int i = 0; i < 6; i++)
             {
                 int currentMonth = currentDate.Month;
@@ -359,7 +352,6 @@
         public static IList<SelectListItem> GetDateRangeByYear()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-
             var currentDate = DateTime.Today;
             dateRange.Add(new SelectListItem
             {

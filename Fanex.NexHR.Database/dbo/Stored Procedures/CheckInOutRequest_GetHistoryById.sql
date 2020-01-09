@@ -1,27 +1,26 @@
 ﻿
-CREATE PROCEDURE [dbo].[CheckInOutRequest_GetHistoryById] @RequestId INT
+CREATE PROCEDURE [dbo].[CheckInOutRequest_GetHistoryById] @RequestId BIGINT
 AS
 /*
 Created: Quinn.Vo@20190624
 Task: Get Check In/Out request history by RequestId.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		mis.RequestId
+	SELECT mis.RequestId
 		,mis.OnDate
 		,wk.RequestType AS RequestTypeId
 		,mis.RequestTime
 		,mis.ReasonId
 		,wk.Remark
 		,mis.RefNo
-		,sh.Name AS ShiftName
+		,sh.[Name] AS ShiftName
 		,wk.CreatedDate
 		,wk.CurrentStatus
 		,wk.VerifiedDate
@@ -33,7 +32,7 @@ BEGIN
 		,e.FullName
 		,g.GroupId
 		,g.Code
-		,g.Name
+		,g.[Name] AS Section
 		,ve.EmpId AS VerifierId
 		,ve.NickName
 		,Ve.FullName
@@ -44,15 +43,15 @@ BEGIN
 		,pr.NickName
 		,pr.FullName
 	FROM dbo.WorkingTimeRequestHistory AS wk WITH (NOLOCK)
-	INNER JOIN dbo.CheckInOutRequestHistory AS mis WITH (NOLOCK) ON wk.HistoryId = mis.HistoryId
-	INNER JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON mis.OnDate = cl.WorkDate AND mis.EmpId = cl.EmpId
-	LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID 
-	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON mis.EmpId = e.EmpId
-	INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
-	LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
-	LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		INNER JOIN dbo.CheckInOutRequestHistory AS mis WITH (NOLOCK) ON wk.HistoryId = mis.HistoryId
+		INNER JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON mis.OnDate = cl.WorkDate
+		AND mis.EmpId = cl.EmpId
+		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cl.ShiftId = sh.ShiftID
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON mis.EmpId = e.EmpId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
+		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
+		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
 	WHERE mis.RequestId = @RequestId
 	ORDER BY wk.LogDate DESC
-
 END

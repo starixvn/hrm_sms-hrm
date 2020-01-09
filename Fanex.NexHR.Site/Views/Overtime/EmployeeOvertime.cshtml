@@ -107,13 +107,13 @@
                         <div class="checkbox">
                             <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
                                    data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                                   data-verifierid="@request.Verifier.EmployeeId" data-approverid="@request.Approver.EmployeeId" />
+                                   data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
                             <label for="ckb@(request.RequestId)"></label>
                         </div>
                     </td>
                     <td class="align-left">@request.Requester.FullName</td>
                     <td>@request.Requester.Nickname</td>
-                    <td>@request.Requester.Section.Name</td>
+                    <td>@request.Requester.Section</td>
                     <td>@request.Month.ToString("MMM-yyyy")</td>
                     <td>
                         @if (request.NormalHours > 0)

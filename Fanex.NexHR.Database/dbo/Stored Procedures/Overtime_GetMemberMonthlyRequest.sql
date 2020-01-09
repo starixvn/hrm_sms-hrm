@@ -97,12 +97,10 @@ BEGIN
 			ELSE 0 END
 			) AS IsHost
 		,req.CurrentStatus AS StatusId
-		,emp.EmpId AS EmployeeId
+		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
-		,gr.GroupId
-		,gr.[Name]
-		,gr.Code
+		,gr.[Name] AS Section
 		,verifier.EmpId AS VerifierId
 		,verifier.NickName
 		,verifier.FullName

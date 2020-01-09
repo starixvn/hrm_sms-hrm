@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Helpers;
@@ -40,13 +39,9 @@
 
         public int RequestType { get; set; } = (int)RequestFilter.All;
 
-        [Display(Name = "Section")]
         public int? LeaveType { get; set; }
 
-        public IList<LeaveType> LeaveTypeCollection { get; set; }
-
-        [Display(Name = "Section")]
-        public IList<Team> TeamCollection { get; set; }
+        public IList<LeaveType> LeaveTypes { get; set; }
 
         public byte? IsLocal { get; set; }
 
@@ -131,45 +126,6 @@
         }
 
         public IList<RequestEntity> Requests { get; set; }
-
-        public IList<SelectListItem> GetSelecListItemTeam
-        {
-            get
-            {
-                IList<SelectListItem> selecListItemTeam = new List<SelectListItem>();
-
-                if (TeamCollection == null)
-                {
-                    TeamCollection = new List<Team>();
-                }
-
-                var teamIds = TeamIds?.Split(',');
-
-                foreach (Team team in TeamCollection)
-                {
-                    var isSelected = false;
-                    if (teamIds != null)
-                    {
-                        int pos = Array.IndexOf(teamIds, team.Id.ToString());
-                        if (pos > -1)
-                        {
-                            isSelected = true;
-                        }
-                    }
-
-                    var item = new SelectListItem
-                    {
-                        Value = team.Id.ToString(),
-                        Text = team.Name,
-                        Selected = isSelected
-                    };
-
-                    selecListItemTeam.Add(item);
-                }
-
-                return selecListItemTeam;
-            }
-        }
 
         public string BreadcrumbText => EnumerationHelper.GetStringValue(ViewType);
 

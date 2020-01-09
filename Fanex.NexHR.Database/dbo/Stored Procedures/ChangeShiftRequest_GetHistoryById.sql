@@ -23,9 +23,7 @@ BEGIN
 		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
-		,gr.GroupId
-		,gr.Code
-		,gr.[Name]
+		,gr.[Name] AS Section
 		,verifier.EmpId AS VerifierId
 		,verifier.NickName
 		,verifier.FullName

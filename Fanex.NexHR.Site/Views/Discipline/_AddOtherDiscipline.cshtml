@@ -13,18 +13,19 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Employee, new { @class = "form-control" })
                 @Html.HiddenFor(model => model.EmployeeId)
-                @Html.ValidationMessageFor(model => model.EmployeeId)
             </div>
+            @Html.ValidationMessageFor(model => model.EmployeeId)
         </div>
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.WorkDate, "Discipline Date", new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.DatePickerFor(model => model.WorkDate, minDate: new DateTime(2010, 1, 1))
+                @Html.TextBox(Html.NameFor(model => model.WorkDate).ToString(), Model.WorkDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
-                @Html.ValidationMessageFor(model => model.WorkDate)
             </div>
+            @Html.ValidationMessageFor(model => model.WorkDate)
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -38,8 +39,8 @@
                         <option value="@otherDisciplineType.DisciplineTypeId" data-score="@otherDisciplineType.Score">@otherDisciplineType.Name</option>
                     }
                 </select>
-                @Html.ValidationMessageFor(model => model.DisciplineTypeId)
             </div>
+            @Html.ValidationMessageFor(model => model.DisciplineTypeId)
         </div>
         <div class="form-group">
             <div class="label-form">

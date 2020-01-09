@@ -94,12 +94,6 @@ BEGIN
 			FROM #tblEmployeeIds
 			WHERE EmpId = EmployeeId
 			)
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Adjust annual balance failed.'
-	END
 	
 	DROP TABLE #tblEmployeeIds
 END

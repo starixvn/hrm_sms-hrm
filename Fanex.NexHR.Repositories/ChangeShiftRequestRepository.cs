@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.ScheduleArrange;
 
@@ -40,13 +40,13 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ChangeShiftRequest, Employee, Employee, Employee, Employee, ChangeShiftRequest>(
+                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
                     (request, employee, verifier, approver, hr) =>
                     {
-                        request.Employee = employee;
-                        request.VerifiedBy = verifier;
-                        request.ApprovedBy = approver;
-                        request.ProcessedBy = hr;
+                        request.Requester = employee;
+                        request.Verifier = verifier;
+                        request.Approver = approver;
+                        request.HR = hr;
 
                         return request;
                     },
@@ -59,12 +59,12 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<ChangeShiftRequest, Employee, Employee, Employee, ChangeShiftRequest>(
+                return db.QueryEntity<ChangeShiftRequest, Requester, Requester, Requester, ChangeShiftRequest>(
                     (request, employee, verifier, approver) =>
                     {
-                        request.Employee = employee;
-                        request.VerifiedBy = verifier;
-                        request.ApprovedBy = approver;
+                        request.Requester = employee;
+                        request.Verifier = verifier;
+                        request.Approver = approver;
 
                         return request;
                     },
@@ -77,16 +77,15 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ChangeShiftRequest, Employee, Team, Employee, Employee, ChangeShiftRequest>(
-                    (request, employee, team, verifier, approver) =>
+                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, ChangeShiftRequest>(
+                    (request, employee, verifier, approver) =>
                     {
-                        request.Employee = employee;
-                        request.Employee.Team = team;
-                        request.VerifiedBy = verifier;
-                        request.ApprovedBy = approver;
+                        request.Requester = employee;
+                        request.Verifier = verifier;
+                        request.Approver = approver;
                         return request;
                     },
-                    splitOn: "EmpId, GroupId, VerifierId, ApproverId",
+                    splitOn: "EmpId, VerifierId, ApproverId",
                     parameterSet: criteria);
             }
         }

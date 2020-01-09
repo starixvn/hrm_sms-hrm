@@ -14,7 +14,6 @@
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
@@ -62,7 +61,7 @@
 
         public ActionResult Create()
         {
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.Leave);
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
@@ -115,7 +114,7 @@
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
 
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
 
@@ -147,10 +146,15 @@
         public ActionResult Detail(long id)
         {
             LeaveRequest request = leaveRequestService.GetById(id);
+            if (request == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
 
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(sessionService.Employee.Id);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
             ViewBag.IsView = true;
@@ -328,38 +332,6 @@
             }
         }
 
-        private VerifierAndApproverForRequest GetVerifierApprover(int employeeId, LeaveRequest request = null)
-        {
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.Leave);
-
-            if (request != null)
-            {
-                if (request.VerifiedBy != null && !supervisor.Verifiers.Any(t => t.OwnerId == request.VerifiedBy.Id))
-                {
-                    var verifier = new SupervisorNameModel
-                    {
-                        OwnerId = request.VerifiedBy.Id,
-                        NickName = request.VerifiedBy.NickName,
-                        FullName = request.VerifiedBy.FullName
-                    };
-                    supervisor.Verifiers.Add(verifier);
-                }
-
-                if (request.ApprovedBy != null && !supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
-                {
-                    var approver = new SupervisorNameModel
-                    {
-                        OwnerId = request.ApprovedBy.Id,
-                        NickName = request.ApprovedBy.NickName,
-                        FullName = request.ApprovedBy.FullName
-                    };
-                    supervisor.Approvers.Add(approver);
-                }
-            }
-
-            return supervisor;
-        }
-
         private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
         {
             LeaveRequestViewModel model = null;
@@ -371,16 +343,16 @@
                 {
                     RequestId = request.RequestId,
                     LeaveTypeId = request.LeaveType.Id,
-                    Employee = request.Employee.DisplayName,
-                    EmployeeId = request.Employee.Id,
+                    Employee = request.Requester.DisplayName,
+                    EmployeeId = request.Requester.EmpId,
                     FromDate = request.FromDate,
                     ToDate = (request.LeaveType.Id != (int)LeaveTypes.GeneralLeave
                             && request.IsHalfDay
                             && request.ToDate.Date != toTime) ? request.ToDate.AddDays(1) : request.ToDate,
                     TotalDays = request.TotalDays,
                     HalfDayOff = request.IsHalfDay,
-                    VerifierId = request.VerifiedBy.Id,
-                    ApproverId = request.ApprovedBy.Id,
+                    VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
+                    ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
                     RefNo = request.RefNO,
                     Remark = request.Remark,
                     FromTime = fromTime.ToString("HH:mm"),

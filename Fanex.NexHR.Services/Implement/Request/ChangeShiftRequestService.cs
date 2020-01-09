@@ -196,14 +196,14 @@
                 email.Subject = string.Format(
                     "{0} {1} {2}",
                     Messages.ChangeShiftEmailSubject,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     forDate);
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     forDate,
                     request.Remark,
                     ConfigSettings.ApplicationDomain);
@@ -228,14 +228,14 @@
                 email.Subject = string.Format(
                     "{0} {1} {2}",
                     Messages.UpdatedChangeShiftEmailSubject,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     forDate);
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     forDate,
                     request.Remark,
                     ConfigSettings.ApplicationDomain);
@@ -258,12 +258,12 @@
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
-                email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Employee.NickName);
+                email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     forDate,
                     request.Remark);
 
@@ -287,12 +287,12 @@
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
-                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     commandMessage,
                     actor.DisplayName,
                     Labels.ChangeShift,

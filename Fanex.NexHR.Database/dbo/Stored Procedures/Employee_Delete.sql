@@ -35,10 +35,4 @@ BEGIN
 	DELETE dbo.EmployeeAttendance WITH (ROWLOCK)
 	WHERE AttendanceDate >= @ResignedDate
 		AND EmpId = @Empid
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'delete an employee failed.'
-	END
 END

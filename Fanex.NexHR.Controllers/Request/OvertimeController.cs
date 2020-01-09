@@ -60,8 +60,8 @@
             var model = new EditMonthlyRequestViewModel
             {
                 MonthlyRequest = monthlyRequest,
-                VerifierId = monthlyRequest.Verifier != null ? monthlyRequest.Verifier.EmployeeId : 0,
-                ApproverId = monthlyRequest.Approver != null ? monthlyRequest.Approver.EmployeeId : 0,
+                VerifierId = monthlyRequest.Verifier != null ? monthlyRequest.Verifier.EmpId : 0,
+                ApproverId = monthlyRequest.Approver != null ? monthlyRequest.Approver.EmpId : 0,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
             };

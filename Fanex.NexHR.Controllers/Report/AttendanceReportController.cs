@@ -11,24 +11,19 @@
     public class AttendanceReportController : BaseController
     {
         private readonly IReportService reportService;
-        private readonly ITeamService teamService;
         private readonly IExportExcelAttendanceReportService excelService;
-
 
         public AttendanceReportController(
             ISessionService sessionService,
             IReportService reportSevice,
-            ITeamService teamService,
             IExportExcelAttendanceReportService excelService) : base(sessionService)
         {
             this.reportService = reportSevice;
-            this.teamService = teamService;
             this.excelService = excelService;
         }
 
         public ActionResult Index()
         {
-            ViewBag.Groups = teamService.GetBySupervisor(sessionService.Employee.Id);
             var model = new EmployeeAttendanceViewModel
             {
                 FromDate = DateTime.Now,

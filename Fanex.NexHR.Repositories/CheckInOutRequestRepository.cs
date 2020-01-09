@@ -4,7 +4,6 @@
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
     public class CheckInOutRequestRepository : ICheckInOutRequestRepository
@@ -13,13 +12,13 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.Query<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
+                var entity = db.Query<CheckInOutRequest, Requester, Requester, Requester, Requester, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
-                            request.Employee = employee;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
                         splitOn: "EmpId, VerifierId, ApproverId, HRId",
@@ -33,13 +32,13 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<CheckInOutRequest, Employee, Employee, Employee, Employee, CheckInOutRequest>(
+                var entity = db.QueryEntity<CheckInOutRequest, Requester, Requester, Requester, Requester, CheckInOutRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
-                            request.Employee = employee;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
                         splitOn: "EmpId, VerifierId, ApproverId, HRId",
@@ -53,17 +52,16 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.Query<CheckInOutRequest, Employee, Team, Employee, Employee, Employee, CheckInOutRequest>(
-                        (request, employee, team, verifier, approver, hr) =>
+                var entity = db.Query<CheckInOutRequest, Requester, Requester, Requester, Requester, CheckInOutRequest>(
+                        (request, employee, verifier, approver, hr) =>
                         {
-                            request.Employee = employee;
-                            request.Employee.Team = team;
-                            request.VerifiedBy = verifier;
-                            request.ApprovedBy = approver;
-                            request.ProcessedBy = hr;
+                            request.Requester = employee;
+                            request.Verifier = verifier;
+                            request.Approver = approver;
+                            request.HR = hr;
                             return request;
                         },
-                        splitOn: "EmpId, GroupId, VerifierId, ApproverId, HRId",
+                        splitOn: "EmpId, VerifierId, ApproverId, HRId",
                         parameterSet: criteria);
 
                 return entity.ToList();

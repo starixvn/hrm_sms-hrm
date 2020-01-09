@@ -127,7 +127,10 @@ BEGIN
 			@EmpId IS NULL
 			OR emp.EmpId = @EmpId
 			)
-		AND ISNULL(emp.ResignedDate, '2079-06-06') > @fromdate
+		AND (
+			emp.ResignedDate IS NULL
+			OR emp.ResignedDate > @fromdate
+			)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
@@ -179,19 +182,16 @@ BEGIN
 			@EmpId IS NULL
 			OR emp.EmpId = @EmpId
 			)
-		AND ISNULL(emp.ResignedDate, '2079-06-06') > @fromdate
+		AND (
+			emp.ResignedDate IS NULL
+			OR emp.ResignedDate > @fromdate
+			)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 			WHERE emp.EmpId = empca.EmpId
 				AND tblc.WorkDate = empca.WorkDate
 			)
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Insert calendar unsuccessfully.'
-	END
 
 	DROP TABLE #tblDate
 END

@@ -152,12 +152,12 @@
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
-                email.Subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Employee.NickName);
+                email.Subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     forDate,
                     request.LeaveType.Name,
                     request.Remark);
@@ -184,12 +184,12 @@
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
-                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     commandMessage,
                     actor.DisplayName,
                     request.RequestTypeName,

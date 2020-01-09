@@ -7,36 +7,26 @@
     public class BaseRequest
     {
         public long RequestId { get; set; }
-
-        public Employee Employee { get; set; }
-
         public byte RequestTypeId { get; set; }
 
         public string Remark { get; set; }
 
-        public Employee VerifiedBy { get; set; }
-
-        public Employee ApprovedBy { get; set; }
-
-        public Employee ProcessedBy { get; set; }
+        public Requester Requester { get; set; }
+        public Requester Verifier { get; set; }
+        public Requester Approver { get; set; }
+        public Requester HR { get; set; }
 
         public DateTime CreatedDate { get; set; }
-
         public DateTime VerifiedDate { get; set; }
-
         public DateTime ApprovedDate { get; set; }
-
         public DateTime ProcessedDate { get; set; }
 
         public DateTime InsertedDate { get; set; }
 
         public byte CurrentStatus { get; set; }
-
-        public int VerifiedStatus { get; set; }
-
-        public int ApprovedStatus { get; set; }
-
-        public int ProcessedStatus { get; set; }
+        public byte VerifiedStatus { get; set; }
+        public byte ApprovedStatus { get; set; }
+        public byte ProcessedStatus { get; set; }
 
         public RequestStatus Status => new RequestStatus
         {

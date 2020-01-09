@@ -97,14 +97,14 @@
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.InsertedKeepInViewEmailSubject,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark,
                     ConfigSettings.ApplicationDomain);
@@ -128,14 +128,14 @@
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedKeepInViewEmailSubject,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark,
                     ConfigSettings.ApplicationDomain);
@@ -156,12 +156,12 @@
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
-                email.Subject = string.Format(Messages.MessageKeepInViewRequest, request.Employee.NickName);
+                email.Subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    string.Format("{0} ({1})", request.Employee.NickName, request.Employee.FullName),
+                    request.Requester.DisplayName,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark);
 
@@ -183,12 +183,12 @@
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
-                email.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     commandMessage,
                     actor.DisplayName,
                     request.RequestTypeName,

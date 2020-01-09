@@ -58,59 +58,6 @@
             return htmlHelper.BeginForm(null, null, FormMethod.Get);
         }
 
-        public static MvcHtmlString DatePicker(
-            this HtmlHelper htmlHelper,
-            string name,
-            DateTime? date,
-            DateTime? minDate = null,
-            DateTime? maxDate = null,
-            string formatDate = "dd MMM, yyyy",
-            IEnumerable<DateTime> unavailDates = null)
-        {
-            bool validMinDate = minDate.HasValue && minDate != DateTime.MinValue;
-            bool validMaxDate = maxDate.HasValue && maxDate != DateTime.MinValue;
-            string disabledDate = (unavailDates != null && unavailDates.Any())
-                ? string.Join(",", unavailDates.Select(d => d.ToString("dd MMM yyyy")))
-                : string.Empty;
-
-            var htmlAttribute = new
-            {
-                @class = "datepicker form-control",
-                mindate = validMinDate ? ((DateTime)minDate).ToString("yyyy/MM/dd") : "null",
-                maxdate = validMaxDate ? ((DateTime)maxDate).ToString("yyyy/MM/dd") : "null",
-                disabledDate
-            };
-
-            var dateValue = date.HasValue ? date.Value.ToString(formatDate) : string.Empty;
-
-            var textbox = htmlHelper.TextBox(name, dateValue, htmlAttribute);
-
-            return MvcHtmlString.Create(textbox.ToString());
-        }
-
-        public static MvcHtmlString DatePickerFor<TModel, TValue>(
-            this HtmlHelper<TModel> html,
-            Expression<Func<TModel, TValue>> expression,
-            DateTime? minDate = null,
-            DateTime? maxDate = null,
-            string formatDate = "dd MMM, yyyy",
-            IEnumerable<DateTime> unavailDates = null)
-        {
-            var metaData = ModelMetadata.FromLambdaExpression(expression, html.ViewData);
-            DateTime? value;
-
-            if (metaData.Model is DateTime)
-            {
-                value = (DateTime?)metaData.Model;
-            }
-            else
-            {
-                value = null;
-            }
-
-            return html.DatePicker(metaData.PropertyName, value, minDate, maxDate, formatDate, unavailDates);
-        }
-
         public static DateTime GetMaxDate(this DateTime date)
         {
             if (date.AddMonths(1).Year > DateTime.Now.Year)

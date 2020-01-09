@@ -24,18 +24,15 @@
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ICommonDataService commonDataService;
-        private readonly ITeamService teamService;
 
         public RequestController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            ICommonDataService commonDataService,
-            ITeamService teamService) : base(sessionService)
+            ICommonDataService commonDataService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
-            this.teamService = teamService;
             this.commonDataService = commonDataService;
         }
 
@@ -228,9 +225,8 @@
         [NonAction]
         private void GetRequests(RequestViewModel request)
         {
-            request.TeamCollection = teamService.GetBySupervisor(sessionService.Employee.Id);
-            request.ToDate = Utilities.SetTimeToEndOfDay(request.ToDate);
-            request.LeaveTypeCollection = commonDataService.GetLeaveType();
+            request.ToDate = request.ToDate.ToEndOfDay();
+            request.LeaveTypes = commonDataService.GetLeaveType();
             int? employeeId = null;
             if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
             {

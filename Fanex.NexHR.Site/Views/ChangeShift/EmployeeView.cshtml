@@ -73,15 +73,15 @@
                         }
                     </td>
                     <td>
-                        @if (request.VerifiedBy != null)
+                        @if (request.Verifier != null)
                         {
-                            @request.VerifiedBy.NickName
+                            @request.Verifier.Nickname
                         }
                     </td>
                     <td>
-                        @if (request.ApprovedBy != null)
+                        @if (request.Approver != null)
                         {
-                            @request.ApprovedBy.NickName
+                            @request.Approver.Nickname
                         }
                     </td>
                     <td>@RenderStatus(request)</td>
@@ -100,40 +100,40 @@
 <div id="dialoghistorycontent"></div>
 @helper RenderStatus(ChangeShiftRequest request)
 {
-    var verifier = request.VerifiedBy != null ? request.VerifiedBy.NickName : string.Empty;
-    var approver = request.ApprovedBy != null ? request.ApprovedBy.NickName : string.Empty;
-    var processor = request.ProcessedBy != null ? request.ProcessedBy.NickName : string.Empty;
+    var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
+    var approver = request.Approver != null ? request.Approver.Nickname : string.Empty;
+    var processor = request.HR != null ? request.HR.Nickname : string.Empty;
     switch (request.Status.Id)
     {
         case (byte)CurrentRequestStatus.Pending:
-            <a requestid="@request.RequestId" class="menu-actions" href="javascript:void(0);">
+            <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
             break;
         case (byte)CurrentRequestStatus.Verified:
         case (byte)CurrentRequestStatus.NotVerified:
-            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
                 title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Approved:
         case (byte)CurrentRequestStatus.Rejected:
-            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
                 title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         case (byte)CurrentRequestStatus.Processed:
         case (byte)CurrentRequestStatus.Void:
-            <a requestid="@request.RequestId" href="javascript:void(0);" class="tooltip-tipsy"
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
                 title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </a>
             break;
         default:
-            <a href="javascript:void(0);">@request.Status.ToString()</a>
+            <a href="javascript:;">@request.Status.ToString()</a>
             break;
     }
 }

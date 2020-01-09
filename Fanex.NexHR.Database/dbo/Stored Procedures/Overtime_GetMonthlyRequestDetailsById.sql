@@ -40,7 +40,7 @@ BEGIN
 		,ot.PublicHours
 		,ot.SpecialHours
 		,ot.CurrentStatus AS StatusId
-		,emp.EmpId AS EmployeeId
+		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
 		,empsum.WorkingHours

@@ -134,6 +134,11 @@
             return date.ToString("HH:mm");
         }
 
+        public static DateTime ToEndOfDay(this DateTime time)
+        {
+            return new DateTime(time.Year, time.Month, time.Day, 23, 59, 59);
+        }
+
         public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)
         {
             return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);

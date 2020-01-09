@@ -4,7 +4,6 @@
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
 
@@ -42,7 +41,7 @@
                         re.Approver = approver;
                         return re;
                     },
-                    "StatusId, EmployeeId, VerifierId, ApproverId").FirstOrDefault();
+                    "StatusId, EmpId, VerifierId, ApproverId").FirstOrDefault();
 
                     if (monthlyRequest != null)
                     {
@@ -58,17 +57,16 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, EntityBase<int>, Requester, Requester, MonthlyOvertimeRequest>(
-                    (req, stt, requester, section, verifier, approver) =>
+                return db.Query<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
+                    (req, stt, requester, verifier, approver) =>
                     {
-                        requester.Section = section;
                         req.Status = stt;
                         req.Requester = requester;
                         req.Verifier = verifier;
                         req.Approver = approver;
                         return req;
                     },
-                    "StatusId, EmployeeId, GroupId, VerifierId, ApproverId",
+                    "StatusId, EmpId, VerifierId, ApproverId",
                     criteria);
             }
         }

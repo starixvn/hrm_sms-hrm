@@ -47,7 +47,8 @@
                 @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -56,7 +57,8 @@
                 @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disableddate = "" })
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -68,10 +70,10 @@
             <div class="select-form">
                 @{
                     var filteringDateType = new List<SelectListItem>
-{
-new SelectListItem() {Text = "Effected Date", Value = "true"},
-new SelectListItem() {Text = "Created Date", Value = "false"},
-};
+                    {
+                        new SelectListItem() {Text = "Effected Date", Value = "true"},
+                        new SelectListItem() {Text = "Created Date", Value = "false"},
+                    };
                 }
                 @Html.DropDownListFor(model => model.IsFilterByAffectedDate, filteringDateType, new { @class = "form-control" })
             </div>
@@ -108,11 +110,11 @@ new SelectListItem() {Text = "Created Date", Value = "false"},
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                                                    new SelectListItem() {Text = Labels.Expat, Value = "0"},
-                                                    new SelectListItem() {Text = Labels.Local, Value = "1"},
-                                                };
+                    {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "0"},
+                        new SelectListItem() {Text = Labels.Local, Value = "1"},
+                    };
                 }
 
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "form-control" })
@@ -125,7 +127,7 @@ new SelectListItem() {Text = "Created Date", Value = "false"},
             <div class="select-form">
                 @{
                     var listTypes = new List<SelectListItem> { new SelectListItem { Value = "", Text = "All" } };
-                    listTypes.AddRange(Model.LeaveTypeCollection.Select(l => new SelectListItem { Value = l.Id.ToString(), Text = l.Name }).ToList());
+                    listTypes.AddRange(Model.LeaveTypes.Select(l => new SelectListItem { Value = l.Id.ToString(), Text = l.Name }).ToList());
                 }
                 @Html.DropDownListFor(model => model.LeaveType, listTypes, new { @class = "form-control" })
             </div>
@@ -137,14 +139,14 @@ new SelectListItem() {Text = "Created Date", Value = "false"},
             <div class="select-form">
                 @{
                     var requestTypes = new List<SelectListItem>
-                                                {
-                                                    new SelectListItem() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
-                                                    new SelectListItem() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
-                                                    new SelectListItem() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
-                                                    new SelectListItem() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
-                                                    new SelectListItem() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
-                                                    new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
-                                                };
+                    {
+                        new SelectListItem() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
+                        new SelectListItem() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
+                        new SelectListItem() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
+                        new SelectListItem() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
+                        new SelectListItem() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
+                        new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
+                    };
                     @Html.DropDownListFor(model => model.RequestType, requestTypes, new { @class = "form-control" })
                 }
             </div>

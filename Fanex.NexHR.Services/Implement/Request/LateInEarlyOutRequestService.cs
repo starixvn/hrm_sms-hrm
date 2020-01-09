@@ -101,14 +101,14 @@
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.LateInEarlyOutEmailSubject,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.RequestTypeId == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
@@ -134,14 +134,14 @@
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedLateInEarlyOutEmailSubject,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.NickName,
+                    request.Requester.Nickname,
                     request.RequestTypeId == (short)RequestType.LateIn ? "a " + Labels.LateIn : "an " + Labels.EarlyOut,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
@@ -164,12 +164,12 @@
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
-                email.Subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Employee.NickName);
+                email.Subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     request.RequestTypeName,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
@@ -195,13 +195,13 @@
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.LateIn
-                    ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Employee.NickName, commandMessage, actor.Nickname)
-                    : string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Employee.NickName, commandMessage, actor.Nickname);
+                    ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Requester.Nickname, commandMessage, actor.Nickname)
+                    : string.Format(Messages.ApprovalNotificationEarlyOutSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
                     email.SendToNickName,
-                    request.Employee.DisplayName,
+                    request.Requester.DisplayName,
                     commandMessage,
                     actor.DisplayName,
                     request.RequestTypeName,
