@@ -273,6 +273,7 @@ BEGIN
 		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS overtime WITH (NOLOCK) ON empca.EmpId = overtime.EmpId
 		AND empca.WorkDate = overtime.OvertimeDate
+		AND overtime.[Status] NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND (
@@ -478,6 +479,8 @@ BEGIN
 		FROM dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK)
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lrdt.RequestId = r.RequestId
 			AND empca.EmpId = r.EmpId
+			AND empca.WorkDate BETWEEN @fromDate
+				AND @toDate
 			AND lrdt.OnDate = empca.WorkDate
 			AND lrdt.WorkType IN (@OffDay, @LeaveDay)
 			AND lrdt.IsHalfDay = 0
@@ -492,6 +495,8 @@ BEGIN
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 			AND lr.LeaveType <> @GeneralLeaveId
 			AND empca.EmpId = r.EmpId
+			AND empca.WorkDate BETWEEN @fromDate
+				AND @toDate
 			AND empca.WorkDate BETWEEN lr.FromDate
 				AND lr.ToDate
 			AND (

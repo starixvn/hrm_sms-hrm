@@ -9,7 +9,7 @@ Task: show annual leave tranasaction by employee
 DB: HRM
 Original:
 
-Revisions: 
+Revisions:
 Param's Explanation:
 
 */
@@ -23,13 +23,13 @@ BEGIN
 	SET @todate = dateadd(yy, 1, @fromdate)
 
 	SELECT t.LeaveTransId
-		,RequestID
+		,RequestId
 		,FromDate AS AffectedFrom
 		,ISNULL(CreditDays, 0) - ISNULL(DeductDays, 0) AS [ToTalDays]
 		,[Description]
 		,ISNULL(t.ModifiedDate, t.CreatedDate) AS ModifiedDate
 	FROM dbo.LeaveTrans t WITH (NOLOCK)
-		INNER JOIN dbo.Employee e WITH (NOLOCK) ON e.EmpID = t.EmpID
+		INNER JOIN dbo.Employee e WITH (NOLOCK) ON e.EmpID = t.EmpId
 	WHERE fromdate >= @fromdate
 		AND fromdate < @todate
 		AND t.EmpId = @EmpId

@@ -202,7 +202,6 @@
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetById.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Insert.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetByRole.sql" />
-    <Build Include="dbo\Stored Procedures\DBA_Job_EmployeeAttendance_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRole_Update.sql" />
     <Build Include="dbo\Stored Procedures\OtherDiscipline_Get.sql" />
     <Build Include="dbo\Stored Procedures\Employee_ChangePassword.sql" />

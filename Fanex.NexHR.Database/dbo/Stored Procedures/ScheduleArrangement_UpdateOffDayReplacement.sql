@@ -280,7 +280,7 @@ BEGIN
 							emp.TotalOffDaysUsed < emp.OffDaysByWeek
 							AND empca.ModifiedBy IS NULL
 							)
-						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+						OR emp.TotalOffDaysUsed > emp.OffDaysByWeek
 						)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
@@ -304,7 +304,7 @@ BEGIN
 							emp.TotalOffDaysUsed < emp.OffDaysByWeek
 							AND empca.ModifierId IS NULL
 							)
-						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+						OR emp.TotalOffDaysUsed > emp.OffDaysByWeek
 						)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
@@ -316,7 +316,7 @@ BEGIN
 			INNER JOIN @tblEmployeeWeekly AS tbl ON offr.EmployeeId = tbl.EmployeeId
 			AND offr.ReplaceForDate BETWEEN tbl.FromDate
 				AND tbl.ToDate
-			AND tbl.TotalOffDaysUsed >= tbl.OffDaysByWeek
+			AND tbl.TotalOffDaysUsed > tbl.OffDaysByWeek
 
 		DELETE
 		FROM @tblEmployeeWeekly
@@ -809,12 +809,6 @@ BEGIN
 		,WorkDate
 		,ReplaceForDate
 	FROM @tblOffDayReplacement
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Update off replacement unsuccessfully!'
-	END
 
 	DROP TABLE #tblEmployee
 
