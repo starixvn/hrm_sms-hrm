@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Supervisor
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class GetSupervisorByRequestTypeCriteria : CriteriaBase

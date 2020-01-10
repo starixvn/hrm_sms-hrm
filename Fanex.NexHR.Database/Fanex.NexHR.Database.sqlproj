@@ -77,7 +77,6 @@
     <Build Include="dbo\Tables\OTDailyRequest.sql" />
     <Build Include="dbo\Tables\OTMonthlyRequest.sql" />
     <Build Include="dbo\Tables\Shift.sql" />
-    <Build Include="dbo\Tables\SystemSetting.sql" />
     <Build Include="dbo\Tables\Department.sql" />
     <Build Include="dbo\Tables\TimeRecord.sql" />
     <Build Include="dbo\Tables\tmpKIVLeaveBalance.sql" />
@@ -183,7 +182,6 @@
     <Build Include="dbo\Stored Procedures\Function_AssignFunctionToRole.sql" />
     <Build Include="dbo\Stored Procedures\Report_WorkingHoursSummary.sql" />
     <Build Include="dbo\Stored Procedures\Shift_GetShifts.sql" />
-    <Build Include="dbo\Stored Procedures\Shift_GetShiftsByShiftID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert_ForEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Report_ShiftStatistic.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_ImportData.sql" />
@@ -225,7 +223,6 @@
     <Build Include="dbo\Stored Procedures\Discipline_UpdateIgnore.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetById.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_GetRequestByRequestDate_AllType.sql" />
-    <Build Include="dbo\Stored Procedures\Employee_GetSubTeam.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Information_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Message_GetDetailByEmployee.sql" />
     <Build Include="dbo\Stored Procedures\LateInEarlyOutRequest_GetDetailToReviewDiscipline.sql" />
@@ -262,15 +259,10 @@
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ForWaitingCase.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_ForRequestType.sql" />
     <Build Include="dbo\Stored Procedures\Report_DisciplineDetail.sql" />
-    <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAboveOffDayForEmployee.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetByQuery.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorByEmpID.sql" />
-    <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAboveOffDayForShiftManager.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetListSupervisorRequestID.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetRequestByEmpID.sql" />
-    <Build Include="dbo\Stored Procedures\ReminderAttendance_GetMissingCheckinOut.sql" />
-    <Build Include="dbo\Stored Procedures\ReminderAttendance_GetAbsent.sql" />
-    <Build Include="dbo\Stored Procedures\ReminderAttendance_GetLateInEarlyOut.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_EmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\OtherDiscipline_Delete.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_DELETE_GroupExternal.sql" />

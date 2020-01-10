@@ -45,7 +45,7 @@ BEGIN
 		,@logOldData NVARCHAR(MAX)
 	
 	SET @xml = (
-			SELECT CAST(DOB AS DATE) AS '@DOB'
+			SELECT DOB AS '@DOB'
 				,Email AS '@Email'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
@@ -62,7 +62,7 @@ BEGIN
 				,Ethnic AS '@Ethnic'
 				,[Native] AS '@Native'
 				,Religion AS '@Religion'
-				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,DateOfIDCard AS '@DateOfIDCard'
 				,PlaceOfIDCard AS '@PlaceOfIDCard'
 				,HomePhone AS '@HomePhone'
 				,Qualification AS '@Qualification'
@@ -106,15 +106,9 @@ BEGIN
 	UPDATE dbo.EmployeeSummary WITH (ROWLOCK, UPDLOCK)
 	SET CountryCode = @CountryCode
 	WHERE EmpId = @EmpId
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Update Unsuccessfully!'
-	END
 	
 	SET @xml = (
-			SELECT CAST(DOB AS DATE) AS '@DOB'
+			SELECT DOB AS '@DOB'
 				,Email AS '@Email'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
@@ -131,7 +125,7 @@ BEGIN
 				,Ethnic AS '@Ethnic'
 				,[Native] AS '@Native'
 				,Religion AS '@Religion'
-				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,DateOfIDCard AS '@DateOfIDCard'
 				,PlaceOfIDCard AS '@PlaceOfIDCard'
 				,HomePhone AS '@HomePhone'
 				,Qualification AS '@Qualification'

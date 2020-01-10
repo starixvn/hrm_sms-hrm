@@ -85,17 +85,7 @@ BEGIN
 		,@password
 		)
 
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Create member code "' + @code + '" failed.'
-
-		RETURN
-	END
-	ELSE
-	BEGIN
-		SET @EmpId = CAST(SCOPE_IDENTITY() AS INT)
-	END
+	SET @EmpId = CAST(SCOPE_IDENTITY() AS INT)
 
 	INSERT INTO dbo.EmployeeSummary (
 		EmpId

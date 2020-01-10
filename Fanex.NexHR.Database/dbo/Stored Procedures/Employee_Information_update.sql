@@ -121,23 +121,23 @@ BEGIN
 	SELECT @Roles_old = COALESCE(@Roles_old + ',', '') + CONVERT(NVARCHAR(2), RoleId)
 	FROM dbo.EmployeeRole WITH (NOLOCK)
 	WHERE EmployeeId = @EmpId
-	ORDER BY RoleID
+	Order by RoleID 
 
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,DomainUsername AS '@DomainUsername'
 				,FullName AS '@FullName'
 				,Nickname AS '@Nickname'
-				,CAST(DOB AS DATE) AS '@DOB'
+				,DOB AS '@DOB'
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
 				,[Enabled] AS '@Enabled'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,GroupId AS '@GroupId'
-				,CAST(JoinedDate AS DATE) AS '@JoinedDate'
-				,CAST(ConfirmedDate AS DATE) AS '@ConfirmedDate'
-				,CAST(ResignedDate AS DATE) AS '@ResignedDate'
+				,JoinedDate AS '@JoinedDate'
+				,ConfirmedDate AS '@ConfirmedDate'
+				,ResignedDate AS '@ResignedDate'
 				,Skype AS '@Skype'
 				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
@@ -151,15 +151,15 @@ BEGIN
 				,Ethnic AS '@Ethnic'
 				,[Native] AS '@Native'
 				,Religion AS '@Religion'
-				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,DateOfIDCard AS '@DateOfIDCard'
 				,PlaceOfIDCard AS '@PlaceOfIDCard'
 				,HomePhone AS '@HomePhone'
 				,Qualification AS '@Qualification'
 				,Major AS '@Major'
 				,EmployeeCard AS '@EmployeeCard'
 				,PickupRemark AS '@PickupRemark'
-				,CAST(PromotionDate AS DATE) AS '@PromotionDate'
-				,CAST(SectionDate AS DATE) AS '@SectionDate'
+				,PromotionDate AS '@PromotionDate'
+				,SectionDate AS '@SectionDate'
 				,@Roles_old AS '@RoleIds'
 				,CanOT AS '@CanOT'
 				,SpecialOT AS '@SpecialOT'
@@ -167,13 +167,13 @@ BEGIN
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
 				,IsTopManager AS '@IsTopManager'
-				,CAST(CompanyDate AS DATE) AS '@CompanyDate'
+				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
 				,Unit AS '@Unit'
 				,IsExpatUseHoliday AS '@IsExpatUseHoliday'
 				,OffDaysbyWeek AS '@OffDaysbyWeek'
-				,CAST(MilitaryFromDate AS DATE) AS '@MilitaryFromDate'
-				,CAST(MilitaryToDate AS DATE) AS '@MilitaryToDate'
+				,MilitaryFromDate AS '@MilitaryFromDate'
+				,MilitaryToDate AS '@MilitaryToDate'
 			FROM dbo.Employee AS emp WITH (NOLOCK)
 				INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			WHERE emp.EmpId = @EmpId
@@ -247,29 +247,21 @@ BEGIN
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Update failed.'
-
-		RETURN
-	END
-
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,DomainUsername AS '@DomainUsername'
 				,FullName AS '@FullName'
 				,Nickname AS '@Nickname'
-				,CAST(DOB AS DATE) AS '@DOB'
+				,DOB AS '@DOB'
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
 				,[Enabled] AS '@Enabled'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,GroupId AS '@GroupId'
-				,CAST(JoinedDate AS DATE) AS '@JoinedDate'
-				,CAST(ConfirmedDate AS DATE) AS '@ConfirmedDate'
-				,CAST(ResignedDate AS DATE) AS '@ResignedDate'
+				,JoinedDate AS '@JoinedDate'
+				,ConfirmedDate AS '@ConfirmedDate'
+				,ResignedDate AS '@ResignedDate'
 				,Skype AS '@Skype'
 				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
@@ -283,15 +275,15 @@ BEGIN
 				,Ethnic AS '@Ethnic'
 				,[Native] AS '@Native'
 				,Religion AS '@Religion'
-				,CAST(DateOfIDCard AS DATE) AS '@DateOfIDCard'
+				,DateOfIDCard AS '@DateOfIDCard'
 				,PlaceOfIDCard AS '@PlaceOfIDCard'
 				,HomePhone AS '@HomePhone'
 				,Qualification AS '@Qualification'
 				,Major AS '@Major'
 				,EmployeeCard AS '@EmployeeCard'
 				,PickupRemark AS '@PickupRemark'
-				,CAST(PromotionDate AS DATE) AS '@PromotionDate'
-				,CAST(SectionDate AS DATE) AS '@SectionDate'
+				,PromotionDate AS '@PromotionDate'
+				,SectionDate AS '@SectionDate'
 				,@Roles AS '@RoleIds'
 				,CanOT AS '@CanOT'
 				,SpecialOT AS '@SpecialOT'
@@ -299,13 +291,13 @@ BEGIN
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
 				,IsTopManager AS '@IsTopManager'
-				,CAST(CompanyDate AS DATE) AS '@CompanyDate'
+				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
 				,Unit AS '@Unit'
 				,IsExpatUseHoliday AS '@IsExpatUseHoliday'
 				,OffDaysbyWeek AS '@OffDaysbyWeek'
-				,CAST(MilitaryFromDate AS DATE) AS '@MilitaryFromDate'
-				,CAST(MilitaryToDate AS DATE) AS '@MilitaryToDate'
+				,MilitaryFromDate AS '@MilitaryFromDate'
+				,MilitaryToDate AS '@MilitaryToDate'
 			FROM dbo.Employee AS emp WITH (NOLOCK)
 				INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			WHERE emp.EmpId = @EmpId
