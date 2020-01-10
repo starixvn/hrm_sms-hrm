@@ -45,18 +45,6 @@ BEGIN
 		,IsHoliday BIT
 		)
 
-	CREATE TABLE #tblHalfDayRequest (
-		RequestId BIGINT
-		,RequestTypeId SMALLINT
-		,EmployeeId INT
-		,WorkDate DATE
-		,FromTime DATETIME
-		,ToTime DATETIME
-		,LeaveTypeId INT
-		,WorkType TINYINT
-		,LeaveDay DECIMAL(2, 1)
-		)
-
 	IF ISNULL(@empIds, '') <> ''
 	BEGIN
 		INSERT INTO @tblEmployeeIds (EmpId)
@@ -453,10 +441,96 @@ BEGIN
 			)
 
 	-- leave request
+	CREATE TABLE #tblLeaveRequest (
+		RequestId BIGINT
+		,EmpId INT
+		,WorkDate DATE
+		,RequestTypeId SMALLINT
+		,LeaveTypeId INT
+		,WorkType TINYINT
+		)
+
+	CREATE TABLE #tblHalfDayRequest (
+		RequestId BIGINT
+		,RequestTypeId SMALLINT
+		,EmployeeId INT
+		,WorkDate DATE
+		,FromTime DATETIME
+		,ToTime DATETIME
+		,LeaveTypeId INT
+		,WorkType TINYINT
+		,LeaveDay DECIMAL(2, 1)
+		)
+
+	INSERT INTO #tblLeaveRequest (
+		RequestId
+		,EmpId
+		,WorkDate
+		,RequestTypeId
+		,LeaveTypeId
+		,WorkType
+		)
+	SELECT r.RequestId
+		,empca.EmpId
+		,empca.WorkDate
+		,r.RequestType
+		,lrdt.LeaveType
+		,lrdt.WorkType
+	FROM @tblEmployeeIds AS tblemp
+		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
+		AND empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+		INNER JOIN dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK) ON lrdt.EmpId = tblemp.EmpId
+		AND lrdt.OnDate = empca.WorkDate
+		AND lrdt.WorkType IN (@OffDay, @LeaveDay)
+		AND lrdt.IsHalfDay = 0
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lrdt.RequestId = r.RequestId
+		AND empca.EmpId = r.EmpId
+		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
+
+	INSERT INTO #tblLeaveRequest (
+		RequestId
+		,EmpId
+		,WorkDate
+		,RequestTypeId
+		,LeaveTypeId
+		,WorkType
+		)
+	SELECT r.RequestId
+		,empca.EmpId
+		,empca.WorkDate
+		,r.RequestType
+		,lr.LeaveType
+		,@LeaveDay AS WorkType
+	FROM @tblEmployeeIds AS tblemp
+		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
+		AND empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.EmpId = tblemp.EmpId
+		AND lr.LeaveType <> @GeneralLeaveId
+		AND empca.WorkDate BETWEEN lr.FromDate
+			AND lr.ToDate
+		AND (
+			lr.LeaveType NOT IN (@MaternityLeaveId, @PaternityLeaveId)
+			OR (
+				lr.LeaveType IN (@MaternityLeaveId, @PaternityLeaveId)
+				AND empca.IsOffDay = 0
+				AND empca.IsHoliday = 0
+				)
+			)
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
+		AND tblemp.EmpId = r.EmpId
+		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK)
+			WHERE lr.RequestId = lrdt.RequestId
+			)
+
 	UPDATE empca
 	SET empca.RequestId = lr.RequestId
-		,empca.RequestTypeId = lr.RequestType
-		,empca.LeaveTypeId = lr.LeaveType
+		,empca.RequestTypeId = lr.RequestTypeId
+		,empca.LeaveTypeId = lr.LeaveTypeId
 		,empca.IsLeaveDay = CASE 
 			WHEN lr.RequestId IS NOT NULL THEN 1
 			ELSE 0
@@ -471,49 +545,8 @@ BEGIN
 			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
-		OUTER APPLY (
-		SELECT r.RequestId
-			,r.RequestType
-			,lrdt.LeaveType
-			,lrdt.WorkType
-		FROM dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lrdt.RequestId = r.RequestId
-			AND empca.EmpId = r.EmpId
-			AND empca.WorkDate BETWEEN @fromDate
-				AND @toDate
-			AND lrdt.OnDate = empca.WorkDate
-			AND lrdt.WorkType IN (@OffDay, @LeaveDay)
-			AND lrdt.IsHalfDay = 0
-			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
-		
-		UNION
-		SELECT r.RequestId
-			,r.RequestType
-			,lr.LeaveType
-			,@LeaveDay AS WorkType
-		FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
-			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
-			AND lr.LeaveType <> @GeneralLeaveId
-			AND empca.EmpId = r.EmpId
-			AND empca.WorkDate BETWEEN @fromDate
-				AND @toDate
-			AND empca.WorkDate BETWEEN lr.FromDate
-				AND lr.ToDate
-			AND (
-				lr.LeaveType NOT IN (@MaternityLeaveId, @PaternityLeaveId)
-				OR (
-					lr.LeaveType IN (@MaternityLeaveId, @PaternityLeaveId)
-					AND empca.IsOffDay = 0
-					AND empca.IsHoliday = 0
-					)
-				)
-			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
-		WHERE NOT EXISTS (
-				SELECT 1
-				FROM dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK)
-				WHERE lr.RequestId = lrdt.RequestId
-				)
-		) AS lr
+		LEFT JOIN #tblLeaveRequest AS lr ON empca.EmpId = lr.EmpId
+		AND empca.WorkDate = lr.WorkDate
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND (
@@ -604,6 +637,8 @@ BEGIN
 		AND empca.WorkDate = rq.WorkDate
 	WHERE empca.FromTime <> rq.FromTime
 		AND empca.ToTime <> rq.ToTime
+
+	DROP TABLE #tblLeaveRequest
 
 	DROP TABLE #tblEmployeeCalendar
 
