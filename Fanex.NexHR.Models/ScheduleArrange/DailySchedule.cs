@@ -2,6 +2,7 @@
 {
     using System;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
 
     [Serializable]
     public class DailySchedule
@@ -40,7 +41,9 @@
                 {
                     return true;
                 }
-                else if (IsChangeShift && MoveOffFromDate.HasValue)
+                else if (IsChangeShift
+                    && (ChangeShiftTypeId.Value == (byte)ChangeShiftType.ChangeShift
+                        || (ChangeShiftTypeId.Value == (byte)ChangeShiftType.MoveOffDay && MoveOffFromDate.HasValue)))
                 {
                     return true;
                 }
