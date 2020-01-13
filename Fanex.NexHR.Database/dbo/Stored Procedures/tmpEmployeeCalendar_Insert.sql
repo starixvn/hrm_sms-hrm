@@ -32,6 +32,7 @@ BEGIN
 		,@ChangeShiftTypeId TINYINT = 1
 		,@MoveOfDayTypeId TINYINT = 2
 		-- request status
+		,@PendingStatusId TINYINT = 1
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
@@ -261,7 +262,7 @@ BEGIN
 		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS overtime WITH (NOLOCK) ON empca.EmpId = overtime.EmpId
 		AND empca.WorkDate = overtime.OvertimeDate
-		AND overtime.[Status] NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
+		AND overtime.[Status] NOT IN (@PendingStatusId, @NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND (
