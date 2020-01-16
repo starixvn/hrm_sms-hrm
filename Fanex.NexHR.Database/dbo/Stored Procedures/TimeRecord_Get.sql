@@ -1,5 +1,4 @@
 ﻿
---[TimeRecord_Get] null, '2016-12-20', '2016-12-20'
 CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
 	,@FromDate DATE
 	,@ToDate DATE

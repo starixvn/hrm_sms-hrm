@@ -37,8 +37,8 @@ BEGIN
 		)
 	SELECT emp.EmpId
 		,ROUND((ISNULL(gr.BasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
-				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01')
-				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') - 1 END
+				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') + 1
+				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') END
 				), 0)
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
