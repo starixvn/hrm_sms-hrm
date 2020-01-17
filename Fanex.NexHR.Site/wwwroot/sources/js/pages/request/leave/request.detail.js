@@ -231,6 +231,10 @@ var LeaveRequestDetail = (function ($) {
                 || leaveTypeId === LeaveType.KeepInViewByDay) {
                 $chkhalfday.show();
             } else {
+                if ($chkhalfday.prop('checked')) {
+                    $chkhalfday.prop('checked', false).change();
+                }
+
                 $chkhalfday.hide();
             }
         },
