@@ -800,6 +800,12 @@ BEGIN
 					AND tbl.ToDate
 			)
 
+	UPDATE offr
+	SET offr.ReplaceForDate = tbl.ReplaceForDate
+	FROM dbo.ScheduleArrangementOffDayReplacement AS offr WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN @tblOffDayReplacement AS tbl ON offr.EmployeeId = tbl.EmployeeId
+		AND offr.WorkDate = tbl.WorkDate
+
 	INSERT INTO dbo.ScheduleArrangementOffDayReplacement (
 		EmployeeId
 		,WorkDate
@@ -808,7 +814,13 @@ BEGIN
 	SELECT EmployeeId
 		,WorkDate
 		,ReplaceForDate
-	FROM @tblOffDayReplacement
+	FROM @tblOffDayReplacement AS tbl
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.ScheduleArrangementOffDayReplacement AS offr WITH (NOLOCK)
+			WHERE tbl.EmployeeId = offr.EmployeeId
+				AND tbl.WorkDate = offr.WorkDate
+			)
 
 	DROP TABLE #tblEmployee
 

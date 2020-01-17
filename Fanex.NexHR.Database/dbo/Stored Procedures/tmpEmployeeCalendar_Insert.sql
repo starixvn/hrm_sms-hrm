@@ -301,7 +301,7 @@ BEGIN
 			(
 				empca.IsKeepInView = 1
 				AND empca.RequestTypeId = @KeepInViewRequestTypeId
-				AND kiv.RequestId IS NULL
+				--AND kiv.RequestId IS NULL
 				)
 			OR (
 				empca.IsKeepInView = 0
@@ -344,7 +344,7 @@ BEGIN
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
 				AND empca.ChangeShiftTypeId = @ChangeShiftTypeId
-				AND cs.RequestId IS NULL
+				--AND cs.RequestId IS NULL
 				)
 			OR (
 				empca.RequestId IS NULL
@@ -386,7 +386,7 @@ BEGIN
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
 				AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
 				AND empca.MoveOffToDate IS NOT NULL
-				AND cs.RequestId IS NULL
+				--AND cs.RequestId IS NULL
 				)
 			OR (
 				empca.RequestId IS NULL
@@ -555,7 +555,7 @@ BEGIN
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @LeaveRequestTypeId
 				AND empca.LeaveDay = 1
-				AND lr.RequestId IS NULL
+				--AND lr.RequestId IS NULL
 				)
 			OR (
 				empca.RequestId IS NULL
