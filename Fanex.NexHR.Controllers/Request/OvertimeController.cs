@@ -38,7 +38,7 @@
         [HttpGet]
         public ActionResult EmployeeView(MonthlyOvertimeRequestViewModel model)
         {
-            model.Employee = model.Employee ?? sessionService.Employee.Nickname;
+            model.Employee = model.Employee ?? sessionService.Employee.DisplayName;
             model.EmployeeId = model.EmployeeId <= 0 ? sessionService.Employee.Id : model.EmployeeId;
             model.OvertimeRequests = overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
