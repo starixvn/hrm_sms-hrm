@@ -35,3 +35,9 @@
         }
     }
 }
+
+@-moz-document url-prefix() {
+    .card .request-time {
+        width: 69px;
+    }
+}
