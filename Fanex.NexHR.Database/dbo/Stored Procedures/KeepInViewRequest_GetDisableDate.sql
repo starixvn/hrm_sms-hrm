@@ -31,7 +31,7 @@ BEGIN
 		,tmpca.IsHoliday
 		,tmpca.IsOffDay
 		,tmpca.IsOvertime
-		,tmpca.IsLeaveOffday
+		,tmpca.IsLeaveOffDay
 		,tmpca.IsLeaveDay
 		,tmpca.LeaveDay
 		,tmpca.ChangeShiftTypeId
@@ -49,8 +49,9 @@ BEGIN
 			IsLeaveDay = 1
 			AND LeaveDay = 1
 			)
-		OR IsLeaveOffday = 1
+		OR IsLeaveOffDay = 1
 		OR ChangeShiftTypeId IS NOT NULL
+		OR (IsOffDay = 0 AND IsHoliday = 0)
 		OR EXISTS (
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
