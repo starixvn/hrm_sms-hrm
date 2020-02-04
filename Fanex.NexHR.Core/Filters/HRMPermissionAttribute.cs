@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Core.Filters
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
     using System.Web.Routing;
     using Fanex.NexHR.Core.Enums;
@@ -9,13 +10,13 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class HRMPermissionAttribute : FilterAttribute, IAuthorizationFilter
     {
-        public HRMPermissionAttribute(Policy policy, string functionKey)
+        public HRMPermissionAttribute(Policy policy, params string[] functionKeys)
         {
             Policy = policy;
-            FunctionKey = functionKey;
+            FunctionKeys = functionKeys;
         }
 
-        public string FunctionKey { get; set; }
+        public string[] FunctionKeys { get; set; }
 
         public Policy Policy { get; set; }
 
@@ -23,7 +24,7 @@
         {
             var currentSession = new SessionService();
 
-            if (currentSession.Employee.Id <= 0 || !currentSession.HasPermissionOnFunction(FunctionKey, Policy))
+            if (currentSession.Employee.Id <= 0 || !FunctionKeys.Select(functionKey => currentSession.HasPermissionOnFunction(functionKey, Policy)).Any())
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
             }

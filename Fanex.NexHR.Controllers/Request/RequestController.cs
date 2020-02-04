@@ -47,8 +47,7 @@
             return date;
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
         public ActionResult Member(RequestViewModel request)
         {
             request.ViewType = RequestViewType.PersonalSpace;
@@ -137,10 +136,7 @@
             return supervisors;
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
         public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
         {
             if (model != null
@@ -156,10 +152,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
-        [HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
         public CustomJsonResult ProcessRequest(ProcessRequestParam model)
         {
             CommandResult commandResult;
