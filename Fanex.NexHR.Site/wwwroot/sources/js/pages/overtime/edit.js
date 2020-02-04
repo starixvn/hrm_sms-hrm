@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery.are-you-sure/jquery.are-you-sure';
+﻿import 'jquery.are-you-sure/jquery.are-you-sure';
 import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
@@ -77,8 +76,8 @@ $(document).ready(function () {
         } else {
             $('input.remark').each(function () {
                 let row = $(this).closest('tr');
-                const normalHours = parseFloat(row.find('input.normalHours').val());
-                const specialHours = parseFloat(row.find('input.specialHours').val());
+                const normalHours = parseFloat(row.find('input.normalHours').val()) || 0;
+                const specialHours = parseFloat(row.find('input.specialHours').val()) || 0;
 
                 if (normalHours !== 0 && specialHours !== 0) {
                     toastr.error('Can not claim both normal and special.', '', toastOptions());

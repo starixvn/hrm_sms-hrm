@@ -240,7 +240,7 @@ function initDatepicker() {
             return false;
         });
 
-        $this.closest('.calendar-form').find('.icon-calendar').off('click').on('click', function () {
+        $this.closest('.calendar-form').find('.icon-calendar:not(.disabled)').off('click').on('click', function () {
             if ($this.datepicker('widget').is(':visible')) {
                 $this.datepicker('hide');
             } else {
