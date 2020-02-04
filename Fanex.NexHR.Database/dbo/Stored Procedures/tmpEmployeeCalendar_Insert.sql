@@ -511,14 +511,8 @@ BEGIN
 		AND lr.LeaveType <> @GeneralLeaveId
 		AND empca.WorkDate BETWEEN lr.FromDate
 			AND lr.ToDate
-		AND (
-			lr.LeaveType NOT IN (@MaternityLeaveId, @PaternityLeaveId)
-			OR (
-				lr.LeaveType IN (@MaternityLeaveId, @PaternityLeaveId)
-				AND empca.IsOffDay = 0
-				AND empca.IsHoliday = 0
-				)
-			)
+		AND empca.IsOffDay = 0
+		AND empca.IsHoliday = 0
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND tblemp.EmpId = r.EmpId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -554,7 +548,7 @@ BEGIN
 			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @LeaveRequestTypeId
-				AND empca.LeaveDay = 1
+				--AND empca.LeaveDay = 1
 				--AND lr.RequestId IS NULL
 				)
 			OR (
