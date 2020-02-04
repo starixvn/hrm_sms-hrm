@@ -240,15 +240,6 @@ BEGIN
 						)
 					OR (
 						empca.IsOffDay = 1
-						AND empca.ChangeShiftTypeId IS NULL
-						AND (
-							empca.IsFixedOffDay = 0
-							OR empca.IsFixedOffDay = 1
-							)
-						AND (
-							empca.IsOvertime = 0
-							OR empca.IsOvertime = 1
-							)
 						AND NOT EXISTS (
 							SELECT 1
 							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
