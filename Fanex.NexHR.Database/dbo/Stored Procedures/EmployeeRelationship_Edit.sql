@@ -4,8 +4,10 @@
 CREATE PROCEDURE [dbo].[EmployeeRelationship_Edit] @RelationshipId INT
 	,@FullName NVARCHAR(200)
 	,@Phone NVARCHAR(100)
+	,@Relationship NVARCHAR(50)
 	,@DateOfBirth DATE
 	,@Gender BIT
+	,@IsEmergency BIT
 	,@Modifier INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -17,6 +19,7 @@ DB: NexEPA
 Original: 
 
 Revisions:  
+	- 20200205@MerlinLe: Add field [Relationship] and [IsEmergency]
 Param's Explanation:
 • @ErrCode:
 	= 0: Transaction recorded successfully.
@@ -49,8 +52,10 @@ BEGIN
 
 	SET FullName = @FullName
 		,Phone = @Phone
+		,Relationship = @Relationship
 		,DateOfBirth = @DateOfBirth
 		,Gender = @Gender
+		,IsEmergency = @IsEmergency
 		,ModifiedBy = @Modifier
 		,ModifiedDate = GETDATE()
 	WHERE Id = @RelationshipId

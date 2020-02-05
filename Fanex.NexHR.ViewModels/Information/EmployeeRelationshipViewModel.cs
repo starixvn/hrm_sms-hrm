@@ -22,6 +22,14 @@
         [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]
         public string Phone { get; set; }
 
+        [Required]
+        [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.ValidateStringLengthMessage))]
+        [Display(Name = "Relationship")]
+        public string Relationship { get; set; }
+
         public int Gender { get; set; }
+
+        [Display(Name = "Emergency")]
+        public bool IsEmergency { get; set; }
     }
 }

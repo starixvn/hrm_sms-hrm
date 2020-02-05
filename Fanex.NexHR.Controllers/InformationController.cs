@@ -172,6 +172,8 @@
                     Gender = viewModel.Gender,
                     DateOfBirth = viewModel.BirthDay,
                     Phone = viewModel.Phone,
+                    Relationship = viewModel.Relationship,
+                    IsEmergency = viewModel.IsEmergency,
                     Creator = sessionService.Employee.Id
                 };
 
@@ -197,7 +199,9 @@
                 FullName = relationship.FullName,
                 Gender = relationship.Gender,
                 Phone = relationship.Phone,
-                BirthDay = relationship.DateOfBirth
+                Relationship = relationship.Relationship,
+                BirthDay = relationship.DateOfBirth,
+                IsEmergency = relationship.IsEmergency
             };
             return PartialView("_EditRelationship", viewModel);
         }
@@ -215,6 +219,8 @@
                     Gender = viewModel.Gender,
                     DateOfBirth = viewModel.BirthDay,
                     Phone = string.IsNullOrEmpty(viewModel.Phone) ? string.Empty : viewModel.Phone,
+                    Relationship = viewModel.Relationship,
+                    IsEmergency = viewModel.IsEmergency,
                     Modifier = sessionService.Employee.Id
                 };
 

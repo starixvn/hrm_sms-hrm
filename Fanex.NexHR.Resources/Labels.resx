@@ -1863,4 +1863,7 @@
   <data name="IsRealDate" xml:space="preserve">
     <value>Is real date</value>
   </data>
+  <data name="Emergency" xml:space="preserve">
+    <value>Emergency</value>
+  </data>
 </root>

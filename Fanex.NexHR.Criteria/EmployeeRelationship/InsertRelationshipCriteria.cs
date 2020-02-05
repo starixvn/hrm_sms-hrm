@@ -11,9 +11,13 @@
 
         public string Phone { get; set; } = string.Empty;
 
+        public string Relationship { get; set; }
+
         public DateTime DateOfBirth { get; set; }
 
         public int Gender { get; set; }
+
+        public bool IsEmergency { get; set; }
 
         public int Creator { get; set; }
 
@@ -24,7 +28,7 @@
 
         public override bool IsValid()
         {
-            return EmployeeId > 0 && Creator > 0 && !string.IsNullOrEmpty(FullName);
+            return EmployeeId > 0 && Creator > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
         }
     }
 }

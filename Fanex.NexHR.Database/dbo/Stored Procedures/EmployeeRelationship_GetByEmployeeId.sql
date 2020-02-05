@@ -11,6 +11,7 @@ DB: HRM
 Original: 
 
 Revisions:  
+	- 20200205@MerlinLe: Add field [Relationship] and [IsEmergency]
 Param's Explanation:
 
 */
@@ -21,8 +22,10 @@ BEGIN
 		  ,r.EmpId
 		  ,r.FullName
 		  ,r.Phone
+		  ,r.Relationship
 		  ,r.Gender
 		  ,r.DateOfBirth
+		  ,r.IsEmergency
 		  ,r.CreatedBy
 		  ,r.CreatedBy
 		  ,r.ModifiedBy

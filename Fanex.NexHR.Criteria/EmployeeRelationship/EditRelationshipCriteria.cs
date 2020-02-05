@@ -11,9 +11,13 @@
 
         public string Phone { get; set; }
 
+        public string Relationship { get; set; }
+
         public DateTime DateOfBirth { get; set; }
 
         public int Gender { get; set; }
+
+        public bool IsEmergency { get; set; }
 
         public int Modifier { get; set; }
 
@@ -24,7 +28,7 @@
 
         public override bool IsValid()
         {
-            return RelationshipId > 0 && Modifier > 0 && !string.IsNullOrEmpty(FullName);
+            return RelationshipId > 0 && Modifier > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
         }
     }
 }

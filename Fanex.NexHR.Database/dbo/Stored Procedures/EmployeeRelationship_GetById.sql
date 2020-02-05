@@ -11,6 +11,7 @@ DB: HRM
 Original: 
 
 Revisions:  
+	- 20200205@MerlinLe: Add field [Relationship] and [IsEmergency]
 Param's Explanation:
 
 */
@@ -20,8 +21,10 @@ BEGIN
 	SELECT r.Id As RelationshipId
 		  ,r.FullName
 		  ,r.Phone
+		  ,r.Relationship
 		  ,r.DateOfBirth
 		  ,r.Gender
+		  ,r.IsEmergency
 	FROM dbo.EmployeeRelationship As r WITH (NOLOCK)
 	WHERE r.Id = @RelationshipId
 

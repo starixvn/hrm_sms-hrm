@@ -4,8 +4,10 @@
 CREATE PROCEDURE [dbo].[EmployeeRelationship_Insert] @EmployeeId INT
 	,@FullName NVARCHAR(200)
 	,@Phone NVARCHAR(100) = ''
+	,@Relationship NVARCHAR(50)
 	,@DateOfBirth DATE
 	,@Gender BIT
+	,@IsEmergency BIT = 0
 	,@Creator INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -17,6 +19,7 @@ DB: SPM
 Original: 
 
 Revisions:  
+	- 20200205@MerlinLe: Add field [Relationship] and [IsEmergency]
 Param's Explanation:
 
 */
@@ -28,8 +31,10 @@ BEGIN
 			[EmpId]
 			,FullName
 			,Phone
+			,Relationship
 			,DateOfBirth
 			,Gender
+			,IsEmergency
 			,CreatedBy
 			,CreatedDate
 			)
@@ -37,8 +42,10 @@ BEGIN
 			@EmployeeId
 			,@FullName
 			,@Phone
+			,@Relationship
 			,@DateOfBirth
 			,@Gender
+			,@IsEmergency
 			,@Creator
 			,GETDATE()
 			)
