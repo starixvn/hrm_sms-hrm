@@ -36,7 +36,7 @@
 .rightjob {
     float: left;
     padding: 5px 10px 5px 5px;
-    width: calc(100% - 600px);
+    min-width: calc(100% - 600px);
 
     .pcontent {
         float: left;
