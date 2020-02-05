@@ -52,21 +52,22 @@
     </thead>
     @if (Model != null && Model.Any())
     {
-        int index = 0;
+        int rowIndex = 0;
         <tbody>
             @foreach (DisciplineDetailModel item in Model)
             {
-                int disciplinetypeId;
-                index++;
+                int colIndex = 1, disciplinetypeId;
+                rowIndex++;
+                var checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                 <tr>
-                    <td>@index</td>
+                    <td>@rowIndex</td>
                     @if (hasPermissionToUpdateOutOfControlReason)
                     {
                         <td>
-                            <input type="checkbox" class="checkbox-custom outOfControlReason" id="checkbox-@index-@item.Employee.EmployeeId"
-                                name="checkbox-@index-@item.Employee.EmployeeId" checked="@item.IsOutOfControlReason" data-changed="false"
+                            <input type="checkbox" class="checkbox-custom outOfControlReason" id="@checkboxId"
+                                name="@checkboxId" checked="@item.IsOutOfControlReason" data-changed="false"
                                 data-originchecked="@item.IsOutOfControlReason" />
-                            <label for="checkbox-@index-@item.Employee.EmployeeId"></label>
+                            <label for="@checkboxId"></label>
                         </td>
                     }
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
@@ -110,15 +111,15 @@
                             if (item.MissingCheckInOut.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.MissingCheckInOut;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="missCheckInOut-@item.Employee.EmployeeId"
-                                        name="missCheckInOut-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.MissingCheckInOut.HasIgnored"
                                         disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
                                         data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
-                                <label for="missCheckInOut-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -133,15 +134,15 @@
                             if (item.WorkingUnderTime.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="workingundertime-@item.Employee.EmployeeId"
-                                        name="workingundertime-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.WorkingUnderTime.HasIgnored"
                                         disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
                                         data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
-                                <label for="workingundertime-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -156,15 +157,15 @@
                             if (item.LateIn.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.LateIn;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="latein-@item.Employee.EmployeeId"
-                                        name="latein-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.LateIn.HasIgnored"
                                         disabled="@item.LateIn.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
                                         data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
-                                <label for="latein-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -179,15 +180,15 @@
                             if (item.EarlyOut.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.EarlyOut;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="earlyout-@item.Employee.EmployeeId"
-                                        name="earlyout-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.EarlyOut.HasIgnored"
                                         disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
                                         data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
-                                <label for="earlyout-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -202,15 +203,15 @@
                             if (item.Absent.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.Absent;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="absent-@item.Employee.EmployeeId"
-                                        name="absent-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.Absent.HasIgnored"
                                         disabled="@item.Absent.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
                                         data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
-                                <label for="absent-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -225,15 +226,15 @@
                             if (item.UnpaidLeave.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeave;
-                                <input class="float-right ignoredDiscipline" type="checkbox"
-                                        id="unpaid-@item.Employee.EmployeeId"
-                                        name="unpaid-@item.Employee.EmployeeId"
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                                <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.UnpaidLeave.HasIgnored"
                                         disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
                                         data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
-                                <label for="unpaid-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -248,15 +249,15 @@
                             if (item.UnpaidLeaveAbsent.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="unpaid-absent-@item.Employee.EmployeeId"
-                                        name="unpaid-absent-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.UnpaidLeaveAbsent.HasIgnored"
                                         disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
                                         data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
-                                <label for="unpaid-absent-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -271,15 +272,15 @@
                             if (item.ChangeShift.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.ChangeShift;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="changeshif-@item.Employee.EmployeeId"
-                                        name="changeshif-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.ChangeShift.HasIgnored"
                                         disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
                                         data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
-                                <label for="changeshif-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -294,15 +295,15 @@
                             if (item.UnplannedLeave.HasViolated)
                             {
                                 disciplinetypeId = (int)DisciplineType.UnplannedLeave;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="unplaned-@item.Employee.EmployeeId"
-                                        name="unplaned-@item.Employee.EmployeeId"
+                                        id="@checkboxId" name="@checkboxId"
                                         checked="@item.UnplannedLeave.HasIgnored"
                                         disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
                                         data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
                                         data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
                                         data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
-                                <label for="unplaned-@item.Employee.EmployeeId"></label>
+                                <label for="@checkboxId"></label>
                             }
                         }
                         else
@@ -310,7 +311,29 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td></td>
+                    <td>
+                        @if (item.WeekendLeave.Value > 0)
+                        {
+                            <span class="float-left">@item.WeekendLeave.Value</span>
+                            if (item.WeekendLeave.HasViolated)
+                            {
+                                disciplinetypeId = (int)DisciplineType.WeekendLeave;
+                                checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                                <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.WeekendLeave.HasIgnored"
+                                       disabled="@item.WeekendLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WeekendLeave.Score"
+                                       data-has-ignored="@item.WeekendLeave.HasIgnored" data-changed="false" />
+                                <label for="@checkboxId"></label>
+                            }
+                        }
+                        else
+                        {
+                            <span class="float-left">-</span>
+                        }
+                    </td>
                     <td>
                         @if (item.SystemSubtractScore > 0)
                         {
