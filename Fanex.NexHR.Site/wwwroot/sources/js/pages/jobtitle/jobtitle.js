@@ -36,6 +36,7 @@ const jobTitle = (function ($) {
     function initButtonCreateEvent() {
         $(domElement.BtnCreate).on('click', function() {
             removeMsg($(domElement.CreateDialog));
+            $(domElement.CreateDialog).find('input[name="name"]').val('');
             $(domElement.CreateDialog).dialog({
                 modal: true,
                 title: 'Add Job Title',
@@ -129,7 +130,7 @@ const jobTitle = (function ($) {
 
             $(domElement.EditDialog).dialog({
                 modal: true,
-                title: 'Edit an job title',
+                title: 'Edit Job Title',
                 buttons: [
                     {
                         text: 'Submit',

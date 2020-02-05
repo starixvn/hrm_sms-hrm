@@ -171,7 +171,7 @@ import '../../shared/employee.search.in.team';
                             let data = response.data;
 
                             if (data.isSuccessful) {
-                                alert('Updated Successfully!');
+                                alert('Updated successfully!');
                                 resetOriginChecked();
                             } else {
                                 alert(data.message);

@@ -12,7 +12,7 @@
 
 }
 @section Breadcrumb {
-    <a class="step" href="#">@ViewBag.Title</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <div class="filter">
@@ -29,7 +29,7 @@
             <button class="btn btn-primary" type="button" id="btnGetJobtitle">@Labels.Submit</button>
             @if (hasPermission)
             {
-                <button class="btn btn-excel" id="exportExcel" type="button">Excel</button>
+                <button class="btn btn-excel" id="exportExcel" type="button">@Labels.Excel</button>
                 <button id="btnNewJobTitle" class="btn btn-request" type="button">
                     <span class="fa fa-plus"></span> @Labels.NewJobTitle
                 </button>
@@ -40,7 +40,7 @@
 
 <div id="data"></div>
 
-<div id="create-dialog" title="Create an job title" style="display: none" class="dialog-form">
+<div id="create-dialog" style="display: none" class="dialog-form">
     @Html.ValidationSummary()
     <form>
         <div class="form-horizontal clearfix">
@@ -64,7 +64,7 @@
     </form>
 </div>
 
-<div id="edit-dialog" title="Create an job title" style="display: none" class="dialog-form">
+<div id="edit-dialog" style="display: none" class="dialog-form">
     @Html.ValidationSummary()
     <form>
         <div class="form-horizontal clearfix">
