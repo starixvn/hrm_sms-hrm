@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[EmployeePaternity] (
     [PaternityId]   INT            IDENTITY (1, 1) NOT NULL,
     [EmpId]         INT            NOT NULL,
-    [ChildBornDate] DATETIME       NOT NULL,
+    [ChildBornDate] DATE       NOT NULL,
     [CreatedBy]     INT            NOT NULL,
     [CreatedDate]   DATETIME       NOT NULL,
     [ModifiedBy]    INT            NULL,

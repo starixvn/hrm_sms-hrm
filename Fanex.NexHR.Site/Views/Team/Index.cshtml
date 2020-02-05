@@ -59,8 +59,8 @@
                 <td>@team.Code</td>
                 <td>@team.Name</td>
                 <td>@team.Department.Name</td>
-                <td>@string.Join(", ", team.Leaders.Select(x => x.NickName))</td>
-                <td>@string.Join(", ", team.AssistantLeaders.Select(x => x.NickName))</td>
+                <td>@string.Join(", ", team.Leaders.Select(x => x.Nickname))</td>
+                <td>@string.Join(", ", team.AssistantLeaders.Select(x => x.Nickname))</td>
                 <td class="align-left">@team.MailGroup</td>
                 <td>@team.BasicAnnualLeaveBalance</td>
                 <td>@team.TotalExpat</td>

@@ -61,7 +61,7 @@ BEGIN
 
 	SELECT gl.GroupId
 		,gl.IsLeader
-		,emp.EmpId AS EmployeeId
+		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
 	FROM dbo.GroupLeader AS gl WITH (NOLOCK)

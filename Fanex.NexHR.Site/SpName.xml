@@ -10,8 +10,8 @@
   <Function Name="Employee">
     <Setting Key="Employee_CheckResetPassword" SpName="Employee_CheckResetPassword" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="TeamId" ObjectProperty="Id" />
+      <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
     </Setting>
     <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
       <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
@@ -20,11 +20,11 @@
     </Setting>
     <Setting Key="Employee_GetUploadedFile" SpName="Employee_GetUploadedFile" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetEmployees" SpName="Employee_GetEmployees" DbName="nexhrx" Plain="0">
-      <Mapping DataField="EmpId" ObjectProperty="Id" />
-      <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
-      <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
-      <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
-      <Mapping DataField="TeamID" ObjectProperty="Id" />
+      <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+      <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" Class="Employee" />
+      <Mapping DataField="PermanentAddress" ObjectProperty="Address" Class="Employee" />
+      <Mapping DataField="DOB" ObjectProperty="DateOfBirth" Class="Employee" />
+      <Mapping DataField="TeamID" ObjectProperty="Id" Class="Team" />
     </Setting>
     <Setting Key="Employee_GetMemberByManager" SpName="Employee_GetMemberByManager" DbName="nexhrx" Plain="0">
       <Mapping DataField="EmpId" ObjectProperty="Id" />
@@ -98,9 +98,8 @@
     <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Group_Get" SpName="Group_Get" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
-      <Mapping DataField="EmployeeId" ObjectProperty="Id" />
+      <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
     </Setting>
     <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0">
       <Mapping DataField="GroupId" ObjectProperty="Id" />
@@ -203,19 +202,19 @@
     <Setting Key="Department_Insert" SpName="Department_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Department_Update" SpName="Department_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Department_GetByParentId" SpName="Department_GetByParentId" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" />
-      <Mapping DataField="ManagerId" ObjectProperty="EmpId" />
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ManagerId" ObjectProperty="EmpId" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_GetById" SpName="Department_GetById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" />
-      <Mapping DataField="ManagerId" ObjectProperty="EmpId" />
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ManagerId" ObjectProperty="EmpId" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_GetParent" SpName="Department_GetParent" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" />
-      <Mapping DataField="ManagerId" ObjectProperty="Id" />
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="ManagerId" ObjectProperty="Id" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>

@@ -5,18 +5,11 @@
 
     public class Team : EntityBase<int>
     {
-        public Team()
-        {
-            Department = new Department();
-            Leaders = new List<Employee>();
-            AssistantLeaders = new List<Employee>();
-        }
+        public Department Department { get; set; } = new Department();
 
-        public Department Department { get; set; }
+        public IList<TeamLeader> Leaders { get; set; } = new List<TeamLeader>();
 
-        public IList<Employee> Leaders { get; set; }
-
-        public IList<Employee> AssistantLeaders { get; set; }
+        public IList<TeamLeader> AssistantLeaders { get; set; } = new List<TeamLeader>();
 
         public DateTime? CreatedDate { get; set; }
 

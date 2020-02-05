@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[Employee_GetEmployeeByID] --652
-	@Empid INT
+﻿
+CREATE PROCEDURE [dbo].[Employee_GetEmployeeByID] @Empid INT
 AS
 /*
 Created: Tom.Vo@2013-10-21
-Task: get employee by code
+Task: get employee by id
 DB: HRM
 Original:
 
@@ -28,15 +28,11 @@ BEGIN
 		,e.EmployeeCard
 		,e.DOB AS DateOfBirth
 		,e.Email
-		,e.JobTitleId
-		,lk.Name AS JobTitle
 		,e.[Enabled]
 		,e.Phone
 		,e.Gender
 		,e.SectionDate
 		,e.PromotionDate
-		,e.GroupId
-		,g.DepartmentId
 		,e.JoinedDate
 		,e.ConfirmedDate
 		,e.ResignedDate
@@ -102,7 +98,9 @@ BEGIN
 		,e_cs.History
 		,e.PasswordReset
 		,e.PickupRemark
-		,ISNULL(e.GroupID, - 1) AS [TeamID]
+		,e.JobTitleId
+		,lk.[Name] AS JobTitle
+		,ISNULL(e.GroupId, - 1) AS [TeamId]
 		,g.Code
 		,g.[Name]
 	FROM dbo.Employee e WITH (NOLOCK)
@@ -110,6 +108,7 @@ BEGIN
 		LEFT JOIN dbo.EmployeeContract e_cs WITH (NOLOCK) ON e_cs.EmpId = e.EmpId
 		LEFT JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupID = g.GroupID
 		LEFT JOIN dbo.Country ct WITH (NOLOCK) ON empsum.CountryCode = ct.CountryCode
-		LEFT JOIN dbo.LookupData lk WITH (NOLOCK) ON e.JobTitleId = lk.Id AND lk.LookupId = 1
+		LEFT JOIN dbo.LookupData lk WITH (NOLOCK) ON e.JobTitleId = lk.Id
+		AND lk.LookupId = 1
 	WHERE e.EmpId = @Empid
 END

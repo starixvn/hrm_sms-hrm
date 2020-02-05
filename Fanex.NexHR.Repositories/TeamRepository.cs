@@ -12,7 +12,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (IMultiResultReader multi = db.QueryMultiple(criteria))
                 {
                     var team = multi.Read<Team, Department, Team>(
                              (t, de) =>
@@ -20,21 +20,13 @@
                                  t.Department = de;
                                  return t;
                              },
-                             "DepartmentId")
-                             .FirstOrDefault();
-
-                    var employees = multi.Read<TeamLeader, Employee, TeamLeader>(
-                        (t, e) =>
-                        {
-                            t.Employee = e;
-                            return t;
-                        },
-                        "EmployeeId").ToList();
+                             "DepartmentId").FirstOrDefault();
+                    var employees = multi.Read<TeamLeader>();
 
                     if (team != null)
                     {
-                        team.Leaders = employees.Where(e => e.IsLeader).Select(l => l.Employee).ToList();
-                        team.AssistantLeaders = employees.Where(e => !e.IsLeader).Select(l => l.Employee).ToList();
+                        team.Leaders = employees.Where(e => e.IsLeader).ToList();
+                        team.AssistantLeaders = employees.Where(e => !e.IsLeader).ToList();
                     }
 
                     return team;
@@ -56,20 +48,14 @@
                             },
                             "DepartmentId"
                             ).ToList();
-
-                    var employees = multi.Read<TeamLeader, Employee, TeamLeader>(
-                        (t, e) =>
-                        {
-                            t.Employee = e;
-                            return t;
-                        },
-                        "EmployeeId").ToList();
+                    var employees = multi.Read<TeamLeader>();
 
                     foreach (var team in teams)
                     {
-                        team.Leaders = employees.Where(e => e.Id == team.Id && e.IsLeader).Select(l => l.Employee).ToList();
-                        team.AssistantLeaders = employees.Where(e => e.Id == team.Id && !e.IsLeader).Select(l => l.Employee).ToList();
+                        team.Leaders = employees.Where(e => e.GroupId == team.Id && e.IsLeader).ToList();
+                        team.AssistantLeaders = employees.Where(e => e.GroupId == team.Id && !e.IsLeader).ToList();
                     }
+
                     return teams;
                 }
             }

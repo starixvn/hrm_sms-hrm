@@ -2,9 +2,11 @@
 {
     public class TeamLeader
     {
-        public int Id { get; set; }
+        public int GroupId { get; set; }
 
-        public Employee Employee { get; set; }
+        public string EmpId { get; set; }
+        public string Nickname { get; set; }
+        public string FullName { get; set; }
 
         public bool IsLeader { get; set; }
     }

@@ -27,14 +27,14 @@
         [Email]
         public string MailGroup { get; set; }
 
-        [Display(Name = "Leader", ResourceType = typeof(Labels))]
-        public IList<Employee> Leaders { get; set; }
+        [Display(Name = nameof(Labels.Leader), ResourceType = typeof(Labels))]
+        public IList<TeamLeader> Leaders { get; set; } = new List<TeamLeader>();
 
         [Required(ErrorMessage = "Leaders field is required.")]
         public string LeaderIds { get; set; }
 
-        [Display(Name = "Assistant Leader")]
-        public IList<Employee> AssistantLeaders { get; set; } = new List<Employee>();
+        [Display(Name = nameof(Labels.AssistantLeader), ResourceType = typeof(Labels))]
+        public IList<TeamLeader> AssistantLeaders { get; set; } = new List<TeamLeader>();
 
         public string AssistantLeaderIds { get; set; }
 

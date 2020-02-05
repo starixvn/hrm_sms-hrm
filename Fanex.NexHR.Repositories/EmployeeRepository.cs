@@ -13,19 +13,14 @@
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
-                {
-                    Employee employee;
-                    employee = multi.Read<Employee, Team, Employee>(
+                return db.QueryEntity<Employee, Team, Employee>(
                         (e, t) =>
                         {
                             e.Team = t;
                             return e;
                         },
-                        splitOn: "TeamId").First();
-
-                    return employee;
-                }
+                        splitOn: "TeamId",
+                        parameterSet: criteria);
             }
         }
 
@@ -33,7 +28,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                Employee entity = db.QueryEntity<Employee, dynamic, Employee>(
+                return db.QueryEntity<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
@@ -41,8 +36,6 @@
                         },
                         splitOn: "TeamId",
                         parameterSet: criteria);
-
-                return entity;
             }
         }
 
@@ -52,7 +45,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
+                    var employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
@@ -60,7 +53,7 @@
                         },
                         splitOn: "TeamID");
 
-                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
                         (er, r) =>
                         {
                             er.Role = r;
@@ -82,7 +75,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<Employee> employees = multi.Read<Employee, dynamic, Employee>(
+                    var employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
                             e.Team = new Team { Id = t.TeamID, Name = t.Team };
@@ -90,7 +83,7 @@
                         },
                         splitOn: "TeamID");
 
-                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
                             (er, r) =>
                             {
                                 er.Role = r;
@@ -122,10 +115,9 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<EmployeeFullProfile> profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
+                    var profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
                         (f, em) =>
                         {
-
                             f.Emergency = em;
                             return f;
                         },

@@ -112,9 +112,9 @@
                 MailGroup = team.MailGroup,
                 BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
                 Leaders = team.Leaders,
-                LeaderIds = string.Join(",", team.Leaders.Select(e => e.Id)),
+                LeaderIds = string.Join(",", team.Leaders.Select(e => e.EmpId)),
                 AssistantLeaders = team.AssistantLeaders,
-                AssistantLeaderIds = string.Join(",", team.AssistantLeaders.Select(e => e.Id)),
+                AssistantLeaderIds = string.Join(",", team.AssistantLeaders.Select(e => e.EmpId)),
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
                 Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()

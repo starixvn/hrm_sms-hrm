@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Models
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.EmployeeGroup
 @model TeamViewModel
 
@@ -12,7 +13,7 @@
     <script src="~/wwwroot/dist/js/section.edit.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">>@Labels.HRSpace</a>
+    <a class="step">@Labels.HRSpace</a>
     <a class="step" href="@Url.Action("index", "team")">@Labels.SectionManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
@@ -61,9 +62,9 @@
             <div class="input-form">
                 @Html.HiddenFor(model => model.LeaderIds)
                 <select id="Leaders" data-placeholder="Choose leaders..." multiple class="form-control">
-                    @foreach (var employee in Model.Employees)
+                    @foreach (Employee employee in Model.Employees)
                     {
-                        <option value="@employee.Id">@(employee.NickName + " (" + employee.FullName + ")")</option>
+                        <option value="@employee.Id">@employee.DisplayName</option>
                     }
                 </select>
             </div>
@@ -76,9 +77,9 @@
             <div class="input-form">
                 @Html.HiddenFor(model => model.AssistantLeaderIds)
                 <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="form-control">
-                    @foreach (var employee in Model.Employees)
+                    @foreach (Employee employee in Model.Employees)
                     {
-                        <option value="@employee.Id" selected="@Model.AssistantLeaders.Any(l => l.Id == employee.Id)">@(employee.NickName + " (" + employee.FullName + ")")</option>
+                        <option value="@employee.Id">@employee.DisplayName</option>
                     }
                 </select>
             </div>
