@@ -157,6 +157,35 @@ BEGIN
 			,@ModifiedDate
 		FROM @tblDiscipline
 
+		-- insert
+		INSERT INTO dbo.Discipline (
+			EmpId
+			,WorkDate
+			)
+		SELECT DISTINCT EmpId
+			,WorkDate
+		FROM @tblDiscipline AS tbl
+		WHERE NOT EXISTS (
+				SELECT 1
+				FROM dbo.Discipline AS dis WITH (NOLOCK)
+				WHERE dis.EmpId = tbl.EmpId
+					AND dis.WorkDate = tbl.WorkDate
+				)
+
+		INSERT INTO dbo.DisciplineIgnore (
+			EmpId
+			,WorkDate
+			)
+		SELECT DISTINCT EmpId
+			,WorkDate
+		FROM @tblDiscipline AS tbl
+		WHERE NOT EXISTS (
+				SELECT 1
+				FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
+				WHERE dis.EmpId = tbl.EmpId
+					AND dis.WorkDate = tbl.WorkDate
+				)
+
 		-- update
 		UPDATE dis
 		SET dis.IsAbsent = CASE 
@@ -210,84 +239,5 @@ BEGIN
 		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 			AND dis.EmpId = tbl.EmpId
-
-		-- insert
-		INSERT INTO dbo.Discipline (
-			EmpId
-			,WorkDate
-			,IsAbsent
-			,IsUnpaidLeave
-			,IsUnpaidLeaveAbsent
-			,IsUnplannedLeave
-			,IsWeekendLeave
-			)
-		SELECT DISTINCT EmpId
-			,WorkDate
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 5 THEN 1
-				ELSE 0 END
-				) AS IsAbsent
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 6 THEN 1
-				ELSE 0 END
-				) AS IsUnpaidLeave
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 8 THEN 1
-				ELSE 0 END
-				) AS IsUnpaidLeaveAbsent
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 9 THEN 1
-				ELSE 0 END
-				) AS IsUnplannedLeave
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 10 THEN 1
-				ELSE 0 END
-				) AS IsWeekendLeave
-		FROM @tblDiscipline AS tbl
-		WHERE NOT EXISTS (
-				SELECT 1
-				FROM dbo.Discipline AS dis WITH (NOLOCK)
-				WHERE dis.EmpId = tbl.EmpId
-					AND dis.WorkDate = tbl.WorkDate
-				)
-
-		INSERT INTO dbo.DisciplineIgnore (
-			EmpId
-			,WorkDate
-			,IsIgnoredAbsent
-			,IsIgnoredUnpaidLeave
-			,IsIgnoredUnpaidLeaveAbsent
-			,IsIgnoredUnplannedLeave
-			,IsIgnoredWeekendLeave
-			)
-		SELECT DISTINCT EmpId
-			,WorkDate
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 5 THEN tbl.IsIgnored
-				ELSE 0 END
-				) AS IsIgnoredAbsent
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 6 THEN tbl.IsIgnored
-				ELSE 0 END
-				) AS IsIgnoredUnpaidLeave
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 8 THEN tbl.IsIgnored
-				ELSE 0 END
-				) AS IsIgnoredUnpaidLeaveAbsent
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 9 THEN tbl.IsIgnored
-				ELSE 0 END
-				) AS IsIgnoredUnplannedLeave
-			,(CASE 
-				WHEN tbl.DisciplineTypeId = 10 THEN tbl.IsIgnored
-				ELSE 0 END
-				) AS IsIgnoredWeekendLeave
-		FROM @tblDiscipline AS tbl
-		WHERE NOT EXISTS (
-				SELECT 1
-				FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
-				WHERE dis.EmpId = tbl.EmpId
-					AND dis.WorkDate = tbl.WorkDate
-				)
 	END
 END
