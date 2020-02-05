@@ -123,6 +123,7 @@ import '../../shared/employee.search.in.team';
 
         $dialogAddOtherDiscipline.dialog({
             modal: true,
+            dialogClass: 'other-discipline-dialog',
             title: 'Add Other Discipline',
             buttons: [
                 {
