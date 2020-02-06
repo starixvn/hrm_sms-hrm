@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
+﻿
+CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
 	,@groupIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -190,9 +191,6 @@ BEGIN
 		+ ',g.Code AS [Team] ' + CHAR(13)
 		+ ',g.Name AS [TeamName] ' + CHAR(13)
 		+ ',g.Rank ' + CHAR(13)
-		+ ',(CASE e.EmpId WHEN g.LeaderId THEN 2 ' + CHAR(13)
-		+ ' WHEN g.AssistantLeaderId THEN 1' + CHAR(13)
-		+ 'ELSE 0 END) AS EmployeeRank ' + CHAR(13)
 		+ 'FROM dbo.Employee AS e WITH (NOLOCK) ' + CHAR(13)
 		+ 'INNER JOIN dbo.EmployeeSummary AS s WITH (NOLOCK) ON s.EmpId = e.EmpId ' + CHAR(13)
 		+ 'INNER JOIN dbo.EmployeeContract AS e_cs WITH (NOLOCK) ON e_cs.EmpId = e.EmpId ' + CHAR(13)
@@ -210,7 +208,6 @@ BEGIN
 	SELECT @SQL = @SQL + ' JoinedDate DESC' + CHAR(13)
 		+ '  , [Code] DESC' + CHAR(13) +
 		'  , [NickName] ' + CHAR(13)
-		+ '  , EmployeeRank DESC ' + CHAR(13)
 		+ 'OFFSET ' + CONVERT(NVARCHAR(10), (@pageNumber - 1) * @pageSize) + ' ROWS FETCH NEXT ' + CONVERT(NVARCHAR(10), @pageSize) + ' ROWS ONLY;'
 
 	EXEC sp_executesql @SQL
