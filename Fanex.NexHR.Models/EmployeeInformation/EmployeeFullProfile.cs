@@ -53,7 +53,6 @@
         public string Major { get; set; }
 
         public string GroupName { get; set; }
-        public EmployeeEmergency Emergency { get; set; }
 
         public IEnumerable<EmployeeRelationship> Relationships { get; set; }
     }

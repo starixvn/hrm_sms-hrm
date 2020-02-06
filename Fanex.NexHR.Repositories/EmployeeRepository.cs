@@ -115,13 +115,7 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var profiles = multi.Read<EmployeeFullProfile, EmployeeEmergency, EmployeeFullProfile>(
-                        (f, em) =>
-                        {
-                            f.Emergency = em;
-                            return f;
-                        },
-                        splitOn: "EmergencyId");
+                    var profiles = multi.Read<EmployeeFullProfile>();
 
                     var relationships = multi.Read<EmployeeRelationship>();
 

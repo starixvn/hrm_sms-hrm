@@ -213,7 +213,7 @@
             FillEmployeeFullProfileHeader(writer, maxRelationship);
 
             WriteFullProfileBody(writer, profiles, maxRelationship);
-            writer.SyncColumnsWidth(21 + maxRelationship);
+            writer.SyncColumnsWidth(19 + maxRelationship);
             writer.CreateFreezePane(0, 3);
 
             writer.Render();
@@ -231,7 +231,7 @@
                 var record = CreateRecordEployeeFullProfile(p, currentRow);
                 if (maxLengthRelationship > 0)
                 {
-                    var baseColumn = 21;
+                    var baseColumn = 19;
                     for (int i = 0; i < maxLengthRelationship; i++)
                     {
                         writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
@@ -252,7 +252,7 @@
         {
             if (relationships != null && relationships.Any())
             {
-                int baseColumn = 21;
+                int baseColumn = 19;
                 foreach (var r in relationships)
                 {
                     writer.WriteCellValue(currentRow, baseColumn, r.FullName);
@@ -293,9 +293,7 @@
                 p.HomePhone,
                 p.Email,
                 p.Qualification,
-                p.Major,
-                Emergency = p.Emergency != null ? p.Emergency.Phone : string.Empty,
-                EmergencyFullName = p.Emergency != null ? p.Emergency.FullName : string.Empty
+                p.Major
             };
 
             return record;
@@ -304,7 +302,7 @@
         private static void FillEmployeeFullProfileHeader(ExcelTemplateWriter writer, int maxRelationship)
         {
             const int headerRow = 2;
-            var currentColumn = 21;
+            var currentColumn = 19;
 
             if (maxRelationship > 0)
             {

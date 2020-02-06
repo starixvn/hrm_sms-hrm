@@ -614,9 +614,6 @@
     <Content Include="Views\Information\_AddRelationship.cshtml" />
     <Content Include="Views\Information\_ListRelationship.cshtml" />
     <Content Include="Views\Information\_EditRelationship.cshtml" />
-    <Content Include="Views\Information\_AddEmergency.cshtml" />
-    <Content Include="Views\Information\_EditEmergency.cshtml" />
-    <Content Include="Views\Information\_ListEmergency.cshtml" />
     <Content Include="wwwroot\sources\styles\images\titlebg.png" />
     <Content Include="wwwroot\sources\styles\images\uicon.png" />
     <Content Include="wwwroot\sources\styles\login.css" />

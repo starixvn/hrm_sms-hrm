@@ -358,13 +358,6 @@
     <Setting Key="EmployeeRelationship_Edit" SpName="EmployeeRelationship_Edit" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeRelationship_Delete" SpName="EmployeeRelationship_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
-  <Function Name="Employee Emergency">
-    <Setting Key="EmployeeEmergency_GetById" SpName="EmployeeEmergency_GetById" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeEmergency_Insert" SpName="EmployeeEmergency_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeEmergency_GetByEmployeeId" SpName="EmployeeEmergency_GetByEmployeeId" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeEmergency_Edit" SpName="EmployeeEmergency_Edit" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeEmergency_Delete" SpName="EmployeeEmergency_Delete" DbName="nexhrx" Plain="0"></Setting>
-  </Function>
   <Function Name="Check In Out">
     <Setting Key="CheckInOutRequest_Insert" SpName="CheckInOutRequest_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="CheckInOutRequest_Update" SpName="CheckInOutRequest_Update" DbName="nexhrx" Plain="0"></Setting>

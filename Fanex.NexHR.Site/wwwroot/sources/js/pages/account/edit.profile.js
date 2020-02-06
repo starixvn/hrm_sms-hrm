@@ -11,9 +11,7 @@ var editAccount = (function ($) {
         DeleteFile: '.delete-file-upload',
         ListFileUpload: '#upload-list',
         Relationship: '#relationship',
-        Emergency: '#emergency',
         BtnAddRelationship: '#btn-add-relationship',
-        BtnAddEmergency: '#btn-add-emergency',
         CreateForm: '#create-form'
     };
 
@@ -21,10 +19,7 @@ var editAccount = (function ($) {
         FileMaxSize: 5242880,
         CreateRelationshipUrl: _global.root + 'Information/InsertRelationship',
         EditRelationshipUrl: _global.root + 'Information/EditRelationship/',
-        CreateEmergencyUrl: _global.root + 'Information/InsertEmergency',
-        EditEmergencyUrl: _global.root + 'Information/EditEmergency/',
         DeleteRelationship: _global.root + 'Information/DeleteRelationship/',
-        DeleteEmergency: _global.root + 'Information/DeleteEmergency/'
     };
 
     function updateInformationEvent() {
@@ -44,15 +39,6 @@ var editAccount = (function ($) {
                 }
             });
         });
-    }
-
-    function setAddEmergencyButton() {
-        var isAllowInsert = $('#emergency input[name=isAllowInsert]').is(':checked');
-        if (isAllowInsert) {
-            $(domElement.BtnAddEmergency).removeAttr('disabled');
-        } else {
-            $(domElement.BtnAddEmergency).attr('disabled', true);
-        }
     }
 
     function initUploadFileHandler() {
@@ -175,26 +161,6 @@ var editAccount = (function ($) {
                     'Do you want to delete this relationship?',
                     constants.DeleteRelationship,
                     function () { getRelationship(); });
-            }
-        });
-    }
-
-    function getEmergency() {
-        $.ajax({
-            type: 'GET',
-            url: _global.root + 'Information/GetEmployeeEmergency',
-            contentType: 'html',
-            success: function (data) {
-                $(domElement.Emergency).html(data);
-                setAddEmergencyButton();
-                initEditEvent($(domElement.Emergency),
-                    constants.EditEmergencyUrl,
-                    'Edit Emergency',
-                    function () { getEmergency(); });
-                initDeleteEvent($(domElement.Emergency),
-                    'Do you want to delete this emergency?',
-                    constants.DeleteEmergency,
-                    function () { getEmergency(); });
             }
         });
     }
@@ -334,12 +300,8 @@ var editAccount = (function ($) {
         getFileUpload();
         updateInformationEvent();
         getRelationship();
-        getEmergency();
         initButtonInsertEvent($(domElement.BtnAddRelationship), function () {
             getRelationship();
-        });
-        initButtonInsertEvent($(domElement.BtnAddEmergency), function () {
-            getEmergency();
         });
     }
 

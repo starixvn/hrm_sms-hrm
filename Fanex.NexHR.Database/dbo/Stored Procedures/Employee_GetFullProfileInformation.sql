@@ -68,16 +68,9 @@ BEGIN
 		,e.Qualification
 		,e.Major
 		,g.[Name] AS GroupName
-		,ee.Id AS EmergencyId
-		,ee.FullName
-		,ee.Gender
-		,ee.DateOfBirth
-		,ee.Phone
-		,ee.Relationship
 	FROM #tplEmployee tpl
 	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	LEFT JOIN dbo.EmployeeEmergency ee WITH (NOLOCK) ON ee.EmpId = e.EmpId
 	ORDER BY e.EmpId
 
 	SELECT r.Id
