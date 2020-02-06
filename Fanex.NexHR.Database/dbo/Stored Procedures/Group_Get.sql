@@ -13,12 +13,20 @@ Revisions:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT g.groupId
-		,g.[Name]
-		,g.Code
-		,g.[Rank]
-		,g.MailGroup
-		,g.BasicAnnualLeaveBalance
+	DECLARE @tblGroup TABLE (
+		GroupId INT
+		,NoOfMembers INT
+		,TotalLocal INT
+		,TotalExpat INT
+		)
+
+	INSERT INTO @tblGroup (
+		GroupId
+		,NoOfMembers
+		,TotalLocal
+		,TotalExpat
+		)
+	SELECT g.GroupId
 		,SUM(CASE 
 				WHEN esum.IsLocal IS NOT NULL THEN 1
 				ELSE 0
@@ -31,15 +39,11 @@ BEGIN
 				WHEN esum.IsLocal = 0 THEN 1
 				ELSE 0
 				END) TotalExpat
-		,de.DepartmentId
-		,de.Code
-		,de.[Name]
 	FROM dbo.[Group] AS g WITH (NOLOCK)
-		INNER JOIN dbo.Department AS de WITH (NOLOCK) ON g.DepartmentId = de.DepartmentId
-		LEFT JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.groupId = g.groupId
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.GroupId = g.GroupId
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND emp.[Enabled] = 1
-		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
 	WHERE (
 			@groupId IS NULL
 			OR g.GroupId = @groupId
@@ -48,24 +52,40 @@ BEGIN
 			@isDeleted IS NULL
 			OR g.isDeleted = @isDeleted
 			)
-	GROUP BY g.groupId
+	GROUP BY g.GroupId
+
+	SELECT g.groupId
 		,g.[Name]
 		,g.Code
+		,g.[Rank]
 		,g.MailGroup
 		,g.BasicAnnualLeaveBalance
-		,g.[Rank]
+		,tbl.NoOfMembers
+		,tbl.TotalLocal
+		,tbl.TotalExpat
 		,de.DepartmentId
 		,de.Code
 		,de.[Name]
+	FROM dbo.[Group] AS g WITH (NOLOCK)
+		INNER JOIN dbo.Department AS de WITH (NOLOCK) ON g.DepartmentId = de.DepartmentId
+		LEFT JOIN @tblGroup AS tbl ON g.GroupId = tbl.GroupId
+	WHERE (
+			@groupId IS NULL
+			OR g.GroupId = @groupId
+			)
+		AND (
+			@isDeleted IS NULL
+			OR g.isDeleted = @isDeleted
+			)
 	ORDER BY g.[Code]
 
-	SELECT gl.GroupId
-		,gl.IsLeader
+	SELECT mng.GroupId
+		,mng.RoleId
 		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
-	FROM dbo.GroupLeader AS gl WITH (NOLOCK)
-		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON gl.GroupId = g.GroupId
+	FROM dbo.GroupManager AS mng WITH (NOLOCK)
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON mng.GroupId = g.GroupId
 		AND (
 			@groupId IS NULL
 			OR g.GroupId = @groupId
@@ -74,7 +94,7 @@ BEGIN
 			@isDeleted IS NULL
 			OR g.isDeleted = @isDeleted
 			)
-		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gl.EmployeeId = emp.EmpId
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON mng.EmpId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND emp.[Enabled] = 1
 END

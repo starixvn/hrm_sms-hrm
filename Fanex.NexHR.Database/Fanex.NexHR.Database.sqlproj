@@ -254,7 +254,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Discipline_Insert.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineType_GetDisciplineType.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeGroup_GetGroups.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ForWaitingCase.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_ForRequestType.sql" />
     <Build Include="dbo\Stored Procedures\Report_DisciplineDetail.sql" />
@@ -280,7 +279,6 @@
     <Build Include="dbo\Stored Procedures\Group_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Group_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeSupervisor_GetDisciplineSettingById.sql" />
-    <Build Include="dbo\Stored Procedures\Group_Select.sql" />
     <Build Include="dbo\Stored Procedures\Group_Update.sql" />
     <Build Include="dbo\Stored Procedures\Employee_UpdatePasswordResetStatusByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\Holiday_Delete.sql" />
@@ -338,7 +336,6 @@
     <Build Include="dbo\Tables\WeekendLeaveTrans.sql" />
     <Build Include="dbo\Tables\KeepInViewByHourTrans.sql" />
     <Build Include="dbo\Tables\KeepInViewByDayTrans.sql" />
-    <Build Include="dbo\Tables\GroupLeader.sql" />
     <Build Include="dbo\Tables\DisciplineRequestTrans.sql" />
     <Build Include="dbo\Tables\DisciplineOutOfControl.sql" />
     <Build Include="dbo\Tables\DisciplineIgnore.sql" />
@@ -497,6 +494,7 @@
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_Update.sql" />
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_UpdateForNewEmployee.sql" />
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_UpdateIsPublic.sql" />
+    <Build Include="dbo\Tables\GroupManager.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

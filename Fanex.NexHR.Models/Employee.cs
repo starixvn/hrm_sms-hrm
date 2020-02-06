@@ -217,9 +217,7 @@
         {
             get
             {
-                return (string.IsNullOrEmpty(NickName) || string.IsNullOrEmpty(FullName))
-                ? string.Empty
-                : NickName + " (" + FullName + ")";
+                return string.IsNullOrWhiteSpace(NickName) ? FullName : NickName + " (" + FullName + ")";
             }
         }
 

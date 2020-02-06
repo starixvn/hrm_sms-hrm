@@ -4,7 +4,9 @@ CREATE PROCEDURE [dbo].[Group_Update] @GroupId INT
 	,@Name NVARCHAR(150)
 	,@DepartmentId INT
 	,@MailGroup VARCHAR(50) = ''
-	,@LeaderIds VARCHAR(MAX)
+	,@HeadId INT
+	,@AssistantHeadIds VARCHAR(MAX) = ''
+	,@LeaderIds VARCHAR(MAX) = ''
 	,@AssistantLeaderIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
 	,@ModifiedBy INT
@@ -22,6 +24,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	SET XACT_ABORT ON;
 
 	IF EXISTS (
 			SELECT 1
@@ -32,7 +35,7 @@ BEGIN
 			)
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'Code "' + @code + '" have been used by other Group.'
+			,@ErrMsg = N'Code "' + @code + '" have been used by other group.'
 
 		RETURN
 	END
@@ -40,23 +43,37 @@ BEGIN
 	DECLARE @xml XML
 		,@logData NVARCHAR(MAX)
 		,@logOldData NVARCHAR(MAX)
+		,@OldHeadId INT
+		,@OldAssistantHeadIds VARCHAR(MAX) = ''
 		,@OldLeaderIds VARCHAR(MAX)
 		,@OldAssistantLeaderIds VARCHAR(MAX)
 
-	SELECT @OldLeaderIds = COALESCE(@OldLeaderIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
-	FROM dbo.GroupLeader WITH (NOLOCK)
+	SELECT @OldHeadId = EmpId
+	FROM dbo.GroupManager WITH (NOLOCK)
 	WHERE GroupId = @GroupId
-		AND IsLeader = 1
+		AND RoleId = 1
 
-	SELECT @OldAssistantLeaderIds = COALESCE(@OldAssistantLeaderIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
-	FROM dbo.GroupLeader WITH (NOLOCK)
+	SELECT @OldAssistantHeadIds = COALESCE(@OldAssistantHeadIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	FROM dbo.GroupManager WITH (NOLOCK)
 	WHERE GroupId = @GroupId
-		AND ISNULL(IsLeader, 0) = 0
+		AND RoleId = 2
+
+	SELECT @OldLeaderIds = COALESCE(@OldLeaderIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	FROM dbo.GroupManager WITH (NOLOCK)
+	WHERE GroupId = @GroupId
+		AND RoleId = 3
+
+	SELECT @OldAssistantLeaderIds = COALESCE(@OldAssistantLeaderIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	FROM dbo.GroupManager WITH (NOLOCK)
+	WHERE GroupId = @GroupId
+		AND RoleId = 4
 
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
 				,DepartmentId AS '@DepartmentId'
+				,@OldHeadId AS '@HeadId'
+				,@OldAssistantHeadIds AS '@AssistantHeadIds'
 				,@OldLeaderIds AS '@LeaderIds'
 				,@OldAssistantLeaderIds AS '@AssistantLeaderIds'
 				,MailGroup AS '@MailGroup'
@@ -69,33 +86,57 @@ BEGIN
 	SET @logOldData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
 
 	DELETE
-	FROM dbo.GroupLeader WITH (ROWLOCK, UPDLOCK)
+	FROM dbo.GroupManager WITH (ROWLOCK, UPDLOCK)
 	WHERE GroupId = @GroupId
 
-	IF ISNULL(@LeaderIds, '') <> ''
+	INSERT INTO dbo.GroupManager (
+		GroupId
+		,EmpId
+		,RoleId
+		)
+	VALUES (
+		@GroupId
+		,@HeadId
+		,1
+		)
+
+	IF ISNULL(@AssistantHeadIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupLeader (
+		INSERT INTO dbo.GroupManager (
 			GroupId
-			,EmployeeId
-			,IsLeader
+			,EmpId
+			,RoleId
 			)
 		SELECT @GroupId
 			,val
-			,1
-		FROM fnc_strSplit(@LeaderIds, ',')
+			,2
+		FROM dbo.fnc_strSplit(@AssistantHeadIds, ',')
+	END
+
+	IF ISNULL(@LeaderIds, '') <> ''
+	BEGIN
+		INSERT INTO dbo.GroupManager (
+			GroupId
+			,EmpId
+			,RoleId
+			)
+		SELECT @GroupId
+			,val
+			,3
+		FROM dbo.fnc_strSplit(@LeaderIds, ',')
 	END
 
 	IF ISNULL(@AssistantLeaderIds, '') <> ''
 	BEGIN
-		INSERT INTO [dbo].[GroupLeader] (
+		INSERT INTO dbo.GroupManager (
 			GroupId
-			,EmployeeId
-			,IsLeader
+			,EmpId
+			,RoleId
 			)
 		SELECT @GroupId
 			,val
-			,0
-		FROM fnc_strSplit(@AssistantLeaderIds, ',')
+			,4
+		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
 	END
 
 	UPDATE dbo.[Group] WITH (ROWLOCK, UPDLOCK)
@@ -112,6 +153,8 @@ BEGIN
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
 				,DepartmentId AS '@DepartmentId'
+				,@HeadId AS '@HeadId'
+				,@AssistantHeadIds AS '@AssistantHeadIds'
 				,@LeaderIds AS '@LeaderIds'
 				,@AssistantLeaderIds AS '@AssistantLeaderIds'
 				,MailGroup AS '@MailGroup'

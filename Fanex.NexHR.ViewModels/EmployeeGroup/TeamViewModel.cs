@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
     using Fanex.NexHR.Resources;
 
     public class TeamViewModel
@@ -12,33 +13,41 @@
         public int Id { get; set; }
 
         [AllowHtml]
-        [Required]
-        [Display(Name = "Code", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.Code), ResourceType = typeof(Labels))]
         public string TeamCode { get; set; }
 
         [AllowHtml]
-        [Required]
-        [Display(Name = "Name", ResourceType = typeof(Labels))]
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.Name), ResourceType = typeof(Labels))]
         public string TeamName { get; set; }
 
-        [Required]
-        public int DepartmentId { get; set; }
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.Division), ResourceType = typeof(Labels))]
+        public int? DepartmentId { get; set; }
 
         [Email]
         public string MailGroup { get; set; }
 
-        [Display(Name = nameof(Labels.Leader), ResourceType = typeof(Labels))]
-        public IList<TeamLeader> Leaders { get; set; } = new List<TeamLeader>();
+        public IEnumerable<SectionManager> Managers { get; set; } = new List<SectionManager>();
 
-        [Required(ErrorMessage = "Leaders field is required.")]
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.SectionHead), ResourceType = typeof(Labels))]
+        public int? HeadId { get; set; }
+
+        [Display(Name = nameof(Labels.SectionHead), ResourceType = typeof(Labels))]
+        public string SectionHead { get; set; }
+
+        [Display(Name = nameof(Labels.AssistantSectionHead), ResourceType = typeof(Labels))]
+        public string AssistantHeadIds { get; set; }
+
+        [Display(Name = nameof(Labels.Leader), ResourceType = typeof(Labels))]
         public string LeaderIds { get; set; }
 
         [Display(Name = nameof(Labels.AssistantLeader), ResourceType = typeof(Labels))]
-        public IList<TeamLeader> AssistantLeaders { get; set; } = new List<TeamLeader>();
-
         public string AssistantLeaderIds { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
         public byte? BasicAnnualLeaveBalance { get; set; }
 

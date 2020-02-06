@@ -5,6 +5,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Section;
 
     public class TeamRepository : ITeamRepository
     {
@@ -21,12 +22,10 @@
                                  return t;
                              },
                              "DepartmentId").FirstOrDefault();
-                    var employees = multi.Read<TeamLeader>();
 
                     if (team != null)
                     {
-                        team.Leaders = employees.Where(e => e.IsLeader).ToList();
-                        team.AssistantLeaders = employees.Where(e => !e.IsLeader).ToList();
+                        team.Managers = multi.Read<SectionManager>();
                     }
 
                     return team;
@@ -48,12 +47,11 @@
                             },
                             "DepartmentId"
                             ).ToList();
-                    var employees = multi.Read<TeamLeader>();
+                    var employees = multi.Read<SectionManager>();
 
                     foreach (var team in teams)
                     {
-                        team.Leaders = employees.Where(e => e.GroupId == team.Id && e.IsLeader).ToList();
-                        team.AssistantLeaders = employees.Where(e => e.GroupId == team.Id && !e.IsLeader).ToList();
+                        team.Managers = employees.Where(e => e.GroupId == team.Id);
                     }
 
                     return teams;

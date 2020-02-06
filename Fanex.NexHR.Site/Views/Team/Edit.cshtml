@@ -50,17 +50,39 @@
                 @Html.LabelFor(model => model.DepartmentId, Labels.Department, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name")
-               , new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"), new { @class = "form-control" })
             </div>
-            @Html.ValidationMessage("DepartmentId")
+            @Html.ValidationMessageFor(model => model.DepartmentId)
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.Leaders, "Head", new { @class = "control-label" })
+                @Html.LabelFor(model => model.SectionHead, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.HiddenFor(model => model.LeaderIds)
+                @Html.TextBoxFor(model => model.SectionHead, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+            </div>
+            @Html.TextBoxFor(model => model.HeadId, new { @class = "section-head" })
+            @Html.ValidationMessageFor(model => model.HeadId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AssistantHeadIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select id="AssistantHeads" data-placeholder="Choose assistant heads..." multiple="multiple" class="form-control chosen-select">
+                    @foreach (Employee employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.DisplayName</option>
+                    }
+                </select>
+            </div>
+            @Html.HiddenFor(model => model.AssistantHeadIds)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaderIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
                 <select id="Leaders" data-placeholder="Choose leaders..." multiple class="form-control">
                     @foreach (Employee employee in Model.Employees)
                     {
@@ -68,14 +90,13 @@
                     }
                 </select>
             </div>
-            @Html.ValidationMessageFor(model => model.LeaderIds)
+            @Html.HiddenFor(model => model.LeaderIds)
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.AssistantLeaders, "Assist Head", new { @class = "control-label" })
+                @Html.LabelFor(model => model.AssistantLeaderIds, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.HiddenFor(model => model.AssistantLeaderIds)
                 <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="form-control">
                     @foreach (Employee employee in Model.Employees)
                     {
@@ -83,6 +104,7 @@
                     }
                 </select>
             </div>
+            @Html.HiddenFor(model => model.AssistantLeaderIds)
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -103,6 +125,7 @@
             @Html.ValidationMessageFor(model => model.BasicAnnualLeaveBalance)
         </div>
         <div class="form-group">
+            <div class="label-form"></div>
             <div>
                 <input type="submit" class="btn btn-primary" value="@Labels.Update" />
                 <a href="@Url.Action("index","team")" class="btn btn-default">@Labels.Back</a>

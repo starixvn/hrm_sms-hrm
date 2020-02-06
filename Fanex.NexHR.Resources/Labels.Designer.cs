@@ -475,15 +475,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assistant Leader.
-        /// </summary>
-        public static string AssitantLeader {
-            get {
-                return ResourceManager.GetString("AssitantLeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Attendance Daily Detail.
         /// </summary>
         public static string AttendanceDailyDetail {
@@ -1353,6 +1344,15 @@ namespace Fanex.NexHR.Resources {
         public static string DisciplineType {
             get {
                 return ResourceManager.GetString("DisciplineType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Division.
+        /// </summary>
+        public static string Division {
+            get {
+                return ResourceManager.GetString("Division", resourceCulture);
             }
         }
         

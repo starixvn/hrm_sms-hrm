@@ -1,42 +1,39 @@
-﻿/****** Object:  Stored Procedure dbo.Group_Delete    Script Date: 7/20/2016 10:19:09 AM ******/
-/****** Object:  Stored Procedure dbo.Group_Delete    Script Date: 7/19/2016 5:22:15 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-CREATE PROCEDURE [dbo].[Group_Delete]
-	@GroupID int,
-    @ModifiedBy int,
-	@ErrCode int = 0 OUTPUT,
-	@ErrMsg nvarchar(200) = '' OUTPUT
+﻿
+CREATE PROCEDURE [dbo].[Group_Delete] @GroupId INT
+	,@ModifiedBy INT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
 /*
 Created: Tom.Vo@2013-10-23
 Task: Delete Group 
 DB: HRM_SMS
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
+	SET NOCOUNT ON;
 
-SET NOCOUNT ON;
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.[Group] AS gr WITH (NOLOCK)
+				INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gr.GroupId = emp.GroupId
+			WHERE gr.GroupId = @GroupId
+				AND emp.isDeleted = 0
+				AND emp.[Enabled] = 1
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = 'The group is not empty so cannot delete it'
 
-IF (EXISTS(SELECT TOP 1 1 FROM dbo.[Group]  eg WITH (NOLOCK) 
-						INNER JOIN Employee e WITH (NOLOCK) ON eg.GroupID=e.GroupID
-		WHERE eg.GroupID=@GroupID AND e.isDeleted=0 AND e.[Enabled] = 1))
-BEGIN
-	SELECT @ErrCode=100,
-			@ErrMsg = 'The group is not empty so cannot delete it'
-	RETURN
+		RETURN
+	END
+
+	UPDATE dbo.[Group] WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
+	WHERE GroupId = @GroupId
 END
-
-UPDATE [dbo].[Group]   WITH(RowLock,UPDLock)
-SET IsDeleted = 1
-	,ModifiedDate = GETDATE()
-	,ModifiedBy = @ModifiedBy
-WHERE GroupID=@GroupID
-
-SELECT @ErrCode = 0, @ErrMsg = ''
-
-END
-
-

@@ -2,14 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Models.Section;
 
     public class Team : EntityBase<int>
     {
         public Department Department { get; set; } = new Department();
-
-        public IList<TeamLeader> Leaders { get; set; } = new List<TeamLeader>();
-
-        public IList<TeamLeader> AssistantLeaders { get; set; } = new List<TeamLeader>();
+        public IEnumerable<SectionManager> Managers { get; set; } = new List<SectionManager>();
 
         public DateTime? CreatedDate { get; set; }
 

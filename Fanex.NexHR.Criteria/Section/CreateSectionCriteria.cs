@@ -5,15 +5,14 @@
     public class CreateSectionCriteria : CriteriaBase
     {
         public string Code { get; set; }
-
         public string Name { get; set; }
-
         public int DepartmentId { get; set; }
 
         public string MailGroup { get; set; }
 
+        public int HeadId { get; set; }
+        public string AssistantHeadIds { get; set; }
         public string LeaderIds { get; set; }
-
         public string AssistantLeaderIds { get; set; }
         public byte BasicAnnualLeaveBalance { get; set; }
 
@@ -28,7 +27,7 @@
         {
             return !string.IsNullOrWhiteSpace(Code)
                 && !string.IsNullOrWhiteSpace(Name)
-                && !string.IsNullOrWhiteSpace(LeaderIds);
+                && HeadId > 0;
         }
     }
 }

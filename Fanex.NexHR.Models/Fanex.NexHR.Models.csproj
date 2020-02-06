@@ -185,6 +185,7 @@
     <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
     <Compile Include="Section\DisciplineRule.cs" />
+    <Compile Include="Section\SectionManager.cs" />
     <Compile Include="Section\Supervisor.cs" />
     <Compile Include="Section\EditSectionSupervisor.cs" />
     <Compile Include="Section\SectionModel.cs" />

@@ -72,7 +72,9 @@
                 {
                     Code = model.TeamCode,
                     Name = model.TeamName,
-                    DepartmentId = model.DepartmentId,
+                    DepartmentId = model.DepartmentId ?? 0,
+                    HeadId = model.HeadId ?? 0,
+                    AssistantHeadIds = model.AssistantHeadIds,
                     LeaderIds = model.LeaderIds,
                     AssistantLeaderIds = model.AssistantLeaderIds,
                     MailGroup = model.MailGroup,
@@ -105,16 +107,18 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
+            var sectionHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)SectionManagerRole.Head);
             var model = new TeamViewModel
             {
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
-                Leaders = team.Leaders,
-                LeaderIds = string.Join(",", team.Leaders.Select(e => e.EmpId)),
-                AssistantLeaders = team.AssistantLeaders,
-                AssistantLeaderIds = string.Join(",", team.AssistantLeaders.Select(e => e.EmpId)),
+                HeadId = sectionHead?.EmpId,
+                SectionHead = sectionHead?.DisplayName,
+                AssistantHeadIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantHead).Select(e => e.EmpId)),
+                LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.Leader).Select(e => e.EmpId)),
+                AssistantLeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantLeader).Select(e => e.EmpId)),
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
                 Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()
@@ -138,8 +142,10 @@
                         GroupId = model.Id,
                         Code = model.TeamCode,
                         Name = model.TeamName,
-                        DepartmentId = model.DepartmentId,
+                        DepartmentId = model.DepartmentId ?? 0,
                         MailGroup = model.MailGroup,
+                        HeadId = model.HeadId ?? 0,
+                        AssistantHeadIds = model.AssistantHeadIds,
                         LeaderIds = model.LeaderIds,
                         AssistantLeaderIds = model.AssistantLeaderIds,
                         ModifiedBy = sessionService.Employee.Id,

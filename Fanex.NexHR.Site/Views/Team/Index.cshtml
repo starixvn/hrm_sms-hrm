@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Models
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models
 @using Fanex.NexHR.Resources
 @model IList<Team>
 @{
@@ -32,10 +33,12 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.Team</th>
+            <th>@Labels.Section</th>
             <th>@Labels.Department</th>
             <th>@Labels.SectionHead</th>
             <th>@Labels.AssistantSectionHead</th>
+            <th>@Labels.Leader</th>
+            <th>@Labels.AssistantLeader</th>
             <th>@Labels.Email</th>
             <th>@Labels.BasicAnnualLeaveBalance</th>
             <th>@Labels.TotalExpat</th>
@@ -54,13 +57,16 @@
         @{int index = 1;}
         @foreach (Team team in Model)
         {
+            var sectionHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)SectionManagerRole.Head);
             <tr id="row@(team.Id)">
                 <td>@(index++)</td>
                 <td>@team.Code</td>
                 <td>@team.Name</td>
                 <td>@team.Department.Name</td>
-                <td>@string.Join(", ", team.Leaders.Select(x => x.Nickname))</td>
-                <td>@string.Join(", ", team.AssistantLeaders.Select(x => x.Nickname))</td>
+                <td>@(sectionHead != null ? sectionHead.Nickname : string.Empty)</td>
+                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantHead).Select(x => x.Nickname))</td>
+                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.Leader).Select(x => x.Nickname))</td>
+                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantLeader).Select(x => x.Nickname))</td>
                 <td class="align-left">@team.MailGroup</td>
                 <td>@team.BasicAnnualLeaveBalance</td>
                 <td>@team.TotalExpat</td>

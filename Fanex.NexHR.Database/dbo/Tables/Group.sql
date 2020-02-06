@@ -3,8 +3,6 @@
     [Code]              VARCHAR (20)   NOT NULL,
     [Name]              NVARCHAR (150) NULL,
     [DepartmentId]      INT            NULL,
-    [LeaderId]          INT            NULL,
-    [AssistantLeaderId] INT            NULL,
     [Rank]              INT            NULL,
     [CreatedDate]       DATETIME       NULL,
     [CreatedBy]         INT            NULL,

@@ -3,7 +3,9 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@Name VARCHAR(150)
 	,@DepartmentId INT
 	,@MailGroup VARCHAR(50) = ''
-	,@LeaderIds VARCHAR(MAX)
+	,@HeadId INT
+	,@AssistantHeadIds VARCHAR(MAX) = ''
+	,@LeaderIds VARCHAR(MAX) = ''
 	,@AssistantLeaderIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
 	,@CreatedBy INT
@@ -57,39 +59,65 @@ BEGIN
 
 	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
 
-	IF ISNULL(@LeaderIds, '') <> ''
+	INSERT INTO dbo.GroupManager (
+		GroupId
+		,EmpId
+		,RoleId
+		)
+	VALUES (
+		@id
+		,@HeadId
+		,1
+		)
+
+	IF ISNULL(@AssistantHeadIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupLeader (
+		INSERT INTO dbo.GroupManager (
 			GroupId
-			,EmployeeId
-			,IsLeader
+			,EmpId
+			,RoleId
 			)
 		SELECT @id
 			,val
-			,1
+			,2
+		FROM dbo.fnc_strSplit(@AssistantHeadIds, ',')
+	END
+
+	IF ISNULL(@LeaderIds, '') <> ''
+	BEGIN
+		INSERT INTO dbo.GroupManager (
+			GroupId
+			,EmpId
+			,RoleId
+			)
+		SELECT @id
+			,val
+			,3
 		FROM dbo.fnc_strSplit(@LeaderIds, ',')
 	END
 
 	IF ISNULL(@AssistantLeaderIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupLeader (
+		INSERT INTO dbo.GroupManager (
 			GroupId
-			,EmployeeId
-			,IsLeader
+			,EmpId
+			,RoleId
 			)
 		SELECT @id
 			,val
-			,0
+			,4
 		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
 	END
-	
+
 	DECLARE @xml XML
 		,@logData NVARCHAR(MAX)
-	
+
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
 				,DepartmentId AS '@DepartmentId'
+				,@HeadId AS '@HeadId'
+				,@AssistantHeadIds AS '@AssistantHeadIds'
 				,@LeaderIds AS '@LeaderIds'
 				,@AssistantLeaderIds AS '@AssistantLeaderIds'
 				,MailGroup AS '@MailGroup'
@@ -100,7 +128,7 @@ BEGIN
 				,TYPE
 			)
 	SET @logData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
-	
+
 	EXEC dbo.ActivityLog_Insert @UserId = @CreatedBy
 		,@ObjectTypeId = 2
 		,@ObjectId = @id

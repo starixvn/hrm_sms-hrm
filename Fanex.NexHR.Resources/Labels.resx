@@ -591,9 +591,6 @@
   <data name="AddEditTeam" xml:space="preserve">
     <value>Add/Edit Team</value>
   </data>
-  <data name="AssitantLeader" xml:space="preserve">
-    <value>Assistant Leader</value>
-  </data>
   <data name="Leader" xml:space="preserve">
     <value>Leader</value>
   </data>
@@ -1862,6 +1859,9 @@
   </data>
   <data name="IsRealDate" xml:space="preserve">
     <value>Is real date</value>
+  </data>
+  <data name="Division" xml:space="preserve">
+    <value>Division</value>
   </data>
   <data name="Emergency" xml:space="preserve">
     <value>Emergency</value>
