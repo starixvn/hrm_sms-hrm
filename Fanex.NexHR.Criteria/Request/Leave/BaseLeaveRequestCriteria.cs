@@ -5,7 +5,6 @@
     using System.Text;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Request;

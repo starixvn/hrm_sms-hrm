@@ -5,7 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using Fanex.NexHR.Core.Attributes;
     using Fanex.NexHR.Core.Enums;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -48,7 +47,7 @@
 
         public string HomePhone { get; set; }
 
-        [Email]
+        [EmailAddress(ErrorMessage = "{0} is invalid.")]
         public string Email { get; set; }
 
         public int? JobTitleId { get; set; }

@@ -345,8 +345,8 @@
   <data name="WrongUsernameOrPassword" xml:space="preserve">
     <value>The User name or Password provided is incorrect.</value>
   </data>
-  <data name="ValidateStringLengthMessage" xml:space="preserve">
-    <value>{0} must not over than {1} characters</value>
+  <data name="StringLengthErrorMessage" xml:space="preserve">
+    <value>{0} must not over {1} character long.</value>
   </data>
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Updated Successfully!</value>

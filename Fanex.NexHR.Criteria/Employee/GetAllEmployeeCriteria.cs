@@ -2,7 +2,6 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Core.Attributes;
 
     public class GetAllEmployeeCriteria : CriteriaBase
     {

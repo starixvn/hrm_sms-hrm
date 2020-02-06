@@ -619,6 +619,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must not over {1} character long..
+        /// </summary>
+        public static string StringLengthErrorMessage {
+            get {
+                return ResourceManager.GetString("StringLengthErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team&apos;s created!.
         /// </summary>
         public static string TeamCreated {
@@ -714,15 +723,6 @@ namespace Fanex.NexHR.Resources {
         public static string UpdatedSuccessfully {
             get {
                 return ResourceManager.GetString("UpdatedSuccessfully", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} must not over than {1} characters.
-        /// </summary>
-        public static string ValidateStringLengthMessage {
-            get {
-                return ResourceManager.GetString("ValidateStringLengthMessage", resourceCulture);
             }
         }
         

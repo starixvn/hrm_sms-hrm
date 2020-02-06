@@ -1,8 +1,7 @@
 ﻿namespace Fanex.NexHR.MailDeliver.Criteria
 {
-    using Core.Attributes;
-    using Data.Repository;
     using System;
+    using Data.Repository;
 
     public class InsertMailRecordCriteria : CriteriaBase
     {

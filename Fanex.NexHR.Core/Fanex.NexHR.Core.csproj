@@ -139,8 +139,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\EmailAttribute.cs" />
-    <Compile Include="Attributes\EmailValidationRule.cs" />
     <Compile Include="ConfigSettings.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="Constants\LogObjectType.cs" />
