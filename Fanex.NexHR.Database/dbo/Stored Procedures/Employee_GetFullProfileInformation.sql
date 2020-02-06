@@ -13,6 +13,7 @@ DB: HRM
 Original:
 
 Revisions:
+	20200206MerlinLe: Remove employee emergency
 Param's Explanation:
 */
 BEGIN
