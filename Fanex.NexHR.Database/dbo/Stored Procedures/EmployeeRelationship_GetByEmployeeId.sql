@@ -33,6 +33,6 @@ BEGIN
 			
 	FROM dbo.EmployeeRelationship as r WITH(NOLOCK)
 	WHERE r.EmpId = @EmployeeId
-	ORDER BY r.CreatedDate
+	ORDER BY r.IsEmergency DESC, r.CreatedDate ASC
 	
 END

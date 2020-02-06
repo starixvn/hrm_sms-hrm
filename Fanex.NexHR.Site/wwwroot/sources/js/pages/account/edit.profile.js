@@ -14,8 +14,7 @@ var editAccount = (function ($) {
         Emergency: '#emergency',
         BtnAddRelationship: '#btn-add-relationship',
         BtnAddEmergency: '#btn-add-emergency',
-        CreateForm: '#create-form',
-        EditForm: '#edit-form'
+        CreateForm: '#create-form'
     };
 
     const constants = {
@@ -205,9 +204,9 @@ var editAccount = (function ($) {
             var id = $(this).data('id');
             if (id > 0) {
                 $.get(baseUrl + id, function (data) {
-                    $(domElement.EditForm).html(data);
+                    $(domElement.CreateForm).html(data);
                     initDatepicker();
-                    $(domElement.EditForm).dialog({
+                    $(domElement.CreateForm).dialog({
                         title: title,
                         height: 'auto',
                         width: 'auto',
@@ -218,18 +217,18 @@ var editAccount = (function ($) {
                                 class: 'btn btn-primary',
                                 click: function () {
                                     $.ajax({
-                                        method: $(domElement.EditForm).find('form').attr('method'),
-                                        url: $(domElement.EditForm).find('form').attr('action'),
-                                        data: $(domElement.EditForm).find('form').serialize(),
+                                        method: $(domElement.CreateForm).find('form').attr('method'),
+                                        url: $(domElement.CreateForm).find('form').attr('action'),
+                                        data: $(domElement.CreateForm).find('form').serialize(),
                                         success: function (data) {
                                             if (data.IsSuccessful) {
-                                                $(domElement.EditForm).dialog('close');
+                                                $(domElement.CreateForm).dialog('close');
                                                 toastr.success('Updated successfully!', '', toastOptions());
                                                 if (onEditSuccess) {
                                                     onEditSuccess();
                                                 }
                                             } else {
-                                                showErrorMsg($(domElement.EditForm), data.Message);
+                                                showErrorMsg($(domElement.CreateForm), data.Message);
                                             }
                                         }
                                     });

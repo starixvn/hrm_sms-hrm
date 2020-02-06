@@ -64,7 +64,7 @@
             @Html.LabelFor(model => model.IsEmergency, new { @class = "control-label" })
         </div>
         <div class="input-form">
-            @Html.CheckBoxFor(model => model.IsEmergency)
+            <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsEmergency)</div>
         </div>
     </div>
 }

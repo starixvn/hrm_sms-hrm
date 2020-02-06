@@ -3,14 +3,3 @@
 @import '../../components/_buttons-new.scss';
 @import '../../layout/_filter.scss';
 @import '../../layout/_table.scss';
-@import '../../components/_checkbox.scss';
-
-.checkbox-custom {
-    & + label:before {
-        content: none;
-    }
-
-    & + label:after {
-        border-color: mediumseagreen;
-    }
-}

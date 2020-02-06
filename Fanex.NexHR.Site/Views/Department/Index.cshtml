@@ -84,9 +84,10 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
                         }
                     </td>
                     <td>
-                        <input type="checkbox" class="checkbox-custom"
-                               @(department.IsActive ? "checked" : string.Empty) value="@department.IsActive" />
-                        <label></label>
+                        @if (department.IsActive)
+                        {
+                            <i class="fa fa-check fa-lg icon-check"></i>
+                        }
                     </td>
                     @if (hasPermission)
                     {
