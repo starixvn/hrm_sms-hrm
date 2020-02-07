@@ -1,18 +1,17 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import '../../../libs/monthPicker/monPickr-0.0.3';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { axiosError, blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, initFromDateOnChange, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
+import '../request/date.filter';
 
 function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
     createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
     var result = '';
     $.ajax({
-        url: _global.root + "request/GetMessageDetailRequest",
+        url: resolveClientUrl("request/GetMessageDetailRequest"),
         async: false,
         type: 'post',
         data: {
@@ -102,7 +101,7 @@ function initTooltip() {
 function query() {
     blockUI();
     $.ajax({
-        url: _global.root + 'report/AttendanceDetails',
+        url: resolveClientUrl('report/AttendanceDetails'),
         type: 'POST',
         dataType: 'html',
         data: $('.filter').serialize(),
@@ -125,7 +124,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: _global.root + 'Department/GetHierarchy',
+        url: resolveClientUrl('Department/GetHierarchy'),
         success: function (data) {
             $('#Section').multiSelectTreeView({
                 data: data,
@@ -152,7 +151,7 @@ $(document).ready(function () {
 
     $("#btnExcel").click(function () {
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        location.href = _global.root + "AttendanceReport/ExportExcel?" + $('.filter').serialize();
+        location.href = resolveClientUrl("AttendanceReport/ExportExcel?" + $('.filter').serialize());
     });
 
     query();

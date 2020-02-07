@@ -4,6 +4,7 @@
 @model EmployeeAttendanceViewModel
 @{
     ViewBag.Title = @Labels.AttendanceReport;
+    var today = DateTime.Today;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/report.attendance.css" rel="stylesheet" />
@@ -47,7 +48,11 @@
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
                     Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -59,7 +64,11 @@
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
                     Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
