@@ -518,8 +518,8 @@ BEGIN
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK)
-			WHERE lr.RequestId = lrdt.RequestId
+			FROM #tblLeaveRequest AS tblreq WITH (NOLOCK)
+			WHERE lr.RequestId = tblreq.RequestId
 			)
 
 	UPDATE empca
