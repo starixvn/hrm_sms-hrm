@@ -526,6 +526,10 @@ BEGIN
 	SET empca.RequestId = lr.RequestId
 		,empca.RequestTypeId = lr.RequestTypeId
 		,empca.LeaveTypeId = lr.LeaveTypeId
+		,empca.IsOffDay = CASE 
+			WHEN lr.WorkType = @OffDay THEN 1
+			ELSE empca.IsOffDay
+			END
 		,empca.IsLeaveDay = CASE 
 			WHEN lr.RequestId IS NOT NULL THEN 1
 			ELSE 0

@@ -39,9 +39,9 @@ BEGIN
 	DECLARE @tblGroupId TABLE (GroupId INT)
 	DECLARE @tblEmployeeId TABLE (EmpId INT)
 
-	IF(@isRealDate = 1)
+	IF (@isRealDate = 1)
 	BEGIN
-		SET @fromtime = DATEADD(d, -1, @fromtime)
+		SET @fromtime = DATEADD(d, - 1, @fromtime)
 	END
 
 	IF ISNULL(@GroupIds, '') <> ''
@@ -737,11 +737,20 @@ BEGIN
 			OR rd.RequestType <> 6
 		) AS r ON (
 			T.EmpId = r.EmpId
-			AND
+			AND (
 				(
-				(@isRealDate = 1 AND r.IsInAfterDay = 1 AND T.AttendanceDate = r.WorkDate + 1)
-				OR 
-				((@isRealDate = 0 OR @isRealDate IS NULL OR r.IsInAfterDay = 0) AND T.AttendanceDate = r.WorkDate)
+					@isRealDate = 1
+					AND r.IsInAfterDay = 1
+					AND T.AttendanceDate = r.WorkDate + 1
+					)
+				OR (
+					(
+						@isRealDate = 0
+						OR @isRealDate IS NULL
+						OR r.IsInAfterDay = 0
+						)
+					AND T.AttendanceDate = r.WorkDate
+					)
 				)
 			)
 		LEFT JOIN LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeId = r.LeaveTypeId
