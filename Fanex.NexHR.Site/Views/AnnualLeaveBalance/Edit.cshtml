@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.ViewModels.AnnualLeave
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.AnnualLeave
 @model AnnualLeaveTransactionViewModel
 @{
     ViewBag.Title = "Edit " + ViewBag.Employee.NickName + "'s annual leave balance";
@@ -13,8 +14,8 @@
 
 @section Breadcrumb
 {
-    <a class="step" href="javascript:;">HR</a>
-    <a class="step" href="@Url.Action("index", "annualleavebalance")">Annual leave balance</a>
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
     <a class="step" href="~/annualleavebalance/employee/@ViewBag.Employee.Id">@ViewBag.Employee.NickName's annual leave balance</a>
     <span class="step">@Labels.Edit</span>
 }
@@ -27,7 +28,7 @@
 
         @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
-            <div class="success">@Messages.Saved</div>
+            <div class="success">@Messages.UpdatedSuccessfully</div>
         }
 
         <div class="form-group">
@@ -47,6 +48,7 @@
             <div class="input-form">
                 @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
             </div>
+            @Html.ValidationMessageFor(model => model.Description)
         </div>
 
         <div class="form-group">
