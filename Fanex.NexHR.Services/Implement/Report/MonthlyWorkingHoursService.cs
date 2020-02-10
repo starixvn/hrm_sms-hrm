@@ -12,6 +12,7 @@
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
+    using Fanex.NexHR.Models.Request;
     using OfficeOpenXml;
 
     public partial interface IEmployeeWorkingHoursService
@@ -410,7 +411,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     request.RequestTypeId == (short)RequestType.Leave ? request.LeaveType : request.RequestTypeId.RequestTypeToText();
-                worksheet.Cells[rowIndex, colIndex++].Value = request.RequestDetails;
+                worksheet.Cells[rowIndex, colIndex++].Value = GetRequestDetails(request);
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Remark;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.CreatedDate;
                 worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
@@ -468,6 +469,28 @@
             }
 
             return totals;
+        }
+
+        private string GetRequestDetails(EmployeeRequest request)
+        {
+            var requestEntity = new RequestEntity
+            {
+                RequestType = new RequestTypeModel { Id = request.RequestTypeId },
+                RequestedDate = request.RequestedDate,
+                LeaveType = new LeaveType { Id = request.LeaveTypeId },
+                TotalDays = request.TotalDays,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                FromTime = request.FromTime,
+                ToTime = request.ToTime,
+                LeaveCountDetails = request.LeaveCountDetails,
+                FromShift = new Shift { Name = request.FromShift },
+                ToShift = new Shift { Name = request.ToShift },
+                ActualLateInEarlyOut = request.ActualLateInEarlyOut,
+                TotalMins = request.TotalMins,
+                KeepInViewType = request.KeepInViewTypeId
+            };
+            return RequestService.ToRequestMessage(requestEntity);
         }
     }
 }
