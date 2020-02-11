@@ -13,7 +13,7 @@
 }
 @section Breadcrumb {
     <a class="step">>@Labels.HRSpace</a>
-    <a class="step" href="@Url.Action("index", "team")">Section Management</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.SectionManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Create</h2>
@@ -27,7 +27,7 @@
                 @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control", @autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.TeamCode)
         </div>
@@ -36,7 +36,7 @@
                 @Html.LabelFor(model => model.TeamName, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control", @autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.TeamName)
         </div>
@@ -54,7 +54,7 @@
                 @Html.LabelFor(model => model.SectionHead, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.SectionHead, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.TextBoxFor(model => model.SectionHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
             @Html.TextBoxFor(model => model.HeadId, new { @class = "section-head" })
             @Html.ValidationMessageFor(model => model.HeadId)
@@ -106,7 +106,7 @@
                 @Html.LabelFor(model => model.MailGroup, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control", @autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.MailGroup)
         </div>
