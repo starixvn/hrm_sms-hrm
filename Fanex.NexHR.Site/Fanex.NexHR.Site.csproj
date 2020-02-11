@@ -983,11 +983,9 @@
     <Content Include="Views\Message\Detail.cshtml" />
     <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
     <Content Include="Views\Report\_EmployeeSupervisorDetails.cshtml" />
-    <Content Include="ExcelTemplates\EmployeeSupervisorTemplate.xls" />
     <Content Include="Views\Team\TeamSupervisor.cshtml" />
     <Content Include="Views\Report\SectionSupervisor.cshtml" />
     <Content Include="Views\Report\_SectionSupervisorDetails.cshtml" />
-    <Content Include="ExcelTemplates\SectionSupervisorTemplate.xls" />
     <Content Include="Views\Message\DetailByEmployee.cshtml" />
     <Content Include="Views\ChangeShift\Details.cshtml" />
   </ItemGroup>
@@ -1097,7 +1095,6 @@
     <Content Include="Views\Information\UpdateInformation.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\account\edit.profile.scss" />
     <Content Include="Views\Information\_ListFileUploaded.cshtml" />
-    <Content Include="ExcelTemplates\JobTitleSummary.xls" />
     <Content Include="Views\Report\_UnpaidLeaveSummaryDetails.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\employee\details.scss" />
     <Content Include="wwwroot\sources\styles\pages\employee\edit.scss" />
@@ -1111,6 +1108,9 @@
     <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
     <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
     <Content Include="package.json" />
+    <Content Include="ExcelTemplates\SectionSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

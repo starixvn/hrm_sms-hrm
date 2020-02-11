@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models.Supervisor;
@@ -11,18 +13,15 @@
     public class ExportSupervisorController : BaseExportController
     {
         private readonly IReportService reportService;
-        private readonly IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor;
-        private readonly IExportExcelSectionSupervisorService exportExcelSectionSupervisorService;
+        private readonly IExportSupervisorService exportSupervisorService;
 
         public ExportSupervisorController(
             ISessionService sessionService,
             IReportService reportService,
-            IExportExcelEmployeeSupervisor exportExcelEmployeeSupervisor,
-            IExportExcelSectionSupervisorService exportExcelSectionSupervisorService) : base(sessionService)
+            IExportSupervisorService exportSupervisorService) : base(sessionService)
         {
             this.reportService = reportService;
-            this.exportExcelEmployeeSupervisor = exportExcelEmployeeSupervisor;
-            this.exportExcelSectionSupervisorService = exportExcelSectionSupervisorService;
+            this.exportSupervisorService = exportSupervisorService;
         }
 
         public ActionResult EmployeeSupervisor(EmployeeAndSectionSupervisorViewModel model)
@@ -35,9 +34,9 @@
                 ActionType = model.ActionType
             };
             IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
-            exportExcelEmployeeSupervisor.Export(supervisors);
+            byte[] bytes = exportSupervisorService.ExportEmployeeSupervisor(supervisors);
 
-            return new EmptyResult();
+            return File(bytes, MimeType.XLSX, $"EmployeeSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
         }
 
         public ActionResult SectionSupervisor(EmployeeAndSectionSupervisorViewModel model)
@@ -47,9 +46,9 @@
                 GroupIds = model.SectionIds,
             };
             IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
-            exportExcelSectionSupervisorService.Export(supervisors);
+            byte[] bytes = exportSupervisorService.ExportSectionSupervisor(supervisors);
 
-            return new EmptyResult();
+            return File(bytes, MimeType.XLSX, $"SectionSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
         }
     }
 }

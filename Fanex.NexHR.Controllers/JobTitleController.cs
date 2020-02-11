@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Enums;
@@ -52,9 +53,9 @@
         public ActionResult ExportExcel(string jobTitle)
         {
             IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
-            jobTitleExportService.ExportJobTitle(jobTitles);
+            byte[] bytes = jobTitleExportService.Export(jobTitles);
 
-            return new EmptyResult();
+            return File(bytes, MimeType.XLSX, $"JobTitle_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
         }
 
         [HttpPost]

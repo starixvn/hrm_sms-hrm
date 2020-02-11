@@ -1,70 +1,74 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Web;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
+    using OfficeOpenXml;
 
     public interface IJobTitleExportService
     {
-        void ExportJobTitle(IEnumerable<LookupData> jobtitles);
+        byte[] Export(IEnumerable<LookupData> jobtitles);
     }
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class JobTitleExportService : IJobTitleExportService
     {
-        private const string JobTitleTemplatePath = @"~\ExcelTemplates\JobTitleSummary.xls";
-        private const int RowStartHead = 2;
-        private const int RowStartBody = 3;
+        private const byte HeaderRowIndex = 2;
+        private const byte BodyRowIndex = 3;
+        private const byte OddRowIndex = 3;
+        private const byte EvenRowIndex = 4;
+        private const byte MinimumWidth = 10;
+        private const byte MaximumWidth = 50;
         private const int TotalColumns = 6;
 
-        public void ExportJobTitle(IEnumerable<LookupData> jobtitles)
+        public byte[] Export(IEnumerable<LookupData> jobtitles)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(JobTitleTemplatePath);
-            string fileName = "Jobtitle_" + DateTime.Now.ToString("yyyyMMdd");
-            const string sheetName = "Job title";
-            var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-
-            // Fill report title.
-            const byte TotalCopyRows = 2;
-            writer.CopyRows(0, TotalCopyRows);
-            // Fill report header.
-            writer.CopyRows(RowStartHead, 1);
-
-            FillContent(jobtitles, ref writer);
-            writer.SyncColumnsWidth(TotalColumns);
-            writer.CreateFreezePane(0, RowStartBody);
-
-            writer.Render();
-        }
-
-        private void FillContent(IEnumerable<LookupData> jobtitles, ref ExcelTemplateWriter writer)
-        {
-            int rowIndex = 1;
-
-            foreach (LookupData jobtitle in jobtitles)
+            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/JobTitleSummary.xlsx");
+            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
-                FillRow(jobtitle, ref writer, ref rowIndex);
+                using (var xlPackage = new ExcelPackage())
+                {
+                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.JobTitle);
+                    var rowIndex = 1;
+                    var colIndex = 1;
+
+                    // title & header
+                    templateWorksheet.Cells[rowIndex, colIndex, HeaderRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, HeaderRowIndex, TotalColumns]);
+
+                    // data
+                    rowIndex = BodyRowIndex;
+                    var recordIndex = 1;
+                    foreach (LookupData jobtitle in jobtitles)
+                    {
+                        colIndex = 1;
+                        if (recordIndex % 2 != 0)
+                        {
+                            templateWorksheet.Cells[OddRowIndex, 1, OddRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                        }
+                        else
+                        {
+                            templateWorksheet.Cells[EvenRowIndex, 1, EvenRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                        }
+
+                        worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
+                        worksheet.Cells[rowIndex, colIndex++].Value = jobtitle.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = jobtitle.CategoryName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = jobtitle.TotalExpat;
+                        worksheet.Cells[rowIndex, colIndex++].Value = jobtitle.TotalLocal;
+                        worksheet.Cells[rowIndex, colIndex].Value = jobtitle.Value;
+
+                        rowIndex++;
+                    }
+
+                    worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+                    worksheet.View.FreezePanes(BodyRowIndex, 1);
+
+                    return xlPackage.GetAsByteArray();
+                }
             }
-        }
-
-        private void FillRow(LookupData jobtitle, ref ExcelTemplateWriter writer, ref int rowIndex)
-        {
-            object record = new
-            {
-                Count = rowIndex,
-                jobtitle.Name,
-                jobtitle.CategoryName,
-                jobtitle.TotalExpat,
-                jobtitle.TotalLocal,
-                jobtitle.Value
-            };
-
-            var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
-
-            writer.WriteRow(writeRowNumber, record);
-
-            rowIndex++;
         }
     }
 }
