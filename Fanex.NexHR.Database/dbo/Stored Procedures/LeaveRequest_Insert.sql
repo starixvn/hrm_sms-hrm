@@ -534,10 +534,11 @@ BEGIN
 				SELECT 1
 				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
 					INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON lv.RequestId = ldt.RequestId
-					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
-				WHERE ldt.IsHalfDay = 1
+					AND lv.LeaveType = @BusinessDuringWorkingLeaveType
 					AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
+					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
 					AND wk.CurrentStatus IN (1, 2, 4, 6)
+				WHERE ldt.IsHalfDay = 1
 				)
 		BEGIN
 			SET @ErrCode = 114
