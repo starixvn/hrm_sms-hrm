@@ -141,10 +141,12 @@
             <strong>@Html.DisplayFor(model => model.Status.Name)</strong>
         </div>
     </div>
-    <div class="form-group">
-        <div id="leaveDetails"></div>
+    <div class="form-group" id="leaveDetailContainer">
+        <div class="label-form">@Labels.Details</div>
+        <div id="leaveDetails" class="leave-details"></div>
     </div>
     <div class="form-group">
+        <div class="label-form"></div>
         <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
     </div>
 </div>

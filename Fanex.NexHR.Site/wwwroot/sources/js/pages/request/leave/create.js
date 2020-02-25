@@ -726,15 +726,15 @@ const LeaveRequest = (function ($) {
         },
         getLeaveDetail: function () {
             if (parseInt(LeaveRequest.leaveTypeId.val(), 10) === LeaveType.GeneralLeave) {
+                $('#leaveDetailContainer').show();
                 LeaveRequest.showLeaveDetail(
                     LeaveRequest.employeeId.val(),
                     LeaveRequest.fromDate.val(),
                     LeaveRequest.toDate.val(),
                     LeaveRequest.leaveTypeId.val());
             } else {
-                var leaveDetailContainer = $('#leaveDetails');
-                leaveDetailContainer.empty();
-
+                $('#leaveDetailContainer').hide();
+                $('#leaveDetails').empty();
                 if (LeaveRequest.halfDayOff.prop('checked')) {
                     LeaveRequest.bindHalfDay();
                 } else {

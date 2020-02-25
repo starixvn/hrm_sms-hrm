@@ -509,6 +509,7 @@ BEGIN
 			AND @toDate
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.EmpId = tblemp.EmpId
 		AND lr.LeaveType <> @GeneralLeaveId
+		AND lr.TotalDays % 1 = 0
 		AND empca.WorkDate BETWEEN lr.FromDate
 			AND lr.ToDate
 		AND empca.IsOffDay = 0

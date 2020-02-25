@@ -186,37 +186,29 @@ function initFromDateOnChange($fromDate, $toDate) {
 function initDatepicker() {
     $('.datepicker').each(function () {
         let $this = $(this);
-        const disabledDates = $this.attr('disabledDate');
 
-        if (disabledDates && disabledDates.length > 0) {
-            let checkBadDates = function (mydate) {
-                let isEnable = true;
-                if (disabledDates && disabledDates.length > 0) {
-                    const checkdate = moment(mydate),
-                        myBadDates = disabledDates.split(',');
-                    for (let i = 0; i < myBadDates.length; i++) {
-                        const date = moment(myBadDates[i]);
-                        if (date.isSame(checkdate)) {
-                            isEnable = false;
-                        }
+        let beforeShowDayHandler = function (mydate) {
+            let isEnable = true;
+            const disabledDates = $this.attr('disabledDate');
+            if (disabledDates && disabledDates.length > 0) {
+                const checkdate = moment(mydate),
+                    myBadDates = disabledDates.split(',');
+                for (let i = 0; i < myBadDates.length; i++) {
+                    const date = moment(myBadDates[i]);
+                    if (date.isSame(checkdate)) {
+                        isEnable = false;
                     }
                 }
+            }
 
-                return [isEnable];
-            };
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                beforeShowDay: checkBadDates,
-                changeMonth: true,
-                changeYear: true
-            });
-        } else {
-            $this.datepicker({
-                dateFormat: 'dd M, yy',
-                changeMonth: true,
-                changeYear: true
-            });
-        }
+            return [isEnable];
+        };
+        $this.datepicker({
+            dateFormat: 'dd M, yy',
+            beforeShowDay: beforeShowDayHandler,
+            changeMonth: true,
+            changeYear: true
+        });
 
         let mindate = $this.attr('mindate'),
             maxdate = $this.attr('maxdate');

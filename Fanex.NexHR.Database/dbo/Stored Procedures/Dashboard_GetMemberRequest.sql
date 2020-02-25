@@ -123,7 +123,8 @@ BEGIN
 		,ToDate
 		)
 	SELECT CASE 
-			WHEN VerifierId = @EmployeeId THEN @VerifierId
+			WHEN VerifierId = @EmployeeId
+				AND VerifierId <> ApproverId THEN @VerifierId
 			WHEN ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
@@ -178,7 +179,8 @@ BEGIN
 			ELSE 0
 			END = 1
 	GROUP BY CASE 
-			WHEN VerifierId = @EmployeeId THEN @VerifierId
+			WHEN VerifierId = @EmployeeId
+				AND VerifierId <> ApproverId THEN @VerifierId
 			WHEN ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
@@ -207,7 +209,8 @@ BEGIN
 		,TotalRejected
 		)
 	SELECT CASE 
-			WHEN VerifierId = @EmployeeId THEN @VerifierId
+			WHEN VerifierId = @EmployeeId
+				AND VerifierId <> ApproverId THEN @VerifierId
 			WHEN ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
@@ -262,7 +265,8 @@ BEGIN
 			ELSE 0
 			END = 0
 	GROUP BY CASE 
-			WHEN VerifierId = @EmployeeId THEN @VerifierId
+			WHEN VerifierId = @EmployeeId
+				AND VerifierId <> ApproverId THEN @VerifierId
 			WHEN ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 

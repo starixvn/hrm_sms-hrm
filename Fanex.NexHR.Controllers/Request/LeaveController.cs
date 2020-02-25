@@ -73,7 +73,8 @@
                 LeaveTypeList = commonDataService.GetLeaveType(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers
+                Approvers = supervisor.Approvers,
+                MinDate = DateTime.Today.FirstDayOfMonth().AddMonths(-5)
             };
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);

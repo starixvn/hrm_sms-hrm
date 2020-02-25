@@ -45,6 +45,10 @@
     .time-businesstrip {
         display: flex;
         align-items: center;
+
+        input.form-control {
+            width: 70px;
+        }
     }
 
     .time-isafterday {
@@ -60,11 +64,14 @@
         }
     }
 
-    #leaveDetails {
+    .leave-details {
         width: 100%;
+        margin-left: 10px;
     }
 
     .table {
+        margin: 0 !important;
+
         .timehalfday {
             display: flex;
             align-items: center;
