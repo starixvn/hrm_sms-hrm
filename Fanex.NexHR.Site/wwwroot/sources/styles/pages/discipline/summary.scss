@@ -18,11 +18,20 @@
             width: 10rem;
         }
 
-        .select-form, .input-form, .calendar-form {
+        .select-form, .input-form {
             width: calc(100% - 10rem);
 
+            .minusScore {
+                width: 50px;
+            }
+        }
+
+        .calendar-form {
+            width: 180px;
+            position: relative;
+
             .datepicker {
-                width: calc(100% - 30px);
+                width: 150px;
                 display: inline-block;
             }
 
