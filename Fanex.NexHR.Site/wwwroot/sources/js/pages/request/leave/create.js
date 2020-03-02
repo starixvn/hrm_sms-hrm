@@ -336,7 +336,11 @@ const LeaveRequest = (function ($) {
         },
         enableControlForHalfday: function () {
             const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
-            if (leaveTypeId === LeaveType.BusinessTrip) {
+            if (leaveTypeId === LeaveType.GeneralLeave) {
+                $('.time-businesstrip').hide();
+                $('.time').hide();
+                $('#grbHalfDay').hide();
+            } else if (leaveTypeId === LeaveType.BusinessTrip) {
                 $('.time-businesstrip').show();
                 $('.time').hide();
             } else if (leaveTypeId === LeaveType.KeepInViewByHour) {
