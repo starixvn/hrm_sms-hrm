@@ -495,6 +495,7 @@
     <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_UpdateForNewEmployee.sql" />
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_UpdateIsPublic.sql" />
     <Build Include="dbo\Tables\GroupManager.sql" />
+    <Build Include="dbo\Stored Procedures\ChangeShiftRequest_ResetCalendar.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
