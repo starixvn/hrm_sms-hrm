@@ -16,6 +16,10 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
+		,@toDate = @toDate
+		,@empIds = @empId
+
 	SELECT tmpca.WorkDate
 		,tmpca.ShiftId
 		,tmpca.IsOvertime

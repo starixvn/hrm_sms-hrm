@@ -76,6 +76,7 @@
                 Approvers = supervisor.Approvers,
                 MinDate = DateTime.Today.FirstDayOfMonth().AddMonths(-5)
             };
+            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -120,6 +121,7 @@
             model.Approvers = supervisor.Approvers;
 
             ViewBag.IsView = false;
+            ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 

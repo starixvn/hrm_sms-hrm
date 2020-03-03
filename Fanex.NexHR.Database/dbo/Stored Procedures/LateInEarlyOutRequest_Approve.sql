@@ -28,7 +28,7 @@ BEGIN
 		,@OnDate DATE
 		,@LateIn INT
 		,@EarlyOut INT
-		,@RequestType TINYINT
+		,@requestTypeId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
 		-- request type
 		,@LateInRequestTypeId TINYINT = 3
@@ -46,7 +46,7 @@ BEGIN
 		,@OnDate = OnDate
 		,@LateIn = LateInMins
 		,@EarlyOut = EarlyOutMins
-		,@RequestType = r.RequestType
+		,@requestTypeId = r.RequestType
 	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
@@ -57,6 +57,7 @@ BEGIN
 				INNER JOIN dbo.LateInEarlyOutRequest AS lie WITH (NOLOCK) ON r.RequestId = lie.RequestId
 				AND lie.OnDate = @OnDate
 			WHERE r.RequestId <> @RequestId
+				AND r.RequestType = @requestTypeId
 				AND r.EmpId = @EmpId
 				AND r.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 			)
@@ -108,11 +109,11 @@ BEGIN
 
 		UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 		SET LateIn = CASE 
-				WHEN @RequestType = @LateInRequestTypeId THEN @LateIn
+				WHEN @requestTypeId = @LateInRequestTypeId THEN @LateIn
 				ELSE LateIn
 				END
 			,EarlyOut = CASE 
-				WHEN @RequestType = @EarlyOutRequestTypeId THEN @EarlyOut
+				WHEN @requestTypeId = @EarlyOutRequestTypeId THEN @EarlyOut
 				ELSE EarlyOut
 				END
 			,ModifiedDate = @ProcessedDate

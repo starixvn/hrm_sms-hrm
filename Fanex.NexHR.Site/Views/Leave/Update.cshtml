@@ -6,6 +6,7 @@
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
+    var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -27,6 +28,7 @@
         @Html.Hidden("RequestType", (byte)RequestType.Leave)
         @Html.Hidden("RequestId", Model.RequestId)
         @Html.Hidden("IsView", (bool)ViewBag.IsView)
+        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
         @Html.ValidationSummary()
 
         <div class="leave-info">
@@ -142,6 +144,10 @@
                 :
                 @Html.Html5Number(0, 59, 1, Model.ToTimeMinute, new { Name = "Minute", MaxLength = "2", id = "ToTimeMinute", @class = "form-control" })
             </div>
+            <div style="display: none;">
+                @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
+                @Html.LabelFor(model => model.IsToTimeAfterDay, "Is after day", new { @class = "control-label" })
+            </div>
         </div>
         <div id="grbTotalDay" class="form-group">
             <div class="label-form">
@@ -182,13 +188,13 @@
         </div>
         if (!(bool)ViewBag.IsView)
         {
-        <div class="form-group">
-            <div class="label-form"></div>
-            <div>
-                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
-                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            <div class="form-group">
+                <div class="label-form"></div>
+                <div>
+                    <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                    <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+                </div>
             </div>
-        </div>
         }
     }
 </div>

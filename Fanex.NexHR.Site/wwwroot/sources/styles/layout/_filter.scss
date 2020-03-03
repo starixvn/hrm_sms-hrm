@@ -6,6 +6,14 @@
     @include box-shadow(1px 1px 5px #888);
     min-width: 600px;
     max-width: 1150px;
+
+    .form-horizontal {
+        .form-group {
+            &.year .label-form {
+                width: 5rem;
+            }
+        }
+    }
 }
 
 .form-horizontal {

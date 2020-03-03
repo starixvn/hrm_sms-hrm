@@ -115,13 +115,15 @@
             else
             {
                 VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.CheckIn);
-                IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(new GetDisabledDateParam
+                var param = new GetDisabledDateParam
                 {
                     EmployeeId = request.Requester.EmpId,
                     FromDate = request.OnDate.AddMonths(-1),
                     ToDate = DateTime.Today,
-                    RequestId = request.RequestId
-                });
+                    RequestId = request.RequestId,
+                    RequestTypeId = request.RequestTypeId
+                };
+                IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(param);
                 Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.OnDate);
                 var viewModel = new CheckInOutRequestViewModel
                 {

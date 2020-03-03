@@ -251,7 +251,7 @@ BEGIN
 				,DisciplineTypeId
 				,IsIgnored
 				,CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
+					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,@ActorId
@@ -269,7 +269,7 @@ BEGIN
 					ELSE 0
 					END
 				,dis.IsOutOfControlReason = CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
+					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE dis.IsOutOfControlReason
 					END
 				,dis.IsDeleted = 0
@@ -295,12 +295,12 @@ BEGIN
 			UPDATE dis
 			SET dis.IsOutOfControlLateIn = CASE 
 					WHEN tbl.DisciplineTypeId = 3
-						AND @ReasonId = @ManagementAllowReasonId THEN 1
+						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,dis.IsOutOfControlEarlyOut = CASE 
 					WHEN tbl.DisciplineTypeId = 4
-						AND @ReasonId = @ManagementAllowReasonId THEN 1
+						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
@@ -328,7 +328,7 @@ BEGIN
 					ELSE 0
 					END
 				,CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId THEN 1
+					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,@ActorId
@@ -375,12 +375,12 @@ BEGIN
 				,WorkDate
 				,CASE 
 					WHEN tbl.DisciplineTypeId = 3
-						AND @ReasonId = @ManagementAllowReasonId THEN 1
+						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,CASE 
 					WHEN tbl.DisciplineTypeId = 4
-						AND @ReasonId = @ManagementAllowReasonId THEN 1
+						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM @tblDiscipline AS tbl

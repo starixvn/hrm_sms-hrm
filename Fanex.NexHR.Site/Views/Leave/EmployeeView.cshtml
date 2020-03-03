@@ -26,7 +26,7 @@
     @using (Html.BeginForm("employeeview", "leave", FormMethod.Get, new { @class = "filter" }))
     {
         <div class="form-horizontal clearfix">
-            <div class="form-group">
+            <div class="form-group year">
                 <div class="label-form">
                     @Html.Label(Labels.Year, new { @class = "control-label" })
                 </div>
@@ -34,7 +34,7 @@
                     @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
                 </div>
             </div>
-            <div class="form-group form-group--m">
+            <div class="form-group">
                 <button type="submit" id="btnSearch" class="btn btn-primary">@Labels.Search</button>
                 <a class="btn btn-request" href="@Url.Action("create", "leave")">
                     <span class="fa fa-plus"></span> @Labels.NewRequest

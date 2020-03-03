@@ -39,7 +39,7 @@
             <td>
                 @if (item.SystemSubtractScore > 0)
                 {
-                    <span style="color: red">-@item.SystemSubtractScore</span>
+                    <span style="color: red">-@item.SystemSubtractScore.ToString("#.0")</span>
                 }
                 else
                 {
@@ -49,7 +49,7 @@
             <td>
                 @if (item.ApproverSubtractScore > 0)
                 {
-                    <span style="color: red">-@item.ApproverSubtractScore</span>
+                    <span style="color: red">-@item.ApproverSubtractScore.ToString("#.0")</span>
                 }
                 else
                 {

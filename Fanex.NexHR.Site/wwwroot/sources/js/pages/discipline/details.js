@@ -3,8 +3,9 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 import { stringify, parse } from 'qs';
+import toastr from 'toastr';
 
-import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, initDatepicker, initFromDateOnChange, initTooltip, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, blockUI, floatThead, unblockUI, confirm, initDatepicker, initFromDateOnChange, initTooltip, resolveClientUrl, toastOptions } from '../../shared/common.functions';
 import { DisciplineType } from '../../shared/constants';
 import '../../date';
 import '../../shared/multiselect-tree-view';
@@ -42,13 +43,11 @@ import '../../shared/employee.search.in.team';
         $('#discipline-detail table.discipline-detail td input.outOfControlReason:checkbox')
             .on('click', function () {
                 var changed = !$(this).data('changed');
-
                 $(this).data('changed', changed);
             });
 
         $('#checkAll').on('click', function () {
             var isChecked = $(this).prop('checked');
-
             $('.outOfControlReason').each(function () {
                 var $this = $(this);
                 $this.prop('checked', isChecked);
@@ -56,14 +55,6 @@ import '../../shared/employee.search.in.team';
 
                 $(this).data('changed', changed);
             });
-        });
-    }
-
-    function resetOriginChecked() {
-        $('.outOfControlReason').each(function () {
-            var $this = $(this);
-            var isChecked = $this.prop('checked');
-            $this.prop('originchecked', isChecked);
         });
     }
 
@@ -154,27 +145,25 @@ import '../../shared/employee.search.in.team';
 
     function initEventForSaveChange() {
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
-            var ignoredDisciplines = getDataChanged();
-
-            if (ignoredDisciplines.length > 0) {
+            const ignoreDetails = getDataChanged();
+            if (ignoreDetails.length > 0) {
                 confirm('Are you sure you want to save?',
                     function () {
                         axios({
                             url: resolveClientUrl('discipline/EditDisciplineIgnore'),
                             method: 'POST',
-                            data: stringify({ ignoreDetails: ignoredDisciplines }),
+                            data: stringify({ ignoreDetails }),
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             }
                         }).then(response => {
-                            let data = response.data;
-
+                            const data = response.data;
                             if (data.isSuccessful) {
-                                alert('Updated successfully!');
-                                resetOriginChecked();
+                                toastr.success('Updated successfully!', '', toastOptions());
+                                query();
                             } else {
-                                alert(data.message);
+                                toastr.error(data.message, '', toastOptions());
                             }
                         }).catch(axiosError);
                     });
@@ -185,7 +174,6 @@ import '../../shared/employee.search.in.team';
     function initEventForDateRangeDropdown() {
         $('form.form-filter #DateRange').on('change', function () {
             var dateRange = $('form.form-filter #DateRange').val();
-
             if (parseInt(dateRange, 10) !== 0) {
                 const quarter = parseInt(dateRange.charAt(0), 10),
                     year = parseInt(dateRange.substring(1, dateRange.length), 10);

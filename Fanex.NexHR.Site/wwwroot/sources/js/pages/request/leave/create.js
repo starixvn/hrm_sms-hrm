@@ -70,7 +70,6 @@ const LeaveRequest = (function ($) {
         currentLeaveBalance: null,
         isFromTimeAfterDay: null,
         isToTimeAfterDay: null,
-        isTopManager: false,
 
         init: function () {
             LeaveRequest.verifierId = $('#VerifierId');
@@ -98,7 +97,6 @@ const LeaveRequest = (function ($) {
             LeaveRequest.weekendLeaveTaken = $('#lblWeekendLeave');
             LeaveRequest.isFromTimeAfterDay = $('#IsFromTimeAfterDay');
             LeaveRequest.isToTimeAfterDay = $('#IsToTimeAfterDay');
-
             LeaveRequest.autocomplete();
             LeaveRequest.getLeaveTypeInfo();
             $('#errors-model-state').hide();
@@ -141,6 +139,7 @@ const LeaveRequest = (function ($) {
                     LeaveRequest.toDate.val(),
                     LeaveRequest.requestId.val());
             }
+
             LeaveRequest.disableControlForDetail();
         },
         employeeChange: function () {
@@ -179,9 +178,8 @@ const LeaveRequest = (function ($) {
             }
         },
         saveLeaveRequest: function () {
-            LeaveRequest.checkIsTopManager();
-            var validate = LeaveRequest.validateForm();
-            if (validate) {
+            const isValid = LeaveRequest.validateForm();
+            if (isValid) {
                 RequestCommon.removeErrorMsg(false);
                 const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
                 let leaveRequest = {
@@ -373,29 +371,32 @@ const LeaveRequest = (function ($) {
                 { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
                 function (data) {
                     if (data !== null) {
-                        var arrTimeIn = data.BeginCheckInTime.split(':');
-                        var arrTimeOut = data.BeginCheckOutTime.split(':');
+                        const arrTimeIn = data.BeginCheckInTime.split(':'),
+                            arrTimeOut = data.BeginCheckOutTime.split(':');
 
-                        var minuteFrom = (parseInt(arrTimeIn[0], 10) * 60) + parseInt(arrTimeIn[1], 10);
-                        var minuteTo = (parseInt(arrTimeOut[0], 10) * 60) + parseInt(arrTimeOut[1], 10);
-                        var isFromAfterday = data.IsInAfterDay;
-                        var isToAfterday = false;
+                        let minuteFrom = parseInt(arrTimeIn[0], 10) * 60 + parseInt(arrTimeIn[1], 10),
+                            minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
+                            isFromAfterday = data.IsInAfterDay,
+                            isToAfterday = data.IsOutAfterDay;
                         if (data.IsInAfterDay) {
+                            $('.time-isafterday').show();
                             minuteFrom += 1440; //60*24
+                        } else {
+                            $('.time-isafterday').hide();
                         }
 
                         if (data.IsOutAfterDay) {
                             minuteTo += 1440;
                         }
 
-                        var averageTime = (minuteFrom + minuteTo) / 2;
+                        let averageTime = (minuteFrom + minuteTo) / 2;
                         if (averageTime >= 1440) {
                             averageTime = averageTime - 1440;
                             isToAfterday = true;
                         }
 
-                        var hour = Math.floor(averageTime / 60);
-                        var minute = Math.floor((averageTime % 60) / 30) * 30;
+                        let hour = Math.floor(averageTime / 60),
+                            minute = Math.floor((averageTime % 60) / 30) * 30;
                         minute = minute === 0 ? '00' : minute;
                         if (hour < 10) {
                             hour = '0' + hour;
@@ -413,7 +414,7 @@ const LeaveRequest = (function ($) {
                         LeaveRequest.isToTimeAfterDay.prop('checked', isToAfterday);
 
                         if (isToAfterday) {
-                            var toDate = new Date(LeaveRequest.fromDate.val());
+                            let toDate = new Date(LeaveRequest.fromDate.val());
                             toDate.setDate(toDate.getDate() + 1);
                             LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
                         }
@@ -423,7 +424,6 @@ const LeaveRequest = (function ($) {
                 });
         },
         autocomplete: function () {
-            var nickName;
             const requestType = LeaveRequest.requestType.val();
             LeaveRequest.employee.autocomplete({
                 source: function (request, response) {
@@ -438,7 +438,8 @@ const LeaveRequest = (function ($) {
                             response($.map(data, function (item) {
                                 return {
                                     label: item.NickName + ' (' + item.FullName + ')',
-                                    value: item.OwnerId
+                                    value: item.OwnerId,
+                                    isTopManager: item.IsTopManager
                                 };
                             }));
                         }
@@ -446,20 +447,28 @@ const LeaveRequest = (function ($) {
                 },
                 minLength: 1,
                 select: function (event, ui) {
-                    nickName = ui.item.label;
-                    LeaveRequest.employee.val(nickName);
+                    event.preventDefault();
+                    LeaveRequest.employee.val(ui.item.label);
                     LeaveRequest.employeeId.val(ui.item.value);
+                    $('#IsTopManager').prop('checked', ui.item.isTopManager);
                     LeaveRequest.employeeChange();
                     RequestCommon.removeErrorMsg(true);
                 },
                 focus: function (event, ui) {
-                    nickName = ui.item.label;
-                    LeaveRequest.employee.val(nickName);
-                    LeaveRequest.employeeId.val(ui.item.value);
                     event.preventDefault();
+                    LeaveRequest.employee.val(ui.item.label);
+                    LeaveRequest.employeeId.val(ui.item.value);
+                    $('#IsTopManager').prop('checked', ui.item.isTopManager);
                 },
-                close: function () {
-                    LeaveRequest.employee.val(nickName);
+                change: function (event, ui) {
+                    event.preventDefault();
+                    if (ui && ui.item) {
+                        LeaveRequest.employee.val(ui.item.label);
+                        LeaveRequest.employeeId.val(ui.item.value);
+                        $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                    } else {
+                        LeaveRequest.employeeId.val('0');
+                    }
                 }
             });
         },
@@ -507,7 +516,7 @@ const LeaveRequest = (function ($) {
             }
         },
         validateForm: function () {
-            var check = true;
+            var isValid = true;
             var errorString = [];
             var empName = LeaveRequest.employee.val();
             var fromDate = LeaveRequest.fromDate.val();
@@ -544,7 +553,7 @@ const LeaveRequest = (function ($) {
                 }
             }
 
-            if (LeaveRequest.isTopManager === false) {
+            if (!$('#IsTopManager').prop('checked')) {
                 if (verifier === null || verifier === '') {
                     errorString.push('Verified by field is required.');
                 }
@@ -563,27 +572,10 @@ const LeaveRequest = (function ($) {
 
             if (errorString.length > 0) {
                 RequestCommon.showErrorMsgs(errorString);
-                check = false;
+                isValid = false;
             }
 
-            return check;
-        },
-        checkIsTopManager: function () {
-            var employeeId = $('#EmployeeId').val();
-            if (employeeId !== null) {
-                $.ajax({
-                    url: resolveClientUrl('employee/GetEmployee'),
-                    data: {
-                        id: employeeId
-                    },
-                    async: false,
-                    success: function (data) {
-                        $(data).each(function (index, item) {
-                            LeaveRequest.isTopManager = item.IsTopManager;
-                        });
-                    }
-                });
-            }
+            return isValid;
         },
         getVerifier: function () {
             $.getJSON(resolveClientUrl('Request/GetVerifiers'),

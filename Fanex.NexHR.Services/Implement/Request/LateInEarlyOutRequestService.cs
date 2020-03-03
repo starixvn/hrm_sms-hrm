@@ -77,7 +77,8 @@
                 EmployeeId = param.EmployeeId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
-                RequestId = param.RequestId
+                RequestId = param.RequestId,
+                RequestTypeId = param.RequestTypeId,
             };
             return baseService.GetData<DateTime>(criteria);
         }

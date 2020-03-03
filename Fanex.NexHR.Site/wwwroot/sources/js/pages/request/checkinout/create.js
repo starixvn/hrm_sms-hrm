@@ -62,10 +62,12 @@ $(document).ready(function () {
             }).catch(axiosError);
     };
     let getDisabledDates = function (callback) {
+        const requestTypeId = domElements.$checkInTypeId.prop('checked') ? RequestType.CheckIn : RequestType.CheckOut;
         axios({
             url: _global.root + 'checkinout/GetDisabledDate',
             method: 'GET',
             params: {
+                requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
                 fromDate: domElements.$attendantDate.attr('mindate'),
                 toDate: domElements.$attendantDate.attr('maxdate')
@@ -226,6 +228,7 @@ $(document).ready(function () {
     });
 
     $('#RequestType_1, #RequestType_2').on('change', function () {
+        getDisabledDates();
         bindingHourAndMinute();
     });
 

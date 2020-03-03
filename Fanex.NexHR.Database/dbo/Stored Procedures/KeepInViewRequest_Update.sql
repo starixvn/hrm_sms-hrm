@@ -97,7 +97,8 @@ BEGIN
 		RETURN
 	END
 
-	IF NOT EXISTS (
+	IF @KeepInViewType = @KeepInViewByDay
+		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar WITH (NOLOCK)
 			WHERE WorkDate = @OnDate

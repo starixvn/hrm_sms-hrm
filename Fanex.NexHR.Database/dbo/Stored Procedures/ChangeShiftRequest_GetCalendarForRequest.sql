@@ -17,9 +17,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE
-		-- change shift type
-		@ChangeShift TINYINT = 1
+	DECLARE @ChangeShift TINYINT = 1
 		,@MoveOffDay TINYINT = 2
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
@@ -29,6 +27,7 @@ BEGIN
 	SELECT tmpca.WorkDate
 		,tmpca.ShiftId
 		,tmpca.IsOvertime
+		,tmpca.RequestId
 		,tmpca.ChangeShiftTypeId
 		,tmpca.IsKeepInView
 		,tmpca.IsHoliday
@@ -43,8 +42,17 @@ BEGIN
 			AND @toDate
 	WHERE emp.EmpId = @EmpId
 		AND (
-			@requestId IS NULL
-			OR ISNULL(tmpca.RequestId, 0) <> @requestId
+			(
+				@requestId IS NULL
+				AND tmpca.ChangeShiftTypeId IS NULL
+				)
+			OR (
+				@requestId IS NOT NULL
+				AND (
+					tmpca.RequestId = @requestId
+					OR tmpca.RequestId IS NULL
+					)
+				)
 			)
 
 	IF @TypeId = @ChangeShift
@@ -54,9 +62,8 @@ BEGIN
 			,tbl.ShiftId
 			,shift.[Name]
 		FROM #tblEmployeeCalendar AS tbl
-			LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
-		WHERE ChangeShiftTypeId IS NULL
-			AND IsKeepInView = 0
+			LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
+		WHERE IsKeepInView = 0
 			AND IsOvertime = 0
 			AND IsHoliday = 0
 			AND IsLeaveOffday = 0
@@ -67,14 +74,22 @@ BEGIN
 	END
 	ELSE
 	BEGIN
+		UPDATE tbl
+		SET tbl.IsOffDay = 1
+		FROM #tblEmployeeCalendar AS tbl
+			INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON tbl.RequestId = cs.RequestId
+			AND cs.TypeId = @MoveOffDay
+			INNER JOIN dbo.ChangeShiftRequestDetail AS dt WITH (NOLOCK) ON cs.RequestId = dt.RequestId
+			AND tbl.WorkDate = dt.OnDate
+		WHERE cs.RequestId = @requestId
+
 		SELECT WorkDate
 			,IsOffDay
 			,tbl.ShiftId
 			,shift.[Name]
 		FROM #tblEmployeeCalendar AS tbl
-			LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
-		WHERE ChangeShiftTypeId IS NULL
-			AND IsKeepInView = 0
+			LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
+		WHERE IsKeepInView = 0
 			AND IsLeaveDay = 0
 			AND IsHoliday = 0
 			AND IsOvertime = 0

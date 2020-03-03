@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_GetDisableDate] @empId INT
 	,@fromDate DATE
 	,@toDate DATE
+	,@requestTypeId TINYINT = 3
 	,@requestId BIGINT = NULL
 AS
 /*
@@ -16,23 +17,13 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @RequestTypeId TINYINT
-		-- request status
-		,@NotVerifiedStatusId TINYINT = 3
+	DECLARE @NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
 		,@empIds = @empId
-
-	IF @RequestId IS NOT NULL
-	BEGIN
-		SELECT @RequestTypeId = r.RequestType
-		FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-			INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON r.RequestId = lieo.RequestId
-			AND lieo.RequestId = @RequestId
-	END
 
 	SELECT tmpca.WorkDate
 		,tmpca.ShiftId
@@ -73,7 +64,7 @@ BEGIN
 			WHERE @RequestId IS NULL
 				OR (
 					r.RequestId <> @requestId
-					AND r.RequestType = @RequestTypeId
+					AND r.RequestType = @requestTypeId
 					)
 			)
 

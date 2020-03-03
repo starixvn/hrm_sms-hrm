@@ -60,6 +60,7 @@ BEGIN
 				AND csdt.OnDate BETWEEN @FromDate
 					AND @ToDate
 			WHERE r.RequestId <> @RequestId
+				AND cs.TypeId = @TypeId
 				AND r.EmpId = @EmpId
 				AND r.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 			)

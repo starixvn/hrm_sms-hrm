@@ -189,7 +189,7 @@ BEGIN
 				,DisciplineTypeId
 				,IsIgnored
 				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,@ActorId
@@ -220,7 +220,7 @@ BEGIN
 
 			UPDATE dis
 			SET dis.IsOutOfControlMissingCheckInOut = CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
@@ -241,7 +241,7 @@ BEGIN
 				,WorkDate
 				,1
 				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,@ActorId
@@ -280,7 +280,7 @@ BEGIN
 			SELECT EmpId
 				,WorkDate
 				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM @tblDiscipline AS tbl

@@ -105,13 +105,15 @@
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.LateIn);
             var minutes = request.RequestTypeId == (byte)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
-            IEnumerable<DateTime> disabledDates = lateInEarlyOutRequestService.GetDisabledDate(new GetDisabledDateParam
+            var param = new GetDisabledDateParam
             {
                 EmployeeId = request.Requester.EmpId,
                 FromDate = request.OnDate.AddMonths(-1),
                 ToDate = DateTime.Today,
-                RequestId = request.RequestId
-            });
+                RequestId = request.RequestId,
+                RequestTypeId = request.RequestTypeId,
+            };
+            IEnumerable<DateTime> disabledDates = lateInEarlyOutRequestService.GetDisabledDate(param);
             var viewModel = new LateInEarlyOutRequestViewModel
             {
                 RequestId = request.RequestId,

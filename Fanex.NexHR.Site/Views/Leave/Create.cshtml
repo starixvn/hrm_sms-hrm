@@ -7,6 +7,7 @@
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
+    var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -24,6 +25,7 @@
 <div class="card form-horizontal">
     @using (Html.BeginForm())
     {
+        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.Hidden("RequestType", (byte)RequestType.Leave)
         @Html.Hidden("RequestId", -1)
@@ -130,6 +132,10 @@
                 @Html.Html5Number(0, 23, 1, Model.ToTimeHour, new { Name = "Hour", MaxLength = "2", id = "ToTimeHour", @class = "form-control" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.ToTimeMinute, new { Name = "Minute", MaxLength = "2", id = "ToTimeMinute", @class = "form-control" })
+            </div>
+            <div style="display: none;">
+                @Html.CheckBoxFor(model => model.IsToTimeAfterDay)
+                @Html.LabelFor(model => model.IsToTimeAfterDay, "Is after day", new { @class = "control-label" })
             </div>
         </div>
         <div id="grbTotalDay" class="form-group">

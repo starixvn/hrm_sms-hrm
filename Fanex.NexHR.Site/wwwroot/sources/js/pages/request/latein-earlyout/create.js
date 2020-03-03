@@ -64,10 +64,12 @@ $(document).ready(function () {
             }).catch(axiosError);
     };
     let getDisabledDates = function (callback) {
+        const requestTypeId = domElements.$lateInTypeId.prop('checked') ? RequestType.LateIn : RequestType.EarlyOut;
         axios({
             url: _global.root + 'lateinearlyout/GetDisabledDate',
             method: 'GET',
             params: {
+                requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
                 fromDate: domElements.$onDate.attr('mindate'),
                 toDate: domElements.$onDate.attr('maxdate')
@@ -207,11 +209,13 @@ $(document).ready(function () {
     });
 
     domElements.$lateInTypeId.on('change', function () {
+        getDisabledDates();
         getActualLateInEarlyOut();
         showHideActualLateInEarlyOut();
     });
 
     domElements.$earlyOutTypeId.on('change', function () {
+        getDisabledDates();
         getActualLateInEarlyOut();
         showHideActualLateInEarlyOut();
     });

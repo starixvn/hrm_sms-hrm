@@ -51,7 +51,6 @@ BEGIN
 			)
 		OR IsLeaveOffDay = 1
 		OR ChangeShiftTypeId IS NOT NULL
-		OR (IsOffDay = 0 AND IsHoliday = 0)
 		OR EXISTS (
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)

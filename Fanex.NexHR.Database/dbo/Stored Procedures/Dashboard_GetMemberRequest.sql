@@ -301,16 +301,6 @@ BEGIN
 		) AS tblrole
 		LEFT JOIN #tblData AS data ON tblrole.RoleId = data.RoleId
 		AND tblrole.RequestTypeId = data.RequestTypeId
-	WHERE EXISTS (
-			SELECT 1
-			FROM #tblData AS data1
-			WHERE data1.RoleId = tblrole.RoleId
-				AND (
-					data1.TotalPending > 0
-					OR data1.TotalApproved > 0
-					OR data1.TotalRejected > 0
-					)
-			)
 	GROUP BY tblrole.RoleId
 		,tblrole.RequestTypeId
 		,tblrole.RequestType

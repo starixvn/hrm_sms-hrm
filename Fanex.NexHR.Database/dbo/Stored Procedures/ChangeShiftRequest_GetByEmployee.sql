@@ -56,5 +56,5 @@ BEGIN
 		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.EmpId = wkr.VerifierId
 		LEFT JOIN dbo.Employee AS approver WITH (NOLOCK) ON approver.EmpId = wkr.ApproverId
 		LEFT JOIN dbo.Employee AS hr WITH (NOLOCK) ON hr.EmpId = wkr.EmpId
-	ORDER BY wkr.CreatedDate
+	ORDER BY wkr.CreatedDate DESC
 END
