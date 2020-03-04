@@ -11,6 +11,10 @@
     [XMLName("Row")]
     public class ChangeShiftDetail
     {
+        [JsonIgnore]
+        [XmlIgnore]
+        public long RequestID { get; set; }
+
         public DateTime OnDate { get; set; }
 
         public int FromShiftId { get; set; }

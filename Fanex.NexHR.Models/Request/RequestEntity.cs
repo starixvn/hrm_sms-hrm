@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.Models.Request
 {
     using System;
+    using System.Collections.Generic;
+    using Fanex.NexHR.Models.Request.ChangeShift;
 
     public class RequestEntity : EntityBase<long>
     {
@@ -67,6 +69,10 @@
         public Shift FromShift { get; set; }
 
         public Shift ToShift { get; set; }
+
+        public byte ChangeShiftType { get; set; }
+            
+        public IEnumerable<ChangeShiftDetail> ChangeShiftDetails { get; set; }
 
         // LateIn-EarlyOut
         public int TotalMins { get; set; }

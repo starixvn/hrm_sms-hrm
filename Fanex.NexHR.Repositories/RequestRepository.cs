@@ -1,33 +1,37 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using Fanex.Common.Extensions;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Models.Supervisor;
 
     public class RequestRepository : IRequestRepository
     {
         public IList<RequestEntity> GetRequests(ICriteria criteria)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (IDataReader reader = db.ExecuteReader(criteria))
+                using (var multi = db.QueryMultiple(criteria))
                 {
-                    if (reader != null)
+                    var entityList = FillData(multi.Read<dynamic>());
+                    var changeOffDateDetails = multi.Read<ChangeShiftDetail>();
+
+                    foreach (var request in entityList.Where(entity => entity.RequestType.Id == (byte)RequestType.ChangeShift))
                     {
-                        entityList = FillData(reader);
+                        request.ChangeShiftDetails = changeOffDateDetails.Where(detail => detail.RequestID == request.Id);
                     }
+
+                    return entityList;
                 }
             }
-
-            return entityList;
         }
 
         public RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
@@ -105,108 +109,111 @@
             }
         }
 
-        private IList<RequestEntity> FillData(IDataReader reader)
+        private IList<RequestEntity> FillData(dynamic data)
         {
             IList<RequestEntity> entityList = new List<RequestEntity>();
-            while (reader.Read())
+
+            foreach (var request in data)
             {
-                RequestEntity entity = FillDataEntity(reader);
+                RequestEntity entity = FillDataEntity(request);
                 entityList.Add(entity);
             }
 
             return entityList;
         }
 
-        private RequestEntity FillDataEntity(IDataReader reader)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+        private RequestEntity FillDataEntity(dynamic requestInfo)
         {
-            var entity = new RequestEntity
+            var entity = new RequestEntity();
+
+            entity.Id = requestInfo.RequestId;
+            entity.RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType };
+            entity.Status = new RequestStatus { Id = requestInfo.Status };
+            entity.FromDate = requestInfo.FromDate;
+            entity.ToDate = requestInfo.ToDate;
+            entity.TotalDays = requestInfo.TotalDays;
+            entity.IsHalfDay = requestInfo.IsHalfDay ?? false;
+            entity.FromTime = requestInfo.FromTime ?? new DateTime();
+            entity.ToTime = requestInfo.ToTime ?? new DateTime();
+            entity.KeepInViewType = (byte)(requestInfo.KeepInViewType ?? 0);
+            entity.LeaveCountDetails = requestInfo.LeaveCountDetails ?? string.Empty;
+            entity.LeaveType = new LeaveType
             {
-                Id = reader.ToInt("RequestId"),
-                RequestType = new RequestTypeModel { Id = reader.ToShort("RequestType") },
-                Status = new RequestStatus { Id = reader.ToByte("Status") },
-                FromDate = reader.ToDateTime("FromDate"),
-                ToDate = reader.ToDateTime("ToDate"),
-                TotalDays = reader.ToDecimal("TotalDays"),
-                IsHalfDay = reader.ToBool("IsHalfDay"),
-                FromTime = reader.ToDateTime("FromTime"),
-                ToTime = reader.ToDateTime("ToTime"),
-                KeepInViewType = reader.ToByte("KeepInViewType"),
-                LeaveCountDetails = reader.ToString("LeaveCountDetails"),
-                LeaveType = new LeaveType
-                {
-                    Id = reader.ToInt("LeaveTypeId"),
-                    Name = reader.ToString("LeaveTypeName")
-                },
-                Remark = reader.ToString("Remark"),
-                TotalDaysRequestInMonth = reader.ToDecimal("TotalDaysRequestInMonth"),
-                CreatedDate = reader.ToDateTime("CreatedDate"),
-                RefNO = reader.ToString("RefNo"),
-                ApprovedDate = reader.ToDateTime("ApprovedDate"),
-                VerifiedDate = reader.ToDateTime("VerifiedDate"),
-                ProcessedDate = reader.ToDateTime("ProcessedDate"),
-                Requester = GetRequester(reader),
-                ModifiedBy = new Employee
-                {
-                    Id = reader.ToInt("ModifiedById"),
-                    NickName = reader.ToString("ModifiedByNickName"),
-                    FullName = reader.ToString("ModifiedByFullName")
-                },
-                VerifiedBy = new Employee
-                {
-                    Id = reader.ToInt("VerifierId"),
-                    NickName = reader.ToString("VerifierNickName"),
-                    FullName = reader.ToString("VerifierFullName"),
-                },
-                ApprovedBy = new Employee
-                {
-                    Id = reader.ToInt("ApproverId"),
-                    NickName = reader.ToString("ApproverNickName"),
-                    FullName = reader.ToString("ApproverFullName"),
-                },
-                ProcessedBy = new Employee
-                {
-                    Id = reader.ToInt("ProcessedId"),
-                    NickName = reader.ToString("ProcessedNickName"),
-                    FullName = reader.ToString("ProcessedFullName"),
-                },
-                FromShift = new Shift
-                {
-                    Id = reader.ToInt("FromShiftId"),
-                    Name = reader.ToString("FromShiftName")
-                },
-                RequestedDate = reader.ToDateTime("RequestedDate"),
-                TotalMins = reader.ToInt("TotalMinutes"),
-                ActualLateInEarlyOut = reader.ToInt("ActualInOutMins"),
-                CrossDay = reader.ToDateTime("FromTime").DayOfYear > reader.ToDateTime("ToTime").DayOfYear,
-                ToShift = new Shift
-                {
-                    Id = reader.ToInt("ToShiftId"),
-                    Name = reader.ToString("ToShiftName")
-                },
-                IsWarning = reader.ToBool("IsWarning"),
-                ModifiedDate = reader.ToDateTime("ModifiedDate"),
-                VerifiedStatus = reader.ToInt("VerifiedStatus"),
-                ApprovedStatus = reader.ToInt("ApprovedStatus"),
-                ProcessedStatus = reader.ToInt("ProcessedStatus"),
-                ReworkCount = reader.ToInt("ReworkCount")
+                Id = requestInfo.LeaveTypeId ?? 0,
+                Name = requestInfo.LeaveTypeName ?? string.Empty
             };
+            entity.Remark = requestInfo.Remark ?? string.Empty;
+            entity.TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0;
+            entity.CreatedDate = requestInfo.CreatedDate;
+            entity.RefNO = requestInfo.RefNo ?? string.Empty;
+            entity.ApprovedDate = requestInfo.ApprovedDate;
+            entity.VerifiedDate = requestInfo.VerifiedDate;
+            entity.ProcessedDate = requestInfo.ProcessedDate;
+            entity.Requester = GetRequester(requestInfo);
+            entity.ModifiedBy = new Employee
+            {
+                Id = requestInfo.ModifiedById ?? 0,
+                NickName = requestInfo.ModifiedByNickName ?? string.Empty,
+                FullName = requestInfo.ModifiedByFullName ?? string.Empty
+            };
+            entity.VerifiedBy = new Employee
+            {
+                Id = requestInfo.VerifierId ?? 0,
+                NickName = requestInfo.VerifierNickName ?? string.Empty,
+                FullName = requestInfo.VerifierFullName ?? string.Empty
+            };
+            entity.ApprovedBy = new Employee
+            {
+                Id = requestInfo.ApproverId ?? 0,
+                NickName = requestInfo.ApproverNickName ?? string.Empty,
+                FullName = requestInfo.ApproverFullName ?? string.Empty
+            };
+            entity.ProcessedBy = new Employee
+            {
+                Id = requestInfo.ProcessedId ?? 0,
+                NickName = requestInfo.ProcessedNickName ?? string.Empty,
+                FullName = requestInfo.ProcessedFullName ?? string.Empty
+            };
+            entity.FromShift = new Shift
+            {
+                Id = requestInfo.FromShiftId ?? 0,
+                Name = requestInfo.FromShiftName ?? string.Empty
+            };
+            entity.RequestedDate = requestInfo.RequestedDate ?? new DateTime();
+            entity.TotalMins = requestInfo.TotalMinutes ?? 0;
+            entity.ActualLateInEarlyOut = requestInfo.ActualInOutMins ?? 0;
+            entity.CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ??
+                requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear;
+            entity.ToShift = new Shift
+            {
+                Id = requestInfo.ToShiftId ?? 0,
+                Name = requestInfo.ToShiftName ?? string.Empty
+            };
+            entity.ChangeShiftType = (byte)(requestInfo.ChangeShiftType ?? 0);
+            entity.IsWarning = requestInfo.IsWarning ?? false;
+            entity.ModifiedDate = requestInfo.ModifiedDate;
+            entity.VerifiedStatus = requestInfo.VerifiedStatus ?? 0;
+            entity.ApprovedStatus = requestInfo.ApprovedStatus ?? 0;
+            entity.ProcessedStatus = requestInfo.ProcessedStatus ?? 0;
+            entity.ReworkCount = requestInfo.ReworkCount ?? 0;
 
             return entity;
         }
 
-        private Employee GetRequester(IDataReader reader)
+        private Employee GetRequester(dynamic requestInfo)
         {
             return new Employee
             {
-                Id = reader.ToInt("RequesterId"),
-                NickName = reader.ToString("RequesterNickName"),
-                FullName = reader.ToString("RequesterFullName"),
-                AnnualLeaveBalance = reader.ToDecimal("AnnualLeaveBalance"),
+                Id = requestInfo.RequesterId,
+                NickName = requestInfo.RequesterNickName,
+                FullName = requestInfo.RequesterFullName,
+                AnnualLeaveBalance = requestInfo.AnnualLeaveBalance,
                 Team = new Team
                 {
-                    Id = reader.ToInt("GroupId"),
-                    Code = reader.ToString("GroupCode"),
-                    Name = reader.ToString("GroupName")
+                    Id = requestInfo.GroupId,
+                    Code = requestInfo.GroupCode,
+                    Name = requestInfo.GroupName
                 }
             };
         }

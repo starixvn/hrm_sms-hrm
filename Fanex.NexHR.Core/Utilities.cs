@@ -428,5 +428,24 @@
 
             return result;
         }
+
+        public static string GetMessgaeDateStringChangeOffDate(DateTime fromDate, DateTime toDate)
+        {
+            const string arrowSymbol = " <span class='arr'>&rarr;</span> ";
+            string result = string.Empty;
+
+            if (fromDate.Year != toDate.Year)
+            {
+                result = fromDate.ToDateMonthYearFormatedDate() + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+            else
+            {
+                result = (fromDate.Month != toDate.Month) ?
+                fromDate.ToMonthAndDayFormatedDate() + arrowSymbol + toDate.ToDateMonthYearFormatedDate() :
+                fromDate.ToString("dd") + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            return result;
+        }
     }
 }
