@@ -53,6 +53,11 @@
             }
         }
 
+        .input-validation-error {
+            border-color: #ff4545;
+            @include box-shadow(0 0 2px 2px rgba(255,0,0, .2));
+        }
+
         .field-validation-error {
             color: #e80c4d;
             padding-left: 10px;

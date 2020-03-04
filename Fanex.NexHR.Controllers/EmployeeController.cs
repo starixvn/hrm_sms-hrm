@@ -238,10 +238,7 @@
                 if (ModelState.IsValid)
                 {
                     EditEmployeeParam param = MappingEditEmployeeParam(model);
-
-
                     CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
-
                     if (commandResult.IsSuccessful)
                     {
                         ViewBag.Updated = true;
@@ -255,7 +252,6 @@
                 }
 
                 model.Coutries = commonDataService.GetAllCountry();
-
                 IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
                 model.Verifier = GetVerifiers(supervisors);
                 model.Approver = GetApprovers(supervisors);
@@ -664,6 +660,6 @@
         private static string BuildDefaultRole()
         {
             return ((int)RoleSystem.Member).ToString();
-        }       
+        }
     }
 }

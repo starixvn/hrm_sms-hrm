@@ -6,13 +6,15 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class Employee : EntityBase<int>
     {
         public string DomainUsername { get; set; }
 
-        [Required]
+        [Display(ResourceType = typeof(Labels), Name = nameof(Labels.FullName))]
+        [Required(ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage))]
         public string FullName { get; set; }
 
         public string NickName { get; set; }
