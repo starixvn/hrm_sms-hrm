@@ -73,23 +73,28 @@ function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDef
             shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'PH';
         }
 
-        if (dailySchedule.isChangeShift || dailySchedule.isOvertime) {
-            shift.details = dailySchedule.isChangeShift
-                ? `Change shift${dailySchedule.changeShiftTypeId === ChangeShiftType.MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`
-                : 'Overtime';
+        if (dailySchedule.isChangeShift) {
+            shift.details = `Change shift${dailySchedule.changeShiftTypeId === ChangeShiftType.MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`;
+        } else if (dailySchedule.isOvertime) {
+            shift.details = 'Overtime';
+        } else if (dailySchedule.isKeepInView) {
+            shift.details = 'KIV';
         }
     } else if (dailySchedule.isOffDay) {
         shift.class = 'offday';
         shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'Off';
-        if (dailySchedule.isFixedOffDay || dailySchedule.isChangeShift || dailySchedule.isOvertime) {
-            shift.details = dailySchedule.isFixedOffDay
-                ? 'Off Day OT Fixed'
-                : dailySchedule.isChangeShift
-                    ? `Change shift${dailySchedule.changeShiftTypeId === ChangeShiftType.MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`
-                    : 'Overtime';
+        if (dailySchedule.isFixedOffDay) {
+            shift.details = 'Off Day OT Fixed';
+        } else if (dailySchedule.isChangeShift) {
+            shift.details = `Change shift${dailySchedule.changeShiftTypeId === ChangeShiftType.MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`;
+        } else if (dailySchedule.isOvertime) {
+            shift.details = 'Overtime';
+        } else if (dailySchedule.isKeepInView) {
+            shift.details = 'KIV';
         }
     } else if (dailySchedule.isKeepInView) {
         shift.class = 'keepinviewday';
+        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
     } else if (dailySchedule.isChangeShift) {
         shift.class = 'changeshift';
         shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';

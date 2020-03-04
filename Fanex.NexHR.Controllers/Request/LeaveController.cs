@@ -104,14 +104,14 @@
         public ActionResult Update(long id)
         {
             LeaveRequest request = leaveRequestService.GetById(id);
-            LeaveRequestViewModel model = ConvertRequestToModel(request);
-            if (model == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, model.EmployeeId)
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
 
+            LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
@@ -337,54 +337,45 @@
 
         private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
         {
-            LeaveRequestViewModel model = null;
-            if (request != null)
+            var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
+            var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
+            var model = new LeaveRequestViewModel
             {
-                var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
-                var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
-                model = new LeaveRequestViewModel
-                {
-                    RequestId = request.RequestId,
-                    LeaveTypeId = request.LeaveType.Id,
-                    Employee = request.Requester.DisplayName,
-                    EmployeeId = request.Requester.EmpId,
-                    FromDate = request.FromDate,
-                    ToDate = (request.LeaveType.Id != (int)LeaveTypes.GeneralLeave
-                            && request.IsHalfDay
-                            && request.ToDate.Date != toTime) ? request.ToDate.AddDays(1) : request.ToDate,
-                    TotalDays = request.TotalDays,
-                    HalfDayOff = request.IsHalfDay,
-                    VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
-                    ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
-                    RefNo = request.RefNO,
-                    Remark = request.Remark,
-                    FromTime = fromTime.ToString("HH:mm"),
-                    ToTime = toTime.ToString("HH:mm"),
-                    FromTimeHour = fromTime.Hour,
-                    FromTimeMinute = fromTime.Minute,
-                    ToTimeHour = toTime.Hour,
-                    ToTimeMinute = toTime.Minute,
-                    IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date,
-                    IsToTimeAfterDay = request.ToDate.Date != toTime.Date,
-                    Status = request.Status
-                };
-            }
+                RequestId = request.RequestId,
+                LeaveTypeId = request.LeaveType.Id,
+                Employee = request.Requester.DisplayName,
+                EmployeeId = request.Requester.EmpId,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                TotalDays = request.TotalDays,
+                HalfDayOff = request.IsHalfDay,
+                VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
+                ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
+                RefNo = request.RefNO,
+                Remark = request.Remark,
+                FromTime = fromTime.ToString("HH:mm"),
+                ToTime = toTime.ToString("HH:mm"),
+                FromTimeHour = fromTime.Hour,
+                FromTimeMinute = fromTime.Minute,
+                ToTimeHour = toTime.Hour,
+                ToTimeMinute = toTime.Minute,
+                IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date,
+                IsToTimeAfterDay = request.ToDate.Date != toTime.Date,
+                Status = request.Status
+            };
 
             var today = DateTime.Today;
             var minDate = today.FirstDayOfMonth().AddMonths(-5);
             var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-            if (model != null)
+            if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
             {
-                if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
-                {
-                    //// rule: user can make maternity leave for 6 months.
-                    const byte ExtraMonthsCanRequest = 2;
-                    maxDate = maxDate.AddMonths(ExtraMonthsCanRequest);
-                }
-
-                model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
-                model.MaxDate = maxDate;
+                //// rule: user can make maternity leave for 6 months.
+                const byte ExtraMonthsCanRequest = 2;
+                maxDate = maxDate.AddMonths(ExtraMonthsCanRequest);
             }
+
+            model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
+            model.MaxDate = maxDate;
 
             return model;
         }

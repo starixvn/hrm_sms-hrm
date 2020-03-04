@@ -4,7 +4,7 @@ import 'jquery.are-you-sure/jquery.are-you-sure';
 import moment from 'moment';
 
 import { confirm, initDatepicker, resolveClientUrl } from '../../../shared/common.functions';
-import { LeaveType, DateFormat } from '../../../shared/constants';
+import { LeaveType, DateFormat, RequestType } from '../../../shared/constants';
 
 const RequestCommon = {
     showErrorMsg: function (msg, htmlObject) {
@@ -141,6 +141,11 @@ const LeaveRequest = (function ($) {
             }
 
             LeaveRequest.disableControlForDetail();
+
+            if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
+                $('.time-isafterday').show();
+                LeaveRequest.isFromTimeAfterDay.trigger('change');
+            }
         },
         employeeChange: function () {
             LeaveRequest.getVerifier();
@@ -186,9 +191,9 @@ const LeaveRequest = (function ($) {
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
                     EmployeeName: LeaveRequest.employee.val(),
-                    RequestType: 6,
+                    RequestType: RequestType.Leave,
                     FromDate: LeaveRequest.fromDate.val(),
-                    ToDate: LeaveRequest.halfDayOff.prop('checked') ? LeaveRequest.fromDate.val() : LeaveRequest.toDate.val(),
+                    ToDate: LeaveRequest.toDate.val(),
                     LeaveTypeId: leaveTypeId,
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(':selected').text(),
                     TotalDays: LeaveRequest.totalDays.val(),
