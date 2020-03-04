@@ -102,7 +102,9 @@
 
         public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
         {
-            return baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
+            var leaveBalance = baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
+            leaveBalance.KeepInViewByHourBalance = Math.Round(leaveBalance.KeepInViewByHourBalance / Constants.TotalMinuteInHour, 1);
+            return leaveBalance;
         }
 
         public CommandResult Delete(long requestId)
