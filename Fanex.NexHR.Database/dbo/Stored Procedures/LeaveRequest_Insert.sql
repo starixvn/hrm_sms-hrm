@@ -604,7 +604,7 @@ BEGIN
 	BEGIN
 		IF EXISTS (SELECT 1
 					FROM dbo.EmployeePaternity
-					WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate AND @FromDate >= ChildBornDate AND EmpId = @EmpId AND BalanceDay >= @TotalDays)
+					WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate AND @FromDate >= ChildBornDate AND @FromDate >= GETDATE() AND EmpId = @EmpId AND BalanceDay >= @TotalDays)
 		BEGIN
 			UPDATE EmployeePaternity
 			SET BalanceDay = BalanceDay - @TotalDays
