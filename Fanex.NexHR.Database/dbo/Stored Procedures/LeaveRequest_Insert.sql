@@ -59,6 +59,7 @@ BEGIN
 		,@TmpFromDate DATE
 		,@TmpToDate DATE
 		,@DocHandler INT
+		,@PaternityLeaveType INT = 14
 
 	CREATE TABLE #LeaveRequestDetail (
 		OnDate DATE
@@ -592,6 +593,27 @@ BEGIN
 		BEGIN
 			SET @ErrCode = 117
 			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
+		END
+	END
+
+	-- check leave request paternity by Lilac
+
+	IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF EXISTS (SELECT 1
+					FROM dbo.EmployeePaternity
+					WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate AND @FromDate >= ChildBornDate AND EmpId = @EmpId AND BalanceDay >= @TotalDays)
+		BEGIN
+			UPDATE EmployeePaternity
+			SET BalanceDay = BalanceDay - @TotalDays
+			WHERE EmpId = @EmpId AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date or leave day incorrect.'
 
 			RETURN
 		END
