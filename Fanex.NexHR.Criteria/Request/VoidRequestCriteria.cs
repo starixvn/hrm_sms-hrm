@@ -8,7 +8,6 @@
     {
         public long RequestId { get; set; }
         public int ActorId { get; set; }
-        public int RoleId { get; set; }
         public string Comment { get; set; }
 
         [SpParam(Ignored = true)]
@@ -21,24 +20,24 @@
             {
                 case RequestType.CheckIn:
                 case RequestType.CheckOut:
-                    key = "CheckInOutRequest_Void";
+                    key = "CheckInOutRequest_VoidBySA";
                     break;
 
                 case RequestType.LateIn:
                 case RequestType.EarlyOut:
-                    key = "LateInEarlyOutRequest_Void";
+                    key = "LateInEarlyOutRequest_VoidBySA";
                     break;
 
                 case RequestType.ChangeShift:
-                    key = "ChangeShiftRequest_Void";
+                    key = "ChangeShiftRequest_VoidBySA";
                     break;
 
                 case RequestType.Leave:
-                    key = "LeaveRequest_Void";
+                    key = "LeaveRequest_VoidBySA";
                     break;
 
                 default:
-                    key = "KeepInViewRequest_Void";
+                    key = "KeepInViewRequest_VoidBySA";
                     break;
             }
 

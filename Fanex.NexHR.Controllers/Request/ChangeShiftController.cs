@@ -136,7 +136,7 @@
         public CustomJsonResult Delete(long id)
         {
             changeShiftService.SendMailDeleteRequest(id);
-            CommandResult commandResult = changeShiftService.Delete(id);
+            CommandResult commandResult = changeShiftService.Delete(sessionService.Employee.Id, id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

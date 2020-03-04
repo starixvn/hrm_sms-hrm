@@ -1,5 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Delete] @RequestId BIGINT
+	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -32,12 +33,17 @@ BEGIN
 		RETURN
 	END
 
+	EXEC dbo.ChangeShiftRequest_ResetCalendar @RequestId = @RequestId
+		,@ActorId = @ActorId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrCode OUTPUT
+
 	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK)
 	WHERE RequestId = @RequestId
 
 	DELETE dbo.ChangeShiftRequest WITH (ROWLOCK)
 	WHERE RequestId = @RequestId
-	
+
 	DELETE dbo.ChangeShiftRequestHistory WITH (ROWLOCK)
 	WHERE RequestId = @RequestId
 

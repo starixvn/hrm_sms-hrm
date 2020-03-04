@@ -176,11 +176,12 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult Delete(long requestId)
+        public CommandResult Delete(int actorId, long requestId)
         {
             var criteria = new DeleteChangeShiftRequestCriteria
             {
-                RequestId = requestId
+                RequestId = requestId,
+                ActorId = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
         }

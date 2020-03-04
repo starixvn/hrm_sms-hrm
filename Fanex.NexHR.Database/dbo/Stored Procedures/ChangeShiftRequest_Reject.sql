@@ -63,6 +63,11 @@ BEGIN
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
+
+		EXEC dbo.ChangeShiftRequest_ResetCalendar @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrCode OUTPUT
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
@@ -74,6 +79,11 @@ BEGIN
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
+
+		EXEC dbo.ChangeShiftRequest_ResetCalendar @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrCode OUTPUT
 	END
 	ELSE IF @RoleId = @HRRoleId
 	BEGIN

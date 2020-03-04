@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
-	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -165,6 +164,13 @@ BEGIN
 			FROM @tblChangeShiftDetail
 			WHERE OnDate = @FromDate
 		END
+	END
+	ELSE
+	BEGIN
+		EXEC dbo.ChangeShiftRequest_ResetCalendar @RequestId = @RequestId
+			,@ActorId = @ActorId
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrCode OUTPUT
 	END
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId

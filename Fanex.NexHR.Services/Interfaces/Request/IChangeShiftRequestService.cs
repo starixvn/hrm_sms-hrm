@@ -27,7 +27,7 @@
 
         CommandResult Edit(int actorId, EditChangeShift model);
 
-        CommandResult Delete(long requestId);
+        CommandResult Delete(int actorId, long requestId);
 
         void SendMailCreateRequest(long requestId);
 

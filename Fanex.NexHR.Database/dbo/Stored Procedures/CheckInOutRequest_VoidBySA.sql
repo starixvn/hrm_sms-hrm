@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[CheckInOutRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
-	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT

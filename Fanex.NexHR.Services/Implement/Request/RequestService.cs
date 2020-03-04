@@ -186,7 +186,6 @@
             {
                 RequestId = param.RequestId,
                 RequestTypeId = param.RequestTypeId,
-                RoleId = param.RoleId,
                 Comment = param.Comment,
                 ActorId = actorId
             };
