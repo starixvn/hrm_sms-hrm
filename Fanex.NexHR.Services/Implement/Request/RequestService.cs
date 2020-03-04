@@ -249,37 +249,37 @@
             string msgTemplate;
             string messageDetail;
 
-            if (request.FromDate.Date == request.ToDate.Date)
+            if (request.ChangeShiftType == (byte)ChangeShiftType.MoveOffDay)
             {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
-                messageDetail = string.Format(
-                        msgTemplate,
-                        request.FromShift.Name,
-                        request.ToShift.Name,
-                        request.FromDate.ToDateMonthYearFormatedDate());
+                var changeOffDateRequests = new StringBuilder();
+                foreach (var changeOffDate in request.ChangeShiftDetails)
+                {
+                    msgTemplate = RequestFormatConstants.MsgChangeShift;
+
+                    var dateFomarted = Utilities.GetMessgaeDateStringChangeOffDate(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
+                    changeOffDateRequests.Append(string.Format(msgTemplate, dateFomarted));
+                }
+                changeOffDateRequests.Append("Move off day");
+
+                messageDetail = changeOffDateRequests.ToString();
             }
             else
             {
-                if(request.ChangeShiftType == (byte)ChangeShiftType.MoveOffDay)
+                if (request.FromDate.Date == request.ToDate.Date)
                 {
-                    var changeOffDateRequests = new StringBuilder();
-                    foreach(var changeOffDate in request.ChangeShiftDetails)
-                    {
-                        msgTemplate = RequestFormatConstants.MsgChangeShift;
-                        
-                        var dateFomarted = Utilities.GetMessgaeDateStringChangeOffDate(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
-                        changeOffDateRequests.Append(string.Format(msgTemplate, dateFomarted));
-                    }
-                    changeOffDateRequests.Append("Move off day");
-
-                    messageDetail = changeOffDateRequests.ToString();
+                    msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
+                    messageDetail = string.Format(
+                            msgTemplate,
+                            request.FromShift.Name,
+                            request.ToShift.Name,
+                            request.FromDate.ToDateMonthYearFormatedDate());
                 }
                 else
                 {
-
                     msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
                     var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                     messageDetail = string.Format(msgTemplate, date);
+
                 }
             }
 

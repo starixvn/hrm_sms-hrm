@@ -589,6 +589,7 @@ BEGIN
 			) AS ToShiftName
 		,s2.ShiftID AS ToShiftId
 		,s2.[Name] AS ToShiftName
+		,csr.TypeId AS ChangeShiftType
 		,rd.InOutMins AS TotalMinutes
 		,rd.ActualInOutMins
 		,r.CreatedDate
@@ -646,6 +647,13 @@ BEGIN
 	WHERE @leaveTypeId IS NULL
 		OR lr.LeaveType = @leaveTypeId
 	ORDER BY r.CreatedDate DESC
+
+	SELECT csrd.RequestId,
+		csrd.OnDate,
+		csrd.ToDate
+	FROM #tblRequestId AS r
+		INNER JOIN ChangeShiftRequest AS csr WITH (NOLOCK) ON csr.RequestId = r.RequestId
+		INNER JOIN ChangeShiftRequestDetail AS csrd WITH (NOLOCK) ON csr.RequestId = csrd.RequestId
 
 	DROP TABLE #tblstatus
 
