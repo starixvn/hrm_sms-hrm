@@ -589,7 +589,6 @@ BEGIN
 			) AS ToShiftName
 		,s2.ShiftID AS ToShiftId
 		,s2.[Name] AS ToShiftName
-		,csr.TypeId AS ChangeShiftType
 		,rd.InOutMins AS TotalMinutes
 		,rd.ActualInOutMins
 		,r.CreatedDate
