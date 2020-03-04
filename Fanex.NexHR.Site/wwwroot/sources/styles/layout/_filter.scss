@@ -10,7 +10,7 @@
     .form-horizontal {
         .form-group {
             &.year .label-form {
-                width: 5rem;
+                width: 4rem;
             }
         }
     }
@@ -34,9 +34,27 @@
             float: left;
             width: 8rem;
 
-            &.label--small {
+            &.label--xxs {
                 @media (min-width: 1280px) {
                     width: 4rem;
+                }
+            }
+
+            &.label--xs {
+                @media (min-width: 1280px) {
+                    width: 5rem;
+                }
+            }
+
+            &.label--s {
+                @media (min-width: 1280px) {
+                    width: 6rem;
+                }
+            }
+
+            &.label--m {
+                @media (min-width: 1280px) {
+                    width: 7rem;
                 }
             }
 
@@ -83,6 +101,10 @@
                     font-size: 1.6rem;
                     color: #A63C45;
                 }
+            }
+
+            &.style-mr-0 {
+                margin-right: 0;
             }
         }
 
