@@ -157,11 +157,6 @@ BEGIN
 			AND tblweekly.ShiftId IS NULL
 			)
 		OR (
-			empca.IsKeepInView = 1
-			AND tblweekly.IsHoliday = 0
-			AND tblweekly.IsOffDay = 0
-			)
-		OR (
 			tblweekly.WorkDate <= @Today
 			AND empca.IsOvertime = 1
 			)

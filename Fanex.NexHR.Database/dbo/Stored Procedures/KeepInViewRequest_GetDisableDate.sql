@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[KeepInViewRequest_GetDisableDate] @empId INT
 	,@fromDate DATE
 	,@toDate DATE
+	,@typeId TINYINT = 1
 	,@requestId BIGINT = NULL
 AS
 /*
@@ -16,9 +17,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @RequestTypeId TINYINT
-		-- request status
-		,@NotVerifiedStatusId TINYINT = 3
+	DECLARE @NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 
@@ -59,6 +58,11 @@ BEGIN
 				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 			WHERE @RequestId IS NULL
 				OR r.RequestId <> @requestId
+			)
+		OR (
+			@typeId = 1 -- kiv by day
+			AND IsOffDay = 0
+			AND IsHoliday = 0
 			)
 
 	DROP TABLE #tblEmployeeCalendar

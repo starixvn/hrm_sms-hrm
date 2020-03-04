@@ -65,10 +65,12 @@ $(document).ready(function () {
             }).catch(axiosError);
     };
     let getDisabledDates = function (callback) {
+        const requestTypeId = domElements.$keepInViewByDay.prop('checked') ? KeepInViewType.KeepInViewByDay : KeepInViewType.KeepInViewByHour;
         axios({
             url: _global.root + 'keepinview/getDisabledDate',
             method: 'GET',
             params: {
+                requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
                 fromDate: domElements.$date.attr('mindate'),
                 toDate: domElements.$date.attr('maxdate')
@@ -169,6 +171,8 @@ $(document).ready(function () {
     });
 
     domElements.$keepInViewType.on('change', function () {
+        getDisabledDates();
+
         if (domElements.$keepInViewByDay.prop('checked')) {
             domElements.$groupHalfDay.show();
             if (domElements.$halfDay.prop('checked')) {

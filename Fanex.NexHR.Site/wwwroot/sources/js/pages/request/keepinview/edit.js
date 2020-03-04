@@ -31,6 +31,34 @@ $(document).ready(function () {
         $remark: $('#Remark'),
         $btnSubmit: $('#btnSubmit')
     };
+    let getDisabledDates = function (callback) {
+        const requestTypeId = domElements.$keepInViewByDay.prop('checked') ? KeepInViewType.KeepInViewByDay : KeepInViewType.KeepInViewByHour;
+        axios({
+            url: _global.root + 'keepinview/getDisabledDate',
+            method: 'GET',
+            params: {
+                requestId: requestId,
+                requestTypeId: requestTypeId,
+                employeeId: employeeId,
+                fromDate: domElements.$date.attr('mindate'),
+                toDate: domElements.$date.attr('maxdate')
+            }
+        }).then(response => {
+            const totalItems = response.data.length;
+            let disabledDate = '';
+            for (let i = 0; i < totalItems; i++) {
+                disabledDate = disabledDate.length > 0
+                    ? disabledDate + ',' + moment(response.data[i]).format('YYYY/MM/DD')
+                    : moment(response.data[i]).format('YYYY/MM/DD');
+            }
+
+            domElements.$date.attr('disabledDate', disabledDate);
+
+            if (callback !== undefined && typeof callback === 'function') {
+                callback();
+            }
+        }).catch(axiosError);
+    };
     let validateForm = function () {
         let isValid = true,
             errorMessages = [];
@@ -59,6 +87,8 @@ $(document).ready(function () {
     };
 
     domElements.$keepInViewType.on('change', function () {
+        getDisabledDates();
+
         if (domElements.$keepInViewByDay.prop('checked')) {
             domElements.$groupHalfDay.show();
             if (domElements.$halfDay.prop('checked')) {
@@ -141,5 +171,5 @@ $(document).ready(function () {
 
     $('form').areYouSure();
 
-    initDatepicker();
+    getDisabledDates(initDatepicker);
 });

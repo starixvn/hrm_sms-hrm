@@ -40,6 +40,7 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.RefNo1</th>
+            <th>@Labels.Type</th>
             <th>@Labels.FromDate</th>
             <th>@Labels.ToDate</th>
             <th>@Labels.CreatedDate</th>
@@ -59,6 +60,16 @@
                 <tr>
                     <td>@(index++)</td>
                     <td><a href="@Url.Action("details", "changeshift", new { id = request.RequestId })">@request.RequestId</a></td>
+                    <td>
+                        @if (request.TypeId == (byte)ChangeShiftType.ChangeShift)
+                        {
+                            @Labels.ChangeShift
+                        }
+                        else
+                        {
+                            @Labels.MoveOffDayToAnotherWeek
+                        }
+                    </td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
                     <td>@request.CreatedDate.ToShortFormatedDate()</td>
@@ -94,7 +105,7 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 12);
+        @RazorHelper.DisplayNoInformation(colspan: 11);
     }
 </table>
 <div id="dialoghistorycontent"></div>

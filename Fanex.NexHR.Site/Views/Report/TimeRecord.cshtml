@@ -16,9 +16,9 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
-    <div class="form-horizontal clearfix">
-        @if (hasPermission)
-        {
+    @if (hasPermission)
+    {
+        <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
                 <div class="label-form">
                     @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
@@ -63,7 +63,8 @@
                     @Html.HiddenFor(model => model.EmployeeId)
                 </div>
             </div>
-            <div class="clear"></div>
+        </div>
+        <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
                 <div class="label-form">
                     <label class="control-label">@Labels.Category</label>
@@ -71,11 +72,11 @@
                 <div class="input-form">
                     @{
                         var category = new List<SelectListItem>
-                        {
-                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                            new SelectListItem() {Text = "Expat", Value = "0"},
-                            new SelectListItem() {Text = "Local", Value = "1"}
-                        };
+                                                        {
+                                                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                                                            new SelectListItem() {Text = "Expat", Value = "0"},
+                                                            new SelectListItem() {Text = "Local", Value = "1"}
+                                                        };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
                 </div>
@@ -83,9 +84,11 @@
             <div class="form-group form-group--m">
                 <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
             </div>
-        }
-        else
-        {
+        </div>
+    }
+    else
+    {
+        <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
                 <div class="label-form">
                     @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
@@ -117,11 +120,11 @@
             <div class="form-group form-group--m">
                 <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
             </div>
-        }
-        @Html.HiddenFor(model => model.ItemsPerPage)
-        @Html.HiddenFor(model => model.CurrentPage)
-        @Html.HiddenFor(model => model.TeamIds)
-    </div>
+        </div>
+    }
+    @Html.HiddenFor(model => model.ItemsPerPage)
+    @Html.HiddenFor(model => model.CurrentPage)
+    @Html.HiddenFor(model => model.TeamIds)
 </form>
 
 <div id="TimeRecordContent"></div>

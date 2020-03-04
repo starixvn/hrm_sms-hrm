@@ -130,13 +130,6 @@
                 MinDate = request.OnDate.AddMonths(-1),
                 MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
             };
-            viewModel.DisabledDates = keepInViewRequestService.GetDisabledDate(new GetDisabledDateParam
-            {
-                EmployeeId = request.Requester.EmpId,
-                FromDate = viewModel.MinDate,
-                ToDate = viewModel.MaxDate,
-                RequestId = request.RequestId
-            });
             ViewBag.IsTopManager = request.Requester.IsTopManager;
 
             return View(viewModel);

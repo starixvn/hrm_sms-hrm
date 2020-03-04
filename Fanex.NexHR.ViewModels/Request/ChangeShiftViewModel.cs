@@ -14,7 +14,7 @@
     {
         public long RequestId { get; set; }
 
-        [Display(Name = nameof(Labels.Reason), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.Type), ResourceType = typeof(Labels))]
         public byte TypeId { get; set; } = (byte)ChangeShiftType.ChangeShift;
 
         public string Employee { get; set; }

@@ -200,7 +200,7 @@ BEGIN
 			UPDATE dis
 			SET dis.IsMissingCheckInOut = 1
 				,dis.IsOutOfControlReason = CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) THEN 1
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
 					ELSE dis.IsOutOfControlReason
 					END
 				,dis.IsDeleted = 0
