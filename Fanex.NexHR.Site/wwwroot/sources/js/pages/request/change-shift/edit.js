@@ -84,7 +84,6 @@ $(document).ready(function () {
         });
     };
     let getChangeShiftDetails = function () {
-        blockUI();
         axios({
             url: _global.root + 'changeshift/GetChangeShiftDetail',
             method: 'GET',
@@ -107,7 +106,7 @@ $(document).ready(function () {
             } else {
                 domElements.$btnSubmit.prop('disabled', true);
             }
-        }).catch(axiosError);
+        }).catch(axiosError).then(() => unblockUI());
     };
 
     initDatepicker();

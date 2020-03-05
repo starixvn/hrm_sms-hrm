@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, blockUI, unblockUI
 } from '../../../shared/common.functions';
 import { KeepInViewType } from '../../../shared/constants';
 
@@ -32,6 +32,7 @@ $(document).ready(function () {
         $btnSubmit: $('#btnSubmit')
     };
     let getDisabledDates = function (callback) {
+        blockUI();
         const requestTypeId = domElements.$keepInViewByDay.prop('checked') ? KeepInViewType.KeepInViewByDay : KeepInViewType.KeepInViewByHour;
         axios({
             url: _global.root + 'keepinview/getDisabledDate',
@@ -57,7 +58,7 @@ $(document).ready(function () {
             if (callback !== undefined && typeof callback === 'function') {
                 callback();
             }
-        }).catch(axiosError);
+        }).catch(axiosError).then(() => unblockUI());
     };
     let validateForm = function () {
         let isValid = true,

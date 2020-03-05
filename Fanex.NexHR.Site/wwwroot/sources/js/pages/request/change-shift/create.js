@@ -72,7 +72,6 @@ $(document).ready(function () {
             },
             responseType: 'text'
         }).then(response => {
-            unblockUI();
             $('#changeShiftDetails').html(response.data);
             initDatepicker();
             $('#tblchangeshift input.datepicker').off('change').on('change', function () {
@@ -93,7 +92,7 @@ $(document).ready(function () {
             } else {
                 domElements.$btnSubmit.prop('disabled', true);
             }
-        }).catch(axiosError);
+        }).catch(axiosError).then(() => unblockUI());
     };
     let validateForm = function () {
         let isValid = true,
