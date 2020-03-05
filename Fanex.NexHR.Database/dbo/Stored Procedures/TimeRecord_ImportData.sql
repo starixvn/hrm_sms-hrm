@@ -1,5 +1,4 @@
-﻿---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+﻿
 CREATE PROCEDURE [dbo].[TimeRecord_ImportData]
 AS
 -- =============================================
@@ -14,7 +13,7 @@ BEGIN
 
 	SET @todate= CONVERT(VARCHAR(10), getdate(), 111)
 	
-	SET @fromdate = dateadd(d, -1 , @todate)
+	SET @fromdate = dateadd(d, -2 , @todate)
 	EXEC dbo.TimeRecord_ImportFromBioStar @fromdate, @todate
 	
 	EXEC [dbo].[EmployeeAttendance_ForWaitingCase]
