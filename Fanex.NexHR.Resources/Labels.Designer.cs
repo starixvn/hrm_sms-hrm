@@ -576,6 +576,15 @@ namespace Fanex.NexHR.Resources {
         /// <summary>
         ///   Looks up a localized string similar to BT.
         /// </summary>
+        public static string BT {
+            get {
+                return ResourceManager.GetString("BT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Trip.
+        /// </summary>
         public static string BusinessTrip {
             get {
                 return ResourceManager.GetString("BusinessTrip", resourceCulture);

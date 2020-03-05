@@ -1594,7 +1594,7 @@
     <value>AL</value>
   </data>
   <data name="BusinessTrip" xml:space="preserve">
-    <value>BT</value>
+    <value>Business Trip</value>
   </data>
   <data name="ShortBereavementLeave" xml:space="preserve">
     <value>BL</value>
@@ -1865,5 +1865,8 @@
   </data>
   <data name="Emergency" xml:space="preserve">
     <value>Emergency</value>
+  </data>
+  <data name="BT" xml:space="preserve">
+    <value>BT</value>
   </data>
 </root>
