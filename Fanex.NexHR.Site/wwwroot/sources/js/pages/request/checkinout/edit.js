@@ -114,7 +114,7 @@ $(document).ready(function () {
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
-                date: domElements.$forDate.val()
+                date: domElements.$attendantDate.val()
             }
         }).then(response => {
             const shift = response.data;

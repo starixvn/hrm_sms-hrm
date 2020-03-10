@@ -70,6 +70,7 @@
             Shift shift = shiftService.GetByDate(sessionService.Employee.Id, today);
             CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
+            ViewBag.Shift = shift;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);

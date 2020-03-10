@@ -91,13 +91,11 @@ BEGIN
 			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
 
-	SELECT emp.EmpId AS EmployeeId
+	SELECT emp.EmpId
 		,emp.Code
 		,emp.NickName
 		,emp.FullName
-		,gr.GroupId
-		,gr.Code AS GroupCode
-		,gr.[Name] AS GroupName
+		,gr.[Name] AS Section
 		,tmp.WorkDate
 		,s.ShiftId
 		,s.Code AS ShiftCode

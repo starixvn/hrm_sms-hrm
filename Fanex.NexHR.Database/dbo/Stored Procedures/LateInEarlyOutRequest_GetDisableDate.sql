@@ -59,6 +59,7 @@ BEGIN
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 				INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON r.RequestId = lieo.RequestId
+				AND lieo.EmpId = @EmpId
 				AND WorkDate = lieo.OnDate
 				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 			WHERE @RequestId IS NULL

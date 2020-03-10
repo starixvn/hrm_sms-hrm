@@ -27,7 +27,7 @@ BEGIN
 		SET @tempDate = DATEADD(DAY, 1, @tempDate)
 	END
 
-	SELECT emp.[EmpId] AS EmployeeId
+	SELECT emp.EmpId
 		,emp.NickName
 		,emp.FullName
 		,tmp.WorkDate

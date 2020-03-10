@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, blockUI, unblockUI
 } from '../../../shared/common.functions';
 import { RequestType, RoleSystem } from '../../../shared/constants';
 
@@ -62,6 +62,7 @@ $(document).ready(function () {
             }).catch(axiosError);
     };
     let getDisabledDates = function (callback) {
+        blockUI();
         const requestTypeId = domElements.$checkInTypeId.prop('checked') ? RequestType.CheckIn : RequestType.CheckOut;
         axios({
             url: _global.root + 'checkinout/GetDisabledDate',
@@ -87,7 +88,7 @@ $(document).ready(function () {
             if (callback !== undefined && typeof callback === 'function') {
                 callback();
             }
-        }).catch(axiosError);
+        }).catch(axiosError).then(() => unblockUI());
     };
     let bindingHourAndMinute = function () {
         if (domElements.$checkInTypeId.prop('checked')) {
@@ -120,14 +121,6 @@ $(document).ready(function () {
         if (domElements.$checkOutTypeId.prop('checked')) {
             checkInOrOutInNextDay(isOutAfterDay);
         }
-
-        domElements.$checkInTypeId.on('change', function () {
-            checkInOrOutInNextDay(isInAfterDay);
-        });
-
-        domElements.$checkInTypeId.on('change', function () {
-            checkInOrOutInNextDay(isOutAfterDay);
-        });
     };
     let validateForm = function () {
         let isValid = true,
@@ -178,8 +171,6 @@ $(document).ready(function () {
         return isValid;
     };
 
-    getDisabledDates(initDatepicker);
-
     $('#Employee').autocomplete({
         source: function (request, response) {
             axios({
@@ -227,7 +218,12 @@ $(document).ready(function () {
         }
     });
 
-    $('#RequestType_1, #RequestType_2').on('change', function () {
+    domElements.$checkInTypeId.on('change', function () {
+        getDisabledDates();
+        bindingHourAndMinute();
+    });
+
+    domElements.$checkOutTypeId.on('change', function () {
         getDisabledDates();
         bindingHourAndMinute();
     });
@@ -238,7 +234,7 @@ $(document).ready(function () {
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
-                date: domElements.$forDate.val()
+                date: domElements.$attendantDate.val()
             }
         }).then(response => {
             const shift = response.data;
@@ -295,6 +291,8 @@ $(document).ready(function () {
             }).catch(axiosError);
         }
     });
+
+    getDisabledDates(initDatepicker);
 
     $('form').areYouSure();
 });

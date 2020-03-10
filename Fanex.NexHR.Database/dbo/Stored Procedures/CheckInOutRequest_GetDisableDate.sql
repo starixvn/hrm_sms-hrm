@@ -59,6 +59,7 @@ BEGIN
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 				INNER JOIN dbo.CheckInOutRequest AS cio WITH (NOLOCK) ON r.RequestId = cio.RequestId
+				AND cio.EmpId = @EmpId
 				AND WorkDate = cio.OnDate
 				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 			WHERE @RequestId IS NULL

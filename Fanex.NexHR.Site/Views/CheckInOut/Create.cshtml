@@ -1,4 +1,5 @@
 ﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Models
 @using Fanex.NexHR.Resources
 @using System.Web.Mvc.Html5
 @using Fanex.NexHR.ViewModels.Request
@@ -6,6 +7,7 @@
 @{
     ViewBag.Title = Labels.Create;
     var today = DateTime.Today;
+    var shift = (Shift)ViewBag.Shift;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
@@ -28,11 +30,11 @@
         @Html.ValidationSummary()
         <div class="validation-summary-errors" style="display: none;"></div>
         @Html.HiddenFor(model => model.EmployeeId)
-        @Html.Hidden("InTime")
-        @Html.Hidden("OutTime")
-        @Html.Hidden("CrossDay")
-        @Html.Hidden("IsInAfterDay")
-        @Html.Hidden("IsOutAfterDay")
+        @Html.Hidden("InTime", shift != null ? shift.BeginCheckInTime : string.Empty)
+        @Html.Hidden("OutTime", shift != null ? shift.BeginCheckOutTime : string.Empty)
+        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("IsInAfterDay", shift != null ? shift.IsInAfterDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("IsOutAfterDay", shift != null ? shift.IsOutAfterDay.ToString().ToLower() : string.Empty)
 
         <div class="form-group">
             <div class="label-form">
