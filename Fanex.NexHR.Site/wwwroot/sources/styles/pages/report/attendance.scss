@@ -75,3 +75,17 @@
 .tooltip-overtime {
     font-weight: bold;
 }
+
+span.req {
+    &.mytimesheet-pending {
+        background-color: #808080;
+    }
+
+    &.mytimesheet-accepted, &.mytimesheet-verified, &.mytimesheet-approved, &.mytimesheet-processed {
+        background-color: #008000;
+    }
+
+    &.mytimesheet-notaccepted, &.mytimesheet-notverified, &.mytimesheet-rejected, &.mytimesheet-void {
+        background-color: #ff0000;
+    }
+}
