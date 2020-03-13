@@ -120,7 +120,7 @@
             {
                 CurrentPage = model.CurrentPage,
                 ItemsPerPage = model.ItemsPerPage,
-                TotalItem = (int)criteria.TotalItem
+                TotalItem = criteria.TotalItem ?? 0
             };
             ViewBag.PagerOption = pagerOption;
 
