@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
 } from '../../../shared/common.functions';
 import { RequestType, RoleSystem } from '../../../shared/constants';
 
@@ -32,13 +32,13 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(_global.root + 'request/GetVerifiers', {
+            axios(resolveClientUrl('request/GetVerifiers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
                 }
             }),
-            axios(_global.root + 'request/GetApprovers', {
+            axios(resolveClientUrl('request/GetApprovers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
@@ -66,7 +66,7 @@ $(document).ready(function () {
     let getDisabledDates = function (callback) {
         const requestTypeId = domElements.$lateInTypeId.prop('checked') ? RequestType.LateIn : RequestType.EarlyOut;
         axios({
-            url: _global.root + 'lateinearlyout/GetDisabledDate',
+            url: resolveClientUrl('lateinearlyout/GetDisabledDate'),
             method: 'GET',
             params: {
                 requestTypeId: requestTypeId,
@@ -100,21 +100,22 @@ $(document).ready(function () {
     };
     let getActualLateInEarlyOut = function () {
         axios({
-            url: _global.root + 'lateinearlyout/GetActualLateInEarlyOut',
+            url: resolveClientUrl('lateinearlyout/GetActualLateInEarlyOut'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
                 workDate: domElements.$onDate.val()
             }
         }).then(response => {
-            if (response.data.lateIn > 0) {
-                domElements.$lateInHours.html(data.LateIn + "'");
+            const data = response.data;
+            if (data.lateIn > 0) {
+                domElements.$lateInHours.html(data.lateIn + "'");
             } else {
                 domElements.$lateInHours.html('N/A');
             }
 
-            if (response.data.earlyOut > 0) {
-                domElements.$earlyOutHours.html(data.EarlyOut + "'");
+            if (data.earlyOut > 0) {
+                domElements.$earlyOutHours.html(data.earlyOut + "'");
             } else {
                 domElements.$earlyOutHours.html('N/A');
             }
@@ -241,7 +242,7 @@ $(document).ready(function () {
         const isValid = validateForm();
         if (isValid) {
             axios({
-                url: _global.root + 'lateinearlyout/Create',
+                url: resolveClientUrl('lateinearlyout/Create'),
                 method: 'POST',
                 data: stringify({ model }),
                 headers: {
@@ -254,7 +255,7 @@ $(document).ready(function () {
                     $('form').removeClass('dirty');
                     domElements.$btnSubmit.prop('disabled', true);
                     toastr.success('Create successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'lateinearlyout/employeeview'; }, 3000);
+                    setTimeout(function () { location.href = resolveClientUrl('lateinearlyout/employeeview'); }, 3000);
                 } else {
                     toastr.error(data.message, '', toastOptions());
                 }

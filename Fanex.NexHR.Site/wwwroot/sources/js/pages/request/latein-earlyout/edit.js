@@ -8,7 +8,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
 } from '../../../shared/common.functions';
 import { RequestType } from '../../../shared/constants';
 
@@ -39,21 +39,22 @@ $(document).ready(function () {
     };
     let getActualLateInEarlyOut = function () {
         axios({
-            url: _global.root + 'lateinearlyout/GetActualLateInEarlyOut',
+            url: resolveClientUrl('lateinearlyout/GetActualLateInEarlyOut'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
                 workDate: domElements.$onDate.val()
             }
         }).then(response => {
-            if (response.data.lateIn > 0) {
-                domElements.$lateInHours.html(data.LateIn + "'");
+            const data = response.data;
+            if (data.lateIn > 0) {
+                domElements.$lateInHours.html(data.lateIn + "'");
             } else {
                 domElements.$lateInHours.html('N/A');
             }
 
-            if (response.data.earlyOut > 0) {
-                domElements.$earlyOutHours.html(data.EarlyOut + "'");
+            if (data.earlyOut > 0) {
+                domElements.$earlyOutHours.html(data.earlyOut + "'");
             } else {
                 domElements.$earlyOutHours.html('N/A');
             }
@@ -97,6 +98,7 @@ $(document).ready(function () {
     };
 
     initDatepicker();
+    getActualLateInEarlyOut();
     showHideActualLateInEarlyOut();
 
     domElements.$onDate.on('change', function () {
@@ -120,7 +122,7 @@ $(document).ready(function () {
         const isValid = validateForm();
         if (isValid) {
             axios({
-                url: _global.root + 'lateinearlyout/edit',
+                url: resolveClientUrl('lateinearlyout/edit'),
                 method: 'POST',
                 data: stringify({ model }),
                 headers: {
@@ -133,7 +135,7 @@ $(document).ready(function () {
                     $('form').removeClass('dirty');
                     domElements.$btnSubmit.prop('disabled', true);
                     toastr.success('Edit successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'lateinearlyout/employeeview'; }, 3000);
+                    setTimeout(function () { location.href = resolveClientUrl('lateinearlyout/employeeview'); }, 3000);
                 } else {
                     toastr.error(data.message, '', toastOptions());
                 }
