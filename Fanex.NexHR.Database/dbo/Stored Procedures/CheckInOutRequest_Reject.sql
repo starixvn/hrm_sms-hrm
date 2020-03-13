@@ -83,11 +83,11 @@ BEGIN
 
 		UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 		SET RequestedCheckinTime = CASE 
-				WHEN @RequestTypeId = @CheckInRequestTypeId THEN 0
+				WHEN @RequestTypeId = @CheckInRequestTypeId THEN NULL
 				ELSE RequestedCheckinTime
 				END
 			,RequestedCheckoutTime = CASE 
-				WHEN @RequestTypeId = @CheckOutRequestTypeId THEN 0
+				WHEN @RequestTypeId = @CheckOutRequestTypeId THEN NULL
 				ELSE RequestedCheckoutTime
 				END
 			,ModifiedBy = @ActorId

@@ -61,12 +61,10 @@ BEGIN
 				INNER JOIN dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK) ON r.RequestId = lieo.RequestId
 				AND lieo.EmpId = @EmpId
 				AND WorkDate = lieo.OnDate
+				AND r.RequestType = @requestTypeId
 				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 			WHERE @RequestId IS NULL
-				OR (
-					r.RequestId <> @requestId
-					AND r.RequestType = @requestTypeId
-					)
+				OR r.RequestId <> @requestId
 			)
 
 	DROP TABLE #tblEmployeeCalendar

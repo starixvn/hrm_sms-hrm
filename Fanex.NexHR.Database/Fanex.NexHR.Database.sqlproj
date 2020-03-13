@@ -349,11 +349,6 @@
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_GetByEmployeeId.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_Edit.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeRelationship_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Insert.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_GetByEmployeeId.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Edit.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeEmergency_Delete.sql" />
     <Build Include="dbo\Functions\fnc_GetKIVByDayBalance.sql" />
     <Build Include="dbo\Functions\fnc_GetDisciplineDetailByLeaveRequestId.sql" />
     <Build Include="dbo\Functions\fnc_GetEmployeeByActorId.sql" />

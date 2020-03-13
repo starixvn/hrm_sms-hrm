@@ -62,11 +62,9 @@ BEGIN
 				AND cio.EmpId = @EmpId
 				AND WorkDate = cio.OnDate
 				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
+				AND r.RequestType = @requestTypeId
 			WHERE @RequestId IS NULL
-				OR (
-					r.RequestId <> @requestId
-					AND r.RequestType = @requestTypeId
-					)
+				OR r.RequestId <> @requestId
 			)
 
 	DROP TABLE #tblEmployeeCalendar

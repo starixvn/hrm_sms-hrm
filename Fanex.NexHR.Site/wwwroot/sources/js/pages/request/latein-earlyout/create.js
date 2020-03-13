@@ -159,6 +159,7 @@ $(document).ready(function () {
     };
 
     getDisabledDates(initDatepicker);
+    getActualLateInEarlyOut();
     showHideActualLateInEarlyOut();
 
     $('#Employee').autocomplete({
