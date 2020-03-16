@@ -337,8 +337,6 @@
 
         private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
         {
-            var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
-            var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
             var model = new LeaveRequestViewModel
             {
                 RequestId = request.RequestId,
@@ -353,16 +351,13 @@
                 ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
                 RefNo = request.RefNO,
                 Remark = request.Remark,
-                FromTime = fromTime.ToString("HH:mm"),
-                ToTime = toTime.ToString("HH:mm"),
-                FromTimeHour = fromTime.Hour,
-                FromTimeMinute = fromTime.Minute,
-                ToTimeHour = toTime.Hour,
-                ToTimeMinute = toTime.Minute,
-                IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date,
-                IsToTimeAfterDay = request.ToDate.Date != toTime.Date,
                 Status = request.Status
             };
+
+            if (request.IsHalfDay)
+            {
+                GetTimeForHalfDayRequest(request, model);
+            }
 
             var today = DateTime.Today;
             var minDate = today.FirstDayOfMonth().AddMonths(-5);
@@ -378,6 +373,21 @@
             model.MaxDate = maxDate;
 
             return model;
+        }
+
+        private void GetTimeForHalfDayRequest(LeaveRequest request, LeaveRequestViewModel model)
+        {
+            var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
+            var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
+
+            model.FromTime = fromTime.ToString("HH:mm");
+            model.ToTime = toTime.ToString("HH:mm");
+            model.FromTimeHour = fromTime.Hour;
+            model.FromTimeMinute = fromTime.Minute;
+            model.ToTimeHour = toTime.Hour;
+            model.ToTimeMinute = toTime.Minute;
+            model.IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date;
+            model.IsToTimeAfterDay = request.ToDate.Date != toTime.Date;
         }
 
         private EmployeeLeaveBalance GetLeaveBalance(long? requestId, int? year)
