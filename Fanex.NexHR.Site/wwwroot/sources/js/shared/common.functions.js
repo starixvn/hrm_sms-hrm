@@ -177,9 +177,12 @@ function floatThead(el) {
 function initFromDateOnChange($fromDate, $toDate) {
     if ($fromDate && $toDate) {
         $fromDate.on("change", function () {
-            let fromDateValue = $(this).val();
-            $toDate.val(fromDateValue);
-        });
+            let toMonth = new Date($toDate.val()).getMonth();
+            let fromMonth = new Date($fromDate.val()).getMonth();
+            if (fromMonth != toMonth) {
+                $toDate.val($(this).val());
+                }
+            });
     }
 }
 
