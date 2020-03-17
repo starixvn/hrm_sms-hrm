@@ -343,8 +343,7 @@ const LeaveRequest = (function ($) {
                 $('.time-businesstrip').hide();
                 $('.time').hide();
                 $('#grbHalfDay').hide();
-            } else if (leaveTypeId === LeaveType.KeepInViewByHour
-                || leaveTypeId === LeaveType.BusinessDuringWorking) {
+            } else if (leaveTypeId === LeaveType.KeepInViewByHour || leaveTypeId === LeaveType.BusinessDuringWorking) {
                 $('.time-businesstrip').show();
                 $('.time').hide();
                 $('#grbHalfDay').hide();
@@ -504,7 +503,8 @@ const LeaveRequest = (function ($) {
         },
         disableControlForDetail: function () {
             if ($('#IsView').val() === 'True') {
-                $('input').attr('disabled', 'disabled');
+                $('.datepicker').attr('disabled', 'disabled');
+                $('#HalfDayOff').attr('disabled', 'disabled');
                 $('select').attr('disabled', 'disabled');
                 $('textarea').attr('disabled', 'disabled');
 
