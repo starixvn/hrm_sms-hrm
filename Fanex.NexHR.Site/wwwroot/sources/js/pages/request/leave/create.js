@@ -343,12 +343,8 @@ const LeaveRequest = (function ($) {
                 $('.time-businesstrip').hide();
                 $('.time').hide();
                 $('#grbHalfDay').hide();
-            } else if (leaveTypeId === LeaveType.KeepInViewByHour) {
-                $('.time-businesstrip').show();
-                $('.time').hide();
-                $('#grbHalfDay').hide();
-                $('#grbTotalDay').hide();
-            } else if (leaveTypeId === LeaveType.BusinessDuringWorking) {
+            } else if (leaveTypeId === LeaveType.KeepInViewByHour
+                || leaveTypeId === LeaveType.BusinessDuringWorking) {
                 $('.time-businesstrip').show();
                 $('.time').hide();
                 $('#grbHalfDay').hide();

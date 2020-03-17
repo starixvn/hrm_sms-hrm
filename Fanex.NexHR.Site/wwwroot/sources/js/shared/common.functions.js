@@ -179,10 +179,10 @@ function initFromDateOnChange($fromDate, $toDate) {
         $fromDate.on("change", function () {
             let toMonth = new Date($toDate.val()).getMonth();
             let fromMonth = new Date($fromDate.val()).getMonth();
-            if (fromMonth != toMonth) {
+            if (fromMonth !== toMonth) {
                 $toDate.val($(this).val());
-                }
-            });
+            }
+        });
     }
 }
 
