@@ -186,7 +186,10 @@
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
                 EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
-                email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject,
+                    request.Requester.Nickname,
+                    commandMessage,
+                    actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
