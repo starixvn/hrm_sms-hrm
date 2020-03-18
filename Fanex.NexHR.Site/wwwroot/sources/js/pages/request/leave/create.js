@@ -503,8 +503,7 @@ const LeaveRequest = (function ($) {
         },
         disableControlForDetail: function () {
             if ($('#IsView').val() === 'True') {
-                $('.datepicker').attr('disabled', 'disabled');
-                $('#HalfDayOff').attr('disabled', 'disabled');
+                $('.form-horizontal input').attr('disabled', 'disabled');
                 $('select').attr('disabled', 'disabled');
                 $('textarea').attr('disabled', 'disabled');
 

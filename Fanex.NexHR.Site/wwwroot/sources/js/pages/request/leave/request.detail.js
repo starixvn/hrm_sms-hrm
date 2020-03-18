@@ -294,7 +294,7 @@ var LeaveRequestDetail = (function ($) {
         },
         disableControlForDetail: function () {
             if ($("#IsView").val() === "True") {
-                $("input").attr("disabled", "disabled");
+                $('.form-horizontal input').attr('disabled', 'disabled');
                 $("select").attr("disabled", "disabled");
                 $("textarea").attr("disabled", "disabled");
                 $(".tdhalfday").hide();

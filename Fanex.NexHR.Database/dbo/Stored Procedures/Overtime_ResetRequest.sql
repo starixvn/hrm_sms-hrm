@@ -61,10 +61,7 @@ BEGIN
 			AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ProcessedStatusId, @VoidStatusId)
 
 		UPDATE req
-		SET CurrentStatus = CASE 
-				WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
-				ELSE @PendingStatusId
-				END
+		SET CurrentStatus = @PendingStatusId
 			,ApproverId = @ActorId
 			,ApprovedDate = @ModifiedDate
 			,ApprovedStatus = @PendingStatusId
