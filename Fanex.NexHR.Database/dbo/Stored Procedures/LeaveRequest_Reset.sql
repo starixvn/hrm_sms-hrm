@@ -99,7 +99,7 @@ BEGIN
 		BEGIN
 			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 			SET CurrentStatus = CASE 
-					WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
+					WHEN VerifiedStatus = @VerifiedStatusId THEN @PendingStatusId
 					ELSE @PendingStatusId
 					END
 				,ApprovedStatus = @PendingStatusId
