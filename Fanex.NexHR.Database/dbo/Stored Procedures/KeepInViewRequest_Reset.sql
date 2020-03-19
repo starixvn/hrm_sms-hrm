@@ -63,7 +63,6 @@ BEGIN
 		SET CurrentStatus = @PendingStatusId
 			,VerifiedStatus = @PendingStatusId
 			,ApprovedStatus = @PendingStatusId
-			,VerifiedDate = @ProcessedDate
 			,ApproverId = @ActorId
 			,ApprovedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
