@@ -88,7 +88,7 @@ $(document).ready(function () {
         axios({
             url: _global.root + 'overtime/CheckInvalidOvertime',
             method: 'POST',
-            data: stringify({ requestIds: requestIds.join(',') }),
+            data: stringify({ requestIds: requestIds }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/x-www-form-urlencoded'
