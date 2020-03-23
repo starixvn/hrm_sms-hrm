@@ -245,7 +245,9 @@ const LeaveRequest = (function ($) {
                         toDate.setDate(toDate.getDate() + 1);
                     }
 
-                    if (leaveTypeId === LeaveType.BusinessTrip || leaveTypeId === LeaveType.KeepInViewByHour) {
+                    if (leaveTypeId === LeaveType.BusinessTrip || leaveTypeId === LeaveType.KeepInViewByHour
+                        || leaveTypeId === LeaveType.AnnualLeave || leaveTypeId === LeaveType.UnpaidLeave
+                        || leaveTypeId === LeaveType.KeepInViewByDay || leaveTypeId === LeaveType.BusinessDuringWorking) {
                         fromDateTime = moment(fromDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
                             + ':' + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2);
                         toDateTime = moment(toDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
