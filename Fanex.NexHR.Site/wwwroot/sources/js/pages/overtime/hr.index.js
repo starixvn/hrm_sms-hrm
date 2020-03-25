@@ -7,7 +7,7 @@ import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -38,7 +38,7 @@ $(document).ready(function () {
         $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
     }
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
@@ -66,7 +66,7 @@ $(document).ready(function () {
 
     let onUpdateRequestStatus = function (requestIds, command) {
         axios({
-            url: _global.root + 'overtime/EditMonthlyRequestStatus',
+            url: resolveClientUrl('overtime/EditMonthlyRequestStatus'),
             method: 'POST',
             data: stringify({ requestIds, command, roleId: RoleSystem.HR }),
             headers: {
@@ -86,7 +86,7 @@ $(document).ready(function () {
 
     let checkInvalidOvertime = function (requestIds) {
         axios({
-            url: _global.root + 'overtime/CheckInvalidOvertime',
+            url: resolveClientUrl('overtime/CheckInvalidOvertime'),
             method: 'POST',
             data: stringify({ requestIds: requestIds }),
             headers: {
@@ -94,8 +94,8 @@ $(document).ready(function () {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(response => {
-            let isValid = response.data;
-            if (isValid) {
+            let isInvalid = response.data;
+            if (!isInvalid) {
                 onUpdateRequestStatus(requestIds, RequestCommand.Process);
             } else {
                 $confirmModal.find('.modal-body')
@@ -169,7 +169,7 @@ $(document).ready(function () {
         $('#btnSendMail').on('click', function () {
             $reminderMailModal.modal('hide');
             axios({
-                url: _global.root + 'overtime/ReminderClaimOvertime',
+                url: resolveClientUrl('overtime/ReminderClaimOvertime'),
                 method: 'POST',
                 data: stringify({
                     subject: $('#txtSubject').val().trim(),

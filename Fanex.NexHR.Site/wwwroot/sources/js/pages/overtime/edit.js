@@ -3,7 +3,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, toastOptions } from '../../shared/common.functions';
+import { axiosError, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let rangeTextBox = function (textbox, min, max) {
@@ -140,7 +140,7 @@ $(document).ready(function () {
             });
 
             axios({
-                url: _global.root + 'overtime/Edit',
+                url: resolveClientUrl('overtime/Edit'),
                 method: 'POST',
                 data: stringify({ model }),
                 headers: {

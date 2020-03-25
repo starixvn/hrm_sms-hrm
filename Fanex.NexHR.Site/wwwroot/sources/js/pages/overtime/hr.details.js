@@ -1,12 +1,11 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'floatthead/dist/jquery.floatThead';
+﻿import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(document).ready(function () {
@@ -22,7 +21,7 @@ $(document).ready(function () {
 
     let onUpdateRequestStatus = function (requestIds, command, roleId) {
         axios({
-            url: _global.root + 'overtime/EditMonthlyRequestStatus',
+            url: resolveClientUrl('overtime/EditMonthlyRequestStatus'),
             method: 'POST',
             data: stringify({ requestIds, command, roleId }),
             headers: {
@@ -47,7 +46,7 @@ $(document).ready(function () {
         $btnConfirm.on('click', function () {
             $confirmModal.modal('hide');
             axios({
-                url: _global.root + 'overtime/CheckInvalidOvertime',
+                url: resolveClientUrl('overtime/CheckInvalidOvertime'),
                 method: 'POST',
                 data: stringify({ requestIds: requestId }),
                 headers: {
@@ -55,8 +54,8 @@ $(document).ready(function () {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                let isValid = response.data;
-                if (isValid) {
+                let isInvalid = response.data;
+                if (!isInvalid) {
                     onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
                 } else {
                     $confirmModal.find('.modal-body')
