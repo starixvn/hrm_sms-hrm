@@ -31,8 +31,8 @@
         public string ToShift { get; set; }
 
         // Late In - Early Out
-        public int TotalMins { get; set; }
-        public int ActualLateInEarlyOut { get; set; }
+        public int TotalMinutes { get; set; }
+        public int ActualInOutMins { get; set; }
 
         // Keep In View
         public DateTime FromTime { get; set; }

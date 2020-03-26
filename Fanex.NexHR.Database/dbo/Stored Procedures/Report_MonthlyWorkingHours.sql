@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @ActorId INT
+﻿
+CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@GroupIds VARCHAR(MAX) = ''
@@ -162,7 +163,7 @@ BEGIN
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 	ORDER BY gr.[Name]
-		,emp.NickName
+		,emp.Code
 
 	SELECT *
 	FROM #tblEmployeeCalendar

@@ -293,7 +293,9 @@
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             }
 
-            worksheet.Cells.AutoFitColumns();
+            const byte MinimumWidth = 10;
+            const byte MaximumWidth = 50;
+            worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
             worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
 
@@ -486,8 +488,8 @@
                 LeaveCountDetails = request.LeaveCountDetails,
                 FromShift = new Shift { Name = request.FromShift },
                 ToShift = new Shift { Name = request.ToShift },
-                ActualLateInEarlyOut = request.ActualLateInEarlyOut,
-                TotalMins = request.TotalMins,
+                ActualLateInEarlyOut = request.ActualInOutMins,
+                TotalMins = request.TotalMinutes,
                 KeepInViewType = request.KeepInViewTypeId
             };
             return RequestService.ToRequestMessage(requestEntity, true);
