@@ -25,6 +25,7 @@
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
         private readonly ICommonDataService commonDataService;
+        private readonly IShiftService shiftService;
 
         public LeaveController(
             ISessionService sessionService,
@@ -32,13 +33,15 @@
             IRequestService requestService,
             IBaseService baseService,
             IEmployeeService employeeService,
-            ICommonDataService commonDataService) : base(sessionService)
+            ICommonDataService commonDataService,
+            IShiftService shiftService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
+            this.shiftService = shiftService;
         }
 
         [HttpGet]
@@ -111,6 +114,13 @@
                 return RedirectToAction("AccessDenied", "Error");
             }
 
+            bool showCheckboxAfterDay = false;
+            if (request.IsHalfDay)
+            {
+                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.FromDate);
+                showCheckboxAfterDay = shift != null && shift.IsOutAfterDay;
+            }
+
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.UnavailDates = GetUnavailDate(model);
             model.LeaveTypeList = commonDataService.GetLeaveType();
@@ -120,6 +130,7 @@
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
 
+            ViewBag.showCheckboxAfterDay = showCheckboxAfterDay;
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -154,12 +165,20 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
+            bool showCheckboxAfterDay = false;
+            if (request.IsHalfDay)
+            {
+                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.FromDate);
+                showCheckboxAfterDay = shift != null && shift.IsOutAfterDay;
+            }
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
+
+            ViewBag.showCheckboxAfterDay = showCheckboxAfterDay;
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
@@ -387,7 +406,7 @@
             model.ToTimeHour = toTime.Hour;
             model.ToTimeMinute = toTime.Minute;
             model.IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date;
-            model.IsToTimeAfterDay = request.ToDate.Date != toTime.Date;
+            model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
         }
 
         private EmployeeLeaveBalance GetLeaveBalance(long? requestId, int? year)

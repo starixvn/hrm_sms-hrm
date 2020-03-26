@@ -6,6 +6,7 @@
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
+    var showCheckboxAfterDay = (bool)ViewBag.showCheckboxAfterDay;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
@@ -112,15 +113,12 @@
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
-            <div class="time" style="display: none;">
-                @Html.DropDownList("FromTime", Utilities.TimeSteps(30), new { @class = "form-control" })
-            </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.FromTimeHour, new { Name = "Hour", MaxLength = "2", id = "FromTimeHour", @class = "form-control" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.FromTimeMinute, new { Name = "Minute", MaxLength = "2", id = "FromTimeMinute", @class = "form-control" })
             </div>
-            <div class="time-isafterday" style="display: none;">
+            <div class="time-isafterday" style="display: @(showCheckboxAfterDay ? "block" : "none")">
                 @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
                 @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day", new { @class = "control-label" })
             </div>
@@ -138,9 +136,6 @@
                         disabledDate = string.Join(",", Model.UnavailDates.Select(x => x.ToString("yyyy/MM/dd")))
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
-            </div>
-            <div class="time" style="display: none;">
-                @Html.DropDownList("ToTime", Utilities.TimeSteps(30), new { @class = "form-control" })
             </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.ToTimeHour, new { Name = "Hour", MaxLength = "2", id = "ToTimeHour", @class = "form-control" })

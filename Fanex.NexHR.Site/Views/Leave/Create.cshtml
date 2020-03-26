@@ -102,9 +102,6 @@
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
-            <div class="time" style="display: none;">
-                @Html.DropDownList("FromTime", Utilities.TimeSteps(30), new { @class = "form-control" })
-            </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.FromTimeHour, new { Name = "Hour", MaxLength = "2", id = "FromTimeHour", @class = "form-control" })
                 :
@@ -127,9 +124,6 @@
                         mindate = Model.MinDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
-            </div>
-            <div class="time" style="display: none;">
-                @Html.DropDownList("ToTime", Utilities.TimeSteps(30), new { @class = "form-control" })
             </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.ToTimeHour, new { Name = "Hour", MaxLength = "2", id = "ToTimeHour", @class = "form-control" })

@@ -730,11 +730,6 @@ BEGIN
 			LEFT JOIN dbo.Shift AS s1 WITH (NOLOCK) ON s1.ShiftId = rd.FromShift
 			LEFT JOIN dbo.Shift AS s2 WITH (NOLOCK) ON s2.ShiftId = rd.ToShift
 			LEFT JOIN dbo.Shift AS s3 WITH (NOLOCK) ON s3.ShiftId = c.ShiftID
-		WHERE (
-				c.LeaveDay <> 0
-				AND rd.RequestType = 6
-				)
-			OR rd.RequestType <> 6
 		) AS r ON (
 			T.EmpId = r.EmpId
 			AND (

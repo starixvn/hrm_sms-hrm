@@ -55,8 +55,6 @@ const LeaveRequest = (function ($) {
         toDate: null,
         employeeId: null,
         employee: null,
-        fromTime: null,
-        toTime: null,
         fromTimeHour: null,
         fromTimeMinute: null,
         toTimeHour: null,
@@ -80,8 +78,6 @@ const LeaveRequest = (function ($) {
             LeaveRequest.toDate = $('#ToDate');
             LeaveRequest.employeeId = $('#EmployeeId');
             LeaveRequest.employee = $('#Employee');
-            LeaveRequest.fromTime = $('#FromTime');
-            LeaveRequest.toTime = $('#ToTime');
             LeaveRequest.fromTimeHour = $('#FromTimeHour');
             LeaveRequest.fromTimeMinute = $('#FromTimeMinute');
             LeaveRequest.toTimeHour = $('#ToTimeHour');
@@ -117,15 +113,43 @@ const LeaveRequest = (function ($) {
             LeaveRequest.leaveTypeId.change(function () {
                 LeaveRequest.leaveTypeChange();
             });
+
             LeaveRequest.isFromTimeAfterDay.change(function () {
-                LeaveRequest.timeChange();
+                if (LeaveRequest.halfDayOff.prop('checked')) {
+                    if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
+                        LeaveRequest.isToTimeAfterDay.prop('checked', true);
+                        let toDate = new Date(LeaveRequest.fromDate.val());
+                        toDate.setDate(toDate.getDate() + 1);
+                        LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
+                    } else {
+                        LeaveRequest.isToTimeAfterDay.prop('checked', false);
+                        LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+                    }
+                } else {
+                    LeaveRequest.isFromTimeAfterDay.prop('checked', false);
+                    LeaveRequest.isToTimeAfterDay.prop('checked', false);
+                    LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
+                }
             });
-            LeaveRequest.fromTime.change(function () {
-                LeaveRequest.timeChange();
+
+            $('#FromTimeHour, #ToTimeHour').on('change', function () {
+                const value = parseInt($(this).val(), 10) || 0;
+                if (value > 23) {
+                    $(this).val('00');
+                } else {
+                    LeaveRequest.timeChangeHandler();
+                }
             });
-            LeaveRequest.toTime.change(function () {
-                LeaveRequest.timeChange();
+
+            $('#FromTimeMinute, #ToTimeMinute').on('change', function () {
+                const value = parseInt($(this).val(), 10) || 0;
+                if (value > 59) {
+                    $(this).val('00');
+                } else {
+                    LeaveRequest.timeChangeHandler();
+                }
             });
+
             $('#btnSubmit').click(function (evt) {
                 evt.preventDefault();
                 RequestCommon.removeErrorMsg(false);
@@ -146,17 +170,20 @@ const LeaveRequest = (function ($) {
                 $('.time-isafterday').show();
                 LeaveRequest.isFromTimeAfterDay.trigger('change');
             }
+
+            if (LeaveRequest.isToTimeAfterDay.prop('checked')) {
+                let toDate = new Date(LeaveRequest.fromDate.val());
+                toDate.setDate(toDate.getDate() + 1);
+                LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
+            }
         },
-        employeeChange: function () {
-            LeaveRequest.getVerifier();
-            LeaveRequest.getApprover();
-            LeaveRequest.getLeaveBalance();
-            LeaveRequest.getDisableDate();
-            LeaveRequest.getLeaveDetail();
-        },
-        timeChange: function () {
-            if (LeaveRequest.halfDayOff.prop('checked')) {
-                if (LeaveRequest.isFromTimeAfterDay.prop('checked') || LeaveRequest.fromTime.val() > LeaveRequest.toTime.val()) {
+        timeChangeHandler: function () {
+            const fromTime = LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
+                + ':' + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2),
+                toTime = LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
+                    + ':' + LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2);
+            if (!LeaveRequest.isFromTimeAfterDay.prop('checked')) {
+                if (fromTime > toTime) {
                     LeaveRequest.isToTimeAfterDay.prop('checked', true);
                     let toDate = new Date(LeaveRequest.fromDate.val());
                     toDate.setDate(toDate.getDate() + 1);
@@ -165,11 +192,14 @@ const LeaveRequest = (function ($) {
                     LeaveRequest.isToTimeAfterDay.prop('checked', false);
                     LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
                 }
-            } else {
-                LeaveRequest.isFromTimeAfterDay.prop('checked', false);
-                LeaveRequest.isToTimeAfterDay.prop('checked', false);
-                LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
             }
+        },
+        employeeChange: function () {
+            LeaveRequest.getVerifier();
+            LeaveRequest.getApprover();
+            LeaveRequest.getLeaveBalance();
+            LeaveRequest.getDisableDate();
+            LeaveRequest.getLeaveDetail();
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
             var leaveDetailContainer = $('#leaveDetails');
@@ -232,10 +262,9 @@ const LeaveRequest = (function ($) {
                         });
                     });
                 } else if (LeaveRequest.halfDayOff.prop('checked')) {
-                    var fromDate = new Date(LeaveRequest.fromDate.val());
-                    var toDate = new Date(LeaveRequest.fromDate.val());
-                    var fromDateTime;
-                    var toDateTime;
+                    let fromDate = new Date(LeaveRequest.fromDate.val()),
+                        toDate = new Date(LeaveRequest.fromDate.val()),
+                        fromDateTime, toDateTime;
 
                     if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
                         fromDate.setDate(fromDate.getDate() + 1);
@@ -245,17 +274,10 @@ const LeaveRequest = (function ($) {
                         toDate.setDate(toDate.getDate() + 1);
                     }
 
-                    if (leaveTypeId === LeaveType.BusinessTrip || leaveTypeId === LeaveType.KeepInViewByHour
-                        || leaveTypeId === LeaveType.AnnualLeave || leaveTypeId === LeaveType.UnpaidLeave
-                        || leaveTypeId === LeaveType.KeepInViewByDay || leaveTypeId === LeaveType.BusinessDuringWorking) {
-                        fromDateTime = moment(fromDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
-                            + ':' + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2);
-                        toDateTime = moment(toDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
-                            + ':' + LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2);
-                    } else {
-                        fromDateTime = moment(fromDate).format(DateFormat) + ' ' + LeaveRequest.fromTime.val();
-                        toDateTime = moment(toDate).format(DateFormat) + ' ' + LeaveRequest.toTime.val();
-                    }
+                    fromDateTime = moment(fromDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)
+                        + ':' + LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2);
+                    toDateTime = moment(toDate).format(DateFormat) + ' ' + LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2)
+                        + ':' + LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2);
 
                     requestDetails.push({
                         OnDate: LeaveRequest.fromDate.val(),
@@ -343,23 +365,19 @@ const LeaveRequest = (function ($) {
             const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
             if (leaveTypeId === LeaveType.GeneralLeave) {
                 $('.time-businesstrip').hide();
-                $('.time').hide();
                 $('#grbHalfDay').hide();
             } else if (leaveTypeId === LeaveType.KeepInViewByHour || leaveTypeId === LeaveType.BusinessDuringWorking) {
                 $('.time-businesstrip').show();
-                $('.time').hide();
                 $('#grbHalfDay').hide();
                 $('#grbTotalDay').hide();
             } else {
                 $('.time-businesstrip').show();
-                $('.time').hide();
             }
 
             LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
             LeaveRequest.toDate.datepicker('disable').prop('disabled', false);
         },
         disableControlForHalfDay: function () {
-            $('.time').hide();
             $('.time-businesstrip').hide();
             $('.time-isafterday').hide();
 
@@ -377,11 +395,14 @@ const LeaveRequest = (function ($) {
                             minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
                             isFromAfterday = data.IsInAfterDay,
                             isToAfterday = data.IsOutAfterDay;
-                        if (data.IsInAfterDay) {
+                        if (data.IsInAfterDay || data.IsOutAfterDay) {
                             $('.time-isafterday').show();
-                            minuteFrom += 1440; //60*24
                         } else {
                             $('.time-isafterday').hide();
+                        }
+
+                        if (data.IsInAfterDay) {
+                            minuteFrom += 1440; //60*24
                         }
 
                         if (data.IsOutAfterDay) {
@@ -392,6 +413,8 @@ const LeaveRequest = (function ($) {
                         if (averageTime >= 1440) {
                             averageTime = averageTime - 1440;
                             isToAfterday = true;
+                        } else {
+                            isToAfterday = false;
                         }
 
                         let hour = Math.floor(averageTime / 60),
@@ -401,13 +424,10 @@ const LeaveRequest = (function ($) {
                             hour = '0' + hour;
                         }
 
-                        var toTime = hour + ':' + minute;
-                        LeaveRequest.fromTime.val(data.BeginCheckInTime);
-                        LeaveRequest.toTime.val(toTime);
                         LeaveRequest.fromTimeHour.val(arrTimeIn[0]);
                         LeaveRequest.fromTimeMinute.val(arrTimeIn[1]);
-                        LeaveRequest.toTimeHour.val(arrTimeOut[0]);
-                        LeaveRequest.toTimeMinute.val(arrTimeOut[1]);
+                        LeaveRequest.toTimeHour.val(hour);
+                        LeaveRequest.toTimeMinute.val(minute);
 
                         LeaveRequest.isFromTimeAfterDay.prop('checked', isFromAfterday);
                         LeaveRequest.isToTimeAfterDay.prop('checked', isToAfterday);
@@ -515,40 +535,42 @@ const LeaveRequest = (function ($) {
             }
         },
         validateForm: function () {
-            var isValid = true;
-            var errorString = [];
-            var empName = LeaveRequest.employee.val();
-            var fromDate = LeaveRequest.fromDate.val();
-            var toDate = LeaveRequest.toDate.val();
-            var approver = LeaveRequest.approverId.val();
-            var verifier = LeaveRequest.verifierId.val();
-            var remark = $('#Remark').val();
+            let isValid = true,
+                errorString = [],
+                empName = LeaveRequest.employee.val(),
+                fromDate = LeaveRequest.fromDate.val(), toDate = LeaveRequest.toDate.val(),
+                approver = LeaveRequest.approverId.val(), verifier = LeaveRequest.verifierId.val(),
+                remark = $('#Remark').val();
 
-            var start = $("[name='FromDate']").datepicker('getDate');
-            var end = $("[name='ToDate']").datepicker('getDate');
-            var days = (end - start) / 1000 / 60 / 60 / 24;
+            let start = $("[name='FromDate']").datepicker('getDate'),
+                end = $("[name='ToDate']").datepicker('getDate'),
+                days = (end - start) / 1000 / 60 / 60 / 24;
 
             if (empName !== undefined && (empName === null || empName === '')) {
                 errorString.push('The Employee field is required.');
             }
-
             if (fromDate === null || fromDate === '') {
                 errorString.push('From Date field is required.');
             }
-
             if (toDate === null || toDate === '') {
                 errorString.push('To Date field is required.');
             }
 
             if (LeaveRequest.halfDayOff.prop('checked')) {
-                if (parseInt(LeaveRequest.leaveTypeId.val(), 10) === LeaveType.BusinessTrip) {
-                    if (parseInt(LeaveRequest.fromTimeHour.val()) > 23
-                        || parseInt(LeaveRequest.fromTimeMinute.val()) > 59
-                        || parseInt(LeaveRequest.toTimeHour.val()) > 23
-                        || parseInt(LeaveRequest.toTimeMinute.val()) > 59
-                    ) {
-                        errorString.push('Time is not valid.');
-                    }
+                fromDate = moment(LeaveRequest.fromDate.val());
+                toDate = moment(LeaveRequest.fromDate.val());
+                if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
+                    fromDate = fromDate.add(1, 'day');
+                }
+                if (LeaveRequest.isToTimeAfterDay.prop('checked')) {
+                    toDate = toDate.add(1, 'day');
+                }
+                fromDate = fromDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2));
+                fromDate = fromDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2));
+                toDate = toDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2));
+                toDate = toDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2));
+                if (fromDate.isAfter(toDate)) {
+                    errorString.push('Time is not valid.');
                 }
             }
 
@@ -676,7 +698,6 @@ const LeaveRequest = (function ($) {
             if (leaveTypeId === LeaveType.GeneralLeave) {
                 $('#grbHalfDay').hide();
                 $('#grbTotalDay').hide();
-                $('.time').hide();
                 $('.time-businesstrip').hide();
                 $('.time-isafterday').hide();
                 LeaveRequest.toDate.datepicker('enable');

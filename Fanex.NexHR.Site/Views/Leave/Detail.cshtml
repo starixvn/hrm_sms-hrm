@@ -4,6 +4,7 @@
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Details;
+    var showCheckboxAfterDay = (bool)ViewBag.showCheckboxAfterDay;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/leave.create.css" rel="stylesheet" />
@@ -70,15 +71,13 @@
                          @readonly = "readonly"
                      })
                 <i class="icon-calendar fa fa-calendar disabled"></i>
-            </div><div class="time" style="display: none;">
-                @Html.DropDownList("FromTime", Utilities.TimeSteps(30), new { @class = "form-control" })
             </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.FromTimeHour, new { Name = "Hour", MaxLength = "2", id = "FromTimeHour", @class = "form-control" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.FromTimeMinute, new { Name = "Minute", MaxLength = "2", id = "FromTimeMinute", @class = "form-control" })
             </div>
-            <div class="time-isafterday" style="display: none;">
+            <div class="time-isafterday" style="display: @(showCheckboxAfterDay ? "block" : "none")">
                 @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
                 @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day", new { @class = "control-label" })
             </div>
@@ -95,9 +94,6 @@
                      @readonly = "readonly"
                  })
                 <i class="icon-calendar fa fa-calendar disabled"></i>
-            </div>
-            <div class="time" style="display: none;">
-                @Html.DropDownList("ToTime", Utilities.TimeSteps(30), new { @class = "form-control" })
             </div>
             <div class="time-businesstrip" style="display: none;">
                 @Html.Html5Number(0, 23, 1, Model.ToTimeHour, new { Name = "Hour", MaxLength = "2", id = "ToTimeHour", @class = "form-control" })
@@ -158,4 +154,4 @@
             <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
         </div>
     }
-    </div>
+</div>
