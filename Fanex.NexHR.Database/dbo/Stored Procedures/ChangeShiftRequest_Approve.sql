@@ -171,6 +171,7 @@ BEGIN
 
 			UPDATE empca
 			SET empca.IsOffDay = 1
+				,empca.ShiftId = NULL
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 				,empca.IsPublic = 1
