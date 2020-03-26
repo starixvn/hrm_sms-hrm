@@ -490,7 +490,7 @@
                 TotalMins = request.TotalMins,
                 KeepInViewType = request.KeepInViewTypeId
             };
-            return RequestService.ToRequestMessage(requestEntity);
+            return RequestService.ToRequestMessage(requestEntity, true);
         }
     }
 }
