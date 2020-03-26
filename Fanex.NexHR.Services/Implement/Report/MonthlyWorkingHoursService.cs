@@ -120,7 +120,19 @@
             WriteHeader(template, worksheet, param);
 
             // data
-            WriteBody(template, worksheet, monthlyWorkings, param);
+            var rowIndex = (int)StartBodyRowIndex;
+            WriteBody(template, worksheet, monthlyWorkings, ref rowIndex, param);
+
+            // summary
+            const byte SummaryRowIndex = 5;
+            TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns;
+            template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 6].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 6]);
+            for (var i = 7; i <= TotalColumns; i++)
+            {
+                template.Cells[SummaryRowIndex, 7].Copy(worksheet.Cells[rowIndex, i]);
+                var excelAddress = $"{worksheet.Cells[StartBodyRowIndex, i].Address}:{worksheet.Cells[rowIndex - 1, i].Address}";
+                worksheet.Cells[rowIndex, i].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+            }
 
             worksheet.Cells.AutoFitColumns();
             worksheet.View.FreezePanes(StartBodyRowIndex, 6);
@@ -161,9 +173,9 @@
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
             IEnumerable<MonthlyWorking> monthlyWorkings,
+            ref int rowIndex,
             GetMonthlyWorkingHoursParam param)
         {
-            var rowIndex = StartBodyRowIndex;
             var rowNum = 1;
             foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
             {
