@@ -4,6 +4,8 @@
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
 
@@ -38,6 +40,12 @@
             foreach (var leave in leaves)
             {
                 leave.LeaveDetail = leaveDetails.Where(t => t.RequestId == leave.RequestId).ToList();
+
+                if (leave.LeaveDetail.Any())
+                {
+                    leave.TotalDays = leave.LeaveDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                        .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+                }
             }
 
             return leaves;
