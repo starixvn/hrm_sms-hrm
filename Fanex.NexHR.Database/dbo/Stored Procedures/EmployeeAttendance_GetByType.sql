@@ -667,14 +667,33 @@ BEGIN
 			CROSS APPLY #CalendarDF AS tbldate
 			INNER JOIN @tblEmployeeId AS tblemp ON e.EmpId = tblemp.EmpId
 			LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
-			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON tbldate.AttendanceDate = a.AttendanceDate
-			AND a.empid = e.empid
-			LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.WorkDate = tbldate.AttendanceDate
-			AND c.EmpId = e.EmpId
-			LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = c.ShiftId
 			LEFT JOIN dbo.EmployeeCalendar AS c_CrossDay WITH (NOLOCK) ON c_CrossDay.WorkDate = (tbldate.AttendanceDate - 1)
 			AND c_CrossDay.EmpId = e.EmpId
 			LEFT JOIN dbo.[Shift] AS s_CrossDay WITH (NOLOCK) ON s_CrossDay.ShiftId = c_CrossDay.ShiftId
+			LEFT JOIN dbo.EmployeeCalendar AS c_CurDay WITH (NOLOCK) ON c_CurDay.WorkDate = tbldate.AttendanceDate
+			AND c_CurDay.EmpId = e.EmpId
+			LEFT JOIN dbo.[Shift] AS s_CurDay WITH (NOLOCK) ON s_CurDay.ShiftId = c_CurDay.ShiftId
+			LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.EmpId = e.EmpId
+			AND (
+				(
+					(
+						s_CrossDay.IsInAfterDay = 0
+						OR @isRealDate = 0
+						)
+					AND c.WorkDate = tbldate.AttendanceDate
+					)
+				OR (
+					(
+						s_CrossDay.IsInAfterDay = 1
+						OR s_CurDay.IsInAfterDay = 1
+						)
+					AND @isRealDate = 1
+					AND c.WorkDate = c_CrossDay.WorkDate
+					)
+				)
+			LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = c.ShiftId
+			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON a.AttendanceDate = c.WorkDate
+			AND a.empid = e.empid
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.groupid = g.groupid
 			INNER JOIN @tblGroupId AS gId ON g.GroupId = gId.GroupId
 			LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
@@ -726,28 +745,21 @@ BEGIN
 					AND CONVERT(VARCHAR(10), rd.ToDate, 101)
 				)
 			AND c.EmpId = rd.EmpId
+			AND (
+				(
+					rd.RequestType = @LeaveRequestTypeId
+					AND c.IsHoliday = 0
+					AND c.IsOffDay = 0
+					AND c.IsKeepInView = 0
+					)
+				OR rd.RequestType <> @LeaveRequestTypeId
+				)
 			LEFT JOIN dbo.LeaveType AS l WITH (NOLOCK) ON l.LeaveTypeID = lr.LeaveType
 			LEFT JOIN dbo.Shift AS s1 WITH (NOLOCK) ON s1.ShiftId = rd.FromShift
 			LEFT JOIN dbo.Shift AS s2 WITH (NOLOCK) ON s2.ShiftId = rd.ToShift
 			LEFT JOIN dbo.Shift AS s3 WITH (NOLOCK) ON s3.ShiftId = c.ShiftID
-		) AS r ON (
-			T.EmpId = r.EmpId
-			AND (
-				(
-					@isRealDate = 1
-					AND r.IsInAfterDay = 1
-					AND T.AttendanceDate = r.WorkDate + 1
-					)
-				OR (
-					(
-						@isRealDate = 0
-						OR @isRealDate IS NULL
-						OR r.IsInAfterDay = 0
-						)
-					AND T.AttendanceDate = r.WorkDate
-					)
-				)
-			)
+		) AS r ON T.EmpId = r.EmpId
+		AND T.AttendanceDate = r.WorkDate
 		LEFT JOIN LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeId = r.LeaveTypeId
 		LEFT JOIN LeaveType AS lv2 WITH (NOLOCK) ON lv2.LeaveTypeId = r.LeaveTypeId2
 		LEFT JOIN @OutOffDay AS od ON t.AttendanceDate = od.WorkDate
