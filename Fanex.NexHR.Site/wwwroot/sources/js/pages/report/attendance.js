@@ -4,6 +4,7 @@ import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import { blockUI, floatThead, unblockUI, initFromDateOnChange, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { CurrentRequestStatus } from '../../shared/constants';
 import '../../date';
 import '../request/date.filter';
 
@@ -50,24 +51,26 @@ function initTooltip() {
                 object.attr('data-ottype'),
                 object.attr('data-isothours'),
                 object.attr('data-actualLateInEarlyOut'));
-            var status = "";
+            const leavetype = object.data('leavetype');
+            let status = "";
             switch (parseInt(object.attr('data-currentStatus'))) {
-                case 1:
+                case CurrentRequestStatus.Pending:
                     status = "Pending";
                     break;
-                case 2:
+                case CurrentRequestStatus.Verified:
                     status = "Verified";
                     break;
-                case 4:
+                case CurrentRequestStatus.Approved:
                     status = "Approved";
                     break;
-                case 6:
+                case CurrentRequestStatus.Processed:
                     status = "Processed";
                     break;
                 default:
                     status = "Approved";
             }
             return "<div>" + "<table class='table-tooltip checkinout'>" +
+                (leavetype ? "<tr class='hasborder'><td class='col1'>Leave Type</td><td class='col2'>" + leavetype + "</td></tr>" : '') +
                 "<tr class='hasborder'>" +
                 "<td class='col1'>Details</td>" +
                 "<td class='col2'>" + result +

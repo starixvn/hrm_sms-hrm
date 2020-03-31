@@ -110,6 +110,7 @@
                                 var className = "tooltip-request req" + statusClass;
                                 <a href='javascript:;' class="@className"
                                     data-requesttype="@request.RequestType.Id"
+                                    data-leavetype="@request.LeaveType.Name"
                                     data-fromdate="@request.FromDate.ToFormatedDate()"
                                     data-todate="@request.ToDate.ToFormatedDate()"
                                     data-createddate="@request.CreatedDateTime"
