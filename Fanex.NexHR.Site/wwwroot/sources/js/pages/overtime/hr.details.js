@@ -44,29 +44,7 @@ $(document).ready(function () {
         $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Process</strong> this request?');
         $confirmModal.modal('show');
         $btnConfirm.on('click', function () {
-            $confirmModal.modal('hide');
-            axios({
-                url: resolveClientUrl('overtime/CheckInvalidOvertime'),
-                method: 'POST',
-                data: stringify({ requestIds: requestId }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                let isInvalid = response.data;
-                if (!isInvalid) {
-                    onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
-                } else {
-                    $confirmModal.find('.modal-body')
-                        .html('The request is invalid. Are you sure you want to <strong>Process</strong> this request?');
-                    $confirmModal.modal('show');
-                    $btnConfirm.off('click');
-                    $btnConfirm.on('click', function () {
-                        onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
-                    });
-                }
-            }).catch(axiosError);
+            onUpdateRequestStatus(requestId, RequestCommand.Process, RoleSystem.HR);
         });
     });
 
