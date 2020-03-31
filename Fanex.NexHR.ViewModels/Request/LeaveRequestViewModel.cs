@@ -8,6 +8,7 @@
     using Fanex.NexHR.Models.Request;
     using System.Linq;
     using Fanex.NexHR.Models.Supervisor;
+    using System.Web;
 
     public class LeaveRequestViewModel : IValidatableObject
     {
@@ -114,5 +115,7 @@
 
             return result;
         }
+
+        public string Files { get; set; }
     }
 }

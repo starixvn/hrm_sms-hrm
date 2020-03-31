@@ -1866,4 +1866,7 @@
   <data name="Emergency" xml:space="preserve">
     <value>Emergency</value>
   </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>Upload File</value>
+  </data>
 </root>

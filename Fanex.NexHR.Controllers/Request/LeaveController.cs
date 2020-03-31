@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -85,7 +87,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Create(string request, string requestDetails)
+        public ActionResult Create(string request, string requestDetails, IList<HttpPostedFileBase> files)
         {
             InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
             List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
@@ -96,9 +98,31 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailCreateRequest(criteria);
+                UploadFile(files, criteria.RequestId);
             }
 
             return Json(result);
+        }
+
+        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
+        {
+            if (!files.Any(file => file.ContentLength <= 0))
+            {
+                string dir = Server.MapPath("~/file/uploads/request/" + requestId);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine(dir, fileName);
+                    file.SaveAs(path);
+                }
+            }
         }
 
         public ActionResult Update(long id)
@@ -125,6 +149,13 @@
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
+            string dir = Server.MapPath("~/file/uploads/request/" + id);
+
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                model.Files = Path.GetFileName(file);
+            }
             return View(model);
         }
 
@@ -164,6 +195,14 @@
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
+            string dir = Server.MapPath("~/file/uploads/request/" + id);
+
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                model.Files = Path.GetFileName(file);
+            }
+
             return View(model);
         }
 
@@ -172,6 +211,20 @@
         {
             leaveRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = leaveRequestService.Delete(id);
+
+            if (commandResult.IsSuccessful)
+            {
+                string dir = Server.MapPath("~/file/uploads/request/" + id);
+
+                if (!System.IO.File.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+                    foreach (string file in files)
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+            }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

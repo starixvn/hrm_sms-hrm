@@ -45,6 +45,20 @@ const RequestCommon = {
     }
 };
 
+function uploadComplete(evt) {
+    if (evt.target.status === 200) {
+        $('form').removeClass('dirty');
+        var successMsg = 'Your request have been sent successfully!';
+        RequestCommon.showSuccessMsg(successMsg, 'Leave/EmployeeView');
+    }
+}
+
+//function uploadFailed(response) {
+//    RequestCommon.showErrorMsg(response.Message, LeaveRequest.employee);
+//}
+function uploadFailed(response) {
+    $("#error").html(response.message);
+}
 const LeaveRequest = (function ($) {
     return {
         verifierId: null,
@@ -187,6 +201,7 @@ const LeaveRequest = (function ($) {
             if (isValid) {
                 RequestCommon.removeErrorMsg(false);
                 const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
+
                 let leaveRequest = {
                     RequestId: LeaveRequest.requestId.val(),
                     EmployeeId: LeaveRequest.employeeId.val(),
@@ -202,6 +217,7 @@ const LeaveRequest = (function ($) {
                     VerifierId: LeaveRequest.verifierId.val(),
                     ApproverId: LeaveRequest.approverId.val()
                 };
+
                 var requestDetails = [];
                 var leaveDate = '';
                 var isHalfDay = false;
@@ -261,7 +277,7 @@ const LeaveRequest = (function ($) {
                         LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                         IsHalfDay: true,
                         FromTime: fromDateTime,
-                        ToTime: toDateTime
+                        ToTime: toDateTime,
                     });
                 }
 
@@ -274,22 +290,27 @@ const LeaveRequest = (function ($) {
             }
         },
         insertLeaveRequest: function (leaveRequest, requestDetails) {
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: resolveClientUrl('Leave/Create'),
-                data: { request: JSON.stringify(leaveRequest), requestDetails: JSON.stringify(requestDetails) },
-                success: function (response) {
-                    if (response.IsSuccessful) {
-                        $('form').removeClass('dirty');
-                        var successMsg = 'Your request have been sent successfully!';
-                        RequestCommon.showSuccessMsg(successMsg, 'Leave/EmployeeView');
-                    }
-                    else {
-                        RequestCommon.showErrorMsg(response.Message, LeaveRequest.employee);
-                    }
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                if (file.size / 1024 > 5120) {
+                    alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
+                    return;
                 }
-            });
+
+                fd.append('files[' + i + ']', file);
+            }
+            fd.append('request', JSON.stringify(leaveRequest));
+            fd.append('requestDetails', JSON.stringify(requestDetails));
+
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.addEventListener("error", uploadFailed, false);
+            xhr.open("POST", _global.root + "leave/Create");
+            xhr.send(fd);
         },
         updateLeaveRequest: function (leaveRequest, requestDetails) {
             $.ajax({

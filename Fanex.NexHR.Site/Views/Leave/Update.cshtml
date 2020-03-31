@@ -182,12 +182,27 @@
                 @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
             </div>
         </div>
-        <div class="form-group" id="leaveDetailContainer">
-            <div class="label-form">@Labels.Details</div>
-            <div id="leaveDetails" class="leave-details"></div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
         </div>
-        if (!(bool)ViewBag.IsView)
-        {
+        <div class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <a>@Html.DisplayFor(model => model.Files)</a>
+            </div>
+        </div>
+            <div class="form-group" id="leaveDetailContainer">
+                <div class="label-form">@Labels.Details</div>
+                <div id="leaveDetails" class="leave-details"></div>
+            </div>
+            if (!(bool)ViewBag.IsView)
+            {
             <div class="form-group">
                 <div class="label-form"></div>
                 <div>
@@ -195,6 +210,6 @@
                     <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
                 </div>
             </div>
-        }
-    }
-</div>
+            }
+            }
+        </div>
