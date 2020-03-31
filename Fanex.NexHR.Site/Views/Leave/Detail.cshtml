@@ -146,15 +146,16 @@
         <div class="label-form">
             @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
         </div>
-        <div class="input-form">
-            @Html.DisplayFor(model => model.Files)
-        </div>
-        @*@foreach (var file in Model.Files)
+        @if (Model.Files != null)
         {
-            <div class="input-form">
-                @Html.DisplayFor(model => model.Files)
-            </div>
-        }*@
+            foreach (string file in Model.Files)
+            {
+                @file<br>
+            }
+        }
+        else {
+            @Labels.NoFileChoose
+        }
     </div>
     <div class="form-group" id="leaveDetailContainer">
         <div class="label-form">@Labels.Details</div>

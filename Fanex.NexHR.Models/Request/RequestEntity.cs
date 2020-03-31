@@ -38,6 +38,8 @@
 
         public string Remark { get; set; }
 
+        public string ContentFile { get; set; }
+
         public string RefNO { get; set; }
 
         public decimal TotalDaysRequestInMonth { get; set; }

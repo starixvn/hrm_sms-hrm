@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -24,6 +26,8 @@
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ICommonDataService commonDataService;
+        const string pathFolder = "~/file/uploads/request/";
+
 
         public RequestController(
             ISessionService sessionService,
@@ -60,8 +64,30 @@
                 request.IsFilterByAffectedDate = false;
             }
             GetRequests(request);
+            GetInfoAttachFile(request.Requests);
 
             return View(EmployeeRequestViewName, request);
+        }
+
+        private void GetInfoAttachFile(IList<RequestEntity> requests)
+        {
+            foreach (var request in requests)
+            {
+                StringBuilder content = new StringBuilder();
+                string path = pathFolder + request.Id;
+                string dir = Server.MapPath(path);
+                if (Directory.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+
+                    foreach (string file in files)
+                    {
+                        content.Append($"<a href=\'{file}\'> {Path.GetFileName(file)}</a></br>");
+                    }
+
+                    request.ContentFile = content.ToString();
+                }
+            }
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
@@ -70,6 +96,7 @@
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
             GetRequests(request);
+            GetInfoAttachFile(request.Requests);
 
             return View(EmployeeRequestViewName, request);
         }

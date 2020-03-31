@@ -34,6 +34,7 @@
                 <th>@Labels.Verifier</th>
                 <th>@Labels.Approver</th>
                 <th>@Labels.Remark</th>
+                <th>@Labels.FileAttach</th>
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Status</th>
                 <th>@Labels.History</th>
@@ -87,6 +88,7 @@
                                 <span>-</span>
                             }
                         </td>
+                        <td>@Html.Raw(request.ContentFile)</td>
                         <td>@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@RenderStatus(Model, request)</td>
                         <td>@RenderHistoryLink(request)</td>

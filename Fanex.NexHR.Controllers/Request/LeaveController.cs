@@ -27,6 +27,7 @@
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
         private readonly ICommonDataService commonDataService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public LeaveController(
             ISessionService sessionService,
@@ -98,7 +99,10 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailCreateRequest(criteria);
-                UploadFile(files, criteria.RequestId);
+
+                if (files != null) {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
 
             return Json(result);
@@ -108,7 +112,7 @@
         {
             if (!files.Any(file => file.ContentLength <= 0))
             {
-                string dir = Server.MapPath("~/file/uploads/request/" + requestId);
+                string dir = Server.MapPath(pathFolder + requestId);
 
                 if (!Directory.Exists(dir))
                 {
@@ -127,6 +131,8 @@
 
         public ActionResult Update(long id)
         {
+            string dir = Server.MapPath(pathFolder + id);
+
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -144,19 +150,29 @@
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
 
+            if (Directory.Exists(dir))
+            {
+                model.Files = GetFileNames(dir);
+            }
+
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
-            string dir = Server.MapPath("~/file/uploads/request/" + id);
+            return View(model);
+        }
 
+        private static List<string> GetFileNames(string dir)
+        {
+            List<string> Files = new List<string>();
             string[] files = Directory.GetFiles(dir);
             foreach (string file in files)
             {
-                model.Files = Path.GetFileName(file);
+                Files.Add(Path.GetFileName(file));
             }
-            return View(model);
+
+            return Files;
         }
 
         [HttpPost]
@@ -179,6 +195,8 @@
 
         public ActionResult Detail(long id)
         {
+            string dir = Server.MapPath(pathFolder + id);
+
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null)
             {
@@ -188,20 +206,17 @@
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
 
+            if (Directory.Exists(dir))
+            {
+                model.Files = GetFileNames(dir);
+            }
+
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-
-            string dir = Server.MapPath("~/file/uploads/request/" + id);
-
-            string[] files = Directory.GetFiles(dir);
-            foreach (string file in files)
-            {
-                model.Files = Path.GetFileName(file);
-            }
 
             return View(model);
         }
@@ -214,15 +229,11 @@
 
             if (commandResult.IsSuccessful)
             {
-                string dir = Server.MapPath("~/file/uploads/request/" + id);
+                string dir = Server.MapPath(pathFolder + id);
 
-                if (!System.IO.File.Exists(dir))
+                if (Directory.Exists(dir))
                 {
-                    string[] files = Directory.GetFiles(dir);
-                    foreach (string file in files)
-                    {
-                        System.IO.File.Delete(file);
-                    }
+                    Directory.Delete(dir, true);
                 }
             }
 
