@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -22,6 +24,7 @@
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public ChangeShiftController(
             ISessionService sessionService,
@@ -68,19 +71,51 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public CustomJsonResult Create(CreateChangeShift model)
+        public CustomJsonResult Create(string model, string details, IList<HttpPostedFileBase> files)
         {
-            CommandResult commandResult = changeShiftService.Create(sessionService.Employee.Id, model);
+            CreateChangeShift criteria = JsonConverter.FromJson<CreateChangeShift>(model);
+            List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
+            criteria.Details = requestDetail;
+
+            CommandResult commandResult = changeShiftService.Create(sessionService.Employee.Id, criteria);
+
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailCreateRequest(commandResult.OutputId);
+                if (files != null)
+                {
+                    UploadFile(files, commandResult.OutputId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
+        {
+            if (!files.Any(file => file.ContentLength <= 0))
+            {
+                string dir = Server.MapPath(pathFolder + requestId);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine(dir, fileName);
+                    file.SaveAs(path);
+                }
+            }
+        }
+
         public ActionResult Edit(int id)
         {
+            string dir = Server.MapPath(pathFolder + id);
+
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -113,6 +148,11 @@
                 }
             }
 
+            if (Directory.Exists(dir))
+            {
+                model.Files = GetFileNames(dir);
+            }
+
             ViewBag.IsHost = true;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.TypeId = request.TypeId;
@@ -122,13 +162,22 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public CustomJsonResult Edit(EditChangeShift model)
+        public CustomJsonResult Edit(string model, string details, IList<HttpPostedFileBase> files)
         {
-            CommandResult commandResult = changeShiftService.Edit(sessionService.Employee.Id, model);
+            EditChangeShift criteria = JsonConverter.FromJson<EditChangeShift>(model);
+            List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
+            criteria.Details = requestDetail;
+
+            CommandResult commandResult = changeShiftService.Edit(sessionService.Employee.Id, criteria);
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailEditRequest(model.RequestId);
+                changeShiftService.SendMailEditRequest(criteria.RequestId);
+                if (files != null)
+                {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
+
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -138,11 +187,22 @@
             changeShiftService.SendMailDeleteRequest(id);
             CommandResult commandResult = changeShiftService.Delete(id);
 
+            if (commandResult.IsSuccessful)
+            {
+                string dir = Server.MapPath(pathFolder + id);
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir, true);
+                }
+            }
+
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         public ActionResult Details(int id)
         {
+            string dir = Server.MapPath(pathFolder + id);
+
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null)
             {
@@ -162,12 +222,30 @@
                 Details = changeShiftService.GetDetailById(id),
                 Status = request.Status,
                 Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers
+                Approvers = supervisor.Approvers,
             };
+
+            if (Directory.Exists(dir))
+            {
+                model.Files = GetFileNames(dir);
+            }
+
             ViewBag.IsHost = false;
             ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
+        }
+
+        private static List<string> GetFileNames(string dir)
+        {
+            List<string> Files = new List<string>();
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                Files.Add(Path.GetFileName(file));
+            }
+
+            return Files;
         }
 
         public ActionResult GetChangeShiftDetail(GetWorkingCalendarForRequestParam param)

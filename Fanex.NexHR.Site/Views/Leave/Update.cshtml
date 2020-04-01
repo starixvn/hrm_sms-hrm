@@ -194,7 +194,15 @@
             <div class="label-form">
             </div>
             <div class="input-form">
-                <a>@Html.DisplayFor(model => model.Files)</a>
+                <a>
+                    @if (Model.Files != null)
+                    {
+                        foreach (string file in Model.Files)
+                        {
+                            @file<br>
+                        }
+                    }
+                </a>
             </div>
         </div>
             <div class="form-group" id="leaveDetailContainer">

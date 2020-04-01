@@ -229,27 +229,40 @@ $(document).ready(function () {
             details: details
         };
 
+        function uploadComplete(evt) {
+            if (evt.target.status == 200) {
+                $('form').removeClass('dirty');
+                domElements.$btnSubmit.prop('disabled', true);
+                toastr.success('Edit successfully!', '', toastOptions());
+                setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }
+
         const isValid = validateForm();
         if (isValid) {
-            axios({
-                url: _global.root + 'ChangeShift/Create',
-                method: 'POST',
-                data: stringify({ model }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                if (file.size / 1024 > 5120) {
+                    alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
+                    return;
                 }
-            }).then(response => {
-                let data = response.data;
-                if (data.isSuccessful) {
-                    $('form').removeClass('dirty');
-                    domElements.$btnSubmit.prop('disabled', true);
-                    toastr.success('Create successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+
+                fd.append('files[' + i + ']', file);
+            }
+
+            fd.append('model', JSON.stringify(model));
+            fd.append('details', JSON.stringify(details))
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            //xhr.addEventListener("error", uploadFailed, false);
+            xhr.open("POST", _global.root + "ChangeShift/Create");
+            xhr.send(fd);
         }
     });
 
