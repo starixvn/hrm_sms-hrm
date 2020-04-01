@@ -359,6 +359,26 @@ BEGIN
 			,@ErrMsg = @ErrMsg OUTPUT
 	END
 
+	IF @TypeId = @ChangeShift
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
+
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 
 	DROP TABLE #tblChangeShiftDetail

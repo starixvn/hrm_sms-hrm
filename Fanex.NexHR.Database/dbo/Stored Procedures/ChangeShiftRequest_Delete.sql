@@ -20,6 +20,10 @@ BEGIN
 	DECLARE @CurrentStatus INT
 		-- request status
 		,@PendingStatusId TINYINT = 1
+		,@EmpId INT
+		,@TypeId TINYINT
+		,@FromDate DATE
+		,@ToDate DATE
 
 	SELECT @CurrentStatus = CurrentStatus
 	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
@@ -31,6 +35,26 @@ BEGIN
 		SET @ErrMsg = 'Status is not pending, you can not delete this request.'
 
 		RETURN
+	END
+
+	SELECT @EmpId = EmpId
+		,@TypeId = TypeId
+	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+
+	IF @TypeId = 1
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
 	END
 
 	EXEC dbo.ChangeShiftRequest_ResetCalendar @RequestId = @RequestId
@@ -52,4 +76,9 @@ BEGIN
 
 	DELETE dbo.ChangeShiftRequestDetailHistory WITH (ROWLOCK)
 	WHERE RequestId = @RequestId
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 END

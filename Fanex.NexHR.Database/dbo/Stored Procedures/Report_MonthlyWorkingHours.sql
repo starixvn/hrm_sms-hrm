@@ -26,7 +26,7 @@ BEGIN
 		,@Disabled TINYINT = 2
 		,@Deleted TINYINT = 3
 	DECLARE @tblGroupIds TABLE (GroupId INT)
-	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	IF ISNULL(@GroupIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
@@ -40,7 +40,7 @@ BEGIN
 		WHERE IsDeleted = 0
 	END
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -80,7 +80,7 @@ BEGIN
 			)
 
 	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(20))
-	FROM @tblEmployeeIds
+	FROM #tblEmployeeIds WITH (NOLOCK)
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
@@ -139,7 +139,7 @@ BEGIN
 		,lv2.[Name] AS LeaveName
 	INTO #tblEmployeeCalendar
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN #tblEmployeeIds AS empid WITH (NOLOCK) ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND empca.WorkDate BETWEEN @fromDate
@@ -159,16 +159,17 @@ BEGIN
 		,gr.Code
 		,gr.[Name]
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN #tblEmployeeIds AS empid WITH (NOLOCK) ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 	ORDER BY gr.[Name]
 		,emp.Code
 
 	SELECT *
-	FROM #tblEmployeeCalendar
+	FROM #tblEmployeeCalendar WITH (NOLOCK)
 	ORDER BY EmployeeId
 		,WorkDate
 
+	DROP TABLE #tblEmployeeIds
 	DROP TABLE #tblEmployeeCalendar
 END

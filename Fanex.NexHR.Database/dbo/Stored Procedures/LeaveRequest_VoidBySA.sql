@@ -20,8 +20,8 @@ BEGIN
 
 	DECLARE @StatusId INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@FromDate DATETIME
-		,@ToDate DATETIME
+		,@FromDate DATE
+		,@ToDate DATE
 		,@EmpId INT
 		-- request status
 		,@ApprovedStatusId TINYINT = 4
@@ -30,6 +30,7 @@ BEGIN
 
 	SELECT @StatusId = r.CurrentStatus
 		,@FromDate = lr.FromDate
+		,@ToDate = lr.ToDate
 		,@EmpId = r.EmpId
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
@@ -72,6 +73,11 @@ BEGIN
 	EXEC dbo.LeaveRequest_UpdateTmpKIVLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
 		,@Status = 2
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment

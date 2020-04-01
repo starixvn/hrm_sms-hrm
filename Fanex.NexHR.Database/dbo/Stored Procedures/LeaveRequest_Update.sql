@@ -21,7 +21,7 @@ Task: update leave request
 DB: HRM
 Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 	- @ListDetail: '<ROOT><Row OnDate='' ShiftID='' LeaveType='' IsHalfDay='' WorkType='' FromTime='' ToTime='' /></ROOT>'
 	- @WorkType :
@@ -719,6 +719,11 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
+
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+			,@toDate = @ToDate
+			,@empIds = @EmpId
+			,@isUpdateRequestData = 1
 
 		EXEC dbo.LeaveRequest_WriteLog @RequestId
 

@@ -51,7 +51,7 @@ BEGIN
 			,VerifiedDate = @ModifiedDate
 			,VerifiedStatus = @PendingStatusId
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblRequestIds tmp ON req.RequestId = tmp.RequestId
+			INNER JOIN #tblRequestIds tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
@@ -61,12 +61,15 @@ BEGIN
 			AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ProcessedStatusId, @VoidStatusId)
 
 		UPDATE req
-		SET CurrentStatus = @PendingStatusId
+		SET CurrentStatus = CASE 
+				WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
+				ELSE @PendingStatusId
+				END
 			,ApproverId = @ActorId
 			,ApprovedDate = @ModifiedDate
 			,ApprovedStatus = @PendingStatusId
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblRequestIds AS tmp ON req.RequestId = tmp.RequestId
+			INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
 	END
 	ELSE IF @RoleId = @HRRoleId
 	BEGIN
@@ -84,7 +87,7 @@ BEGIN
 			,HRDate = @ModifiedDate
 			,HRStatus = 0
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblRequestIds AS tmp ON req.RequestId = tmp.RequestId
+			INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
 	END
 
 	UPDATE req
@@ -97,7 +100,37 @@ BEGIN
 					)
 			END
 	FROM dbo.OTDailyRequest AS req WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblRequestIds tmp ON req.RequestId = tmp.RequestId
+		INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
+
+	DECLARE @RequestId BIGINT
+		,@EmpId INT
+		,@FromDate DATE
+		,@ToDate DATE
+
+	WHILE EXISTS (
+			SELECT 1
+			FROM #tblRequestIds WITH (NOLOCK)
+			)
+	BEGIN
+		SELECT TOP 1 @RequestId = RequestId
+		FROM #tblRequestIds WITH (NOLOCK)
+
+		SELECT @EmpId = EmpId
+			,@FromDate = MIN(OvertimeDate)
+			,@ToDate = MAX(OvertimeDate)
+		FROM dbo.OTDailyRequest WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+		GROUP by EmpId
+
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+			,@toDate = @ToDate
+			,@empIds = @EmpId
+			,@isUpdateRequestData = 1
+
+		DELETE
+		FROM #tblRequestIds
+		WHERE RequestId = @RequestId
+	END
 
 	DROP TABLE #tblRequestIds
 

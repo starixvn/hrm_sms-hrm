@@ -18,7 +18,7 @@ Task: create a change shift request
 DB: HRM
 Original: 
 
-Revisions:    
+Revisions:
 Param's Explanation:
     @DetailXml: '<ROOT><Row OnDate={0} FromShiftId={1} ToShiftId={2} Remark={3} ToDate={4} /></ROOT>'
 */
@@ -365,6 +365,26 @@ BEGIN
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 	END
+
+	IF @TypeId = @ChangeShift
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 

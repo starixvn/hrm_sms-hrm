@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_Insert] @fromDate DATE
 	,@empIds VARCHAR(MAX) = NULL
 	,@isEnable BIT = NULL
 	,@isDelete BIT = NULL
+	,@isUpdateRequestData BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-10-10
@@ -251,6 +252,8 @@ BEGIN
 				AND holiday.Id IS NOT NULL
 				)
 			)
+
+	IF @isUpdateRequestData = 0 RETURN
 
 	-- overtime
 	UPDATE empca

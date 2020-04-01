@@ -99,6 +99,11 @@ BEGIN
 		,@EmpId = @EmpId
 		,@Status = 2
 
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
+
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
 END

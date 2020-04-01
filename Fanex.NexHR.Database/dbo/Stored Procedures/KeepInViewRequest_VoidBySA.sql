@@ -58,6 +58,11 @@ BEGIN
 			,1
 	END
 
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OnDate
+		,@toDate = @OnDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
+
 	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
 END

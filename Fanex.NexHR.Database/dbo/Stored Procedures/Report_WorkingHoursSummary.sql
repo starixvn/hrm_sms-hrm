@@ -38,7 +38,7 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 	DECLARE @tblGroupIds TABLE (GroupId INT)
-	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	IF ISNULL(@GroupIds, '') = ''
 	BEGIN
@@ -54,7 +54,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@GroupIds, ',')
 	END
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -94,7 +94,7 @@ BEGIN
 			)
 
 	SELECT @employeeIds = COALESCE(@employeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(20))
-	FROM @tblEmployeeIds
+	FROM #tblEmployeeIds WITH (NOLOCK)
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
@@ -251,7 +251,7 @@ BEGIN
 		,SUM(ISNULL(ot.PublicHours, 0)) AS PublicOvertimeHours
 		,SUM(ISNULL(ot.SpecialHours, 0)) AS SpecialOvertimeHours
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId
+		INNER JOIN #tblEmployeeIds AS empid WITH (NOLOCK) ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
@@ -270,4 +270,6 @@ BEGIN
 		,empsum.WorkingHours
 		,gr.[Name]
 	ORDER BY emp.NickName
+
+	DROP TABLE #tblEmployeeIds
 END

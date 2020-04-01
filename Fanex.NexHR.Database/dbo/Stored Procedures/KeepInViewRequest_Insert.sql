@@ -291,6 +291,11 @@ BEGIN
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OnDate
+			,@toDate = @OnDate
+			,@empIds = @EmpId
+			,@isUpdateRequestData = 1
+
 		EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 	END TRY
 

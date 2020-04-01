@@ -78,15 +78,34 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
-		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-		SET CurrentStatus = @PendingStatusId
-			,VerifiedStatus = @PendingStatusId
-			,ApprovedStatus = @PendingStatusId
-			,ApproverId = @ActorId
-			,ApprovedDate = @ProcessedDate
-			,ModifiedBy = @ActorId
-			,ModifiedDate = @ProcessedDate
-		WHERE RequestId = @RequestId
+		IF @VerifierId = @ApproverId
+		BEGIN
+			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+			SET CurrentStatus = @PendingStatusId
+				,VerifiedStatus = @PendingStatusId
+				,ApprovedStatus = @PendingStatusId
+				,VerifierId = @ActorId
+				,VerifiedDate = @ProcessedDate
+				,ApproverId = @ActorId
+				,ApprovedDate = @ProcessedDate
+				,ModifiedBy = @ActorId
+				,ModifiedDate = @ProcessedDate
+			WHERE RequestId = @RequestId
+		END
+		ELSE
+		BEGIN
+			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+			SET CurrentStatus = CASE 
+					WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
+					ELSE @PendingStatusId
+					END
+				,ApprovedStatus = @PendingStatusId
+				,ApproverId = @ActorId
+				,ApprovedDate = @ProcessedDate
+				,ModifiedBy = @ActorId
+				,ModifiedDate = @ProcessedDate
+			WHERE RequestId = @RequestId
+		END
 
 		IF @StatusId = @ApprovedStatusId
 		BEGIN
@@ -288,6 +307,26 @@ BEGIN
 			WHERE OnDate = @FromDate
 		END
 	END
+
+	IF @TypeId = @ChangeShift
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''

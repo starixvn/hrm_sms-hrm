@@ -17,6 +17,9 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	DECLARE @PendingStatusId TINYINT = 1
+		,@EmpId INT
+		,@FromDate DATE
+		,@ToDate DATE
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -30,6 +33,12 @@ BEGIN
 
 		RETURN;
 	END
+
+	SELECT @EmpId = EmpId
+		,@FromDate = FromDate
+		,@ToDate = ToDate
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	DELETE dbo.WorkingTimeRequest
 	WHERE RequestId = @RequestId
@@ -54,4 +63,9 @@ BEGIN
 	
 	DELETE dbo.DisciplineRequestTrans
 	WHERE RequestId = @RequestId
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 END

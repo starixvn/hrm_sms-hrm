@@ -98,7 +98,7 @@ BEGIN
 		,@CurrentStatus TINYINT
 
 	SELECT TOP 1 @Month = MAX(WorkDate)
-	FROM #tblDailyOvertime
+	FROM #tblDailyOvertime WITH (NOLOCK)
 
 	SELECT @Month = CASE 
 			WHEN DAY(@Month) BETWEEN 10
@@ -187,7 +187,7 @@ BEGIN
 			,1 AS HRStatus
 			,@ActorId
 			,@ModifiedDate
-		FROM #tblDailyOvertime
+		FROM #tblDailyOvertime WITH (NOLOCK)
 
 		SELECT @RequestId = CAST(SCOPE_IDENTITY() AS BIGINT)
 	END
@@ -227,7 +227,7 @@ BEGIN
 					,SUM(ISNULL(rd.OffHours, 0)) OffHours
 					,SUM(ISNULL(rd.PublicHours, 0)) PublicHours
 					,SUM(ISNULL(rd.SpecialHours, 0)) SpecialHours
-				FROM #tblDailyOvertime AS rd
+				FROM #tblDailyOvertime AS rd WITH (NOLOCK)
 				) AS rd
 		WHERE RequestId = @RequestId
 
@@ -270,15 +270,21 @@ BEGIN
 		,@ActorId
 		,@ModifiedDate
 		,0
-	FROM #tblDailyOvertime
+	FROM #tblDailyOvertime WITH (NOLOCK)
 	WHERE [TimeIn] IS NOT NULL
 		AND [TimeOut] IS NOT NULL
 
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Update monthly overtime request unsuccessfully.'
-	END
+	DECLARE @FromDate DATE
+		,@ToDate DATE
+
+	SELECT @FromDate = MIN(WorkDate)
+		,@ToDate = MAX(WorkDate)
+	FROM #tblDailyOvertime WITH (NOLOCK)
+
+	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+		,@toDate = @ToDate
+		,@empIds = @EmployeeId
+		,@isUpdateRequestData = 1
 
 	DROP TABLE #tblDailyOvertime
 END
