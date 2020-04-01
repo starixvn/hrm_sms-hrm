@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -56,10 +57,31 @@
             };
 
             IList<LeaveRequest> leaves = leaveRequestService.GetByDate(criteria);
-
+            GetInfoAttachFile(leaves);
             ViewBag.Year = tempYear;
             ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
             return View(leaves);
+        }
+
+        private void GetInfoAttachFile(IList<LeaveRequest> leaves)
+        {
+            foreach (var request in leaves)
+            {
+                StringBuilder content = new StringBuilder();
+                string path = pathFolder + request.RequestId;
+                string dir = Server.MapPath(path);
+                if (Directory.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+
+                    foreach (string file in files)
+                    {
+                        content.Append($"<a href=\'{file}\'> {Path.GetFileName(file)}</a></br>");
+                    }
+
+                    request.ContentFile = content.ToString();
+                }
+            }
         }
 
         public ActionResult Create()
@@ -177,7 +199,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Update(string request, string requestDetails)
+        public ActionResult Update(string request, string requestDetails, IList<HttpPostedFileBase> files)
         {
             UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
             List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
@@ -188,6 +210,10 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailEditRequest(criteria);
+                if (files != null)
+                {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
 
             return Json(result);
