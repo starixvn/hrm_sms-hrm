@@ -32,7 +32,7 @@ function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
 function initTooltip() {
     $('.tooltip-request').tipsy({
         html: true,
-        gravity: 'n',
+        gravity: $.fn.tipsy.autoNS,
         fade: true,
         className: 'table-tipsy',
         title: function () {
@@ -82,22 +82,9 @@ function initTooltip() {
         }
     });
 
-    $('.tooltip-overtime').tipsy({
-        html: true,
-        gravity: 'n',
-        fade: true,
-        className: 'table-tipsy',
-        title: function () {
-            var object = $(this);
-
-            return "<div>" + "<div class='overtime-tooltip'>" +
-                object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
-        }
-    });
-
     $('.tooltip-tipsy').tipsy({
         html: true,
-        gravity: 'w'
+        gravity: $.fn.tipsy.autoWE
     });
 }
 

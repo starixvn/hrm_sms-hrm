@@ -108,7 +108,7 @@
                                 var statusClass = request.CurrentStatus == (byte)CurrentRequestStatus.Pending || request.CurrentStatus == (byte)CurrentRequestStatus.Verified
                                     ? " pending-request" : string.Empty;
                                 var className = "tooltip-request req" + statusClass;
-                                <a href='javascript:;' class="@className"
+                                <div class="@className"
                                     data-requesttype="@request.RequestType.Id"
                                     data-leavetype="@request.LeaveType.Name"
                                     data-fromdate="@request.FromDate.ToFormatedDate()"
@@ -124,7 +124,7 @@
                                     data-remark='@request.Remark'
                                     data-currentStatus="@request.CurrentStatus">
                                     @request.RequestType.Name
-                                </a>
+                                </div>
                             }
                         }
                     </td>

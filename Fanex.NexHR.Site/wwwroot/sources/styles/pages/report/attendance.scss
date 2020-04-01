@@ -17,13 +17,20 @@
     margin-right: 2px;
     margin-bottom: 2px;
     display: inline-block;
+    cursor: pointer;
 }
 
 .table-tipsy {
     opacity: 1 !important;
 
     .tipsy-arrow {
-        border-bottom-color: #fff;
+        &.tipsy-arrow-s {
+            border-top-color: #fff;
+        }
+
+        &.tipsy-arrow-n {
+            border-bottom-color: #fff;
+        }
     }
 
     .tipsy-inner {
@@ -37,45 +44,38 @@
         background-color: #fff;
         padding: 5px;
         border: 1px solid #e6e6e6;
-        border-radius: 3px
-    }
+        border-radius: 3px;
 
-    table.table-tooltip tr.hasborder {
-        border-bottom: 1px solid #0789D1;
-    }
+        tr {
+            &.hasborder {
+                border-bottom: 1px solid #0789D1;
+            }
 
-    table.table-tooltip tr td {
-        padding: 5px 10px;
-        font-weight: normal;
-        height: 25px;
-    }
+            td {
+                padding: 5px 10px;
+                font-weight: normal;
+                height: 25px;
 
-    table.table-tooltip tr td span.bold {
-        font-weight: bold;
-    }
+                &.col1 {
+                    width: 100px;
+                    text-align: right;
+                }
 
-    table.table-tooltip tr td.col1 {
-        width: 100px;
-        text-align: right;
-    }
+                &.col11 {
+                    width: 150px;
+                    text-align: right;
+                }
 
-    table.table-tooltip tr td.col11 {
-        width: 150px;
-        text-align: right;
-    }
+                &.col2 {
+                    border-left: 1px solid #0789D1;
+                }
 
-    table.table-tooltip tr td.col2 {
-        border-left: 1px solid #0789D1;
+                span.bold {
+                    font-weight: bold;
+                }
+            }
+        }
     }
-
-    .overtime-tooltip {
-        width: 100px;
-        text-align: center;
-    }
-}
-
-.tooltip-overtime {
-    font-weight: bold;
 }
 
 span.req {
