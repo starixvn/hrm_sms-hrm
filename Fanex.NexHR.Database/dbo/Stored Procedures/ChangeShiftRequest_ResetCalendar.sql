@@ -22,6 +22,7 @@ BEGIN
 
 	SELECT @TypeId = TypeId
 	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	IF @TypeId = 1
 	BEGIN
