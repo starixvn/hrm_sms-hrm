@@ -6,7 +6,6 @@ import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
 import moment from 'moment';
-import { stringify } from 'qs';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions

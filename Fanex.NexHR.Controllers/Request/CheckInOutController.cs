@@ -225,8 +225,9 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(CheckInOutRequestViewModel model)
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files)
         {
+            CheckInOutRequestViewModel model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
             var criteria = new EditCheckInOutRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -246,6 +247,10 @@
             if (commandResult.IsSuccessful)
             {
                 checkInOutRequestService.SendMailEditRequest(model.RequestId);
+                if (files != null)
+                {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
