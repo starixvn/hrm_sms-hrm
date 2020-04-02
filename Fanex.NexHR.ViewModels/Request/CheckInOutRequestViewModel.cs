@@ -61,8 +61,11 @@
         public int? ApproverId { get; set; }
 
         public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
+
         public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
 
         public IEnumerable<DateTime> DisabledDates { get; set; } = new List<DateTime>();
+
+        public List<string> Files { get; set; }
     }
 }
