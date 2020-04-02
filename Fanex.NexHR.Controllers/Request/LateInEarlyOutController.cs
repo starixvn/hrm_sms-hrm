@@ -2,6 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -19,6 +23,7 @@
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public LateInEarlyOutController(
             ISessionService sessionService,
@@ -43,7 +48,29 @@
                 ToDate = new DateTime(tempYear, 12, 31)
             };
             IList<LateInEarlyOutRequest> requests = lateInEarlyOutRequestService.GetByDate(criteria);
+            GetInfoAttachFile(requests);
             return View(requests);
+        }
+
+        private void GetInfoAttachFile(IList<LateInEarlyOutRequest> requests)
+        {
+            foreach (var request in requests)
+            {
+                StringBuilder content = new StringBuilder();
+                string path = pathFolder + request.RequestId;
+                string dir = Server.MapPath(path);
+                if (Directory.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+
+                    foreach (string file in files)
+                    {
+                        content.Append($"<a href=\'{file}\'> {Path.GetFileName(file)}</a></br>");
+                    }
+
+                    request.ContentFile = content.ToString();
+                }
+            }
         }
 
         public ActionResult Create()
@@ -68,8 +95,10 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Create(LateInEarlyOutRequestViewModel model)
+        public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            LateInEarlyOutRequestViewModel model = JsonConverter.FromJson<LateInEarlyOutRequestViewModel>(requestModel);
+
             var criteria = new InsertLateInEarlyOutRequestCriteria
             {
                 EmpId = model.EmployeeId,
@@ -88,13 +117,40 @@
             if (commandResult.IsSuccessful)
             {
                 lateInEarlyOutRequestService.SendMailCreateRequest(commandResult.OutputId);
+                if (files != null)
+                {
+                    UploadFile(files, commandResult.OutputId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
+        {
+            if (!files.Any(file => file.ContentLength <= 0))
+            {
+                string dir = Server.MapPath(pathFolder + requestId);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine(dir, fileName);
+                    file.SaveAs(path);
+                }
+            }
+        }
+
+
         public ActionResult Edit(int id)
         {
+            string dir = Server.MapPath(pathFolder + id);
             LateInEarlyOutRequest request = lateInEarlyOutRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -131,13 +187,32 @@
                 Approvers = supervisor.Approvers
             };
 
+            if (Directory.Exists(dir))
+            {
+                viewModel.Files = GetFileNames(dir);
+            }
+
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             return View(viewModel);
         }
 
-        [HttpPost]
-        public CustomJsonResult Edit(LateInEarlyOutRequestViewModel model)
+        private static List<string> GetFileNames(string dir)
         {
+            List<string> Files = new List<string>();
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                Files.Add(Path.GetFileName(file));
+            }
+
+            return Files;
+        }
+
+        [HttpPost]
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files)
+        {
+            LateInEarlyOutRequestViewModel model = JsonConverter.FromJson<LateInEarlyOutRequestViewModel>(requestModel);
+
             var criteria = new UpdateLateInEarlyOutRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -157,6 +232,10 @@
             if (commandResult.IsSuccessful)
             {
                 lateInEarlyOutRequestService.SendMailEditRequest(model.RequestId);
+                if (files != null)
+                {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -168,6 +247,14 @@
             lateInEarlyOutRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = lateInEarlyOutRequestService.Delete(id);
 
+            if (commandResult.IsSuccessful)
+            {
+                string dir = Server.MapPath(pathFolder + id);
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir, true);
+                }
+            }
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

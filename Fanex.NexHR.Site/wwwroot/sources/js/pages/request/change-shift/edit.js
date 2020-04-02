@@ -153,24 +153,34 @@ $(document).ready(function () {
         if (isValid) {
             var files = document.getElementById('file').files
             var fd = new FormData();
-
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
-
                 if (file.size / 1024 > 5120) {
-                    alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
+                    alert('Attach file is to large (' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
                     return;
                 }
-
                 fd.append('files[' + i + ']', file);
             }
             fd.append('model', JSON.stringify(model));
             fd.append('details', JSON.stringify(details))
             var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "ChangeShift/Edit");
             xhr.send(fd);
         }
     });
+
+    function uploadComplete(evt) {
+        const data = JSON.parse(evt.target.response);
+        if (data.isSuccessful) {
+            $('form').removeClass('dirty');
+            domElements.$btnSubmit.prop('disabled', true);
+            toastr.success('Update successfully!', '', toastOptions());
+            setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
+        } else {
+            toastr.error(data.message, '', toastOptions());
+        }
+    }
 
     $('form').areYouSure();
 });

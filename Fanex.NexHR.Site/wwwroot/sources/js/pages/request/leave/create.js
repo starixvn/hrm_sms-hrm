@@ -46,19 +46,33 @@ const RequestCommon = {
 };
 
 function uploadComplete(evt) {
-    if (evt.target.status === 200) {
+    const data = JSON.parse(evt.target.response);
+    if (data.IsSuccessful) {
         $('form').removeClass('dirty');
         var successMsg = 'Your request have been sent successfully!';
         RequestCommon.showSuccessMsg(successMsg, 'Leave/EmployeeView');
+    } else {
+         RequestCommon.showErrorMsg(data.Message, LeaveRequest.employee);
     }
 }
 
-//function uploadFailed(response) {
-//    RequestCommon.showErrorMsg(response.Message, LeaveRequest.employee);
-//}
-function uploadFailed(response) {
-    $("#error").html(response.message);
+function GetFormData(leaveRequest, requestDetails) {
+    var files = document.getElementById('file').files
+    var fd = new FormData();
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if (file.size / 1024 > 5120) {
+            alert('Attach file is to large(' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
+            //RequestCommon.showErrorMsg('Attach file is to large(' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb', LeaveRequest.employee);
+            return;
+        }
+        fd.append('files[' + i + ']', file);
+    }
+    fd.append('request', JSON.stringify(leaveRequest));
+    fd.append('requestDetails', JSON.stringify(requestDetails));
+    return fd;
 }
+
 const LeaveRequest = (function ($) {
     return {
         verifierId: null,
@@ -290,50 +304,16 @@ const LeaveRequest = (function ($) {
             }
         },
         insertLeaveRequest: function (leaveRequest, requestDetails) {
-            var files = document.getElementById('file').files
-            var fd = new FormData();
-
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-
-                if (file.size / 1024 > 5120) {
-                    alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
-                    return;
-                }
-
-                fd.append('files[' + i + ']', file);
-            }
-            fd.append('request', JSON.stringify(leaveRequest));
-            fd.append('requestDetails', JSON.stringify(requestDetails));
-
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
-            xhr.addEventListener("error", uploadFailed, false);
             xhr.open("POST", _global.root + "leave/Create");
-            xhr.send(fd);
+            xhr.send(GetFormData(leaveRequest, requestDetails));
         },
         updateLeaveRequest: function (leaveRequest, requestDetails) {
-            var files = document.getElementById('file').files
-            var fd = new FormData();
-
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-
-                if (file.size / 1024 > 5120) {
-                    alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
-                    return;
-                }
-
-                fd.append('files[' + i + ']', file);
-            }
-            fd.append('request', JSON.stringify(leaveRequest));
-            fd.append('requestDetails', JSON.stringify(requestDetails));
-
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
-            xhr.addEventListener("error", uploadFailed, false);
             xhr.open("POST", _global.root + "leave/Update");
-            xhr.send(fd);
+            xhr.send(GetFormData(leaveRequest, requestDetails));
         },
         dateChange: function () {
             LeaveRequest.getLeaveDetail();

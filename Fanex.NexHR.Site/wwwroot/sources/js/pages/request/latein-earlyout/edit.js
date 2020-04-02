@@ -119,27 +119,35 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            axios({
-                url: _global.root + 'lateinearlyout/edit',
-                method: 'POST',
-                data: stringify({ model }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file.size / 1024 > 5120) {
+                    alert('Attach file is to large (' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
+                    return;
                 }
-            }).then(response => {
-                let data = response.data;
-                if (data.isSuccessful) {
-                    $('form').removeClass('dirty');
-                    domElements.$btnSubmit.prop('disabled', true);
-                    toastr.success('Edit successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'lateinearlyout/employeeview'; }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+                fd.append('files[' + i + ']', file);
+            }
+            fd.append('requestModel', JSON.stringify(model));
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.open("POST", _global.root + "lateinearlyout/edit");
+            xhr.send(fd);
         }
     });
+
+    function uploadComplete(evt) {
+        const data = JSON.parse(evt.target.response);
+        if (data.isSuccessful) {
+            $('form').removeClass('dirty');
+            domElements.$btnSubmit.prop('disabled', true);
+            toastr.success('Update successfully!', '', toastOptions());
+            setTimeout(function () { location.href = _global.root + 'lateinearlyout/employeeview'; }, 3000);
+        } else {
+            toastr.error(data.message, '', toastOptions());
+        }
+    }
 
     $('form').areYouSure();
 });

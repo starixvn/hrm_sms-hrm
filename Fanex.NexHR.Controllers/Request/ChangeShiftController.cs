@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -44,8 +45,30 @@
             var fromDate = new DateTime(tempYear, 1, 1);
             var toDate = new DateTime(tempYear, 12, 31).ToEndOfDay();
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(sessionService.Employee.Id, fromDate, toDate);
+            GetInfoAttachFile(requests);
             ViewBag.Year = tempYear;
             return View(requests);
+        }
+
+        private void GetInfoAttachFile(IEnumerable<ChangeShiftRequest> requests)
+        {
+            foreach (var request in requests)
+            {
+                StringBuilder content = new StringBuilder();
+                string path = pathFolder + request.RequestId;
+                string dir = Server.MapPath(path);
+                if (Directory.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+
+                    foreach (string file in files)
+                    {
+                        content.Append($"<a href=\'{file}\'> {Path.GetFileName(file)}</a></br>");
+                    }
+
+                    request.ContentFile = content.ToString();
+                }
+            }
         }
 
         public ActionResult Create()
