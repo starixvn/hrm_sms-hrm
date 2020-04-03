@@ -125,7 +125,7 @@
                 keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
                 if (files != null)
                 {
-                    UploadFile(files, commandResult.OutputId);
+                    UploadFile(files, criteria.RequestId);
                 }
             }
 

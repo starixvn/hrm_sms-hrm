@@ -113,13 +113,12 @@
                 CreatedBy = sessionService.Employee.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
-
             if (commandResult.IsSuccessful)
             {
                 lateInEarlyOutRequestService.SendMailCreateRequest(commandResult.OutputId);
                 if (files != null)
                 {
-                    UploadFile(files, commandResult.OutputId);
+                    UploadFile(files, criteria.RequestId);
                 }
             }
 
