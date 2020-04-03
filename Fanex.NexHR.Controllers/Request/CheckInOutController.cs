@@ -70,7 +70,7 @@
 
                     foreach (string file in files)
                     {
-                        content.Append($"<a href=\'{file}\'> {Path.GetFileName(file)}</a></br>");
+                        content.Append($"<a href=\'{"/file/uploads/request/" + request.RequestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
                     }
 
                     request.ContentFile = content.ToString();
