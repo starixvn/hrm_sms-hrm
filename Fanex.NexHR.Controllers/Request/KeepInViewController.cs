@@ -2,6 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -18,6 +22,7 @@
         private readonly IKeepInViewRequestService keepInViewRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public KeepInViewController(
             ISessionService sessionService,
@@ -42,7 +47,30 @@
                 ToDate = new DateTime(tempYear, 12, 31)
             };
             IList<KeepInViewRequest> requests = keepInViewRequestService.GetByDate(criteria);
+            GetInfoAttachFile(requests);
+
             return View(requests);
+        }
+
+        private void GetInfoAttachFile(IList<KeepInViewRequest> requests)
+        {
+            foreach (var request in requests)
+            {
+                StringBuilder content = new StringBuilder();
+                string path = pathFolder + request.RequestId;
+                string dir = Server.MapPath(path);
+                if (Directory.Exists(dir))
+                {
+                    string[] files = Directory.GetFiles(dir);
+
+                    foreach (string file in files)
+                    {
+                        content.Append($"<a href=\'{"/file/uploads/request/" + request.RequestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
+                    }
+
+                    request.ContentFile = content.ToString();
+                }
+            }
         }
 
         public ActionResult Create()
@@ -68,8 +96,9 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Create(KeepInViewRequestViewModel model)
+        public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            KeepInViewRequestViewModel model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
             var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
             var criteria = new CreateKeepInViewRequestCriteria
@@ -94,13 +123,39 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
+                if (files != null)
+                {
+                    UploadFile(files, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
+        {
+            if (!files.Any(file => file.ContentLength <= 0))
+            {
+                string dir = Server.MapPath(pathFolder + requestId);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine(dir, fileName);
+                    file.SaveAs(path);
+                }
+            }
+        }
+
         public ActionResult Edit(long id)
         {
+            string dir = Server.MapPath(pathFolder + id);
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -130,14 +185,32 @@
                 MinDate = request.OnDate.AddMonths(-1),
                 MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
             };
+
+            if (Directory.Exists(dir))
+            {
+                viewModel.Files = GetFileNames(dir);
+            }
             ViewBag.IsTopManager = request.Requester.IsTopManager;
 
             return View(viewModel);
         }
 
-        [HttpPost]
-        public CustomJsonResult Edit(KeepInViewRequestViewModel model)
+        private static List<string> GetFileNames(string dir)
         {
+            List<string> Files = new List<string>();
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                Files.Add(Path.GetFileName(file));
+            }
+
+            return Files;
+        }
+
+        [HttpPost]
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
+        {
+            KeepInViewRequestViewModel model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var criteria = new EditKeepInViewRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -159,9 +232,25 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailEditRequest(model.RequestId);
+                if (files != null){
+                    UploadFile(files, criteria.RequestId);
+                }
+                if (filesRemove != null) {
+                    DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
+                System.IO.File.Delete(dir);
+            }
         }
 
         [HttpPost]
@@ -169,6 +258,15 @@
         {
             keepInViewRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = keepInViewRequestService.Delete(id);
+
+            if (commandResult.IsSuccessful)
+            {
+                string dir = Server.MapPath(pathFolder + id);
+                if (Directory.Exists(dir))
+                {
+                    Directory.Delete(dir, true);
+                }
+            }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

@@ -96,6 +96,22 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            @if (Model.Files != null)
+            {
+                foreach (string file in Model.Files)
+                {
+                    @file<br>
+                }
+            }
+            else
+            {
+                @Labels.NoFileChoose
+            }
+        </div>
+        <div class="form-group">
             <div class="label-form">@Labels.Details</div>
             <div id="changeShiftDetails" class="change-shift-details">
                 @Html.Partial("_ChangeShiftDetail", Model.Details)

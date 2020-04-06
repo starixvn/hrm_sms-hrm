@@ -14,6 +14,7 @@ CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@ListDetail VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
+	,@PaternityLeaveType INT = 14
 AS
 /*
 Created: Tom.Vo@2013-11-11
@@ -633,6 +634,27 @@ BEGIN
 		BEGIN
 			SET @ErrCode = 117
 			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
+		END
+	END
+
+	-- check leave request paternity by Lilac
+
+	IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF EXISTS (SELECT 1
+					FROM dbo.EmployeePaternity
+					WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate AND @FromDate >= ChildBornDate AND @FromDate >= GETDATE() AND EmpId = @EmpId AND BalanceDay + (SELECT TotalDays FROM LeaveRequest WHERE RefNo = @RefNo) >= @TotalDays)
+		BEGIN
+			UPDATE EmployeePaternity
+			SET BalanceDay = BalanceDay - @TotalDays + (SELECT TotalDays FROM LeaveRequest WHERE RefNo = @RefNo)
+			WHERE EmpId = @EmpId AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date or leave day incorrect.'
 
 			RETURN
 		END

@@ -122,6 +122,29 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form" id="@Model.RequestId">
+                @if (Model.Files != null)
+                {
+                    foreach (string file in Model.Files)
+                    {
+                        <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
+                            <i class=" fa fa-close">@file</i><br>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
             <div class="label-form"></div>
             <div>
                 <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>

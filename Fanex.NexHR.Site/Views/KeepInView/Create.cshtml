@@ -125,6 +125,14 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
             <div class="label-form"></div>
             <div>
                 <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>

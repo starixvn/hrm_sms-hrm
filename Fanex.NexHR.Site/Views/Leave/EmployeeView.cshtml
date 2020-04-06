@@ -58,6 +58,7 @@
             <th>@Labels.To</th>
             <th>@Labels.Total</th>
             <th>@Labels.Remark</th>
+            <th>@Labels.FileAttach</th>
             <th>@Labels.Verifier</th>
             <th>@Labels.Approver</th>
             <th>@Labels.CreatedDate</th>
@@ -93,7 +94,7 @@
                             case (ushort)LeaveTypes.KeepInViewByHour:
                             case (ushort)LeaveTypes.BusinessDuringWorking:
                                 LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
-                                if(detail != null)
+                                if (detail != null)
                                 {
                                     var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
                                     totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
@@ -115,6 +116,7 @@
                             <span>-</span>
                         }
                     </td>
+                    <td>@Html.Raw(request.ContentFile)</td>
                     <td>
                         @if (request.Verifier != null)
                         {
@@ -137,7 +139,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 12)
+            @RazorHelper.DisplayNoInformation(colspan: 13)
         }
     </tbody>
 </table>

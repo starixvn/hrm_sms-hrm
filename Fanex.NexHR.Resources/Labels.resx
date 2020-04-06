@@ -1869,4 +1869,13 @@
   <data name="BT" xml:space="preserve">
     <value>BT</value>
   </data>
+  <data name="UploadFile" xml:space="preserve">
+    <value>Upload File</value>
+  </data>
+  <data name="NoFileChoose" xml:space="preserve">
+    <value>No File Chosen</value>
+  </data>
+  <data name="FileAttach" xml:space="preserve">
+    <value>Attach File</value>
+  </data>
 </root>

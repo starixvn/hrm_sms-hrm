@@ -5,7 +5,6 @@ import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
-import { stringify } from 'qs';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
@@ -97,6 +96,14 @@ $(document).ready(function () {
         return isValid;
     };
 
+    var tempFile = [];
+    $('.delete-file').on('click', function () {
+        const fileName = $(this).attr("data-id");
+        var classDelete = document.getElementById(fileName);
+        classDelete.remove();
+        tempFile.push(fileName);
+    });
+
     initDatepicker();
     getActualLateInEarlyOut();
     showHideActualLateInEarlyOut();
@@ -121,27 +128,36 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            axios({
-                url: resolveClientUrl('lateinearlyout/edit'),
-                method: 'POST',
-                data: stringify({ model }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (file.size / 1024 > 5120) {
+                    alert('Attach file is to large (' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
+                    return;
                 }
-            }).then(response => {
-                let data = response.data;
-                if (data.isSuccessful) {
-                    $('form').removeClass('dirty');
-                    domElements.$btnSubmit.prop('disabled', true);
-                    toastr.success('Edit successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = resolveClientUrl('lateinearlyout/employeeview'); }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+                fd.append('files[' + i + ']', file);
+            }
+            fd.append('requestModel', JSON.stringify(model));
+            fd.append('filesRemove', JSON.stringify(tempFile));
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.open("POST", _global.root + "lateinearlyout/edit");
+            xhr.send(fd);
         }
     });
+
+    function uploadComplete(evt) {
+        const data = JSON.parse(evt.target.response);
+        if (data.isSuccessful) {
+            $('form').removeClass('dirty');
+            domElements.$btnSubmit.prop('disabled', true);
+            toastr.success('Update successfully!', '', toastOptions());
+            setTimeout(function () { location.href = resolveClientUrl('lateinearlyout/employeeview'); }, 3000);
+        } else {
+            toastr.error(data.message, '', toastOptions());
+        }
+    }
 
     $('form').areYouSure();
 });
