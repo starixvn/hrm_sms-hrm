@@ -6,7 +6,6 @@ import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
 import moment from 'moment';
-import { stringify } from 'qs';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
@@ -108,6 +107,14 @@ $(document).ready(function () {
 
     initDatepicker();
 
+    var tempFile = [];
+    $('.delete-file').on('click', function () {
+        const fileName = $(this).attr("data-id");
+        var classDelete = document.getElementById(fileName);
+        classDelete.remove();
+        tempFile.push(fileName);
+    });
+
     domElements.$attendantDate.on('change', function () {
         axios({
             url: _global.root + 'shift/getShiftByDate',
@@ -162,6 +169,7 @@ $(document).ready(function () {
                 fd.append('files[' + i + ']', file);
             }
             fd.append('requestModel', JSON.stringify(model));
+            fd.append('filesRemove', JSON.stringify(tempFile));
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "checkinout/edit");

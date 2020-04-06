@@ -56,22 +56,30 @@ function uploadComplete(evt) {
     }
 }
 
-function GetFormData(leaveRequest, requestDetails) {
+function GetFormData(leaveRequest, requestDetails,tempFile) {
     var files = document.getElementById('file').files
     var fd = new FormData();
     for (var i = 0; i < files.length; i++) {
         var file = files[i];
         if (file.size / 1024 > 5120) {
             alert('Attach file is to large(' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
-            //RequestCommon.showErrorMsg('Attach file is to large(' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb', LeaveRequest.employee);
             return;
         }
         fd.append('files[' + i + ']', file);
     }
     fd.append('request', JSON.stringify(leaveRequest));
     fd.append('requestDetails', JSON.stringify(requestDetails));
+    fd.append('filesRemove', JSON.stringify(tempFile));
     return fd;
 }
+
+var tempFile = [];
+$('.delete-file').on('click', function () {
+    const fileName = $(this).attr("data-id");
+    var classDelete = document.getElementById(fileName);
+    classDelete.remove();
+    tempFile.push(fileName);
+});
 
 const LeaveRequest = (function ($) {
     return {
@@ -296,24 +304,24 @@ const LeaveRequest = (function ($) {
                 }
 
                 if (LeaveRequest.requestId.val() === '-1') {
-                    LeaveRequest.insertLeaveRequest(leaveRequest, requestDetails);
+                    LeaveRequest.insertLeaveRequest(leaveRequest, requestDetails, tempFile);
                 }
                 else {
-                    LeaveRequest.updateLeaveRequest(leaveRequest, requestDetails);
+                    LeaveRequest.updateLeaveRequest(leaveRequest, requestDetails, tempFile);
                 }
             }
         },
-        insertLeaveRequest: function (leaveRequest, requestDetails) {
+        insertLeaveRequest: function (leaveRequest, requestDetails,tempFile) {
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "leave/Create");
-            xhr.send(GetFormData(leaveRequest, requestDetails));
+            xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
         },
-        updateLeaveRequest: function (leaveRequest, requestDetails) {
+        updateLeaveRequest: function (leaveRequest, requestDetails, tempFile) {
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "leave/Update");
-            xhr.send(GetFormData(leaveRequest, requestDetails));
+            xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
         },
         dateChange: function () {
             LeaveRequest.getLeaveDetail();

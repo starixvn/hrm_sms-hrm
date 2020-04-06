@@ -208,7 +208,7 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files)
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
             LateInEarlyOutRequestViewModel model = JsonConverter.FromJson<LateInEarlyOutRequestViewModel>(requestModel);
 
@@ -235,9 +235,23 @@
                 {
                     UploadFile(files, criteria.RequestId);
                 }
+                if (filesRemove != null)
+                {
+                    DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
+                System.IO.File.Delete(dir);
+            }
         }
 
         [HttpPost]
@@ -255,6 +269,13 @@
                 }
             }
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        public void DeleteFile(string pathFile)
+        {
+            string dir = Server.MapPath(pathFile);
+            System.IO.File.Delete(dir);
         }
 
         public ActionResult ViewHistory(long id)

@@ -215,7 +215,7 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files)
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
             KeepInViewRequestViewModel model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var criteria = new EditKeepInViewRequestCriteria
@@ -239,13 +239,25 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailEditRequest(model.RequestId);
-                if (files != null)
-                {
+                if (files != null){
                     UploadFile(files, criteria.RequestId);
+                }
+                if (filesRemove != null) {
+                    DeleteFile(filesRemove, criteria.RequestId);
                 }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
+                System.IO.File.Delete(dir);
+            }
         }
 
         [HttpPost]

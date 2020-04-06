@@ -185,7 +185,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public CustomJsonResult Edit(string model, string details, IList<HttpPostedFileBase> files)
+        public CustomJsonResult Edit(string model, string details, IList<HttpPostedFileBase> files, string filesRemove)
         {
             EditChangeShift criteria = JsonConverter.FromJson<EditChangeShift>(model);
             List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
@@ -199,10 +199,23 @@
                 {
                     UploadFile(files, criteria.RequestId);
                 }
+                if (filesRemove != null)
+                {
+                    DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
-
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
+                System.IO.File.Delete(dir);
+            }
         }
 
         public CustomJsonResult Delete(long id)

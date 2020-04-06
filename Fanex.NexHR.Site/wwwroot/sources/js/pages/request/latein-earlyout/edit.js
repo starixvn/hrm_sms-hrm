@@ -95,6 +95,14 @@ $(document).ready(function () {
         return isValid;
     };
 
+    var tempFile = [];
+    $('.delete-file').on('click', function () {
+        const fileName = $(this).attr("data-id");
+        var classDelete = document.getElementById(fileName);
+        classDelete.remove();
+        tempFile.push(fileName);
+    });
+
     initDatepicker();
     showHideActualLateInEarlyOut();
 
@@ -129,6 +137,7 @@ $(document).ready(function () {
                 fd.append('files[' + i + ']', file);
             }
             fd.append('requestModel', JSON.stringify(model));
+            fd.append('filesRemove', JSON.stringify(tempFile));
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "lateinearlyout/edit");

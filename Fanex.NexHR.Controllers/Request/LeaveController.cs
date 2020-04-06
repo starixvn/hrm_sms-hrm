@@ -199,7 +199,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Update(string request, string requestDetails, IList<HttpPostedFileBase> files)
+        public ActionResult Update(string request, string requestDetails, IList<HttpPostedFileBase> files, string filesRemove)
         {
             UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
             List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
@@ -214,9 +214,23 @@
                 {
                     UploadFile(files, criteria.RequestId);
                 }
+                if (filesRemove != null)
+                {
+                    DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
             return Json(result);
+        }
+
+        private void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
+                System.IO.File.Delete(dir);
+            }
         }
 
         public ActionResult Detail(long id)
@@ -264,6 +278,13 @@
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        public void DeleteFile(string pathFile)
+        {
+            string dir = Server.MapPath(pathFile);
+            System.IO.File.Delete(dir);
         }
 
         public ActionResult ViewHistory(long id)

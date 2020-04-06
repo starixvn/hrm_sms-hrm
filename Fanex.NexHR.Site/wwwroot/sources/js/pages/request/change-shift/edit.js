@@ -113,6 +113,14 @@ $(document).ready(function () {
     initDatepicker();
     onChangeMoveToDate();
 
+    var tempFile = [];
+    $('.delete-file').on('click', function () {
+        const fileName = $(this).attr("data-id");
+        var classDelete = document.getElementById(fileName);
+        classDelete.remove();
+        tempFile.push(fileName);
+    });
+
     domElements.$typeId.on('change', function () {
         getChangeShiftDetails();
     });
@@ -163,6 +171,7 @@ $(document).ready(function () {
             }
             fd.append('model', JSON.stringify(model));
             fd.append('details', JSON.stringify(details))
+            fd.append('filesRemove', JSON.stringify(tempFile));
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);
             xhr.open("POST", _global.root + "ChangeShift/Edit");

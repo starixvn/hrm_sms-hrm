@@ -132,16 +132,16 @@
         <div class="form-group">
             <div class="label-form">
             </div>
-            <div class="input-form">
-                <a>
-                    @if (Model.Files != null)
+            <div class="input-form" id="@Model.RequestId">
+                @if (Model.Files != null)
+                {
+                    foreach (string file in Model.Files)
                     {
-                        foreach (string file in Model.Files)
-                        {
-                            @file<br>
-                        }
+                        <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
+                            <i class=" fa fa-close">@file</i><br>
+                        </a>
                     }
-                </a>
+                }
             </div>
         </div>
         <div class="form-group">
