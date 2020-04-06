@@ -116,6 +116,7 @@
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.SASpace;
             GetRequests(request);
+            GetInfoAttachFile(request.Requests);
 
             return View(EmployeeRequestViewName, request);
         }
