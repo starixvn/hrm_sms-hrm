@@ -18,6 +18,7 @@ BEGIN
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
 		,@empIds = @EmpId
+		,@isUpdateRequestData = 1
 
 	SELECT emp.EmpId
 		,empca.WorkDate

@@ -136,6 +136,7 @@ BEGIN
 		,@empIds = @EmployeeIds
 		,@isEnable = 1
 		,@isDelete = 0
+		,@isUpdateRequestData = 1
 
 	SELECT emp.EmpId
 		,tmpca.WorkDate
