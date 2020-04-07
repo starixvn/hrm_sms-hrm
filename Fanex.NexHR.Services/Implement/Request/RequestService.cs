@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -250,17 +251,17 @@
 
             if (request.ChangeShiftType == (byte)ChangeShiftType.MoveOffDay)
             {
-                var changeOffDateRequests = new StringBuilder();
+                var moveOffDayBuilder = new StringBuilder();
                 foreach (var changeOffDate in request.ChangeShiftDetails)
                 {
                     msgTemplate = RequestFormatConstants.MsgChangeShift;
 
-                    var dateFomarted = Utilities.GetMessgaeDateStringChangeOffDate(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
-                    changeOffDateRequests.Append(string.Format(msgTemplate, dateFomarted));
+                    var dateFomarted = GetMessageForMoveOffDay(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
+                    moveOffDayBuilder.Append(string.Format(msgTemplate, dateFomarted));
                 }
-                changeOffDateRequests.Append("Move off day");
 
-                messageDetail = changeOffDateRequests.ToString();
+                moveOffDayBuilder.Append("Move off day");
+                messageDetail = moveOffDayBuilder.ToString();
             }
             else
             {
@@ -278,11 +279,26 @@
                     msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
                     var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                     messageDetail = string.Format(msgTemplate, date);
-
                 }
             }
 
             return messageDetail;
+        }
+
+        private static string GetMessageForMoveOffDay(DateTime fromDate, DateTime toDate)
+        {
+            const string arrowSymbol = " <span class='arr'>&rarr;</span> ";
+            if (fromDate.Year != toDate.Year)
+            {
+                return fromDate.ToDateMonthYearFormatedDate() + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            if (fromDate.Month != toDate.Month)
+            {
+                return fromDate.ToString("dd") + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            return fromDate.ToString("dd") + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
         }
 
         private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
