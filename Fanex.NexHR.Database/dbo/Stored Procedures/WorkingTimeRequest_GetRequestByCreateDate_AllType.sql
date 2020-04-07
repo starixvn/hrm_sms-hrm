@@ -16,24 +16,19 @@ Task:Get Request By Date For LateInEarlyOutType
 DB: HRM_SMS
 Original: 
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	CREATE TABLE #tblstatus (Currentstatus TINYINT)
-
 	CREATE TABLE #tblGroupsList (GroupId INT)
-
 	CREATE TABLE #tblEmployeeId (EmpId INT)
-
 	CREATE TABLE #tblRequestId (RequestId INT)
-
 	CREATE TABLE #tblTotalDaysRequestInMonth (
 		empid INT
 		,RequestType TINYINT
 		,TotalDaysRequest INT
 		)
-
 	CREATE TABLE #tblRequestInDaily (
 		RequestID BIGINT
 		,empid INT
@@ -52,16 +47,17 @@ BEGIN
 		,IsWarning BIT
 		,KeepInViewType TINYINT
 		)
-
 	CREATE TABLE #tblGeneralLeaveDetail (
 		RequestId BIGINT
 		,LeaveCountDetails NVARCHAR(MAX)
 		)
 
 	IF ISNULL(@status, '') <> ''
+	BEGIN
 		INSERT INTO #tblstatus (Currentstatus)
 		SELECT val
 		FROM dbo.fnc_strSplit(@status, ',')
+	END
 
 	IF ISNULL(@GroupIds, '') <> ''
 	BEGIN
@@ -636,7 +632,6 @@ BEGIN
 		AND r.RequestType = rm.RequestType
 		LEFT JOIN #tblGeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId
 		LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = r.empID
-	--LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = e.EmpId
 		LEFT JOIN dbo.EmployeeCalendar AS C WITH (NOLOCK) ON c.empid = r.empid
 		AND c.WorkDate = convert(VARCHAR(10), rd.FromDate, 111)
 		LEFT JOIN dbo.[Shift] AS s1 WITH (NOLOCK) ON s1.ShiftID = rd.FromShift
@@ -648,24 +643,18 @@ BEGIN
 		OR lr.LeaveType = @leaveTypeId
 	ORDER BY r.CreatedDate DESC
 
-	SELECT csrd.RequestId,
-		csrd.OnDate,
-		csrd.ToDate
+	SELECT csrd.RequestId
+		,csrd.OnDate
+		,csrd.ToDate
 	FROM #tblRequestId AS r
 		INNER JOIN ChangeShiftRequest AS csr WITH (NOLOCK) ON csr.RequestId = r.RequestId
 		INNER JOIN ChangeShiftRequestDetail AS csrd WITH (NOLOCK) ON csr.RequestId = csrd.RequestId
 
 	DROP TABLE #tblstatus
-
 	DROP TABLE #tblGroupsList
-
 	DROP TABLE #tblEmployeeId
-
 	DROP TABLE #tblTotalDaysRequestInMonth
-
 	DROP TABLE #tblRequestInDaily
-
 	DROP TABLE #tblGeneralLeaveDetail
-
 	DROP TABLE #tblRequestId
 END
