@@ -1,4 +1,5 @@
-﻿@import '../../abstracts/variables';
+﻿@import '~tippy.js/dist/tippy.css';
+@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/checkbox';
 @import '../../layout/filter';
@@ -20,22 +21,15 @@
     cursor: pointer;
 }
 
-.table-tipsy {
-    opacity: 1 !important;
+.tippy-request .tippy-box {
+    @include border-radius(0);
 
-    .tipsy-arrow {
-        &.tipsy-arrow-s {
-            border-top-color: #fff;
-        }
-
-        &.tipsy-arrow-n {
-            border-bottom-color: #fff;
-        }
+    .tippy-content {
+        padding: 0 9px 0 0;
     }
 
-    .tipsy-inner {
-        background-color: #fff !important;
-        padding: 0px;
+    .tippy-arrow {
+        color: #fff;
     }
 
     table.table-tooltip {
@@ -57,7 +51,7 @@
                 height: 25px;
 
                 &.col1 {
-                    width: 100px;
+                    width: 110px;
                     text-align: right;
                 }
 

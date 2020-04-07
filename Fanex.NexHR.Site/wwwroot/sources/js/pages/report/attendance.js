@@ -1,5 +1,5 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import 'tipsy/src/javascripts/jquery.tipsy';
+import tippy from 'tippy.js';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -8,51 +8,20 @@ import { CurrentRequestStatus } from '../../shared/constants';
 import '../../date';
 import '../request/date.filter';
 
-function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
-    createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
-    var result = '';
-    $.ajax({
-        url: resolveClientUrl("request/GetMessageDetailRequest"),
-        async: false,
-        type: 'post',
-        data: {
-            "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
-            "fromtime": fromTime, "totime": toTime,
-            "createddate": createdDate, "fromshiftCode": fromShift,
-            "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut,
-        },
-        success: function (data) {
-            result = data;
-        }
-    });
-    return result;
-}
-
 function initTooltip() {
-    $('.tooltip-request').tipsy({
-        html: true,
-        gravity: $.fn.tipsy.autoNS,
-        fade: true,
-        className: 'table-tipsy',
-        title: function () {
-            var object = $(this);
-            var result = getMessageDetail(
-                object.attr('data-requesttype'),
-                object.attr('data-fromdate'),
-                object.attr('data-todate'),
-                object.attr('data-fromtime'),
-                object.attr('data-totime'),
-                object.attr('data-createddate'),
-                object.attr('data-fromshift'),
-                object.attr('data-toshift'),
-                object.attr('data-totaldays'),
-                object.attr('data-totalmins'),
-                object.attr('data-ottype'),
-                object.attr('data-isothours'),
-                object.attr('data-actualLateInEarlyOut'));
-            const leavetype = object.data('leavetype');
-            let status = "";
+    tippy('.tooltip-request', {
+        maxWidth: 'none',
+        animation: 'fade',
+        arrow: true,
+        placement: 'auto',
+        allowHTML: true,
+        //delay: [null, 200000],
+        appendTo: document.getElementById('tippy-request'),
+        content: (reference) => {
+            const object = $(reference),
+                result = $('<div/>').html(object.data('requestdetail')).text(),
+                leavetype = object.data('leavetype');
+            let status = '';
             switch (parseInt(object.attr('data-currentStatus'))) {
                 case CurrentRequestStatus.Pending:
                     status = "Pending";
@@ -69,6 +38,7 @@ function initTooltip() {
                 default:
                     status = "Approved";
             }
+
             return "<div>" + "<table class='table-tooltip checkinout'>" +
                 (leavetype ? "<tr class='hasborder'><td class='col1'>Leave Type</td><td class='col2'>" + leavetype + "</td></tr>" : '') +
                 "<tr class='hasborder'>" +
@@ -82,9 +52,10 @@ function initTooltip() {
         }
     });
 
-    $('.tooltip-tipsy').tipsy({
-        html: true,
-        gravity: $.fn.tipsy.autoWE
+    tippy('.tooltip-tippy', {
+        animation: 'fade',
+        arrow: true,
+        placement: 'auto'
     });
 }
 
