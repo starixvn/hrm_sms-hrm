@@ -6,7 +6,6 @@ import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
 import moment from 'moment';
-import { stringify } from 'qs';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, blockUI, unblockUI
@@ -98,6 +97,8 @@ $(document).ready(function () {
         const employeeId = parseInt(domElements.$employeeId.val(), 10),
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
+        let files = document.getElementById('file').files,
+            allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
         if (employeeId === 0) {
             errorMessages.push('Employee field is required.');
@@ -114,6 +115,15 @@ $(document).ready(function () {
 
         if ($.trim(domElements.$remark.val()).length === 0) {
             errorMessages.push('Remark field is required.');
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5120) {
+                errorMessages.push('Attach file (' + files[i].name + ') is to large to upload!. Maximum = 5120kb');
+            }
+            if (!allowedExtensions.exec(files[i].name)) {
+                errorMessages.push('File type of ' + files[i].name + ' incorrect!');
+            }
         }
 
         if (errorMessages.length > 0) {
@@ -234,14 +244,8 @@ $(document).ready(function () {
             var files = document.getElementById('file').files
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                if (file.size / 1024 > 5120) {
-                    alert('Attach file is to large (' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
-                    return;
-                }
-                fd.append('files[' + i + ']', file);
+                fd.append('files[' + i + ']', files[i]);
             }
-
             fd.append('requestModel', JSON.stringify(model));
             var xhr = new XMLHttpRequest();
             xhr.addEventListener("load", uploadComplete, false);

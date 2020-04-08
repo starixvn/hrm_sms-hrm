@@ -49,8 +49,9 @@ function uploadComplete(evt) {
     const data = JSON.parse(evt.target.response);
     if (data.IsSuccessful) {
         $('form').removeClass('dirty');
-        var successMsg = 'Your request have been sent successfully!';
-        RequestCommon.showSuccessMsg(successMsg, 'Leave/EmployeeView');
+        confirm('Successfull!\nPress OK to continue', function () {
+            location.href = resolveClientUrl('Leave/EmployeeView');
+        });
     } else {
          RequestCommon.showErrorMsg(data.Message, LeaveRequest.employee);
     }
@@ -60,12 +61,7 @@ function GetFormData(leaveRequest, requestDetails,tempFile) {
     var files = document.getElementById('file').files
     var fd = new FormData();
     for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        if (file.size / 1024 > 5120) {
-            alert('Attach file is to large(' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
-            return;
-        }
-        fd.append('files[' + i + ']', file);
+        fd.append('files[' + i + ']', files[i]);
     }
     fd.append('request', JSON.stringify(leaveRequest));
     fd.append('requestDetails', JSON.stringify(requestDetails));
@@ -327,25 +323,15 @@ const LeaveRequest = (function ($) {
                     });
                 }
 
+                var xhr = new XMLHttpRequest();
+                xhr.addEventListener("load", uploadComplete, false);
                 if (LeaveRequest.requestId.val() === '-1') {
-                    LeaveRequest.insertLeaveRequest(leaveRequest, requestDetails, tempFile);
+                    xhr.open("POST", _global.root + "leave/Create");
+                } else {
+                    xhr.open("POST", _global.root + "leave/Update");
                 }
-                else {
-                    LeaveRequest.updateLeaveRequest(leaveRequest, requestDetails, tempFile);
-                }
+                xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
             }
-        },
-        insertLeaveRequest: function (leaveRequest, requestDetails,tempFile) {
-            var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "leave/Create");
-            xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
-        },
-        updateLeaveRequest: function (leaveRequest, requestDetails, tempFile) {
-            var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "leave/Update");
-            xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
         },
         dateChange: function () {
             LeaveRequest.getLeaveDetail();
@@ -560,6 +546,9 @@ const LeaveRequest = (function ($) {
                 end = $("[name='ToDate']").datepicker('getDate'),
                 days = (end - start) / 1000 / 60 / 60 / 24;
 
+            let files = document.getElementById('file').files,
+                allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
+
             if (empName !== undefined && (empName === null || empName === '')) {
                 errorString.push('The Employee field is required.');
             }
@@ -603,6 +592,15 @@ const LeaveRequest = (function ($) {
 
             if ($.trim(remark).length === 0) {
                 errorString.push('The Remark field is required.');
+            }
+
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].size / 1024 > 5120) {
+                    errorString.push('Attach file (' + files[i].name +') is to large to upload!. Maximum = 5120kb');
+                }
+                if (!allowedExtensions.exec(files[i].name)) {
+                    errorString.push('File type of ' + files[i].name + ' incorrect!');
+                }
             }
 
             if (errorString.length > 0) {

@@ -102,6 +102,8 @@ $(document).ready(function () {
             toDate = moment(domElements.$toDate.val()),
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
+        let files = document.getElementById('file').files,
+            allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
         if (employeeId === 0) {
             errorMessages.push('Employee field is required.');
@@ -131,6 +133,15 @@ $(document).ready(function () {
 
             if (moveToDates.length > 0) {
                 errorMessages.push('Move To Date field is required.');
+            }
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5120) {
+                errorMessages.push('Attach file (' + files[i].name + ') is to large to upload!. Maximum = 5120kb');
+            }
+            if (!allowedExtensions.exec(files[i].name)) {
+                errorMessages.push('File type of ' + files[i].name + ' incorrect!');
             }
         }
 
@@ -232,14 +243,8 @@ $(document).ready(function () {
             var files = document.getElementById('file').files
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                if (file.size / 1024 > 5120) {
-                    alert('Attach file is to large (' + file.size / 1024 + 'kb) to upload. Maximum = 5120kb');
-                    return;
-                }
-                fd.append('files[' + i + ']', file);
+                fd.append('files[' + i + ']', files[i]);
             }
-
             fd.append('model', JSON.stringify(model));
             fd.append('details', JSON.stringify(details))
             var xhr = new XMLHttpRequest();
