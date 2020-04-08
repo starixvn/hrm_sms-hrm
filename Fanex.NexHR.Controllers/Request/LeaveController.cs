@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -60,31 +59,13 @@
             };
 
             IList<LeaveRequest> leaves = leaveRequestService.GetByDate(criteria);
-            GetInfoAttachFile(leaves);
+            foreach (var request in leaves)
+            {
+                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+            }
             ViewBag.Year = tempYear;
             ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
             return View(leaves);
-        }
-
-        private void GetInfoAttachFile(IList<LeaveRequest> leaves)
-        {
-            foreach (var request in leaves)
-            {
-                StringBuilder content = new StringBuilder();
-                string path = pathFolder + request.RequestId;
-                string dir = Server.MapPath(path);
-                if (Directory.Exists(dir))
-                {
-                    string[] files = Directory.GetFiles(dir);
-
-                    foreach (string file in files)
-                    {
-                        content.Append($"<a href=\'{"/file/uploads/request/"+request.RequestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
-                    }
-
-                    request.ContentFile = content.ToString();
-                }
-            }
         }
 
         public ActionResult Create()
@@ -126,32 +107,11 @@
                 leaveRequestService.SendMailCreateRequest(criteria);
 
                 if (files != null) {
-                    UploadFile(files, criteria.RequestId);
+                    requestService.UploadFile(files, criteria.RequestId);
                 }
             }
 
             return Json(result);
-        }
-
-        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
-        {
-            if (!files.Any(file => file.ContentLength <= 0))
-            {
-                string dir = Server.MapPath(pathFolder + requestId);
-
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                foreach (var file in files)
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-
-                    var path = Path.Combine(dir, fileName);
-                    file.SaveAs(path);
-                }
-            }
         }
 
         public ActionResult Update(long id)
@@ -184,7 +144,7 @@
 
             if (Directory.Exists(dir))
             {
-                model.Files = GetFileNames(dir);
+                model.Files = requestService.GetFileNames(dir);
             }
 
             ViewBag.showCheckboxAfterDay = showCheckboxAfterDay;
@@ -194,18 +154,6 @@
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
-        }
-
-        private static List<string> GetFileNames(string dir)
-        {
-            List<string> Files = new List<string>();
-            string[] files = Directory.GetFiles(dir);
-            foreach (string file in files)
-            {
-                Files.Add(Path.GetFileName(file));
-            }
-
-            return Files;
         }
 
         [HttpPost]
@@ -223,25 +171,15 @@
                 leaveRequestService.SendMailEditRequest(criteria);
                 if (files != null)
                 {
-                    UploadFile(files, criteria.RequestId);
+                    requestService.UploadFile(files, criteria.RequestId);
                 }
                 if (filesRemove != null)
                 {
-                    DeleteFile(filesRemove, criteria.RequestId);
+                    requestService.DeleteFile(filesRemove, criteria.RequestId);
                 }
             }
 
             return Json(result);
-        }
-
-        private void DeleteFile(string filesRemove, long requestId)
-        {
-            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
-            foreach (string file in files)
-            {
-                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
-                System.IO.File.Delete(dir);
-            }
         }
 
         public ActionResult Detail(long id)
@@ -265,7 +203,7 @@
 
             if (Directory.Exists(dir))
             {
-                model.Files = GetFileNames(dir);
+                model.Files = requestService.GetFileNames(dir);
             }
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
@@ -288,22 +226,10 @@
 
             if (commandResult.IsSuccessful)
             {
-                string dir = Server.MapPath(pathFolder + id);
-
-                if (Directory.Exists(dir))
-                {
-                    Directory.Delete(dir, true);
-                }
+                requestService.DeleteFolderAttachFile(id);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        [HttpPost]
-        public void DeleteFile(string pathFile)
-        {
-            string dir = Server.MapPath(pathFile);
-            System.IO.File.Delete(dir);
         }
 
         public ActionResult ViewHistory(long id)

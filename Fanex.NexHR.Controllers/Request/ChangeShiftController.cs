@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -45,30 +44,13 @@
             var fromDate = new DateTime(tempYear, 1, 1);
             var toDate = new DateTime(tempYear, 12, 31).ToEndOfDay();
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(sessionService.Employee.Id, fromDate, toDate);
-            GetInfoAttachFile(requests);
-            ViewBag.Year = tempYear;
-            return View(requests);
-        }
-
-        private void GetInfoAttachFile(IEnumerable<ChangeShiftRequest> requests)
-        {
             foreach (var request in requests)
             {
-                StringBuilder content = new StringBuilder();
-                string path = pathFolder + request.RequestId;
-                string dir = Server.MapPath(path);
-                if (Directory.Exists(dir))
-                {
-                    string[] files = Directory.GetFiles(dir);
-
-                    foreach (string file in files)
-                    {
-                        content.Append($"<a href=\'{"/file/uploads/request/" + request.RequestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
-                    }
-
-                    request.ContentFile = content.ToString();
-                }
+                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
             }
+            ViewBag.Year = tempYear;
+
+            return View(requests);
         }
 
         public ActionResult Create()
@@ -107,32 +89,11 @@
                 changeShiftService.SendMailCreateRequest(commandResult.OutputId);
                 if (files != null)
                 {
-                    UploadFile(files, commandResult.OutputId);
+                    requestService.UploadFile(files, commandResult.OutputId);
                 }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        private void UploadFile(IList<HttpPostedFileBase> files, long requestId)
-        {
-            if (!files.Any(file => file.ContentLength <= 0))
-            {
-                string dir = Server.MapPath(pathFolder + requestId);
-
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                foreach (var file in files)
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-
-                    var path = Path.Combine(dir, fileName);
-                    file.SaveAs(path);
-                }
-            }
         }
 
         public ActionResult Edit(int id)
@@ -173,7 +134,7 @@
 
             if (Directory.Exists(dir))
             {
-                model.Files = GetFileNames(dir);
+                model.Files = requestService.GetFileNames(dir);
             }
 
             ViewBag.IsHost = true;
@@ -197,25 +158,15 @@
                 changeShiftService.SendMailEditRequest(criteria.RequestId);
                 if (files != null)
                 {
-                    UploadFile(files, criteria.RequestId);
+                    requestService.UploadFile(files, criteria.RequestId);
                 }
                 if (filesRemove != null)
                 {
-                    DeleteFile(filesRemove, criteria.RequestId);
+                    requestService.DeleteFile(filesRemove, criteria.RequestId);
                 }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        private void DeleteFile(string filesRemove, long requestId)
-        {
-            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
-            foreach (string file in files)
-            {
-                string dir = Server.MapPath(pathFolder + requestId + '/' + file);
-                System.IO.File.Delete(dir);
-            }
         }
 
         public CustomJsonResult Delete(long id)
@@ -225,11 +176,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                string dir = Server.MapPath(pathFolder + id);
-                if (Directory.Exists(dir))
-                {
-                    Directory.Delete(dir, true);
-                }
+                requestService.DeleteFolderAttachFile(id);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -263,25 +210,13 @@
 
             if (Directory.Exists(dir))
             {
-                model.Files = GetFileNames(dir);
+                model.Files = requestService.GetFileNames(dir);
             }
 
             ViewBag.IsHost = false;
             ViewBag.TypeId = request.TypeId;
             ViewBag.Shifts = shiftService.GetAll(isShowOff: true);
             return View(model);
-        }
-
-        private static List<string> GetFileNames(string dir)
-        {
-            List<string> Files = new List<string>();
-            string[] files = Directory.GetFiles(dir);
-            foreach (string file in files)
-            {
-                Files.Add(Path.GetFileName(file));
-            }
-
-            return Files;
         }
 
         public ActionResult GetChangeShiftDetail(GetWorkingCalendarForRequestParam param)

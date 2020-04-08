@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using System.Web;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Request;
@@ -30,5 +31,15 @@
         CommandResult VoidRequest(int actorId, ProcessRequestParam param);
 
         void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
+
+        void UploadFile(IList<HttpPostedFileBase> files, long requestId);
+
+        void DeleteFile(string filesRemove, long requestId);
+
+        List<string> GetFileNames(string dir);
+
+        string GetInfoAttachFile(long requestId);
+
+        void DeleteFolderAttachFile(long id);
     }
 }
