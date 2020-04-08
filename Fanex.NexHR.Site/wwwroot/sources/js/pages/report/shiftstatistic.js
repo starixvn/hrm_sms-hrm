@@ -1,8 +1,10 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import axios from 'axios';
-import { stringify } from 'qs';
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, initDatepicker, initFromDateOnChange, resolveClientUrl } from '../../shared/common.functions';
+import {
+    axiosError, blockUI, unblockUI, initDatepicker, initFromDateOnChange,
+    resolveClientUrl, downloadFile
+} from '../../shared/common.functions';
 
 $(document).ready(function () {
     const query = function () {
@@ -44,15 +46,23 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-
-        var params = {
+        const params = {
             fromDate: $('#FromDate').val(),
             toDate: $('#ToDate').val(),
             sectionIds: $('#SectionIds').val(),
             isLocal: $('#IsLocal').val(),
             IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
-        }
+        };
 
-        window.location.href = resolveClientUrl('ShiftStatisticReport/ExportExcel?' + stringify(params));
+        blockUI();
+        axios({
+            url: resolveClientUrl('ShiftStatisticReport/ExportExcel'),
+            method: 'GET',
+            params: params,
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

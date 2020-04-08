@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
@@ -8,7 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-    axiosError, unblockUI, initDatepicker,
+    axiosError, blockUI, unblockUI, initDatepicker,
     showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
 } from '../../../shared/common.functions';
 import { ChangeShiftType, OffDayShiftId } from '../../../shared/constants';
@@ -94,6 +93,7 @@ $(document).ready(function () {
         });
     };
     let getChangeShiftDetails = function () {
+        blockUI();
         axios({
             url: _global.root + 'changeshift/GetChangeShiftDetail',
             method: 'GET',

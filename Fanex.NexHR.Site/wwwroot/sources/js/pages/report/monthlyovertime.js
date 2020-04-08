@@ -1,6 +1,9 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import '../../../libs/monthPicker/monPickr-0.0.3';
+import axios from 'axios';
+import { parse } from 'qs';
+
+import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let monthPicker = $('#MonthControl');
@@ -20,6 +23,15 @@ $(document).ready(function () {
     });
 
     $('#btnExcel').on('click', function () {
-        window.location.href = _global.root + 'OvertimeReport/ExportMonthlyOvertime?' + $('form.filter').serialize();
+        blockUI();
+        axios({
+            url: resolveClientUrl('OvertimeReport/ExportMonthlyOvertime'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

@@ -1,18 +1,18 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
+import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, floatThead } from '../../shared/common.functions';
+import { axiosError, floatThead, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
 
 $(document).ready(function () {
     floatThead('table#data');
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             const sectionIds = $('#SectionIds').val();
-            console.log(sectionIds);
+
             $('#Section').multiSelectTreeView({
                 data: response.data,
                 selectedItems: sectionIds
@@ -26,6 +26,16 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = _global.root + 'OvertimeReport/ExportYearlyOvertime?' + $('form.filter').serialize();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('OvertimeReport/ExportYearlyOvertime'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });
