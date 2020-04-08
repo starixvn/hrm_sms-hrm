@@ -1,12 +1,17 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
+import axios from 'axios';
+import { parse } from 'qs';
+
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import {  blockUI, floatThead, unblockUI, confirm, alert, initDatepicker } from '../../shared/common.functions';
 import '../../date';
+import {
+    axiosError, blockUI, unblockUI, initDatepicker, floatThead,
+    resolveClientUrl, downloadFile
+} from '../../shared/common.functions';
 
 function initEventForDateRangeDropdown() {
     $('form.filter #DateRange').on('change', function () {
@@ -27,16 +32,16 @@ function initEventForDateRangeDropdown() {
 
 function initEventForViewWeekendLeaveDetail() {
     $('table a.viewWeekendLeaveDetail').on('click', function () {
-        var empId = $(this).data('empid'),
+        const empId = $(this).data('empid'),
             employee = $(this).data('employee'),
             teamId = $('form.filter #TeamId').val(),
             isLocal = $('form.filter #IsLocal').val(),
             fromDate = $('form.filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
             toDate = $('form.filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val();
 
-        window.location.href = _global.root + 'report/WeekendLeaveDetail?fromDate=' + fromDate + '&toDate=' + toDate
+        window.open(resolveClientUrl('report/WeekendLeaveDetail?fromDate=' + fromDate + '&toDate=' + toDate
             + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
-            + '&isLocal=' + isLocal + '&fromSummaryPage=true&leaveTypeId=-1', '_blank';
+            + '&isLocal=' + isLocal + '&fromSummaryPage=true&leaveTypeId=-1'), '_blank');
     });
 }
 
@@ -57,29 +62,25 @@ function formatDate(date) {
 
 function query() {
     blockUI();
-    $.ajax({
-        url: _global.root + 'report/PartialListWeekendLeaveSummary',
-        data: $('form.filter').serialize(),
-        success: function (data) {
-            unblockUI();
-            $('#weekend-leave-summary').html(data);
-            floatThead("table#data");
-            initEventForViewWeekendLeaveDetail();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            unblockUI();
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+    axios({
+        url: resolveClientUrl('report/PartialListWeekendLeaveSummary'),
+        method: 'GET',
+        params: parse($('form.filter').serialize()),
+        responseType: 'text'
+    }).then(response => {
+        $('#weekend-leave-summary').html(response.data);
+        floatThead('table#data');
+        initEventForViewWeekendLeaveDetail();
+    }).catch(axiosError).then(() => unblockUI());
 }
 
 $(document).ready(function () {
     initEventForDateRangeDropdown();
-    $.ajax({
-        url: _global.root + 'Department/GetHierarchy',
-        success: function (data) {
+
+    axios(resolveClientUrl('Department/GetHierarchy'))
+        .then(response => {
             $('#Section').multiSelectTreeView({
-                data: data,
+                data: response.data,
                 noneSelectedText: 'Select a section',
                 selectedItems: $('#TeamId').val(),
                 singleSelection: true,
@@ -89,11 +90,7 @@ $(document).ready(function () {
             });
 
             query();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+        }).catch(axiosError);
 
     initDatepicker();
 
@@ -107,6 +104,16 @@ $(document).ready(function () {
     });
     $('form.filter #btnExcel').on('click', function (event) {
         event.preventDefault();
-        window.location.href = _global.root + 'ExportWeekendLeave/ExportWeekendLeaveSummaryReport?' + $('form.filter').serialize();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('ExportWeekendLeave/ExportWeekendLeaveSummaryReport'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

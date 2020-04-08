@@ -5,11 +5,14 @@ import axios from 'axios';
 import { stringify, parse } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, blockUI, floatThead, unblockUI, confirm, initDatepicker, initFromDateOnChange, initTooltip, resolveClientUrl, toastOptions } from '../../shared/common.functions';
-import { DisciplineType } from '../../shared/constants';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
+import {
+    axiosError, blockUI, floatThead, unblockUI, confirm, initDatepicker, initFromDateOnChange, initTooltip,
+    resolveClientUrl, toastOptions, downloadFile
+} from '../../shared/common.functions';
+import { DisciplineType } from '../../shared/constants';
 
 (function () {
     function initEventForIgnoreDiscipline() {
@@ -269,7 +272,17 @@ import '../../shared/employee.search.in.team';
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-            window.location.href = resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport?' + $('form.form-filter').serialize());
+
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
+                method: 'GET',
+                params: parse($('form.form-filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
         });
     });
 })();

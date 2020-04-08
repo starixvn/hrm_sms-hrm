@@ -9,7 +9,7 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl, downloadFile } from '../../shared/common.functions';
 import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
@@ -203,6 +203,7 @@ export default class App extends Component {
             fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
+        blockUI();
         axios(resolveClientUrl('ScheduleArrange/ExportExcel'), {
             params: {
                 fromDate: fromDate,
@@ -212,12 +213,9 @@ export default class App extends Component {
             },
             responseType: 'blob'
         }).then(response => {
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(new Blob([response.data]));
-            link.setAttribute('download', `Working shift ${fromDate} to ${toDate}.xlsx`);
-            document.body.appendChild(link);
-            link.click();
-        }).catch(axiosError);
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     handleExportExcelDriverPickup = () => {
@@ -225,6 +223,7 @@ export default class App extends Component {
             fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
+        blockUI();
         axios(resolveClientUrl('ScheduleArrange/ExportExcelDriverPickup'), {
             params: {
                 fromDate: fromDate,
@@ -234,12 +233,9 @@ export default class App extends Component {
             },
             responseType: 'blob'
         }).then(response => {
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(new Blob([response.data]));
-            link.setAttribute('download', `Schedule for Driver ${fromDate} to ${toDate}.xlsx`);
-            document.body.appendChild(link);
-            link.click();
-        }).catch(axiosError);
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     handleGetWeeklyShedules = isCurrentWeek => {

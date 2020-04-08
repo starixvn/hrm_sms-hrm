@@ -1,40 +1,35 @@
 ﻿import 'floatthead/dist/jquery.floatThead';
+import axios from 'axios';
+import { parse } from 'qs';
+
 import '../../shared/multiselect-tree-view';
-import { floatThead, alert, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile } from '../../shared/common.functions';
 
 (function () {
     function query() {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        $.ajax({
+        blockUI();
+        axios({
             url: resolveClientUrl('report/SectionSupervisorDetails'),
-            type: 'POST',
-            dataType: 'html',
-            data: $('form.filter').serialize(),
-            success: function (response) {
-                $('#SectionSupervisorDetails').html(response);
-                floatThead('table#data');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            method: 'POST',
+            params: parse($('form.filter').serialize()),
+            responseType: 'text'
+        }).then(response => {
+            $('#SectionSupervisorDetails').html(response.data);
+            floatThead('table#data');
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     $(document).ready(function () {
-        $.ajax({
-            url: resolveClientUrl('Department/GetHierarchy'),
-            success: function (data) {
+        axios(resolveClientUrl('Department/GetHierarchy'))
+            .then(response => {
                 $('#Section').multiSelectTreeView({
-                    data: data,
+                    data: response.data,
                     isSelectedAll: true
                 });
 
                 query();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            }).catch(axiosError);
 
         $("#btnSubmit").on('click', function () {
             query();
@@ -42,7 +37,17 @@ import { floatThead, alert, resolveClientUrl } from '../../shared/common.functio
 
         $('#btnExcel').on('click', function () {
             $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-            window.location.href = resolveClientUrl('ExportSupervisor/SectionSupervisor?' + $('form.filter').serialize());
+
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportSupervisor/SectionSupervisor'),
+                method: 'GET',
+                params: parse($('form.filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
         });
     });
 })();

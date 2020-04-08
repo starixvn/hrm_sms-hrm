@@ -1,12 +1,18 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import tippy from 'tippy.js';
 import 'floatthead/dist/jquery.floatThead';
+import tippy from 'tippy.js';
+import axios from 'axios';
+import { parse } from 'qs';
+
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, initFromDateOnChange, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
-import { CurrentRequestStatus } from '../../shared/constants';
 import '../../date';
 import '../request/date.filter';
+import {
+    blockUI, unblockUI, floatThead, initFromDateOnChange, initDatepicker,
+    resolveClientUrl, downloadFile, axiosError
+} from '../../shared/common.functions';
+import { CurrentRequestStatus } from '../../shared/constants';
 
 function initTooltip() {
     tippy('.tooltip-request', {
@@ -15,7 +21,6 @@ function initTooltip() {
         arrow: true,
         placement: 'auto',
         allowHTML: true,
-        //delay: [null, 200000],
         appendTo: document.getElementById('tippy-request'),
         content: (reference) => {
             const object = $(reference),
@@ -61,22 +66,16 @@ function initTooltip() {
 
 function query() {
     blockUI();
-    $.ajax({
+    axios({
         url: resolveClientUrl('report/AttendanceDetails'),
-        type: 'POST',
-        dataType: 'html',
-        data: $('.filter').serialize(),
-        success: function (response) {
-            $('#attendanceDetails').html(response);
-            initTooltip();
-            floatThead('table#data');
-            unblockUI();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            unblockUI();
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+        method: 'POST',
+        params: parse($('form.filter').serialize()),
+        responseType: 'text'
+    }).then(response => {
+        $('#attendanceDetails').html(response.data);
+        floatThead('table#data');
+        initTooltip();
+    }).catch(axiosError).then(() => unblockUI());
 }
 
 $(document).ready(function () {
@@ -84,18 +83,15 @@ $(document).ready(function () {
         $(this).val(event.target.checked);
     });
 
-    $.ajax({
-        url: resolveClientUrl('Department/GetHierarchy'),
-        success: function (data) {
+    axios(resolveClientUrl('Department/GetHierarchy'))
+        .then(response => {
             $('#Section').multiSelectTreeView({
-                data: data,
+                data: response.data,
                 selectedItems: $('#GroupIds').val()
             });
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+
+            query();
+        }).catch(axiosError);
 
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     initDatepicker();
@@ -112,8 +108,16 @@ $(document).ready(function () {
 
     $("#btnExcel").click(function () {
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        location.href = resolveClientUrl("AttendanceReport/ExportExcel?" + $('.filter').serialize());
-    });
 
-    query();
+        blockUI();
+        axios({
+            url: resolveClientUrl('AttendanceReport/ExportExcel'),
+            method: 'GET',
+            params: parse($('.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
+    });
 });

@@ -1,10 +1,16 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker, initFromDateOnChange, resolveClientUrl } from '../../shared/common.functions';
+import axios from 'axios';
+import { parse } from 'qs';
+
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
+import {
+    axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker,
+    initFromDateOnChange, resolveClientUrl, downloadFile
+} from '../../shared/common.functions';
 
 (function () {
     var $disciplineTableBody, $dialogAddOtherDiscipline, $dialogViewOtherDiscipline, $btnAddOtherDiscipline;
@@ -366,7 +372,17 @@ import '../../shared/employee.search.in.team';
 
         $('form.form-filter #btnExcel').on('click', function (event) {
             event.preventDefault();
-            window.location.href = resolveClientUrl('ExportDiscipline/ExportDisciplineSummaryReport?' + $('form.form-filter').serialize());
+
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportDiscipline/ExportDisciplineSummaryReport'),
+                method: 'GET',
+                params: parse($('form.form-filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
         });
 
         floatThead("table#data");
