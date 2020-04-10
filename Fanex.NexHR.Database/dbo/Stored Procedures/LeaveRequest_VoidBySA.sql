@@ -24,6 +24,7 @@ BEGIN
 		,@ToDate DATE
 		,@EmpId INT
 		-- request status
+		,@PaternityTypeId TINYINT = 14
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
@@ -46,7 +47,7 @@ BEGIN
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 
-	IF @LeaveType = 14
+	IF @LeaveType = @PaternityTypeId
 	BEGIN
 		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
 		SET BalanceDay = BalanceDay + @TotalDays
