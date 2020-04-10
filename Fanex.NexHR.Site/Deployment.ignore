@@ -1,5 +1,7 @@
 \\Avatars\\.*
 \\file\.*
+\\wwwroot\\parts
+\\wwwroot\\sources\\js
 \\*.local.config
 \\*.uat.config
 \\*.pro.config
