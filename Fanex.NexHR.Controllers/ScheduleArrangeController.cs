@@ -170,10 +170,9 @@
             {
                 isHost = true;
             }
-            else if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleFrom4WeeksAgo, Policy.Host))
+            else if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleFromCurrentWeek, Policy.Host))
             {
-                const int FourWeeksAgo = 28;
-                isHost = fromDate.Date >= firstDayOfWeek.AddDays(-FourWeeksAgo);
+                isHost = fromDate.Date >= firstDayOfWeek;
             }
             else if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleFromNextWeek, Policy.Host))
             {
