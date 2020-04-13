@@ -599,13 +599,31 @@ BEGIN
 	END
 	
 	-- check paternity leave
+		IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND @FromDate >= ChildBornDate
+					AND EmpId = @EmpId
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+
+			RETURN
+		END
+	END
+
 	IF @LeaveTypeId = @PaternityLeaveType
 	BEGIN
 		IF EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)
 				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
-					AND @FromDate >= GETDATE()
+					AND @FromDate >= CONVERT(DATE, GETDATE())
 					AND @FromDate >= ChildBornDate
 					AND EmpId = @EmpId
 					AND BalanceDay >= @TotalDays
@@ -618,8 +636,8 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-			SET @ErrCode = 118
-			SET @ErrMsg = 'You can not request because request within 1 month from child born date or leave day incorrect.'
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request'
 
 			RETURN
 		END
