@@ -58,6 +58,7 @@ BEGIN
 		,@TmpFromDate DATE
 		,@TmpToDate DATE
 		,@DocHandler INT
+		,@OldTotalDays INT
 
 	CREATE TABLE #LeaveRequestDetail (
 		OnDate DATETIME
@@ -68,6 +69,10 @@ BEGIN
 		,FromTime DATETIME
 		,ToTime DATETIME
 		)
+
+	SELECT @OldTotalDays = TotalDays
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	SELECT @IsHalfDay = CASE 
 			WHEN @TotalDays = 0.5 THEN 1
@@ -639,22 +644,44 @@ BEGIN
 		END
 	END
 
-	-- check leave request paternity by Lilac
+	-- check paternity leave
+	IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= ChildBornDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND EmpId = @EmpId
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+		END
+	END
 
 	IF @LeaveTypeId = @PaternityLeaveType
 	BEGIN
-		IF EXISTS (SELECT 1
-					FROM dbo.EmployeePaternity
-					WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate AND @FromDate >= ChildBornDate AND @FromDate >= GETDATE() AND EmpId = @EmpId AND BalanceDay + (SELECT TotalDays FROM LeaveRequest WHERE RefNo = @RefNo) >= @TotalDays)
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= ChildBornDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND EmpId = @EmpId
+					AND BalanceDay + @OldTotalDays >= @TotalDays
+				)
 		BEGIN
-			UPDATE EmployeePaternity
-			SET BalanceDay = BalanceDay - @TotalDays + (SELECT TotalDays FROM LeaveRequest WHERE RefNo = @RefNo)
-			WHERE EmpId = @EmpId AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+			SET BalanceDay = BalanceDay - @TotalDays + @OldTotalDays
+			WHERE EmpId = @EmpId
+				AND DATEADD(M, 1, ChildBornDate) >= @ToDate
 		END
 		ELSE
 		BEGIN
-			SET @ErrCode = 118
-			SET @ErrMsg = 'You can not request because request within 1 month from child born date or leave day incorrect.'
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request.'
 
 			RETURN
 		END
