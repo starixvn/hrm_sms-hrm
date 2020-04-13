@@ -269,6 +269,100 @@ $(function () {
         }
     }
 
+    function approveMultipleRequest() {
+        let objSelected = $('table#data tbody input[type=checkbox]:checked');
+
+        switch (objSelected.length) {
+            case 0:
+                toastr.error('Please choose at least one request to continue.', '', toastOptions());
+                return;
+            case 1:
+                const request = objSelected[0],
+                    requestTypeId = parseInt(request.getAttribute('requestTypeId'), 10),
+                    requestId = parseInt(request.getAttribute('id'), 10),
+                    roleId = parseInt(request.getAttribute('roleId'), 10),
+                    employeeId = parseInt(request.getAttribute('employeeId'), 10);
+                const title = 'Are you sure you want to approve?';
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
+                return;
+            default:
+                break;
+        }
+
+        $('#dialogProcessMultipleRequest').dialog({
+            title: 'Are you sure you want to approve these requests ?',
+            height: 'auto',
+            width: 'auto',
+            modal: true,
+            buttons: [{
+                text: 'Confirm',
+                class: 'btn btn-primary',
+                click: function () {
+                    let requests = [],
+                        comment = $(this).find('textarea#Comment').val(),
+                        isValid = true,
+                        chkIgnore = $(this).find('#chk-ignore-all'),
+                        chkRecord = $(this).find('#chk-record-all');
+
+                    if (!chkIgnore.prop('checked') && !chkRecord.prop('checked')) {
+                        isValid = false;
+                    } else {
+                        objSelected.each(function () {
+                            var request = this;
+                            requests.push({
+                                RequestId: parseInt(request.getAttribute('Id'), 10),
+                                RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
+                            });
+                        });
+                    }
+
+                    if (!isValid) {
+                        $(this).find('.validation-summary-valid').show()
+                            .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b>.');
+                    } else {
+                        $(this).find('.validation-summary-valid').hide();
+                        approveRequests(requests, comment, chkIgnore.prop('checked'));
+                        $(this).dialog('close');
+                    }
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn btn-default',
+                click: function () {
+                    $(this).dialog('close');
+                }
+            }]
+        });
+    }
+
+    function approveRequests(requests, comment, isIgnoredViolate) {
+        blockUI();
+        const model = {
+            requests: requests,
+            comment: comment,
+            IsIgnoredViolate: isIgnoredViolate
+        };
+
+        axios({
+            url: resolveClientUrl('request/ApproveMultipleRequests'),
+            method: 'POST',
+            data: stringify({ model }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            unblockUI();
+            const data = response.data;
+            if (data.isSuccessful) {
+                window.location.reload();
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    }
+
     function renderIconOk(opt, $itemElement, itemKey, item) {
         $itemElement.html('<span class="processed"><i class="fa fa-check"></i>' + item.name + '</span>');
         return '';
@@ -402,6 +496,14 @@ $(function () {
                     + '&leaveType=' + $('#LeaveType').val());
                 location.href = url;
             }
+        });
+
+        $('#ckbAll').on('change', function (event) {
+            $('table#data').find('tbody input[type=checkbox]').prop('checked', event.target.checked);
+        });
+
+        $('#btnApproveMultiple').on('click', function (event){
+            approveMultipleRequest();
         });
 
         floatThead('#data');

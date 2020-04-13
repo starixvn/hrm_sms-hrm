@@ -215,6 +215,24 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
+        [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
+        public CustomJsonResult ApproveMultipleRequests(ApproveRequestsParam model)
+        {
+            model.ActorId = sessionService.Employee.Id;
+            model.RoleId = (byte)RoleSystem.Approver;
+
+            var commandResult = requestService.ApproveRequests(model);
+
+            if (commandResult.IsSuccessful)
+            {
+                //requestService.SendMailProcessRequest(model, sessionService.Employee, model.Command);
+            }
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
         private void HandleProcessRequest(ProcessRequestViewModel model)
         {
             switch (model.RequestTypeId)

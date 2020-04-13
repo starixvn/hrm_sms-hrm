@@ -24,6 +24,8 @@
 
         CommandResult ApproveRequest(int actorId, ProcessRequestParam param);
 
+        CommandResult ApproveRequests(ApproveRequestsParam param);
+
         CommandResult ResetRequest(int actorId, ProcessRequestParam param);
 
         CommandResult RejectRequest(int actorId, ProcessRequestParam param);

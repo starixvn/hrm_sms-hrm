@@ -160,6 +160,20 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
+        public CommandResult ApproveRequests(ApproveRequestsParam param)
+        {
+            var criteria = new ApproveMultipleRequestsCriteria
+            {
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = param.ActorId,
+                IsIgnoredViolate = param.IsIgnoredViolate,
+                IsConfirmed = param.IsConfirmed,
+                Requests = param.Requests.Any() ? param.Requests.ToXML().ToString() : string.Empty
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
         public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
         {
             var criteria = new RejectRequestCriteria

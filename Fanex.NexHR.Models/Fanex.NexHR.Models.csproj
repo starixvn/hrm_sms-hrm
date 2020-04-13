@@ -151,6 +151,7 @@
     <Compile Include="Report\WeekendLeaveDetail.cs" />
     <Compile Include="Report\WeekendLeaveSummary.cs" />
     <Compile Include="Report\WorkingHoursSummary.cs" />
+    <Compile Include="Request\ApproveRequestsParam.cs" />
     <Compile Include="Request\BaseRequest.cs" />
     <Compile Include="Request\ChangeShift\ChangeShiftDetail.cs" />
     <Compile Include="Request\ChangeShift\ChangeShiftRequest.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Request\ProcessRequestParam.cs" />
     <Compile Include="Request\Requester.cs" />
     <Compile Include="Request\RequestRelatedPeopleModel.cs" />
+    <Compile Include="Request\RequestsXML.cs" />
     <Compile Include="Request\VerifierAndApproverForRequest.cs" />
     <Compile Include="ScheduleArrange\DailySchedule.cs" />
     <Compile Include="ScheduleArrange\EditDailySchedule.cs" />
