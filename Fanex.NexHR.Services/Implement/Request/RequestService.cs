@@ -239,6 +239,37 @@
             }
         }
 
+        public void SendMailAprroveRequests(ApproveRequestsParam param, EmployeeSession actor)
+        {
+            foreach(var request in param.Requests)
+            {
+                switch (request.RequestTypeID)
+                {
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
+                        checkInOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
+                        lateInEarlyOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.ChangeShift:
+                        changeShiftRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.Leave:
+                        leaveRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    default:
+                        keepInViewRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+                }
+            }
+        }
+
         private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)
         {
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLeaveWithNoFormat : RequestFormatConstants.MsgLeave;

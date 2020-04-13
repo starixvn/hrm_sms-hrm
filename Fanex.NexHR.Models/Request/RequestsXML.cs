@@ -8,6 +8,6 @@
     public class RequestsXML
     {
         public long RequestId { get; set; }
-        public byte RequestTypeID { get; set; }
+        public int RequestTypeID { get; set; }
     }
 }

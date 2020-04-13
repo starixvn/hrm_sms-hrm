@@ -227,7 +227,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                //requestService.SendMailProcessRequest(model, sessionService.Employee, model.Command);
+                requestService.SendMailAprroveRequests(model, sessionService.Employee);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

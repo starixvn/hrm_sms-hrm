@@ -34,6 +34,8 @@
 
         void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
 
+        void SendMailAprroveRequests(ApproveRequestsParam param, EmployeeSession actor);
+
         void UploadFile(IList<HttpPostedFileBase> files, long requestId);
 
         void DeleteFile(string filesRemove, long requestId);
