@@ -599,7 +599,7 @@ BEGIN
 	END
 	
 	-- check paternity leave
-		IF @LeaveTypeId = @PaternityLeaveType
+	IF @LeaveTypeId = @PaternityLeaveType
 	BEGIN
 		IF NOT EXISTS (
 				SELECT 1
@@ -615,10 +615,7 @@ BEGIN
 
 			RETURN
 		END
-	END
 
-	IF @LeaveTypeId = @PaternityLeaveType
-	BEGIN
 		IF EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)

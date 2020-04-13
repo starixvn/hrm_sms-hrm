@@ -659,10 +659,7 @@ BEGIN
 			SET @ErrCode = 118
 			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
 		END
-	END
 
-	IF @LeaveTypeId = @PaternityLeaveType
-	BEGIN
 		IF EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)
