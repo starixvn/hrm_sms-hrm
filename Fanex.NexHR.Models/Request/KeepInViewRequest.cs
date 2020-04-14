@@ -16,6 +16,8 @@
 
         public DateTime ToTime { get; set; }
 
+        public string ContentFile { get; set; }
+
         public string KeepInViewTypeName
         {
             get

@@ -23,6 +23,8 @@ BEGIN
 		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
+		,@LeaveType TINYINT
+		,@TotalDays INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -31,10 +33,13 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
+		,@PaternityTypeId TINYINT = 14
 
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
+		,@LeaveType = LeaveType
+		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 	
@@ -43,6 +48,15 @@ BEGIN
 		,@RequestStatusId = @NotVerifiedStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
+
+	IF @LeaveType = @PaternityTypeId
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay + @TotalDays
+		WHERE EmpId = @EmpId
+			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+			AND @FromDate >= ChildBornDate
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN

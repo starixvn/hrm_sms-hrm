@@ -1,11 +1,14 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
+import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, floatThead, initDatepicker, initFromDateOnChange, setDateRange } from '../../shared/common.functions';
 import '../../date';
+import {
+    axiosError, floatThead, initDatepicker, initFromDateOnChange, setDateRange,
+    blockUI, unblockUI, downloadFile, resolveClientUrl
+} from '../../shared/common.functions';
 
 $(document).ready(function () {
     floatThead('table#data');
@@ -23,7 +26,7 @@ $(document).ready(function () {
         $('#DateOption').val(0);
     });
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
@@ -38,6 +41,16 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = _global.root + 'WorkingHoursSummaryReport/ExportExcel?' + $('form.filter').serialize();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('WorkingHoursSummaryReport/ExportExcel'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

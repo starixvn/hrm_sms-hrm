@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -19,6 +21,7 @@
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public LateInEarlyOutController(
             ISessionService sessionService,
@@ -43,7 +46,11 @@
                 ToDate = new DateTime(tempYear, 12, 31)
             };
             IList<LateInEarlyOutRequest> requests = lateInEarlyOutRequestService.GetByDate(criteria);
-            return View(requests);
+            foreach (var request in requests)
+            {
+                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+            }
+                return View(requests);
         }
 
         public ActionResult Create()
@@ -68,8 +75,10 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Create(LateInEarlyOutRequestViewModel model)
+        public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            LateInEarlyOutRequestViewModel model = JsonConverter.FromJson<LateInEarlyOutRequestViewModel>(requestModel);
+
             var criteria = new InsertLateInEarlyOutRequestCriteria
             {
                 EmpId = model.EmployeeId,
@@ -84,10 +93,13 @@
                 CreatedBy = sessionService.Employee.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
-
             if (commandResult.IsSuccessful)
             {
                 lateInEarlyOutRequestService.SendMailCreateRequest(commandResult.OutputId);
+                if (files != null)
+                {
+                    requestService.UploadFile(files, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -95,6 +107,7 @@
 
         public ActionResult Edit(int id)
         {
+            string dir = Server.MapPath(pathFolder + id);
             LateInEarlyOutRequest request = lateInEarlyOutRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -131,13 +144,20 @@
                 Approvers = supervisor.Approvers
             };
 
+            if (Directory.Exists(dir))
+            {
+                viewModel.Files = requestService.GetFileNames(dir);
+            }
+
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             return View(viewModel);
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(LateInEarlyOutRequestViewModel model)
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
+            LateInEarlyOutRequestViewModel model = JsonConverter.FromJson<LateInEarlyOutRequestViewModel>(requestModel);
+
             var criteria = new UpdateLateInEarlyOutRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -157,6 +177,14 @@
             if (commandResult.IsSuccessful)
             {
                 lateInEarlyOutRequestService.SendMailEditRequest(model.RequestId);
+                if (files != null)
+                {
+                    requestService.UploadFile(files, criteria.RequestId);
+                }
+                if (filesRemove != null)
+                {
+                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -168,6 +196,10 @@
             lateInEarlyOutRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = lateInEarlyOutRequestService.Delete(id);
 
+            if (commandResult.IsSuccessful)
+            {
+                requestService.DeleteFolderAttachFile(id);
+            }
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

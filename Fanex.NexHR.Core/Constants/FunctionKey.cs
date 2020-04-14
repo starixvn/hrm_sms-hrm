@@ -60,7 +60,7 @@
 
         public const string ScheduleArrange = "ScheduleArrange";
         public const string EditScheduleUnlimited = "EditScheduleUnlimited";
-        public const string EditScheduleFrom4WeeksAgo = "EditScheduleFrom4WeeksAgo";
+        public const string EditScheduleFromCurrentWeek = "EditScheduleFromCurrentWeek";
         public const string EditScheduleFromNextWeek = "EditScheduleFromNextWeek";
 
         public const string ReportHome = "ReportHome";

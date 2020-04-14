@@ -6,7 +6,6 @@ import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
 import moment from 'moment';
-import { stringify } from 'qs';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
@@ -68,6 +67,8 @@ $(document).ready(function () {
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
         const dayDiff = (requestDate - attendantDate) / 1000 / 60 / 60 / 24;
+        let files = document.getElementById('file').files,
+            allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
         if (employeeId === 0) {
             errorMessages.push('Employee field is required.');
@@ -98,6 +99,15 @@ $(document).ready(function () {
             errorMessages.push('Remark field is required.');
         }
 
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5120) {
+                errorMessages.push('Attach file (' + files[i].name + ') is to large to upload!. Maximum = 5120kb');
+            }
+            if (!allowedExtensions.exec(files[i].name)) {
+                errorMessages.push('File type of ' + files[i].name + ' incorrect!');
+            }
+        }
+
         if (errorMessages.length > 0) {
             showValidationSummaryErrors(errorMessages);
             isValid = false;
@@ -107,6 +117,14 @@ $(document).ready(function () {
     };
 
     initDatepicker();
+
+    var tempFile = [];
+    $('.delete-file').on('click', function () {
+        const fileName = $(this).attr("data-id");
+        var classDelete = document.getElementById(fileName);
+        classDelete.remove();
+        tempFile.push(fileName);
+    });
 
     domElements.$attendantDate.on('change', function () {
         axios({
@@ -150,27 +168,32 @@ $(document).ready(function () {
                 verifierId: domElements.$verifierId.val(),
                 approverId: domElements.$approverId.val()
             };
-            axios({
-                url: _global.root + 'checkinout/edit',
-                method: 'POST',
-                data: stringify({ model }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                let data = response.data;
-                if (data.isSuccessful) {
-                    $('form').removeClass('dirty');
-                    domElements.$btnSubmit.prop('disabled', true);
-                    toastr.success('Create successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'checkinout/employeeview'; }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fd.append('files[' + i + ']', files[i]);
+            }
+            fd.append('requestModel', JSON.stringify(model));
+            fd.append('filesRemove', JSON.stringify(tempFile));
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.open("POST", _global.root + "checkinout/edit");
+            xhr.send(fd);
         }
     });
+
+    function uploadComplete(evt) {
+        const data = JSON.parse(evt.target.response);
+        if (data.isSuccessful) {
+            $('form').removeClass('dirty');
+            domElements.$btnSubmit.prop('disabled', true);
+            toastr.success('Update successfully!', '', toastOptions());
+            setTimeout(function () { location.href = _global.root + 'checkinout/employeeview'; }, 3000);
+        } else {
+            toastr.error(data.message, '', toastOptions());
+        }
+    }
 
     $('form').areYouSure();
 });

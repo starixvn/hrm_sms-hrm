@@ -8,6 +8,7 @@
     [ModifiedDate]  DATETIME       NULL,
     [LeaveDay]      INT            NOT NULL,
     [Remark]        NVARCHAR (MAX) NULL,
+    [BalanceDay] INT NULL, 
     CONSTRAINT [PK_EmployeePaternity] PRIMARY KEY CLUSTERED ([PaternityId] ASC)
 );
 

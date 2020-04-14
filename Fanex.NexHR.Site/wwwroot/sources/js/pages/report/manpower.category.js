@@ -1,12 +1,22 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'floatthead/dist/jquery.floatThead';
+﻿import 'floatthead/dist/jquery.floatThead';
+import axios from 'axios';
+import { parse } from 'qs';
 
-import { floatThead } from '../../shared/common.functions';
+import { axiosError, floatThead, blockUI, unblockUI, downloadFile, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     floatThead('table#data');
 
     $('#btnExcel').on('click', function () {
-        window.location.href = _global.root + 'ManpowerReport/ExportManpowerCategory?' + $('form.filter').serialize();
+        blockUI();
+        axios({
+            url: resolveClientUrl('ManpowerReport/ExportManpowerCategory'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

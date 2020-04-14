@@ -25,7 +25,26 @@
 <div class="table-data">
     <table class="table table-custom" id="data">
         <thead>
+            @if (Model.ViewType == RequestViewType.PersonalSpace)
+            {
+                <tr>
+                    <th colspan="14">
+                        <div style="float:right;">
+                            <input type="button" class="btn btn-primary" id="btnApproveMultiple" value="@Labels.Approve" />
+                        </div>
+                    </th>
+                </tr>
+            }
             <tr>
+                @if (Model.ViewType == RequestViewType.PersonalSpace)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                            <label for="ckbAll"></label>
+                        </div>
+                    </th>
+                }
                 <th>@Labels.SymbolCount</th>
                 <th>@Labels.Employee</th>
                 <th>@Labels.Team</th>
@@ -34,6 +53,10 @@
                 <th>@Labels.Verifier</th>
                 <th>@Labels.Approver</th>
                 <th>@Labels.Remark</th>
+                @if (@Model.ActionName != "DailyView")
+                {
+                    <th>@Labels.FileAttach</th>
+                }
                 <th>@Labels.CreatedDate</th>
                 <th>@Labels.Status</th>
                 <th>@Labels.History</th>
@@ -47,6 +70,24 @@
                 @foreach (RequestEntity request in Model.Requests)
                 {
                     <tr id="row@(request.Id)">
+                        @if (Model.ViewType == RequestViewType.PersonalSpace)
+                        {
+                            <td>
+                                <div class="checkbox">
+                                    @if (request.ApprovedBy.Id == Model.CurrentUserId && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
+                                    {
+                                        <input type="checkbox" 
+                                               class="checkbox-custom chk-request" 
+                                               roleid="@Convert.ToInt32(RoleSystem.Approver)"
+                                               requesttypeid="@request.RequestType.Id" 
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                </div>
+                            </td>
+                        }
+
                         <td>@(index++)</td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.NickName</span>
@@ -87,6 +128,10 @@
                                 <span>-</span>
                             }
                         </td>
+                        @if (@Model.ActionName != "DailyView")
+                        {
+                            <td>@Html.Raw(request.ContentFile)</td>
+                        }
                         <td>@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@RenderStatus(Model, request)</td>
                         <td>@RenderHistoryLink(request)</td>
@@ -107,7 +152,35 @@
     </table>
 </div>
 <div id="dialoghistorycontent"></div>
-<div id="dialogProcessRequest"></div>
+<div id="dialogProcessRequest" h></div>
+<div id="dialogProcessMultipleRequest" role="dialog" class="modal dialogProcessRequest">
+    <form>
+        <div class="formrow">
+            <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
+        </div>
+        <div class="formrow">
+            <div class="label approver-selection">
+                <label>@Labels.Violation : </label>
+            </div>
+            <div class="input radio-btn">
+                <input type="radio" id="chk-ignore-all" name="btn-violation" />
+                <label for="chk-ignore-all">@Labels.ViolationIgnored</label>
+            </div>
+            <div class="input radio-btn">
+                <input type="radio" id="chk-record-all" name="btn-violation"/>
+                <label for="chk-record-all">@Labels.ViolationRecorded</label>
+            </div>
+        </div>
+        <div class="formrow">
+            <div class="label approver-comment">
+                <label for="Comment">@Labels.Comment : </label>
+            </div>
+            <div class="input">
+                <textarea class="form-control" cols="20" id="Comment" maxlength="500" name="Comment" rows="2"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
 
 @helper RenderStatus(RequestViewModel model, RequestEntity request)
 {

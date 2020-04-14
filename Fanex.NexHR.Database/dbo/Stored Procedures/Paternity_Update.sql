@@ -19,6 +19,11 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+	DECLARE @OldBalanceDay INT
+
+	SELECT @OldBalanceDay = LeaveDay
+	FROM dbo.EmployeePaternity WITH (NOLOCK)
+	WHERE PaternityId = @PaternityId
 
 	IF EXISTS (
 			SELECT 1
@@ -53,5 +58,6 @@ BEGIN
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = GETDATE()
 		,Remark = @Remark
+		,BalanceDay = BalanceDay + (@LeaveDay - @OldBalanceDay)
 	WHERE PaternityId = @PaternityId
 END

@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -20,6 +22,7 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public CheckInOutController(
             ISessionService sessionService,
@@ -47,6 +50,11 @@
             };
 
             IList<CheckInOutRequest> requests = checkInOutRequestService.GetByDate(criteria);
+            foreach (var request in requests)
+            {
+                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+            }
+
             return View(requests);
         }
 
@@ -79,8 +87,9 @@
         }
 
         [HttpPost]
-        public CustomJsonResult Create(CheckInOutRequestViewModel model)
+        public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            CheckInOutRequestViewModel model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
             var criteria = new CreateCheckInOutRequestCriteria
             {
                 EmpId = model.EmployeeId,
@@ -99,6 +108,10 @@
             if (commandResult.IsSuccessful)
             {
                 checkInOutRequestService.SendMailCreateRequest(commandResult.OutputId);
+                if (files != null)
+                {
+                    requestService.UploadFile(files, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -106,6 +119,7 @@
 
         public ActionResult Edit(long id)
         {
+            string dir = Server.MapPath(pathFolder + id);
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -146,14 +160,21 @@
                     Approvers = supervisor.Approvers,
                     DisabledDates = disabledDates
                 };
+
+                if (Directory.Exists(dir))
+                {
+                    viewModel.Files = requestService.GetFileNames(dir);
+                }
+
                 ViewBag.IsTopManager = request.Requester.IsTopManager;
                 return View(viewModel);
             }
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(CheckInOutRequestViewModel model)
+        public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
+            CheckInOutRequestViewModel model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
             var criteria = new EditCheckInOutRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -173,6 +194,14 @@
             if (commandResult.IsSuccessful)
             {
                 checkInOutRequestService.SendMailEditRequest(model.RequestId);
+                if (files != null)
+                {
+                    requestService.UploadFile(files, criteria.RequestId);
+                }
+                if (filesRemove != null)
+                {
+                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                }
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -183,6 +212,11 @@
         {
             checkInOutRequestService.SendMailDeleteRequest(id);
             CommandResult commandResult = checkInOutRequestService.Delete(id);
+
+            if (commandResult.IsSuccessful)
+            {
+                requestService.DeleteFolderAttachFile(id);
+            }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

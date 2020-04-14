@@ -1771,6 +1771,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attach File.
+        /// </summary>
+        public static string FileAttach {
+            get {
+                return ResourceManager.GetString("FileAttach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file does not exists.
         /// </summary>
         public static string FileDoesNotExists {
@@ -3144,6 +3153,15 @@ namespace Fanex.NexHR.Resources {
         public static string NoData {
             get {
                 return ResourceManager.GetString("NoData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No File Chosen.
+        /// </summary>
+        public static string NoFileChoose {
+            get {
+                return ResourceManager.GetString("NoFileChoose", resourceCulture);
             }
         }
         
@@ -4890,6 +4908,15 @@ namespace Fanex.NexHR.Resources {
         public static string UPLAbsent {
             get {
                 return ResourceManager.GetString("UPLAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload File.
+        /// </summary>
+        public static string UploadFile {
+            get {
+                return ResourceManager.GetString("UploadFile", resourceCulture);
             }
         }
         

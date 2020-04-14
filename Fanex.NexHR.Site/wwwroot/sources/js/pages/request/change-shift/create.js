@@ -1,12 +1,10 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
 import moment from 'moment';
-import { stringify } from 'qs';
 
 import {
     axiosError, blockUI, unblockUI, initDatepicker,
@@ -103,6 +101,8 @@ $(document).ready(function () {
             toDate = moment(domElements.$toDate.val()),
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
+        let files = document.getElementById('file').files,
+            allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
         if (employeeId === 0) {
             errorMessages.push('Employee field is required.');
@@ -132,6 +132,15 @@ $(document).ready(function () {
 
             if (moveToDates.length > 0) {
                 errorMessages.push('Move To Date field is required.');
+            }
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5120) {
+                errorMessages.push('Attach file (' + files[i].name + ') is to large to upload!. Maximum = 5120kb');
+            }
+            if (!allowedExtensions.exec(files[i].name)) {
+                errorMessages.push('File type of ' + files[i].name + ' incorrect!');
             }
         }
 
@@ -230,27 +239,31 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            axios({
-                url: _global.root + 'ChangeShift/Create',
-                method: 'POST',
-                data: stringify({ model }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                let data = response.data;
-                if (data.isSuccessful) {
-                    $('form').removeClass('dirty');
-                    domElements.$btnSubmit.prop('disabled', true);
-                    toastr.success('Create successfully!', '', toastOptions());
-                    setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+            var files = document.getElementById('file').files
+            var fd = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                fd.append('files[' + i + ']', files[i]);
+            }
+            fd.append('model', JSON.stringify(model));
+            fd.append('details', JSON.stringify(details))
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.open("POST", _global.root + "ChangeShift/Create");
+            xhr.send(fd);
         }
     });
+
+    function uploadComplete(evt) {
+        const data = JSON.parse(evt.target.response);
+        if (data.isSuccessful) {
+            $('form').removeClass('dirty');
+            domElements.$btnSubmit.prop('disabled', true);
+            toastr.success('Create successfully!', '', toastOptions());
+            setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
+        } else {
+            toastr.error(data.message, '', toastOptions());
+        }
+    }
 
     $('form').areYouSure();
 });

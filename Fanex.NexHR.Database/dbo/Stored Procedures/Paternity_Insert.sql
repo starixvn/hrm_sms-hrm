@@ -39,6 +39,7 @@ BEGIN
 		,CreatedBy
 		,CreatedDate
 		,Remark
+		,BalanceDay
 		)
 	VALUES (
 		@EmpId
@@ -47,5 +48,6 @@ BEGIN
 		,@CreatedBy
 		,GETDATE()
 		,@Remark
+		,@LeaveDay
 		)
 END

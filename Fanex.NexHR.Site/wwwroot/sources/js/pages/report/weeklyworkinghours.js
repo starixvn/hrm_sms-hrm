@@ -3,25 +3,18 @@ import 'floatthead/dist/jquery.floatThead';
 import '../../jquery-weekpicker';
 import moment from 'moment';
 import axios from 'axios';
+import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
         blockUI();
-
         axios({
             url: resolveClientUrl('WeeklyWorkingHours/GetWeeklyWorkingHours'),
             method: 'GET',
-            params: {
-                fromDate: $('#FromDate').val(),
-                toDate: $('#ToDate').val(),
-                sectionIds: $('#SectionIds').val(),
-                isLocal: $('#IsLocal').val(),
-                employee: $('#Employee').val(),
-                employeeStatusId: $('#EmployeeStatusId').val()
-            },
+            params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
             $('#WeeklyWorkingHoursDetails').html(response.data);
@@ -70,6 +63,16 @@ $(document).ready(function () {
 
     $('#btnExcel').on('click', function () {
         $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        window.location.href = resolveClientUrl('WeeklyWorkingHours/ExportExcel?' + $('form.filter').serialize());
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('WeeklyWorkingHours/ExportExcel'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

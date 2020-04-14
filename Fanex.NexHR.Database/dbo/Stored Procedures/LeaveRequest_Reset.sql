@@ -25,6 +25,8 @@ BEGIN
 		,@ApproverId INT
 		,@StatusId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
+		,@LeaveType TINYINT
+		,@TotalDays INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -37,6 +39,7 @@ BEGIN
 		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
+		,@PaternityTypeId TINYINT = 14
 
 	SELECT @EmpId = lr.EmpId
 		,@FromDate = lr.FromDate
@@ -44,9 +47,20 @@ BEGIN
 		,@VerifierId = r.VerifierId
 		,@ApproverId = r.ApproverId
 		,@StatusId = r.CurrentStatus
+		,@LeaveType = LeaveType
+		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
+
+	IF @LeaveType = @PaternityTypeId AND (@StatusId = @NotVerifiedStatusId OR @StatusId = @RejectedStatusId)
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay - @TotalDays
+		WHERE EmpId = @EmpId
+			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+			AND @FromDate >= ChildBornDate
+	END
 
 	IF @StatusId <> @ProcessedStatusId
 	BEGIN
@@ -81,34 +95,15 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
-		IF @VerifierId = @ApproverId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @PendingStatusId
-				,VerifiedStatus = @PendingStatusId
-				,ApprovedStatus = @PendingStatusId
-				,VerifierId = @ActorId
-				,VerifiedDate = @ProcessedDate
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
-		ELSE
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = CASE 
-					WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
-					ELSE @PendingStatusId
-					END
-				,ApprovedStatus = @PendingStatusId
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestID = @RequestId
-		END
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @PendingStatusId
+			,VerifiedStatus = @PendingStatusId
+			,ApprovedStatus = @PendingStatusId
+			,ApproverId = @ActorId
+			,ApprovedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
 
 		IF @StatusId = @ApprovedStatusId
 		BEGIN

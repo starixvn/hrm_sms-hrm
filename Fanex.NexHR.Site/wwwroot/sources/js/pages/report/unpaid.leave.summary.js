@@ -1,18 +1,17 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 
-import { axiosError, blockUI, floatThead, unblockUI } from '../../shared/common.functions';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
         blockUI();
 
         axios({
-            url: _global.root + 'report/GetUnpaidLeaveSummary',
+            url: resolveClientUrl('report/GetUnpaidLeaveSummary'),
             method: 'GET',
             params: {
                 year: $('#Year').val(),
@@ -29,7 +28,7 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
@@ -46,9 +45,23 @@ $(document).ready(function () {
 
     $('#btnExcel').click(function () {
         const sectionIds = $('#Section').multiSelectTreeView('getSelectedItems');
-        const url = _global.root + 'ExportLeaveSummary/UnpaidLeaveSummary?year=' + $('#Year').val() +
-            '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
-            '&EmployeeId=' + $('#EmployeeId').val() + '&category=' + $('#Category').val() + '&leaveType=' + $('#LeaveType').val();
-        location.href = url;
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('ExportLeaveSummary/UnpaidLeaveSummary'),
+            method: 'GET',
+            params: {
+                year: $('#Year').val(),
+                sectionIds: $('#SectionIds').val(),
+                category: $('#Category').val(),
+                employee: $('#Employee').val(),
+                employeeId: $('#EmployeeId').val(),
+                leaveType: $('#LeaveType').val()
+            },
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 });

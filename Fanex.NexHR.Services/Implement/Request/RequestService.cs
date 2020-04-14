@@ -1,7 +1,11 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -27,6 +31,7 @@
         private readonly IChangeShiftRequestService changeShiftRequestService;
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IKeepInViewRequestService keepInViewRequestService;
+        const string pathFolder = "~/file/uploads/request/";
 
         public RequestService(
             IRequestRepository requestRepository,
@@ -155,6 +160,20 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
+        public CommandResult ApproveRequests(ApproveRequestsParam param)
+        {
+            var criteria = new ApproveMultipleRequestsCriteria
+            {
+                RoleId = param.RoleId,
+                Comment = param.Comment,
+                ActorId = param.ActorId,
+                IsIgnoredViolate = param.IsIgnoredViolate,
+                IsConfirmed = param.IsConfirmed,
+                Requests = param.Requests.Any() ? param.Requests.ToXML().ToString() : string.Empty
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
         public CommandResult RejectRequest(int actorId, ProcessRequestParam param)
         {
             var criteria = new RejectRequestCriteria
@@ -220,6 +239,37 @@
             }
         }
 
+        public void SendMailAprroveRequests(ApproveRequestsParam param, EmployeeSession actor)
+        {
+            foreach(var request in param.Requests)
+            {
+                switch (request.RequestTypeID)
+                {
+                    case (int)RequestType.CheckIn:
+                    case (int)RequestType.CheckOut:
+                        checkInOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.LateIn:
+                    case (int)RequestType.EarlyOut:
+                        lateInEarlyOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.ChangeShift:
+                        changeShiftRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    case (int)RequestType.Leave:
+                        leaveRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+
+                    default:
+                        keepInViewRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        break;
+                }
+            }
+        }
+
         private static string GetMessageForLeave(RequestEntity request, bool isNoFormat)
         {
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLeaveWithNoFormat : RequestFormatConstants.MsgLeave;
@@ -246,23 +296,57 @@
         {
             string msgTemplate;
             string messageDetail;
-            if (request.FromDate.Date == request.ToDate.Date)
+
+            if (request.ChangeShiftType == (byte)ChangeShiftType.MoveOffDay)
             {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
-                messageDetail = string.Format(
-                        msgTemplate,
-                        request.FromShift.Name,
-                        request.ToShift.Name,
-                        request.FromDate.ToDateMonthYearFormatedDate());
+                var moveOffDayBuilder = new StringBuilder();
+                foreach (var changeOffDate in request.ChangeShiftDetails)
+                {
+                    msgTemplate = RequestFormatConstants.MsgChangeShift;
+
+                    var dateFomarted = GetMessageForMoveOffDay(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
+                    moveOffDayBuilder.Append(string.Format(msgTemplate, dateFomarted));
+                }
+
+                moveOffDayBuilder.Append("Move off day");
+                messageDetail = moveOffDayBuilder.ToString();
             }
             else
             {
-                msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
-                var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
-                messageDetail = string.Format(msgTemplate, date);
+                if (request.FromDate.Date == request.ToDate.Date)
+                {
+                    msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
+                    messageDetail = string.Format(
+                            msgTemplate,
+                            request.FromShift.Name,
+                            request.ToShift.Name,
+                            request.FromDate.ToDateMonthYearFormatedDate());
+                }
+                else
+                {
+                    msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
+                    var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
+                    messageDetail = string.Format(msgTemplate, date);
+                }
             }
 
             return messageDetail;
+        }
+
+        private static string GetMessageForMoveOffDay(DateTime fromDate, DateTime toDate)
+        {
+            const string arrowSymbol = " <span class='arr'>&rarr;</span> ";
+            if (fromDate.Year != toDate.Year)
+            {
+                return fromDate.ToDateMonthYearFormatedDate() + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            if (fromDate.Month != toDate.Month)
+            {
+                return fromDate.ToString("dd") + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
+            }
+
+            return fromDate.ToString("dd") + arrowSymbol + toDate.ToDateMonthYearFormatedDate();
         }
 
         private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
@@ -362,6 +446,77 @@
         private static string GetTotalDay(decimal totalDays)
         {
             return totalDays != 0 ? string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#")) : string.Empty;
+        }
+
+        public void UploadFile(IList<HttpPostedFileBase> files, long requestId)
+        {
+            if (!files.Any(file => file.ContentLength <= 0))
+            {
+                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId);
+
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+
+                    var path = Path.Combine(dir, fileName);
+                    file.SaveAs(path);
+                }
+            }
+        }
+
+        public string GetInfoAttachFile(long requestId)
+        {
+            StringBuilder content = new StringBuilder();
+            string path = pathFolder + requestId;
+            string dir = HttpContext.Current.Server.MapPath(path);
+            if (Directory.Exists(dir))
+            {
+                string[] files = Directory.GetFiles(dir);
+
+                foreach (string file in files)
+                {
+                    content.Append($"<a href=\'{"/file/uploads/request/" + requestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
+                }
+            }
+
+            return content.ToString();
+        }
+
+        public List<string> GetFileNames(string dir)
+        {
+            List<string> Files = new List<string>();
+            string[] files = Directory.GetFiles(dir);
+            foreach (string file in files)
+            {
+                Files.Add(Path.GetFileName(file));
+            }
+
+            return Files;
+        }
+
+        public void DeleteFile(string filesRemove, long requestId)
+        {
+            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
+            foreach (string file in files)
+            {
+                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId + '/' + file);
+                File.Delete(dir);
+            }
+        }
+
+        public void DeleteFolderAttachFile(long id)
+        {
+            string dir = HttpContext.Current.Server.MapPath(pathFolder + id);
+
+            if (Directory.Exists(dir))
+            {
+                Directory.Delete(dir, true);
+            }
         }
     }
 }

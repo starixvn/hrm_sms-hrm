@@ -78,34 +78,15 @@ BEGIN
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
-		IF @VerifierId = @ApproverId
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = @PendingStatusId
-				,VerifiedStatus = @PendingStatusId
-				,ApprovedStatus = @PendingStatusId
-				,VerifierId = @ActorId
-				,VerifiedDate = @ProcessedDate
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
-		ELSE
-		BEGIN
-			UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
-			SET CurrentStatus = CASE 
-					WHEN VerifiedStatus = @VerifiedStatusId THEN @VerifiedStatusId
-					ELSE @PendingStatusId
-					END
-				,ApprovedStatus = @PendingStatusId
-				,ApproverId = @ActorId
-				,ApprovedDate = @ProcessedDate
-				,ModifiedBy = @ActorId
-				,ModifiedDate = @ProcessedDate
-			WHERE RequestId = @RequestId
-		END
+		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+		SET CurrentStatus = @PendingStatusId
+			,VerifiedStatus = @PendingStatusId
+			,ApprovedStatus = @PendingStatusId
+			,ApproverId = @ActorId
+			,ApprovedDate = @ProcessedDate
+			,ModifiedBy = @ActorId
+			,ModifiedDate = @ProcessedDate
+		WHERE RequestId = @RequestId
 
 		IF @StatusId = @ApprovedStatusId
 		BEGIN

@@ -76,6 +76,7 @@
     </Setting>
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="WorkingTimeRequest_ApproveMultipleRequest" SpName="WorkingTimeRequest_ApproveMultipleRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />

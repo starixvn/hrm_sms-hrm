@@ -72,12 +72,16 @@ var LeaveRequestDetail = (function ($) {
                 // end
             });
 
-            $(".ddlleavetype").change(function () {
+            $('.ddlleavetype').on('change', function () {
                 const leaveTypeId = parseInt($(this).val(), 10);
-                var trObject = $(this).parent().parent();
+                let trObject = $(this).parent().parent();
 
                 LeaveRequestDetail.showHideCheckboxHalfDay(trObject, leaveTypeId);
                 LeaveRequestDetail.getTotalLeave();
+            });
+
+            $('.ddlleavetype').each(function () {
+                $(this).trigger('change');
             });
 
             LeaveRequestDetail.disableControlForDetail();

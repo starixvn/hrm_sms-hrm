@@ -32,14 +32,15 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	DECLARE @RequestType SMALLINT = 6
-		,@AnnualLeaveType INT = 2
-		,@KIVByDayLeaveType INT = 10
-		,@KIVByHourLeaveType INT = 48
-		,@PublicHolidayLeaveType INT = 13
-		,@UnpaidLeaveType INT = 25
-		,@BusinessTripLeaveType INT = 9
-		,@BusinessDuringWorkingLeaveType INT = 26
+	DECLARE @RequestType TINYINT = 6
+		,@AnnualLeaveType TINYINT = 2
+		,@KIVByDayLeaveType TINYINT = 10
+		,@KIVByHourLeaveType TINYINT = 48
+		,@PublicHolidayLeaveType TINYINT = 13
+		,@PaternityLeaveType TINYINT = 14
+		,@UnpaidLeaveType TINYINT = 25
+		,@BusinessTripLeaveType TINYINT = 9
+		,@BusinessDuringWorkingLeaveType TINYINT = 26
 		,@OnbehalfActionType TINYINT = 5
 		,@VerifyActionType TINYINT = 2
 		,@ApproveActionType TINYINT = 3
@@ -592,6 +593,48 @@ BEGIN
 		BEGIN
 			SET @ErrCode = 117
 			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
+		END
+	END
+	
+	-- check paternity leave
+	IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND @FromDate >= ChildBornDate
+					AND EmpId = @EmpId
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+
+			RETURN
+		END
+
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND @FromDate >= ChildBornDate
+					AND EmpId = @EmpId
+					AND BalanceDay >= @TotalDays
+				)
+		BEGIN
+			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+			SET BalanceDay = BalanceDay - @TotalDays
+			WHERE EmpId = @EmpId
+				AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request'
 
 			RETURN
 		END

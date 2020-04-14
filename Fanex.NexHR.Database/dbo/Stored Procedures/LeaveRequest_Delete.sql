@@ -17,6 +17,9 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	DECLARE @PendingStatusId TINYINT = 1
+		,@PaternityTypeId TINYINT = 14
+		,@LeaveType TINYINT
+		,@TotalDays INT
 		,@EmpId INT
 		,@FromDate DATE
 		,@ToDate DATE
@@ -37,8 +40,19 @@ BEGIN
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
+		,@LeaveType = LeaveType
+		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
+
+	IF @LeaveType = @PaternityTypeId
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay + @TotalDays
+		WHERE EmpId = @EmpId
+			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+			AND @FromDate >= ChildBornDate
+	END
 
 	DELETE dbo.WorkingTimeRequest
 	WHERE RequestId = @RequestId

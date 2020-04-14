@@ -14,6 +14,7 @@ CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@ListDetail VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
+	,@PaternityLeaveType INT = 14
 AS
 /*
 Created: Tom.Vo@2013-11-11
@@ -57,6 +58,7 @@ BEGIN
 		,@TmpFromDate DATE
 		,@TmpToDate DATE
 		,@DocHandler INT
+		,@OldTotalDays INT
 
 	CREATE TABLE #LeaveRequestDetail (
 		OnDate DATETIME
@@ -67,6 +69,10 @@ BEGIN
 		,FromTime DATETIME
 		,ToTime DATETIME
 		)
+
+	SELECT @OldTotalDays = TotalDays
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	SELECT @IsHalfDay = CASE 
 			WHEN @TotalDays = 0.5 THEN 1
@@ -633,6 +639,46 @@ BEGIN
 		BEGIN
 			SET @ErrCode = 117
 			SET @ErrMsg = 'You can not request at the beginning of the shift.'
+
+			RETURN
+		END
+	END
+
+	-- check paternity leave
+	IF @LeaveTypeId = @PaternityLeaveType
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= ChildBornDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND EmpId = @EmpId
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+		END
+
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.EmployeePaternity WITH (NOLOCK)
+				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
+					AND @FromDate >= ChildBornDate
+					AND @FromDate >= CONVERT(DATE, GETDATE())
+					AND EmpId = @EmpId
+					AND BalanceDay + @OldTotalDays >= @TotalDays
+				)
+		BEGIN
+			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+			SET BalanceDay = BalanceDay - @TotalDays + @OldTotalDays
+			WHERE EmpId = @EmpId
+				AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request.'
 
 			RETURN
 		END

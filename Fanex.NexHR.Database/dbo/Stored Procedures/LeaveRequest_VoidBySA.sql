@@ -24,14 +24,19 @@ BEGIN
 		,@ToDate DATE
 		,@EmpId INT
 		-- request status
+		,@PaternityTypeId TINYINT = 14
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
+		,@LeaveType TINYINT
+		,@TotalDays INT
 
 	SELECT @StatusId = r.CurrentStatus
 		,@FromDate = lr.FromDate
 		,@ToDate = lr.ToDate
 		,@EmpId = r.EmpId
+		,@LeaveType = lr.LeaveType
+		,@TotalDays = lr.TotalDays
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		AND lr.RequestId = @RequestId
@@ -41,6 +46,15 @@ BEGIN
 		,@RequestStatusId = @VoidStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
+
+	IF @LeaveType = @PaternityTypeId
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay + @TotalDays
+		WHERE EmpId = @EmpId
+			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+			AND @FromDate >= ChildBornDate
+	END
 
 	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET CurrentStatus = @VoidStatusId
