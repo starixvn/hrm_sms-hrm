@@ -153,14 +153,14 @@
             {
                 RequestType = request.RequestType,
                 Remark = request.Remark,
-                RequestedDate = request.FromDate.HasValue ? request.FromDate.Value : DateTime.Now,
-                FromDate = request.FromDate.HasValue ? request.FromDate.Value : DateTime.Now,
-                ToDate = request.ToDate.HasValue ? request.ToDate.Value : DateTime.Now,
-                CreatedDate = request.CreatedDate.HasValue ? request.CreatedDate.Value : DateTime.Now,
-                TotalDays = request.TotalDays.HasValue ? request.TotalDays.Value : 0,
+                RequestedDate = request.RequestDate,
+                FromDate = request.FromDate ?? DateTime.Now,
+                ToDate = request.ToDate ?? DateTime.Now,
+                CreatedDate = request.CreatedDate,
+                TotalDays = request.TotalDays ?? 0,
                 LeaveType = request.LeaveType,
-                FromTime = request.FromTime.HasValue ? request.FromTime.Value : DateTime.Now,
-                ToTime = request.ToTime.HasValue ? request.ToTime.Value : DateTime.Now,
+                FromTime = request.FromTime ?? DateTime.Now,
+                ToTime = request.ToTime ?? DateTime.Now,
                 FromShift = new Shift
                 {
                     Name = request.FromShift
@@ -169,7 +169,7 @@
                 {
                     Name = request.ToShift
                 },
-                TotalMins = request.TotalMins.HasValue ? request.TotalMins.Value : 0,
+                TotalMins = request.TotalMins ?? 0,
                 ActualLateInEarlyOut = actualLateInErlyOut
             };
 

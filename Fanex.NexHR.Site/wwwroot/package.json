@@ -39,6 +39,7 @@
     "react-dom": "16.8.6",
     "react-toastify": "^5.4.0",
     "tinymce": "^5.1.2",
+    "tippy.js": "^6.1.1",
     "tipsy": "^1.0.0",
     "toastr": "^2.1.4"
   },

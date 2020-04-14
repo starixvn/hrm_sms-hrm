@@ -1,5 +1,8 @@
-﻿@using Fanex.NexHR.Core
+﻿﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Models
+@using Fanex.NexHR.Models.Request
+@using Fanex.NexHR.Services
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels
 @model IList<EmployeeAttendanceModel>
@@ -43,10 +46,10 @@
                         <td>@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
                     }
                     <td>
-                        <span class="tooltip-tipsy" title="@item.FullName">@item.NickName</span>
+                        <span class="tooltip-tippy" data-tippy-content="@item.FullName">@item.NickName</span>
                     </td>
                     <td>
-                        <span class="tooltip-tipsy" title="@item.Team">@item.TeamCode</span>
+                        <span class="tooltip-tippy" data-tippy-content="@item.Team">@item.TeamCode</span>
                     </td>
 
                     @if (item.IsOffdayOT)
@@ -55,7 +58,7 @@
                         var className = string.Format("{0} {1}", "mytimesheet-workinginoffday",
                             item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
                         <td class="@className">
-                            <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
+                            <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
                         </td>
                     }
                     else
@@ -64,20 +67,20 @@
                         var className = string.Format("{0} {1}", "",
                             item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
                         <td class="@className">
-                            <span class="tooltip-tipsy" title="@title">@item.ShiftCode</span>
+                            <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
                         </td>
                     }
                     <td>
                         @if (item.InFixed.HasValue)
                         {
-                            <span class="tooltip-tipsy" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.InFixed.Value.ToString("HH:mm")</span>
+                            <span class="tooltip-tippy" data-tippy-content="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.InFixed.Value.ToString("HH:mm")</span>
                         }
                     </td>
                     <td>
                         @if (item.OutFixed.HasValue)
                         {
-                            <span class="tooltip-tipsy"
-                                  title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                            <span class="tooltip-tippy"
+                                  data-tippy-content="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">
                                 @item.OutFixed.Value.ToString("HH:mm")
                             </span>
                         }
@@ -108,19 +111,26 @@
                                 var statusClass = request.CurrentStatus == (byte)CurrentRequestStatus.Pending || request.CurrentStatus == (byte)CurrentRequestStatus.Verified
                                     ? " pending-request" : string.Empty;
                                 var className = "tooltip-request req" + statusClass;
+                                var requestEntity = new RequestEntity
+                                {
+                                    RequestType = request.RequestType,
+                                    TotalDays = request.TotalDays ?? 0,
+                                    TotalMins = request.TotalMins ?? 0,
+                                    FromDate = request.FromDate.Value,
+                                    ToDate = request.ToDate.Value,
+                                    FromTime = request.FromTime ?? request.FromDate.Value,
+                                    ToTime = request.ToTime ?? request.ToDate.Value,
+                                    RequestedDate = request.RequestDate,
+                                    CreatedDate = request.CreatedDate,
+                                    FromShift = new Shift { Name = request.FromShift },
+                                    ToShift = new Shift { Name = request.ToShift },
+                                    ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut
+                                };
+                                var requestdetail = RequestService.ToRequestMessage(requestEntity);
                                 <div class="@className"
-                                    data-requesttype="@request.RequestType.Id"
+                                    data-requestdetail="@Html.Encode(requestdetail)"
                                     data-leavetype="@request.LeaveType.Name"
-                                    data-fromdate="@request.FromDate.ToFormatedDate()"
-                                    data-todate="@request.ToDate.ToFormatedDate()"
                                     data-createddate="@request.CreatedDateTime"
-                                    data-fromshift="@request.FromShift"
-                                    data-toshift="@request.ToShift"
-                                    data-fromtime="@request.FromTime"
-                                    data-totime="@request.ToTime"
-                                    data-totaldays="@request.TotalDays"
-                                    data-totalmins="@request.TotalMins"
-                                    data-actualLateInEarlyOut="@(request.RequestType.Id == 3 ? item.LateIn : item.EarlyOut)"
                                     data-remark='@request.Remark'
                                     data-currentStatus="@request.CurrentStatus">
                                     @request.RequestType.Name
@@ -131,14 +141,12 @@
                     <td>
                         @if (item.IsOvertime)
                         {
-                            <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip-tipsy">
+                            <span data-tippy-content="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip-tippy">
                                 @item.OvertimeHours
                             </span>
                         }
                     </td>
-                    <td class="align-left">
-                        @item.Notes
-                    </td>
+                    <td class="align-left">@item.Notes</td>
                     <td class="td-warning">
                         @if (item.IsWarning)
                         {
@@ -154,3 +162,4 @@
         }
     </tbody>
 </table>
+<div id="tippy-request" class="tippy-request"></div>

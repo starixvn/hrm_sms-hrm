@@ -1,58 +1,32 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
+import tippy from 'tippy.js';
+import axios from 'axios';
+import { parse } from 'qs';
+
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, initFromDateOnChange, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
-import { CurrentRequestStatus } from '../../shared/constants';
 import '../../date';
 import '../request/date.filter';
-
-function getMessageDetail(requestType, fromDate, toDate, fromTime, toTime,
-    createdDate, fromShift, toShift, totalDays, totalMins, overtimeType, isOvertimeHours, actualLateInEarlyOut) {
-    var result = '';
-    $.ajax({
-        url: resolveClientUrl("request/GetMessageDetailRequest"),
-        async: false,
-        type: 'post',
-        data: {
-            "requesttype": requestType, "fromdate": fromDate, "todate": toDate, "requestedDate": fromDate,
-            "fromtime": fromTime, "totime": toTime,
-            "createddate": createdDate, "fromshiftCode": fromShift,
-            "toshiftcode": toShift, "totaldays": totalDays, "totalmins": totalMins,
-            "overtimetype": overtimeType, "isOvertimehours": isOvertimeHours, "actualLateInEarlyOut": actualLateInEarlyOut,
-        },
-        success: function (data) {
-            result = data;
-        }
-    });
-    return result;
-}
+import {
+    blockUI, unblockUI, floatThead, initFromDateOnChange, initDatepicker,
+    resolveClientUrl, downloadFile, axiosError
+} from '../../shared/common.functions';
+import { CurrentRequestStatus } from '../../shared/constants';
 
 function initTooltip() {
-    $('.tooltip-request').tipsy({
-        html: true,
-        gravity: $.fn.tipsy.autoNS,
-        fade: true,
-        className: 'table-tipsy',
-        title: function () {
-            var object = $(this);
-            var result = getMessageDetail(
-                object.attr('data-requesttype'),
-                object.attr('data-fromdate'),
-                object.attr('data-todate'),
-                object.attr('data-fromtime'),
-                object.attr('data-totime'),
-                object.attr('data-createddate'),
-                object.attr('data-fromshift'),
-                object.attr('data-toshift'),
-                object.attr('data-totaldays'),
-                object.attr('data-totalmins'),
-                object.attr('data-ottype'),
-                object.attr('data-isothours'),
-                object.attr('data-actualLateInEarlyOut'));
-            const leavetype = object.data('leavetype');
-            let status = "";
+    tippy('.tooltip-request', {
+        maxWidth: 'none',
+        animation: 'fade',
+        arrow: true,
+        placement: 'auto',
+        allowHTML: true,
+        appendTo: document.getElementById('tippy-request'),
+        content: (reference) => {
+            const object = $(reference),
+                result = $('<div/>').html(object.data('requestdetail')).text(),
+                leavetype = object.data('leavetype');
+            let status = '';
             switch (parseInt(object.attr('data-currentStatus'))) {
                 case CurrentRequestStatus.Pending:
                     status = "Pending";
@@ -69,6 +43,7 @@ function initTooltip() {
                 default:
                     status = "Approved";
             }
+
             return "<div>" + "<table class='table-tooltip checkinout'>" +
                 (leavetype ? "<tr class='hasborder'><td class='col1'>Leave Type</td><td class='col2'>" + leavetype + "</td></tr>" : '') +
                 "<tr class='hasborder'>" +
@@ -82,30 +57,25 @@ function initTooltip() {
         }
     });
 
-    $('.tooltip-tipsy').tipsy({
-        html: true,
-        gravity: $.fn.tipsy.autoWE
+    tippy('.tooltip-tippy', {
+        animation: 'fade',
+        arrow: true,
+        placement: 'auto'
     });
 }
 
 function query() {
     blockUI();
-    $.ajax({
+    axios({
         url: resolveClientUrl('report/AttendanceDetails'),
-        type: 'POST',
-        dataType: 'html',
-        data: $('.filter').serialize(),
-        success: function (response) {
-            $('#attendanceDetails').html(response);
-            initTooltip();
-            floatThead('table#data');
-            unblockUI();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            unblockUI();
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+        method: 'POST',
+        params: parse($('form.filter').serialize()),
+        responseType: 'text'
+    }).then(response => {
+        $('#attendanceDetails').html(response.data);
+        floatThead('table#data');
+        initTooltip();
+    }).catch(axiosError).then(() => unblockUI());
 }
 
 $(document).ready(function () {
@@ -113,18 +83,15 @@ $(document).ready(function () {
         $(this).val(event.target.checked);
     });
 
-    $.ajax({
-        url: resolveClientUrl('Department/GetHierarchy'),
-        success: function (data) {
+    axios(resolveClientUrl('Department/GetHierarchy'))
+        .then(response => {
             $('#Section').multiSelectTreeView({
-                data: data,
+                data: response.data,
                 selectedItems: $('#GroupIds').val()
             });
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert(textStatus + ': ' + errorThrown);
-        }
-    });
+
+            query();
+        }).catch(axiosError);
 
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     initDatepicker();
@@ -141,8 +108,16 @@ $(document).ready(function () {
 
     $("#btnExcel").click(function () {
         $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
-        location.href = resolveClientUrl("AttendanceReport/ExportExcel?" + $('.filter').serialize());
-    });
 
-    query();
+        blockUI();
+        axios({
+            url: resolveClientUrl('AttendanceReport/ExportExcel'),
+            method: 'GET',
+            params: parse($('.filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
+    });
 });

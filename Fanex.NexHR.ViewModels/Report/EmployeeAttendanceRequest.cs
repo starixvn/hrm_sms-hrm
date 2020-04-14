@@ -16,15 +16,8 @@
 
         public DateTime? ToDate { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
-
-        public string CreatedDateTime
-        {
-            get
-            {
-                return CreatedDate.HasValue ? CreatedDate.Value.ToShortFormatedDate() : string.Empty;
-            }
-        }
+        public DateTime CreatedDate { get; set; }
+        public string CreatedDateTime => CreatedDate.ToShortFormatedDate();
 
         public decimal? TotalDays { get; set; }
 
@@ -46,5 +39,7 @@
 
         // keep in view
         public byte? KeepInViewTypeId { get; set; }
+
+        public DateTime RequestDate { get; set; }
     }
 }

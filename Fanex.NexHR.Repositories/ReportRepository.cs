@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -127,7 +128,8 @@
                 ToDate = t.ToDate,
                 FromTime = t.FromTime,
                 ToTime = t.ToTime,
-                CreatedDate = t.CreatedDate,
+                RequestDate = t.RequestDate ?? DateTime.Now,
+                CreatedDate = t.CreatedDate ?? DateTime.Now,
                 Remark = t.Remark,
                 TotalDays = t.TotalDays,
                 LeaveType = FillLeaveType(t),
