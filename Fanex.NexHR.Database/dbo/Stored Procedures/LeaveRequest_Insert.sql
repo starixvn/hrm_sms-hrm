@@ -38,6 +38,7 @@ BEGIN
 		,@KIVByHourLeaveType TINYINT = 48
 		,@PublicHolidayLeaveType TINYINT = 13
 		,@PaternityLeaveType TINYINT = 14
+		,@GeneralLeaveType TINYINT = 0
 		,@UnpaidLeaveType TINYINT = 25
 		,@BusinessTripLeaveType TINYINT = 9
 		,@BusinessDuringWorkingLeaveType TINYINT = 26
@@ -60,6 +61,8 @@ BEGIN
 		,@TmpFromDate DATE
 		,@TmpToDate DATE
 		,@DocHandler INT
+		,@TotalDaysPaternity INT
+		,@BalanceDaysPaternity INT
 
 	CREATE TABLE #LeaveRequestDetail (
 		OnDate DATE
@@ -635,6 +638,46 @@ BEGIN
 		BEGIN
 			SET @ErrCode = 119
 			SET @ErrMsg = 'You have not enough paternity leave days to request'
+
+			RETURN
+		END
+	END
+
+	-- check paternity in general leave
+	IF @LeaveTypeId = @GeneralLeaveType AND (SELECT COUNT(*) FROM #LeaveRequestDetail WHERE LeaveType = @PaternityLeaveType) > 0
+	BEGIN
+		IF EXISTS (
+				SELECT *
+				FROM #LeaveRequestDetail AS lr
+				INNER JOIN dbo.EmployeePaternity  AS ep ON lr.OnDate > DATEADD(M, 1, ep.ChildBornDate) OR lr.OnDate < ep.ChildBornDate
+				WHERE lr.LeaveType = @PaternityLeaveType
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+
+		RETURN
+		END
+
+		SELECT @TotalDaysPaternity = COUNT(*)
+						FROM #LeaveRequestDetail
+						WHERE LeaveType = @PaternityLeaveType
+
+		SELECT @BalanceDaysPaternity = (SELECT ep.BalanceDay
+						FROM dbo.EmployeePaternity AS ep 
+						WHERE ep.EmpId = @EmpId AND (@FromDate >= ep.ChildBornDate OR DATEADD(M, 1, ep.ChildBornDate) >=  @FromDate)
+						)
+
+		IF ( @BalanceDaysPaternity >= @TotalDaysPaternity )
+		BEGIN
+			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+			SET BalanceDay = BalanceDay - @TotalDaysPaternity
+			WHERE EmpId = @EmpId AND (@FromDate >= ChildBornDate OR DATEADD(M, 1, ChildBornDate) >= @FromDate)
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request.'
 
 			RETURN
 		END

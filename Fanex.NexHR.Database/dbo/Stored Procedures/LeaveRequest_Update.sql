@@ -14,7 +14,6 @@ CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@ListDetail VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
-	,@PaternityLeaveType INT = 14
 AS
 /*
 Created: Tom.Vo@2013-11-11
@@ -39,6 +38,8 @@ BEGIN
 		,@KIVLeaveType INT = 10
 		,@KIVByHourLeaveType INT = 48
 		,@PublicHolidayLeaveType INT = 13
+		,@PaternityLeaveType TINYINT = 14
+		,@GeneralLeaveType TINYINT = 0
 		,@UnpaidLeaveType INT = 25
 		,@BusinessTripLeaveType INT = 9
 		,@BusinessDuringWorkingLeaveType INT = 26
@@ -59,6 +60,8 @@ BEGIN
 		,@TmpToDate DATE
 		,@DocHandler INT
 		,@OldTotalDays INT
+		,@TotalDaysPaternity INT
+		,@BalanceDaysPaternity INT
 
 	CREATE TABLE #LeaveRequestDetail (
 		OnDate DATETIME
@@ -69,10 +72,6 @@ BEGIN
 		,FromTime DATETIME
 		,ToTime DATETIME
 		)
-
-	SELECT @OldTotalDays = TotalDays
-	FROM dbo.LeaveRequest WITH (NOLOCK)
-	WHERE RequestId = @RequestId
 
 	SELECT @IsHalfDay = CASE 
 			WHEN @TotalDays = 0.5 THEN 1
@@ -660,6 +659,10 @@ BEGIN
 			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
 		END
 
+		SELECT @OldTotalDays = TotalDays
+		FROM dbo.LeaveRequest WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+
 		IF EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)
@@ -674,6 +677,50 @@ BEGIN
 			SET BalanceDay = BalanceDay - @TotalDays + @OldTotalDays
 			WHERE EmpId = @EmpId
 				AND DATEADD(M, 1, ChildBornDate) >= @ToDate
+		END
+		ELSE
+		BEGIN
+			SET @ErrCode = 119
+			SET @ErrMsg = 'You have not enough paternity leave days to request.'
+
+			RETURN
+		END
+	END
+
+	-- check paternity in general leave
+	IF @LeaveTypeId = @GeneralLeaveType AND (SELECT COUNT(*) FROM #LeaveRequestDetail WHERE LeaveType = @PaternityLeaveType) > 0
+	BEGIN
+		IF EXISTS (
+				SELECT *
+				FROM #LeaveRequestDetail AS lr
+				INNER JOIN dbo.EmployeePaternity  AS ep ON lr.OnDate > DATEADD(M, 1, ep.ChildBornDate) OR lr.OnDate < ep.ChildBornDate
+				WHERE lr.LeaveType = @PaternityLeaveType
+				)
+		BEGIN
+			SET @ErrCode = 118
+			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
+
+		RETURN
+		END
+
+		SELECT @OldTotalDays = COUNT(*)
+						FROM dbo.LeaveRequestDetail
+						WHERE LeaveType = @PaternityLeaveType AND RequestId = @RequestId
+
+		SELECT @TotalDaysPaternity = COUNT(*)
+						FROM #LeaveRequestDetail
+						WHERE LeaveType = @PaternityLeaveType
+
+		SELECT @BalanceDaysPaternity = (SELECT ep.BalanceDay
+						FROM dbo.EmployeePaternity AS ep 
+						WHERE ep.EmpId = @EmpId AND (@FromDate >= ep.ChildBornDate OR DATEADD(M, 1, ep.ChildBornDate) >=  @FromDate)
+						)
+
+		IF ( @BalanceDaysPaternity + @OldTotalDays >= @TotalDaysPaternity )
+		BEGIN
+			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+			SET BalanceDay = BalanceDay + @OldTotalDays - @TotalDaysPaternity
+			WHERE EmpId = @EmpId AND (@FromDate >= ChildBornDate OR DATEADD(M, 1, ChildBornDate) >= @FromDate)
 		END
 		ELSE
 		BEGIN
