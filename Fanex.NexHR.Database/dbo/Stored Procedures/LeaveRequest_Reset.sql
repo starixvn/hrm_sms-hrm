@@ -40,6 +40,8 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 		,@PaternityTypeId TINYINT = 14
+		,@GeneralTypeId TINYINT = 0
+		,@TotalDaysPaternity INT
 
 	SELECT @EmpId = lr.EmpId
 		,@FromDate = lr.FromDate
@@ -60,6 +62,18 @@ BEGIN
 		WHERE EmpId = @EmpId
 			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
 			AND @FromDate >= ChildBornDate
+	END
+
+	SELECT @TotalDaysPaternity = COUNT(*)
+								FROM dbo.LeaveRequestDetail
+								WHERE LeaveType = @PaternityTypeId AND RequestId = @RequestId
+
+	IF @LeaveType = @GeneralTypeId AND @TotalDaysPaternity > 0 AND (@StatusId = @NotVerifiedStatusId OR @StatusId = @RejectedStatusId)
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay - @TotalDaysPaternity
+		WHERE EmpId = @EmpId
+			AND (DATEADD(M, 1, ChildBornDate) >= @FromDate OR @FromDate >= ChildBornDate)
 	END
 
 	IF @StatusId <> @ProcessedStatusId
