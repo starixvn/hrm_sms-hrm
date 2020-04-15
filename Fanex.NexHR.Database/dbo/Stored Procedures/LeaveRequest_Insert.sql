@@ -38,7 +38,6 @@ BEGIN
 		,@KIVByHourLeaveType TINYINT = 48
 		,@PublicHolidayLeaveType TINYINT = 13
 		,@PaternityLeaveType TINYINT = 14
-		,@GeneralLeaveType TINYINT = 0
 		,@UnpaidLeaveType TINYINT = 25
 		,@BusinessTripLeaveType TINYINT = 9
 		,@BusinessDuringWorkingLeaveType TINYINT = 26
@@ -64,7 +63,7 @@ BEGIN
 		,@TotalDaysPaternity INT
 		,@BalanceDaysPaternity INT
 
-	CREATE TABLE #LeaveRequestDetail (
+	CREATE TABLE #tblLeaveRequestDetail (
 		OnDate DATE
 		,ShiftId INT
 		,LeaveType INT
@@ -238,7 +237,7 @@ BEGIN
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
-		INSERT INTO #LeaveRequestDetail (
+		INSERT INTO #tblLeaveRequestDetail (
 			OnDate
 			,ShiftID
 			,LeaveType
@@ -272,7 +271,7 @@ BEGIN
 
 	IF EXISTS (
 			SELECT 1
-			FROM #LeaveRequestDetail
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 			GROUP BY OnDate
 			HAVING COUNT(DISTINCT LeaveType) = 1
@@ -287,7 +286,7 @@ BEGIN
 
 	IF EXISTS (
 			SELECT 1
-			FROM #LeaveRequestDetail
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			)
 	BEGIN
 		SELECT @TotalDays_tmp = SUM(CASE lrd.IsHalfDay
@@ -295,7 +294,7 @@ BEGIN
 					ELSE 1
 					END)
 		FROM dbo.EmployeeCalendar cl WITH (NOLOCK)
-			INNER JOIN #LeaveRequestDetail lrd ON cl.WorkDate = lrd.OnDate
+			INNER JOIN #tblLeaveRequestDetail lrd WITH (NOLOCK) ON cl.WorkDate = lrd.OnDate
 		WHERE EmpID = @EmpID
 			AND WorkDate BETWEEN @TmpFromDate
 				AND @TmpToDate
@@ -310,7 +309,7 @@ BEGIN
 						WHEN 1 THEN 0.5
 						ELSE 1
 						END)
-			FROM #LeaveRequestDetail lrd
+			FROM #tblLeaveRequestDetail lrd WITH (NOLOCK)
 			WHERE lrd.WorkType = @LeaveWorkType
 		END
 
@@ -318,7 +317,7 @@ BEGIN
 					WHEN 1 THEN 0.5
 					ELSE 1
 					END)
-		FROM #LeaveRequestDetail cl WITH (NOLOCK)
+		FROM #tblLeaveRequestDetail cl WITH (NOLOCK)
 			INNER JOIN dbo.LeaveType l WITH (NOLOCK) ON cl.LeaveType = l.LeaveTypeId
 		WHERE IsALDeduction = 1
 
@@ -340,7 +339,7 @@ BEGIN
 					WHEN LeaveType = @KIVByHourLeaveType THEN DATEDIFF(MI, FromTime, ToTime)
 					ELSE 0
 					END)
-		FROM #LeaveRequestDetail WITH (NOLOCK)
+		FROM #tblLeaveRequestDetail WITH (NOLOCK)
 	END
 	ELSE
 	BEGIN
@@ -422,7 +421,7 @@ BEGIN
 			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
 				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
 				INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
-				INNER JOIN #LeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
+				INNER JOIN #tblLeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
 			WHERE r.empid = @empid
 				AND r.RequestType = @RequestType
 				AND CurrentStatus IN (1, 2, 4, 6)
@@ -501,7 +500,7 @@ BEGIN
 
 	IF EXISTS (
 			SELECT 1
-			FROM #LeaveRequestDetail
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType, @KIVByHourLeaveType, @BusinessTripLeaveType, @BusinessDuringWorkingLeaveType)
 			)
@@ -514,7 +513,7 @@ BEGIN
 
 	IF EXISTS (
 			SELECT 1
-			FROM #LeaveRequestDetail
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
 				AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
@@ -530,7 +529,7 @@ BEGIN
 	IF @LeaveTypeId = @BusinessDuringWorkingLeaveType
 		AND EXISTS (
 			SELECT 1
-			FROM #LeaveRequestDetail
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 			)
 	BEGIN
@@ -554,7 +553,7 @@ BEGIN
 		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
 			OR EXISTS (
 				SELECT 1
-				FROM #LeaveRequestDetail
+				FROM #tblLeaveRequestDetail WITH (NOLOCK)
 				WHERE IsHalfDay = 1
 					AND LeaveType = @BusinessDuringWorkingLeaveType
 					AND DATEDIFF(MI, FromTime, ToTime) > 120
@@ -588,7 +587,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
 					INNER JOIN dbo.Shift AS shift WITH (NOLOCK) ON empca.ShiftId = shift.ShiftId
-					INNER JOIN #LeaveRequestDetail AS detail ON DATEDIFF(DD, detail.OnDate, empca.WorkDate) = 0
+					INNER JOIN #tblLeaveRequestDetail AS detail WITH (NOLOCK) ON DATEDIFF(DD, detail.OnDate, empca.WorkDate) = 0
 					AND CONVERT(VARCHAR(5), detail.FromTime, 108) = shift.BeginCheckInTime
 				WHERE empca.EmpId = @EmpId
 					AND DATEDIFF(DD, @FromDate, empca.WorkDate) = 0
@@ -600,17 +599,36 @@ BEGIN
 			RETURN
 		END
 	END
-	
+
 	-- check paternity leave
 	IF @LeaveTypeId = @PaternityLeaveType
+		OR EXISTS (
+			SELECT 1
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
+			WHERE LeaveType = @PaternityLeaveType
+			)
 	BEGIN
+		IF @LeaveTypeId = @PaternityLeaveType
+		BEGIN
+			SELECT @TotalDaysPaternity = @TotalDays
+				,@TmpFromDate = @FromDate
+				,@TmpToDate = @ToDate
+		END
+		ELSE
+		BEGIN
+			SELECT @TotalDaysPaternity = COUNT(1)
+				,@TmpFromDate = MIN(OnDate)
+				,@TmpToDate = MAX(OnDate)
+			FROM #tblLeaveRequestDetail WITH (NOLOCK)
+			WHERE LeaveType = @PaternityLeaveType
+		END
+
 		IF NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)
-				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
-					AND @FromDate >= CONVERT(DATE, GETDATE())
-					AND @FromDate >= ChildBornDate
-					AND EmpId = @EmpId
+				WHERE EmpId = @EmpId
+					AND @TmpFromDate >= ChildBornDate
+					AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
 				)
 		BEGIN
 			SET @ErrCode = 118
@@ -619,68 +637,26 @@ BEGIN
 			RETURN
 		END
 
-		IF EXISTS (
+		IF NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeePaternity WITH (NOLOCK)
-				WHERE DATEADD(M, 1, ChildBornDate) >= @ToDate
-					AND @FromDate >= CONVERT(DATE, GETDATE())
-					AND @FromDate >= ChildBornDate
-					AND EmpId = @EmpId
+				WHERE EmpId = @EmpId
+					AND @TmpFromDate >= ChildBornDate
+					AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
 					AND BalanceDay >= @TotalDays
 				)
-		BEGIN
-			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-			SET BalanceDay = BalanceDay - @TotalDays
-			WHERE EmpId = @EmpId
-				AND DATEADD(M, 1, ChildBornDate) >= @ToDate
-		END
-		ELSE
-		BEGIN
-			SET @ErrCode = 119
-			SET @ErrMsg = 'You have not enough paternity leave days to request'
-
-			RETURN
-		END
-	END
-
-	-- check paternity in general leave
-	IF @LeaveTypeId = @GeneralLeaveType AND (SELECT COUNT(*) FROM #LeaveRequestDetail WHERE LeaveType = @PaternityLeaveType) > 0
-	BEGIN
-		IF EXISTS (
-				SELECT *
-				FROM #LeaveRequestDetail AS lr
-				INNER JOIN dbo.EmployeePaternity  AS ep ON lr.OnDate > DATEADD(M, 1, ep.ChildBornDate) OR lr.OnDate < ep.ChildBornDate
-				WHERE lr.LeaveType = @PaternityLeaveType
-				)
-		BEGIN
-			SET @ErrCode = 118
-			SET @ErrMsg = 'You can not request because request within 1 month from child born date.'
-
-		RETURN
-		END
-
-		SELECT @TotalDaysPaternity = COUNT(*)
-						FROM #LeaveRequestDetail
-						WHERE LeaveType = @PaternityLeaveType
-
-		SELECT @BalanceDaysPaternity = (SELECT ep.BalanceDay
-						FROM dbo.EmployeePaternity AS ep 
-						WHERE ep.EmpId = @EmpId AND (@FromDate >= ep.ChildBornDate OR DATEADD(M, 1, ep.ChildBornDate) >=  @FromDate)
-						)
-
-		IF ( @BalanceDaysPaternity >= @TotalDaysPaternity )
-		BEGIN
-			UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-			SET BalanceDay = BalanceDay - @TotalDaysPaternity
-			WHERE EmpId = @EmpId AND (@FromDate >= ChildBornDate OR DATEADD(M, 1, ChildBornDate) >= @FromDate)
-		END
-		ELSE
 		BEGIN
 			SET @ErrCode = 119
 			SET @ErrMsg = 'You have not enough paternity leave days to request.'
 
 			RETURN
 		END
+
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay - @TotalDaysPaternity
+		WHERE EmpId = @EmpId
+			AND @TmpFromDate >= ChildBornDate
+			AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
 	END
 
 	EXEC [dbo].WorkingTimeRequest_GetNewRefNoByRequestType @RefNo = @RefNo OUTPUT
@@ -771,7 +747,7 @@ BEGIN
 			,FromTime
 			,ToTime
 			,WorkType
-		FROM #LeaveRequestDetail
+		FROM #tblLeaveRequestDetail WITH (NOLOCK)
 
 		EXEC dbo.LeaveRequest_InsertTmpAnnualLeaveTrans @RequestId = @RequestId
 			,@EmpId = @EmpId
@@ -806,5 +782,5 @@ BEGIN
 		RETURN
 	END CATCH
 
-	DROP TABLE #LeaveRequestDetail
+	DROP TABLE #tblLeaveRequestDetail
 END

@@ -23,8 +23,6 @@ BEGIN
 		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
-		,@LeaveType TINYINT
-		,@TotalDays INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -34,14 +32,39 @@ BEGIN
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 		,@PaternityTypeId TINYINT = 14
-		,@GeneralTypeId TINYINT = 0
 		,@TotalDaysPaternity INT
+
+	SELECT @TotalDaysPaternity = TotalDays
+		,@FromDate = FromDate
+		,@ToDate = ToDate
+		,@EmpId = EmpId
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+		AND LeaveType = @PaternityTypeId
+
+	IF ISNULL(@TotalDaysPaternity, 0) = 0
+	BEGIN
+		SELECT @TotalDaysPaternity = COUNT(1)
+			,@FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+			,@EmpId = MIN(EmpId)
+		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+			AND LeaveType = @PaternityTypeId
+	END
+
+	IF @TotalDaysPaternity > 0
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay + @TotalDaysPaternity
+		WHERE EmpId = @EmpId
+			AND @FromDate >= ChildBornDate
+			AND @ToDate <= DATEADD(M, 1, ChildBornDate)
+	END
 
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
-		,@LeaveType = LeaveType
-		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 	
@@ -50,27 +73,6 @@ BEGIN
 		,@RequestStatusId = @NotVerifiedStatusId
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
-
-	IF @LeaveType = @PaternityTypeId
-	BEGIN
-		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-		SET BalanceDay = BalanceDay + @TotalDays
-		WHERE EmpId = @EmpId
-			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
-			AND @FromDate >= ChildBornDate
-	END
-
-	SELECT @TotalDaysPaternity = COUNT(*)
-								FROM dbo.LeaveRequestDetail
-								WHERE LeaveType = @PaternityTypeId AND RequestId = @RequestId
-
-	IF @LeaveType = @GeneralTypeId AND @TotalDaysPaternity > 0
-	BEGIN
-		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-		SET BalanceDay = BalanceDay + @TotalDaysPaternity
-		WHERE EmpId = @EmpId
-			AND (DATEADD(M, 1, ChildBornDate) >= @FromDate OR @FromDate >= ChildBornDate)
-	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN
