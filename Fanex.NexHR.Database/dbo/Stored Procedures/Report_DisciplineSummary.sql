@@ -20,17 +20,17 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @tblGroupIds TABLE (TmpGroupId INT)
+	CREATE TABLE #tblGroupIds (TmpGroupId INT)
 
 	IF ISNULL(@GroupId, '') <> ''
 	BEGIN
-		INSERT INTO @tblGroupIds (TmpGroupId)
+		INSERT INTO #tblGroupIds (TmpGroupId)
 		SELECT DISTINCT val
 		FROM fnc_strSplit(@GroupId, ',')
 	END
 	ELSE
 	BEGIN
-		INSERT INTO @tblGroupIds (TmpGroupId)
+		INSERT INTO #tblGroupIds (TmpGroupId)
 		SELECT DISTINCT g.GroupId
 		FROM dbo.[Group] AS g WITH (NOLOCK)
 		WHERE ISNULL(g.IsDeleted, 0) = 0
@@ -190,7 +190,7 @@ BEGIN
 			AND @ToDate
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl
 			WHERE emp.GroupId = tbl.TmpGroupId
 			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
@@ -231,7 +231,7 @@ BEGIN
 			AND @ToDate
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl
 			WHERE emp.GroupId = tbl.TmpGroupId
 			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
@@ -423,7 +423,7 @@ BEGIN
 		AND ISNULL(emp.IsDeleted, 0) = 0
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl
 			WHERE emp.GroupId = tbl.TmpGroupId
 			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
@@ -571,4 +571,6 @@ BEGIN
 	DROP TABLE #tblEmployeeDiscipline
 
 	DROP TABLE #tblEmployeeDisciplineFinalScore
+
+	DROP TABLE #tblGroupIds
 END

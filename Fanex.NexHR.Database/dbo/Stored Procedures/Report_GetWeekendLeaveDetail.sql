@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveDetail] @FromDate DATE
 	,@ToDate DATE
-	,@GroupId INT = NULL
+	,@GroupId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@IsLocal BIT = NULL
 	,@LeaveTypeId INT = NULL
@@ -9,6 +9,22 @@ CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveDetail] @FromDate DATE
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	CREATE TABLE #tblGroupIds (TmpGroupId INT)
+
+	IF ISNULL(@GroupId, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupIds (TmpGroupId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@GroupId, ',')
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblGroupIds (TmpGroupId)
+		SELECT DISTINCT g.GroupId
+		FROM dbo.[Group] AS g WITH (NOLOCK)
+		WHERE ISNULL(g.IsDeleted, 0) = 0
+	END
 
 	CREATE TABLE #tblEmployeeId (EmpId INT)
 
@@ -83,7 +99,11 @@ BEGIN
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		WHERE emp.[Enabled] = 1
 			AND ISNULL(emp.IsDeleted, 0) = 0
-			AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+			AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 			AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 			AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 			AND (
@@ -136,7 +156,11 @@ BEGIN
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		WHERE emp.[Enabled] = 1
 			AND ISNULL(emp.IsDeleted, 0) = 0
-			AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+			AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 			AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 			AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 			AND (
@@ -209,7 +233,11 @@ BEGIN
 			LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		WHERE emp.[Enabled] = 1
 			AND ISNULL(emp.IsDeleted, 0) = 0
-			AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+			AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 			AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 			AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 			AND (

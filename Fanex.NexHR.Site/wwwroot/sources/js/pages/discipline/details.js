@@ -246,8 +246,8 @@ import { DisciplineType } from '../../shared/constants';
             .then(response => {
                 $('#Section').multiSelectTreeView({
                     data: response.data,
-                    noneSelectedText: 'Select a section',
-                    singleSelection: true,
+                    isSelectedAll: true,
+                    singleSelection: false,
                     onSelect: function () {
                         $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
                         if ($('#TeamId').val().length > 0) {

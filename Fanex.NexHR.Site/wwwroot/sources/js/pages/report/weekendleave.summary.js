@@ -81,9 +81,9 @@ $(document).ready(function () {
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
-                noneSelectedText: 'Select a section',
+                isSelectedAll: true,
                 selectedItems: $('#TeamId').val(),
-                singleSelection: true,
+                singleSelection: false,
                 onSelect: function () {
                     $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
                 }
