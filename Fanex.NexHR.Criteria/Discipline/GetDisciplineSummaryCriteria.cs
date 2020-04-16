@@ -10,7 +10,7 @@
 
         public DateTime ToDate { get; set; }
 
-        public int? GroupId { get; set; }
+        public string GroupId { get; set; }
 
         public int? EmployeeId { get; set; }
 
