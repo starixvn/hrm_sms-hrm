@@ -82,11 +82,6 @@ $(document).ready(function () {
             $('#Section').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true,
-                selectedItems: $('#TeamId').val(),
-                singleSelection: false,
-                onSelect: function () {
-                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
-                }
             });
 
             query();
@@ -99,7 +94,7 @@ $(document).ready(function () {
     });
 
     $('form.filter #submit').on('click', function (event) {
-        event.preventDefault();
+        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
         query();
     });
     $('form.filter #btnExcel').on('click', function (event) {
