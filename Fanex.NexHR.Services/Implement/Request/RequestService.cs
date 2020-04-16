@@ -239,7 +239,7 @@
             }
         }
 
-        public void SendMailAprroveRequests(ApproveRequestsParam param, EmployeeSession actor)
+        public void SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command)
         {
             foreach(var request in param.Requests)
             {
@@ -247,24 +247,24 @@
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        checkInOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        checkInOutRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        lateInEarlyOutRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        lateInEarlyOutRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.ChangeShift:
-                        changeShiftRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        changeShiftRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.Leave:
-                        leaveRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        leaveRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                         break;
 
                     default:
-                        keepInViewRequestService.SendMailProcessRequest(request.RequestId, actor, RequestCommand.Approve);
+                        keepInViewRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                         break;
                 }
             }

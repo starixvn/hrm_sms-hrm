@@ -34,7 +34,7 @@
 
         void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
 
-        void SendMailAprroveRequests(ApproveRequestsParam param, EmployeeSession actor);
+        void SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command);
 
         void UploadFile(IList<HttpPostedFileBase> files, long requestId);
 
