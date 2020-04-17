@@ -83,6 +83,7 @@ $(document).ready(function () {
                 data: response.data,
                 isSelectedAll: true,
             });
+            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
 
             query();
         }).catch(axiosError);

@@ -28,13 +28,6 @@ BEGIN
 		SELECT DISTINCT val
 		FROM fnc_strSplit(@GroupId, ',')
 	END
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (TmpGroupId)
-		SELECT DISTINCT g.GroupId
-		FROM dbo.[Group] AS g WITH (NOLOCK)
-		WHERE ISNULL(g.IsDeleted, 0) = 0
-	END
 
 	DECLARE @HasEditDisciplineRole INT = 0
 	--request type

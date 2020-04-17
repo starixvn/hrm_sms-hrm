@@ -344,6 +344,7 @@ import {
                     data: data,
                     isSelectedAll: true,
                 });
+                $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
 
                 query();
             },
