@@ -330,7 +330,7 @@ $(function () {
                             const role = request.getAttribute('roleId');
 
                             if (role != RoleSystem.Approver) {
-                                toastr.error('Dont have permission to approve some requests', '', toastOptions());
+                                toastr.error('You don\'t have permission to approve some requests', '', toastOptions());
                                 isValid = false;
                             }
 
@@ -382,7 +382,7 @@ $(function () {
                         const role = request.getAttribute('roleId');
 
                         if (role != RoleSystem.Verifier) {
-                            toastr.error('Dont have permission to verify some requests', '', toastOptions());
+                            toastr.error('You don\'t have permission to verify some requests', '', toastOptions());
                             isValid = false;
                         }
 
@@ -427,7 +427,7 @@ $(function () {
                         const role = request.getAttribute('roleId');
 
                         if (role != RoleSystem.HR) {
-                            toastr.error('Dont have permission to process some requests', '', toastOptions());
+                            toastr.error('You don\'t have permission to process some requests', '', toastOptions());
                             isValid = false;
                         }
 
