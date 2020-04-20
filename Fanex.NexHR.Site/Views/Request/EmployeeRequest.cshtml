@@ -116,7 +116,7 @@
                     {
                         <td>
                             <div class="checkbox">
-                                @if (request.Status.Id != (byte)CurrentRequestStatus.Processed)
+                                @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
                                 {
                                     <input type="checkbox"
                                            class="checkbox-custom chk-request"
