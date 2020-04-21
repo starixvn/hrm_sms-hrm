@@ -14,5 +14,6 @@
         public short StatusId { get; set; } = -1; // pending and verified
         public IEnumerable<MonthlyOvertimeRequest> MemberRequests { get; set; } = new List<MonthlyOvertimeRequest>();
         public IEnumerable<EntityBase<int>> Sections { get; set; }
+        public string Sort { get; set; }
     }
 }

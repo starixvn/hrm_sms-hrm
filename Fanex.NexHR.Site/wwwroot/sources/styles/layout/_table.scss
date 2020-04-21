@@ -44,6 +44,26 @@ table.table.table-custom {
             th {
                 border-color: #646d80;
 
+                &.col-sorter {
+                    .sorter {
+                        background: url('../images/sort-icon.png') no-repeat 0 -.5rem;
+                        width: 1rem;
+                        height: 1.6rem;
+                        cursor: pointer;
+                        display: inline-block;
+                        float: right;
+                        margin-top: 2px;
+
+                        &.desc {
+                            background-position: 0 -5.3rem;
+                        }
+
+                        &.asc {
+                            background-position: 0 -3.2rem;
+                        }
+                    }
+                }
+
                 &.weekend {
                     color: red;
                 }

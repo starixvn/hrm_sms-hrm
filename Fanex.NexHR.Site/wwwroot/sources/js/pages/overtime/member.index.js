@@ -12,7 +12,62 @@ import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/c
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
+var rowIndex = 1,
+    sorts = [];
+
+function index() {
+    return rowIndex++;
+}
+
+
+function eventSorting() {
+    $('th.col-sorter').on('click', function () {
+        var $this = $(this).find('div.sorter'),
+            property = $this.attr('data-property'),
+            direction, index;
+
+        index = sorts.map(function (e) { return e.Property; }).indexOf(property);
+
+        if ($this.hasClass('desc')) {
+            $this.removeClass('desc').addClass('asc');
+            direction = 'asc';
+        } else if ($this.hasClass('asc')) {
+            $this.removeClass('asc').addClass('desc');
+            direction = 'desc';
+        } else {
+            refreshSorting();
+            $this.addClass('desc');
+            direction = 'desc';
+        }
+
+        if (index !== -1) {
+            sorts[index].Direction = direction;
+        } else {
+            sorts.shift();
+            sorts.push({ Property: property, Direction: direction });
+        }
+
+        $.ajax({
+            url: _global.root + 'overtime/MemberOvertime',
+            type: 'POST',
+            data: $("form.filter").serialize() + '&sort=' + JSON.stringify(sorts),
+        });
+
+    });
+}
+
+function refreshSorting() {
+    sorts = [];
+
+    $('th.col-sorter').each(function () {
+        $(this).find('div.sorter').removeClass('asc').removeClass('desc');
+    });
+}
+
 $(document).ready(function () {
+
+    eventSorting();
+
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);
     let $confirmModal = $('#confirmModal'),
         $btnConfirm = $confirmModal.find('#btnConfirm'),

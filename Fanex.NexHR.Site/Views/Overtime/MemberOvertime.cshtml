@@ -98,7 +98,10 @@
                     </div>
                 </th>
             }
-            <th>@Labels.FullName</th>
+            <th class="col-sorter">
+                @Labels.FullName
+                <div class="sorter" data-property="FullName" style="background: url('../images/sort-icon.png') no-repeat 0 -.5rem;"></div>
+            </th>
             <th>@Labels.NickName</th>
             <th>@Labels.Team</th>
             <th>@Labels.Month</th>

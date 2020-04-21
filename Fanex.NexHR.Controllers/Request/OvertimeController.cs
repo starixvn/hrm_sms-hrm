@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -17,6 +18,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
+    using Newtonsoft.Json;
 
     public class OvertimeController : BaseController
     {
@@ -104,11 +106,30 @@
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests);
+
             ViewBag.CurrentUserId = sessionService.Employee.Id;
             ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
             ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
             return View(model);
+        }
+
+        private static IEnumerable<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IEnumerable<MonthlyOvertimeRequest> memberRequests)
+        {
+            IEnumerable<MonthlyOvertimeRequest> memberOvertimeSorted;
+
+            if (sort != null)
+            {
+                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(sort);
+                memberOvertimeSorted = Utilities.MultipleSort(memberRequests, sorts);
+            }
+            else
+            {
+                memberOvertimeSorted = memberRequests;
+            }
+
+            return memberOvertimeSorted;
         }
 
         public ActionResult MemberDetails(long id)
