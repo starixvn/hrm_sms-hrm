@@ -120,7 +120,7 @@
                                     ToDate = request.ToDate.Value,
                                     FromTime = request.FromTime ?? request.FromDate.Value,
                                     ToTime = request.ToTime ?? request.ToDate.Value,
-                                    RequestedDate = request.FromDate.Value,
+                                    RequestedDate = request.RequestDate,
                                     CreatedDate = request.CreatedDate.Value,
                                     FromShift = new Shift { Name = request.FromShift },
                                     ToShift = new Shift { Name = request.ToShift },
