@@ -81,7 +81,7 @@ span.req {
         background-color: #008000;
     }
 
-    &.mytimesheet-notaccepted, &.mytimesheet-notverified, &.mytimesheet-rejected, &.mytimesheet-void {
+    &.mytimesheet-not, &.mytimesheet-rejected, &.mytimesheet-void {
         background-color: #ff0000;
     }
 }
