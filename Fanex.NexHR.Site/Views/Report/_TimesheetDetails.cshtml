@@ -119,7 +119,7 @@
                     <td>
                         @if (item.IsOvertime)
                         {
-                            <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip">
+                            <span title="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus.Replace(" ", "") tooltip">
                                 @item.OvertimeHours
                             </span>
                         }

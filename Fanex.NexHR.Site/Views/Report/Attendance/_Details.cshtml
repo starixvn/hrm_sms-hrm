@@ -141,7 +141,7 @@
                     <td>
                         @if (item.IsOvertime)
                         {
-                            <span data-tippy-content="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus tooltip-tippy">
+                            <span data-tippy-content="@item.FormattedOvertimeStatus" class="req mytimesheet-@item.FormattedOvertimeStatus.Replace(" ", "") tooltip-tippy">
                                 @item.OvertimeHours
                             </span>
                         }
