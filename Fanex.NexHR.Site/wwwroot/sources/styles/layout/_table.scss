@@ -45,22 +45,16 @@ table.table.table-custom {
                 border-color: #646d80;
 
                 &.col-sorter {
-                    .sorter {
-                        background: url('/Images/sort-icon.png') no-repeat 0 -.5rem;
+                    .fa {
                         width: 1rem;
                         height: 1.6rem;
                         cursor: pointer;
                         display: inline-block;
                         float: right;
                         margin-top: 2px;
-
-                        &.desc {
-                            background-position: 0 -5.3rem;
-                        }
-
-                        &.asc {
-                            background-position: 0 -3.2rem;
-                        }
+                    }
+                    .fa-sort-desc, .fa-sort-asc {
+                        color:red
                     }
                 }
 

@@ -42,21 +42,21 @@ function query(isFirstLoad) {
 
 function eventSorting() {
     $('th.col-sorter').on('click', function () {
-        var $this = $(this).find('div.sorter'),
+        var $this = $(this).find('div.fa'),
             property = $this.attr('data-property'),
             direction, index;
 
         index = sorts.map(function (e) { return e.Property; }).indexOf(property);
 
-        if ($this.hasClass('desc')) {
-            $this.removeClass('desc').addClass('asc');
+        if ($this.hasClass('fa-sort-desc')) {
+            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
             direction = 'asc';
-        } else if ($this.hasClass('asc')) {
-            $this.removeClass('asc').addClass('desc');
+        } else if ($this.hasClass('fa-sort-asc')) {
+            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
             direction = 'desc';
         } else {
             refreshSorting();
-            $this.addClass('desc');
+            $this.addClass('fa-sort-desc');
             direction = 'desc';
         }
 
@@ -76,7 +76,7 @@ function refreshSorting() {
     sorts = [];
 
     $('th.col-sorter').each(function () {
-        $(this).find('div.sorter').removeClass('asc').removeClass('desc');
+        $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
     });
 }
 
