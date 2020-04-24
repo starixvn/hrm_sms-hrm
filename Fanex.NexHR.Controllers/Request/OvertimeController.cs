@@ -106,13 +106,42 @@
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
-            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests);
-
             ViewBag.CurrentUserId = sessionService.Employee.Id;
             ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
             ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
             return View(model);
+        }
+
+        public ActionResult ListMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var statusIds = string.Empty;
+            IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+            if (model.StatusId == -1)
+            {
+                statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
+            }
+            else if (model.StatusId == 0)
+            {
+                statusIds = string.Join(",", requestStatusIds);
+            }
+            else
+            {
+                statusIds = model.StatusId.ToString();
+            }
+            var param = new GetMonthlyOvertimeRequestParam
+            {
+                ActorId = sessionService.Employee.Id,
+                Month = model.Month,
+                SectionIds = model.SectionIds,
+                EmployeeId = model.EmployeeId,
+                StatusIds = statusIds
+            };
+            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests);
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+
+            return PartialView("_ListMemberOvertime", model.MemberRequests);
         }
 
         private static IEnumerable<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IEnumerable<MonthlyOvertimeRequest> memberRequests)

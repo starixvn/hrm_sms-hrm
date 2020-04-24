@@ -12,13 +12,33 @@ import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/c
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
-var rowIndex = 1,
-    sorts = [];
+var sorts = [];
 
-function index() {
-    return rowIndex++;
+function query(isFirstLoad) {
+    $.ajax({
+        url: _global.root + 'overtime/ListMemberOvertime',
+        dataType: 'html',
+        data: $('form.filter').serialize() + '&sort=' + JSON.stringify(sorts),
+        beforeSend: function () {
+            if (!isFirstLoad) {
+                $('.loading-process').fadeIn(300);
+            }
+        },
+        success: function (data) {
+            $('#listMemberOvertime').html(data);
+
+            floatThead('table#data');
+        },
+        error: function () {
+            alert(_messages.errorTryAgain);
+        },
+        complete: function () {
+            if (!isFirstLoad) {
+                $('.loading-process').fadeOut(300);
+            }
+        }
+    });
 }
-
 
 function eventSorting() {
     $('th.col-sorter').on('click', function () {
@@ -47,11 +67,7 @@ function eventSorting() {
             sorts.push({ Property: property, Direction: direction });
         }
 
-        $.ajax({
-            url: _global.root + 'overtime/MemberOvertime',
-            type: 'POST',
-            data: $("form.filter").serialize() + '&sort=' + JSON.stringify(sorts),
-        });
+        query(false);
 
     });
 }
@@ -65,7 +81,7 @@ function refreshSorting() {
 }
 
 $(document).ready(function () {
-
+    query(true);
     eventSorting();
 
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);

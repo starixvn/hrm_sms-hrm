@@ -1,7 +1,5 @@
 ﻿@using Fanex.NexHR.Core
-@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
-@using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
 @model MemberMonthlyOvertimeRequestViewModel
 @{
@@ -88,104 +86,56 @@
                 </th>
             </tr>
         }
-        <tr>
-            @if (showCheckAll)
-            {
-                <th>
-                    <div class="checkbox">
-                        <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                        <label for="ckbAll"></label>
-                    </div>
+            <tr>
+                @if (showCheckAll)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                            <label for="ckbAll"></label>
+                        </div>
+                    </th>
+                }
+                <th class="col-sorter">
+                    @Labels.FullName
+                    <div class="sorter" data-property="FullName"></div>
                 </th>
-            }
-            <th class="col-sorter">
-                @Labels.FullName
-                <div class="sorter" data-property="FullName"></div>
-            </th>
-            <th>@Labels.NickName</th>
-            <th>@Labels.Team</th>
-            <th>@Labels.Month</th>
-            <th>@Labels.NormalDay</th>
-            <th>@Labels.OffDay</th>
-            <th>@Labels.PublicHoliday</th>
-            <th>@Labels.SpecialOT</th>
-            <th>@Labels.Verifier</th>
-            <th>@Labels.Approver</th>
-            <th>@Labels.Status</th>
-            <th>@Labels.Details</th>
-            <th></th>
-        </tr>
+                <th class="col-sorter">
+                    @Labels.NickName
+                    <div class="sorter" data-property="Nickname"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Team
+                    <div class="sorter" data-property="Section"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Month
+                    <div class="sorter" data-property="Month"></div>
+                </th> 
+                <th class="col-sorter">
+                    @Labels.NormalDay
+                    <div class="sorter" data-property="NormalHours"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.OffDay
+                    <div class="sorter" data-property="OffHours"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.PublicHoliday
+                    <div class="sorter" data-property="PublicHours"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.SpecialOT
+                    <div class="sorter" data-property="SpecialHours"></div>
+                </th>
+                <th>@Labels.Verifier</th>
+                <th>@Labels.Approver</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.Details</th>
+                <th></th>
+            </tr>
     </thead>
-    <tbody>
-        @if (Model.MemberRequests.Any())
-        {
-            foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
-            {
-                <tr>
-                    @if (showCheckAll)
-                    {
-                        <td>
-                            @if (request.IsHost)
-                            {
-                                <div class="checkbox">
-                                    <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
-                                           data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                                           data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
-                                    <label for="ckb@(request.RequestId)"></label>
-                                </div>
-                            }
-                        </td>
-                    }
-                    <td class="align-left">@request.Requester.FullName</td>
-                    <td>@request.Requester.Nickname</td>
-                    <td>@request.Requester.Section</td>
-                    <td>@request.Month.ToString("MMM-yyyy")</td>
-                    <td>
-                        @if (request.NormalHours > 0)
-                        {
-                            @request.NormalHours
-                        }
-                    </td>
-                    <td>
-                        @if (request.OffHours > 0)
-                        {
-                            @request.OffHours
-                        }
-                    </td>
-                    <td>
-                        @if (request.PublicHours > 0)
-                        {
-                            @request.PublicHours
-                        }
-                    </td>
-                    <td>
-                        @if (request.SpecialHours > 0)
-                        {
-                            @request.SpecialHours
-                        }
-                    </td>
-                    <td>@request.Verifier.Nickname</td>
-                    <td>@request.Approver.Nickname</td>
-                    <td>@RenderStatus(request, currentUserId)</td>
-                    <td>
-                        <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
-                            @Labels.View
-                        </a>
-                    </td>
-                    <td>
-                        @if (request.IsWarning)
-                        {
-                            <i class="fa fa-exclamation-triangle"></i>
-                        }
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: 14);
-        }
-    </tbody>
+    <tbody id="listMemberOvertime"></tbody>
     <tfoot>
         <tr class="summary">
             <td colspan="@(showCheckAll ? 5 : 4)" class="align-right">@Labels.TotalOvertimeHours:</td>
@@ -198,66 +148,3 @@
     </tfoot>
 </table>
 @Html.Partial("_ConfirmModal")
-@helper RenderStatus(MonthlyOvertimeRequest request, int currentUserId)
-{
-    if (request.Approver.EmpId == currentUserId)
-    {
-        switch (request.Status.Id)
-        {
-            case (byte)CurrentRequestStatus.Pending:
-            case (byte)CurrentRequestStatus.Verified:
-                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-pending">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            case (byte)CurrentRequestStatus.Approved:
-                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-approved">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            case (byte)CurrentRequestStatus.Rejected:
-                <a roleid="@Convert.ToByte(RoleSystem.Approver)" requestid="@request.RequestId" href="javascript:;" class="approver-rejected">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            default:
-                @request.Status
-                break;
-        }
-    }
-    else if (request.Verifier.EmpId == currentUserId)
-    {
-        switch (request.Status.Id)
-        {
-            case (byte)CurrentRequestStatus.Pending:
-                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-pending">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            case (byte)CurrentRequestStatus.Verified:
-                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-verified">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            case (byte)CurrentRequestStatus.NotVerified:
-                <a roleid="@Convert.ToByte(RoleSystem.Verifier)" requestid="@request.RequestId" href="javascript:;" class="verifier-notverified">
-                    @request.Status
-                    <span class="caret"></span>
-                </a>
-                break;
-            default:
-                @request.Status
-                break;
-        }
-
-    }
-    else
-    {
-        @request.Status
-    }
-}
