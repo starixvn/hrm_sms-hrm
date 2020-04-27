@@ -46,7 +46,14 @@
                 var className = string.Format("{0} {1}", "",
                     item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
                 <td class="@className">
-                    <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
+                    @if (!string.IsNullOrEmpty(title))
+                    {
+                        <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
+                    }
+                    else
+                    {
+                        <span>@item.ShiftCode</span>
+                    }
                 </td>
             }
             <td>
