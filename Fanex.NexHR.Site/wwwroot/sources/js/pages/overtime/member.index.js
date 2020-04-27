@@ -73,8 +73,6 @@ function eventSorting() {
 }
 
 function refreshSorting() {
-    sorts = [];
-
     $('th.col-sorter').each(function () {
         $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
     });

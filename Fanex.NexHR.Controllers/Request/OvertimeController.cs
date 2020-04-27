@@ -138,15 +138,15 @@
                 StatusIds = statusIds
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
-            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests);
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
             ViewBag.CurrentUserId = sessionService.Employee.Id;
 
             return PartialView("_ListMemberOvertime", model.MemberRequests);
         }
 
-        private static IEnumerable<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IEnumerable<MonthlyOvertimeRequest> memberRequests)
+        private static IList<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IList<MonthlyOvertimeRequest> memberRequests)
         {
-            IEnumerable<MonthlyOvertimeRequest> memberOvertimeSorted;
+            IList<MonthlyOvertimeRequest> memberOvertimeSorted;
 
             if (sort != null)
             {

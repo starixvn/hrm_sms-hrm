@@ -167,7 +167,7 @@
             return list;
         }
 
-        public static IEnumerable<T> MultipleSort<T>(IEnumerable<T> data, IList<SortModel> sortExpressions)
+        public static IList<T> MultipleSort<T>(IList<T> data, IList<SortModel> sortExpressions)
         {
             // No sorting needed.
             if (sortExpressions == null || !sortExpressions.Any())

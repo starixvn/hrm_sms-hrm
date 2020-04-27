@@ -3,10 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using Newtonsoft.Json;
 
     public class AttendanceReportController : BaseController
     {
@@ -55,7 +58,26 @@
 
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
 
+            employeeAttendances = SortAttendances(model.Sort, employeeAttendances);
+
             return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
+        }
+
+        private static IList<EmployeeAttendanceModel> SortAttendances(string sort, IList<EmployeeAttendanceModel> employeeAttendances)
+        {
+            IList<EmployeeAttendanceModel> memberOvertimeSorted;
+
+            if (sort != null)
+            {
+                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(sort);
+                memberOvertimeSorted = Utilities.MultipleSort(employeeAttendances, sorts);
+            }
+            else
+            {
+                memberOvertimeSorted = employeeAttendances;
+            }
+
+            return memberOvertimeSorted;
         }
 
         public ActionResult ExportExcel(EmployeeAttendanceViewModel model)
@@ -73,6 +95,13 @@
                 IsRealDate = model.IsRealDate
             };
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
+            if (model.Sort != null)
+            {
+                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(model.Sort);
+
+                employeeAttendances = Utilities.MultipleSort(employeeAttendances, sorts);
+            }
+
             excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
             return new EmptyResult();
