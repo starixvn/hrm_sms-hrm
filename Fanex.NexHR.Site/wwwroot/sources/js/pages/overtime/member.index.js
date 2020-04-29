@@ -6,38 +6,27 @@ import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
+import { parse } from 'qs';
 
-import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, blockUI, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 var sorts = [];
 
-function query(isFirstLoad) {
-    $.ajax({
-        url: _global.root + 'overtime/ListMemberOvertime',
-        dataType: 'html',
-        data: $('form.filter').serialize() + '&sort=' + JSON.stringify(sorts),
-        beforeSend: function () {
-            if (!isFirstLoad) {
-                $('.loading-process').fadeIn(300);
-            }
-        },
-        success: function (data) {
-            $('#listMemberOvertime').html(data);
+function query() {
+    blockUI();
+    axios({
+        url: resolveClientUrl('overtime/ListMemberOvertime'),
+        method: 'POST',
+        params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
+        responseType: 'text'
+    }).then(response => {
+        $('#listMemberOvertime').html(response.data);
+        floatThead('table#data');
+    }).catch(axiosError).then(() => unblockUI());
 
-            floatThead('table#data');
-        },
-        error: function () {
-            alert(_messages.errorTryAgain);
-        },
-        complete: function () {
-            if (!isFirstLoad) {
-                $('.loading-process').fadeOut(300);
-            }
-        }
-    });
 }
 
 function eventSorting() {
@@ -67,7 +56,7 @@ function eventSorting() {
             sorts.push({ Property: property, Direction: direction });
         }
 
-        query(false);
+        query();
 
     });
 }
@@ -79,7 +68,7 @@ function refreshSorting() {
 }
 
 $(document).ready(function () {
-    query(true);
+    query();
     eventSorting();
 
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);
