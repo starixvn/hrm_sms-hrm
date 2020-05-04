@@ -193,7 +193,7 @@
 
                 IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
-                const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"*{1}½*\")/2)";
+                const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
                 var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
                 var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
