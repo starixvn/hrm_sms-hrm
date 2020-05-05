@@ -6,7 +6,6 @@ import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
-import { parse } from 'qs';
 
 import { axiosError, floatThead, toastOptions, blockUI, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
@@ -20,13 +19,17 @@ function query() {
     axios({
         url: resolveClientUrl('overtime/ListMemberOvertime'),
         method: 'POST',
-        params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
-        responseType: 'text'
+        data: stringify({
+            memberRequest: memberRequests,
+            sort: JSON.stringify(sorts) }),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
     }).then(response => {
         $('#listMemberOvertime').html(response.data);
         floatThead('table#data');
     }).catch(axiosError).then(() => unblockUI());
-
 }
 
 function eventSorting() {
@@ -57,7 +60,6 @@ function eventSorting() {
         }
 
         query();
-
     });
 }
 
@@ -68,7 +70,6 @@ function refreshSorting() {
 }
 
 $(document).ready(function () {
-    query();
     eventSorting();
 
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);

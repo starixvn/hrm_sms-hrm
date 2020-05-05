@@ -14,6 +14,9 @@
     <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
 }
 @section js{
+    <script>
+        var memberRequests = @Html.Raw(Json.Encode(Model.MemberRequests));
+    </script>
     <script src="~/wwwroot/dist/js/overtime.member.index.js"></script>
 }
 @section Breadcrumb {
@@ -86,56 +89,58 @@
                 </th>
             </tr>
         }
-            <tr>
-                @if (showCheckAll)
-                {
-                    <th>
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                            <label for="ckbAll"></label>
-                        </div>
-                    </th>
-                }
-                <th class="col-sorter">
-                    @Labels.FullName
-                    <div class="fa fa-sort" data-property="FullName"></div>
+        <tr>
+            @if (showCheckAll)
+            {
+                <th>
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                        <label for="ckbAll"></label>
+                    </div>
                 </th>
-                <th class="col-sorter">
-                    @Labels.NickName
-                    <div class="fa fa-sort" data-property="Nickname"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Team
-                    <div class="fa fa-sort" data-property="Section"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Month
-                    <div class="fa fa-sort" data-property="Month"></div>
-                </th> 
-                <th class="col-sorter">
-                    @Labels.NormalDay
-                    <div class="fa fa-sort" data-property="NormalHours"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.OffDay
-                    <div class="fa fa-sort" data-property="OffHours"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.PublicHoliday
-                    <div class="fa fa-sort" data-property="PublicHours"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.SpecialOT
-                    <div class="fa fa-sort" data-property="SpecialHours"></div>
-                </th>
-                <th>@Labels.Verifier</th>
-                <th>@Labels.Approver</th>
-                <th>@Labels.Status</th>
-                <th>@Labels.Details</th>
-                <th></th>
-            </tr>
+            }
+            <th class="col-sorter">
+                @Labels.FullName
+                <div class="fa fa-sort" data-property="FullName"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.NickName
+                <div class="fa fa-sort" data-property="Nickname"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Team
+                <div class="fa fa-sort" data-property="Section"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Month
+                <div class="fa fa-sort" data-property="Month"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.NormalDay
+                <div class="fa fa-sort" data-property="NormalHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.OffDay
+                <div class="fa fa-sort" data-property="OffHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.PublicHoliday
+                <div class="fa fa-sort" data-property="PublicHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.SpecialOT
+                <div class="fa fa-sort" data-property="SpecialHours"></div>
+            </th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.Approver</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.Details</th>
+            <th></th>
+        </tr>
     </thead>
-    <tbody id="listMemberOvertime"></tbody>
+    <tbody id="listMemberOvertime">
+        @Html.Partial("_ListMemberOvertime", Model.MemberRequests)
+    </tbody>
     <tfoot>
         <tr class="summary">
             <td colspan="@(showCheckAll ? 5 : 4)" class="align-right">@Labels.TotalOvertimeHours:</td>
