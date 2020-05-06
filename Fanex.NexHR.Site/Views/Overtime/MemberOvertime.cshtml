@@ -15,7 +15,7 @@
 }
 @section js{
     <script>
-        var memberRequests = @Html.Raw(Json.Encode(Model.MemberRequests));
+        var memberRequests = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MemberRequests));
     </script>
     <script src="~/wwwroot/dist/js/overtime.member.index.js"></script>
 }
