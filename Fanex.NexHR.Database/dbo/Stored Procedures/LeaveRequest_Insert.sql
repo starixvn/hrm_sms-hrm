@@ -537,6 +537,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
 					INNER JOIN dbo.LeaveRequest AS lv WITH (NOLOCK) ON lv.RequestId = ldt.RequestId
+					AND lv.EmpId = @EmpId
 					AND lv.LeaveType = @BusinessDuringWorkingLeaveType
 					AND DATEDIFF(MONTH, lv.FromDate, @FromDate) = 0
 					INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON wk.RequestId = ldt.RequestId
