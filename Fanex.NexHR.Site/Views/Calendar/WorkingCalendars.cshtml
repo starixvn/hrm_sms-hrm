@@ -2,8 +2,6 @@
 @model WorkingCalendarFilterViewModel
 @{
     ViewBag.Title = Labels.WorkingCalendars;
-    var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
-    var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/workingcalendars.css" rel="stylesheet" />
@@ -16,23 +14,7 @@
     <span class="step">@ViewBag.Title</span>
 }
 
-<div class="title">
-    <h2 class="page-title">@ViewBag.Title</h2>
-    <div>
-        @if (hasPermissionToViewHoliday)
-        {
-            <a href="~/Holiday/index">@Labels.Holiday</a>
-        }
-        @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
-        {
-            <span>||</span>
-        }
-        @if (hasPermissionToViewShift)
-        {
-            <a href="~/Shift/index">@Labels.Shift</a>
-        }
-    </div>
-</div>
+<h2 class="page-title">@ViewBag.Title</h2>
 
 <form class="filter">
     @Html.HiddenFor(model => model.SectionIds)

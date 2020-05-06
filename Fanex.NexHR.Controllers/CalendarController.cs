@@ -58,9 +58,6 @@
 
         public ActionResult WorkingCalendars()
         {
-            ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
-            ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
-
             var model = new WorkingCalendarFilterViewModel
             {
                 FromDate = DateTime.Now.FirstDayOfWeek(),
