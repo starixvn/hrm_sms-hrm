@@ -3,24 +3,11 @@ import '../../../libs/monthPicker/monPickr-0.0.3';
 import axios from 'axios';
 import { parse } from 'qs';
 
-import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
 
 $(document).ready(function () {
-    let monthPicker = $('#MonthControl');
-    monthPicker.monPickr({
-        showDateRange: false,
-        sortDesc: true,
-        minDate: $('#MinDate').val(),
-        maxDate: $('#MaxDate').val(),
-        today: undefined,
-        month: undefined,
-        afterChangeMonth: function () {
-            const month = monthPicker.monPickr('getMonth', 'MM');
-            const year = monthPicker.monPickr('getMonth', 'yyyy');
-            $('#Month').val(month);
-            $('#Year').val(year);
-        }
-    });
+    initDatepicker();
+    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('#btnExcel').on('click', function () {
         blockUI();

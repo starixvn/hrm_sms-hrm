@@ -25,12 +25,8 @@
         [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
         public ActionResult MonthlyOvertime()
         {
-            var today = DateTime.Today;
             var model = new MonthlyFilterViewModel
             {
-                Month = today.Month,
-                Year = today.Year,
-                Calendar = (byte)CalendarType.Fiscal,
                 EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
@@ -104,10 +100,10 @@
                 EmployeeStatusId = model.EmployeeStatusId
             };
             Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple = overtimeReportService.GetMonthlyOvertime(param);
-            DateTime requestDate = new DateTime(model.Year, model.Month, 1);
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
 
-            var fileName = "Monthly Overtime Report " + requestDate.ToString("MMM-yyyy") + ".xlsx";
+            var fileName = $"Monthly Overtime Report {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
+
             return File(bytes, MimeType.XLSX, fileName);
         }
 
