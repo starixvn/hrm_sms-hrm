@@ -4570,6 +4570,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TimeRecord.
+        /// </summary>
+        public static string TimeRecordReport {
+            get {
+                return ResourceManager.GetString("TimeRecordReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string Title {

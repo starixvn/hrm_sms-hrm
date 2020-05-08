@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
     <Compile Include="ExportExcel\JobTitleExportService.cs" />
+    <Compile Include="ExportExcel\TimeRecord\ExportExcelTimeRecordService.cs" />
     <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />

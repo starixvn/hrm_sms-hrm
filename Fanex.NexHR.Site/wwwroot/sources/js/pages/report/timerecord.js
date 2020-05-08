@@ -3,10 +3,12 @@ import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker, resolveClientUrl, axiosError, downloadFile } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
+import axios from 'axios';
+import { parse } from 'qs';
 
 (function () {
     function initPagination() {
@@ -142,6 +144,21 @@ import '../../shared/employee.search.in.team';
         $('#btnSubmit').on('click', function () {
             $('form.filter #CurrentPage').val(1);
             query();
+        });
+
+        $('form.filter #btnExcel').on('click', function (event) {
+            event.preventDefault();
+
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportTimeRecord/Export'),
+                method: 'GET',
+                params: parse($('form.filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
         });
 
         initDatepicker();
