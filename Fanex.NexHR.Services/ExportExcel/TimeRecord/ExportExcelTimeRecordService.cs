@@ -19,7 +19,6 @@
         public byte[] Export(GetTimeRecordCriteria criteria, IList<TimeRecordModel> timeRecords)
         {
             const int FirstDataTableRow = 4;
-            const int TotalDataTableCol = 6;
 
             string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TimeRecordTemplate.xlsx");
 
@@ -31,18 +30,11 @@
                 int colIndex = 1;
                 int count = 1;
 
-                var oddRowTableStyle = workSheet.Cells[FirstDataTableRow, 1, FirstDataTableRow, TotalDataTableCol];
-                var evenRowTableStyle = workSheet.Cells[FirstDataTableRow + 1, 1, FirstDataTableRow + 1, TotalDataTableCol];
-
                 foreach (var detail in timeRecords)
                 {
-                    //Copy row style
-                    var rowTableStyle = rowIndex % 2 != 0 ? oddRowTableStyle : evenRowTableStyle;
-                    rowTableStyle.Copy(workSheet.Cells[rowIndex, 1, rowIndex, TotalDataTableCol]);
-
-                    //Fill data
                     workSheet.Cells[rowIndex, colIndex++].Value = count;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.Code;
+                    workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.Section;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.RecordTime.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + detail.RecordTime.ToString(@"mm\'");
