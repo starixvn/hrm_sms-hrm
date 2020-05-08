@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web;
-    using Fanex.NexHR.Core;
+    using Fanex.Common.Extensions;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
@@ -32,23 +33,50 @@
 
         public IEnumerable<YearlyOvertime> GetYearlyOvertime(GetYearlyOvertimeParam param)
         {
+            var monthxml = new StringBuilder(Constants.BeginRootTag);
+            for (var month = 1; month <= Constants.December; month++)
+            {
+                var fromDate = new DateTime(param.Year, month, 1);
+                var toDate = fromDate.LastDayOfMonth();
+
+                if (param.Calendar == (byte)CalendarType.Fiscal)
+                {
+                    var daterange = GetDateRange(fromDate);
+                    fromDate = daterange.Item1;
+                    toDate = daterange.Item2;
+                }
+
+                monthxml.AppendFormat("<Row Month='{0}' FromDate='{1}' ToDate='{2}' />", month, fromDate, toDate);
+            }
+
+            monthxml.Append(Constants.EndRootTag);
+
             var criteria = new GetYearlyOvertimeReportCriteria
             {
                 ActorId = param.ActorId,
-                Year = param.Year,
-                CalendarType = param.Calendar,
                 GroupIds = param.SectionIds,
                 Employee = param.Employee,
-                EmployeeStatusId = param.EmployeeStatusId
+                EmployeeStatusId = param.EmployeeStatusId,
+                MonthXml = monthxml.ToString()
             };
             return baseService.GetData<YearlyOvertime>(criteria);
         }
 
-        public IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(int employeeId, DateTime fromDate, DateTime toDate)
+        public IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
         {
+            var fromDate = new DateTime(param.Year, param.Month, 1);
+            var toDate = fromDate.LastDayOfMonth();
+
+            if (param.Calendar == CalendarType.Fiscal)
+            {
+                var daterange = GetDateRange(fromDate);
+                fromDate = daterange.Item1;
+                toDate = daterange.Item2;
+            }
+
             var criteria = new GetMonthlyOvertimeDetailsReportCriteria
             {
-                EmployeeId = employeeId,
+                EmployeeId = param.EmployeeId,
                 FromDate = fromDate,
                 ToDate = toDate
             };
@@ -502,6 +530,29 @@
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
             worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
+        }
+
+        private static Tuple<DateTime, DateTime> GetDateRange(DateTime month)
+        {
+            const byte FromDay = 21;
+            const byte ToDay = 20;
+            var newRuleApplyFromMonth = new DateTime(2020, 5, 1);
+            var lastMonth = month.AddMonths(-1);
+            var fromDate = new DateTime(lastMonth.Year, lastMonth.Month, 10);
+            var toDate = new DateTime(month.Year, month.Month, 9);
+
+            if (month == newRuleApplyFromMonth)
+            {
+                toDate = new DateTime(month.Year, month.Month, ToDay);
+            }
+
+            if (month > newRuleApplyFromMonth)
+            {
+                fromDate = new DateTime(lastMonth.Year, lastMonth.Month, FromDay);
+                toDate = new DateTime(month.Year, month.Month, ToDay);
+            }
+
+            return new Tuple<DateTime, DateTime>(fromDate, toDate);
         }
     }
 }

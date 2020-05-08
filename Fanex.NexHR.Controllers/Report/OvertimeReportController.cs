@@ -51,21 +51,10 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
-        public ActionResult MonthlyOvertimeDetails(int employeeId, byte month, int year, CalendarType calendar)
+        public ActionResult MonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
         {
-            const byte FromDay = 10;
-            const byte ToDay = 9;
-            var fromDate = new DateTime(year, month, 1);
-            var toDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-            if (calendar == CalendarType.Fiscal)
-            {
-                var previousMonth = fromDate.AddMonths(-1);
-                fromDate = new DateTime(previousMonth.Year, previousMonth.Month, FromDay);
-                toDate = new DateTime(year, month, ToDay);
-            }
-
-            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(employeeId, fromDate, toDate);
-            ViewBag.Month = new DateTime(year, month, 1);
+            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(param);
+            ViewBag.Month = new DateTime(param.Year, param.Month, 1);
 
             return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
         }

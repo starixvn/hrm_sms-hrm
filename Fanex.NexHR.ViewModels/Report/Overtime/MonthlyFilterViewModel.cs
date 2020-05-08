@@ -1,12 +1,12 @@
 ﻿namespace Fanex.NexHR.ViewModels.Report.Overtime
 {
     using System;
+    using Fanex.NexHR.Core;
 
     public class MonthlyFilterViewModel
     {
-        private static DateTime Today = DateTime.Today;
-        public DateTime FromDate { get; set; } = Today;
-        public DateTime ToDate { get; set; } = Today;
+        public DateTime FromDate { get; set; } = DateTime.Today.FirstDayOfMonth();
+        public DateTime ToDate { get; set; } = DateTime.Today.LastDayOfMonth();
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; }
     }

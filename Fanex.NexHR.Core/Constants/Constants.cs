@@ -5,6 +5,7 @@
         public const string JobTitle = "JT";
         public const string MemoCategory = "MC";
 
+        public const byte December = 12;
         public const byte NumberMonthsInFutureCanLeaveRequest = 7;
 
         public const string PassWordAdmin = "@dm!nhrms";

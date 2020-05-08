@@ -1,6 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Overtime_GetMonthlyRequestByEmpId] @EmployeeId INT
-	,@Year INT
+	,@FromDate DATE
+	,@ToDate DATE
 AS
 /*
 Created: Tim.Trinh@2019-07-02
@@ -14,45 +15,18 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @fromdate DATE
-		,@todate DATE
-		,@Month DATE
-		,@Today DATE = GETDATE()
-
-	IF YEAR(@Today) = @Year
-	BEGIN
-		SELECT @Month = CONVERT(VARCHAR(5), @Year) + '/' + CONVERT(VARCHAR(2), MONTH(@Today)) + + '/' + CONVERT(VARCHAR(2), DAY(@Today))
-	END
-	ELSE
-	BEGIN
-		SELECT @Month = CONVERT(VARCHAR(5), @Year) + '/12/01'
-	END
-
-	SELECT @Month = CASE 
-			WHEN DAY(@Today) BETWEEN 10
-					AND 31 THEN DATEADD(MONTH, 1, @Month)
-			ELSE @Month
-			END
-
-	IF YEAR(@Month) > @Year
-	BEGIN
-		SELECT @Month = CONVERT(VARCHAR(5), @Year) + '/12/01'
-	END
-
-	SELECT @fromDate = CONVERT(VARCHAR(5), @Year) + '/01/01'
-		,@toDate = @Month
+	DECLARE @Today DATE = GETDATE()
+		,@tmpFromDate DATE = @FromDate
 
 	CREATE TABLE #tblMonth ([Month] DATE)
 
-	WHILE @fromDate <= @toDate
+	WHILE @tmpFromDate <= @toDate
 	BEGIN
 		INSERT INTO #tblMonth ([Month])
-		VALUES (@fromDate)
+		VALUES (@tmpFromDate)
 
-		SET @fromDate = DATEADD(MONTH, 1, @fromDate)
+		SET @tmpFromDate = DATEADD(MONTH, 1, @tmpFromDate)
 	END
-
-	SELECT @fromDate = CONVERT(VARCHAR(5), @Year) + '/01/01'
 
 	SELECT request.RequestId
 		,cl.[Month]

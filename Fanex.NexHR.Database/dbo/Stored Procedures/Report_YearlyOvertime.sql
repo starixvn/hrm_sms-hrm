@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @ActorId INT
-	,@Year INT
-	,@CalendarType TINYINT = 0
+	,@MonthXml VARCHAR(MAX)
 	,@GroupIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -14,13 +13,12 @@ Original:
 
 Revisions:
 Param's Explanation:
-    @CalendarType: 0 - normal, 1 - fiscal
+    @MonthXml: <ROOT><Row Month='{0}' FromDate='{1}' ToDate='{2}' /></ROOT>
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @fromdate DATE
-		,@todate DATE
+	DECLARE @DocHandler INT
 		-- employee status
 		,@Enable TINYINT = 1
 		,@Disabled TINYINT = 2
@@ -60,34 +58,20 @@ BEGIN
 		WHERE IsDeleted = 0
 	END
 
-	DECLARE @fromMonth INT = 1
-		,@toMonth INT = 12
+	EXEC sp_xml_preparedocument @DocHandler OUTPUT
+		,@MonthXml
 
-	WHILE @fromMonth <= @toMonth
-	BEGIN
-		SET @fromdate = CONVERT(VARCHAR(5), @Year) + '/' + CONVERT(VARCHAR(2), @fromMonth) + '/01'
-		SET @todate = DATEADD(DAY, - 1, DATEADD(MONTH, 1, @fromdate))
+	INSERT INTO #tblMonth (
+		[Month]
+		,FromDate
+		,ToDate
+		)
+	SELECT [Month]
+		,FromDate
+		,ToDate
+	FROM OPENXML(@DocHandler, '/ROOT/Row', 1) WITH ([Month] TINYINT, FromDate DATE, ToDate DATE) AS Data
 
-		IF @CalendarType = 1
-		BEGIN
-			SET @fromdate = DATEADD(MONTH, - 1, @fromdate)
-			SET @fromdate = CONVERT(VARCHAR(5), YEAR(@fromdate)) + '/' + CONVERT(VARCHAR(2), MONTH(@fromdate)) + '/10'
-			SET @todate = CONVERT(VARCHAR(5), YEAR(@todate)) + '/' + CONVERT(VARCHAR(2), MONTH(@todate)) + '/09'
-		END
-
-		INSERT INTO #tblMonth (
-			[Month]
-			,FromDate
-			,ToDate
-			)
-		VALUES (
-			@fromMonth
-			,@fromdate
-			,@todate
-			)
-
-		SET @fromMonth = @fromMonth + 1
-	END
+	EXEC sp_xml_removedocument @DocHandler
 
 	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT emp.EmpId
