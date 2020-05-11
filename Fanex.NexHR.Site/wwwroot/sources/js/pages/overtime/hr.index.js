@@ -7,7 +7,7 @@ import toastr from 'toastr';
 import axios from 'axios';
 import { stringify, parse } from 'qs';
 
-import { axiosError, floatThead, toastOptions, resolveClientUrl, blockUI, unblockUI } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -239,6 +239,21 @@ $(document).ready(function () {
                 toastr.success('Send Successfully!', '', toastOptions());
             }).catch(axiosError);
         });
+    });
+
+    $('form.filter #btnExcel').on('click', function (event) {
+        event.preventDefault();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('Overtime/Export'),
+            method: 'GET',
+            params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 
     let renderIconOk = function (opt, $itemElement, itemKey, item) {

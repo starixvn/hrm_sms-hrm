@@ -15,6 +15,7 @@
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
@@ -25,16 +26,19 @@
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly IOvertimeRequestService overtimeService;
+        private readonly IExportOvertimeService exportOvertimeService;
 
         public OvertimeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            IOvertimeRequestService overtimeService) : base(sessionService)
+            IOvertimeRequestService overtimeService,
+            IExportOvertimeService exportOvertimeService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.overtimeService = overtimeService;
+            this.exportOvertimeService = exportOvertimeService;
         }
 
         [HttpGet]
@@ -152,6 +156,13 @@
 
         public ActionResult ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            model.MemberRequests = GetEmployeeOvertimeRequest(model);
+
+            return PartialView("_ListEmployeeOvertime", model);
+        }
+
+        private IEnumerable<MonthlyOvertimeRequest> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
+        {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
             if (model.StatusId == -1)
@@ -175,11 +186,11 @@
                 StatusIds = statusIds,
                 IsProcessor = true
             };
-            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
+            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
             model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
 
-            return PartialView("_ListEmployeeOvertime", model);
+            return model.MemberRequests;
         }
 
         public ActionResult EmployeeDetails(long id)
@@ -227,6 +238,16 @@
         public void ReminderClaimOvertime(string subject, string content)
         {
             BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
+        }
+
+        public ActionResult Export(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var fileName = $"{Labels.EmployeeOvertimeExport}.xlsx";
+
+            model.MemberRequests = GetEmployeeOvertimeRequest(model);
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests);
+
+            return File(exportData, MimeType.XLSX, fileName);
         }
     }
 }

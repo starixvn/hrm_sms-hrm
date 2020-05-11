@@ -82,6 +82,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IJobTitleExportService, JobTitleExportService>();
             container.RegisterType<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
             container.RegisterType<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
+            container.RegisterType<IExportOvertimeService, ExportOvertimeService>();
         }
     }
 }

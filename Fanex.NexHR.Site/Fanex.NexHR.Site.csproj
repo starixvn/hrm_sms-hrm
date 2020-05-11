@@ -1112,6 +1112,7 @@
     <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
     <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
     <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

@@ -4,19 +4,18 @@
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Web;
-    using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
     using OfficeOpenXml;
 
     public interface IExportExcelTimeRecordService
     {
-        byte[] Export(GetTimeRecordCriteria criteria, IList<TimeRecordModel> timeRecords);
+        byte[] Export(IList<TimeRecordModel> timeRecords);
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelTimeRecordService : IExportExcelTimeRecordService
     {
-        public byte[] Export(GetTimeRecordCriteria criteria, IList<TimeRecordModel> timeRecords)
+        public byte[] Export(IList<TimeRecordModel> timeRecords)
         {
             const int FirstDataTableRow = 4;
 

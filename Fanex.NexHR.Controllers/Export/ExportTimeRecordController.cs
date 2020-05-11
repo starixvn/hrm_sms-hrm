@@ -37,7 +37,7 @@
             };
 
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
-            byte[] exportData = exportTimeRecordService.Export(criteria, timeRecords);
+            byte[] exportData = exportTimeRecordService.Export(timeRecords);
 
             var fileName = $"{Labels.TimeRecordReport}.xlsx";
             return File(exportData, MimeType.XLSX, fileName);

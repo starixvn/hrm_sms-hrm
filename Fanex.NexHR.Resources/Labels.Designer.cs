@@ -1564,6 +1564,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EmployeeOverTimeTemplate.
+        /// </summary>
+        public static string EmployeeOvertimeExport {
+            get {
+                return ResourceManager.GetString("EmployeeOvertimeExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee Permission Summary.
         /// </summary>
         public static string EmployeePermissionSummary {
