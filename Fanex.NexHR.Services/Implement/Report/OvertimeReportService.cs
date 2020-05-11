@@ -372,7 +372,8 @@
 
             // data
             var rowNum = 1;
-            IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmpId).Select(x => x.First()).OrderBy(x => x.Nickname);
+            IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmpId)
+                .Select(x => x.First()).OrderByDescending(x => x.Section).ThenBy(x => x.Code);
             foreach (DailyOvertimeDetails employee in employees)
             {
                 IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.EmpId == employee.EmpId);
