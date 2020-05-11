@@ -52,20 +52,19 @@
             </td>
         </tr>
     }
+    <tr class="summary">
+        <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
+        <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+        <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+        <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+        <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
+        <td colspan="5"></td>
+    </tr>
 }
 else
 {
     @RazorHelper.DisplayNoInformation(colspan: 13);
 }
-
-<tr class="summary">
-    <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
-    <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
-    <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
-    <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
-    <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
-    <td colspan="5"></td>
-</tr>
 
 @helper RenderStatus(MonthlyOvertimeRequest request)
 {
