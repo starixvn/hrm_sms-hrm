@@ -7,12 +7,73 @@ import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, floatThead, toastOptions, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl, blockUI, unblockUI } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
-$(document).ready(function () {
+var sorts = [];
+
+function query() {
+    blockUI();
+    axios({
+        url: resolveClientUrl('overtime/ListEmployeeOvertime'),
+        method: 'POST',
+        data: stringify({
+            employeeRequest: employeeRequests,
+            sort: JSON.stringify(sorts)
+        }),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).then(response => {
+        $('#listEmployeeOvertime').html(response.data);
+        floatThead('table#data');
+    }).catch(axiosError).then(() => unblockUI());
+}
+
+function eventSorting() {
+    $('th.col-sorter').on('click', function () {
+        var $this = $(this).find('div.fa'),
+            property = $this.attr('data-property'),
+            direction, index;
+
+        index = sorts.map(function (e) { return e.Property; }).indexOf(property);
+
+        if ($this.hasClass('fa-sort-desc')) {
+            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+            direction = 'asc';
+        } else if ($this.hasClass('fa-sort-asc')) {
+            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+            direction = 'desc';
+        } else {
+            refreshSorting();
+            $this.addClass('fa-sort-desc');
+            direction = 'desc';
+        }
+
+        if (index !== -1) {
+            sorts[index].Direction = direction;
+        } else {
+            sorts.shift();
+            sorts.push({ Property: property, Direction: direction });
+        }
+
+        query();
+    });
+}
+
+function refreshSorting() {
+    $('th.col-sorter').each(function () {
+        $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
+    });
+}
+
+    $(document).ready(function () {
+
+        eventSorting();
+
     let $confirmModal = $('#confirmModal'),
         $reminderMailModal = $('#reminderMailModal'),
         $btnConfirm = $confirmModal.find('#btnConfirm'),

@@ -175,6 +175,13 @@
             return View(model);
         }
 
+        public ActionResult ListEmployeeOvertime(IEnumerable<MonthlyOvertimeRequest> employeeRequest, string sort)
+        {
+            employeeRequest = SortMemberOvertime(sort, employeeRequest.ToList());
+
+            return PartialView("_ListEmployeeOvertime", employeeRequest);
+        }
+
         public ActionResult EmployeeDetails(long id)
         {
             MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
