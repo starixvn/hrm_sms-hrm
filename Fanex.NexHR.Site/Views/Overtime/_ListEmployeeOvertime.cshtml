@@ -1,9 +1,11 @@
 ﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Overtime
-@model IEnumerable<MonthlyOvertimeRequest>
-@if (Model.Any())
+@using Fanex.NexHR.ViewModels.Overtime
+@model MemberMonthlyOvertimeRequestViewModel
+
+@if (Model.MemberRequests.Any())
 {
-    foreach (MonthlyOvertimeRequest request in Model)
+    foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
     {
         <tr>
             <td>
@@ -55,6 +57,15 @@ else
 {
     @RazorHelper.DisplayNoInformation(colspan: 13);
 }
+
+<tr class="summary">
+    <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
+    <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+    <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+    <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+    <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
+    <td colspan="5"></td>
+</tr>
 
 @helper RenderStatus(MonthlyOvertimeRequest request)
 {

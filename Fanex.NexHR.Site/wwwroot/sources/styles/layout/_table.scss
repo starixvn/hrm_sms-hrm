@@ -53,6 +53,7 @@ table.table.table-custom {
                         float: right;
                         margin-top: 2px;
                     }
+
                     .fa-sort-desc, .fa-sort-asc {
                         color:red
                     }
@@ -81,6 +82,10 @@ table.table.table-custom {
 
             &:nth-child(odd) {
                 background: #ececec;
+            }
+
+            &.summary {
+                background-color: #bbf8f2;
             }
 
             input {

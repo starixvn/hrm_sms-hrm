@@ -147,6 +147,11 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            return View(model);
+        }
+
+        public ActionResult ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
             if (model.StatusId == -1)
@@ -172,14 +177,9 @@
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
-            return View(model);
-        }
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
 
-        public ActionResult ListEmployeeOvertime(IEnumerable<MonthlyOvertimeRequest> employeeRequest, string sort)
-        {
-            employeeRequest = SortMemberOvertime(sort, employeeRequest.ToList());
-
-            return PartialView("_ListEmployeeOvertime", employeeRequest);
+            return PartialView("_ListEmployeeOvertime", model);
         }
 
         public ActionResult EmployeeDetails(long id)

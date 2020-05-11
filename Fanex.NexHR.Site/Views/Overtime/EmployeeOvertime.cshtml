@@ -9,9 +9,6 @@
     <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
 }
 @section js{
-    <script>
-        var employeeRequests = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MemberRequests));
-    </script>
     <script src="~/wwwroot/dist/js/overtime.hr.index.js"></script>
 }
 @section Breadcrumb {
@@ -122,19 +119,7 @@
             <th>@Labels.Details</th>
         </tr>
     </thead>
-    <tbody id="listEmployeeOvertime">
-        @Html.Partial("_ListEmployeeOvertime", Model.MemberRequests)
-    </tbody>
-    <tfoot>
-        <tr class="summary">
-            <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
-            <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
-            <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
-            <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
-            <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
-            <td colspan="5"></td>
-        </tr>
-    </tfoot>
+    <tbody id="listEmployeeOvertime"></tbody>
 </table>
 @Html.Partial("_ConfirmModal")
 <div id="reminderMailModal" class="modal" tabindex="-1" role="dialog">

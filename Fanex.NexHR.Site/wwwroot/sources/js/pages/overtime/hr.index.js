@@ -5,7 +5,7 @@ import 'jquery-contextmenu/dist/jquery.contextMenu';
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
-import { stringify } from 'qs';
+import { stringify, parse } from 'qs';
 
 import { axiosError, floatThead, toastOptions, resolveClientUrl, blockUI, unblockUI } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
@@ -19,14 +19,8 @@ function query() {
     axios({
         url: resolveClientUrl('overtime/ListEmployeeOvertime'),
         method: 'POST',
-        data: stringify({
-            employeeRequest: employeeRequests,
-            sort: JSON.stringify(sorts)
-        }),
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
+        responseType: 'text'
     }).then(response => {
         $('#listEmployeeOvertime').html(response.data);
         floatThead('table#data');
@@ -70,9 +64,8 @@ function refreshSorting() {
     });
 }
 
-    $(document).ready(function () {
-
-        eventSorting();
+$(document).ready(function () {
+    eventSorting();
 
     let $confirmModal = $('#confirmModal'),
         $reminderMailModal = $('#reminderMailModal'),
@@ -108,6 +101,8 @@ function refreshSorting() {
         }).catch(axiosError);
 
     floatThead('table#data');
+
+    query();
 
     $('#btnSearch').on('click', function () {
         const statusId = parseInt($('#StatusId').val(), 10),
