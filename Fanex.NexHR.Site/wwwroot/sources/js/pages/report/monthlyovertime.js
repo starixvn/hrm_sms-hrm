@@ -1,5 +1,4 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import '../../../libs/monthPicker/monPickr-0.0.3';
 import axios from 'axios';
 import { parse } from 'qs';
 
