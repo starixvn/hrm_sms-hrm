@@ -1881,7 +1881,7 @@
   <data name="TimeRecordReport" xml:space="preserve">
     <value>TimeRecord</value>
   </data>
-  <data name="EmployeeOvertimeExport" xml:space="preserve">
-    <value>EmployeeOverTimeTemplate</value>
+  <data name="EmployeeOvertimeReport" xml:space="preserve">
+    <value>EmployeeOverTimeReport</value>
   </data>
 </root>

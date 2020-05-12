@@ -242,7 +242,7 @@
 
         public ActionResult Export(MemberMonthlyOvertimeRequestViewModel model)
         {
-            var fileName = $"{Labels.EmployeeOvertimeExport}.xlsx";
+            var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
 
             model.MemberRequests = GetEmployeeOvertimeRequest(model);
             byte[] exportData = exportOvertimeService.Export(model.MemberRequests);
