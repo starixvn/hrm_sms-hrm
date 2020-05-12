@@ -1884,4 +1884,7 @@
   <data name="EmployeeOvertimeReport" xml:space="preserve">
     <value>EmployeeOvertimeReport</value>
   </data>
+  <data name="MemberOvertimeReport" xml:space="preserve">
+    <value>MemberOvertimeReport</value>
+  </data>
 </root>

@@ -86,6 +86,16 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            model.MemberRequests = GetMemberOvertimeRequest(model);
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+
+            return View(model);
+        }
+
+        private IEnumerable<MonthlyOvertimeRequest> GetMemberOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
+        {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
             if (model.StatusId == -1)
@@ -109,11 +119,8 @@
                 StatusIds = statusIds
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
-            ViewBag.CurrentUserId = sessionService.Employee.Id;
-            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
-            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
-            return View(model);
+            return model.MemberRequests;
         }
 
         public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest, string sort)
@@ -243,9 +250,21 @@
         public ActionResult Export(MemberMonthlyOvertimeRequestViewModel model)
         {
             var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
-
+            const bool ismemberOvetime = false;
             model.MemberRequests = GetEmployeeOvertimeRequest(model);
-            byte[] exportData = exportOvertimeService.Export(model.MemberRequests);
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
+
+            return File(exportData, MimeType.XLSX, fileName);
+        }
+
+        public ActionResult ExportMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var fileName = $"{Labels.MemberOvertimeReport}.xlsx";
+            const bool ismemberOvetime = true;
+
+            model.MemberRequests = GetMemberOvertimeRequest(model);
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
 
             return File(exportData, MimeType.XLSX, fileName);
         }

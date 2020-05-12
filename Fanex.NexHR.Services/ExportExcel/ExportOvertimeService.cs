@@ -10,27 +10,33 @@
 
     public interface IExportOvertimeService
     {
-        byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests);
+        byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime);
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportOvertimeService : IExportOvertimeService
     {
-        public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests)
+        public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
         {
             const byte TotalColumns = 12;
             const byte StartBodyRow = 3;
             const byte StartTotal = 6;
             const byte LineOfTotal = 4;
 
+            string sheetName = "Employee Overtime Report";
             string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/EmployeeOverTimeTemplate.xlsx");
+
+            if (isMemberOvertime)
+            {
+                sheetName = "Member Overtime Report";
+            }
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet workSheet = xlPackage.Workbook.Worksheets.Add("Employee Overtime Report");
+                    ExcelWorksheet workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
 
                     int rowIndex = 1;
                     int colIndex = 1;
