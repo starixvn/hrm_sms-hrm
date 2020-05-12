@@ -60,6 +60,7 @@
                         count++;
                     }
 
+                    workSheet.Cells.AutoFitColumns();
                     return xlPackage.GetAsByteArray();
                 }
             }

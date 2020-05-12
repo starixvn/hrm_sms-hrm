@@ -76,6 +76,7 @@
                         workSheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                     }
 
+                    workSheet.Cells.AutoFitColumns();
                     return xlPackage.GetAsByteArray();
                 }
             }

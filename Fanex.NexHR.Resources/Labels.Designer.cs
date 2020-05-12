@@ -1564,7 +1564,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EmployeeOverTimeReport.
+        ///   Looks up a localized string similar to EmployeeOvertimeReport.
         /// </summary>
         public static string EmployeeOvertimeReport {
             get {
