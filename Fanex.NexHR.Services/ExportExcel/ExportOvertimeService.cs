@@ -44,6 +44,7 @@
 
                     // title
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                    workSheet.Cells[rowIndex, colIndex].Value = string.Format(sheetName);
                     rowIndex++;
 
                     // header
