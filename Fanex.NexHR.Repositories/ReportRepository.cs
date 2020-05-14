@@ -129,7 +129,6 @@
                 ToDate = t.ToDate,
                 FromTime = t.FromTime,
                 ToTime = t.ToTime,
-                RequestDate = t.RequestDate ?? DateTime.Now,
                 CreatedDate = t.CreatedDate ?? DateTime.Now,
                 Remark = t.Remark,
                 TotalDays = t.TotalDays,

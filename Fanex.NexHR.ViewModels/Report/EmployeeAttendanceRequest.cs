@@ -41,7 +41,5 @@
 
         // keep in view
         public byte? KeepInViewTypeId { get; set; }
-
-        public DateTime RequestDate { get; set; }
     }
 }

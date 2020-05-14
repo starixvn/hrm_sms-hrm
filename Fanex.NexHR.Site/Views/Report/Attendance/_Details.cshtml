@@ -107,7 +107,7 @@
                             FromTime = request.FromTime ?? request.FromDate.Value,
                             ToTime = request.ToTime ?? request.ToDate.Value,
                             RequestedDate = request.RequestDate,
-                            CreatedDate = request.CreatedDate.Value,
+                            CreatedDate = request.CreatedDate,
                             FromShift = new Shift { Name = request.FromShift },
                             ToShift = new Shift { Name = request.ToShift },
                             ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut
