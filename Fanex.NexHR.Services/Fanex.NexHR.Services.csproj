@@ -153,7 +153,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
+    <Compile Include="ExportExcel\ExportOvertimeService.cs" />
     <Compile Include="ExportExcel\JobTitleExportService.cs" />
+    <Compile Include="ExportExcel\ExportExcelTimeRecordService.cs" />
     <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
@@ -227,7 +229,7 @@
     <Compile Include="Implement\MessageService.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Implement\OvertimeRequestService.cs" />
+    <Compile Include="Implement\Request\OvertimeRequestService.cs" />
     <Compile Include="Implement\ReportService.cs" />
     <Compile Include="Implement\Request\RequestMailService.cs" />
     <Compile Include="Implement\TeamService.cs" />

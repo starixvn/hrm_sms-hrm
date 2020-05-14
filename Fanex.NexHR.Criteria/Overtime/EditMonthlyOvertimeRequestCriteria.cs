@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NexHR.Criteria.Overtime
 {
+    using System;
     using Fanex.Data.Repository;
 
     public class EditMonthlyOvertimeRequestCriteria : CriteriaBase
     {
         public int EmployeeId { get; set; }
+        public DateTime Month { get; set; }
         public int VerifierId { get; set; }
         public int ApproverId { get; set; }
         public int ActorId { get; set; }

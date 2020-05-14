@@ -17,6 +17,7 @@ BEGIN
 		,@fromDate DATE
 		,@toDate DATE
 		,@EmployeeId INT
+		,@NewRuleApplyFromMonth DATE = '2020/05/01'
 
 	SELECT @Month = [Month]
 		,@EmployeeId = EmpId
@@ -28,6 +29,17 @@ BEGIN
 
 	SELECT @fromDate = CONVERT(VARCHAR(5), YEAR(@fromDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@fromDate)) + '/10'
 		,@toDate = CONVERT(VARCHAR(5), YEAR(@toDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@toDate)) + + '/09'
+
+	IF @Month = @NewRuleApplyFromMonth
+	BEGIN
+		SET @toDate = CONVERT(VARCHAR(5), YEAR(@toDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@toDate)) + '/20'
+	END
+
+	IF @Month > @NewRuleApplyFromMonth
+	BEGIN
+		SET @fromDate = CONVERT(VARCHAR(5), YEAR(@fromDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@fromDate)) + '/21'
+		SET @toDate = CONVERT(VARCHAR(5), YEAR(@toDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@toDate)) + '/20'
+	END
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate

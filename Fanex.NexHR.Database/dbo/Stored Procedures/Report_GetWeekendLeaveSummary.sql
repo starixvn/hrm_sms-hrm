@@ -4,7 +4,7 @@
 CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveSummary] 
 	 @FromDate DATE
 	,@ToDate DATE
-	,@GroupId INT = NULL
+	,@GroupId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@IsLocal BIT = NULL
 	,@MinTotalLeave INT = NULL
@@ -13,6 +13,15 @@ AS
 
 BEGIN
 	SET NOCOUNT ON;
+
+	CREATE TABLE #tblGroupIds (TmpGroupId INT)
+
+	IF ISNULL(@GroupId, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupIds (TmpGroupId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@GroupId, ',')
+	END
 
 	CREATE TABLE #tblEmployeeId (EmpId INT)
 
@@ -64,7 +73,11 @@ BEGIN
 	WHERE emp.[Enabled] = 1
 		AND wl.TotalWeekendLeaveDays >= @MinTotalLeave
 		AND ISNULL(emp.IsDeleted, 0) = 0
-		AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 
@@ -73,4 +86,5 @@ BEGIN
 
 	DROP TABLE #tblWeekendLeaveSummary
 
+	DROP TABLE #tblGroupIds
 END

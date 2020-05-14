@@ -81,13 +81,9 @@ $(document).ready(function () {
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
-                noneSelectedText: 'Select a section',
-                selectedItems: $('#TeamId').val(),
-                singleSelection: true,
-                onSelect: function () {
-                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
-                }
+                isSelectedAll: true,
             });
+            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
 
             query();
         }).catch(axiosError);
@@ -99,7 +95,7 @@ $(document).ready(function () {
     });
 
     $('form.filter #submit').on('click', function (event) {
-        event.preventDefault();
+        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
         query();
     });
     $('form.filter #btnExcel').on('click', function (event) {

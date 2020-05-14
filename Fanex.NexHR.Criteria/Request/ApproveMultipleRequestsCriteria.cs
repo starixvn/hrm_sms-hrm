@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Enums;
 
     public class ApproveMultipleRequestsCriteria : CriteriaBase
     {
@@ -10,6 +11,7 @@
         public string Comment { get; set; }
         public bool IsIgnoredViolate { get; set; }
         public bool IsConfirmed { get; set; }
+        public RequestCommand Command { get; set; }
 
         public override string GetSettingKey() => "WorkingTimeRequest_ApproveMultipleRequest";
 

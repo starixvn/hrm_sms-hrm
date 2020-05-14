@@ -11,6 +11,8 @@
 
         public string Remark { get; set; }
 
+        public DateTime RequestDate { get; set; }
+
         // Leave
         public DateTime? FromDate { get; set; }
 

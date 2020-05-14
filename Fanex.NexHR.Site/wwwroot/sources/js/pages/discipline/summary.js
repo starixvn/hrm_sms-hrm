@@ -342,17 +342,9 @@ import {
             success: function (data) {
                 $('#Section').multiSelectTreeView({
                     data: data,
-                    noneSelectedText: 'Select a section',
-                    singleSelection: true,
-                    onSelect: function () {
-                        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
-                        if ($('#TeamId').val().length > 0) {
-                            $('form.form-filter #TeamName').val($('#Section .selected-text').text());
-                        } else {
-                            $('form.form-filter #TeamName').val('');
-                        }
-                    }
+                    isSelectedAll: true,
                 });
+                $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
 
                 query();
             },
@@ -366,7 +358,7 @@ import {
         });
 
         $('form.form-filter #submit').on('click', function (event) {
-            event.preventDefault();
+            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
             query();
         });
 

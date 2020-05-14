@@ -16,7 +16,7 @@
         public IList<Team> Teams { get; set; }
 
         [Display(Name = "Team")]
-        public int? TeamId { get; set; }
+        public string TeamId { get; set; }
 
         public string TeamName { get; set; }
 

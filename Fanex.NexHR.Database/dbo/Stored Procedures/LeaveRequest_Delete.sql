@@ -18,11 +18,10 @@ BEGIN
 
 	DECLARE @PendingStatusId TINYINT = 1
 		,@PaternityTypeId TINYINT = 14
-		,@LeaveType TINYINT
-		,@TotalDays INT
 		,@EmpId INT
 		,@FromDate DATE
 		,@ToDate DATE
+		,@TotalDaysPaternity INT
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -37,22 +36,39 @@ BEGIN
 		RETURN;
 	END
 
+	SELECT @TotalDaysPaternity = TotalDays
+		,@FromDate = FromDate
+		,@ToDate = ToDate
+		,@EmpId = EmpId
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+		AND LeaveType = @PaternityTypeId
+
+	IF ISNULL(@TotalDaysPaternity, 0) = 0
+	BEGIN
+		SELECT @TotalDaysPaternity = COUNT(1)
+			,@FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+			,@EmpId = MIN(EmpId)
+		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+			AND LeaveType = @PaternityTypeId
+	END
+
+	IF @TotalDaysPaternity > 0
+	BEGIN
+		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
+		SET BalanceDay = BalanceDay + @TotalDaysPaternity
+		WHERE EmpId = @EmpId
+			AND @FromDate >= ChildBornDate
+			AND @ToDate <= DATEADD(M, 1, ChildBornDate)
+	END
+
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
-		,@LeaveType = LeaveType
-		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
-
-	IF @LeaveType = @PaternityTypeId
-	BEGIN
-		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-		SET BalanceDay = BalanceDay + @TotalDays
-		WHERE EmpId = @EmpId
-			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
-			AND @FromDate >= ChildBornDate
-	END
 
 	DELETE dbo.WorkingTimeRequest
 	WHERE RequestId = @RequestId
@@ -74,7 +90,7 @@ BEGIN
 
 	DELETE dbo.WeekendLeaveTrans
 	WHERE RequestId = @RequestId
-	
+
 	DELETE dbo.DisciplineRequestTrans
 	WHERE RequestId = @RequestId
 

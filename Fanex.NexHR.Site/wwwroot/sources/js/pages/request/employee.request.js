@@ -15,7 +15,7 @@ import {
     axiosError, blockUI, unblockUI, floatThead, confirm, initDatepicker,
     initFromDateOnChange, toastOptions, resolveClientUrl
 } from '../../shared/common.functions';
-import { RequestCommand } from '../../shared/constants';
+import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(function () {
     function processRequest(requestId, requestTypeId, roleId, command, comment, disciplines) {
@@ -269,7 +269,7 @@ $(function () {
         }
     }
 
-    function approveMultipleRequest() {
+    function processMultipleRequest(commandType) {
         let objSelected = $('table#data tbody input[type=checkbox]:checked');
 
         switch (objSelected.length) {
@@ -289,7 +289,24 @@ $(function () {
                 break;
         }
 
-        $('#dialogProcessMultipleRequest').dialog({
+        switch (commandType) {
+            case 'Accept':
+                openDialogVerifyMultipleRequest();
+                break;
+            case 'Approve':
+                openDialogApproveMultipleRequest();
+                break;
+            case 'Process':
+                openDialogProcessMultipleRequest();
+                break;
+        }
+
+    }
+
+    function openDialogApproveMultipleRequest() {
+        let objSelected = $('table#data tbody input[type=checkbox]:checked');
+
+        $('#dialogApproveMultipleRequest').dialog({
             title: 'Are you sure you want to approve these requests ?',
             height: 'auto',
             width: 'auto',
@@ -299,6 +316,7 @@ $(function () {
                 class: 'btn btn-primary',
                 click: function () {
                     let requests = [],
+                        modal = $(this),
                         comment = $(this).find('textarea#Comment').val(),
                         isValid = true,
                         chkIgnore = $(this).find('#chk-ignore-all'),
@@ -308,7 +326,14 @@ $(function () {
                         isValid = false;
                     } else {
                         objSelected.each(function () {
-                            var request = this;
+                            const request = this;
+                            const role = request.getAttribute('roleId');
+
+                            if (role != RoleSystem.Approver) {
+                                toastr.error('You don\'t have permission to approve some requests', '', toastOptions());
+                                isValid = false;
+                            }
+
                             requests.push({
                                 RequestId: parseInt(request.getAttribute('Id'), 10),
                                 RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
@@ -321,8 +346,8 @@ $(function () {
                             .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b>.');
                     } else {
                         $(this).find('.validation-summary-valid').hide();
-                        approveRequests(requests, comment, chkIgnore.prop('checked'));
-                        $(this).dialog('close');
+                        processMultiRequests(requests, comment, RoleSystem.Approver, RequestCommand.Approve, chkIgnore.prop('checked'));
+                        modal.dialog('close');
                     }
                 }
             },
@@ -336,16 +361,108 @@ $(function () {
         });
     }
 
-    function approveRequests(requests, comment, isIgnoredViolate) {
+    function openDialogVerifyMultipleRequest() {
+        let objSelected = $('table#data tbody input[type=checkbox]:checked');
+
+        $('#dialogProcessMultipleRequest').dialog({
+            title: 'Are you sure you want to verify these requests ?',
+            height: 'auto',
+            width: 'auto',
+            modal: true,
+            buttons: [{
+                text: 'Confirm',
+                class: 'btn btn-primary',
+                click: function () {
+                    let requests = [],
+                        modal = $(this),
+                        comment = $(this).find('textarea#Comment')[0].value;
+
+                    objSelected.each(function () {
+                        const request = this;
+                        const role = request.getAttribute('roleId');
+
+                        if (role != RoleSystem.Verifier) {
+                            toastr.error('You don\'t have permission to verify some requests', '', toastOptions());
+                            isValid = false;
+                        }
+
+                        requests.push({
+                            RequestId: parseInt(request.getAttribute('Id'), 10),
+                            RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
+                        });
+                    });
+
+                    processMultiRequests(requests, comment, RoleSystem.Verifier, RequestCommand.Accept);
+                    modal.dialog('close');
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn btn-default',
+                click: function () {
+                    $(this).dialog('close');
+                }
+            }]
+        });
+    }
+
+    function openDialogProcessMultipleRequest() {
+        let objSelected = $('table#data tbody input[type=checkbox]:checked');
+
+        $('#dialogProcessMultipleRequest').dialog({
+            title: 'Are you sure you want to process these requests ?',
+            height: 'auto',
+            width: 'auto',
+            modal: true,
+            buttons: [{
+                text: 'Confirm',
+                class: 'btn btn-primary',
+                click: function () {
+                    const requests = [],
+                        modal = $(this),
+                        comment = $(this).find('textarea#Comment')[0].value;
+
+                    objSelected.each(function () {
+                        const request = this;
+                        const role = request.getAttribute('roleId');
+
+                        if (role != RoleSystem.HR) {
+                            toastr.error('You don\'t have permission to process some requests', '', toastOptions());
+                            isValid = false;
+                        }
+
+                        requests.push({
+                            RequestId: parseInt(request.getAttribute('Id'), 10),
+                            RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
+                        });
+                    });
+
+                    processMultiRequests(requests, comment, RoleSystem.HR, RequestCommand.Process);
+                    modal.dialog('close');
+                }
+            },
+            {
+                text: 'Cancel',
+                class: 'btn btn-default',
+                click: function () {
+                    $(this).dialog('close');
+                }
+            }]
+        });
+    }
+
+    function processMultiRequests(requests, comment, roleId, command , isIgnoredViolate) {
         blockUI();
         const model = {
             requests: requests,
             comment: comment,
+            RoleId: roleId,
+            Command: command,
             IsIgnoredViolate: isIgnoredViolate
         };
 
         axios({
-            url: resolveClientUrl('request/ApproveMultipleRequests'),
+            url: resolveClientUrl('request/ProcessMultipleRequests'),
             method: 'POST',
             data: stringify({ model }),
             headers: {
@@ -502,8 +619,9 @@ $(function () {
             $('table#data').find('tbody input[type=checkbox]').prop('checked', event.target.checked);
         });
 
-        $('#btnApproveMultiple').on('click', function (event){
-            approveMultipleRequest();
+        $('.btnApproveMultiple').on('click', function (event) {
+            const commandType = event.target.getAttribute('command-type');
+            processMultipleRequest(commandType);
         });
 
         floatThead('#data');

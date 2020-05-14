@@ -5,14 +5,73 @@ import 'jquery-contextmenu/dist/jquery.contextMenu';
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import toastr from 'toastr';
 import axios from 'axios';
-import { stringify } from 'qs';
+import { stringify, parse } from 'qs';
 
-import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, blockUI, unblockUI, resolveClientUrl, downloadFile } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
+var sorts = [];
+
+function query() {
+    blockUI();
+    axios({
+        url: resolveClientUrl('overtime/ListMemberOvertime'),
+        method: 'POST',
+        data: stringify({
+            memberRequest: memberRequests,
+            sort: JSON.stringify(sorts) }),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).then(response => {
+        $('#listMemberOvertime').html(response.data);
+        floatThead('table#data');
+    }).catch(axiosError).then(() => unblockUI());
+}
+
+function eventSorting() {
+    $('th.col-sorter').on('click', function () {
+        var $this = $(this).find('div.fa'),
+            property = $this.attr('data-property'),
+            direction, index;
+
+        index = sorts.map(function (e) { return e.Property; }).indexOf(property);
+
+        if ($this.hasClass('fa-sort-desc')) {
+            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+            direction = 'asc';
+        } else if ($this.hasClass('fa-sort-asc')) {
+            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+            direction = 'desc';
+        } else {
+            refreshSorting();
+            $this.addClass('fa-sort-desc');
+            direction = 'desc';
+        }
+
+        if (index !== -1) {
+            sorts[index].Direction = direction;
+        } else {
+            sorts.shift();
+            sorts.push({ Property: property, Direction: direction });
+        }
+
+        query();
+    });
+}
+
+function refreshSorting() {
+    $('th.col-sorter').each(function () {
+        $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
+    });
+}
+
 $(document).ready(function () {
+    eventSorting();
+
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);
     let $confirmModal = $('#confirmModal'),
         $btnConfirm = $confirmModal.find('#btnConfirm'),
@@ -214,6 +273,21 @@ $(document).ready(function () {
         } else {
             toastr.error('Please choose at least one request to continue.', '', toastOptions());
         }
+    });
+
+    $('form.filter #btnExcel').on('click', function (event) {
+        event.preventDefault();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('Overtime/ExportMemberOvertime'),
+            method: 'GET',
+            params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
     });
 
     let renderIconOk = function (opt, $itemElement, itemKey, item) {

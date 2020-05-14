@@ -8,31 +8,37 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
+    using Newtonsoft.Json;
 
     public class OvertimeController : BaseController
     {
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly IOvertimeRequestService overtimeService;
+        private readonly IExportOvertimeService exportOvertimeService;
 
         public OvertimeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            IOvertimeRequestService overtimeService) : base(sessionService)
+            IOvertimeRequestService overtimeService,
+            IExportOvertimeService exportOvertimeService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.overtimeService = overtimeService;
+            this.exportOvertimeService = exportOvertimeService;
         }
 
         [HttpGet]
@@ -80,6 +86,16 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            model.MemberRequests = GetMemberOvertimeRequest(model);
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+
+            return View(model);
+        }
+
+        private IEnumerable<MonthlyOvertimeRequest> GetMemberOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
+        {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
             if (model.StatusId == -1)
@@ -104,11 +120,32 @@
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
-            ViewBag.CurrentUserId = sessionService.Employee.Id;
-            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
-            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+            return model.MemberRequests;
+        }
 
-            return View(model);
+        public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest, string sort)
+        {
+            memberRequest = SortMemberOvertime(sort, memberRequest.ToList());
+            ViewBag.CurrentUserId = sessionService.Employee.Id;
+
+            return PartialView("_ListMemberOvertime", memberRequest);
+        }
+
+        private static IList<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IList<MonthlyOvertimeRequest> memberRequests)
+        {
+            IList<MonthlyOvertimeRequest> memberOvertimeSorted;
+
+            if (sort != null)
+            {
+                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(sort);
+                memberOvertimeSorted = Utilities.MultipleSort(memberRequests, sorts);
+            }
+            else
+            {
+                memberOvertimeSorted = memberRequests;
+            }
+
+            return memberOvertimeSorted;
         }
 
         public ActionResult MemberDetails(long id)
@@ -120,6 +157,18 @@
 
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            return View(model);
+        }
+
+        public ActionResult ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            model.MemberRequests = GetEmployeeOvertimeRequest(model);
+
+            return PartialView("_ListEmployeeOvertime", model);
+        }
+
+        private IEnumerable<MonthlyOvertimeRequest> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
         {
             var statusIds = string.Empty;
             IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
@@ -144,9 +193,11 @@
                 StatusIds = statusIds,
                 IsProcessor = true
             };
-            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
-            return View(model);
+            model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
+
+            return model.MemberRequests;
         }
 
         public ActionResult EmployeeDetails(long id)
@@ -194,6 +245,28 @@
         public void ReminderClaimOvertime(string subject, string content)
         {
             BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
+        }
+
+        public ActionResult Export(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
+            const bool ismemberOvetime = false;
+            model.MemberRequests = GetEmployeeOvertimeRequest(model);
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
+
+            return File(exportData, MimeType.XLSX, fileName);
+        }
+
+        public ActionResult ExportMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+        {
+            var fileName = $"{Labels.MemberOvertimeReport}.xlsx";
+            const bool ismemberOvetime = true;
+
+            model.MemberRequests = GetMemberOvertimeRequest(model);
+            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
+
+            return File(exportData, MimeType.XLSX, fileName);
         }
     }
 }

@@ -193,7 +193,7 @@
 
                 IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
-                const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"*{1}½*\")/2)";
+                const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
                 var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
                 var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
@@ -272,10 +272,9 @@
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
-                annualLeaveColumn = 3,
-                unpaidLeaveColumn = 4,
-                weddingLeaveColumn = 5,
-                compensationLeaveColumn = 9
+                maternityLeaveColumn = 3,
+                weddingLeaveColumn = 8,
+                unpaidLeaveColumn = 9
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -300,7 +299,7 @@
             template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
             for (var i = 2; i <= TotalColumns; i++)
             {
-                template.Cells[templateIndex.summaryRow, templateIndex.annualLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                 var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             }
@@ -311,14 +310,14 @@
             worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
 
-        private void WriteHeaderSummary(
+        private static void WriteHeaderSummary(
             ExcelWorksheet template,
             ExcelWorksheet worksheet,
             IEnumerable<DateTime> months,
             dynamic templateIndex)
         {
             var rowIndex = templateIndex.headerRow;
-            var colIndex = templateIndex.annualLeaveColumn;
+            var colIndex = templateIndex.weddingLeaveColumn;
             template.Cells[rowIndex, 1, rowIndex, colIndex].Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex]);
             colIndex++;
             foreach (DateTime month in months)
@@ -327,9 +326,6 @@
                 worksheet.Cells[rowIndex, colIndex].Value = string.Format(worksheet.Cells[rowIndex, colIndex].Value.ToString(), month.ToString("MMM-yyyy"));
                 colIndex++;
             }
-
-            template.Cells[rowIndex, templateIndex.weddingLeaveColumn, rowIndex, templateIndex.compensationLeaveColumn]
-                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         }
 
         private void WriteBodySummary(
@@ -347,13 +343,23 @@
             foreach (var section in sections)
             {
                 var colIndex = 1;
-                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.annualLeaveColumn]
-                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.annualLeaveColumn]);
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.weddingLeaveColumn]
+                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.weddingLeaveColumn]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = section.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = section.Members.Sum(x => x.ActualWorkingDays);
                 worksheet.Cells[rowIndex, colIndex++].Value =
+                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.MaternityLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
                     section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.AnnualLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BusinessTrip));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
 
                 foreach (DateTime month in months)
                 {
@@ -369,19 +375,6 @@
                             x.DailyWorkings.Where(daily => daily.WorkDate.Month == month.Month && daily.WorkDate.Year == month.Year),
                             Core.Enums.LeaveTypes.PaternityLeave));
                 }
-
-                template.Cells[templateIndex.bodyRow, templateIndex.weddingLeaveColumn, templateIndex.bodyRow, templateIndex.compensationLeaveColumn]
-                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
-                worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.MaternityLeave));
-                worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BusinessTrip));
-                worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
-                worksheet.Cells[rowIndex, colIndex].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
 
                 rowIndex++;
             }

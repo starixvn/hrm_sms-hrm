@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = Labels.ScheduleArrange;
     var isSystemAdmin = (bool)ViewBag.IsSystemAdmin;
+    var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
+    var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/schedule.arrange.css" rel="stylesheet" />
@@ -14,6 +16,23 @@
     <a class="step">@ViewBag.Title</a>
 }
 
-<h2 class="page-title">@ViewBag.Title</h2>
+<div class="title">
+    <h2 class="page-title">@ViewBag.Title</h2>
+    <div>
+        @if (hasPermissionToViewHoliday)
+        {
+            <a href="~/Holiday/index">@Labels.Holiday</a>
+        }
+        @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
+        {
+            <span>||</span>
+        }
+        @if (hasPermissionToViewShift)
+        {
+            <a href="~/Shift/index">@Labels.Shift</a>
+        }
+    </div>
+</div>
+
 <input type="checkbox" id="IsSystemAdmin" hidden @(isSystemAdmin ? "checked" : string.Empty) />
 <div id="schedule-wrapper"></div>

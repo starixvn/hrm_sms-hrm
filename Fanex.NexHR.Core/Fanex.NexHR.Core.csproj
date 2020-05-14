@@ -198,6 +198,7 @@
     <Compile Include="Models\EmployeeSession.cs" />
     <Compile Include="Models\FunctionSession.cs" />
     <Compile Include="Models\MenuItemSession.cs" />
+    <Compile Include="Models\SortModel.cs" />
     <Compile Include="NPOIExtensions\HSSFCellExtensions.cs" />
     <Compile Include="NPOIExtensions\HSSFCellRangeAddressExtensions.cs" />
     <Compile Include="NPOIExtensions\HSSFRowExtensions.cs" />

@@ -29,14 +29,28 @@
             {
                 <tr>
                     <th colspan="14">
+                        <div style="float:right; margin-left: 10px">
+                            <input type="button" class="btn btn-primary btnApproveMultiple" id="btnApproveMultiple" command-type="@RequestCommand.Approve" value="@Labels.Approve" />
+                        </div>
+
                         <div style="float:right;">
-                            <input type="button" class="btn btn-primary" id="btnApproveMultiple" value="@Labels.Approve" />
+                            <input type="button" class="btn btn-primary btnApproveMultiple" id="btnApproveMultiple" command-type="@RequestCommand.Accept" value="@Labels.Verify" />
+                        </div>
+                    </th>
+                </tr>
+            }
+            else if (Model.ViewType == RequestViewType.HRSpace)
+            {
+                <tr>
+                    <th colspan="14">
+                        <div style="float:right;">
+                            <input type="button" class="btn btn-primary btnApproveMultiple" id="btnApproveMultiple" command-type="@RequestCommand.Process" value="@Labels.Process" />
                         </div>
                     </th>
                 </tr>
             }
             <tr>
-                @if (Model.ViewType == RequestViewType.PersonalSpace)
+                @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
                 {
                     <th>
                         <div class="checkbox">
@@ -74,12 +88,40 @@
                         {
                             <td>
                                 <div class="checkbox">
-                                    @if (request.ApprovedBy.Id == Model.CurrentUserId && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
+                                    @if (request.ApprovedBy.Id == Model.CurrentUserId
+                                        && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
                                     {
-                                        <input type="checkbox" 
-                                               class="checkbox-custom chk-request" 
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
                                                roleid="@Convert.ToInt32(RoleSystem.Approver)"
-                                               requesttypeid="@request.RequestType.Id" 
+                                               requesttypeid="@request.RequestType.Id"
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                    else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
+                                    {
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
+                                               roleid="@Convert.ToInt32(RoleSystem.Verifier)"
+                                               requesttypeid="@request.RequestType.Id"
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                </div>
+                            </td>
+                        }
+                        else if (Model.ViewType == RequestViewType.HRSpace)
+                        {
+                            <td>
+                                <div class="checkbox">
+                                    @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
+                                    {
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
+                                               roleid="@Convert.ToInt32(RoleSystem.HR)"
+                                               requesttypeid="@request.RequestType.Id"
                                                employeeid="@request.Requester.Id"
                                                id="@request.Id" />
                                         <label for="@request.Id"></label>
@@ -147,17 +189,18 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 12);
+            @RazorHelper.DisplayNoInformation(colspan: 14);
         }
     </table>
 </div>
 <div id="dialoghistorycontent"></div>
 <div id="dialogProcessRequest" h></div>
-<div id="dialogProcessMultipleRequest" role="dialog" class="modal dialogProcessRequest">
+<div id="dialogApproveMultipleRequest" role="dialog" class="modal dialogApproveMultipleRequest">
     <form>
         <div class="formrow">
             <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
         </div>
+
         <div class="formrow">
             <div class="label approver-selection">
                 <label>@Labels.Violation : </label>
@@ -167,16 +210,32 @@
                 <label for="chk-ignore-all">@Labels.ViolationIgnored</label>
             </div>
             <div class="input radio-btn">
-                <input type="radio" id="chk-record-all" name="btn-violation"/>
+                <input type="radio" id="chk-record-all" name="btn-violation" />
                 <label for="chk-record-all">@Labels.ViolationRecorded</label>
             </div>
+        </div>
+
+        <div class="formrow">
+            <div class="label approver-comment">
+                <label for="Comment">@Labels.Comment : </label>
+            </div>
+            <div class="input">
+                <textarea class="form-control" cols="20" id="Comment" viewtype="@Model.ViewType" maxlength="500" name="Comment" rows="2"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="dialogProcessMultipleRequest" role="dialog" class="modal dialogProcessRequest">
+    <form>
+        <div class="formrow">
+            <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
         </div>
         <div class="formrow">
             <div class="label approver-comment">
                 <label for="Comment">@Labels.Comment : </label>
             </div>
             <div class="input">
-                <textarea class="form-control" cols="20" id="Comment" maxlength="500" name="Comment" rows="2"></textarea>
+                <textarea class="form-control" cols="20" id="Comment" viewtype="@Model.ViewType" maxlength="500" name="Comment" rows="2"></textarea>
             </div>
         </div>
     </form>
@@ -254,8 +313,13 @@
                 </span>
             }
             break;
+        case (byte)CurrentRequestStatus.Void:
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+            break;
         default:
-            <span class="tooltip-tipsy">@request.Status.ToString()</span>
+            <span>@request.Status.ToString()</span>
             break;
     }
 }
@@ -351,7 +415,9 @@
             break;
         case (byte)CurrentRequestStatus.Processed:
         case (byte)CurrentRequestStatus.Void:
-            <span>@request.Status.ToString()</span>
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
             break;
         default:
             <span>@request.Status.ToString()</span>

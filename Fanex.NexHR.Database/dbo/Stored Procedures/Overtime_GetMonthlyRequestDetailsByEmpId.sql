@@ -1,6 +1,8 @@
 ﻿
 CREATE PROCEDURE [dbo].[Overtime_GetMonthlyRequestDetailsByEmpId] @EmployeeId INT
 	,@Month DATE
+	,@FromDate DATE
+	,@ToDate DATE
 AS
 /*
 Created: Tim.Trinh@2019-07-02
@@ -14,12 +16,6 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @fromDate DATE = DATEADD(month, - 1, @Month)
-		,@toDate DATE
-
-	SELECT @fromDate = CONVERT(VARCHAR(5), YEAR(@fromDate)) + '/' + CONVERT(VARCHAR(2), MONTH(@fromDate)) + '/10'
-		,@toDate = CONVERT(VARCHAR(5), YEAR(@Month)) + '/' + CONVERT(VARCHAR(2), MONTH(@Month)) + + '/09'
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate

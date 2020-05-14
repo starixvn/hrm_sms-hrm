@@ -118,6 +118,7 @@ $(document).ready(function () {
         if (isValid) {
             let model = {
                 employeeId: $('#EmployeeId').val(),
+                month: $('#Month').val(),
                 verifierId: $('#VerifierId').val(),
                 approverId: $('#ApproverId').val(),
                 dailyOvertimes: []

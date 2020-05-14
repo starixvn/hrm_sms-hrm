@@ -139,4 +139,57 @@
         </div>
     </div>
 </form>
-<div id="attendanceDetails"></div>
+
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th class="col-sorter">
+                @Labels.Date
+                <div class="fa fa-sort" data-property="AttendanceDate"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.NickName
+                <div class="fa fa-sort" data-property="NickName"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Section
+                <div class="fa fa-sort" data-property="TeamCode"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Shift
+                <div class="fa fa-sort" data-property="ShiftCode"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.CheckIn
+                <div class="fa fa-sort" data-property="InFixed"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.CheckOut
+                <div class="fa fa-sort" data-property="OutFixed"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.TotalHours
+                <div class="fa fa-sort" data-property="TotalWorkHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.LateIn
+                <div class="fa fa-sort" data-property="LateIn"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.EarlyOut
+                <div class="fa fa-sort" data-property="EarlyOut"></div>
+            </th>
+            <th>@Labels.Request</th>
+            <th class="col-sorter">
+                @Labels.Overtime
+                <div class="fa fa-sort" data-property="OvertimeHours"></div>
+            </th>
+            <th>@Labels.Note</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="attendanceDetails"></tbody>
+</table>
+
+<div id="tippy-request" class="tippy-request"></div>

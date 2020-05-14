@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models.Report.Overtime;
@@ -15,7 +16,7 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     var dateRanges = multi.Read<DateRange>();
-                    var dailyOvertimes = multi.Read<DailyOvertimeDetails>();
+                    var dailyOvertimes = multi.Read<DailyOvertimeDetails>().OrderBy(x => x.WorkDate).ThenByDescending(x => x.Section);
 
                     return new Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>(dateRanges, dailyOvertimes);
                 }

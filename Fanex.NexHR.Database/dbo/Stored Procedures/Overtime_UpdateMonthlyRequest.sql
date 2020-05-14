@@ -1,5 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Overtime_UpdateMonthlyRequest] @EmployeeId INT
+	,@Month DATE
 	,@VerifierId INT
 	,@ApproverId INT
 	,@DailyDetailsXml NVARCHAR(MAX)
@@ -94,19 +95,7 @@ BEGIN
 	END CATCH
 
 	DECLARE @RequestId BIGINT
-		,@Month DATE
-		,@CurrentStatus TINYINT
-
-	SELECT TOP 1 @Month = MAX(WorkDate)
-	FROM #tblDailyOvertime WITH (NOLOCK)
-
-	SELECT @Month = CASE 
-			WHEN DAY(@Month) BETWEEN 10
-					AND 31 THEN DATEADD(MONTH, 1, @Month)
-			ELSE @Month
-			END
-
-	SELECT @Month = CONVERT(VARCHAR(5), YEAR(@Month)) + '/' + CONVERT(VARCHAR(2), MONTH(@Month)) + '/01'
+		,@CurrentStatus TINYINT 
 
 	SELECT TOP 1 @RequestId = RequestId
 		,@CurrentStatus = CurrentStatus
@@ -288,3 +277,4 @@ BEGIN
 
 	DROP TABLE #tblDailyOvertime
 END
+

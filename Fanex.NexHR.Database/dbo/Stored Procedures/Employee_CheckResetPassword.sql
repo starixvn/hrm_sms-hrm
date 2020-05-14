@@ -19,5 +19,5 @@ BEGIN
 	FROM dbo.Employee WITH (NOLOCK)
 	WHERE EmpId = @EmployeeId
 	
-	SELECT @IsReset
+	SELECT ISNULL(@IsReset, 0)
 END

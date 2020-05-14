@@ -100,6 +100,7 @@
     <Compile Include="Log\FieldValue.cs" />
     <Compile Include="Log\LogObjectDetail.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />
+    <Compile Include="Report\Overtime\GetMonthlyOvertimeDetailParam.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeParam.cs" />
     <Compile Include="Report\ShiftStatistic\GetShiftStatisticDetailParam.cs" />
     <Compile Include="Report\ShiftStatistic\GetShiftStatisticParam.cs" />

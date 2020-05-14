@@ -26,8 +26,7 @@
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ICommonDataService commonDataService;
-        const string pathFolder = "~/file/uploads/request/";
-
+        private const string pathFolder = "~/file/uploads/request/";
 
         public RequestController(
             ISessionService sessionService,
@@ -218,16 +217,15 @@
         [HttpPost]
         [ValidateInput(false)]
         [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
-        public CustomJsonResult ApproveMultipleRequests(ApproveRequestsParam model)
+        public CustomJsonResult ProcessMultipleRequests(ApproveRequestsParam model)
         {
             model.ActorId = sessionService.Employee.Id;
-            model.RoleId = (byte)RoleSystem.Approver;
 
             var commandResult = requestService.ApproveRequests(model);
 
             if (commandResult.IsSuccessful)
             {
-                requestService.SendMailAprroveRequests(model, sessionService.Employee);
+                requestService.SendMailProcessRequests(model, sessionService.Employee, model.Command);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

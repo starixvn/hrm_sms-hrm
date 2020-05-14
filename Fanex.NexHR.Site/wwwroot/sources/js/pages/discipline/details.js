@@ -246,16 +246,7 @@ import { DisciplineType } from '../../shared/constants';
             .then(response => {
                 $('#Section').multiSelectTreeView({
                     data: response.data,
-                    noneSelectedText: 'Select a section',
-                    singleSelection: true,
-                    onSelect: function () {
-                        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
-                        if ($('#TeamId').val().length > 0) {
-                            $('form.form-filter #TeamName').val($('#Section .selected-text').text());
-                        } else {
-                            $('form.form-filter #TeamName').val('');
-                        }
-                    }
+                    isSelectedAll: true,
                 });
 
                 query();
@@ -266,7 +257,7 @@ import { DisciplineType } from '../../shared/constants';
         });
 
         $('form.form-filter #submit').on('click', function (event) {
-            event.preventDefault();
+            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
             query();
         });
 

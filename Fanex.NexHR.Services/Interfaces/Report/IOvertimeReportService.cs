@@ -8,7 +8,7 @@
     {
         IEnumerable<YearlyOvertime> GetYearlyOvertime(GetYearlyOvertimeParam param);
 
-        IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(int employeeId, DateTime fromDate, DateTime toDate);
+        IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param);
 
         Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(GetMonthlyOvertimeParam param);
 

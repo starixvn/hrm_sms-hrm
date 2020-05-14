@@ -137,6 +137,7 @@
     <Compile Include="Export\ExportRequestController.cs" />
     <Compile Include="Export\ExportLeaveSummaryController.cs" />
     <Compile Include="Export\ExportDisciplineController.cs" />
+    <Compile Include="Export\ExportTimeRecordController.cs" />
     <Compile Include="Export\ExportWeekendLeaveController.cs" />
     <Compile Include="InformationController.cs" />
     <Compile Include="MenuController.cs" />

@@ -25,12 +25,8 @@
         [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
         public ActionResult MonthlyOvertime()
         {
-            var today = DateTime.Today;
             var model = new MonthlyFilterViewModel
             {
-                Month = today.Month,
-                Year = today.Year,
-                Calendar = (byte)CalendarType.Fiscal,
                 EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
@@ -55,21 +51,10 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
-        public ActionResult MonthlyOvertimeDetails(int employeeId, byte month, int year, CalendarType calendar)
+        public ActionResult MonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
         {
-            const byte FromDay = 10;
-            const byte ToDay = 9;
-            var fromDate = new DateTime(year, month, 1);
-            var toDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-            if (calendar == CalendarType.Fiscal)
-            {
-                var previousMonth = fromDate.AddMonths(-1);
-                fromDate = new DateTime(previousMonth.Year, previousMonth.Month, FromDay);
-                toDate = new DateTime(year, month, ToDay);
-            }
-
-            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(employeeId, fromDate, toDate);
-            ViewBag.Month = new DateTime(year, month, 1);
+            IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(param);
+            ViewBag.Month = new DateTime(param.Year, param.Month, 1);
 
             return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
         }
@@ -104,10 +89,10 @@
                 EmployeeStatusId = model.EmployeeStatusId
             };
             Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple = overtimeReportService.GetMonthlyOvertime(param);
-            DateTime requestDate = new DateTime(model.Year, model.Month, 1);
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
 
-            var fileName = "Monthly Overtime Report " + requestDate.ToString("MMM-yyyy") + ".xlsx";
+            var fileName = $"Monthly Overtime Report {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
+
             return File(bytes, MimeType.XLSX, fileName);
         }
 

@@ -65,12 +65,7 @@ $(document).ready(function () {
         .then(response => {
             $('#Section').multiSelectTreeView({
                 data: response.data,
-                noneSelectedText: 'Select a section',
-                selectedItems: $('#TeamId').val(),
-                singleSelection: true,
-                onSelect: function () {
-                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
-                }
+                isSelectedAll: true,
             });
 
             query();
@@ -80,7 +75,7 @@ $(document).ready(function () {
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('form.filter #btnSubmit').on('click', function (event) {
-        event.preventDefault();
+        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
         query();
     });
 

@@ -33,5 +33,7 @@
         public bool? IsRealDate { get; set; }
 
         public int SupervisorId { get; set; }
+
+        public string Sort { get; set; }
     }
 }

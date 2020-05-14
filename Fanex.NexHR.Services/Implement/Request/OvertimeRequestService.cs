@@ -5,6 +5,7 @@
     using System.Linq;
     using Core.Services;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.XMLExtensions;
@@ -15,6 +16,9 @@
 
     public class OvertimeRequestService : IOvertimeRequestService
     {
+        private const byte FromDay = 21;
+        private const byte ToDay = 20;
+
         private readonly IOvertimeRequestRepository overtimeRepository;
         private readonly IBaseService baseService;
         private readonly IEmailService emailService;
@@ -31,10 +35,30 @@
 
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
         {
+            var today = DateTime.Today;
+            var fromDate = new DateTime(year, 1, 1);
+            var toDate = DateTime.Today;
+
+            if (today.Year != year)
+            {
+                toDate = new DateTime(year, Constants.December, 1);
+            }
+
+            if (today.Day > ToDay)
+            {
+                toDate = toDate.AddMonths(1);
+            }
+
+            if(toDate.Year > year)
+            {
+                toDate = new DateTime(year, Constants.December, 1);
+            }
+
             var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
             {
                 EmployeeId = employeeId,
-                Year = year
+                FromDate = fromDate,
+                ToDate = toDate
             };
             IEnumerable<MonthlyOvertimeRequest> monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
@@ -43,10 +67,13 @@
 
         public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
         {
+            var dateRange = GetDateRange(month.FirstDayOfMonth());
             var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
             {
                 EmployeeId = employeeId,
-                Month = month
+                Month = month.FirstDayOfMonth(),
+                FromDate = dateRange.Item1,
+                ToDate = dateRange.Item2
             };
             MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
@@ -121,6 +148,7 @@
             {
                 ActorId = actorId,
                 EmployeeId = model.EmployeeId,
+                Month = model.Month.FirstDayOfMonth(),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
@@ -193,6 +221,27 @@
             }
 
             return emails;
+        }
+
+        private static Tuple<DateTime, DateTime> GetDateRange(DateTime month)
+        {
+            var newRuleApplyFromMonth = new DateTime(2020, 5, 1);
+            var lastMonth = month.AddMonths(-1);
+            var fromDate = new DateTime(lastMonth.Year, lastMonth.Month, 10);
+            var toDate = new DateTime(month.Year, month.Month, 9);
+
+            if(month == newRuleApplyFromMonth)
+            {
+                toDate = new DateTime(month.Year, month.Month, ToDay);
+            }
+
+            if (month > newRuleApplyFromMonth)
+            {
+                fromDate = new DateTime(lastMonth.Year, lastMonth.Month, FromDay);
+                toDate = new DateTime(month.Year, month.Month, ToDay);
+            }
+
+            return new Tuple<DateTime, DateTime>(fromDate, toDate);
         }
     }
 }

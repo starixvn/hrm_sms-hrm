@@ -37,6 +37,9 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult Index()
         {
+            ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
+            ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
+
             ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
                 .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
             return View();

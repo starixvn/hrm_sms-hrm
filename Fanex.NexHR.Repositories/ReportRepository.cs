@@ -124,6 +124,7 @@
             var request = new EmployeeAttendanceRequest
             {
                 RequestType = new RequestTypeModel { Id = (short)t.RequestType },
+                RequestDate = t.RequestDate ?? DateTime.Now,
                 FromDate = t.FromDate,
                 ToDate = t.ToDate,
                 FromTime = t.FromTime,

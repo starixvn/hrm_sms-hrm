@@ -25,8 +25,6 @@ BEGIN
 		,@ApproverId INT
 		,@StatusId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@LeaveType TINYINT
-		,@TotalDays INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -40,6 +38,9 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 		,@PaternityTypeId TINYINT = 14
+		,@TotalDaysPaternity INT
+		,@tmpFromDate DATE
+		,@tmpToDate DATE
 
 	SELECT @EmpId = lr.EmpId
 		,@FromDate = lr.FromDate
@@ -47,19 +48,35 @@ BEGIN
 		,@VerifierId = r.VerifierId
 		,@ApproverId = r.ApproverId
 		,@StatusId = r.CurrentStatus
-		,@LeaveType = LeaveType
-		,@TotalDays = TotalDays
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	IF @LeaveType = @PaternityTypeId AND (@StatusId = @NotVerifiedStatusId OR @StatusId = @RejectedStatusId)
+	SELECT @TotalDaysPaternity = TotalDays
+		,@tmpFromDate = FromDate
+		,@tmpToDate = ToDate
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+		AND LeaveType = @PaternityTypeId
+
+	IF ISNULL(@TotalDaysPaternity, 0) = 0
+	BEGIN
+		SELECT @TotalDaysPaternity = COUNT(1)
+			,@tmpFromDate = MIN(OnDate)
+			,@tmpToDate = MAX(OnDate)
+		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+			AND LeaveType = @PaternityTypeId
+	END
+
+	IF @TotalDaysPaternity > 0
+		AND @StatusId IN (@NotVerifiedStatusId, @RejectedStatusId)
 	BEGIN
 		UPDATE dbo.EmployeePaternity WITH (ROWLOCK, UPDLOCK)
-		SET BalanceDay = BalanceDay - @TotalDays
+		SET BalanceDay = BalanceDay - @TotalDaysPaternity
 		WHERE EmpId = @EmpId
-			AND DATEADD(M, 1, ChildBornDate) >= @ToDate
-			AND @FromDate >= ChildBornDate
+			AND @tmpFromDate >= ChildBornDate
+			AND @tmpToDate <= DATEADD(M, 1, ChildBornDate)
 	END
 
 	IF @StatusId <> @ProcessedStatusId

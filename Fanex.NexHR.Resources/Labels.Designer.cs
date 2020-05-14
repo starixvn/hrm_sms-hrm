@@ -1564,6 +1564,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EmployeeOvertimeReport.
+        /// </summary>
+        public static string EmployeeOvertimeReport {
+            get {
+                return ResourceManager.GetString("EmployeeOvertimeReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee Permission Summary.
         /// </summary>
         public static string EmployeePermissionSummary {
@@ -2694,6 +2703,15 @@ namespace Fanex.NexHR.Resources {
         public static string MemberOvertime {
             get {
                 return ResourceManager.GetString("MemberOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MemberOvertimeReport.
+        /// </summary>
+        public static string MemberOvertimeReport {
+            get {
+                return ResourceManager.GetString("MemberOvertimeReport", resourceCulture);
             }
         }
         
@@ -4566,6 +4584,15 @@ namespace Fanex.NexHR.Resources {
         public static string TimeRecord {
             get {
                 return ResourceManager.GetString("TimeRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TimeRecord.
+        /// </summary>
+        public static string TimeRecordReport {
+            get {
+                return ResourceManager.GetString("TimeRecordReport", resourceCulture);
             }
         }
         

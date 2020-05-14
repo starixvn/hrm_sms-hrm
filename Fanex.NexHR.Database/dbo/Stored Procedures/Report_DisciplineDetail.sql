@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_DisciplineDetail] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
-	,@GroupId INT = NULL
+	,@GroupId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@ReasonId INT = NULL
 	,@IsLocal BIT = NULL
@@ -19,6 +19,15 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	CREATE TABLE #tblGroupIds (TmpGroupId INT)
+
+	IF ISNULL(@GroupId, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupIds (TmpGroupId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@GroupId, ',')
+	END
 
 	DECLARE @HasEditDisciplineRole INT = 0
 	--request type
@@ -481,7 +490,11 @@ BEGIN
 					)
 				)
 			)
-		AND ISNULL(@GroupId, emp.GroupId) = emp.GroupId
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 		AND (
 			EXISTS (
 				SELECT 1
@@ -670,4 +683,6 @@ BEGIN
 	ORDER BY dis.WorkDate DESC
 
 	DROP TABLE #tblDisciplineDetail
+
+	DROP TABLE #tblGroupIds
 END

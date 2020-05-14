@@ -1878,4 +1878,13 @@
   <data name="FileAttach" xml:space="preserve">
     <value>Attach File</value>
   </data>
+  <data name="TimeRecordReport" xml:space="preserve">
+    <value>TimeRecord</value>
+  </data>
+  <data name="EmployeeOvertimeReport" xml:space="preserve">
+    <value>EmployeeOvertimeReport</value>
+  </data>
+  <data name="MemberOvertimeReport" xml:space="preserve">
+    <value>MemberOvertimeReport</value>
+  </data>
 </root>

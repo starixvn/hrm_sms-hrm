@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_DisciplineSummary] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
-	,@GroupId INT = NULL
+	,@GroupId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@ReasonId INT = NULL
 	,@IsLocal BIT = NULL
@@ -19,6 +19,15 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	CREATE TABLE #tblGroupIds (TmpGroupId INT)
+
+	IF ISNULL(@GroupId, '') <> ''
+	BEGIN
+		INSERT INTO #tblGroupIds (TmpGroupId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@GroupId, ',')
+	END
 
 	CREATE TABLE #tblEmployeeDiscipline (
 		WorkDate DATE
@@ -172,7 +181,11 @@ BEGIN
 	WHERE d.IsDeleted = 0
 		AND d.WorkDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 	
@@ -209,7 +222,11 @@ BEGIN
 	WHERE dis.IsDeleted = 0
 		AND dis.WorkDate BETWEEN @FromDate
 			AND @ToDate
-		AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 
@@ -397,7 +414,11 @@ BEGIN
 		LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE emp.[Enabled] = 1
 		AND ISNULL(emp.IsDeleted, 0) = 0
-		AND ISNULL(@GroupId, gr.GroupId) = gr.GroupId
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupIds AS tbl
+			WHERE emp.GroupId = tbl.TmpGroupId
+			)
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, empSum.IsLocal) = empSum.IsLocal
 		AND (
@@ -543,4 +564,6 @@ BEGIN
 	DROP TABLE #tblEmployeeDiscipline
 
 	DROP TABLE #tblEmployeeDisciplineFinalScore
+
+	DROP TABLE #tblGroupIds
 END

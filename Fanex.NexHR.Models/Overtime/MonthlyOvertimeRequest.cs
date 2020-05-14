@@ -21,6 +21,9 @@
         public DateTime? ApprovedDate { get; set; }
         public bool IsWarning { get; set; }
         public bool IsHost { get; set; }
+        public string Nickname => Requester.Nickname;
+        public string FullName => Requester.FullName;
+        public string Section => Requester.Section;
 
         public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
     }
