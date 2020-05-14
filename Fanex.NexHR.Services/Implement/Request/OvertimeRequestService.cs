@@ -148,6 +148,7 @@
             {
                 ActorId = actorId,
                 EmployeeId = model.EmployeeId,
+                Month = model.Month.FirstDayOfMonth(),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
