@@ -191,7 +191,8 @@
                 SectionIds = model.SectionIds,
                 EmployeeId = model.EmployeeId,
                 StatusIds = statusIds,
-                IsProcessor = true
+                IsProcessor = true,
+                OvertimeType = model.OvertimeType
             };
 
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);

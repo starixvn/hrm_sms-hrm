@@ -11,6 +11,7 @@
         public string StatusIds { get; set; }
         public DateTime? Month { get; set; }
         public bool IsProcessor { get; set; }
+        public short OvertimeType { get; set; }
 
         public override string GetSettingKey() => "Overtime_GetMemberMonthlyRequest";
 

@@ -4,6 +4,9 @@
 
     public enum OvertimeType
     {
+        [StringValue("All")]
+        All = 0,
+
         [StringValue("Normal")]
         Normal = 1,
 
@@ -12,5 +15,8 @@
 
         [StringValue("Holiday")]
         Holiday = 3,
+
+        [StringValue("Special")]
+        Special = 4,
     }
 }

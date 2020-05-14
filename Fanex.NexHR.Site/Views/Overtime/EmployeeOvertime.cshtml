@@ -42,6 +42,26 @@
                 @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control")
             </div>
         </div>
+
+        <div class="form-group form-group-sm">
+            <div class="label-form">
+                @Html.LabelFor(model => model.OvertimeType, "Overtime Type", new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var types = new List<SelectListItem>
+                            {
+                                new SelectListItem() { Text = Labels.All, Value = ((short)OvertimeType.All).ToString() },
+                                new SelectListItem() { Text = Labels.NormalDay, Value = ((short)OvertimeType.Normal).ToString() },
+                                new SelectListItem() { Text = Labels.OffDay, Value = ((short)OvertimeType.Off).ToString() },
+                                new SelectListItem() { Text = Labels.PublicHoliday, Value = ((short)OvertimeType.Holiday).ToString() },
+                                new SelectListItem() { Text = Labels.SpecialOT, Value = ((short)OvertimeType.Special).ToString() },
+                            };
+                }
+                @Html.DropDownListFor(model => model.OvertimeType, types, new { @class = "form-control" })
+            </div>
+        </div>
+
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">

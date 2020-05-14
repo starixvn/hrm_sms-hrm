@@ -5,6 +5,7 @@ CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@Month DATE = NULL
 	,@StatusIds VARCHAR(MAX) = NULL
 	,@IsProcessor BIT = 0
+	,@OvertimeType SMALLINT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-05
@@ -26,11 +27,29 @@ BEGIN
 		,@RejectedStatusId TINYINT = 5
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
+	-- overtime type
+		,@ALLOvertimeType TINYINT = 0
+		,@NormalDay TINYINT = 1
+		,@OffDay TINYINT = 2
+		,@PublicHoliday TINYINT = 3
+		,@SpecialOT TINYINT = 4
+
 	DECLARE @tblStatusIds TABLE (StatusId TINYINT)
 
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
+
+	CREATE TABLE #tblOvertimeType (RequestId INT)
+
+	INSERT INTO #tblOvertimeType (RequestId)
+	SELECT otmr.RequestId
+	FROM dbo.OTMonthlyRequest AS otmr WITH (NOLOCK)
+	WHERE @OvertimeType = @ALLOvertimeType
+		OR (@OvertimeType = @NormalDay AND otmr.NormalHours > 0)
+		OR (@OvertimeType = @OffDay AND otmr.OffHours > 0)
+		OR (@OvertimeType = @PublicHoliday AND otmr.PublicHours > 0)
+		OR (@OvertimeType = @SpecialOT AND otmr.SpecialHours > 0)
 
 	IF @EmployeeId IS NULL
 	BEGIN
@@ -145,6 +164,11 @@ BEGIN
 			OR req.VerifierId = @ActorId
 			OR req.ApproverId = @ActorId
 			)
+		AND EXISTS (
+			SELECT 1
+			FROM #tblOvertimeType AS ovt
+			WHERE req.RequestId = ovt.RequestId
+			)
 	ORDER BY IsHost DESC
 		,StatusId
 		,req.[Month] DESC
@@ -153,4 +177,6 @@ BEGIN
 	DROP TABLE #tblEmployeeIds
 
 	DROP TABLE #tblGroupIds
+
+	DROP TABLE #tblOvertimeType
 END

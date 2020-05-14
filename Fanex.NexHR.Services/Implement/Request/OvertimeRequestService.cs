@@ -89,7 +89,8 @@
                 StatusIds = param.StatusIds,
                 GroupIds = param.SectionIds,
                 EmployeeId = param.EmployeeId,
-                IsProcessor = param.IsProcessor
+                IsProcessor = param.IsProcessor,
+                OvertimeType = param.OvertimeType
             };
             IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
             return memberRequests;
