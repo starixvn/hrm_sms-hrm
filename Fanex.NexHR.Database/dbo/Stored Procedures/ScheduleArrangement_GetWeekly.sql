@@ -5,6 +5,7 @@ CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@EmpId INT = NULL
 	,@GroupIds VARCHAR(MAX) = ''
 	,@IsIFrame BIT = 0
+	,@isLocal BIT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-04-12
@@ -269,6 +270,10 @@ BEGIN
 			SELECT 1
 			FROM @tblGroupIds AS tblgr
 			WHERE emp.GroupId = tblgr.GroupId
+			)
+			AND (
+			@isLocal IS NULL
+			OR esum.IsLocal = @isLocal
 			)
 	ORDER BY ISNULL(gorder.DisplayOrder, 0)
 		,gr.Code

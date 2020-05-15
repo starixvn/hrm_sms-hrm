@@ -44,6 +44,7 @@
 
         public IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
+            bool? isLocal = null;
             var criteria = new GetWeeklyScheduleCriteria
             {
                 ActorId = filter.ActorId,
@@ -51,7 +52,8 @@
                 ToTime = filter.ToDate,
                 EmpId = filter.EmployeeId,
                 GroupIds = filter.GroupIds,
-                IsIFrame = filter.IsIFrame
+                IsIFrame = filter.IsIFrame,
+                IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal
             };
 
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);

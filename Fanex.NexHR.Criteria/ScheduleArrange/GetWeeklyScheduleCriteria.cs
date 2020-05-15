@@ -11,6 +11,7 @@
         public int? EmpId { get; set; }
         public string GroupIds { get; set; }
         public bool IsIFrame { get; set; }
+        public bool? IsLocal { get; set; }
 
         public override string GetSettingKey() => "ScheduleArrangement_GetWeekly";
 

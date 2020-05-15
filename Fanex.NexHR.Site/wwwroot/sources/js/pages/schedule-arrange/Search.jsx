@@ -20,6 +20,10 @@ export default class Search extends Component {
         this.props.onChange('toDate', toDate);
     }
 
+    handleCategoryChange = category => {
+        this.props.onChange('category', category);
+    }
+
     handleSubmit = event => {
         this.props.onSubmit(event.target.name === 'currentWeek');
     }
@@ -52,6 +56,20 @@ export default class Search extends Component {
                             />
                         </div>
                     </div>
+
+                    <div className="form-group form-group--m">
+                        <div className="label-form">
+                            <label className="control-label">Category</label>
+                        </div>
+                        <div className="select-form">
+                            <select className="form-control" value={this.props.category} onChange={this.handleCategoryChange}>
+                                <option value >All</option>
+                                <option value="0">Expat</option>
+                                <option value="1">Local</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div className="form-group form-group--m">
                         <div className="label-form">
                             <label className="control-label">Employee</label>
