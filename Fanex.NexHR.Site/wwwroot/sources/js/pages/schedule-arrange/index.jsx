@@ -159,6 +159,7 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
+                isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             }
         }).then(response => {
@@ -209,6 +210,7 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
+                isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
             responseType: 'blob'
@@ -229,6 +231,7 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 groupIds: filter.groupIds,
+                isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
             responseType: 'blob'
