@@ -130,6 +130,9 @@
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />
     <Compile Include="NewDepartment\GetDepartmentByActiveCriteria.cs" />
+    <Compile Include="NewDepartment\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="NewDepartment\InsertDepartmentCriteria.cs" />
+    <Compile Include="NewDepartment\UpdateDepartmentCriteria.cs" />
     <Compile Include="Overtime\GetMemberMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria.cs" />
     <Compile Include="Paternity\DeletePaternityCriteria.cs" />

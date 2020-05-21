@@ -15,7 +15,7 @@
             this.departmentRepository = departmentRepository;
         }
 
-        public IList<NewDepartment> GetAll(bool? isActive)
+        public IList<NewDepartment> GetByActive(bool? isActive)
         {
             var criteria = new GetDepartmentByActiveCriteria
             {
@@ -24,6 +24,15 @@
             IList<NewDepartment> departments = departmentRepository.GetByActive(criteria);
 
             return departments ?? new List<NewDepartment>();
+        }
+
+        public NewDepartment GetById(int departmentId)
+        {
+            var criteria = new GetDepartmentByIdCriteria
+            {
+                DepartmentId = departmentId
+            };
+            return departmentRepository.GetById(criteria);
         }
     }
 }

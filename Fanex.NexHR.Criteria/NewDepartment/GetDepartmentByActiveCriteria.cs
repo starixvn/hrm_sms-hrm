@@ -6,7 +6,7 @@
     {
         public bool? IsActive { get; set; }
 
-        public override string GetSettingKey() => "Department_GetByActive";
+        public override string GetSettingKey() => "TestDepartment_GetByActive";
 
         public override bool IsValid() => true;
     }

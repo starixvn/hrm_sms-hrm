@@ -218,6 +218,9 @@
       <Mapping DataField="ManagerId" ObjectProperty="Id" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0">
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+    </Setting>
   </Function>
   <Function Name="Unit">
     <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="nexhrx" Plain="0"></Setting>

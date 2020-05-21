@@ -1448,6 +1448,15 @@ namespace Fanex.NexHR.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Edit Unit.
+        ///   Looks up a localized string similar to Edit Department.
+        /// </summary>
+        public static string EditDepartment {
+            get {
+                return ResourceManager.GetString("EditDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// </summary>
         public static string EditDivision {
             get {

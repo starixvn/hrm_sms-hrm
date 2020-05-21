@@ -1908,4 +1908,7 @@
   <data name="NewDepartmentManagement" xml:space="preserve">
     <value>Department Management</value>
   </data>
+  <data name="EditDepartment" xml:space="preserve">
+    <value>Edit Department</value>
+  </data>
 </root>

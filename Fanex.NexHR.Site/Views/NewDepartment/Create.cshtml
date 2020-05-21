@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
-@using Fanex.NexHR.ViewModels.Department
-@model AddDepartmentViewModel
+@using Fanex.NexHR.ViewModels.NewDepartment
+@model CreateDepartmentViewModel
 
 @{
     ViewBag.Title = @Labels.AddNewDepartment;
@@ -30,22 +30,26 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
             </div>
+            @Html.ValidationMessageFor(model => model.Code)
         </div>
-
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })
             </div>
             <div class="input-form">
+                @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
             </div>
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
 
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.ParentId, "Parent", new { @class = "control-label" })
+                @Html.LabelFor(model => model.UnitId, "Unit", new { @class = "control-label" })
             </div>
             <div class="select-form">
+                @*@Html.DropDownListFor(model => model.UnitId, new SelectList(, "Id", "Name"), string.Empty, new { @class = "form-control" })*@
             </div>
+            @Html.ValidationMessageFor(model => model.UnitId)
         </div>
 
         <div id="groupHalfDay" class="form-group">
@@ -53,7 +57,7 @@
                 @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                <div class="checkbox"></div>
+                <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsActive)</div>
             </div>
         </div>
 

@@ -1204,6 +1204,7 @@
     <Content Include="Views\Unit\Create.cshtml" />
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
+    <Content Include="Views\NewDepartment\Edit.cshtml" />
     <Content Include="wwwroot\dist\js\unit.edit.js.map" />
     <Content Include="wwwroot\sources\styles\pages\unit\create.scss" />
     <Content Include="wwwroot\sources\styles\pages\unit\index.scss" />

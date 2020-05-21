@@ -5,6 +5,8 @@
 
     public interface INewDepartmentService
     {
-        IList<NewDepartment> GetAll(bool? isActive);
+        IList<NewDepartment> GetByActive(bool? isActive);
+        NewDepartment GetById(int departmentId);
+        //IList<Unit> GetUnit();
     }
 }
