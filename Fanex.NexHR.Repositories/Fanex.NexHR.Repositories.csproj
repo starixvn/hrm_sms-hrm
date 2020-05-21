@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeShiftRequestRepository.cs" />
+    <Compile Include="Interfaces\INewDepartmentRepository.cs" />
     <Compile Include="Interfaces\IOvertimeReportRepository.cs" />
     <Compile Include="LateInEarlyOutRequestRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="LeaveRequestRepository.cs" />
     <Compile Include="KeepInViewRequestRepository.cs" />
     <Compile Include="EmployeeWorkingHoursRepository.cs" />
+    <Compile Include="NewDepartmentRepository.cs" />
     <Compile Include="OvertimeReportRepository.cs" />
     <Compile Include="ScheduleArrangeRepository.cs" />
     <Compile Include="MenuRepository.cs" />

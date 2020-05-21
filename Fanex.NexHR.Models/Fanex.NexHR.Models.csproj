@@ -99,6 +99,7 @@
     <Compile Include="Log\MappingFieldConfig.cs" />
     <Compile Include="Log\FieldValue.cs" />
     <Compile Include="Log\LogObjectDetail.cs" />
+    <Compile Include="NewDepartment.cs" />
     <Compile Include="Report\MonthlyWorkingHours\EmployeeRequest.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeDetailParam.cs" />
     <Compile Include="Report\Overtime\GetMonthlyOvertimeParam.cs" />

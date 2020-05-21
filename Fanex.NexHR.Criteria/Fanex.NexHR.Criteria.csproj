@@ -124,6 +124,7 @@
     <Compile Include="Menu\GetMenusCriteria.cs" />
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />
+    <Compile Include="NewDepartment\GetDepartmentByActiveCriteria.cs" />
     <Compile Include="Overtime\GetMemberMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria.cs" />
     <Compile Include="Paternity\DeletePaternityCriteria.cs" />
@@ -330,6 +331,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

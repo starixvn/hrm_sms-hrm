@@ -1,0 +1,85 @@
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
+@model IList<NewDepartment>
+@{
+    ViewBag.Title = @Labels.NewDepartmentManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/department.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@using (Html.BeginForm("index", "newdepartment", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
+{
+    var gender = new List<SelectListItem>
+{
+new SelectListItem() {Text = "All", Value = ""},
+new SelectListItem() {Text = "Active", Value = "true"},
+new SelectListItem() {Text = "Inactive", Value = "false"}
+};
+
+<div class="form-horizontal clearfix">
+    <div class="form-group">
+        <div class="label-form label--xs">
+            @Html.Label(@Labels.Status, new { @class = "control-label" })
+        </div>
+        <div class="select-form">
+            @Html.DropDownList("IsActive", gender, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group form-group--m">
+        <button type="submit" class="btn btn-primary">@Labels.Search</button>
+        <a class="btn btn-request" href="@Url.Action("create", "newdepartment")">
+            <span class="fa fa-plus"></span> @Labels.CreateDepartment
+        </a>
+    </div>
+</div>
+}
+<table class="table table-custom" id="data" style="width: auto; min-width: 700px;">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.NewDepartment</th>
+            <th>@Labels.Unit</th>
+            <th>@Labels.Active</th>
+            <th>@Labels.Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 1;
+            foreach (NewDepartment department in Model)
+            {
+                <tr id="row@(department.Id)">
+                    <td>@(index++)</td>
+                    <td>@department.Code</td>
+                    <td>@department.Name</td>
+                    <td>@department.Unit</td>
+                    <td>
+                        @if (department.IsActive)
+                        {
+                            <i class="fa fa-check fa-lg icon-check"></i>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
+                            <i class="fa fa-pencil fa-lg icon-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(9)
+        }
+    </tbody>
+</table>

@@ -74,5 +74,7 @@
         public const string WorkingCalendarReport = "WorkingCalendarReport";
         public const string ManpowerReport = "ManpowerReport";
         public const string ManpowerCategoryReport = "ManpowerCategoryReport";
+        public const string DepartmentManagement = "DepartmentManagement";
+
     }
 }

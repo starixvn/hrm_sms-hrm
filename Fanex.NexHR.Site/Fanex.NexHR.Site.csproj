@@ -1196,6 +1196,8 @@
     <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
     <Content Include="Views\Overtime\_ListMemberOvertime.cshtml" />
     <Content Include="Views\Overtime\_ListEmployeeOvertime.cshtml" />
+    <Content Include="Views\NewDepartment\Index.cshtml" />
+    <Content Include="Views\NewDepartment\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

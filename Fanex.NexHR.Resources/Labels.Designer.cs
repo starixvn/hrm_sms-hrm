@@ -223,6 +223,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Department.
+        /// </summary>
+        public static string AddNewDepartment {
+            get {
+                return ResourceManager.GetString("AddNewDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Division.
         /// </summary>
         public static string AddNewDivision {
@@ -930,6 +939,15 @@ namespace Fanex.NexHR.Resources {
         public static string CreatedDate {
             get {
                 return ResourceManager.GetString("CreatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Department.
+        /// </summary>
+        public static string CreateDepartment {
+            get {
+                return ResourceManager.GetString("CreateDepartment", resourceCulture);
             }
         }
         
@@ -3054,6 +3072,24 @@ namespace Fanex.NexHR.Resources {
         public static string Native {
             get {
                 return ResourceManager.GetString("Native", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department.
+        /// </summary>
+        public static string NewDepartment {
+            get {
+                return ResourceManager.GetString("NewDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department Management.
+        /// </summary>
+        public static string NewDepartmentManagement {
+            get {
+                return ResourceManager.GetString("NewDepartmentManagement", resourceCulture);
             }
         }
         

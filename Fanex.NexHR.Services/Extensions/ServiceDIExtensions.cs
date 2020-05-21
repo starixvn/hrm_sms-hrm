@@ -2,6 +2,9 @@ namespace Fanex.NexHR.Services.Extensions
 {
     using Fanex.NexHR.MailDeliver;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Repositories.Interfaces;
+    using Fanex.NexHR.Services.Implement;
+    using Fanex.NexHR.Services.Interfaces;
     using Unity;
 
     public static class ServiceDIExtensions
@@ -25,6 +28,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
             container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
             container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
+            container.RegisterType<INewDepartmentRepository, NewDepartmentRepository>();
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();
@@ -67,6 +71,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IActionLogService, ActionLogService>();
             container.RegisterType<IEmployeeLogService, EmployeeLogService>();
             container.RegisterType<IShiftStatisticReportService, ShiftStatisticReportService>();
+            container.RegisterType<INewDepartmentService, NewDepartmentService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

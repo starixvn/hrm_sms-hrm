@@ -181,6 +181,7 @@
     <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\ActionLog\ActionLogService.cs" />
     <Compile Include="Implement\MenuService.cs" />
+    <Compile Include="Implement\NewDepartmentService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
     <Compile Include="Implement\Report\MonthlyWorkingHoursService.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Interfaces\IFunctionService.cs" />
     <Compile Include="Interfaces\IMenuService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
+    <Compile Include="Interfaces\INewDepartmentService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
     <Compile Include="Interfaces\IPaternityService.cs" />
     <Compile Include="Interfaces\IPostnatalService.cs" />
