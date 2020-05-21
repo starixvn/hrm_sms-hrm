@@ -136,6 +136,9 @@
     <Compile Include="Report\EmployeeAttendanceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\WorkingCalendarSummaryViewModel.cs" />
+    <Compile Include="Unit\AddUnitViewModel.cs" />
+    <Compile Include="Unit\EditDepartmentViewModel.cs" />
+    <Compile Include="Unit\UnitViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">

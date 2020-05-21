@@ -72,6 +72,8 @@
   <ItemGroup>
     <Compile Include="ChangeShiftRequestRepository.cs" />
     <Compile Include="Interfaces\INewDepartmentRepository.cs" />
+    <Compile Include="UnitRepository.cs" />
+    <Compile Include="Interfaces\IUnitRepository.cs" />
     <Compile Include="Interfaces\IOvertimeReportRepository.cs" />
     <Compile Include="LateInEarlyOutRequestRepository.cs" />
     <Compile Include="DepartmentRepository.cs" />

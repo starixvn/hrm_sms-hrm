@@ -12,6 +12,7 @@ namespace Fanex.NexHR.Services.Extensions
         public static void ResolveServiceCoreDI(this IUnityContainer container)
         {
             container.RegisterType<IDepartmentRepository, DepartmentRepository>();
+            container.RegisterType<IUnitRepository, UnitRepository>();
             container.RegisterType<IEmployeeRepository, EmployeeRepository>();
             container.RegisterType<IOvertimeRequestRepository, OvertimeRequestRepository>();
             container.RegisterType<IReportRepository, ReportRepository>();
@@ -37,6 +38,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IAuthService, AuthService>();
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<IDepartmentService, DepartmentService>();
+            container.RegisterType<IUnitService, UnitService>();
             container.RegisterType<IEmployeeService, EmployeeService>();
             container.RegisterType<IExtensionNumberService, ExtensionNumberService>();
             container.RegisterType<IHolidayService, HolidayService>();
