@@ -4,7 +4,7 @@
 @model UnitViewModel
 @{
     ViewBag.Title = @Labels.UnitManagement;
-    var hasPermission = true;//(bool)ViewBag.HasPermission;
+    var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 5 : 4;
 }
 @section css{

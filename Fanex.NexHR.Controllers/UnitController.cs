@@ -3,7 +3,6 @@
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
@@ -121,6 +120,5 @@
             }
             return Json(commandResult);
         }
-
     }
 }

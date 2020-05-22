@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
