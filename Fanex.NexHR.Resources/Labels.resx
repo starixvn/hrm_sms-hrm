@@ -1116,11 +1116,8 @@
   <data name="EditDivision" xml:space="preserve">
     <value>Edit Division</value>
   </data>
-  <data name="AddUnit" xml:space="preserve">
-    <value>Add Unit</value>
-  </data>
   <data name="EditDivision" xml:space="preserve">
-    <value>Edit Unit</value>
+    <value>Edit Division</value>
   </data>
   <data name="DisciplineSummary" xml:space="preserve">
     <value>Discipline Review</value>
@@ -1454,6 +1451,15 @@
   </data>
   <data name="UnitManagement" xml:space="preserve">
     <value>Unit Management</value>
+  </data>
+  <data name="EditUnit" xml:space="preserve">
+    <value>Edit Unit</value>
+  </data>
+  <data name="AddUnit" xml:space="preserve">
+    <value>Add Unit</value>
+  </data>
+  <data name="NewUnit" xml:space="preserve">
+    <value>New Unit</value>
   </data>
   <data name="Wed" xml:space="preserve">
     <value>Wed</value>

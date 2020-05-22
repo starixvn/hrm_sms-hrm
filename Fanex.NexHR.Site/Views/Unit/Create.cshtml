@@ -4,7 +4,7 @@
 @model AddUnitViewModel
 
 @{
-    ViewBag.Title = @Labels.AddNewUnit;
+    ViewBag.Title = @Labels.AddUnit;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/unit.create.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
-    <a class="step" href="@Url.Action("index", "unit")">@Labels.UnittManagement</a>
+    <a class="step" href="@Url.Action("index", "unit")">@Labels.UnitManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
 

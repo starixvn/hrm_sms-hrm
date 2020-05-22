@@ -1447,7 +1447,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Unit.
         ///   Looks up a localized string similar to Edit Department.
         /// </summary>
         public static string EditDepartment {
@@ -1457,6 +1456,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Division.
         /// </summary>
         public static string EditDivision {
             get {
@@ -1515,6 +1515,15 @@ namespace Fanex.NexHR.Resources {
         public static string EditShift {
             get {
                 return ResourceManager.GetString("EditShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Unit.
+        /// </summary>
+        public static string EditUnit {
+            get {
+                return ResourceManager.GetString("EditUnit", resourceCulture);
             }
         }
         
@@ -3180,6 +3189,15 @@ namespace Fanex.NexHR.Resources {
         public static string NewSection {
             get {
                 return ResourceManager.GetString("NewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Unit.
+        /// </summary>
+        public static string NewUnit {
+            get {
+                return ResourceManager.GetString("NewUnit", resourceCulture);
             }
         }
         

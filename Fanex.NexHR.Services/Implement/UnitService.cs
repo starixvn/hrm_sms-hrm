@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
@@ -15,6 +16,7 @@
             this._unitRepository = unitRepository;
         }
 
+    
         public Unit GetById(int id)
         {
             var criteria = new GetUnitByIdCriteria
@@ -26,7 +28,7 @@
 
         public IList<Unit> GetUnit(bool? isActive = true)
         {
-            var criteria = new GetUnitByParentIdCriteria
+            var criteria = new GetUnits
             {
                 IsActive = isActive
             };
@@ -34,5 +36,6 @@
 
             return units ?? new List<Unit>();
         }
+
     }
 }

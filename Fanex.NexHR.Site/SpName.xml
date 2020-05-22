@@ -221,14 +221,11 @@
     <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0">
       <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
     </Setting>
-    <Setting Key="TestDepartment_GetAllUnit" SpName="TestDepartment_GetAllUnit" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TestDepartment_Insert" SpName="TestDepartment_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TestDepartment_Delete" SpName="TestDepartment_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Unit">
     <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Unit_Update" SpName="Unit_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Unit_Get" SpName="Unit_GetByParentId" DbName="nexhrx" Plain="0">
+    <Setting Key="Unit_Get" SpName="Unit_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
       <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
       <Mapping DataField="ManagerId" ObjectProperty="EmpId" Class="UnitHead" />

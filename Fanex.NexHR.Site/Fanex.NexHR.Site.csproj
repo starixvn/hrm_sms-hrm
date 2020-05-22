@@ -253,6 +253,8 @@
     <Content Include="wwwroot\dist\styles\shift.edit.js" />
     <Content Include="wwwroot\dist\styles\shift.index.css" />
     <Content Include="wwwroot\dist\styles\shift.index.js" />
+    <Content Include="wwwroot\dist\styles\unit.create.css" />
+    <Content Include="wwwroot\dist\styles\unit.index.css" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
@@ -280,8 +282,6 @@
     <Content Include="wwwroot\dist\styles\section.index.css" />
     <Content Include="wwwroot\dist\styles\section.index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
-    <Content Include="wwwroot\sources\js\pages\newdepartment\edit.js" />
-    <Content Include="wwwroot\sources\js\pages\newdepartment\index.js" />
     <Content Include="wwwroot\sources\js\pages\unit\edit.js" />
     <Content Include="wwwroot\sources\js\pages\unit\index.js" />
     <Content Include="wwwroot\sources\js\pages\department\edit.js" />

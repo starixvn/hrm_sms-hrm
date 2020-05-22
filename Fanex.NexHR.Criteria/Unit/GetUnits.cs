@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetUnitByParentIdCriteria : CriteriaBase
+    public class GetUnits : CriteriaBase
     {
         public bool? IsActive { get; set; }
 

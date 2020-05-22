@@ -8,7 +8,6 @@ import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors
 
 function submitEvent() {
     $('#btnSubmit').on('click', function () {
-        debugger
         let isValid = validateFormData();
         let form = $('#EditForm');
 
