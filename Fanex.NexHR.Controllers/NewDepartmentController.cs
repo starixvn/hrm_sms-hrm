@@ -30,7 +30,6 @@
         [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
         public ActionResult Index(bool? isActive = null)
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
             IList<NewDepartment> departments = departmentService.GetByActive(isActive);
             return View(departments);
         }
@@ -47,12 +46,20 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public JsonResult Create(InsertDepartmentCriteria criteria)
+        public JsonResult Create(CreateDepartmentViewModel model)
         {
             var commandResult = new CommandResult();
 
-            if (criteria.IsValid())
+            if (model != null && ModelState.IsValid)
             {
+                var criteria = new InsertDepartmentCriteria
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    UnitId = model.UnitId,
+                    ModifiedBy = sessionService.Employee.Id
+                };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
@@ -63,25 +70,36 @@
         public ActionResult Edit(int departmentId)
         {
             NewDepartment department = departmentService.GetById(departmentId);
+            IList<Unit> unit = departmentService.GetUnit();
             var model = new EditNewDepartmentViewModel
             {
                 DepartmentId = departmentId,
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,
-                //Unit
+                UnitId = department.Unit.Id,
+                Unit = unit
             };
             return View(model);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public JsonResult Edit(UpdateDepartmentCriteria criteria)
+        public JsonResult Edit(EditNewDepartmentViewModel model)
         {
             var commandResult = new CommandResult();
 
-            if (criteria.IsValid())
+            if (model != null && ModelState.IsValid)
             {
+                var criteria = new UpdateDepartmentCriteria
+                {
+                    DepartmentId = model.DepartmentId,
+                    Code = model.Code,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    UnitId = model.UnitId,
+                    ModifiedBy = sessionService.Employee.Id
+                };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 

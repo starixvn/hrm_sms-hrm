@@ -18,7 +18,7 @@
 
         public override string GetSettingKey()
         {
-            return "Department_Update";
+            return "TestDepartment_Update";
         }
 
         public override bool IsValid()

@@ -31,7 +31,18 @@
 
         public NewDepartment GetById(GetDepartmentByIdCriteria criteria)
         {
-            throw new System.NotImplementedException();
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<NewDepartment, Unit, NewDepartment>(
+                    (d, u) =>
+                    {
+                        d.Unit = u;
+
+                        return d;
+                    },
+                    "Id",
+                    criteria);
+            }
         }
     }
 }

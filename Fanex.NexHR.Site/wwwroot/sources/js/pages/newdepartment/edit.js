@@ -36,14 +36,6 @@ function validateFormData() {
     let isValid = true,
         errorMessages = [];
 
-    if (!$('#Code').val()) {
-        errorMessages.push('The Code field is required!');
-    }
-
-    if (!$('#Name').val()) {
-        errorMessages.push('The Name field is required!');
-    }
-
     if (errorMessages.length > 0) {
         $('.validation-summary-valid').find('ul:first').html('');
         showValidationSummaryErrors(errorMessages);

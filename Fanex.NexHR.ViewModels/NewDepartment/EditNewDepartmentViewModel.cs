@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NexHR.ViewModels.NewDepartment
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
+    using Fanex.NexHR.Models;
 
     public class EditNewDepartmentViewModel
     {
@@ -21,6 +23,6 @@
 
         public bool IsActive { get; set; }
 
-        public string Unit { get; set; }
+        public IList<Unit> Unit { get; set; }
     }
 }
