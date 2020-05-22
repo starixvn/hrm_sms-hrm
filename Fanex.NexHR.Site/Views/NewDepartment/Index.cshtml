@@ -9,7 +9,7 @@
     <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/department.index.js"></script>
+    <script src="~/wwwroot/dist/js/newdepartment.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
@@ -50,6 +50,7 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
             <th>@Labels.Unit</th>
             <th>@Labels.Active</th>
             <th>@Labels.Edit</th>
+            <th>@Labels.Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -58,28 +59,33 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
             int index = 1;
             foreach (NewDepartment department in Model)
             {
-                <tr id="row@(department.Id)">
-                    <td>@(index++)</td>
-                    <td>@department.Code</td>
-                    <td>@department.Name</td>
-                    <td>@department.Unit</td>
-                    <td>
-                        @if (department.IsActive)
-                        {
-                            <i class="fa fa-check fa-lg icon-check"></i>
-                        }
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                    </td>
-                </tr>
+        <tr id="row@(department.Id)">
+            <td>@(index++)</td>
+            <td>@department.Code</td>
+            <td>@department.Name</td>
+            <td>@department.Unit.Name</td>
+            <td>
+                @if (department.IsActive)
+                {
+                    <i class="fa fa-check fa-lg icon-check"></i>
+                }
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
+                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                </a>
+            </td>
+            <td>
+                <a href="javascript:;" class="deleteDepartment" data-department-id="@department.Id">
+                    <i class="fa fa-times fa-lg icon-delete"></i>
+                </a>
+            </td>
+        </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(9)
+            @RazorHelper.DisplayNoInformation(10)
         }
     </tbody>
 </table>

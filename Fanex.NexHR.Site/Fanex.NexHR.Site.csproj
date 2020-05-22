@@ -280,6 +280,8 @@
     <Content Include="wwwroot\dist\styles\section.index.css" />
     <Content Include="wwwroot\dist\styles\section.index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
+    <Content Include="wwwroot\sources\js\pages\newdepartment\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\newdepartment\index.js" />
     <Content Include="wwwroot\sources\js\pages\unit\edit.js" />
     <Content Include="wwwroot\sources\js\pages\unit\index.js" />
     <Content Include="wwwroot\sources\js\pages\department\edit.js" />

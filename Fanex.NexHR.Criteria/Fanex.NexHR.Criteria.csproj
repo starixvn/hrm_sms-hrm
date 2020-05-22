@@ -83,6 +83,8 @@
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
+    <Compile Include="NewDepartment\DeleteDepartmentCriteria.cs" />
+    <Compile Include="NewDepartment\GetAllUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />
     <Compile Include="Unit\GetUnitByParentIdCriteria.cs" />
     <Compile Include="Unit\GetParentByUnitCriteria.cs" />

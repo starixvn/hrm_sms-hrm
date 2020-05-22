@@ -2,7 +2,6 @@
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.NewDepartment
 @model CreateDepartmentViewModel
-
 @{
     ViewBag.Title = @Labels.AddNewDepartment;
 }
@@ -10,7 +9,7 @@
     <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/department.edit.js"></script>
+    <script src="~/wwwroot/dist/js/newdepartment.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
@@ -47,7 +46,7 @@
                 @Html.LabelFor(model => model.UnitId, "Unit", new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @*@Html.DropDownListFor(model => model.UnitId, new SelectList(, "Id", "Name"), string.Empty, new { @class = "form-control" })*@
+                @Html.DropDownListFor(model => model.UnitId, new SelectList(Model.Unit, "Id", "Name"), string.Empty, new { @class = "form-control" })
             </div>
             @Html.ValidationMessageFor(model => model.UnitId)
         </div>

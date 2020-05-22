@@ -4,10 +4,10 @@
 
     public class GetDepartmentByIdCriteria : CriteriaBase
     {
-        public int DepartmentId { get; set; }
+        public int Id { get; set; }
 
-        public override string GetSettingKey() => "Department_GetById";
+        public override string GetSettingKey() => "TestDepartment_GetById";
 
-        public override bool IsValid() => DepartmentId > 0;
+        public override bool IsValid() => Id > 0;
     }
 }

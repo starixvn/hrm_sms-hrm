@@ -2,7 +2,7 @@
 {
     public class NewDepartment : EntityBase<int>
     {
-        public string Unit { get; set; }
+        public Unit Unit { get; set; }
 
         public bool IsActive { get; set; }
     }

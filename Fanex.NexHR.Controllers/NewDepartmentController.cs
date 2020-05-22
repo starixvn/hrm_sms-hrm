@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
@@ -39,7 +40,7 @@
         {
             var model = new CreateDepartmentViewModel
             {
-                //Unit = departmentService.GetUnit()
+                Unit = departmentService.GetUnit()
             };
             return View(model);
         }
@@ -85,6 +86,15 @@
             }
 
             return Json(commandResult);
+        }
+
+        [HttpPost]
+        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
+        public CustomJsonResult Delete(int id)
+        {
+            CommandResult commandResult = departmentService.Delete(id);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

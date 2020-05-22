@@ -169,6 +169,8 @@ module.exports = {
         [`${jsDistPath}/holiday.index`]: `${jsSourcePath}/holiday/index.js`,
         [`${jsDistPath}/holiday.edit`]: `${jsSourcePath}/holiday/edit.js`,
         [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`,
-        [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`
+        [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`,
+        [`${jsDistPath}/newdepartment.edit`]: `${jsSourcePath}/newdepartment/edit.js`,
+        [`${jsDistPath}/newdepartment.index`]: `${jsSourcePath}/newdepartment/index.js`
     }
 };

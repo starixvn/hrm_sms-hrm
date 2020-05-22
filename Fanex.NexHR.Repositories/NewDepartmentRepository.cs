@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Criteria.NewDepartment;
@@ -14,16 +15,17 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var department = db.QueryEntity<NewDepartment, Unit, NewDepartment>(
-                        (depart, unit) =>
+                var departments = db.Query<NewDepartment, Unit, NewDepartment>(
+                        (d, u) =>
                         {
-                            depart.Unit = unit;
-                            return depart;
+                            d.Unit = u;
+
+                            return d;
                         },
-                        splitOn: "Unit",
+                        splitOn: "Name",
                         parameterSet: criteria);
 
-                return null;
+                return departments.ToList();
             }
         }
 
