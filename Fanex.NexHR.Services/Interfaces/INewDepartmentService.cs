@@ -10,8 +10,6 @@
 
         NewDepartment GetById(int departmentId);
 
-        IList<Unit> GetUnit();
-
         CommandResult Delete(int id);
     }
 }

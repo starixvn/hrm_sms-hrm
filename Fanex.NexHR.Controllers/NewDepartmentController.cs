@@ -44,7 +44,7 @@
         {
             var model = new CreateDepartmentViewModel
             {
-                Unit = departmentService.GetUnit()
+                Unit = unitService.GetUnit()
             };
             return View(model);
         }
@@ -75,7 +75,7 @@
         public ActionResult Edit(int departmentId)
         {
             NewDepartment department = departmentService.GetById(departmentId);
-            IList<Unit> unit = departmentService.GetUnit();
+            IList<Unit> unit = unitService.GetUnit();
             var model = new EditNewDepartmentViewModel
             {
                 DepartmentId = departmentId,

@@ -84,7 +84,6 @@
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="NewDepartment\DeleteDepartmentCriteria.cs" />
-    <Compile Include="NewDepartment\GetAllUnitCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />
     <Compile Include="Unit\GetUnitsCriteria.cs" />

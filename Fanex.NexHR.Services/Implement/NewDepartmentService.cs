@@ -49,11 +49,5 @@
             };
             return departmentRepository.GetById(criteria);
         }
-
-        public IList<Unit> GetUnit()
-        {
-            var criteria = new GetAllUnitCriteria();
-            return baseService.GetData<Unit>(criteria).ToList();
-        }
     }
 }

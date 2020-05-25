@@ -1,6 +1,7 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
+import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 
 import { axiosError, floatThead, confirm, resolveClientUrl } from '../../shared/common.functions';
