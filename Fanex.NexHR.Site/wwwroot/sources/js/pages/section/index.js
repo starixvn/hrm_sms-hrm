@@ -4,7 +4,7 @@ import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 
-import { axiosError, floatThead, confirm, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, floatThead, confirm, resolveClientUrl, alert } from '../../shared/common.functions';
 
 function deleteSection(id) {
     confirm('Are you sure you want to delete this section?', function () {
@@ -18,9 +18,10 @@ function deleteSection(id) {
         }).then(response => {
             let data = response.data;
             if (data.isSuccessful) {
-                location.reload();
+                alert('Delete successfully!');
+                $('#row' + id).remove();
             } else {
-                toastr.error(data.message, '', toastOptions());
+                alert(response.data.Message);
             }
             }).catch(axiosError);
     });
