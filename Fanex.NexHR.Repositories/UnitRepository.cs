@@ -12,13 +12,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var item = db.QueryEntity<Unit, UnitHead, Unit>(
-                        (unit, manager) =>
-                        {
-                            return unit;
-                        },
-                        splitOn: "ManagerId",
-                        parameterSet: criteria);
+                var item = db.QueryEntity<Unit>(criteria);
 
                 return item;
             }
@@ -28,13 +22,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var items = db.Query<Unit, UnitHead, Unit>(
-                        (unit, manager) =>
-                        {
-                            return unit;
-                        },
-                        splitOn: "ManagerId",
-                        parameterSet: criteria);
+                IList<Unit> items = db.Query<Unit>(criteria).ToList();
 
                 return items.ToList();
             }

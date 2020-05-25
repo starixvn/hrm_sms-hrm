@@ -21,7 +21,7 @@ BEGIN
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'The department does not exists'
+			,@ErrMsg = N'The unit does not exists'
 
 		RETURN
 	END

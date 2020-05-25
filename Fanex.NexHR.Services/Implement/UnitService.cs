@@ -27,7 +27,7 @@
 
         public IList<Unit> GetUnit(bool? isActive = true)
         {
-            var criteria = new GetUnits
+            var criteria = new GetUnitsCriteria
             {
                 IsActive = isActive
             };

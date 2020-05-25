@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Unit_Get] @ParentId INT = NULL
-	,@IsActive BIT = NULL
+﻿CREATE PROCEDURE [dbo].[Unit_Get]
+	@IsActive BIT = NULL
 AS
 /*
 Created: 20200521@Patsy.Doan
@@ -18,7 +18,6 @@ BEGIN
 		,u.Name
 		,u.IsActive
 		,u.ModifiedDate
-		,null as ManagerId
 	FROM dbo.Unit as u
 	WHERE (
 			@IsActive IS NULL

@@ -87,7 +87,7 @@
     <Compile Include="NewDepartment\GetAllUnitCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />
-    <Compile Include="Unit\GetUnits.cs" />
+    <Compile Include="Unit\GetUnitsCriteria.cs" />
     <Compile Include="Unit\InsertUnitCriteria.cs" />
     <Compile Include="Unit\UpdateUnitCriteria.cs" />
     <Compile Include="Department\GetParentByDepartmentCriteria.cs" />

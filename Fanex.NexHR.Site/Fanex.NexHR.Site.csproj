@@ -253,8 +253,6 @@
     <Content Include="wwwroot\dist\styles\shift.edit.js" />
     <Content Include="wwwroot\dist\styles\shift.index.css" />
     <Content Include="wwwroot\dist\styles\shift.index.js" />
-    <Content Include="wwwroot\dist\styles\unit.create.css" />
-    <Content Include="wwwroot\dist\styles\unit.index.css" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
@@ -1201,15 +1199,20 @@
     <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
     <Content Include="Views\Overtime\_ListMemberOvertime.cshtml" />
     <Content Include="Views\Overtime\_ListEmployeeOvertime.cshtml" />
-    <Content Include="Views\NewDepartment\Index.cshtml" />
+	<Content Include="Views\NewDepartment\Index.cshtml" />
     <Content Include="Views\NewDepartment\Create.cshtml" />
     <Content Include="Views\Unit\Create.cshtml" />
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
     <Content Include="Views\NewDepartment\Edit.cshtml" />
     <Content Include="wwwroot\dist\js\unit.edit.js.map" />
+	<Content Include="wwwroot\dist\js\unit.edit.js" />
+	<Content Include="wwwroot\dist\js\unit.index.js.map" />
+	<Content Include="wwwroot\dist\js\unit.index.js" />
     <Content Include="wwwroot\sources\styles\pages\unit\create.scss" />
     <Content Include="wwwroot\sources\styles\pages\unit\index.scss" />
+	<Content Include="wwwroot\dist\styles\unit.create.css" />
+    <Content Include="wwwroot\dist\styles\unit.index.css" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

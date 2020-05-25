@@ -172,6 +172,5 @@ module.exports = {
         [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`,
         [`${jsDistPath}/newdepartment.edit`]: `${jsSourcePath}/newdepartment/edit.js`,
         [`${jsDistPath}/newdepartment.index`]: `${jsSourcePath}/newdepartment/index.js`,
-        [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`
     }
 };

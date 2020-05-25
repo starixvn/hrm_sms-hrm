@@ -1,6 +1,7 @@
 ﻿import $ from 'jquery/dist/jquery';
-import axios from 'axios';
 import 'jquery-ui-bundle/jquery-ui';
+import 'bootstrap/dist/js/bootstrap';
+import axios from 'axios';
 import { resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
 
 $(function () {
@@ -14,6 +15,7 @@ $(function () {
                     data: { 'UnitId': unitId }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
+                        alert('Delete successfully!');
                         $('#row_' + unitId).remove();
                     }
                     else {

@@ -47,16 +47,14 @@
                 model.Units = _unitService.GetUnit(isActive: model.IsActive);
             }
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
-
             return View(model);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Create()
         {
-            var model = new AddUnitViewModel{};
-        
+            var model = new AddUnitViewModel { };
+
             return View(model);
         }
 
@@ -66,10 +64,10 @@
         {
             var commandResult = new CommandResult();
 
-            criteria.CreatedBy = sessionService.Employee.Id;
-
-            if (criteria.IsValid())
+            if (criteria != null && ModelState.IsValid)
             {
+                criteria.CreatedBy = sessionService.Employee.Id;
+
                 commandResult = _baseService.ExecuteNonQuery(criteria);
             }
 
@@ -80,7 +78,7 @@
         public ActionResult Edit(int unitId)
         {
             Unit unit = _unitService.GetById(unitId);
-            
+
             var model = new EditUnitViewModel
             {
                 UnitId = unitId,
@@ -97,27 +95,23 @@
         public JsonResult Edit(UpdateUnitCriteria criteria)
         {
             var commandResult = new CommandResult();
-            
-            criteria.ModifiedBy = sessionService.Employee.Id;
 
-            if (criteria.IsValid())
+            if (criteria != null && ModelState.IsValid)
             {
+                criteria.ModifiedBy = sessionService.Employee.Id;
+
                 commandResult = _baseService.ExecuteNonQuery(criteria);
             }
 
             return Json(commandResult);
         }
-     
+
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public JsonResult Delete(DeleteUnitCriteria criteria)
         {
-            var commandResult = new CommandResult();
+            var commandResult = _baseService.ExecuteNonQuery(criteria);
 
-            if (criteria.IsValid())
-            {
-                commandResult = _baseService.ExecuteNonQuery(criteria);
-            }
             return Json(commandResult);
         }
     }
