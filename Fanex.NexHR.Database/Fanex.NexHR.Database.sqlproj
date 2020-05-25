@@ -490,6 +490,12 @@
     <Build Include="dbo\Stored Procedures\Auto_EmployeeCalendar_UpdateIsPublic.sql" />
     <Build Include="dbo\Tables\GroupManager.sql" />
     <Build Include="dbo\Stored Procedures\ChangeShiftRequest_ResetCalendar.sql" />
+    <Build Include="dbo\Tables\Unit.sql" />
+    <Build Include="dbo\Stored Procedures\Unit_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Unit_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Unit_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Unit_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Unit_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
