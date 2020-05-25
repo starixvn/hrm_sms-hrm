@@ -79,6 +79,8 @@ module.exports = {
         [`${styleDistPath}/holiday.create`]: `${styleSourcePath}/pages/holiday/create.scss`,
         [`${styleDistPath}/account.changepwd`]: `${styleSourcePath}/pages/account/changepwd.scss`,
         [`${styleDistPath}/addtimerecord`]: `${styleSourcePath}/pages/addtimerecord.scss`,
+        [`${styleDistPath}/newdepartment.index`]: `${styleSourcePath}/pages/newdepartment/index.scss`,
+        [`${styleDistPath}/newdepartment.create`]: `${styleSourcePath}/pages/newdepartment/create.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',

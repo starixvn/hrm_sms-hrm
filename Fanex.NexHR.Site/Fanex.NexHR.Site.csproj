@@ -1213,6 +1213,8 @@
     <Content Include="wwwroot\sources\styles\pages\unit\index.scss" />
 	<Content Include="wwwroot\dist\styles\unit.create.css" />
     <Content Include="wwwroot\dist\styles\unit.index.css" />
+    <Content Include="wwwroot\sources\styles\pages\newdepartment\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\newdepartment\create.scss" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

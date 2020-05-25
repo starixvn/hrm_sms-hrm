@@ -7,7 +7,7 @@
     ViewBag.Title = @Labels.EditDepartment;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/newdepartment.create.css" rel="stylesheet" />
 }
 @section js{
     <script src="~/wwwroot/dist/js/newdepartment.edit.js"></script>
@@ -22,15 +22,17 @@
 <div class="card">
     @using (Html.BeginForm("Edit", "newdepartment", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
-    <div class="form-group">
-        <div class="label-form">
-            @Html.LabelFor(model => model.Code, new { @class = "control-label" })
-            <input type="hidden" value="@Model.DepartmentId" name="DepartmentId" />
+        @Html.ValidationSummary()
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+                <input type="hidden" value="@Model.DepartmentId" name="DepartmentId" />
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
-        <div class="input-form">
-            @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
-        </div>
-    </div>
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })
@@ -38,17 +40,17 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
             </div>
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
-
         <div class="form-group">
             <div class="label-form">
-               @Html.LabelFor(model => model.UnitId, "Unit", new { @class = "control-label" })
+                @Html.LabelFor(model => model.UnitId, "Unit", new { @class = "control-label" })
             </div>
             <div class="select-form">
                 @Html.DropDownListFor(model => model.UnitId, new SelectList(Model.Unit, "Id", "Name"), string.Empty, new { @class = "form-control" })
             </div>
+            @Html.ValidationMessageFor(model => model.UnitId)
         </div>
-
         <div id="groupHalfDay" class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })

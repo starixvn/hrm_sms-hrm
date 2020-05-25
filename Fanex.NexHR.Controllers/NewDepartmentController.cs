@@ -10,6 +10,7 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.NewDepartment;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.NewDepartment;
 
@@ -17,19 +18,23 @@
     {
         private readonly INewDepartmentService departmentService;
         private readonly IBaseService baseService;
+        private readonly IUnitService unitService;
 
         public NewDepartmentController(
             ISessionService sessionService,
             INewDepartmentService departmentService,
+            IUnitService unitService,
             IBaseService baseService) : base(sessionService)
         {
             this.departmentService = departmentService;
             this.baseService = baseService;
+            this.unitService = unitService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
         public ActionResult Index(bool? isActive = null)
         {
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
             IList<NewDepartment> departments = departmentService.GetByActive(isActive);
             return View(departments);
         }

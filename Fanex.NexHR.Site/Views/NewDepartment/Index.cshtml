@@ -3,9 +3,10 @@
 @model IList<NewDepartment>
 @{
     ViewBag.Title = @Labels.NewDepartmentManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/newdepartment.index.css" rel="stylesheet" />
 }
 @section js{
     <script src="~/wwwroot/dist/js/newdepartment.index.js"></script>
@@ -48,9 +49,12 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
             <th>@Labels.NewDepartment</th>
             <th>@Labels.Unit</th>
             <th>@Labels.Active</th>
-            <th>@Labels.Edit</th>
-            <th>@Labels.Delete</th>
-        </tr>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
+            </tr>
     </thead>
     <tbody>
         @if (Model != null && Model.Any())
@@ -58,30 +62,33 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
             int index = 1;
             foreach (NewDepartment department in Model)
             {
-        <tr id="row@(department.Id)">
-            <td>@(index++)</td>
-            <td>@department.Code</td>
-            <td>@department.Name</td>
-            <td>@department.Unit.Name</td>
-            <td>
-                @if (department.IsActive)
-                {
-                    <i class="fa fa-check fa-lg icon-check"></i>
+            <tr id="row@(department.Id)">
+                <td>@(index++)</td>
+                <td>@department.Code</td>
+                <td>@department.Name</td>
+                <td>@department.Unit.Name</td>
+                <td>
+                    @if (department.IsActive)
+                    {
+                        <i class="fa fa-check fa-lg icon-check"></i>
+                    }
+                </td>
+                    @if (hasPermission)
+                    {
+                        <td>
+                            <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="deleteDepartment" data-department-id="@department.Id">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                    </tr>
                 }
-            </td>
-            <td>
-                <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
-                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                </a>
-            </td>
-            <td>
-                <a href="javascript:;" class="deleteDepartment" data-department-id="@department.Id">
-                    <i class="fa fa-times fa-lg icon-delete"></i>
-                </a>
-            </td>
-        </tr>
             }
-        }
         else
         {
             @RazorHelper.DisplayNoInformation(10)
