@@ -18,7 +18,6 @@ BEGIN
 		,u.Name
 		,u.IsActive
 		,u.ModifiedDate
-		,null as ManagerId
 	FROM dbo.Unit as u
 	WHERE u.UnitId =@UnitId
 END

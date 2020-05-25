@@ -1,24 +1,6 @@
-﻿@import '../../abstracts/mixins';
-@import '../../layout/filter';
-@import '../../layout/table';
-@import '../../components/validation';
-@import '../../components/buttons-new';
+﻿@import '../../abstracts/_mixins.scss';
+@import '../../abstracts/_variables.scss';
+@import '../../components/_buttons-new.scss';
+@import '../../layout/_filter.scss';
+@import '../../layout/_table.scss';
 @import '../../components/jquery-ui-dialog';
-
-#create-dialog, #edit-dialog {
-    .form-group {
-        width: 100%;
-
-        .input-form, .select-form {
-            width: calc(100% - 8rem);
-        }
-    }
-}
-
-.form-horizontal .form-group.form-group--m {
-    width: auto;
-}
-
-.content_scroll .filter {
-    width: 827px;
-}

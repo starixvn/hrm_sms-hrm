@@ -1,3 +1,28 @@
+.btn {
+  font-size: inherit;
+  padding-top: 4px;
+  padding-bottom: 4px; }
+  .btn.btn-default {
+    background-color: #e6e6e6; }
+  .btn.btn-request {
+    background-color: #f4783d;
+    color: #fff;
+    border: 1px solid #f4783d;
+    transition: all .2s ease-in; }
+    .btn.btn-request:hover, .btn.btn-request:focus, .btn.btn-request:active {
+      color: #fff;
+      background: #f79a6d;
+      border-color: #f79a6d; }
+  .btn.btn-excel {
+    background: #549f3b;
+    color: #fff;
+    border: 1px solid #549f3b;
+    transition: all .2s ease-in; }
+    .btn.btn-excel:hover, .btn.btn-excel:focus, .btn.btn-excel:active {
+      color: #fff;
+      background: #6bbe4f;
+      border-color: #6bbe4f; }
+
 .filter {
   background-color: #F4F4F4;
   border: 1px solid #C8C8C8;
@@ -231,85 +256,6 @@ span.req.keepinview {
 .mytimesheet-workinginoffday {
   background-color: #F8F89C; }
 
-.error, .alert, .notice, .success, .info, .validation-summary-errors {
-  border: 1px solid #ddd;
-  margin-bottom: 1em;
-  padding: 4px; }
-
-.warning {
-  background: none repeat scroll 0 0 #F7E36F;
-  border: 1px solid #ddd;
-  margin-bottom: 1em;
-  padding: 4px; }
-
-.validation-summary-errors ul {
-  margin: 0;
-  padding: 0 20px; }
-  .validation-summary-errors ul li {
-    margin: 4px 0; }
-
-.error a, .alert a, .notice a, .success a, .info a, .validation-summary-errors a {
-  float: none !important;
-  margin: 0 !important;
-  color: #FF0000; }
-
-.notice {
-  background: none repeat scroll 0 0 #FFF6BF;
-  border-color: #FFD324;
-  color: #514721; }
-
-.success {
-  background: none repeat scroll 0 0 #cae3bf !important;
-  border: 1px solid #9DB886 !important;
-  color: #3C763D !important;
-  padding: 4px; }
-
-.info {
-  background: none repeat scroll 0 0 #D5EDF8;
-  border-color: #92CAE4;
-  color: #205791; }
-
-.error, .alert, .validation-summary-errors {
-  background: none repeat scroll 0 0 #FBE3E4;
-  border-color: #FBC2C4;
-  color: #8A1F11; }
-
-/* styles for validation helpers */
-.field-validation-error {
-  color: #e80c4d;
-  line-height: 24px; }
-
-.field-validation-valid {
-  display: none; }
-
-.validation-summary-valid {
-  display: none; }
-
-.btn {
-  font-size: inherit;
-  padding-top: 4px;
-  padding-bottom: 4px; }
-  .btn.btn-default {
-    background-color: #e6e6e6; }
-  .btn.btn-request {
-    background-color: #f4783d;
-    color: #fff;
-    border: 1px solid #f4783d;
-    transition: all .2s ease-in; }
-    .btn.btn-request:hover, .btn.btn-request:focus, .btn.btn-request:active {
-      color: #fff;
-      background: #f79a6d;
-      border-color: #f79a6d; }
-  .btn.btn-excel {
-    background: #549f3b;
-    color: #fff;
-    border: 1px solid #549f3b;
-    transition: all .2s ease-in; }
-    .btn.btn-excel:hover, .btn.btn-excel:focus, .btn.btn-excel:active {
-      color: #fff;
-      background: #6bbe4f;
-      border-color: #6bbe4f; }
-
 .ui-widget-overlay {
   background-color: #000;
   opacity: .5;
@@ -339,17 +285,6 @@ span.req.keepinview {
     padding: 15px; }
   .ui-dialog textarea {
     resize: none; }
-
-#create-dialog .form-group, #edit-dialog .form-group {
-  width: 100%; }
-  #create-dialog .form-group .input-form, #create-dialog .form-group .select-form, #edit-dialog .form-group .input-form, #edit-dialog .form-group .select-form {
-    width: calc(100% - 8rem); }
-
-.form-horizontal .form-group.form-group--m {
-  width: auto; }
-
-.content_scroll .filter {
-  width: 827px; }
 
 
 /*# sourceMappingURL=unit.index.css.map*/
