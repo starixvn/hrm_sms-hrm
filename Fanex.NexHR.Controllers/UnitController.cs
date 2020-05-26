@@ -76,13 +76,13 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public ActionResult Edit(int unitId)
+        public ActionResult Edit(int id)
         {
-            Unit unit = unitService.GetById(unitId);
+            Unit unit = unitService.GetById(id);
 
             var model = new EditUnitViewModel
             {
-                UnitId = unitId,
+                UnitId = id,
                 Code = unit.Code,
                 Name = unit.Name,
                 IsActive = unit.IsActive,

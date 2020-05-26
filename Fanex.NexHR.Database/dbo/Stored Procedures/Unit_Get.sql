@@ -13,7 +13,7 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
-	SELECT u.UnitId
+	SELECT u.UnitId AS Id
 		,u.Code
 		,u.Name
 		,u.IsActive

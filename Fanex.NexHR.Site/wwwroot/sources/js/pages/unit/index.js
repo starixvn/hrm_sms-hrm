@@ -1,8 +1,10 @@
-﻿import $ from 'jquery/dist/jquery';
+﻿import 'floatthead/dist/jquery.floatThead';
+import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
-import { resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
+
+import { floatThead, resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
 
 $(function () {
     function initDeleteEvent() {
@@ -27,6 +29,7 @@ $(function () {
     }
 
     $(document).ready(() => {
+        floatThead('table#data');
         initDeleteEvent();
     });
 });

@@ -1,7 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
-import 'jquery-validation/dist/jquery.validate';
-import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
+﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import toastr from 'toastr';
 import axios from 'axios';
 import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors, hideValidationSummaryErrors } from '../../shared/common.functions';
@@ -21,7 +18,7 @@ function submitEvent() {
                 if (response.data.Code === 0) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("Unit/Index");
+                        document.location = resolveClientUrl("unit/index");
                     }, 3000);
                 }
                 else {
