@@ -1,5 +1,4 @@
-﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
-import toastr from 'toastr';
+﻿import toastr from 'toastr';
 import axios from 'axios';
 import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors, hideValidationSummaryErrors } from '../../shared/common.functions';
 
