@@ -21,20 +21,21 @@
 
 @using (Html.BeginForm("index", "unit", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
 {
-    var gender = new List<SelectListItem>
-    {
-        new SelectListItem() {Text = "All", Value = "", Selected = !Model.IsActive.HasValue },
-        new SelectListItem() {Text = "Active", Value = "true", Selected = Model.IsActive.HasValue && Model.IsActive.Value},
-        new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsActive.HasValue  && !Model.IsActive.Value}
-     };
-
     <div class="form-horizontal clearfix">
         <div class="form-group">
             <div class="label-form label--xs">
                 @Html.Label(@Labels.Status, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownList("IsActive", gender, new { @class = "form-control" })
+                @{
+                    var status = new List<SelectListItem>
+                        {
+                        new SelectListItem() {Text = "All", Value = "", Selected = !Model.IsActive.HasValue },
+                        new SelectListItem() {Text = "Active", Value = "true", Selected = Model.IsActive.HasValue && Model.IsActive.Value},
+                        new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsActive.HasValue  && !Model.IsActive.Value}
+                     };
+                }
+                @Html.DropDownList("IsActive", status, new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group form-group--m">

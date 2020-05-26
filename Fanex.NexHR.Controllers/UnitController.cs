@@ -8,6 +8,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Unit;
 
@@ -55,9 +56,8 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public JsonResult Create(AddUnitViewModel model)
+        public ActionResult Create(AddUnitViewModel model)
         {
-            var commandResult = new CommandResult();
 
             if (model != null && ModelState.IsValid)
             {
@@ -68,11 +68,24 @@
                     IsActive = model.IsActive,
                     CreatedBy = sessionService.Employee.Id
                 };
+                var commandResult = unitService.Create(criteria);
 
-                commandResult = unitService.Create(criteria);
+                if (commandResult.IsSuccessful)
+                {
+                    return RedirectToAction("Index", "Unit");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
-            return Json(commandResult);
+            return View(model);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
@@ -93,9 +106,8 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public JsonResult Edit(EditUnitViewModel model)
+        public ActionResult Edit(EditUnitViewModel model)
         {
-            var commandResult = new CommandResult();
 
             if (model != null && ModelState.IsValid)
             {
@@ -108,10 +120,22 @@
                     ModifiedBy = sessionService.Employee.Id
                 };
 
-                commandResult = unitService.Edit(criteria);
+                var commandResult = unitService.Edit(criteria);
+                if (commandResult.IsSuccessful)
+                {
+                    ViewBag.Updated = true;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
             }
 
-            return Json(commandResult);
+            return View(model);
         }
 
         [HttpPost]

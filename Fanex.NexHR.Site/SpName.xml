@@ -227,9 +227,12 @@
   <Function Name="Unit">
     <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Unit_Update" SpName="Unit_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Unit_Get" SpName="Unit_Get" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Unit_GetById" SpName="Unit_GetById" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Unit_GetParent" SpName="Unit_GetParent" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Unit_Get" SpName="Unit_Get" DbName="nexhrx" Plain="0">
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+    </Setting>
+    <Setting Key="Unit_GetById" SpName="Unit_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+    </Setting>
     <Setting Key="Unit_Delete" SpName="Unit_Delete" DbName="nexhrx" Plain="0"></Setting>
   </Function>
   <Function Name="Discipline">

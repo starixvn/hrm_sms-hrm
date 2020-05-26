@@ -19,16 +19,16 @@
 }
 
 <h2 class="page-title">@Labels.Create</h2>
-<div class="card">
-    @using (Html.BeginForm("create", "unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
-    {
-        @Html.ValidationSummary()
+@using (Html.BeginForm())
+{
+    <div class="card form-horizontal">
+        @Html.ValidationSummary(true)
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Code, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.Code)
         </div>
@@ -38,7 +38,7 @@
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.Name)
         </div>
@@ -54,9 +54,9 @@
 
         <div class="form-group">
             <div>
-                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
-                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
+                <a href="@Url.Action("index", "unit")" class="btn btn-default">@Labels.Back</a>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
