@@ -1,7 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
-import 'jquery-validation/dist/jquery.validate';
-import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
+﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import toastr from 'toastr';
 import axios from 'axios';
 import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors, hideValidationSummaryErrors } from '../../shared/common.functions';

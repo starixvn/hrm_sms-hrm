@@ -79,7 +79,7 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("Edit", "NewDepartment", new { DepartmentId = department.Id })">
+                            <a href="@Url.Action("Edit", "NewDepartment", new {Id = department.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>

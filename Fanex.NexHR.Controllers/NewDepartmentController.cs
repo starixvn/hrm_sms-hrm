@@ -72,13 +72,13 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public ActionResult Edit(int departmentId)
+        public ActionResult Edit(int Id)
         {
-            NewDepartment department = departmentService.GetById(departmentId);
+            NewDepartment department = departmentService.GetById(Id);
             IList<Unit> unit = unitService.GetUnit();
             var model = new EditNewDepartmentViewModel
             {
-                DepartmentId = departmentId,
+                DepartmentId = Id,
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,

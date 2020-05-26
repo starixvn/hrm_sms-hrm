@@ -218,9 +218,7 @@
       <Mapping DataField="ManagerId" ObjectProperty="Id" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-    </Setting>
+    <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Insert" SpName="TestDepartment_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Delete" SpName="TestDepartment_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_GetById" SpName="TestDepartment_GetById" DbName="nexhrx" Plain="0"></Setting>
