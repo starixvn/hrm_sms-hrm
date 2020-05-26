@@ -20,7 +20,7 @@
 
 <h2 class="page-title">@Labels.Create</h2>
 <div class="card">
-    @using (Html.BeginForm("Create", "unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
+    @using (Html.BeginForm("create", "unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
         @Html.ValidationSummary()
         <div class="form-group">

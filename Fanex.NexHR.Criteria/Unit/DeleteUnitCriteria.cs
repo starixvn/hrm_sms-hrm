@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.Criteria.Unit
 {
     using Fanex.Data.Repository;
-
+    
     public class DeleteUnitCriteria : CriteriaBase
     {
         public int UnitId { get; set; }

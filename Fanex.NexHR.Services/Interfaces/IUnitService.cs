@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
 
     public interface IUnitService
@@ -10,6 +11,11 @@
 
         IList<Unit> GetUnit(bool? isActive = true);
 
+        CommandResult Create(InsertUnitCriteria criteria);
+        
+        CommandResult Edit(UpdateUnitCriteria criteria);
+
+        CommandResult Delete(DeleteUnitCriteria criteria);
 
     }
 }

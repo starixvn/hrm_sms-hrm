@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Unit
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class UpdateUnitCriteria : CriteriaBase
@@ -12,10 +11,6 @@
         public string Name { get; set; }
 
         public bool IsActive { get; set; }
-
-        //public int ParentId { get; set; }
-
-        //public int ManagerId { get; set; }
 
         public int ModifiedBy { get; set; }
 

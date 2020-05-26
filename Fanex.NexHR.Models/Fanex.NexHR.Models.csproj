@@ -95,7 +95,6 @@
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Unit\Unit.cs" />
-    <Compile Include="Unit\UnitHead.cs" />
     <Compile Include="Department\DepartmentHead.cs" />
     <Compile Include="EditEmployeeParam.cs" />
     <Compile Include="Log\MappingFieldConfig.cs" />

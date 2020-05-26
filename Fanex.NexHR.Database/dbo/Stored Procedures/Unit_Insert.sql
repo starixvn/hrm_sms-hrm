@@ -41,7 +41,7 @@ BEGIN
 		,@Name
 		,@CreatedBy
 		,GETDATE()
-		,1
+		,@IsActive
 		)
 END
 

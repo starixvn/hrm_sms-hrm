@@ -13,16 +13,13 @@
 
     public class UnitController : BaseController
     {
-        private readonly IUnitService _unitService;
-        private readonly IBaseService _baseService;
+        private readonly IUnitService unitService;
 
         public UnitController(
             ISessionService sessionService,
-            IUnitService unitService,
-            IBaseService baseService) : base(sessionService)
+            IUnitService unitService) : base(sessionService)
         {
-            this._unitService = unitService;
-            this._baseService = baseService;
+            this.unitService = unitService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.UnitManagement)]
@@ -32,7 +29,7 @@
             var model = new UnitViewModel
             {
                 IsActive = isActive,
-                Units = _unitService.GetUnit(isActive: isActive)
+                Units = unitService.GetUnit(isActive: isActive)
             };
 
             return View(model);
@@ -44,7 +41,7 @@
         {
             if (model != null)
             {
-                model.Units = _unitService.GetUnit(isActive: model.IsActive);
+                model.Units = unitService.GetUnit(isActive: model.IsActive);
             }
 
             return View(model);
@@ -53,22 +50,26 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Create()
         {
-            var model = new AddUnitViewModel { };
-
-            return View(model);
+            return View(new AddUnitViewModel { });
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public JsonResult Create(InsertUnitCriteria criteria)
+        public JsonResult Create(AddUnitViewModel model)
         {
             var commandResult = new CommandResult();
 
-            if (criteria != null && ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
-                criteria.CreatedBy = sessionService.Employee.Id;
+                var criteria = new InsertUnitCriteria
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    CreatedBy = sessionService.Employee.Id
+                };
 
-                commandResult = _baseService.ExecuteNonQuery(criteria);
+                commandResult = unitService.Create(criteria);
             }
 
             return Json(commandResult);
@@ -77,7 +78,7 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Edit(int unitId)
         {
-            Unit unit = _unitService.GetById(unitId);
+            Unit unit = unitService.GetById(unitId);
 
             var model = new EditUnitViewModel
             {
@@ -92,15 +93,22 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public JsonResult Edit(UpdateUnitCriteria criteria)
+        public JsonResult Edit(EditUnitViewModel model)
         {
             var commandResult = new CommandResult();
 
-            if (criteria != null && ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
-                criteria.ModifiedBy = sessionService.Employee.Id;
+                var criteria = new UpdateUnitCriteria
+                {
+                    UnitId = model.UnitId,
+                    Code = model.Code,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    ModifiedBy = sessionService.Employee.Id
+                };
 
-                commandResult = _baseService.ExecuteNonQuery(criteria);
+                commandResult = unitService.Edit(criteria);
             }
 
             return Json(commandResult);
@@ -110,7 +118,7 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public JsonResult Delete(DeleteUnitCriteria criteria)
         {
-            var commandResult = _baseService.ExecuteNonQuery(criteria);
+            var commandResult = unitService.Delete(criteria);
 
             return Json(commandResult);
         }

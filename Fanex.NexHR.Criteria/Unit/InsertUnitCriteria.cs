@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Unit
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class InsertUnitCriteria : CriteriaBase

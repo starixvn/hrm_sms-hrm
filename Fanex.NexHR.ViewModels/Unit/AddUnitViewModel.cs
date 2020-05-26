@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NexHR.ViewModels.Unit
 {
-    using Fanex.NexHR.Models;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
@@ -19,7 +17,6 @@
         [AllowHtml]
         [Required]
         public string Name { get; set; }
-
 
         public bool IsActive { get; set; }
 

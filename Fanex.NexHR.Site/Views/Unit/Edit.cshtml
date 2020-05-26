@@ -18,7 +18,7 @@
 }
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
-    @using (Html.BeginForm("Edit", "Unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
+    @using (Html.BeginForm("edit", "unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
         @Html.HiddenFor(model => model.UnitId)
         @Html.ValidationSummary()

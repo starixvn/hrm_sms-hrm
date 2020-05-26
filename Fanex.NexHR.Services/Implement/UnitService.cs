@@ -3,38 +3,46 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Repositories;
+    using System.Linq;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.Models;
 
     public class UnitService : IUnitService
     {
-        private readonly IUnitRepository _unitRepository;
+        private readonly IBaseService baseService;
 
-        public UnitService(
-            IUnitRepository unitRepository)
+        public UnitService(IBaseService baseService)
         {
-            this._unitRepository = unitRepository;
+            this.baseService = baseService;
         }
 
-    
         public Unit GetById(int id)
         {
-            var criteria = new GetUnitByIdCriteria
-            {
-                UnitId = id
-            };
-            return _unitRepository.GetById(criteria);
+            var criteria = new GetUnitByIdCriteria { UnitId = id };
+
+            return baseService.GetDataEntity<Unit>(criteria);
         }
 
         public IList<Unit> GetUnit(bool? isActive = true)
         {
-            var criteria = new GetUnitsCriteria
-            {
-                IsActive = isActive
-            };
-            IList<Unit> units = _unitRepository.GetUnit(criteria);
+            var criteria = new GetUnitsCriteria { IsActive = isActive };
 
-            return units ?? new List<Unit>();
+            return baseService.GetData<Unit>(criteria).ToList();
         }
 
+        public CommandResult Create(InsertUnitCriteria criteria)
+        {
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Edit(UpdateUnitCriteria criteria)
+        {
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult Delete(DeleteUnitCriteria criteria)
+        {
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

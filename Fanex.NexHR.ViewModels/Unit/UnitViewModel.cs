@@ -9,6 +9,5 @@
 
         public IList<Unit> Units { get; set; }
 
-        public int ParentId { get; set; }
     }
 }
