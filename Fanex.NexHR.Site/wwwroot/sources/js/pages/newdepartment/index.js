@@ -4,7 +4,7 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 
-import { axiosError, floatThead, confirm, resolveClientUrl, alert } from '../../shared/common.functions';
+import { axiosError, floatThead, confirm, resolveClientUrl, alert, autoIndex } from '../../shared/common.functions';
 
 function deleteDepartment() {
     $('.deleteDepartment').on('click', function () {
@@ -22,6 +22,7 @@ function deleteDepartment() {
                 if (data.isSuccessful) {
                     alert('Delete successfully!');
                     $('#row' + id).remove();
+                    autoIndex();
                 } else {
                     alert(data.Message);
                 }
