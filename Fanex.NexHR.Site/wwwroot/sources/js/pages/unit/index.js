@@ -4,7 +4,7 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 
-import { floatThead, resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
+import { floatThead, resolveClientUrl, confirm, axiosError, alert, autoIndex } from '../../shared/common.functions';
 
 $(function () {
     function initDeleteEvent() {
@@ -19,6 +19,7 @@ $(function () {
                     if (response.data.IsSuccessful) {
                         alert('Delete successfully!');
                         $('#row_' + unitId).remove();
+                        autoIndex();
                     }
                     else {
                         alert(response.data.Message);

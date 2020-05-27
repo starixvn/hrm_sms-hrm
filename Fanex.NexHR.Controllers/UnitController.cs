@@ -108,7 +108,6 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Edit(EditUnitViewModel model)
         {
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new UpdateUnitCriteria

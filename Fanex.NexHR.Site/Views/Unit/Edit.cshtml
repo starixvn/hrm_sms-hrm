@@ -8,6 +8,9 @@
 @section css{
     <link href="~/wwwroot/dist/styles/unit.create.css" rel="stylesheet" />
 }
+@section js{
+    <script src="~/wwwroot/dist/js/unit.edit.js"></script>
+}
 
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
@@ -15,13 +18,14 @@
     <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Edit</h2>
-<div class="card form-horizontal">
-    @using (Html.BeginForm())
-    {
+@using (Html.BeginForm())
+{
+    <div class="card form-horizontal">
+        @Html.ValidationSummary(true)
+
         @Html.HiddenFor(model => model.UnitId)
-        @Html.ValidationSummary()
-        
-        if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+
+        @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
             <div class="success flash">@Messages.UpdatedSuccessfully</div>
         }
@@ -32,6 +36,7 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
             </div>
+            @Html.ValidationMessageFor(model => model.Code)
         </div>
 
         <div class="form-group">
@@ -41,6 +46,7 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
             </div>
+            @Html.ValidationMessageFor(model => model.Name)
         </div>
 
         <div id="groupHalfDay" class="form-group">
@@ -58,5 +64,5 @@
                 <a href="@Url.Action("index", "unit")" class="btn btn-default">@Labels.Back</a>
             </div>
         </div>
-    }
-</div>
+    </div>
+}

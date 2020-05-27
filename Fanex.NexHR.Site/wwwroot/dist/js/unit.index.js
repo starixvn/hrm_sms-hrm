@@ -57844,6 +57844,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
                     if (response.data.IsSuccessful) {
                         (0, _common.alert)('Delete successfully!');
                         (0, _jquery2.default)('#row_' + unitId).remove();
+                        (0, _common.autoIndex)();
                     } else {
                         (0, _common.alert)(response.data.Message);
                     }
