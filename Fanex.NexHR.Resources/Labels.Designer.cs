@@ -1159,11 +1159,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dept./Section.
+        ///   Looks up a localized string similar to Dept./Team.
         /// </summary>
-        public static string DepartmentSection {
+        public static string DepartmentTeam {
             get {
-                return ResourceManager.GetString("DepartmentSection", resourceCulture);
+                return ResourceManager.GetString("DepartmentTeam", resourceCulture);
             }
         }
         
@@ -4579,7 +4579,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section.
+        ///   Looks up a localized string similar to Team.
         /// </summary>
         public static string Team {
             get {

@@ -265,7 +265,7 @@
     <value>Since Last Month</value>
   </data>
   <data name="Team" xml:space="preserve">
-    <value>Section</value>
+    <value>Team</value>
   </data>
   <data name="ToDate" xml:space="preserve">
     <value>To Date</value>
@@ -1251,8 +1251,8 @@
   <data name="DefaultShift" xml:space="preserve">
     <value>Default Shift</value>
   </data>
-  <data name="DepartmentSection" xml:space="preserve">
-    <value>Dept./Section</value>
+  <data name="DepartmentTeam" xml:space="preserve">
+    <value>Dept./Team</value>
   </data>
   <data name="EmployeeID" xml:space="preserve">
     <value>Employee ID</value>
