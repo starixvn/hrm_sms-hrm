@@ -36,7 +36,7 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 IsLocal = param.IsLocal,
-                GroupIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee
             };
             return repository.GetWorkingCalendarSummary(criteria);

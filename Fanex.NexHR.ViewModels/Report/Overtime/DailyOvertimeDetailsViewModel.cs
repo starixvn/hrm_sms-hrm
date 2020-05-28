@@ -10,7 +10,7 @@
     {
         public DateTime FromDate { get; set; } = DateTime.Now.AddMonths(-1);
         public DateTime ToDate { get; set; } = DateTime.Now;
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public IEnumerable<EntityBase<int>> Sections { get; set; }
         public string Employee { get; set; }
         public byte? IsLocal { get; set; }

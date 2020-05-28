@@ -56,7 +56,7 @@
             var model = new LeaveSummaryViewModel
             {
                 Year = year ?? DateTime.Now.Year,
-                SectionIds = sectionIds,
+                TeamIds = sectionIds,
                 Employee = employee,
                 EmployeeId = employeeId ?? -1,
                 MinAnnualBalance = minAnnualBalance ?? 0,
@@ -72,9 +72,9 @@
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
-            model.Sections = teamService.GetBySupervisor(sessionService.Employee.Id);
+            model.Teams = teamService.GetBySupervisor(sessionService.Employee.Id);
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-            model.LeaveSumaries = reportService.GetLeaveByTeam(leaveSumaries, model.Sections);
+            model.LeaveSumaries = reportService.GetLeaveByTeam(leaveSumaries, model.Teams);
 
             return View(model);
         }
@@ -107,7 +107,7 @@
             {
                 Year = lastYear,
                 EmpId = null,
-                GroupIds = null,
+                TeamIds = null,
                 IsLocal = null,
                 Role = string.Empty,
                 SupervisorId = null
@@ -254,7 +254,7 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 Role = string.Empty,
                 SupervisorId = sessionService.Employee.Id

@@ -24,7 +24,7 @@
 <h2 class="page-title">@ViewBag.Title</h2>
 @Html.Hidden("Today", DateTime.Now.ToString("MMMM dd, yyyy"))
 <form class="filter">
-    @Html.HiddenFor(model => model.SectionIds)
+    @Html.HiddenFor(model => model.TeamIds)
     @Html.Hidden("DateOption", Model.DateOption)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
@@ -89,7 +89,7 @@
             <div class="label-form">
                 <label class="control-label">@Labels.DepartmentTeam</label>
             </div>
-            <div class="select-form" id="Section"></div>
+            <div class="select-form" id="Team"></div>
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -131,7 +131,7 @@
             <th>@Labels.Code</th>
             <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
-            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
             <th>@Labels.WorkingDaysMonth</th>
             <th>@Labels.HoursPerDay</th>
             <th>@Labels.TotalOvertimeHours</th>
@@ -180,7 +180,7 @@
                     <td>@item.Code</td>
                     <td class="align-left">@item.FullName</td>
                     <td class="align-left">@item.Nickname</td>
-                    <td class="align-left">@item.Section</td>
+                    <td class="align-left">@item.Team</td>
                     <td>@item.WorkingDays</td>
                     <td>@item.WorkingHours</td>
                     <td>@Utilities.DisplayFloatNumber(item.TotalWorkingHours)</td>

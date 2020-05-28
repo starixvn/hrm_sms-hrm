@@ -103,7 +103,7 @@
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
-                GroupIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 IsLocal = param.IsLocal,
                 EmployeeStatusId = param.EmployeeStatusId
@@ -248,7 +248,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;
@@ -315,7 +315,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;
@@ -373,7 +373,7 @@
             // data
             var rowNum = 1;
             IEnumerable<DailyOvertimeDetails> employees = dailyOvertimes.GroupBy(x => x.EmpId)
-                .Select(x => x.First()).OrderByDescending(x => x.Section).ThenBy(x => x.Code);
+                .Select(x => x.First()).OrderByDescending(x => x.Team).ThenBy(x => x.Code);
             foreach (DailyOvertimeDetails employee in employees)
             {
                 IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.EmpId == employee.EmpId);
@@ -384,7 +384,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.OffHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.PublicHours);
@@ -500,14 +500,14 @@
             rowIndex++;
 
             // data
-            IEnumerable<string> sections = dailyOvertimes.Select(x => x.Section).Distinct().OrderBy(x => x);
-            foreach (var section in sections)
+            IEnumerable<string> teams = dailyOvertimes.Select(x => x.Team).Distinct().OrderBy(x => x);
+            foreach (var team in teams)
             {
-                IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.Section == section);
+                IEnumerable<DailyOvertimeDetails> overtimes = dailyOvertimes.Where(x => x.Team == team);
                 colIndex = 1;
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalColumns]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                worksheet.Cells[rowIndex, colIndex++].Value = section;
+                worksheet.Cells[rowIndex, colIndex++].Value = team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.OffHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.PublicHours);
@@ -517,7 +517,7 @@
             }
 
             // summary
-            if (sections.Any())
+            if (teams.Any())
             {
                 template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
                 const byte TotalSummaryColumns = 4;

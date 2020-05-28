@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_GetWeekendLeaveDetail] @FromDate DATE
 	,@ToDate DATE
-	,@GroupId VARCHAR(MAX) = ''
+	,@TeamId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@IsLocal BIT = NULL
 	,@LeaveTypeId INT = NULL
@@ -12,11 +12,11 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (TmpGroupId INT)
 
-	IF ISNULL(@GroupId, '') <> ''
+	IF ISNULL(@TeamId, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (TmpGroupId)
 		SELECT DISTINCT val
-		FROM fnc_strSplit(@GroupId, ',')
+		FROM fnc_strSplit(@TeamId, ',')
 	END
 
 	CREATE TABLE #tblEmployeeId (EmpId INT)
@@ -39,9 +39,9 @@ BEGIN
 		,FullName
 		,Code
 		,IsLocal
-		,GroupId
-		,GroupName
-		,GroupCode
+		,GroupId AS TeamId
+		,GroupName AS TeamName
+		,GroupCode AS TeamCode
 		,LeaveDate
 		,LeaveTypeId
 		,LeaveType
@@ -125,9 +125,9 @@ BEGIN
 			,emp.FullName
 			,emp.Code
 			,empSum.IsLocal
-			,gr.GroupId
-			,gr.[Name] AS GroupName
-			,gr.Code AS GroupCode
+			,gr.GroupId AS TeamId
+			,gr.[Name] AS TeamName
+			,gr.Code AS TeamCode
 			,empC.WorkDate AS LeaveDate
 			,ISNULL(empC.LeaveTypeId, empC.LeaveTypeId2) AS LeaveTypeId
 			,lt.NAME AS LeaveType
@@ -182,9 +182,9 @@ BEGIN
 			,emp.FullName
 			,emp.Code
 			,empSum.IsLocal
-			,gr.GroupId
-			,gr.[Name] AS GroupName
-			,gr.Code AS GroupCode
+			,gr.GroupId AS TeamId
+			,gr.[Name] AS TeamName
+			,gr.Code AS TeamCode
 			,empC.WorkDate AS LeaveDate
 			,ISNULL(empC.LeaveTypeId, empC.LeaveTypeId2) AS LeaveTypeId
 			,lt.NAME AS LeaveType
@@ -254,4 +254,6 @@ BEGIN
 				)
 		) a
 	ORDER BY LeaveDate DESC
+
+	DROP TABLE #tblGroupIds
 END

@@ -16,7 +16,7 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     var dateRanges = multi.Read<DateRange>();
-                    var dailyOvertimes = multi.Read<DailyOvertimeDetails>().OrderBy(x => x.WorkDate).ThenByDescending(x => x.Section);
+                    var dailyOvertimes = multi.Read<DailyOvertimeDetails>().OrderBy(x => x.WorkDate).ThenByDescending(x => x.Team);
 
                     return new Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>(dateRanges, dailyOvertimes);
                 }

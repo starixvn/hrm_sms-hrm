@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_LeaveSummary] @empid INT = NULL
-	,@groupids VARCHAR(max) = ''
+		,@TeamIds VARCHAR(max) = ''
 	,@year INT
 	,@isLocal BIT = NULL
 	,@SupervisorId INT = NULL
@@ -30,11 +30,11 @@ BEGIN
 
 	CREATE TABLE #EmployeeId (EmpId INT)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #GroupsList (GroupId)
 		SELECT val
-		FROM fnc_strSplit(@GroupIds, ',')
+		FROM fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN
@@ -93,8 +93,8 @@ BEGIN
 			OR es.IsLocal = @isLocal
 			)
 		AND (
-			@groupids IS NULL
-			OR @groupids = ''
+			@Teamids IS NULL
+			OR @Teamids = ''
 			OR e.GroupId IN (
 				SELECT GroupId
 				FROM #GroupsList
@@ -322,8 +322,8 @@ BEGIN
 			OR es.IsLocal = @isLocal
 			)
 		AND (
-			@groupids IS NULL
-			OR @groupids = ''
+			@Teamids IS NULL
+			OR @Teamids = ''
 			OR e.GroupId IN (
 				SELECT GroupId
 				FROM #GroupsList

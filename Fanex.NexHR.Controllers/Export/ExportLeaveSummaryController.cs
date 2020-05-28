@@ -44,7 +44,7 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsLocal = isLocal,
                 Role = string.Empty,
                 SupervisorId = null
@@ -64,7 +64,7 @@
             {
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
-                GroupIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 SupervisorId = sessionService.Employee.Id,
                 LeaveType = (int)model.LeaveType

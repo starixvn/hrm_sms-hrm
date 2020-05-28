@@ -32,9 +32,9 @@
             {
                 reportTitle = string.Format(Labels.WeekendLeaveSummary, criteria.EmployeeName, startDate, endDate);
             }
-            else if (criteria.GroupId != null)
+            else if (criteria.TeamId != null)
             {
-                reportTitle = string.Format(Labels.WeekendLeaveSummary, criteria.GroupName, startDate, endDate);
+                reportTitle = string.Format(Labels.WeekendLeaveSummary, criteria.TeamName, startDate, endDate);
             }
             else
             {
@@ -95,7 +95,7 @@
                 weekendLeave.Code,
                 weekendLeave.FullName,
                 Nick = weekendLeave.NickName,
-                Section = weekendLeave.GroupName,
+                Team = weekendLeave.TeamName,
                 Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,
                 WeekendLeave = totalWeekendLeaveDays
             };

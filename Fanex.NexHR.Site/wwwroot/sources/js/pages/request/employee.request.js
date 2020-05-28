@@ -536,7 +536,7 @@ $(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
             const url = resolveClientUrl('ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
-                + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
+                + '&TeamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
                 + '&Employee=' + $('#Employee').val()
                 + '&EmployeeId=' + $('#EmployeeId').val()
                 + '&FromDate=' + $('#FromDate').val()
@@ -555,7 +555,7 @@ $(function () {
 
         axios(resolveClientUrl('Department/GetHierarchy'))
             .then(response => {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: response.data,
                     selectedItems: $('#TeamIds').val()
                 });
@@ -601,7 +601,7 @@ $(function () {
             } else {
                 const url = resolveClientUrl('request/' + $('#ActionName').val()
                     + '?DateOption=' + $('#Date').val()
-                    + '&TeamIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
+                    + '&TeamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
                     + '&Employee=' + $('#Employee').val()
                     + '&EmployeeId=' + $('#EmployeeId').val()
                     + '&FromDate=' + $('#FromDate').val()

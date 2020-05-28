@@ -94,9 +94,9 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#SectionIds').val()
+                selectedItems: $('#TeamIds').val()
             });
         }).catch(axiosError);
 
@@ -111,7 +111,7 @@ $(document).ready(function () {
         if ((statusId === 0 || statusId === CurrentRequestStatus.Processed) && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
-            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
             $('form.filter').submit();
         }
     });

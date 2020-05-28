@@ -37,7 +37,7 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 IsLocal = param.IsLocal,
-                GroupIds = param.SectionIds,
+                GroupIds = param.TeamIds,
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId
             };
@@ -103,7 +103,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = item.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = item.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WorkingDays;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WorkingHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.TotalWorkingHours;
@@ -173,7 +173,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;

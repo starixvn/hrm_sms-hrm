@@ -32,9 +32,9 @@
             {
                 reportTitle = string.Format(Labels.WeekendLeaveDetail, criteria.EmployeeName, startDate, endDate);
             }
-            else if (criteria.GroupId != null)
+            else if (criteria.TeamId != null)
             {
-                reportTitle = string.Format(Labels.WeekendLeaveDetail, criteria.GroupName, startDate, endDate);
+                reportTitle = string.Format(Labels.WeekendLeaveDetail, criteria.TeamName, startDate, endDate);
             }
             else
             {

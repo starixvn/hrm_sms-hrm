@@ -14,7 +14,7 @@
         public DateTime FromDate { get; set; } = new DateTime(Today.Year, Today.Month, 1);
         public DateTime ToDate { get; set; } = Today;
         public byte? IsLocal { get; set; }
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
 

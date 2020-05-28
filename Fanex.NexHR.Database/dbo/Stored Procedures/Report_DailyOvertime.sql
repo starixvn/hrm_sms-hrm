@@ -1,8 +1,7 @@
-﻿
-CREATE PROCEDURE [dbo].[Report_DailyOvertime] @ActorId INT
+﻿CREATE PROCEDURE [dbo].[Report_DailyOvertime] @ActorId INT
 	,@fromDate DATE
 	,@toDate DATE
-	,@groupIds VARCHAR(MAX) = NULL
+	,@TeamIds VARCHAR(MAX) = NULL
 	,@isLocal BIT = NULL
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -29,14 +28,14 @@ BEGIN
 
 	INSERT INTO #tblGroupIds (GroupId)
 	SELECT val
-	FROM dbo.fnc_strSplit(@groupids, ',')
+	FROM dbo.fnc_strSplit(@TeamIds, ',')
 
 	SELECT emp.EmpId
 		,emp.NickName
 		,emp.FullName
 		,emp.Code
 		,gr.GroupId
-		,gr.[Name] AS Section
+		,gr.[Name] AS Team
 		,ot.OvertimeDate AS WorkDate
 		,s.ShiftId
 		,s.Code AS ShiftCode
@@ -90,7 +89,7 @@ BEGIN
 			OR empsum.IsLocal = @isLocal
 			)
 		AND (
-			ISNULL(@groupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR EXISTS (
 				SELECT 1
 				FROM #tblGroupIds AS tbl
@@ -102,3 +101,6 @@ BEGIN
 
 	DROP TABLE #tblGroupIds
 END
+
+
+
