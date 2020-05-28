@@ -10,16 +10,16 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Section;
+    using Fanex.NexHR.Criteria.Group;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
-    using Fanex.NexHR.ViewModels.Section;
+    using Fanex.NexHR.ViewModels.Team;
 
-    [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
+    [HRMPermission(Policy.Read, FunctionKey.TeamManagement)]
     public class TeamController : BaseController
     {
         private readonly ITeamService teamService;
@@ -43,13 +43,13 @@
         public ActionResult Index()
         {
             IList<Team> teams = teamService.GetAll();
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
             ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
 
             return View(teams);
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult Create()
         {
             var model = new TeamViewModel
@@ -61,14 +61,14 @@
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult Create(TeamViewModel model)
         {
             model.Departments = departmentService.GetDepartment();
             model.Employees = GetAllEmployees();
             if (ModelState.IsValid)
             {
-                var criteria = new CreateSectionCriteria
+                var criteria = new CreateTeamCriteria
                 {
                     Code = model.TeamCode,
                     Name = model.TeamName,
@@ -98,7 +98,7 @@
             return View(model);
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult Edit(int id)
         {
             Team team = teamService.GetById(id);
@@ -107,18 +107,18 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
-            var sectionHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)SectionManagerRole.Head);
+            var teamHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
             var model = new TeamViewModel
             {
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
-                HeadId = sectionHead?.EmpId,
-                SectionHead = sectionHead?.DisplayName,
-                AssistantHeadIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantHead).Select(e => e.EmpId)),
-                LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.Leader).Select(e => e.EmpId)),
-                AssistantLeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)SectionManagerRole.AssistantLeader).Select(e => e.EmpId)),
+                HeadId = teamHead?.EmpId,
+                TeamHead = teamHead?.DisplayName,
+                AssistantHeadIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantHead).Select(e => e.EmpId)),
+                LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
+                AssistantLeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantLeader).Select(e => e.EmpId)),
                 DepartmentId = team.Department != null ? team.Department.Id : 0,
                 Departments = departmentService.GetDepartment(),
                 Employees = GetAllEmployees()
@@ -128,7 +128,7 @@
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult Edit(TeamViewModel model)
         {
             if (model != null)
@@ -137,7 +137,7 @@
                 model.Employees = GetAllEmployees();
                 if (ModelState.IsValid)
                 {
-                    var criteria = new EditSectionCriteria
+                    var criteria = new EditTeamCriteria
                     {
                         GroupId = model.Id,
                         Code = model.TeamCode,
@@ -172,7 +172,7 @@
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public CustomJsonResult Delete(int id)
         {
             CommandResult commandResult = teamService.Delete(sessionService.Employee.Id, id);
@@ -189,36 +189,36 @@
             return View(supervisors);
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult ManageSupervisor(int id, short roleId)
         {
-            ViewBag.SectionId = id;
+            ViewBag.TeamId = id;
             ViewBag.RoleId = roleId;
 
             return View();
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public CustomJsonResult GetSectionSupervisorByRoleId(int sectionId, RoleSystem roleId)
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        public CustomJsonResult GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId)
         {
-            IEnumerable<SupervisorModel> supervisors = teamService.GetSectionSupervisorByRoleId(sectionId, roleId);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisorByRoleId(teamId, roleId);
 
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult ShiftManager(int id)
         {
-            ViewBag.SectionId = id;
+            ViewBag.TeamId = id;
             ViewBag.RoleId = (short)RoleSystem.ShiftManager;
 
             return View();
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public CustomJsonResult GetShiftManagerBySectionId(int sectionId)
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        public CustomJsonResult GetShiftManagerByTeamId(int teamId)
         {
-            IEnumerable<SupervisorModel> supervisors = teamService.GetSectionSupervisorByRoleId(sectionId, RoleSystem.ShiftManager);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisorByRoleId(teamId, RoleSystem.ShiftManager);
 
             return new CustomJsonResult
             {
@@ -227,26 +227,26 @@
             };
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult DisciplineManager(int id)
         {
-            ViewBag.SectionId = id;
+            ViewBag.TeamId = id;
             ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
             return View();
         }
 
         [HttpGet]
-        public CustomJsonResult GetDisciplineManagerBySectionId(int sectionId)
+        public CustomJsonResult GetDisciplineManagerByTeamId(int teamId)
         {
-            IEnumerable<Supervisor> supervisors = teamService.GetDisciplineManagerBySectionId(sectionId);
+            IEnumerable<Supervisor> supervisors = teamService.GetDisciplineManagerByTeamId(teamId);
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public CustomJsonResult EditSectionSupervisor(int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        public CustomJsonResult EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
-            CommandResult commandResult = teamService.EditSectionSupervisor(sessionService.Employee.Id, sectionId, roleId, supervisors);
+            CommandResult commandResult = teamService.EditTeamSupervisor(sessionService.Employee.Id, teamId, roleId, supervisors);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -254,27 +254,27 @@
         [HttpGet]
         public ActionResult DisciplineRule(int id)
         {
-            Team section = teamService.GetById(id);
-            if (section == null)
+            Team team = teamService.GetById(id);
+            if (team == null)
             {
                 return RedirectToAction("PageNotFound", "Error");
             }
 
             var model = new DisciplineRuleViewModel
             {
-                SectionId = section.Id,
-                Section = section.Name,
-                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host),
-                DisciplineRules = teamService.GetDisciplineRuleBySection(id)
+                TeamId = team.Id,
+                Team = team.Name,
+                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
+                DisciplineRules = teamService.GetDisciplineRuleByTeam(id)
             };
             return View(model);
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public CustomJsonResult EditDisciplineRule(int sectionId, IEnumerable<DisciplineRule> disciplineRules)
+        [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        public CustomJsonResult EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
         {
-            CommandResult commandResult = teamService.EditDisciplineRule(sessionService.Employee.Id, sectionId, disciplineRules);
+            CommandResult commandResult = teamService.EditDisciplineRule(sessionService.Employee.Id, teamId, disciplineRules);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

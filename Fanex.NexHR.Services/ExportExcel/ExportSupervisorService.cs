@@ -60,7 +60,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.NickName;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
-                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Roles2String;
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Verifier);
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Approver);

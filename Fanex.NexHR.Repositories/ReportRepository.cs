@@ -7,6 +7,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
@@ -54,10 +55,10 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, SectionModel, SupervisorReportModel>(
+                    IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, TeamModel, SupervisorReportModel>(
                     (su, section) =>
                     {
-                        su.Section = section;
+                        su.Team = section;
 
                         return su;
                     },
@@ -100,10 +101,10 @@
                 {
                     IList<TeamSupervisorReportModel> supervisors = multi.Read<TeamSupervisorReportModel>().ToList();
 
-                    IList<SupervisorModel> employees = multi.Read<SupervisorModel, SectionModel, SupervisorModel>(
+                    IList<SupervisorModel> employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
                     (su, section) =>
                     {
-                        su.Section = section;
+                        su.Team = section;
 
                         return su;
                     },
@@ -111,7 +112,7 @@
 
                     foreach (TeamSupervisorReportModel supervisor in supervisors)
                     {
-                        supervisor.Supervisors = employees.Where(x => x.Section.SectionId == supervisor.SectionId).ToList();
+                        supervisor.Supervisors = employees.Where(x => x.Team.TeamId == supervisor.SectionId).ToList();
                     }
 
                     return supervisors;

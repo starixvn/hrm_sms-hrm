@@ -11,7 +11,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels.AnnualLeave;
 
@@ -57,7 +57,7 @@
 
         IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
-        CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors);
+        CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
         CommandResult EditPasswordResetStatus(int employeeId, bool status);
 

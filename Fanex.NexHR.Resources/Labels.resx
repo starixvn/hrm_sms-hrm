@@ -1029,8 +1029,8 @@
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
-  <data name="SectionManagement" xml:space="preserve">
-    <value>Section Management</value>
+  <data name="TeamManagement" xml:space="preserve">
+    <value>Team Management</value>
   </data>
   <data name="AuthorityLevel" xml:space="preserve">
     <value>Authority Level</value>
@@ -1308,8 +1308,8 @@
   <data name="ResignedDate" xml:space="preserve">
     <value>Resigned Date</value>
   </data>
-  <data name="AssistantSectionHead" xml:space="preserve">
-    <value>Assist.Section Head</value>
+  <data name="AssistantTeamHead" xml:space="preserve">
+    <value>Assist.Team Head</value>
   </data>
   <data name="ExternalGroup" xml:space="preserve">
     <value>External Group</value>
@@ -1317,8 +1317,8 @@
   <data name="GroupName" xml:space="preserve">
     <value>Group Name</value>
   </data>
-  <data name="SectionHead" xml:space="preserve">
-    <value>Section Head</value>
+  <data name="TeamHead" xml:space="preserve">
+    <value>Team Head</value>
   </data>
   <data name="SectionSupervisor" xml:space="preserve">
     <value>Section Supervisor</value>

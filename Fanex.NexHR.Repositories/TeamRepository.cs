@@ -5,7 +5,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
 
     public class TeamRepository : ITeamRepository
     {
@@ -25,7 +25,7 @@
 
                     if (team != null)
                     {
-                        team.Managers = multi.Read<SectionManager>();
+                        team.Managers = multi.Read<TeamManager>();
                     }
 
                     return team;
@@ -47,7 +47,7 @@
                             },
                             "DepartmentId"
                             ).ToList();
-                    var employees = multi.Read<SectionManager>();
+                    var employees = multi.Read<TeamManager>();
 
                     foreach (var team in teams)
                     {

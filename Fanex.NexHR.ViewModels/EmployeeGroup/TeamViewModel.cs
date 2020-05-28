@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Resources;
 
 #pragma warning disable S109 // Magic numbers should not be used
@@ -33,16 +33,16 @@
         [Display(Name = nameof(Labels.Email), ResourceType = typeof(Labels))]
         public string MailGroup { get; set; }
 
-        public IEnumerable<SectionManager> Managers { get; set; } = new List<SectionManager>();
+        public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-        [Display(Name = nameof(Labels.SectionHead), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.TeamHead), ResourceType = typeof(Labels))]
         public int? HeadId { get; set; }
 
-        [Display(Name = nameof(Labels.SectionHead), ResourceType = typeof(Labels))]
-        public string SectionHead { get; set; }
+        [Display(Name = nameof(Labels.TeamHead), ResourceType = typeof(Labels))]
+        public string TeamHead { get; set; }
 
-        [Display(Name = nameof(Labels.AssistantSectionHead), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.AssistantTeamHead), ResourceType = typeof(Labels))]
         public string AssistantHeadIds { get; set; }
 
         [Display(Name = nameof(Labels.Leader), ResourceType = typeof(Labels))]

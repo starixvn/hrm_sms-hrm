@@ -172,7 +172,7 @@
     <Compile Include="Enums\Relationship.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
-    <Compile Include="Enums\SectionManagerRole.cs" />
+    <Compile Include="Enums\TeamManagerRole.cs" />
     <Compile Include="Enums\SettingsSendMail.cs" />
     <Compile Include="Enums\ShiftStatus.cs" />
     <Compile Include="Enums\SiteId.cs" />

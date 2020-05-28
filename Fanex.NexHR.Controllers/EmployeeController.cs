@@ -19,7 +19,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Log;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -330,7 +330,7 @@
         }
 
         [HttpPost]
-        public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
             CommandResult commandResult = employeeService.EditEmployeeSupervisor(sessionService.Employee.Id, employeeId, roleId, supervisors);
 

@@ -14,7 +14,7 @@
 
         public const string JobTitleManagement = "JobTitleManagement";
 
-        public const string SectionManagement = "SectionManagement";
+        public const string TeamManagement = "TeamManagement";
 
         public const string EmployeeManagement = "EmployeeManagement";
 

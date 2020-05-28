@@ -1,10 +1,12 @@
-﻿namespace Fanex.NexHR.Models.Supervisor
+﻿using Fanex.NexHR.Models.Group;
+
+namespace Fanex.NexHR.Models.Supervisor
 {
     public class SupervisorModel
     {
         public Employee Supervisor { get; set; }
 
-        public SectionModel Section { get; set; }
+        public TeamModel Team { get; set; }
 
         public int OwnerId { get; set; }
 
@@ -12,7 +14,7 @@
 
         public string FullName { get; set; }
 
-        public string Team { get; set; }
+        //public string Team { get; set; }
 
         public byte ActionType { get; set; }
 

@@ -188,11 +188,11 @@
     <Compile Include="ScheduleArrange\WeeklyDefaultShift.cs" />
     <Compile Include="ScheduleArrange\WeeklySchedule.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleFilter.cs" />
-    <Compile Include="Section\DisciplineRule.cs" />
-    <Compile Include="Section\SectionManager.cs" />
-    <Compile Include="Section\Supervisor.cs" />
-    <Compile Include="Section\EditSectionSupervisor.cs" />
-    <Compile Include="Section\SectionModel.cs" />
+    <Compile Include="Group\DisciplineRule.cs" />
+    <Compile Include="Group\TeamManager.cs" />
+    <Compile Include="Group\Supervisor.cs" />
+    <Compile Include="Group\EditTeamSupervisor.cs" />
+    <Compile Include="Group\TeamModel.cs" />
     <Compile Include="Shifts\EditShiftModel.cs" />
     <Compile Include="Shifts\CreateShiftModel.cs" />
     <Compile Include="Supervisor\SupervisorReportGroupModel.cs" />

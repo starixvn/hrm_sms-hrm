@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Models.Supervisor
 {
+    using Fanex.NexHR.Models.Group;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -28,7 +29,7 @@
             }
         }
 
-        public SectionModel Section { get; set; }
+        public TeamModel Team { get; set; }
 
         public IList<SupervisorModel> Supervisors { get; set; }
     }

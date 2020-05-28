@@ -6,12 +6,11 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
-    using Fanex.NexHR.Criteria;
-    using Fanex.NexHR.Criteria.Section;
+    using Fanex.NexHR.Criteria.Group;
     using Fanex.NexHR.Criteria.Supervisor;
-    using Fanex.NexHR.Criteria.Team;
+    using Fanex.NexHR.Group;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
 
@@ -67,11 +66,11 @@
             return baseService.GetData<Team>(criteria).ToList();
         }
 
-        public IList<SupervisorModel> GetSectionSupervisorByRoleId(int sectionId, RoleSystem roleId)
+        public IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId)
         {
-            var criteria = new GetSectionSupervisorByRoleIdCriteria
+            var criteria = new GetTeamSupervisorByRoleIdCriteria
             {
-                GroupId = sectionId,
+                GroupId = teamId,
                 Role = (short)roleId
             };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
@@ -86,20 +85,20 @@
             return baseService.GetData<TeamSupervisorModel>(criteria).ToList();
         }
 
-        public IEnumerable<Supervisor> GetDisciplineManagerBySectionId(int sectionId)
+        public IEnumerable<Supervisor> GetDisciplineManagerByTeamId(int teamId)
         {
             var criteria = new GetDisciplineManagerByTeamIdCriteria
             {
-                GroupId = sectionId
+                GroupId = teamId
             };
             return baseService.GetData<Supervisor>(criteria).ToList();
         }
 
-        public CommandResult EditSectionSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        public CommandResult EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
-            var criteria = new EditSectionSupervisorCriteria
+            var criteria = new EditTeamSupervisorCriteria
             {
-                GroupId = sectionId,
+                GroupId = teamId,
                 ActorId = actorId,
                 RoleId = roleId,
                 SupervisorXml = supervisors.ToXML().ToString()
@@ -107,17 +106,17 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IEnumerable<DisciplineRule> GetDisciplineRuleBySection(int sectionId)
+        public IEnumerable<DisciplineRule> GetDisciplineRuleByTeam(int teamId)
         {
-            var criteria = new GetDisciplineRuleBySectionCriteria { SectionId = sectionId };
+            var criteria = new GetDisciplineRuleByTeamCriteria { TeamId = teamId };
             return baseService.GetData<DisciplineRule>(criteria);
         }
 
-        public CommandResult EditDisciplineRule(int actorId, int sectionId, IEnumerable<DisciplineRule> disciplineRules)
+        public CommandResult EditDisciplineRule(int actorId, int teamId, IEnumerable<DisciplineRule> disciplineRules)
         {
             var criteria = new EditDisciplineRuleCriteria
             {
-                SectionId = sectionId,
+                TeamId = teamId,
                 ActorId = actorId,
                 DisciplineRuleXml = disciplineRules.ToXML().ToString()
             };

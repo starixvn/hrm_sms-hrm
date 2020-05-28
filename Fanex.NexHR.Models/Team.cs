@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NexHR.Models
 {
+    using Fanex.NexHR.Models.Group;
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Models.Section;
 
     public class Team : EntityBase<int>
     {
         public Department Department { get; set; } = new Department();
-        public IEnumerable<SectionManager> Managers { get; set; } = new List<SectionManager>();
+        public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 
         public DateTime? CreatedDate { get; set; }
 

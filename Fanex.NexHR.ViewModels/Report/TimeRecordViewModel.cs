@@ -16,7 +16,7 @@
 
         public string TeamIds { get; set; }
 
-        public IList<Team> Teams { get; set; }
+        public IList<Fanex.NexHR.Models.Team> Teams { get; set; }
 
         public byte? IsLocal { get; set; }
     }

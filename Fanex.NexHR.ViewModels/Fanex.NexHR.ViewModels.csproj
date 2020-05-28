@@ -112,7 +112,7 @@
     <Compile Include="EmployeeGroup\TeamSupervisorViewModel.cs" />
     <Compile Include="Request\ProcessRequestViewModel.cs" />
     <Compile Include="ScheduleArrange\WeeklyScheduleViewModel.cs" />
-    <Compile Include="Section\DisciplineRuleViewModel.cs" />
+    <Compile Include="Team\DisciplineRuleViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Report\TimeRecordViewModel.cs" />
     <Compile Include="ExtensionNumber\ExtensionNumberViewModel.cs" />
@@ -148,7 +148,7 @@
       <Name>Fanex.NexHR.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
-      <Project>{5955CE2D-B3DC-48C2-B3B4-CCEE2DB5B35F}</Project>
+      <Project>{5955ce2d-b3dc-48c2-b3b4-ccee2db5b35f}</Project>
       <Name>Fanex.NexHR.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">

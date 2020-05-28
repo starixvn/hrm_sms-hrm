@@ -484,11 +484,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assist.Section Head.
+        ///   Looks up a localized string similar to Assist.Team Head.
         /// </summary>
-        public static string AssistantSectionHead {
+        public static string AssistantTeamHead {
             get {
-                return ResourceManager.GetString("AssistantSectionHead", resourceCulture);
+                return ResourceManager.GetString("AssistantTeamHead", resourceCulture);
             }
         }
         
@@ -4165,24 +4165,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section Head.
-        /// </summary>
-        public static string SectionHead {
-            get {
-                return ResourceManager.GetString("SectionHead", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section Management.
-        /// </summary>
-        public static string SectionManagement {
-            get {
-                return ResourceManager.GetString("SectionManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Section Permission Summary.
         /// </summary>
         public static string SectionPermissionSummary {
@@ -4584,6 +4566,24 @@ namespace Fanex.NexHR.Resources {
         public static string Team {
             get {
                 return ResourceManager.GetString("Team", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Head.
+        /// </summary>
+        public static string TeamHead {
+            get {
+                return ResourceManager.GetString("TeamHead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Management.
+        /// </summary>
+        public static string TeamManagement {
+            get {
+                return ResourceManager.GetString("TeamManagement", resourceCulture);
             }
         }
         

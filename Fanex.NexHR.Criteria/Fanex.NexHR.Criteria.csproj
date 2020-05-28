@@ -196,9 +196,9 @@
     <Compile Include="ScheduleArrange\GetEmployeeCriteria.cs" />
     <Compile Include="ScheduleArrange\GetWeeklyScheduleCriteria.cs" />
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
-    <Compile Include="Section\EditDisciplineRuleCriteria.cs" />
-    <Compile Include="Section\GetAllGroupCriteria.cs" />
-    <Compile Include="Section\GetDisciplineRuleBySectionCriteria.cs" />
+    <Compile Include="Group\EditDisciplineRuleCriteria.cs" />
+    <Compile Include="Group\GetAllGroupCriteria.cs" />
+    <Compile Include="Group\GetDisciplineRuleBySectionCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />
@@ -221,8 +221,8 @@
     <Compile Include="Employee\EditPasswordResetStatusCriteria.cs" />
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
-    <Compile Include="Section\GetSectionSupervisorByRoleIdCriteria.cs" />
-    <Compile Include="Section\EditSectionSupervisorCriteria.cs" />
+    <Compile Include="Group\GetTeamSupervisorByRoleIdCriteria.cs" />
+    <Compile Include="Group\EditTeamSupervisorCriteria.cs" />
     <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
     <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
     <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
@@ -278,8 +278,8 @@
     <Compile Include="Message\EditMessageStatusCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
-    <Compile Include="Section\GetDisciplineManagerByTeamIdCriteria.cs" />
-    <Compile Include="Section\GetGroupBySupervisorCriteria.cs" />
+    <Compile Include="Group\GetDisciplineManagerByTeamIdCriteria.cs" />
+    <Compile Include="Group\GetGroupBySupervisorCriteria.cs" />
     <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
     <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />
     <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
@@ -306,10 +306,10 @@
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\CreateShiftCriteria.cs" />
     <Compile Include="Shift\EditShiftCriteria.cs" />
-    <Compile Include="Section\DeleteGroupCriteria.cs" />
-    <Compile Include="Section\GetGroupByIdCriteria.cs" />
-    <Compile Include="Section\CreateSectionCriteria.cs" />
-    <Compile Include="Section\EditSectionCriteria.cs" />
+    <Compile Include="Group\DeleteGroupCriteria.cs" />
+    <Compile Include="Group\GetGroupByIdCriteria.cs" />
+    <Compile Include="Group\CreateTeamCriteria.cs" />
+    <Compile Include="Group\EditTeamCriteria.cs" />
     <Compile Include="Time\GetTimeRecordCriteria.cs" />
     <Compile Include="Time\InsertTimeRecordCriteria.cs" />
   </ItemGroup>

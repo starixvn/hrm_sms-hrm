@@ -18,7 +18,7 @@
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
-    using Fanex.NexHR.Models.Section;
+    using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.ViewModels.AnnualLeave;
@@ -199,7 +199,7 @@
             return baseService.GetData<Supervisor>(criteria).ToList();
         }
 
-        public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditSectionSupervisor> supervisors)
+        public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
             var criteria = new EditEmployeeSupervisorCriteria
             {
