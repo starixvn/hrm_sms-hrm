@@ -32,7 +32,7 @@ BEGIN
 		,e.FullName
 		,g.GroupId
 		,g.Code
-		,g.[Name] AS Section
+		,g.[Name] AS Team
 		,ve.EmpId AS VerifierId
 		,ve.NickName
 		,Ve.FullName

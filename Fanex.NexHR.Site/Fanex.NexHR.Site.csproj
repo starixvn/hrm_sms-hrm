@@ -1113,7 +1113,7 @@
     <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
     <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
     <Content Include="package.json" />
-    <Content Include="ExcelTemplates\SectionSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\TeamSupervisor.xlsx" />
     <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
     <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
     <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx" />

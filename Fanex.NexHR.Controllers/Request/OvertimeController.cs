@@ -114,7 +114,7 @@
             {
                 ActorId = sessionService.Employee.Id,
                 Month = model.Month,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 EmployeeId = model.EmployeeId,
                 StatusIds = statusIds
             };
@@ -188,7 +188,7 @@
             {
                 ActorId = sessionService.Employee.Id,
                 Month = model.Month,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 EmployeeId = model.EmployeeId,
                 StatusIds = statusIds,
                 IsProcessor = true,

@@ -28,7 +28,7 @@ BEGIN
 		,kiv.EmpId
 		,e.NickName
 		,e.FullName
-		,g.[Name] AS Section
+		,g.[Name] AS Team
 		,ve.EmpId AS VerifierId
 		,ve.NickName
 		,Ve.FullName

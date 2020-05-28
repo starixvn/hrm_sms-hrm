@@ -7,7 +7,7 @@
         public int ActorId { get; set; }
         public DateTime? Month { get; set; }
         public int? EmployeeId { get; set; }
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public string StatusIds { get; set; }
         public bool IsProcessor { get; set; }
         public short OvertimeType { get; set; }
