@@ -23,7 +23,7 @@
         public bool IsHost { get; set; }
         public string Nickname => Requester.Nickname;
         public string FullName => Requester.FullName;
-        public string Section => Requester.Section;
+        public string Team => Requester.Team;
 
         public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
     }
