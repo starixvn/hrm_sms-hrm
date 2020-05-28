@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetSectionSupervisorCriteria : CriteriaBase
+    public class GetTeamSupervisorCriteria : CriteriaBase
     {
         public string GroupIds { get; set; }
 

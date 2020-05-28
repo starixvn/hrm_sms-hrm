@@ -8,10 +8,10 @@
     var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/section.index.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/team.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/section.index.js"></script>
+    <script src="~/wwwroot/dist/js/team.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
@@ -33,7 +33,7 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
             <th>@Labels.Department</th>
             <th>@Labels.SectionHead</th>
             <th>@Labels.AssistantSectionHead</th>

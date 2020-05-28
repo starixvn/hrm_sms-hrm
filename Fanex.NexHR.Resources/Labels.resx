@@ -769,7 +769,7 @@
     <value>Void</value>
   </data>
   <data name="Department" xml:space="preserve">
-    <value>Division</value>
+    <value>Department</value>
   </data>
   <data name="ScheduleArrange" xml:space="preserve">
     <value>Schedule Arrange</value>

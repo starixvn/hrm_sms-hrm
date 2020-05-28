@@ -1141,7 +1141,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Division.
+        ///   Looks up a localized string similar to Department.
         /// </summary>
         public static string Department {
             get {

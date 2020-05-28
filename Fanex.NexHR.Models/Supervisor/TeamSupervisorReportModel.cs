@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class SectionSupervisorReportModel
+    public class TeamSupervisorReportModel
     {
-        public SectionSupervisorReportModel()
+        public TeamSupervisorReportModel()
         {
             Supervisors = new List<SupervisorModel>();
         }

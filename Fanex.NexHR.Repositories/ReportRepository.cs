@@ -92,13 +92,13 @@
             }
         }
 
-        public IList<SectionSupervisorReportModel> GetSectionSupervisor(ICriteria criteria)
+        public IList<TeamSupervisorReportModel> GetSectionSupervisor(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IList<SectionSupervisorReportModel> supervisors = multi.Read<SectionSupervisorReportModel>().ToList();
+                    IList<TeamSupervisorReportModel> supervisors = multi.Read<TeamSupervisorReportModel>().ToList();
 
                     IList<SupervisorModel> employees = multi.Read<SupervisorModel, SectionModel, SupervisorModel>(
                     (su, section) =>
@@ -109,7 +109,7 @@
                     },
                     splitOn: "SectionId").ToList();
 
-                    foreach (SectionSupervisorReportModel supervisor in supervisors)
+                    foreach (TeamSupervisorReportModel supervisor in supervisors)
                     {
                         supervisor.Supervisors = employees.Where(x => x.Section.SectionId == supervisor.SectionId).ToList();
                     }

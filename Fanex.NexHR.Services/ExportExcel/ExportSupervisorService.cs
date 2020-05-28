@@ -13,7 +13,7 @@
     {
         byte[] ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors);
 
-        byte[] ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors);
+        byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors);
     }
 
 #pragma warning disable S109 // Magic numbers should not be used
@@ -79,7 +79,7 @@
             }
         }
 
-        public byte[] ExportSectionSupervisor(IList<SectionSupervisorReportModel> supervisors)
+        public byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
             string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/SectionSupervisor.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
@@ -98,7 +98,7 @@
                     // data
                     rowIndex = BodyRowIndex;
                     var recordIndex = 1;
-                    foreach (SectionSupervisorReportModel supervisor in supervisors)
+                    foreach (TeamSupervisorReportModel supervisor in supervisors)
                     {
                         colIndex = 1;
                         if (recordIndex % 2 != 0)

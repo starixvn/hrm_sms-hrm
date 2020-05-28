@@ -25,7 +25,7 @@
 
         IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
-        IList<SectionSupervisorReportModel> GetSectionSupervisor(GetSectionSupervisorCriteria criteria);
+        IList<TeamSupervisorReportModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
 
         IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
 

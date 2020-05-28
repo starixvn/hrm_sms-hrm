@@ -223,17 +223,17 @@
 
         public ActionResult EmployeeSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel();
+            var model = new EmployeeAndTeamSupervisorViewModel();
 
             return View("EmployeeSupervisor", model);
         }
 
-        public ActionResult EmployeeSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
+        public ActionResult EmployeeSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
         {
             var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.SectionIds,
+                GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -244,18 +244,18 @@
 
         public ActionResult SectionSupervisor()
         {
-            var model = new EmployeeAndSectionSupervisorViewModel();
+            var model = new EmployeeAndTeamSupervisorViewModel();
 
             return View("SectionSupervisor", model);
         }
 
-        public ActionResult SectionSupervisorDetails(EmployeeAndSectionSupervisorViewModel model)
+        public ActionResult SectionSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
         {
-            var criteria = new GetSectionSupervisorCriteria
+            var criteria = new GetTeamSupervisorCriteria
             {
-                GroupIds = model.SectionIds,
+                GroupIds = model.TeamIds,
             };
-            IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
+            IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
 
             return PartialView("_SectionSupervisorDetails", supervisors);
         }

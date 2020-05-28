@@ -11,6 +11,6 @@
 
         IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria);
 
-        IList<SectionSupervisorReportModel> GetSectionSupervisor(ICriteria criteria);
+        IList<TeamSupervisorReportModel> GetSectionSupervisor(ICriteria criteria);
     }
 }

@@ -97,7 +97,7 @@
     <Compile Include="PagerOptionModel.cs" />
     <Compile Include="Paternity\PaternityViewModel.cs" />
     <Compile Include="Postnatal\PostnatalViewModel.cs" />
-    <Compile Include="Report\EmployeeAndSectionSupervisorViewModel.cs" />
+    <Compile Include="Report\EmployeeAndTeamSupervisorViewModel.cs" />
     <Compile Include="Report\ManpowerCategoryViewModel.cs" />
     <Compile Include="Report\ManpowerViewModel.cs" />
     <Compile Include="Report\Overtime\MonthlyFilterViewModel.cs" />

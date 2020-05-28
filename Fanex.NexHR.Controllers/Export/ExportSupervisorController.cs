@@ -24,12 +24,12 @@
             this.exportSupervisorService = exportSupervisorService;
         }
 
-        public ActionResult EmployeeSupervisor(EmployeeAndSectionSupervisorViewModel model)
+        public ActionResult EmployeeSupervisor(EmployeeAndTeamSupervisorViewModel model)
         {
             var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.SectionIds,
+                GroupIds = model.TeamIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -39,16 +39,16 @@
             return File(bytes, MimeType.XLSX, $"EmployeeSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
         }
 
-        public ActionResult SectionSupervisor(EmployeeAndSectionSupervisorViewModel model)
+        public ActionResult TeamSupervisor(EmployeeAndTeamSupervisorViewModel model)
         {
-            var criteria = new GetSectionSupervisorCriteria
+            var criteria = new GetTeamSupervisorCriteria
             {
-                GroupIds = model.SectionIds,
+                GroupIds = model.TeamIds,
             };
-            IList<SectionSupervisorReportModel> supervisors = reportService.GetSectionSupervisor(criteria);
-            byte[] bytes = exportSupervisorService.ExportSectionSupervisor(supervisors);
+            IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
+            byte[] bytes = exportSupervisorService.ExportTeamSupervisor(supervisors);
 
-            return File(bytes, MimeType.XLSX, $"SectionSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
+            return File(bytes, MimeType.XLSX, $"TeamSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
         }
     }
 }
