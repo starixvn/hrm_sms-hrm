@@ -9,7 +9,7 @@
         public DateTime ToTime { get; set; }
         public int ActorId { get; set; }
         public int? EmpId { get; set; }
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
         public bool IsIFrame { get; set; }
         public bool? IsLocal { get; set; }
 

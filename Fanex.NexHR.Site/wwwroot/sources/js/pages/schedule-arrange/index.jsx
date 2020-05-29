@@ -32,7 +32,7 @@ export default class App extends Component {
             filter: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: '',
+                teamIds: '',
                 employee: { value: 0, label: '' }
             },
             schedules: [],
@@ -42,7 +42,7 @@ export default class App extends Component {
             showRemarkPopover: false,
             editWeeklyDefaultShift: {
                 show: false,
-                groupId: 0,
+                teamId: 0,
                 employeeId: 0,
                 nickname: '',
                 data: null,
@@ -51,7 +51,7 @@ export default class App extends Component {
         };
 
         this.originalSchedules = [];
-        this.groupOptions = [];
+        this.teamOptions = [];
         this.shiftOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
@@ -71,11 +71,11 @@ export default class App extends Component {
         ];
 
         Promise.all(promises)
-            .then(([groupResponse, shiftResponse]) => {
-                this.groupOptions = groupResponse.data;
-                const { floatData } = buildData(groupResponse.data);
+            .then(([teamResponse, shiftResponse]) => {
+                this.teamOptions = teamResponse.data;
+                const { floatData } = buildData(teamResponse.data);
                 this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
-                const filter = { ...this.state.filter, groupIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
+                const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
                 this.getWeeklyShedules(filter);
 
@@ -134,7 +134,7 @@ export default class App extends Component {
     getEmployees = query => {
         axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
             params: {
-                groupIds: this.state.filter.groupIds,
+                teamIds: this.state.filter.teamIds,
                 query: query
             }
         }).then(response => {
@@ -158,7 +158,7 @@ export default class App extends Component {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: filter.groupIds,
+                teamIds: filter.teamIds,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             }
@@ -166,8 +166,8 @@ export default class App extends Component {
             this.selectedWeek = { fromDate, toDate };
             let { isHost, schedules } = response.data;
 
-            this.originalSchedules = schedules.map(group => {
-                group.members.map(schedule => {
+            this.originalSchedules = schedules.map(team => {
+                team.members.map(schedule => {
                     schedule.selectWeekDays = {
                         mondaySchedule: false,
                         tuesdaySchedule: false,
@@ -188,7 +188,7 @@ export default class App extends Component {
                     return schedule;
                 });
 
-                return group;
+                return team;
             });
 
             this.setState({
@@ -209,7 +209,7 @@ export default class App extends Component {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: filter.groupIds,
+                teamIds: filter.teamIds,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
@@ -230,7 +230,7 @@ export default class App extends Component {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: filter.groupIds,
+                teamIds: filter.teamIds,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
@@ -281,9 +281,9 @@ export default class App extends Component {
         }
     }
 
-    handleChangeSelectWeekDay = (groupId, employeeId, scheduleAttrName, isChecked) => {
+    handleChangeSelectWeekDay = (teamId, employeeId, scheduleAttrName, isChecked) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         members[eindex] = Object.assign({}, members[eindex], {
@@ -333,9 +333,9 @@ export default class App extends Component {
         this.setState({ schedules });
     }
 
-    handleChangeShift = (groupId, employeeId, attrName, shift) => {
+    handleChangeShift = (teamId, employeeId, attrName, shift) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         let member = { ...members[eindex] };
@@ -367,9 +367,9 @@ export default class App extends Component {
         this.setState({ schedules });
     }
 
-    handleChangeDefaultShift = (groupId, employeeId, defaultShift) => {
+    handleChangeDefaultShift = (teamId, employeeId, defaultShift) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId),
             originalDefaultShift = members[eindex].defaultShift;
@@ -410,9 +410,9 @@ export default class App extends Component {
         this.setState({ schedules });
     }
 
-    handleChangePublics = (groupId, isChecked) => {
+    handleChangePublics = (teamId, isChecked) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const totalItems = members.length;
         for (let index = 0; index < totalItems; index++) {
@@ -749,15 +749,15 @@ export default class App extends Component {
         this.setState({ showRemarkPopover: show });
     }
 
-    handleShowWeeklyDefaultShiftModal = (groupId, employeeId) => {
+    handleShowWeeklyDefaultShiftModal = (teamId, employeeId) => {
         const schedules = this.state.schedules,
-            gindex = schedules.findIndex(item => item.groupId === groupId),
+            gindex = schedules.findIndex(item => item.teamId === teamId),
             eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
 
         this.setState({
             editWeeklyDefaultShift: {
                 show: true,
-                groupId,
+                teamId,
                 employeeId,
                 nickname: schedules[gindex].members[eindex].nickname,
                 data: schedules[gindex].members[eindex].weeklyDefaultShift,
@@ -770,7 +770,7 @@ export default class App extends Component {
         this.setState({
             editWeeklyDefaultShift: {
                 show: false,
-                groupId: 0,
+                teamId: 0,
                 employeeId: 0,
                 nickname: '',
                 data: null,
@@ -779,9 +779,9 @@ export default class App extends Component {
         });
     }
 
-    updateWeeklyDefaultShift = (groupId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+    updateWeeklyDefaultShift = (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId);
         members[eindex] = { ...members[eindex], weeklyDefaultShift, isUsedWeeklyDefaultShift };
@@ -828,9 +828,9 @@ export default class App extends Component {
     }
 
     handleChangeWeeklyDefaultShift = (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
-        const { groupId, employeeId } = this.state.editWeeklyDefaultShift;
+        const { teamId, employeeId } = this.state.editWeeklyDefaultShift;
         let schedules = this.state.schedules;
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = schedules[gindex].members;
         const eindex = members.findIndex(item => item.employeeId === employeeId);
 
@@ -862,7 +862,7 @@ export default class App extends Component {
             const data = response.data;
             if (data.isSuccessful) {
                 toast.success('Updated Successfully!');
-                this.updateWeeklyDefaultShift(groupId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+                this.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
                 this.handleCloseWeeklyDefaultShiftModal();
             } else {
@@ -871,9 +871,9 @@ export default class App extends Component {
         }).catch(axiosError);
     }
 
-    handleUpdateRemark = (groupId, employeeId, remark) => {
+    handleUpdateRemark = (teamId, employeeId, remark) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.groupId === groupId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const eindex = members.findIndex(item => item.employeeId === employeeId);
 
@@ -903,21 +903,21 @@ export default class App extends Component {
         }
     }
 
-    handleEditGroupOrder = () => {
+    handleEditTeamOrder = () => {
         let displayOrders = [];
         const schedules = this.state.schedules,
             totalItems = schedules.length;
 
         for (let index = 0; index < totalItems; index++) {
             displayOrders.push({
-                groupId: schedules[index].groupId,
+                teamId: schedules[index].teamId,
                 displayOrder: index + 1
             });
         }
 
         if (displayOrders.length > 0) {
             axios({
-                url: resolveClientUrl('ScheduleArrange/EditGroupOrder'),
+                url: resolveClientUrl('ScheduleArrange/EditTeamOrder'),
                 method: 'POST',
                 data: stringify({ displayOrders }),
                 headers: {
@@ -972,22 +972,22 @@ export default class App extends Component {
             sourceIndex = result.source.index,
             destinationIndex = result.destination.index;
         let schedules = [...this.state.schedules];
-        if (resultType === 'droppableSection') {
+        if (resultType === 'droppableTeam') {
             schedules = reorder(schedules, sourceIndex, destinationIndex);
             this.originalSchedules = reorder(schedules, sourceIndex, destinationIndex);
-            this.setState({ schedules }, () => this.handleEditGroupOrder());
+            this.setState({ schedules }, () => this.handleEditTeamOrder());
         } else if (resultType.includes('droppableMember')) {
-            const groupId = parseInt(resultType.split('-')[1], 10),
-                index = schedules.findIndex(x => x.groupId === groupId);
+            const teamId = parseInt(resultType.split('-')[1], 10),
+                index = schedules.findIndex(x => x.teamId === teamId);
             this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
             schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
             this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
         }
     }
 
-    handleChangeSectionOrder = (key, groupId) => {
+    handleChangeTeamOrder = (key, teamId) => {
         let schedules = [...this.state.schedules];
-        const sourceIndex = schedules.findIndex(x => x.groupId === groupId),
+        const sourceIndex = schedules.findIndex(x => x.teamId === teamId),
             totalItems = schedules.length;
         let destinationIndex = 0;
 
@@ -1009,12 +1009,12 @@ export default class App extends Component {
 
         schedules = reorder(schedules, sourceIndex, destinationIndex);
         this.originalSchedules = reorder(this.originalSchedules, sourceIndex, destinationIndex);
-        this.setState({ schedules }, () => this.handleEditGroupOrder());
+        this.setState({ schedules }, () => this.handleEditTeamOrder());
     }
 
-    handleChangeOrder = (key, groupId, employeeId) => {
+    handleChangeOrder = (key, teamId, employeeId) => {
         let schedules = [...this.state.schedules];
-        const index = schedules.findIndex(x => x.groupId === groupId),
+        const index = schedules.findIndex(x => x.teamId === teamId),
             totalItems = schedules[index].members.length,
             sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
         let destinationIndex = 0;
@@ -1055,7 +1055,7 @@ export default class App extends Component {
                 <ToastLayout />
                 <Search
                     showExportExcel
-                    groupOptions={this.groupOptions}
+                    teamOptions={this.teamOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
                     onSearchEmployees={this.getEmployees}
@@ -1085,7 +1085,7 @@ export default class App extends Component {
                     onShowWeeklyDefaultShift={this.handleShowWeeklyDefaultShiftModal}
                     onUpdateRemark={this.handleUpdateRemark}
                     onDragEnd={this.handleDragEnd}
-                    onChangeSectionOrder={this.handleChangeSectionOrder}
+                    onChangeTeamOrder={this.handleChangeTeamOrder}
                     onChangeOrder={this.handleChangeOrder}
                     onSave={this.handleSave}
                 />

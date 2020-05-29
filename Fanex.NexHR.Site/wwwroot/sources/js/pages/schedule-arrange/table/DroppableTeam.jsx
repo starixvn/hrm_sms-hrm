@@ -1,28 +1,28 @@
 ﻿import React, { PureComponent } from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 
-import RowSection from './RowSection';
+import RowTeam from './RowTeam';
 
-export default class DroppableSection extends PureComponent {
+export default class DroppableTeam extends PureComponent {
     render() {
         const { isHost, shiftOptions, data } = this.props;
 
         return (
-            <Droppable droppableId="droppable" isDropDisabled={!isHost} type="droppableSection">
+            <Droppable droppableId="droppable" isDropDisabled={!isHost} type="droppableTeam">
                 {
                     provided =>
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
-                                data.map((section, gindex) =>
-                                    <Draggable key={`section${section.groupId}`} draggableId={`section${section.groupId}`}
+                                data.map((team, gindex) =>
+                                    <Draggable key={`team{team.teamId}`} draggableId={`team{team.teamId}`}
                                         index={gindex} isDragDisabled={!isHost}
                                     >
                                         {
-                                            (sectionProvided, sectionSnapshot) =>
+                                            (teamProvided, teamSnapshot) =>
                                                 <div>
-                                                    <RowSection draggableProvided={sectionProvided}
-                                                        isHost={isHost} data={section}
-                                                        shiftOptions={shiftOptions} isDragging={sectionSnapshot.isDragging}
+                                                    <RowTeam draggableProvided={teamProvided}
+                                                        isHost={isHost} data={team}
+                                                        shiftOptions={shiftOptions} isDragging={teamSnapshot.isDragging}
                                                         showRemarkPopover={this.props.showRemarkPopover}
                                                         onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
                                                         onChangeShift={this.props.onChangeShift}
@@ -31,10 +31,10 @@ export default class DroppableSection extends PureComponent {
                                                         onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                                                         onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                                         onUpdateRemark={this.props.onUpdateRemark}
-                                                        onChangeSectionOrder={this.props.onChangeSectionOrder}
+                                                        onChangeTeamOrder={this.props.onChangeteamOrder}
                                                         onChangeOrder={this.props.onChangeOrder}
                                                     />
-                                                    {sectionProvided.placeholder}
+                                                    {teamProvided.placeholder}
                                                 </div>
                                         }
                                     </Draggable>

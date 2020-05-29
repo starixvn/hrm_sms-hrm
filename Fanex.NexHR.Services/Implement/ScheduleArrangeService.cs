@@ -34,7 +34,7 @@
             var criteria = new GetEmployeeCriteria
             {
                 ActorId = filter.ActorId,
-                GroupIds = filter.GroupIds,
+                TeamIds = filter.TeamIds,
                 Query = filter.Query,
                 IsIFrame = filter.IsIFrame
             };
@@ -51,7 +51,7 @@
                 FromTime = filter.FromDate,
                 ToTime = filter.ToDate,
                 EmpId = filter.EmployeeId,
-                GroupIds = filter.GroupIds,
+                TeamIds = filter.TeamIds,
                 IsIFrame = filter.IsIFrame,
                 IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal
             };
@@ -106,9 +106,9 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditGroupOrder(int actorId, IEnumerable<EditGroupOrder> displayOrders)
+        public CommandResult EditTeamOrder(int actorId, IEnumerable<EditTeamOrder> displayOrders)
         {
-            var criteria = new EditGroupOrderCriteria
+            var criteria = new EditTeamOrderCriteria
             {
                 ActorId = actorId,
                 DisplayOrderXml = displayOrders.ToXML().ToString()

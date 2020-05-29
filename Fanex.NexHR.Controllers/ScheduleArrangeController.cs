@@ -68,7 +68,7 @@
             IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
                 .Select(x => new WeeklyScheduleViewModel
                 {
-                    GroupId = x.Key.Id,
+                    TeamId = x.Key.Id,
                     Name = x.Key.Name,
                     Code = x.Key.Code,
                     Members = x
@@ -118,9 +118,9 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
-        public ActionResult EditGroupOrder(IEnumerable<EditGroupOrder> displayOrders)
+        public ActionResult EditTeamOrder(IEnumerable<EditTeamOrder> displayOrders)
         {
-            CommandResult commandResult = scheduleArrangeService.EditGroupOrder(sessionService.Employee.Id, displayOrders);
+            CommandResult commandResult = scheduleArrangeService.EditTeamOrder(sessionService.Employee.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

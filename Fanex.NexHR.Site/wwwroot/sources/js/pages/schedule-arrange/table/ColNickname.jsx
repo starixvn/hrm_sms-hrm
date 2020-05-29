@@ -28,8 +28,8 @@ export default class ColNickname extends PureComponent {
     }
 
     handleShowWeeklyDefaultShiftModal = () => {
-        const { groupId, employeeId } = this.props;
-        this.props.onShowWeeklyDefaultShift(groupId, employeeId);
+        const { teamId, employeeId } = this.props;
+        this.props.onShowWeeklyDefaultShift(teamId, employeeId);
     }
 
     handleChangeRemark = event => {
@@ -38,31 +38,31 @@ export default class ColNickname extends PureComponent {
 
     handleUpdateRemark = () => {
         const remark = this.state.remark.trim();
-        const { groupId, employeeId } = this.props;
+        const { teamId, employeeId } = this.props;
 
         this.handleHidePopover();
         this.props.onChangeShowRemarkPopover(false);
-        this.props.onUpdateRemark(groupId, employeeId, remark);
+        this.props.onUpdateRemark(teamId, employeeId, remark);
     }
 
     handleMoveUp = () => {
-        const { groupId, employeeId } = this.props;
-        this.props.onChangeOrder('up', groupId, employeeId);
+        const { teamId, employeeId } = this.props;
+        this.props.onChangeOrder('up', teamId, employeeId);
     }
 
     handleMoveDown = () => {
-        const { groupId, employeeId } = this.props;
-        this.props.onChangeOrder('down', groupId, employeeId);
+        const { teamId, employeeId } = this.props;
+        this.props.onChangeOrder('down', teamId, employeeId);
     }
 
     handleMoveTop = () => {
-        const { groupId, employeeId } = this.props;
-        this.props.onChangeOrder('top', groupId, employeeId);
+        const { teamId, employeeId } = this.props;
+        this.props.onChangeOrder('top', teamId, employeeId);
     }
 
     handleMoveBottom = () => {
-        const { groupId, employeeId } = this.props;
-        this.props.onChangeOrder('bottom', groupId, employeeId);
+        const { teamId, employeeId } = this.props;
+        this.props.onChangeOrder('bottom', teamId, employeeId);
     }
 
     render() {

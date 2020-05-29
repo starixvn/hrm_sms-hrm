@@ -6,9 +6,9 @@ import TreeMultiselect from '../../shared/components/react-tree-multiselect/Tree
 import WeekPicker from '../../shared/components/WeekPicker';
 
 export default class Search extends Component {
-    handleGroupChange = selectedItems => {
+    handleTeamChange = selectedItems => {
         const ids = selectedItems.map(item => item.id);
-        this.props.onChange('groupIds', ids.join(','));
+        this.props.onChange('teamIds', ids.join(','));
     }
 
     handleEmployeeChange = value => {
@@ -50,7 +50,7 @@ export default class Search extends Component {
                         </div>
                         <div className="select-form">
                             <TreeMultiselect
-                                data={this.props.groupOptions}
+                                data={this.props.teamOptions}
                                 isSelectedAll
                                 onChange={this.handleGroupChange}
                             />

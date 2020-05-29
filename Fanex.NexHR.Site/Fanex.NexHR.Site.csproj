@@ -565,9 +565,9 @@
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColDefaultShift.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColIndex.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColShift.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\RowSection.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\RowTeam.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DroppableMember.jsx" />
-    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DroppableSection.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DroppableTeam.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />

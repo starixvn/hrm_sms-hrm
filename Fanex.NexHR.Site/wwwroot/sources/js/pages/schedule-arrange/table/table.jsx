@@ -2,7 +2,7 @@
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import THead from './THead';
-import DroppableSection from './DroppableSection';
+import DroppableTeam from './DroppableTeam';
 
 export default class Table extends PureComponent {
     constructor(props) {
@@ -65,7 +65,7 @@ export default class Table extends PureComponent {
                         {
                             data.length > 0 &&
                             <DragDropContext onDragEnd={this.props.onDragEnd}>
-                                <DroppableSection isHost={isHost} data={data}
+                                <DroppableTeam isHost={isHost} data={data}
                                     shiftOptions={shiftOptions}
                                     showRemarkPopover={this.props.showRemarkPopover}
                                     onChangeSelectWeekDay={this.props.onChangeSelectWeekDay}
@@ -75,7 +75,7 @@ export default class Table extends PureComponent {
                                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                                     onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                     onUpdateRemark={this.props.onUpdateRemark}
-                                    onChangeSectionOrder={this.props.onChangeSectionOrder}
+                                    onChangeTeamOrder={this.props.onChangeTeamOrder}
                                     onChangeOrder={this.props.onChangeOrder}
                                 />
                             </DragDropContext>

@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetEmployee] @ActorId INT
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@Query NVARCHAR(256) = ''
 	,@IsIFrame BIT = 0
 AS
@@ -22,11 +22,11 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (GroupId INT)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
 	SELECT e.EmpId AS EmployeeId

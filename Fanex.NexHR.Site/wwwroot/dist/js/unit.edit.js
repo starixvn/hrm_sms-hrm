@@ -534,11 +534,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery Validation Plugin v1.19.2
+ * jQuery Validation Plugin v1.19.1
  *
  * https://jqueryvalidation.org/
  *
- * Copyright (c) 2020 Jörn Zaefferer
+ * Copyright (c) 2019 Jörn Zaefferer
  * Released under the MIT license
  */
 (function( factory ) {
@@ -750,25 +750,18 @@ $.extend( $.fn, {
 	}
 } );
 
-// JQuery trim is deprecated, provide a trim method based on String.prototype.trim
-var trim = function( str ) {
-
-	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/trim#Polyfill
-	return str.replace( /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "" );
-};
-
 // Custom selectors
 $.extend( $.expr.pseudos || $.expr[ ":" ], {		// '|| $.expr[ ":" ]' here enables backwards compatibility to jQuery 1.7. Can be removed when dropping jQ 1.7.x support
 
 	// https://jqueryvalidation.org/blank-selector/
 	blank: function( a ) {
-		return !trim( "" + $( a ).val() );
+		return !$.trim( "" + $( a ).val() );
 	},
 
 	// https://jqueryvalidation.org/filled-selector/
 	filled: function( a ) {
 		var val = $( a ).val();
-		return val !== null && !!trim( "" + val );
+		return val !== null && !!$.trim( "" + val );
 	},
 
 	// https://jqueryvalidation.org/unchecked-selector/
@@ -2200,7 +2193,7 @@ return $;
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery JavaScript Library v3.5.1
+ * jQuery JavaScript Library v3.5.0
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -2210,7 +2203,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2020-05-04T22:49Z
+ * Date: 2020-04-10T15:07Z
  */
 ( function( global, factory ) {
 
@@ -2348,7 +2341,7 @@ function toType( obj ) {
 
 
 var
-	version = "3.5.1",
+	version = "3.5.0",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -6445,7 +6438,7 @@ Data.prototype = {
 
 		// If not, create one
 		if ( !value ) {
-			value = {};
+			value = Object.create( null );
 
 			// We can accept data for non-element nodes in modern browsers,
 			// but we should not, see #8335.

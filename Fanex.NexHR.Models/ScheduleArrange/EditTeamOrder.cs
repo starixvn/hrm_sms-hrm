@@ -5,9 +5,9 @@
 
     [Serializable]
     [XMLName("Row")]
-    public class EditGroupOrder
+    public class EditTeamOrder
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
         public int DisplayOrder { get; set; }
     }
 }

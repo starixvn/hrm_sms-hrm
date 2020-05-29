@@ -178,7 +178,7 @@
     <Compile Include="ScheduleArrange\DailySchedule.cs" />
     <Compile Include="ScheduleArrange\EditDailySchedule.cs" />
     <Compile Include="ScheduleArrange\EditDefaultShift.cs" />
-    <Compile Include="ScheduleArrange\EditGroupOrder.cs" />
+    <Compile Include="ScheduleArrange\EditTeamOrder.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrder.cs" />
     <Compile Include="ScheduleArrange\EditRemark.cs" />
     <Compile Include="ScheduleArrange\GetEmployeeFilter.cs" />

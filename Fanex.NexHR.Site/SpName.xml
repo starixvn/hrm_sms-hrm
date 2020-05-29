@@ -218,11 +218,15 @@
       <Mapping DataField="ManagerId" ObjectProperty="Id" Class="DepartmentHead" />
     </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Insert" SpName="TestDepartment_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Delete" SpName="TestDepartment_Delete" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="TestDepartment_GetById" SpName="TestDepartment_GetById" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Update" SpName="TestDepartment_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TestDepartment_GetById" SpName="TestDepartment_GetById" DbName="nexhrx" Plain="0">
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Department" />
+    </Setting>
+    <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0">
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Department" />
+    </Setting>
   </Function>
   <Function Name="Unit">
     <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="nexhrx" Plain="0"></Setting>
@@ -282,7 +286,7 @@
     <Setting Key="ScheduleArrangement_UpdateWeekly" SpName="ScheduleArrangement_UpdateWeekly" DbName="nexhrx" Plain="0" />
     <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="nexhrx" Plain="0" />
     <Setting Key="ScheduleArrangement_UpdateDisplayOrder" SpName="ScheduleArrangement_UpdateDisplayOrder" DbName="nexhrx" Plain="0" />
-    <Setting Key="ScheduleArrangement_UpdateGroupOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="nexhrx" Plain="0" />
+    <Setting Key="ScheduleArrangement_UpdateTeamOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="nexhrx" Plain="0" />
     <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="Background Job">

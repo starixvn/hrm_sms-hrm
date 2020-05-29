@@ -22,7 +22,7 @@
 
                             return d;
                         },
-                        splitOn: "Name",
+                        splitOn: "UnitId",
                         parameterSet: criteria);
 
                 return departments.ToList();
@@ -40,7 +40,7 @@
 
                         return d;
                     },
-                    "Id",
+                    "UnitId",
                     criteria);
             }
         }

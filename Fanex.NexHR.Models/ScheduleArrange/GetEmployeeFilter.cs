@@ -3,7 +3,7 @@
     public class GetEmployeeFilter
     {
         public int ActorId { get; set; }
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
         public string Query { get; set; }
         public bool IsIFrame { get; set; }
     }

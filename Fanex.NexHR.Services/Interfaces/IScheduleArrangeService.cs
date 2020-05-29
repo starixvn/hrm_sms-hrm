@@ -23,7 +23,7 @@
 
         CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders);
 
-        CommandResult EditGroupOrder(int actorId, IEnumerable<EditGroupOrder> displayOrders);
+        CommandResult EditTeamOrder(int actorId, IEnumerable<EditTeamOrder> displayOrders);
 
         CommandResult EditWeeklyDefaultShift(int actorId, WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift);
     }

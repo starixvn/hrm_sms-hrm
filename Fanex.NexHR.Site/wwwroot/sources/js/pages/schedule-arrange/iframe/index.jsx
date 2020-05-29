@@ -23,14 +23,14 @@ export default class App extends Component {
             filter: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: '',
+                teamIds: '',
                 employee: { value: 0, label: '' }
             },
             schedules: [],
             employeeOptions: []
         };
 
-        this.groupOptions = [];
+        this.teamOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
     }
@@ -38,9 +38,9 @@ export default class App extends Component {
     componentDidMount() {
         axios(resolveClientUrl('department/GetHierarchy'))
             .then(response => {
-                this.groupOptions = response.data;
+                this.teamOptions = response.data;
                 const { floatData } = buildData(response.data);
-                const filter = { ...this.state.filter, groupIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
+                const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
                 this.getWeeklyShedules(filter);
 
@@ -55,7 +55,7 @@ export default class App extends Component {
     getEmployees = query => {
         axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
             params: {
-                groupIds: this.state.filter.groupIds,
+                teamIds: this.state.filter.teamIds,
                 query: query,
                 isIFrame: true
             }
@@ -81,7 +81,7 @@ export default class App extends Component {
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
-                groupIds: filter.groupIds,
+                teamIds: filter.teamIds,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value,
                 isIFrame: true
             }
@@ -89,8 +89,8 @@ export default class App extends Component {
             this.selectedWeek = { fromDate, toDate };
             const attrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
                 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
-            const schedules = response.data.schedules.map(group => {
-                group.members.map(schedule => {
+            const schedules = response.data.schedules.map(team => {
+                team.members.map(schedule => {
                     schedule.totalOffDayReplacement = 0;
                     attrNames.forEach(attrName => {
                         if (schedule[attrName].isOffDayReplacement) {
@@ -101,7 +101,7 @@ export default class App extends Component {
                     return schedule;
                 });
 
-                return group;
+                return team;
             });
 
             this.setState({
@@ -142,7 +142,7 @@ export default class App extends Component {
             <Fragment>
                 <Search
                     showExportExcel={false}
-                    groupOptions={this.groupOptions}
+                    teamOptions={this.teamOptions}
                     employeeOptions={this.state.employeeOptions}
                     filter={this.state.filter}
                     onSearchEmployees={this.getEmployees}

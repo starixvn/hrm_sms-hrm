@@ -9,21 +9,21 @@ import ColShift from './ColShift';
 
 export default class Row extends PureComponent {
     handleChangeSelectWeekDay = (attrName, isChecked) => {
-        const { groupId, data } = this.props;
+        const { teamId, data } = this.props;
         const employeeId = data.employeeId;
 
-        this.props.onChangeSelectWeekDay(groupId, employeeId, attrName, isChecked);
+        this.props.onChangeSelectWeekDay(teamId, employeeId, attrName, isChecked);
     }
 
     handleChangeShift = (name, shift) => {
-        const { groupId, data } = this.props;
+        const { teamId, data } = this.props;
         const employeeId = data.employeeId;
 
-        this.props.onChangeShift(groupId, employeeId, name, shift);
+        this.props.onChangeShift(teamId, employeeId, name, shift);
     }
 
     render() {
-        const { isHost, shiftOptions, groupId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
+        const { isHost, shiftOptions, teamId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
 
         return (
             <div className={`table-row ${isDragging ? 'dragging' : ''}`}
@@ -31,14 +31,14 @@ export default class Row extends PureComponent {
             >
                 <ColIndex data={data} />
                 <ColNickname isHost={isHost}
-                    groupId={groupId} employeeId={data.employeeId} nickname={data.nickname} remark={data.remark}
+                    teamId={teamId} employeeId={data.employeeId} nickname={data.nickname} remark={data.remark}
                     showRemarkPopover={showRemarkPopover}
                     onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                     onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                     onUpdateRemark={this.props.onUpdateRemark}
                     onChangeOrder={this.props.onChangeOrder}
                 />
-                <ColDefaultShift isHost={isHost} groupId={groupId} employeeId={data.employeeId}
+                <ColDefaultShift isHost={isHost} teamId={teamId} employeeId={data.employeeId}
                     isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift} data={data.defaultShift}
                     shiftOptions={shiftOptions.filter(shift => shift.id !== OffDayShiftId)}
                     onChangeDefaultShift={this.props.onChangeDefaultShift}

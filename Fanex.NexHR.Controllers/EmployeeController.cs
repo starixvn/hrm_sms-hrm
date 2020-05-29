@@ -190,7 +190,7 @@
                     DomainUsername = model.DomainUsername,
                     FullName = model.FullName,
                     Nickname = model.Nickname,
-                    GroupId = model.TeamId
+                    TeamId = model.TeamId
                 };
 
                 CommandResult commandResult = employeeService.Create(sessionService.Employee.Id, param);

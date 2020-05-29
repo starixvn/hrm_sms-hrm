@@ -53,11 +53,11 @@ export default class Table extends PureComponent {
                     }
                     {
                         data.length > 0 &&
-                        data.map(section =>
-                            <Fragment key={section.groupId}>
-                                <div className="row-section"><div className="section-name">{section.name}</div></div>
+                        data.map(team =>
+                            <Fragment key={team.teamId}>
+                                <div className="row-team"><div className="team-name">{team.name}</div></div>
                                 {
-                                    section.members.map((member, index) => <Row key={`row${index}`} data={member} />)
+                                    team.members.map((member, index) => <Row key={`row${index}`} data={member} />)
                                 }
                             </Fragment>
                         )
