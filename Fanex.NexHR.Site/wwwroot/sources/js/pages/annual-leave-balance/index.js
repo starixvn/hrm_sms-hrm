@@ -11,9 +11,9 @@ const annualLeaveBalance = (function ($) {
         $.ajax({
             url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: data,
-                    selectedItems: $('#SectionIds').val()
+                    selectedItems: $('#TeamIds').val()
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -23,9 +23,9 @@ const annualLeaveBalance = (function ($) {
     }
 
     function submitData(postToUrl) {
-        const sectionIds = $('#Section').multiSelectTreeView('getSelectedItems');
+        const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
         return resolveClientUrl(postToUrl + $('#Year').val() +
-            '&SectionIds=' + sectionIds + '&Employee=' + $('#Employee').val() +
+            '&teamIds=' + teamIds + '&Employee=' + $('#Employee').val() +
             '&EmployeeId=' + $('#EmployeeId').val() +
             '&MinAnnualBalance=' + $('#MinAnnualBalance').val() +
             '&Category=' + $('#Category').val());

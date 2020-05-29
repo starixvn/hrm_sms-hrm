@@ -128,7 +128,7 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 selectedItems: $('#GroupIds').val()
             });
@@ -146,12 +146,12 @@ $(document).ready(function () {
     $('#btnSubmit').click(function (evt) {
         evt.preventDefault();
         refreshSorting();
-        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#GroupIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $("#btnExcel").click(function () {
-        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#GroupIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

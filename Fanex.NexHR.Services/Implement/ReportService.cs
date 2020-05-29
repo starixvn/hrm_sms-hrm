@@ -56,7 +56,7 @@
                 var entity = new LeaveSummaryByTeam
                 {
                     GroupId = team.Id,
-                    Section = team.Name,
+                    Team = team.Name,
                     LeaveSummaryInTeam = leaveSummaryList.Where(x => x.GroupId == team.Id).ToList()
                 };
 
@@ -87,7 +87,7 @@
             IList<TeamSupervisorReportModel> supervisors = null;
             if (criteria != null && criteria.IsValid())
             {
-                supervisors = reportRepository.GetSectionSupervisor(criteria);
+                supervisors = reportRepository.GetTeamSupervisor(criteria);
             }
 
             return supervisors;

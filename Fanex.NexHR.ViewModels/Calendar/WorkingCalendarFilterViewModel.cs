@@ -8,7 +8,7 @@
         public DateTime ToDate { get; set; }
         public int? EmployeeId { get; set; }
         public byte? IsLocal { get; set; }
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public string JobTitleIds { get; set; }
     }
 }

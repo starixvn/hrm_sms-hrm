@@ -53,7 +53,7 @@
 
             foreach (LeaveSummaryByTeam leaveSummary in leaveSummaries.Where(x => x.LeaveSummaryInTeam != null && x.LeaveSummaryInTeam.Any()))
             {
-                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Section.ToUpperInvariant() });
+                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Team.ToUpperInvariant() });
 
                 foreach (LeaveSummary item in leaveSummary.LeaveSummaryInTeam)
                 {

@@ -73,7 +73,7 @@
                 IsLocalUser = null
             };
             ViewBag.Employees = employeeService.GetEmployees(criteria);
-            ViewBag.Groups = commonDataService.GetAllSection();
+            ViewBag.Groups = commonDataService.GetAllTeam();
             var model = new Message { FromDate = DateTime.Now, ToDate = DateTime.Now };
 
             return View(model);
@@ -112,7 +112,7 @@
             };
 
             ViewBag.Employees = employeeService.GetEmployees(criteria);
-            ViewBag.Groups = commonDataService.GetAllSection();
+            ViewBag.Groups = commonDataService.GetAllTeam();
 
             return View();
         }

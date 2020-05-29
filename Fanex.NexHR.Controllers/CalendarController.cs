@@ -74,7 +74,7 @@
                 EmpId = model.EmployeeId,
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
-                GroupIds = model.SectionIds,
+                GroupIds = model.TeamIds,
                 JobTitleId = model.JobTitleIds,
                 IsLocal = model.IsLocal
             };

@@ -5,8 +5,8 @@ import 'chosen-js/chosen.jquery';
 import { resolveClientUrl } from '../../shared/common.functions';
 
 (function () {
-    function initSearchSectionHead() {
-        $('#SectionHead').autocomplete({
+    function initSearchTeamHead() {
+        $('#TeamHead').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: resolveClientUrl('employee/getemployees'),
@@ -29,21 +29,21 @@ import { resolveClientUrl } from '../../shared/common.functions';
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                $('#SectionHead').val(ui.item.label);
+                $('#TeamHead').val(ui.item.label);
                 $('#HeadId').val(ui.item.value);
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $('#SectionHead').val(ui.item.label);
+                $('#TeamHead').val(ui.item.label);
                 $('#HeadId').val(ui.item.value);
             },
             change: function (event, ui) {
                 event.preventDefault();
                 if (ui && ui.item) {
-                    $('#SectionHead').val(ui.item.label);
+                    $('#TeamHead').val(ui.item.label);
                     $('#HeadId').val(ui.item.value);
                 } else {
-                    if ($('#SectionHead').val() === '') {
+                    if ($('#TeamHead').val() === '') {
                         $('#HeadId').val('');
                     } else {
                         $('#HeadId').val('0');
@@ -94,7 +94,7 @@ import { resolveClientUrl } from '../../shared/common.functions';
     }
 
     $(document).ready(function () {
-        initSearchSectionHead();
+        initSearchTeamHead();
         initSearchAssistantHead();
         initSearchLeader();
         initSearchAssistantLeader();

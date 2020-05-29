@@ -19,7 +19,7 @@ const workingCalendarModule = (function ($) {
             params: {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
-                sectionIds: $('#Section').multiSelectTreeView('getSelectedItems'),
+                teamIds: $('#Team').multiSelectTreeView('getSelectedItems'),
                 jobTitleIds: $('#JobTitle').multiSelectTreeView('getSelectedItems'),
                 employeeId: $('#EmployeeId').val(),
                 isLocal: $('#IsLocal').val()
@@ -103,9 +103,9 @@ const workingCalendarModule = (function ($) {
         ];
 
         Promise.all(promises)
-            .then(([sectionResponse, jobResponse]) => {
-                $('#Section').multiSelectTreeView({
-                    data: sectionResponse.data,
+            .then(([teamResponse, jobResponse]) => {
+                $('#Team').multiSelectTreeView({
+                    data: teamResponse.data,
                     isSelectedAll: true
                 });
                 $('#JobTitle').multiSelectTreeView({
@@ -126,7 +126,7 @@ const workingCalendarModule = (function ($) {
             const url = 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + $('#FromDate').val()
                 + '&toDate=' + $('#ToDate').val()
                 + '&employeeId=' + $('#EmployeeId').val()
-                + '&sectionIds=' + $('#Section').multiSelectTreeView('getSelectedItems')
+                + '&teamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
                 + '&jobTitleIds=' + $('#JobTitle').multiSelectTreeView('getSelectedItems')
                 + '&isLocal=' + $('#IsLocal').val();
             location.href = resolveClientUrl(url);

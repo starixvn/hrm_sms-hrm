@@ -7,7 +7,7 @@
         public string Nickname { get; set; }
         public string FullName { get; set; }
         public int GroupId { get; set; }
-        public string Section { get; set; }
+        public string Team { get; set; }
 
         public float AnnualLeaveLastYear { get; set; }
         public float CreditKIV { get; set; }

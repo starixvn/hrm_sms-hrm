@@ -73,7 +73,7 @@
             var dayDiff = (toDay - fromDay).TotalDays;
             <tr>
                 <th rowspan="2">@Labels.NickName</th>
-                <th rowspan="2">@Labels.Section</th>
+                <th rowspan="2">@Labels.Team</th>
                 @for (int i = 0; i <= dayDiff; i++)
                 {
                     <th>@fromDay.AddDays(i).ToDateMonthYearFormatedDate()</th>
@@ -103,7 +103,7 @@
         {
             <tr>
                 <td class="align-left">@calendar.Nickname</td>
-                <td class="align-left">@calendar.Section</td>
+                <td class="align-left">@calendar.Team</td>
                 @RenderColShift(calendar.MondaySchedule)
                 @RenderColShift(calendar.TuesdaySchedule)
                 @RenderColShift(calendar.WednesdaySchedule)

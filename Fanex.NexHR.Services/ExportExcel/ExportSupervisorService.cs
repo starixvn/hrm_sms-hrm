@@ -88,7 +88,7 @@
                 {
                     const byte TotalColumns = 7;
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.SectionSupervisor);
+                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.TeamSupervisor);
                     var rowIndex = 1;
                     var colIndex = 1;
 

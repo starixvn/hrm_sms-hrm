@@ -19,7 +19,7 @@
 
         IList<LeaveType> GetLeaveType(bool excludeNotShown = true);
 
-        IList<Team> GetAllSection(bool isDeleted = false);
+        IList<Team> GetAllTeam(bool isDeleted = false);
 
         IList<Country> GetAllCountry();
 
@@ -71,7 +71,7 @@
             return leaveTypes;
         }
 
-        public IList<Team> GetAllSection(bool isDeleted = false)
+        public IList<Team> GetAllTeam(bool isDeleted = false)
         {
             return teamService.GetAll(isDeleted);
         }

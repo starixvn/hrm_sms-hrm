@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
-import { getSupervisors, editSectionSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
+import { getSupervisors, editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 
 const PageType = {
-    Section: 1,
+    Team: 1,
     Employee: 2
 };
 
@@ -52,10 +52,10 @@ export default class DisciplineManager extends Component {
 
     getDisciplineManagers = () => {
         blockUI();
-        if (this.props.pageType === PageType.Section) {
-            axios(resolveClientUrl('Team/GetDisciplineManagerBySectionId'), {
+        if (this.props.pageType === PageType.Team) {
+            axios(resolveClientUrl('Team/GetDisciplineManagerByTeamId'), {
                 params: {
-                    sectionId: this.props.objectId
+                    teamId: this.props.objectId
                 }
             }).then(response => {
                 this.setState({ managers: response.data });
@@ -99,8 +99,8 @@ export default class DisciplineManager extends Component {
                 displayOrder: i + 1
             });
         }
-        if (this.props.pageType === PageType.Section) {
-            editSectionSupervisor(this.props.objectId, this.roleId, supervisors, toast);
+        if (this.props.pageType === PageType.Team) {
+            editTeamSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
@@ -121,7 +121,7 @@ export default class DisciplineManager extends Component {
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"
-                    href={resolveClientUrl(`${this.props.pageType === PageType.Section ? 'team/TeamSupervisor' : 'employee/edit'}/${this.props.objectId}`)}
+                    href={resolveClientUrl(`${this.props.pageType === PageType.Team ? 'team/TeamSupervisor' : 'employee/edit'}/${this.props.objectId}`)}
                 >Back</a>
             </Fragment>
         );

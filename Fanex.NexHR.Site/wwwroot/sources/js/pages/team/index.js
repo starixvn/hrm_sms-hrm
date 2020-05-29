@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { axiosError, floatThead, confirm, resolveClientUrl, alert, autoIndex } from '../../shared/common.functions';
 
-function deleteSection(id) {
+function deleteTeam(id) {
     confirm('Are you sure you want to delete this team?', function () {
         axios({
             url: resolveClientUrl('team/delete' + '/' + id),
@@ -33,6 +33,6 @@ $(document).ready(function () {
 
     $('table#data a.deleteTeam').on('click', function () {
         const teamId = $(this).data('team-id');
-        deleteSection(teamId);
+        deleteTeam(teamId);
     });
 });

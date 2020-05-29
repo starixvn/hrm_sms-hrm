@@ -66,7 +66,7 @@
                     sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                     var rowTeam = sheet.GetRow(rowIndex);
                     var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(item.Section.ToUpperInvariant());
+                    cellTeam.SetCellValue(item.Team.ToUpperInvariant());
                     sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 18);
                     rowTeam.Height = height;
 
@@ -203,7 +203,7 @@
                 cellEmployeeID.SetCellValue(item.Code);
                 cellFullName.SetCellValue(item.FullName);
                 cellNickName.SetCellValue(item.Nickname);
-                cellTeam.SetCellValue(item.Section);
+                cellTeam.SetCellValue(item.Team);
                 cellShift1.SetCellValue(GetShift(item.MondaySchedule));
                 cellShift2.SetCellValue(GetShift(item.TuesdaySchedule));
                 cellShift3.SetCellValue(GetShift(item.WednesdaySchedule));

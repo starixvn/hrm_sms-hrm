@@ -5,7 +5,7 @@
     public class LeaveSummaryByTeam
     {
         public int GroupId { get; set; }
-        public string Section { get; set; }
+        public string Team { get; set; }
 
         public List<LeaveSummary> LeaveSummaryInTeam { get; set; }
     }

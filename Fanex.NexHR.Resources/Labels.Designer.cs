@@ -4165,24 +4165,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section Supervisor.
-        /// </summary>
-        public static string SectionSupervisor {
-            get {
-                return ResourceManager.GetString("SectionSupervisor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section Supervisors.
-        /// </summary>
-        public static string SectionSupervisors {
-            get {
-                return ResourceManager.GetString("SectionSupervisors", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to --Select an Approver--.
         /// </summary>
         public static string SelectApprover {
@@ -4584,6 +4566,24 @@ namespace Fanex.NexHR.Resources {
         public static string TeamPermissionSummary {
             get {
                 return ResourceManager.GetString("TeamPermissionSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Supervisor.
+        /// </summary>
+        public static string TeamSupervisor {
+            get {
+                return ResourceManager.GetString("TeamSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Supervisors.
+        /// </summary>
+        public static string TeamSupervisors {
+            get {
+                return ResourceManager.GetString("TeamSupervisors", resourceCulture);
             }
         }
         

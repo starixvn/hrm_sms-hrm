@@ -1320,8 +1320,8 @@
   <data name="TeamHead" xml:space="preserve">
     <value>Team Head</value>
   </data>
-  <data name="SectionSupervisor" xml:space="preserve">
-    <value>Section Supervisor</value>
+  <data name="TeamSupervisor" xml:space="preserve">
+    <value>Team Supervisor</value>
   </data>
   <data name="Confirmed" xml:space="preserve">
     <value>Confirmed</value>
@@ -1350,8 +1350,8 @@
   <data name="RemoveAll" xml:space="preserve">
     <value>Remove All</value>
   </data>
-  <data name="SectionSupervisors" xml:space="preserve">
-    <value>Section Supervisors</value>
+  <data name="TeamSupervisors" xml:space="preserve">
+    <value>Team Supervisors</value>
   </data>
   <data name="UpdateShiftManager" xml:space="preserve">
     <value>Update Shift Manager</value>

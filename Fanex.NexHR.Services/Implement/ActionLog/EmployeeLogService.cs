@@ -92,7 +92,7 @@
 
         public IEnumerable<LogObjectDetail> GetLogDetailById(int employeeId)
         {
-            Sections = commonDataService.GetAllSection();
+            Sections = commonDataService.GetAllTeam();
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             Countries = commonDataService.GetAllCountry();
             SystemRoles = roleService.GetRoles();

@@ -21,7 +21,7 @@
         @using (Html.BeginForm())
         {
             <div class="form-horizontal clearfix">
-                @Html.HiddenFor(model => model.SectionIds)
+                @Html.HiddenFor(model => model.TeamIds)
                 <div class="form-group form-group--m">
                     <div class="label-form">
                         <label class="control-label">@Labels.Category</label>
@@ -59,7 +59,7 @@
                     <div class="label-form">
                         <label class="control-label">@Labels.DepartmentTeam</label>
                     </div>
-                    <div class="input-form" id="Section"></div>
+                    <div class="input-form" id="Team"></div>
                 </div>
 
                 <div class="form-group form-group--m">
@@ -161,7 +161,7 @@
                 {
                     <tr>
                         <td class="rowdivider align-left" colspan="19">
-                            <b>@item.Section.ToUpper()</b>
+                            <b>@item.Team.ToUpper()</b>
                         </td>
                     </tr>
                 }

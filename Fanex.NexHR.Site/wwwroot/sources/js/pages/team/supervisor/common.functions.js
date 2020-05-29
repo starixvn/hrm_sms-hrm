@@ -36,12 +36,12 @@ function editEmployeeSupervisor(employeeId, roleId, supervisors, toastObj) {
     }).catch(axiosError);
 }
 
-function editSectionSupervisor(sectionId, roleId, supervisors, toastObj) {
+function editTeamSupervisor(taemId, roleId, supervisors, toastObj) {
     axios({
-        url: resolveClientUrl('Team/EditSectionSupervisor'),
+        url: resolveClientUrl('Team/EditTeamSupervisor'),
         method: 'POST',
         data: stringify({
-            sectionId,
+            teamId,
             roleId,
             supervisors
         }),
@@ -109,7 +109,7 @@ function moveBottom(vm) {
 export {
     getSupervisors,
     editEmployeeSupervisor,
-    editSectionSupervisor,
+    editTeamSupervisor,
     reorderSupervisor,
     moveUp,
     moveDown,

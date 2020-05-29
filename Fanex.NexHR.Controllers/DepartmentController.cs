@@ -120,13 +120,13 @@
 
         public CustomJsonResult GetHierarchy()
         {
-            IList<Team> sections = commonDataService.GetAllSection();
+            IList<Team> teams = commonDataService.GetAllTeam();
             IEnumerable<MultiSelectViewModel> departments = departmentService.GetDepartment().Select(x => new MultiSelectViewModel
             {
                 Id = x.Id,
                 Text = x.Name,
                 ParentId = x.Parent == null ? (int?)null : x.Parent.Id,
-                Items = sections.Where(y => y.Department != null && y.Department.Id == x.Id).Select(y => new MultiSelectViewModel
+                Items = teams.Where(y => y.Department != null && y.Department.Id == x.Id).Select(y => new MultiSelectViewModel
                 {
                     Id = y.Id,
                     Text = y.Name,

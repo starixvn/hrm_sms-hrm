@@ -93,7 +93,7 @@
             }
         }
 
-        public IList<TeamSupervisorReportModel> GetSectionSupervisor(ICriteria criteria)
+        public IList<TeamSupervisorReportModel> GetTeamSupervisor(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {

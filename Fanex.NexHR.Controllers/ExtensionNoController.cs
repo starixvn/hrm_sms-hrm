@@ -156,7 +156,7 @@
             IList<SelectListItem> groups = null;
             if (isInternal)
             {
-                IList<Team> teams = commonDataService.GetAllSection();
+                IList<Team> teams = commonDataService.GetAllTeam();
                 groups = teams.Select(x => new SelectListItem
                 {
                     Text = x.Name,
