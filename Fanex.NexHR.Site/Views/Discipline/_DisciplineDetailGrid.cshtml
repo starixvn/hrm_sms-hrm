@@ -28,7 +28,7 @@
                 </th>
             }
             <th>@Labels.Date</th>
-            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
             <th>@Labels.Nick</th>
             <th>@Labels.Shift</th>
             <th>@Labels.CheckIn</th>
@@ -71,7 +71,7 @@
                         </td>
                     }
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
-                    <td>@item.Employee.GroupName</td>
+                    <td>@item.Employee.TeamName</td>
                     <td class="tooltip-tipsy" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.ShiftName</td>
                     <td>

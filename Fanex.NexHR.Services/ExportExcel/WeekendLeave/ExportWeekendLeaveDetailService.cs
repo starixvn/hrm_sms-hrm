@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Resources;
@@ -95,7 +94,7 @@
                 weekendLeave.Code,
                 weekendLeave.FullName,
                 Nick = weekendLeave.NickName,
-                Section = weekendLeave.GroupName,
+                Team = weekendLeave.TeamName,
                 Category = weekendLeave.IsLocal ? Labels.Local : Labels.Expat,
                 weekendLeave.LeaveDate,
                 weekendLeave.LeaveType,

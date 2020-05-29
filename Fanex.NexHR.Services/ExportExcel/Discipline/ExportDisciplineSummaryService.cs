@@ -29,9 +29,9 @@
             {
                 reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.EmployeeName, startDate, endDate);
             }
-            else if (criteria.GroupId != null)
+            else if (criteria.TeamId != null)
             {
-                reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.GroupName, startDate, endDate);
+                reportTitle = string.Format(Labels.DisciplineSummaryReportTitle, criteria.TeamName, startDate, endDate);
             }
             else
             {
@@ -80,7 +80,7 @@
             var record = new
             {
                 Count = rowIndex,
-                Section = discipline.Employee.GroupName,
+                Team = discipline.Employee.TeamName,
                 Code = discipline.Employee.Code,
                 Nick = discipline.Employee.NickName,
                 FullName = discipline.Employee.FullName,

@@ -10,7 +10,7 @@
 
         public DateTime ToDate { get; set; }
 
-        public string GroupId { get; set; }
+        public string TeamId { get; set; }
 
         public int? EmployeeId { get; set; }
 
@@ -26,7 +26,7 @@
         public string EmployeeName { get; set; }
 
         [SpParam(Ignored = true)]
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
 
         public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
 

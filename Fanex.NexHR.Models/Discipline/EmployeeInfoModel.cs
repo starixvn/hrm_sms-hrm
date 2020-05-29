@@ -12,10 +12,10 @@
 
         public bool IsLocal { get; set; }
 
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
-        public string GroupCode { get; set; }
+        public string TeamCode { get; set; }
 
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
     }
 }

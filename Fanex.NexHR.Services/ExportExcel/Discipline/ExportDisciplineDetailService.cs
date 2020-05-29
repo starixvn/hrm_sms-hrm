@@ -30,9 +30,9 @@
             {
                 reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.EmployeeName, startDate, endDate);
             }
-            else if (criteria.GroupId != null)
+            else if (criteria.TeamId != null)
             {
-                reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.GroupName, startDate, endDate);
+                reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.TeamName, startDate, endDate);
             }
             else
             {
@@ -99,7 +99,7 @@
                 Nick = discipline.Employee.NickName,
                 FullName = discipline.Employee.FullName,
                 Category = discipline.Employee.IsLocal ? Labels.Local : Labels.Expat,
-                Section = discipline.Employee.GroupName,
+                Team = discipline.Employee.TeamName,
                 Date = discipline.WorkDate,
                 ShiftName = discipline.ShiftName,
                 CheckIn = checkIn,

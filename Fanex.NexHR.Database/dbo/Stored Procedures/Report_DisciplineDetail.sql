@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_DisciplineDetail] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
-	,@GroupId VARCHAR(MAX) = ''
+	,@TeamId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@ReasonId INT = NULL
 	,@IsLocal BIT = NULL
@@ -22,11 +22,11 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (TmpGroupId INT)
 
-	IF ISNULL(@GroupId, '') <> ''
+	IF ISNULL(@TeamId, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (TmpGroupId)
 		SELECT DISTINCT val
-		FROM fnc_strSplit(@GroupId, ',')
+		FROM fnc_strSplit(@TeamId, ',')
 	END
 
 	DECLARE @HasEditDisciplineRole INT = 0
@@ -664,8 +664,8 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,empsum.IsLocal
-		,gr.Code AS GroupCode
-		,gr.[Name] AS GroupName
+		,gr.Code AS TeamCode
+		,gr.[Name] AS TeamName
 		,shift.Code AS ShiftName
 		,empatt.InFixed AS CheckIn
 		,empatt.OutFixed AS CheckOut

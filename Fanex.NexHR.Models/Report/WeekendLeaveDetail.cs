@@ -14,11 +14,11 @@
 
         public bool IsLocal { get; set; }
 
-        public string GroupId { get; set; }
+        public string TeamId { get; set; }
 
-        public string GroupCode { get; set; }
+        public string TeamCode { get; set; }
 
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
 
         public DateTime LeaveDate { get; set; }
 

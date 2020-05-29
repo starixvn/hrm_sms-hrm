@@ -53,7 +53,7 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                GroupId = model.TeamId,
+                TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
@@ -116,7 +116,7 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                GroupId = model.TeamId,
+                TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,

@@ -66,8 +66,8 @@
                         FullName = discipline.FullName,
                         Code = discipline.Code,
                         IsLocal = discipline.IsLocal,
-                        GroupName = discipline.GroupName,
-                        GroupCode = discipline.GroupCode
+                        TeamName = discipline.TeamName,
+                        TeamCode = discipline.TeamCode
                     },
                     ChangeShift = GetChangeShift(discipline),
                     MissingCheckInOut = GetMissingCheckInOut(discipline),

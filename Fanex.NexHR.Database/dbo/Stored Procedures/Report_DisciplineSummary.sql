@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_DisciplineSummary] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
-	,@GroupId VARCHAR(MAX) = ''
+	,@TeamId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
 	,@ReasonId INT = NULL
 	,@IsLocal BIT = NULL
@@ -22,11 +22,11 @@ BEGIN
 
 	CREATE TABLE #tblGroupIds (TmpGroupId INT)
 
-	IF ISNULL(@GroupId, '') <> ''
+	IF ISNULL(@TeamId, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (TmpGroupId)
 		SELECT DISTINCT val
-		FROM fnc_strSplit(@GroupId, ',')
+		FROM fnc_strSplit(@TeamId, ',')
 	END
 
 	CREATE TABLE #tblEmployeeDiscipline (
@@ -395,7 +395,7 @@ BEGIN
 									AND ISNULL(empS.IsDeleted, 0) = 0
 								)
 						)
-					) THEN 2 -- Host				
+					) THEN 2 -- Host
 			ELSE 1 END
 			)
 		,emp.EmpId AS EmployeeId
@@ -403,9 +403,9 @@ BEGIN
 		,emp.FullName
 		,emp.Code
 		,empSum.IsLocal
-		,gr.GroupId
-		,gr.[Name] AS GroupName
-		,gr.Code AS GroupCode
+		,gr.GroupId AS TeamId
+		,gr.[Name] AS TeamName
+		,gr.Code AS TeamCode
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		LEFT JOIN #tblEmployeeDiscipline AS empD WITH (NOLOCK) ON emp.EmpId = empD.EmpId
 		LEFT JOIN #tblEmployeeDisciplineFinalScore AS empF WITH (NOLOCK) ON empF.WorkDate = empD.WorkDate
@@ -567,3 +567,4 @@ BEGIN
 
 	DROP TABLE #tblGroupIds
 END
+

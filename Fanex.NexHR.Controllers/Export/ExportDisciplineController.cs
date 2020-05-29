@@ -31,13 +31,13 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                GroupId = model.TeamId,
+                TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
                 ApproverId = sessionService.Employee.Id,
                 EmployeeName = model.Employee,
-                GroupName = model.TeamName
+                TeamName = model.TeamName
             };
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
@@ -52,13 +52,13 @@
             {
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                GroupId = model.TeamId,
+                TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
                 ApproverId = sessionService.Employee.Id,
                 EmployeeName = model.Employee,
-                GroupName = model.TeamName
+                TeamName = model.TeamName
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
