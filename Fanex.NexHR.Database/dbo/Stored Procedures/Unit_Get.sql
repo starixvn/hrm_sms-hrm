@@ -18,7 +18,7 @@ BEGIN
 		,u.Name
 		,u.IsActive
 		,u.ModifiedDate
-	FROM dbo.Unit as u
+	FROM dbo.Unit as u WITH (NOLOCK) 
 	WHERE (
 			@IsActive IS NULL
 			OR u.IsActive = @IsActive

@@ -161,11 +161,11 @@
 
         private void MappingSection(FieldValue field)
         {
-            int.TryParse(field.OldValue, out int sectionId);
-            field.OldValue = Sections.FirstOrDefault(x => x.Id == sectionId)?.Name;
+            int.TryParse(field.OldValue, out int teamId);
+            field.OldValue = Sections.FirstOrDefault(x => x.Id == teamId)?.Name;
 
-            int.TryParse(field.Value, out sectionId);
-            field.Value = Sections.FirstOrDefault(x => x.Id == sectionId)?.Name;
+            int.TryParse(field.Value, out teamId);
+            field.Value = Sections.FirstOrDefault(x => x.Id == teamId)?.Name;
         }
 
         private void MappingRole(FieldValue field)

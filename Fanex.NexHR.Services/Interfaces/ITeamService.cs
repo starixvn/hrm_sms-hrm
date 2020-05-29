@@ -17,16 +17,16 @@
 
         IList<Team> GetBySupervisor(int supervisorId);
 
-        IList<SupervisorModel> GetTeamSupervisorByRoleId(int sectionId, RoleSystem roleId);
+        IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId);
 
         IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id);
 
-        IEnumerable<Supervisor> GetDisciplineManagerByTeamId(int sectionId);
+        IEnumerable<Supervisor> GetDisciplineManagerByTeamId(int teamId);
 
-        CommandResult EditTeamSupervisor(int actorId, int sectionId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
+        CommandResult EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
-        IEnumerable<DisciplineRule> GetDisciplineRuleByTeam(int sectionId);
+        IEnumerable<DisciplineRule> GetDisciplineRuleByTeam(int teamId);
 
-        CommandResult EditDisciplineRule(int actorId, int sectionId, IEnumerable<DisciplineRule> disciplineRules);
+        CommandResult EditDisciplineRule(int actorId, int teamId, IEnumerable<DisciplineRule> disciplineRules);
     }
 }

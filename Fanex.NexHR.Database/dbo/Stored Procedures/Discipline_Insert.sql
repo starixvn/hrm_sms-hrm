@@ -81,7 +81,7 @@ BEGIN
 		AND empca.LeaveDay <> 1
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 2
 		AND rul.Value = 1
@@ -148,7 +148,7 @@ BEGIN
 		AND empca.LeaveDay <> 1
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 3
 		AND rul.Value = 1
@@ -204,7 +204,7 @@ BEGIN
 		AND empca.LeaveDay <> 1
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 4
 		AND rul.Value = 1
@@ -274,7 +274,7 @@ BEGIN
 		INNER JOIN dbo.Shift AS shift WITH (NOLOCK) ON empatt.ShiftId = shift.ShiftId
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empatt.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 7
 		AND rul.Value = 1
@@ -407,7 +407,7 @@ BEGIN
 	FROM dbo.EmployeeAttendance AS att WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON att.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
 		AND rul.Value = 1

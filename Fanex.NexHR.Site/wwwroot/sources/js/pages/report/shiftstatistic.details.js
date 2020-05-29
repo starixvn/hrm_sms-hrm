@@ -16,7 +16,7 @@ $(document).ready(function () {
                 workdate: $('#WorkDate').val(),
                 shiftId: $('#ShiftId').val(),
                 employeeId: $('#EmployeeId').val(),
-                sectionIds: $('#SectionIds').val(),
+                teamIds: $('#TeamtionIds').val(),
                 isLocal: $('#IsLocal').val(),
                 IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
             },
@@ -31,26 +31,26 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#SectionIds').val()
+                selectedItems: $('#TeamIds').val()
             });
 
             $('#btnSearch').trigger('click');
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $('#btnExcel').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         const params = {
             workdate: $('#WorkDate').val(),
             shiftId: $('#ShiftId').val(),
             employeeId: $('#EmployeeId').val(),
-            sectionIds: $('#SectionIds').val(),
+            teamIds: $('#TeamIds').val(),
             isLocal: $('#IsLocal').val(),
             IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
         };

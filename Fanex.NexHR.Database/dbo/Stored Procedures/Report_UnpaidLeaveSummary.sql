@@ -275,7 +275,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,g.GroupId
-		,g.[Name] AS Section
+		,g.[Name] AS Team
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0

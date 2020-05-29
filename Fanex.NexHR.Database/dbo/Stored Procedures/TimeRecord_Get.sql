@@ -34,7 +34,7 @@ BEGIN
 		,Code VARCHAR(20)
 		,Nickname NVARCHAR(20)
 		,FullName NVARCHAR(50)
-		,Section NVARCHAR(50)
+		,Team NVARCHAR(50)
 		)
 
 	DECLARE @tblGroupId TABLE (GroupId INT)
@@ -86,7 +86,7 @@ BEGIN
 			,Code
 			,Nickname
 			,FullName
-			,Section
+			,Team
 		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
 
@@ -101,7 +101,7 @@ BEGIN
 			,Code
 			,Nickname
 			,FullName
-			,Section
+			,Team
 		FROM #tblTimeRecord AS t
 		ORDER BY t.RecordTime DESC
 	END

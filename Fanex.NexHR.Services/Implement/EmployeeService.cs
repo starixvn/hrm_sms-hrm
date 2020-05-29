@@ -258,7 +258,7 @@
                 DomainUsername = param.DomainUsername,
                 FullName = param.FullName,
                 Nickname = param.Nickname,
-                GroupId = param.GroupId,
+                GroupId = param.TeamId,
                 Password = Encryptor.ComputeHash(authService.HashProvider, param.Code)
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

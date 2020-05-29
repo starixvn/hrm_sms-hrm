@@ -35,7 +35,7 @@ $(document).ready(function () {
         }
 
         if (teamId === 0) {
-            errorMessages.push('Team field is required.');
+            errorMessages.push('Section field is required.');
         }
 
         if (errorMessages.length > 0) {
@@ -49,12 +49,12 @@ $(document).ready(function () {
 
     axios(_global.root + 'Department/GetHierarchy')
         .then(response => {
-            $('#Team').multiSelectTreeView({
+            $('#Section').multiSelectTreeView({
                 data: response.data,
-                noneSelectedText: 'Select a team',
+                noneSelectedText: 'Select a section',
                 singleSelection: true,
                 onSelect: function () {
-                    $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+                    $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
                 }
             });
         }).catch(axiosError);

@@ -43,7 +43,7 @@
 
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(
-            string sectionIds,
+            string teamIds,
             string employee,
             int? year = null,
             int? employeeId = null,
@@ -56,7 +56,7 @@
             var model = new LeaveSummaryViewModel
             {
                 Year = year ?? DateTime.Now.Year,
-                TeamIds = sectionIds,
+                TeamIds = teamIds,
                 Employee = employee,
                 EmployeeId = employeeId ?? -1,
                 MinAnnualBalance = minAnnualBalance ?? 0,

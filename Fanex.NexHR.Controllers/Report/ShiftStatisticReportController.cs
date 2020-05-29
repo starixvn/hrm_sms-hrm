@@ -49,7 +49,7 @@
                 SupervisorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsShowWholeCompany = model.IsShowWholeCompany,
                 IsLocal = model.IsLocal
             };
@@ -71,7 +71,7 @@
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsShowWholeCompany = model.IsShowWholeCompany,
                 IsLocal = model.IsLocal
             };
@@ -87,7 +87,7 @@
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsShowWholeCompany = model.IsShowWholeCompany,
                 IsLocal = model.IsLocal
             };
@@ -106,7 +106,7 @@
                 SupervisorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 IsShowWholeCompany = model.IsShowWholeCompany,
                 IsLocal = model.IsLocal
             };

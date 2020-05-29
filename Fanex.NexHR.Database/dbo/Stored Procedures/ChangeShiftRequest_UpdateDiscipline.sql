@@ -66,7 +66,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.Employee AS emp WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
 					AND drule.DisciplineTypeId = 1
 					AND empsum.IsLocal = drule.IsLocal
 					AND drule.Value = 1
@@ -85,7 +85,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.Employee AS emp WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
 					AND drule.DisciplineTypeId = 1
 					AND empsum.IsLocal = drule.IsLocal
 					AND drule.Value = 1

@@ -28,7 +28,7 @@
                 SupervisorId = param.SupervisorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
-                SectionIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 IsLocal = param.IsLocal,
                 IsShowWholeCompany = param.IsShowWholeCompany
             };
@@ -43,7 +43,7 @@
                 EmployeeId = param.EmployeeId,
                 WorkDate = param.WorkDate,
                 ShiftId = param.ShiftId,
-                SectionIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 IsLocal = param.IsLocal,
                 IsShowWholeCompany = param.IsShowWholeCompany
             };

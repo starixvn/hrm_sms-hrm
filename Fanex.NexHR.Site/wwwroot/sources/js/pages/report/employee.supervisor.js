@@ -9,7 +9,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
 
 (function () {
     function query() {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
         axios({
             url: resolveClientUrl('report/EmployeeSupervisorDetails'),
@@ -42,7 +42,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
         });
 
         $('#btnExcel').on('click', function () {
-            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
             blockUI();
             axios({

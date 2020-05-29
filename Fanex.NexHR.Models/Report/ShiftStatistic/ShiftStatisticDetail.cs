@@ -7,7 +7,7 @@
         public DateTime WorkDate { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
-        public string Section { get; set; }
+        public string Team { get; set; }
         public string Shift { get; set; }
     }
 }

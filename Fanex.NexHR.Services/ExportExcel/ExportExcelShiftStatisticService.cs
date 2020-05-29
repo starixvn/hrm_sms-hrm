@@ -121,7 +121,7 @@
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.WorkDate;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
                     workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
-                    workSheet.Cells[rowIndex, colIndex++].Value = detail.Section;
+                    workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
                     workSheet.Cells[rowIndex, colIndex].Value = detail.Shift;
 
                     rowIndex++;

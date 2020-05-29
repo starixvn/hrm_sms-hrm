@@ -215,8 +215,8 @@
                 LeaveType = (int)model.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
-            IList<Team> sections = teamService.GetBySupervisor(sessionService.Employee.Id);
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, sections);
+            IList<Team> teams = teamService.GetBySupervisor(sessionService.Employee.Id);
+            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
             ViewBag.HeaderTitle = string.Format("{0} {1}", EnumerationHelper.GetStringValue(model.LeaveType), model.Year);
             return PartialView("_UnpaidLeaveSummaryDetails", leaveSummaryByTeamList);
         }

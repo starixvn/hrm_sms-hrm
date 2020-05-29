@@ -75,7 +75,7 @@ BEGIN
 		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
-		,gr.[Name] AS Section
+		,gr.[Name] AS Team
 		,shift.[Name] AS [Shift]
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN @tblEmployeeId AS tblemp ON emp.EmpId = tblemp.EmpId

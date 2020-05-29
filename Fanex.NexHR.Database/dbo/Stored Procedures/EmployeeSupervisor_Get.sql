@@ -120,7 +120,7 @@ BEGIN
 		,e.Code
 		,e.NickName
 		,e.FullName
-		,g.GroupId AS SectionId
+		,g.GroupId AS TeamId
 		,g.Code
 		,g.[Name]
 	FROM dbo.Employee AS e WITH (NOLOCK)

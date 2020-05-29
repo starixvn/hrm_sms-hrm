@@ -113,14 +113,14 @@
             return html.YearPicker(metaData.PropertyName, fromYear, currentYear, isShowAll);
         }
 
-        public static HelperResult RenderSection(
+        public static HelperResult RenderTeam(
             this WebPageBase page,
-            string sectionName,
+            string teamName,
             Func<object, HelperResult> defaultContent)
         {
-            if (page.IsSectionDefined(sectionName))
+            if (page.IsSectionDefined(teamName))
             {
-                return page.RenderSection(sectionName);
+                return page.RenderSection(teamName);
             }
 
             return defaultContent(_O);

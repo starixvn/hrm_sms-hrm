@@ -11,7 +11,7 @@
         public DateTime FromDate { get; set; } = DateTime.Now.AddMonths(-1);
         public DateTime ToDate { get; set; } = DateTime.Now;
         public string TeamIds { get; set; }
-        public IEnumerable<EntityBase<int>> Sections { get; set; }
+        public IEnumerable<EntityBase<int>> Teams { get; set; }
         public string Employee { get; set; }
         public byte? IsLocal { get; set; }
         public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;

@@ -30,7 +30,7 @@ BEGIN
 		FROM fnc_strSplit(@GroupIds, ',')
 	END
 
-	SELECT DISTINCT gr.GroupId AS SectionId
+	SELECT DISTINCT gr.GroupId AS TeamId
 		,gr.Code
 		,gr.[Name]
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
@@ -48,7 +48,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,su.ActionType
-		,su.GroupId AS SectionId
+		,su.GroupId AS TeamId
 		,gr.Code
 	FROM dbo.GroupSupervisor AS su WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON su.GroupId = gr.GroupId

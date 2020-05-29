@@ -18,7 +18,7 @@
         private readonly IScheduleArrangeRepository scheduleArrangeRepository;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
-
+        
         public ScheduleArrangeService(
             IScheduleArrangeRepository scheduleArrangeRepository,
             IBaseService baseService,

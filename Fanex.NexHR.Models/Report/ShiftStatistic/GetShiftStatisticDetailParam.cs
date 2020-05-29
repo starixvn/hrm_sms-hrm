@@ -8,7 +8,7 @@
         public int? EmployeeId { get; set; }
         public int? ShiftId { get; set; }
         public DateTime WorkDate { get; set; } = DateTime.Today;
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public bool IsShowWholeCompany { get; set; }
         public byte? IsLocal { get; set; }
     }

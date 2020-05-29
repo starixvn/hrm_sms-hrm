@@ -12,7 +12,7 @@
         public DateTime WorkDate { get; set; }
 
         [SpParam(SqlParamName = "GroupIds")]
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
 
         public bool IsShowWholeCompany { get; set; }
         public byte? IsLocal { get; set; }

@@ -361,7 +361,7 @@ BEGIN
 		,NickName
 		,g.[Rank]
 		,g.GroupId
-		,g.[Name] AS Section
+		,g.[Name] AS Team
 	FROM #CurrenBalace AS cb
 		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid
 		LEFT JOIN #CreditKIV AS crk ON cb.EmpId = crk.EmpId

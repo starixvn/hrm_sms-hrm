@@ -1836,8 +1836,8 @@
   <data name="OnDate" xml:space="preserve">
     <value>On Date</value>
   </data>
-  <data name="NewSection" xml:space="preserve">
-    <value>New Section</value>
+  <data name="NewTeam" xml:space="preserve">
+    <value>New Team</value>
   </data>
   <data name="NewDivision" xml:space="preserve">
     <value>New Division</value>

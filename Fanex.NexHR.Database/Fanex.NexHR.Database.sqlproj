@@ -94,7 +94,7 @@
     <Build Include="dbo\Tables\Country.sql" />
     <Build Include="dbo\Tables\DisciplineType.sql" />
     <Build Include="dbo\Tables\Employee.sql" />
-    <Build Include="dbo\Tables\DisciplineSectionRule.sql" />
+    <Build Include="dbo\Tables\DisciplineGroupRule.sql" />
     <Build Include="dbo\Tables\EmployeeAttendance.sql" />
     <Build Include="dbo\Tables\RoleFunction.sql" />
     <Build Include="dbo\Tables\EmployeeCalendar.sql" />

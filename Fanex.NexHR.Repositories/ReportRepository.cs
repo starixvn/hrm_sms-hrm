@@ -56,13 +56,13 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, TeamModel, SupervisorReportModel>(
-                    (su, section) =>
+                    (su, team) =>
                     {
-                        su.Team = section;
+                        su.Team = team;
 
                         return su;
                     },
-                    splitOn: "SectionId").ToList();
+                    splitOn: "TeamId").ToList();
 
                     IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
                         (er, r) =>
@@ -102,9 +102,9 @@
                     IList<TeamSupervisorReportModel> supervisors = multi.Read<TeamSupervisorReportModel>().ToList();
 
                     IList<SupervisorModel> employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
-                    (su, section) =>
+                    (su, team) =>
                     {
-                        su.Team = section;
+                        su.Team = team;
 
                         return su;
                     },

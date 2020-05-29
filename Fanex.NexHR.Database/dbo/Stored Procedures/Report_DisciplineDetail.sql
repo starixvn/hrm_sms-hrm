@@ -137,7 +137,7 @@ BEGIN
 			WHEN dis.IsChangeShift = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @ChangeShiftId
 						AND drule.Value = 1
@@ -158,7 +158,7 @@ BEGIN
 			WHEN dis.IsMissingCheckInOut = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @MissingCheckInOutId
 						AND drule.Value = 1
@@ -179,7 +179,7 @@ BEGIN
 			WHEN dis.IsLateIn = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @LateInId
 						AND drule.Value = 1
@@ -200,7 +200,7 @@ BEGIN
 			WHEN dis.IsEarlyOut = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @EarlyOutId
 						AND drule.Value = 1
@@ -221,7 +221,7 @@ BEGIN
 			WHEN dis.IsAbsent = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @AbsentId
 						AND drule.Value = 1
@@ -242,7 +242,7 @@ BEGIN
 			WHEN dis.IsUnplannedLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @UnplannedLeaveId
 						AND drule.Value = 1
@@ -263,7 +263,7 @@ BEGIN
 			WHEN dis.IsUnpaidLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @UnpaidLeaveId
 						AND drule.Value = 1
@@ -284,7 +284,7 @@ BEGIN
 			WHEN dis.IsWorkingUndertime = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @WorkingUnderTimeId
 						AND drule.Value = 1
@@ -305,7 +305,7 @@ BEGIN
 			WHEN dis.IsUnpaidLeaveAbsent = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @UnpaidLeaveAbsentId
 						AND drule.Value = 1
@@ -326,7 +326,7 @@ BEGIN
 			WHEN dis.IsWeekendLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.GroupId = emp.GroupId
 						AND drule.DisciplineTypeId = @WeekendLeaveId
 						AND drule.Value = 1
@@ -374,7 +374,7 @@ BEGIN
 				AND dis.IsChangeShift = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @ChangeShiftId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -386,7 +386,7 @@ BEGIN
 				AND dis.IsMissingCheckInOut = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @MissingCheckInOutId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -398,7 +398,7 @@ BEGIN
 				AND dis.IsLateIn = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @LateInId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -410,7 +410,7 @@ BEGIN
 				AND dis.IsEarlyOut = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @EarlyOutId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -422,7 +422,7 @@ BEGIN
 				AND dis.IsAbsent = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @AbsentId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -434,7 +434,7 @@ BEGIN
 				AND dis.IsUnplannedLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @UnplannedLeaveId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -446,7 +446,7 @@ BEGIN
 				AND dis.IsUnpaidLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @UnpaidLeaveId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -458,7 +458,7 @@ BEGIN
 				AND dis.IsWorkingUndertime = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @WorkingUnderTimeId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -470,7 +470,7 @@ BEGIN
 				AND dis.IsUnpaidLeaveAbsent = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @UnpaidLeaveAbsentId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId
@@ -482,7 +482,7 @@ BEGIN
 				AND dis.IsWeekendLeave = 1
 				AND EXISTS (
 					SELECT 1
-					FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 					WHERE drule.DisciplineTypeId = @WeekendLeaveId
 						AND drule.Value = 1
 						AND drule.GroupId = emp.GroupId

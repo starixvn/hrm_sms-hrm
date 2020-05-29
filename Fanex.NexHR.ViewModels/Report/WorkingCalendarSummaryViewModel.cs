@@ -13,6 +13,6 @@
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; }
 
-        public IEnumerable<EntityBase<int>> Sections { get; set; }
+        public IEnumerable<EntityBase<int>> Teams { get; set; }
     }
 }

@@ -70,7 +70,7 @@ BEGIN
 		,d.EmpId
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 1 -- change shift
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -80,7 +80,7 @@ BEGIN
 			) AS ChangeShift
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 2 -- missing check in / out
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -90,7 +90,7 @@ BEGIN
 			) AS MissingCheckInOut
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 3 -- late in
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -100,7 +100,7 @@ BEGIN
 			) AS LateIn
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 4 -- early out
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -110,7 +110,7 @@ BEGIN
 			) AS EarlyOut
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 5 -- absent
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -120,7 +120,7 @@ BEGIN
 			) AS [Absent]
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 9 -- unplanned leave
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -130,7 +130,7 @@ BEGIN
 			) AS UnplannedLeave
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 10 -- weekend leave
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -140,7 +140,7 @@ BEGIN
 			) AS WeekendLeave
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 6 -- unpaid leave
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -150,7 +150,7 @@ BEGIN
 			) AS UnpaidLeave
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 7 -- working under time
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal
@@ -160,7 +160,7 @@ BEGIN
 			) AS WorkingUnderTime
 		,(CASE (
 				SELECT drule.[Value]
-				FROM dbo.DisciplineSectionRule AS drule WITH (NOLOCK)
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
 				WHERE drule.DisciplineTypeId = 8 -- unpaid leave absent
 					AND drule.GroupId = emp.GroupId
 					AND drule.IsLocal = empSum.IsLocal

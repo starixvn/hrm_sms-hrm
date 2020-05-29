@@ -53,11 +53,11 @@ BEGIN
 
 	BEGIN TRY
 		DELETE
-		FROM dbo.DisciplineSectionRule WITH (ROWLOCK)
+		FROM dbo.DisciplineGroupRule WITH (ROWLOCK)
 		WHERE GroupId = @GroupId
 
 		-- local
-		INSERT INTO dbo.DisciplineSectionRule (
+		INSERT INTO dbo.DisciplineGroupRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal
@@ -70,7 +70,7 @@ BEGIN
 		FROM @tblDisciplineRule
 
 		-- expat
-		INSERT INTO dbo.DisciplineSectionRule (
+		INSERT INTO dbo.DisciplineGroupRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal

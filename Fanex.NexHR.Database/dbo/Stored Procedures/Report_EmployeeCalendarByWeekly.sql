@@ -87,7 +87,7 @@ BEGIN
 		,emp.Code
 		,emp.NickName
 		,emp.FullName
-		,gr.[Name] AS Section
+		,gr.[Name] AS Team
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId

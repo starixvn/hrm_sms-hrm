@@ -203,52 +203,52 @@ BEGIN
 		LEFT JOIN dbo.OtherDiscipline AS otherdis WITH (NOLOCK) ON d.EmpId = otherdis.EmpId
 		AND d.WorkDate = otherdis.WorkDate
 	-- change shift
-		LEFT JOIN dbo.DisciplineSectionRule AS cs WITH (NOLOCK) ON cs.DisciplineTypeId = 1
+		LEFT JOIN dbo.DisciplineGroupRule AS cs WITH (NOLOCK) ON cs.DisciplineTypeId = 1
 		AND cs.GroupId = emp.GroupId
 		AND cs.IsLocal = es.IsLocal
 		AND cs.Value = 1
 	-- missing check in/out
-		LEFT JOIN dbo.DisciplineSectionRule AS mio WITH (NOLOCK) ON mio.DisciplineTypeId = 2
+		LEFT JOIN dbo.DisciplineGroupRule AS mio WITH (NOLOCK) ON mio.DisciplineTypeId = 2
 		AND mio.GroupId = emp.GroupId
 		AND mio.IsLocal = es.IsLocal
 		AND mio.Value = 1
 	-- late in
-		LEFT JOIN dbo.DisciplineSectionRule AS li WITH (NOLOCK) ON li.DisciplineTypeId = 3
+		LEFT JOIN dbo.DisciplineGroupRule AS li WITH (NOLOCK) ON li.DisciplineTypeId = 3
 		AND li.GroupId = emp.GroupId
 		AND li.IsLocal = es.IsLocal
 		AND li.Value = 1
 	-- early out
-		LEFT JOIN dbo.DisciplineSectionRule AS eo WITH (NOLOCK) ON eo.DisciplineTypeId = 4
+		LEFT JOIN dbo.DisciplineGroupRule AS eo WITH (NOLOCK) ON eo.DisciplineTypeId = 4
 		AND eo.GroupId = emp.GroupId
 		AND eo.IsLocal = es.IsLocal
 		AND eo.Value = 1
 	-- absent
-		LEFT JOIN dbo.DisciplineSectionRule AS ab WITH (NOLOCK) ON ab.DisciplineTypeId = 5
+		LEFT JOIN dbo.DisciplineGroupRule AS ab WITH (NOLOCK) ON ab.DisciplineTypeId = 5
 		AND ab.GroupId = emp.GroupId
 		AND ab.IsLocal = es.IsLocal
 		AND ab.Value = 1
 	-- unpaid leave
-		LEFT JOIN dbo.DisciplineSectionRule AS upl WITH (NOLOCK) ON upl.DisciplineTypeId = 6
+		LEFT JOIN dbo.DisciplineGroupRule AS upl WITH (NOLOCK) ON upl.DisciplineTypeId = 6
 		AND upl.GroupId = emp.GroupId
 		AND upl.IsLocal = es.IsLocal
 		AND upl.Value = 1
 	-- working under time
-		LEFT JOIN dbo.DisciplineSectionRule AS wut WITH (NOLOCK) ON wut.DisciplineTypeId = 7
+		LEFT JOIN dbo.DisciplineGroupRule AS wut WITH (NOLOCK) ON wut.DisciplineTypeId = 7
 		AND wut.GroupId = emp.GroupId
 		AND wut.IsLocal = es.IsLocal
 		AND wut.Value = 1
 	-- unpaid leave absent
-		LEFT JOIN dbo.DisciplineSectionRule AS upla WITH (NOLOCK) ON upla.DisciplineTypeId = 8
+		LEFT JOIN dbo.DisciplineGroupRule AS upla WITH (NOLOCK) ON upla.DisciplineTypeId = 8
 		AND upla.GroupId = emp.GroupId
 		AND upla.IsLocal = es.IsLocal
 		AND upla.Value = 1
 	-- unplanned leave
-		LEFT JOIN dbo.DisciplineSectionRule AS unplanned WITH (NOLOCK) ON unplanned.DisciplineTypeId = 9
+		LEFT JOIN dbo.DisciplineGroupRule AS unplanned WITH (NOLOCK) ON unplanned.DisciplineTypeId = 9
 		AND unplanned.GroupId = emp.GroupId
 		AND unplanned.IsLocal = es.IsLocal
 		AND unplanned.Value = 1
 	-- weekend leave
-		LEFT JOIN dbo.DisciplineSectionRule AS weekendleave WITH (NOLOCK) ON weekendleave.DisciplineTypeId = 10
+		LEFT JOIN dbo.DisciplineGroupRule AS weekendleave WITH (NOLOCK) ON weekendleave.DisciplineTypeId = 10
 		AND weekendleave.GroupId = emp.GroupId
 		AND weekendleave.IsLocal = es.IsLocal
 		AND weekendleave.Value = 1

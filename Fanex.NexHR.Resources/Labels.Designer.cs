@@ -3184,11 +3184,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Section.
+        ///   Looks up a localized string similar to New Team.
         /// </summary>
-        public static string NewSection {
+        public static string NewTeam {
             get {
-                return ResourceManager.GetString("NewSection", resourceCulture);
+                return ResourceManager.GetString("NewTeam", resourceCulture);
             }
         }
         

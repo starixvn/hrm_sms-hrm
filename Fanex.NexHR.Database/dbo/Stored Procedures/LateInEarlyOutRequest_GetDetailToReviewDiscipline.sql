@@ -40,7 +40,7 @@ BEGIN
 		AND CAST(ca.WorkDate AS DATE) = CAST(lio.OnDate AS DATE)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = wkr.EmpId
 		INNER JOIN dbo.EmployeeSummary AS emps WITH (NOLOCK) ON emp.EmpId = emps.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
 		AND emps.IsLocal = drule.IsLocal
 		AND (
 			wkr.RequestType = @LateInRequestTypeId
