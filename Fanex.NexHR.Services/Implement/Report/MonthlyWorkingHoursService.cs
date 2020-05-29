@@ -45,7 +45,7 @@
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
-                GroupIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 IsLocal = param.IsLocal,
                 EmployeeStatusId = param.EmployeeStatusId
@@ -61,7 +61,7 @@
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
-                GroupIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 IsLocal = param.IsLocal,
                 EmployeeStatusId = param.EmployeeStatusId
@@ -185,7 +185,7 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
-                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section.Name;
+                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
@@ -337,41 +337,41 @@
             dynamic templateIndex)
         {
             rowIndex = templateIndex.bodyRow;
-            var sections = monthlyWorkings.GroupBy(x => x.Section.Name)
-                .Select(x => new { Section = x.Key, Members = x.ToList() })
-                .OrderBy(x => x.Section);
-            foreach (var section in sections)
+            var teams = monthlyWorkings.GroupBy(x => x.Team.Name)
+                .Select(x => new { Team = x.Key, Members = x.ToList() })
+                .OrderBy(x => x.Team);
+            foreach (var team in teams)
             {
                 var colIndex = 1;
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.weddingLeaveColumn]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.weddingLeaveColumn]);
 
-                worksheet.Cells[rowIndex, colIndex++].Value = section.Section;
-                worksheet.Cells[rowIndex, colIndex++].Value = section.Members.Sum(x => x.ActualWorkingDays);
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays);
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.MaternityLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.MaternityLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.AnnualLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.AnnualLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BusinessTrip));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BusinessTrip));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    section.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
 
                 foreach (DateTime month in months)
                 {
                     template.Cells[templateIndex.bodyRow, templateIndex.unpaidLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                     worksheet.Cells[rowIndex, colIndex++].Value =
-                        section.Members.Sum(x => SummaryLeaveDay(
+                        team.Members.Sum(x => SummaryLeaveDay(
                             x.DailyWorkings.Where(daily => daily.WorkDate.Month == month.Month && daily.WorkDate.Year == month.Year),
                             Core.Enums.LeaveTypes.UnpaidLeave))
-                        + section.Members.Sum(x => SummaryLeaveDay(
+                        + team.Members.Sum(x => SummaryLeaveDay(
                             x.DailyWorkings.Where(daily => daily.WorkDate.Month == month.Month && daily.WorkDate.Year == month.Year),
                             Core.Enums.LeaveTypes.UnpaidLeaveInsurance))
-                        + section.Members.Sum(x => SummaryLeaveDay(
+                        + team.Members.Sum(x => SummaryLeaveDay(
                             x.DailyWorkings.Where(daily => daily.WorkDate.Month == month.Month && daily.WorkDate.Year == month.Year),
                             Core.Enums.LeaveTypes.PaternityLeave));
                 }
@@ -413,7 +413,7 @@
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                worksheet.Cells[rowIndex, colIndex++].Value = request.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value =

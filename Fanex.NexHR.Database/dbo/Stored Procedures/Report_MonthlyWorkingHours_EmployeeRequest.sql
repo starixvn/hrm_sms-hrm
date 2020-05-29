@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours_EmployeeRequest] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@Employee NVARCHAR(200) = NULL
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@EmployeeStatusId TINYINT = NULL
 AS
@@ -74,11 +74,11 @@ BEGIN
 		,LeaveCountDetails NVARCHAR(MAX)
 		)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN
@@ -483,7 +483,7 @@ BEGIN
 		,e.EmpId AS EmployeeId
 		,e.NickName
 		,e.FullName
-		,g.[Name] AS Section
+		,g.[Name] AS Team
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS rq ON r.RequestId = rq.RequestId
 		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID

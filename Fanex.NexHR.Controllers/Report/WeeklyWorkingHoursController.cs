@@ -47,7 +47,7 @@
                 ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 IsLocal = model.IsLocal,
                 EmployeeStatusId = model.EmployeeStatusId
@@ -67,7 +67,7 @@
                 ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 IsLocal = model.IsLocal,
                 EmployeeStatusId = model.EmployeeStatusId

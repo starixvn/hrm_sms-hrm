@@ -16,7 +16,7 @@
 
         public string Employee { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public short AttendanceType { get; set; }
 

@@ -340,11 +340,11 @@ import {
         $.ajax({
             url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: data,
                     isSelectedAll: true,
                 });
-                $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
                 query();
             },
@@ -358,7 +358,7 @@ import {
         });
 
         $('form.form-filter #submit').on('click', function (event) {
-            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
             query();
         });
 

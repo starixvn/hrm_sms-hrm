@@ -11,21 +11,21 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            const sectionIds = $('#SectionIds').val();
+            const teamIds = $('#TeamIds').val();
 
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: sectionIds
+                selectedItems: teamIds
             });
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         $('form.filter').submit();
     });
 
     $('#btnExcel').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

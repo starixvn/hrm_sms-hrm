@@ -14,7 +14,7 @@
 
         public int? EmpId { get; set; }
 
-        public string Groupids { get; set; }
+        public string TeamIds { get; set; }
 
         public int? ExcludeUserDelete { get; set; }
 

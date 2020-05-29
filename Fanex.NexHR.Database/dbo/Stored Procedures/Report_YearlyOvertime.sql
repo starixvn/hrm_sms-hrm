@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @ActorId INT
 	,@MonthXml VARCHAR(MAX)
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
 AS
@@ -46,10 +46,10 @@ BEGIN
 		,SpecialHours DECIMAL(18, 2)
 		)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	ELSE
 	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
@@ -134,8 +134,8 @@ BEGIN
 		,Code
 		,NickName
 		,FullName
-		,GroupId
-		,Section
+		,TeamId
+		,Team
 		,ISNULL([1], 0) AS Jan
 		,ISNULL([2], 0) AS Feb
 		,ISNULL([3], 0) AS Mar
@@ -153,8 +153,8 @@ BEGIN
 			,emp.Code
 			,emp.NickName
 			,emp.FullName
-			,gr.GroupId
-			,gr.[Name] AS Section
+			,gr.GroupId AS TeamId
+			,gr.[Name] AS Team
 			,cl.[Month] AS [Month]
 			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours + otsum.SpecialHours) AS TotalHours
 		FROM dbo.Employee AS emp WITH (NOLOCK)

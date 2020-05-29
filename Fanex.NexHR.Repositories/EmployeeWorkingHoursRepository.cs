@@ -16,12 +16,12 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     IEnumerable<MonthlyWorking> monthlyWorkings = multi.Read<MonthlyWorking, EntityBase<int>, MonthlyWorking>(
-                        (monthlyWorking, section) =>
+                        (monthlyWorking, team) =>
                         {
-                            monthlyWorking.Section = section;
+                            monthlyWorking.Team = team;
                             return monthlyWorking;
                         },
-                        splitOn: "GroupId");
+                        splitOn: "Id");
 
                     IEnumerable<DailyWorking> dailyWorkings = multi.Read<DailyWorking, EntityBase<int>, EntityBase<int>, DailyWorking>(
                         (dailyWorking, leave, leave2) =>

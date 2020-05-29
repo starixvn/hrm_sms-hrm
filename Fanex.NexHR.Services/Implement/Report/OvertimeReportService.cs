@@ -54,7 +54,7 @@
             var criteria = new GetYearlyOvertimeReportCriteria
             {
                 ActorId = param.ActorId,
-                GroupIds = param.SectionIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId,
                 MonthXml = monthxml.ToString()
@@ -145,7 +145,7 @@
                         templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jan;

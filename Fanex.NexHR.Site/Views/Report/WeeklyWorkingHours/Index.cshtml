@@ -17,7 +17,7 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
-    @Html.HiddenFor(model => model.SectionIds)
+    @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--l">
             <div class="label-form">
@@ -42,7 +42,7 @@
             <div class="label-form">
                 <label class="control-label">@Labels.DepartmentTeam</label>
             </div>
-            <div class="select-form" id="Section"></div>
+            <div class="select-form" id="Team"></div>
         </div>
     </div>
     <div class="form-horizontal clearfix">

@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType] @fromtime DATE
 	,@totime DATE
 	,@EmpId INT = NULL
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@excludeUserDelete INT = 1
 	,@isLocal BIT = NULL
 	,@SupervisorId INT = NULL
@@ -46,11 +46,11 @@ BEGIN
 		SET @fromtime = DATEADD(d, - 1, @fromtime)
 	END
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO @tblGroupId (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN

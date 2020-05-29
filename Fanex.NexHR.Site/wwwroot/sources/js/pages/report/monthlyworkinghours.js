@@ -28,7 +28,7 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true
             });
@@ -37,12 +37,12 @@ $(document).ready(function () {
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $('#btnExcel').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

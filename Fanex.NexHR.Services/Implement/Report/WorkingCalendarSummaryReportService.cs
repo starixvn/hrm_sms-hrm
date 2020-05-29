@@ -91,7 +91,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
 
                         for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
                         {

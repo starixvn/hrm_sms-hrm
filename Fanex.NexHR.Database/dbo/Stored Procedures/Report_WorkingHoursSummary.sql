@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_WorkingHoursSummary] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@GroupIds VARCHAR(MAX) = NULL
+	,@TeamIds VARCHAR(MAX) = NULL
 	,@isLocal BIT = NULL
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -40,7 +40,7 @@ BEGIN
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
-	IF ISNULL(@GroupIds, '') = ''
+	IF ISNULL(@TeamIds, '') = ''
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT GroupId
@@ -51,7 +51,7 @@ BEGIN
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
 	INSERT INTO #tblEmployeeIds (EmployeeId)
@@ -104,7 +104,7 @@ BEGIN
 		,emp.Code
 		,emp.FullName
 		,emp.NickName
-		,gr.[Name] AS Section
+		,gr.[Name] AS Team
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,SUM(ISNULL(empatt.TotalWorkHours, 0)) AS TotalWorkingHours

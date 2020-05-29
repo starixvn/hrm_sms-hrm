@@ -89,7 +89,7 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
-                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
@@ -147,7 +147,7 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
-                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                         WriteDailyCells(worksheet.Cells[rowIndex, colIndex], monthlyWorking.DailyWorkings.First());

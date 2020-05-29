@@ -6,8 +6,8 @@
 
     public class MonthlyFilterViewModel
     {
-        public string SectionIds { get; set; }
-        public IEnumerable<EntityBase<int>> Sections { get; set; }
+        public string TeamIds { get; set; }
+        public IEnumerable<EntityBase<int>> Teams { get; set; }
         public string Employee { get; set; }
         public byte? IsLocal { get; set; }
         public DateTime FromDate { get; set; }

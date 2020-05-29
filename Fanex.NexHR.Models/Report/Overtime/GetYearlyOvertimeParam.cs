@@ -5,7 +5,7 @@
         public int ActorId { get; set; }
         public int Year { get; set; }
         public string Employee { get; set; }
-        public string SectionIds { get; set; }
+        public string TeamIds { get; set; }
         public byte Calendar { get; set; }
         public byte? EmployeeStatusId { get; set; }
     }

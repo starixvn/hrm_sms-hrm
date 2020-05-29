@@ -33,7 +33,7 @@
             }
         }
 
-        public EntityBase<int> Section { get; set; }
+        public EntityBase<int> Team { get; set; }
         public IEnumerable<DailyWorking> DailyWorkings { get; set; }
     }
 }

@@ -37,7 +37,7 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 IsLocal = param.IsLocal,
-                GroupIds = param.TeamIds,
+                TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId
             };

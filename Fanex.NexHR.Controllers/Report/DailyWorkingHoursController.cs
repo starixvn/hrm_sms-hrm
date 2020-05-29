@@ -44,7 +44,7 @@
                 ActorId = sessionService.Employee.Id,
                 FromDate = model.FromDate,
                 ToDate = model.FromDate,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 IsLocal = model.IsLocal,
                 EmployeeStatusId = model.EmployeeStatusId

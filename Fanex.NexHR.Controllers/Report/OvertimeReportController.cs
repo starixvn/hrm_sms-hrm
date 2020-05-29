@@ -41,7 +41,7 @@
                 ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 EmployeeStatusId = model.EmployeeStatusId
             };
@@ -104,7 +104,7 @@
                 ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
-                SectionIds = model.SectionIds,
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 EmployeeStatusId = model.EmployeeStatusId
             };

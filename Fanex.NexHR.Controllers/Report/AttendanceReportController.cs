@@ -31,7 +31,7 @@
             {
                 FromDate = DateTime.Now,
                 ToDate = DateTime.Now,
-                GroupIds = string.Empty,
+                TeamIds = string.Empty,
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
                 SupervisorId = sessionService.Employee.Id
@@ -50,7 +50,7 @@
                 Totime = model.ToDate,
                 AttendanceType = model.AttendanceType,
                 EmpId = model.EmployeeId,
-                Groupids = model.GroupIds,
+                TeamIds = model.TeamIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal,
                 IsRealDate = model.IsRealDate
@@ -89,7 +89,7 @@
                 Totime = model.ToDate,
                 AttendanceType = model.AttendanceType,
                 EmpId = model.EmployeeId,
-                Groupids = model.GroupIds,
+                TeamIds = model.TeamIds,
                 ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
                 IsLocal = model.IsLocal,
                 IsRealDate = model.IsRealDate

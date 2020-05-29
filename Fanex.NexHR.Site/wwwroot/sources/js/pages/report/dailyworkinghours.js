@@ -10,14 +10,14 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true
             });
         }).catch(axiosError);
 
     $('#btnExcel').on('click', function () {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

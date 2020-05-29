@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
 	,@IsLocal BIT = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -28,10 +28,10 @@ BEGIN
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	ELSE
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
@@ -155,7 +155,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,empsum.WorkingDays
-		,gr.GroupId
+		,gr.GroupId AS Id
 		,gr.Code
 		,gr.[Name]
 	FROM dbo.Employee AS emp WITH (NOLOCK)

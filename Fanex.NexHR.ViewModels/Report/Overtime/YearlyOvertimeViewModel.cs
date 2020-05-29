@@ -10,8 +10,8 @@
     {
         public int Year { get; set; } = DateTime.Now.Year;
         public string Employee { get; set; }
-        public IEnumerable<EntityBase<int>> Sections { get; set; }
-        public string SectionIds { get; set; }
+        public IEnumerable<EntityBase<int>> Teams { get; set; }
+        public string TeamIds { get; set; }
         public byte Calendar { get; set; } = (byte)CalendarType.Normal;
         public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
         public IEnumerable<YearlyOvertime> Overtimes { get; set; } = new List<YearlyOvertime>();
