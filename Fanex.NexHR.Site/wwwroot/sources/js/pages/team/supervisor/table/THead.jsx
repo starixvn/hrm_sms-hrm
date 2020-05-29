@@ -19,7 +19,6 @@ export default class THead extends PureComponent {
 
     handleChange = event => {
         const value = event.target.value;
-
         this.setState({ value });
         this.props.onSearchEmployees(value);
     }

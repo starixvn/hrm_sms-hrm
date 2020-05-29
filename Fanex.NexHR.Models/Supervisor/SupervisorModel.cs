@@ -14,7 +14,7 @@ namespace Fanex.NexHR.Models.Supervisor
 
         public string FullName { get; set; }
 
-        //public string Team { get; set; }
+        public string TeamCode { get; set; }
 
         public byte ActionType { get; set; }
 

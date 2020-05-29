@@ -36,7 +36,7 @@ function editEmployeeSupervisor(employeeId, roleId, supervisors, toastObj) {
     }).catch(axiosError);
 }
 
-function editTeamSupervisor(taemId, roleId, supervisors, toastObj) {
+function editTeamSupervisor(teamId, roleId, supervisors, toastObj) {
     axios({
         url: resolveClientUrl('Team/EditTeamSupervisor'),
         method: 'POST',

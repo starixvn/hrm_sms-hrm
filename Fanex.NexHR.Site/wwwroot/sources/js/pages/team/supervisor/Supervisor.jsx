@@ -44,7 +44,7 @@ export default class Supervisor extends Component {
                         id: item.Id,
                         nickname: item.NickName,
                         fullName: item.FullName,
-                        team: item.Team !== null ? item.Team.Code : '',
+                        teamCode: item.TeamCode !== null ? item.Team.Code : '',
                         value: item.DisplayName
                     };
                 });
@@ -96,7 +96,7 @@ export default class Supervisor extends Component {
                 ownerId: employee.id,
                 nickName: employee.nickname,
                 fullName: employee.fullName,
-                team: employee.team,
+                teamCode: employee.teamCode,
                 leaves: true,
                 changeShifts: true,
                 lateInEarlyOuts: true,
@@ -123,6 +123,7 @@ export default class Supervisor extends Component {
     }
 
     handleSave = () => {
+        debugger
         const supervisors = [];
         const requestTypes = [
             { key: 'leaves', value: RequestType.Leave },
