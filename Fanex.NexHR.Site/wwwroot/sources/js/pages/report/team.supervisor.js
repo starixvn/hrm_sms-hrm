@@ -7,15 +7,15 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
 
 (function () {
     function query() {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
         axios({
-            url: resolveClientUrl('report/SectionSupervisorDetails'),
+            url: resolveClientUrl('report/TeamSupervisorDetails'),
             method: 'POST',
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
-            $('#SectionSupervisorDetails').html(response.data);
+            $('#TeamSupervisorDetails').html(response.data);
             floatThead('table#data');
         }).catch(axiosError).then(() => unblockUI());
     }
@@ -23,7 +23,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
     $(document).ready(function () {
         axios(resolveClientUrl('Department/GetHierarchy'))
             .then(response => {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: response.data,
                     isSelectedAll: true
                 });
@@ -36,11 +36,11 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
         });
 
         $('#btnExcel').on('click', function () {
-            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
             blockUI();
             axios({
-                url: resolveClientUrl('ExportSupervisor/SectionSupervisor'),
+                url: resolveClientUrl('ExportSupervisor/TeamSupervisor'),
                 method: 'GET',
                 params: parse($('form.filter').serialize()),
                 responseType: 'blob'

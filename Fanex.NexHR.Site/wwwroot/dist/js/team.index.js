@@ -57832,7 +57832,7 @@ var _common = __webpack_require__(/*! ../../shared/common.functions */ "./source
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function deleteSection(id) {
-    (0, _common.confirm)('Are you sure you want to delete this section?', function () {
+    (0, _common.confirm)('Are you sure you want to delete this team?', function () {
         (0, _axios2.default)({
             url: (0, _common.resolveClientUrl)('team/delete' + '/' + id),
             method: 'POST',

@@ -37501,15 +37501,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (function () {
     function query() {
-        $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         (0, _common.blockUI)();
         (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('report/SectionSupervisorDetails'),
+            url: (0, _common.resolveClientUrl)('report/TeamSupervisorDetails'),
             method: 'POST',
             params: (0, _qs.parse)($('form.filter').serialize()),
             responseType: 'text'
         }).then(function (response) {
-            $('#SectionSupervisorDetails').html(response.data);
+            $('#TeamSupervisorDetails').html(response.data);
             (0, _common.floatThead)('table#data');
         }).catch(_common.axiosError).then(function () {
             return (0, _common.unblockUI)();
@@ -37518,7 +37518,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     $(document).ready(function () {
         (0, _axios2.default)((0, _common.resolveClientUrl)('Department/GetHierarchy')).then(function (response) {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true
             });
@@ -37531,11 +37531,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         });
 
         $('#btnExcel').on('click', function () {
-            $('#SectionIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
             (0, _common.blockUI)();
             (0, _axios2.default)({
-                url: (0, _common.resolveClientUrl)('ExportSupervisor/SectionSupervisor'),
+                url: (0, _common.resolveClientUrl)('ExportSupervisor/TeamSupervisor'),
                 method: 'GET',
                 params: (0, _qs.parse)($('form.filter').serialize()),
                 responseType: 'blob'

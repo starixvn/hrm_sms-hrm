@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class DeleteGroupCriteria : CriteriaBase
+    public class DeleteTeamCriteria : CriteriaBase
     {
         public int GroupId { get; set; }
 

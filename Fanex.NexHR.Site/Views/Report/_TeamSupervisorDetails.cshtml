@@ -1,4 +1,4 @@
-﻿@model List<SectionSupervisorReportModel>
+﻿@model List<TeamSupervisorReportModel>
 <div>
     <table id="data" class="table table-custom">
         <thead>
@@ -16,7 +16,7 @@
         {
             int index = 0;
             <tbody>
-                @foreach (SectionSupervisorReportModel item in Model)
+                @foreach (TeamSupervisorReportModel item in Model)
                 {
                     index++;
                     <tr>

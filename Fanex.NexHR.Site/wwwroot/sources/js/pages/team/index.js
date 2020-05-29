@@ -7,7 +7,7 @@ import axios from 'axios';
 import { axiosError, floatThead, confirm, resolveClientUrl, alert, autoIndex } from '../../shared/common.functions';
 
 function deleteSection(id) {
-    confirm('Are you sure you want to delete this section?', function () {
+    confirm('Are you sure you want to delete this team?', function () {
         axios({
             url: resolveClientUrl('team/delete' + '/' + id),
             method: 'POST',

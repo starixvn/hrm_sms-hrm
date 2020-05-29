@@ -36262,7 +36262,7 @@ var disciplineRule = function ($) {
 
     function registerEventSubmit() {
         $btnSubmit.on('click', function () {
-            var sectionId = $('#SectionId').val(),
+            var teamId = $('#TeamId').val(),
                 model = [],
                 els = $table.find('tbody tr'),
                 totalItems = els.length;
@@ -36280,7 +36280,7 @@ var disciplineRule = function ($) {
                 (0, _axios2.default)({
                     url: _global.root + 'team/EditDisciplineRule',
                     method: 'POST',
-                    data: (0, _qs.stringify)({ sectionId: sectionId, disciplineRules: model }),
+                    data: (0, _qs.stringify)({ teamId: teamId, disciplineRules: model }),
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/x-www-form-urlencoded'

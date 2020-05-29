@@ -1854,8 +1854,8 @@
   <data name="EmployeePermissionSummary" xml:space="preserve">
     <value>Employee Permission Summary</value>
   </data>
-  <data name="SectionPermissionSummary" xml:space="preserve">
-    <value>Section Permission Summary</value>
+  <data name="TeamPermissionSummary" xml:space="preserve">
+    <value>Team Permission Summary</value>
   </data>
   <data name="CreateMenu" xml:space="preserve">
     <value>New Menu</value>

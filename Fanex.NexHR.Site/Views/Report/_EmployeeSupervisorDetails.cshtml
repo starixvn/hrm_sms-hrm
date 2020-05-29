@@ -26,7 +26,7 @@
                         <td>@index</td>
                         <td>@item.NickName</td>
                         <td class="align-left">@item.FullName</td>
-                        <td>@item.Section.Code</td>
+                        <td>@item.Team.Code</td>
                         <td class="align-left">@item.Roles2String</td>
                         <td class="align-left">
                             @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))

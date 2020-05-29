@@ -1,5 +1,5 @@
 ﻿@using Fanex.NexHR.Resources
-@model EmployeeAndSectionSupervisorViewModel
+@model EmployeeAndTeamSupervisorViewModel
 
 @{
     ViewBag.Title = Labels.EmployeePermissionSummary;
@@ -12,14 +12,14 @@
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
-    <a class="step" href="@Url.Action("index", "team")">@Labels.Section</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.Team</a>
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 
 <form class="filter">
     <div class="form-horizontal clearfix">
-        @Html.HiddenFor(model => model.SectionIds)
+        @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.IsLocal)
         @Html.HiddenFor(model => model.EmployeeId)
         <div class="form-group form-group--l">

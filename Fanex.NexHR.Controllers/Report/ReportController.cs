@@ -242,14 +242,14 @@
             return PartialView("_EmployeeSupervisorDetails", supervisors);
         }
 
-        public ActionResult SectionSupervisor()
+        public ActionResult TeamSupervisor()
         {
             var model = new EmployeeAndTeamSupervisorViewModel();
 
-            return View("SectionSupervisor", model);
+            return View("TeamSupervisor", model);
         }
 
-        public ActionResult SectionSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
+        public ActionResult TeamSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
         {
             var criteria = new GetTeamSupervisorCriteria
             {
@@ -257,7 +257,7 @@
             };
             IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
 
-            return PartialView("_SectionSupervisorDetails", supervisors);
+            return PartialView("_TeamSupervisorDetails", supervisors);
         }
     }
 }

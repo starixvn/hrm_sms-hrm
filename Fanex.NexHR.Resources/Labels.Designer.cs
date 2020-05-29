@@ -4165,15 +4165,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section Permission Summary.
-        /// </summary>
-        public static string SectionPermissionSummary {
-            get {
-                return ResourceManager.GetString("SectionPermissionSummary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Section Supervisor.
         /// </summary>
         public static string SectionSupervisor {
@@ -4584,6 +4575,15 @@ namespace Fanex.NexHR.Resources {
         public static string TeamManagement {
             get {
                 return ResourceManager.GetString("TeamManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Permission Summary.
+        /// </summary>
+        public static string TeamPermissionSummary {
+            get {
+                return ResourceManager.GetString("TeamPermissionSummary", resourceCulture);
             }
         }
         

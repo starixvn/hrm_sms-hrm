@@ -81,7 +81,7 @@
 
         public byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/SectionSupervisor.xlsx");
+            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TeamSupervisor.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())

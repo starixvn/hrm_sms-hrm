@@ -108,11 +108,11 @@
 
                         return su;
                     },
-                    splitOn: "SectionId").ToList();
+                    splitOn: "TeamId").ToList();
 
                     foreach (TeamSupervisorReportModel supervisor in supervisors)
                     {
-                        supervisor.Supervisors = employees.Where(x => x.Team.TeamId == supervisor.SectionId).ToList();
+                        supervisor.Supervisors = employees.Where(x => x.Team.TeamId == supervisor.TeamId).ToList();
                     }
 
                     return supervisors;

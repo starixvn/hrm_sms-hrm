@@ -10,7 +10,7 @@ let disciplineRule = (function ($) {
 
     function registerEventSubmit() {
         $btnSubmit.on('click', function () {
-            let sectionId = $('#SectionId').val(),
+            let teamId = $('#TeamId').val(),
                 model = [],
                 els = $table.find('tbody tr'),
                 totalItems = els.length;
@@ -28,7 +28,7 @@ let disciplineRule = (function ($) {
                 axios({
                     url: _global.root + 'team/EditDisciplineRule',
                     method: 'POST',
-                    data: stringify({ sectionId: sectionId, disciplineRules: model }),
+                    data: stringify({ teamId: teamId, disciplineRules: model }),
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Content-Type': 'application/x-www-form-urlencoded'

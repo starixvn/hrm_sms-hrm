@@ -989,8 +989,8 @@
     <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
     <Content Include="Views\Report\_EmployeeSupervisorDetails.cshtml" />
     <Content Include="Views\Team\TeamSupervisor.cshtml" />
-    <Content Include="Views\Report\SectionSupervisor.cshtml" />
-    <Content Include="Views\Report\_SectionSupervisorDetails.cshtml" />
+    <Content Include="Views\Report\TeamSupervisor.cshtml" />
+    <Content Include="Views\Report\_TeamSupervisorDetails.cshtml" />
     <Content Include="Views\Message\DetailByEmployee.cshtml" />
     <Content Include="Views\ChangeShift\Details.cshtml" />
   </ItemGroup>

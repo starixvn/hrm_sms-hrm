@@ -306,7 +306,7 @@
     <Compile Include="Shift\GetShiftByIdCriteria.cs" />
     <Compile Include="Shift\CreateShiftCriteria.cs" />
     <Compile Include="Shift\EditShiftCriteria.cs" />
-    <Compile Include="Group\DeleteGroupCriteria.cs" />
+    <Compile Include="Group\DeleteTeamCriteria.cs" />
     <Compile Include="Group\GetGroupByIdCriteria.cs" />
     <Compile Include="Group\CreateTeamCriteria.cs" />
     <Compile Include="Group\EditTeamCriteria.cs" />

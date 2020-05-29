@@ -20,7 +20,7 @@
 
         public override string GetSettingKey()
         {
-            return "Section_Update";
+            return "Group_Update";
         }
 
         public override bool IsValid()

@@ -49,7 +49,7 @@
 
         public CommandResult Delete(int actorId, int id)
         {
-            var criteria = new DeleteGroupCriteria
+            var criteria = new DeleteTeamCriteria
             {
                 GroupId = id,
                 ModifiedBy = actorId
