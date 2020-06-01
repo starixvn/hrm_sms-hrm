@@ -16,7 +16,7 @@
 
         CommandResult CreateExternalGroup(string groupName);
 
-        CommandResult EditExternalGroup(int groupId, string groupName);
+        CommandResult EditExternalGroup(int teamId, string groupName);
 
         CommandResult DeleteExternalGroup(int groupId);
     }

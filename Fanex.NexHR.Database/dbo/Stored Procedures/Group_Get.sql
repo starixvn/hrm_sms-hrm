@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Group_Get] @groupId INT = NULL
+CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
 	,@isDeleted BIT = NULL
 AS
 /*
@@ -45,8 +45,8 @@ BEGIN
 		AND emp.[Enabled] = 1
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
 	WHERE (
-			@groupId IS NULL
-			OR g.GroupId = @groupId
+			@TeamId IS NULL
+			OR g.GroupId = @TeamId
 			)
 		AND (
 			@isDeleted IS NULL
@@ -70,8 +70,8 @@ BEGIN
 		INNER JOIN dbo.Department AS de WITH (NOLOCK) ON g.DepartmentId = de.DepartmentId
 		LEFT JOIN @tblGroup AS tbl ON g.GroupId = tbl.GroupId
 	WHERE (
-			@groupId IS NULL
-			OR g.GroupId = @groupId
+			@TeamId IS NULL
+			OR g.GroupId = @TeamId
 			)
 		AND (
 			@isDeleted IS NULL
@@ -87,8 +87,8 @@ BEGIN
 	FROM dbo.GroupManager AS mng WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON mng.GroupId = g.GroupId
 		AND (
-			@groupId IS NULL
-			OR g.GroupId = @groupId
+			@TeamId IS NULL
+			OR g.GroupId = @TeamId
 			)
 		AND (
 			@isDeleted IS NULL

@@ -4,7 +4,7 @@
 
     public class DeleteTeamCriteria : CriteriaBase
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public int ModifiedBy { get; set; }
 
@@ -15,7 +15,7 @@
 
         public override bool IsValid()
         {
-            return GroupId > 0;
+            return TeamId > 0;
         }
     }
 }

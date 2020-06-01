@@ -13,7 +13,7 @@
 
         public DateTime ToDate { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public int? PageIndex { get; set; }
 

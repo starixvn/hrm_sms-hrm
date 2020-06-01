@@ -29,7 +29,7 @@
             var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -43,7 +43,7 @@
         {
             var criteria = new GetTeamSupervisorCriteria
             {
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
             };
             IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
             byte[] bytes = exportSupervisorService.ExportTeamSupervisor(supervisors);

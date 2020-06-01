@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[DisciplineRule_GetByGroupId] @GroupId INT
+CREATE PROCEDURE [dbo].[DisciplineRule_GetByGroupId] @TeamId INT
 AS
 /*
 Created: Tim.Trinh@2019-11-05
@@ -30,7 +30,7 @@ BEGIN
 		,ISNULL(dsr.Value, 0)
 	FROM dbo.DisciplineType AS dtype WITH (NOLOCK)
 		LEFT JOIN dbo.DisciplineGroupRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
-		AND dsr.GroupId = @GroupId
+		AND dsr.GroupId = @TeamId
 		AND dsr.IsLocal = 1
 	WHERE dtype.DisciplineTypeId > 0
 
@@ -38,7 +38,7 @@ BEGIN
 	SET dtype.IsApplyForExpat = ISNULL(dsr.Value, 0)
 	FROM @tblDisciplineRule AS dtype
 		LEFT JOIN dbo.DisciplineGroupRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
-		AND dsr.GroupId = @GroupId
+		AND dsr.GroupId = @TeamId
 		AND dsr.IsLocal = 0
 
 	SELECT *

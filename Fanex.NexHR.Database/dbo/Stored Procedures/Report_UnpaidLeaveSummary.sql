@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
 	,@EmpId INT = NULL
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@SupervisorId INT = NULL
 	,@LeaveType SMALLINT = 1
@@ -40,11 +40,11 @@ BEGIN
 			ELSE 'UPL'
 			END
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT DISTINCT val
-		FROM fnc_strSplit(@GroupIds, ',')
+		FROM fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN

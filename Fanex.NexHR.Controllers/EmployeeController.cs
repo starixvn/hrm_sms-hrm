@@ -72,7 +72,7 @@
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
-                    GroupIds = model.GroupIds,
+                    TeamIds = model.TeamIds,
                     EnableUser = model.IsEnable,
                     IsLocalUser = model.IsLocal,
                     PageNumber = model.CurrentPage,
@@ -95,7 +95,7 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult UserManagement(int? jobTitleId = null, string groupIds = "")
+        public ActionResult UserManagement(int? jobTitleId = null, string teamIds = "")
         {
             IList<LookupData> listJobTitle = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
@@ -108,7 +108,7 @@
             var model = new UserManagementViewModel
             {
                 JobTitleId = jobTitleId,
-                GroupIds = groupIds,
+                TeamIds = teamIds,
                 IsEnable = true,
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
@@ -129,7 +129,7 @@
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
-                    GroupIds = model.GroupIds,
+                    TeamIds = model.TeamIds,
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,
@@ -392,7 +392,7 @@
 
         public JsonResult GetEmployees(
             string query,
-            string groupIds = "",
+            string teamIds = "",
             bool? enable = null,
             bool? isDelete = null,
             int? titleId = null,
@@ -401,7 +401,7 @@
             var criteria = new GetAllEmployeeCriteria
             {
                 Query = query,
-                GroupIds = groupIds,
+                TeamIds = teamIds,
                 EnableUser = enable,
                 IsDeleteUser = isDelete,
                 TitleId = titleId,
@@ -640,7 +640,7 @@
                 IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
                 PickupRemark = model.PickupRemark,
                 PromotionDate = model.PromotionDate,
-                TeamDate = model.TeamDate,
+                SectionDate = model.TeamDate,
                 MilitaryFromDate = model.MilitaryFromDate,
                 MilitaryToDate = model.MilitaryToDate
             };

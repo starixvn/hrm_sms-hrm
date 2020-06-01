@@ -79,11 +79,11 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true,
             });
-            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
             query();
         }).catch(axiosError);
@@ -95,7 +95,7 @@ $(document).ready(function () {
     });
 
     $('form.filter #submit').on('click', function (event) {
-        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
     $('form.filter #btnExcel').on('click', function (event) {

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[GroupSupervisor_GetByRole] @GroupId INT
+CREATE PROCEDURE [dbo].[GroupSupervisor_GetByRole] @TeamId INT
 	,@Role TINYINT
 AS
 /*
@@ -47,7 +47,7 @@ BEGIN
 	FROM dbo.GroupSupervisor AS su WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON su.OwnerId = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	WHERE su.GroupId = @GroupId
+	WHERE su.GroupId = @TeamId
 		AND su.ActionType = @Role
 		AND ISNULL(su.IsDeleted, 0) = 0
 	GROUP BY e.EmpId

@@ -42,7 +42,7 @@ import 'chosen-js/chosen.jquery';
     }
 
     function query() {
-        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
         $.ajax({
             url: resolveClientUrl('employee/ListEmployee'),
@@ -95,7 +95,7 @@ import 'chosen-js/chosen.jquery';
             controllerPath = "ExportEmployee/EmployeeDetailsInfo?";
         }
 
-        $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         url = resolveClientUrl(controllerPath + $('form.filter').serialize());
         location.href = url;
     }
@@ -104,9 +104,9 @@ import 'chosen-js/chosen.jquery';
         $.ajax({
             url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: data,
-                    selectedItems: $('#GroupIds').val()
+                    selectedItems: $('#TeamIds').val()
                 });
 
                 query();

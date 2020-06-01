@@ -138,13 +138,13 @@ $(document).ready(function () {
 
     axios(_global.root + 'Department/GetHierarchy')
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 noneSelectedText: 'Select a section',
                 singleSelection: true,
                 selectedItems: $('#Team_Id').val(),
                 onSelect: function () {
-                    $('#Team_Id').val($('#Section').multiSelectTreeView('getSelectedItems'));
+                    $('#Team_Id').val($('#Team').multiSelectTreeView('getSelectedItems'));
                 }
             });
         }).catch(axiosError);

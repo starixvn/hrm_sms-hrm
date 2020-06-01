@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_Get] @EmployeeId INT = NULL
 	,@ActionType TINYINT = NULL
-	,@GroupIds NVARCHAR(MAX) = ''
+	,@TeamIds NVARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 AS
 /*
@@ -26,11 +26,11 @@ BEGIN
 		,ActionType TINYINT
 		)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN		
 		INSERT INTO #tblGroup (GroupId)
 		SELECT val
-		FROM fnc_strSplit(@GroupIds, ',')
+		FROM fnc_strSplit(@TeamIds, ',')
 	END
 
 	INSERT INTO #tblEmployee (
@@ -60,7 +60,7 @@ BEGIN
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR tblgr.GroupId IS NOT NULL
 			)
 
@@ -91,7 +91,7 @@ BEGIN
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR tblgr.GroupId IS NOT NULL
 			)
 
@@ -108,7 +108,7 @@ BEGIN
 		AND ISNULL(@EmployeeId, e.EmpId) = e.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR tblgr.GroupId IS NOT NULL
 			)
 		AND e.[Enabled] = 1
@@ -133,7 +133,7 @@ BEGIN
 		AND ISNULL(@EmployeeId, e.EmpId) = e.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR tblgr.GroupId IS NOT NULL
 			)
 	ORDER BY e.Code

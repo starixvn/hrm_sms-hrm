@@ -85,7 +85,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
         $.ajax({
             url: _global.root + 'Department/GetHierarchy',
             success: function (data) {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: data,
                     isSelectedAll: true
                 });
@@ -127,7 +127,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
         $('form').on("submit", function (evt) {
             evt.preventDefault();
             $('form.filter #CurrentPage').val('1');
-            $('#GroupIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
             query();
         });
     });

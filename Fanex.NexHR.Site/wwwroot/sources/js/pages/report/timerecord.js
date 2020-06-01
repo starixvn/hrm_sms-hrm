@@ -87,7 +87,7 @@ import { parse } from 'qs';
     }
 
     function query() {
-        $('#TeamIds').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         $.ajax({
             url: resolveClientUrl('Report/TimeRecordDetail'),
             type: 'POST',
@@ -123,7 +123,7 @@ import { parse } from 'qs';
         $.ajax({
             url: resolveClientUrl('Department/GetHierarchy'),
             success: function (data) {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: data,
                     isSelectedAll: true
                 });

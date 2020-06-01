@@ -2,7 +2,7 @@
 {
     public class TeamSupervisorViewModel
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public string Code { get; set; }
 

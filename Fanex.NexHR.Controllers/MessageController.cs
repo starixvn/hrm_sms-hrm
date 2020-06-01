@@ -66,7 +66,7 @@
             var criteria = new GetAllEmployeeCriteria
             {
                 Query = null,
-                GroupIds = null,
+                TeamIds = null,
                 EnableUser = true,
                 IsDeleteUser = null,
                 TitleId = null,
@@ -104,7 +104,7 @@
             var criteria = new GetAllEmployeeCriteria
             {
                 Query = null,
-                GroupIds = null,
+                TeamIds = null,
                 EnableUser = true,
                 IsDeleteUser = false,
                 TitleId = null,

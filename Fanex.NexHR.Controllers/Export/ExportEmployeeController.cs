@@ -28,7 +28,7 @@
             var criteria = new GetAllEmployeeCriteria
             {
                 Query = model.Keyword,
-                GroupIds = model.GroupIds,
+                TeamIds = model.TeamIds,
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,
@@ -46,7 +46,7 @@
             var criteria = new GetEmployeeFullProfileCriteria
             {
                 Query = model.Keyword,
-                GroupIds = model.GroupIds,
+                TeamIds = model.TeamIds,
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,

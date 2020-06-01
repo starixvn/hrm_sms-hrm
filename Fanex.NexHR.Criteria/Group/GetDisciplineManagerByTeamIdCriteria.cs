@@ -4,9 +4,9 @@
 
     public class GetDisciplineManagerByTeamIdCriteria : CriteriaBase
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
-        public override bool IsValid() => GroupId > 0;
+        public override bool IsValid() => TeamId > 0;
 
         public override string GetSettingKey() => "GroupSupervisor_GetDisciplineSettingById";
     }

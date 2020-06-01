@@ -51,7 +51,7 @@
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Code;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Taem;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.RecordTime.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + detail.RecordTime.ToString(@"mm\'");
                         workSheet.Cells[rowIndex, colIndex].Value = detail.GetInOutName;
 

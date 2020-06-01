@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@fromtime DATE
 	,@totime DATE
 	,@EmpId INT = NULL
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@IsIFrame BIT = 0
 	,@isLocal BIT = NULL
 AS
@@ -37,11 +37,11 @@ BEGIN
 		,ShiftId INT
 		)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
 	INSERT INTO @tblEmployeeIds (EmployeeId)

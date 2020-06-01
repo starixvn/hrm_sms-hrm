@@ -1,7 +1,7 @@
 ﻿/****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/20/2016 10:19:09 AM ******/
 /****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/19/2016 5:22:16 PM ******/
 
-CREATE PROCEDURE [dbo].[GroupSupervisor_Get] @GroupIds VARCHAR(MAX) = ''
+CREATE PROCEDURE [dbo].[GroupSupervisor_Get] @TeamIds VARCHAR(MAX) = ''
 AS
 /*
 Created: 20140723@Quinn.Vo
@@ -23,11 +23,11 @@ BEGIN
 		,ActionType TINYINT
 		)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #Group (GroupId)
 		SELECT val
-		FROM fnc_strSplit(@GroupIds, ',')
+		FROM fnc_strSplit(@TeamIds, ',')
 	END
 
 	SELECT DISTINCT gr.GroupId AS TeamId
@@ -36,7 +36,7 @@ BEGIN
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
 	WHERE ISNULL(gr.IsDeleted, 0) = 0
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR gr.GroupId IN (
 				SELECT GroupId
 				FROM #Group

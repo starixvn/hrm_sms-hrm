@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
@@ -26,10 +26,10 @@ BEGIN
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	DECLARE @tblEmployeeIds TABLE (EmpId INT)
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	ELSE
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)

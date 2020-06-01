@@ -9,8 +9,6 @@
         public int SupervisorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-
-        [SpParam(SqlParamName = "GroupIds")]
         public string TeamIds { get; set; }
 
         public bool IsShowWholeCompany { get; set; }

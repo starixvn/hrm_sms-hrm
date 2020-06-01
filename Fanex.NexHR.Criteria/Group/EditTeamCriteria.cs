@@ -4,7 +4,7 @@
 
     public class EditTeamCriteria : CriteriaBase
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public int DepartmentId { get; set; }
@@ -25,7 +25,7 @@
 
         public override bool IsValid()
         {
-            return GroupId > 0 &&
+            return TeamId > 0 &&
                 !string.IsNullOrWhiteSpace(Code) &&
                 !string.IsNullOrWhiteSpace(Name) &&
                 HeadId > 0;

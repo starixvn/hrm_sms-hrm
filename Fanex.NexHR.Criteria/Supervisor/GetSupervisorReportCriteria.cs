@@ -6,7 +6,7 @@
     {
         public int? EmployeeId { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public int? ActionType { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[GroupSupervisor_Update] @GroupId INT
+CREATE PROCEDURE [dbo].[GroupSupervisor_Update] @TeamId INT
 	,@RoleId TINYINT
 	,@SupervisorXml NVARCHAR(MAX) = ''
 	,@ActorId INT
@@ -49,7 +49,7 @@ BEGIN
 		,su.ModifiedDate = @ModifiedDate
 		,su.ModifiedBy = @ActorId
 	FROM dbo.GroupSupervisor AS su WITH (ROWLOCK, UPDLOCK)
-	WHERE su.GroupId = @GroupId
+	WHERE su.GroupId = @TeamId
 		AND su.ActionType = @RoleId
 		AND ISNULL(su.IsDeleted, 0) = 0
 		AND NOT EXISTS (
@@ -67,13 +67,13 @@ BEGIN
 	FROM dbo.GroupSupervisor AS su WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblSupervisor AS sp ON sp.OwnerId = su.OwnerId
 		AND sp.RequestType = su.RequestType
-	WHERE su.GroupId = @GroupId
+	WHERE su.GroupId = @TeamId
 		AND su.ActionType = @RoleId
 		AND su.IsDeleted = 1
 
 	MERGE dbo.GroupSupervisor AS [target]
 	USING #tblSupervisor AS [source] ON (
-				[target].GroupId = @GroupId
+				[target].GroupId = @TeamId
 				AND [target].ActionType = @RoleId
 				AND [target].OwnerId = [source].OwnerId
 				AND [target].RequestType = [source].RequestType
@@ -96,7 +96,7 @@ BEGIN
 				,DisplayOrder
 				)
 			VALUES (
-				@GroupId
+				@TeamId
 				,@RoleId
 				,[source].RequestType
 				,[source].OwnerId
@@ -106,7 +106,7 @@ BEGIN
 				,[source].DisplayOrder
 				);
 
-	DECLARE @LogSPData VARCHAR(MAX) = '<GroupSupervisor_Update ActionType="' + coalesce(cast(@RoleId AS VARCHAR(10)), space(1)) + '" ' + 'GroupId="' + coalesce(cast(@GroupId AS VARCHAR(10)), space(1)) + '" ' + 'SupervisorXml="' + @SupervisorXml + '" />'
+	DECLARE @LogSPData VARCHAR(MAX) = '<GroupSupervisor_Update ActionType="' + coalesce(cast(@RoleId AS VARCHAR(10)), space(1)) + '" ' + 'GroupId="' + coalesce(cast(@TeamId AS VARCHAR(10)), space(1)) + '" ' + 'SupervisorXml="' + @SupervisorXml + '" />'
 
 	EXEC dbo.Log_WriteLog @LogActionID = 1000
 		,@LogDate = @ModifiedDate

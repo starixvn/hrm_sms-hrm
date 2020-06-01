@@ -15,7 +15,7 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
-    @Html.HiddenFor(model => model.GroupIds)
+    @Html.HiddenFor(model => model.TeamIds)
     @Html.HiddenFor(model => model.IsEnable)
     @Html.HiddenFor(model => model.IsLocal)
     @Html.HiddenFor(model => model.CurrentPage)
@@ -35,7 +35,7 @@
             <div class="label-form">
                 <label class="control-label">@Labels.DepartmentTeam</label>
             </div>
-            <div class="input-form" id="Section"></div>
+            <div class="input-form" id="Team"></div>
         </div>
 
         <div class="form-group form-group--m">

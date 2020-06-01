@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[GroupSupervisor_GetById] @GroupId INT
+CREATE PROCEDURE [dbo].[GroupSupervisor_GetById] @TeamId INT
 AS
 /*
 Created: 20140723@Quinn.Vo
@@ -28,7 +28,7 @@ BEGIN
 		,ActionType
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,2
 		) -- verify
 
@@ -37,7 +37,7 @@ BEGIN
 		,ActionType
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,3
 		) -- approve
 
@@ -46,7 +46,7 @@ BEGIN
 		,ActionType
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,4
 		) -- shift
 
@@ -55,7 +55,7 @@ BEGIN
 		,ActionType
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,5
 		) -- on behalf request
 
@@ -64,7 +64,7 @@ BEGIN
 		,ActionType
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,8
 		) -- edit discipline
 
@@ -83,7 +83,7 @@ BEGIN
 						,e.NickName
 					FROM [dbo].GroupSupervisor AS su WITH (NOLOCK)
 						INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON su.OwnerId = e.EmpId
-					WHERE su.GroupId = @GroupId
+					WHERE su.GroupId = @TeamId
 						AND su.ActionType IN (2, 3, 4, 5, 8)
 						AND ISNULL(su.IsDeleted, 0) = 0
 					) AS a

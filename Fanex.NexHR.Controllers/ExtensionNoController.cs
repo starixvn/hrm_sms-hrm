@@ -66,7 +66,7 @@
                         ExtensionNo = model.ExtensionNo,
                         IsInternal = model.IsInternal,
                         EmpId = model.EmpId,
-                        GroupId = model.TeamId,
+                        TeamId = model.TeamId,
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -115,7 +115,7 @@
                     IsInternal = model.IsInternal,
                     ExtId = model.EmployeeExtensionId,
                     EmpId = model.EmpId,
-                    GroupId = model.TeamId
+                    TeamId = model.TeamId
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
                 if (result.IsSuccessful)
@@ -151,7 +151,7 @@
 
         [HttpGet]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public CustomJsonResult GetGroupExtension(bool isInternal, int? groupId)
+        public CustomJsonResult GetGroupExtension(bool isInternal, int? teamId)
         {
             IList<SelectListItem> groups = null;
             if (isInternal)
@@ -165,7 +165,7 @@
             }
             else
             {
-                IEnumerable<ExtensionNoModel> extensionGroups = extensionNumberService.GetAllExtensionGroupInfo(groupId, isInternal);
+                IEnumerable<ExtensionNoModel> extensionGroups = extensionNumberService.GetAllExtensionGroupInfo(teamId, isInternal);
                 groups = extensionGroups.Select(x => new SelectListItem
                 {
                     Text = x.TeamName,
@@ -196,9 +196,9 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public CustomJsonResult EditExternalGroup(int groupId, string groupName)
+        public CustomJsonResult EditExternalGroup(int teamId, string groupName)
         {
-            CommandResult commandResult = extensionNumberService.EditExternalGroup(groupId, groupName);
+            CommandResult commandResult = extensionNumberService.EditExternalGroup(teamId, groupName);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

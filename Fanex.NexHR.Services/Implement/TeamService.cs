@@ -31,7 +31,7 @@
         {
             var criteria = new GetGroupByIdCriteria
             {
-                GroupId = id
+                TeamId = id
             };
             return teamRepository.GetById(criteria);
         }
@@ -51,7 +51,7 @@
         {
             var criteria = new DeleteTeamCriteria
             {
-                GroupId = id,
+                TeamId = id,
                 ModifiedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
@@ -70,7 +70,7 @@
         {
             var criteria = new GetTeamSupervisorByRoleIdCriteria
             {
-                GroupId = teamId,
+                TeamId = teamId,
                 Role = (short)roleId
             };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
@@ -80,7 +80,7 @@
         {
             var criteria = new GetSupervisorByTeamIdCriteria
             {
-                GroupId = id
+                TeamId = id
             };
             return baseService.GetData<TeamSupervisorModel>(criteria).ToList();
         }
@@ -89,7 +89,7 @@
         {
             var criteria = new GetDisciplineManagerByTeamIdCriteria
             {
-                GroupId = teamId
+                TeamId = teamId
             };
             return baseService.GetData<Supervisor>(criteria).ToList();
         }
@@ -98,7 +98,7 @@
         {
             var criteria = new EditTeamSupervisorCriteria
             {
-                GroupId = teamId,
+                TeamId = teamId,
                 ActorId = actorId,
                 RoleId = roleId,
                 SupervisorXml = supervisors.ToXML().ToString()

@@ -63,7 +63,7 @@ $(document).ready(function () {
 
     axios(resolveClientUrl('Department/GetHierarchy'))
         .then(response => {
-            $('#Section').multiSelectTreeView({
+            $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true,
             });
@@ -75,7 +75,7 @@ $(document).ready(function () {
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('form.filter #btnSubmit').on('click', function (event) {
-        $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+        $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
 

@@ -7,7 +7,6 @@
     {
         public int ActorId { get; set; }
 
-        [SpParam(SqlParamName = "groupid")]
         public int TeamId { get; set; }
 
         public string DisciplineRuleXml { get; set; }

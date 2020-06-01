@@ -87,7 +87,7 @@
                 ActorId = param.ActorId,
                 Month = param.Month,
                 StatusIds = param.StatusIds,
-                GroupIds = param.TeamIds,
+                TeamIds = param.TeamIds,
                 EmployeeId = param.EmployeeId,
                 IsProcessor = param.IsProcessor,
                 OvertimeType = param.OvertimeType

@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
-	,@groupIds NVARCHAR(MAX) = ''
+	,@teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
 	,@isLocal BIT = NULL
@@ -26,7 +26,7 @@ BEGIN
 
 	INSERT INTO #GroupsList (GroupId)
 	SELECT val
-	FROM fnc_strSplit(@groupids, ',')
+	FROM fnc_strSplit(@teamIds, ',')
 
 	IF LEN(@query) = 0
 		OR @query LIKE '% or %'
@@ -76,7 +76,7 @@ BEGIN
 			,@bWhere = 1
 	END
 
-	IF ISNULL(@groupids, '') <> ''
+	IF ISNULL(@teamIds, '') <> ''
 	BEGIN
 		SELECT @sWhere = @sWhere + CASE 
 				WHEN @bWhere = 1 THEN ' AND '

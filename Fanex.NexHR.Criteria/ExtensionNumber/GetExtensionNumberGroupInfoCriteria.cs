@@ -6,7 +6,7 @@
     {
         public bool? IsInternal { get; set; }
 
-        public int? GroupId { get; set; }
+        public int? TeamId { get; set; }
 
         public override string GetSettingKey() => "ExtensionNO_GetGroupInfo";
 

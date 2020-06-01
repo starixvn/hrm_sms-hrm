@@ -2,7 +2,7 @@
 {
     public class EmailSettingsModel
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public int Action { get; set; }
 

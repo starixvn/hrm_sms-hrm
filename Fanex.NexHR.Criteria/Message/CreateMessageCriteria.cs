@@ -17,7 +17,7 @@
 
         public string EmployeeIds { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public int CreatedBy { get; set; }
 

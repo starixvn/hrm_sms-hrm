@@ -18,7 +18,7 @@
         public string Phone { get; set; }
         public byte? Gender { get; set; }
         public int TeamId { get; set; }
-        public DateTime? TeamDate { get; set; }
+        public DateTime? SectionDate { get; set; }
         public string Roles { get; set; }
         public DateTime? JoinedDate { get; set; }
         public DateTime? ConfirmedDate { get; set; }

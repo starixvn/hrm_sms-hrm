@@ -26,7 +26,7 @@
         {
             var criteria = new GetExtensionNumberGroupInfoCriteria
             {
-                GroupId = groupId,
+                TeamId = groupId,
                 IsInternal = isInternal
             };
             return baseService.GetData<ExtensionNoModel>(criteria).ToList();

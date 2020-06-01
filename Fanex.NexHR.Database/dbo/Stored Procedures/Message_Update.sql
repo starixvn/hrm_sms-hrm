@@ -6,7 +6,7 @@ CREATE PROCEDURE [dbo].[Message_Update] @MessageId INT
 	,@FromDate DATETIME = NULL
 	,@ToDate DATETIME = NULL
 	,@EmployeeIds VARCHAR(500) = ''
-	,@GroupIds VARCHAR(500) = ''
+	,@TeamIds VARCHAR(500) = ''
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -49,11 +49,11 @@ BEGIN
 	DELETE dbo.MessageGroup WITH (ROWLOCK)
 	WHERE MessageId = @MessageId
 
-	IF @GroupIds <> ''
+	IF @TeamIds <> ''
 	BEGIN
 		INSERT INTO @tblGroup (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 
 		INSERT INTO dbo.MessageGroup (
 			MessageId

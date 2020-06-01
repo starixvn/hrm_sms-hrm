@@ -106,7 +106,7 @@
             var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 IsLocal = model.IsLocal,
@@ -233,7 +233,7 @@
             var criteria = new GetSupervisorReportCriteria
             {
                 EmployeeId = model.EmployeeId,
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
                 IsLocal = model.IsLocal,
                 ActionType = model.ActionType
             };
@@ -253,7 +253,7 @@
         {
             var criteria = new GetTeamSupervisorCriteria
             {
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
             };
             IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
 

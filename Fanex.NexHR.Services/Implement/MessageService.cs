@@ -55,7 +55,7 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 EmployeeIds = model.EmployeeIds,
-                GroupIds = model.GroupIds,
+                TeamIds = model.TeamIds,
                 CreatedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
@@ -72,7 +72,7 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 EmployeeIds = model.EmployeeIds,
-                GroupIds = model.GroupIds,
+                TeamIds = model.TeamIds,
                 ModifiedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);

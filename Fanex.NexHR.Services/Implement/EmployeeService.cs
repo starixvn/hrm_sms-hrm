@@ -319,7 +319,7 @@
                 IsExpatUseHoliday = !param.IsLocal && param.IsExpatUseHoliday,
                 PickupRemark = param.PickupRemark,
                 PromotionDate = param.PromotionDate,
-                TeamDate = param.TeamDate,
+                SectionDate = param.SectionDate,
                 MilitaryFromDate = param.MilitaryFromDate,
                 MilitaryToDate = param.MilitaryToDate
             };

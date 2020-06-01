@@ -198,7 +198,7 @@
     <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
     <Compile Include="Group\EditDisciplineRuleCriteria.cs" />
     <Compile Include="Group\GetAllGroupCriteria.cs" />
-    <Compile Include="Group\GetDisciplineRuleBySectionCriteria.cs" />
+    <Compile Include="Group\GetDisciplineRuleByGroupCriteria.cs" />
     <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
     <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
     <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[GroupSupervisor_GetDisciplineSettingById] @GroupId INT
+CREATE PROCEDURE [dbo].[GroupSupervisor_GetDisciplineSettingById] @TeamId INT
 AS
 /*
 Created: 20160620@Tim.Trinh
@@ -19,7 +19,7 @@ BEGIN
 	FROM dbo.GroupSupervisor AS su WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON su.OwnerId = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	WHERE su.GroupId = @GroupId
+	WHERE su.GroupId = @TeamId
 		AND su.ActionType = 8 -- edit discipline
 		AND su.RequestType = 0
 		AND ISNULL(su.IsDeleted, 0) = 0

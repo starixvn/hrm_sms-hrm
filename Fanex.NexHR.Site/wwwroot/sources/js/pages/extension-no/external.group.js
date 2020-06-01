@@ -67,7 +67,7 @@ const externalGroup = (function ($) {
 
     function registerEventEdit() {
         $('table#data a.edit').on('click', function () {
-            const groupId = $(this).data('id'),
+            const teamId = $(this).data('id'),
                 name = $(this).data('name');
             $('#GroupName').val(name);
             $('.validation-summary-errors').html('').hide();
@@ -89,7 +89,7 @@ const externalGroup = (function ($) {
                             axios({
                                 url: resolveClientUrl('ExtensionNo/EditExternalGroup'),
                                 method: 'POST',
-                                data: stringify({ groupId, groupName }),
+                                data: stringify({ teamId, groupName }),
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
                                     'Content-Type': 'application/x-www-form-urlencoded'

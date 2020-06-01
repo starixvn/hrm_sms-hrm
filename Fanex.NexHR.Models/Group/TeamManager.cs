@@ -2,7 +2,7 @@
 {
     public class TeamManager
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public int EmpId { get; set; }
         public string Nickname { get; set; }

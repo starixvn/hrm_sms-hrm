@@ -39,7 +39,7 @@ const modifiedExtensionNo = (function ($) {
             method: 'GET',
             params: {
                 isInternal: domElements.$checkboxInternal.prop('checked'),
-                groupId: null
+                teamId: null
             }
         }).then(response => {
             const data = response.data;

@@ -3,7 +3,7 @@
 
 CREATE PROCEDURE [dbo].[ExtensionNO_GetGroupInfo]
 	@isInternal BIT = NULL,
-	@GroupID INT = NULL
+	@TeamId INT = NULL
 AS
 /*
 Created: Tom.Vo@2014-01-04
@@ -39,7 +39,7 @@ IF @isInternal IS NULL
 		  ,exg.IsInternal
 		  ,exg.[OrderNo] 
 		  	 
- ELSE IF @GroupID IS NULL
+ ELSE IF @TeamId IS NULL
 	SELECT exg.[ExtID]
 		  ,COALESCE(g.[GroupID],exg.[ExtID]) TeamID		
 		  ,ISNULL(g.Code,'') Team
@@ -63,7 +63,7 @@ IF @isInternal IS NULL
 		  ,COALESCE(g.Name,exg.[FullName]) 
 		  ,exg.IsInternal
 		  ,exg.[OrderNo] 	 
- ELSE IF @GroupID IS NOT NULL
+ ELSE IF @TeamId IS NOT NULL
 	SELECT exg.[ExtID]
 		  ,COALESCE(g.[GroupID],exg.[ExtID]) TeamID		
 		  ,ISNULL(g.Code,'') Team
@@ -81,7 +81,7 @@ IF @isInternal IS NULL
 			)
 	 WHERE exg.IsGroup =1 AND 
 			@isInternal =  exg.IsInternal AND 
-			@GroupID = CASE WHEN @isInternal = 1 THEN exg.[GroupID]
+			@TeamId = CASE WHEN @isInternal = 1 THEN exg.[GroupID]
 							WHEN @isInternal = 0 THEN exg.[ExtID]
 							END
 	GROUP BY exg.[ExtID]

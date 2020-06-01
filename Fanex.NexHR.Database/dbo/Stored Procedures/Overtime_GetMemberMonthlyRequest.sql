@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@EmployeeId INT = NULL
-	,@GroupIds VARCHAR(MAX) = NULL
+	,@TeamIds VARCHAR(MAX) = NULL
 	,@Month DATE = NULL
 	,@StatusIds VARCHAR(MAX) = NULL
 	,@IsProcessor BIT = 0
@@ -78,11 +78,11 @@ BEGIN
 	SELECT val
 	FROM dbo.fnc_strSplit(@StatusIds, ',')
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN

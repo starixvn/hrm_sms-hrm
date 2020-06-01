@@ -55,9 +55,9 @@
             {
                 var entity = new LeaveSummaryByTeam
                 {
-                    GroupId = team.Id,
+                    TeamId = team.Id,
                     Team = team.Name,
-                    LeaveSummaryInTeam = leaveSummaryList.Where(x => x.GroupId == team.Id).ToList()
+                    LeaveSummaryInTeam = leaveSummaryList.Where(x => x.TeamId == team.Id).ToList()
                 };
 
                 leaveSummaryByTeams.Add(entity);

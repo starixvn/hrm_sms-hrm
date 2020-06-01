@@ -4,12 +4,12 @@
 
     public class GetGroupByIdCriteria : CriteriaBase
     {
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public bool? IsDeleted { get; set; }
 
         public override string GetSettingKey() => "Group_Get";
 
-        public override bool IsValid() => GroupId > 0;
+        public override bool IsValid() => TeamId > 0;
     }
 }

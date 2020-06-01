@@ -30,7 +30,7 @@ BEGIN
 		RETURN
 	END
 
-	DECLARE @GroupId INT
+	DECLARE @TeamId INT
 
 	INSERT INTO dbo.ExtensionNumbers (
 		FullName
@@ -51,12 +51,12 @@ BEGIN
 		,NULL AS GroupId
 		,MAX(OrderNo)
 	FROM dbo.ExtensionNumbers WITH (NOLOCK)
-	WHERE GroupId <> @GroupId
+	WHERE GroupId <> @TeamId
 		AND IsInternal = 1
 
-	SET @GroupId = SCOPE_IDENTITY()
+	SET @TeamId = SCOPE_IDENTITY()
 
 	UPDATE dbo.ExtensionNumbers WITH (ROWLOCK, UPDLOCK)
-	SET GroupId = @GroupId
-	WHERE ExtId = @GroupId
+	SET GroupId = @TeamId
+	WHERE ExtId = @TeamId
 END

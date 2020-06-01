@@ -7,7 +7,7 @@
     {
         public string Query { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public int? Enable
         {

@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Group_Update] @GroupId INT
+CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@Code VARCHAR(20)
 	,@Name NVARCHAR(150)
 	,@DepartmentId INT
@@ -29,7 +29,7 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.[Group] WITH (NOLOCK)
-			WHERE GroupId <> @GroupId
+			WHERE GroupId <> @TeamId
 				AND Code = @code
 				AND IsDeleted = 0
 			)
@@ -50,22 +50,22 @@ BEGIN
 
 	SELECT @OldHeadId = EmpId
 	FROM dbo.GroupManager WITH (NOLOCK)
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 		AND RoleId = 1
 
 	SELECT @OldAssistantHeadIds = COALESCE(@OldAssistantHeadIds + ',', '') + CAST(EmpId AS VARCHAR(10))
 	FROM dbo.GroupManager WITH (NOLOCK)
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 		AND RoleId = 2
 
 	SELECT @OldLeaderIds = COALESCE(@OldLeaderIds + ',', '') + CAST(EmpId AS VARCHAR(10))
 	FROM dbo.GroupManager WITH (NOLOCK)
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 		AND RoleId = 3
 
 	SELECT @OldAssistantLeaderIds = COALESCE(@OldAssistantLeaderIds + ',', '') + CAST(EmpId AS VARCHAR(10))
 	FROM dbo.GroupManager WITH (NOLOCK)
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 		AND RoleId = 4
 
 	SET @xml = (
@@ -79,7 +79,7 @@ BEGIN
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
 			FROM dbo.[Group] WITH (NOLOCK)
-			WHERE GroupId = @GroupId
+			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')
 				,TYPE
 			)
@@ -87,7 +87,7 @@ BEGIN
 
 	DELETE
 	FROM dbo.GroupManager WITH (ROWLOCK, UPDLOCK)
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 
 	INSERT INTO dbo.GroupManager (
 		GroupId
@@ -95,7 +95,7 @@ BEGIN
 		,RoleId
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,@HeadId
 		,1
 		)
@@ -107,7 +107,7 @@ BEGIN
 			,EmpId
 			,RoleId
 			)
-		SELECT @GroupId
+		SELECT @TeamId
 			,val
 			,2
 		FROM dbo.fnc_strSplit(@AssistantHeadIds, ',')
@@ -120,7 +120,7 @@ BEGIN
 			,EmpId
 			,RoleId
 			)
-		SELECT @GroupId
+		SELECT @TeamId
 			,val
 			,3
 		FROM dbo.fnc_strSplit(@LeaderIds, ',')
@@ -133,7 +133,7 @@ BEGIN
 			,EmpId
 			,RoleId
 			)
-		SELECT @GroupId
+		SELECT @TeamId
 			,val
 			,4
 		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
@@ -147,7 +147,7 @@ BEGIN
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
 		,BasicAnnualLeaveBalance = @BasicAnnualLeaveBalance
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 
 	SET @xml = (
 			SELECT Code AS '@Code'
@@ -160,7 +160,7 @@ BEGIN
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
 			FROM dbo.[Group] WITH (NOLOCK)
-			WHERE GroupId = @GroupId
+			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')
 				,TYPE
 			)
@@ -168,7 +168,7 @@ BEGIN
 
 	EXEC dbo.ActivityLog_Insert @UserId = @ModifiedBy
 		,@ObjectTypeId = 2
-		,@ObjectId = @GroupId
+		,@ObjectId = @TeamId
 		,@OldData = @logOldData
 		,@Data = @logData
 		,@ErrCode = @ErrCode OUTPUT

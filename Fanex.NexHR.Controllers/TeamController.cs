@@ -139,7 +139,7 @@
                 {
                     var criteria = new EditTeamCriteria
                     {
-                        GroupId = model.Id,
+                        TeamId = model.Id,
                         Code = model.TeamCode,
                         Name = model.TeamName,
                         DepartmentId = model.DepartmentId ?? 0,
@@ -284,7 +284,7 @@
             var criteria = new GetAllEmployeeCriteria
             {
                 Query = null,
-                GroupIds = null,
+                TeamIds = null,
                 EnableUser = true,
                 IsDeleteUser = null,
                 TitleId = null,

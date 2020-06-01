@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_ShiftStatistic] @SupervisorId INT
 	,@fromDate DATE
 	,@toDate DATE
-	,@groupIds VARCHAR(MAX) = ''
+	,@teamId VARCHAR(MAX) = ''
 	,@isShowWholeCompany BIT = 0
 	,@isLocal BIT = NULL
 AS
@@ -22,10 +22,10 @@ BEGIN
 	DECLARE @tblGroupId TABLE (GroupId INT)
 	DECLARE @tblEmployeeId TABLE (EmpId INT)
 
-	IF ISNULL(@groupids, '') <> ''
+	IF ISNULL(@teamId, '') <> ''
 		INSERT INTO @tblGroupId (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@groupids, ',')
+		FROM dbo.fnc_strSplit(@teamId, ',')
 	ELSE
 	BEGIN
 		INSERT INTO @tblGroupId (GroupId)

@@ -15,7 +15,7 @@ function bindingDataIfEditMode() {
         messageFromDate = $('#messageFromDate').val(),
         messageToDate = $('#messageToDate').val(),
         messageEmployeeIds = $('#messageEmployeeIds').val(),
-        messageGroupIds = $('#messageGroupIds').val(),
+        messageTeamIds = $('#messageTeamIds').val(),
         messageCategory = $('#messageCategory').val();
 
     $('#Subject').val(messageSubject);
@@ -34,8 +34,8 @@ function bindingDataIfEditMode() {
     if (messageEmployeeIds) {
         $('#Employees').val(messageEmployeeIds.split(','));
     }
-    if (messageGroupIds) {
-        $('#GroupIds').val(messageGroupIds);
+    if (messageTeamIds) {
+        $('#TeamIds').val(messageTeamIds);
     }
 };
 
@@ -62,7 +62,7 @@ function initSearchGroup() {
     }).then(response => {
         $('#Groups').multiSelectTreeView({
             data: response.data,
-            selectedItems: $('#GroupIds').val()
+            selectedItems: $('#TeamIds').val()
         });
     }).catch(axiosError);
 }
@@ -162,7 +162,7 @@ function Submit() {
         let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
         let sendToEmail = getSendToEmails();
         $('#SendToEmail').val(sendToEmail);
-        $('#GroupIds').val(selectedGroups);
+        $('#TeamIds').val(selectedGroups);
 
         let isValid = validateForm();
 

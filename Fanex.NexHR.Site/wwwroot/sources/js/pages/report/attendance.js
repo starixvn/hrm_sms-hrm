@@ -130,7 +130,7 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#GroupIds').val()
+                selectedItems: $('#TeamIds').val()
             });
 
             query();
@@ -146,12 +146,12 @@ $(document).ready(function () {
     $('#btnSubmit').click(function (evt) {
         evt.preventDefault();
         refreshSorting();
-        $('#GroupIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $("#btnExcel").click(function () {
-        $('#GroupIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

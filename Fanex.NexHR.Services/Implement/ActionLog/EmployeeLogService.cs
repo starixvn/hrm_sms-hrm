@@ -48,7 +48,7 @@
             new MappingFieldConfig { FieldName = "Skype", DisplayName = Labels.Skype },
             new MappingFieldConfig { FieldName = "LetsTalk", DisplayName = Labels.LetsTalk },
             new MappingFieldConfig { FieldName = "Unit", DisplayName = Labels.Unit },
-            new MappingFieldConfig { FieldName = "GroupId", DisplayName = Labels.Section },
+            new MappingFieldConfig { FieldName = "GroupId", DisplayName = Labels.Team },
             new MappingFieldConfig { FieldName = "SectionDate", DisplayName = Labels.SectionDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
             new MappingFieldConfig { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
@@ -73,7 +73,7 @@
         private readonly IActionLogService actionLogService;
         private readonly IRoleService roleService;
 
-        private IEnumerable<Team> Sections { get; set; }
+        private IEnumerable<Team> Teams { get; set; }
         private IEnumerable<LookupData> JobTitles { get; set; }
         private IEnumerable<Country> Countries { get; set; }
         private IEnumerable<SystemRoleModel> SystemRoles { get; set; }
@@ -92,7 +92,7 @@
 
         public IEnumerable<LogObjectDetail> GetLogDetailById(int employeeId)
         {
-            Sections = commonDataService.GetAllTeam();
+            Teams = commonDataService.GetAllTeam();
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             Countries = commonDataService.GetAllCountry();
             SystemRoles = roleService.GetRoles();
@@ -126,7 +126,7 @@
             switch (field.FieldName)
             {
                 case "GroupId":
-                    MappingSection(field);
+                    MappingTeam(field);
                     break;
 
                 case "RoleIds":
@@ -159,13 +159,13 @@
             }
         }
 
-        private void MappingSection(FieldValue field)
+        private void MappingTeam(FieldValue field)
         {
             int.TryParse(field.OldValue, out int teamId);
-            field.OldValue = Sections.FirstOrDefault(x => x.Id == teamId)?.Name;
+            field.OldValue = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
 
             int.TryParse(field.Value, out teamId);
-            field.Value = Sections.FirstOrDefault(x => x.Id == teamId)?.Name;
+            field.Value = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
         }
 
         private void MappingRole(FieldValue field)

@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
-	,@groupIds NVARCHAR(MAX) = ''
+	,@teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
 	,@isLocal BIT = NULL
@@ -23,7 +23,7 @@ BEGIN
 
 	INSERT INTO #GroupsList (GroupId)
 	SELECT val
-	FROM fnc_strSplit(@groupids, ',')
+	FROM fnc_strSplit(@teamIds, ',')
 
 	CREATE TABLE #tplEmployee (EmpId INT)
 
@@ -36,7 +36,7 @@ BEGIN
 		AND e.[Enabled] = ISNULL(@enable, 1)
 		AND (@titleId IS NULL or e.JobTitleId = @titleId)
 		AND (
-			ISNULL(@groupids, '') = ''
+			ISNULL(@teamIds, '') = ''
 			OR g.GroupId IS NOT NULL
 			)
 		AND (

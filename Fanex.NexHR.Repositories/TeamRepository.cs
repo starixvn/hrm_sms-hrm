@@ -51,7 +51,7 @@
 
                     foreach (var team in teams)
                     {
-                        team.Managers = employees.Where(e => e.GroupId == team.Id);
+                        team.Managers = employees.Where(e => e.TeamId == team.Id);
                     }
 
                     return teams;

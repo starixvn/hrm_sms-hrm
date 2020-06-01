@@ -16,7 +16,7 @@
 
         public int EmpId { get; set; }
 
-        public int GroupId { get; set; }
+        public int TeamId { get; set; }
 
         public short OrderNo { get; set; }
 

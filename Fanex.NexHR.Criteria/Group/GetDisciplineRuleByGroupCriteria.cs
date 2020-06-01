@@ -5,7 +5,6 @@
 
     public class GetDisciplineRuleByTeamCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "groupid")]
         public int TeamId { get; set; }
 
         public override string GetSettingKey() => "DisciplineRule_GetByGroupId";

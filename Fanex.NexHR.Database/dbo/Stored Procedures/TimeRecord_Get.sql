@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
 	,@FromDate DATE
 	,@ToDate DATE
-	,@GroupIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@PageIndex INT = NULL
 	,@ItemsPerPage INT = NULL
@@ -41,7 +41,7 @@ BEGIN
 
 	INSERT INTO @tblGroupId (GroupId)
 	SELECT val
-	FROM fnc_strSplit(@GroupIds, ',')
+	FROM fnc_strSplit(@TeamIds, ',')
 
 	INSERT INTO #tblTimeRecord
 	SELECT t.Id
@@ -63,7 +63,7 @@ BEGIN
 			OR e.EmpId = @EmpId
 			)
 		AND (
-			ISNULL(@GroupIds, '') = ''
+			ISNULL(@TeamIds, '') = ''
 			OR e.GroupId IN (
 				SELECT GroupId
 				FROM @tblGroupId

@@ -244,7 +244,7 @@ import { DisciplineType } from '../../shared/constants';
 
         axios(resolveClientUrl('Department/GetHierarchy'))
             .then(response => {
-                $('#Section').multiSelectTreeView({
+                $('#Team').multiSelectTreeView({
                     data: response.data,
                     isSelectedAll: true,
                 });
@@ -257,7 +257,7 @@ import { DisciplineType } from '../../shared/constants';
         });
 
         $('form.form-filter #submit').on('click', function (event) {
-            $('#TeamId').val($('#Section').multiSelectTreeView('getSelectedItems'));
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
             query();
         });
 

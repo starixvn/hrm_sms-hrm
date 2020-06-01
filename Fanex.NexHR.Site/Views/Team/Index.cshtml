@@ -74,7 +74,7 @@
                 <td>
                     @if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
                     {
-                        <a href="@Url.Action("UserManagement", "Employee", new { groupIds = team.Id })">@team.NoOfMembers</a>
+                        <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
                     }
                     else
                     {

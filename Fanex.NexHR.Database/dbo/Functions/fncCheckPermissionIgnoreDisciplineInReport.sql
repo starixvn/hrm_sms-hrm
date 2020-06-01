@@ -1,6 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[fncCheckPermissionIgnoreDisciplineInReport] (
 	@OwnerId INT
-	,@GroupId INT
+	,@TeamId INT
 	,@EmpId INT
 	)
 RETURNS BIT
@@ -33,7 +33,7 @@ BEGIN
 			OR EXISTS (
 				SELECT 1
 				FROM dbo.GroupSupervisor AS grS WITH (NOLOCK)
-				WHERE grS.GroupId = @GroupId
+				WHERE grS.GroupId = @TeamId
 					AND grS.OwnerId = @OwnerId
 					AND grS.ActionType = 8 -- edit discipline
 					AND grS.IsDeleted = 0

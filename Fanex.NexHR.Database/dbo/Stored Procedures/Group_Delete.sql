@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Group_Delete] @GroupId INT
+CREATE PROCEDURE [dbo].[Group_Delete] @TeamId INT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -20,7 +20,7 @@ BEGIN
 			SELECT 1
 			FROM dbo.[Group] AS gr WITH (NOLOCK)
 				INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gr.GroupId = emp.GroupId
-			WHERE gr.GroupId = @GroupId
+			WHERE gr.GroupId = @TeamId
 				AND emp.isDeleted = 0
 				AND emp.[Enabled] = 1
 			)
@@ -35,5 +35,5 @@ BEGIN
 	SET IsDeleted = 1
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
-	WHERE GroupId = @GroupId
+	WHERE GroupId = @TeamId
 END

@@ -31,11 +31,11 @@
         @Html.Hidden("messageToDate", message.ToDate)
         @Html.Hidden("messageContents", message.Contents)
         @Html.Hidden("messageEmployeeIds", message.EmployeeIds)
-        @Html.Hidden("messageGroupIds", message.GroupIds)
+        @Html.Hidden("messageGroupIds", message.TeamIds)
         @Html.Hidden("messageCategory", message.Category)
 
         @Html.HiddenFor(model => model.EmployeeIds)
-        @Html.HiddenFor(model => model.GroupIds)
+        @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.SendToEmail)
 
         <div class="form-group form-group--l">

@@ -10,7 +10,7 @@
         public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
-        public string Taem { get; set; }
+        public string Team { get; set; }
         public DateTime RecordTime { get; set; }
         public byte? InOutType { get; set; }
 

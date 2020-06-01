@@ -30,7 +30,7 @@
             var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
-                GroupIds = model.TeamIds,
+                TeamIds = model.TeamIds,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 IsLocal = model.IsLocal,
