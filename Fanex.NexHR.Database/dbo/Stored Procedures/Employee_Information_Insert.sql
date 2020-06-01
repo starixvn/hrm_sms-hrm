@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_Insert] @fullName NVARCHAR(50)
 	,@Nickname NVARCHAR(20)
 	,@domainUserName VARCHAR(50) = ''
 	,@code VARCHAR(20)
-	,@GroupId INT
+	,@TeamId INT
 	,@createBy INT
 	,@password NVARCHAR(100)
 	,@EmpId INT = 0 OUTPUT
@@ -79,7 +79,7 @@ BEGIN
 		,@Nickname
 		,CAST('1-1-1900' AS SMALLDATETIME)
 		,1
-		,@GroupId
+		,@TeamId
 		,GETDATE()
 		,@createBy
 		,@password
@@ -112,7 +112,7 @@ BEGIN
 		,isMainGroup
 		)
 	VALUES (
-		@GroupId
+		@TeamId
 		,@EmpId
 		,1
 		)

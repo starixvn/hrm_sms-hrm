@@ -618,7 +618,7 @@
                 IdCardNumber = model.CardNo,
                 PassportNo = model.PassportNo,
                 PassportExp = model.PassportExp,
-                GroupId = model.Team.Id,
+                TeamId = model.Team.Id,
                 IsLocal = model.IsLocal,
                 CountryCode = model.CountryCode,
                 CanOT = model.CanOT,
@@ -640,7 +640,7 @@
                 IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
                 PickupRemark = model.PickupRemark,
                 PromotionDate = model.PromotionDate,
-                SectionDate = model.SectionDate,
+                TeamDate = model.TeamDate,
                 MilitaryFromDate = model.MilitaryFromDate,
                 MilitaryToDate = model.MilitaryToDate
             };

@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetRequestByCreateDate_AllType] @SupervisorID INT = NULL
 	,@empid INT = NULL
-	,@groupids VARCHAR(max) = ''
+	,@TeamIds VARCHAR(max) = ''
 	,@fromdate DATETIME
 	,@todate DATETIME
 	,@status VARCHAR(max) = NULL
@@ -59,11 +59,11 @@ BEGIN
 		FROM dbo.fnc_strSplit(@status, ',')
 	END
 
-	IF ISNULL(@GroupIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupsList (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@GroupIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 	ELSE
 	BEGIN
@@ -593,8 +593,8 @@ BEGIN
 		,e.NickName AS RequesterNickName
 		,e.FullName AS RequesterFullName
 		,g.GroupId
-		,g.Code AS GroupCode
-		,g.[Name] AS GroupName
+		,g.Code AS TeamCode
+		,g.[Name] AS TeamName
 		,ap_V.EmpId AS VerifierId
 		,ap_V.NickName AS VerifierNickName
 		,ap_V.FullName AS VerifierFullName

@@ -211,9 +211,9 @@
                 AnnualLeaveBalance = requestInfo.AnnualLeaveBalance,
                 Team = new Team
                 {
-                    Id = requestInfo.GroupId,
-                    Code = requestInfo.GroupCode,
-                    Name = requestInfo.GroupName
+                    Id = requestInfo.TeamId,
+                    Code = requestInfo.TeamCode,
+                    Name = requestInfo.TeamName
                 }
             };
         }

@@ -65,7 +65,7 @@
         public Team Team { get; set; } ////remove
 
         [DataType(DataType.Date)]
-        public DateTime? SectionDate { get; set; }
+        public DateTime? TeamDate { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? JoinedDate { get; set; }

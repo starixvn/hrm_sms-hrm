@@ -258,7 +258,7 @@
                 DomainUsername = param.DomainUsername,
                 FullName = param.FullName,
                 Nickname = param.Nickname,
-                GroupId = param.TeamId,
+                TeamId = param.TeamId,
                 Password = Encryptor.ComputeHash(authService.HashProvider, param.Code)
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -297,7 +297,7 @@
                 PassportNo = param.PassportNo,
                 PassportExp = param.PassportExp,
                 ModifiedBy = actorId,
-                GroupId = param.GroupId,
+                TeamId = param.TeamId,
                 IsLocal = param.IsLocal,
                 CountryCode = param.CountryCode,
                 CanOT = param.CanOT,
@@ -319,7 +319,7 @@
                 IsExpatUseHoliday = !param.IsLocal && param.IsExpatUseHoliday,
                 PickupRemark = param.PickupRemark,
                 PromotionDate = param.PromotionDate,
-                SectionDate = param.SectionDate,
+                TeamDate = param.TeamDate,
                 MilitaryFromDate = param.MilitaryFromDate,
                 MilitaryToDate = param.MilitaryToDate
             };

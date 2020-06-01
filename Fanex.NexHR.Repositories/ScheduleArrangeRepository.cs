@@ -24,7 +24,7 @@
 
                             return weeklySchedule;
                         },
-                        splitOn: "GroupId, DefaultShiftId");
+                        splitOn: "TeamId, DefaultShiftId");
 
                     IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                         (dailySchedule, shift, leave, leave2) =>

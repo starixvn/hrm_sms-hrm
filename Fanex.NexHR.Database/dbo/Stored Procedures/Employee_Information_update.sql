@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@Enabled BIT
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL
-	,@GroupId INT
+	,@TeamId INT
 	,@Roles VARCHAR(20)
 	,@JoinedDate DATE = NULL
 	,@ConfirmedDate DATE = NULL
@@ -48,7 +48,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@EmployeeCard VARCHAR(10) = ''
 	,@PickupRemark NVARCHAR(200) = NULL
 	,@PromotionDate DATE = NULL
-	,@SectionDate DATE = NULL
+	,@TeamDate DATE = NULL
 	,@MilitaryFromDate DATE = NULL
 	,@MilitaryToDate DATE = NULL
 	,@ErrCode INT = 0 OUTPUT
@@ -159,7 +159,7 @@ BEGIN
 				,EmployeeCard AS '@EmployeeCard'
 				,PickupRemark AS '@PickupRemark'
 				,PromotionDate AS '@PromotionDate'
-				,SectionDate AS '@SectionDate'
+				,TeamDate AS '@TeamDate'
 				,@Roles_old AS '@RoleIds'
 				,CanOT AS '@CanOT'
 				,SpecialOT AS '@SpecialOT'
@@ -193,7 +193,7 @@ BEGIN
 		,[Enabled] = @Enabled
 		,Phone = @Phone
 		,Gender = @Gender
-		,GroupId = @GroupId
+		,GroupId = @TeamId
 		,JoinedDate = @JoinedDate
 		,ConfirmedDate = @ConfirmedDate
 		,ResignedDate = @ResignedDate
@@ -220,7 +220,7 @@ BEGIN
 		,EmployeeCard = @EmployeeCard
 		,PickupRemark = @PickupRemark
 		,PromotionDate = @PromotionDate
-		,SectionDate = @SectionDate
+		,TeamDate = @TeamDate
 	WHERE EmpId = @EmpId
 
 	EXEC dbo.EmployeeRole_Update @EmployeeId = @EmpId
@@ -283,7 +283,7 @@ BEGIN
 				,EmployeeCard AS '@EmployeeCard'
 				,PickupRemark AS '@PickupRemark'
 				,PromotionDate AS '@PromotionDate'
-				,SectionDate AS '@SectionDate'
+				,TeamDate AS '@TeamDate'
 				,@Roles AS '@RoleIds'
 				,CanOT AS '@CanOT'
 				,SpecialOT AS '@SpecialOT'

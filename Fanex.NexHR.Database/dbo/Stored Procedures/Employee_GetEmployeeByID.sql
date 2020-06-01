@@ -31,7 +31,7 @@ BEGIN
 		,e.[Enabled]
 		,e.Phone
 		,e.Gender
-		,e.SectionDate
+		,e.TeamDate
 		,e.PromotionDate
 		,e.JoinedDate
 		,e.ConfirmedDate

@@ -222,10 +222,10 @@
     <Setting Key="TestDepartment_Delete" SpName="TestDepartment_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Update" SpName="TestDepartment_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_GetById" SpName="TestDepartment_GetById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
     </Setting>
     <Setting Key="TestDepartment_GetByActive" SpName="TestDepartment_GetByActive" DbName="nexhrx" Plain="0">
-      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
     </Setting>
   </Function>
   <Function Name="Unit">

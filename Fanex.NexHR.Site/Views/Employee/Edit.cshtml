@@ -349,11 +349,11 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.SectionDate, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.TeamDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @{ var sectionDate = Model.SectionDate.HasValue ? Model.SectionDate.ToDateMonthYearFormatedDate() : string.Empty; }
-                    @Html.TextBox("SectionDate", sectionDate, new { @class = "datepicker form-control" })
+                    @{ var teamDate = Model.TeamDate.HasValue ? Model.TeamDate.ToDateMonthYearFormatedDate() : string.Empty; }
+                    @Html.TextBox("TeamDate", teamDate, new { @class = "datepicker form-control" })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </li>

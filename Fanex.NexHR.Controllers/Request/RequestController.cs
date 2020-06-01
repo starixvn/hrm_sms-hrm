@@ -276,7 +276,7 @@
                 EmpId = employeeId,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
-                GroupIds = request.TeamIds,
+                TeamIds = request.TeamIds,
                 Status = request.StatusIds,
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,

@@ -11,7 +11,7 @@
 
         public int? EmpId { get; set; }
 
-        public string GroupIds { get; set; }
+        public string TeamIds { get; set; }
 
         public DateTime FromDate { get; set; }
 
