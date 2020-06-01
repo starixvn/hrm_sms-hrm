@@ -52,7 +52,7 @@ input[type="text"] {
     margin-top: 10px;
 }
 
-.section-content.iframe {
+.team-content.iframe {
     .table-wrapper {
         width: 1070px;
 
@@ -199,7 +199,7 @@ input[type="text"] {
             box-shadow: 0 0 4px 2px #1e88e5;
         }
 
-        .row-section {
+        .row-team {
             background-color: #f2f2c2;
             font-weight: bold;
             border: 1px solid #d2d2d2;
@@ -208,7 +208,7 @@ input[type="text"] {
             justify-content: space-between;
             align-items: center;
 
-            .section-name {
+            .team-name {
                 width: 230px;
                 display: flex;
                 justify-content: space-between;
