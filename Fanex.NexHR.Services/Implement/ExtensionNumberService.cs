@@ -22,11 +22,11 @@
             return baseService.GetData<ExtensionNoModel>(criteria);
         }
 
-        public IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? groupId = null, bool? isInternal = null)
+        public IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? teamId = null, bool? isInternal = null)
         {
             var criteria = new GetExtensionNumberGroupInfoCriteria
             {
-                TeamId = groupId,
+                TeamId = teamId,
                 IsInternal = isInternal
             };
             return baseService.GetData<ExtensionNoModel>(criteria).ToList();
@@ -57,11 +57,11 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditExternalGroup(int groupId, string groupName)
+        public CommandResult EditExternalGroup(int teamId, string groupName)
         {
             var criteria = new UpdateExternalNumberCriteria
             {
-                ExternalId = groupId,
+                ExternalId = teamId,
                 FullName = groupName
             };
             return baseService.ExecuteNonQuery(criteria);

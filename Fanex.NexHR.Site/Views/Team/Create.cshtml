@@ -56,7 +56,7 @@
             <div class="input-form">
                 @Html.TextBoxFor(model => model.TeamHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
-            @Html.TextBoxFor(model => model.HeadId, new { @class = "section-head" })
+            @Html.TextBoxFor(model => model.HeadId, new { @class = "team-head" })
             @Html.ValidationMessageFor(model => model.HeadId)
         </div>
         <div class="form-group">

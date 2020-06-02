@@ -79,7 +79,7 @@ BEGIN
 			)
 	ORDER BY g.[Code]
 
-	SELECT mng.GroupId
+	SELECT mng.GroupId AS TeamId
 		,mng.RoleId
 		,emp.EmpId
 		,emp.NickName

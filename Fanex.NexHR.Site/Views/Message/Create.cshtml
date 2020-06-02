@@ -26,7 +26,7 @@
         <div id="messageInfo" class="success" style="display:none;">@Messages.CreatedSuccessfully</div>
 
         @Html.HiddenFor(model => model.EmployeeIds)
-        @Html.HiddenFor(model => model.GroupIds)
+        @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.SendToEmail)
         <div class="form-group form-group--l">
             <div class="label-form">
@@ -68,7 +68,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(@Labels.SendToGroup, new { @class = "control-label" })
+                @Html.Label(@Labels.SendToTeam, new { @class = "control-label" })
             </div>
             <div class="input-form">
                 <div class="multi-select" id="Groups"></div>

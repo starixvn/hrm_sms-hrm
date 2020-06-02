@@ -7,6 +7,7 @@
     public class Team : EntityBase<int>
     {
         public Department Department { get; set; } = new Department();
+
         public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 
         public DateTime? CreatedDate { get; set; }

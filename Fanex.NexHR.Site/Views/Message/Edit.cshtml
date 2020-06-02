@@ -31,7 +31,7 @@
         @Html.Hidden("messageToDate", message.ToDate)
         @Html.Hidden("messageContents", message.Contents)
         @Html.Hidden("messageEmployeeIds", message.EmployeeIds)
-        @Html.Hidden("messageGroupIds", message.TeamIds)
+        @Html.Hidden("messageTeamIds", message.TeamIds)
         @Html.Hidden("messageCategory", message.Category)
 
         @Html.HiddenFor(model => model.EmployeeIds)
@@ -78,7 +78,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(@Labels.SendToGroup, new { @class = "control-label" })
+                @Html.Label(@Labels.SendToTeam, new { @class = "control-label" })
             </div>
             <div class="input-form">
                 <div class="multi-select" id="Groups"></div>

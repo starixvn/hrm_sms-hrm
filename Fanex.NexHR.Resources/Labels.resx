@@ -963,8 +963,8 @@
   <data name="SendToEmployee" xml:space="preserve">
     <value>To Employee</value>
   </data>
-  <data name="SendToGroup" xml:space="preserve">
-    <value>To Group</value>
+  <data name="SendToTeam" xml:space="preserve">
+    <value>To Section</value>
   </data>
   <data name="EditMessage" xml:space="preserve">
     <value>Edit Message</value>
@@ -1011,8 +1011,8 @@
   <data name="EmployeeShift" xml:space="preserve">
     <value>Employee Shift</value>
   </data>
-  <data name="ShowWholeSection" xml:space="preserve">
-    <value>Show whole section</value>
+  <data name="ShowWholeTeam" xml:space="preserve">
+    <value>Show whole Team</value>
   </data>
   <data name="ActualTime" xml:space="preserve">
     <value>Actual Time</value>
@@ -1725,8 +1725,8 @@
   <data name="VanLate" xml:space="preserve">
     <value>Van Late</value>
   </data>
-  <data name="SectionDate" xml:space="preserve">
-    <value>Section Date</value>
+  <data name="TeamDate" xml:space="preserve">
+    <value>Team Date</value>
   </data>
   <data name="PromotionDate" xml:space="preserve">
     <value>Promotion Date</value>

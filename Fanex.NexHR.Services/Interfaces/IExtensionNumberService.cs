@@ -18,6 +18,6 @@
 
         CommandResult EditExternalGroup(int teamId, string groupName);
 
-        CommandResult DeleteExternalGroup(int groupId);
+        CommandResult DeleteExternalGroup(int teamId);
     }
 }

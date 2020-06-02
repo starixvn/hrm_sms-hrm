@@ -233,7 +233,7 @@ BEGIN
 		,esum.IsDefaultSchedule AS IsUsedWeeklyDefaultShift
 		,modifier.NickName AS Modifier
 		,ec.ModifiedDate
-		,gr.GroupId
+		,gr.GroupId AS TeamId
 		,gr.Code
 		,gr.[Name]
 		,shift.ShiftId AS DefaultShiftId

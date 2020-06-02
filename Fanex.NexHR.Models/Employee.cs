@@ -62,7 +62,7 @@
 
         public byte? Gender { get; set; }
 
-        public Team Team { get; set; } ////remove
+        public Team Team { get; set; } 
 
         [DataType(DataType.Date)]
         public DateTime? TeamDate { get; set; }

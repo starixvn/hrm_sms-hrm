@@ -70,7 +70,7 @@ BEGIN
 			) AS a
 	END
 
-	SELECT g.GroupId
+	SELECT g.GroupId AS Id
 		,g.[Name]
 		,g.Code
 	FROM dbo.[Group] AS g WITH (NOLOCK)

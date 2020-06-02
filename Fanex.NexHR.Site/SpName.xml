@@ -102,9 +102,7 @@
       <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
       <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
     </Setting>
-    <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
-    </Setting>
+    <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_GetByRole" SpName="GroupSupervisor_GetByRole" DbName="nexhrx" Plain="0">
       <Mapping DataField="HasCheckInOut" ObjectProperty="CheckInOuts" />
@@ -113,8 +111,8 @@
       <Mapping DataField="HasLeave" ObjectProperty="Leaves" />
       <Mapping DataField="HasKeepInView" ObjectProperty="KeepInViews" />
       <Mapping DataField="HasOvertime" ObjectProperty="Overtimes" />
-      <Mapping DataField="Code" ObjectProperty="TeamCode" />
       <Mapping DataField="EmpId" ObjectProperty="OwnerId" />
+      <Mapping DataField="Code" ObjectProperty="TeamCode" />
     </Setting>
     <Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="nexhrx" Plain="0"></Setting>
@@ -277,7 +275,7 @@
   <Function Name="Schedule Arrange">
     <Setting Key="ScheduleArrangement_GetEmployee" SpName="ScheduleArrangement_GetEmployee" DbName="nexhrx" Plain="0" />
     <Setting Key="ScheduleArrangement_GetWeekly" SpName="ScheduleArrangement_GetWeekly" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" />
+      <Mapping DataField="TeamId" ObjectProperty="Id" />
       <Mapping DataField="DefaultShiftId" ObjectProperty="Id" />
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />

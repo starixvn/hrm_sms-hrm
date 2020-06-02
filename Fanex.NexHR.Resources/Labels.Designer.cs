@@ -4156,15 +4156,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section Date.
-        /// </summary>
-        public static string SectionDate {
-            get {
-                return ResourceManager.GetString("SectionDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to --Select an Approver--.
         /// </summary>
         public static string SelectApprover {
@@ -4228,11 +4219,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To Group.
+        ///   Looks up a localized string similar to To Section.
         /// </summary>
-        public static string SendToGroup {
+        public static string SendToTeam {
             get {
-                return ResourceManager.GetString("SendToGroup", resourceCulture);
+                return ResourceManager.GetString("SendToTeam", resourceCulture);
             }
         }
         
@@ -4354,11 +4345,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show whole section.
+        ///   Looks up a localized string similar to Show whole Team.
         /// </summary>
-        public static string ShowWholeSection {
+        public static string ShowWholeTeam {
             get {
-                return ResourceManager.GetString("ShowWholeSection", resourceCulture);
+                return ResourceManager.GetString("ShowWholeTeam", resourceCulture);
             }
         }
         
@@ -4539,6 +4530,15 @@ namespace Fanex.NexHR.Resources {
         public static string Team {
             get {
                 return ResourceManager.GetString("Team", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Date.
+        /// </summary>
+        public static string TeamDate {
+            get {
+                return ResourceManager.GetString("TeamDate", resourceCulture);
             }
         }
         

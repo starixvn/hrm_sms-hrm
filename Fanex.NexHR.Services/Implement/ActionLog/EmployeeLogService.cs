@@ -48,8 +48,8 @@
             new MappingFieldConfig { FieldName = "Skype", DisplayName = Labels.Skype },
             new MappingFieldConfig { FieldName = "LetsTalk", DisplayName = Labels.LetsTalk },
             new MappingFieldConfig { FieldName = "Unit", DisplayName = Labels.Unit },
-            new MappingFieldConfig { FieldName = "GroupId", DisplayName = Labels.Team },
-            new MappingFieldConfig { FieldName = "SectionDate", DisplayName = Labels.SectionDate, DataType = MappingDataType.Date },
+            new MappingFieldConfig { FieldName = "TeamId", DisplayName = Labels.Team },
+            new MappingFieldConfig { FieldName = "TeamDate", DisplayName = Labels.TeamDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
             new MappingFieldConfig { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
@@ -125,7 +125,7 @@
         {
             switch (field.FieldName)
             {
-                case "GroupId":
+                case "TeamId":
                     MappingTeam(field);
                     break;
 

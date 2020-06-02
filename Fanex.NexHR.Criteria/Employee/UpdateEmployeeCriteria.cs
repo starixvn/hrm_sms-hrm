@@ -35,7 +35,7 @@
 
         public int TeamId { get; set; }
 
-        public DateTime? SectionDate { get; set; }
+        public DateTime? TeamDate { get; set; }
 
         public string Roles { get; set; }
 

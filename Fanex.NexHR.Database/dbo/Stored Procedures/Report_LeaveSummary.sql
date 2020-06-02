@@ -360,7 +360,7 @@ BEGIN
 		,FullName
 		,NickName
 		,g.[Rank]
-		,g.GroupId
+		,g.GroupId AS TeamId
 		,g.[Name] AS Team
 	FROM #CurrenBalace AS cb
 		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid
@@ -399,8 +399,8 @@ BEGIN
 		,FullName
 		,NickName
 		,g.[Rank]
-		,g.GroupId
-		,g.[Name]
+		,g.GroupId AS TeamId
+		,g.[Name] AS Team
 	FROM #OpenBalance AS op
 		LEFT JOIN #CreditKIV AS kiv ON op.EmpId = kiv.EmpId
 		LEFT JOIN #CurrentKIV AS dek ON op.EmpId = dek.EmpId

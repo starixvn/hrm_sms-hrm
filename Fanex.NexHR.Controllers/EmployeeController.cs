@@ -640,7 +640,7 @@
                 IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
                 PickupRemark = model.PickupRemark,
                 PromotionDate = model.PromotionDate,
-                SectionDate = model.TeamDate,
+                TeamDate = model.TeamDate,
                 MilitaryFromDate = model.MilitaryFromDate,
                 MilitaryToDate = model.MilitaryToDate
             };

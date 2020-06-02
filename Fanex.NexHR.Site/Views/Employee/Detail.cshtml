@@ -145,14 +145,14 @@
                 </li>
             }
             <li class="list-group-item">
-                <div class="plabel">@Labels.Section:</div>
+                <div class="plabel">@Labels.Team:</div>
                 <div class="pcontent bold">@Model.Team.Name</div>
             </li>
-            @if (Model.SectionDate.HasValue)
+            @if (Model.TeamDate.HasValue)
             {
                 <li class="list-group-item">
-                    <div class="plabel">@Labels.SectionDate:</div>
-                    <div class="pcontent bold">@Model.SectionDate.Value.ToDateMonthYearFormatedDate()</div>
+                    <div class="plabel">@Labels.TeamDate:</div>
+                    <div class="pcontent bold">@Model.TeamDate.Value.ToDateMonthYearFormatedDate()</div>
                 </li>
             }
             <li class="list-group-item">
