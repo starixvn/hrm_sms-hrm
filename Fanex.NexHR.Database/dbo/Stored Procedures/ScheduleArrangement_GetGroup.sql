@@ -17,7 +17,7 @@ BEGIN
 	DECLARE @ShiftManagerRoleId TINYINT = 4
 		,@EditScheduleUnlimited VARCHAR(100) = 'EditScheduleUnlimited'
 
-	SELECT gr.GroupId
+	SELECT gr.GroupId AS TeamId
 		,gr.Code
 		,gr.[Name]
 	FROM dbo.[Group] AS gr WITH (NOLOCK)

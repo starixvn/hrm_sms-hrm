@@ -94,7 +94,6 @@ BEGIN
 		,e.PassportNo
 		,e.PassportExp
 		,e.[Password]
-		,e.GroupId
 		,ISNULL(e.GroupID, - 1) AS [TeamID]
 		,ISNULL(g.[Name], '') AS [Team]
 	FROM dbo.Employee AS e WITH (NOLOCK)

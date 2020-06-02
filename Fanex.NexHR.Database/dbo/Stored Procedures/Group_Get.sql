@@ -54,7 +54,7 @@ BEGIN
 			)
 	GROUP BY g.GroupId
 
-	SELECT g.groupId
+	SELECT g.groupId AS TeamId
 		,g.[Name]
 		,g.Code
 		,g.[Rank]

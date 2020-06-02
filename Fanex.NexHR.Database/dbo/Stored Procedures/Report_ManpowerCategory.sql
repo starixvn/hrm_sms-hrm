@@ -23,9 +23,9 @@ BEGIN
 	SELECT @FromDate = CAST(@Year AS VARCHAR(4)) + '/01/01'
 		,@ToDate = CAST(@Year AS VARCHAR(4)) + '/12/31'
 
-	SELECT g.GroupId
-		,g.Code AS GroupCode
-		,g.[Name] AS GroupName
+	SELECT g.GroupId AS TeamId
+		,g.Code AS TeamCode
+		,g.[Name] AS TeamName
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @ToDate) >= 0
 					AND (

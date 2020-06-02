@@ -30,7 +30,7 @@ BEGIN
 		,mis.EmpId
 		,e.NickName
 		,e.FullName
-		,g.GroupId
+		,g.GroupId As TeamId
 		,g.Code
 		,g.[Name] AS Team
 		,ve.EmpId AS VerifierId

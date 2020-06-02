@@ -2,9 +2,9 @@
 {
     public class ManpowerCategoryModel
     {
-        public string GroupCode { get; set; }
+        public string TeamCode { get; set; }
 
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
 
         public int Total => TotalExpat + TotalLocal;
 

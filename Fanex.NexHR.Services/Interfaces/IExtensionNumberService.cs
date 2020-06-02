@@ -8,15 +8,15 @@
     {
         IEnumerable<ExtensionNoModel> GetAllExtensionNo();
 
-        IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? groupId = null, bool? isInternal = null);
+        IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? teamId = null, bool? isInternal = null);
 
         ExtensionNoModel GetEmployeeExtensionNoById(int employeeExtensionNoId, bool isInternal);
 
         CommandResult DeleteExtensionNumber(int extensionNoId);
 
-        CommandResult CreateExternalGroup(string groupName);
+        CommandResult CreateExternalGroup(string teamName);
 
-        CommandResult EditExternalGroup(int teamId, string groupName);
+        CommandResult EditExternalGroup(int teamId, string teamName);
 
         CommandResult DeleteExternalGroup(int teamId);
     }

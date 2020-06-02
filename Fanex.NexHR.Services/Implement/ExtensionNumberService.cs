@@ -48,28 +48,28 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult CreateExternalGroup(string groupName)
+        public CommandResult CreateExternalGroup(string teamName)
         {
             var criteria = new CreateExternalGroupCriteria
             {
-                FullName = groupName
+                FullName = teamName
             };
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult EditExternalGroup(int teamId, string groupName)
+        public CommandResult EditExternalGroup(int teamId, string teamName)
         {
             var criteria = new UpdateExternalNumberCriteria
             {
                 ExternalId = teamId,
-                FullName = groupName
+                FullName = teamName
             };
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult DeleteExternalGroup(int groupId)
+        public CommandResult DeleteExternalGroup(int teamId)
         {
-            var criteria = new DeleteExternalGroupCriteria { ExternalId = groupId };
+            var criteria = new DeleteExternalGroupCriteria { ExternalId = teamId };
             return baseService.ExecuteNonQuery(criteria);
         }
     }

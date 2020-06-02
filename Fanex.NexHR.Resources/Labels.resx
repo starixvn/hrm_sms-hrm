@@ -1314,8 +1314,8 @@
   <data name="ExternalGroup" xml:space="preserve">
     <value>External Group</value>
   </data>
-  <data name="GroupName" xml:space="preserve">
-    <value>Group Name</value>
+  <data name="TeamName" xml:space="preserve">
+    <value>Team Name</value>
   </data>
   <data name="TeamHead" xml:space="preserve">
     <value>Team Head</value>

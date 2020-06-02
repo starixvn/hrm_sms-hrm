@@ -99,7 +99,7 @@
     <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Group_Get" SpName="Group_Get" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="Id" Class="Team" />
+      <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
       <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
     </Setting>
     <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0"></Setting>
@@ -503,9 +503,6 @@
   </Function>
   <Function Name="Discipline Rule">
     <Setting Key="DisciplineRule_GetByGroupId" SpName="DisciplineRule_GetByGroupId" DbName="nexhrx" Plain="0" />
-    <Setting Key="DisciplineRule_Update" SpName="DisciplineRule_Update" DbName="nexhrx" Plain="0">
-      <Mapping DataField="GroupId" ObjectProperty="TeamId" Class="Requester" />
-    </Setting>
-    
+    <Setting Key="DisciplineRule_Update" SpName="DisciplineRule_Update" DbName="nexhrx" Plain="0"></Setting>
   </Function>
 </Functions>

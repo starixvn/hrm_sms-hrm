@@ -43,9 +43,9 @@ BEGIN
 		,@Nov = DATEADD(MM, 10, @Jan)
 		,@Dec = DATEADD(MM, 11, @Jan)
 
-	SELECT g.GroupId
-		,g.Code AS GroupCode
-		,g.[Name] AS GroupName
+	SELECT g.GroupId AS TeamId
+		,g.Code AS TeamCode
+		,g.[Name] AS TeamName
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, @Jan, e.ResignedDate) >= 0
 					AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0

@@ -130,7 +130,7 @@
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = manpower.GroupName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalExpat;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalLocal;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.Total;
@@ -181,7 +181,7 @@
             var colIndex = 1;
             var month = 1;
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
-            worksheet.Cells[rowIndex, colIndex++].Value = manpower.GroupName;
+            worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.ProbationResigned;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.ConfirmedResigned;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.NewHire;

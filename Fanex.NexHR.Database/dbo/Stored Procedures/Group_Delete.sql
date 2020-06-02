@@ -26,7 +26,7 @@ BEGIN
 			)
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'The group is not empty so cannot delete it'
+			,@ErrMsg = 'The team is not empty so cannot delete it'
 
 		RETURN
 	END

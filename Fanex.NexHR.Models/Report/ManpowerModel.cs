@@ -2,9 +2,9 @@
 {
     public class ManpowerModel
     {
-        public string GroupCode { get; set; }
+        public string TeamCode { get; set; }
 
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
 
         public int ProbationResigned { get; set; }
 

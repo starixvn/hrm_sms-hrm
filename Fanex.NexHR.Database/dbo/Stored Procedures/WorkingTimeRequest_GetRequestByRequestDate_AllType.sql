@@ -694,9 +694,9 @@ BEGIN
 		,e.EmpId AS RequesterId
 		,e.NickName AS RequesterNickName
 		,e.FullName AS RequesterFullName
-		,g.GroupId
-		,g.Code AS GroupCode
-		,g.[Name] AS GroupName
+		,g.GroupId AS TeamId
+		,g.Code AS TeamCode
+		,g.[Name] AS TeamName
 		,ap_V.EmpId AS VerifierId
 		,ap_V.NickName AS VerifierNickName
 		,ap_V.FullName AS VerifierFullName

@@ -17,7 +17,7 @@ BEGIN
 	SELECT e.EmpId
 		,e.NickName
 		,e.FullName
-		,g.GroupId
+		,g.GroupId AS TeamId
 		,g.Code
 		,g.[Name]
 		,CAST(MAX(CASE 

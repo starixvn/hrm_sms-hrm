@@ -1978,15 +1978,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group Name.
-        /// </summary>
-        public static string GroupName {
-            get {
-                return ResourceManager.GetString("GroupName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Half Day.
         /// </summary>
         public static string HalfDay {
@@ -4557,6 +4548,15 @@ namespace Fanex.NexHR.Resources {
         public static string TeamManagement {
             get {
                 return ResourceManager.GetString("TeamManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Name.
+        /// </summary>
+        public static string TeamName {
+            get {
+                return ResourceManager.GetString("TeamName", resourceCulture);
             }
         }
         

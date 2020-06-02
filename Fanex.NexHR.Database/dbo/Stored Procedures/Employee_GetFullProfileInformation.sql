@@ -68,7 +68,7 @@ BEGIN
 		,e.Email
 		,e.Qualification
 		,e.Major
-		,g.[Name] AS GroupName
+		,g.[Name] AS TeamName
 	FROM #tplEmployee tpl
 	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId

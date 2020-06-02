@@ -95,7 +95,7 @@ BEGIN
 	ORDER BY es.GroupId
 		,es.ActionType
 
-	SELECT g.GroupId
+	SELECT g.GroupId AS TeamId
 		,g.Code
 		,g.[Name]
 		,sp.ActionType

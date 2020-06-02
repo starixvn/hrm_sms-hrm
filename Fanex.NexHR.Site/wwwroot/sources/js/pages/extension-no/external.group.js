@@ -6,9 +6,9 @@ import { stringify } from 'qs';
 import { axiosError, confirm, resolveClientUrl, toastOptions } from '../../shared/common.functions';
 
 const externalGroup = (function ($) {
-    function validateGroupName(groupName) {
+    function validateTeamName(teamName) {
         let isValid = true;
-        if (groupName.length < 3 || groupName.length > 100) {
+        if (team.length < 3 || teamName.length > 100) {
             $('.validation-summary-errors').html('Length of external group must be 3 between and 100.').show();
             isValid = false;
         }
@@ -18,7 +18,7 @@ const externalGroup = (function ($) {
 
     function registerEventCreate() {
         $('#btnCreate').on('click', function () {
-            $('#GroupName').val('');
+            $('#TeamName').val('');
             $('.validation-summary-errors').html('').hide();
 
             $('#dialog-form').dialog({
@@ -30,15 +30,15 @@ const externalGroup = (function ($) {
                         text: 'Save',
                         class: 'btn btn-primary',
                         click: function () {
-                            const groupName = $('#GroupName').val().trim();
-                            if (!validateGroupName(groupName)) {
+                            const teamName = $('#TeamName').val().trim();
+                            if (!validateTeamName(teamName)) {
                                 return;
                             }
 
                             axios({
                                 url: resolveClientUrl('ExtensionNo/CreateExternalGroup'),
                                 method: 'POST',
-                                data: stringify({ groupName }),
+                                data: stringify({ teamName }),
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
                                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -69,7 +69,7 @@ const externalGroup = (function ($) {
         $('table#data a.edit').on('click', function () {
             const teamId = $(this).data('id'),
                 name = $(this).data('name');
-            $('#GroupName').val(name);
+            $('#TeamName').val(name);
             $('.validation-summary-errors').html('').hide();
 
             $('#dialog-form').dialog({
@@ -81,15 +81,15 @@ const externalGroup = (function ($) {
                         text: 'Save',
                         class: 'btn btn-primary',
                         click: function () {
-                            const groupName = $('#GroupName').val().trim();
-                            if (!validateGroupName(groupName)) {
+                            const teamName = $('#TeamName').val().trim();
+                            if (!validateTeamName(teamName)) {
                                 return;
                             }
 
                             axios({
                                 url: resolveClientUrl('ExtensionNo/EditExternalGroup'),
                                 method: 'POST',
-                                data: stringify({ teamId, groupName }),
+                                data: stringify({ teamId, teamName }),
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
                                     'Content-Type': 'application/x-www-form-urlencoded'

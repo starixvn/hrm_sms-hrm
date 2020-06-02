@@ -179,9 +179,9 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public CustomJsonResult CreateExternalGroup(string groupName)
+        public CustomJsonResult CreateExternalGroup(string teamName)
         {
-            CommandResult commandResult = extensionNumberService.CreateExternalGroup(groupName);
+            CommandResult commandResult = extensionNumberService.CreateExternalGroup(teamName);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -196,9 +196,9 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public CustomJsonResult EditExternalGroup(int teamId, string groupName)
+        public CustomJsonResult EditExternalGroup(int teamId, string teamName)
         {
-            CommandResult commandResult = extensionNumberService.EditExternalGroup(teamId, groupName);
+            CommandResult commandResult = extensionNumberService.EditExternalGroup(teamId, teamName);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

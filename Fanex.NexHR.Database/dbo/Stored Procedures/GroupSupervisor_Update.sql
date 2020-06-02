@@ -106,7 +106,7 @@ BEGIN
 				,[source].DisplayOrder
 				);
 
-	DECLARE @LogSPData VARCHAR(MAX) = '<GroupSupervisor_Update ActionType="' + coalesce(cast(@RoleId AS VARCHAR(10)), space(1)) + '" ' + 'GroupId="' + coalesce(cast(@TeamId AS VARCHAR(10)), space(1)) + '" ' + 'SupervisorXml="' + @SupervisorXml + '" />'
+	DECLARE @LogSPData VARCHAR(MAX) = '<GroupSupervisor_Update ActionType="' + coalesce(cast(@RoleId AS VARCHAR(10)), space(1)) + '" ' + 'TeamId="' + coalesce(cast(@TeamId AS VARCHAR(10)), space(1)) + '" ' + 'SupervisorXml="' + @SupervisorXml + '" />'
 
 	EXEC dbo.Log_WriteLog @LogActionID = 1000
 		,@LogDate = @ModifiedDate

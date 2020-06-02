@@ -52,7 +52,7 @@
 
         public string Major { get; set; }
 
-        public string GroupName { get; set; }
+        public string TeamName { get; set; }
 
         public IEnumerable<EmployeeRelationship> Relationships { get; set; }
     }
