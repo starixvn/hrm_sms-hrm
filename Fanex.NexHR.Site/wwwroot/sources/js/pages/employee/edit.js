@@ -140,7 +140,7 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                noneSelectedText: 'Select a section',
+                noneSelectedText: 'Select a team',
                 singleSelection: true,
                 selectedItems: $('#Team_Id').val(),
                 onSelect: function () {

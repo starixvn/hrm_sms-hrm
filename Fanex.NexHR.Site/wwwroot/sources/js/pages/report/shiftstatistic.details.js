@@ -16,7 +16,7 @@ $(document).ready(function () {
                 workdate: $('#WorkDate').val(),
                 shiftId: $('#ShiftId').val(),
                 employeeId: $('#EmployeeId').val(),
-                teamIds: $('#TeamtionIds').val(),
+                teamIds: $('#TeamIds').val(),
                 isLocal: $('#IsLocal').val(),
                 IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
             },

@@ -964,7 +964,7 @@
     <value>To Employee</value>
   </data>
   <data name="SendToTeam" xml:space="preserve">
-    <value>To Section</value>
+    <value>To Team</value>
   </data>
   <data name="EditMessage" xml:space="preserve">
     <value>Edit Message</value>

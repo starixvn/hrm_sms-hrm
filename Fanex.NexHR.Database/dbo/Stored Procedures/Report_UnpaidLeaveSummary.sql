@@ -274,7 +274,7 @@ BEGIN
 		,emp.EmpId
 		,emp.NickName
 		,emp.FullName
-		,g.GroupId
+		,g.GroupId AS TeamId
 		,g.[Name] AS Team
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId

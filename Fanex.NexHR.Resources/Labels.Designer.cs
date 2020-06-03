@@ -4210,7 +4210,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To Section.
+        ///   Looks up a localized string similar to To Team.
         /// </summary>
         public static string SendToTeam {
             get {

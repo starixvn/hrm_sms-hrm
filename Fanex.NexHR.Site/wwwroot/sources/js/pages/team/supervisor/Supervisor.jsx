@@ -123,7 +123,6 @@ export default class Supervisor extends Component {
     }
 
     handleSave = () => {
-        debugger
         const supervisors = [];
         const requestTypes = [
             { key: 'leaves', value: RequestType.Leave },

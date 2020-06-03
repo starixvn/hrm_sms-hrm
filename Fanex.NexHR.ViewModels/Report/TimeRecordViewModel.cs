@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Models;
 
     public class TimeRecordViewModel : PagerOptionModel
     {
@@ -16,7 +15,7 @@
 
         public string TeamIds { get; set; }
 
-        public IList<Fanex.NexHR.Models.Team> Teams { get; set; }
+        public IList<Models.Team> Teams { get; set; }
 
         public byte? IsLocal { get; set; }
     }

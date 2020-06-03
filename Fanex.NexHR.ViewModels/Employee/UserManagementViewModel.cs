@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Fanex.NexHR.Models;
 
     public class UserManagementViewModel : PagerOptionModel
     {
@@ -19,7 +18,7 @@
 
         public bool? IsLocal { get; set; }
 
-        public IList<Fanex.NexHR.Models.Team> Groups { get; set; }
+        public IList<Models.Team> Groups { get; set; }
 
         public IList<SelectListItem> JobTitles { get; set; }
     }

@@ -49,7 +49,7 @@ BEGIN
 					ELSE 0
 					END) Overtimes
 			,isnull(g.GroupID, - 1) AS [TeamID]
-			,isnull(g.NAME, '') AS [Team]
+			,isnull(g.NAME, '') AS [TeamCode]
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 			INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON ee.GroupId = g.GroupId
@@ -77,7 +77,7 @@ BEGIN
 			,0 KeepInViews
 			,0 Overtimes
 			,isnull(g.GroupID, - 1) AS [TeamID]
-			,isnull(g.NAME, '') AS [Team]
+			,isnull(g.NAME, '') AS [TeamCode]
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 			INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON ee.GroupId = g.GroupId
@@ -103,8 +103,8 @@ BEGIN
 			,su.Leaves
 			,su.KeepInViews
 			,su.Overtimes
-			,su.TeamID
-			,su.[Team]
+			,su.TeamId
+			,su.[Team] AS [TeamCode]
 			,ROW_NUMBER() OVER (
 				ORDER BY MIN(ord.OrderNo)
 				) OrderNo

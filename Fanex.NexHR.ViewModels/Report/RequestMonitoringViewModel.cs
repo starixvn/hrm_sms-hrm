@@ -12,7 +12,7 @@
 
         public int? EmpId { get; set; }
 
-        public string Group { get; set; }
+        public string Team { get; set; }
 
         public byte? IsLocal { get; set; }
 

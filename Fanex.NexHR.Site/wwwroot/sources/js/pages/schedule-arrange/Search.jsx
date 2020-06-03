@@ -52,7 +52,7 @@ export default class Search extends Component {
                             <TreeMultiselect
                                 data={this.props.teamOptions}
                                 isSelectedAll
-                                onChange={this.handleGroupChange}
+                                onChange={this.handleTeamChange}
                             />
                         </div>
                     </div>
