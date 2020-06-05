@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories;
@@ -8,11 +10,14 @@
     public class SectionService : ISectionService
     {
         private readonly ISectionRepository sectionRepository;
+        private readonly IBaseService baseService;
 
         public SectionService(
-            ISectionRepository sectionRepository)
+            ISectionRepository sectionRepository,
+            IBaseService baseService)
         {
             this.sectionRepository = sectionRepository;
+            this.baseService = baseService;
         }
 
         public Section GetById(int id)
@@ -35,5 +40,13 @@
             return sections ?? new List<Section>();
         }
 
+        public CommandResult Delete(int id)
+        {
+            var criteria = new DeleteSectionCriteria
+            {
+                sectionId = id,
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
     }
 }

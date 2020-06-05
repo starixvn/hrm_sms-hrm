@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Section
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class UpdateSectionCriteria : CriteriaBase
@@ -13,7 +12,7 @@
 
         public bool IsActive { get; set; }
 
-        public int ParentId { get; set; }
+        public int DepartmentId { get; set; }
 
         public int ModifiedBy { get; set; }
 

@@ -30,7 +30,7 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<NewDepartment> GetByActive(bool? isActive = true)
+        public IList<NewDepartment> GetByActive(bool? isActive)
         {
             var criteria = new GetDepartmentByActiveCriteria
             {

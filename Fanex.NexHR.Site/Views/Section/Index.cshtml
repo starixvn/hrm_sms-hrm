@@ -81,12 +81,12 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("Edit", "Section", new { SectionId = sectionDetail.Id })">
+                            <a href="@Url.Action("Edit", "Section", new {Id = sectionDetail.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
                         <td>
-                            <a href="javascript:;" class="deleteDepartment" data-department-id="@sectionDetail.Id">
+                            <a href="javascript:;" class="deleteSection" data-section-id="@sectionDetail.Id">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>

@@ -44,6 +44,10 @@ function validateFormData() {
         errorMessages.push('The Name field is required!');
     }
 
+    if ($('#DepartmentId').val() == 0) {
+        errorMessages.push('The Department field is required!');
+    }
+
     if (errorMessages.length > 0) {
         $('.validation-summary-valid').find('ul:first').html('');
         showValidationSummaryErrors(errorMessages);
@@ -54,6 +58,5 @@ function validateFormData() {
 }
 
 $(document).ready(() => {
-    initManagerSearch();
     submitEvent();
 });
