@@ -100,7 +100,7 @@
     <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Group_Get" SpName="Group_Get" DbName="nexhrx" Plain="0">
       <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+      <Mapping DataField="SectionId" ObjectProperty="Id" Class="Section" />
     </Setting>
     <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="nexhrx" Plain="0"></Setting>

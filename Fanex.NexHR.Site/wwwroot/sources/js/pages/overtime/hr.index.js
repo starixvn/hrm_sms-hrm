@@ -92,7 +92,7 @@ $(document).ready(function () {
         $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
     }
 
-    axios(resolveClientUrl('Department/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

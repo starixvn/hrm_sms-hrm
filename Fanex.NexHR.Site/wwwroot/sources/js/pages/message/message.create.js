@@ -57,7 +57,7 @@ function initSearchEmployee() {
 
 function initSearchGroup() {
     axios({
-        url: _global.root + 'Department/GetHierarchy',
+        url: _global.root + 'Section/GetHierarchy',
         method: "GET"
     }).then(response => {
         $('#Groups').multiSelectTreeView({

@@ -83,7 +83,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
 
     $(document).ready(function () {
         $.ajax({
-            url: _global.root + 'Department/GetHierarchy',
+            url: _global.root + 'Section/GetHierarchy',
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

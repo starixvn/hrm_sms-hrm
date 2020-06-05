@@ -9,7 +9,7 @@ import { axiosError, floatThead, resolveClientUrl, blockUI, unblockUI, downloadF
 $(document).ready(function () {
     floatThead('table#data');
 
-    axios(resolveClientUrl('Department/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             const teamIds = $('#TeamIds').val();
 

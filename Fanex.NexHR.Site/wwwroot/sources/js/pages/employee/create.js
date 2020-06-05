@@ -47,7 +47,7 @@ $(document).ready(function () {
         return isValid;
     };
 
-    axios(_global.root + 'Department/GetHierarchy')
+    axios(_global.root + 'Section/GetHierarchy')
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

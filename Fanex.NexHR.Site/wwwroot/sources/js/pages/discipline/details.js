@@ -242,7 +242,7 @@ import { DisciplineType } from '../../shared/constants';
         initDatepicker();
         initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
-        axios(resolveClientUrl('Department/GetHierarchy'))
+        axios(resolveClientUrl('Section/GetHierarchy'))
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,

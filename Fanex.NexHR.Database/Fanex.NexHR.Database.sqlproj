@@ -77,7 +77,6 @@
     <Build Include="dbo\Tables\OTDailyRequest.sql" />
     <Build Include="dbo\Tables\OTMonthlyRequest.sql" />
     <Build Include="dbo\Tables\Shift.sql" />
-    <Build Include="dbo\Tables\Department.sql" />
     <Build Include="dbo\Tables\TimeRecord.sql" />
     <Build Include="dbo\Tables\tmpKIVLeaveBalance.sql" />
     <Build Include="dbo\Tables\EmployeeAttendanceViolation.sql" />
@@ -151,12 +150,11 @@
     <Build Include="dbo\Stored Procedures\Group_GetBySupervisor.sql" />
     <Build Include="dbo\Stored Procedures\Report_UnpaidLeaveSummary.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetEmployeeToRemindClaim.sql" />
-    <Build Include="dbo\Stored Procedures\Department_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
-    <Build Include="dbo\Stored Procedures\Department_GetByParentId.sql" />
+    <Build Include="dbo\Stored Procedures\Section_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Section_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Get.sql" />
-    <Build Include="dbo\Stored Procedures\Department_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Section_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Section_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeGroup_Get.sql" />
     <Build Include="dbo\Stored Procedures\Menu_GetMenusByUserId.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_GetMonthlyRequestByEmpId.sql" />
@@ -172,7 +170,6 @@
     <Build Include="dbo\Stored Procedures\Overtime_ResetRequest.sql" />
     <Build Include="dbo\Stored Procedures\AnnualLeave_InsertTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\Overtime_UpdateMonthlyRequest.sql" />
-    <Build Include="dbo\Stored Procedures\Department_GetParent.sql" />
     <Build Include="dbo\Stored Procedures\Group_Get.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetMonthlyByEmployeeId.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByWeekly.sql" />
@@ -271,7 +268,7 @@
     <Build Include="dbo\Stored Procedures\ExtensionNO_GetGroupInfo.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_Insert_EmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_Insert_GroupExternal.sql" />
-    <Build Include="dbo\Stored Procedures\Department_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Section_Get.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_WriteHistory.sql" />
     <Build Include="dbo\Stored Procedures\ExtensionNO_Update_EmployeeInfo.sql" />
     <Build Include="dbo\Stored Procedures\GroupSupervisor_GetDisciplineSettingById.sql" />
@@ -496,6 +493,7 @@
     <Build Include="dbo\Stored Procedures\Unit_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Unit_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Unit_Update.sql" />
+    <Build Include="dbo\Tables\Section.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

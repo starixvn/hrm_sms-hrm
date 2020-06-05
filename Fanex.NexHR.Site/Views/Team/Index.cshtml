@@ -34,7 +34,7 @@
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
             <th>@Labels.Team</th>
-            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
             <th>@Labels.TeamHead</th>
             <th>@Labels.AssistantTeamHead</th>
             <th>@Labels.Leader</th>
@@ -62,7 +62,7 @@
                 <td>@(index++)</td>
                 <td>@team.Code</td>
                 <td>@team.Name</td>
-                <td>@team.Department.Name</td>
+                <td>@team.Section.Name</td>
                 <td>@(teamHead != null ? teamHead.Nickname : string.Empty)</td>
                 <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantHead).Select(x => x.Nickname))</td>
                 <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>

@@ -28,7 +28,7 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
-    axios(resolveClientUrl('Department/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

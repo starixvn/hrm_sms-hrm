@@ -23,7 +23,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
     }
 
     $(document).ready(function () {
-        axios(resolveClientUrl('Department/GetHierarchy'))
+        axios(resolveClientUrl('Section/GetHierarchy'))
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,

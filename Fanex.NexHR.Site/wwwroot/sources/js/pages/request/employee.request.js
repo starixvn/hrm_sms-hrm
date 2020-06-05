@@ -553,7 +553,7 @@ $(function () {
         initDatepicker();
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
-        axios(resolveClientUrl('Department/GetHierarchy'))
+        axios(resolveClientUrl('Section/GetHierarchy'))
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,
