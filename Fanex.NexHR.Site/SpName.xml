@@ -197,24 +197,15 @@
     <Setting Key="Message_GetDetailByEmployee" SpName="Message_GetDetailByEmployee" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Message_GetUnreadMessageByEmployee" SpName="Message_GetUnreadMessageByEmployee" DbName="nexhrx" Plain="0"></Setting>
   </Function>
+  <Function Name="Section">
+    <Setting Key="Section_Insert" SpName="Section_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_Update" SpName="Section_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_Get" SpName="Section_Get" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_GetById" SpName="Section_GetById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_GetByDepartmentId" SpName="Section_GetByDepartmentId" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_Delete" SpName="Section_Delete" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
   <Function Name="Department">
-    <Setting Key="Department_Insert" SpName="Department_Insert" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Department_Update" SpName="Department_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Department_GetByParentId" SpName="Department_GetByParentId" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ManagerId" ObjectProperty="EmpId" Class="DepartmentHead" />
-    </Setting>
-    <Setting Key="Department_GetById" SpName="Department_GetById" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ManagerId" ObjectProperty="EmpId" Class="DepartmentHead" />
-    </Setting>
-    <Setting Key="Department_GetParent" SpName="Department_GetParent" DbName="nexhrx" Plain="0">
-      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ParentId" ObjectProperty="Id" Class="Department" />
-      <Mapping DataField="ManagerId" ObjectProperty="Id" Class="DepartmentHead" />
-    </Setting>
     <Setting Key="Department_Delete" SpName="Department_Delete" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Insert" SpName="TestDepartment_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TestDepartment_Delete" SpName="TestDepartment_Delete" DbName="nexhrx" Plain="0"></Setting>

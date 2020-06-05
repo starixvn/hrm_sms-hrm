@@ -7,7 +7,7 @@
         public int TeamId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public int DepartmentId { get; set; }
+        public int SectionId { get; set; }
 
         public string MailGroup { get; set; }
         public int HeadId { get; set; }

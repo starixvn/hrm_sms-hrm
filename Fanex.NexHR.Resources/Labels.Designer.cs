@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Labels {
@@ -232,11 +232,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Division.
+        ///   Looks up a localized string similar to Add New Section.
         /// </summary>
-        public static string AddNewDivision {
+        public static string AddNewSection {
             get {
-                return ResourceManager.GetString("AddNewDivision", resourceCulture);
+                return ResourceManager.GetString("AddNewSection", resourceCulture);
             }
         }
         
@@ -1456,15 +1456,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Division.
-        /// </summary>
-        public static string EditDivision {
-            get {
-                return ResourceManager.GetString("EditDivision", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Employee Information.
         /// </summary>
         public static string EditEmployeeInfo {
@@ -1506,6 +1497,15 @@ namespace Fanex.NexHR.Resources {
         public static string EditMessage {
             get {
                 return ResourceManager.GetString("EditMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Section.
+        /// </summary>
+        public static string EditSection {
+            get {
+                return ResourceManager.GetString("EditSection", resourceCulture);
             }
         }
         
@@ -3175,6 +3175,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Section.
+        /// </summary>
+        public static string NewSection {
+            get {
+                return ResourceManager.GetString("NewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Team.
         /// </summary>
         public static string NewTeam {
@@ -4143,6 +4152,15 @@ namespace Fanex.NexHR.Resources {
         public static string Section {
             get {
                 return ResourceManager.GetString("Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section Management.
+        /// </summary>
+        public static string SectionManagement {
+            get {
+                return ResourceManager.GetString("SectionManagement", resourceCulture);
             }
         }
         

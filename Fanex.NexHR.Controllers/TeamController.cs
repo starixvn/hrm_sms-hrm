@@ -23,19 +23,19 @@
     public class TeamController : BaseController
     {
         private readonly ITeamService teamService;
-        private readonly IDepartmentService departmentService;
+        private readonly ISectionService sectionService;
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
 
         public TeamController(
             ISessionService sessionService,
             ITeamService teamService,
-            IDepartmentService departmentService,
+            ISectionService sectionService,
             IBaseService baseService,
             IEmployeeService employeeService) : base(sessionService)
         {
             this.teamService = teamService;
-            this.departmentService = departmentService;
+            this.sectionService = sectionService;
             this.baseService = baseService;
             this.employeeService = employeeService;
         }
@@ -54,7 +54,7 @@
         {
             var model = new TeamViewModel
             {
-                Departments = departmentService.GetDepartment(),
+                Sections = sectionService.GetSection(),
                 Employees = GetAllEmployees()
             };
             return View(model);
@@ -64,7 +64,7 @@
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public ActionResult Create(TeamViewModel model)
         {
-            model.Departments = departmentService.GetDepartment();
+            model.Sections = sectionService.GetSection();
             model.Employees = GetAllEmployees();
             if (ModelState.IsValid)
             {
@@ -72,7 +72,7 @@
                 {
                     Code = model.TeamCode,
                     Name = model.TeamName,
-                    DepartmentId = model.DepartmentId ?? 0,
+                    SectionId = model.SectionId ?? 0,
                     HeadId = model.HeadId ?? 0,
                     AssistantHeadIds = model.AssistantHeadIds,
                     LeaderIds = model.LeaderIds,
@@ -119,8 +119,8 @@
                 AssistantHeadIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantHead).Select(e => e.EmpId)),
                 LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
                 AssistantLeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantLeader).Select(e => e.EmpId)),
-                DepartmentId = team.Department != null ? team.Department.Id : 0,
-                Departments = departmentService.GetDepartment(),
+                SectionId = team.Section != null ? team.Section.Id : 0,
+                Sections = sectionService.GetSection(),
                 Employees = GetAllEmployees()
             };
 
@@ -133,7 +133,7 @@
         {
             if (model != null)
             {
-                model.Departments = departmentService.GetDepartment();
+                model.Sections = sectionService.GetSection();
                 model.Employees = GetAllEmployees();
                 if (ModelState.IsValid)
                 {
@@ -142,7 +142,7 @@
                         TeamId = model.Id,
                         Code = model.TeamCode,
                         Name = model.TeamName,
-                        DepartmentId = model.DepartmentId ?? 0,
+                        SectionId = model.SectionId ?? 0,
                         MailGroup = model.MailGroup,
                         HeadId = model.HeadId ?? 0,
                         AssistantHeadIds = model.AssistantHeadIds,

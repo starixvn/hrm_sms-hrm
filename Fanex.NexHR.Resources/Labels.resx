@@ -1110,14 +1110,11 @@
   <data name="Parent" xml:space="preserve">
     <value>Parent</value>
   </data>
-  <data name="AddNewDivision" xml:space="preserve">
-    <value>Add New Division</value>
+  <data name="AddNewSection" xml:space="preserve">
+    <value>Add New Section</value>
   </data>
-  <data name="EditDivision" xml:space="preserve">
-    <value>Edit Division</value>
-  </data>
-  <data name="EditDivision" xml:space="preserve">
-    <value>Edit Division</value>
+  <data name="EditSection" xml:space="preserve">
+    <value>Edit Section</value>
   </data>
   <data name="DisciplineSummary" xml:space="preserve">
     <value>Discipline Review</value>
@@ -1916,5 +1913,11 @@
   </data>
   <data name="EditDepartment" xml:space="preserve">
     <value>Edit Department</value>
+  </data>
+  <data name="NewSection" xml:space="preserve">
+    <value>New Section</value>
+  </data>
+  <data name="SectionManagement" xml:space="preserve">
+    <value>Section Management</value>
   </data>
 </root>

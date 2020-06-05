@@ -6,7 +6,7 @@
     {
         public TeamModel()
         {
-            Department = new Department();
+            Section = new Section();
             Leader = new Employee();
             AssistantLeader = new Employee();
         }
@@ -17,7 +17,7 @@
 
         public string Name { get; set; }
 
-        public Department Department { get; set; }
+        public Section Section { get; set; }
 
         public Employee Leader { get; set; }
 

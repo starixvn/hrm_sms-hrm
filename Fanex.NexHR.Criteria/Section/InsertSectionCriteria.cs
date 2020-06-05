@@ -1,9 +1,8 @@
-﻿namespace Fanex.NexHR.Criteria.Department
+﻿namespace Fanex.NexHR.Criteria.Section
 {
-    using System;
     using Fanex.Data.Repository;
 
-    public class InsertDepartmentCriteria : CriteriaBase
+    public class InsertSectionCriteria : CriteriaBase
     {
         public string Code { get; set; }
 
@@ -13,13 +12,11 @@
 
         public int ? ParentId { get; set; }
 
-        public int ManagerId { get; set; }
-
         public int CreatedBy { get; set; }
 
         public override string GetSettingKey()
         {
-            return "Department_Insert";
+            return "Section_Insert";
         }
 
         public override bool IsValid()

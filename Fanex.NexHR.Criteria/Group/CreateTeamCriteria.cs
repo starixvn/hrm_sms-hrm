@@ -6,7 +6,7 @@
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public int DepartmentId { get; set; }
+        public int SectionId { get; set; }
 
         public string MailGroup { get; set; }
 

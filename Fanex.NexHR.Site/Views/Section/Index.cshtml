@@ -1,25 +1,25 @@
 ﻿@using Fanex.NexHR.Models
 @using Fanex.NexHR.Resources
-@using Fanex.NexHR.ViewModels.Department
-@model DepartmentViewModel
+@using Fanex.NexHR.ViewModels.Section
+@model SectionViewModel
 @{
-    ViewBag.Title = @Labels.DepartmentManagement;
+    ViewBag.Title = @Labels.SectionManagement;
     var hasPermission = (bool)ViewBag.HasPermission;
     var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/section.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/department.index.js"></script>
+    <script src="~/wwwroot/dist/js/section.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@using (Html.BeginForm("index", "department", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
+@using (Html.BeginForm("index", "section", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
 {
-    var gender = new List<SelectListItem>
+    var status = new List<SelectListItem>
 {
 new SelectListItem() {Text = "All", Value = "", Selected = !Model.IsActive.HasValue },
 new SelectListItem() {Text = "Active", Value = "true", Selected = Model.IsActive.HasValue && Model.IsActive.Value},
@@ -32,15 +32,15 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
             @Html.Label(@Labels.Status, new { @class = "control-label" })
         </div>
         <div class="select-form">
-            @Html.DropDownList("IsActive", gender, new { @class = "form-control" })
+            @Html.DropDownList("IsActive", status, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group form-group--m">
         <button type="submit" class="btn btn-primary">@Labels.Search</button>
         @if (hasPermission)
         {
-            <a class="btn btn-request" href="@Url.Action("create", "department")">
-                <span class="fa fa-plus"></span> @Labels.NewDivision
+            <a class="btn btn-request" href="@Url.Action("create", "section")">
+                <span class="fa fa-plus"></span> @Labels.NewSection
             </a>
         }
     </div>
@@ -51,9 +51,7 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.Department</th>
-            <th>@Labels.Manager</th>
-            <th>@Labels.Parent</th>
+            <th>@Labels.Section</th>
             <th>@Labels.Active</th>
             @if (hasPermission)
             {
@@ -62,29 +60,17 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Departments != null)
+        @if (Model != null && Model.Sections != null)
         {
             int index = 1;
-            foreach (Department department in Model.Departments)
+            foreach (Section section in Model.Sections)
             {
-                <tr id="row@(department.Id)">
+                <tr id="row@(section.Id)">
                     <td>@(index++)</td>
-                    <td>@department.Code</td>
-                    <td>@department.Name</td>
+                    <td>@section.Code</td>
+                    <td>@section.Name</td>
                     <td>
-                        @if (department.Manager != null)
-                        {
-                            <span class="tooltip-tipsy" title="@department.Manager.FullName">@department.Manager.Nickname</span>
-                        }
-                    </td>
-                    <td>
-                        @if (department.Parent != null)
-                        {
-                            @department.Parent.Name
-                        }
-                    </td>
-                    <td>
-                        @if (department.IsActive)
+                        @if (section.IsActive)
                         {
                             <i class="fa fa-check fa-lg icon-check"></i>
                         }
@@ -92,7 +78,7 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("Edit", "Department", new { DepartmentId = department.Id })">
+                            <a href="@Url.Action("Edit", "Section", new { SectionId = section.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>

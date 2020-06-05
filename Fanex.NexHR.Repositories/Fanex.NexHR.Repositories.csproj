@@ -76,14 +76,14 @@
     <Compile Include="Interfaces\IUnitRepository.cs" />
     <Compile Include="Interfaces\IOvertimeReportRepository.cs" />
     <Compile Include="LateInEarlyOutRequestRepository.cs" />
-    <Compile Include="DepartmentRepository.cs" />
+    <Compile Include="SectionRepository.cs" />
     <Compile Include="DisciplineRepository.cs" />
     <Compile Include="Interfaces\ILateInEarlyOutRequestRepository.cs" />
     <Compile Include="Interfaces\ICheckInOutRequestRepository.cs" />
     <Compile Include="Interfaces\ILeaveRequestRepository.cs" />
     <Compile Include="Interfaces\IKeepInViewRequestRepository.cs" />
     <Compile Include="Interfaces\IMenuRepository.cs" />
-    <Compile Include="Interfaces\IDepartmentRepository.cs" />
+    <Compile Include="Interfaces\ISectionRepository.cs" />
     <Compile Include="Interfaces\IDisciplineRepository.cs" />
     <Compile Include="Interfaces\IEmployeeWorkingHoursRepository.cs" />
     <Compile Include="Interfaces\IOvertimeRequestRepository.cs" />

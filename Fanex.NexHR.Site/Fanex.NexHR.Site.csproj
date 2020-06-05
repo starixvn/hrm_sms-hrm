@@ -284,9 +284,9 @@
     <Content Include="wwwroot\sources\js\pages\newdepartment\index.js" />
     <Content Include="wwwroot\sources\js\pages\unit\edit.js" />
     <Content Include="wwwroot\sources\js\pages\unit\index.js" />
-    <Content Include="wwwroot\sources\js\pages\department\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\section\edit.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
-    <Content Include="wwwroot\sources\js\pages\department\index.js" />
+    <Content Include="wwwroot\sources\js\pages\section\index.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
     <Content Include="wwwroot\sources\js\pages\employee\index.js" />
     <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />
@@ -1009,9 +1009,9 @@
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
     <Content Include="Views\Report\Manpower.cshtml" />
     <Content Include="Views\Report\ManpowerCategory.cshtml" />
-    <Content Include="Views\Department\Create.cshtml" />
-    <Content Include="Views\Department\Edit.cshtml" />
-    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Section\Create.cshtml" />
+    <Content Include="Views\Section\Edit.cshtml" />
+    <Content Include="Views\Section\Index.cshtml" />
     <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
     <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
@@ -1197,8 +1197,8 @@
     <Content Include="wwwroot\sources\styles\pages\team\edit.scss" />
     <Content Include="wwwroot\sources\js\pages\report\team.supervisor.js" />
     <Content Include="wwwroot\sources\styles\pages\report\timesheet.scss" />
-    <Content Include="wwwroot\sources\styles\pages\department\index.scss" />
-    <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\create.scss" />
     <Content Include="Views\Overtime\_ListMemberOvertime.cshtml" />
     <Content Include="Views\Overtime\_ListEmployeeOvertime.cshtml" />
     <Content Include="Views\NewDepartment\Index.cshtml" />

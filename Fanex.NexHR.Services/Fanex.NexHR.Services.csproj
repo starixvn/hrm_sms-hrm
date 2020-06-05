@@ -165,7 +165,7 @@
     <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\UnitService.cs" />
-    <Compile Include="Implement\DepartmentService.cs" />
+    <Compile Include="Implement\SectionService.cs" />
     <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Discipline\ExportDisciplineDetailService.cs" />
     <Compile Include="ExportExcel\Discipline\ExportDisciplineSummaryService.cs" />
@@ -198,7 +198,7 @@
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IUnitService.cs" />
-    <Compile Include="Interfaces\IDepartmentService.cs" />
+    <Compile Include="Interfaces\ISectionService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IFunctionService.cs" />

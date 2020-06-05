@@ -25,8 +25,8 @@
         public string TeamName { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-        [Display(Name = nameof(Labels.Division), ResourceType = typeof(Labels))]
-        public int? DepartmentId { get; set; }
+        [Display(Name = nameof(Labels.Section), ResourceType = typeof(Labels))]
+        public int? SectionId { get; set; }
 
         [EmailAddress(ErrorMessage = "{0} is invalid.")]
         [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
@@ -55,7 +55,7 @@
         [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
         public byte? BasicAnnualLeaveBalance { get; set; }
 
-        public IList<Department> Departments { get; set; }
+        public IList<Section> Sections { get; set; }
 
         public IList<Employee> Employees { get; set; }
     }

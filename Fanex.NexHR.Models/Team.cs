@@ -6,7 +6,7 @@
 
     public class Team : EntityBase<int>
     {
-        public Department Department { get; set; } = new Department();
+        public Section Section { get; set; } = new Section();
 
         public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 

@@ -76,9 +76,9 @@
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarFilterViewModel.cs" />
-    <Compile Include="Department\AddDepartmentViewModel.cs" />
-    <Compile Include="Department\DepartmentViewModel.cs" />
-    <Compile Include="Department\EditDepartmentViewModel.cs" />
+    <Compile Include="Section\AddSectionViewModel.cs" />
+    <Compile Include="Section\SectionViewModel.cs" />
+    <Compile Include="Section\EditSectionViewModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryViewModel.cs" />
     <Compile Include="Discipline\AddOtherDisciplineViewModel.cs" />
     <Compile Include="Employee\ChangePasswordViewModel.cs" />

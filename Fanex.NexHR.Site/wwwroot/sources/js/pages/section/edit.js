@@ -6,51 +6,6 @@ import toastr from 'toastr';
 import axios from 'axios';
 import { axiosError, resolveClientUrl, toastOptions, showValidationSummaryErrors, hideValidationSummaryErrors } from '../../shared/common.functions';
 
-function initManagerSearch() {
-    $('#Manager').autocomplete({
-        source: function (request, response) {
-            axios({
-                url: resolveClientUrl('employee/getmemberbymanager'),
-                method: "GET",
-                params: {
-                    keyword: request.term
-                }
-            }).then(result => {
-                response($.map(result.data, function (item) {
-                    return {
-                        label: item.NickName + ' (' + item.FullName + ')',
-                        value: item.Id
-                    };
-                }));
-            });
-        },
-        minLength: 2,
-        select: function (event, ui) {
-            event.preventDefault();
-            $('#Manager').val(ui.item.label);
-            $('#ManagerId').val(ui.item.value);
-        },
-        focus: function (event, ui) {
-            event.preventDefault();
-            $('#Manager').val(ui.item.label);
-            $('#ManagerId').val(ui.item.value);
-        },
-        change: function (event, ui) {
-            event.preventDefault();
-            if (ui && ui.item) {
-                $('#Manager').val(ui.item.label);
-                $('#ManagerId').val(ui.item.value);
-            } else {
-                if ($('#Manager').val() === '') {
-                    $('#ManagerId').val('');
-                } else {
-                    $('#Manager').val('0');
-                }
-            }
-        }
-    });
-}
-
 function submitEvent() {
     $('#btnSubmit').on('click', function () {
         let isValid = validateFormData();
@@ -66,7 +21,7 @@ function submitEvent() {
                 if (response.data.Code === 0) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("Department/Index");
+                        document.location = resolveClientUrl("Section/Index");
                     }, 3000);
                 }
                 else {
@@ -87,10 +42,6 @@ function validateFormData() {
 
     if (!$('#Name').val()) {
         errorMessages.push('The Name field is required!');
-    }
-
-    if (!$('#ManagerId').val() || $('#ManagerId').val() == 0) {
-        errorMessages.push('The Manager field is required!');
     }
 
     if (errorMessages.length > 0) {

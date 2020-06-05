@@ -20,7 +20,7 @@
 
         public const string CreateAccount = "CreateAccount";
 
-        public const string DivisionManagement = "DivisionManagement";
+        public const string SectionManagement = "SectionManagement";
         
         public const string UnitManagement = "UnitManagement";
 

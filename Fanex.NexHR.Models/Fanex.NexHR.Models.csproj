@@ -95,7 +95,6 @@
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Unit\Unit.cs" />
-    <Compile Include="Department\DepartmentHead.cs" />
     <Compile Include="EditEmployeeParam.cs" />
     <Compile Include="Log\MappingFieldConfig.cs" />
     <Compile Include="Log\FieldValue.cs" />
@@ -203,7 +202,7 @@
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="ExtensionNoModel.cs" />
     <Compile Include="Country.cs" />
-    <Compile Include="Department\Department.cs" />
+    <Compile Include="Section\Section.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="EmployeeShift.cs" />
     <Compile Include="IEntity.cs" />

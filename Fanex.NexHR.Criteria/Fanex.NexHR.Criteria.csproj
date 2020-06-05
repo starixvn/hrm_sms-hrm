@@ -89,11 +89,11 @@
     <Compile Include="Unit\GetUnitsCriteria.cs" />
     <Compile Include="Unit\InsertUnitCriteria.cs" />
     <Compile Include="Unit\UpdateUnitCriteria.cs" />
-    <Compile Include="Department\GetParentByDepartmentCriteria.cs" />
-    <Compile Include="Department\UpdateDepartmentCriteria.cs" />
-    <Compile Include="Department\InsertDepartmentCriteria.cs" />
-    <Compile Include="Department\GetDepartmentByParentIdCriteria.cs" />
-    <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="Section\GetParentBySectionCriteria.cs" />
+    <Compile Include="Section\UpdateSectionCriteria.cs" />
+    <Compile Include="Section\InsertSectionCriteria.cs" />
+    <Compile Include="Section\GetSectionByParentIdCriteria.cs" />
+    <Compile Include="Section\GetSectionByIdCriteria.cs" />
     <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\DeleteWeekendLeaveCriteria.cs" />
     <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />

@@ -1,11 +1,11 @@
-﻿namespace Fanex.NexHR.Criteria.Department
+﻿namespace Fanex.NexHR.Criteria.Section
 {
     using System;
     using Fanex.Data.Repository;
 
-    public class UpdateDepartmentCriteria : CriteriaBase
+    public class UpdateSectionCriteria : CriteriaBase
     {
-        public int DepartmentId { get; set; }
+        public int SectionId { get; set; }
 
         public string Code { get; set; }
 
@@ -15,18 +15,16 @@
 
         public int ParentId { get; set; }
 
-        public int ManagerId { get; set; }
-
         public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {
-            return "Department_Update";
+            return "Section_Update";
         }
 
         public override bool IsValid()
         {
-            return DepartmentId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
+            return SectionId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
         }
     }
 }
