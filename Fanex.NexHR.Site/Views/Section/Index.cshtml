@@ -52,38 +52,46 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
             <th>@Labels.Section</th>
+            <th>@Labels.Department</th>
             <th>@Labels.Active</th>
             @if (hasPermission)
             {
                 <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
             }
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Sections != null)
+        @if (Model != null && Model.Sections.Any())
         {
             int index = 1;
-            foreach (Section section in Model.Sections)
+            foreach (Section sectionDetail in Model.Sections)
             {
-                <tr id="row@(section.Id)">
-                    <td>@(index++)</td>
-                    <td>@section.Code</td>
-                    <td>@section.Name</td>
-                    <td>
-                        @if (section.IsActive)
-                        {
-                            <i class="fa fa-check fa-lg icon-check"></i>
-                        }
-                    </td>
+            <tr id="row@(sectionDetail.Id)">
+                <td>@(index++)</td>
+                <td>@sectionDetail.Code</td>
+                <td>@sectionDetail.Name</td>
+                <td>@sectionDetail.Department.Name</td>
+                <td>
+                    @if (sectionDetail.IsActive)
+                    {
+                        <i class="fa fa-check fa-lg icon-check"></i>
+                    }
+                </td>
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("Edit", "Section", new { SectionId = section.Id })">
+                            <a href="@Url.Action("Edit", "Section", new { SectionId = sectionDetail.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
+                        <td>
+                            <a href="javascript:;" class="deleteDepartment" data-department-id="@sectionDetail.Id">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
                     }
-                </tr>
+            </tr>
             }
         }
         else

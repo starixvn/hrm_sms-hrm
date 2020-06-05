@@ -92,7 +92,7 @@
     <Compile Include="Section\GetParentBySectionCriteria.cs" />
     <Compile Include="Section\UpdateSectionCriteria.cs" />
     <Compile Include="Section\InsertSectionCriteria.cs" />
-    <Compile Include="Section\GetSectionByParentIdCriteria.cs" />
+    <Compile Include="Section\GetSectionCriteria.cs" />
     <Compile Include="Section\GetSectionByIdCriteria.cs" />
     <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
     <Compile Include="Discipline\DeleteWeekendLeaveCriteria.cs" />

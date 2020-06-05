@@ -8,7 +8,5 @@
         public bool? IsActive { get; set; }
 
         public IList<Section> Sections { get; set; }
-
-        public int ParentId { get; set; }
     }
 }

@@ -9,6 +9,6 @@
     {
         Section GetById(ICriteria criteria);
 
-        IList<Section> GetSection(GetSectionByParentIdCriteria criteria);
+        IList<Section> GetSection(GetSectionCriteria criteria);
     }
 }

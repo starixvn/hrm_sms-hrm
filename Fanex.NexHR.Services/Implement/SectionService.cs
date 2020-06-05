@@ -24,11 +24,10 @@
             return sectionRepository.GetById(criteria);
         }
 
-        public IList<Section> GetSection(int? parentId = null, bool? isActive = true)
+        public IList<Section> GetSection(bool? isActive = true)
         {
-            var criteria = new GetSectionByParentIdCriteria
+            var criteria = new GetSectionCriteria
             {
-                ParentId = parentId,
                 IsActive = isActive
             };
             IList<Section> sections = sectionRepository.GetSection(criteria);

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Criteria.Section;
@@ -25,9 +26,22 @@
             }
         }
 
-        public IList<Section> GetSection(GetSectionByParentIdCriteria criteria)
+        public IList<Section> GetSection(GetSectionCriteria criteria)
         {
-            throw new System.NotImplementedException();
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var sections = db.Query<Section, NewDepartment, Section>(
+                        (s, d) =>
+                        {
+                            s.Department = d;
+
+                            return s;
+                        },
+                        splitOn: "DepartmentId",
+                        parameterSet: criteria);
+
+                return sections.ToList();
+            }
         }
     }
 }

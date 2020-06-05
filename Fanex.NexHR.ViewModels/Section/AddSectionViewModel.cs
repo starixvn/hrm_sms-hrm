@@ -20,10 +20,11 @@
         [Required]
         public string Name { get; set; }
 
-        public int ? ParentId { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
 
         public bool IsActive { get; set; }
 
-        public IList<Section> ParentSections { get; set; }
+        public IList<NewDepartment> Departments { get; set; }
     }
 }

@@ -2,12 +2,11 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetSectionByParentIdCriteria : CriteriaBase
+    public class GetSectionCriteria : CriteriaBase
     {
-        public int? ParentId { get; set; }
         public bool? IsActive { get; set; }
 
-        public override string GetSettingKey() => "Section_GetByParentId";
+        public override string GetSettingKey() => "Section_Get";
 
         public override bool IsValid() => true;
     }

@@ -12,6 +12,7 @@
     using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Section;
 
@@ -20,16 +21,19 @@
         private readonly ICommonDataService commonDataService;
         private readonly ISectionService sectionService;
         private readonly IBaseService baseService;
+        private readonly INewDepartmentService departmentService;
 
         public SectionController(
             ISessionService sessionService,
             ICommonDataService commonDataService,
+            INewDepartmentService departmentService,
             ISectionService sectionService,
             IBaseService baseService) : base(sessionService)
         {
             this.commonDataService = commonDataService;
             this.sectionService = sectionService;
             this.baseService = baseService;
+            this.departmentService = departmentService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
@@ -64,19 +68,27 @@
         {
             var model = new AddSectionViewModel
             {
-                ParentSections = sectionService.GetSection()
+                Departments = departmentService.GetByActive()
             };
             return View(model);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public JsonResult Create(InsertSectionCriteria criteria)
+        public JsonResult Create(AddSectionViewModel model)
         {
             var commandResult = new CommandResult();
 
-            if (criteria.IsValid())
+            if (model != null && ModelState.IsValid)
             {
+                var criteria = new InsertSectionCriteria
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    IsActive = model.IsActive,
+                    DepartmentId = model.DepartmentId,
+                    ModifiedBy = sessionService.Employee.Id
+                };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
@@ -87,16 +99,13 @@
         public ActionResult Edit(int sectionId)
         {
             Section section = sectionService.GetById(sectionId);
-            IList<Section> parentSections = sectionService.GetSection();
-            parentSections = parentSections.Where(t => t.Id != section.Id).ToList();
 
             var model = new EditSectionViewModel
             {
                 SectionId = sectionId,
                 Code = section.Code,
                 Name = section.Name,
-                IsActive = section.IsActive,
-                ParentSections = parentSections
+                IsActive = section.IsActive
             };
             return View(model);
         }

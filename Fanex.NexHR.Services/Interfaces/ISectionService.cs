@@ -7,7 +7,6 @@
     {
         Section GetById(int id);
 
-        IList<Section> GetSection(int? parentId = null, bool? isActive = true);
-
+        IList<Section> GetSection(bool? isActive = true);
     }
 }
