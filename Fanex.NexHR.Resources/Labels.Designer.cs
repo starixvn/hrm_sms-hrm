@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Labels {
@@ -1155,15 +1155,6 @@ namespace Fanex.NexHR.Resources {
         public static string DepartmentManagement {
             get {
                 return ResourceManager.GetString("DepartmentManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dept./Team.
-        /// </summary>
-        public static string DepartmentTeam {
-            get {
-                return ResourceManager.GetString("DepartmentTeam", resourceCulture);
             }
         }
         
@@ -4161,6 +4152,15 @@ namespace Fanex.NexHR.Resources {
         public static string SectionManagement {
             get {
                 return ResourceManager.GetString("SectionManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sec./Team.
+        /// </summary>
+        public static string SectionTeam {
+            get {
+                return ResourceManager.GetString("SectionTeam", resourceCulture);
             }
         }
         

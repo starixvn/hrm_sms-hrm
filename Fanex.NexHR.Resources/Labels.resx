@@ -1248,8 +1248,8 @@
   <data name="DefaultShift" xml:space="preserve">
     <value>Default Shift</value>
   </data>
-  <data name="DepartmentTeam" xml:space="preserve">
-    <value>Dept./Team</value>
+  <data name="SectionTeam" xml:space="preserve">
+    <value>Sec./Team</value>
   </data>
   <data name="EmployeeID" xml:space="preserve">
     <value>Employee ID</value>

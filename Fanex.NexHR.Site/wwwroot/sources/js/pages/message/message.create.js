@@ -55,7 +55,7 @@ function initSearchEmployee() {
     });
 }
 
-function initSearchGroup() {
+function initSearchTeam() {
     axios({
         url: _global.root + 'Section/GetHierarchy',
         method: "GET"
@@ -194,7 +194,7 @@ function Submit() {
 $(document).ready(function () {
     bindingDataIfEditMode();
     initSearchEmployee();
-    initSearchGroup();
+    initSearchTeam();
     initDatePicker();
     Submit();
 });

@@ -20,7 +20,7 @@ BEGIN
 	END
 
 	SELECT g.GroupId AS TeamId
-		,g.DepartmentId
+		,g.SectionId
 		,g.Code
 		,g.[Name]
 		,mng.EmpId AS LeaderId

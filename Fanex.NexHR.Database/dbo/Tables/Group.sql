@@ -2,7 +2,7 @@
     [GroupId]           INT            IDENTITY (1, 1) NOT NULL,
     [Code]              VARCHAR (20)   NOT NULL,
     [Name]              NVARCHAR (150) NULL,
-    [DepartmentId]      INT            NULL,
+    [SectionId]      INT            NULL,
     [Rank]              INT            NULL,
     [CreatedDate]       DATETIME       NULL,
     [CreatedBy]         INT            NULL,

@@ -41,7 +41,7 @@ BEGIN
 	INSERT INTO dbo.[Group] (
 		Code
 		,[Name]
-		,DepartmentId
+		,SectionId
 		,MailGroup
 		,CreatedDate
 		,CreatedBy
@@ -115,7 +115,7 @@ BEGIN
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
-				,DepartmentId AS '@DepartmentId'
+				,SectionId AS '@SectionId'
 				,@HeadId AS '@HeadId'
 				,@AssistantHeadIds AS '@AssistantHeadIds'
 				,@LeaderIds AS '@LeaderIds'

@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@Code VARCHAR(20)
 	,@Name NVARCHAR(150)
-	,@DepartmentId INT
+	,@SectionId INT
 	,@MailGroup VARCHAR(50) = ''
 	,@HeadId INT
 	,@AssistantHeadIds VARCHAR(MAX) = ''
@@ -71,7 +71,7 @@ BEGIN
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
-				,DepartmentId AS '@DepartmentId'
+				,SectionId AS '@SectionId'
 				,@OldHeadId AS '@HeadId'
 				,@OldAssistantHeadIds AS '@AssistantHeadIds'
 				,@OldLeaderIds AS '@LeaderIds'
@@ -142,7 +142,7 @@ BEGIN
 	UPDATE dbo.[Group] WITH (ROWLOCK, UPDLOCK)
 	SET Code = @Code
 		,[Name] = @Name
-		,DepartmentId = @DepartmentId
+		,SectionId = @SectionId
 		,[MailGroup] = @MailGroup
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
@@ -152,7 +152,7 @@ BEGIN
 	SET @xml = (
 			SELECT Code AS '@Code'
 				,[Name] AS '@Name'
-				,DepartmentId AS '@DepartmentId'
+				,SectionId AS '@SectionId'
 				,@HeadId AS '@HeadId'
 				,@AssistantHeadIds AS '@AssistantHeadIds'
 				,@LeaderIds AS '@LeaderIds'

@@ -13,6 +13,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
+    using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Section;
 
     public class SectionController : BaseController
@@ -105,7 +106,7 @@
                 Code = section.Code,
                 Name = section.Name,
                 IsActive = section.IsActive,
-                DepartmentId= section.Department.Id,
+                DepartmentId = section.Department.Id,
                 Departments = department
             };
             return View(model);
@@ -141,6 +142,49 @@
             CommandResult commandResult = sectionService.Delete(id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public CustomJsonResult GetHierarchy()
+        {
+            IList<Team> teams = commonDataService.GetAllTeam();
+            IEnumerable<MultiSelectViewModel> sections = sectionService.GetSection().Select(x => new MultiSelectViewModel
+            {
+                Id = x.Id,
+                Text = x.Name,
+                Items = teams.Where(y => y.Section != null && y.Section.Id == x.Id).Select(y => new MultiSelectViewModel
+                {
+                    Id = y.Id,
+                    Text = y.Name,
+                    IsLeaf = true
+                }).ToList()
+            }).ToList();
+            IEnumerable<MultiSelectViewModel> hierarchy = GetHierarchy(sections);
+
+            return new CustomJsonResult { Data = hierarchy, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private IEnumerable<MultiSelectViewModel> GetHierarchy(IEnumerable<MultiSelectViewModel> sections)
+        {
+            IEnumerable<MultiSelectViewModel> parents = sections.Where(x => !x.ParentId.HasValue);
+            foreach (MultiSelectViewModel parent in parents)
+            {
+                GetChilds(parent, sections);
+            }
+
+            return parents;
+        }
+
+        private void GetChilds(MultiSelectViewModel section, IEnumerable<MultiSelectViewModel> sections)
+        {
+            IEnumerable<MultiSelectViewModel> items = sections.Where(x => x.ParentId.HasValue && x.ParentId.Value == section.Id);
+            if (items.Any())
+            {
+                foreach (MultiSelectViewModel item in items)
+                {
+                    section.Items.Add(item);
+                    GetChilds(item, sections);
+                }
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 const annualLeaveBalance = (function ($) {
-    function getDepartment() {
+    function getSection() {
         $.ajax({
             url: resolveClientUrl('Section/GetHierarchy'),
             success: function (data) {
@@ -222,7 +222,7 @@ const annualLeaveBalance = (function ($) {
     }
 
     function init() {
-        getDepartment();
+        getSection();
         initDatepicker();
         initSubmitFilterEvent();
         initExportExcelEvent();
