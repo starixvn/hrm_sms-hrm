@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.NewDepartment
+﻿namespace Fanex.NexHR.Criteria.Department
 {
     using Fanex.Data.Repository;
 
@@ -8,7 +8,7 @@
 
         public override string GetSettingKey()
         {
-            return "TestDepartment_Delete";
+            return "Department_Delete";
         }
 
         public override bool IsValid()

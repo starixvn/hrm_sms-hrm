@@ -1,8 +1,8 @@
-﻿namespace Fanex.NexHR.ViewModels.NewDepartment
+﻿namespace Fanex.NexHR.ViewModels.Department
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class EditNewDepartmentViewModel : CreateDepartmentViewModel
+    public class EditDepartmentViewModel : CreateDepartmentViewModel
     {
         [Required]
         public int DepartmentId { get; set; }

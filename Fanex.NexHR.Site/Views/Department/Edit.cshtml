@@ -1,30 +1,32 @@
 ﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
-@using Fanex.NexHR.ViewModels.NewDepartment
-@model CreateDepartmentViewModel
+@using Fanex.NexHR.ViewModels.Department
+@model EditDepartmentViewModel
+
 @{
-    ViewBag.Title = @Labels.AddNewDepartment;
+    ViewBag.Title = @Labels.EditDepartment;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/newdepartment.create.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/newdepartment.edit.js"></script>
+    <script src="~/wwwroot/dist/js/department.edit.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
-    <a class="step" href="@Url.Action("index", "newdepartment")">@Labels.NewDepartmentManagement</a>
+    <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
 
-<h2 class="page-title">@Labels.Create</h2>
+<h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
-    @using (Html.BeginForm("Create", "newdepartment", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
+    @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
     {
         @Html.ValidationSummary()
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.Code, new { @class = "control-label" })
+                <input type="hidden" value="@Model.DepartmentId" name="DepartmentId" />
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
@@ -54,9 +56,10 @@
                 <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsActive)</div>
             </div>
         </div>
+
         <div class="form-group">
             <div>
-                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Add</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
                 <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
             </div>
         </div>

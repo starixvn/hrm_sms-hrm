@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.NewDepartment
+﻿namespace Fanex.NexHR.Criteria.Department
 {
     using Fanex.Data.Repository;
 
@@ -6,7 +6,7 @@
     {
         public bool? IsActive { get; set; }
 
-        public override string GetSettingKey() => "TestDepartment_GetByActive";
+        public override string GetSettingKey() => "Department_Get";
 
         public override bool IsValid() => true;
     }

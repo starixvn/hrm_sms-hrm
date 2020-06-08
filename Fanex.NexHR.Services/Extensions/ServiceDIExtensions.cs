@@ -28,7 +28,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
             container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
             container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
-            container.RegisterType<INewDepartmentRepository, NewDepartmentRepository>();
+            container.RegisterType<IDepartmentRepository, DepartmentRepository>();
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();
@@ -72,7 +72,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IActionLogService, ActionLogService>();
             container.RegisterType<IEmployeeLogService, EmployeeLogService>();
             container.RegisterType<IShiftStatisticReportService, ShiftStatisticReportService>();
-            container.RegisterType<INewDepartmentService, NewDepartmentService>();
+            container.RegisterType<IDepartmentService, DepartmentService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

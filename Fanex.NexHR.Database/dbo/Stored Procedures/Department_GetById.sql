@@ -1,0 +1,26 @@
+﻿CREATE PROCEDURE [dbo].[Department_GetById]
+	@Id INT
+AS
+/*
+Created: 20200521@Lilac.Nguyen
+Task: get department by id
+DB: HRM
+Original: 
+
+Revisions:  
+Param's Explanation:
+*/
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT dep.DepartmentId AS Id
+	,dep.Code
+	,dep.Name
+	,dep.IsActive
+	,u.UnitId
+	,u.Name
+	FROM dbo.Department AS dep WITH (NOLOCK)
+		LEFT JOIN dbo.Unit AS u WITH (NOLOCK) ON dep.UnitId = u.UnitId
+	WHERE dep.DepartmentId = @Id
+
+END

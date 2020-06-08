@@ -160,7 +160,7 @@
     <Compile Include="JobTitleController.cs" />
     <Compile Include="MemoController.cs" />
     <Compile Include="MessageController.cs" />
-    <Compile Include="NewDepartmentController.cs" />
+    <Compile Include="DepartmentController.cs" />
     <Compile Include="PaternityController.cs" />
     <Compile Include="PostnatalController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

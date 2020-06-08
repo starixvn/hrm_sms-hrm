@@ -13,7 +13,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var section = db.QueryEntity<Section, NewDepartment, Section>(
+                var section = db.QueryEntity<Section, Department, Section>(
                         (s, d) =>
                         {
                             s.Department = d;
@@ -30,7 +30,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var sections = db.Query<Section, NewDepartment, Section>(
+                var sections = db.Query<Section, Department, Section>(
                         (s, d) =>
                         {
                             s.Department = d;

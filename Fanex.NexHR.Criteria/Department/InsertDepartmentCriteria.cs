@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Criteria.NewDepartment
+﻿namespace Fanex.NexHR.Criteria.Department
 {
     using Fanex.Data.Repository;
 
@@ -16,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "TestDepartment_Insert";
+            return "Department_Insert";
         }
 
         public override bool IsValid()

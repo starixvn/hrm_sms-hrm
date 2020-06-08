@@ -17,7 +17,7 @@ function submitEvent() {
                 if (response.data.Code === 0) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("NewDepartment/Index");
+                        document.location = resolveClientUrl("Department/Index");
                     }, 3000);
                 }
                 else {

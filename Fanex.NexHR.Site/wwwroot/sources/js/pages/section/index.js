@@ -23,7 +23,7 @@ function deleteSection() {
                     $('#row' + id).remove();
                     autoIndex();
                 } else {
-                    alert(data.Message);
+                    alert(data.message);
                 }
             }).catch(axiosError);
         });

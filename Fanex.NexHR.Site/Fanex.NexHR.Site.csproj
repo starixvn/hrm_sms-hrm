@@ -280,8 +280,8 @@
     <Content Include="wwwroot\dist\styles\team.index.css" />
     <Content Include="wwwroot\dist\styles\team.index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
-    <Content Include="wwwroot\sources\js\pages\newdepartment\edit.js" />
-    <Content Include="wwwroot\sources\js\pages\newdepartment\index.js" />
+    <Content Include="wwwroot\sources\js\pages\department\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\unit\edit.js" />
     <Content Include="wwwroot\sources\js\pages\unit\index.js" />
     <Content Include="wwwroot\sources\js\pages\section\edit.js" />
@@ -1201,12 +1201,12 @@
     <Content Include="wwwroot\sources\styles\pages\section\create.scss" />
     <Content Include="Views\Overtime\_ListMemberOvertime.cshtml" />
     <Content Include="Views\Overtime\_ListEmployeeOvertime.cshtml" />
-    <Content Include="Views\NewDepartment\Index.cshtml" />
-    <Content Include="Views\NewDepartment\Create.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Department\Create.cshtml" />
     <Content Include="Views\Unit\Create.cshtml" />
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
-    <Content Include="Views\NewDepartment\Edit.cshtml" />
+    <Content Include="Views\Department\Edit.cshtml" />
     <Content Include="wwwroot\dist\js\unit.edit.js.map" />
     <Content Include="wwwroot\dist\js\unit.edit.js" />
     <Content Include="wwwroot\dist\js\unit.index.js.map" />
@@ -1215,8 +1215,8 @@
     <Content Include="wwwroot\sources\styles\pages\unit\index.scss" />
     <Content Include="wwwroot\dist\styles\unit.create.css" />
     <Content Include="wwwroot\dist\styles\unit.index.css" />
-    <Content Include="wwwroot\sources\styles\pages\newdepartment\index.scss" />
-    <Content Include="wwwroot\sources\styles\pages\newdepartment\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\department\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

@@ -83,7 +83,7 @@
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
-    <Compile Include="NewDepartment\DeleteDepartmentCriteria.cs" />
+    <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />
@@ -131,10 +131,10 @@
     <Compile Include="Menu\GetMenusCriteria.cs" />
     <Compile Include="Menu\InsertMenuCriteria.cs" />
     <Compile Include="Menu\UpdateMenuCriteria.cs" />
-    <Compile Include="NewDepartment\GetDepartmentByActiveCriteria.cs" />
-    <Compile Include="NewDepartment\GetDepartmentByIdCriteria.cs" />
-    <Compile Include="NewDepartment\InsertDepartmentCriteria.cs" />
-    <Compile Include="NewDepartment\UpdateDepartmentCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByActiveCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="Department\InsertDepartmentCriteria.cs" />
+    <Compile Include="Department\UpdateDepartmentCriteria.cs" />
     <Compile Include="Overtime\GetMemberMonthlyOvertimeRequestCriteria.cs" />
     <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria.cs" />
     <Compile Include="Paternity\DeletePaternityCriteria.cs" />

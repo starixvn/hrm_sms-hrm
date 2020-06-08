@@ -26,18 +26,18 @@ BEGIN
 		RETURN
 	END
 
-	--IF EXISTS (
-	--		SELECT 1
-	--		FROM dbo.Unit AS u WITH (NOLOCK)
-	--			INNER JOIN dbo.Department AS d WITH (NOLOCK) ON d.UnitId = u.UnitId
-	--		WHERE u.UnitId = @UnitId
-	--		)
-	--BEGIN
-	--	SELECT @ErrCode = 1
-	--		,@ErrMsg = N'The unit has department'
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.Unit AS u WITH (NOLOCK)
+				INNER JOIN dbo.Department AS d WITH (NOLOCK) ON d.UnitId = u.UnitId
+			WHERE u.UnitId = @UnitId
+			)
+	BEGIN
+		SELECT @ErrCode = 1
+			,@ErrMsg = N'The unit has department'
 
-	--	RETURN
-	--END
+		RETURN
+	END
 
 	DELETE dbo.Unit WITH (ROWLOCK, UPDLOCK)
 	WHERE UnitId = @UnitId

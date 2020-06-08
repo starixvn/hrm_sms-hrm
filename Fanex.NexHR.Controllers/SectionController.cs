@@ -21,12 +21,12 @@
         private readonly ICommonDataService commonDataService;
         private readonly ISectionService sectionService;
         private readonly IBaseService baseService;
-        private readonly INewDepartmentService departmentService;
+        private readonly IDepartmentService departmentService;
 
         public SectionController(
             ISessionService sessionService,
             ICommonDataService commonDataService,
-            INewDepartmentService departmentService,
+            IDepartmentService departmentService,
             ISectionService sectionService,
             IBaseService baseService) : base(sessionService)
         {
@@ -99,7 +99,7 @@
         public ActionResult Edit(int Id)
         {
             Section section = sectionService.GetById(Id);
-            IList<NewDepartment> department = departmentService.GetByActive();
+            IList<Department> department = departmentService.GetByActive();
             var model = new EditSectionViewModel
             {
                 SectionId = Id,

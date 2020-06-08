@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    public class NewDepartment : EntityBase<int>
+    public class Department : EntityBase<int>
     {
         public Unit Unit { get; set; }
 

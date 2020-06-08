@@ -4,11 +4,11 @@
     using Fanex.NexHR.Models;
     using System.Collections.Generic;
 
-    public interface INewDepartmentService
+    public interface IDepartmentService
     {
-        IList<NewDepartment> GetByActive(bool? isActive = true);
+        IList<Department> GetByActive(bool? isActive = true);
 
-        NewDepartment GetById(int departmentId);
+        Department GetById(int departmentId);
 
         CommandResult Delete(int id);
     }

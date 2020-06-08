@@ -4,18 +4,18 @@
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NexHR.Criteria.NewDepartment;
+    using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
 
-    public class NewDepartmentRepository : INewDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
 
     {
-        public IList<NewDepartment> GetByActive(ICriteria criteria)
+        public IList<Department> GetByActive(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var departments = db.Query<NewDepartment, Unit, NewDepartment>(
+                var departments = db.Query<Department, Unit, Department>(
                         (d, u) =>
                         {
                             d.Unit = u;
@@ -29,11 +29,11 @@
             }
         }
 
-        public NewDepartment GetById(GetDepartmentByIdCriteria criteria)
+        public Department GetById(GetDepartmentByIdCriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<NewDepartment, Unit, NewDepartment>(
+                return db.QueryEntity<Department, Unit, Department>(
                     (d, u) =>
                     {
                         d.Unit = u;

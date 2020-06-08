@@ -25,6 +25,6 @@
 
         public bool IsActive { get; set; }
 
-        public IList<NewDepartment> Departments { get; set; }
+        public IList<Department> Departments { get; set; }
     }
 }

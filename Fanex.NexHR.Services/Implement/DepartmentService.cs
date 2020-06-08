@@ -2,19 +2,18 @@
 {
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.NewDepartment;
+    using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Interfaces;
     using System.Collections.Generic;
-    using System.Linq;
 
-    public class NewDepartmentService : INewDepartmentService
+    public class DepartmentService : IDepartmentService
     {
-        private readonly INewDepartmentRepository departmentRepository;
+        private readonly IDepartmentRepository departmentRepository;
         private readonly IBaseService baseService;
 
-        public NewDepartmentService(INewDepartmentRepository departmentRepository,
+        public DepartmentService(IDepartmentRepository departmentRepository,
             IBaseService baseService)
         {
             this.departmentRepository = departmentRepository;
@@ -30,18 +29,18 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<NewDepartment> GetByActive(bool? isActive)
+        public IList<Department> GetByActive(bool? isActive)
         {
             var criteria = new GetDepartmentByActiveCriteria
             {
                 IsActive = isActive
             };
-            IList<NewDepartment> departments = departmentRepository.GetByActive(criteria);
+            IList<Department> departments = departmentRepository.GetByActive(criteria);
 
-            return departments ?? new List<NewDepartment>();
+            return departments ?? new List<Department>();
         }
 
-        public NewDepartment GetById(int departmentId)
+        public Department GetById(int departmentId)
         {
             var criteria = new GetDepartmentByIdCriteria
             {

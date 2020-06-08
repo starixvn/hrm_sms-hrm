@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.ViewModels.NewDepartment
+﻿namespace Fanex.NexHR.ViewModels.Department
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

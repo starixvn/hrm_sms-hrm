@@ -1899,16 +1899,16 @@
   <data name="MemberOvertimeReport" xml:space="preserve">
     <value>MemberOvertimeReport</value>
   </data>
-  <data name="AddNewDepartment" xml:space="preserve">
+  <data name="AddDepartment" xml:space="preserve">
     <value>Add New Department</value>
   </data>
   <data name="CreateDepartment" xml:space="preserve">
     <value>New Department</value>
   </data>
-  <data name="NewDepartment" xml:space="preserve">
+  <data name="Department" xml:space="preserve">
     <value>Department</value>
   </data>
-  <data name="NewDepartmentManagement" xml:space="preserve">
+  <data name="DepartmentManagement" xml:space="preserve">
     <value>Department Management</value>
   </data>
   <data name="EditDepartment" xml:space="preserve">

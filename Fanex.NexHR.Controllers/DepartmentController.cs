@@ -8,21 +8,21 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.NewDepartment;
+    using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
-    using Fanex.NexHR.ViewModels.NewDepartment;
+    using Fanex.NexHR.ViewModels.Department;
 
-    public class NewDepartmentController : BaseController
+    public class DepartmentController : BaseController
     {
-        private readonly INewDepartmentService departmentService;
+        private readonly IDepartmentService departmentService;
         private readonly IBaseService baseService;
         private readonly IUnitService unitService;
 
-        public NewDepartmentController(
+        public DepartmentController(
             ISessionService sessionService,
-            INewDepartmentService departmentService,
+            IDepartmentService departmentService,
             IUnitService unitService,
             IBaseService baseService) : base(sessionService)
         {
@@ -35,7 +35,7 @@
         public ActionResult Index(bool? isActive = null)
         {
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
-            IList<NewDepartment> departments = departmentService.GetByActive(isActive);
+            IList<Department> departments = departmentService.GetByActive(isActive);
             return View(departments);
         }
 
@@ -74,9 +74,9 @@
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public ActionResult Edit(int Id)
         {
-            NewDepartment department = departmentService.GetById(Id);
+            Department department = departmentService.GetById(Id);
             IList<Unit> unit = unitService.GetUnit();
-            var model = new EditNewDepartmentViewModel
+            var model = new EditDepartmentViewModel
             {
                 DepartmentId = Id,
                 Code = department.Code,
@@ -90,7 +90,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public JsonResult Edit(EditNewDepartmentViewModel model)
+        public JsonResult Edit(EditDepartmentViewModel model)
         {
             var commandResult = new CommandResult();
 

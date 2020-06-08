@@ -205,6 +205,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Department.
+        /// </summary>
+        public static string AddDepartment {
+            get {
+                return ResourceManager.GetString("AddDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add/Edit Team.
         /// </summary>
         public static string AddEditTeam {
@@ -219,15 +228,6 @@ namespace Fanex.NexHR.Resources {
         public static string AddHalfDay {
             get {
                 return ResourceManager.GetString("AddHalfDay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add New Department.
-        /// </summary>
-        public static string AddNewDepartment {
-            get {
-                return ResourceManager.GetString("AddNewDepartment", resourceCulture);
             }
         }
         
@@ -1150,7 +1150,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Division Management.
+        ///   Looks up a localized string similar to Department Management.
         /// </summary>
         public static string DepartmentManagement {
             get {
@@ -3081,24 +3081,6 @@ namespace Fanex.NexHR.Resources {
         public static string Native {
             get {
                 return ResourceManager.GetString("Native", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Department.
-        /// </summary>
-        public static string NewDepartment {
-            get {
-                return ResourceManager.GetString("NewDepartment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Department Management.
-        /// </summary>
-        public static string NewDepartmentManagement {
-            get {
-                return ResourceManager.GetString("NewDepartmentManagement", resourceCulture);
             }
         }
         

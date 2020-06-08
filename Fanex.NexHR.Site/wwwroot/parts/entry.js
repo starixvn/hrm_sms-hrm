@@ -79,8 +79,8 @@ module.exports = {
         [`${styleDistPath}/holiday.create`]: `${styleSourcePath}/pages/holiday/create.scss`,
         [`${styleDistPath}/account.changepwd`]: `${styleSourcePath}/pages/account/changepwd.scss`,
         [`${styleDistPath}/addtimerecord`]: `${styleSourcePath}/pages/addtimerecord.scss`,
-        [`${styleDistPath}/newdepartment.index`]: `${styleSourcePath}/pages/newdepartment/index.scss`,
-        [`${styleDistPath}/newdepartment.create`]: `${styleSourcePath}/pages/newdepartment/create.scss`,
+        [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
+        [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -172,7 +172,7 @@ module.exports = {
         [`${jsDistPath}/holiday.edit`]: `${jsSourcePath}/holiday/edit.js`,
         [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`,
         [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`,
-        [`${jsDistPath}/newdepartment.edit`]: `${jsSourcePath}/newdepartment/edit.js`,
-        [`${jsDistPath}/newdepartment.index`]: `${jsSourcePath}/newdepartment/index.js`,
+        [`${jsDistPath}/department.edit`]: `${jsSourcePath}/department/edit.js`,
+        [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
     }
 };

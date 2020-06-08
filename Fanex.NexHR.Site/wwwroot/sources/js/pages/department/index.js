@@ -11,7 +11,7 @@ function deleteDepartment() {
         const id = $(this).data('department-id');
         confirm('Are you sure you want to delete this department?', function () {
             axios({
-                url: resolveClientUrl('newdepartment/delete' + '/' + id),
+                url: resolveClientUrl('department/delete' + '/' + id),
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
@@ -24,7 +24,7 @@ function deleteDepartment() {
                     $('#row' + id).remove();
                     autoIndex();
                 } else {
-                    alert(data.Message);
+                    alert(data.message);
                 }
             }).catch(axiosError);
         });

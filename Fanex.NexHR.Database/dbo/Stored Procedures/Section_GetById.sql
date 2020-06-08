@@ -21,7 +21,7 @@ BEGIN
 		,dep.DepartmentId
 		,dep.Name
 	FROM dbo.Section AS sec WITH (NOLOCK)
-	LEFT JOIN dbo.TestDepartment AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
+	LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE sec.SectionId = @SectionId
 
 END
