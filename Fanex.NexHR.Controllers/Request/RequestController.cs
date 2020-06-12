@@ -26,17 +26,22 @@
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ICommonDataService commonDataService;
+        private readonly ITeamService teamService;
+
         private const string pathFolder = "~/file/uploads/request/";
 
         public RequestController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
-            ICommonDataService commonDataService) : base(sessionService)
+            ICommonDataService commonDataService,
+             ITeamService teamService
+            ) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.commonDataService = commonDataService;
+            this.teamService = teamService;
         }
 
         [HttpPost]
@@ -89,11 +94,14 @@
             }
         }
 
+
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
+
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
+            request.TeamIds = request.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             GetRequests(request);
             GetInfoAttachFile(request.Requests);
 
@@ -104,6 +112,8 @@
         {
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.CompanySpace;
+            request.TeamIds = request.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+
             GetRequests(request);
 
             return View(EmployeeRequestViewName, request);

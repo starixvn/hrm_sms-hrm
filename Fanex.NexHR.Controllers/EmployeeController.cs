@@ -34,6 +34,7 @@
         private readonly IRoleService roleService;
         private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
+        private readonly ITeamService teamService;
 
         public EmployeeController(
             ISessionService sessionService,
@@ -41,13 +42,15 @@
             ICommonDataService commonDataService,
             IRoleService roleService,
             IAuthService authService,
-            IEmployeeLogService employeeLogService) : base(sessionService)
+            IEmployeeLogService employeeLogService,
+            ITeamService teamService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
             this.roleService = roleService;
             this.authService = authService;
             this.employeeLogService = employeeLogService;
+            this.teamService = teamService;
         }
 
         public ActionResult Index()
@@ -56,7 +59,8 @@
             {
                 IsEnable = true,
                 CurrentPage = Constants.CurrentPage,
-                ItemsPerPage = Constants.ItemsPerPage
+                ItemsPerPage = Constants.ItemsPerPage,
+                TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 
             return View(model);
@@ -95,8 +99,9 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult UserManagement(int? jobTitleId = null, string teamIds = "")
+        public ActionResult UserManagement(int? jobTitleId = null, string teamIds=null)
         {
+            teamIds = teamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             IList<LookupData> listJobTitle = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
             {
@@ -129,7 +134,7 @@
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
-                    TeamIds = (string.IsNullOrEmpty(model.TeamIds) ? "-1": model.TeamIds),
+                    TeamIds = model.TeamIds,
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,

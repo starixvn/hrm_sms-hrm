@@ -56,7 +56,7 @@
             var model = new LeaveSummaryViewModel
             {
                 Year = year ?? DateTime.Now.Year,
-                TeamIds = teamIds,
+                TeamIds = teamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 Employee = employee,
                 EmployeeId = employeeId ?? -1,
                 MinAnnualBalance = minAnnualBalance ?? 0,

@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
@@ -19,16 +18,19 @@
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IShiftService shiftService;
         private readonly ICommonDataService commonDataService;
+        private readonly ITeamService teamService;
 
         public CalendarController(
             ISessionService sessionService,
             IWorkingCalendarService workingCalendarService,
             IShiftService shiftService,
-            ICommonDataService commonDataService) : base(sessionService)
+            ICommonDataService commonDataService,
+            ITeamService teamService) : base(sessionService)
         {
             this.workingCalendarService = workingCalendarService;
             this.shiftService = shiftService;
             this.commonDataService = commonDataService;
+            this.teamService = teamService;
         }
 
         public ActionResult GetShift(string query, bool isShowOff = false)
@@ -61,7 +63,8 @@
             var model = new WorkingCalendarFilterViewModel
             {
                 FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek()
+                ToDate = DateTime.Now.LastDayOfWeek(),
+                TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 
             return View(model);

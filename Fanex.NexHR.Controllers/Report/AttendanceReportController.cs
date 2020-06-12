@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Model;
@@ -15,14 +16,17 @@
     {
         private readonly IReportService reportService;
         private readonly IExportExcelAttendanceReportService excelService;
+        private readonly ITeamService teamService;
 
         public AttendanceReportController(
             ISessionService sessionService,
             IReportService reportSevice,
-            IExportExcelAttendanceReportService excelService) : base(sessionService)
+            IExportExcelAttendanceReportService excelService,
+            ITeamService teamService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.excelService = excelService;
+            this.teamService = teamService;
         }
 
         public ActionResult Index()
@@ -31,10 +35,10 @@
             {
                 FromDate = DateTime.Now,
                 ToDate = DateTime.Now,
-                TeamIds = string.Empty,
+                TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = sessionService.Employee.Id,
             };
 
             return View("~/Views/Report/Attendance/Index.cshtml", model);

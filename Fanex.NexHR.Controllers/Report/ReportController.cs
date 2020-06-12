@@ -86,8 +86,10 @@
                 FromDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : fromDate.Value,
                 ToDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : toDate.Value,
                 CurrentPage = Constants.CurrentPage,
-                ItemsPerPage = Constants.ItemsPerPage
+                ItemsPerPage = Constants.ItemsPerPage,
+                TeamIds= string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
+
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             return View(model);
@@ -195,8 +197,10 @@
             {
                 Year = DateTime.Now.Year,
                 EmployeeId = -1,
-                LeaveType = UnpaidLeaveType.UnpaidLeave
+                LeaveType = UnpaidLeaveType.UnpaidLeave,
+                TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
+
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
@@ -224,6 +228,7 @@
         public ActionResult EmployeeSupervisor()
         {
             var model = new EmployeeAndTeamSupervisorViewModel();
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
 
             return View("EmployeeSupervisor", model);
         }
@@ -245,6 +250,7 @@
         public ActionResult TeamSupervisor()
         {
             var model = new EmployeeAndTeamSupervisorViewModel();
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
 
             return View("TeamSupervisor", model);
         }

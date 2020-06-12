@@ -27,18 +27,21 @@
         private readonly IRequestService requestService;
         private readonly IOvertimeRequestService overtimeService;
         private readonly IExportOvertimeService exportOvertimeService;
+        private readonly ITeamService teamService;
 
         public OvertimeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
             IOvertimeRequestService overtimeService,
-            IExportOvertimeService exportOvertimeService) : base(sessionService)
+            IExportOvertimeService exportOvertimeService,
+            ITeamService teamService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.overtimeService = overtimeService;
             this.exportOvertimeService = exportOvertimeService;
+            this.teamService = teamService;
         }
 
         [HttpGet]
@@ -158,6 +161,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
         public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+
             return View(model);
         }
 
