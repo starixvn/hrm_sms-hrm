@@ -6,7 +6,7 @@
 
     public interface IDepartmentService
     {
-        IList<Department> GetByActive(bool? isActive = true);
+        IList<Department> GetDepartment(bool? isActive = true);
 
         Department GetById(int departmentId);
 

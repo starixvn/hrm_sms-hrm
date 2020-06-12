@@ -200,7 +200,9 @@
   <Function Name="Section">
     <Setting Key="Section_Insert" SpName="Section_Insert" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Section_Update" SpName="Section_Update" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="Section_Get" SpName="Section_Get" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="Section_Get" SpName="Section_Get" DbName="nexhrx" Plain="0">
+      <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+    </Setting>
     <Setting Key="Section_GetById" SpName="Section_GetById" DbName="nexhrx" Plain="0">
       <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
     </Setting>

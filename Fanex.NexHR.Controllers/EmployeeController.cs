@@ -129,7 +129,7 @@
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
-                    TeamIds = model.TeamIds,
+                    TeamIds = (string.IsNullOrEmpty(model.TeamIds) ? "-1": model.TeamIds),
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,

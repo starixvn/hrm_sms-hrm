@@ -7,6 +7,7 @@
     public class MultiSelectViewModel
     {
         public int Id { get; set; }
+        public string Type { get; set; }
         public string Text { get; set; }
         public bool Checked { get; set; }
         public bool Enable { get; set; } = true;

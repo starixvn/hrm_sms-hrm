@@ -35,7 +35,7 @@
         public ActionResult Index(bool? isActive = null)
         {
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
-            IList<Department> departments = departmentService.GetByActive(isActive);
+            IList<Department> departments = departmentService.GetDepartment(isActive);
             return View(departments);
         }
 

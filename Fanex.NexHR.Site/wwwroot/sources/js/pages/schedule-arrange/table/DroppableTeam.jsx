@@ -6,7 +6,6 @@ import RowTeam from './RowTeam';
 export default class DroppableTeam extends PureComponent {
     render() {
         const { isHost, shiftOptions, data } = this.props;
-
         return (
             <Droppable droppableId="droppable" isDropDisabled={!isHost} type="droppableTeam">
                 {
@@ -14,7 +13,8 @@ export default class DroppableTeam extends PureComponent {
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((team, gindex) =>
-                                    <Draggable key={`team{team.teamId}`} draggableId={`team{team.teamId}`}
+                      
+                                    <Draggable key={team.teamId} draggableId={team.teamId}
                                         index={gindex} isDragDisabled={!isHost}
                                     >
                                         {

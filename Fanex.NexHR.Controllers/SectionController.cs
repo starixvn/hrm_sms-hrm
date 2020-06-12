@@ -11,6 +11,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -19,11 +20,13 @@
     public class SectionController : BaseController
     {
         private readonly ICommonDataService commonDataService;
+        private readonly IUnitService unitService;
         private readonly ISectionService sectionService;
         private readonly IBaseService baseService;
         private readonly IDepartmentService departmentService;
 
         public SectionController(
+            IUnitService unitService,
             ISessionService sessionService,
             ICommonDataService commonDataService,
             IDepartmentService departmentService,
@@ -34,6 +37,7 @@
             this.sectionService = sectionService;
             this.baseService = baseService;
             this.departmentService = departmentService;
+            this.unitService = unitService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
@@ -68,7 +72,7 @@
         {
             var model = new AddSectionViewModel
             {
-                Departments = departmentService.GetByActive()
+                Departments = departmentService.GetDepartment()
             };
             return View(model);
         }
@@ -99,7 +103,7 @@
         public ActionResult Edit(int Id)
         {
             Section section = sectionService.GetById(Id);
-            IList<Department> department = departmentService.GetByActive();
+            IList<Department> department = departmentService.GetDepartment();
             var model = new EditSectionViewModel
             {
                 SectionId = Id,
@@ -146,45 +150,68 @@
 
         public CustomJsonResult GetHierarchy()
         {
+            IList<Unit> units = unitService.GetUnit();
+            IList<Department> department = departmentService.GetDepartment();
             IList<Team> teams = commonDataService.GetAllTeam();
-            IEnumerable<MultiSelectViewModel> sections = sectionService.GetSection().Select(x => new MultiSelectViewModel
-            {
-                Id = x.Id,
-                Text = x.Name,
-                Items = teams.Where(y => y.Section != null && y.Section.Id == x.Id).Select(y => new MultiSelectViewModel
-                {
-                    Id = y.Id,
-                    Text = y.Name,
-                    IsLeaf = true
-                }).ToList()
-            }).ToList();
-            IEnumerable<MultiSelectViewModel> hierarchy = GetHierarchy(sections);
+            IList<Section> sections = sectionService.GetSection();
+
+            IEnumerable<MultiSelectViewModel> hierarchy = GetHierarchy(units, department, teams, sections);
 
             return new CustomJsonResult { Data = hierarchy, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private IEnumerable<MultiSelectViewModel> GetHierarchy(IEnumerable<MultiSelectViewModel> sections)
+        private IEnumerable<MultiSelectViewModel> GetHierarchy(IList<Unit> units, IList<Department> department, IList<Team> teams, IList<Section> sections)
         {
-            IEnumerable<MultiSelectViewModel> parents = sections.Where(x => !x.ParentId.HasValue);
-            foreach (MultiSelectViewModel parent in parents)
+            IEnumerable<MultiSelectViewModel> multiSelectViewModel = units.Select(u => new MultiSelectViewModel
             {
-                GetChilds(parent, sections);
-            }
+                Id = u.Id,
+                Text = u.Name,
+                Type = Labels.Unit,
+                Items = department.Where(d => d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
+                {
+                    Id = d.Id,
+                    Text = d.Name,
+                    ParentId = u.Id,
+                    Type = Labels.Department,
+                    Items = sections.Where(s => s.Department.Id == d.Id).Select(s => new MultiSelectViewModel
+                    {
+                        Id = s.Id,
+                        Text = s.Name,
+                        ParentId = d.Id,
+                        Type = Labels.Section,
+                        Items = teams.Where(t => t.Section.Id == s.Id).Select(t => new MultiSelectViewModel
+                        {
+                            Id = t.Id,
+                            Text = t.Name,
+                            IsLeaf = true,
+                            ParentId = s.Id,
+                            Type = Labels.Team,
+                        }).ToList()
+                    }).ToList()
+                }).ToList()
+            });
 
-            return parents;
+            SetIdParentValue(multiSelectViewModel);
+
+            return SetIdParentValue(multiSelectViewModel);
         }
 
-        private void GetChilds(MultiSelectViewModel section, IEnumerable<MultiSelectViewModel> sections)
+        private IEnumerable<MultiSelectViewModel> SetIdParentValue(IEnumerable<MultiSelectViewModel> data)
         {
-            IEnumerable<MultiSelectViewModel> items = sections.Where(x => x.ParentId.HasValue && x.ParentId.Value == section.Id);
-            if (items.Any())
+            var items = data.ToList();
+            for (int i = 0; i < items.Count; i++)
             {
-                foreach (MultiSelectViewModel item in items)
+                if (items[i].Items.Count == 0 && items[i].Type != Labels.Team)
                 {
-                    section.Items.Add(item);
-                    GetChilds(item, sections);
+                    items[i].Id = items[i].Id*-1;
+                    items[i].IsLeaf = true;
+                }
+                else
+                {
+                    items[i].Items = SetIdParentValue(items[i].Items).ToList();
                 }
             }
+            return items;
         }
     }
 }

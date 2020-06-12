@@ -67,7 +67,7 @@ BEGIN
 		,de.Code
 		,de.[Name]
 	FROM dbo.[Group] AS g WITH (NOLOCK)
-		INNER JOIN dbo.Department AS de WITH (NOLOCK) ON g.DepartmentId = de.DepartmentId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 		LEFT JOIN @tblGroup AS tbl ON g.GroupId = tbl.GroupId
 	WHERE (
 			@TeamId IS NULL
