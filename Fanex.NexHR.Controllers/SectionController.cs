@@ -191,27 +191,7 @@
                 }).ToList()
             });
 
-            SetIdParentValue(multiSelectViewModel);
-
-            return SetIdParentValue(multiSelectViewModel);
-        }
-
-        private IEnumerable<MultiSelectViewModel> SetIdParentValue(IEnumerable<MultiSelectViewModel> data)
-        {
-            var items = data.ToList();
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (items[i].Items.Count == 0 && items[i].Type != Labels.Team)
-                {
-                    items[i].Id = items[i].Id*-1;
-                    items[i].IsLeaf = true;
-                }
-                else
-                {
-                    items[i].Items = SetIdParentValue(items[i].Items).ToList();
-                }
-            }
-            return items;
+            return multiSelectViewModel;
         }
     }
 }
