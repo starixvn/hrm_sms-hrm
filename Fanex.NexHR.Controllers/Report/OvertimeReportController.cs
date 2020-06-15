@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -14,12 +15,16 @@
     public class OvertimeReportController : BaseController
     {
         private readonly IOvertimeReportService overtimeReportService;
+        private readonly ITeamService teamService;
 
         public OvertimeReportController(
             ISessionService sessionService,
-            IOvertimeReportService overtimeReportService) : base(sessionService)
+            IOvertimeReportService overtimeReportService,
+            ITeamService teamService
+            ) : base(sessionService)
         {
             this.overtimeReportService = overtimeReportService;
+            this.teamService = teamService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
@@ -41,7 +46,7 @@
                 ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
-                TeamIds = model.TeamIds,
+                TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 Employee = model.Employee,
                 EmployeeStatusId = model.EmployeeStatusId
             };

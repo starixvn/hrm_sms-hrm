@@ -89,6 +89,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             model.MemberRequests = GetMemberOvertimeRequest(model);
             ViewBag.CurrentUserId = sessionService.Employee.Id;
             ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);

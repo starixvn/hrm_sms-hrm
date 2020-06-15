@@ -67,12 +67,6 @@ BEGIN
 		SELECT val
 		FROM dbo.fnc_strSplit(@teamIds, ',')
 	END
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupsList (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] AS g WITH (NOLOCK)
-	END
 
 	IF @empid IS NULL
 	BEGIN

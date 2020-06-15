@@ -30,13 +30,6 @@ BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
-	ELSE
-	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
-	END
 
 	INSERT INTO @tblEmployeeIds (EmpId)
 	SELECT emp.EmpId
