@@ -60,8 +60,8 @@ BEGIN
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR tblgr.GroupId IS NOT NULL
+			 -- ISNULL( @TeamIds, '') = '' OR 
+			tblgr.GroupId IS NOT NULL
 			)
 
 	INSERT INTO #tblEmployee (
@@ -91,8 +91,8 @@ BEGIN
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR tblgr.GroupId IS NOT NULL
+			-- ISNULL( @TeamIds, '') = '' OR 
+			tblgr.GroupId IS NOT NULL
 			)
 
 	INSERT INTO #tblEmployeeSupervisor(EmpId)
@@ -108,8 +108,8 @@ BEGIN
 		AND ISNULL(@EmployeeId, e.EmpId) = e.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR tblgr.GroupId IS NOT NULL
+			--ISNULL( @TeamIds, '') = '' OR
+			tblgr.GroupId IS NOT NULL
 			)
 		AND e.[Enabled] = 1
 		AND ISNULL(e.IsDeleted, 0) = 0
@@ -133,8 +133,8 @@ BEGIN
 		AND ISNULL(@EmployeeId, e.EmpId) = e.EmpId
 		AND ISNULL(@IsLocal, es.IsLocal) = es.IsLocal
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR tblgr.GroupId IS NOT NULL
+			--ISNULL( @TeamIds, '') = '' OR
+			tblgr.GroupId IS NOT NULL
 			)
 	ORDER BY e.Code
 

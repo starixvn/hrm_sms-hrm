@@ -63,8 +63,8 @@ BEGIN
 			OR e.EmpId = @EmpId
 			)
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR e.GroupId IN (
+			--ISNULL(@TeamIds, '') = ''OR
+			e.GroupId IN (
 				SELECT GroupId
 				FROM @tblGroupId
 				)

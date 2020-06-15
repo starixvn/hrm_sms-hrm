@@ -1,6 +1,5 @@
-﻿
-CREATE PROCEDURE [dbo].[Report_LeaveSummary] @empid INT = NULL
-		,@TeamIds VARCHAR(max) = ''
+﻿CREATE PROCEDURE [dbo].[Report_LeaveSummary] @empid INT = NULL
+	,@TeamIds VARCHAR(max) = ''
 	,@year INT
 	,@isLocal BIT = NULL
 	,@SupervisorId INT = NULL
@@ -36,21 +35,21 @@ BEGIN
 		SELECT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
-	ELSE
-	BEGIN
-		IF EXISTS (
-				SELECT 1
-				FROM dbo.Employee AS e WITH (NOLOCK)
-					INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
-				WHERE EmpId = @SupervisorId
-					AND er.RoleId IN (2, 3, 4, 5, 6, 7)
-				)
-		BEGIN
-			INSERT INTO #GroupsList (GroupId)
-			SELECT GroupId
-			FROM dbo.[Group] WITH (NOLOCK)
-		END
-	END
+	--ELSE
+	--BEGIN
+		--IF EXISTS (
+		--		SELECT 1
+		--		FROM dbo.Employee AS e WITH (NOLOCK)
+		--			INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
+		--		WHERE EmpId = @SupervisorId
+		--			AND er.RoleId IN (2, 3, 4, 5, 6, 7)
+		--		)
+		--BEGIN
+		--	INSERT INTO #GroupsList (GroupId)
+		--	SELECT GroupId
+		--	FROM dbo.[Group] WITH (NOLOCK)
+		--END
+	--END
 
 	IF @empid IS NULL
 	BEGIN
@@ -93,9 +92,9 @@ BEGIN
 			OR es.IsLocal = @isLocal
 			)
 		AND (
-			@Teamids IS NULL
-			OR @Teamids = ''
-			OR e.GroupId IN (
+			--@Teamids IS NULL OR
+			--@Teamids = '' OR
+			e.GroupId IN (
 				SELECT GroupId
 				FROM #GroupsList
 				)
@@ -322,9 +321,9 @@ BEGIN
 			OR es.IsLocal = @isLocal
 			)
 		AND (
-			@Teamids IS NULL
-			OR @Teamids = ''
-			OR e.GroupId IN (
+			--@Teamids IS NULL OR
+			--@Teamids = '' OR
+			e.GroupId IN (
 				SELECT GroupId
 				FROM #GroupsList
 				)
@@ -360,7 +359,7 @@ BEGIN
 		,FullName
 		,NickName
 		,g.[Rank]
-		,g.GroupId AS TeamId
+		,g.GroupId As TeamId
 		,g.[Name] AS Team
 	FROM #CurrenBalace AS cb
 		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid

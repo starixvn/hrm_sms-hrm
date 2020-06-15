@@ -2,7 +2,7 @@
 CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
 	,@fromtime DATE
 	,@totime DATE
-	,@teamIds VARCHAR(MAX) = ''
+	,@TeamIds VARCHAR(MAX) = ''
 	,@JobTitleId VARCHAR(MAX) = ''
 	,@isLocal BIT = NULL
 AS
@@ -23,17 +23,17 @@ BEGIN
 	DECLARE @tblJobTitleIds TABLE (JobTitleId INT)
 	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
 
-	IF ISNULL(@teamIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT DISTINCT val
-		FROM dbo.fnc_strSplit(@teamIds, ',')
-	ELSE
-	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
-		SELECT g.GroupId
-		FROM dbo.[Group] AS g WITH (NOLOCK)
-		WHERE ISNULL(g.IsDeleted, 0) = 0
-	END
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
+	--ELSE
+	--BEGIN
+	--	INSERT INTO @tblGroupIds (GroupId)
+	--	SELECT g.GroupId
+	--	FROM dbo.[Group] AS g WITH (NOLOCK)
+	--	WHERE ISNULL(g.IsDeleted, 0) = 0
+	--END
 
 	IF ISNULL(@JobTitleId, '') <> ''
 		INSERT INTO @tblJobTitleIds (JobTitleId)

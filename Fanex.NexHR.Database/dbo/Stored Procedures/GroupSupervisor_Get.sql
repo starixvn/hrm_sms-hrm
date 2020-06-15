@@ -36,8 +36,8 @@ BEGIN
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
 	WHERE ISNULL(gr.IsDeleted, 0) = 0
 		AND (
-			ISNULL(@TeamIds, '') = ''
-			OR gr.GroupId IN (
+			--ISNULL(@TeamIds, '') = '' OR
+			gr.GroupId IN (
 				SELECT GroupId
 				FROM #Group
 				)
@@ -57,6 +57,7 @@ BEGIN
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND emp.[Enabled] = 1
 	WHERE su.ActionType IN (2, 3, 4, 5, 8)
+		AND ISNULL(su.IsDeleted, 0) = 0
 
 	DROP TABLE #Group
 

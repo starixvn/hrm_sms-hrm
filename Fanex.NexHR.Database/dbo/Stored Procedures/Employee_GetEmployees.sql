@@ -54,7 +54,7 @@ BEGIN
 
 	IF @enable IS NOT NULL
 	BEGIN
-		SELECT @sWhere = @sWhere + 'WHERE e.isDeleted = 0 and e.Enabled = ' + CONVERT(NVARCHAR(10), @enable) + CHAR(13)
+		SELECT @sWhere = @sWhere + 'WHERE ISNULL(e.isDeleted, 0) = 0 and e.Enabled = ' + CONVERT(NVARCHAR(10), @enable) + CHAR(13)
 			,@bWhere = 1
 	END
 	ELSE IF @isDelete IS NOT NULL
@@ -76,14 +76,18 @@ BEGIN
 			,@bWhere = 1
 	END
 
-	IF ISNULL(@teamIds, '') <> ''
-	BEGIN
+
+
+	--IF ISNULL( @teamIds, '') <> ''
+	--BEGIN
 		SELECT @sWhere = @sWhere + CASE 
 				WHEN @bWhere = 1 THEN ' AND '
 				ELSE ' WHERE '
 				END + ' ( e.GroupId IN (SELECT GroupId FROM #GroupsList) )' + CHAR(13)
 			,@bWhere = 1
-	END
+	--END
+
+
 
 	IF @titleId IS NOT NULL
 	BEGIN

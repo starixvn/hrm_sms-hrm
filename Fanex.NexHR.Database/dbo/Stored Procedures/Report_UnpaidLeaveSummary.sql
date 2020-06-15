@@ -48,10 +48,10 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
-		SELECT DISTINCT GroupId
-		FROM dbo.[Group] AS g WITH (NOLOCK)
-		WHERE ISNULL(g.IsDeleted, 0) = 0
+		--INSERT INTO @tblGroupIds (GroupId)
+		--SELECT DISTINCT GroupId
+		--FROM dbo.[Group] AS g WITH (NOLOCK)
+		--WHERE ISNULL(g.IsDeleted, 0) = 0
 
 		IF NOT EXISTS (
 				SELECT 1

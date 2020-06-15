@@ -84,13 +84,13 @@ BEGIN
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
-	END
+	--ELSE
+	--BEGIN
+	--	INSERT INTO #tblGroupIds (GroupId)
+	--	SELECT GroupId
+	--	FROM dbo.[Group] WITH (NOLOCK)
+	--	WHERE IsDeleted = 0
+	--END
 
 	SELECT req.RequestId
 		,req.EmpId
@@ -180,3 +180,4 @@ BEGIN
 
 	DROP TABLE #tblOvertimeType
 END
+
