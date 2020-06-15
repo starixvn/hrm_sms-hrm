@@ -18,7 +18,7 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                isSelectedAll: true
+                selectedItems: $('#TeamIds').val()
             });
         }).catch(axiosError);
 

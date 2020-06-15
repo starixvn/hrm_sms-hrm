@@ -29,12 +29,6 @@ BEGIN
 		SELECT val
 		FROM dbo.fnc_strSplit(@teamIds, ',')
 	END
-	ELSE
-	BEGIN
-		INSERT INTO @tblGroupId (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-	END
 
 	IF @isShowWholeCompany = 0
 	BEGIN

@@ -50,13 +50,6 @@ BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
-	END
 
 	EXEC sp_xml_preparedocument @DocHandler OUTPUT
 		,@MonthXml

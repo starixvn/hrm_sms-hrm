@@ -80,12 +80,6 @@ BEGIN
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
-	ELSE
-	BEGIN
-		INSERT INTO #tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-	END
 
 	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT emp.EmpId

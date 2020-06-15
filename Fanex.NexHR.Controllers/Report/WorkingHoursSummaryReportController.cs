@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -16,19 +17,23 @@
     {
         private readonly IWorkingHoursSummaryReportService reportService;
         private readonly IOvertimeReportService overtimeReportService;
+        private readonly ITeamService teamService;
 
         public WorkingHoursSummaryReportController(
             ISessionService sessionService,
             IWorkingHoursSummaryReportService reportService,
-            IOvertimeReportService overtimeReportService) : base(sessionService)
+            IOvertimeReportService overtimeReportService,
+            ITeamService teamService) : base(sessionService)
         {
             this.reportService = reportService;
             this.overtimeReportService = overtimeReportService;
+            this.teamService = teamService;
         }
 
         [HttpGet]
         public ActionResult Index(WorkingHoursSummaryViewModel model)
         {
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetWorkingHoursSummaryParam
             {
                 ActorId = sessionService.Employee.Id,

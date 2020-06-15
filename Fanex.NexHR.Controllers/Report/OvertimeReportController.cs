@@ -41,12 +41,13 @@
         [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
         {
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetYearlyOvertimeParam
             {
                 ActorId = sessionService.Employee.Id,
                 Year = model.Year,
                 Calendar = model.Calendar,
-                TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id)),
+                TeamIds = model.TeamIds,
                 Employee = model.Employee,
                 EmployeeStatusId = model.EmployeeStatusId
             };
@@ -67,6 +68,7 @@
         [HRMPermission(Policy.Read, FunctionKey.OvertimeReport)]
         public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
         {
+            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetDailyOvertimeDetailsParam
             {
                 ActorId = sessionService.Employee.Id,
