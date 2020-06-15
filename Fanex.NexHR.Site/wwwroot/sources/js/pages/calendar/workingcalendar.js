@@ -126,7 +126,7 @@ const workingCalendarModule = (function ($) {
             const url = 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + $('#FromDate').val()
                 + '&toDate=' + $('#ToDate').val()
                 + '&employeeId=' + $('#EmployeeId').val()
-                + '&teamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
+                + '&teamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " ")
                 + '&jobTitleIds=' + $('#JobTitle').multiSelectTreeView('getSelectedItems')
                 + '&isLocal=' + $('#IsLocal').val();
             location.href = resolveClientUrl(url);

@@ -27,13 +27,6 @@ BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT DISTINCT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
-	--ELSE
-	--BEGIN
-	--	INSERT INTO @tblGroupIds (GroupId)
-	--	SELECT g.GroupId
-	--	FROM dbo.[Group] AS g WITH (NOLOCK)
-	--	WHERE ISNULL(g.IsDeleted, 0) = 0
-	--END
 
 	IF ISNULL(@JobTitleId, '') <> ''
 		INSERT INTO @tblJobTitleIds (JobTitleId)

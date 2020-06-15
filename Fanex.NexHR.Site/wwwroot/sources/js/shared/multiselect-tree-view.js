@@ -23,7 +23,7 @@
     // Plugin
     $.fn.multiSelectTreeView = function (options) {
         if (methods[options]) {
-            return methods[options].apply(this, Array.prototype.slice.call(arguments, 1)) + ',';
+            return methods[options].apply(this, Array.prototype.slice.call(arguments, 1));
         }
         else if (typeof options === 'object' || !options) {
             return methods.init.apply(this, arguments);

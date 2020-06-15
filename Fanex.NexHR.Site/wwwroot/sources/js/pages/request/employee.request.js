@@ -536,7 +536,7 @@ $(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
             const url = resolveClientUrl('ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
-                + '&TeamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
+                + '&TeamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " ")
                 + '&Employee=' + $('#Employee').val()
                 + '&EmployeeId=' + $('#EmployeeId').val()
                 + '&FromDate=' + $('#FromDate').val()
@@ -601,7 +601,7 @@ $(function () {
             } else {
                 const url = resolveClientUrl('request/' + $('#ActionName').val()
                     + '?DateOption=' + $('#Date').val()
-                    + '&TeamIds=' + $('#Team').multiSelectTreeView('getSelectedItems')
+                    + '&TeamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " ": $('#Team').multiSelectTreeView('getSelectedItems'))
                     + '&Employee=' + $('#Employee').val()
                     + '&EmployeeId=' + $('#EmployeeId').val()
                     + '&FromDate=' + $('#FromDate').val()

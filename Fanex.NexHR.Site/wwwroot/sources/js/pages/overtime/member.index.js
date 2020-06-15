@@ -114,7 +114,8 @@ $(document).ready(function () {
         if ((statusId === 0 || statusId === CurrentRequestStatus.Processed) && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
-            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            $('#TeamIds').val(($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " " : $('#Team').multiSelectTreeView('getSelectedItems')));
+          
             $('form.filter').submit();
         }
     });

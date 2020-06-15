@@ -20,13 +20,12 @@ $(document).ready(function () {
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
-        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#TeamIds').val(($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " " : $('#Team').multiSelectTreeView('getSelectedItems')));
         $('form.filter').submit();
     });
 
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-
         blockUI();
         axios({
             url: resolveClientUrl('OvertimeReport/ExportYearlyOvertime'),
