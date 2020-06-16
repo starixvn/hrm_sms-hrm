@@ -3,7 +3,7 @@ import { confirm, autoIndex, resolveClientUrl } from '../../shared/common.functi
 
 function deleteMemo(memoId) {
     confirm('Are you sure you want to delete this memo?', function () {
-        $.post(resolveClientUrl'Memo/delete'), { id: memoId }, function () {
+        $.post(resolveClientUrl('Memo/delete'), { id: memoId }, function () {
             $('#row_' + memoId).remove();
             autoIndex();
         });
