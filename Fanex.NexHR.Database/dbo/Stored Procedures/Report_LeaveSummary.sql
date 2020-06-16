@@ -35,7 +35,7 @@ BEGIN
 		SELECT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
-	ELSE
+	--ELSE
 	--BEGIN
 	--	IF EXISTS (
 	--			SELECT 1
