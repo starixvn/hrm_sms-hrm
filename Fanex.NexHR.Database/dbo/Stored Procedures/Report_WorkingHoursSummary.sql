@@ -40,14 +40,7 @@ BEGIN
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
-	IF ISNULL(@TeamIds, '') = ''
-	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
-		SELECT GroupId
-		FROM dbo.[Group] WITH (NOLOCK)
-		WHERE IsDeleted = 0
-	END
-	ELSE
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT val
