@@ -246,9 +246,8 @@ import { DisciplineType } from '../../shared/constants';
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,
-                    isSelectedAll: true,
+                    selectedItems: $('#TeamId').val()
                 });
-
                 query();
             }).catch(axiosError);
 
