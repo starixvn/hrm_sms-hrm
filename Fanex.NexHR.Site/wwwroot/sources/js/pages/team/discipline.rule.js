@@ -2,7 +2,7 @@
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, toastOptions } from '../../shared/common.functions';
+import { axiosError, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 
 let disciplineRule = (function ($) {
     let $table,
@@ -26,7 +26,7 @@ let disciplineRule = (function ($) {
 
             if (totalItems > 0) {
                 axios({
-                    url: _global.root + 'team/EditDisciplineRule',
+                    url: resolveClientUrl('team/EditDisciplineRule'),
                     method: 'POST',
                     data: stringify({ teamId: teamId, disciplineRules: model }),
                     headers: {

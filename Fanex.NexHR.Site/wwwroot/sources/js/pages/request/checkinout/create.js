@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
@@ -8,7 +7,8 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, blockUI, unblockUI
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions,
+    blockUI, unblockUI, resolveClientUrl
 } from '../../../shared/common.functions';
 import { RequestType, RoleSystem } from '../../../shared/constants';
 
@@ -29,13 +29,13 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(_global.root + 'request/GetVerifiers', {
+            axios(resolveClientUrl('request/GetVerifiers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.CheckIn
                 }
             }),
-            axios(_global.root + 'request/GetApprovers', {
+            axios(resolveClientUrl('request/GetApprovers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.CheckIn
@@ -64,7 +64,7 @@ $(document).ready(function () {
         blockUI();
         const requestTypeId = domElements.$checkInTypeId.prop('checked') ? RequestType.CheckIn : RequestType.CheckOut;
         axios({
-            url: _global.root + 'checkinout/GetDisabledDate',
+            url: resolveClientUrl('checkinout/GetDisabledDate'),
             method: 'GET',
             params: {
                 requestTypeId: requestTypeId,
@@ -184,7 +184,7 @@ $(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
             axios({
-                url: _global.root + 'request/GetEmployeesByActingUser',
+                url: resolveClientUrl('request/GetEmployeesByActingUser'),
                 method: 'GET',
                 params: {
                     role: RoleSystem.OnBehalfRequest,
@@ -240,7 +240,7 @@ $(document).ready(function () {
 
     domElements.$attendantDate.on('change', function () {
         axios({
-            url: _global.root + 'shift/getShiftByDate',
+            url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
@@ -281,15 +281,15 @@ $(document).ready(function () {
                 approverId: domElements.$approverId.val()
             };
 
-            var files = document.getElementById('file').files
+            var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
                 fd.append('files[' + i + ']', files[i]);
             }
             fd.append('requestModel', JSON.stringify(model));
             var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "checkinout/Create");
+            xhr.addEventListener('load', uploadComplete, false);
+            xhr.open('POST', resolveClientUrl('checkinout/Create'));
             xhr.send(fd);
         }
     });
@@ -300,7 +300,7 @@ $(document).ready(function () {
             $('form').removeClass('dirty');
             domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Create successfully!', '', toastOptions());
-            setTimeout(function () { location.href = _global.root + 'checkinout/employeeview'; }, 3000);
+            setTimeout(function () { location.href = resolveClientUrl('checkinout/employeeview'); }, 3000);
         } else {
             toastr.error(data.message, '', toastOptions());
         }

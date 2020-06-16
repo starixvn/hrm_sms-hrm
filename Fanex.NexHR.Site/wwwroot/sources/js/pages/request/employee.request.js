@@ -534,9 +534,11 @@ $(function () {
     function initEventExportExcel() {
         $('#btnExcel').click(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
+            const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
+
             const url = resolveClientUrl('ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
-                + '&TeamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " ")
+                + '&TeamIds=' + (teamIds !== '' ? teamIds : ' ')
                 + '&Employee=' + $('#Employee').val()
                 + '&EmployeeId=' + $('#EmployeeId').val()
                 + '&FromDate=' + $('#FromDate').val()
@@ -599,9 +601,10 @@ $(function () {
                 $('#submit').val('Submit');
                 e.preventDefault();
             } else {
+                const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
                 const url = resolveClientUrl('request/' + $('#ActionName').val()
                     + '?DateOption=' + $('#Date').val()
-                    + '&TeamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " ": $('#Team').multiSelectTreeView('getSelectedItems'))
+                    + '&TeamIds=' + (teamIds === '' ? ' ' : teamIds)
                     + '&Employee=' + $('#Employee').val()
                     + '&EmployeeId=' + $('#EmployeeId').val()
                     + '&FromDate=' + $('#FromDate').val()

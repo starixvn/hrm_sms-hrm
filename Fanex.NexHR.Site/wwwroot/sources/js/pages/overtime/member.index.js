@@ -21,7 +21,8 @@ function query() {
         method: 'POST',
         data: stringify({
             memberRequest: memberRequests,
-            sort: JSON.stringify(sorts) }),
+            sort: JSON.stringify(sorts)
+        }),
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -97,7 +98,7 @@ $(document).ready(function () {
         $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
     }
 
-    axios(_global.root + 'Section/GetHierarchy')
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -114,8 +115,9 @@ $(document).ready(function () {
         if ((statusId === 0 || statusId === CurrentRequestStatus.Processed) && month === '') {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
-            $('#TeamIds').val(($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " " : $('#Team').multiSelectTreeView('getSelectedItems')));
-          
+            const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
+            $('#TeamIds').val(teamIds === '' ? ' ' : teamIds);
+
             $('form.filter').submit();
         }
     });
@@ -126,7 +128,7 @@ $(document).ready(function () {
 
     let onUpdateRequestStatus = function (requestIds, command, roleId) {
         axios({
-            url: _global.root + 'overtime/EditMonthlyRequestStatus',
+            url: resolveClientUrl('overtime/EditMonthlyRequestStatus'),
             method: 'POST',
             data: stringify({ requestIds, command, roleId }),
             headers: {

@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios'
 import { initFromDateOnChange, confirm, initDatepicker, autoIndex, axiosError, resolveClientUrl } from '../../shared/common.functions';
@@ -28,7 +27,7 @@ var detailMessage = function (messageId) {
             id: messageId
         }
     }).then(() => {
-        window.location.href = _global.root + 'message/detailByEmployee/' + messageId;
+        window.location.href = resolveClientUrl('message/detailByEmployee/' + messageId);
     }).catch(axiosError);
 };
 

@@ -1,10 +1,9 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-validation/dist/jquery.validate';
+﻿import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import axios from 'axios';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, showValidationSummaryErrors } from '../../shared/common.functions';
+import { axiosError, showValidationSummaryErrors, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let domElements = {
@@ -47,7 +46,7 @@ $(document).ready(function () {
         return isValid;
     };
 
-    axios(_global.root + 'Section/GetHierarchy')
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -60,7 +59,7 @@ $(document).ready(function () {
         }).catch(axiosError);
 
     $('#generate').on('click', function () {
-        axios(_global.root + 'employee/GenerateEmployeeCode')
+        axios(resolveClientUrl('employee/GenerateEmployeeCode'))
             .then(response => {
                 let data = response.data;
 

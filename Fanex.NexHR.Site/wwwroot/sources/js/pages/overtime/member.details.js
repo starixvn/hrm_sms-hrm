@@ -1,12 +1,11 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'floatthead/dist/jquery.floatThead';
+﻿import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import toastr from 'toastr';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, floatThead, toastOptions } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(document).ready(function () {
@@ -22,7 +21,7 @@ $(document).ready(function () {
 
     let onUpdateRequestStatus = function (requestIds, command, roleId) {
         axios({
-            url: _global.root + 'overtime/EditMonthlyRequestStatus',
+            url: resolveClientUrl('overtime/EditMonthlyRequestStatus'),
             method: 'POST',
             data: stringify({ requestIds, command, roleId }),
             headers: {

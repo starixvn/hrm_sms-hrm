@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
@@ -8,7 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
 } from '../../../shared/common.functions';
 import { RequestType } from '../../../shared/constants';
 
@@ -128,7 +127,7 @@ $(document).ready(function () {
 
     domElements.$attendantDate.on('change', function () {
         axios({
-            url: _global.root + 'shift/getShiftByDate',
+            url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
@@ -169,7 +168,7 @@ $(document).ready(function () {
                 approverId: domElements.$approverId.val()
             };
 
-            var files = document.getElementById('file').files
+            var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
                 fd.append('files[' + i + ']', files[i]);
@@ -177,8 +176,8 @@ $(document).ready(function () {
             fd.append('requestModel', JSON.stringify(model));
             fd.append('filesRemove', JSON.stringify(tempFile));
             var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "checkinout/edit");
+            xhr.addEventListener('load', uploadComplete, false);
+            xhr.open('POST', resolveClientUrl('checkinout/edit'));
             xhr.send(fd);
         }
     });
@@ -189,7 +188,7 @@ $(document).ready(function () {
             $('form').removeClass('dirty');
             domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Update successfully!', '', toastOptions());
-            setTimeout(function () { location.href = _global.root + 'checkinout/employeeview'; }, 3000);
+            setTimeout(function () { location.href = resolveClientUrl('checkinout/employeeview'); }, 3000);
         } else {
             toastr.error(data.message, '', toastOptions());
         }

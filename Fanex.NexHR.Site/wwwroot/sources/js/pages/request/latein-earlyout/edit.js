@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
@@ -139,7 +138,7 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            var files = document.getElementById('file').files
+            var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
                 fd.append('files[' + i + ']', files[i]);
@@ -147,8 +146,8 @@ $(document).ready(function () {
             fd.append('requestModel', JSON.stringify(model));
             fd.append('filesRemove', JSON.stringify(tempFile));
             var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "lateinearlyout/edit");
+            xhr.addEventListener('load', uploadComplete, false);
+            xhr.open('POST', resolveClientUrl('lateinearlyout/edit'));
             xhr.send(fd);
         }
     });

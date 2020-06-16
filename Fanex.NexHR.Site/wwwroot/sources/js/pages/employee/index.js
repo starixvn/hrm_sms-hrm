@@ -1,11 +1,10 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, getParam } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } from '../../shared/common.functions';
 
 (function () {
     function initPagination() {
@@ -36,7 +35,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
     function query() {
         blockUI();
         $.ajax({
-            url: _global.root + 'employee/ContactList',
+            url: resolveClientUrl('employee/ContactList'),
             type: 'POST',
             dataType: 'html',
             data: $('form.filter').serialize(),
@@ -70,7 +69,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
             className: 'nick-tooltip',
             live: false,
             title: function () {
-                var path = _global.root + 'employee/avatar/' + $(this).attr('data-code');
+                var path = resolveClientUrl('employee/avatar/' + $(this).attr('data-code'));
                 return '<img width=80px; height=80px; src="' + path + '" />';
             }
         });
@@ -83,7 +82,7 @@ import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, g
 
     $(document).ready(function () {
         $.ajax({
-            url: _global.root + 'Section/GetHierarchy',
+            url: resolveClientUrl('Section/GetHierarchy'),
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

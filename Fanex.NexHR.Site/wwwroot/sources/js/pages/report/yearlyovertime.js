@@ -20,7 +20,8 @@ $(document).ready(function () {
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
-        $('#TeamIds').val(($('#Team').multiSelectTreeView('getSelectedItems') == "" ? " " : $('#Team').multiSelectTreeView('getSelectedItems')));
+        const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
+        $('#TeamIds').val(teamIds === '' ? ' ' : teamIds);
         $('form.filter').submit();
     });
 

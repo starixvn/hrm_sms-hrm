@@ -1,11 +1,13 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import 'chosen-js/chosen.jquery';
 import '../../shared/multiselect-tree-view';
 import axios from 'axios';
-import { initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, axiosError } from '../../shared/common.functions';
+import {
+    initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors,
+    axiosError, resolveClientUrl
+} from '../../shared/common.functions';
 import '../../date';
 
 function bindingDataIfEditMode() {
@@ -57,7 +59,7 @@ function initSearchEmployee() {
 
 function initSearchTeam() {
     axios({
-        url: _global.root + 'Section/GetHierarchy',
+        url: resolveClientUrl('Section/GetHierarchy'),
         method: "GET"
     }).then(response => {
         $('#Groups').multiSelectTreeView({
@@ -179,7 +181,7 @@ function Submit() {
                 if (response.data.Code === 0) {
                     $('#messageInfo').show();
                     setTimeout(function () {
-                        document.location = _global.root + "Message/Index";
+                        document.location = resolveClientUrl('Message/Index');
                     }, 2000);
                 }
                 else {

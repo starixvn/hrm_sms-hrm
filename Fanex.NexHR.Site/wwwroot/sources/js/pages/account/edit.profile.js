@@ -1,8 +1,7 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import toastr from 'toastr';
-import { confirm, alert, toastOptions, initDatepicker } from '../../shared/common.functions';
+import { confirm, alert, toastOptions, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 
 var editAccount = (function ($) {
     const domElement = {
@@ -17,9 +16,9 @@ var editAccount = (function ($) {
 
     const constants = {
         FileMaxSize: 5242880,
-        CreateRelationshipUrl: _global.root + 'Information/InsertRelationship',
-        EditRelationshipUrl: _global.root + 'Information/EditRelationship/',
-        DeleteRelationship: _global.root + 'Information/DeleteRelationship/',
+        CreateRelationshipUrl: resolveClientUrl('Information/InsertRelationship'),
+        EditRelationshipUrl: resolveClientUrl('Information/EditRelationship/'),
+        DeleteRelationship: resolveClientUrl('Information/DeleteRelationship/')
     };
 
     function updateInformationEvent() {
@@ -72,7 +71,7 @@ var editAccount = (function ($) {
 
         $.ajax({
             type: 'POST',
-            url: _global.root + 'File/MyProfileUploadFile',
+            url: resolveClientUrl('File/MyProfileUploadFile'),
             contentType: false,
             processData: false,
             data: fd,
@@ -101,7 +100,7 @@ var editAccount = (function ($) {
                 var fileName = $btn.attr('data-file-name');
                 $.ajax({
                     type: 'POST',
-                    url: _global.root + 'File/DeleteMyProfileUploadedFile',
+                    url: resolveClientUrl('File/DeleteMyProfileUploadedFile'),
                     data: { fileName },
                     success: function (result) {
                         if (result.isSuccessful) {
@@ -136,7 +135,7 @@ var editAccount = (function ($) {
     function getFileUpload() {
         $.ajax({
             type: 'GET',
-            url: _global.root + 'Information/GetFileUploaded',
+            url: resolveClientUrl('Information/GetFileUploaded'),
             contentType: 'html',
             success: function (data) {
                 $(domElement.ListFileUpload).html(data);
@@ -149,7 +148,7 @@ var editAccount = (function ($) {
     function getRelationship() {
         $.ajax({
             type: 'GET',
-            url: _global.root + 'Information/GetEmployeeRelationship',
+            url: resolveClientUrl('Information/GetEmployeeRelationship'),
             contentType: 'html',
             success: function (data) {
                 $(domElement.Relationship).html(data);

@@ -1,18 +1,17 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 import toastr from 'toastr';
 import axios from 'axios';
 
-import { axiosError, confirm, toastOptions } from '../../../shared/common.functions';
+import { axiosError, confirm, toastOptions, resolveClientUrl } from '../../../shared/common.functions';
 
 $(function () {
     function cancelRequest(id) {
         confirm('Are you sure you want to cancel this request?', function () {
             axios({
-                url: _global.root + 'keepinview/delete' + '/' + id,
+                url: resolveClientUrl('keepinview/delete' + '/' + id),
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
@@ -35,7 +34,7 @@ $(function () {
 
         switch (command) {
             case 'Edit':
-                location.href = _global.root + 'keepinview/edit/' + requestId;
+                location.href = resolveClientUrl('keepinview/edit/' + requestId);
                 break;
             case 'Cancel':
                 cancelRequest(requestId);
@@ -70,7 +69,7 @@ $(function () {
 
         $('.viewhistory').click(function () {
             axios({
-                url: _global.root + 'keepinview/ViewHistory/' + $(this).attr('requestid'),
+                url: resolveClientUrl('keepinview/ViewHistory/' + $(this).attr('requestid')),
                 method: 'GET',
                 responseType: 'text'
             }).then(response => {

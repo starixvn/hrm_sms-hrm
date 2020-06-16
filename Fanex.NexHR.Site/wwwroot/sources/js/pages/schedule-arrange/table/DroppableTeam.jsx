@@ -13,7 +13,6 @@ export default class DroppableTeam extends PureComponent {
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {
                                 data.map((team, gindex) =>
-                      
                                     <Draggable key={team.teamId} draggableId={team.teamId}
                                         index={gindex} isDragDisabled={!isHost}
                                     >

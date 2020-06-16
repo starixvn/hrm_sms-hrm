@@ -9,6 +9,7 @@ $(document).ready(function () {
     const query = function () {
         blockUI();
 
+        const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
         axios({
             url: resolveClientUrl('ShiftStatisticReport/ShiftStatisticDetails'),
             method: 'GET',
@@ -16,7 +17,7 @@ $(document).ready(function () {
                 workdate: $('#WorkDate').val(),
                 shiftId: $('#ShiftId').val(),
                 employeeId: $('#EmployeeId').val(),
-                teamIds: ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " "),
+                teamIds: teamIds !== '' ? teamIds : ' ',
                 isLocal: $('#IsLocal').val(),
                 IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
             },

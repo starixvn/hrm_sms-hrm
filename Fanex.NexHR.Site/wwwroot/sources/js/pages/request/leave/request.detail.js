@@ -1,5 +1,6 @@
 ﻿import 'jquery.are-you-sure/jquery.are-you-sure';
 import { LeaveType } from '../../../shared/constants';
+import { resolveClientUrl } from '../../../shared/common.functions';
 
 var LeaveRequestDetail = (function ($) {
     return {
@@ -126,7 +127,7 @@ var LeaveRequestDetail = (function ($) {
             LeaveRequestDetail.getTotalLeave();
         },
         fillTimeForHalfday: function (trObject) {
-            $.getJSON(_global.root + 'shift/getshiftbydate',
+            $.getJSON(resolveClientUrl('shift/getshiftbydate'),
                 { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
                 function (data) {
                     if (data !== null) {

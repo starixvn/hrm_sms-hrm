@@ -3,7 +3,7 @@ import axios from 'axios';
 import { stringify } from 'qs';
 import toastr from 'toastr';
 
-import { axiosError, floatThead, toastOptions } from '../shared/common.functions';
+import { axiosError, floatThead, toastOptions, resolveClientUrl } from '../shared/common.functions';
 
 let assignPermissionToRole = (function ($) {
     let $functionTable,
@@ -111,7 +111,7 @@ let assignPermissionToRole = (function ($) {
 
             if (totalItems > 0) {
                 axios({
-                    url: _global.root + 'Function/AssignPermission',
+                    url: resolveClientUrl('Function/AssignPermission'),
                     method: 'POST',
                     data: stringify({ roleId: roleId, permissions: model }),
                     headers: {

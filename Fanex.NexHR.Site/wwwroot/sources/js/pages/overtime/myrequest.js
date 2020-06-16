@@ -1,11 +1,11 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
+import { resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: _global.root + 'overtime/GetActingEmployees',
+                url: resolveClientUrl('overtime/GetActingEmployees'),
                 data: {
                     query: request.term
                 },

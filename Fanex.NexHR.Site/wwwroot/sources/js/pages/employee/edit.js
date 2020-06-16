@@ -9,7 +9,7 @@ import toastr from 'toastr';
 import '../../../libs/birthdaypicker';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, confirm, alert, initDatepicker, toastOptions } from '../../shared/common.functions';
+import { axiosError, confirm, alert, initDatepicker, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     function bindSARole(onload) {
@@ -66,7 +66,7 @@ $(document).ready(function () {
         let xhr = new XMLHttpRequest();
         xhr.addEventListener('load', uploadComplete, false);
         xhr.addEventListener('error', uploadFailed, false);
-        xhr.open('POST', _global.root + 'employee/uploadavatar');
+        xhr.open('POST', resolveClientUrl('employee/uploadavatar'));
         xhr.send(fd);
     }
 
@@ -75,7 +75,7 @@ $(document).ready(function () {
         const nickName = $('#NickName').val();
         confirm('Are you sure you want to reset ' + nickName + "'s password?", function () {
             axios({
-                url: _global.root + 'Account/ResetPassword',
+                url: resolveClientUrl('Account/ResetPassword'),
                 method: 'POST',
                 data: stringify({ id: id }),
                 headers: {
@@ -136,7 +136,7 @@ $(document).ready(function () {
         defaultDate: $('#DateOfBirth').val()
     });
 
-    axios(_global.root + 'Section/GetHierarchy')
+    axios(resolveClientUrl('Section/GetHierarchy'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -205,7 +205,7 @@ $(document).ready(function () {
             }
 
             axios({
-                url: _global.root + 'Employee/Delete',
+                url: resolveClientUrl('Employee/Delete'),
                 method: 'POST',
                 data: stringify({ employeeId: $('#Id').val(), resignedDate: resignedDate }),
                 headers: {
@@ -216,7 +216,7 @@ $(document).ready(function () {
                 let data = response.data;
 
                 if (data.IsSuccessful) {
-                    document.location = _global.root + 'employee/usermanagement';
+                    document.location = resolveClientUrl('employee/usermanagement');
                 } else {
                     toastr.error(data.Message, '', toastOptions());
                 }

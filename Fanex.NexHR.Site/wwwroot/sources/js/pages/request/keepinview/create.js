@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'jquery-ui-bundle/jquery-ui';
+﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
@@ -8,7 +7,8 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, blockUI, unblockUI
+    axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions,
+    blockUI, unblockUI, resolveClientUrl
 } from '../../../shared/common.functions';
 import { KeepInViewType, RequestType, RoleSystem } from '../../../shared/constants';
 
@@ -32,13 +32,13 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(_global.root + 'request/getVerifiers', {
+            axios(resolveClientUrl('request/getVerifiers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
                 }
             }),
-            axios(_global.root + 'request/getApprovers', {
+            axios(resolveClientUrl('request/getApprovers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.KeepInView
@@ -67,7 +67,7 @@ $(document).ready(function () {
         blockUI();
         const requestTypeId = domElements.$keepInViewByDay.prop('checked') ? KeepInViewType.KeepInViewByDay : KeepInViewType.KeepInViewByHour;
         axios({
-            url: _global.root + 'keepinview/getDisabledDate',
+            url: resolveClientUrl('keepinview/getDisabledDate'),
             method: 'GET',
             params: {
                 requestTypeId: requestTypeId,
@@ -137,7 +137,7 @@ $(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
             axios({
-                url: _global.root + 'request/getEmployeesByActingUser',
+                url: resolveClientUrl('request/getEmployeesByActingUser'),
                 method: 'GET',
                 params: {
                     role: RoleSystem.OnBehalfRequest,
@@ -207,7 +207,7 @@ $(document).ready(function () {
 
     domElements.$date.on('change', function () {
         axios({
-            url: _global.root + 'shift/getShiftByDate',
+            url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
@@ -241,15 +241,15 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            var files = document.getElementById('file').files
+            var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
                 fd.append('files[' + i + ']', files[i]);
             }
             fd.append('requestModel', JSON.stringify(model));
             var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "keepinview/create");
+            xhr.addEventListener('load', uploadComplete, false);
+            xhr.open('POST', resolveClientUrl('keepinview/create'));
             xhr.send(fd);
         }
     });
@@ -260,7 +260,7 @@ $(document).ready(function () {
             $('form').removeClass('dirty');
             domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Create successfully!', '', toastOptions());
-            setTimeout(function () { location.href = _global.root + 'keepinview/employeeview'; }, 3000);
+            setTimeout(function () { location.href = resolveClientUrl('keepinview/employeeview'); }, 3000);
         } else {
             toastr.error(data.message, '', toastOptions());
         }

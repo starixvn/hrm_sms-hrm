@@ -326,9 +326,9 @@ const LeaveRequest = (function ($) {
                 var xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", uploadComplete, false);
                 if (LeaveRequest.requestId.val() === '-1') {
-                    xhr.open("POST", _global.root + "leave/Create");
+                    xhr.open("POST", resolveClientUrl('leave/Create'));
                 } else {
-                    xhr.open("POST", _global.root + "leave/Update");
+                    xhr.open("POST", resolveClientUrl('leave/Update'));
                 }
                 xhr.send(GetFormData(leaveRequest, requestDetails, tempFile));
             }

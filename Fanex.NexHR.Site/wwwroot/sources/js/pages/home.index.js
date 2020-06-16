@@ -1,16 +1,15 @@
-﻿import $ from 'jquery/dist/jquery';
-import 'bootstrap/dist/js/bootstrap';
+﻿import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError } from '../shared/common.functions';
+import { axiosError, resolveClientUrl } from '../shared/common.functions';
 
 $(document).ready(function () {
     if ($('#IsResetPassword').prop('checked')) {
         $('#changePasswordModal').modal('show');
 
         $('#btnSubmit').on('click', function () {
-            location.href = _global.root + 'Account/changepwd';
+            location.href = resolveClientUrl('Account/changepwd');
         });
 
         $('#btnCancel').on('click', function () {
@@ -18,7 +17,7 @@ $(document).ready(function () {
             const status = $('#ckb-dontshowagain').prop('checked');
             if (status) {
                 axios({
-                    url: _global.root + 'Account/EditPasswordResetStatus',
+                    url: resolveClientUrl('Account/EditPasswordResetStatus'),
                     method: 'POST',
                     data: stringify({ status: false }),
                     headers: {

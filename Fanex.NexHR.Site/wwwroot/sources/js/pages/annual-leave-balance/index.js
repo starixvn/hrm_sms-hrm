@@ -24,12 +24,12 @@ const annualLeaveBalance = (function ($) {
 
     function submitData(postToUrl) {
         const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-        return resolveClientUrl(postToUrl + $('#Year').val() +
-            '&teamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " ")
-            + '&Employee=' + $('#Employee').val() +
-            '&EmployeeId=' + $('#EmployeeId').val() +
-            '&MinAnnualBalance=' + $('#MinAnnualBalance').val() +
-            '&Category=' + $('#Category').val());
+        return resolveClientUrl(postToUrl + $('#Year').val()
+            + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
+            + '&Employee=' + $('#Employee').val()
+            + '&EmployeeId=' + $('#EmployeeId').val()
+            + '&MinAnnualBalance=' + $('#MinAnnualBalance').val()
+            + '&Category=' + $('#Category').val());
     }
 
     function initSubmitFilterEvent() {

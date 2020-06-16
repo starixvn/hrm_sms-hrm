@@ -123,10 +123,11 @@ const workingCalendarModule = (function ($) {
         });
 
         $('#btnExcel').on('click', function () {
+            const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
             const url = 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + $('#FromDate').val()
                 + '&toDate=' + $('#ToDate').val()
                 + '&employeeId=' + $('#EmployeeId').val()
-                + '&teamIds=' + ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " ")
+                + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
                 + '&jobTitleIds=' + $('#JobTitle').multiSelectTreeView('getSelectedItems')
                 + '&isLocal=' + $('#IsLocal').val();
             location.href = resolveClientUrl(url);

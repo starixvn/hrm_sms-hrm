@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import {
     axiosError, blockUI, unblockUI, initDatepicker,
-    showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions
+    showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
 } from '../../../shared/common.functions';
 import { RequestType, RoleSystem, ChangeShiftType, OffDayShiftId } from '../../../shared/constants';
 
@@ -26,13 +26,13 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = $('#EmployeeId').val();
         const promises = [
-            axios(_global.root + 'request/GetVerifiers', {
+            axios(resolveClientUrl('request/GetVerifiers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.ChangeShift
                 }
             }),
-            axios(_global.root + 'request/GetApprovers', {
+            axios(resolveClientUrl('request/GetApprovers'), {
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.ChangeShift
@@ -60,7 +60,7 @@ $(document).ready(function () {
     let getChangeShiftDetails = function () {
         blockUI();
         axios({
-            url: _global.root + 'changeshift/GetChangeShiftDetail',
+            url: resolveClientUrl('changeshift/GetChangeShiftDetail'),
             method: 'GET',
             params: {
                 employeeId: domElements.$employeeId.val(),
@@ -158,7 +158,7 @@ $(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
             axios({
-                url: _global.root + 'request/GetEmployeesByActingUser',
+                url: resolveClientUrl('request/GetEmployeesByActingUser'),
                 method: 'GET',
                 params: {
                     role: RoleSystem.OnBehalfRequest,
@@ -239,16 +239,16 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
-            var files = document.getElementById('file').files
+            var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
                 fd.append('files[' + i + ']', files[i]);
             }
             fd.append('model', JSON.stringify(model));
-            fd.append('details', JSON.stringify(details))
+            fd.append('details', JSON.stringify(details));
             var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.open("POST", _global.root + "ChangeShift/Create");
+            xhr.addEventListener('load', uploadComplete, false);
+            xhr.open('POST', resolveClientUrl('ChangeShift/Create'));
             xhr.send(fd);
         }
     });
@@ -259,7 +259,7 @@ $(document).ready(function () {
             $('form').removeClass('dirty');
             domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Create successfully!', '', toastOptions());
-            setTimeout(function () { location.href = _global.root + 'changeshift/employeeview'; }, 3000);
+            setTimeout(function () { location.href = resolveClientUrl('changeshift/employeeview'); }, 3000);
         } else {
             toastr.error(data.message, '', toastOptions());
         }
