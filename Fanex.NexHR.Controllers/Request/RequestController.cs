@@ -99,7 +99,6 @@
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)
         {
-
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
             request.ViewType = RequestViewType.HRSpace;
             request.TeamIds = request.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));

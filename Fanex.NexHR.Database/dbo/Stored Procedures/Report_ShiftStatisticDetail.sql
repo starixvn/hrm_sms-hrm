@@ -92,4 +92,9 @@ BEGIN
 			@ShiftId IS NULL
 			OR ISNULL(empca.ShiftId, 0) = @ShiftId
 			)
+		AND EXISTS (
+			SELECT 1
+			FROM @tblGroupId AS tblgr
+			WHERE tblgr.GroupId = emp.GroupId
+			)
 END

@@ -35,21 +35,21 @@ BEGIN
 		SELECT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
-	--ELSE
-	--BEGIN
-		--IF EXISTS (
-		--		SELECT 1
-		--		FROM dbo.Employee AS e WITH (NOLOCK)
-		--			INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
-		--		WHERE EmpId = @SupervisorId
-		--			AND er.RoleId IN (2, 3, 4, 5, 6, 7)
-		--		)
-		--BEGIN
-		--	INSERT INTO #GroupsList (GroupId)
-		--	SELECT GroupId
-		--	FROM dbo.[Group] WITH (NOLOCK)
-		--END
-	--END
+	ELSE
+	BEGIN
+		IF EXISTS (
+				SELECT 1
+				FROM dbo.Employee AS e WITH (NOLOCK)
+					INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e.EmpId = er.EmployeeId
+				WHERE EmpId = @SupervisorId
+					AND er.RoleId IN (2, 3, 4, 5, 6, 7)
+				)
+		BEGIN
+			INSERT INTO #GroupsList (GroupId)
+			SELECT GroupId
+			FROM dbo.[Group] WITH (NOLOCK)
+		END
+	END
 
 	IF @empid IS NULL
 	BEGIN

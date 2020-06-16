@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
@@ -166,26 +165,22 @@
             {
                 Id = u.Id,
                 Text = u.Name,
-                Type = Labels.Unit,
                 Items = department.Where(d => d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
                 {
                     Id = d.Id,
                     Text = d.Name,
                     ParentId = u.Id,
-                    Type = Labels.Department,
                     Items = sections.Where(s => s.Department.Id == d.Id).Select(s => new MultiSelectViewModel
                     {
                         Id = s.Id,
                         Text = s.Name,
                         ParentId = d.Id,
-                        Type = Labels.Section,
                         Items = teams.Where(t => t.Section.Id == s.Id).Select(t => new MultiSelectViewModel
                         {
                             Id = t.Id,
                             Text = t.Name,
                             IsLeaf = true,
                             ParentId = s.Id,
-                            Type = Labels.Team,
                         }).ToList()
                     }).ToList()
                 }).ToList()

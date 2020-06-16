@@ -16,7 +16,7 @@ $(document).ready(function () {
                 workdate: $('#WorkDate').val(),
                 shiftId: $('#ShiftId').val(),
                 employeeId: $('#EmployeeId').val(),
-                teamIds: $('#TeamIds').val(),
+                teamIds: ($('#Team').multiSelectTreeView('getSelectedItems') != "" ? $('#Team').multiSelectTreeView('getSelectedItems') : " "),
                 isLocal: $('#IsLocal').val(),
                 IsShowWholeCompany: $('#IsShowWholeCompany').prop('checked')
             },

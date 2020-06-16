@@ -129,6 +129,8 @@
 
         public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest, string sort)
         {
+            memberRequest = memberRequest ?? new List<MonthlyOvertimeRequest>();
+
             memberRequest = SortMemberOvertime(sort, memberRequest.ToList());
             ViewBag.CurrentUserId = sessionService.Employee.Id;
 

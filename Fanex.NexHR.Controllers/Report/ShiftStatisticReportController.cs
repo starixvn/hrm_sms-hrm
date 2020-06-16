@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -19,16 +20,19 @@
         private readonly IShiftStatisticReportService statisticReportService;
         private readonly IShiftService shiftService;
         private readonly IExportExcelShiftStatisticService exportExcelService;
+        private readonly ITeamService teamService;
 
         public ShiftStatisticReportController(
             ISessionService sessionService,
             IShiftStatisticReportService statisticReportService,
             IShiftService shiftService,
-            IExportExcelShiftStatisticService exportExcelService) : base(sessionService)
+            IExportExcelShiftStatisticService exportExcelService,
+            ITeamService teamService) : base(sessionService)
         {
             this.statisticReportService = statisticReportService;
             this.shiftService = shiftService;
             this.exportExcelService = exportExcelService;
+            this.teamService = teamService;
         }
 
         public ActionResult Index()
@@ -71,7 +75,7 @@
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
-                TeamIds = model.TeamIds,
+                TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 IsShowWholeCompany = model.IsShowWholeCompany,
                 IsLocal = model.IsLocal
             };
