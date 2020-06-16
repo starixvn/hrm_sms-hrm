@@ -171,6 +171,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="..\SonarQube\smshrm\CSharp\SonarLint.xml">
+      <Link>SonarLint.xml</Link>
+    </AdditionalFiles>
     <Content Include="Avatars\avatar.jpg" />
     <Content Include="wwwroot\dist\js\account.changepwd.js" />
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
