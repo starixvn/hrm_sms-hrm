@@ -102,5 +102,13 @@
         {
             return baseService.GetData<WeekendLeaveDetail>(criteria).ToList();
         }
+
+        public IList<LeaveType> GetLeaveType()
+        {
+            var criteria = new GetUnpaidLeaveTypeCriteria { };
+            IList<LeaveType> leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
+
+            return leaveTypes;
+        }
     }
 }

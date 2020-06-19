@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
@@ -197,7 +196,6 @@
             {
                 Year = DateTime.Now.Year,
                 EmployeeId = -1,
-                LeaveType = UnpaidLeaveType.UnpaidLeave,
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 
@@ -216,12 +214,12 @@
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 SupervisorId = sessionService.Employee.Id,
-                LeaveType = (int)model.LeaveType
+                LeaveType = model.LeaveType
             };
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
             IList<Team> teams = teamService.GetBySupervisor(sessionService.Employee.Id);
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
-            ViewBag.HeaderTitle = string.Format("{0} {1}", EnumerationHelper.GetStringValue(model.LeaveType), model.Year);
+            ViewBag.HeaderTitle = string.Format("{0}", model.Year);
             return PartialView("_UnpaidLeaveSummaryDetails", leaveSummaryByTeamList);
         }
 
@@ -264,6 +262,19 @@
             IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
 
             return PartialView("_TeamSupervisorDetails", supervisors);
+        }
+
+        public CustomJsonResult GetUnpaidLeaveType()
+        {
+            IList<LeaveType> leaveTypes = reportService.GetLeaveType();
+            IEnumerable<MultiSelectViewModel> multiSelectViewModel = leaveTypes.Select(u => new MultiSelectViewModel
+            {
+                Id = u.Id,
+                Text = u.Name,
+                IsLeaf = true,
+            });
+
+            return new CustomJsonResult { Data = multiSelectViewModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

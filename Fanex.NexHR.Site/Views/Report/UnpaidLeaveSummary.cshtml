@@ -47,10 +47,9 @@
         <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
                 <div class="label-form">
-                    @Html.Label(@Labels.Type, new { @class = "control-label" })
+                    <label class="control-label">@Labels.Type</label>
                 </div>
-                <div class="select-form">
-                    @Html.EnumDropDownFor(model => model.LeaveType, null, null, new { @class = "form-control" })
+                <div class="select-form" id="LeaveType">
                 </div>
             </div>
             <div class="form-group form-group--m">

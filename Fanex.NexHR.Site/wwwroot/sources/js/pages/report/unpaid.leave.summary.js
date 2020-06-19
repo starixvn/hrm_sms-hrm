@@ -19,7 +19,7 @@ $(document).ready(function () {
                 category: $('#Category').val(),
                 employee: $('#Employee').val(),
                 employeeId: $('#EmployeeId').val(),
-                leaveType: $('#LeaveType').val()
+                leaveType: $('#LeaveType.select-form').multiSelectTreeView('getSelectedItems')
             },
             responseType: 'text'
         }).then(response => {
@@ -34,6 +34,14 @@ $(document).ready(function () {
                 data: response.data,
                 isSelectedAll: true
             });
+        }).catch(axiosError);
+
+    axios(resolveClientUrl('Report/GetUnpaidLeaveType'))
+        .then(response => {
+            $('#LeaveType').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true
+            });
 
             query();
         }).catch(axiosError);
@@ -44,8 +52,6 @@ $(document).ready(function () {
     });
 
     $('#btnExcel').click(function () {
-        const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-
         blockUI();
         axios({
             url: resolveClientUrl('ExportLeaveSummary/UnpaidLeaveSummary'),

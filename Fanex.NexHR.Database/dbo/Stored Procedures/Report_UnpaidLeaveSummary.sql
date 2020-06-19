@@ -4,7 +4,7 @@ CREATE PROCEDURE [dbo].[Report_UnpaidLeaveSummary] @Year INT
 	,@TeamIds VARCHAR(MAX) = ''
 	,@IsLocal BIT = NULL
 	,@SupervisorId INT = NULL
-	,@LeaveType SMALLINT = 1
+	,@LeaveType VARCHAR(MAX) = ''
 AS
 /*
 Created: 20151028@Quinn.Vo
@@ -19,26 +19,23 @@ LeaveType:
 - 2: UPL Insurance
 - 3: Paternity
 - 4: Maternity
-
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @UnpaidLeaveType INT
-		,@fromDate DATE = CAST(@year AS VARCHAR(5)) + '-01-01'
+	DECLARE
+		@fromDate DATE = CAST(@year AS VARCHAR(5)) + '-01-01'
 		,@toDate DATE = CAST(@year AS VARCHAR(5)) + '-12-31'
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	DECLARE @tblEmployeeIds TABLE (EmpId INT)
+	DECLARE @tblLeaveTypes TABLE (LeaveTypeId INT)
 
-	SELECT @UnpaidLeaveType = LeaveTypeId
-	FROM dbo.LeaveType WITH (NOLOCK)
-	WHERE Code = CASE @LeaveType
-			WHEN 1 THEN 'UPL'
-			WHEN 2 THEN 'UPLI'
-			WHEN 3 THEN 'PL'
-			WHEN 4 THEN 'ML'
-			ELSE 'UPL'
-			END
+	IF ISNULL(@LeaveType, '') <> ''
+	BEGIN
+		INSERT INTO @tblLeaveTypes (LeaveTypeId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@LeaveType, ',')
+	END
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
@@ -78,12 +75,11 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
-						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
-							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
-						ELSE empca.LeaveDay END
+								WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
+									AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
+								ELSE empca.LeaveDay END
 						)
 				ELSE 0 END
 				)) AS Jan
@@ -93,8 +89,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -108,8 +103,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -123,8 +117,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -138,8 +131,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -153,8 +145,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -168,8 +159,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -183,8 +173,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -198,8 +187,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -213,8 +201,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -228,8 +215,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -243,8 +229,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -257,8 +242,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -277,6 +261,7 @@ BEGIN
 		AND ISNULL(emp.[Enabled], 0) = 1
 		INNER JOIN EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = emp.GroupId
+		LEFT JOIN @tblLeaveTypes AS lt ON lt.LeaveTypeId = empca.LeaveTypeId OR lt.LeaveTypeId = empca.LeaveTypeId2
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND ISNULL(g.IsDeleted, 0) = 0
@@ -304,8 +289,7 @@ BEGIN
 					AND empca.IsHoliday = 0
 					AND empca.IsLeaveDay = 1
 					AND (
-						empca.LeaveTypeId = @UnpaidLeaveType
-						OR empca.LeaveTypeId2 = @UnpaidLeaveType
+						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5

@@ -67,12 +67,12 @@
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 SupervisorId = sessionService.Employee.Id,
-                LeaveType = (int)model.LeaveType
+                LeaveType = model.LeaveType
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
             IList<Team> teams = commonDataService.GetAllTeam();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
-            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
+            //exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
 
             return new EmptyResult();
         }

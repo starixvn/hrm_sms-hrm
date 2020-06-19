@@ -30,5 +30,7 @@
         IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
 
         IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria);
+
+        IList<LeaveType> GetLeaveType();
     }
 }

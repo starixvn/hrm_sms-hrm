@@ -500,6 +500,7 @@
     <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Report_GetUnpaidLeaveType.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

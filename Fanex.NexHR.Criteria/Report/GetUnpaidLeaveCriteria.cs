@@ -14,7 +14,7 @@
 
         public int? SupervisorId { get; set; }
 
-        public int LeaveType { get; set; }
+        public string LeaveType { get; set; }
 
         public override string GetSettingKey()
         {
