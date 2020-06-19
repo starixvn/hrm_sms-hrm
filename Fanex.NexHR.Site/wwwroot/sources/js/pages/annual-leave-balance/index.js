@@ -9,7 +9,7 @@ import '../../shared/employee.search.in.team';
 const annualLeaveBalance = (function ($) {
     function getSection() {
         $.ajax({
-            url: resolveClientUrl('Section/GetHierarchy'),
+            url: resolveClientUrl('Section/GetOrgChart'),
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

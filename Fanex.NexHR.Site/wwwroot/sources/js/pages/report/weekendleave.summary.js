@@ -77,7 +77,7 @@ function query() {
 $(document).ready(function () {
     initEventForDateRangeDropdown();
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

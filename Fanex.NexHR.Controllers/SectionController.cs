@@ -147,21 +147,25 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        public CustomJsonResult GetHierarchy()
+        public CustomJsonResult GetOrgChart()
         {
             IList<Unit> units = unitService.GetUnit();
             IList<Department> department = departmentService.GetDepartment();
             IList<Team> teams = commonDataService.GetAllTeam();
             IList<Section> sections = sectionService.GetSection();
 
-            IEnumerable<MultiSelectViewModel> hierarchy = GetHierarchy(units, department, teams, sections);
+            IEnumerable<MultiSelectViewModel> orgchart = GetOrgChart(units, department, teams, sections);
 
-            return new CustomJsonResult { Data = hierarchy, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = orgchart, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        private IEnumerable<MultiSelectViewModel> GetHierarchy(IList<Unit> units, IList<Department> department, IList<Team> teams, IList<Section> sections)
+        private IEnumerable<MultiSelectViewModel> GetOrgChart(
+            IList<Unit> units,
+            IList<Department> department,
+            IList<Team> teams,
+            IList<Section> sections)
         {
-            IEnumerable<MultiSelectViewModel> multiSelectViewModel = units.Select(u => new MultiSelectViewModel
+            var multiSelectViewModel = units.Select(u => new MultiSelectViewModel
             {
                 Id = u.Id,
                 Text = u.Name,

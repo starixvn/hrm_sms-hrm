@@ -14,7 +14,7 @@ $(document).ready(function () {
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     floatThead('table#data');
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

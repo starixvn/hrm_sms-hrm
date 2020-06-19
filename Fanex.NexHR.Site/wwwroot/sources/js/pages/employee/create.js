@@ -46,7 +46,7 @@ $(document).ready(function () {
         return isValid;
     };
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

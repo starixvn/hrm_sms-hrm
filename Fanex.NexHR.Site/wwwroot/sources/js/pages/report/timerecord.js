@@ -121,7 +121,7 @@ import { parse } from 'qs';
 
     $(document).ready(function () {
         $.ajax({
-            url: resolveClientUrl('Section/GetHierarchy'),
+            url: resolveClientUrl('Section/GetOrgChart'),
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

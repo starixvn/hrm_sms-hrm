@@ -61,7 +61,7 @@ export default class App extends Component {
 
     componentDidMount() {
         const promises = [
-            axios(resolveClientUrl('Section/GetHierarchy')),
+            axios(resolveClientUrl('Section/GetOrgChart')),
             axios(resolveClientUrl('Calendar/GetShift'), {
                 params: {
                     query: '',

@@ -12,7 +12,7 @@ $(document).ready(function () {
     initDatepicker();
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

@@ -98,7 +98,7 @@ const workingCalendarModule = (function ($) {
 
     function initModule() {
         const promises = [
-            axios(resolveClientUrl('Section/GetHierarchy')),
+            axios(resolveClientUrl('Section/GetOrgChart')),
             axios(resolveClientUrl('calendar/GetJobTitle'))
         ];
 

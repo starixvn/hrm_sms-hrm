@@ -28,7 +28,7 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -53,6 +53,7 @@ $(document).ready(function () {
 
     $('#btnExcel').click(function () {
         blockUI();
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         axios({
             url: resolveClientUrl('ExportLeaveSummary/UnpaidLeaveSummary'),
             method: 'GET',

@@ -126,7 +126,7 @@ $(document).ready(function () {
         $(this).val(event.target.checked);
     });
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

@@ -36,7 +36,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        axios(resolveClientUrl('Section/GetHierarchy'))
+        axios(resolveClientUrl('Section/GetOrgChart'))
             .then(response => {
                 this.teamOptions = response.data;
                 const { floatData } = buildData(response.data);

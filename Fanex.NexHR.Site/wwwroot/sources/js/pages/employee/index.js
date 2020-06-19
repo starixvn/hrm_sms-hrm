@@ -82,7 +82,7 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } fro
 
     $(document).ready(function () {
         $.ajax({
-            url: resolveClientUrl('Section/GetHierarchy'),
+            url: resolveClientUrl('Section/GetOrgChart'),
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

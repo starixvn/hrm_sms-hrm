@@ -338,7 +338,7 @@ import {
         initFromDateOnChange($('#FromDate'), $('#ToDate'));
         initEventForDateRangeDropdown();
         $.ajax({
-            url: resolveClientUrl('Section/GetHierarchy'),
+            url: resolveClientUrl('Section/GetOrgChart'),
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,

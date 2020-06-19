@@ -59,7 +59,7 @@ function initSearchEmployee() {
 
 function initSearchTeam() {
     axios({
-        url: resolveClientUrl('Section/GetHierarchy'),
+        url: resolveClientUrl('Section/GetOrgChart'),
         method: "GET"
     }).then(response => {
         $('#Groups').multiSelectTreeView({

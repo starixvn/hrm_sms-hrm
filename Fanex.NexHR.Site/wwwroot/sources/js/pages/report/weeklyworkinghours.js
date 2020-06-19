@@ -46,7 +46,7 @@ $(document).ready(function () {
         $('#week-picker').toggle();
     });
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

@@ -8,7 +8,7 @@ import { axiosError, initDatepicker, resolveClientUrl, blockUI, unblockUI, downl
 $(document).ready(function () {
     initDatepicker();
 
-    axios(resolveClientUrl('Section/GetHierarchy'))
+    axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
