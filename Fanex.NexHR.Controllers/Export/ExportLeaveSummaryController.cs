@@ -72,7 +72,7 @@
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
             IList<Team> teams = commonDataService.GetAllTeam();
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
-            //exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
+            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummaryByTeamList, model.Year, model.LeaveType);
 
             return new EmptyResult();
         }

@@ -15,6 +15,6 @@ BEGIN
 	SELECT LeaveTypeId AS Id
 		,Code
 		,Name
-	FROM dbo.LeaveType
+	FROM dbo.LeaveType WITH (NOLOCK)
 	WHERE Code IN ('UPL','UPLI','PL','ML')
 END

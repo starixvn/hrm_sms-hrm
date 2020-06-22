@@ -6,13 +6,11 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Models;
 
     public interface IExportExcelUnpaidLeaveSummaryReportService
     {
-        void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, UnpaidLeaveType leaveType);
+        void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, string leaveType);
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -23,21 +21,22 @@
         private const int RowHighlight = 6;
         private const string UnpaidLeaveSummaryTemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
 
-        public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, UnpaidLeaveType leaveType)
+        public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, string leaveType)
         {
             string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath);
-            string fileName = leaveType.ToString() + "Summary_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
+            string type = leaveType != null ? leaveType.Replace("25", "Unpaid Leave").Replace("12", "Maternity Leave")
+                .Replace("14", "Paternity Leave").Replace("41", "Unpaid Leave (Insurance)") : "";
 
-            var writer = new ExcelTemplateWriter(templatePath, fileName, $"{EnumerationHelper.GetStringValue(leaveType)} Summary Report");
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
 
             /// Fill report title.
-            writer.CopyRows(0, 2);
-            writer.WriteCellRange(0, 1, 0, 16, $"{EnumerationHelper.GetStringValue(leaveType)} Summary");
+            writer.CopyRows(2, 2);
 
             /// Fill report header.
             writer.CopyRows(RowStartHeader, 2);
-            writer.WriteCellRange(2, 1, 3, 12, $"Take {EnumerationHelper.GetStringValue(leaveType)} {year}");
-            writer.WriteCellRange(2, 1, 15, 1, $"Total Of {EnumerationHelper.GetStringValue(leaveType)} {year}");
+            writer.WriteCellRange(2, 1, 3, 12, $"Take {type} {year}");
+            writer.WriteCellRange(2, 1, 15, 1, $"Total Of {type} {year}");
 
             FillContentRowReport(leaveSummaries, ref writer);
 
