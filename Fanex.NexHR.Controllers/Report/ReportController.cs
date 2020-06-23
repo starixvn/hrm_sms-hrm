@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Helpers;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
@@ -221,8 +220,9 @@
                 LeaveType = model.LeaveType
             };
 
-            string leaveType = model.LeaveType != null ? model.LeaveType.Replace("25", " Unpaid Leave").Replace("12", " Maternity Leave")
-                .Replace("14", " Paternity Leave").Replace("41", " Unpaid Leave (Insurance)") : "";
+            string[] leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',') : new string[] { };
+            IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
+            string leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
             IList<Team> teams = teamService.GetBySupervisor(sessionService.Employee.Id);
             IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);

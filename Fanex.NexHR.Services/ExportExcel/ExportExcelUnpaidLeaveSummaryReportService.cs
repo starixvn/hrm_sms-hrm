@@ -16,17 +16,26 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
     {
+        private readonly ICommonDataService commonDataService;
+
         private const int RowStartHeader = 2;
         private const int RowStartBody = 4;
         private const int RowHighlight = 6;
         private const string UnpaidLeaveSummaryTemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
 
+        public ExportExcelUnpaidLeaveSummaryReportService(ICommonDataService commonDataService)
+        {
+            this.commonDataService = commonDataService;
+        }
+
         public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, string leaveType)
         {
             string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath);
             string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
-            string type = leaveType != null ? leaveType.Replace("25", "Unpaid Leave").Replace("12", "Maternity Leave")
-                .Replace("14", "Paternity Leave").Replace("41", "Unpaid Leave (Insurance)") : "";
+
+            string[] leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',') : new string[] { };
+            IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
+            string type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
 
