@@ -71,9 +71,6 @@ BEGIN
 
 	SELECT SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 1
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -85,9 +82,6 @@ BEGIN
 				)) AS Jan
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 2
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -99,9 +93,6 @@ BEGIN
 				)) AS Feb
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 3
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -113,9 +104,6 @@ BEGIN
 				)) AS Mar
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 4
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -127,9 +115,6 @@ BEGIN
 				)) AS Apr
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 5
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -141,9 +126,6 @@ BEGIN
 				)) AS May
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 6
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -155,9 +137,6 @@ BEGIN
 				)) AS Jun
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 7
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -169,9 +148,6 @@ BEGIN
 				)) AS Jul
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 8
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -183,9 +159,6 @@ BEGIN
 				)) AS Aug
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 9
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -197,9 +170,6 @@ BEGIN
 				)) AS Sep
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 10
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -211,9 +181,6 @@ BEGIN
 				)) AS Oct
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 11
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -225,9 +192,6 @@ BEGIN
 				)) AS Nov
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 12
-					AND empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
 					AND (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
@@ -238,11 +202,7 @@ BEGIN
 				ELSE 0 END
 				)) AS [Dec]
 		,SUM((CASE 
-				WHEN empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
-					AND (
-						lt.LeaveTypeId IS NOT NULL
+				WHEN ( lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
@@ -269,6 +229,9 @@ BEGIN
 			@IsLocal IS NULL
 			OR empsum.IsLocal = @IsLocal
 			)
+		AND empca.IsOffday = 0
+		AND empca.IsHoliday = 0
+		AND empca.IsLeaveDay = 1
 		AND EXISTS (
 			SELECT 1
 			FROM @tblGroupIds AS tbl
@@ -285,10 +248,7 @@ BEGIN
 		,g.GroupId
 		,g.[Name]
 	HAVING SUM((CASE 
-				WHEN empca.IsOffday = 0
-					AND empca.IsHoliday = 0
-					AND empca.IsLeaveDay = 1
-					AND (
+				WHEN (
 						lt.LeaveTypeId IS NOT NULL
 						) THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0

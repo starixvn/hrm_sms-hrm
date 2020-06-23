@@ -27,14 +27,17 @@
     {
         private readonly IReportService reportService;
         private readonly ITeamService teamService;
+        private readonly ICommonDataService commonDataService;
 
         public ReportController(
             ISessionService sessionService,
             IReportService reportSevice,
+            ICommonDataService commonDataService,
             ITeamService teamService) : base(sessionService)
         {
             this.reportService = reportSevice;
             this.teamService = teamService;
+            this.commonDataService = commonDataService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
@@ -217,6 +220,7 @@
                 SupervisorId = sessionService.Employee.Id,
                 LeaveType = model.LeaveType
             };
+
             string leaveType = model.LeaveType != null ? model.LeaveType.Replace("25", " Unpaid Leave").Replace("12", " Maternity Leave")
                 .Replace("14", " Paternity Leave").Replace("41", " Unpaid Leave (Insurance)") : "";
             IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
@@ -269,13 +273,17 @@
 
         public CustomJsonResult GetUnpaidLeaveType()
         {
-            IList<LeaveType> leaveTypes = reportService.GetLeaveType();
-            IEnumerable<MultiSelectViewModel> multiSelectViewModel = leaveTypes.Select(u => new MultiSelectViewModel
-            {
-                Id = u.Id,
-                Text = u.Name,
-                IsLeaf = true,
-            });
+            IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
+            IEnumerable<MultiSelectViewModel> multiSelectViewModel = leaveTypes.Where(x => x.Id == (int)LeaveTypes.MaternityLeave
+                                                                                    || x.Id == (int)LeaveTypes.PaternityLeave
+                                                                                    || x.Id == (int)LeaveTypes.UnpaidLeave
+                                                                                    || x.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                                                                    ).Select(u => new MultiSelectViewModel
+                                                                                    {
+                                                                                        Id = u.Id,
+                                                                                        Text = u.Name,
+                                                                                        IsLeaf = true,
+                                                                                    });
 
             return new CustomJsonResult { Data = multiSelectViewModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

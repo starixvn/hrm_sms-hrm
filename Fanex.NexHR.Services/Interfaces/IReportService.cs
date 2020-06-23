@@ -31,6 +31,5 @@
 
         IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria);
 
-        IList<LeaveType> GetLeaveType();
     }
 }
