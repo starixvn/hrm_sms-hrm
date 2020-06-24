@@ -395,11 +395,7 @@ const LeaveRequest = (function ($) {
                             minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
                             isFromAfterday = data.IsInAfterDay,
                             isToAfterday = data.IsOutAfterDay;
-                        if (data.IsInAfterDay || data.IsOutAfterDay) {
-                            $('.time-isafterday').show();
-                        } else {
-                            $('.time-isafterday').hide();
-                        }
+                        $('.time-isafterday').show();
 
                         if (data.IsInAfterDay) {
                             minuteFrom += 1440; //60*24

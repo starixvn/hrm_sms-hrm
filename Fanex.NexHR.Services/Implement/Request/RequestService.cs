@@ -286,7 +286,11 @@
 
             if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
             {
-                leaveDate = string.Format(RequestFormatConstants.MsgLeaveHalfDayWithNoFormat, leaveDate, request.FromTime.ToShortTime(), request.ToTime.ToShortTime());
+                leaveDate = string.Format(
+                    RequestFormatConstants.MsgLeaveHalfDayWithNoFormat,
+                    request.FromDate.ToDateMonthYearFormatedDate(),
+                    request.FromTime.ToShortTime(),
+                    request.ToTime.ToShortTime());
             }
 
             return leaveDate;

@@ -86,7 +86,16 @@
                         <a href="@Url.Action("detail", "leave", new { id = request.RequestId })">@request.LeaveType.Name</a>
                     </td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>
+                        @if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
+                        {
+                            @request.FromDate.ToDateMonthYearFormatedDate()
+                        }
+                        else
+                        {
+                            @request.ToDate.ToDateMonthYearFormatedDate()
+                        }
+                    </td>
                     <td>
                         @{ var totaldays = string.Empty; }
                         @switch (request.LeaveType.Id)
