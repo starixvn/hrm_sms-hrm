@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
@@ -13,13 +12,11 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Models.Group;
+    using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
@@ -99,7 +96,7 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult UserManagement(int? jobTitleId = null, string teamIds=null)
+        public ActionResult UserManagement(int? jobTitleId = null, string teamIds = null)
         {
             teamIds = teamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             IList<LookupData> listJobTitle = commonDataService.GetLookupDataByCode(Constants.JobTitle);
@@ -428,75 +425,6 @@
             IList<Employee> employees = employeeService.GetEmployeesByRole(criteria);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetRangeDate(int leaveTypeId, int employeeId, DateTime fromDate, DateTime toDate)
-        {
-            var numberDays = 0;
-            switch (leaveTypeId)
-            {
-                case (ushort)LeaveTypes.MaternityLeave:
-                case (ushort)LeaveTypes.CompensationLeave:
-                    numberDays = (toDate - fromDate).Days + 1;
-                    break;
-
-                case (ushort)LeaveTypes.UnpaidLeave:
-                case (ushort)LeaveTypes.BusinessTrip:
-                    var criteria = new GetOffDateAndHolidayDateCriteria
-                    {
-                        EmpId = employeeId,
-                        FromDate = fromDate,
-                        ToDate = toDate
-                    };
-                    IEnumerable<DateTime> dates = employeeService.GetOffDateAndHolidayDate(criteria);
-                    numberDays = (toDate - fromDate).Days + 1 - (dates != null ? dates.Count() : 0);
-                    break;
-
-                default:
-                    var getDateRangeCriteria = new GetDateRangeCriteria
-                    {
-                        EmpId = employeeId,
-                        FromDate = fromDate,
-                        ToDate = toDate
-                    };
-                    numberDays = employeeService.GetDateRange(getDateRangeCriteria);
-                    break;
-            }
-
-            return Json(numberDays, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetUnavailableDates(int employeeId, DateTime date, int? leaveTypeId = null)
-        {
-            IEnumerable<DateTime> dates = null;
-            var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
-            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
-            var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
-
-            if (leaveTypeId.HasValue && (leaveTypeId.Value == (ushort)LeaveTypes.UnpaidLeave
-                || leaveTypeId.Value == (ushort)LeaveTypes.BusinessTrip
-                || leaveTypeId.Value == (ushort)LeaveTypes.UnpaidLeaveInsurance))
-            {
-                var criteria = new GetOffDateAndHolidayDateCriteria
-                {
-                    EmpId = employeeId,
-                    FromDate = fromDate,
-                    ToDate = toDate
-                };
-                dates = employeeService.GetOffDateAndHolidayDate(criteria);
-            }
-            else
-            {
-                var getUnavailableDateCriteria = new GetUnavailableRequestDateCriteria
-                {
-                    EmpId = employeeId,
-                    FromDate = fromDate,
-                    ToDate = toDate
-                };
-                dates = employeeService.GetUnavailableDates(getUnavailableDateCriteria);
-            }
-
-            return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetMemberByGender(string keyword, int gender)

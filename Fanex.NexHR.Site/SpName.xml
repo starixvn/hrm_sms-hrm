@@ -40,7 +40,6 @@
     <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetOffDate_HolidayDate" SpName="EmployeeCalendar_GetOffDate_HolidayDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0" />
     <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="nexhrx" Plain="0"></Setting>
@@ -77,13 +76,11 @@
     <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="WorkingTimeRequest_ApproveMultipleRequest" SpName="WorkingTimeRequest_ApproveMultipleRequest" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeCalendar_GetRangeDate" SpName="EmployeeCalendar_GetNumberWorkDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
     </Setting>
-    <Setting Key="EmployeeCalendar_GetUnavailRequestDate" SpName="EmployeeCalendar_GetUnavailRequestDate" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_ChangePassword" SpName="Employee_ChangePassword" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GetByRole" SpName="Employee_GetByRole" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeSupervisor_Update" SpName="EmployeeSupervisor_Update" DbName="nexhrx" Plain="0"></Setting>

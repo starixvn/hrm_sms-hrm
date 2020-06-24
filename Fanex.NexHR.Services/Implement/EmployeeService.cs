@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Security;
@@ -11,9 +9,7 @@
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Shift;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
@@ -105,42 +101,6 @@
             return baseService.GetDataEntity<EmployeeShift>(criteria);
         }
 
-        public IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
-        {
-            return baseService.GetData<DateTime>(criteria).ToList();
-        }
-
-        public IList<DateTime> GetNotOffOrHolidayDate(GetOffDateAndHolidayDateCriteria criteria)
-        {
-            IList<DateTime> availableDates = GetOffDateAndHolidayDate(criteria);
-            IList<DateTime> unavailableDates = new List<DateTime>();
-
-            if (availableDates == null)
-            {
-                return unavailableDates;
-            }
-
-            for (DateTime dateInRange = criteria.FromDate; dateInRange <= criteria.ToDate; dateInRange = dateInRange.AddDays(1))
-            {
-                bool isIncludedToUnvailableDates = true;
-
-                foreach (DateTime availableDate in availableDates)
-                {
-                    if (dateInRange.IsSameDateWith(availableDate) && isIncludedToUnvailableDates)
-                    {
-                        isIncludedToUnvailableDates = false;
-                    }
-                }
-
-                if (isIncludedToUnvailableDates)
-                {
-                    unavailableDates.Add(dateInRange);
-                }
-            }
-
-            return unavailableDates;
-        }
-
         public IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
         {
             return baseService.GetData<AnnualLeaveTransactionViewModel>(criteria).ToList();
@@ -153,16 +113,6 @@
                 LeaveTransId = leaveTransId
             };
             return baseService.GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
-        }
-
-        public int GetDateRange(GetDateRangeCriteria criteria)
-        {
-            return baseService.GetDataEntity<int>(criteria);
-        }
-
-        public IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria)
-        {
-            return baseService.GetData<DateTime>(criteria).ToList();
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)

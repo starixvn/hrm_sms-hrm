@@ -1,13 +1,10 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
@@ -35,17 +32,9 @@
 
         EmployeeShift GetShiftByEmployeeId(int id);
 
-        IList<DateTime> GetOffDateAndHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
-
-        IList<DateTime> GetNotOffOrHolidayDate(GetOffDateAndHolidayDateCriteria criteria);
-
         IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
 
         AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId);
-
-        int GetDateRange(GetDateRangeCriteria criteria);
-
-        IList<DateTime> GetUnavailableDates(GetUnavailableRequestDateCriteria criteria);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 

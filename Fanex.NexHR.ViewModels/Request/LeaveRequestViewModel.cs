@@ -77,7 +77,7 @@
 
         public decimal TotalWeekendLeave { get; set; }
 
-        public IEnumerable<DateTime> UnavailDates { get; set; }
+        public IEnumerable<DateTime> DisabledDates { get; set; }
 
         public IList<LeaveType> LeaveTypeList { get; set; }
 

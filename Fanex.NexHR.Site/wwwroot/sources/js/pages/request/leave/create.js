@@ -1,9 +1,10 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
+import axios from 'axios';
 import moment from 'moment';
 
-import { confirm, initDatepicker, resolveClientUrl } from '../../../shared/common.functions';
+import { axiosError, confirm, initDatepicker, resolveClientUrl, blockUI, unblockUI } from '../../../shared/common.functions';
 import { LeaveType, DateFormat, RequestType } from '../../../shared/constants';
 
 const RequestCommon = {
@@ -53,12 +54,12 @@ function uploadComplete(evt) {
             location.href = resolveClientUrl('Leave/EmployeeView');
         });
     } else {
-         RequestCommon.showErrorMsg(data.Message, LeaveRequest.employee);
+        RequestCommon.showErrorMsg(data.Message, LeaveRequest.employee);
     }
 }
 
-function GetFormData(leaveRequest, requestDetails,tempFile) {
-    var files = document.getElementById('file').files
+function GetFormData(leaveRequest, requestDetails, tempFile) {
+    var files = document.getElementById('file').files;
     var fd = new FormData();
     for (var i = 0; i < files.length; i++) {
         fd.append('files[' + i + ']', files[i]);
@@ -227,8 +228,7 @@ const LeaveRequest = (function ($) {
             }
         },
         employeeChange: function () {
-            LeaveRequest.getVerifier();
-            LeaveRequest.getApprover();
+            LeaveRequest.getVerifierAndApprover();
             LeaveRequest.getLeaveBalance();
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
@@ -319,7 +319,7 @@ const LeaveRequest = (function ($) {
                         LeaveTypeId: LeaveRequest.leaveTypeId.val(),
                         IsHalfDay: true,
                         FromTime: fromDateTime,
-                        ToTime: toDateTime,
+                        ToTime: toDateTime
                     });
                 }
 
@@ -592,7 +592,7 @@ const LeaveRequest = (function ($) {
 
             for (var i = 0; i < files.length; i++) {
                 if (files[i].size / 1024 > 5120) {
-                    errorString.push('Attach file (' + files[i].name +') is to large to upload!. Maximum = 5120kb');
+                    errorString.push('Attach file (' + files[i].name + ') is to large to upload!. Maximum = 5120kb');
                 }
                 if (!allowedExtensions.exec(files[i].name)) {
                     errorString.push('File type of ' + files[i].name + ' incorrect!');
@@ -606,45 +606,38 @@ const LeaveRequest = (function ($) {
 
             return isValid;
         },
-        getVerifier: function () {
-            $.getJSON(resolveClientUrl('Request/GetVerifiers'),
-                {
-                    employeeId: LeaveRequest.employeeId.val(),
-                    requestType: LeaveRequest.requestType.val()
-                },
-                function (response) {
-                    if (response !== null) {
-                        var options = '';
-                        if (response.length > 1) {
-                            options = "<option value=''>--Select a Verifier--</option>";
-                        }
-                        for (var i = 0; i < response.length; i++) {
-                            options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
-                        }
-
-                        LeaveRequest.verifierId.empty();
-                        LeaveRequest.verifierId.html(options);
+        getVerifierAndApprover: function () {
+            const promises = [
+                axios(resolveClientUrl('request/getVerifiers'), {
+                    params: {
+                        employeeId: LeaveRequest.employeeId.val(),
+                        requestType: LeaveRequest.requestType.val()
                     }
-                });
-        },
-        getApprover: function () {
-            $.getJSON(resolveClientUrl('Request/GetApprovers'),
-                { employeeId: LeaveRequest.employeeId.val(), requestType: LeaveRequest.requestType.val() },
-                function (response) {
-                    if (response !== null) {
-                        var options = '';
-                        if (response.length > 1) {
-                            options = "<option value=''>--Select a Verifier--</option>";
-                        }
-
-                        for (var i = 0; i < response.length; i++) {
-                            options += "<option value='" + response[i].OwnerId + "'>" + response[i].NickName + " (" + response[i].FullName + ")</option>";
-                        }
-
-                        LeaveRequest.approverId.empty();
-                        LeaveRequest.approverId.html(options);
+                }),
+                axios(resolveClientUrl('request/getApprovers'), {
+                    params: {
+                        employeeId: LeaveRequest.employeeId.val(),
+                        requestType: LeaveRequest.requestType.val()
                     }
-                });
+                })
+            ];
+
+            Promise.all(promises)
+                .then(([verifierResponse, approverResponse]) => {
+                    const verifiers = verifierResponse.data,
+                        approvers = approverResponse.data;
+                    let options = '';
+                    for (let i = 0; i < verifiers.length; i++) {
+                        options += "<option value='" + verifiers[i].OwnerId + "'>" + verifiers[i].NickName + " (" + verifiers[i].FullName + ")</option>";
+                    }
+                    LeaveRequest.verifierId.html(options);
+
+                    options = '';
+                    for (let i = 0; i < approvers.length; i++) {
+                        options += "<option value='" + approvers[i].OwnerId + "'>" + approvers[i].NickName + " (" + approvers[i].FullName + ")</option>";
+                    }
+                    LeaveRequest.approverId.html(options);
+                }).catch(axiosError);
         },
         getLeaveBalance: function () {
             $.getJSON(resolveClientUrl('leave/GetLeaveBalance'),
@@ -663,11 +656,11 @@ const LeaveRequest = (function ($) {
                     }
                 });
         },
-        getDateRange: function () {
+        getTotalLeaveDay: function () {
             $.ajax({
-                url: resolveClientUrl('employee/GetRangeDate'),
+                url: resolveClientUrl('leave/getTotalLeaveDay'),
                 data: {
-                    leaveTypeId: LeaveRequest.leaveTypeId.val(),
+                    RequestId: LeaveRequest.requestId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
                     fromDate: LeaveRequest.fromDate.val(),
                     toDate: LeaveRequest.toDate.val()
@@ -681,22 +674,25 @@ const LeaveRequest = (function ($) {
             });
         },
         getUnavailableDate: function () {
-            $.getJSON(resolveClientUrl('employee/GetUnavailableDates'),
-                {
+            blockUI();
+            axios({
+                url: resolveClientUrl('leave/getDisableDate'),
+                method: 'GET',
+                params: {
+                    requestId: LeaveRequest.requestId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
-                    date: new Date().toDateString(),
-                    leaveTypeId: LeaveRequest.leaveTypeId.val()
-                },
-                function (response) {
-                    if (!$.isEmptyObject(response)) {
-                        LeaveRequest.fromDate.attr('disabledDate', response.join(','));
-                        LeaveRequest.toDate.attr('disabledDate', response.join(','));
-                    }
-                    else {
-                        LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
-                        LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
-                    }
-                });
+                    date: new Date().toDateString()
+                }
+            }).then(response => {
+                if (response.data.length > 0) {
+                    LeaveRequest.fromDate.attr('disabledDate', response.data.join(','));
+                    LeaveRequest.toDate.attr('disabledDate', response.data.join(','));
+                }
+                else {
+                    LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
+                    LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
+                }
+            }).catch(axiosError).then(() => unblockUI());
         },
         getDisableDate: function () {
             var minDate = new Date(LeaveRequest.fromDate.attr('minDate'));
@@ -762,7 +758,7 @@ const LeaveRequest = (function ($) {
                 if (LeaveRequest.halfDayOff.prop('checked')) {
                     LeaveRequest.bindHalfDay();
                 } else {
-                    LeaveRequest.getDateRange();
+                    LeaveRequest.getTotalLeaveDay();
                 }
             }
         },

@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Request.Leave;
     using Fanex.NexHR.Models;
@@ -25,24 +24,21 @@
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
-        private readonly IEmployeeService employeeService;
         private readonly ICommonDataService commonDataService;
         private readonly IShiftService shiftService;
-        const string pathFolder = "~/file/uploads/request/";
+        private const string pathFolder = "~/file/uploads/request/";
 
         public LeaveController(
             ISessionService sessionService,
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IEmployeeService employeeService,
             ICommonDataService commonDataService,
             IShiftService shiftService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
-            this.employeeService = employeeService;
             this.commonDataService = commonDataService;
             this.shiftService = shiftService;
         }
@@ -106,7 +102,8 @@
             {
                 leaveRequestService.SendMailCreateRequest(criteria);
 
-                if (files != null) {
+                if (files != null)
+                {
                     requestService.UploadFile(files, criteria.RequestId);
                 }
             }
@@ -134,7 +131,13 @@
             }
 
             LeaveRequestViewModel model = ConvertRequestToModel(request);
-            model.UnavailDates = GetUnavailDate(model);
+            model.DisabledDates = leaveRequestService.GetDisabledDate(new GetDisabledDateParam
+            {
+                EmployeeId = model.EmployeeId,
+                FromDate = model.MinDate,
+                ToDate = model.MaxDate,
+                RequestId = model.RequestId
+            });
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
 
@@ -270,6 +273,31 @@
             };
 
             return View(model);
+        }
+
+        public CustomJsonResult GetDisableDate(int employeeId, DateTime date, long? requestId = null)
+        {
+            var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
+            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
+            var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
+
+            var param = new GetDisabledDateParam
+            {
+                RequestId = requestId,
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            IEnumerable<DateTime> dates = leaveRequestService.GetDisabledDate(param);
+            return new CustomJsonResult { Data = dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public CustomJsonResult GetTotalLeaveDay(GetDisabledDateParam param)
+        {
+            IEnumerable<DateTime> dates = leaveRequestService.GetDisabledDate(param);
+            var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
+
+            return new CustomJsonResult { Data = totalDays, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
@@ -455,21 +483,6 @@
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };
             return leaveRequestService.GetLeaveBalance(criteria);
-        }
-
-        private IList<DateTime> GetUnavailDate(LeaveRequestViewModel model)
-        {
-            var criteria = new GetUnavailableRequestDateCriteria
-            {
-                EmpId = model.EmployeeId,
-                FromDate = model.MinDate,
-                ToDate = model.MaxDate
-            };
-
-            IList<DateTime> unavailDates = model.LeaveTypeId == (ushort)LeaveTypes.GeneralLeave
-                ? new List<DateTime> { DateTime.Now.AddYears(-3) }
-                : employeeService.GetUnavailableDates(criteria);
-            return unavailDates;
         }
     }
 }

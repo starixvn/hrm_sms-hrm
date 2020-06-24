@@ -109,7 +109,7 @@
                         @readonly = "readonly",
                         mindate = Model.MinDate.ToString("yyyy/MM/dd"),
                         maxdate = Model.MaxDate.ToString("yyyy/MM/dd"),
-                        disabledDate = string.Join(",", Model.UnavailDates.Select(x => x.ToString("yyyy/MM/dd")))
+                        disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -133,7 +133,7 @@
                         @class = "datepicker form-control",
                         @readonly = "readonly",
                         mindate = Model.MinDate.ToString("yyyy/MM/dd"),
-                        disabledDate = string.Join(",", Model.UnavailDates.Select(x => x.ToString("yyyy/MM/dd")))
+                        disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>

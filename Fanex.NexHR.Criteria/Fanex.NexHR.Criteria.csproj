@@ -79,9 +79,7 @@
     <Compile Include="BackgroundJob\UpdateAnnualLeaveBalanceForNewEmployeeCriteria.cs" />
     <Compile Include="BackgroundJob\UpdateAnnualLeaveBalanceCriteria.cs" />
     <Compile Include="BackgroundJob\UpdateWorkingHourPerDayCriteria.cs" />
-    <Compile Include="Calendar\GetDateRangeCriteria.cs" />
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
-    <Compile Include="Calendar\GetUnavailableRequestDateCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
@@ -236,7 +234,6 @@
     <Compile Include="Memo\CreateMemoCriteria.cs" />
     <Compile Include="Memo\EditMemoCriteria.cs" />
     <Compile Include="Dashboard\GetMySpaceCriteria.cs" />
-    <Compile Include="Request\GetOffDateAndHolidayDateCriteria.cs" />
     <Compile Include="Report\GetEmployeeAttendanceCriteria.cs" />
     <Compile Include="ExtensionNumber\DeleteExtensionNumberMemberCriteria.cs" />
     <Compile Include="ExtensionNumber\DeleteExternalGroupCriteria.cs" />

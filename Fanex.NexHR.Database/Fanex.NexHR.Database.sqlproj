@@ -239,13 +239,10 @@
     <Build Include="dbo\Stored Procedures\Shift_Insert.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetNumberWorkDate.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Update.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetOffDate_HolidayDate.sql" />
     <Build Include="dbo\Stored Procedures\TimeRecord_UpdateType.sql" />
     <Build Include="dbo\Stored Procedures\OtherDiscipline_GetMember.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetRangeDate.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetShiftByDate.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Get.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeCalendar_GetUnavailRequestDate.sql" />
     <Build Include="dbo\Stored Procedures\Report_MonthlyOvertimeDetails.sql" />
     <Build Include="dbo\Stored Procedures\Report_DisciplineSummary.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeCalendar_Insert.sql" />
