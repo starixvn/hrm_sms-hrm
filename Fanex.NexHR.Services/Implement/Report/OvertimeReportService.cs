@@ -91,7 +91,8 @@
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
                 Employee = param.Employee,
-                EmployeeStatusId = param.EmployeeStatusId
+                EmployeeStatusId = param.EmployeeStatusId,
+                TeamIds = param.TeamIds
             };
             return overtimeReportRepository.GetMonthlyOvertime(criteria);
         }

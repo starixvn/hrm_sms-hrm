@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @ActorId INT
 	,@ToDate DATE
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
+	,@TeamIds VARCHAR(MAX) = ''
 AS
 /*
 Created: Tim.Trinh@2019-07-09
@@ -32,6 +33,14 @@ BEGIN
 		WorkDate DATE
 		,IsHoliday BIT
 		)
+	DECLARE @tblGroupIds TABLE (GroupId INT)
+
+	IF ISNULL(@TeamIds, '') <> ''
+	BEGIN
+		INSERT INTO @tblGroupIds (GroupId)
+		SELECT DISTINCT val
+		FROM fnc_strSplit(@TeamIds, ',')
+	END
 
 	WHILE @fromDatetmp <= @ToDate
 	BEGIN
@@ -89,6 +98,11 @@ BEGIN
 		AND (
 			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
 			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
+			)
+		AND EXISTS (
+			SELECT 1
+			FROM @tblGroupIds AS tbl
+			WHERE tbl.GroupId = emp.GroupId
 			)
 
 	SELECT emp.EmpId

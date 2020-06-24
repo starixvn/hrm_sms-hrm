@@ -9,5 +9,6 @@
         public DateTime ToDate { get; set; } = DateTime.Today.LastDayOfMonth();
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; }
+        public string TeamIds { get; set; }
     }
 }

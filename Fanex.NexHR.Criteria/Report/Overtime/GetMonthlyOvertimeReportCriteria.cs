@@ -10,6 +10,7 @@
         public DateTime ToDate { get; set; }
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; }
+        public string TeamIds { get; set; }
 
         public override string GetSettingKey() => "Report_MonthlyOvertime";
 

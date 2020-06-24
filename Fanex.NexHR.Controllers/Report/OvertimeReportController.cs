@@ -93,7 +93,8 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 Employee = model.Employee,
-                EmployeeStatusId = model.EmployeeStatusId
+                EmployeeStatusId = model.EmployeeStatusId,
+                TeamIds = model.TeamIds
             };
             Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple = overtimeReportService.GetMonthlyOvertime(param);
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);

@@ -21,6 +21,7 @@
 @Html.Hidden("MinDate", DateTime.Now.AddYears(-2).ToDateMonthYearFormatedDate())
 @Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
 <form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -52,6 +53,12 @@
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
@@ -72,7 +79,6 @@
             </div>
         </div>
         <div class="form-group form-group--m">
-            <div class="label-form">&nbsp;</div>
             <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
         </div>
     </div>
