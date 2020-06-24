@@ -115,7 +115,7 @@
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public CustomJsonResult Delete(int id)
         {
-            CommandResult commandResult = departmentService.Delete(id);
+            CommandResult commandResult = departmentService.Delete(sessionService.Employee.Id, id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

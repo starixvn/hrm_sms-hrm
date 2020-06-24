@@ -23,6 +23,7 @@ BEGIN
 			@IsActive IS NULL
 			OR u.IsActive = @IsActive
 			)
+			AND U.IsDeleted IS NULL
 	ORDER BY u.Code
 END
 

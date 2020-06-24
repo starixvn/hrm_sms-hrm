@@ -6,6 +6,8 @@
     {
         public int departmentId { get; set; }
 
+        public int ModifiedBy { get; set; }
+
         public override string GetSettingKey()
         {
             return "Department_Delete";
@@ -17,4 +19,3 @@
         }
     }
 }
-

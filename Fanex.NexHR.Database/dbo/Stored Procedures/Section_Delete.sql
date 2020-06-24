@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Section_Delete] @SectionId INT
+	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -40,7 +41,9 @@ BEGIN
 		RETURN
 	END
 
-    DELETE
-	FROM dbo.Section
+	UPDATE dbo.[Section] WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
 	WHERE SectionId = @SectionId
 END

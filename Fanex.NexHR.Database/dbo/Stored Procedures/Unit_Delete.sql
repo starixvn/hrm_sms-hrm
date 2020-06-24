@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[Unit_Delete] @UnitId INT
+	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -39,7 +40,10 @@ BEGIN
 		RETURN
 	END
 
-	DELETE dbo.Unit WITH (ROWLOCK, UPDLOCK)
+	UPDATE dbo.[Unit] WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
 	WHERE UnitId = @UnitId
 END
 

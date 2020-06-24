@@ -21,6 +21,6 @@ BEGIN
 		,u.Name
 	FROM dbo.Department AS dep WITH (NOLOCK)
 		LEFT JOIN dbo.Unit AS u WITH (NOLOCK) ON dep.UnitId = u.UnitId
-	WHERE dep.IsActive = @IsActive OR @IsActive IS NULL
-
+	WHERE (dep.IsActive = @IsActive OR @IsActive IS NULL)
+		AND dep.IsDeleted IS NULL
 END

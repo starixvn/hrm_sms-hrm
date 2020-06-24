@@ -6,6 +6,8 @@
     {
         public int sectionId { get; set; }
 
+        public int ModifiedBy { get; set; }
+
         public override string GetSettingKey()
         {
             return "Section_Delete";
@@ -17,4 +19,3 @@
         }
     }
 }
-

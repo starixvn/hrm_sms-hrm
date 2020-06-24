@@ -10,6 +10,6 @@
 
         IList<Section> GetSection(bool? isActive = true);
 
-        CommandResult Delete(int id);
+        CommandResult Delete(int actorId, int id);
     }
 }

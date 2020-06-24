@@ -10,6 +10,6 @@
 
         Department GetById(int departmentId);
 
-        CommandResult Delete(int id);
+        CommandResult Delete(int actorId , int id);
     }
 }

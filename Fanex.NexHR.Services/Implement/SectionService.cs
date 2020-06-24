@@ -40,11 +40,12 @@
             return sections ?? new List<Section>();
         }
 
-        public CommandResult Delete(int id)
+        public CommandResult Delete(int actorId, int id)
         {
             var criteria = new DeleteSectionCriteria
             {
                 sectionId = id,
+                ModifiedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
         }

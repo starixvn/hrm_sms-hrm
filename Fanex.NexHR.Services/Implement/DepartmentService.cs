@@ -20,11 +20,12 @@
             this.baseService = baseService;
         }
 
-        public CommandResult Delete(int id)
+        public CommandResult Delete(int actorId, int id)
         {
             var criteria = new DeleteDepartmentCriteria
             {
                 departmentId = id,
+                ModifiedBy = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
         }
