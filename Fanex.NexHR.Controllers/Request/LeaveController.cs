@@ -123,13 +123,6 @@
                 return RedirectToAction("AccessDenied", "Error");
             }
 
-            bool showCheckboxAfterDay = false;
-            if (request.IsHalfDay)
-            {
-                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.FromDate);
-                showCheckboxAfterDay = shift != null && shift.IsOutAfterDay;
-            }
-
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.DisabledDates = leaveRequestService.GetDisabledDate(new GetDisabledDateParam
             {
@@ -150,7 +143,6 @@
                 model.Files = requestService.GetFileNames(dir);
             }
 
-            ViewBag.showCheckboxAfterDay = showCheckboxAfterDay;
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -195,12 +187,6 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
-            bool showCheckboxAfterDay = false;
-            if (request.IsHalfDay)
-            {
-                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.FromDate);
-                showCheckboxAfterDay = shift != null && shift.IsOutAfterDay;
-            }
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
 
@@ -213,7 +199,6 @@
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
 
-            ViewBag.showCheckboxAfterDay = showCheckboxAfterDay;
             ViewBag.IsView = true;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);

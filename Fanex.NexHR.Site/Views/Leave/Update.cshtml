@@ -6,7 +6,7 @@
 @model LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
-    var showCheckboxAfterDay = (bool)ViewBag.showCheckboxAfterDay;
+    //var showCheckboxAfterDay = (bool)ViewBag.showCheckboxAfterDay;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
@@ -118,7 +118,7 @@
                 :
                 @Html.Html5Number(0, 59, 1, Model.FromTimeMinute, new { Name = "Minute", MaxLength = "2", id = "FromTimeMinute", @class = "form-control" })
             </div>
-            <div class="time-isafterday" style="display: @(showCheckboxAfterDay ? "block" : "none")">
+            <div class="time-isafterday">
                 @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
                 @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day", new { @class = "control-label" })
             </div>
