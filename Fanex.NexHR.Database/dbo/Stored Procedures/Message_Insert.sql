@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[Message_Insert]
 	,@FromDate DATETIME = NULL
 	,@ToDate DATETIME = NULL
 	,@EmployeeIds VARCHAR(500) = ''
-	,@TeamId VARCHAR(500) = ''
+	,@TeamIds VARCHAR(500) = ''
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -69,10 +69,10 @@ BEGIN
 
 	SELECT @MessageId = SCOPE_IDENTITY();
 
-	IF(@TeamId <> '')
+	IF(@TeamIds <> '')
 	BEGIN
 		INSERT INTO @Groups (GroupId)
-		SELECT val FROM fnc_strSplit (@TeamId, ',')
+		SELECT val FROM fnc_strSplit (@TeamIds, ',')
 
 		INSERT INTO dbo.MessageGroup(MessageId, GroupId, Email)
 		SELECT @MessageId, g.GroupId, gr.MailGroup

@@ -16,6 +16,7 @@ Param's Explanation:
 */
 AS
 RETURN WITH cteEmployee AS (
+
 		SELECT e.EmpId
 		FROM dbo.Employee AS e WITH (NOLOCK)
 		WHERE (
@@ -29,11 +30,11 @@ RETURN WITH cteEmployee AS (
 			AND (
 				@EmpId IS NULL
 				OR EXISTS (
-					SELECT 1
+					SELECT e1.EmpId
 					FROM dbo.Employee AS e1 WITH (NOLOCK)
 						INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON e1.EmpId = er.EmployeeId
+						AND er.RoleId IN (6, 7) -- HR, SA
 					WHERE e1.EmpId = @EmpId
-						AND er.RoleId IN (6, 7)
 					)
 				)
 		
@@ -51,7 +52,7 @@ RETURN WITH cteEmployee AS (
 				OR @ExcludeUserDelete = 0
 				)
 			AND ISNULL(es.IsDeleted, 0) = 0
-			AND es.ActionType IN (2, 3)
+			AND es.ActionType IN (2, 3) -- verifier, approver
 		
 		UNION ALL
 		SELECT es.EmpId
@@ -67,7 +68,7 @@ RETURN WITH cteEmployee AS (
 				OR @ExcludeUserDelete = 0
 				)
 			AND ISNULL(es.IsDeleted, 0) = 0
-			AND es.ActionType IN (4, 5)
+			AND es.ActionType IN (4, 5) -- shift manager, on behalf request
 		
 		UNION ALL
 		SELECT e.EmpId
@@ -134,8 +135,8 @@ RETURN WITH cteEmployee AS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 					INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON es.EmpId = ee.EmpId
-				WHERE OwnerId = e.EmpId
-					AND ActionType = 4
+				WHERE es.EmpId = e.EmpId
+					AND es.ActionType = 4
 					AND ISNULL(es.IsDeleted, 0) = 0
 					AND ISNULL(ee.IsDeleted, 0) = 0
 					AND ISNULL(ee.[Enabled], 0) = 1
@@ -160,12 +161,13 @@ RETURN WITH cteEmployee AS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 					INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON es.EmpId = ee.EmpId
-				WHERE OwnerId = e.EmpId
-					AND ActionType = 5
+				WHERE es.EmpId = e.EmpId
+					AND es.ActionType = 5
 					AND ISNULL(es.IsDeleted, 0) = 0
 					AND ISNULL(ee.IsDeleted, 0) = 0
 					AND ISNULL(ee.[Enabled], 0) = 1
 				)
+			GROUP BY e.EmpId
 		
 		UNION ALL
 		SELECT e.EmpId

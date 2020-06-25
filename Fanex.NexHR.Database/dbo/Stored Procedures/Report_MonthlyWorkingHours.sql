@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[Report_MonthlyWorkingHours] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -88,6 +90,7 @@ BEGIN
 		,empca.LeaveDay
 		,(CASE 
 			WHEN empca.WorkDate < GETDATE() - 1
+				AND emp.JoinedDate >= @Today
 				AND empatt.ShiftId IS NOT NULL
 				AND empatt.InFixed IS NULL
 				AND empatt.OutFixed IS NOT NULL
@@ -96,6 +99,7 @@ BEGIN
 			) AS IsMissingCheckIn
 		,(CASE 
 			WHEN empca.WorkDate < GETDATE() - 1
+				AND emp.JoinedDate >= @Today
 				AND empatt.ShiftId IS NOT NULL
 				AND empatt.OutFixed IS NULL
 				AND empatt.InFixed IS NOT NULL
@@ -104,6 +108,7 @@ BEGIN
 			) AS IsMissingCheckOut
 		,(CASE 
 			WHEN empca.WorkDate < GETDATE() - 1
+				AND emp.JoinedDate >= @Today
 				AND empca.ShiftId IS NOT NULL
 				AND (
 					empsum.IsDefaultSchedule = 0

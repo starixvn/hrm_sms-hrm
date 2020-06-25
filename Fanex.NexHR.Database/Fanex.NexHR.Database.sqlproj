@@ -79,7 +79,6 @@
     <Build Include="dbo\Tables\Shift.sql" />
     <Build Include="dbo\Tables\TimeRecord.sql" />
     <Build Include="dbo\Tables\tmpKIVLeaveBalance.sql" />
-    <Build Include="dbo\Tables\EmployeeAttendanceViolation.sql" />
     <Build Include="dbo\Tables\tmpLeaveBalance.sql" />
     <Build Include="dbo\Tables\WorkingTimeRequest.sql" />
     <Build Include="dbo\Tables\WorkingTimeRequestHistory.sql" />
@@ -497,6 +496,8 @@
     <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
+    <Build Include="dbo\Tables\DisciplineSectionRule.sql" />
+    <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveMultipleRequest.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

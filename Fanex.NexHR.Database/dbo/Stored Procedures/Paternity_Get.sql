@@ -1,6 +1,6 @@
 ﻿
-/****** Object:  Stored Procedure dbo.Department_Get    Script Date: 7/20/2016 10:19:01 AM ******/
-/****** Object:  Stored Procedure dbo.Department_Get    Script Date: 7/19/2016 5:22:11 PM ******/
+
+
 CREATE PROCEDURE [dbo].[Paternity_Get] @Year INT
 AS
 /*

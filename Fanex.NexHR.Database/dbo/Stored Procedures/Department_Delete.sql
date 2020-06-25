@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Department_Delete] @DepartmentId INT
+﻿
+CREATE PROCEDURE [dbo].[Department_Delete] @DepartmentId INT
+	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -27,8 +29,10 @@ BEGIN
 		RETURN
 	END
 
-	DELETE
-	FROM dbo.Department
+	UPDATE dbo.[Department] WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
 	WHERE DepartmentId = @DepartmentId
 
 END

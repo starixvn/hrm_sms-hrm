@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[EmployeeGroup_Get] @FromDate DATETIME = NULL
 AS
 /*
@@ -20,7 +21,7 @@ BEGIN
 	END
 
 	SELECT g.GroupId AS TeamId
-		,g.SectionId
+		,g.SectionId AS DepartmentId
 		,g.Code
 		,g.[Name]
 		,mng.EmpId AS LeaderId

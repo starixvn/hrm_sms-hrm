@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@fromtime DATE
 	,@totime DATE
@@ -30,12 +31,12 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
-	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	DECLARE @tblDefaultShift TABLE (
 		EmployeeId INT
 		,ShiftId INT
 		)
+	CREATE TABLE #tblEmployeeIds (EmpId INT)
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
@@ -44,7 +45,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT OwnerId
 	FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 	WHERE EmpId = @ActorId
@@ -63,7 +64,7 @@ BEGIN
 				AND es.OwnerId = emp.EmpId
 			)
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT emp.EmpId
 	FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON gs.GroupId = emp.GroupId
@@ -83,8 +84,8 @@ BEGIN
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM @tblEmployeeIds AS tbl
-			WHERE tbl.EmployeeId = emp.EmpId
+			FROM #tblEmployeeIds AS tbl WITH (NOLOCK)
+			WHERE tbl.EmpId = emp.EmpId
 			)
 
 	IF @IsIFrame = 1
@@ -99,7 +100,7 @@ BEGIN
 			WHERE rf.IsRead = 1
 			)
 	BEGIN
-		INSERT INTO @tblEmployeeIds (EmployeeId)
+		INSERT INTO #tblEmployeeIds (EmpId)
 		SELECT EmpId
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 		WHERE [Enabled] = 1
@@ -115,29 +116,28 @@ BEGIN
 				)
 			AND NOT EXISTS (
 				SELECT 1
-				FROM @tblEmployeeIds AS tbl
-				WHERE emp.EmpId = tbl.EmployeeId
+				FROM #tblEmployeeIds AS tbl WITH (NOLOCK)
+				WHERE emp.EmpId = tbl.EmpId
 				)
 	END
 
 	DELETE emp
-	FROM @tblEmployeeIds AS emp
+	FROM #tblEmployeeIds AS emp
 	WHERE EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeSummary AS esum WITH (NOLOCK)
-			WHERE emp.EmployeeId = esum.EmpId
+			WHERE emp.EmpId = esum.EmpId
 				AND esum.IsTopManager = 1
 			)
 
-	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
-	FROM @tblEmployeeIds
+	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	FROM #tblEmployeeIds WITH (NOLOCK)
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromtime
 		,@toDate = @totime
 		,@empIds = @EmployeeIds
 		,@isEnable = 1
 		,@isDelete = 0
-		,@isUpdateRequestData = 1
 
 	SELECT emp.EmpId
 		,tmpca.WorkDate
@@ -169,7 +169,7 @@ BEGIN
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmpId = tmpca.EmpId
 		AND tmpca.WorkDate BETWEEN @fromTime
 			AND @toTime
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND tmpca.WorkDate = empca.WorkDate
 		LEFT JOIN dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK) ON emp.EmpId = offrep.EmployeeId
@@ -183,11 +183,11 @@ BEGIN
 	IF @IsIFrame = 1
 	BEGIN
 		DELETE emp
-		FROM @tblEmployeeIds AS emp
+		FROM #tblEmployeeIds AS emp WITH (NOLOCK)
 		WHERE NOT EXISTS (
 				SELECT 1
-				FROM #tblEmployeeCalendar AS empca
-				WHERE emp.EmployeeId = empca.EmpId
+				FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
+				WHERE emp.EmpId = empca.EmpId
 				)
 	END
 
@@ -195,10 +195,10 @@ BEGIN
 		EmployeeId
 		,ShiftId
 		)
-	SELECT emp.EmployeeId
+	SELECT emp.EmpId
 		,defaultshift.ShiftId
-	FROM @tblEmployeeIds AS emp
-		INNER JOIN dbo.ScheduleArrangementDefaultShift AS defaultshift WITH (NOLOCK) ON emp.EmployeeId = defaultshift.EmployeeId
+	FROM #tblEmployeeIds AS emp WITH (NOLOCK)
+		INNER JOIN dbo.ScheduleArrangementDefaultShift AS defaultshift WITH (NOLOCK) ON emp.EmpId = defaultshift.EmployeeId
 	WHERE defaultshift.FromDate = @fromtime
 
 	INSERT INTO @tblDefaultShift (
@@ -244,7 +244,7 @@ BEGIN
 		,shift.IsInAfterDay
 		,shift.IsOutAfterDay
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId
 		LEFT JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		LEFT JOIN dbo.ScheduleArrangement AS arrange WITH (NOLOCK) ON emp.EmpId = arrange.EmployeeId
@@ -261,7 +261,7 @@ BEGIN
 			AND ec.ModifiedDate IS NOT NULL
 			AND ec.ModifiedDate = (
 				SELECT MAX(ec1.ModifiedDate)
-				FROM #tblEmployeeCalendar AS ec1
+				FROM #tblEmployeeCalendar AS ec1 WITH (NOLOCK)
 				WHERE ec.EmpId = ec1.EmpId
 				)
 		) AS ec
@@ -316,7 +316,7 @@ BEGIN
 		,lv2.Code
 		,lv2.[Name]
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 		INNER JOIN #tblEmployeeCalendar AS empca ON emp.EmpId = empca.EmpId
 		AND empca.WorkDate BETWEEN @fromTime
 			AND @toTime
@@ -331,7 +331,7 @@ BEGIN
 	ORDER BY emp.NickName
 		,empca.WorkDate
 
-	SELECT emp.EmployeeId
+	SELECT emp.EmpId AS EmployeeId
 		,ISNULL(monshift.ShiftId, @OffDayShiftId) AS MonShiftId
 		,ISNULL(tueshift.ShiftId, @OffDayShiftId) AS TueShiftId
 		,ISNULL(wedshift.ShiftId, @OffDayShiftId) AS WedShiftId
@@ -339,8 +339,8 @@ BEGIN
 		,ISNULL(frishift.ShiftId, @OffDayShiftId) AS FriShiftId
 		,ISNULL(satshift.ShiftId, @OffDayShiftId) AS SatShiftId
 		,ISNULL(sunshift.ShiftId, @OffDayShiftId) AS SunShiftId
-	FROM @tblEmployeeIds AS emp
-		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpId = emp.EmployeeId
+	FROM #tblEmployeeIds AS emp WITH (NOLOCK)
+		LEFT JOIN dbo.EmployeeDefaultShift AS eds WITH (NOLOCK) ON eds.EmpId = emp.EmpId
 		LEFT JOIN dbo.Shift AS monshift WITH (NOLOCK) ON eds.MonShift = monshift.ShiftId
 		AND ISNULL(monshift.IsDisabled, 0) = 0
 		LEFT JOIN dbo.Shift AS tueshift WITH (NOLOCK) ON eds.TueShift = tueshift.ShiftId
@@ -356,5 +356,6 @@ BEGIN
 		LEFT JOIN dbo.Shift AS sunshift WITH (NOLOCK) ON eds.SunShift = sunshift.ShiftId
 		AND ISNULL(sunshift.IsDisabled, 0) = 0
 
+	DROP TABLE #tblEmployeeIds
 	DROP TABLE #tblEmployeeCalendar
 END

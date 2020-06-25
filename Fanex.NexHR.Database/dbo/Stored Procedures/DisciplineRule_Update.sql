@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[DisciplineRule_Update] @ActorId INT
-	,@TeamId INT
+	, @TeamId INT
 	,@DisciplineRuleXml VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -53,30 +53,30 @@ BEGIN
 
 	BEGIN TRY
 		DELETE
-		FROM dbo.DisciplineGroupRule WITH (ROWLOCK)
-		WHERE GroupId = @TeamId
+		FROM dbo.DisciplineSectionRule WITH (ROWLOCK)
+		WHERE GroupId =  @TeamId
 
 		-- local
-		INSERT INTO dbo.DisciplineGroupRule (
+		INSERT INTO dbo.DisciplineSectionRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal
 			,Value
 			)
-		SELECT @TeamId
+		SELECT  @TeamId
 			,DisciplineTypeId
 			,1
 			,IsApplyForLocal
 		FROM @tblDisciplineRule
 
 		-- expat
-		INSERT INTO dbo.DisciplineGroupRule (
+		INSERT INTO dbo.DisciplineSectionRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal
 			,Value
 			)
-		SELECT @TeamId
+		SELECT  @TeamId
 			,DisciplineTypeId
 			,0
 			,IsApplyForExpat

@@ -1,6 +1,7 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
-	,@teamIds NVARCHAR(MAX) = ''
+	, @teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
 	,@isLocal BIT = NULL
@@ -13,7 +14,6 @@ DB: HRM
 Original:
 
 Revisions:
-	20200206MerlinLe: Remove employee emergency
 Param's Explanation:
 */
 BEGIN
@@ -23,7 +23,7 @@ BEGIN
 
 	INSERT INTO #GroupsList (GroupId)
 	SELECT val
-	FROM fnc_strSplit(@teamIds, ',')
+	FROM fnc_strSplit( @teamIds, ',')
 
 	CREATE TABLE #tplEmployee (EmpId INT)
 
@@ -36,7 +36,7 @@ BEGIN
 		AND e.[Enabled] = ISNULL(@enable, 1)
 		AND (@titleId IS NULL or e.JobTitleId = @titleId)
 		AND (
-			ISNULL(@teamIds, '') = ''
+			ISNULL( @teamIds, '') = ''
 			OR g.GroupId IS NOT NULL
 			)
 		AND (

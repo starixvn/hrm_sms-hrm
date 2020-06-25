@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Department_Insert] @Code VARCHAR(50)
+﻿
+CREATE PROCEDURE [dbo].[Department_Insert] @Code VARCHAR(50)
 	,@Name NVARCHAR(200)
 	,@UnitId INT
 	,@IsActive BIT
@@ -21,7 +22,7 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.Department WITH (NOLOCK)
-			WHERE Code = @Code
+			WHERE Code = @Code AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1

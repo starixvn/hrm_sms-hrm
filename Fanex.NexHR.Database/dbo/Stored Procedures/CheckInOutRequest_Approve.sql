@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[CheckInOutRequest_Approve] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
@@ -54,7 +56,8 @@ BEGIN
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 				INNER JOIN dbo.CheckInOutRequest AS cio WITH (NOLOCK) ON r.RequestId = cio.RequestId
 				AND cio.OnDate = @OnDate
-			WHERE r.EmpId = @EmpId
+			WHERE r.RequestId <> @RequestId
+				AND r.EmpId = @EmpId
 				AND r.RequestType = @RequestTypeId
 				AND r.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId)
 			)

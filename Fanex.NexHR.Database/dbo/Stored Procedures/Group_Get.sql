@@ -45,8 +45,8 @@ BEGIN
 		AND emp.[Enabled] = 1
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
 	WHERE (
-			@TeamId IS NULL
-			OR g.GroupId = @TeamId
+			 @TeamId IS NULL
+			OR g.GroupId =  @TeamId
 			)
 		AND (
 			@isDeleted IS NULL
@@ -63,15 +63,15 @@ BEGIN
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat
-		,de.DepartmentId
-		,de.Code
-		,de.[Name]
+		,sec.SectionId
+		,sec.Code
+		,sec.[Name]
 	FROM dbo.[Group] AS g WITH (NOLOCK)
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 		LEFT JOIN @tblGroup AS tbl ON g.GroupId = tbl.GroupId
 	WHERE (
-			@TeamId IS NULL
-			OR g.GroupId = @TeamId
+			 @TeamId IS NULL
+			OR g.GroupId =  @TeamId
 			)
 		AND (
 			@isDeleted IS NULL
@@ -87,8 +87,8 @@ BEGIN
 	FROM dbo.GroupManager AS mng WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON mng.GroupId = g.GroupId
 		AND (
-			@TeamId IS NULL
-			OR g.GroupId = @TeamId
+			 @TeamId IS NULL
+			OR g.GroupId =  @TeamId
 			)
 		AND (
 			@isDeleted IS NULL

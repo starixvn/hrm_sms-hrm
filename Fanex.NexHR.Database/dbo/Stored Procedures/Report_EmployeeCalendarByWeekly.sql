@@ -21,13 +21,13 @@ BEGIN
 	DECLARE @EmployeeIds VARCHAR(MAX)
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	DECLARE @tblJobTitleIds TABLE (JobTitleId INT)
-	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	IF ISNULL(@TeamIds, '') <> ''
 		INSERT INTO @tblGroupIds (GroupId)
 		SELECT DISTINCT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
-
+	
 	IF ISNULL(@JobTitleId, '') <> ''
 		INSERT INTO @tblJobTitleIds (JobTitleId)
 		SELECT DISTINCT val
@@ -40,7 +40,7 @@ BEGIN
 		WHERE lk.LookupId = 1
 	END
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tblEmployeeIds (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
@@ -67,14 +67,13 @@ BEGIN
 			)
 
 	SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmployeeId AS VARCHAR(10))
-	FROM @tblEmployeeIds
+	FROM #tblEmployeeIds WITH (NOLOCK)
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromtime
 		,@toDate = @totime
 		,@empIds = @EmployeeIds
 		,@isEnable = 1
 		,@isDelete = 0
-		,@isUpdateRequestData = 1
 
 	SELECT emp.EmpId AS EmployeeId
 		,emp.Code
@@ -82,7 +81,7 @@ BEGIN
 		,emp.FullName
 		,gr.[Name] AS Team
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	ORDER BY gr.[Name]
@@ -120,7 +119,7 @@ BEGIN
 		,lv2.Code
 		,lv2.[Name]
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmployeeId
+		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmployeeId
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca ON emp.EmpId = empca.EmpId
 		AND empca.WorkDate BETWEEN @fromTime
 			AND @toTime
@@ -131,4 +130,6 @@ BEGIN
 		AND empca.WorkDate = offrep.WorkDate
 	ORDER BY emp.NickName
 		,empca.WorkDate
+
+	DROP TABLE #tblEmployeeIds
 END

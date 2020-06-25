@@ -26,6 +26,13 @@ BEGIN
 		INSERT INTO @tblGroupId (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
+	--ELSE
+	--BEGIN
+	--	INSERT INTO @tblGroupId (GroupId)
+	--	SELECT GroupId
+	--	FROM dbo.[Group] WITH (NOLOCK)
+	--	WHERE IsDeleted = 0
+	--END
 
 	IF @isShowWholeCompany = 0
 	BEGIN

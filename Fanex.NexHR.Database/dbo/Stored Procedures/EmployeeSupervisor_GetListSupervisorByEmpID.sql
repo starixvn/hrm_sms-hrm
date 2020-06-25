@@ -18,12 +18,12 @@ BEGIN
 	SET NOCOUNT ON
 
 	IF @RequestType IS NULL
-		SELECT DISTINCT OwnerId
+		SELECT DISTINCT OwnerId AS Id
 			,ee.FullName
 			,ee.NickName
 			,ee.Email
 			,0 OrderNo
-			,isnull(g.GroupID, - 1) AS [TeamID]
+			,isnull(g.GroupID, - 1) AS [TeamId]
 			,isnull(g.[Name], '') AS [Team]
 			,su.ActionType
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)

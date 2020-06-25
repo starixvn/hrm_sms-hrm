@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@Name VARCHAR(150)
-	,@DepartmentId INT
+	,@SectionId INT
 	,@MailGroup VARCHAR(50) = ''
 	,@HeadId INT
 	,@AssistantHeadIds VARCHAR(MAX) = ''
@@ -50,7 +50,7 @@ BEGIN
 	VALUES (
 		@Code
 		,@Name
-		,@DepartmentId
+		,@SectionId
 		,@MailGroup
 		,GETDATE()
 		,@CreatedBy

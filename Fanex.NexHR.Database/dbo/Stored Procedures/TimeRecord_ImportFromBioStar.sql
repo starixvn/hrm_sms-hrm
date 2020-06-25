@@ -24,7 +24,7 @@ BEGIN
 		,@StartDateConnectBitoStar VARCHAR(10)
 
 	CREATE TABLE #tempFinger (
-		nUserID VARCHAR(5)
+		nUserID VARCHAR(32)
 		,dtDateTime DATETIME
 		,nTNAEvent INT
 		)
@@ -49,7 +49,7 @@ BEGIN
 	BEGIN
 		SET @SQLString = N'INSERT INTO #tempFinger(nUserID, dtDateTime, nTNAEvent) 
 						SELECT 
-						REPLACE(STR(USRID, 5), SPACE(1), ''0'') AS nUserID
+						USRID AS nUserID
 						  ,DATEADD(HH, 7, DATEADD(s, [DEVDT], ''1970-01-01'')) AS dtDateTime
 						  ,[TNAKEY] AS nTNAEvent
 
@@ -70,7 +70,7 @@ BEGIN
 	BEGIN
 		SET @SQLString = N'INSERT INTO #tempFinger(nUserID, dtDateTime, nTNAEvent) 
 						SELECT 
-					 REPLACE(STR(USRID, 5), SPACE(1), ''0'') AS nUserID
+					 USRID AS nUserID
 						  ,DATEADD(HH, 7, DATEADD(s, [DEVDT], ''1970-01-01'')) AS dtDateTime
 						  ,[TNAKEY] AS nTNAEvent
 	  
@@ -96,7 +96,7 @@ BEGIN
 			ELSE NULL
 			END
 	FROM dbo.Employee e WITH (NOLOCK)
-		INNER JOIN #tempFinger f ON e.Code = f.nUserID
+		INNER JOIN #tempFinger f ON ISNULL(TRY_PARSE(e.Code AS INT), 0) = ISNULL(TRY_PARSE(f.nUserID AS INT), -1)
 	WHERE NOT EXISTS (
 			SELECT 1
 			FROM dbo.TimeRecord t WITH (NOLOCK)

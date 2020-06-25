@@ -66,6 +66,7 @@ BEGIN
 		,FullName
 		,NickName
 		,DOB
+		,isDeleted
 		,[Enabled]
 		,GroupId
 		,CreatedDate
@@ -78,6 +79,7 @@ BEGIN
 		,@fullName
 		,@Nickname
 		,CAST('1-1-1900' AS SMALLDATETIME)
+		,0
 		,1
 		,@TeamId
 		,GETDATE()

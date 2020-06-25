@@ -206,7 +206,7 @@ BEGIN
 			WHERE r.EmpId = emp.EmpId
 			)
 
-	-- Leave Request <> 0.5
+	-- Leave request
 	INSERT INTO #tblDailyRequest (
 		RequestId
 		,EmpId
@@ -218,7 +218,7 @@ BEGIN
 		,Remark
 		,CreatedDate
 		)
-	SELECT r.RequestId
+	SELECT DISTINCT r.RequestId
 		,r.EmpId
 		,r.RequestType
 		,lr.FromDate
@@ -229,7 +229,6 @@ BEGIN
 		,r.CreatedDate
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-		AND lr.TotalDays <> 0.5
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 	WHERE (
 			(
@@ -249,8 +248,13 @@ BEGIN
 			FROM #tblEmployeeId AS emp WITH (NOLOCK)
 			WHERE r.EmpId = emp.EmpId
 			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+			WHERE lr.RequestId = ldt.RequestId
+			)
 
-	-- Leave Request = 0.5
+	-- Leave request
 	INSERT INTO #tblDailyRequest (
 		RequestId
 		,EmpId
@@ -264,28 +268,21 @@ BEGIN
 		,Remark
 		,CreatedDate
 		)
-	SELECT r.RequestId
+	SELECT DISTINCT r.RequestId
 		,r.EmpId
 		,r.RequestType
 		,lr.FromDate
 		,lr.ToDate
 		,lr.TotalDays
-		,(CASE 
-			WHEN ldt.FromTime IS NULL THEN lr.FromDate
-			ELSE ldt.FromTime END
-			)
-		,(CASE 
-			WHEN ldt.ToTime IS NULL THEN lr.ToDate
-			ELSE ldt.ToTime END
-			)
+		,CASE WHEN ldt.IsHalfDay = 1 THEN ldt.FromTime ELSE NULL END
+		,CASE WHEN ldt.IsHalfDay = 1 THEN ldt.ToTime ELSE NULL END
 		,r.CurrentStatus
 		,r.Remark
 		,r.CreatedDate
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN [dbo].LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-		AND lr.TotalDays = 0.5
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
-		LEFT JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
+		INNER JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
 	WHERE (
 			(
 				datediff(d, @fromtime, lr.FromDate) <= 0
@@ -782,5 +779,6 @@ BEGIN
 		,T.code
 
 	DROP TABLE #tblEmployeeId
+
 	DROP TABLE #tblDailyRequest
 END
