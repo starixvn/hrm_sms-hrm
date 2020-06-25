@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[DisciplineRule_Update] @ActorId INT
-	, @TeamId INT
+	,@TeamId INT
 	,@DisciplineRuleXml VARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -9,9 +9,9 @@ AS
 Created: Tim.Trinh@2019-11-05
 Task: apply discipline rule for section
 DB: HRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 	@Functions = <Root><Row DisciplineTypeId='{0}' IsApplyForLocal='{1}' IsApplyForExpat='{2}' /></Root>
 */
@@ -53,30 +53,30 @@ BEGIN
 
 	BEGIN TRY
 		DELETE
-		FROM dbo.DisciplineSectionRule WITH (ROWLOCK)
-		WHERE GroupId =  @TeamId
+		FROM dbo.DisciplineGroupRule WITH (ROWLOCK)
+		WHERE GroupId = @TeamId
 
 		-- local
-		INSERT INTO dbo.DisciplineSectionRule (
+		INSERT INTO dbo.DisciplineGroupRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal
 			,Value
 			)
-		SELECT  @TeamId
+		SELECT @TeamId
 			,DisciplineTypeId
 			,1
 			,IsApplyForLocal
 		FROM @tblDisciplineRule
 
 		-- expat
-		INSERT INTO dbo.DisciplineSectionRule (
+		INSERT INTO dbo.DisciplineGroupRule (
 			GroupId
 			,DisciplineTypeId
 			,IsLocal
 			,Value
 			)
-		SELECT  @TeamId
+		SELECT @TeamId
 			,DisciplineTypeId
 			,0
 			,IsApplyForExpat

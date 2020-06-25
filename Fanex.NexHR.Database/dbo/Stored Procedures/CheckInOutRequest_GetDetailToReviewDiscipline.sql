@@ -32,9 +32,10 @@ BEGIN
 		AND CAST(empca.WorkDate AS DATE) = cio.OnDate
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = wkr.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-		INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+		INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
 		AND empsum.IsLocal = drule.IsLocal
 		AND drule.DisciplineTypeId = 2
+		AND drule.Value = 1
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON shift.ShiftID = empca.ShiftId
 	WHERE wkr.RequestId = @RequestId
 END

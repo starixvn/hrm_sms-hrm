@@ -27,7 +27,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	DECLARE 
+	DECLARE
 		-- request type
 		@CheckInRequestTypeId TINYINT = 1
 		,@CheckOutRequestTypeId TINYINT = 2
@@ -47,12 +47,11 @@ BEGIN
 		,@UnplannedLeave INT = 9
 		,@WeekenLeave INT = 10
 
-
 	CREATE TABLE #request (
-		RequestId BIGINT,
-		RequestTypeID TINYINT
-	)
-		
+		RequestId BIGINT
+		,RequestTypeID TINYINT
+		)
+
 	IF ISNULL(@Requests, '') <> ''
 	BEGIN
 		BEGIN TRY
@@ -84,103 +83,171 @@ BEGIN
 		RETURN
 	END
 
-	DECLARE @RequestID BIGINT,
-		@RequestTypeID TINYINT
+	DECLARE @RequestID BIGINT
+		,@RequestTypeID TINYINT
 
-	CREATE TABLE #Disciplines (WorkDate DATE, EmployeeId INT, DisciplineTypeId INT, IsIgnored VARCHAR(20), IsConfirmed VARCHAR(20))
+	CREATE TABLE #Disciplines (
+		WorkDate DATE
+		,EmployeeId INT
+		,DisciplineTypeId INT
+		,IsIgnored VARCHAR(20)
+		,IsConfirmed VARCHAR(20)
+		)
 
-	WHILE (EXISTS (SELECT TOP(1) RequestID FROM #request))
+	WHILE (
+			EXISTS (
+				SELECT TOP (1) RequestID
+				FROM #request
+				)
+			)
 	BEGIN
-
-		SELECT TOP(1) @RequestID = RequestID, @RequestTypeID = RequestTypeID FROM #request
+		SELECT TOP (1) @RequestID = RequestID
+			,@RequestTypeID = RequestTypeID
+		FROM #request
 
 		IF @RoleId = 3 -- Approve
 		BEGIN
 			IF @RequestTypeId = @CheckInRequestTypeId
-			OR @RequestTypeId = @CheckOutRequestTypeId
+				OR @RequestTypeId = @CheckOutRequestTypeId
 			BEGIN
-				INSERT INTO #Disciplines (WorkDate, EmployeeId, DisciplineTypeId, IsIgnored, IsConfirmed)
-				SELECT cio.OnDate, emp.EmpId, drule.DisciplineTypeId, @IsIgnoredViolate, @IsConfirmed
+				INSERT INTO #Disciplines (
+					WorkDate
+					,EmployeeId
+					,DisciplineTypeId
+					,IsIgnored
+					,IsConfirmed
+					)
+				SELECT cio.OnDate
+					,emp.EmpId
+					,drule.DisciplineTypeId
+					,@IsIgnoredViolate
+					,@IsConfirmed
 				FROM dbo.CheckInOutRequest AS cio WITH (NOLOCK)
 					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = cio.EmpId
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-					INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-						AND empsum.IsLocal = drule.IsLocal
-						AND drule.DisciplineTypeId = @MissingCheckInOut
+					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.DisciplineTypeId = @MissingCheckInOut
+					AND drule.Value = 1
 				WHERE cio.RequestId = @RequestID
 			END
 			ELSE IF @RequestTypeId = @LateInRequestTypeId
 				OR @RequestTypeId = @EarlyOutRequestTypeId
 			BEGIN
-				INSERT INTO #Disciplines (WorkDate, EmployeeId, DisciplineTypeId, IsIgnored, IsConfirmed)
-				SELECT lio.OnDate, emp.EmpId, drule.DisciplineTypeId, @IsIgnoredViolate, @IsConfirmed
+				INSERT INTO #Disciplines (
+					WorkDate
+					,EmployeeId
+					,DisciplineTypeId
+					,IsIgnored
+					,IsConfirmed
+					)
+				SELECT lio.OnDate
+					,emp.EmpId
+					,drule.DisciplineTypeId
+					,@IsIgnoredViolate
+					,@IsConfirmed
 				FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
-				INNER JOIN dbo.LateInEarlyOutRequest AS lio WITH (NOLOCK) ON wkr.RequestId = lio.RequestId
-				AND lio.RequestId = @RequestId
-				INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON ca.EmpId = wkr.EmpId
-				AND CAST(ca.WorkDate AS DATE) = CAST(lio.OnDate AS DATE)
-				INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = wkr.EmpId
-				INNER JOIN dbo.EmployeeSummary AS emps WITH (NOLOCK) ON emp.EmpId = emps.EmpId
-				INNER JOIN dbo.DisciplineSectionRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-				AND emps.IsLocal = drule.IsLocal
-				AND (
-					wkr.RequestType = @LateInRequestTypeId
-					OR (
-						wkr.RequestType = @EarlyOutRequestTypeId
-						AND ISNULL(ca.IsOffDay, 0) = 0
-						AND ISNULL(ca.IsHoliday, 0) = 0
-						)
-					)
-				AND (
-					(
+					INNER JOIN dbo.LateInEarlyOutRequest AS lio WITH (NOLOCK) ON wkr.RequestId = lio.RequestId
+					AND lio.RequestId = @RequestId
+					INNER JOIN dbo.EmployeeCalendar AS ca WITH (NOLOCK) ON ca.EmpId = wkr.EmpId
+					AND CAST(ca.WorkDate AS DATE) = CAST(lio.OnDate AS DATE)
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = wkr.EmpId
+					INNER JOIN dbo.EmployeeSummary AS emps WITH (NOLOCK) ON emp.EmpId = emps.EmpId
+					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND emps.IsLocal = drule.IsLocal
+					AND drule.Value = 1
+					AND (
 						wkr.RequestType = @LateInRequestTypeId
-						AND drule.DisciplineTypeId = @LateIn
+						OR (
+							wkr.RequestType = @EarlyOutRequestTypeId
+							AND ISNULL(ca.IsOffDay, 0) = 0
+							AND ISNULL(ca.IsHoliday, 0) = 0
+							)
 						)
-					OR (
-						wkr.RequestType = @EarlyOutRequestTypeId
-						AND drule.DisciplineTypeId = @EarlyOut
+					AND (
+						(
+							wkr.RequestType = @LateInRequestTypeId
+							AND drule.DisciplineTypeId = @LateIn
+							)
+						OR (
+							wkr.RequestType = @EarlyOutRequestTypeId
+							AND drule.DisciplineTypeId = @EarlyOut
+							)
 						)
-					)
 			END
 			ELSE IF @RequestTypeId = @ChangeShiftRequestTypeId
 			BEGIN
-				INSERT INTO #Disciplines (WorkDate, EmployeeId, DisciplineTypeId, IsIgnored, IsConfirmed)
-				SELECT csdt.OnDate, csdt.EmpId, @ChangeShift, @IsIgnoredViolate, @IsConfirmed
-				FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK) 
+				INSERT INTO #Disciplines (
+					WorkDate
+					,EmployeeId
+					,DisciplineTypeId
+					,IsIgnored
+					,IsConfirmed
+					)
+				SELECT csdt.OnDate
+					,csdt.EmpId
+					,@ChangeShift
+					,@IsIgnoredViolate
+					,@IsConfirmed
+				FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
 					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
+					INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = cs.EmpId
+					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+					AND empsum.IsLocal = drule.IsLocal
+					AND drule.DisciplineTypeId = @ChangeShift
+					AND drule.Value = 1
 				WHERE csdt.RequestId = @RequestID
 					AND cs.TypeId = 1 -- Change Shift
 			END
 			ELSE IF @RequestTypeId = @LeaveRequestTypeId
 			BEGIN
-				INSERT INTO #Disciplines (WorkDate, EmployeeId, DisciplineTypeId, IsIgnored, IsConfirmed)
-				SELECT WorkDate,
-					lr.EmpId,
-					CASE
+				INSERT INTO #Disciplines (
+					WorkDate
+					,EmployeeId
+					,DisciplineTypeId
+					,IsIgnored
+					,IsConfirmed
+					)
+				SELECT WorkDate
+					,lr.EmpId
+					,CASE 
 						WHEN IsUnpaidLeaveAbsent = 1 THEN @UnpaidLeaveAbsent
 						WHEN IsAbsent = 1 THEN @Absent
 						WHEN IsUnplannedLeave = 1 THEN @UnplannedLeave
 						WHEN IsUnpaidLeave = 1 THEN @UnpaidLeave
 						WHEN IsWeekendLeave = 1 THEN @WeekenLeave
-					END AS DisciplineTypeId,
-					CASE @IsIgnoredViolate
+						END AS DisciplineTypeId
+					,CASE @IsIgnoredViolate
 						WHEN 1 THEN 'True'
 						ELSE 'False'
-					END AS IsIgnoredViolate,
-					CASE @IsConfirmed
+						END AS IsIgnoredViolate
+					,CASE @IsConfirmed
 						WHEN 1 THEN 'True'
 						ELSE 'False'
-					END AS IsConfirmed
+						END AS IsConfirmed
 				FROM [dbo].[fnc_GetDisciplineDetailByLeaveRequestId](@RequestID)
-				INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.RequestId = @RequestID
-				WHERE IsUnpaidLeaveAbsent = 1 OR IsAbsent = 1 OR IsUnplannedLeave = 1 OR IsUnpaidLeave = 1 OR IsWeekendLeave = 1
+					INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.RequestId = @RequestID
+				WHERE IsUnpaidLeaveAbsent = 1
+					OR IsAbsent = 1
+					OR IsUnplannedLeave = 1
+					OR IsUnpaidLeave = 1
+					OR IsWeekendLeave = 1
 			END
 		END
-		
 
-		DECLARE @DisciplineXml NVARCHAR(MAX) = (SELECT * FROM #Disciplines FOR XML RAW('Row'), ROOT('Root'))
-		
-		EXECUTE WorkingTimeRequest_ApproveRequest @RequestID, @ActorId, @RoleId, @Comment, @DisciplineXml
+		DECLARE @DisciplineXml NVARCHAR(MAX) = (
+				SELECT *
+				FROM #Disciplines
+				FOR XML RAW('Row')
+					,ROOT('Root')
+				)
+
+		EXECUTE WorkingTimeRequest_ApproveRequest @RequestID
+			,@ActorId
+			,@RoleId
+			,@Comment
+			,@DisciplineXml
 
 		DELETE #request
 		WHERE RequestId = @RequestID
@@ -189,5 +256,6 @@ BEGIN
 	END
 
 	DROP TABLE #Disciplines
+
 	DROP TABLE #request
 END

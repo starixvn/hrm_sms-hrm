@@ -29,7 +29,7 @@ BEGIN
 		,dtype.[Name]
 		,ISNULL(dsr.Value, 0)
 	FROM dbo.DisciplineType AS dtype WITH (NOLOCK)
-		LEFT JOIN dbo.DisciplineSectionRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
+		LEFT JOIN dbo.DisciplineGroupRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
 		AND dsr.GroupId = @TeamId
 		AND dsr.IsLocal = 1
 	WHERE dtype.DisciplineTypeId > 0
@@ -37,7 +37,7 @@ BEGIN
 	UPDATE dtype
 	SET dtype.IsApplyForExpat = ISNULL(dsr.Value, 0)
 	FROM @tblDisciplineRule AS dtype
-		LEFT JOIN dbo.DisciplineSectionRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
+		LEFT JOIN dbo.DisciplineGroupRule AS dsr WITH (NOLOCK) ON dsr.DisciplineTypeId = dtype.DisciplineTypeId
 		AND dsr.GroupId = @TeamId
 		AND dsr.IsLocal = 0
 

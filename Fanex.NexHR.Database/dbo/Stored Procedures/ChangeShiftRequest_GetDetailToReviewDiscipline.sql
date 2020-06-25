@@ -26,6 +26,12 @@ BEGIN
 		,csdt.ToDate
 	FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
 		INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = cs.EmpId
+		INNER JOIN dbo.EmployeeSummary AS emps WITH (NOLOCK) ON emp.EmpId = emps.EmpId
+		INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
+		AND drule.DisciplineTypeId = 1
+		AND emps.IsLocal = drule.IsLocal
+		AND drule.Value = 1
 		LEFT JOIN dbo.Shift AS s1 WITH (NOLOCK) ON s1.ShiftId = csdt.FromShift
 		LEFT JOIN dbo.Shift AS s2 WITH (NOLOCK) ON s2.ShiftId = csdt.ToShift
 	WHERE cs.RequestId = @RequestId

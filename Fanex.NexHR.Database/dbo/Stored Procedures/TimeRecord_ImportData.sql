@@ -59,7 +59,7 @@ BEGIN
 		AND empA.[AttendanceDate] = empC.[WorkDate]
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON empA.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		LEFT JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 2
 	WHERE 
@@ -92,7 +92,7 @@ BEGIN
 	FROM [dbo].[EmployeeAttendance] AS att WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON att.EmpId = e.EmpId
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
-		LEFT JOIN dbo.DisciplineSectionRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
+		LEFT JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
 		AND rul.DisciplineTypeId = 5
 	WHERE (

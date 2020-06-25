@@ -392,7 +392,6 @@
     <Build Include="dbo\Stored Procedures\DisciplineRequestTrans_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Dashboard_GetMemberRequest.sql" />
     <Build Include="dbo\Stored Procedures\Dashboard_Get.sql" />
-    <Build Include="dbo\Tables\EmployeeEmergency.sql" />
     <Build Include="dbo\Tables\EmployeeRelationship.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeEmergency_Delete.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeEmergency_Edit.sql" />
@@ -496,7 +495,6 @@
     <Build Include="dbo\Stored Procedures\Department_GetById.sql" />
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
-    <Build Include="dbo\Tables\DisciplineSectionRule.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveMultipleRequest.sql" />
   </ItemGroup>
   <ItemGroup>
