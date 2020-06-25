@@ -20,7 +20,7 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.Unit WITH (NOLOCK)
-			WHERE Code = @Code
+			WHERE Code = @Code AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1
@@ -35,6 +35,7 @@ BEGIN
 		,[ModifiedBy]
 		,[ModifiedDate]
 		,[IsActive]
+		,[IsDeleted]
 		)
 	VALUES (
 		@Code
@@ -42,6 +43,7 @@ BEGIN
 		,@CreatedBy
 		,GETDATE()
 		,@IsActive
+		,0
 		)
 END
 

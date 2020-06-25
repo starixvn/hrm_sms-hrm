@@ -37,6 +37,7 @@ BEGIN
 		,[IsActive]
 		,[ModifiedBy]
 		,[ModifiedDate]
+		,[IsDeleted]
 		)
 	VALUES (
 		@Code
@@ -45,5 +46,6 @@ BEGIN
 		,@IsActive
 		,@ModifiedBy
 		,GETDATE()
+		,0
 		)
 END

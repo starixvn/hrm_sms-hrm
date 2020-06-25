@@ -15,23 +15,11 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF NOT EXISTS (
-			SELECT 1
-			FROM dbo.Unit WITH (NOLOCK)
-			WHERE UnitId = @UnitId
-			)
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'The unit does not exists'
-
-		RETURN
-	END
-
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.Unit AS u WITH (NOLOCK)
 				INNER JOIN dbo.Department AS d WITH (NOLOCK) ON d.UnitId = u.UnitId
-			WHERE u.UnitId = @UnitId
+			WHERE u.UnitId = @UnitId AND d.IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1

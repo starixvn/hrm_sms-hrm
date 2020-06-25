@@ -15,24 +15,12 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF NOT EXISTS (
-			SELECT 1
-			FROM dbo.Section WITH (NOLOCK)
-			WHERE SectionId = @SectionId
-			)
-	BEGIN
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'The section does not exists'
-
-		RETURN
-	END
-
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.Section AS sec WITH (NOLOCK)
 				INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON sec.SectionId = g.SectionId
 			WHERE sec.SectionId = @SectionId
-				AND g.IsDeleted != 1
+				AND g.IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1

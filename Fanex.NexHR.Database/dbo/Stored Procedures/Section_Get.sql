@@ -26,5 +26,5 @@ BEGIN
 	FROM dbo.Section AS sec WITH (NOLOCK)
 	LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 	WHERE (sec.IsActive = @IsActive OR @IsActive IS NULL)
-		AND sec.IsDeleted  IS NULL
+		AND sec.IsDeleted = 0
 END
