@@ -23,12 +23,13 @@ LeaveType:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE
-		@fromDate DATE = CAST(@year AS VARCHAR(5)) + '-01-01'
+	DECLARE @fromDate DATE = CAST(@year AS VARCHAR(5)) + '-01-01'
 		,@toDate DATE = CAST(@year AS VARCHAR(5)) + '-12-31'
-	DECLARE @tblGroupIds TABLE (GroupId INT)
-	DECLARE @tblEmployeeIds TABLE (EmpId INT)
 	DECLARE @tblLeaveTypes TABLE (LeaveTypeId INT)
+
+	CREATE TABLE #tblRptGroupIds (GroupId INT)
+
+	CREATE TABLE #tblRptEmployeeIds (EmpId INT)
 
 	IF ISNULL(@LeaveType, '') <> ''
 	BEGIN
@@ -39,7 +40,7 @@ BEGIN
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
+		INSERT INTO #tblRptGroupIds (GroupId)
 		SELECT DISTINCT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
@@ -59,32 +60,28 @@ BEGIN
 
 	IF @EmpId IS NULL
 	BEGIN
-		INSERT INTO @tblEmployeeIds (EmpId)
+		INSERT INTO #tblRptEmployeeIds (EmpId)
 		SELECT DISTINCT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@SupervisorId, 1, 0)
 	END
 	ELSE
 	BEGIN
-		INSERT INTO @tblEmployeeIds (EmpId)
+		INSERT INTO #tblRptEmployeeIds (EmpId)
 		VALUES (@EmpId)
 	END
 
 	SELECT SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 1
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
-								WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
-									AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
-								ELSE empca.LeaveDay END
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
+						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
+							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
+						ELSE empca.LeaveDay END
 						)
 				ELSE 0 END
 				)) AS Jan
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 2
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -93,9 +90,7 @@ BEGIN
 				)) AS Feb
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 3
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -104,9 +99,7 @@ BEGIN
 				)) AS Mar
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 4
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -115,9 +108,7 @@ BEGIN
 				)) AS Apr
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 5
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -126,9 +117,7 @@ BEGIN
 				)) AS May
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 6
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -137,9 +126,7 @@ BEGIN
 				)) AS Jun
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 7
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -148,9 +135,7 @@ BEGIN
 				)) AS Jul
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 8
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -159,9 +144,7 @@ BEGIN
 				)) AS Aug
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 9
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -170,9 +153,7 @@ BEGIN
 				)) AS Sep
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 10
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -181,9 +162,7 @@ BEGIN
 				)) AS Oct
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 11
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -192,9 +171,7 @@ BEGIN
 				)) AS Nov
 		,SUM((CASE 
 				WHEN MONTH(empca.WorkDate) = 12
-					AND (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+					AND lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -202,8 +179,7 @@ BEGIN
 				ELSE 0 END
 				)) AS [Dec]
 		,SUM((CASE 
-				WHEN ( lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+				WHEN lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -221,25 +197,25 @@ BEGIN
 		AND ISNULL(emp.[Enabled], 0) = 1
 		INNER JOIN EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = emp.GroupId
-		LEFT JOIN @tblLeaveTypes AS lt ON lt.LeaveTypeId = empca.LeaveTypeId OR lt.LeaveTypeId = empca.LeaveTypeId2
-	WHERE empca.WorkDate BETWEEN @fromDate
-			AND @toDate
-		AND ISNULL(g.IsDeleted, 0) = 0
-		AND (
+		LEFT JOIN @tblLeaveTypes AS lt ON lt.LeaveTypeId = empca.LeaveTypeId
+		OR lt.LeaveTypeId = empca.LeaveTypeId2
+	WHERE (
 			@IsLocal IS NULL
 			OR empsum.IsLocal = @IsLocal
 			)
+		AND empca.WorkDate BETWEEN @fromDate
+			AND @toDate
 		AND empca.IsOffday = 0
 		AND empca.IsHoliday = 0
 		AND empca.IsLeaveDay = 1
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblRptGroupIds AS tbl WITH (NOLOCK)
 			WHERE emp.GroupId = tbl.GroupId
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM @tblEmployeeIds AS tbl
+			FROM #tblRptEmployeeIds AS tbl WITH (NOLOCK)
 			WHERE emp.EmpId = tbl.EmpId
 			)
 	GROUP BY emp.EmpId
@@ -248,9 +224,7 @@ BEGIN
 		,g.GroupId
 		,g.[Name]
 	HAVING SUM((CASE 
-				WHEN (
-						lt.LeaveTypeId IS NOT NULL
-						) THEN (CASE 
+				WHEN lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
 							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
 						ELSE empca.LeaveDay END
@@ -258,4 +232,8 @@ BEGIN
 				ELSE 0 END
 				)) > 0
 	ORDER BY g.[Name]
+
+	DROP TABLE #tblRptGroupIds
+
+	DROP TABLE #tblRptEmployeeIds
 END

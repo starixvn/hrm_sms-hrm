@@ -37,9 +37,10 @@ BEGIN
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
-	DECLARE @tblEmployeeIds TABLE (EmpId INT)
 
-	CREATE TABLE #tblEmployeeCalendar (
+	CREATE TABLE #tempEmployeeIds (EmpId INT PRIMARY KEY)
+
+	CREATE TABLE #tempEmployeeCalendar (
 		EmpId INT
 		,WorkDate DATE
 		,ShiftId INT
@@ -49,13 +50,13 @@ BEGIN
 
 	IF ISNULL(@empIds, '') <> ''
 	BEGIN
-		INSERT INTO @tblEmployeeIds (EmpId)
+		INSERT INTO #tempEmployeeIds (EmpId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@empIds, ',')
 	END
 	ELSE
 	BEGIN
-		INSERT INTO @tblEmployeeIds (EmpId)
+		INSERT INTO #tempEmployeeIds (EmpId)
 		SELECT EmpId
 		FROM dbo.Employee WITH (NOLOCK)
 		WHERE (
@@ -68,7 +69,12 @@ BEGIN
 				)
 	END
 
-	INSERT INTO #tblEmployeeCalendar (
+	IF @fromDate < DATEADD(MONTH, - 2, GETDATE())
+	BEGIN
+		SET @fromDate = DATEADD(MONTH, - 2, GETDATE())
+	END
+
+	INSERT INTO #tempEmployeeCalendar (
 		EmpId
 		,WorkDate
 		,ShiftId
@@ -81,13 +87,13 @@ BEGIN
 		,empca.IsOffDay
 		,empca.IsHoliday
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
-		INNER JOIN @tblEmployeeIds AS emp ON empca.EmpId = emp.EmpId
+		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 
 	WHILE @tempDate <= @toDate
 	BEGIN
-		INSERT INTO #tblEmployeeCalendar (
+		INSERT INTO #tempEmployeeCalendar (
 			EmpId
 			,WorkDate
 			,ShiftId
@@ -124,33 +130,18 @@ BEGIN
 				END
 			,0
 		FROM dbo.Employee AS emp WITH (NOLOCK)
-			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
+			INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 1
 			INNER JOIN dbo.EmployeeDefaultShift AS empshift WITH (NOLOCK) ON emp.EmpId = empshift.EmpId
 		WHERE NOT EXISTS (
-				SELECT 1
-				FROM #tblEmployeeCalendar AS tbl
+				SELECT tbl.EmpId
+				FROM #tempEmployeeCalendar AS tbl WITH (NOLOCK)
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
 				)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
-				WHERE emp.EmpId = empca.EmpId
-					AND empca.WorkDate = @tempDate
-					AND ISNULL(empca.ShiftId, 0) = ISNULL(CASE 
-							WHEN DATEPART(dw, @tempDate) = 1 THEN empshift.SunShift
-							WHEN DATEPART(dw, @tempDate) = 2 THEN empshift.MonShift
-							WHEN DATEPART(dw, @tempDate) = 3 THEN empshift.TueShift
-							WHEN DATEPART(dw, @tempDate) = 4 THEN empshift.WedShift
-							WHEN DATEPART(dw, @tempDate) = 5 THEN empshift.ThuShift
-							WHEN DATEPART(dw, @tempDate) = 6 THEN empshift.FriShift
-							WHEN DATEPART(dw, @tempDate) = 7 THEN empshift.SatShift
-							END, 0)
-				)
 
-		INSERT INTO #tblEmployeeCalendar (
+		INSERT INTO #tempEmployeeCalendar (
 			EmpId
 			,WorkDate
 			,ShiftId
@@ -163,7 +154,7 @@ BEGIN
 			,0
 			,0
 		FROM dbo.Employee AS emp WITH (NOLOCK)
-			INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
+			INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 			INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND empsum.IsDefaultSchedule = 0
 			OUTER APPLY (
@@ -175,24 +166,17 @@ BEGIN
 			ORDER BY empshift.FromDate DESC
 			) AS empshift
 		WHERE NOT EXISTS (
-				SELECT 1
-				FROM #tblEmployeeCalendar AS tbl
+				SELECT tbl.EmpId
+				FROM #tempEmployeeCalendar AS tbl WITH (NOLOCK)
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
-				)
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
-				WHERE emp.EmpId = empca.EmpId
-					AND empca.WorkDate = @tempDate
-					AND ISNULL(empca.ShiftId, 0) = ISNULL(empshift.ShiftId, 0)
 				)
 
 		SET @tempDate = DATEADD(d, 1, @tempDate)
 	END
 
 	MERGE dbo.tmpEmployeeCalendar AS [target]
-	USING #tblEmployeeCalendar AS [source] ON (
+	USING #tempEmployeeCalendar AS [source] ON (
 				[target].EmpId = [source].EmpId
 				AND [target].WorkDate = [source].WorkDate
 				)
@@ -230,6 +214,7 @@ BEGIN
 			ELSE 0 END
 			)
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empca.EmpId = empsum.EmpId
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON empca.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
@@ -262,7 +247,7 @@ BEGIN
 			ELSE 0 END
 			)
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS overtime WITH (NOLOCK) ON empca.EmpId = overtime.EmpId
 		AND empca.WorkDate = overtime.OvertimeDate
 		AND overtime.[Status] NOT IN (@PendingStatusId, @NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -288,7 +273,7 @@ BEGIN
 			ELSE 1 END
 			)
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT kiv.RequestId
 			,r.RequestType
@@ -326,7 +311,7 @@ BEGIN
 			)
 		,empca.ChangeShiftTypeId = cs.ChangeShiftTypeId
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -367,7 +352,7 @@ BEGIN
 		,empca.MoveOffFromDate = NULL
 		,empca.MoveOffToDate = cs.ToDate
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -412,7 +397,7 @@ BEGIN
 		,empca.MoveOffFromDate = cs.OnDate
 		,empca.MoveOffToDate = NULL
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT r.RequestId
 			,r.RequestType
@@ -457,7 +442,7 @@ BEGIN
 	CREATE TABLE #tblHalfDayRequest (
 		RequestId BIGINT
 		,RequestTypeId SMALLINT
-		,EmployeeId INT
+		,EmpId INT
 		,WorkDate DATE
 		,FromTime DATETIME
 		,ToTime DATETIME
@@ -480,7 +465,7 @@ BEGIN
 		,r.RequestType
 		,lrdt.LeaveType
 		,lrdt.WorkType
-	FROM @tblEmployeeIds AS tblemp
+	FROM #tempEmployeeIds AS tblemp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		AND empca.WorkDate BETWEEN @fromDate
 			AND @toDate
@@ -506,17 +491,15 @@ BEGIN
 		,r.RequestType
 		,lr.LeaveType
 		,@LeaveDay AS WorkType
-	FROM @tblEmployeeIds AS tblemp
+	FROM #tempEmployeeIds AS tblemp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		AND empca.WorkDate BETWEEN @fromDate
 			AND @toDate
-		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.EmpId = tblemp.EmpId
-		AND lr.LeaveType <> @GeneralLeaveId
-		AND lr.TotalDays % 1 = 0
-		AND empca.WorkDate BETWEEN lr.FromDate
-			AND lr.ToDate
 		AND empca.IsOffDay = 0
 		AND empca.IsHoliday = 0
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON lr.EmpId = tblemp.EmpId
+		AND empca.WorkDate BETWEEN lr.FromDate
+			AND lr.ToDate
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND tblemp.EmpId = r.EmpId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
@@ -524,6 +507,11 @@ BEGIN
 			SELECT 1
 			FROM #tblLeaveRequest AS tblreq WITH (NOLOCK)
 			WHERE lr.RequestId = tblreq.RequestId
+			)
+		AND NOT EXISTS (
+			SELECT ldt.RequestId
+			FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+			WHERE lr.RequestId = ldt.RequestId
 			)
 
 	UPDATE empca
@@ -547,7 +535,7 @@ BEGIN
 			ELSE 0
 			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeIds AS tblemp ON empca.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN #tblLeaveRequest AS lr ON empca.EmpId = lr.EmpId
 		AND empca.WorkDate = lr.WorkDate
 	WHERE empca.WorkDate BETWEEN @fromDate
@@ -568,7 +556,7 @@ BEGIN
 	INSERT INTO #tblHalfDayRequest (
 		RequestId
 		,RequestTypeId
-		,EmployeeId
+		,EmpId
 		,WorkDate
 		,FromTime
 		,ToTime
@@ -587,7 +575,7 @@ BEGIN
 		,0.5 AS LeaveDay
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON r.EmpId = emp.EmpId
-		INNER JOIN @tblEmployeeIds AS tblemp ON emp.EmpId = tblemp.EmpId
+		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmpId
 		INNER JOIN dbo.LeaveRequestDetail AS lrdt WITH (NOLOCK) ON r.RequestId = lrdt.RequestId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		AND lrdt.IsHalfDay = 1
@@ -621,7 +609,7 @@ BEGIN
 		,empca.FromTime = rq.FromTime
 		,empca.ToTime = rq.ToTime
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmployeeId
+		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmpId
 		AND empca.WorkDate = rq.WorkDate
 	WHERE empca.LeaveTypeId IS NULL
 		OR empca.LeaveDay = 0.5
@@ -636,14 +624,16 @@ BEGIN
 		,empca.FromTime2 = rq.FromTime
 		,empca.ToTime2 = rq.ToTime
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmployeeId
+		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmpId
 		AND empca.WorkDate = rq.WorkDate
 	WHERE empca.FromTime <> rq.FromTime
 		AND empca.ToTime <> rq.ToTime
 
+	DROP TABLE #tempEmployeeIds
+
 	DROP TABLE #tblLeaveRequest
 
-	DROP TABLE #tblEmployeeCalendar
+	DROP TABLE #tempEmployeeCalendar
 
 	DROP TABLE #tblHalfDayRequest
 END

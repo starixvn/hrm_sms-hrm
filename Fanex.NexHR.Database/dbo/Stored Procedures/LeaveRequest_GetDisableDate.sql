@@ -26,7 +26,8 @@ BEGIN
 		,@toDate = @toDate
 		,@empIds = @empId
 
-	SELECT tmpca.WorkDate
+	SELECT tmpca.RequestId
+		,tmpca.WorkDate
 		,tmpca.ShiftId
 		,tmpca.IsHoliday
 		,tmpca.IsOffDay
@@ -42,26 +43,25 @@ BEGIN
 	WHERE emp.EmpId = @EmpId
 
 	SELECT WorkDate
-	FROM #tblEmployeeCalendar
+	FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
 	WHERE (
-			IsLeaveDay = 1
-			AND LeaveDay = 1
+			empca.IsLeaveDay = 1
+			AND empca.LeaveDay = 1
 			)
-		OR IsLeaveOffday = 1
-		OR IsOffDay = 1
-		OR IsHoliday = 1
-		OR IsOvertime = 1
+		OR empca.IsLeaveOffday = 1
+		OR empca.IsOffDay = 1
+		OR empca.IsHoliday = 1
+		OR empca.IsOvertime = 1
 		OR EXISTS (
-			SELECT 1
-			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
-				AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
-			WHERE (
+			SELECT lr.RequestId
+			FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
+			WHERE lr.RequestId = empca.RequestId
+				AND (
 					@RequestId IS NULL
-					OR r.RequestId <> @requestId
+					OR lr.RequestId <> @requestId
 					)
-				AND WorkDate < lr.FromDate
-				AND WorkDate > lr.ToDate
+				AND empca.WorkDate < lr.FromDate
+				AND empca.WorkDate > lr.ToDate
 			)
 
 	DROP TABLE #tblEmployeeCalendar

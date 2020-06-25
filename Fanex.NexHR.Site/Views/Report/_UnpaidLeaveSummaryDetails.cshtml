@@ -65,136 +65,84 @@
                         <td>@(index++)</td>
                         <td class="align-left">@leave.Nickname</td>
                         <td class="align-left">@leave.FullName</td>
-                        @if (leave.Jan > 0)
-                        {
-                            <td>
+                        <td>
+                            @if (leave.Jan > 0)
+                            {
                                 @leave.Jan.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Feb > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Feb > 0)
+                            {
                                 @leave.Feb.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Mar > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Mar > 0)
+                            {
                                 @leave.Mar.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Apr > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Apr > 0)
+                            {
                                 @leave.Apr.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.May > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.May > 0)
+                            {
                                 @leave.May.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Jun > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Jun > 0)
+                            {
                                 @leave.Jun.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Jul > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Jul > 0)
+                            {
                                 @leave.Jul.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Aug > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Aug > 0)
+                            {
                                 @leave.Aug.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Sep > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Sep > 0)
+                            {
                                 @leave.Sep.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Oct > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Oct > 0)
+                            {
                                 @leave.Oct.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Nov > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Nov > 0)
+                            {
                                 @leave.Nov.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.Dec > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td>
+                            @if (leave.Dec > 0)
+                            {
                                 @leave.Dec.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        @if (leave.LeaveBalance > 0)
-                        {
-                            <td>
+                            }
+                        </td>
+                        <td style="width: 250px">
+                            @if (leave.LeaveBalance > 0)
+                            {
                                 @leave.LeaveBalance.ToString("0.0")
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
+                            }
+                        </td>
                     </tr>
                 }
             }
