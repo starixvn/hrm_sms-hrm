@@ -25,7 +25,7 @@ BEGIN
 			FROM dbo.Department WITH (NOLOCK)
 			WHERE Code = @Code
 				AND UnitId = @UnitId
-				AND DepartmentId <> @DepartmentId
+				AND DepartmentId <> @DepartmentId AND IsDeleted  = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1

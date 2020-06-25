@@ -21,7 +21,7 @@ BEGIN
 			SELECT 1
 			FROM dbo.Unit WITH (NOLOCK)
 			WHERE Code = @Code
-				AND UnitId <> @UnitId
+				AND UnitId <> @UnitId AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1

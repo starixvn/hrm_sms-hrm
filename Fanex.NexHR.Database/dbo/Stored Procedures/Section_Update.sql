@@ -22,7 +22,7 @@ BEGIN
 			SELECT 1
 			FROM dbo.Section WITH (NOLOCK)
 			WHERE Code = @Code
-				AND SectionId <> @SectionId
+				AND SectionId <> @SectionId AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1
