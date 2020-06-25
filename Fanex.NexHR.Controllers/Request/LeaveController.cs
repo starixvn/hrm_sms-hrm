@@ -89,6 +89,12 @@
         {
             var criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
             var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
+            if (leaveRequestDetail != null && leaveRequestDetail.Any())
+            {
+                criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                        .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+            }
+
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = sessionService.Employee.Id;
 
