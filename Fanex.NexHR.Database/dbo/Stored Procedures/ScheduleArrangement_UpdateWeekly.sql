@@ -126,6 +126,7 @@ BEGIN
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate
 		,@empIds = @EmployeeIds
+		,@isUpdateRequestData = 1
 
 	DELETE tblweekly
 	FROM #tblWeeklySchedule AS tblweekly
@@ -289,12 +290,6 @@ BEGIN
 		,@Description = 'Update employee calendar'
 		,@TrackingValue = @WeeklyScheduleXml
 		,@UserId = @ActorId
-
-	IF @@ERROR <> 0
-	BEGIN
-		SELECT @ErrCode = 101
-			,@ErrMsg = N'Updated unsuccessfully!'
-	END
 
 	DROP TABLE #tblWeeklySchedule
 

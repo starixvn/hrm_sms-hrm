@@ -69,9 +69,9 @@ BEGIN
 				)
 	END
 
-	IF @fromDate < DATEADD(MONTH, - 2, GETDATE())
+	IF @fromDate < DATEADD(MONTH, - 6, GETDATE())
 	BEGIN
-		SET @fromDate = DATEADD(MONTH, - 2, GETDATE())
+		SET @fromDate = DATEADD(MONTH, - 6, GETDATE())
 	END
 
 	INSERT INTO #tempEmployeeCalendar (
