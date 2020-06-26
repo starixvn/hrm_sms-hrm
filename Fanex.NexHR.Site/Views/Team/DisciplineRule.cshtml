@@ -23,8 +23,20 @@
     <thead>
         <tr>
             <th>@Labels.DisciplineType</th>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
+            <th>
+                @Labels.Local
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckbAllLocal">
+                    <label for="ckbAllLocal"></label>
+                </div>
+            </th>
+            <th>
+                @Labels.Expat
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckbAllExpat">
+                    <label for="ckbAllExpat"></label>
+                </div>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -34,14 +46,14 @@
                 <td class="align-left">@discipline.Name</td>
                 <td>
                     <div class="checkbox">
-                        <input type="checkbox" class="checkbox-custom" name="local" id="local@(discipline.DisciplineTypeId)"
+                        <input type="checkbox" class="checkbox-custom ckb-local" name="local" id="local@(discipline.DisciplineTypeId)"
                                @(discipline.IsApplyForLocal ? "checked" : string.Empty) @disabled />
                         <label for="local@(discipline.DisciplineTypeId)"></label>
                     </div>
                 </td>
                 <td>
                     <div class="checkbox">
-                        <input type="checkbox" class="checkbox-custom" name="expat" id="expat@(discipline.DisciplineTypeId)"
+                        <input type="checkbox" class="checkbox-custom ckb-expat" name="expat" id="expat@(discipline.DisciplineTypeId)"
                                @(discipline.IsApplyForExpat ? "checked" : string.Empty) @disabled />
                         <label for="expat@(discipline.DisciplineTypeId)"></label>
                     </div>

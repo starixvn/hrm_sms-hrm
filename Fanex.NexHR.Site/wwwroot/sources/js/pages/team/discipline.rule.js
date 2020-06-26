@@ -50,6 +50,14 @@ let disciplineRule = (function ($) {
         $table = $('#tabledata');
         $btnSubmit = $('#btnSubmit');
 
+        $('#ckbAllLocal').on('change', function () {
+            $('.ckb-local').prop('checked', $(this).prop('checked'));
+        });
+
+        $('#ckbAllExpat').on('change', function () {
+            $('.ckb-expat').prop('checked', $(this).prop('checked'));
+        });
+
         registerEventSubmit();
     }
 
