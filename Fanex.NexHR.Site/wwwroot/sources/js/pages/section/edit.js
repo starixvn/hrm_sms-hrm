@@ -36,11 +36,11 @@ function validateFormData() {
     let isValid = true,
         errorMessages = [];
 
-    if (!$('#Code').val()) {
+    if (!$('#Code').val().trim()) {
         errorMessages.push('The Code field is required!');
     }
 
-    if (!$('#Name').val()) {
+    if (!$('#Name').val().trim()) {
         errorMessages.push('The Name field is required!');
     }
 
