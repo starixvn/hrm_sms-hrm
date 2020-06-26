@@ -44,24 +44,21 @@ BEGIN
 
 	SELECT WorkDate
 	FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
-	WHERE (
-			empca.IsLeaveDay = 1
-			AND empca.LeaveDay = 1
-			)
-		OR empca.IsLeaveOffday = 1
-		OR empca.IsOffDay = 1
+	WHERE empca.IsOffDay = 1
 		OR empca.IsHoliday = 1
 		OR empca.IsOvertime = 1
-		OR EXISTS (
-			SELECT lr.RequestId
-			FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
-			WHERE lr.RequestId = empca.RequestId
-				AND (
-					@RequestId IS NULL
-					OR lr.RequestId <> @requestId
+		OR (
+			(
+				@RequestId IS NULL
+				OR empca.RequestId <> @RequestId
+				)
+			AND (
+				(
+					empca.IsLeaveDay = 1
+					AND empca.LeaveDay = 1
 					)
-				AND empca.WorkDate < lr.FromDate
-				AND empca.WorkDate > lr.ToDate
+				OR empca.IsLeaveOffday = 1
+				)
 			)
 
 	DROP TABLE #tblEmployeeCalendar
