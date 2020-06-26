@@ -25,7 +25,6 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly ICommonDataService commonDataService;
-        private readonly IShiftService shiftService;
         private const string pathFolder = "~/file/uploads/request/";
 
         public LeaveController(
@@ -33,14 +32,12 @@
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            ICommonDataService commonDataService,
-            IShiftService shiftService) : base(sessionService)
+            ICommonDataService commonDataService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.commonDataService = commonDataService;
-            this.shiftService = shiftService;
         }
 
         [HttpGet]
