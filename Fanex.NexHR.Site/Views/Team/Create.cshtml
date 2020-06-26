@@ -51,27 +51,41 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.TeamHead, new { @class = "control-label" })
+                @Html.LabelFor(model => model.UnitHead, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.TeamHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.TextBoxFor(model => model.UnitHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
             @Html.TextBoxFor(model => model.HeadId, new { @class = "team-head" })
             @Html.ValidationMessageFor(model => model.HeadId)
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.AssistantHeadIds, new { @class = "control-label" })
+                @Html.LabelFor(model => model.ManagerIds, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                <select id="AssistantHeads" data-placeholder="Choose assistant heads..." multiple="multiple" class="form-control chosen-select">
+                <select id="Managers" data-placeholder="Choose managers..." multiple="multiple" class="form-control chosen-select">
                     @foreach (Employee employee in Model.Employees)
                     {
                         <option value="@employee.Id">@employee.DisplayName</option>
                     }
                 </select>
             </div>
-            @Html.HiddenFor(model => model.AssistantHeadIds)
+            @Html.HiddenFor(model => model.ManagerIds)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SupervisorIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select id="Supervisors" data-placeholder="Choose supervisors..." multiple class="chosen-select form-control">
+                    @foreach (Employee employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.DisplayName</option>
+                    }
+                </select>
+            </div>
+            @Html.HiddenFor(model => model.SupervisorIds)
         </div>
         <div class="form-group">
             <div class="label-form">
@@ -86,20 +100,6 @@
                 </select>
             </div>
             @Html.HiddenFor(model => model.LeaderIds)
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.AssistantLeaderIds, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                <select id="AssistantLeaders" data-placeholder="Choose assistant leaders..." multiple class="chosen-select form-control">
-                    @foreach (var employee in Model.Employees)
-                    {
-                        <option value="@employee.Id">@employee.DisplayName</option>
-                    }
-                </select>
-            </div>
-            @Html.HiddenFor(model => model.AssistantLeaderIds)
         </div>
         <div class="form-group">
             <div class="label-form">

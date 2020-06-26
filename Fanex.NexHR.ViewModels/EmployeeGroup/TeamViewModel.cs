@@ -36,20 +36,20 @@
         public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-        [Display(Name = nameof(Labels.TeamHead), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.UnitHead), ResourceType = typeof(Labels))]
         public int? HeadId { get; set; }
 
-        [Display(Name = nameof(Labels.TeamHead), ResourceType = typeof(Labels))]
-        public string TeamHead { get; set; }
+        [Display(Name = nameof(Labels.UnitHead), ResourceType = typeof(Labels))]
+        public string UnitHead { get; set; }
 
-        [Display(Name = nameof(Labels.AssistantTeamHead), ResourceType = typeof(Labels))]
-        public string AssistantHeadIds { get; set; }
+        [Display(Name = nameof(Labels.Manager), ResourceType = typeof(Labels))]
+        public string ManagerIds { get; set; }
 
-        [Display(Name = nameof(Labels.Leader), ResourceType = typeof(Labels))]
+        [Display(Name = nameof(Labels.Supervisor), ResourceType = typeof(Labels))]
+        public string SupervisorIds { get; set; }
+
+        [Display(Name = nameof(Labels.TeamLeader), ResourceType = typeof(Labels))]
         public string LeaderIds { get; set; }
-
-        [Display(Name = nameof(Labels.AssistantLeader), ResourceType = typeof(Labels))]
-        public string AssistantLeaderIds { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]

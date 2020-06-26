@@ -4,9 +4,9 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@SectionId INT
 	,@MailGroup VARCHAR(50) = ''
 	,@HeadId INT
-	,@AssistantHeadIds VARCHAR(MAX) = ''
+	,@ManagerIds VARCHAR(MAX) = ''
 	,@LeaderIds VARCHAR(MAX) = ''
-	,@AssistantLeaderIds VARCHAR(MAX) = ''
+	,@SupervisorIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
@@ -70,7 +70,7 @@ BEGIN
 		,1
 		)
 
-	IF ISNULL(@AssistantHeadIds, '') <> ''
+	IF ISNULL(@ManagerIds, '') <> ''
 	BEGIN
 		INSERT INTO dbo.GroupManager (
 			GroupId
@@ -80,7 +80,7 @@ BEGIN
 		SELECT @id
 			,val
 			,2
-		FROM dbo.fnc_strSplit(@AssistantHeadIds, ',')
+		FROM dbo.fnc_strSplit(@ManagerIds, ',')
 	END
 
 	IF ISNULL(@LeaderIds, '') <> ''
@@ -96,7 +96,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@LeaderIds, ',')
 	END
 
-	IF ISNULL(@AssistantLeaderIds, '') <> ''
+	IF ISNULL(@SupervisorIds, '') <> ''
 	BEGIN
 		INSERT INTO dbo.GroupManager (
 			GroupId
@@ -106,7 +106,7 @@ BEGIN
 		SELECT @id
 			,val
 			,4
-		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
+		FROM dbo.fnc_strSplit(@SupervisorIds, ',')
 	END
 
 	DECLARE @xml XML
@@ -117,9 +117,9 @@ BEGIN
 				,[Name] AS '@Name'
 				,SectionId AS '@SectionId'
 				,@HeadId AS '@HeadId'
-				,@AssistantHeadIds AS '@AssistantHeadIds'
+				,@ManagerIds AS '@ManagerIds'
 				,@LeaderIds AS '@LeaderIds'
-				,@AssistantLeaderIds AS '@AssistantLeaderIds'
+				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
 			FROM dbo.[Group] WITH (NOLOCK)

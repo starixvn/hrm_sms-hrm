@@ -5,9 +5,9 @@ CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@SectionId INT
 	,@MailGroup VARCHAR(50) = ''
 	,@HeadId INT
-	,@AssistantHeadIds VARCHAR(MAX) = ''
+	,@ManagerIds VARCHAR(MAX) = ''
 	,@LeaderIds VARCHAR(MAX) = ''
-	,@AssistantLeaderIds VARCHAR(MAX) = ''
+	,@SupervisorIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
@@ -44,16 +44,16 @@ BEGIN
 		,@logData NVARCHAR(MAX)
 		,@logOldData NVARCHAR(MAX)
 		,@OldHeadId INT
-		,@OldAssistantHeadIds VARCHAR(MAX) = ''
+		,@OldManagerIds VARCHAR(MAX) = ''
 		,@OldLeaderIds VARCHAR(MAX)
-		,@OldAssistantLeaderIds VARCHAR(MAX)
+		,@OldSupervisorIds VARCHAR(MAX)
 
 	SELECT @OldHeadId = EmpId
 	FROM dbo.GroupManager WITH (NOLOCK)
 	WHERE GroupId = @TeamId
 		AND RoleId = 1
 
-	SELECT @OldAssistantHeadIds = COALESCE(@OldAssistantHeadIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	SELECT @OldManagerIds = COALESCE(@OldManagerIds + ',', '') + CAST(EmpId AS VARCHAR(10))
 	FROM dbo.GroupManager WITH (NOLOCK)
 	WHERE GroupId = @TeamId
 		AND RoleId = 2
@@ -63,7 +63,7 @@ BEGIN
 	WHERE GroupId = @TeamId
 		AND RoleId = 3
 
-	SELECT @OldAssistantLeaderIds = COALESCE(@OldAssistantLeaderIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+	SELECT @OldSupervisorIds = COALESCE(@OldSupervisorIds + ',', '') + CAST(EmpId AS VARCHAR(10))
 	FROM dbo.GroupManager WITH (NOLOCK)
 	WHERE GroupId = @TeamId
 		AND RoleId = 4
@@ -73,9 +73,9 @@ BEGIN
 				,[Name] AS '@Name'
 				,SectionId AS '@SectionId'
 				,@OldHeadId AS '@HeadId'
-				,@OldAssistantHeadIds AS '@AssistantHeadIds'
+				,@OldManagerIds AS '@ManagerIds'
 				,@OldLeaderIds AS '@LeaderIds'
-				,@OldAssistantLeaderIds AS '@AssistantLeaderIds'
+				,@OldSupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
 			FROM dbo.[Group] WITH (NOLOCK)
@@ -100,7 +100,7 @@ BEGIN
 		,1
 		)
 
-	IF ISNULL(@AssistantHeadIds, '') <> ''
+	IF ISNULL(@ManagerIds, '') <> ''
 	BEGIN
 		INSERT INTO dbo.GroupManager (
 			GroupId
@@ -110,7 +110,7 @@ BEGIN
 		SELECT @TeamId
 			,val
 			,2
-		FROM dbo.fnc_strSplit(@AssistantHeadIds, ',')
+		FROM dbo.fnc_strSplit(@ManagerIds, ',')
 	END
 
 	IF ISNULL(@LeaderIds, '') <> ''
@@ -126,7 +126,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@LeaderIds, ',')
 	END
 
-	IF ISNULL(@AssistantLeaderIds, '') <> ''
+	IF ISNULL(@SupervisorIds, '') <> ''
 	BEGIN
 		INSERT INTO dbo.GroupManager (
 			GroupId
@@ -136,7 +136,7 @@ BEGIN
 		SELECT @TeamId
 			,val
 			,4
-		FROM dbo.fnc_strSplit(@AssistantLeaderIds, ',')
+		FROM dbo.fnc_strSplit(@SupervisorIds, ',')
 	END
 
 	UPDATE dbo.[Group] WITH (ROWLOCK, UPDLOCK)
@@ -154,9 +154,9 @@ BEGIN
 				,[Name] AS '@Name'
 				,SectionId AS '@SectionId'
 				,@HeadId AS '@HeadId'
-				,@AssistantHeadIds AS '@AssistantHeadIds'
+				,@ManagerIds AS '@ManagerIds'
 				,@LeaderIds AS '@LeaderIds'
-				,@AssistantLeaderIds AS '@AssistantLeaderIds'
+				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
 			FROM dbo.[Group] WITH (NOLOCK)

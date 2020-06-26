@@ -206,7 +206,8 @@
             } else {
                 me.updateSelectedText();
             }
-            if (totalItems == checkboxes.filter(':checked').length) {
+
+            if (totalItems === checkboxes.filter(':checked').length) {
                 me.$checkboxes.prop('checked', true);
             }
         },

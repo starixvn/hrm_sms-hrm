@@ -597,9 +597,6 @@
   <data name="MySpace" xml:space="preserve">
     <value>My space</value>
   </data>
-  <data name="AssistantLeader" xml:space="preserve">
-    <value>Assistant Leader</value>
-  </data>
   <data name="History" xml:space="preserve">
     <value>History</value>
   </data>
@@ -1102,7 +1099,7 @@
     <value>SMS TOTAL MANPOWER AND JOB CATEGORY REPORT</value>
   </data>
   <data name="DepartmentManagement" xml:space="preserve">
-    <value>Division Management</value>
+    <value>Department Management</value>
   </data>
   <data name="Manager" xml:space="preserve">
     <value>Manager</value>
@@ -1305,17 +1302,11 @@
   <data name="ResignedDate" xml:space="preserve">
     <value>Resigned Date</value>
   </data>
-  <data name="AssistantTeamHead" xml:space="preserve">
-    <value>Assist.Team Head</value>
-  </data>
   <data name="ExternalGroup" xml:space="preserve">
     <value>External Group</value>
   </data>
   <data name="TeamName" xml:space="preserve">
     <value>Team Name</value>
-  </data>
-  <data name="TeamHead" xml:space="preserve">
-    <value>Team Head</value>
   </data>
   <data name="TeamSupervisor" xml:space="preserve">
     <value>Team Supervisor</value>
@@ -1905,12 +1896,6 @@
   <data name="CreateDepartment" xml:space="preserve">
     <value>New Department</value>
   </data>
-  <data name="Department" xml:space="preserve">
-    <value>Department</value>
-  </data>
-  <data name="DepartmentManagement" xml:space="preserve">
-    <value>Department Management</value>
-  </data>
   <data name="EditDepartment" xml:space="preserve">
     <value>Edit Department</value>
   </data>
@@ -1919,5 +1904,11 @@
   </data>
   <data name="SectionManagement" xml:space="preserve">
     <value>Section Management</value>
+  </data>
+  <data name="TeamLeader" xml:space="preserve">
+    <value>Team Leader</value>
+  </data>
+  <data name="UnitHead" xml:space="preserve">
+    <value>Unit Head</value>
   </data>
 </root>

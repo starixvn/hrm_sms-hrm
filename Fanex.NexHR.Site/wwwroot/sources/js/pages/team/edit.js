@@ -5,8 +5,8 @@ import 'chosen-js/chosen.jquery';
 import { resolveClientUrl } from '../../shared/common.functions';
 
 (function () {
-    function initSearchTeamHead() {
-        $('#TeamHead').autocomplete({
+    function initSearchUnitHead() {
+        $('#UnitHead').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: resolveClientUrl('employee/getemployees'),
@@ -29,21 +29,21 @@ import { resolveClientUrl } from '../../shared/common.functions';
             minLength: 2,
             select: function (event, ui) {
                 event.preventDefault();
-                $('#TeamHead').val(ui.item.label);
+                $('#UnitHead').val(ui.item.label);
                 $('#HeadId').val(ui.item.value);
             },
             focus: function (event, ui) {
                 event.preventDefault();
-                $('#TeamHead').val(ui.item.label);
+                $('#UnitHead').val(ui.item.label);
                 $('#HeadId').val(ui.item.value);
             },
             change: function (event, ui) {
                 event.preventDefault();
                 if (ui && ui.item) {
-                    $('#TeamHead').val(ui.item.label);
+                    $('#UnitHead').val(ui.item.label);
                     $('#HeadId').val(ui.item.value);
                 } else {
-                    if ($('#TeamHead').val() === '') {
+                    if ($('#UnitHead').val() === '') {
                         $('#HeadId').val('');
                     } else {
                         $('#HeadId').val('0');
@@ -53,16 +53,29 @@ import { resolveClientUrl } from '../../shared/common.functions';
         });
     }
 
-    function initSearchAssistantHead() {
-        const assistIds = $('#AssistantHeadIds').val();
+    function initSearchManager() {
+        const assistIds = $('#ManagerIds').val();
         if (assistIds) {
-            $('#AssistantHeads').val(assistIds.split(','));
+            $('#Managers').val(assistIds.split(','));
         }
-        $('#AssistantHeads').chosen();
-        $('#AssistantHeads').on('change', function () {
+        $('#Managers').chosen();
+        $('#Managers').on('change', function () {
             const values = $(this).val(),
-                assistantHeadIds = values ? values.join(',') : '';
-            $('#AssistantHeadIds').val(assistantHeadIds);
+                managerIds = values ? values.join(',') : '';
+            $('#ManagerIds').val(managerIds);
+        });
+    }
+
+    function initSearchSupervisor() {
+        const assistIds = $('#SupervisorIds').val();
+        if (assistIds) {
+            $('#Supervisors').val(assistIds.split(','));
+        }
+        $('#Supervisors').chosen();
+        $('#Supervisors').on('change', function () {
+            const values = $(this).val(),
+                supervisorIds = values ? values.join(',') : '';
+            $('#SupervisorIds').val(supervisorIds);
         });
     }
 
@@ -80,23 +93,10 @@ import { resolveClientUrl } from '../../shared/common.functions';
         });
     }
 
-    function initSearchAssistantLeader() {
-        const assistIds = $('#AssistantLeaderIds').val();
-        if (assistIds) {
-            $('#AssistantLeaders').val(assistIds.split(','));
-        }
-        $('#AssistantLeaders').chosen();
-        $('#AssistantLeaders').on('change', function () {
-            const values = $(this).val(),
-                assistantLeaderIds = values ? values.join(',') : '';
-            $('#AssistantLeaderIds').val(assistantLeaderIds);
-        });
-    }
-
     $(document).ready(function () {
-        initSearchTeamHead();
-        initSearchAssistantHead();
+        initSearchUnitHead();
+        initSearchManager();
+        initSearchSupervisor();
         initSearchLeader();
-        initSearchAssistantLeader();
     });
 })();

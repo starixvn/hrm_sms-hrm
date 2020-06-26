@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Labels {
@@ -471,24 +471,6 @@ namespace Fanex.NexHR.Resources {
         public static string ArrangeShift {
             get {
                 return ResourceManager.GetString("ArrangeShift", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Assistant Leader.
-        /// </summary>
-        public static string AssistantLeader {
-            get {
-                return ResourceManager.GetString("AssistantLeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Assist.Team Head.
-        /// </summary>
-        public static string AssistantTeamHead {
-            get {
-                return ResourceManager.GetString("AssistantTeamHead", resourceCulture);
             }
         }
         
@@ -4534,11 +4516,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team Head.
+        ///   Looks up a localized string similar to Team Leader.
         /// </summary>
-        public static string TeamHead {
+        public static string TeamLeader {
             get {
-                return ResourceManager.GetString("TeamHead", resourceCulture);
+                return ResourceManager.GetString("TeamLeader", resourceCulture);
             }
         }
         
@@ -4908,6 +4890,15 @@ namespace Fanex.NexHR.Resources {
         public static string Unit {
             get {
                 return ResourceManager.GetString("Unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit Head.
+        /// </summary>
+        public static string UnitHead {
+            get {
+                return ResourceManager.GetString("UnitHead", resourceCulture);
             }
         }
         

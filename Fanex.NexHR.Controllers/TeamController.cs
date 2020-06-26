@@ -74,9 +74,9 @@
                     Name = model.TeamName,
                     SectionId = model.SectionId ?? 0,
                     HeadId = model.HeadId ?? 0,
-                    AssistantHeadIds = model.AssistantHeadIds,
+                    ManagerIds = model.ManagerIds,
                     LeaderIds = model.LeaderIds,
-                    AssistantLeaderIds = model.AssistantLeaderIds,
+                    SupervisorIds = model.SupervisorIds,
                     MailGroup = model.MailGroup,
                     CreatedBy = sessionService.Employee.Id,
                     BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
@@ -107,18 +107,18 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
-            var teamHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
+            var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
             var model = new TeamViewModel
             {
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
-                HeadId = teamHead?.EmpId,
-                TeamHead = teamHead?.DisplayName,
-                AssistantHeadIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantHead).Select(e => e.EmpId)),
+                HeadId = unitHead?.EmpId,
+                UnitHead = unitHead?.DisplayName,
+                ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
+                SupervisorIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(e => e.EmpId)),
                 LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
-                AssistantLeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.AssistantLeader).Select(e => e.EmpId)),
                 SectionId = team.Section != null ? team.Section.Id : 0,
                 Sections = sectionService.GetSection(),
                 Employees = GetAllEmployees()
@@ -145,9 +145,9 @@
                         SectionId = model.SectionId ?? 0,
                         MailGroup = model.MailGroup,
                         HeadId = model.HeadId ?? 0,
-                        AssistantHeadIds = model.AssistantHeadIds,
+                        ManagerIds = model.ManagerIds,
                         LeaderIds = model.LeaderIds,
-                        AssistantLeaderIds = model.AssistantLeaderIds,
+                        SupervisorIds = model.SupervisorIds,
                         ModifiedBy = sessionService.Employee.Id,
                         BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
                     };

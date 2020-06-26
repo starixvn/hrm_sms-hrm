@@ -11,9 +11,9 @@
         public string MailGroup { get; set; }
 
         public int HeadId { get; set; }
-        public string AssistantHeadIds { get; set; }
+        public string ManagerIds { get; set; }
         public string LeaderIds { get; set; }
-        public string AssistantLeaderIds { get; set; }
+        public string SupervisorIds { get; set; }
         public byte BasicAnnualLeaveBalance { get; set; }
 
         public int CreatedBy { get; set; }

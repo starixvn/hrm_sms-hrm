@@ -3,8 +3,8 @@
     public enum TeamManagerRole
     {
         Head = 1,
-        AssistantHead,
+        Manager,
         Leader,
-        AssistantLeader
+        Supervisor
     }
 }
