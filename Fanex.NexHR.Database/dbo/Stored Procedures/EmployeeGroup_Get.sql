@@ -35,6 +35,6 @@ BEGIN
 		LEFT JOIN dbo.GroupManager AS mng WITH (NOLOCK) ON g.GroupId = mng.GroupId
 		AND mng.RoleId = 1 -- head
 	WHERE @FromDate IS NULL
-		OR g.ModifiedDate > @FromDate
+		OR ISNULL(g.ModifiedDate, g.CreatedDate) > @FromDate
 	ORDER BY g.ModifiedDate
 END
