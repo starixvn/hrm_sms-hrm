@@ -230,10 +230,7 @@ var LeaveRequestDetail = (function ($) {
         },
         showHideCheckboxHalfDay: function (trObject, leaveTypeId) {
             var $chkhalfday = trObject.find('.chkhalfday');
-            if (leaveTypeId === LeaveType.AnnualLeave
-                || leaveTypeId === LeaveType.UnpaidLeave
-                || leaveTypeId === LeaveType.BusinessTrip
-                || leaveTypeId === LeaveType.KeepInViewByDay) {
+            if (!(leaveTypeId === LeaveType.UnpaidLeaveInsurance)) {
                 $chkhalfday.show();
             } else {
                 if ($chkhalfday.prop('checked')) {

@@ -40,6 +40,7 @@ BEGIN
 		,@PublicHolidayLeaveType TINYINT = 13
 		,@PaternityLeaveType TINYINT = 14
 		,@UnpaidLeaveType TINYINT = 25
+		,@UnpaidLeaveInsuranceType TINYINT = 41
 		,@BusinessTripLeaveType TINYINT = 9
 		,@BusinessDuringWorkingLeaveType TINYINT = 26
 		,@OnbehalfActionType TINYINT = 5
@@ -542,7 +543,7 @@ BEGIN
 				SELECT 1
 				FROM #tblLeaveRequestDetail WITH (NOLOCK)
 				WHERE IsHalfDay = 1
-					AND LeaveType NOT IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVLeaveType, @KIVByHourLeaveType, @BusinessTripLeaveType, @BusinessDuringWorkingLeaveType)
+					AND LeaveType IN (@UnpaidLeaveInsuranceType)
 				)
 		BEGIN
 			SET @ErrCode = 112
@@ -833,3 +834,4 @@ BEGIN
 
 	DROP TABLE #tblLeaveRequestDetail
 END
+
