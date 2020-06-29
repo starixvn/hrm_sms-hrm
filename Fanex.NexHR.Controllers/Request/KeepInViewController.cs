@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -20,7 +19,6 @@
         private readonly IKeepInViewRequestService keepInViewRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
-        const string pathFolder = "~/file/uploads/request/";
 
         public KeepInViewController(
             ISessionService sessionService,
@@ -50,7 +48,7 @@
                 request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
             }
 
-                return View(requests);
+            return View(requests);
         }
 
         public ActionResult Create()
@@ -78,7 +76,7 @@
         [HttpPost]
         public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
-            KeepInViewRequestViewModel model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
+            var model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
             var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
             var criteria = new CreateKeepInViewRequestCriteria
@@ -103,10 +101,7 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
-                if (files != null)
-                {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
+                requestService.UploadFile(files, criteria.RequestId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -114,7 +109,6 @@
 
         public ActionResult Edit(long id)
         {
-            string dir = Server.MapPath(pathFolder + id);
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -142,13 +136,10 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
                 MinDate = request.OnDate.AddMonths(-1),
-                MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
+                MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
+                Files = requestService.GetAttachFile(id)
             };
 
-            if (Directory.Exists(dir))
-            {
-                viewModel.Files = requestService.GetFileNames(dir);
-            }
             ViewBag.IsTopManager = request.Requester.IsTopManager;
 
             return View(viewModel);
@@ -157,7 +148,7 @@
         [HttpPost]
         public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
-            KeepInViewRequestViewModel model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
+            var model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var criteria = new EditKeepInViewRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -179,11 +170,10 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailEditRequest(model.RequestId);
-                if (files != null){
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
-                if (filesRemove != null) {
-                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                requestService.UploadFile(files, criteria.RequestId);
+                if (!string.IsNullOrWhiteSpace(filesRemove))
+                {
+                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
                 }
             }
 

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -24,7 +23,6 @@
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
-        const string pathFolder = "~/file/uploads/request/";
 
         public ChangeShiftController(
             ISessionService sessionService,
@@ -87,10 +85,7 @@
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailCreateRequest(commandResult.OutputId);
-                if (files != null)
-                {
-                    requestService.UploadFile(files, commandResult.OutputId);
-                }
+                requestService.UploadFile(files, commandResult.OutputId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -98,8 +93,6 @@
 
         public ActionResult Edit(int id)
         {
-            string dir = Server.MapPath(pathFolder + id);
-
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -121,7 +114,8 @@
                 Remark = request.Remark,
                 Details = changeShiftService.GetDetailById(id),
                 Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers
+                Approvers = supervisor.Approvers,
+                Files = requestService.GetAttachFile(id)
             };
 
             if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
@@ -130,11 +124,6 @@
                 {
                     detail.DisableDates = changeShiftService.GetDisableDateForMoveOffDayRequest(model.EmployeeId, detail.OnDate, model.RequestId);
                 }
-            }
-
-            if (Directory.Exists(dir))
-            {
-                model.Files = requestService.GetFileNames(dir);
             }
 
             ViewBag.IsHost = true;
@@ -156,13 +145,10 @@
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailEditRequest(criteria.RequestId);
-                if (files != null)
+                requestService.UploadFile(files, criteria.RequestId);
+                if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
-                if (filesRemove != null)
-                {
-                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
                 }
             }
 
@@ -184,8 +170,6 @@
 
         public ActionResult Details(int id)
         {
-            string dir = Server.MapPath(pathFolder + id);
-
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null)
             {
@@ -206,12 +190,8 @@
                 Status = request.Status,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
+                Files = requestService.GetAttachFile(id)
             };
-
-            if (Directory.Exists(dir))
-            {
-                model.Files = requestService.GetFileNames(dir);
-            }
 
             ViewBag.IsHost = false;
             ViewBag.TypeId = request.TypeId;

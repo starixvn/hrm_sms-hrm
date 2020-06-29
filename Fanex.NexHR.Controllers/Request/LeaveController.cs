@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
@@ -25,7 +24,6 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly ICommonDataService commonDataService;
-        private const string pathFolder = "~/file/uploads/request/";
 
         public LeaveController(
             ISessionService sessionService,
@@ -89,8 +87,8 @@
         [ValidateInput(false)]
         public ActionResult Create(string request, string requestDetails, IList<HttpPostedFileBase> files)
         {
-            InsertLeaveRequestCriteria criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
-            List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
+            var criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
+            var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.CreatedBy = sessionService.Employee.Id;
 
@@ -98,11 +96,7 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailCreateRequest(criteria);
-
-                if (files != null)
-                {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
+                requestService.UploadFile(files, criteria.RequestId);
             }
 
             return Json(result);
@@ -110,8 +104,6 @@
 
         public ActionResult Update(long id)
         {
-            string dir = Server.MapPath(pathFolder + id);
-
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -134,11 +126,7 @@
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
-
-            if (Directory.Exists(dir))
-            {
-                model.Files = requestService.GetFileNames(dir);
-            }
+            model.Files = requestService.GetAttachFile(id);
 
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -152,8 +140,8 @@
         [ValidateInput(false)]
         public ActionResult Update(string request, string requestDetails, IList<HttpPostedFileBase> files, string filesRemove)
         {
-            UpdateLeaveRequestCriteria criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
-            List<LeaveRequestDetail> leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
+            var criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
+            var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
             criteria.ModifiedBy = sessionService.Employee.Id;
 
@@ -161,13 +149,10 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailEditRequest(criteria);
-                if (files != null)
+                requestService.UploadFile(files, criteria.RequestId);
+                if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
-                if (filesRemove != null)
-                {
-                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
                 }
             }
 
@@ -176,8 +161,6 @@
 
         public ActionResult Detail(long id)
         {
-            string dir = Server.MapPath(pathFolder + id);
-
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null)
             {
@@ -186,11 +169,7 @@
 
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
-
-            if (Directory.Exists(dir))
-            {
-                model.Files = requestService.GetFileNames(dir);
-            }
+            model.Files = requestService.GetAttachFile(id);
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;

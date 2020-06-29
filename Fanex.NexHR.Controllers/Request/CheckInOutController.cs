@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -22,7 +21,6 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
-        const string pathFolder = "~/file/uploads/request/";
 
         public CheckInOutController(
             ISessionService sessionService,
@@ -89,7 +87,7 @@
         [HttpPost]
         public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
-            CheckInOutRequestViewModel model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
+            var model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
             var criteria = new CreateCheckInOutRequestCriteria
             {
                 EmpId = model.EmployeeId,
@@ -108,10 +106,7 @@
             if (commandResult.IsSuccessful)
             {
                 checkInOutRequestService.SendMailCreateRequest(commandResult.OutputId);
-                if (files != null)
-                {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
+                requestService.UploadFile(files, criteria.RequestId);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -119,7 +114,6 @@
 
         public ActionResult Edit(long id)
         {
-            string dir = Server.MapPath(pathFolder + id);
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
                 || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
@@ -158,13 +152,9 @@
                     Remark = request.Remark,
                     Verifiers = supervisor.Verifiers,
                     Approvers = supervisor.Approvers,
-                    DisabledDates = disabledDates
+                    DisabledDates = disabledDates,
+                    Files = requestService.GetAttachFile(id)
                 };
-
-                if (Directory.Exists(dir))
-                {
-                    viewModel.Files = requestService.GetFileNames(dir);
-                }
 
                 ViewBag.IsTopManager = request.Requester.IsTopManager;
                 return View(viewModel);
@@ -174,7 +164,7 @@
         [HttpPost]
         public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
-            CheckInOutRequestViewModel model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
+            var model = JsonConverter.FromJson<CheckInOutRequestViewModel>(requestModel);
             var criteria = new EditCheckInOutRequestCriteria
             {
                 RequestId = model.RequestId,
@@ -194,13 +184,10 @@
             if (commandResult.IsSuccessful)
             {
                 checkInOutRequestService.SendMailEditRequest(model.RequestId);
-                if (files != null)
+                requestService.UploadFile(files, criteria.RequestId);
+                if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.UploadFile(files, criteria.RequestId);
-                }
-                if (filesRemove != null)
-                {
-                    requestService.DeleteFile(filesRemove, criteria.RequestId);
+                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
                 }
             }
 

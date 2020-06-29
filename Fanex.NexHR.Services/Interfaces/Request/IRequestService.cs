@@ -38,9 +38,9 @@
 
         void UploadFile(IList<HttpPostedFileBase> files, long requestId);
 
-        void DeleteFile(string filesRemove, long requestId);
+        List<string> GetAttachFile(long requestId);
 
-        List<string> GetFileNames(string dir);
+        void DeleteFile(List<string> files, long requestId);
 
         string GetInfoAttachFile(long requestId);
 

@@ -31,7 +31,7 @@
         private readonly IChangeShiftRequestService changeShiftRequestService;
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IKeepInViewRequestService keepInViewRequestService;
-        const string pathFolder = "~/file/uploads/request/";
+        private const string pathFolder = "~/file/uploads/request/";
 
         public RequestService(
             IRequestRepository requestRepository,
@@ -241,7 +241,7 @@
 
         public void SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command)
         {
-            foreach(var request in param.Requests)
+            foreach (var request in param.Requests)
             {
                 switch (request.RequestTypeID)
                 {
@@ -454,10 +454,9 @@
 
         public void UploadFile(IList<HttpPostedFileBase> files, long requestId)
         {
-            if (!files.Any(file => file.ContentLength <= 0))
+            if (files != null && files.Any(x => x.ContentLength > 0))
             {
                 string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId);
-
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -465,23 +464,33 @@
 
                 foreach (var file in files)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-
-                    var path = Path.Combine(dir, fileName);
-                    file.SaveAs(path);
+                    if (file.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(dir, fileName);
+                        file.SaveAs(path);
+                    }
                 }
+            }
+        }
+
+        public void DeleteFile(List<string> files, long requestId)
+        {
+            foreach (string file in files)
+            {
+                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId + '/' + file);
+                File.Delete(dir);
             }
         }
 
         public string GetInfoAttachFile(long requestId)
         {
-            StringBuilder content = new StringBuilder();
+            var content = new StringBuilder();
             string path = pathFolder + requestId;
             string dir = HttpContext.Current.Server.MapPath(path);
             if (Directory.Exists(dir))
             {
                 string[] files = Directory.GetFiles(dir);
-
                 foreach (string file in files)
                 {
                     content.Append($"<a href=\'{"/file/uploads/request/" + requestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
@@ -491,26 +500,20 @@
             return content.ToString();
         }
 
-        public List<string> GetFileNames(string dir)
+        public List<string> GetAttachFile(long requestId)
         {
-            List<string> Files = new List<string>();
-            string[] files = Directory.GetFiles(dir);
-            foreach (string file in files)
+            var files = new List<string>();
+            string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId);
+            if (Directory.Exists(dir))
             {
-                Files.Add(Path.GetFileName(file));
+                string[] filePaths = Directory.GetFiles(dir);
+                foreach (string filePath in filePaths)
+                {
+                    files.Add(Path.GetFileName(filePath));
+                }
             }
 
-            return Files;
-        }
-
-        public void DeleteFile(string filesRemove, long requestId)
-        {
-            List<string> files = JsonConverter.FromJsonArray<string>(filesRemove);
-            foreach (string file in files)
-            {
-                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId + '/' + file);
-                File.Delete(dir);
-            }
+            return files;
         }
 
         public void DeleteFolderAttachFile(long id)
