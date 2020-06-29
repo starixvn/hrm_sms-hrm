@@ -363,12 +363,15 @@ const LeaveRequest = (function ($) {
         },
         enableControlForHalfday: function () {
             const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
-            if (leaveTypeId === LeaveType.KeepInViewByHour || leaveTypeId === LeaveType.BusinessDuringWorking) {
-                $('.time-businesstrip').show();
+            if (leaveTypeId === LeaveType.GeneralLeave) {
+                $('.time-businesstrip').hide();
                 $('#grbHalfDay').hide();
-                $('#grbTotalDay').hide();
-            } else {
-                $('.time-businesstrip').show();
+            } else if (leaveTypeId === LeaveType.KeepInViewByHour || leaveTypeId === LeaveType.BusinessDuringWorking) {
+                    $('.time-businesstrip').show();
+                    $('#grbHalfDay').hide();
+                    $('#grbTotalDay').hide();
+                } else {
+                    $('.time-businesstrip').show();
             }
 
             LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
@@ -494,6 +497,11 @@ const LeaveRequest = (function ($) {
         },
         enableControlForEdit: function () {
             $('#RefNo').attr('disabled', 'disabled');
+            if (parseInt(LeaveRequest.leaveTypeId.val(), 10) === LeaveType.GeneralLeave) {
+                $('#grbHalfDay').hide();
+                $('#grbTotalDay').hide();
+                $('.time-isafterday').hide();
+            }
 
             if (LeaveRequest.halfDayOff.prop('checked')) {
                 LeaveRequest.enableControlForHalfday();
@@ -689,19 +697,27 @@ const LeaveRequest = (function ($) {
             var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
             const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
 
-             if (leaveTypeId === LeaveType.KeepInViewByHour
+            if (leaveTypeId === LeaveType.GeneralLeave) {
+                $('#grbHalfDay').hide();
+                $('#grbTotalDay').hide();
+                $('.time-businesstrip').hide();
+                $('.time-isafterday').hide();
+                LeaveRequest.toDate.datepicker('enable');
+                LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
+                LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
+            } else if (leaveTypeId === LeaveType.KeepInViewByHour
                 || leaveTypeId === LeaveType.BusinessDuringWorking) {
                 LeaveRequest.halfDayOff.prop('checked', true);
                 $('#grbTotalDay').hide();
-            } else {
-                $('#grbTotalDay').show();
-                if (!(leaveTypeId === LeaveType.UnpaidLeaveInsurance)) {
-                    $('#grbHalfDay').show();
                 } else {
-                    LeaveRequest.halfDayOff.prop('checked', false);
-                    LeaveRequest.bindHalfDay();
-                    $('#grbHalfDay').hide();
-                }
+                    $('#grbTotalDay').show();
+                    if (!(leaveTypeId === LeaveType.UnpaidLeaveInsurance)) {
+                        $('#grbHalfDay').show();
+                    } else {
+                        LeaveRequest.halfDayOff.prop('checked', false);
+                        LeaveRequest.bindHalfDay();
+                        $('#grbHalfDay').hide();
+                    }
 
                 if (leaveTypeId === LeaveType.MaternityLeave) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
