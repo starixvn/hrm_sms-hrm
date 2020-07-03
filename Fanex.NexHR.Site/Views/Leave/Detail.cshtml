@@ -145,7 +145,7 @@
             <div class="label-form">
                 @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
             </div>
-            @if (Model.Files != null)
+            @if (Model.Files.Count > 0)
             {
                 foreach (string file in Model.Files)
                 {
