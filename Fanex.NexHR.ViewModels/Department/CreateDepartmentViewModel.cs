@@ -7,11 +7,6 @@
 
     public class CreateDepartmentViewModel
     {
-        public CreateDepartmentViewModel()
-        {
-            IsActive = true;
-        }
-
         [AllowHtml]
         [Required]
         public string Code { get; set; }
@@ -23,8 +18,8 @@
         [Required]
         public int UnitId { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        public IList<Unit> Unit { get; set; }
+        public IList<Unit> Units { get; set; }
     }
 }

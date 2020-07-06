@@ -71,7 +71,12 @@ new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsAct
                 <td>@(index++)</td>
                 <td>@sectionDetail.Code</td>
                 <td>@sectionDetail.Name</td>
-                <td>@sectionDetail.Department.Name</td>
+                <td>
+                    @if (sectionDetail.Department != null)
+                    {
+                        @sectionDetail.Department.Name
+                    }
+                </td>
                 <td>
                     @if (sectionDetail.IsActive)
                     {

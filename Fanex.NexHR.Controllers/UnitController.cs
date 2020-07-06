@@ -58,7 +58,6 @@
         public JsonResult Create(AddUnitViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertUnitCriteria
@@ -68,7 +67,6 @@
                     IsActive = model.IsActive,
                     CreatedBy = sessionService.Employee.Id
                 };
-
                 commandResult = unitService.Create(criteria);
             }
 
@@ -79,6 +77,10 @@
         public ActionResult Edit(int id)
         {
             Unit unit = unitService.GetById(id);
+            if (unit == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
 
             var model = new EditUnitViewModel
             {
@@ -87,7 +89,6 @@
                 Name = unit.Name,
                 IsActive = unit.IsActive,
             };
-
             return View(model);
         }
 
@@ -96,7 +97,6 @@
         public JsonResult Edit(EditUnitViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new UpdateUnitCriteria
@@ -107,7 +107,6 @@
                     IsActive = model.IsActive,
                     ModifiedBy = sessionService.Employee.Id
                 };
-
                 commandResult = unitService.Edit(criteria);
             }
 

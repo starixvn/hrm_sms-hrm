@@ -44,7 +44,7 @@
         {
             var model = new CreateDepartmentViewModel
             {
-                Unit = unitService.GetUnit()
+                Units = unitService.GetUnit()
             };
             return View(model);
         }
@@ -54,7 +54,6 @@
         public JsonResult Create(CreateDepartmentViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertDepartmentCriteria
@@ -75,15 +74,20 @@
         public ActionResult Edit(int Id)
         {
             Department department = departmentService.GetById(Id);
-            IList<Unit> unit = unitService.GetUnit();
+            if (department == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            IList<Unit> units = unitService.GetUnit();
             var model = new EditDepartmentViewModel
             {
                 DepartmentId = Id,
                 Code = department.Code,
                 Name = department.Name,
                 IsActive = department.IsActive,
-                UnitId = department.Unit.Id,
-                Unit = unit
+                UnitId = department.Unit != null ? department.Unit.Id : 0,
+                Units = units
             };
             return View(model);
         }
@@ -93,7 +97,6 @@
         public JsonResult Edit(EditDepartmentViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new UpdateDepartmentCriteria

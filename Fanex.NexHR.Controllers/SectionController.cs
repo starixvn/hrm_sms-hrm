@@ -81,7 +81,6 @@
         public JsonResult Create(AddSectionViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new InsertSectionCriteria
@@ -102,15 +101,20 @@
         public ActionResult Edit(int Id)
         {
             Section section = sectionService.GetById(Id);
-            IList<Department> department = departmentService.GetDepartment();
+            if (section == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            IList<Department> departments = departmentService.GetDepartment();
             var model = new EditSectionViewModel
             {
                 SectionId = Id,
                 Code = section.Code,
                 Name = section.Name,
                 IsActive = section.IsActive,
-                DepartmentId = section.Department.Id,
-                Departments = department
+                DepartmentId = section.Department != null ? section.Department.Id : 0,
+                Departments = departments
             };
             return View(model);
         }
@@ -120,7 +124,6 @@
         public JsonResult Edit(EditSectionViewModel model)
         {
             var commandResult = new CommandResult();
-
             if (model != null && ModelState.IsValid)
             {
                 var criteria = new UpdateSectionCriteria

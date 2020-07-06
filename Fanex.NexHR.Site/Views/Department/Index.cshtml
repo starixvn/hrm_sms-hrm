@@ -69,7 +69,12 @@ new SelectListItem() {Text = "Inactive", Value = "false"}
                 <td>@(index++)</td>
                 <td>@department.Code</td>
                 <td>@department.Name</td>
-                <td>@department.Unit.Name</td>
+                <td>
+                    @if (department.Unit != null)
+                    {
+                        @department.Unit.Name
+                    }
+                </td>
                 <td>
                     @if (department.IsActive)
                     {
