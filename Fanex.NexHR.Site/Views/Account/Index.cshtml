@@ -224,6 +224,15 @@
                     }
                 </div>
             </li>
+            @if (Model.PromotionDate.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.PromotionDate:</div>
+                    <div class="pcontent bold">
+                        @Model.PromotionDate.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                </li>
+            }
             @if (Model.ResignedDate.HasValue)
             {
                 <li class="list-group-item">
