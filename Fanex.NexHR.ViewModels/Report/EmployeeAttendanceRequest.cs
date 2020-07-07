@@ -7,6 +7,10 @@
 
     public class EmployeeAttendanceRequest
     {
+        public int EmpId { get; set; }
+
+        public DateTime WorkDate { get; set; }
+
         public RequestTypeModel RequestType { get; set; }
 
         public string Remark { get; set; }

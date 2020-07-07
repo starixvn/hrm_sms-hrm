@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
@@ -11,42 +7,36 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
 
     public partial class ReportRepository : IReportRepository
     {
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
         {
-            var listAttendance = new List<EmployeeAttendanceModel>();
-            var currentAttendance = new EmployeeAttendanceModel();
-
             using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                objectDb.Query<EmployeeAttendanceModel, dynamic, EmployeeAttendanceModel>(
-                    (attendance, t) =>
+                using (var multi = objectDb.QueryMultiple(criteria))
+                {
+                    var attendances = multi.Read<EmployeeAttendanceModel>().ToList();
+                    var requests = multi.Read<EmployeeAttendanceRequest, RequestTypeModel, LeaveType, EmployeeAttendanceRequest>(
+                        (request, requestType, leaveType) =>
+                        {
+                            request.RequestType = requestType;
+                            request.LeaveType = leaveType;
+                            return request;
+                        },
+                        splitOn: "RequestType, LeaveTypeId").ToList();
+
+                    foreach (var attendance in attendances)
                     {
-                        if (currentAttendance == null
-                            || currentAttendance.EmpId != attendance.EmpId
-                            || currentAttendance.AttendanceDate.Value.Date != attendance.AttendanceDate.Value.Date)
-                        {
-                            listAttendance.Add(attendance);
-                            currentAttendance = attendance;
-                            currentAttendance.RequestList = new List<EmployeeAttendanceRequest>();
-                        }
+                        attendance.RequestList = requests.Where(t => t.WorkDate == attendance.AttendanceDate && t.EmpId == attendance.EmpId).ToList();
+                    }
 
-                        if (t != null && t.RequestType != null)
-                        {
-                            EmployeeAttendanceRequest request = FillAttendanceRequest(t);
-
-                            currentAttendance.RequestList.Add(request);
-                        }
-
-                        return currentAttendance;
-                    },
-                    splitOn: "RequestType",
-                    parameterSet: criteria);
+                    return attendances;
+                }
             }
-
-            return listAttendance;
         }
 
         public IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria)
@@ -118,40 +108,6 @@
                     return supervisors;
                 }
             }
-        }
-
-        private EmployeeAttendanceRequest FillAttendanceRequest(dynamic t)
-        {
-            var request = new EmployeeAttendanceRequest
-            {
-                RequestType = new RequestTypeModel { Id = (short)t.RequestType },
-                RequestDate = t.RequestDate ?? DateTime.Now,
-                FromDate = t.FromDate,
-                ToDate = t.ToDate,
-                FromTime = t.FromTime,
-                ToTime = t.ToTime,
-                CreatedDate = t.CreatedDate ?? DateTime.Now,
-                Remark = t.Remark,
-                TotalDays = t.TotalDays,
-                LeaveType = FillLeaveType(t),
-                FromShift = t.FromShift,
-                ToShift = t.ToShift,
-                TotalMins = t.Time,
-                CurrentStatus = t.CurrentStatus,
-                KeepInViewTypeId = t.KeepInViewTypeId
-            };
-            return request;
-        }
-
-        private LeaveType FillLeaveType(dynamic t)
-        {
-            var leaveType = new LeaveType
-            {
-                Id = t.LeaveTypeId ?? 0,
-                Name = t.LeaveType
-            };
-
-            return leaveType;
         }
     }
 }

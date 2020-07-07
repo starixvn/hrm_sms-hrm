@@ -18,11 +18,11 @@
             <td>@index</td>
             @if (item.IsWeekend)
             {
-                <td class="weekend">@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
+                <td class="weekend">@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
             }
             else
             {
-                <td>@item.AttendanceDate.Value.ToString("ddd, dd MMM, yyyy")</td>
+                <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
             }
             <td>
                 <span class="tooltip-tippy" data-tippy-content="@item.FullName">@item.NickName</span>
@@ -110,12 +110,13 @@
                             CreatedDate = request.CreatedDate,
                             FromShift = new Shift { Name = request.FromShift },
                             ToShift = new Shift { Name = request.ToShift },
+                            LeaveType = request.LeaveType,
                             ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut
                         };
                         var requestdetail = RequestService.ToRequestMessage(requestEntity);
                         <div class="@className"
                             data-requestdetail="@Html.Encode(requestdetail)"
-                            data-leavetype="@request.LeaveType.Name"
+                            data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
                             data-createddate="@request.CreatedDateTime"
                             data-remark='@request.Remark'
                             data-currentStatus="@request.CurrentStatus">

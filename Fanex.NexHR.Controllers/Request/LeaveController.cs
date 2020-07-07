@@ -149,6 +149,12 @@
             var criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
             var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
             criteria.RequestDetail = leaveRequestDetail;
+            if (leaveRequestDetail != null && leaveRequestDetail.Any())
+            {
+                criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                        .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+            }
+
             criteria.ModifiedBy = sessionService.Employee.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);

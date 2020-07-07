@@ -39,7 +39,11 @@
     <Setting Key="Employee_UpdateEmployee" SpName="Employee_Information_update" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="nexhrx" Plain="0"></Setting>
-    <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType_xtest" DbName="nexhrx" Plain="0">
+      <Mapping DataField="RequestType" ObjectProperty="Id" Class="RequestTypeModel" />
+      <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+      <Mapping DataField="LeaveTypeName" ObjectProperty="Name" Class="LeaveType" />
+    </Setting>
     <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="nexhrx" Plain="0" />
     <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="nexhrx" Plain="0"></Setting>

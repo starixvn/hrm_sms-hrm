@@ -7,8 +7,6 @@
 
     public class EmployeeAttendanceModel
     {
-        public long Id { get; set; }
-
         public string Code { get; set; }
 
         public int EmpId { get; set; }
@@ -21,7 +19,7 @@
 
         public string TeamCode { get; set; }
 
-        public DateTime? AttendanceDate { get; set; }
+        public DateTime AttendanceDate { get; set; }
 
         public int? ShiftId { get; set; }
 
@@ -131,13 +129,8 @@
         {
             get
             {
-                if (AttendanceDate != null)
-                {
-                    return AttendanceDate.Value.DayOfWeek == DayOfWeek.Sunday ||
-                        AttendanceDate.Value.DayOfWeek == DayOfWeek.Saturday;
-                }
-
-                return false;
+                return AttendanceDate.DayOfWeek == DayOfWeek.Sunday ||
+                        AttendanceDate.DayOfWeek == DayOfWeek.Saturday;
             }
         }
 

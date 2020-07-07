@@ -289,8 +289,8 @@
                 leaveDate = string.Format(
                     RequestFormatConstants.MsgLeaveHalfDayWithNoFormat,
                     request.FromDate.ToDateMonthYearFormatedDate(),
-                    request.FromTime.ToShortTime(),
-                    request.ToTime.ToShortTime());
+                    request.FromTime.ToShortTime() + ((request.FromTime - request.FromDate).Days > 0 ? "*" : string.Empty),
+                    request.ToTime.ToShortTime() + ((request.ToTime - request.FromDate).Days > 0 ? "*" : string.Empty));
             }
 
             return leaveDate;
@@ -356,7 +356,7 @@
         private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
         {
             var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
-            var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+            var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "*");
             return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
         }
 
