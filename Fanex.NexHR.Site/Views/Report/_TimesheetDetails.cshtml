@@ -2,6 +2,9 @@
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels
 @model IList<EmployeeAttendanceModel>
+@{ 
+    var x = 1;
+}
 <table id="data" class="table table-custom">
     <thead>
         <tr>
@@ -34,10 +37,10 @@
                     <td>@index</td>
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">
                         <a class="time-record-link" href="@Url.Action("timerecord", "report", new {
-                            FromDate = item.AttendanceDate.Value.ToDateMonthYearFormatedDate(),
-                            ToDate = item.AttendanceDate.Value.AddDays(1).ToDateMonthYearFormatedDate() })"
+                            FromDate = item.AttendanceDate.ToDateMonthYearFormatedDate(),
+                            ToDate = item.AttendanceDate.AddDays(1).ToDateMonthYearFormatedDate() })"
                             title="Link to time records">
-                            @item.AttendanceDate.Value.ToDayOfWeekFormatedDate()
+                            @item.AttendanceDate.ToDayOfWeekFormatedDate()
                         </a>
                     </td>
                     <td>
