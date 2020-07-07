@@ -172,17 +172,17 @@
             {
                 Id = u.Id,
                 Text = u.Name,
-                Items = department.Where(d => d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
+                Items = department.Where(d => d.Unit != null && d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
                 {
                     Id = d.Id,
                     Text = d.Name,
                     ParentId = u.Id,
-                    Items = sections.Where(s => s.Department.Id == d.Id).Select(s => new MultiSelectViewModel
+                    Items = sections.Where(s => s.Department != null && s.Department.Id == d.Id).Select(s => new MultiSelectViewModel
                     {
                         Id = s.Id,
                         Text = s.Name,
                         ParentId = d.Id,
-                        Items = teams.Where(t => t.Section.Id == s.Id).Select(t => new MultiSelectViewModel
+                        Items = teams.Where(t => t.Section != null && t.Section.Id == s.Id).Select(t => new MultiSelectViewModel
                         {
                             Id = t.Id,
                             Text = t.Name,
