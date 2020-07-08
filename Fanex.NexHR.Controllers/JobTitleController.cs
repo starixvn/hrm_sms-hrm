@@ -46,7 +46,7 @@
             IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
-            return View("~/Views/JobTitle/JobTitleTable.cshtml", jobTitles);
+            return PartialView("~/Views/JobTitle/_JobTitleGrid.cshtml", jobTitles);
         }
 
         [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]

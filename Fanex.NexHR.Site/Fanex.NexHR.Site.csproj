@@ -1143,7 +1143,7 @@
     <Content Include="Views\Menu\Create.cshtml" />
     <Content Include="Views\Menu\Edit.cshtml" />
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
-    <Content Include="Views\JobTitle\JobTitleTable.cshtml" />
+    <Content Include="Views\JobTitle\_JobTitleGrid.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
     <Content Include="WebConfigs\Web.PRO.sms.config">
       <SubType>Designer</SubType>
