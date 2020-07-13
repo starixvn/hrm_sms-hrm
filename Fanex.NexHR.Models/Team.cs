@@ -28,6 +28,6 @@
 
         public byte? BasicAnnualLeaveBalance { get; set; }
 
-        public Department Department { get; set; }
+        public string DepartmentCode { get; set; }
     }
 }

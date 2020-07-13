@@ -21,7 +21,7 @@
                                 t.Section = sec;
                                 return t;
                             },
-                             "DepartmentId").FirstOrDefault();
+                             "SectionId").FirstOrDefault();
 
                     if (team != null)
                     {

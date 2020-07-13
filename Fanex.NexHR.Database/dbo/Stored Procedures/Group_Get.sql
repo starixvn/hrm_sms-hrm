@@ -1,4 +1,13 @@
-﻿CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
+﻿USE [HRM]
+GO
+/****** Object:  StoredProcedure [dbo].[Group_Get]    Script Date: 7/13/2020 4:03:25 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
 	,@keyWord varchar(20) = null
 	,@isDeleted BIT = NULL
 AS
@@ -63,10 +72,10 @@ BEGIN
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat
+		,dept.Code as DepartmentCode
 		,sec.SectionId
 		,sec.Code
 		,sec.[Name]
-		,dept.Code 
 	FROM dbo.[Group] AS g WITH (NOLOCK)
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId

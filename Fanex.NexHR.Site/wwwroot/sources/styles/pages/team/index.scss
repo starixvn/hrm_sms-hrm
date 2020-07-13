@@ -5,3 +5,9 @@
 @import '../../layout/table';
 @import '../../layout/toastr';
 @import '../../components/jquery-ui-dialog';
+
+.col-sorter .cell-control-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

@@ -44,54 +44,83 @@
         <thead>
             <tr>
                 <th>@Labels.SymbolCount</th>
-                <th class="col-sorter" style="width: 120px" ;>
-                    @Labels.Department
-                    <div class="fa fa-sort" data-property="Department"></div>
-                </th>
-                <th class="col-sorter" style="width: 100px" ;>
-                    @Labels.Section
-                    <div class="fa fa-sort" data-property="Section"></div>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Department</div>
+                        <div class="fa fa-sort" data-property="Department"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Team
-                    <div class="fa fa-sort" data-property="Team"></div>
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Section</div>
+                        <div class="fa fa-sort" data-property="Section"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Code
-                    <div class="fa fa-sort" data-property="Code"></div>
-                </th>
-                <th class="col-sorter" style="width: 100px" ;>
-                    @Labels.UnitHead
-                    <div class="fa fa-sort" data-property="UnitHead"></div>
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Team</div>
+                        <div class="fa fa-sort" data-property="Team"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Manager
-                    <div class="fa fa-sort" data-property="Manager"></div>
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Code</div>
+                        <div class="fa fa-sort" data-property="Code"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Supervisor
-                    <div class="fa fa-sort" data-property="Supervisor"></div>
-                </th>
-                <th class="col-sorter" style="width: 110px" ;>
-                    @Labels.TeamLeader
-                    <div class="fa fa-sort" data-property="TeamLeader"></div>
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.UnitHead</div>
+                        <div class="fa fa-sort" data-property="UnitHead"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Email
-                    <div class="fa fa-sort" data-property="Email"></div>
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Manager</div>
+                        <div class="fa fa-sort" data-property="Manager"></div>
+                    </div>
                 </th>
-                <th> @Labels.BasicAnnualLeaveBalance</th>
-                <th class="col-sorter" style="width: 100px" ;>
-                    @Labels.TotalExpat
-                    <div class="fa fa-sort" data-property="TotalExpat"></div>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Supervisor</div>
+                        <div class="fa fa-sort" data-property="Supervisor"></div>
+                    </div>
                 </th>
-                <th class="col-sorter" style="width: 100px" ;>
-                    @Labels.TotalLocal
-                    <div class="fa fa-sort" data-property="TotalLocal"></div>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.TeamLeader</div>
+                        <div class="fa fa-sort" data-property="TeamLeader"></div>
+                    </div>
                 </th>
-                <th class="col-sorter" style="width: 80px" ;>
-                    @Labels.Total
-                    <div class="fa fa-sort" data-property="Total"></div>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Email</div>
+                        <div class="fa fa-sort" data-property="Email"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.BasicAnnualLeaveBalance</div>
+                        <div class="fa fa-sort" data-property="BasicAnnualLeaveBalance"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.TotalExpat</div>
+                        <div class="fa fa-sort" data-property="TotalExpat"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.TotalLocal</div>
+                        <div class="fa fa-sort" data-property="TotalLocal"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Total</div>
+                        <div class="fa fa-sort" data-property="Total"></div>
+                    </div>
                 </th>
                 <th>@Labels.DisciplineRule</th>
                 @if (hasPermission)
@@ -109,7 +138,7 @@
                 var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
             <tr id="row@(team.Id)">
                 <td>@(index++)</td>
-                <td>@team.Code</td>
+                <td>@team.DepartmentCode</td>
                 <td>@team.Section.Name</td>
                 <td>@team.Name</td>
                 <td>@team.Code</td>
