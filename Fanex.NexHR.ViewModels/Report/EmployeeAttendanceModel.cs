@@ -134,6 +134,14 @@
             }
         }
 
+        public int? SectionId { get; set; }
+
+        public string SectionName { get; set; }
+
+        public int? DepartmentId { get; set; }
+
+        public string DepartmentName { get; set; }
+
         public List<EmployeeAttendanceRequest> RequestList { get; set; }
     }
 }

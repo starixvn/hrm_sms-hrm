@@ -32,6 +32,7 @@
 
         public void Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
         {
+            const int columns = 17;
             string templatePath = HttpContext.Current.Server.MapPath(AttendanceTemplatePath);
             string fileName = "AttendanceReport_" + DateTime.Now.ToString("yyyyMMdd");
 
@@ -45,7 +46,7 @@
 
             FillContentRowReport(attendances, ref writer);
 
-            writer.SyncColumnsWidth(15);
+            writer.SyncColumnsWidth(columns);
             writer.CreateFreezePane(0, RowStartBody);
 
             writer.Render();
@@ -105,6 +106,8 @@
                 attendance.NickName,
                 attendance.FullName,
                 attendance.TeamCode,
+                attendance.SectionName,
+                attendance.DepartmentName,
                 ShiftCode = shiftCode,
                 InFixed = attendance.InFixed,
                 OutFixed = attendance.OutFixed,
