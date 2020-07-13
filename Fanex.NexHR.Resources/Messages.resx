@@ -354,4 +354,7 @@
   <data name="RequiredErrorMessage" xml:space="preserve">
     <value>{0} is required.</value>
   </data>
+  <data name="SearchTeamOrCode" xml:space="preserve">
+    <value>team or code</value>
+  </data>
 </root>

@@ -5,6 +5,8 @@
     public class GetAllGroupCriteria : CriteriaBase
     {
         public bool IsDeleted { get; set; }
+        
+        public string NameInput { get; set; }
 
         public override string GetSettingKey() => "Group_Get";
 

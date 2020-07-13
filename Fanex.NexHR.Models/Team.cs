@@ -27,5 +27,7 @@
         public string MailGroup { get; set; }
 
         public byte? BasicAnnualLeaveBalance { get; set; }
+
+        public Department Department { get; set; }
     }
 }

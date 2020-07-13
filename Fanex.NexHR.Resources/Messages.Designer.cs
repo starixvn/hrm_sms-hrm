@@ -592,6 +592,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to team or code.
+        /// </summary>
+        public static string SearchTeamOrCode {
+            get {
+                return ResourceManager.GetString("SearchTeamOrCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift&apos;s created successfully!.
         /// </summary>
         public static string ShiftCreated {

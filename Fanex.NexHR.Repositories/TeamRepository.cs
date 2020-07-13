@@ -15,13 +15,14 @@
             {
                 using (IMultiResultReader multi = db.QueryMultiple(criteria))
                 {
-                    var team = multi.Read<Team, Section, Team>(
-                             (t, de) =>
-                             {
-                                 t.Section = de;
-                                 return t;
-                             },
-                             "DepartmentId").FirstOrDefault();
+                    var team = multi.Read<Team, Section, Department, Team>(
+                            (t, sec, dep) =>
+                            {
+                                t.Section = sec;
+                                t.Department = dep;
+                                return t;
+                            },
+                             "DepartmentId, Code").FirstOrDefault();
 
                     if (team != null)
                     {
@@ -39,13 +40,14 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var teams = multi.Read<Team, Section, Team>(
-                            (t, de) =>
+                    var teams = multi.Read<Team, Section , Department , Team>(
+                            (t, sec, dep) =>
                             {
-                                t.Section = de;
+                                t.Section = sec;
+                                t.Department = dep;
                                 return t;
                             },
-                            "SectionId"
+                             "SectionId, Code"
                             ).ToList();
                     var employees = multi.Read<TeamManager>();
 

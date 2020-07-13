@@ -7,6 +7,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
@@ -18,6 +19,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Team;
+    using Newtonsoft.Json;
 
     [HRMPermission(Policy.Read, FunctionKey.TeamManagement)]
     public class TeamController : BaseController
@@ -40,12 +42,11 @@
             this.employeeService = employeeService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string nameInput)
         {
-            IList<Team> teams = teamService.GetAll();
+            IList<Team> teams = teamService.GetAll(false,nameInput);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
             ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
-
             return View(teams);
         }
 
