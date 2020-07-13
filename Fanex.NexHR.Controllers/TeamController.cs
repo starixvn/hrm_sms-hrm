@@ -42,9 +42,9 @@
             this.employeeService = employeeService;
         }
 
-        public ActionResult Index(string nameInput)
+        public ActionResult Index(string keyWord)
         {
-            IList<Team> teams = teamService.GetAll(false,nameInput);
+            IList<Team> teams = teamService.GetAll(false, keyWord);
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
             ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
             return View(teams);

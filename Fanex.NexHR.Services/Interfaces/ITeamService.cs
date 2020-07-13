@@ -11,7 +11,7 @@
     {
         Team GetById(int id);
 
-        IList<Team> GetAll(bool isDeleted = false , string nameInput = null);
+        IList<Team> GetAll(bool isDeleted = false , string keyWord = null);
 
         CommandResult Delete(int actorId, int id);
 

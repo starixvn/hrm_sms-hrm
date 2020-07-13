@@ -1,5 +1,5 @@
-﻿
-CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
+﻿CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
+	,@keyWord varchar(20) = null
 	,@isDeleted BIT = NULL
 AS
 /*
@@ -66,8 +66,10 @@ BEGIN
 		,sec.SectionId
 		,sec.Code
 		,sec.[Name]
+		,dept.Code 
 	FROM dbo.[Group] AS g WITH (NOLOCK)
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 		LEFT JOIN @tblGroup AS tbl ON g.GroupId = tbl.GroupId
 	WHERE (
 			 @TeamId IS NULL
@@ -76,6 +78,11 @@ BEGIN
 		AND (
 			@isDeleted IS NULL
 			OR g.isDeleted = @isDeleted
+			)
+		AND (
+			 @keyWord IS NULL
+			 OR LOWER(g.name) like LOWER('%' + @keyWord + '%') 
+			 OR LOWER(g.Code) like LOWER('%' + @keyWord + '%') 
 			)
 	ORDER BY g.[Code]
 
