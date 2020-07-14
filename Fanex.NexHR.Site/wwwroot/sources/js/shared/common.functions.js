@@ -369,7 +369,7 @@ function sortTable(th) {
         }
 
     var table = $(th).parents('table').eq(0);
-        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(th).index()));
+        var rows = table.find('tbody tr').toArray().sort(comparer($(th).index()));
          th.asc = !th.asc;
          if (!th.asc) {
             rows = rows.reverse();

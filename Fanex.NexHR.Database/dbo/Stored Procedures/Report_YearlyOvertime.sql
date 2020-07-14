@@ -129,6 +129,8 @@ BEGIN
 		,FullName
 		,TeamId
 		,Team
+		,DepartmentCode
+		,Section
 		,ISNULL([1], 0) AS Jan
 		,ISNULL([2], 0) AS Feb
 		,ISNULL([3], 0) AS Mar
@@ -148,11 +150,15 @@ BEGIN
 			,emp.FullName
 			,gr.GroupId AS TeamId
 			,gr.[Name] AS Team
+			,dept.Code as DepartmentCode
+			,sec.Code as Section
 			,cl.[Month] AS [Month]
 			,(otsum.NormalHours + otsum.OffHours + otsum.PublicHours + otsum.SpecialHours) AS TotalHours
 		FROM dbo.Employee AS emp WITH (NOLOCK)
 			INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmpId
 			INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+			INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON gr.SectionId = sec.SectionId
+			INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 			CROSS JOIN #tblMonth AS cl
 			INNER JOIN #tblOvertimeSummary AS otsum ON emp.EmpId = otsum.EmpId
 			AND cl.[Month] = otsum.[Month]

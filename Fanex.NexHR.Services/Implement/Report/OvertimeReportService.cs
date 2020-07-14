@@ -115,7 +115,7 @@
         public byte[] ExportYearlyOvertime(IEnumerable<YearlyOvertime> overtimes, GetYearlyOvertimeParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/YearlyOvertime.xlsx");
-            const byte TotalColumns = 17;
+            const byte TotalColumns = 19;
             const byte TotalHeaderRows = 2;
             const byte StartMonthColumn = 5;
             const byte StartBodyRow = 4;
@@ -146,6 +146,8 @@
                         templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
