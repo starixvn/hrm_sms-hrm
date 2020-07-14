@@ -6,7 +6,7 @@ import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 import { axiosError, floatThead, resolveClientUrl, blockUI, unblockUI, downloadFile, sortTable } from '../../shared/common.functions';
 
-function sortTeam() {
+function sortYearlyOvertime() {
     $('th.col-sorter').on('click', function () {
         sortTable(this);
         $("tbody tr").each(function (index) {
@@ -54,7 +54,7 @@ function exportExcel() {
 
 $(document).ready(function () {
     floatThead('table#data');
-    sortTeam();
+    sortYearlyOvertime();
     searchKeyWord();
     getOrgChart();
     exportExcel();

@@ -215,7 +215,7 @@
         public byte[] ExportDailyOvertimeDetails(IEnumerable<DailyOvertimeDetails> overtimes, GetDailyOvertimeDetailsParam param)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyOvertimeDetails.xlsx");
-            const byte TotalColumns = 16;
+            const byte TotalColumns = 18;
             const byte StartBodyRow = 3;
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -249,9 +249,11 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;

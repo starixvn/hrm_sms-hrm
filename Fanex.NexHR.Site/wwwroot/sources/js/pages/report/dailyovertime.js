@@ -6,14 +6,17 @@ import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 import {
     axiosError, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl,
-    blockUI, unblockUI, downloadFile
+    blockUI, unblockUI, downloadFile, sortTable
 } from '../../shared/common.functions';
 
-$(document).ready(function () {
-    initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
-    floatThead('table#data');
 
+function sortDailyOverTime() {
+    $('th.col-sorter').on('click', function () {
+        sortTable(this);
+    });
+}
+
+function getOrgChart() {
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
@@ -21,12 +24,16 @@ $(document).ready(function () {
                 selectedItems: $('#TeamIds').val()
             });
         }).catch(axiosError);
+}
 
+function searchKeyWord() {
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         $('form.filter').submit();
     });
+}
 
+function exportExcel() {
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
@@ -41,4 +48,13 @@ $(document).ready(function () {
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
     });
+}
+$(document).ready(function () {
+    initDatepicker();
+    initFromDateOnChange($('#FromDate'), $('#ToDate'));
+    floatThead('table#data');
+    sortDailyOverTime();
+    getOrgChart();
+    searchKeyWord();
+    exportExcel();
 });

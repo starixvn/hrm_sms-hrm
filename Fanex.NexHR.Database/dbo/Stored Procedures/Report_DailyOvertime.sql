@@ -50,6 +50,8 @@ BEGIN
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,ot.[Status] AS StatusId
+		,dept.Code as DepartmentCode
+	    ,sec.Code as Section
 	FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = ot.EmpId
 		INNER JOIN (
@@ -58,6 +60,8 @@ BEGIN
 		) AS member ON emp.EmpId = member.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON gr.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND ot.OvertimeDate = empca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]
@@ -101,6 +105,3 @@ BEGIN
 
 	DROP TABLE #tblGroupIds
 END
-
-
-
