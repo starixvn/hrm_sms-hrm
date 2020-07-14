@@ -31,7 +31,7 @@
         private const ushort TotalUPLColumns = 4;
         private const ushort StartDateColumnIndex = 19;
         private const ushort StartUPLColumnIndex = 15;
-        private const ushort EndUPLColumnIndex = 18;
+        private const ushort EndUPLColumnIndex = 20;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -185,6 +185,8 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
@@ -391,7 +393,7 @@
                 headerRow = 2,
                 bodyRow = 3
             };
-            TotalColumns = 9;
+            TotalColumns = 11;
             var rowIndex = 1;
             var colIndex = 1;
 
@@ -413,6 +415,8 @@
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Department;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Nickname;

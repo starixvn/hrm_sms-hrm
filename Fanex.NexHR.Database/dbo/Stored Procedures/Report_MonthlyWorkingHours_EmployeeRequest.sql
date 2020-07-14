@@ -478,6 +478,8 @@ BEGIN
 		,e.NickName
 		,e.FullName
 		,g.[Name] AS Team
+		,sec.Code AS Section
+		,dep.Code AS Department
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS rq ON r.RequestId = rq.RequestId
 		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID
@@ -493,6 +495,8 @@ BEGIN
 		LEFT JOIN dbo.[Shift] AS s2 WITH (NOLOCK) ON s2.ShiftId = rd.ToShift
 		LEFT JOIN dbo.[Shift] AS s3 WITH (NOLOCK) ON s3.ShiftId = c.ShiftId
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		LEFT JOIN dbo.Department AS dep WITH (NOLOCK ) ON dep.DepartmentId = sec.DepartmentId
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeId = lr.LeaveType
 	ORDER BY r.CreatedDate DESC
 

@@ -1010,7 +1010,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Deployment.ignore" />
-    <Content Include="Views\Report\DailyWorkingHours.cshtml" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
     <Content Include="Views\Report\Manpower.cshtml" />
     <Content Include="Views\Report\ManpowerCategory.cshtml" />
@@ -1228,6 +1227,8 @@
     <Content Include="wwwroot\dist\styles\unit.index.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.js.map" />
     <Content Include="wwwroot\dist\js\section.index.js.map" />
+    <Content Include="Views\Report\DailyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\DailyWorkingHours\_DailyWorkingHoursDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

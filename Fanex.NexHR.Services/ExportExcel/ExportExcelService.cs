@@ -228,6 +228,8 @@
         {
             ICell cellNo = null;
             ICell cellTeam = null;
+            ICell cellSection = null;
+            ICell cellDepartment = null;
             ICell cellNick = null;
             ICell cellName = null;
             ICell cellRequest = null;
@@ -238,20 +240,23 @@
 
             cellNo = row.GetCell(0);
             cellTeam = row.GetCell(1);
-            cellNick = row.GetCell(2);
-            cellName = row.GetCell(3);
-            cellRequest = row.GetCell(4);
-            cellDetails = row.GetCell(5);
-            cellRemarks = row.GetCell(6);
-            cellCreateDate = row.GetCell(7);
-            cellStatus = row.GetCell(8);
+            cellSection = row.GetCell(2);
+            cellDepartment = row.GetCell(3);
+            cellNick = row.GetCell(4);
+            cellName = row.GetCell(5);
+            cellRequest = row.GetCell(6);
+            cellDetails = row.GetCell(7);
+            cellRemarks = row.GetCell(8);
+            cellCreateDate = row.GetCell(9);
+            cellStatus = row.GetCell(10);
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellTeam.SetCellValue(item.Requester.Team.Code);
+            cellSection.SetCellValue(item.Requester.Team.Section.Code);
+            cellDepartment.SetCellValue(item.Requester.Team.Department.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
-
             cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate);

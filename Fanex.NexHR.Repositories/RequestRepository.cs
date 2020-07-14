@@ -213,7 +213,18 @@
                 {
                     Id = requestInfo.TeamId,
                     Code = requestInfo.TeamCode,
-                    Name = requestInfo.TeamName
+                    Name = requestInfo.TeamName,
+                    Section = new Section
+                    {
+                        Id = requestInfo.SectionId,
+                        Code = requestInfo.SectionCode
+                    },
+                    Department = new Department
+                    {
+                        Id = requestInfo.DepartmentId,
+                        Code = requestInfo.DepartmentCode
+                    }
+                    
                 }
             };
         }

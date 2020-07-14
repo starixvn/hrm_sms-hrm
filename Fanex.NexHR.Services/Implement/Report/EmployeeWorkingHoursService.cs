@@ -47,8 +47,8 @@
         public byte[] ExportWeeklyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WeeklyWorkingHours.xlsx");
-            const ushort StartDateColumn = 7;
-            TotalColumns = 13;
+            const ushort StartDateColumn = 9;
+            TotalColumns = 15;
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -89,6 +89,8 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
@@ -112,7 +114,7 @@
         public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyWorkingHours.xlsx");
-            TotalColumns = 13;
+            TotalColumns = 15;
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -131,7 +133,7 @@
 
                     // header
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                    colIndex = 6;
+                    colIndex = 8;
                     worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
                     if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -147,6 +149,8 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;

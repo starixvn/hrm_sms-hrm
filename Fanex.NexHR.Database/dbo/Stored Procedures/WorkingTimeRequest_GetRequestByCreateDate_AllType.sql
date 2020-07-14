@@ -589,6 +589,10 @@ BEGIN
 		,g.GroupId AS TeamId
 		,g.Code AS TeamCode
 		,g.[Name] AS TeamName
+		,sec.SectionId
+		,sec.Code AS SectionCode
+		,dep.DepartmentId
+		,dep.Code AS DepartmentCode
 		,ap_V.EmpId AS VerifierId
 		,ap_V.NickName AS VerifierNickName
 		,ap_V.FullName AS VerifierFullName
@@ -633,6 +637,8 @@ BEGIN
 		LEFT JOIN dbo.[Shift] AS s3 WITH (NOLOCK) ON s3.ShiftID = c.ShiftID
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeID = lr.LeaveType
+		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE @leaveTypeId IS NULL
 		OR lr.LeaveType = @leaveTypeId
 	ORDER BY r.CreatedDate DESC

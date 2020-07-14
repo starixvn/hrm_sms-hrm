@@ -28,6 +28,7 @@
 
         public byte? BasicAnnualLeaveBalance { get; set; }
 
+        public Department Department { get; set; } = new Department();
         public string DepartmentCode { get; set; }
     }
 }

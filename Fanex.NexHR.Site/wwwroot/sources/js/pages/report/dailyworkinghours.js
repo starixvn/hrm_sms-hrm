@@ -6,6 +6,19 @@ import '../../shared/multiselect-tree-view';
 import { axiosError, initDatepicker, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
 
 $(document).ready(function () {
+    let query = function () {
+        blockUI();
+        axios({
+            url: resolveClientUrl('DailyWorkingHours/GetDailyWorkingHours'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'text'
+        }).then(response => {
+            $('#DailyWorkingHoursDetails').html(response.data);
+            floatThead('table#data');
+        }).catch(axiosError).then(() => unblockUI());
+    };
+
     initDatepicker();
 
     axios(resolveClientUrl('Section/GetOrgChart'))
@@ -15,6 +28,11 @@ $(document).ready(function () {
                 isSelectedAll: true
             });
         }).catch(axiosError);
+
+    $('#btnSearch').on('click', function () {
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        query();
+    });
 
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));

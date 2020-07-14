@@ -18,7 +18,7 @@
     {
         public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
         {
-            const byte TotalColumns = 12;
+            const byte TotalColumns = 14;
             const byte StartBodyRow = 3;
             const byte StartTotal = 6;
             const byte LineOfTotal = 4;
@@ -59,6 +59,8 @@
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Section;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Department;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Month.ToString("MMM-yyyy");
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.NormalHours;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.OffHours;

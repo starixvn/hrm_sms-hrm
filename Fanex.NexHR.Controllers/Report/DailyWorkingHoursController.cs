@@ -33,7 +33,26 @@
                 EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
-            return View("~/Views/Report/DailyWorkingHours.cshtml", model);
+            return View("~/Views/Report/DailyWorkingHours/Index.cshtml", model);
+        }
+
+        [HttpGet]
+        public ActionResult GetDailyWorkingHours(WeeklyFilterViewModel model)
+        {
+            var param = new GetMonthlyWorkingHoursParam
+            {
+                ActorId = sessionService.Employee.Id,
+                FromDate = model.FromDate,
+                ToDate = model.FromDate,
+                TeamIds = model.TeamIds,
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
+            };
+            ViewBag.FromDate = param.FromDate;
+            IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
+
+            return PartialView("~/Views/Report/DailyWorkingHours/_DailyWorkingHoursDetails.cshtml", monthlyWorkings);
         }
 
         [HttpGet]

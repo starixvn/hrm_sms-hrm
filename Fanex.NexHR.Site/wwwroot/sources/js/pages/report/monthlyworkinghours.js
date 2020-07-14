@@ -32,8 +32,6 @@ $(document).ready(function () {
                 data: response.data,
                 isSelectedAll: true
             });
-
-            $('#btnSearch').trigger('click');
         }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
