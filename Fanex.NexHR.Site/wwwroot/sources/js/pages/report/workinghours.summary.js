@@ -7,14 +7,10 @@ import '../../shared/multiselect-tree-view';
 import '../../date';
 import {
     axiosError, floatThead, initDatepicker, initFromDateOnChange, setDateRange,
-    blockUI, unblockUI, downloadFile, resolveClientUrl
+    blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
-$(document).ready(function () {
-    floatThead('table#data');
-
-    initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
+function dataChangeEvent() {
     $('#Date').val($('#DateOption').val());
     $('#Date').on('change', function () {
         const value = $(this).val();
@@ -25,7 +21,9 @@ $(document).ready(function () {
         $('#Date').val(0);
         $('#DateOption').val(0);
     });
+}
 
+function GetOrgChart() {
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
@@ -33,14 +31,18 @@ $(document).ready(function () {
                 selectedItems: $('#TeamIds').val()
             });
         }).catch(axiosError);
+}
 
+function searchKeyword() {
     $('#btnSearch').on('click', function () {
         const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
         $('#TeamIds').val(teamIds === '' ? ' ' : teamIds);
 
         $('form.filter').submit();
     });
+}
 
+function exportReport() {
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
@@ -55,4 +57,24 @@ $(document).ready(function () {
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
     });
+}
+
+function sortAttendanceWorking() {
+    $('th.col-sorter').on('click', function () {
+        sortTable(this);
+        $("tbody tr").each(function (index) {
+            var initIndex = index + 1;
+            $(this).find("td:eq(0)").html(initIndex++);
+        });
+    });
+}
+$(document).ready(function () {
+    floatThead('table#data');
+    initDatepicker();
+    initFromDateOnChange($('#FromDate'), $('#ToDate'));
+    dataChangeEvent();
+    GetOrgChart();
+    searchKeyword();
+    exportReport();
+    sortAttendanceWorking();
 });

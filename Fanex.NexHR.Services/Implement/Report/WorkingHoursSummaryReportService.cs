@@ -74,7 +74,7 @@
             GetWorkingHoursSummaryParam param,
             IEnumerable<WorkingHoursSummary> workingHours)
         {
-            const byte TotalColumns = 26;
+            const byte TotalColumns = 28;
             const byte TotalHeaderRows = 2;
             const byte StartBodyRow = 4;
             var rowIndex = 1;
@@ -101,9 +101,11 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.DepartmentCode;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = item.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WorkingDays;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WorkingHours;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.TotalWorkingHours;
@@ -132,7 +134,7 @@
                 rowIndex++;
             }
 
-            const byte FreezeColumnIndex = 6;
+            const byte FreezeColumnIndex = 8;
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
             worksheet.View.FreezePanes(StartBodyRow, FreezeColumnIndex);
         }
@@ -143,7 +145,7 @@
             GetWorkingHoursSummaryParam param,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalColumns = 16;
+            const byte TotalColumns = 18;
             const byte StartBodyRow = 3;
             var rowIndex = 1;
             var colIndex = 1;
@@ -171,9 +173,11 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;

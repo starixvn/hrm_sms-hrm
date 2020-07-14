@@ -98,6 +98,8 @@ BEGIN
 		,emp.FullName
 		,emp.NickName
 		,gr.[Name] AS Team
+		,dept.Code as DepartmentCode
+		,sec.Code as Section
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,SUM(ISNULL(empatt.TotalWorkHours, 0)) AS TotalWorkingHours
@@ -247,6 +249,8 @@ BEGIN
 		INNER JOIN #tblEmployeeIds AS empid WITH (NOLOCK) ON emp.EmpId = empid.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON gr.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND empca.WorkDate BETWEEN @FromDate
 			AND @ToDate
@@ -262,6 +266,8 @@ BEGIN
 		,empsum.WorkingDays
 		,empsum.WorkingHours
 		,gr.[Name]
+		,sec.Code
+		,dept.Code
 	ORDER BY emp.NickName
 
 	DROP TABLE #tblEmployeeIds
