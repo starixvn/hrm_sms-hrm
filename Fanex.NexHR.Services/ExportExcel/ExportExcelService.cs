@@ -234,8 +234,6 @@
             ICell cellDepartment = null;
             ICell cellSection = null;
             ICell cellTeam = null;
-            ICell cellSection = null;
-            ICell cellDepartment = null;
             ICell cellName = null;
             ICell cellNick = null;
             ICell cellRequest = null;

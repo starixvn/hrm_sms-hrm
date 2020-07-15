@@ -88,12 +88,12 @@
             }
             else
             {
-                @RazorHelper.DisplayNoInformation(11)
+                @RazorHelper.DisplayNoInformation(13)
             }
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="11" id="pagination">
+                <td colspan="13" id="pagination">
                     @{
                         var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
                         var to = from + (Model.Count - 1);
