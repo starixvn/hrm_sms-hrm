@@ -15,7 +15,7 @@ DB: HRM_SMS
 Original:
 
 Revisions:
-	- Merlin.Le@20200713: Get section and department - Redmine Id: 110683
+	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 	@type: 0-all, 1-missing checkin; 2-missing check out, 3: latein; 4-earlyout, 5- not work
 */
@@ -696,8 +696,8 @@ BEGIN
 			LEFT JOIN dbo.EmployeeAttendance AS a WITH (NOLOCK) ON a.AttendanceDate = c.WorkDate
 			AND a.empid = e.empid
 			LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.groupid = g.groupid
-			LEFT JOIN dbo.[Section] AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
-			LEFT JOIN dbo.[Department] AS de WITH (NOLOCK) ON de.DepartmentId = sec.DepartmentId
+			INNER JOIN dbo.[Section] AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+			INNER JOIN dbo.[Department] AS de WITH (NOLOCK) ON de.DepartmentId = sec.DepartmentId
 			INNER JOIN @tblGroupId AS gId ON g.GroupId = gId.GroupId
 			LEFT JOIN dbo.OTDailyRequest AS ot WITH (NOLOCK) ON a.attendancedate = ot.OvertimeDate
 			AND a.EmpId = ot.EmpId

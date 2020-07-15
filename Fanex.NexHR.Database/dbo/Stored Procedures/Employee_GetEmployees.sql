@@ -15,6 +15,7 @@ DB: HRM_SMS
 Original:
 
 Revisions:
+	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 
 */
@@ -198,8 +199,8 @@ BEGIN
 	  + 'INNER JOIN dbo.EmployeeSummary AS s WITH (NOLOCK) ON s.EmpId = e.EmpId' + CHAR(13)
 	  + 'INNER JOIN dbo.EmployeeContract AS e_cs WITH (NOLOCK) ON e_cs.EmpId = e.EmpId' + CHAR(13)
 	  + 'LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID' + CHAR(13)
-	  + 'LEFT JOIN dbo.[Section] AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId' + CHAR(13)
-	  + 'LEFT JOIN dbo.[Department] AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId' + CHAR(13)
+	  + 'INNER JOIN dbo.[Section] AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId' + CHAR(13)
+	  + 'INNER JOIN dbo.[Department] AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Country] AS ctry WITH(NOLOCK) ON ctry.CountryCode = s.CountryCode' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Lookup] AS l WITH(NOLOCK) ON l.Code = ''JT''' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[LookupData] AS LK WITH(NOLOCK) ON l.Id = LK.LookupId AND e.JobTitleId = lk.ID' + CHAR(13)

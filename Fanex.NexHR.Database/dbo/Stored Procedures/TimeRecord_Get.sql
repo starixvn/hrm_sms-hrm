@@ -14,7 +14,7 @@ DB: HRM_SMS
 Original:
 
 Revisions:
-	- 20200714@Merlin.Le: Get section code and department code
+	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 
 */
@@ -59,8 +59,8 @@ BEGIN
 	FROM dbo.TimeRecord AS t WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON t.EmpID = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
-		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
-		LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE CAST(RecordTime AS DATE) BETWEEN @FromDate
 			AND @ToDate

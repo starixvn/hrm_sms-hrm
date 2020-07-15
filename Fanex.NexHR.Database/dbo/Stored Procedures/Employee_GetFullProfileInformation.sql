@@ -12,7 +12,7 @@ DB: HRM
 Original:
 
 Revisions:
-	- 20200714@Merlin.Le: Get section and department code
+	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 */
 BEGIN
@@ -73,8 +73,8 @@ BEGIN
 	FROM #tplEmployee tpl
 	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	lEFT JOIN dbo.[Section] sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
-	LEFT JOIN dbo.[Department] dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
+	INNER JOIN dbo.[Section] sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+	INNER JOIN dbo.[Department] dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 	ORDER BY e.EmpId
 
 	SELECT r.Id

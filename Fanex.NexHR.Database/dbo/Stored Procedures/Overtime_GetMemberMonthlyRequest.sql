@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
+﻿ALTER PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@EmployeeId INT = NULL
 	,@TeamIds VARCHAR(MAX) = NULL
 	,@Month DATE = NULL
@@ -14,6 +13,7 @@ DB: HRM
 Original:
 
 Revisions:
+	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 */
 BEGIN
@@ -126,8 +126,8 @@ BEGIN
 		AND emp.[Enabled] = 1
 		AND emp.isDeleted = 0
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
-		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
-		LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.EmpId = req.VerifierId
 		LEFT JOIN dbo.Employee AS approver WITH (NOLOCK) ON approver.EmpId = req.ApproverId
 		LEFT JOIN (
