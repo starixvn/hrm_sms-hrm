@@ -11,8 +11,10 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Code</th>
-            <th>@Labels.NickName</th>
+            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
             <th>@Labels.Team</th>
+            <th>@Labels.NickName</th>
             <th>@Labels.TimeRecord</th>
             <th>@Labels.InOut</th>
         </tr>
@@ -27,10 +29,12 @@
                 <tr>
                     <td>@index</td>
                     <td>@item.Code</td>
+                    <td class="align-left">@item.DepartmentCode</td>
+                    <td class="align-left">@item.SectionCode</td>
+                    <td class="align-left">@item.Team</td>
                     <td>
                         <span class="tooltip-tipsy" title="@item.FullName">@item.Nickname</span>
                     </td>
-                    <td class="align-left">@item.Team</td>
                     <td>@item.RecordTime.ToDetailFormatedDate()</td>
                     <td>
                         @if (hasPermission)
@@ -83,6 +87,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 6);
+        @RazorHelper.DisplayNoInformation(colspan: 8);
     }
 </table>

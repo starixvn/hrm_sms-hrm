@@ -49,65 +49,35 @@
                     </th>
                 </tr>
             }
-                <tr>
-                    @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
-                    {
-                        <th>
-                            <div class="checkbox">
-                                <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                                <label for="ckbAll"></label>
-                            </div>
-                        </th>
-                    }
-                    <th>@Labels.SymbolCount</th>
-                    <th class="col-sorter">
-                        @Labels.Employee
-                        <div class="fa fa-sort" data-property="Employee"></div>
+            <tr>
+                @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                            <label for="ckbAll"></label>
+                        </div>
                     </th>
-                    <th class="col-sorter">
-                        @Labels.Team
-                        <div class="fa fa-sort" data-property="Team"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Section
-                        <div class="fa fa-sort" data-property="Section"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Department
-                        <div class="fa fa-sort" data-property="Department"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Request
-                        <div class="fa fa-sort" data-property="Request"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Details
-                        <div class="fa fa-sort" data-property="Details"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Verifier
-                        <div class="fa fa-sort" data-property="Verifier"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Approver
-                        <div class="fa fa-sort" data-property="Approver"></div>
-                    </th>
-                    <th>@Labels.Remark</th>
-                    @if (@Model.ActionName != "DailyView")
-                    {
-                        <th>@Labels.FileAttach</th>
-                    }
-                    <th class="col-sorter">
-                        @Labels.CreatedDate
-                        <div class="fa fa-sort" data-property="CreatedDate"></div>
-                    </th>
-                    <th class="col-sorter">
-                        @Labels.Status
-                        <div class="fa fa-sort" data-property="Status"></div>
-                    </th>
-                    <th>@Labels.History</th>
-                    <th></th>
-                </tr>
+                }
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Department</th>
+                <th>@Labels.Section</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Employee</th>
+                <th>@Labels.Request</th>
+                <th>@Labels.Details</th>
+                <th>@Labels.Verifier</th>
+                <th>@Labels.Approver</th>
+                <th>@Labels.Remark</th>
+                @if (@Model.ActionName != "DailyView")
+                {
+                    <th>@Labels.FileAttach</th>
+                }
+                <th>@Labels.CreatedDate</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.History</th>
+                <th></th>
+            </tr>
         </thead>
         @if (Model.Requests != null && Model.Requests.Any())
         {
@@ -164,13 +134,23 @@
 
                         <td>@(index++)</td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.NickName</span>
+                            @if (@request.Requester.Team.Section != null && @request.Requester.Team.Section.Department != null)
+                            {
+                                <span class="tooltip-tipsy" title="@request.Requester.Team.Section.Department.Code">@request.Requester.Team.Section.Department.Code</span>
+                            }
+                        </td>
+                        <td>
+                            @if (@request.Requester.Team.Section != null)
+                            {
+                                <span class="tooltip-tipsy" title="@request.Requester.Team.Section.Code">@request.Requester.Team.Section.Code</span>
+                            }
                         </td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
                         </td>
-                        <td>@request.Requester.Team.Section.Code</td>
-                        <td>@request.Requester.Team.Department.Code</td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.NickName</span>
+                        </td>
                         <td>
                             @switch (request.RequestType.Id)
                             {
@@ -223,7 +203,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 14);
+            @RazorHelper.DisplayNoInformation(colspan: 16);
         }
     </table>
 </div>

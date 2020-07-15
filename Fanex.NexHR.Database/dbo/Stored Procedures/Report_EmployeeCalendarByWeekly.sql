@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
+﻿ALTER PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
 	,@fromtime DATE
 	,@totime DATE
 	,@TeamIds VARCHAR(MAX) = ''
@@ -13,6 +12,7 @@ DB: HRM_SMS
 Original:
 
 Revisions:
+	- 20200714@Merlin.Le: Get section and department code
 Param's Explanation:
 */
 BEGIN
@@ -80,10 +80,14 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,gr.[Name] AS Team
+		,sec.Code AS SectionCode
+		,dep.Code AS DepartmentCode
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN #tblEmployeeIds AS tblemp WITH (NOLOCK) ON emp.EmpId = tblemp.EmployeeId
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON emp.EmpId = esum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		LEFT JOIN dbo.[Section] AS sec WITH (NOLOCK) ON gr.SectionId = sec.SectionId
+		LEFT JOIN dbo.[Department] AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 	ORDER BY gr.[Name]
 		,emp.Code
 

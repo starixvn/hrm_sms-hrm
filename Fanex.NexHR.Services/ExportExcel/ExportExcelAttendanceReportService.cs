@@ -101,16 +101,16 @@
             var record = new
             {
                 Count = rowIndex,
-                AttendanceDate = attendance.AttendanceDate,
+                attendance.AttendanceDate,
                 attendance.Code,
-                attendance.NickName,
-                attendance.FullName,
+                attendance.DepartmentCode,
+                attendance.SectionCode,
                 attendance.TeamCode,
-                attendance.SectionName,
-                attendance.DepartmentName,
+                attendance.FullName,
+                attendance.NickName,
                 ShiftCode = shiftCode,
-                InFixed = attendance.InFixed,
-                OutFixed = attendance.OutFixed,
+                attendance.InFixed,
+                attendance.OutFixed,
                 TotalWorkHours = totalWorkHours,
                 LateIn = Utilities.MinuteToTime(attendance.LateIn),
                 EarlyOut = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?

@@ -163,22 +163,22 @@
             cellToDate.SetCellValue(toDate);
 
             var rowHeaderDate = sheet.GetRow(3);
-            rowHeaderDate.GetCell(5).SetCellValue(fromDate);
-            rowHeaderDate.GetCell(6).SetCellValue(fromDate.AddDays(1));
-            rowHeaderDate.GetCell(7).SetCellValue(fromDate.AddDays(2));
-            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(3));
-            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(4));
-            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(5));
-            rowHeaderDate.GetCell(11).SetCellValue(toDate);
+            rowHeaderDate.GetCell(7).SetCellValue(fromDate);
+            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(1));
+            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(2));
+            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(3));
+            rowHeaderDate.GetCell(11).SetCellValue(fromDate.AddDays(4));
+            rowHeaderDate.GetCell(12).SetCellValue(fromDate.AddDays(5));
+            rowHeaderDate.GetCell(13).SetCellValue(toDate);
 
             var rowHeaderDay = sheet.GetRow(4);
-            rowHeaderDay.GetCell(5).SetCellValue(fromDate);
-            rowHeaderDay.GetCell(6).SetCellValue(fromDate.AddDays(1));
-            rowHeaderDay.GetCell(7).SetCellValue(fromDate.AddDays(2));
-            rowHeaderDay.GetCell(8).SetCellValue(fromDate.AddDays(3));
-            rowHeaderDay.GetCell(9).SetCellValue(fromDate.AddDays(4));
-            rowHeaderDay.GetCell(10).SetCellValue(fromDate.AddDays(5));
-            rowHeaderDay.GetCell(11).SetCellValue(toDate);
+            rowHeaderDay.GetCell(7).SetCellValue(fromDate);
+            rowHeaderDay.GetCell(8).SetCellValue(fromDate.AddDays(1));
+            rowHeaderDay.GetCell(9).SetCellValue(fromDate.AddDays(2));
+            rowHeaderDay.GetCell(10).SetCellValue(fromDate.AddDays(3));
+            rowHeaderDay.GetCell(11).SetCellValue(fromDate.AddDays(4));
+            rowHeaderDay.GetCell(12).SetCellValue(fromDate.AddDays(5));
+            rowHeaderDay.GetCell(13).SetCellValue(toDate);
 
             var index = 1;
             foreach (var item in workingCalendars)
@@ -188,22 +188,26 @@
                 var row = sheet.GetRow(rowIndex);
                 ICell cellNo = row.GetCell(0);
                 ICell cellEmployeeID = row.GetCell(1);
-                ICell cellFullName = row.GetCell(2);
-                ICell cellNickName = row.GetCell(3);
+                ICell cellDepartment = row.GetCell(2);
+                ICell cellSection = row.GetCell(3);
                 ICell cellTeam = row.GetCell(4);
-                ICell cellShift1 = row.GetCell(5);
-                ICell cellShift2 = row.GetCell(6);
-                ICell cellShift3 = row.GetCell(7);
-                ICell cellShift4 = row.GetCell(8);
-                ICell cellShift5 = row.GetCell(9);
-                ICell cellShift6 = row.GetCell(10);
-                ICell cellShift7 = row.GetCell(11);
+                ICell cellFullName = row.GetCell(5);
+                ICell cellNickName = row.GetCell(6);
+                ICell cellShift1 = row.GetCell(7);
+                ICell cellShift2 = row.GetCell(8);
+                ICell cellShift3 = row.GetCell(9);
+                ICell cellShift4 = row.GetCell(10);
+                ICell cellShift5 = row.GetCell(11);
+                ICell cellShift6 = row.GetCell(12);
+                ICell cellShift7 = row.GetCell(13);
 
                 cellNo.SetCellValue(rowIndex - _RowStartBodyWorkingCalendar + 1);
                 cellEmployeeID.SetCellValue(item.Code);
+                cellDepartment.SetCellValue(item.DepartmentCode);
+                cellSection.SetCellValue(item.SectionCode);
+                cellTeam.SetCellValue(item.Team);
                 cellFullName.SetCellValue(item.FullName);
                 cellNickName.SetCellValue(item.Nickname);
-                cellTeam.SetCellValue(item.Team);
                 cellShift1.SetCellValue(GetShift(item.MondaySchedule));
                 cellShift2.SetCellValue(GetShift(item.TuesdaySchedule));
                 cellShift3.SetCellValue(GetShift(item.WednesdaySchedule));
@@ -227,11 +231,13 @@
             IRow row)
         {
             ICell cellNo = null;
+            ICell cellDepartment = null;
+            ICell cellSection = null;
             ICell cellTeam = null;
             ICell cellSection = null;
             ICell cellDepartment = null;
-            ICell cellNick = null;
             ICell cellName = null;
+            ICell cellNick = null;
             ICell cellRequest = null;
             ICell cellDetails = null;
             ICell cellRemarks = null;
@@ -239,11 +245,11 @@
             ICell cellStatus = null;
 
             cellNo = row.GetCell(0);
-            cellTeam = row.GetCell(1);
+            cellDepartment = row.GetCell(1);
             cellSection = row.GetCell(2);
-            cellDepartment = row.GetCell(3);
-            cellNick = row.GetCell(4);
-            cellName = row.GetCell(5);
+            cellTeam = row.GetCell(3);
+            cellName = row.GetCell(4);
+            cellNick = row.GetCell(5);
             cellRequest = row.GetCell(6);
             cellDetails = row.GetCell(7);
             cellRemarks = row.GetCell(8);
@@ -252,8 +258,17 @@
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellTeam.SetCellValue(item.Requester.Team.Code);
-            cellSection.SetCellValue(item.Requester.Team.Section.Code);
-            cellDepartment.SetCellValue(item.Requester.Team.Department.Code);
+
+            if (item.Requester.Team.Section != null)
+            {
+                cellSection.SetCellValue(item.Requester.Team.Section.Code);
+
+                if (item.Requester.Team.Section.Department != null)
+                {
+                    cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
+                }
+            }
+
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);

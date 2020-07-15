@@ -72,8 +72,10 @@
             var toDay = Model.ToDate;
             var dayDiff = (toDay - fromDay).TotalDays;
             <tr>
-                <th rowspan="2">@Labels.NickName</th>
+                <th rowspan="2">@Labels.Department</th>
+                <th rowspan="2">@Labels.Section</th>
                 <th rowspan="2">@Labels.Team</th>
+                <th rowspan="2">@Labels.NickName</th>
                 @for (int i = 0; i <= dayDiff; i++)
                 {
                     <th>@fromDay.AddDays(i).ToDateMonthYearFormatedDate()</th>
@@ -102,8 +104,10 @@
         @foreach (WorkingCalendar calendar in Model.WorkingCalendars)
         {
             <tr>
-                <td class="align-left">@calendar.Nickname</td>
+                <td class="align-left">@calendar.DepartmentCode</td>
+                <td class="align-left">@calendar.SectionCode</td>
                 <td class="align-left">@calendar.Team</td>
+                <td class="align-left">@calendar.Nickname</td>
                 @RenderColShift(calendar.MondaySchedule)
                 @RenderColShift(calendar.TuesdaySchedule)
                 @RenderColShift(calendar.WednesdaySchedule)

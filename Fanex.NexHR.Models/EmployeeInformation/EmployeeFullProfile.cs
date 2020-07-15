@@ -54,6 +54,10 @@
 
         public string TeamName { get; set; }
 
+        public string SectionCode { get; set; }
+
+        public string DepartmentCode { get; set; }
+
         public IEnumerable<EmployeeRelationship> Relationships { get; set; }
     }
 }

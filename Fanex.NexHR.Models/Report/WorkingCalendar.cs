@@ -9,7 +9,8 @@
         public string FullName { get; set; }
         public string Nickname { get; set; }
         public string Team { get; set; }
-
+        public string SectionCode { get; set; }
+        public string DepartmentCode { get; set; }
         public DailySchedule MondaySchedule { get; set; }
         public DailySchedule TuesdaySchedule { get; set; }
         public DailySchedule WednesdaySchedule { get; set; }

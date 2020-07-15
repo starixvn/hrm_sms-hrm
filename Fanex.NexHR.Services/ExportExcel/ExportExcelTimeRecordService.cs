@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Web;
     using Fanex.NexHR.Models;
@@ -12,46 +11,44 @@
         byte[] Export(IList<TimeRecordModel> timeRecords);
     }
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelTimeRecordService : IExportExcelTimeRecordService
     {
         public byte[] Export(IList<TimeRecordModel> timeRecords)
         {
-            const int FirstDataTableRow = 1;
-            const byte StartBodyRow = 4;
-            const byte TotalColumns = 7;
-
-
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TimeRecordTemplate.xlsx");
+            const byte startBodyRow = 4;
+            const byte totalColumns = 9;
+            const byte headerAndTitleRow = 2;
+            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TimeRecordTemplate.xlsx");
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet workSheet = xlPackage.Workbook.Worksheets.Add("Time Record Report");
-
-                    int rowIndex = FirstDataTableRow;
-                    int colIndex = 1;
-                    int count = 1;
+                    var templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    var workSheet = xlPackage.Workbook.Worksheets.Add("Time Record Report");
+                    var rowIndex = 1;
+                    var colIndex = 1;
+                    var count = 1;
 
                     // title
-                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                    rowIndex = rowIndex + 2;
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+                    rowIndex = rowIndex + headerAndTitleRow;
 
                     // header
-                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
+                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);
                     rowIndex++;
 
                     foreach (var detail in timeRecords)
                     {
-                        templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+                        templateWorksheet.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
                         workSheet.Cells[rowIndex, colIndex++].Value = count;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Code;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentCode;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.SectionCode;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.RecordTime.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + detail.RecordTime.ToString(@"mm\'");
                         workSheet.Cells[rowIndex, colIndex].Value = detail.GetInOutName;
 

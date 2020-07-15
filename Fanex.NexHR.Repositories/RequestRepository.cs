@@ -217,14 +217,13 @@
                     Section = new Section
                     {
                         Id = requestInfo.SectionId,
-                        Code = requestInfo.SectionCode
-                    },
-                    Department = new Department
-                    {
-                        Id = requestInfo.DepartmentId,
-                        Code = requestInfo.DepartmentCode
+                        Code = requestInfo.SectionCode,
+                        Department = new Department
+                        {
+                            Id = requestInfo.DepartmentId,
+                            Code = requestInfo.DepartmentCode
+                        }
                     }
-                    
                 }
             };
         }

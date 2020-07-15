@@ -575,10 +575,8 @@ BEGIN
 				WHEN AttendanceDate1 IS NULL THEN 'No Data'
 				ELSE NULL
 				END) AS Notes
-        ,T.SectionId
-        ,T.SectionName
-		,T.DepartmentId
-		,T.DepartmentName
+        ,T.SectionCode
+		,T.DepartmentCode
 	FROM (
 		SELECT e.Code
 			,e.EmpId
@@ -666,10 +664,8 @@ BEGIN
 				WHEN ISNULL(s_CrossDay.IsOutAfterDay, 0) = 1 THEN 1
 				ELSE 0 END
 				) AS IsShiftCrossDay
-			,sec.SectionId
-			,sec.Name SectionName
-			,de.DepartmentId
-			,de.Name DepartmentName
+			,sec.Code SectionCode
+			,de.Code DepartmentCode
 		FROM dbo.Employee AS e WITH (NOLOCK)
 			INNER JOIN dbo.tmpEmployeeCalendar AS c WITH (NOLOCK) ON c.EmpId = e.EmpId
 			AND c.WorkDate BETWEEN @fromtime

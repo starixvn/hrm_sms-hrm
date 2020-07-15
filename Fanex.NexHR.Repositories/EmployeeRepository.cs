@@ -48,7 +48,21 @@
                     var employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
-                            e.Team = new Team { Id = t.TeamID, Code = t.Team, Name = t.TeamName };
+                            e.Team = new Team {
+                                Id = t.TeamID,
+                                Code = t.Team,
+                                Name = t.TeamName,
+                                Section = new Section
+                                {
+                                    Id = t.SectionId,
+                                    Code = t.SectionCode,
+                                    Department = new Department
+                                    {
+                                        Id = t.DepartmentId,
+                                        Code = t.DepartmentCode
+                                    }
+                                }
+                            };
                             return e;
                         },
                         splitOn: "TeamID");

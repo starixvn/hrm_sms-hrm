@@ -25,16 +25,16 @@
                 <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
             }
             <td>
-                <span class="tooltip-tippy" data-tippy-content="@item.FullName">@item.NickName</span>
+                <span class="tooltip-tippy" data-tippy-content="@item.DepartmentCode">@item.DepartmentCode</span>
+            </td>
+            <td>
+                <span class="tooltip-tippy" data-tippy-content="@item.SectionCode">@item.SectionCode</span>
             </td>
             <td>
                 <span class="tooltip-tippy" data-tippy-content="@item.Team">@item.TeamCode</span>
             </td>
             <td>
-                <span class="tooltip-tippy" data-tippy-content="@item.SectionName">@item.SectionName</span>
-            </td>
-            <td>
-                <span class="tooltip-tippy" data-tippy-content="@item.DepartmentName">@item.DepartmentName</span>
+                <span class="tooltip-tippy" data-tippy-content="@item.FullName">@item.NickName</span>
             </td>
 
             @if (item.IsOffdayOT)
@@ -151,5 +151,5 @@
 }
 else
 {
-    @RazorHelper.DisplayNoInformation(colspan: 14)
+    @RazorHelper.DisplayNoInformation(colspan: 16)
 }

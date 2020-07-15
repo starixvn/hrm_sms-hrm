@@ -33,5 +33,9 @@
                 return typeName;
             }
         }
+
+        public string SectionCode { get; set; }
+
+        public string DepartmentCode { get; set; }
     }
 }

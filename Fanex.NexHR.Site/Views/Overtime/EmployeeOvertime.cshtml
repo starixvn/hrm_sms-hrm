@@ -88,7 +88,7 @@
 <table class="table table-custom" id="data">
     <thead>
         <tr>
-            <th colspan="13">
+            <th colspan="15">
                 <div style="float:right;">
                     <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
                     <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
@@ -103,16 +103,24 @@
                 </div>
             </th>
             <th class="col-sorter">
+                @Labels.Department
+                <div class="fa fa-sort" data-property="Team"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Section
+                <div class="fa fa-sort" data-property="Team"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Team
+                <div class="fa fa-sort" data-property="Team"></div>
+            </th>
+            <th class="col-sorter">
                 @Labels.FullName
                 <div class="fa fa-sort" data-property="FullName"></div>
             </th>
             <th class="col-sorter">
                 @Labels.NickName
                 <div class="fa fa-sort" data-property="Nickname"></div>
-            </th>
-            <th class="col-sorter">
-                @Labels.Team
-                <div class="fa fa-sort" data-property="Team"></div>
             </th>
             <th class="col-sorter">
                 @Labels.Month

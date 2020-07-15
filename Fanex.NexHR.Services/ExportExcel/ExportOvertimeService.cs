@@ -20,7 +20,7 @@
         {
             const byte TotalColumns = 14;
             const byte StartBodyRow = 3;
-            const byte StartTotal = 6;
+            const byte StartTotal = 8;
             const byte LineOfTotal = 4;
 
             string sheetName = "Employee Overtime Report";
@@ -56,11 +56,11 @@
                         templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         workSheet.Cells[rowIndex, colIndex++].Value = count;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Department;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Section;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Section;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Department;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Month.ToString("MMM-yyyy");
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.NormalHours;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.OffHours;

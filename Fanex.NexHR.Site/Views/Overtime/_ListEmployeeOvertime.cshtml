@@ -16,9 +16,11 @@
                     <label for="ckb@(request.RequestId)"></label>
                 </div>
             </td>
+            <td>@request.Requester.Department</td>
+            <td>@request.Requester.Section</td>
+            <td>@request.Requester.Team</td>
             <td class="align-left">@request.Requester.FullName</td>
             <td>@request.Requester.Nickname</td>
-            <td>@request.Requester.Team</td>
             <td>@request.Month.ToString("MMM-yyyy")</td>
             <td>
                 @if (request.NormalHours > 0)
@@ -53,17 +55,17 @@
         </tr>
     }
     <tr class="summary">
-        <td colspan="5" class="align-right">@Labels.TotalOvertimeHours:</td>
+        <td colspan="7" class="align-right">@Labels.TotalOvertimeHours:</td>
         <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
         <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
         <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
         <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
-        <td colspan="5"></td>
+        <td colspan="4"></td>
     </tr>
 }
 else
 {
-    @RazorHelper.DisplayNoInformation(colspan: 13);
+    @RazorHelper.DisplayNoInformation(colspan: 15);
 }
 
 @helper RenderStatus(MonthlyOvertimeRequest request)

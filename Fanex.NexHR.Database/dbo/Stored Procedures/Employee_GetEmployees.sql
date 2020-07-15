@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
+﻿ALTER PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
 	,@teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -191,10 +190,16 @@ BEGIN
 	  + ',g.Code AS [Team]' + CHAR(13)
 	  + ',g.Name AS [TeamName]' + CHAR(13)
 	  + ',g.Rank' + CHAR(13)
+	  + ',sec.SectionId' + CHAR(13)
+	  + ',sec.Code SectionCode' + CHAR(13)
+	  + ',dep.DepartmentId' + CHAR(13)
+	  + ',dep.Code DepartmentCode' + CHAR(13)
 	  + 'FROM dbo.Employee AS e WITH (NOLOCK)' + CHAR(13)
 	  + 'INNER JOIN dbo.EmployeeSummary AS s WITH (NOLOCK) ON s.EmpId = e.EmpId' + CHAR(13)
 	  + 'INNER JOIN dbo.EmployeeContract AS e_cs WITH (NOLOCK) ON e_cs.EmpId = e.EmpId' + CHAR(13)
 	  + 'LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID' + CHAR(13)
+	  + 'LEFT JOIN dbo.[Section] AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId' + CHAR(13)
+	  + 'LEFT JOIN dbo.[Department] AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Country] AS ctry WITH(NOLOCK) ON ctry.CountryCode = s.CountryCode' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Lookup] AS l WITH(NOLOCK) ON l.Code = ''JT''' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[LookupData] AS LK WITH(NOLOCK) ON l.Id = LK.LookupId AND e.JobTitleId = lk.ID' + CHAR(13)

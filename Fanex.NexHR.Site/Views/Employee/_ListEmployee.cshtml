@@ -5,7 +5,7 @@
     @{
         var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
         var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
-        var totalColumn = 11;
+        var totalColumn = 13;
         totalColumn -= hasPermissionToEdit ? 0 : 1;
     }
 
@@ -14,9 +14,11 @@
             <tr>
                 <th>@Labels.SymbolCount</th>
                 <th>@Labels.Code</th>
-                <th>@Labels.NickName</th>
-                <th>@Labels.FullName</th>
+                <th>@Labels.Department</th>
+                <th>@Labels.Section</th>
                 <th>@Labels.Team</th>
+                <th>@Labels.FullName</th>
+                <th>@Labels.NickName</th>
                 <th>@Labels.GroupDate</th>
                 <th>@Labels.JobTitle</th>
                 <th>@Labels.Roles</th>
@@ -39,11 +41,29 @@
                     <tr class="@cssClass">
                         <td>@index</td>
                         <td>@employee.Code</td>
+                        @if (employee.Team.Section != null && employee.Team.Section.Department != null)
+                        {
+                            <td>@employee.Team.Section.Department.Code</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                        @if (employee.Team.Section != null)
+                        {
+                            <td>@employee.Team.Section.Code</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                        <td>@employee.Team.Code</td>
+                        <td class="align-left">@employee.FullName</td>
                         <td>
                             <a class="nick" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
                         </td>
-                        <td class="align-left">@employee.FullName</td>
-                        <td>@employee.Team.Code</td>
                         <td>
                             @if (employee.JoinedDate.HasValue)
                             {

@@ -1,6 +1,4 @@
-﻿
-
-CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
+﻿ALTER PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
 	, @teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -14,6 +12,7 @@ DB: HRM
 Original:
 
 Revisions:
+	- 20200714@Merlin.Le: Get section and department code
 Param's Explanation:
 */
 BEGIN
@@ -69,9 +68,13 @@ BEGIN
 		,e.Qualification
 		,e.Major
 		,g.[Name] AS TeamName
+		,sec.Code AS SectionCode
+		,dep.Code AS DepartmentCode
 	FROM #tplEmployee tpl
 	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
+	lEFT JOIN dbo.[Section] sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+	LEFT JOIN dbo.[Department] dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 	ORDER BY e.EmpId
 
 	SELECT r.Id

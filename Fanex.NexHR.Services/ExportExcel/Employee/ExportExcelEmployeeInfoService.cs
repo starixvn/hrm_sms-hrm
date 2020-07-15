@@ -21,7 +21,7 @@
         {
             RowStartHeader = 2,
             RowStartBody = 3,
-            TotalColumns = 16
+            TotalColumns = 18
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -87,23 +87,27 @@
 
         private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
+            var sectionCode = employee.Team.Section != null ? employee.Team.Section.Code : string.Empty;
+            var departmentCode = employee.Team.Section != null && employee.Team.Section.Department != null ? employee.Team.Section.Department.Code : string.Empty;
             var record = new
             {
                 Count = rowIndex,
-                Code = employee.Code,
-                FullName = employee.FullName,
-                NickName = employee.NickName,
+                employee.Code,
+                Department = departmentCode,
+                Section = sectionCode,
                 Team = employee.Team.Name,
+                employee.FullName,
+                employee.NickName,
                 GroupDate = employee.JoinedDate,
-                CompanyDate = employee.CompanyDate,
-                ConfirmedDate = employee.ConfirmedDate,
-                ResignedDate = employee.ResignedDate,
+                employee.CompanyDate,
+                employee.ConfirmedDate,
+                employee.ResignedDate,
                 DoB = employee.DateOfBirth,
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
-                Email = employee.Email,
-                CurrentAddress = employee.CurrentAddress,
-                Unit = employee.Unit,
+                employee.Email,
+                employee.CurrentAddress,
+                employee.Unit,
                 Category = employee.IsLocal ? Labels.Local : Labels.Expat
             };
 
@@ -213,7 +217,7 @@
             FillEmployeeFullProfileHeader(writer, maxRelationship);
 
             WriteFullProfileBody(writer, profiles, maxRelationship);
-            writer.SyncColumnsWidth(19 + maxRelationship);
+            writer.SyncColumnsWidth(21 + maxRelationship);
             writer.CreateFreezePane(0, 3);
 
             writer.Render();
@@ -231,7 +235,7 @@
                 var record = CreateRecordEployeeFullProfile(p, currentRow);
                 if (maxLengthRelationship > 0)
                 {
-                    var baseColumn = 19;
+                    var baseColumn = 21;
                     for (int i = 0; i < maxLengthRelationship; i++)
                     {
                         writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
@@ -252,7 +256,7 @@
         {
             if (relationships != null && relationships.Any())
             {
-                int baseColumn = 19;
+                int baseColumn = 21;
                 foreach (var r in relationships)
                 {
                     writer.WriteCellValue(currentRow, baseColumn, r.FullName);
@@ -276,8 +280,10 @@
             var record = new
             {
                 Index = currentRow - 2,
-                TeamName = p.TeamName,
                 p.Code,
+                Department = p.DepartmentCode,
+                Section = p.SectionCode,
+                p.TeamName,
                 p.FullName,
                 p.NickName,
                 Gender = gender,
@@ -302,7 +308,7 @@
         private static void FillEmployeeFullProfileHeader(ExcelTemplateWriter writer, int maxRelationship)
         {
             const int headerRow = 2;
-            var currentColumn = 19;
+            var currentColumn = 21;
 
             if (maxRelationship > 0)
             {
