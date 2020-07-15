@@ -20,7 +20,7 @@ function query() {
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
-        $('#listEmployeeOvertime').html(response.data);
+        $('#data').html(response.data);
         floatThead('table#data');
         sortTableInit()
     }).catch(axiosError).then(() => unblockUI());

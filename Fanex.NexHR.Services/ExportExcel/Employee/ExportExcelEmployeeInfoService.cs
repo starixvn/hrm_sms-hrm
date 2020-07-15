@@ -87,14 +87,12 @@
 
         private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
-            var sectionCode = employee.Team.Section != null ? employee.Team.Section.Code : string.Empty;
-            var departmentCode = employee.Team.Section != null && employee.Team.Section.Department != null ? employee.Team.Section.Department.Code : string.Empty;
             var record = new
             {
                 Count = rowIndex,
                 employee.Code,
-                Department = departmentCode,
-                Section = sectionCode,
+                Department = employee.Team.Section.Department.Code,
+                Section = employee.Team.Section.Code,
                 Team = employee.Team.Name,
                 employee.FullName,
                 employee.NickName,

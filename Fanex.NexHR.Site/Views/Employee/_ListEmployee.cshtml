@@ -68,24 +68,8 @@
                     <tr class="@cssClass">
                         <td>@index</td>
                         <td>@employee.Code</td>
-                        @if (employee.Team.Section != null && employee.Team.Section.Department != null)
-                        {
-                            <td>@employee.Team.Section.Department.Code</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-
-                        @if (employee.Team.Section != null)
-                        {
-                            <td>@employee.Team.Section.Code</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-
+                        <td>@employee.Team.Section.Department.Code</td>
+                        <td>@employee.Team.Section.Code</td>
                         <td>@employee.Team.Code</td>
                         <td class="align-left">@employee.FullName</td>
                         <td>

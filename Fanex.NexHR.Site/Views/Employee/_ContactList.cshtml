@@ -74,23 +74,8 @@
                     <tr class="@cssClass">
                         <td>@index</td>
                         <td>@employee.Code</td>
-                        @if (employee.Team.Section != null && employee.Team.Section.Department != null)
-                        {
-                            <td><span class="tooltip-tipsy" title="@employee.Team.Section.Department.Code">@employee.Team.Section.Department.Code</span></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-
-                        @if (employee.Team.Section != null)
-                        {
-                            <td><span class="tooltip-tipsy" title="@employee.Team.Section.Code">@employee.Team.Section.Code</span></td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
+                        <td>@employee.Team.Section.Department.Code</td>
+                        <td>@employee.Team.Section.Code</td>
                         
                         <td><span class="tooltip-tipsy" title="@employee.Team.Name">@employee.Team.Code</span></td>
                         <td class="align-left">@employee.FullName</td>

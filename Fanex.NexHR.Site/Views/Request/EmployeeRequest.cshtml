@@ -163,18 +163,8 @@
                         }
 
                         <td>@(index++)</td>
-                        <td>
-                            @if (@request.Requester.Team.Section != null && @request.Requester.Team.Section.Department != null)
-                            {
-                                <span class="tooltip-tipsy" title="@request.Requester.Team.Section.Department.Code">@request.Requester.Team.Section.Department.Code</span>
-                            }
-                        </td>
-                        <td>
-                            @if (@request.Requester.Team.Section != null)
-                            {
-                                <span class="tooltip-tipsy" title="@request.Requester.Team.Section.Code">@request.Requester.Team.Section.Code</span>
-                            }
-                        </td>
+                        <td>@request.Requester.Team.Section.Department.Code</td>
+                        <td>@request.Requester.Team.Section.Code</td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
                         </td>
