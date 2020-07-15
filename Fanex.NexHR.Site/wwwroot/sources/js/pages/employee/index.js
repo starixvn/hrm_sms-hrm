@@ -4,7 +4,7 @@ import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable } from '../../shared/common.functions';
 
 (function () {
     function initPagination() {
@@ -53,6 +53,7 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } fro
                 }
 
                 floatThead('table#data');
+                sortTableInit();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 unblockUI();
@@ -77,6 +78,16 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } fro
         $('.tooltip-tipsy').tipsy({
             html: true,
             gravity: 'w'
+        });
+    }
+
+    function sortTableInit() {
+        $('th.col-sorter').on('click', function () {
+            sortTable(this);
+            $("tbody tr").each(function (index) {
+                var initIndex = index + 1;
+                $(this).find("td:eq(0)").html(initIndex++);
+            });
         });
     }
 

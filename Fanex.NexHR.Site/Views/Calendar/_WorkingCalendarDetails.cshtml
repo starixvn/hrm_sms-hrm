@@ -72,8 +72,14 @@
             var toDay = Model.ToDate;
             var dayDiff = (toDay - fromDay).TotalDays;
             <tr>
-                <th rowspan="2">@Labels.Department</th>
-                <th rowspan="2">@Labels.Section</th>
+                <th class="col-sorter" rowspan="2">
+                    @Labels.Department
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter" rowspan="2">
+                    @Labels.Section
+                    <div class="fa fa-sort"></div>
+                </th>
                 <th rowspan="2">@Labels.Team</th>
                 <th rowspan="2">@Labels.NickName</th>
                 @for (int i = 0; i <= dayDiff; i++)

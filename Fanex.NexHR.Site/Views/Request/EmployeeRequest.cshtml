@@ -60,21 +60,51 @@
                     </th>
                 }
                 <th>@Labels.SymbolCount</th>
-                <th>@Labels.Department</th>
-                <th>@Labels.Section</th>
-                <th>@Labels.Team</th>
-                <th>@Labels.Employee</th>
-                <th>@Labels.Request</th>
-                <th>@Labels.Details</th>
-                <th>@Labels.Verifier</th>
-                <th>@Labels.Approver</th>
+                <th class="col-sorter">
+                    @Labels.Department
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Section
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Team
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Employee
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Request
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Details
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Verified
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Approver
+                    <div class="fa fa-sort"></div>
+                </th>
                 <th>@Labels.Remark</th>
                 @if (@Model.ActionName != "DailyView")
                 {
                     <th>@Labels.FileAttach</th>
                 }
-                <th>@Labels.CreatedDate</th>
-                <th>@Labels.Status</th>
+                <th class="col-sorter">
+                    @Labels.CreatedDate
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Status
+                    <div class="fa fa-sort"></div>
+                </th>
                 <th>@Labels.History</th>
                 <th></th>
             </tr>

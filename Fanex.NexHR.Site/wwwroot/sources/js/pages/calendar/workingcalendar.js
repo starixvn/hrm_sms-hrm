@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl, sortTable } from '../../shared/common.functions';
 
 const workingCalendarModule = (function ($) {
     function query() {
@@ -51,6 +51,8 @@ const workingCalendarModule = (function ($) {
             $('.quick-search').on('keyup', function () {
                 table.search(this.value).draw();
             });
+
+            sortTableInit();
 
             $('#prev-week').click(function () {
                 const fromNextDate = $('#FromPreviousDate').val(),
@@ -131,6 +133,12 @@ const workingCalendarModule = (function ($) {
                 + '&jobTitleIds=' + $('#JobTitle').multiSelectTreeView('getSelectedItems')
                 + '&isLocal=' + $('#IsLocal').val();
             location.href = resolveClientUrl(url);
+        });
+    }
+
+    function sortTableInit() {
+        $('th.col-sorter').on('click', function () {
+            sortTable(this);
         });
     }
 

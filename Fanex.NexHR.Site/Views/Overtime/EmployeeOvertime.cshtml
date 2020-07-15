@@ -142,13 +142,32 @@
                 @Labels.SpecialOT
                 <div class="fa fa-sort" data-property="SpecialHours"></div>
             </th>
-            <th>@Labels.Verifier</th>
-            <th>@Labels.Approver</th>
-            <th>@Labels.Status</th>
+            <th class="col-sorter">
+                @Labels.Verifier
+                <div class="fa fa-sort" data-property="OffHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Approver
+                <div class="fa fa-sort" data-property="PublicHours"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Status
+                <div class="fa fa-sort" data-property="SpecialHours"></div>
+            </th>
             <th>@Labels.Details</th>
         </tr>
     </thead>
     <tbody id="listEmployeeOvertime"></tbody>
+    <tfoot>
+        <tr class="summary">
+            <td colspan="7" class="align-right">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
+            <td colspan="4"></td>
+        </tr>
+    </tfoot>
 </table>
 @Html.Partial("_ConfirmModal")
 <div id="reminderMailModal" class="modal" tabindex="-1" role="dialog">

@@ -2,7 +2,7 @@
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable } from '../../shared/common.functions';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import 'chosen-js/chosen.jquery';
@@ -76,6 +76,7 @@ import 'chosen-js/chosen.jquery';
                 }
 
                 floatThead('table#data');
+                sortTableInit();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 unblockUI();
@@ -98,6 +99,16 @@ import 'chosen-js/chosen.jquery';
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         url = resolveClientUrl(controllerPath + $('form.filter').serialize());
         location.href = url;
+    }
+
+    function sortTableInit() {
+        $('th.col-sorter').on('click', function () {
+            sortTable(this);
+            $("tbody tr").each(function (index) {
+                var initIndex = index + 1;
+                $(this).find("td:eq(0)").html(initIndex++);
+            });
+        });
     }
 
     $(document).ready(function () {

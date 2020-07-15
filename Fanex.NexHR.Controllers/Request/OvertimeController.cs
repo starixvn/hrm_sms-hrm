@@ -165,6 +165,7 @@
         public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+            model.MemberRequests = GetEmployeeOvertimeRequest(model);
 
             return View(model);
         }

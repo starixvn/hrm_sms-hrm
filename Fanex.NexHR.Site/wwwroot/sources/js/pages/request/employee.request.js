@@ -13,7 +13,7 @@ import '../../shared/employee.search.in.team';
 import './date.filter';
 import {
     axiosError, blockUI, unblockUI, floatThead, confirm, initDatepicker,
-    initFromDateOnChange, toastOptions, resolveClientUrl
+    initFromDateOnChange, toastOptions, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 import { RequestCommand, RoleSystem } from '../../shared/constants';
 
@@ -551,6 +551,16 @@ $(function () {
         });
     }
 
+    function sortTableInit() {
+        $('th.col-sorter').on('click', function () {
+            sortTable(this);
+            $("tbody tr").each(function (index) {
+                var initIndex = index + 1;
+                $(this).find("td:eq(0)").html(initIndex++);
+            });
+        });
+    }
+
     $(document).ready(function () {
         initDatepicker();
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
@@ -618,6 +628,7 @@ $(function () {
             }
         });
 
+        sortTableInit();
         $('#ckbAll').on('change', function (event) {
             $('table#data').find('tbody input[type=checkbox]').prop('checked', event.target.checked);
         });

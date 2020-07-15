@@ -13,15 +13,42 @@
         <thead>
             <tr>
                 <th>@Labels.SymbolCount</th>
-                <th>@Labels.Code</th>
-                <th>@Labels.Department</th>
-                <th>@Labels.Section</th>
-                <th>@Labels.Team</th>
-                <th>@Labels.FullName</th>
-                <th>@Labels.NickName</th>
-                <th>@Labels.GroupDate</th>
-                <th>@Labels.JobTitle</th>
-                <th>@Labels.Roles</th>
+                <th class="col-sorter">
+                    @Labels.Code
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Department
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Section
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Team
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.FullName
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.NickName
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.GroupDate
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.JobTitle
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Roles
+                    <div class="fa fa-sort"></div>
+                </th>
                 <th class="resignedDate">@Labels.ResignedDate</th>
                 @if (hasPermissionToEdit)
                 {
