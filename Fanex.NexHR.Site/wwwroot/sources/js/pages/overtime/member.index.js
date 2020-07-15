@@ -7,22 +7,17 @@ import toastr from 'toastr';
 import axios from 'axios';
 import { stringify, parse } from 'qs';
 
-import { axiosError, floatThead, toastOptions, blockUI, unblockUI, resolveClientUrl, downloadFile } from '../../shared/common.functions';
+import { axiosError, floatThead, toastOptions, blockUI, unblockUI, resolveClientUrl, downloadFile, sortTable } from '../../shared/common.functions';
 import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/constants';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-
-var sorts = [];
 
 function query() {
     blockUI();
     axios({
         url: resolveClientUrl('overtime/ListMemberOvertime'),
         method: 'POST',
-        data: stringify({
-            memberRequest: memberRequests,
-            sort: JSON.stringify(sorts)
-        }),
+        params: parse($('form.filter').serialize()),
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -33,46 +28,18 @@ function query() {
     }).catch(axiosError).then(() => unblockUI());
 }
 
-function eventSorting() {
+function sortMember() {
     $('th.col-sorter').on('click', function () {
-        var $this = $(this).find('div.fa'),
-            property = $this.attr('data-property'),
-            direction, index;
-
-        index = sorts.map(function (e) { return e.Property; }).indexOf(property);
-
-        if ($this.hasClass('fa-sort-desc')) {
-            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
-            direction = 'asc';
-        } else if ($this.hasClass('fa-sort-asc')) {
-            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
-            direction = 'desc';
-        } else {
-            refreshSorting();
-            $this.addClass('fa-sort-desc');
-            direction = 'desc';
-        }
-
-        if (index !== -1) {
-            sorts[index].Direction = direction;
-        } else {
-            sorts.shift();
-            sorts.push({ Property: property, Direction: direction });
-        }
-
-        query();
-    });
-}
-
-function refreshSorting() {
-    $('th.col-sorter').each(function () {
-        $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
+        sortTable(this);
+        $("tbody tr").each(function (index) {
+            var initIndex = index + 1;
+            $(this).find("td:eq(1)").html(initIndex++);
+        });
     });
 }
 
 $(document).ready(function () {
-    eventSorting();
-
+    sortMember();
     const currentUserId = parseInt($('#CurrentUserId').val(), 10);
     let $confirmModal = $('#confirmModal'),
         $btnConfirm = $confirmModal.find('#btnConfirm'),
@@ -285,7 +252,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('Overtime/ExportMemberOvertime'),
             method: 'GET',
-            params: parse($('form.filter').serialize() + '&sort=' + JSON.stringify(sorts)),
+            params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {
             const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];

@@ -3,19 +3,19 @@ import axios from 'axios';
 import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 
-import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange, sortTable } from '../../shared/common.functions';
 
 $(document).ready(function () {
 
     let query = function () {
         blockUI();
         axios({
-            url: resolveClientUrl('DailyWorkingHours/GetDailyWorkingHours'),
+            url: resolveClientUrl('OvertimeReport/ListMonthlyOvertimeDetails'),
             method: 'GET',
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
-            $('#DailyWorkingHoursDetails').html(response.data);
+            $('#MonthlyOvertimeDetails').html(response.data);
             floatThead('table#data');
         }).catch(axiosError).then(() => unblockUI());
     };
@@ -49,5 +49,13 @@ $(document).ready(function () {
             const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
+    });
+
+    $('th.col-sorter').on('click', function () {
+        sortTable(this);
+        $("tbody tr").each(function (index) {
+            var initIndex = index + 1;
+            $(this).find("td:eq(0)").html(initIndex++);
+        });
     });
 });

@@ -551,12 +551,12 @@ $(function () {
         });
     }
 
-    function sortTableInit() {
+    function sortMember() {
         $('th.col-sorter').on('click', function () {
             sortTable(this);
             $("tbody tr").each(function (index) {
                 var initIndex = index + 1;
-                $(this).find("td:eq(0)").html(initIndex++);
+                $(this).find("td:eq(1)").html(initIndex++);
             });
         });
     }
@@ -640,5 +640,6 @@ $(function () {
 
         floatThead('#data');
         initEventExportExcel();
+        sortMember();
     });
 });

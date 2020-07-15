@@ -127,31 +127,13 @@
             return model.MemberRequests;
         }
 
-        public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest, string sort)
+        public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest)
         {
             memberRequest = memberRequest ?? new List<MonthlyOvertimeRequest>();
 
-            memberRequest = SortMemberOvertime(sort, memberRequest.ToList());
             ViewBag.CurrentUserId = sessionService.Employee.Id;
 
             return PartialView("_ListMemberOvertime", memberRequest);
-        }
-
-        private static IList<MonthlyOvertimeRequest> SortMemberOvertime(string sort, IList<MonthlyOvertimeRequest> memberRequests)
-        {
-            IList<MonthlyOvertimeRequest> memberOvertimeSorted;
-
-            if (sort != null)
-            {
-                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(sort);
-                memberOvertimeSorted = Utilities.MultipleSort(memberRequests, sorts);
-            }
-            else
-            {
-                memberOvertimeSorted = memberRequests;
-            }
-
-            return memberOvertimeSorted;
         }
 
         public ActionResult MemberDetails(long id)
@@ -204,7 +186,6 @@
             };
 
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
-            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
 
             return model.MemberRequests;
         }
@@ -272,7 +253,6 @@
             const bool ismemberOvetime = true;
 
             model.MemberRequests = GetMemberOvertimeRequest(model);
-            model.MemberRequests = SortMemberOvertime(model.Sort, model.MemberRequests.ToList());
             byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
 
             return File(exportData, MimeType.XLSX, fileName);

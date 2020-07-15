@@ -282,12 +282,12 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalColumns = 16;
+            const byte TotalColumns = 18;
             var templateIndex = new
             {
                 bodyRow = 3,
                 summaryRow = 4,
-                startSummaryColumn = 11
+                startSummaryColumn = 13
             };
             var fromDate = dateRanges.Min(x => x.Date);
             var toDate = dateRanges.Max(x => x.Date);
@@ -318,9 +318,11 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;
@@ -358,16 +360,16 @@
             IEnumerable<DateRange> dateRanges,
             IEnumerable<DailyOvertimeDetails> dailyOvertimes)
         {
-            const byte TotalFixedColumns = 9;
+            const byte TotalFixedColumns = 11;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
-                startSummaryColumn = 6,
-                startNormalDayColumn = 10,
-                endNormalDayColumn = 12,
-                holidayColumn = 13
+                startSummaryColumn = 8,
+                startNormalDayColumn = 12,
+                endNormalDayColumn = 14,
+                holidayColumn = 15
             };
             var rowIndex = 3;
             var colIndex = 1;
@@ -387,9 +389,11 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
-                worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.OffHours);
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.PublicHours);
@@ -441,7 +445,7 @@
             IEnumerable<DateRange> dateRanges,
             dynamic templateIndex)
         {
-            const byte TotalFixedColumns = 9;
+            const byte TotalFixedColumns = 11;
             const byte TotalNormalDayColumns = 3;
             var colIndex = 1;
             var fromDate = dateRanges.Min(x => x.Date);

@@ -11,66 +11,66 @@
 {
     foreach (MonthlyOvertimeRequest request in Model)
     {
-        <tr>
-            @if (showCheckAll)
+<tr>
+    @if (showCheckAll)
+    {
+        <td>
+            @if (request.IsHost)
             {
-                <td>
-                    @if (request.IsHost)
-                    {
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
-                                   data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                                   data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
-                            <label for="ckb@(request.RequestId)"></label>
-                        </div>
-                    }
-                </td>
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                           data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                           data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
+                    <label for="ckb@(request.RequestId)"></label>
+                </div>
             }
-            <td class="align-left">@request.Requester.FullName</td>
-            <td>@request.Requester.Nickname</td>
-            <td>@request.Requester.Team</td>
-            <td>@request.Requester.Section</td>
-            <td>@request.Requester.Department</td>
-            <td>@request.Month.ToString("MMM-yyyy")</td>
-            <td>
-                @if (request.NormalHours > 0)
-                {
-                    @request.NormalHours
-                }
-            </td>
-            <td>
-                @if (request.OffHours > 0)
-                {
-                    @request.OffHours
-                }
-            </td>
-            <td>
-                @if (request.PublicHours > 0)
-                {
-                    @request.PublicHours
-                }
-            </td>
-            <td>
-                @if (request.SpecialHours > 0)
-                {
-                    @request.SpecialHours
-                }
-            </td>
-            <td>@request.Verifier.Nickname</td>
-            <td>@request.Approver.Nickname</td>
-            <td>@RenderStatus(request, currentUserId)</td>
-            <td>
-                <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
-                    @Labels.View
-                </a>
-            </td>
-            <td>
-                @if (request.IsWarning)
-                {
-                    <i class="fa fa-exclamation-triangle"></i>
-                }
-            </td>
-        </tr>
+        </td>
+    }
+    <td>@request.Requester.Department</td>
+    <td>@request.Requester.Section</td>
+    <td>@request.Requester.Team</td>
+    <td class="align-left">@request.Requester.FullName</td>
+    <td>@request.Requester.Nickname</td>
+    <td>@request.Month.ToString("MMM-yyyy")</td>
+    <td>
+        @if (request.NormalHours > 0)
+        {
+            @request.NormalHours
+        }
+    </td>
+    <td>
+        @if (request.OffHours > 0)
+        {
+            @request.OffHours
+        }
+    </td>
+    <td>
+        @if (request.PublicHours > 0)
+        {
+            @request.PublicHours
+        }
+    </td>
+    <td>
+        @if (request.SpecialHours > 0)
+        {
+            @request.SpecialHours
+        }
+    </td>
+    <td>@request.Verifier.Nickname</td>
+    <td>@request.Approver.Nickname</td>
+    <td>@RenderStatus(request, currentUserId)</td>
+    <td>
+        <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
+            @Labels.View
+        </a>
+    </td>
+    <td>
+        @if (request.IsWarning)
+        {
+            <i class="fa fa-exclamation-triangle"></i>
+        }
+    </td>
+</tr>
     }
 }
 else

@@ -38,6 +38,23 @@
             return View("~/Views/Report/Overtime/MonthlyOvertime.cshtml", model);
         }
 
+        [HttpGet]
+        public ActionResult ListMonthlyOvertimeDetails(MonthlyFilterViewModel model)
+        {
+            var param = new GetMonthlyOvertimeParam
+            {
+                ActorId = sessionService.Employee.Id,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                Employee = model.Employee,
+                EmployeeStatusId = model.EmployeeStatusId,
+                TeamIds = model.TeamIds
+            };
+            Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> monthlyOvertime = overtimeReportService.GetMonthlyOvertime(param);
+
+            return PartialView("~/Views/Report/Overtime/_ListMonthlyOvertimeDetails.cshtml", monthlyOvertime.Item2);
+        }
+
         [HRMPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
         public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
         {

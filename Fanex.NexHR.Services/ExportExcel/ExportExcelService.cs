@@ -255,7 +255,6 @@
             cellStatus = row.GetCell(10);
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
-            cellTeam.SetCellValue(item.Requester.Team.Code);
 
             if (item.Requester.Team.Section != null)
             {
