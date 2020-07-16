@@ -3,27 +3,114 @@ import { LeaveType } from '../../../shared/constants';
 import { resolveClientUrl } from '../../../shared/common.functions';
 
 var LeaveRequestDetail = (function ($) {
+    const workTypeEnum = {
+        off: '1',
+        leave: '2',
+        onduty: '3'
+    };
+    function getTotalLeave() {
+        let totalAnnualLeave = 0,
+            totalUnpaidLeave = 0,
+            objectTr = $('.tabledata tbody tr');
+        for (let i = 0; i < objectTr.length; i++) {
+            let currentObject = objectTr[i];
+            if ($(currentObject).find('.ddlWorkType').first().val() === workTypeEnum.leave) {
+                const leaveType = parseInt($(currentObject).find('.ddlleavetype').first().val(), 10);
+                if (leaveType === LeaveType.AnnualLeave) {
+                    totalAnnualLeave += parseFloat($.trim($(currentObject).find('.tdnumberleaves').first().html()));
+                }
+
+                if (leaveType === LeaveType.UnpaidLeave) {
+                    totalUnpaidLeave += parseFloat($.trim($(currentObject).find('.tdnumberleaves').first().html()));
+                }
+            }
+        }
+
+        $("#totalAnnualLeave").html(totalAnnualLeave);
+        $("#totalUnpaidLeave").html(totalUnpaidLeave);
+    }
+
+    function workTypeChange(element) {
+        const workType = element.val();
+        if (element.closest('tr').find('.chkhalfday').prop('checked')) {
+            element.closest('tr').find('.ddlfromtime').show();
+            element.closest('tr').find('.ddltotime').show();
+            element.closest('tr').find('.timehalfday').show();
+        } else {
+            element.closest('tr').find('.ddlfromtime').hide();
+            element.closest('tr').find('.ddltotime').hide();
+            element.closest('tr').find('.timehalfday').hide();
+        }
+
+        if (workType === workTypeEnum.leave) {
+            element.closest('tr').find('.ddlleavetype').show();
+            element.closest('tr').find('.tdnumberleaves').show();
+            element.closest('tr').find('.chkhalfday').removeAttr('disabled');
+        } else if (workType === workTypeEnum.off || workType === workTypeEnum.onduty) {
+            element.closest('tr').find('.ddlleavetype').hide();
+            element.closest('tr').find('.tdnumberleaves').hide();
+            element.closest('tr').find('.ddlfromtime').hide();
+            element.closest('tr').find('.ddltotime').hide();
+            element.closest('tr').find('.timehalfday').hide();
+            element.closest('tr').find('.chkhalfday').prop('checked', false).attr('disabled', 'disabled');
+            element.closest('tr').find('.addhalfday').hide();
+            element.closest('tr').find('.tdnumberleaves').html('1');
+        } else {
+            element.closest('tr').find('.ddlleavetype').hide();
+            element.closest('tr').find('.tdnumberleaves').hide();
+            element.closest('tr').find('.chkhalfday').removeAttr('disabled');
+        }
+
+        getTotalLeave();
+    }
+
+    function showHideControlByWorkType() {
+        let objectTr = $('.tabledata tbody tr');
+        const length = objectTr.length;
+        if (length > 0) {
+            let object = objectTr[0];
+            for (let i = 0; i < length; i++) {
+                object = objectTr[i];
+                if ($(object).find('.ddlWorkType').first().val() !== workTypeEnum.leave) {
+                    $(object).find('.ddlleavetype').hide();
+                    $(object).find('.tdnumberleaves').hide();
+                    if ($(object).find('.ddlWorkType').first().val() === workTypeEnum.off) {
+                        $(object).find('.chkhalfday').prop('disabled', true);
+                    }
+                }
+            }
+        }
+    }
+
+    function disableControlForDetail() {
+        if ($('#IsView').val() === 'True') {
+            $('.form-horizontal input').prop('disabled', true);
+            $('select').prop('disabled', true);
+            $('textarea').prop('disabled', true);
+            $('.tdhalfday').hide();
+            getTotalLeave();
+        }
+    }
+
     return {
-        leaveWorkType: null,
-        onDutyWorkType: null,
-        offWorkType: null,
-
         init: function () {
-            LeaveRequestDetail.leaveWorkType = '2'; // hard code for worktype is leave
-            LeaveRequestDetail.onDutyWorkType = '3';
-            LeaveRequestDetail.offWorkType = '1';
-
             $("th.tdhalfday").width(100);
 
             LeaveRequestDetail.showHideHalfDay();
-            LeaveRequestDetail.showHideControlByWorkType();
-            $(".ddlWorkType").change(function () {
-                LeaveRequestDetail.workTypeChange($(this));
+            showHideControlByWorkType();
+
+            $('#leaveDetails').off('change', '.ddlWorkType').on('change', '.ddlWorkType', function () {
+                workTypeChange($(this));
             });
 
-            $(".chkhalfday").change(function () {
-                var trObject = $(this).parent().parent();
-                LeaveRequestDetail.halfdayChange(trObject);
+            $('#leaveDetails').off('change', '.ddlleavetype').on('change', '.ddlleavetype', function () {
+                const leaveTypeId = parseInt($(this).val(), 10);
+                LeaveRequestDetail.showHideCheckboxHalfDay($(this).closest('tr'), leaveTypeId);
+                getTotalLeave();
+            });
+
+            $('#leaveDetails').off('change', '.chkhalfday').on('change', '.chkhalfday', function () {
+                LeaveRequestDetail.halfdayChange($(this).closest('tr'));
             });
 
             $(".addhalfday").on("click", function () {
@@ -31,27 +118,20 @@ var LeaveRequestDetail = (function ($) {
                 var trObject = object.parent().parent();
                 var trCopy = trObject.clone();
                 var halfdayObject = trCopy.find(".addhalfday").first().html("- Remove a half").removeClass("addhalfday").addClass("removehaflday");
-                var leaveTypeObject = trCopy.find(".ddlleavetype").first();
                 var workTypeObject = trCopy.find(".ddlWorkType").first();
 
                 halfdayObject.click(function () {
                     $(this).parent().parent().remove();
                     trObject.find(".addhalfday").first().html("+ Add a half");
                     trObject.find(".chkhalfday").removeAttr("disabled");
-                    LeaveRequestDetail.getTotalLeave();
-                });
-                leaveTypeObject.change(function () {
-                    LeaveRequestDetail.getTotalLeave();
-                });
-                workTypeObject.change(function () {
-                    LeaveRequestDetail.workTypeChange(workTypeObject);
+                    getTotalLeave();
                 });
 
                 workTypeObject.change();
 
                 trObject.after(trCopy);
                 trObject.find(".addhalfday").first().html("");
-                LeaveRequestDetail.getTotalLeave();
+                getTotalLeave();
 
                 trObject.find(".chkhalfday").prop("checked", true).attr("disabled", "disabled");
                 trCopy.find(".chkhalfday").attr("checked", true).attr("disabled", "disabled");
@@ -70,25 +150,21 @@ var LeaveRequestDetail = (function ($) {
                 } else {
                     trCopy.find(".chkIsToAfterday").prop("checked", false);
                 }
-                // end
-            });
-
-            $('.ddlleavetype').on('change', function () {
-                const leaveTypeId = parseInt($(this).val(), 10);
-                let trObject = $(this).parent().parent();
-
-                LeaveRequestDetail.showHideCheckboxHalfDay(trObject, leaveTypeId);
-                LeaveRequestDetail.getTotalLeave();
             });
 
             $('.ddlleavetype').each(function () {
+                if ($(this).closest('tr').find('.chkhalfday').prop('checked')) {
+                    $(this).find('option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
+                }
+
                 $(this).trigger('change');
             });
 
-            LeaveRequestDetail.disableControlForDetail();
+            disableControlForDetail();
         },
         halfdayChange: function (trObject) {
             if (trObject.find(".chkhalfday").prop("checked")) {
+                trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
                 $(".tdhalfday").show();
                 trObject.find(".addhalfday").first().html("+ Add a half").show();
                 var fromTimeObject = trObject.find(".ddlfromtime");
@@ -101,7 +177,8 @@ var LeaveRequestDetail = (function ($) {
 
                 LeaveRequestDetail.fillTimeForHalfday(trObject);
             } else {
-                trObject.find(".addhalfday").first().html("");
+                trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', false);
+                trObject.find(".addhalfday").first().html();
                 trObject.find(".ddlfromtime").hide();
                 trObject.find(".ddltotime").hide();
                 trObject.find(".timehalfday").hide();
@@ -124,7 +201,7 @@ var LeaveRequestDetail = (function ($) {
                 }
             }
 
-            LeaveRequestDetail.getTotalLeave();
+            getTotalLeave();
         },
         fillTimeForHalfday: function (trObject) {
             $.getJSON(resolveClientUrl('shift/getshiftbydate'),
@@ -170,71 +247,17 @@ var LeaveRequestDetail = (function ($) {
                     }
                 });
         },
-        workTypeChange: function (workTypeObject) {
-            var workType = workTypeObject.val();
-
-            if (workTypeObject.parent().parent().find(".chkhalfday").prop("checked")) {
-                workTypeObject.parent().parent().find(".ddlfromtime").show();
-                workTypeObject.parent().parent().find(".ddltotime").show();
-                workTypeObject.parent().parent().find(".timehalfday").show();
-            } else {
-                workTypeObject.parent().parent().find(".ddlfromtime").hide();
-                workTypeObject.parent().parent().find(".ddltotime").hide();
-                workTypeObject.parent().parent().find(".timehalfday").hide();
-            }
-
-            if (workType === LeaveRequestDetail.leaveWorkType) {
-                workTypeObject.parent().parent().find(".ddlleavetype").show();
-                workTypeObject.parent().parent().find(".tdnumberleaves").show();
-                workTypeObject.parent().parent().find(".chkhalfday").removeAttr("disabled");
-            } else if (workType === LeaveRequestDetail.offWorkType || workType === LeaveRequestDetail.onDutyWorkType) {
-                workTypeObject.parent().parent().find(".ddlleavetype").hide();
-                workTypeObject.parent().parent().find(".tdnumberleaves").hide();
-                workTypeObject.parent().parent().find(".ddlfromtime").hide();
-                workTypeObject.parent().parent().find(".ddltotime").hide();
-                workTypeObject.parent().parent().find(".timehalfday").hide();
-                workTypeObject.parent().parent().find(".chkhalfday").prop("checked", false).attr("disabled", "disabled");
-                workTypeObject.parent().parent().find(".addhalfday").hide();
-                workTypeObject.parent().parent().find(".tdnumberleaves").html("1");
-            } else {
-                workTypeObject.parent().parent().find(".ddlleavetype").hide();
-                workTypeObject.parent().parent().find(".tdnumberleaves").hide();
-                workTypeObject.parent().parent().find(".chkhalfday").removeAttr("disabled");
-            }
-
-            LeaveRequestDetail.getTotalLeave();
-        },
-        getTotalLeave: function () {
-            let totalAnnualLeave = 0,
-                totalUnpaidLeave = 0,
-                objectTr = $(".tabledata tbody tr");
-            for (var i = 0; i < objectTr.length; i++) {
-                var currentObject = objectTr[i];
-                if ($(currentObject).find(".ddlWorkType").first().val() === LeaveRequestDetail.leaveWorkType) {
-                    const leaveType = parseInt($(currentObject).find(".ddlleavetype").first().val(), 10);
-                    if (leaveType === LeaveType.AnnualLeave) {
-                        totalAnnualLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
-                    }
-
-                    if (leaveType === LeaveType.UnpaidLeave) {
-                        totalUnpaidLeave += parseFloat($.trim($(currentObject).find(".tdnumberleaves").first().html()));
-                    }
-                }
-            }
-
-            $("#totalAnnualLeave").html(totalAnnualLeave);
-            $("#totalUnpaidLeave").html(totalUnpaidLeave);
-        },
         enableControlForEdit: function () {
             LeaveRequestDetail.showHideHalfDay();
         },
         showHideCheckboxHalfDay: function (trObject, leaveTypeId) {
             var $chkhalfday = trObject.find('.chkhalfday');
-            if (!(leaveTypeId === LeaveType.UnpaidLeaveInsurance)) {
+            if (leaveTypeId !== LeaveType.UnpaidLeaveInsurance) {
                 $chkhalfday.show();
             } else {
                 if ($chkhalfday.prop('checked')) {
-                    $chkhalfday.prop('checked', false).change();
+                    $chkhalfday.prop('checked', false)
+                    $chkhalfday.trigger('change');
                 }
 
                 $chkhalfday.hide();
@@ -290,41 +313,15 @@ var LeaveRequestDetail = (function ($) {
                     $(this).parent().parent().remove();
                     $(oldObject).find(".addhalfday").first().html("+ Add a half");
                     $(oldObject).find(".chkhalfday").removeAttr("disabled");
-                    LeaveRequestDetail.getTotalLeave();
+                    getTotalLeave();
                 });
-            }
-        },
-        disableControlForDetail: function () {
-            if ($("#IsView").val() === "True") {
-                $('.form-horizontal input').attr('disabled', 'disabled');
-                $("select").attr("disabled", "disabled");
-                $("textarea").attr("disabled", "disabled");
-                $(".tdhalfday").hide();
-                LeaveRequestDetail.getTotalLeave();
-            }
-        },
-        showHideControlByWorkType: function () {
-            var objectTr = $(".tabledata tbody tr");
-            var length = objectTr.length;
-
-            if (length > 0) {
-                var object = objectTr[0];
-                for (var i = 0; i < objectTr.length; i++) {
-                    object = objectTr[i];
-                    if ($(object).find(".ddlWorkType").first().val() !== LeaveRequestDetail.leaveWorkType) {
-                        $(object).find(".ddlleavetype").hide();
-                        $(object).find(".tdnumberleaves").hide();
-                        if ($(object).find(".ddlWorkType").first().val() === LeaveRequestDetail.offWorkType) {
-                            $(object).find(".chkhalfday").attr("disabled", "disabled");
-                        }
-                    }
-                }
             }
         }
     };
 }(jQuery));
 
 $(document).ready(function () {
+    console.log('a');
     LeaveRequestDetail.init();
     $('form').areYouSure();
 });
