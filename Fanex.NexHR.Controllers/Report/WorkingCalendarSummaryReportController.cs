@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Dynamic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -35,6 +37,27 @@
             };
 
             return View("~/Views/Report/WorkingCalendarSummary.cshtml", model);
+        }
+
+        [HttpGet]
+        public ActionResult GetWorkingCalendarSumary(WorkingCalendarSummaryViewModel model)
+        {
+            var param = new GetWorkingHoursSummaryParam
+            {
+                ActorId = sessionService.Employee.Id,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                TeamIds = model.TeamIds,
+                Employee = model.Employee,
+                IsLocal = model.IsLocal,
+                EmployeeStatusId = model.EmployeeStatusId
+            };
+            IEnumerable<WorkingCalendarSummary> calendars = reportService.GetWorkingCalendarSummary(param);
+            ViewBag.FromDate = param.FromDate;
+            ViewBag.ToDate = param.ToDate;
+            IEnumerable<WorkingCalendarSummary> employees = calendars.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
+            ViewBag.employee = employees;
+            return PartialView("~/Views/Report/_WorkingCalendarSummaryDetail.cshtml", calendars);
         }
 
         [HttpGet]

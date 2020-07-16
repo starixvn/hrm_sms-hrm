@@ -54,8 +54,8 @@
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
                     const byte StartBodyRow = 3;
-                    const byte TotalFixedColumns = 5;
-                    const byte StartDateColumn = 6;
+                    const byte TotalFixedColumns = 7;
+                    const byte StartDateColumn = 8;
                     var rowIndex = 1;
                     var colIndex = 1;
 
@@ -89,9 +89,11 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
 
                         for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
                         {

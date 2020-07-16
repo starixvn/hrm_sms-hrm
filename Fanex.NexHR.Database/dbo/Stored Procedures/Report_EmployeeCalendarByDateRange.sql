@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
+﻿CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@TeamIds VARCHAR(MAX) = ''
@@ -82,6 +81,8 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,g.[Name] AS Team
+		,dept.Code as DepartmentCode
+		,sec.Code as Section
 		,empca.WorkDate
 		,empca.IsOffDay
 		,empca.IsHoliday
@@ -100,6 +101,8 @@ BEGIN
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN @tblEmployeeIds AS member ON emp.EmpId = member.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON emp.GroupId = g.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND empca.WorkDate BETWEEN @fromDate
 			AND @toDate
