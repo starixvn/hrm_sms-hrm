@@ -162,56 +162,8 @@
                         </td>
                     }
                     <td>@(index++)</td>
-                    <tr id="row@(request.Id)">
-                        @if (Model.ViewType == RequestViewType.PersonalSpace)
-                        {
-                            <td>
-                                <div class="checkbox">
-                                    @if (request.ApprovedBy.Id == Model.CurrentUserId
-                                        && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.Approver)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                    else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.Verifier)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                </div>
-                            </td>
-                        }
-                        else if (Model.ViewType == RequestViewType.HRSpace)
-                        {
-                            <td>
-                                <div class="checkbox">
-                                    @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.HR)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                </div>
-                            </td>
-                        }
-
-                        <td>@(index++)</td>
-                        <td>@request.Requester.Team.Section.Department.Code</td>
-                        <td>@request.Requester.Team.Section.Code</td>
+                    <td>@request.Requester.Team.Section.Department.Code</td>
+                    <td>@request.Requester.Team.Section.Code</td>
                     <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
                     </td>
@@ -265,54 +217,6 @@
                         }
                     </td>
                 </tr>
-                        </td>
-                        <td>
-                            @switch (request.RequestType.Id)
-                            {
-                                case (byte)RequestType.Leave:
-                                    <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
-                                    break;
-                                case (byte)RequestType.ChangeShift:
-                                    <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
-                                    break;
-                                default:
-                                    @request.RequestType.Name
-                                    break;
-                            }
-                        </td>
-                        <td class="align-left">
-                            @Html.Raw(RequestService.ToRequestMessage(request))
-                        </td>
-                        <td>
-                            <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
-                        </td>
-                        <td>
-                            <span class="tooltip-tipsy" title="@request.ApprovedBy.FullName">@request.ApprovedBy.NickName</span>
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrWhiteSpace(request.Remark))
-                            {
-                                <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
-                        </td>
-                        @if (@Model.ActionName != "DailyView")
-                        {
-                            <td>@Html.Raw(request.ContentFile)</td>
-                        }
-                        <td>@request.CreatedDate.ToDetailFormatedDate()</td>
-                        <td class="status">@RenderStatus(Model, request)</td>
-                        <td>@RenderHistoryLink(request)</td>
-                        <td class="td-warning">
-                            @if (request.IsWarning)
-                            {
-                                <span class="fa fa-exclamation-triangle tooltip-tipsy" title="@Labels.RequestWarning"></span>
-                            }
-                        </td>
-                    </tr>
                 }
             </tbody>
         }

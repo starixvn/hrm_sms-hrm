@@ -628,7 +628,6 @@ $(function () {
             }
         });
 
-        sortTableInit();
         $('#ckbAll').on('change', function (event) {
             $('table#data').find('tbody input[type=checkbox]').prop('checked', event.target.checked);
         });
