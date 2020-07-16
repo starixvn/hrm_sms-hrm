@@ -44,6 +44,12 @@ table.table.table-custom {
             th {
                 border-color: #646d80;
 
+                &.col-sorter .cell-control-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+
                 &.col-sorter {
                     .fa {
                         width: 1rem;
@@ -55,7 +61,7 @@ table.table.table-custom {
                     }
 
                     .fa-sort-desc, .fa-sort-asc {
-                        color:red
+                        color: red
                     }
                 }
 
