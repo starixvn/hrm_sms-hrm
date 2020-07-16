@@ -159,7 +159,7 @@
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td colspan="@(showCheckAll ? 7 : 6)" class="align-right">@Labels.TotalOvertimeHours:</td>
+            <td colspan="@(showCheckAll ? 8 : 7)" class="align-right">@Labels.TotalOvertimeHours:</td>
             <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
             <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>

@@ -21,7 +21,7 @@ $(document).ready(function () {
             floatThead('table#data');
             $('th.col-sorter').on('click', function () {
                 sortTable(this);
-                $("tbody tr").each(function (index) {
+                $("#data tbody tr").each(function (index) {
                     var initIndex = index + 1;
                     $(this).find("td:eq(0)").html(initIndex++);
                 });
