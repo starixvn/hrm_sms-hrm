@@ -57,7 +57,7 @@
                 {
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
-                    const byte TotalColumns = 54;
+                    const byte TotalColumns = 56;
                     const byte TotalHeaderRows = 2;
                     const byte StartBodyRow = 4;
                     const byte StartSummaryRow = 5;
@@ -181,6 +181,8 @@
             var colIndex = 1;
             var month = 1;
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
+            worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.ProbationResigned;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.ConfirmedResigned;
@@ -251,7 +253,7 @@
         private static void WriteSummaryRow(ExcelWorksheet worksheet, int rowIndex, int year, IEnumerable<ManpowerModel> manpowers)
         {
             var month = 1;
-            var colIndex = 3;
+            var colIndex = 5;
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.ProbationResigned);
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.ConfirmedResigned);
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.NewHire);
@@ -327,7 +329,7 @@
             int staff = manpowers.Sum(t => t.Staff);
             int worker = manpowers.Sum(t => t.Worker);
 
-            var colIndex = 3;
+            var colIndex = 5;
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalExpat);
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalLocal);
             worksheet.Cells[rowIndex, colIndex++].Value = total;

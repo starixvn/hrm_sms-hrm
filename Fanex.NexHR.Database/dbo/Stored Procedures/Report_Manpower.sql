@@ -46,6 +46,8 @@ BEGIN
 	SELECT g.GroupId AS TeamId
 		,g.Code AS TeamCode
 		,g.[Name] AS TeamName
+		,dept.Code as DepartmentCode
+		,sec.Code as Section
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, @Jan, e.ResignedDate) >= 0
 					AND DATEDIFF(MM, e.ResignedDate, @Dec) >= 0
@@ -337,6 +339,8 @@ BEGIN
 				END) AS ActiveUserDec
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 	WHERE g.IsDeleted = 0
 		--AND e.isDeleted = 0
 		--AND e.[Enabled] = 1
@@ -346,4 +350,6 @@ BEGIN
 	GROUP BY g.GroupId
 		,g.Code
 		,g.[Name]
+		,dept.Code
+		,sec.Code
 END
