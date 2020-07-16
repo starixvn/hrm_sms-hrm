@@ -27,11 +27,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 14;
+        private const ushort TotalFixedColumns = 16;
         private const ushort TotalUPLColumns = 4;
         private const ushort StartDateColumnIndex = 19;
-        private const ushort StartUPLColumnIndex = 15;
-        private const ushort EndUPLColumnIndex = 18;
+        private const ushort StartUPLColumnIndex = 17;
+        private const ushort EndUPLColumnIndex = 20;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -126,10 +126,10 @@
             // summary
             const byte SummaryRowIndex = 5;
             TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns;
-            template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 6].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 6]);
-            for (var i = 7; i <= TotalColumns; i++)
+            template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
+            for (var i = 9; i <= TotalColumns; i++)
             {
-                template.Cells[SummaryRowIndex, 7].Copy(worksheet.Cells[rowIndex, i]);
+                template.Cells[SummaryRowIndex, 9].Copy(worksheet.Cells[rowIndex, i]);
                 var excelAddress = $"{worksheet.Cells[StartBodyRowIndex, i].Address}:{worksheet.Cells[rowIndex - 1, i].Address}";
                 worksheet.Cells[rowIndex, i].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             }
