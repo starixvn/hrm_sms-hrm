@@ -6,7 +6,7 @@
     {
         public bool IsDeleted { get; set; }
         
-        public string KeyWord { get; set; }
+        public string Keyword { get; set; }
 
         public override string GetSettingKey() => "Group_Get";
 

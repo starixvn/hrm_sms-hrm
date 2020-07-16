@@ -36,12 +36,12 @@
             return teamRepository.GetById(criteria);
         }
 
-        public IList<Team> GetAll(bool isDeleted = false, string keyWord = null)
+        public IList<Team> GetAll(bool isDeleted = false, string keyword = null)
         {
             var criteria = new GetAllGroupCriteria
             {
                 IsDeleted = isDeleted,
-                KeyWord = keyWord
+                Keyword = keyword
 
             };
             IList<Team> teams = teamRepository.GetAll(criteria);
