@@ -1,12 +1,4 @@
-﻿USE [HRM]
-GO
-/****** Object:  StoredProcedure [dbo].[Group_Get]    Script Date: 7/13/2020 4:03:25 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
+﻿
 CREATE PROCEDURE [dbo].[Group_Get] @TeamId INT = NULL
 	,@keyWord varchar(20) = null
 	,@isDeleted BIT = NULL

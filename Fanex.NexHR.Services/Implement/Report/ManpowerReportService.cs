@@ -106,7 +106,7 @@
                 {
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
-                    const byte TotalColumns = 15;
+                    const byte TotalColumns = 17;
                     const byte TotalHeaderRows = 2;
                     const byte StartBodyRow = 4;
                     const byte StartSummaryRow = 5;
@@ -130,6 +130,8 @@
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                        worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
+                        worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalExpat;
                         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalLocal;

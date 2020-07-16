@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
+﻿CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByWeekly] @empId INT = NULL
 	,@fromtime DATE
 	,@totime DATE
 	,@TeamIds VARCHAR(MAX) = ''

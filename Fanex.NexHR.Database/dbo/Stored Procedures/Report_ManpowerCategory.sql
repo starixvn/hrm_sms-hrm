@@ -26,6 +26,8 @@ BEGIN
 	SELECT g.GroupId AS TeamId
 		,g.Code AS TeamCode
 		,g.[Name] AS TeamName
+		,dept.Code as DepartmentCode
+		,sec.Code as Section
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @ToDate) >= 0
 					AND (
@@ -100,6 +102,8 @@ BEGIN
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId
 		LEFT JOIN dbo.LookupData AS job WITH (NOLOCK) ON e.JobTitleId = job.Id
 	WHERE g.IsDeleted = 0
 		AND (e.ResignedDate IS NULL 
@@ -108,4 +112,6 @@ BEGIN
 	GROUP BY g.GroupId
 		,g.Code
 		,g.[Name]
+		,dept.Code
+		,sec.Code
 END

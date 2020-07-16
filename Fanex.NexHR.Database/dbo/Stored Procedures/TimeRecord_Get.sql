@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
+﻿CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
 	,@FromDate DATE
 	,@ToDate DATE
 	,@TeamIds VARCHAR(MAX) = ''

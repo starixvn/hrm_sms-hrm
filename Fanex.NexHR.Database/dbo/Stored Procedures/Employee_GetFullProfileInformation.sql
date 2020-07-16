@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
+﻿CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
 	, @teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL

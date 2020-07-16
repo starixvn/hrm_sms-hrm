@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
+﻿CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@EmployeeId INT = NULL
 	,@TeamIds VARCHAR(MAX) = NULL
 	,@Month DATE = NULL

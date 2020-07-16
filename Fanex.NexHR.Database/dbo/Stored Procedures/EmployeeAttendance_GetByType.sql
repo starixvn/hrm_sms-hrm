@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[EmployeeAttendance_GetByType_xtest] @fromtime DATE
+﻿CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType_xtest] @fromtime DATE
 	,@totime DATE
 	,@EmpId INT = NULL
 	,@TeamIds VARCHAR(MAX) = ''
