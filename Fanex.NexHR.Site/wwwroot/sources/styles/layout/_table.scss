@@ -48,6 +48,10 @@ table.table.table-custom {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+
+                    .cell-right-div {
+                        margin-left: 10px;
+                    }
                 }
 
                 &.col-sorter {
@@ -259,3 +263,4 @@ span.req.keepinview {
 .mytimesheet-workinginoffday {
     background-color: #F8F89C;
 }
+

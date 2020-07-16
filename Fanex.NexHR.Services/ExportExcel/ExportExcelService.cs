@@ -255,17 +255,9 @@
             cellStatus = row.GetCell(10);
 
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
-
-            if (item.Requester.Team.Section != null)
-            {
-                cellSection.SetCellValue(item.Requester.Team.Section.Code);
-
-                if (item.Requester.Team.Section.Department != null)
-                {
-                    cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
-                }
-            }
-
+            cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
+            cellSection.SetCellValue(item.Requester.Team.Section.Code);
+            cellTeam.SetCellValue(item.Requester.Team.Code);
             cellNick.SetCellValue(item.Requester.NickName);
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);

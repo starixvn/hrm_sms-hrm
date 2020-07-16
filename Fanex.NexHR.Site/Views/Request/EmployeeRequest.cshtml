@@ -50,65 +50,85 @@
                     </th>
                 </tr>
             }
-            <tr>
-                @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
-                {
-                    <th>
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                            <label for="ckbAll"></label>
+                <tr>
+                    @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
+                    {
+                        <th>
+                            <div class="checkbox">
+                                <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                                <label for="ckbAll"></label>
+                            </div>
+                        </th>
+                    }
+                    <th>@Labels.SymbolCount</th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Department
+                            <div class="fa fa-sort cell-right-div"></div>
                         </div>
                     </th>
-                }
-                <th>@Labels.SymbolCount</th>
-                <th class="col-sorter">
-                    @Labels.Department
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Section
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Team
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Employee
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Request
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Details
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Verified
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Approver
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th>@Labels.Remark</th>
-                @if (@Model.ActionName != "DailyView")
-                {
-                    <th>@Labels.FileAttach</th>
-                }
-                <th class="col-sorter">
-                    @Labels.CreatedDate
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Status
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th>@Labels.History</th>
-                <th></th>
-            </tr>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Section
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Team
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Employee
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Request
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Details
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Verified
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Approver
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th>@Labels.Remark</th>
+                    @if (@Model.ActionName != "DailyView")
+                    {
+                        <th>@Labels.FileAttach</th>
+                    }
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.CreatedDate
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th class="col-sorter">
+                        <div class="cell-control-wrapper">
+                            @Labels.Status
+                            <div class="fa fa-sort cell-right-div"></div>
+                        </div>
+                    </th>
+                    <th>@Labels.History</th>
+                    <th></th>
+                </tr>
         </thead>
         @if (Model.Requests != null && Model.Requests.Any())
         {

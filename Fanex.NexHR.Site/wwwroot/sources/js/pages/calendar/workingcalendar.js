@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { axiosError, blockUI, unblockUI, resolveClientUrl, sortTable } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 
 const workingCalendarModule = (function ($) {
     function query() {
@@ -138,8 +138,47 @@ const workingCalendarModule = (function ($) {
 
     function sortTableInit() {
         $('th.col-sorter').on('click', function () {
-            sortTable(this);
+            sortCustomTable(this);
         });
+    }
+
+    function sortCustomTable(th) {
+        let comparer = function (index) {
+            return function (a, b) {
+                var valA = getCellValue(a, index),
+                    valB = getCellValue(b, index);
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+            };
+        };
+        let getCellValue = function (row, index) {
+            return $(row).children('td').eq(index).text();
+        };
+        let refreshSorting = function () {
+            $('th.col-sorter').each(function () {
+                $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
+            });
+        };
+
+        var $this = $(th).find('div.fa');
+        if ($this.hasClass('fa-sort-desc')) {
+            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+        } else if ($this.hasClass('fa-sort-asc')) {
+            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+        } else {
+            refreshSorting();
+            $this.addClass('fa-sort-desc');
+        }
+
+        var table = $('#data_wrapper').find('table').eq(1);
+        var rows = table.find('tbody tr').toArray().sort(comparer($(th).index()));
+        th.asc = !th.asc;
+        if (!th.asc) {
+            rows = rows.reverse();
+        }
+
+        for (var i = 0; i < rows.length; i++) {
+            table.append(rows[i]);
+        }
     }
 
     return {
