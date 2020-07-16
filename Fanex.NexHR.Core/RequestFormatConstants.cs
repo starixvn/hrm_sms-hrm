@@ -3,7 +3,7 @@
     public static class RequestFormatConstants
     {
         public const string MsgLeaveWithNoFormat = "{0} ({1})";
-        public const string MsgLeaveHalfDayWithNoFormat = "{0} ({1}-{2})";
+        public const string MsgLeaveHalfDayWithNoFormat = "{0} ({1} &rarr; {2})";
 
         public const string MsgChangeShiftOneDayWithNoFormat = "{0} --> {1} ({2})";
         public const string MsgChangeShiftWithNoFormat = "{0}";
@@ -27,8 +27,8 @@
         public const string MsgEarlyOut = "<span class='req inout'>-{0}' {1}</span> {2} (Actual: {3})";
 
         public const string MsgKeepInViewOneDay = "<span class='req keepinview'>{0}</span> 1 day";
-        public const string MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} - {2})</span> 0.5 day";
+        public const string MsgKeepInViewHalfday = "<span class='req keepinview'>{0} ({1} &rarr; {2})</span> 0.5 day";
 
-        public const string MsgKeepInViewByHours = "<span class='req keepinview'>{0} ({1} - {2})</span> {3} hour(s)";
+        public const string MsgKeepInViewByHours = "<span class='req keepinview'>{0} ({1} &rarr; {2})</span> {3} hour(s)";
     }
 }
