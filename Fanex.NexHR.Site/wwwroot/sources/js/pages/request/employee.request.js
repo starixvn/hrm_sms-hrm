@@ -554,9 +554,10 @@ $(function () {
     function sortMember() {
         $('th.col-sorter').on('click', function () {
             sortTable(this);
+            let hasCheckBoxColumn = $('#employee-request-body').hasClass('has-check-box-column');
             $("tbody tr").each(function (index) {
                 var initIndex = index + 1;
-                $(this).find("td:eq(1)").html(initIndex++);
+                $(this).find(`td:eq(${hasCheckBoxColumn ? 1 : 0})`).html(initIndex++);
             });
         });
     }

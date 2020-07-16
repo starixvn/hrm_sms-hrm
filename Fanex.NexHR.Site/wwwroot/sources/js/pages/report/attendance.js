@@ -72,7 +72,7 @@ function query() {
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
-        $('#attendanceDetails').html(response.data);
+        $('#data').html(response.data);
         floatThead('table#data');
         initTooltip();
         sortTableInit();

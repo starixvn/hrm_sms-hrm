@@ -29,10 +29,6 @@ function query() {
 function sortTableInit() {
     $('th.col-sorter').on('click', function () {
         sortTable(this);
-        $("tbody tr").each(function (index) {
-            var initIndex = index + 1;
-            $(this).find("td:eq(0)").html(initIndex++);
-        });
     });
 }
 
