@@ -1,5 +1,5 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import 'tipsy/src/javascripts/jquery.tipsy';
+import tippy from 'tippy.js';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
@@ -42,7 +42,7 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
             success: function (response) {
                 unblockUI();
                 $('#contact-list').html(response);
-                initTipsyTooltip();
+                initTooltip();
                 if ($('table#data #pagination').length > 0) {
                     initPagination();
                     $('#ItemsPerPageOption').on('change', function () {
@@ -62,22 +62,24 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
         });
     }
 
-    function initTipsyTooltip() {
-        $('.nick').tipsy({
-            html: true,
-            fade: false,
-            gravity: 'w',
-            className: 'nick-tooltip',
-            live: false,
-            title: function () {
+    function initTooltip() {
+        tippy('.avatar-tooltip', {
+            maxWidth: 'none',
+            animation: 'fade',
+            arrow: true,
+            placement: 'auto',
+            appendTo: document.getElementById('tippy-avatar'),
+            allowHTML: true,
+            content: (reference) => {
                 var path = resolveClientUrl('employee/avatar/' + $(this).attr('data-code'));
-                return '<img width=80px; height=80px; src="' + path + '" />';
+                return '<img src="' + path + '" />';
             }
         });
 
-        $('.tooltip-tipsy').tipsy({
-            html: true,
-            gravity: 'w'
+        tippy('.tooltip-tippy', {
+            animation: 'fade',
+            arrow: true,
+            placement: 'auto'
         });
     }
 

@@ -77,10 +77,10 @@
                         <td>@employee.Team.Section.Department.Code</td>
                         <td>@employee.Team.Section.Code</td>
                         
-                        <td><span class="tooltip-tipsy" title="@employee.Team.Name">@employee.Team.Code</span></td>
+                        <td><span class="tooltip-tippy" data-tippy-content="@employee.Team.Name">@employee.Team.Code</span></td>
                         <td class="align-left">@employee.FullName</td>
                         <td>
-                            <a class="nick" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
+                            <a class="avatar-tooltip" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
                         </td>
                         @if (isShowJobtitle)
                         {

@@ -73,7 +73,8 @@
                         <td>@employee.Team.Code</td>
                         <td class="align-left">@employee.FullName</td>
                         <td>
-                            <a class="nick" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
+                            <a class="avatar-tooltip" data-code="@employee.Code"
+                               href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
                         </td>
                         <td>
                             @if (employee.JoinedDate.HasValue)

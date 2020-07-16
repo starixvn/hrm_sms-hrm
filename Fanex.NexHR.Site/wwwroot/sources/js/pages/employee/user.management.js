@@ -1,6 +1,6 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
+import tippy from 'tippy.js';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
-import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable } from '../../shared/common.functions';
 import '../../shared/multiselect-tree-view';
@@ -54,14 +54,16 @@ import 'chosen-js/chosen.jquery';
                 $('#user-management').html(response);
                 checkDisabledUser();
 
-                $('.nick').tipsy({
-                    html: true,
-                    gravity: 'nw',
-                    fade: false,
-                    className: 'avatar',
-                    title: function () {
+                tippy('.avatar-tooltip', {
+                    maxWidth: 'none',
+                    animation: 'fade',
+                    arrow: true,
+                    placement: 'auto',
+                    appendTo: document.getElementById('tippy-avatar'),
+                    allowHTML: true,
+                    content: (reference) => {
                         var path = resolveClientUrl('employee/avatar/' + $(this).attr('data-code'));
-                        return '<img width=80px; height=80px; src="' + path + '" />';
+                        return '<img src="' + path + '" />';
                     }
                 });
 

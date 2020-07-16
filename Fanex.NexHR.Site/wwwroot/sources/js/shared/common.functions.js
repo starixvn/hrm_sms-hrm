@@ -1,5 +1,4 @@
-﻿import $ from 'jquery/dist/jquery';
-import moment from 'moment';
+﻿import moment from 'moment';
 
 const _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
 
@@ -340,44 +339,43 @@ function downloadFile(data, fileName) {
     window.URL.revokeObjectURL(url);
 }
 
-function comparer(index) {
-    return function (a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index);
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
-    };
-}
-
-function getCellValue(row, index) {
-    return $(row).children('td').eq(index).text();
-}
-
-function refreshSorting() {
-    $('th.col-sorter').each(function () {
-        $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
-    });
-}
-
 function sortTable(th) {
+    let comparer = function (index) {
+        return function (a, b) {
+            var valA = getCellValue(a, index),
+                valB = getCellValue(b, index);
+            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
+        };
+    };
+    let getCellValue = function (row, index) {
+        return $(row).children('td').eq(index).text();
+    };
+    let refreshSorting = function () {
+        $('th.col-sorter').each(function () {
+            $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
+        });
+    };
+
     var $this = $(th).find('div.fa');
-        if ($this.hasClass('fa-sort-desc')) {
-            $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
-        } else if ($this.hasClass('fa-sort-asc')) {
-            $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
-        } else {
-            refreshSorting();
-            $this.addClass('fa-sort-desc');
-        }
+    if ($this.hasClass('fa-sort-desc')) {
+        $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+    } else if ($this.hasClass('fa-sort-asc')) {
+        $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+    } else {
+        refreshSorting();
+        $this.addClass('fa-sort-desc');
+    }
 
     var table = $(th).parents('table').eq(0);
-        var rows = table.find('tbody tr').toArray().sort(comparer($(th).index()));
-         th.asc = !th.asc;
-         if (!th.asc) {
-            rows = rows.reverse();
-        }
+    var rows = table.find('tbody tr').toArray().sort(comparer($(th).index()));
+    th.asc = !th.asc;
+    if (!th.asc) {
+        rows = rows.reverse();
+    }
 
-        for (var i = 0; i < rows.length; i++) {
-            table.append(rows[i]);
-        }
+    for (var i = 0; i < rows.length; i++) {
+        table.append(rows[i]);
+    }
 }
 
 export {
