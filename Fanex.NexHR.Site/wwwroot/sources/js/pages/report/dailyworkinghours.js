@@ -1,9 +1,10 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import axios from 'axios';
 import { parse } from 'qs';
+import 'floatthead/dist/jquery.floatThead';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, initDatepicker, resolveClientUrl, blockUI, unblockUI, downloadFile } from '../../shared/common.functions';
+import { axiosError, initDatepicker, resolveClientUrl, blockUI, unblockUI, downloadFile, sortTable, floatThead } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
@@ -16,6 +17,13 @@ $(document).ready(function () {
         }).then(response => {
             $('#DailyWorkingHoursDetails').html(response.data);
             floatThead('table#data');
+            $('th.col-sorter').on('click', function () {
+                sortTable(this);
+                $("tbody tr").each(function (index) {
+                    var initIndex = index + 1;
+                    $(this).find("td:eq(0)").html(initIndex++);
+                });
+            });
         }).catch(axiosError).then(() => unblockUI());
     };
 

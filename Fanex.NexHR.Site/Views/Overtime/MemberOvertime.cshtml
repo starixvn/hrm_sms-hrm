@@ -14,9 +14,6 @@
     <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
 }
 @section js{
-    <script>
-        var memberRequests = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MemberRequests));
-    </script>
     <script src="~/wwwroot/dist/js/overtime.member.index.js"></script>
 }
 @section Breadcrumb {
@@ -74,7 +71,7 @@
         @if (showCheckAll && (isVerifier || isApprover))
         {
             <tr>
-                <th colspan="14">
+                <th colspan="17">
                     <div style="float:right;">
                         @if (isVerifier)
                         {
@@ -91,6 +88,7 @@
             </tr>
         }
             <tr>
+                <th>@Labels.SymbolCount</th>
                 @if (showCheckAll)
                 {
                     <th>

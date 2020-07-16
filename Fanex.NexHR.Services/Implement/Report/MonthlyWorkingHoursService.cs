@@ -31,7 +31,7 @@
         private const ushort TotalUPLColumns = 4;
         private const ushort StartDateColumnIndex = 19;
         private const ushort StartUPLColumnIndex = 15;
-        private const ushort EndUPLColumnIndex = 20;
+        private const ushort EndUPLColumnIndex = 18;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -135,7 +135,7 @@
             }
 
             worksheet.Cells.AutoFitColumns();
-            worksheet.View.FreezePanes(StartBodyRowIndex, 6);
+            worksheet.View.FreezePanes(StartBodyRowIndex, 8);
         }
 
         private void WriteHeader(ExcelWorksheet template, ExcelWorksheet worksheet, GetMonthlyWorkingHoursParam param)

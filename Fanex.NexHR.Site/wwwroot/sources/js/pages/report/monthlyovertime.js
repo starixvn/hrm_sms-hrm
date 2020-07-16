@@ -2,8 +2,9 @@
 import axios from 'axios';
 import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
+import 'floatthead/dist/jquery.floatThead';
 
-import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange, sortTable } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange, sortTable, floatThead } from '../../shared/common.functions';
 
 $(document).ready(function () {
 
@@ -17,6 +18,13 @@ $(document).ready(function () {
         }).then(response => {
             $('#MonthlyOvertimeDetails').html(response.data);
             floatThead('table#data');
+            $('th.col-sorter').on('click', function () {
+                sortTable(this);
+                $("tbody tr").each(function (index) {
+                    var initIndex = index + 1;
+                    $(this).find("td:eq(0)").html(initIndex++);
+                });
+            });
         }).catch(axiosError).then(() => unblockUI());
     };
 
@@ -49,13 +57,5 @@ $(document).ready(function () {
             const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
-    });
-
-    $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
-            var initIndex = index + 1;
-            $(this).find("td:eq(0)").html(initIndex++);
-        });
     });
 });

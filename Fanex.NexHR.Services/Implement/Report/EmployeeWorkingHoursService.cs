@@ -104,7 +104,7 @@
                     }
 
                     worksheet.Cells.AutoFitColumns();
-                    worksheet.View.FreezePanes(3, 6);
+                    worksheet.View.FreezePanes(3, 8);
 
                     return xlPackage.GetAsByteArray();
                 }

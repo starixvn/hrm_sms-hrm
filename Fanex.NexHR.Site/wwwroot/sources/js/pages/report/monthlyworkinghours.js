@@ -6,7 +6,7 @@ import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl, downloadFile
+    axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl, downloadFile, sortTable
 } from '../../shared/common.functions';
 
 $(document).ready(function () {
@@ -20,6 +20,13 @@ $(document).ready(function () {
         }).then(response => {
             $('#MonthlyWorkingHoursDetails').html(response.data);
             floatThead('table#data');
+            $('th.col-sorter').on('click', function () {
+                sortTable(this);
+                $("tbody tr").each(function (index) {
+                    var initIndex = index + 1;
+                    $(this).find("td:eq(0)").html(initIndex++);
+                });
+            });
         }).catch(axiosError).then(() => unblockUI());
     };
 

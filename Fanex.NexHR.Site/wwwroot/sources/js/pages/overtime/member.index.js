@@ -33,7 +33,7 @@ function sortMember() {
         sortTable(this);
         $("tbody tr").each(function (index) {
             var initIndex = index + 1;
-            $(this).find("td:eq(1)").html(initIndex++);
+            $(this).find("td:eq(0)").html(initIndex++);
         });
     });
 }

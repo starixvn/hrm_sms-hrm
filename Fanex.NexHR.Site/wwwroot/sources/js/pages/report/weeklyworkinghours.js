@@ -6,7 +6,7 @@ import axios from 'axios';
 import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile, sortTable } from '../../shared/common.functions';
 
 $(document).ready(function () {
     let query = function () {
@@ -19,6 +19,13 @@ $(document).ready(function () {
         }).then(response => {
             $('#WeeklyWorkingHoursDetails').html(response.data);
             floatThead('table#data');
+            $('th.col-sorter').on('click', function () {
+                sortTable(this);
+                $("tbody tr").each(function (index) {
+                    var initIndex = index + 1;
+                    $(this).find("td:eq(0)").html(initIndex++);
+                });
+            });
         }).catch(axiosError).then(() => unblockUI());
     };
 
