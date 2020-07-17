@@ -1,71 +1,63 @@
-﻿import 'tipsy/src/javascripts/jquery.tipsy';
+﻿import 'jquery-ui-bundle/jquery-ui';
+import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import '../../../libs/monthPicker/monPickr-0.0.3';
+import tippy from 'tippy.js';
 import axios from 'axios';
 import { parse } from 'qs';
 
 import { axiosError, blockUI, floatThead, unblockUI, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
+import { CurrentRequestStatus } from '../../shared/constants';
 
 const timesheetModule = (function ($) {
     function initTooltip() {
-        $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+        tippy('.tooltip-request', {
+            maxWidth: 'none',
+            animation: 'fade',
+            arrow: true,
+            placement: 'auto',
+            allowHTML: true,
+            appendTo: document.getElementById('tippy-request'),
+            content: (reference) => {
+                const object = $(reference),
+                    result = $('<div/>').html(object.data('requestdetail')).text(),
+                    leavetype = object.data('leavetype');
+                let status = '';
+                switch (parseInt(object.attr('data-currentStatus'))) {
+                    case CurrentRequestStatus.Pending:
+                        status = "Pending";
+                        break;
+                    case CurrentRequestStatus.Verified:
+                        status = "Verified";
+                        break;
+                    case CurrentRequestStatus.Approved:
+                        status = "Approved";
+                        break;
+                    case CurrentRequestStatus.Processed:
+                        status = "Processed";
+                        break;
+                    default:
+                        status = "Approved";
+                }
 
-        $('.tooltip-request').tipsy({
-            html: true,
-            gravity: 'n',
-            fade: true,
-            className: 'tipsy-request',
-            title: function () {
-                const object = $(this);
-                let title = '';
-                $.ajax({
-                    url: resolveClientUrl('request/GetMessageDetailRequest'),
-                    async: false,
-                    type: 'post',
-                    data: {
-                        'requesttype': object.attr('data-requesttype'),
-                        'fromdate': object.attr('data-fromdate'),
-                        'todate': object.attr('data-todate'),
-                        'requestedDate': object.attr('data-fromdate'),
-                        'fromtime': object.attr('data-fromtime'),
-                        'totime': object.attr('data-totime'),
-                        'createddate': object.attr('data-createddate'),
-                        'fromshiftCode': object.attr('data-fromshift'),
-                        'toshiftcode': object.attr('data-toshift'),
-                        'totaldays': object.attr('data-totaldays'),
-                        'totalmins': object.attr('data-totalmins'),
-                        'overtimetype': object.attr('data-ottype'),
-                        'isOvertimehours': object.attr('data-isothours'),
-                        'actualLateInEarlyOut': object.attr('data-actualLateInEarlyOut'),
-                        'keepInViewType': object.attr('data-keepinviewtypeid')
-                    },
-                    success: function (data) {
-                        title = "<table class='table-tooltip'>" +
-                            "<tr class='hasborder'>" +
-                            "<td class='col1'>Details</td>" +
-                            "<td class='col2'>" + data +
-                            "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
-                            object.attr('data-createddate') +
-                            "</td></tr><tr><td class='col1'>Remark</td><td class='col2'>" +
-                            object.attr('data-remark') +
-                            "</td></tr></table>";
-                    }
-                });
-
-                return title;
+                return "<div>" + "<table class='table-tooltip checkinout'>" +
+                    (leavetype ? "<tr class='hasborder'><td class='col1'>Leave Type</td><td class='col2'>" + leavetype + "</td></tr>" : '') +
+                    "<tr class='hasborder'>" +
+                    "<td class='col1'>Details</td>" +
+                    "<td class='col2'>" + result +
+                    "</td></tr><tr class='hasborder'><td class='col1'>Created Date</td><td class='col2'>" +
+                    object.attr('data-createddate') +
+                    "</td></tr><tr  class='hasborder'><td class='col1'>Remark</td><td class='col2'>" +
+                    object.attr('data-remark') + "</td></tr>" +
+                    "</td></tr><tr><td class='col1'>Status</td><td class='col2'>" + status + "</td></table ></div>";
             }
         });
 
-        $('.tooltip-overtime').tipsy({
-            html: true,
-            gravity: 'n',
-            fade: true,
-            className: 'tipsy-tooltip',
-            title: function () {
-                const object = $(this);
-                return "<div><div class='overtime-tooltip'>" + object.attr('data-fromtime') + "-" + object.attr('data-totime') + "</div></div>";
-            }
+        tippy('.tooltip-tippy', {
+            animation: 'fade',
+            arrow: true,
+            placement: 'auto'
         });
     }
 
@@ -77,9 +69,9 @@ const timesheetModule = (function ($) {
             params: parse($('.filter').serialize()),
             responseType: 'text'
         }).then(response => {
-            $('#timesheetDetails').html(response.data);
-            initTooltip();
+            $('#data').html(response.data);
             floatThead('table#data');
+            initTooltip();
         }).catch(axiosError).then(() => unblockUI());
     }
 
