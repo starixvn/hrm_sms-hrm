@@ -52,7 +52,7 @@ const workingCalendarModule = (function ($) {
                 table.search(this.value).draw();
             });
 
-            sortTableInit();
+            initSortTable();
 
             $('#prev-week').click(function () {
                 const fromNextDate = $('#FromPreviousDate').val(),
@@ -136,9 +136,9 @@ const workingCalendarModule = (function ($) {
         });
     }
 
-    function sortTableInit() {
+    function initSortTable() {
         $('th.col-sorter').on('click', function () {
-            sortCustomTable(this);
+            sortCustomTable('#data', this);
         });
     }
 

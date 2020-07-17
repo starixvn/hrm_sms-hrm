@@ -22,13 +22,13 @@ function query() {
     }).then(response => {
         $('#data').html(response.data);
         floatThead('table#data');
-        sortTableInit()
+        initSortTable()
     }).catch(axiosError).then(() => unblockUI());
 }
 
-function sortTableInit() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
+        sortTable('#data', this);
     });
 }
 

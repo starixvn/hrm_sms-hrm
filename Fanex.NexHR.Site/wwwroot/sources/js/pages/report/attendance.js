@@ -72,17 +72,17 @@ function query() {
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
-        $('#data').html(response.data);
+        $('#attendance-report').html(response.data);
+        initSortTable();
         floatThead('table#data');
         initTooltip();
-        sortTableInit();
     }).catch(axiosError).then(() => unblockUI());
 }
 
-function sortTableInit() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
+        sortTable('#data', this);
+        $("#data tbody tr").each(function (index) {
             var initIndex = index + 1;
             $(this).find("td:eq(0)").html(initIndex++);
         });

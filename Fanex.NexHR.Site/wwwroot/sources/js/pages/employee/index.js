@@ -53,7 +53,7 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
                 }
 
                 floatThead('table#data');
-                sortTableInit();
+                initSortTable();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 unblockUI();
@@ -83,9 +83,9 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
         });
     }
 
-    function sortTableInit() {
+    function initSortTable() {
         $('th.col-sorter').on('click', function () {
-            sortTable(this);
+            sortTable('#data', this);
             $("tbody tr").each(function (index) {
                 var initIndex = index + 1;
                 $(this).find("td:eq(0)").html(initIndex++);
