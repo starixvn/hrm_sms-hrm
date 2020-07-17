@@ -430,7 +430,7 @@
                     request.RequestTypeId == (short)RequestType.Leave ? request.LeaveType : request.RequestTypeId.RequestTypeToText();
                 worksheet.Cells[rowIndex, colIndex++].Value = GetRequestDetails(request);
                 worksheet.Cells[rowIndex, colIndex++].Value = request.Remark;
-                worksheet.Cells[rowIndex, colIndex++].Value = request.CreatedDate;
+                worksheet.Cells[rowIndex, colIndex++].Value = request.CreatedDate.ToString(@"ddd, dd MMM, yyyy");
                 worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
 
                 rowIndex++;
