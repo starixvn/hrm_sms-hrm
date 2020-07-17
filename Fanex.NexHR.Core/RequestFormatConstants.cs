@@ -3,7 +3,7 @@
     public static class RequestFormatConstants
     {
         public const string MsgLeaveWithNoFormat = "{0} ({1})";
-        public const string MsgLeaveHalfDayWithNoFormat = "{0} ({1} &rarr; {2})";
+        public const string MsgLeaveHalfDayWithNoFormat = "{0} ({1} → {2})";
 
         public const string MsgChangeShiftOneDayWithNoFormat = "{0} --> {1} ({2})";
         public const string MsgChangeShiftWithNoFormat = "{0}";
