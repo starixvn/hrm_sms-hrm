@@ -339,10 +339,10 @@ function downloadFile(data, fileName) {
     window.URL.revokeObjectURL(url);
 }
 
-function sortTable(th) {
+function sortTable(table, th) {
     let comparer = function (index) {
         return function (a, b) {
-            var valA = getCellValue(a, index),
+            let valA = getCellValue(a, index),
                 valB = getCellValue(b, index);
             return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
         };
@@ -356,25 +356,24 @@ function sortTable(th) {
         });
     };
 
-    var $this = $(th).find('div.fa');
-    if ($this.hasClass('fa-sort-desc')) {
-        $this.removeClass('fa-sort-desc').addClass('fa-sort-asc');
-    } else if ($this.hasClass('fa-sort-asc')) {
-        $this.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+    let $icon = $(th).find('div.fa');
+    if ($icon.hasClass('fa-sort-desc')) {
+        $icon.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+    } else if ($icon.hasClass('fa-sort-asc')) {
+        $icon.removeClass('fa-sort-asc').addClass('fa-sort-desc');
     } else {
         refreshSorting();
-        $this.addClass('fa-sort-desc');
+        $icon.addClass('fa-sort-desc');
     }
 
-    var table = $(th).parents('table').eq(0);
-    var rows = table.find('tbody tr').toArray().sort(comparer($(th).index()));
+    let rows = $(table).find('tbody tr').toArray().sort(comparer($(th).index()));
     th.asc = !th.asc;
     if (!th.asc) {
         rows = rows.reverse();
     }
 
-    for (var i = 0; i < rows.length; i++) {
-        table.append(rows[i]);
+    for (let i = 0; i < rows.length; i++) {
+        $(table).append(rows[i]);
     }
 }
 
