@@ -1,5 +1,4 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import '../../../libs/monthPicker/monPickr-0.0.3';
 import tippy from 'tippy.js';

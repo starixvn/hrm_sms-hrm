@@ -48,10 +48,10 @@
                             </a>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@item.FullName">@item.NickName</span>
+                            <span class="tooltip-tippy" title="@item.FullName">@item.NickName</span>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@item.Team">@item.TeamCode</span>
+                            <span class="tooltip-tippy" title="@item.Team">@item.TeamCode</span>
                         </td>
                         @if (item.IsOffDay != 0 && item.ShiftId.HasValue)
                         {
@@ -64,7 +64,7 @@
                         @if (item.InFixed.HasValue)
                         {
                             <td>
-                                <span class="tooltip-tipsy" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.InFixed.Value.ToString("HH:mm")</span>
+                                <span class="tooltip-tippy" title="@item.InFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.InFixed.Value.ToString("HH:mm")</span>
                             </td>
                         }
                         else
@@ -74,7 +74,7 @@
                         @if (item.OutFixed.HasValue)
                         {
                             <td>
-                                <span class="tooltip-tipsy" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.OutFixed.Value.ToString("HH:mm")</span>
+                                <span class="tooltip-tippy" title="@item.OutFixed.Value.ToString("ddd, dd MMM, yyyy HH:mm:ss")">@item.OutFixed.Value.ToString("HH:mm")</span>
                             </td>
                         }
                         else
