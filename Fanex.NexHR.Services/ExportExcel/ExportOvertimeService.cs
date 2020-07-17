@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
+    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models.Overtime;
@@ -76,13 +77,16 @@
                     }
 
                     // summary
-                    templateWorksheet.Cells[LineOfTotal, 1, LineOfTotal, TotalColumns].Copy(workSheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-                    const byte Total = 3 ;
-                    for (var i = 0; i <= Total; i++)
+                    if (memberRequests.Any())
                     {
-                        colIndex = StartTotal + i;
-                        var excelAddress = $"{workSheet.Cells[StartBodyRow, colIndex].Address}:{workSheet.Cells[rowIndex - 1, colIndex].Address}";
-                        workSheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                        templateWorksheet.Cells[LineOfTotal, 1, LineOfTotal, TotalColumns].Copy(workSheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+                        const byte Total = 3;
+                        for (var i = 0; i <= Total; i++)
+                        {
+                            colIndex = StartTotal + i;
+                            var excelAddress = $"{workSheet.Cells[StartBodyRow, colIndex].Address}:{workSheet.Cells[rowIndex - 1, colIndex].Address}";
+                            workSheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                        }
                     }
 
                     workSheet.Cells.AutoFitColumns();

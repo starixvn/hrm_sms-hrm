@@ -124,14 +124,17 @@
             WriteBody(template, worksheet, monthlyWorkings, ref rowIndex, param);
 
             // summary
-            const byte SummaryRowIndex = 5;
-            TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns;
-            template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
-            for (var i = 9; i <= TotalColumns; i++)
+            if (monthlyWorkings.Any())
             {
-                template.Cells[SummaryRowIndex, 9].Copy(worksheet.Cells[rowIndex, i]);
-                var excelAddress = $"{worksheet.Cells[StartBodyRowIndex, i].Address}:{worksheet.Cells[rowIndex - 1, i].Address}";
-                worksheet.Cells[rowIndex, i].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                const byte SummaryRowIndex = 5;
+                TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns;
+                template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
+                for (var i = 9; i <= TotalColumns; i++)
+                {
+                    template.Cells[SummaryRowIndex, 9].Copy(worksheet.Cells[rowIndex, i]);
+                    var excelAddress = $"{worksheet.Cells[StartBodyRowIndex, i].Address}:{worksheet.Cells[rowIndex - 1, i].Address}";
+                    worksheet.Cells[rowIndex, i].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                }
             }
 
             worksheet.Cells.AutoFitColumns();
@@ -297,13 +300,16 @@
             WriteBodySummary(template, worksheet, monthlyWorkings, months, ref rowIndex, templateIndex);
 
             // summary
-            colIndex = 1;
-            template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
-            for (var i = 2; i <= TotalColumns; i++)
+            if (monthlyWorkings.Any())
             {
-                template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                colIndex = 1;
+                template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
+                for (var i = 2; i <= TotalColumns; i++)
+                {
+                    template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+                    worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                }
             }
 
             const byte MinimumWidth = 10;
