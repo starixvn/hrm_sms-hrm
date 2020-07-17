@@ -59,10 +59,10 @@ function exportReport() {
     });
 }
 
-function sortAttendanceWorking() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
+        sortTable('table#data', this);
+        $("table#data tbody tr").each(function (index) {
             var initIndex = index + 1;
             $(this).find("td:eq(0)").html(initIndex++);
         });
@@ -70,11 +70,11 @@ function sortAttendanceWorking() {
 }
 $(document).ready(function () {
     floatThead('table#data');
+    initSortTable();
     initDatepicker();
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     dataChangeEvent();
     GetOrgChart();
     searchKeyword();
     exportReport();
-    sortAttendanceWorking();
 });

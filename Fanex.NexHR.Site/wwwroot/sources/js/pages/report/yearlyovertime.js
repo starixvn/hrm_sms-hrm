@@ -6,10 +6,10 @@ import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 import { axiosError, floatThead, resolveClientUrl, blockUI, unblockUI, downloadFile, sortTable } from '../../shared/common.functions';
 
-function sortYearlyOvertime() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
+        sortTable('table#data', this);
+        $("table#data tbody tr").each(function (index) {
             var initIndex = index + 1;
             $(this).find("td:eq(0)").html(initIndex++);
         });
@@ -54,7 +54,7 @@ function exportExcel() {
 
 $(document).ready(function () {
     floatThead('table#data');
-    sortYearlyOvertime();
+    initSortTable();
     searchKeyWord();
     getOrgChart();
     exportExcel();

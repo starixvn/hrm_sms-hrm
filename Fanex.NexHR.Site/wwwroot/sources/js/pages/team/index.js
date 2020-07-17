@@ -29,18 +29,19 @@ function deleteTeam(id) {
     });
 }
 
-function sortTeam() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
+        sortTable('table#data',this);
+        $("table#data tbody tr").each(function (index) {
             var initIndex = index + 1;
             $(this).find("td:eq(0)").html(initIndex++);
         });
     });
 }
+
 $(document).ready(function () {
-    sortTeam();
     floatThead('table#data');
+    initSortTable();
     $('table#data a.deleteTeam').on('click', function () {
         const teamId = $(this).data('team-id');
         deleteTeam(teamId);

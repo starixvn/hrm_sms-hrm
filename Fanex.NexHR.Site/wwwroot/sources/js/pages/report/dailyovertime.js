@@ -10,9 +10,9 @@ import {
 } from '../../shared/common.functions';
 
 
-function sortDailyOverTime() {
+function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
+        sortTable('table#data', this);
     });
 }
 
@@ -53,7 +53,7 @@ $(document).ready(function () {
     initDatepicker();
     initFromDateOnChange($('#FromDate'), $('#ToDate'));
     floatThead('table#data');
-    sortDailyOverTime();
+    initSortTable();
     getOrgChart();
     searchKeyWord();
     exportExcel();
