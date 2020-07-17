@@ -9,6 +9,7 @@
     var currentUserId = (int)ViewBag.CurrentUserId;
     var isVerifier = (bool)ViewBag.IsVerifier;
     var isApprover = (bool)ViewBag.IsApprover;
+    var hasCheckBoxColumn = showCheckAll ? "has-check-box-column" : "";
 }
 @section css{
     <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
@@ -88,7 +89,6 @@
             </tr>
         }
             <tr>
-                <th>@Labels.SymbolCount</th>
                 @if (showCheckAll)
                 {
                     <th>
@@ -98,6 +98,7 @@
                         </div>
                     </th>
                 }
+                <th>@Labels.SymbolCount</th>
                 <th class="col-sorter">
                     @Labels.Department
                     <div class="fa fa-sort"></div>
@@ -154,7 +155,7 @@
                 <th>@Labels.Details</th>
             </tr>
     </thead>
-    <tbody id="listMemberOvertime">
+    <tbody id="listMemberOvertime" class="@hasCheckBoxColumn">
         @Html.Partial("_ListMemberOvertime", Model.MemberRequests)
     </tbody>
     <tfoot>

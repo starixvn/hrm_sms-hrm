@@ -30,10 +30,11 @@ function query() {
 
 function sortMember() {
     $('th.col-sorter').on('click', function () {
-        sortTable(this);
-        $("tbody tr").each(function (index) {
-            var initIndex = index + 1;
-            $(this).find("td:eq(0)").html(initIndex++);
+        sortTable('table#data', this);
+        let hasCheckBoxColumn = $('#listMemberOvertime').hasClass('has-check-box-column');
+        $('table#data tbody tr').each(function (index) {
+            let rowIndex = index + 1;
+            $(this).find(`td:eq(${hasCheckBoxColumn ? 1 : 0})`).html(rowIndex++);
         });
     });
 }

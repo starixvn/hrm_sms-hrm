@@ -14,7 +14,6 @@
     {
         index++;
     <tr>
-        <td>@index</td>    
         @if (showCheckAll)
         {
             <td>
@@ -29,6 +28,7 @@
                 }
             </td>
         }
+        <td>@index</td>
         <td>@request.Requester.Department</td>
         <td>@request.Requester.Section</td>
         <td>@request.Requester.Team</td>
@@ -78,7 +78,7 @@
 }
 else
 {
-    @RazorHelper.DisplayNoInformation(colspan: 14);
+    @RazorHelper.DisplayNoInformation(colspan: 16);
 }
 
 @helper RenderStatus(MonthlyOvertimeRequest request, int currentUserId)

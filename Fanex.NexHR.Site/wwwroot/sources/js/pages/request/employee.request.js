@@ -551,13 +551,13 @@ $(function () {
         });
     }
 
-    function sortMember() {
+    function initSortTable() {
         $('th.col-sorter').on('click', function () {
-            sortTable(this);
+            sortTable('table#data', this);
             let hasCheckBoxColumn = $('#employee-request-body').hasClass('has-check-box-column');
-            $("tbody tr").each(function (index) {
-                var initIndex = index + 1;
-                $(this).find(`td:eq(${hasCheckBoxColumn ? 1 : 0})`).html(initIndex++);
+            $('table#data tbody tr').each(function (index) {
+                let rowIndex = index + 1;
+                $(this).find(`td:eq(${hasCheckBoxColumn ? 1 : 0})`).html(rowIndex++);
             });
         });
     }
@@ -640,6 +640,6 @@ $(function () {
 
         floatThead('#data');
         initEventExportExcel();
-        sortMember();
+        initSortTable();
     });
 });

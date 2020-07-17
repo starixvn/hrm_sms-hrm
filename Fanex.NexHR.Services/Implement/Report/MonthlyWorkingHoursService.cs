@@ -29,7 +29,7 @@
     {
         private const ushort TotalFixedColumns = 16;
         private const ushort TotalUPLColumns = 4;
-        private const ushort StartDateColumnIndex = 19;
+        private const ushort StartDateColumnIndex = 21;
         private const ushort StartUPLColumnIndex = 17;
         private const ushort EndUPLColumnIndex = 20;
         private const ushort StartHeaderRowIndex = 2;

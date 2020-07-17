@@ -21,10 +21,10 @@ $(document).ready(function () {
             $('#MonthlyWorkingHoursDetails').html(response.data);
             floatThead('table#data');
             $('th.col-sorter').on('click', function () {
-                sortTable(this);
-                $("tbody tr").each(function (index) {
-                    var initIndex = index + 1;
-                    $(this).find("td:eq(0)").html(initIndex++);
+                sortTable('table#data', this);
+                $('table#data tbody tr').each(function (index) {
+                    let rowIndex = index + 1;
+                    $(this).find('td:eq(0)').html(rowIndex++);
                 });
             });
         }).catch(axiosError).then(() => unblockUI());
