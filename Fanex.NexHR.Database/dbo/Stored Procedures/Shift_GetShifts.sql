@@ -31,6 +31,8 @@ SELECT [ShiftID]
 	  ,Color
 	  ,TotalHours
 	  ,IsDisabled
+	  ,IsInAfterDay
+	  ,IsOutAfterDay
 FROM [dbo].[Shift] WITH(NOLOCK)
 order by [Code]
 

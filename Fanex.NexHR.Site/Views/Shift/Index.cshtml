@@ -44,6 +44,7 @@
             <th class="left">@Labels.Shift</th>
             <th>@Labels.In</th>
             <th>@Labels.Out</th>
+			<th>@Labels.Status</th>
             @if (isHost)
             {
                 <th>@Labels.Edit</th>
@@ -59,15 +60,20 @@
                 i++;
                 <tr>
                     <td>@i</td>
-                    <td class="align-left">
-                        @item.Name
-                    </td>
-                    <td>
-                        @item.BeginCheckInTime &nbsp;@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : "- " + item.EndCheckInTime)
-                    </td>
-                    <td>
-                        @item.BeginCheckOutTime &nbsp;@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : "- " + item.EndCheckOutTime)
-                    </td>
+					<td class="align-left">
+						@item.Name
+					</td>
+					<td>
+						@item.BeginCheckInTime @((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : " - " + item.EndCheckInTime)
+						@(item.IsInAfterDay ? "+" : "")
+					</td>
+					<td>
+						@item.BeginCheckOutTime @((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : " - " + item.EndCheckOutTime)
+						@(item.IsOutAfterDay ? "+" : "")
+					</td>
+					<td>
+						@(item.IsDisabled ? Labels.Disabled : Labels.Active)
+					</td>
                     @if (isHost)
                     {
                         <td class="cmd">
