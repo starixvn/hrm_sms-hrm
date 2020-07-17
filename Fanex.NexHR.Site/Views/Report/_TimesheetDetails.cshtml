@@ -6,6 +6,7 @@
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels
 @model IList<EmployeeAttendanceModel>
+<table id="data" class="table table-custom">
     @{
         var x = 1;
     }
@@ -159,3 +160,4 @@
                 @RazorHelper.DisplayNoInformation(colspan: 14);
             }
         </tbody>
+</table>

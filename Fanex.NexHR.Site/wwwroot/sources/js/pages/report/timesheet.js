@@ -69,7 +69,7 @@ const timesheetModule = (function ($) {
             params: parse($('.filter').serialize()),
             responseType: 'text'
         }).then(response => {
-            $('#data').html(response.data);
+            $('#timesheetDetails').html(response.data);
             floatThead('table#data');
             initTooltip();
         }).catch(axiosError).then(() => unblockUI());
