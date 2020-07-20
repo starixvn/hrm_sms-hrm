@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -27,6 +29,7 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
+		,@OldOnDate DATE
 		,@KeepInViewRequestTypeId TINYINT = 7
 		,@IsTopManager BIT
 		-- action type
@@ -223,6 +226,10 @@ BEGIN
 		RETURN;
 	END
 
+	SELECT @OldOnDate = OnDate
+	FROM dbo.KeepInViewRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+
 	UPDATE WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET Remark = @Remark
 		,CurrentStatus = CASE 
@@ -267,6 +274,14 @@ BEGIN
 			,@RoleId = 3
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
+	END
+
+	IF @OldOnDate <> @OnDate
+	BEGIN
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OldOnDate
+			,@toDate = @OldOnDate
+			,@empIds = @EmpId
+			,@isUpdateRequestData = 1
 	END
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OnDate

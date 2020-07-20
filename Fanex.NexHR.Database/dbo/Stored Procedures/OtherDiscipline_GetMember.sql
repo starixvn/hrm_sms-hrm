@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[OtherDiscipline_GetMember] @SupervisorId INT
-	,@Query NVARCHAR(100) = NULL
+	,@Query NVARCHAR(100) = ''
 AS
 /*
 Created: 20191205@Tim.Trinh

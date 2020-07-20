@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -110,6 +111,8 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,gr.[Name] AS Team
+		,sec.Code AS Section
+		,dep.Code AS DepartmentCode
 		,tmp.WorkDate
 		,s.ShiftId
 		,s.Code AS ShiftCode
@@ -130,6 +133,8 @@ BEGIN
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ot.EmpId = emp.EmpId
 		INNER JOIN @tblEmployeeId AS empid ON emp.EmpId = empid.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId =  sec.DepartmentId
 		LEFT JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON emp.EmpId = empca.EmpId
 		AND ot.OvertimeDate = empca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]

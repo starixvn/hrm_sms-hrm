@@ -12,7 +12,7 @@ DB: HRM
 Original:
 
 Revisions:
-	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
+	- 20200714@Merlin.Le: Get section and department code
 Param's Explanation:
 */
 BEGIN

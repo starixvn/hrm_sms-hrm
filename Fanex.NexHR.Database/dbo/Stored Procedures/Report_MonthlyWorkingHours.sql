@@ -143,7 +143,7 @@ BEGIN
 		AND empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		LEFT JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON emp.EmpId = empatt.EmpId
-		AND empatt.AttendanceDate = empca.WorkDate
+		AND CAST(empatt.AttendanceDate AS DATE) = empca.WorkDate
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON empca.LeaveTypeId = lv.LeaveTypeId
 		LEFT JOIN dbo.LeaveType AS lv2 WITH (NOLOCK) ON empca.LeaveTypeId2 = lv2.LeaveTypeId
 		LEFT JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON empca.RequestId = r.RequestId

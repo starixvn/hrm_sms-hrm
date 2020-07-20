@@ -28,6 +28,8 @@ BEGIN
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
 		,@RequestType TINYINT = 5
+		,@OldFromDate DATE
+		,@OldToDate DATE
 		-- action type
 		,@VerifyRequest TINYINT = 2
 		,@ApproveRequest TINYINT = 3
@@ -294,7 +296,26 @@ BEGIN
 		RETURN
 	END
 
-	UPDATE WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.ChangeShiftRequest WITH (NOLOCK)
+			WHERE TypeId = @ChangeShift
+			)
+	BEGIN
+		SELECT @OldFromDate = MIN(OnDate)
+			,@OldToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @OldFromDate = MIN(OnDate)
+			,@OldToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+
+	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET Remark = @Remark
 		,CurrentStatus = CASE 
 			WHEN @IsTopManager = 1
@@ -372,6 +393,15 @@ BEGIN
 			,@ToDate = MAX(ToDate)
 		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
 		WHERE RequestId = @RequestId
+	END
+
+	IF @OldFromDate <> @FromDate
+		OR @OldToDate <> @ToDate
+	BEGIN
+		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OldFromDate
+			,@toDate = @OldToDate
+			,@empIds = @EmpId
+			,@isUpdateRequestData = 1
 	END
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate

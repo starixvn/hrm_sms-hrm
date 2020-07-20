@@ -608,6 +608,9 @@ BEGIN
 		,empca.LeaveTypeId = rq.LeaveTypeId
 		,empca.FromTime = rq.FromTime
 		,empca.ToTime = rq.ToTime
+		,empca.LeaveTypeId2 = NULL
+		,empca.FromTime2 = NULL
+		,empca.ToTime2 = NULL
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmpId
 		AND empca.WorkDate = rq.WorkDate

@@ -1,8 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.Shift_GetShifts    Script Date: 7/20/2016 10:19:18 AM ******/
-/****** Object:  Stored Procedure dbo.Shift_GetShifts    Script Date: 7/19/2016 5:22:20 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-CREATE PROCEDURE [dbo].[Shift_GetShifts]
+﻿CREATE PROCEDURE [dbo].[Shift_GetShifts]
 AS
 /*
 Created: Tom.Vo@2013-10-23

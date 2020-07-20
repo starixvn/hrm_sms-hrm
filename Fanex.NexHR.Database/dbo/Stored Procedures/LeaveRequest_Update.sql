@@ -62,6 +62,8 @@ BEGIN
 		,@OldTotalDays INT
 		,@TotalDaysPaternity INT
 		,@BalanceDaysPaternity INT
+		,@OldFromDate DATE
+		,@OldToDate DATE
 
 	CREATE TABLE #tblLeaveRequestDetail (
 		OnDate DATETIME
@@ -728,6 +730,11 @@ BEGIN
 			AND @TmpFromDate >= ChildBornDate
 			AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
 	END
+	
+	SELECT @OldFromDate = FromDate
+		,@OldToDate = ToDate
+	FROM dbo.LeaveRequest WITH (NOLOCK)
+	WHERE RequestId = @RequestId
 
 	BEGIN TRY
 		BEGIN TRANSACTION Update_LeaveMultiRequest
@@ -809,6 +816,15 @@ BEGIN
 				,@RoleID = 3
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+		END
+
+		IF @OldFromDate <> @FromDate
+			OR @OldToDate <> @ToDate
+		BEGIN
+			EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OldFromDate
+				,@toDate = @OldToDate
+				,@empIds = @EmpId
+				,@isUpdateRequestData = 1
 		END
 
 		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate

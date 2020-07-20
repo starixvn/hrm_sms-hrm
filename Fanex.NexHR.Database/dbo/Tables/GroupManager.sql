@@ -1,6 +1,8 @@
-﻿CREATE TABLE [dbo].[GroupManager]
-(
-	[GroupId] INT NOT NULL PRIMARY KEY,
-	[EmpId] INT NOT NULL PRIMARY KEY,
-	[RoleId] TINYINT NOT NULL PRIMARY KEY
-)
+﻿CREATE TABLE [dbo].[GroupManager] (
+    [GroupId] INT     NOT NULL,
+    [EmpId]   INT     NOT NULL,
+    [RoleId]  TINYINT NOT NULL,
+    CONSTRAINT [PK_GroupManager] PRIMARY KEY CLUSTERED ([GroupId] ASC, [EmpId] ASC, [RoleId] ASC)
+);
+
+

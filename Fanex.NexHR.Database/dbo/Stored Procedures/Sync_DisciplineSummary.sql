@@ -92,7 +92,24 @@ BEGIN
 	GROUP BY EmpId
 		,WorkDate
 	
-	UNION
+	INSERT INTO #tblDisciplineSummary (
+		EmployeeId
+		,WorkDate
+		,ChangeShift
+		,MissingCheckInOut
+		,LateIn
+		,EarlyOut
+		,[Absent]
+		,UnpaidLeave
+		,WorkingUndertime
+		,UnpaidLeaveAbsent
+		,UnplannedLeave
+		,WeekendLeave
+		,OtherDisciplines
+		,SystemSubtractScore
+		,ModifiedDate
+		,IsDeleted
+		)
 	SELECT d.EmpId
 		,d.WorkDate
 		,SUM(CASE 
@@ -155,10 +172,7 @@ BEGIN
 					AND unplanned.DisciplineTypeId IS NOT NULL THEN dbo.fncGetDisciplineScoreById(10)
 				ELSE 0
 				END) AS WeekendLeave
-		,SUM(CASE 
-				WHEN otherdis.EmpId IS NOT NULL THEN otherdis.Score
-				ELSE 0
-				END) AS OtherDisciplines
+		,0 AS OtherDisciplines
 		,SUM(CASE 
 				WHEN d.IsChangeShift = 1 THEN dbo.fncGetDisciplineScoreById(1)
 				ELSE 0
@@ -200,8 +214,6 @@ BEGIN
 		AND ISNULL(emp.isDeleted, 0) = 0
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON emp.EmpId = es.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
-		LEFT JOIN dbo.OtherDiscipline AS otherdis WITH (NOLOCK) ON d.EmpId = otherdis.EmpId
-		AND d.WorkDate = otherdis.WorkDate
 	-- change shift
 		LEFT JOIN dbo.DisciplineGroupRule AS cs WITH (NOLOCK) ON cs.DisciplineTypeId = 1
 		AND cs.GroupId = emp.GroupId
@@ -252,13 +264,47 @@ BEGIN
 		AND weekendleave.GroupId = emp.GroupId
 		AND weekendleave.IsLocal = es.IsLocal
 		AND weekendleave.Value = 1
-	WHERE (
-			d.ModifiedDate > @LastModifiedDate
-			OR otherdis.ModifiedDate > @LastModifiedDate
-			)
+	WHERE d.ModifiedDate > @LastModifiedDate
 		AND d.IsDeleted = 0
 	GROUP BY d.EmpId
 		,d.WorkDate
+
+	INSERT INTO #tblDisciplineSummary (
+		EmployeeId
+		,WorkDate
+		,ChangeShift
+		,MissingCheckInOut
+		,LateIn
+		,EarlyOut
+		,[Absent]
+		,UnpaidLeave
+		,WorkingUndertime
+		,UnpaidLeaveAbsent
+		,UnplannedLeave
+		,WeekendLeave
+		,OtherDisciplines
+		,SystemSubtractScore
+		,ModifiedDate
+		,IsDeleted
+		)
+	SELECT otherdis.EmpId
+		,otherdis.WorkDate
+		,0 AS ChangeShift
+		,0 AS MissingCheckInOut
+		,0 AS LateIn
+		,0 AS EarlyOut
+		,0 AS [Absent]
+		,0 AS UnpaidLeave
+		,0 AS WorkingUndertime
+		,0 AS UnpaidLeaveAbsent
+		,0 AS UnplannedLeave
+		,0 AS WeekendLeave
+		,CASE WHEN otherdis.IsDeleted = 0 THEN otherdis.Score ELSE 0 END AS OtherDisciplines
+		,0 AS SystemSubtractScore
+		,otherdis.ModifiedDate
+		,otherdis.IsDeleted
+	FROM dbo.OtherDiscipline AS otherdis WITH (NOLOCK)
+	WHERE otherdis.ModifiedDate > @LastModifiedDate
 
 	INSERT INTO #tblDisciplineSummaryResult (
 		EmployeeId

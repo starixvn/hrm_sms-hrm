@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
+﻿
+CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@EmployeeId INT = NULL
 	,@TeamIds VARCHAR(MAX) = NULL
 	,@Month DATE = NULL
@@ -13,7 +14,6 @@ DB: HRM
 Original:
 
 Revisions:
-	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
 Param's Explanation:
 */
 BEGIN
