@@ -42,7 +42,7 @@
 
             //// render hearder
             var rowTakeLeave = sheet.GetRow(2);
-            var cellTakeLeave = rowTakeLeave.GetCell(5);
+            var cellTakeLeave = rowTakeLeave.GetCell(8);
             cellTakeLeave.SetCellValue("Leave in " + year);
 
             var rowAnnualBalance = sheet.GetRow(2);
@@ -63,7 +63,7 @@
 				sheet.CopyRow(templateSheet, rowCopy, rowIndex);
 				var row = sheet.GetRow(rowIndex);
 
-				row.GetCell(0).SetCellValue(index);
+				row.GetCell(0).SetCellValue(index + 1);
 				row.GetCell(1).SetCellValue(item.Department);
 				row.GetCell(2).SetCellValue(item.Section);
 				row.GetCell(3).SetCellValue(item.Team);

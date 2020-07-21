@@ -398,7 +398,7 @@ BEGIN
 		,ISNULL(OpenKIV, 0) - ISNULL(dek.DeductKIVDays, 0) AS KIVBalance
 		,'' AS Remark
 		,op.EmpId
-		,e.Code
+		,e.[Code]
 		,FullName
 		,NickName
 		,g.[Rank]
@@ -423,9 +423,9 @@ BEGIN
 			@isLocal IS NULL
 			OR es.IsLocal = @isLocal
 			)
-	ORDER BY [Rank]
-		,FullName
-		,e.code
+	ORDER BY
+		g.[Name]
+		,e.[Code]
 
 	DROP TABLE #OpenBalance
 

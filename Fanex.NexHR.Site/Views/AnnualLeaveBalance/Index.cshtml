@@ -141,23 +141,9 @@
         </tr>
     </thead>
     @*Check if exists*@
-    @{
-        bool checkSummaryList = true;
-        foreach (LeaveSummaryByTeam leaveSumaryByTeam in Model.LeaveSumaries)
-        {
-            if (leaveSumaryByTeam.LeaveSummaryInTeam.Count > 0)
-            {
-                checkSummaryList = true;
-                break;
-            }
-            else
-            {
-                checkSummaryList = false;
-            }
-        }
-    }
-    @if (checkSummaryList)
-    {
+   
+    @if (Model.AllLeaveSumaries != null)
+	{
         <tbody>
            
             @foreach (LeaveSummary leave in Model.AllLeaveSumaries)
