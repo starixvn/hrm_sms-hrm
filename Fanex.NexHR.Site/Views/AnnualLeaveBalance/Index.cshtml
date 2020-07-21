@@ -102,25 +102,29 @@
 
 <table class="table table-custom">
     <thead>
-        <tr>
-            @if (hasPermissionToEdit)
-            {
-                <th rowspan="2">
-                    <input type="checkbox" class="checkbox-custom" id="checkuncheckall" name="checkuncheckall" />
-                    <label for="checkuncheckall"></label>
-                </th>
-            }
-            <th rowspan="2">@Labels.NickName</th>
-            <th rowspan="2">@Labels.KeepInView</th>
-            <th rowspan="2">@Labels.AnnualLeave</th>
-            <th colspan="12">Leave in @Model.Year</th>
-            <th rowspan="2">Balance of AL @Model.Year</th>
-            <th rowspan="2">Balance of KIV @Model.Year</th>
-            @if (hasPermissionToEdit)
-            {
-                <th rowspan="2">@Labels.Edit</th>
-            }
-        </tr>
+		<tr>
+			@if (hasPermissionToEdit)
+			{
+				<th rowspan="2">
+					<input type="checkbox" class="checkbox-custom" id="checkuncheckall" name="checkuncheckall" />
+					<label for="checkuncheckall"></label>
+				</th>
+			}
+			<th rowspan="2">@Labels.Department</th>
+			<th rowspan="2">@Labels.Section</th>
+			<th rowspan="2">@Labels.Team</th>
+			<th rowspan="2">@Labels.FullName</th>
+			<th rowspan="2">@Labels.NickName</th>
+			<th rowspan="2">@Labels.KeepInView</th>
+			<th rowspan="2">@Labels.AnnualLeave</th>
+			<th colspan="12">Leave in @Model.Year</th>
+			<th rowspan="2">Balance of AL @Model.Year</th>
+			<th rowspan="2">Balance of KIV @Model.Year</th>
+			@if (hasPermissionToEdit)
+			{
+				<th rowspan="2">@Labels.Edit</th>
+			}
+		</tr>
         <tr>
             <th>@Labels.Jan</th>
             <th>@Labels.Feb</th>
@@ -155,129 +159,131 @@
     @if (checkSummaryList)
     {
         <tbody>
-            @foreach (LeaveSummaryByTeam item in Model.LeaveSumaries)
+           
+            @foreach (LeaveSummary leave in Model.AllLeaveSumaries)
             {
-                if (item.LeaveSummaryInTeam.Count > 0)
-                {
-                    <tr>
-                        <td class="rowdivider align-left" colspan="19">
-                            <b>@item.Team.ToUpper()</b>
-                        </td>
-                    </tr>
-                }
-                foreach (LeaveSummary leave in item.LeaveSummaryInTeam)
-                {
-                    <tr>
-                        @if (hasPermissionToEdit)
-                        {
-                            <td>
-                                <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.EmpId" data-id="@leave.EmpId" />
-                                <label for="checkbox-@leave.EmpId"></label>
-                            </td>
-                        }
-                        <td>
-                            <span class="tooltip-tipsy" title="@leave.FullName">@leave.Nickname</span>
-                        </td>
-                        <td>
-                            @if (leave.CreditKIV > 0)
-                            {
-                                <span>@leave.CreditKIV.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.AnnualLeaveCurrentYear != 0)
-                            {
-                                <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Jan != 0)
-                            {
-                                <span class="@(leave.Jan < 0 ? "red" : string.Empty)">@leave.Jan.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Feb != 0)
-                            {
-                                <span class="@(leave.Feb < 0 ? "red" : string.Empty)">@leave.Feb.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Mar != 0)
-                            {
-                                <span class="@(leave.Mar < 0 ? "red" : string.Empty)">@leave.Mar.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Apr != 0)
-                            {
-                                <span class="@(leave.Apr < 0 ? "red" : string.Empty)">@leave.Apr.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.May != 0)
-                            {
-                                <span class="@(leave.May < 0 ? "red" : string.Empty)">@leave.May.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Jun != 0)
-                            {
-                                <span class="@(leave.Jun < 0 ? "red" : string.Empty)">@leave.Jun.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Jul != 0)
-                            {
-                                <span class="@(leave.Jul < 0 ? "red" : string.Empty)">@leave.Jul.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Aug != 0)
-                            {
-                                <span class="@(leave.Aug < 0 ? "red" : string.Empty)">@leave.Aug.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Sep != 0)
-                            {
-                                <span class="@(leave.Sep < 0 ? "red" : string.Empty)">@leave.Sep.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Oct != 0)
-                            {
-                                <span class="@(leave.Oct < 0 ? "red" : string.Empty)">@leave.Oct.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Nov != 0)
-                            {
-                                <span class="@(leave.Nov < 0 ? "red" : string.Empty)">@leave.Nov.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            @if (leave.Dec != 0)
-                            {
-                                <span class="@(leave.Dec < 0 ? "red" : string.Empty)">@leave.Dec.ToString("0.0")</span>
-                            }
-                        </td>
-                        <td>
-                            <span class="@(leave.LeaveBalance < 0 ? "red" : string.Empty)">@leave.LeaveBalance.ToString("0.0")</span>
-                        </td>
-                        <td>
-                            <span class="@(leave.KIVBalance < 0 ? "red" : string.Empty)">@leave.KIVBalance.ToString("0.0")</span>
-                        </td>
-                        @if (hasPermissionToEdit)
-                        {
-                            <td>
-                                <a href="~/annualleavebalance/employee/@leave.EmpId">
-                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                </a>
-                            </td>
-                        }
-                    </tr>
-                }
+				<tr>
+					@if (hasPermissionToEdit)
+					{
+						<td>
+							<input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.EmpId" data-id="@leave.EmpId" />
+							<label for="checkbox-@leave.EmpId"></label>
+						</td>
+					}
+					<td>
+						<span>@leave.Department</span>
+					</td>
+					<td>
+						<span>@leave.Section</span>
+					</td>
+					<td>
+						<span>@leave.Team</span>
+					</td>
+					<td>
+						<span>@leave.FullName</span>
+					</td>
+					<td>
+						<span>@leave.Nickname</span>
+					</td>
+					<td>
+						@if (leave.CreditKIV > 0)
+						{
+							<span>@leave.CreditKIV.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.AnnualLeaveCurrentYear != 0)
+						{
+							<span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Jan != 0)
+						{
+							<span class="@(leave.Jan < 0 ? "red" : string.Empty)">@leave.Jan.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Feb != 0)
+						{
+							<span class="@(leave.Feb < 0 ? "red" : string.Empty)">@leave.Feb.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Mar != 0)
+						{
+							<span class="@(leave.Mar < 0 ? "red" : string.Empty)">@leave.Mar.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Apr != 0)
+						{
+							<span class="@(leave.Apr < 0 ? "red" : string.Empty)">@leave.Apr.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.May != 0)
+						{
+							<span class="@(leave.May < 0 ? "red" : string.Empty)">@leave.May.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Jun != 0)
+						{
+							<span class="@(leave.Jun < 0 ? "red" : string.Empty)">@leave.Jun.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Jul != 0)
+						{
+							<span class="@(leave.Jul < 0 ? "red" : string.Empty)">@leave.Jul.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Aug != 0)
+						{
+							<span class="@(leave.Aug < 0 ? "red" : string.Empty)">@leave.Aug.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Sep != 0)
+						{
+							<span class="@(leave.Sep < 0 ? "red" : string.Empty)">@leave.Sep.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Oct != 0)
+						{
+							<span class="@(leave.Oct < 0 ? "red" : string.Empty)">@leave.Oct.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Nov != 0)
+						{
+							<span class="@(leave.Nov < 0 ? "red" : string.Empty)">@leave.Nov.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						@if (leave.Dec != 0)
+						{
+							<span class="@(leave.Dec < 0 ? "red" : string.Empty)">@leave.Dec.ToString("0.0")</span>
+						}
+					</td>
+					<td>
+						<span class="@(leave.LeaveBalance < 0 ? "red" : string.Empty)">@leave.LeaveBalance.ToString("0.0")</span>
+					</td>
+					<td>
+						<span class="@(leave.KIVBalance < 0 ? "red" : string.Empty)">@leave.KIVBalance.ToString("0.0")</span>
+					</td>
+					@if (hasPermissionToEdit)
+					{
+						<td>
+							<a href="~/annualleavebalance/employee/@leave.EmpId">
+								<i class="fa fa-pencil fa-lg icon-edit"></i>
+							</a>
+						</td>
+					}
+				</tr>
             }
         </tbody>
     }

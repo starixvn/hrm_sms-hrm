@@ -17,5 +17,6 @@
         public bool IsShowCloseBalance { get; set; }
 
         public IEnumerable<LeaveSummaryByTeam> LeaveSumaries { get; set; }
-    }
+		public IEnumerable<LeaveSummary> AllLeaveSumaries { get; set; }
+	}
 }

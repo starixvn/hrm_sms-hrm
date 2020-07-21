@@ -50,10 +50,8 @@
                 SupervisorId = null
             };
             IList<LeaveSummary> leaveSummary = reportService.GetAnnualLeaveBalanceReport(criteria);
-            IList<Team> teams = commonDataService.GetAllTeam();
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(leaveSummary, teams);
 
-            HSSFWorkbook hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummaryByTeamList, model.Year);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportLeaveSummary(leaveSummary, model.Year);
 
             return ExcelFile(hssfworkbook, fileName);
         }

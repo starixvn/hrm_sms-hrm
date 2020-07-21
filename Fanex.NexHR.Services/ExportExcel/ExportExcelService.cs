@@ -27,7 +27,7 @@
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
-        public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year)
+        public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year)
         {
             HSSFWorkbook hssfworkbook;
 
@@ -46,62 +46,49 @@
             cellTakeLeave.SetCellValue("Leave in " + year);
 
             var rowAnnualBalance = sheet.GetRow(2);
-            var cellAnnualBalance = rowAnnualBalance.GetCell(17);
+            var cellAnnualBalance = rowAnnualBalance.GetCell(20);
             cellAnnualBalance.SetCellValue("Balance Of AL " + year);
 
-            var cellKIVBalance = rowAnnualBalance.GetCell(18);
+            var cellKIVBalance = rowAnnualBalance.GetCell(21);
             cellKIVBalance.SetCellValue("Balance Of KIV " + year);
 
             //// render body
             var rowIndex = _RowStartBodyLeaveSummary;
             var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
-            var index = 1;
+            var index = 0;
 
-            foreach (LeaveSummaryByTeam item in leaveSummaryList)
+            foreach (LeaveSummary item in leaveSummaryList)
             {
-                if (item.LeaveSummaryInTeam.Count > 0)
-                {
-                    //// add row team
-                    var rowCopy = _RowStartBodyLeaveSummary + 2;
-                    sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                    var rowTeam = sheet.GetRow(rowIndex);
-                    var cellTeam = rowTeam.GetCell(0);
-                    cellTeam.SetCellValue(item.Team.ToUpperInvariant());
-                    sheet.MergeCells(rowIndex, 0, lastRow: rowIndex, lastCol: 18);
-                    rowTeam.Height = height;
+				var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+				sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+				var row = sheet.GetRow(rowIndex);
 
-                    rowIndex++;
-                    foreach (var leaveSummary in item.LeaveSummaryInTeam)
-                    {
-                        rowCopy = _RowStartBodyLeaveSummary + (index % 2);
-                        sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                        var row = sheet.GetRow(rowIndex);
-                        row.Height = height;
+				row.GetCell(0).SetCellValue(index);
+				row.GetCell(1).SetCellValue(item.Department);
+				row.GetCell(2).SetCellValue(item.Section);
+				row.GetCell(3).SetCellValue(item.Team);
+				row.GetCell(4).SetCellValue(item.FullName);
+				row.GetCell(5).SetCellValue(item.Nickname);
+                row.GetCell(6).SetCellValue(item.CreditKIV);
+                row.GetCell(7).SetCellValue(item.AnnualLeaveCurrentYear);
+                row.GetCell(8).SetCellValue(item.Jan);
+                row.GetCell(9).SetCellValue(item.Feb);
+                row.GetCell(10).SetCellValue(item.Mar);
+                row.GetCell(11).SetCellValue(item.Apr);
+                row.GetCell(12).SetCellValue(item.May);
+                row.GetCell(13).SetCellValue(item.Jun);
+                row.GetCell(14).SetCellValue(item.Jul);
+                row.GetCell(15).SetCellValue(item.Aug);
+                row.GetCell(16).SetCellValue(item.Sep);
+                row.GetCell(17).SetCellValue(item.Oct);
+                row.GetCell(18).SetCellValue(item.Nov);
+                row.GetCell(19).SetCellValue(item.Dec);
+                row.GetCell(20).SetCellValue(item.LeaveBalance);
+                row.GetCell(21).SetCellValue(item.KIVBalance);
 
-                        row.GetCell(0).SetCellValue(index);
-                        row.GetCell(1).SetCellValue(leaveSummary.Nickname);
-                        row.GetCell(2).SetCellValue(leaveSummary.FullName);
-                        row.GetCell(3).SetCellValue(leaveSummary.CreditKIV);
-                        row.GetCell(4).SetCellValue(leaveSummary.AnnualLeaveCurrentYear);
-                        row.GetCell(5).SetCellValue(leaveSummary.Jan);
-                        row.GetCell(6).SetCellValue(leaveSummary.Feb);
-                        row.GetCell(7).SetCellValue(leaveSummary.Mar);
-                        row.GetCell(8).SetCellValue(leaveSummary.Apr);
-                        row.GetCell(9).SetCellValue(leaveSummary.May);
-                        row.GetCell(10).SetCellValue(leaveSummary.Jun);
-                        row.GetCell(11).SetCellValue(leaveSummary.Jul);
-                        row.GetCell(12).SetCellValue(leaveSummary.Aug);
-                        row.GetCell(13).SetCellValue(leaveSummary.Sep);
-                        row.GetCell(14).SetCellValue(leaveSummary.Oct);
-                        row.GetCell(15).SetCellValue(leaveSummary.Nov);
-                        row.GetCell(16).SetCellValue(leaveSummary.Dec);
-                        row.GetCell(17).SetCellValue(leaveSummary.LeaveBalance);
-                        row.GetCell(18).SetCellValue(leaveSummary.KIVBalance);
+				index++;
+                rowIndex++;
 
-                        index++;
-                        rowIndex++;
-                    }
-                }
             }
             //// end render body
 

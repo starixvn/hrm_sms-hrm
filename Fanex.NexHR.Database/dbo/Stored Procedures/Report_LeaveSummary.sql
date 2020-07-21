@@ -361,6 +361,8 @@ BEGIN
 		,g.[Rank]
 		,g.GroupId As TeamId
 		,g.[Name] AS Team
+		,sec.Code AS Section
+		,dep.Code AS Department
 	FROM #CurrenBalace AS cb
 		LEFT JOIN #OpenBalance AS op ON OP.empid = cb.empid
 		LEFT JOIN #CreditKIV AS crk ON cb.EmpId = crk.EmpId
@@ -368,6 +370,8 @@ BEGIN
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = cb.Empid
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = e.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE ISNULL(e.[Enabled], 0) = 1
 		AND (
 			@isLocal IS NULL
@@ -400,12 +404,16 @@ BEGIN
 		,g.[Rank]
 		,g.GroupId AS TeamId
 		,g.[Name] AS Team
+		,sec.Code AS Section
+		,dep.Code AS Department
 	FROM #OpenBalance AS op
 		LEFT JOIN #CreditKIV AS kiv ON op.EmpId = kiv.EmpId
 		LEFT JOIN #CurrentKIV AS dek ON op.EmpId = dek.EmpId
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.Empid = op.Empid
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = e.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE e.Empid NOT IN (
 			SELECT EmpID
 			FROM #CurrenBalace AS cb
@@ -416,8 +424,8 @@ BEGIN
 			OR es.IsLocal = @isLocal
 			)
 	ORDER BY [Rank]
-		,[Name]
-		,code
+		,FullName
+		,e.code
 
 	DROP TABLE #OpenBalance
 

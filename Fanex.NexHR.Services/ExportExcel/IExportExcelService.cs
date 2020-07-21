@@ -9,7 +9,7 @@
 
     public interface IExportExcelService
     {
-        HSSFWorkbook ExportLeaveSummary(IList<LeaveSummaryByTeam> leaveSummaryList, int year);
+        HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year);
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
 
