@@ -41,8 +41,10 @@
             <li class="list-group-item form-group upload-avatar">
                 <div class="label-form">@Html.Label(Labels.Avatar, new { @class = "control-label" })</div>
                 <div class="input-form">
-                    <img id="avatar" class="img-employee"
-                         src="~/employee/avatar/@(Model.Code)?f=@(Utilities.RandomString(4))" alt="@Model.FullName" /><br />
+                    <div class="avatarbox">
+                        <img id="avatar" src="~/employee/avatar/@(Model.Code)?f=@(Utilities.RandomString(4))" alt="@Model.FullName" />
+                    </div>
+                    <br />
                     <input type="file" id="file" />
                     <input type="button" id="upload" class="btn btn-primary" value="Upload" style="display: none;" />
                 </div>

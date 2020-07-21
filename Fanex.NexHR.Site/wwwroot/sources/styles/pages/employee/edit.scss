@@ -36,7 +36,7 @@
 
                     .checkbox {
                         margin-right: 5px;
-                        
+
                         .checkbox-custom[readonly] {
 
                             & + label {
@@ -58,6 +58,16 @@
                 }
 
                 &.upload-avatar {
+                    .avatarbox {
+                        width: 80px;
+                        height: 80px;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+
                     .btn {
                         margin-top: 5px;
                     }

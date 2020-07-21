@@ -299,8 +299,8 @@
                     using (var processor = new ImageProcessor())
                     {
                         const int JpegCompression = 100;
-                        var resizer = new ResizeFilter(80, 80, ResizeMethod.Crop, AnchorLocation.Middle);
-                        processor.AddFilter(resizer);
+                        ////var resizer = new ResizeFilter(80, 80, ResizeMethod.Crop, AnchorLocation.Middle);
+                        ////processor.AddFilter(resizer);
                         processor.OutputFormat = OutputFormat.Jpeg;
                         processor.JpegCompression = JpegCompression;
                         processor.ProcessImage(file.InputStream, stream);

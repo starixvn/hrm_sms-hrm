@@ -62,7 +62,7 @@ import 'chosen-js/chosen.jquery';
                     appendTo: document.getElementById('tippy-avatar'),
                     allowHTML: true,
                     content: (reference) => {
-                        var path = resolveClientUrl('employee/avatar/' + $(this).attr('data-code'));
+                        const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
                         return '<img src="' + path + '" />';
                     }
                 });
