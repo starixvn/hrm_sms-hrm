@@ -15,7 +15,7 @@
         public int EmployeeId { get; set; }
         public RequestCommand Command { get; set; }
         public byte RequestTypeId { get; set; }
-
+        public RequestViewType ViewType { get; set; }
         [Display(Name = "Remark")]
         public string Comment { get; set; }
 

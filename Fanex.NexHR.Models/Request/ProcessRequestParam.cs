@@ -11,6 +11,7 @@
         public int EmployeeId { get; set; }
         public RequestCommand Command { get; set; }
         public string Comment { get; set; }
+        public string ViewType { get; set; }
         public IEnumerable<DisciplineReview> Disciplines { get; set; } = new List<DisciplineReview>();
     }
 }

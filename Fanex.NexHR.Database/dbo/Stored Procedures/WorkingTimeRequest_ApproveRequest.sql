@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[WorkingTimeRequest_ApproveRequest] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
 	,@DisciplineXml NVARCHAR(MAX) = NULL
+	,@ViewType NVARCHAR(50) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -47,6 +48,9 @@ BEGIN
 		,@LeaveRequestTypeId TINYINT = 6
 		,@KeepInViewRequestTypeId TINYINT = 7
 
+		-- view Type
+		,@HRSpace NVARCHAR(50) ='HRSpace'
+
 	SELECT @EmpId = EmpId
 		,@RequestTypeId = RequestType
 		,@StatusId = CurrentStatus
@@ -70,7 +74,7 @@ BEGIN
 	IF @RoleId = @ApproverRoleId
 		AND (
 			@StatusId NOT IN (@PendingStatusId, @VerifiedStatusId)
-			OR @ApproverId <> @ActorId
+			OR (@ApproverId <> @ActorId AND @ViewType != @HRSpace)
 			)
 	BEGIN
 		SELECT @ErrCode = 101

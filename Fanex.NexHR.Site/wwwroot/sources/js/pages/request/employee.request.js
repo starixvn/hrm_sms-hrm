@@ -18,7 +18,7 @@ import {
 import { RequestCommand, RoleSystem } from '../../shared/constants';
 
 $(function () {
-    function processRequest(requestId, requestTypeId, roleId, command, comment, disciplines) {
+    function processRequest(requestId, requestTypeId, roleId, command, comment, disciplines, viewType) {
         blockUI();
         const model = {
             requestId: requestId,
@@ -26,7 +26,8 @@ $(function () {
             roleId: roleId,
             command: command,
             comment: comment,
-            disciplines: disciplines
+            disciplines: disciplines,
+            viewType: viewType
         };
 
         axios({
@@ -48,7 +49,7 @@ $(function () {
         }).catch(axiosError);
     }
 
-    function renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title) {
+    function renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title, viewType) {
         $('#dialogProcessRequest').dialog({
             title: title,
             height: 'auto',
@@ -70,7 +71,7 @@ $(function () {
                             chkWeekendLeaveRecord = $tr.find('.chk-weekend-record');
 
                         if (chkIgnore.length === 1) {
-                            if (!chkIgnore.prop('checked') && !chkRecord.prop('checked')) {
+                            if ((!chkIgnore.prop('checked') && !chkRecord.prop('checked') && viewType != "HRSpace")) {
                                 isValid = false;
                             } else {
                                 ignoredDisciplines.push({
@@ -101,7 +102,7 @@ $(function () {
                             .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b> on each type of request.');
                     } else {
                         $(this).find('.validation-summary-valid').hide();
-                        processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines);
+                        processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines, viewType);
                         $(this).dialog('close');
                     }
                 }
@@ -116,13 +117,14 @@ $(function () {
         });
     }
 
-    function getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, command, title) {
+    function getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, command, title, viewType) {
         const model = {
             RequestId: requestId,
             RoleId: roleId,
             RequestTypeId: requestTypeId,
             EmployeeId: employeeId,
-            Command: command
+            Command: command,
+            ViewType: viewType
         };
 
         blockUI();
@@ -135,7 +137,7 @@ $(function () {
                 unblockUI();
                 $('#dialogProcessRequest').html(data);
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
-                renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title);
+                renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title, viewType);
 
                 let chkIgnoreAll = $('.chk-ignoreAll'),
                     chkRecordAll = $('.chk-recordAll'),
@@ -230,7 +232,8 @@ $(function () {
             requestTypeId = parseInt(eventElement.attr('requestTypeId'), 10),
             requestId = parseInt(eventElement.attr('requestId'), 10),
             roleId = parseInt(eventElement.attr('roleId'), 10),
-            employeeId = parseInt(eventElement.attr('employeeId'), 10);
+            employeeId = parseInt(eventElement.attr('employeeId'), 10),
+            viewType = eventElement.attr('viewType');
         let title;
         switch (command) {
             case 'Accept':
@@ -243,7 +246,7 @@ $(function () {
                 break;
             case 'Approve':
                 title = 'Are you sure you want to approve?';
-                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
+                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title, viewType);
                 break;
             case 'Reject':
                 title = 'Are you sure you want to reject?';

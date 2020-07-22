@@ -155,7 +155,8 @@
                 RoleId = param.RoleId,
                 Comment = param.Comment,
                 ActorId = actorId,
-                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty
+                DisciplineXml = param.Disciplines.Any() ? param.Disciplines.ToXML().ToString() : string.Empty,
+                ViewType = param.ViewType
             };
             return baseService.ExecuteNonQuery(criteria);
         }

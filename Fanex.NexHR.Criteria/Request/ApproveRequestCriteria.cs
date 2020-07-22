@@ -8,6 +8,7 @@
         public int ActorId { get; set; }
         public byte RoleId { get; set; }
         public string Comment { get; set; }
+        public string ViewType { get; set; }
         public string DisciplineXml { get; set; }
 
         public override string GetSettingKey() => "WorkingTimeRequest_ApproveRequest";

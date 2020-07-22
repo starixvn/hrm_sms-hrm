@@ -50,85 +50,85 @@
                     </th>
                 </tr>
             }
-                <tr>
-                    @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
-                    {
-                        <th>
-                            <div class="checkbox">
-                                <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                                <label for="ckbAll"></label>
-                            </div>
-                        </th>
-                    }
-                    <th>@Labels.SymbolCount</th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Department
-                            <div class="fa fa-sort cell-right-div"></div>
+            <tr>
+                @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                            <label for="ckbAll"></label>
                         </div>
                     </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Section
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Team
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Employee
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Request
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Details
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Verified
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Approver
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th>@Labels.Remark</th>
-                    @if (@Model.ActionName != "DailyView")
-                    {
-                        <th>@Labels.FileAttach</th>
-                    }
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.CreatedDate
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            @Labels.Status
-                            <div class="fa fa-sort cell-right-div"></div>
-                        </div>
-                    </th>
-                    <th>@Labels.History</th>
-                    <th></th>
-                </tr>
+                }
+                <th>@Labels.SymbolCount</th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Department
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Section
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Team
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Employee
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Request
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Details
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Verified
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Approver
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th>@Labels.Remark</th>
+                @if (@Model.ViewType != RequestViewType.CompanySpace)
+                {
+                    <th>@Labels.FileAttach</th>
+                }
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.CreatedDate
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.Status
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th>@Labels.History</th>
+                <th></th>
+            </tr>
         </thead>
         @if (Model.Requests != null && Model.Requests.Any())
         {
@@ -136,108 +136,108 @@
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
                 @foreach (RequestEntity request in Model.Requests)
                 {
-                <tr id="row@(request.Id)">
-                    @if (Model.ViewType == RequestViewType.PersonalSpace)
-                    {
+                    <tr id="row@(request.Id)">
+                        @if (Model.ViewType == RequestViewType.PersonalSpace)
+                        {
+                            <td>
+                                <div class="checkbox">
+                                    @if (request.ApprovedBy.Id == Model.CurrentUserId
+                                        && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
+                                    {
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
+                                               roleid="@Convert.ToInt32(RoleSystem.Approver)"
+                                               requesttypeid="@request.RequestType.Id"
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                    else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
+                                    {
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
+                                               roleid="@Convert.ToInt32(RoleSystem.Verifier)"
+                                               requesttypeid="@request.RequestType.Id"
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                </div>
+                            </td>
+                        }
+                        else if (Model.ViewType == RequestViewType.HRSpace)
+                        {
+                            <td>
+                                <div class="checkbox">
+                                    @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
+                                    {
+                                        <input type="checkbox"
+                                               class="checkbox-custom chk-request"
+                                               roleid="@Convert.ToInt32(RoleSystem.HR)"
+                                               requesttypeid="@request.RequestType.Id"
+                                               employeeid="@request.Requester.Id"
+                                               id="@request.Id" />
+                                        <label for="@request.Id"></label>
+                                    }
+                                </div>
+                            </td>
+                        }
+                        <td>@(index++)</td>
+                        <td>@request.Requester.Team.Section.Department.Code</td>
+                        <td>@request.Requester.Team.Section.Code</td>
                         <td>
-                            <div class="checkbox">
-                                @if (request.ApprovedBy.Id == Model.CurrentUserId
-                                    && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
-                                {
-                                    <input type="checkbox"
-                                           class="checkbox-custom chk-request"
-                                           roleid="@Convert.ToInt32(RoleSystem.Approver)"
-                                           requesttypeid="@request.RequestType.Id"
-                                           employeeid="@request.Requester.Id"
-                                           id="@request.Id" />
-                                    <label for="@request.Id"></label>
-                                }
-                                else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
-                                {
-                                    <input type="checkbox"
-                                           class="checkbox-custom chk-request"
-                                           roleid="@Convert.ToInt32(RoleSystem.Verifier)"
-                                           requesttypeid="@request.RequestType.Id"
-                                           employeeid="@request.Requester.Id"
-                                           id="@request.Id" />
-                                    <label for="@request.Id"></label>
-                                }
-                            </div>
-                        </td>
-                    }
-                    else if (Model.ViewType == RequestViewType.HRSpace)
-                    {
-                        <td>
-                            <div class="checkbox">
-                                @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
-                                {
-                                    <input type="checkbox"
-                                           class="checkbox-custom chk-request"
-                                           roleid="@Convert.ToInt32(RoleSystem.HR)"
-                                           requesttypeid="@request.RequestType.Id"
-                                           employeeid="@request.Requester.Id"
-                                           id="@request.Id" />
-                                    <label for="@request.Id"></label>
-                                }
-                            </div>
-                        </td>
-                    }
-                    <td>@(index++)</td>
-                    <td>@request.Requester.Team.Section.Department.Code</td>
-                    <td>@request.Requester.Team.Section.Code</td>
-                    <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                             <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.NickName</span>
-                    </td>
-                    <td>
-                        @switch (request.RequestType.Id)
+                        </td>
+                        <td>
+                            @switch (request.RequestType.Id)
+                            {
+                                case (byte)RequestType.Leave:
+                                    <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
+                                    break;
+                                case (byte)RequestType.ChangeShift:
+                                    <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                    break;
+                                default:
+                                    @request.RequestType.Name
+                                    break;
+                            }
+                        </td>
+                        <td class="align-left">
+                            @Html.Raw(RequestService.ToRequestMessage(request))
+                        </td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
+                        </td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@request.ApprovedBy.FullName">@request.ApprovedBy.NickName</span>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(request.Remark))
+                            {
+                                <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        @if (@Model.ViewType != RequestViewType.CompanySpace)
                         {
-                            case (byte)RequestType.Leave:
-                                <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
-                                break;
-                            case (byte)RequestType.ChangeShift:
-                                <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
-                                break;
-                            default:
-                                @request.RequestType.Name
-                                break;
+                            <td>@Html.Raw(request.ContentFile)</td>
                         }
-                    </td>
-                    <td class="align-left">
-                        @Html.Raw(RequestService.ToRequestMessage(request))
-                    </td>
-                    <td>
-                        <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
-                    </td>
-                    <td>
-                        <span class="tooltip-tipsy" title="@request.ApprovedBy.FullName">@request.ApprovedBy.NickName</span>
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(request.Remark))
-                        {
-                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    @if (@Model.ActionName != "DailyView")
-                    {
-                        <td>@Html.Raw(request.ContentFile)</td>
-                    }
-                    <td>@request.CreatedDate.ToDetailFormatedDate()</td>
-                    <td class="status">@RenderStatus(Model, request)</td>
-                    <td>@RenderHistoryLink(request)</td>
-                    <td class="td-warning">
-                        @if (request.IsWarning)
-                        {
-                            <span class="fa fa-exclamation-triangle tooltip-tipsy" title="@Labels.RequestWarning"></span>
-                        }
-                    </td>
-                </tr>
+                        <td>@request.CreatedDate.ToDetailFormatedDate()</td>
+                        <td class="status">@RenderStatus(Model, request)</td>
+                        <td>@RenderHistoryLink(request)</td>
+                        <td class="td-warning">
+                            @if (request.IsWarning)
+                            {
+                                <span class="fa fa-exclamation-triangle tooltip-tipsy" title="@Labels.RequestWarning"></span>
+                            }
+                        </td>
+                    </tr>
                 }
             </tbody>
         }
@@ -248,7 +248,7 @@
     </table>
 </div>
 <div id="dialoghistorycontent"></div>
-<div id="dialogProcessRequest" h></div>
+<div id="dialogProcessRequest"></div>
 <div id="dialogApproveMultipleRequest" role="dialog" class="modal dialogApproveMultipleRequest">
     <form>
         <div class="formrow">
@@ -322,11 +322,21 @@
     switch (request.Status.Id)
     {
         case (byte)CurrentRequestStatus.Pending:
-            <span class="tooltip-tipsy" title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" viewType="@Model.ViewType"
+               href="javascript:void(0);" class="approver-actions tooltip-tipsy"
+               title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                 @request.Status.ToString()
-            </span>
+                <span class="caret"></span>
+            </a>
             break;
         case (byte)CurrentRequestStatus.Verified:
+            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" viewType="@Model.ViewType"
+               href="javascript:void(0);" class="approver-actions tooltip-tipsy"
+               title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+                <span class="caret"></span>
+            </a>
+            break;
         case (byte)CurrentRequestStatus.NotVerified:
             <span class="tooltip-tipsy" title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()

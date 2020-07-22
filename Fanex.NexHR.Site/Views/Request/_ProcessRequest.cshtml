@@ -1,12 +1,15 @@
 ﻿@using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @model ProcessRequestViewModel
+@{ 
+    var showTableDiscipline = Model.ViewType == RequestViewType.HRSpace ? "hidden" : "";
+}
 <form>
     @Html.HiddenFor(model => model.RequestId)
     @Html.HiddenFor(model => model.EmployeeId)
     @Html.HiddenFor(model => model.RoleId)
     @Html.HiddenFor(model => model.Command)
-    <div class="formrow">
+    <div class="formrow" @showTableDiscipline>
         <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
         @switch (Model.RequestTypeId)
         {
