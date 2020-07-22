@@ -223,11 +223,11 @@
             string[] leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',') : new string[] { };
             IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
             string leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
-            IList<LeaveSummary> entityList = reportService.GetUnpaidLeave(criteria);
-            IList<Team> teams = teamService.GetBySupervisor(sessionService.Employee.Id);
-            IList<LeaveSummaryByTeam> leaveSummaryByTeamList = reportService.GetLeaveByTeam(entityList, teams);
             ViewBag.HeaderTitle = string.Format("{0} {1}", leaveType, model.Year);
-            return PartialView("_UnpaidLeaveSummaryDetails", leaveSummaryByTeamList);
+
+            model.LeaveSumaries = reportService.GetUnpaidLeave(criteria);
+
+            return PartialView("_UnpaidLeaveSummaryDetails", model);
         }
 
         public ActionResult EmployeeSupervisor()

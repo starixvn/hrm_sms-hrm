@@ -19,7 +19,8 @@ $(document).ready(function () {
                 category: $('#Category').val(),
                 employee: $('#Employee').val(),
                 employeeId: $('#EmployeeId').val(),
-                leaveType: $('#LeaveType.select-form').multiSelectTreeView('getSelectedItems')
+                leaveType: $('#LeaveType.select-form').multiSelectTreeView('getSelectedItems'),
+                period: $('#Period.select-form').multiSelectTreeView('getSelectedItems')
             },
             responseType: 'text'
         }).then(response => {
@@ -45,6 +46,12 @@ $(document).ready(function () {
 
             query();
         }).catch(axiosError);
+
+    
+    $('#Period').multiSelectTreeView({
+        data: [{ text: '1H', checked: false, enable: true, isLeaf: true, id: 1 }, { text: '2H', checked: false, enable: true, isLeaf: true, id: 2 }],
+        isSelectedAll: true
+    });
 
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));

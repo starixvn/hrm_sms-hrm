@@ -10,7 +10,7 @@
 
     public interface IExportExcelUnpaidLeaveSummaryReportService
     {
-        void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, string leaveType);
+        void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType);
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -28,7 +28,7 @@
             this.commonDataService = commonDataService;
         }
 
-        public void Export(IList<LeaveSummaryByTeam> leaveSummaries, int year, string leaveType)
+        public void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType)
         {
             string templatePath = HttpContext.Current.Server.MapPath(UnpaidLeaveSummaryTemplatePath);
             string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
@@ -44,29 +44,23 @@
 
             /// Fill report header.
             writer.CopyRows(RowStartHeader, 2);
-            writer.WriteCellRange(2, 1, 3, 12, $"Take {type} {year}");
-            writer.WriteCellRange(2, 1, 15, 1, $"Total Of {type} {year}");
+            writer.WriteCellRange(2, 1, 6, 12, $"Take {type} {year}");
+            writer.WriteCellRange(2, 1, 18, 1, $"Total Of {type} {year}");
 
             FillContentRowReport(leaveSummaries, ref writer);
 
-            writer.SyncColumnsWidth(16);
+            writer.SyncColumnsWidth(19);
             writer.CreateFreezePane(0, RowStartBody);
 
             writer.Render();
         }
 
-        private void FillContentRowReport(IList<LeaveSummaryByTeam> leaveSummaries, ref ExcelTemplateWriter writer)
+        private void FillContentRowReport(IList<LeaveSummary> leaveSummaries, ref ExcelTemplateWriter writer)
         {
-            int rowIndex = 1;
-
-            foreach (LeaveSummaryByTeam leaveSummary in leaveSummaries.Where(x => x.LeaveSummaryInTeam != null && x.LeaveSummaryInTeam.Any()))
+            int rowIndex = 0;
+            foreach (LeaveSummary leaveSummary in leaveSummaries)
             {
-                writer.WriteRow(RowHighlight, new object[] { leaveSummary.Team.ToUpperInvariant() });
-
-                foreach (LeaveSummary item in leaveSummary.LeaveSummaryInTeam)
-                {
-                    FillRowReport(item, ref writer, ref rowIndex);
-                }
+                FillRowReport(leaveSummary, ref writer, ref rowIndex);
             }
         }
 
@@ -81,9 +75,12 @@
         {
             var record = new
             {
-                Count = rowIndex,
-                leaveSummary.Nickname,
+                Count = rowIndex + 1,
+                leaveSummary.Department,
+                leaveSummary.Section,
+                leaveSummary.Team,
                 leaveSummary.FullName,
+                leaveSummary.Nickname,
                 Jan = leaveSummary.Jan * 1.00,
                 Feb = leaveSummary.Feb * 1.00,
                 Mar = leaveSummary.Mar * 1.00,

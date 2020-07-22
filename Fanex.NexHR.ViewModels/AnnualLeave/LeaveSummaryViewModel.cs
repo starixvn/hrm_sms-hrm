@@ -10,6 +10,7 @@
 
         public string TeamIds { get; set; }
         public string Employee { get; set; }
+        public string Period { get; set; }
         public int EmployeeId { get; set; }
         public int MinAnnualBalance { get; set; }
         public int? Category { get; set; }

@@ -191,12 +191,16 @@ BEGIN
 		,emp.FullName
 		,g.GroupId AS TeamId
 		,g.[Name] AS Team
+		,sec.Code AS Section
+		,dep.Code AS Department
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
 		AND ISNULL(emp.[Enabled], 0) = 1
 		INNER JOIN EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON g.GroupId = emp.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 		LEFT JOIN @tblLeaveTypes AS lt ON lt.LeaveTypeId = empca.LeaveTypeId
 		OR lt.LeaveTypeId = empca.LeaveTypeId2
 	WHERE (
@@ -223,6 +227,8 @@ BEGIN
 		,emp.FullName
 		,g.GroupId
 		,g.[Name]
+		,sec.Code
+		,dep.Code
 	HAVING SUM((CASE 
 				WHEN lt.LeaveTypeId IS NOT NULL THEN (CASE 
 						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
