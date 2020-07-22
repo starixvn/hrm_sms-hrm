@@ -15,8 +15,6 @@
         public int? Category { get; set; }
         public string LeaveType { get; set; }
         public bool IsShowCloseBalance { get; set; }
-
-        public IEnumerable<LeaveSummaryByTeam> LeaveSumaries { get; set; }
-		public IEnumerable<LeaveSummary> AllLeaveSumaries { get; set; }
-	}
+        public IEnumerable<LeaveSummary> LeaveSumaries { get; set; }
+    }
 }

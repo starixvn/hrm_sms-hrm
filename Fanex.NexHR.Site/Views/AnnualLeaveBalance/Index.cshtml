@@ -142,11 +142,11 @@
     </thead>
     @*Check if exists*@
    
-    @if (Model.AllLeaveSumaries != null)
+    @if (Model.LeaveSumaries != null)
 	{
         <tbody>
            
-            @foreach (LeaveSummary leave in Model.AllLeaveSumaries)
+            @foreach (LeaveSummary leave in Model.LeaveSumaries)
             {
 				<tr>
 					@if (hasPermissionToEdit)
@@ -156,21 +156,11 @@
 							<label for="checkbox-@leave.EmpId"></label>
 						</td>
 					}
-					<td>
-						<span>@leave.Department</span>
-					</td>
-					<td>
-						<span>@leave.Section</span>
-					</td>
-					<td>
-						<span>@leave.Team</span>
-					</td>
-					<td>
-						<span>@leave.FullName</span>
-					</td>
-					<td>
-						<span>@leave.Nickname</span>
-					</td>
+					<td>@leave.Department</td>
+                    <td>@leave.Section</td>
+                    <td>@leave.Team</td>
+                    <td>@leave.FullName</td>
+                    <td>@leave.Nickname</td>
 					<td>
 						@if (leave.CreditKIV > 0)
 						{

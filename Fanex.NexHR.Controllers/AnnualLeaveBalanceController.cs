@@ -71,12 +71,11 @@
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
-            IList<LeaveSummary> leaveSumaries = GetAnnualLeaveBalance(model);
             model.Teams = teamService.GetBySupervisor(sessionService.Employee.Id);
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
-			model.AllLeaveSumaries = leaveSumaries;
+            model.LeaveSumaries = GetAnnualLeaveBalance(model);
 
-			return View(model);
+            return View(model);
         }
 
         [ValidateInput(false)]

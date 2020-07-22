@@ -59,16 +59,17 @@
 
             foreach (LeaveSummary item in leaveSummaryList)
             {
-				var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
-				sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-				var row = sheet.GetRow(rowIndex);
+                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
 
-				row.GetCell(0).SetCellValue(index + 1);
-				row.GetCell(1).SetCellValue(item.Department);
-				row.GetCell(2).SetCellValue(item.Section);
-				row.GetCell(3).SetCellValue(item.Team);
-				row.GetCell(4).SetCellValue(item.FullName);
-				row.GetCell(5).SetCellValue(item.Nickname);
+                row.GetCell(0).SetCellValue(index + 1);
+                row.GetCell(1).SetCellValue(item.Department);
+                row.GetCell(2).SetCellValue(item.Section);
+                row.GetCell(3).SetCellValue(item.Team);
+                row.GetCell(4).SetCellValue(item.FullName);
+                row.GetCell(5).SetCellValue(item.Nickname);
                 row.GetCell(6).SetCellValue(item.CreditKIV);
                 row.GetCell(7).SetCellValue(item.AnnualLeaveCurrentYear);
                 row.GetCell(8).SetCellValue(item.Jan);
@@ -86,9 +87,8 @@
                 row.GetCell(20).SetCellValue(item.LeaveBalance);
                 row.GetCell(21).SetCellValue(item.KIVBalance);
 
-				index++;
+                index++;
                 rowIndex++;
-
             }
             //// end render body
 
