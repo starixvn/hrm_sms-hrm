@@ -120,10 +120,6 @@
                     <div class="fa fa-sort"></div>
                 </th>
                 <th class="col-sorter">
-                    @Labels.Team
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
                     @Labels.Month
                     <div class="fa fa-sort"></div>
                 </th>
@@ -151,8 +147,12 @@
                     @Labels.Approver
                     <div class="fa fa-sort"></div>
                 </th>
-                <th>@Labels.Status</th>
+                <th class="col-sorter">
+                    @Labels.Status
+                    <div class="fa fa-sort"></div>
+                </th>
                 <th>@Labels.Details</th>
+                <th></th>
             </tr>
     </thead>
     <tbody id="listMemberOvertime" class="@hasCheckBoxColumn">

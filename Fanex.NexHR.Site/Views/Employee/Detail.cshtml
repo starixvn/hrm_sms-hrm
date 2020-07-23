@@ -133,10 +133,13 @@
     <div class="panel panel-default">
         <div class="panel-heading">JOB INFORMATION</div>
         <ul class="list-group">
-            <li class="list-group-item">
-                <div class="plabel">@Labels.JobTitle:</div>
-                <div class="pcontent bold">@Model.JobTitle</div>
-            </li>
+            @if (hasPermission)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.JobTitle:</div>
+                    <div class="pcontent bold">@Model.JobTitle</div>
+                </li>
+            }
             @if (Model.PromotionDate.HasValue)
             {
                 <li class="list-group-item">
