@@ -378,7 +378,7 @@ function sortTable(table, th) {
                 dateB = new Date(valB);
             return dateA - dateB;
         } else {
-            return valA.localeCompare(valB);
+            return valA.localeCompare(valB, 'vi', { sensitivity: 'base' });
         }
     });
 
