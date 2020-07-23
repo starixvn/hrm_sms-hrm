@@ -19,8 +19,6 @@
 
         IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria);
 
-        IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams);
-
         IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
 
         IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria);

@@ -48,24 +48,6 @@
             return baseService.GetData<LeaveSummary>(criteria).ToList();
         }
 
-        public IList<LeaveSummaryByTeam> GetLeaveByTeam(IList<LeaveSummary> leaveSummaryList, IList<Team> teams)
-        {
-            var leaveSummaryByTeams = new List<LeaveSummaryByTeam>();
-            foreach (Team team in teams)
-            {
-                var entity = new LeaveSummaryByTeam
-                {
-                    TeamId = team.Id,
-                    Team = team.Name,
-                    LeaveSummaryInTeam = leaveSummaryList.Where(x => x.TeamId == team.Id).ToList()
-                };
-
-                leaveSummaryByTeams.Add(entity);
-            }
-
-            return leaveSummaryByTeams;
-        }
-
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
         {
             return baseService.GetData<TimeRecordModel>(criteria).ToList();

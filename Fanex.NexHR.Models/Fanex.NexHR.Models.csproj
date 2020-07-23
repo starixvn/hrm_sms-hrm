@@ -208,7 +208,6 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="Request\Leave\LeaveRequestDetail.cs" />
     <Compile Include="LeaveSummary.cs" />
-    <Compile Include="LeaveSummaryByTeam.cs" />
     <Compile Include="Request\RequestEntity.cs" />
     <Compile Include="Request\RequestStatus.cs" />
     <Compile Include="Request\RequestTypeModel.cs" />

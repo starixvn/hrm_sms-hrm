@@ -15,19 +15,16 @@
     {
         private readonly IReportService reportService;
         private readonly IExportExcelService exportExcelService;
-        private readonly ICommonDataService commonDataService;
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
 
         public ExportLeaveSummaryController(
             ISessionService sessionService,
             IReportService reportService,
             IExportExcelService exportExcelService,
-            ICommonDataService commonDataService,
             IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService) : base(sessionService)
         {
             this.reportService = reportService;
             this.exportExcelService = exportExcelService;
-            this.commonDataService = commonDataService;
             this.exportExcelUnpaidLeaveSummaryReportService = exportExcelUnpaidLeaveSummaryReportService;
         }
 
