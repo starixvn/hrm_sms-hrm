@@ -34,7 +34,7 @@
         <td>@request.Requester.Team</td>
         <td class="align-left">@request.Requester.FullName</td>
         <td>@request.Requester.Nickname</td>
-        <td>@request.Month.ToString("MMM-yyyy")</td>
+        <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
         <td>
             @if (request.NormalHours > 0)
             {

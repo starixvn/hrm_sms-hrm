@@ -340,15 +340,15 @@ function downloadFile(data, fileName) {
 }
 
 function sortTable(table, th) {
-    let comparer = function (index) {
-        return function (a, b) {
-            let valA = getCellValue(a, index),
-                valB = getCellValue(b, index);
-            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB);
-        };
-    };
     let getCellValue = function (row, index) {
-        return $(row).children('td').eq(index).text();
+        let $td = $(row).children('td').eq(index);
+        let datetimeAttr = $td.attr('data-datetime');
+
+        if (typeof datetimeAttr !== typeof undefined && datetimeAttr !== false) {
+            return $td.data('datetime');
+        }
+
+        return $td.text().trim().toLowerCase();
     };
     let refreshSorting = function () {
         $('th.col-sorter').each(function () {
@@ -366,9 +366,23 @@ function sortTable(table, th) {
         $icon.addClass('fa-sort-desc');
     }
 
-    let rows = $(table).find('tbody tr').toArray().sort(comparer($(th).index()));
-    th.asc = !th.asc;
-    if (!th.asc) {
+    const colIndex = $(th).index();
+    let rows = $(table).find('tbody tr').toArray().sort(function (a, b) {
+        let valA = getCellValue(a, colIndex),
+            valB = getCellValue(b, colIndex);
+
+        if ($.isNumeric(valA) && $.isNumeric(valB)) {
+            return valA - valB;
+        } else if (moment(valA).isValid() && moment(valB).isValid()) {
+            const dateA = new Date(valA),
+                dateB = new Date(valB);
+            return dateA - dateB;
+        } else {
+            return valA.localeCompare(valB);
+        }
+    });
+
+    if (!$icon.hasClass('fa-sort-asc')) {
         rows = rows.reverse();
     }
 

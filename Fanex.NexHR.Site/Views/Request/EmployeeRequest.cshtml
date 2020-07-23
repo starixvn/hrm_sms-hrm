@@ -228,7 +228,7 @@
                         {
                             <td>@Html.Raw(request.ContentFile)</td>
                         }
-                        <td>@request.CreatedDate.ToDetailFormatedDate()</td>
+                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@RenderStatus(Model, request)</td>
                         <td>@RenderHistoryLink(request)</td>
                         <td class="td-warning">
