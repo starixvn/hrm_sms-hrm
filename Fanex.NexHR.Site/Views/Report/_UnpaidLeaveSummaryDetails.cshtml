@@ -60,7 +60,8 @@
         <tbody>
             @{int index = 1;}
             @foreach (LeaveSummary item in Model.LeaveSumaries)
-            {
+			{
+				double balance = 0;
 			<tr>
 				<td>@(index++)</td>
 				<td>@item.Department</td>
@@ -70,6 +71,7 @@
 				<td class="align-left">@item.Nickname</td>
 				@if (Model.Period == "1")
 				{
+					balance = item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun;
 					<td>
 						@if (item.Jan > 0)
 						{
@@ -109,6 +111,7 @@
 				}
 				else if (Model.Period == "2")
 				{
+					balance = item.Jul + item.Aug + item.Sep + item.Oct + item.Nov + item.Dec;
 					<td>
 						@if (item.Jul > 0)
 						{
@@ -148,6 +151,7 @@
 				}
 				else
 				{
+					balance = item.LeaveBalance;
 					<td>
 						@if (item.Jan > 0)
 						{
@@ -223,10 +227,7 @@
 				}
 
 				<td style="width: 250px">
-					@if (item.LeaveBalance > 0)
-					{
-						@item.LeaveBalance.ToString("0.0")
-					}
+					@balance.ToString("0.0")
 				</td>
 			</tr>
             }

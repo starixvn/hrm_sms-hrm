@@ -70,7 +70,8 @@ $(document).ready(function () {
                 category: $('#Category').val(),
                 employee: $('#Employee').val(),
                 employeeId: $('#EmployeeId').val(),
-                leaveType: $('#LeaveType.select-form').multiSelectTreeView('getSelectedItems')
+                leaveType: $('#LeaveType.select-form').multiSelectTreeView('getSelectedItems'),
+                period: $('#Period.select-form').multiSelectTreeView('getSelectedItems')
             },
             responseType: 'blob'
         }).then(response => {

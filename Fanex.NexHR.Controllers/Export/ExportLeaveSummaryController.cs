@@ -68,7 +68,7 @@
                 LeaveType = model.LeaveType
             };
             IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
-            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummary, model.Year, model.LeaveType);
+            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummary, model.Year, model.LeaveType, model.Period);
 
             return new EmptyResult();
         }
