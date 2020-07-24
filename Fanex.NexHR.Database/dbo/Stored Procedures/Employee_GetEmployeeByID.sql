@@ -39,6 +39,8 @@ BEGIN
 		,empsum.CompanyDate
 		,empsum.WorkingDays
 		,empsum.WorkingHours
+		,empsum.MilitaryFromDate
+		,empsum.MilitaryToDate
 		,e.Skype
 		,e.LetsTalk
 		,e.Marriage

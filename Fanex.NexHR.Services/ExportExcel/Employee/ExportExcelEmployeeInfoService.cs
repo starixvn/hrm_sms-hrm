@@ -13,6 +13,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
     {
+        private const int halfMonth = 15;
+        private const int dayOfYear = 365;
+        private const int dayOfMonth = 30;
+        private const int monthOfYear = 12;
+        int totalDays, years, months, days;
         private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
         private const string EmployeeFullInfoTemplatePath = @"~\ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
@@ -21,7 +26,7 @@
         {
             RowStartHeader = 2,
             RowStartBody = 3,
-            TotalColumns = 18
+            TotalColumns = 19
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -87,6 +92,27 @@
 
         private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
         {
+            if(employee.JoinedDate != null)
+            { 
+                totalDays = ((TimeSpan)(DateTime.Today - employee.JoinedDate)).Days;
+                if (employee.MilitaryToDate != null && employee.MilitaryFromDate != null)
+                {
+                    totalDays = totalDays - ((TimeSpan)(employee.MilitaryToDate - employee.MilitaryFromDate)).Days;
+                }
+                years = totalDays / dayOfYear;
+                months = (totalDays - (years * dayOfYear)) / dayOfMonth;
+                days = totalDays - (years * dayOfYear - months * dayOfMonth);
+                if (days >= halfMonth)
+                {
+                    months = months++;
+                }
+                if (months >= monthOfYear)
+                {
+                    years++;
+                    months = 0;
+                }
+            }
+
             var record = new
             {
                 Count = rowIndex,
@@ -100,6 +126,7 @@
                 employee.CompanyDate,
                 employee.ConfirmedDate,
                 employee.ResignedDate,
+                LengthOfService = string.Format(Messages.LengthOfService, years,months),
                 DoB = employee.DateOfBirth,
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,

@@ -2527,6 +2527,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Length of Service.
+        /// </summary>
+        public static string LengthOfService {
+            get {
+                return ResourceManager.GetString("LengthOfService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Let&apos;s Talk.
         /// </summary>
         public static string LetsTalk {

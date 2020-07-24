@@ -357,4 +357,7 @@
   <data name="SearchTeamOrCode" xml:space="preserve">
     <value>team or code</value>
   </data>
+  <data name="LengthOfService" xml:space="preserve">
+    <value>{0} YEARS {1} MONTHS</value>
+  </data>
 </root>

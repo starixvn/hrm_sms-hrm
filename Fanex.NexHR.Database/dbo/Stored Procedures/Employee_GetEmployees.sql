@@ -165,6 +165,8 @@ BEGIN
 	  + ',s.IsExpatUseHoliday' + CHAR(13)
 	  + ',ISNULL(ctry.Nationality, ctry.CountryName) CountryName' + CHAR(13)
 	  + ',s.Unit' + CHAR(13)
+	  + ',s.MilitaryFromDate' + CHAR(13)
+	  + ',s.MilitaryToDate' + CHAR(13)
 	  + ',e_cs.[BankAccount]' + CHAR(13)
 	  + ',e_cs.[TaxCode]' + CHAR(13)
 	  + ',e_cs.[SocialInsuranceNo]' + CHAR(13)

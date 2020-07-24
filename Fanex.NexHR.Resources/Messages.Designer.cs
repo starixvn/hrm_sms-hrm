@@ -367,6 +367,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} YEARS {1} MONTHS.
+        /// </summary>
+        public static string LengthOfService {
+            get {
+                return ResourceManager.GetString("LengthOfService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Memo subject.
         /// </summary>
         public static string MemoSubject {
