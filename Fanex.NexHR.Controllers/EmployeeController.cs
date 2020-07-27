@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
@@ -19,7 +18,6 @@
     using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Models.Supervisor;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
@@ -27,10 +25,6 @@
 
     public class EmployeeController : BaseController
     {
-        private const int halfMonth = 15;
-        private const int dayOfYear = 365;
-        private const int dayOfMonth = 30;
-        private const int monthOfYear = 12;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
         private readonly IRoleService roleService;
@@ -227,44 +221,11 @@
                 model.Disciplinarian = GetDisciplineSupervisors(supervisors);
                 model.EmpShiftList = GetShiftMonitors(supervisors);
                 model.ActingEmpList = GetActingSupervisors(supervisors);
-                ViewBag.LengthOfService = CaculateLengthOfService(model);
+                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(model);
             }
 
             ComposeViewBagsForEditEmployee();
             return View(model);
-        }
-
-        private static string CaculateLengthOfService(Employee model)
-        {
-            int totalDays;
-            int years;
-            int months;
-            int days;
-            string lengOfService = string.Empty;
-            if (model.JoinedDate != null)
-            {
-                totalDays = ((TimeSpan)(DateTime.Today - model.JoinedDate)).Days;
-                if (model.MilitaryToDate != null && model.MilitaryFromDate != null)
-                {
-                    totalDays = totalDays - ((TimeSpan)(model.MilitaryToDate - model.MilitaryFromDate)).Days;
-                }
-                years = totalDays / dayOfYear;
-                months = (totalDays - (years * dayOfYear)) / dayOfMonth;
-                days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
-                if (days >= halfMonth)
-                {
-                    months++;
-                }
-                if (months >= monthOfYear)
-                {
-                    years++;
-                    months = 0;
-                }
-
-                lengOfService = string.Format(Messages.LengthOfService, years, months);
-            }
-
-            return lengOfService;
         }
 
         [ValidateInput(false)]

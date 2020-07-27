@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
@@ -17,10 +18,15 @@
     using Fanex.NexHR.Models.Group;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
 
     public class EmployeeService : IEmployeeService
     {
+        private const int halfMonth = 15;
+        private const int dayOfYear = 365;
+        private const int dayOfMonth = 30;
+        private const int monthOfYear = 12;
         private readonly IEmployeeRepository employeeRepository;
         private readonly IRoleService roleService;
         private readonly IBaseService baseService;
@@ -285,6 +291,39 @@
                 ResignedDate = param.ResignedDate
             };
             return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public string CaculateLengthOfService(Employee model)
+        {
+            int totalDays;
+            int years;
+            int months;
+            int days;
+            string lengOfService = string.Empty;
+            if (model.JoinedDate.HasValue)
+            {
+                totalDays = ((TimeSpan)(DateTime.Today - model.JoinedDate)).Days;
+                if (model.MilitaryToDate.HasValue && model.MilitaryFromDate.HasValue)
+                {
+                    totalDays = totalDays - ((TimeSpan)(model.MilitaryToDate - model.MilitaryFromDate)).Days;
+                }
+                years = totalDays / dayOfYear;
+                months = (totalDays - (years * dayOfYear)) / dayOfMonth;
+                days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
+                if (days >= halfMonth)
+                {
+                    months++;
+                }
+                if (months >= monthOfYear)
+                {
+                    years++;
+                    months = 0;
+                }
+
+                lengOfService = string.Format(Messages.LengthOfService, years, months);
+            }
+
+            return lengOfService;
         }
     }
 }

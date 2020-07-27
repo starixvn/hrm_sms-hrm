@@ -57,5 +57,7 @@
         CommandResult Edit(int actorId, EditEmployeeParam param);
 
         CommandResult Delete(int actorId, DeleteEmployeeParam param);
+
+        string CaculateLengthOfService(Employee model);
     }
 }
