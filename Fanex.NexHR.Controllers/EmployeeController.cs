@@ -250,7 +250,7 @@
                 }
                 years = totalDays / dayOfYear;
                 months = (totalDays - (years * dayOfYear)) / dayOfMonth;
-                days = totalDays - (years * dayOfYear - months * dayOfMonth);
+                days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
                 if (days >= halfMonth)
                 {
                     months = months + 1;
