@@ -136,7 +136,7 @@
                 days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
                 if (days >= halfMonth)
                 {
-                    months = months + 1;
+                    months++;
                 }
                 if (months >= monthOfYear)
                 {
