@@ -31,7 +31,6 @@
         private const int dayOfYear = 365;
         private const int dayOfMonth = 30;
         private const int monthOfYear = 12;
-        int totalDays, years, months, days;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
         private readonly IRoleService roleService;
@@ -222,39 +221,50 @@
             if (model != null)
             {
                 model.Coutries = commonDataService.GetAllCountry();
-
-                if (model.JoinedDate != null)
-                {
-                    totalDays = ((TimeSpan)(DateTime.Today - model.JoinedDate)).Days;
-                    if (model.MilitaryToDate != null && model.MilitaryFromDate != null)
-                    {
-                        totalDays = totalDays - ((TimeSpan)(model.MilitaryToDate - model.MilitaryFromDate)).Days;
-                    }
-                    years = totalDays / dayOfYear;
-                    months = (totalDays - (years * dayOfYear)) / dayOfMonth;
-                    days = totalDays - (years * dayOfYear - months * dayOfMonth);
-                    if (days >= halfMonth)
-                    {
-                        months = months++;
-                    }
-                    if (months >= monthOfYear)
-                    {
-                        years++;
-                        months = 0;
-                    }
-                }
-
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
                 model.Verifier = GetVerifiers(supervisors);
                 model.Approver = GetApprovers(supervisors);
                 model.Disciplinarian = GetDisciplineSupervisors(supervisors);
                 model.EmpShiftList = GetShiftMonitors(supervisors);
                 model.ActingEmpList = GetActingSupervisors(supervisors);
-                ViewBag.LengthOfService = string.Format(Messages.LengthOfService,years,months);
+                ViewBag.LengthOfService = CaculateLengthOfService(model);
             }
 
             ComposeViewBagsForEditEmployee();
             return View(model);
+        }
+
+        private static string CaculateLengthOfService(Employee model)
+        {
+            int totalDays;
+            int years;
+            int months;
+            int days;
+            string lengOfService = string.Empty;
+            if (model.JoinedDate != null)
+            {
+                totalDays = ((TimeSpan)(DateTime.Today - model.JoinedDate)).Days;
+                if (model.MilitaryToDate != null && model.MilitaryFromDate != null)
+                {
+                    totalDays = totalDays - ((TimeSpan)(model.MilitaryToDate - model.MilitaryFromDate)).Days;
+                }
+                years = totalDays / dayOfYear;
+                months = (totalDays - (years * dayOfYear)) / dayOfMonth;
+                days = totalDays - (years * dayOfYear - months * dayOfMonth);
+                if (days >= halfMonth)
+                {
+                    months = months + 1;
+                }
+                if (months >= monthOfYear)
+                {
+                    years++;
+                    months = 0;
+                }
+
+                lengOfService = string.Format(Messages.LengthOfService, years, months);
+            }
+
+            return lengOfService;
         }
 
         [ValidateInput(false)]
