@@ -1,7 +1,7 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { alert, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -231,6 +231,7 @@ const annualLeaveBalance = (function ($) {
         initCheckSingleRowEvent();
         initAdjustmentBtnEvent();
         initCloseBalanceButtonEvent();
+        floatThead('table#data');
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
     }
 
