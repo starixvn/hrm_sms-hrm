@@ -20,7 +20,7 @@
             return workingCalendarRepository.GetWorkingSchedule(criteria);
         }
 
-        public IEnumerable<WorkingCalendar> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
+        public IEnumerable<WorkingCalendarRangeDates> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
         {
             return workingCalendarRepository.GetWorkingCalendars(criteria);
         }

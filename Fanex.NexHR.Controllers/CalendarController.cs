@@ -62,8 +62,8 @@
         {
             var model = new WorkingCalendarFilterViewModel
             {
-                FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek(),
+                FromDate = DateTime.Now.AddDays(-7),
+                ToDate = DateTime.Now,
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 
@@ -81,7 +81,7 @@
                 JobTitleId = model.JobTitleIds,
                 IsLocal = model.IsLocal
             };
-            IEnumerable<WorkingCalendar> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            IEnumerable<WorkingCalendarRangeDates> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
 
             var workingCalendarDetails = new WorkingCalendarViewModel
             {

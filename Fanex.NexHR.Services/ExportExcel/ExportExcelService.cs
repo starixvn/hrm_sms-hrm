@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
@@ -8,10 +7,7 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Request;
-    using Fanex.NexHR.Models.ScheduleArrange;
-    using Fanex.NexHR.Resources;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -25,7 +21,6 @@
 
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
-        private const string _EmployeeWorkingCalendarFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingCalendarTemplate.xls";
 
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year)
         {
@@ -130,88 +125,6 @@
             return hssfworkbook;
         }
 
-        public HSSFWorkbook ExportEmployeeWorkingCalendar(IEnumerable<WorkingCalendar> workingCalendars, DateTime fromDate, DateTime toDate)
-        {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWorkingCalendarFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
-            {
-                hssfworkbook = new HSSFWorkbook(template);
-            }
-
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "WorkingCalendar");
-            var rowIndex = _RowStartBodyWorkingCalendar;
-
-            var rowDate = sheet.GetRow(1);
-            ICell cellFromDate = rowDate.GetCell(2);
-            ICell cellToDate = rowDate.GetCell(4);
-            cellFromDate.SetCellValue(fromDate);
-            cellToDate.SetCellValue(toDate);
-
-            var rowHeaderDate = sheet.GetRow(3);
-            rowHeaderDate.GetCell(7).SetCellValue(fromDate);
-            rowHeaderDate.GetCell(8).SetCellValue(fromDate.AddDays(1));
-            rowHeaderDate.GetCell(9).SetCellValue(fromDate.AddDays(2));
-            rowHeaderDate.GetCell(10).SetCellValue(fromDate.AddDays(3));
-            rowHeaderDate.GetCell(11).SetCellValue(fromDate.AddDays(4));
-            rowHeaderDate.GetCell(12).SetCellValue(fromDate.AddDays(5));
-            rowHeaderDate.GetCell(13).SetCellValue(toDate);
-
-            var rowHeaderDay = sheet.GetRow(4);
-            rowHeaderDay.GetCell(7).SetCellValue(fromDate);
-            rowHeaderDay.GetCell(8).SetCellValue(fromDate.AddDays(1));
-            rowHeaderDay.GetCell(9).SetCellValue(fromDate.AddDays(2));
-            rowHeaderDay.GetCell(10).SetCellValue(fromDate.AddDays(3));
-            rowHeaderDay.GetCell(11).SetCellValue(fromDate.AddDays(4));
-            rowHeaderDay.GetCell(12).SetCellValue(fromDate.AddDays(5));
-            rowHeaderDay.GetCell(13).SetCellValue(toDate);
-
-            var index = 1;
-            foreach (var item in workingCalendars)
-            {
-                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
-                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
-                var row = sheet.GetRow(rowIndex);
-                ICell cellNo = row.GetCell(0);
-                ICell cellEmployeeID = row.GetCell(1);
-                ICell cellDepartment = row.GetCell(2);
-                ICell cellSection = row.GetCell(3);
-                ICell cellTeam = row.GetCell(4);
-                ICell cellFullName = row.GetCell(5);
-                ICell cellNickName = row.GetCell(6);
-                ICell cellShift1 = row.GetCell(7);
-                ICell cellShift2 = row.GetCell(8);
-                ICell cellShift3 = row.GetCell(9);
-                ICell cellShift4 = row.GetCell(10);
-                ICell cellShift5 = row.GetCell(11);
-                ICell cellShift6 = row.GetCell(12);
-                ICell cellShift7 = row.GetCell(13);
-
-                cellNo.SetCellValue(rowIndex - _RowStartBodyWorkingCalendar + 1);
-                cellEmployeeID.SetCellValue(item.Code);
-                cellDepartment.SetCellValue(item.DepartmentCode);
-                cellSection.SetCellValue(item.SectionCode);
-                cellTeam.SetCellValue(item.Team);
-                cellFullName.SetCellValue(item.FullName);
-                cellNickName.SetCellValue(item.Nickname);
-                cellShift1.SetCellValue(GetShift(item.MondaySchedule));
-                cellShift2.SetCellValue(GetShift(item.TuesdaySchedule));
-                cellShift3.SetCellValue(GetShift(item.WednesdaySchedule));
-                cellShift4.SetCellValue(GetShift(item.ThursdaySchedule));
-                cellShift5.SetCellValue(GetShift(item.FridaySchedule));
-                cellShift6.SetCellValue(GetShift(item.SaturdaySchedule));
-                cellShift7.SetCellValue(GetShift(item.SundaySchedule));
-                rowIndex++;
-                index++;
-            }
-
-            sheet.CreateFreezePane(0, 5);
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
-        }
-
         private static void RenderBodyWorkingTimeRequest(
             int rowIndex,
             RequestEntity item,
@@ -258,64 +171,6 @@
         {
             var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
             writer.WriteRow(rowStart, record);
-        }
-
-        private static string GetShift(DailySchedule schedule)
-        {
-            var shift = string.Empty;
-            if (schedule.IsLeaveOffDay)
-            {
-                shift = Labels.Off;
-            }
-            else if (schedule.IsLeaveDay)
-            {
-                shift = GetShiftOnLeaveDay(schedule);
-            }
-            else if (schedule.IsHoliday)
-            {
-                shift = schedule.Shift != null ? schedule.Shift.Code : Labels.PH;
-            }
-            else if (schedule.IsOffDay)
-            {
-                shift = schedule.Shift != null ? schedule.Shift.Code : Labels.Off;
-            }
-            else
-            {
-                shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
-            }
-
-            return shift;
-        }
-
-        private static string GetShiftOnLeaveDay(DailySchedule schedule)
-        {
-            var shift = string.Empty;
-            if (schedule.IsHoliday)
-            {
-                shift = Labels.PH;
-            }
-            else if (schedule.IsOffDay)
-            {
-                shift = Labels.Off;
-            }
-            else
-            {
-                if (schedule.IsLeaveHalfDay)
-                {
-                    shift = string.Format("{0} ½", schedule.LeaveType.Code);
-                }
-                else
-                {
-                    shift = schedule.LeaveType.Code;
-
-                    if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
-                    {
-                        shift = string.Format("{0} / {1}", schedule.LeaveType.Code, schedule.LeaveType2.Code);
-                    }
-                }
-            }
-
-            return shift;
-        }
+        }     
     }
 }

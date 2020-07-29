@@ -986,7 +986,6 @@
     <Content Include="Views\ExtensionNo\Edit.cshtml" />
     <Content Include="Views\ExtensionNo\ExternalGroup.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
-    <Content Include="ExcelTemplates\WorkingCalendarTemplate.xls" />
     <Content Include="Views\Report\TimeRecord.cshtml" />
     <Content Include="Views\Shift\Create.cshtml" />
     <Content Include="Views\Shift\Edit.cshtml" />
@@ -1124,6 +1123,7 @@
     <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryH1Template.xls" />
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls" />
+    <Content Include="ExcelTemplates\WorkingCalendar.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

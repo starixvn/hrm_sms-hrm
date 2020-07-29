@@ -10,9 +10,7 @@
 @import '../../vendors/weekpicker';
 
 .toolbar {
-    margin-top: 10px;
     background: #343c4e;
-    padding: 5px 7px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,7 +21,7 @@
         padding: 4px 6px;
     }
 
-    .prev-week, .next-week, .dropdown-color .btn {
+    .dropdown-color .btn {
         background-color: #f1f1f1;
         color: #000;
         margin-right: 5px;
@@ -65,36 +63,5 @@
         @include border-radius(40px);
         color: #fff;
         background-color: #1e88e5;
-    }
-}
-
-.dataTables_wrapper {
-    .dataTables_scrollHead {
-        background: #343c4e;
-
-        .dataTables_scrollHeadInner .table {
-            border-top: 1px solid #646d80;
-        }
-    }
-
-    .dataTables_footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #343c4e;
-        padding: 5px 7px;
-        color: #fff;
-
-        .dataTables_info {
-            padding: 0;
-        }
-
-        .dataTables_paginate {
-            .paginate_button {
-                a {
-                    padding: 4px 8px;
-                }
-            }
-        }
     }
 }

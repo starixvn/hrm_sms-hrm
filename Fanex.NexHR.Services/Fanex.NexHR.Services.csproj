@@ -197,6 +197,7 @@
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
     <Compile Include="Implement\RoleService.cs" />
+    <Compile Include="Implement\WorkingCalendarReportService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />

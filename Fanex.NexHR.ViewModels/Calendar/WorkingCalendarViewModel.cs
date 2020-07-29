@@ -8,6 +8,6 @@
     {
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public IEnumerable<WorkingCalendar> WorkingCalendars { get; set; } = new List<WorkingCalendar>();
+        public IEnumerable<WorkingCalendarRangeDates> WorkingCalendars { get; set; } = new List<WorkingCalendarRangeDates>();
     }
 }

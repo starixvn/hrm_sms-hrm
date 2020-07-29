@@ -29,13 +29,13 @@
             }
         }
 
-        public IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria)
+        public IEnumerable<WorkingCalendarRangeDates> GetWorkingCalendars(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<WorkingCalendar> calendars = multi.Read<WorkingCalendar>();
+                    IEnumerable<WorkingCalendarRangeDates> calendars = multi.Read<WorkingCalendarRangeDates>();
 
                     IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                         (dailySchedule, shift, leave, leave2) =>
@@ -56,49 +56,12 @@
         }
 
         private static void MappingData(
-            IEnumerable<WorkingCalendar> calendars,
+            IEnumerable<WorkingCalendarRangeDates> calendars,
             IEnumerable<DailySchedule> dailySchedules)
         {
-            foreach (WorkingCalendar calendar in calendars)
+            foreach (WorkingCalendarRangeDates calendar in calendars)
             {
-                IEnumerable<DailySchedule> memberDailySchedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId);
-                foreach (DailySchedule dailySchedule in memberDailySchedules)
-                {
-                    switch (dailySchedule.WorkDate.DayOfWeek)
-                    {
-                        case DayOfWeek.Monday:
-                            calendar.MondaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Tuesday:
-                            calendar.TuesdaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Wednesday:
-                            calendar.WednesdaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Thursday:
-                            calendar.ThursdaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Friday:
-                            calendar.FridaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Saturday:
-                            calendar.SaturdaySchedule = dailySchedule;
-                            break;
-
-                        case DayOfWeek.Sunday:
-                            calendar.SundaySchedule = dailySchedule;
-                            break;
-
-                        default:
-                            // nothing
-                            break;
-                    }
-                }
+                calendar.schedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId).OrderBy(x => x.WorkDate);
             }
         }
     }
