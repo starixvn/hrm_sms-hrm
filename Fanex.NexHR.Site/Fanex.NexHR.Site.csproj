@@ -265,6 +265,7 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\account\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\dist\js\jobtitle.js" />
@@ -1233,6 +1234,7 @@
     <Content Include="Views\Report\DailyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\DailyWorkingHours\_DailyWorkingHoursDetails.cshtml" />
     <Content Include="Views\Report\Overtime\_ListMonthlyOvertimeDetails.cshtml" />
+    <Content Include="Views\Account\_HistoryDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

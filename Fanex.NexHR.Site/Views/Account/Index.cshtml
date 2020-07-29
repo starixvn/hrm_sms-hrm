@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Core.Constants
-@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Resources
 
 @model Employee
 @{
@@ -9,6 +8,7 @@
     <link href="~/wwwroot/dist/styles/account.index.css" rel="stylesheet" />
 }
 @section js{
+    <script src="~/wwwroot/dist/js/account.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>
@@ -21,6 +21,7 @@
             <div class="avatar">
                 <img src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
             </div>
+            <input type="hidden" value="@Model.Id" name="Id" class="Id"/>
             <div class="pinfo">
                 <span class="name">@Model.FullName</span>
                 <p class="accinfo">
@@ -247,5 +248,9 @@
                 <div class="pcontent bold">@Model.Unit</div>
             </li>
         </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">HISTORY</div>
+        <div id="historyDetail"></div>
     </div>
 </div>

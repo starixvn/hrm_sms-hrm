@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
@@ -8,6 +9,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
@@ -16,14 +18,17 @@
     {
         private readonly IEmployeeService employeeService;
         private readonly IAuthService authService;
+        private readonly IEmployeeLogService employeeLogService;
 
         public AccountController(
             ISessionService sessionService,
             IEmployeeService employeeService,
+            IEmployeeLogService employeeLogService,
             IAuthService authService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.authService = authService;
+            this.employeeLogService = employeeLogService;
         }
 
         public ActionResult Index()
@@ -31,6 +36,14 @@
             Employee model = employeeService.GetEmployeeById(sessionService.Employee.Id);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult HistoryDetail(int id)
+        {
+            IEnumerable<LogObjectDetail> logs = employeeLogService.GetLogDetailById(id);
+
+            return PartialView("_HistoryDetail", logs);
         }
 
         [HttpPost]
