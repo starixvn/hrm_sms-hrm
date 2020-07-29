@@ -1,5 +1,4 @@
-﻿@import '~datatables.net-bs/css/dataTables.bootstrap.css';
-@import '../../abstracts/variables';
+﻿@import '../../abstracts/variables';
 @import '../../abstracts/mixins';
 @import '../../components/buttons-new';
 @import '../../components/multiselect-treeview';
@@ -7,7 +6,6 @@
 @import '../../layout/table';
 @import '../../layout/shift.color';
 @import '../../vendors/autocomplete';
-@import '../../vendors/weekpicker';
 
 .toolbar {
     background: #343c4e;

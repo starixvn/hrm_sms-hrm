@@ -81,7 +81,7 @@
                 JobTitleId = model.JobTitleIds,
                 IsLocal = model.IsLocal
             };
-            IEnumerable<WorkingCalendarRangeDates> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            IEnumerable<WorkingCalendar> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
 
             var workingCalendarDetails = new WorkingCalendarViewModel
             {

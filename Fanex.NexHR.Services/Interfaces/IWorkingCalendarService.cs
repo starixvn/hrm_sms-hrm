@@ -9,6 +9,6 @@
     {
         IEnumerable<DailySchedule> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria);
 
-        IEnumerable<WorkingCalendarRangeDates> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria);
+        IEnumerable<WorkingCalendar> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria);
     }
 }

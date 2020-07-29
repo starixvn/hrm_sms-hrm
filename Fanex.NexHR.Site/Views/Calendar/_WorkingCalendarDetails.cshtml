@@ -97,7 +97,7 @@
     <tbody>
         @if (Model.WorkingCalendars.Any())
         {
-            foreach (WorkingCalendarRangeDates calendar in Model.WorkingCalendars)
+            foreach (WorkingCalendar calendar in Model.WorkingCalendars)
             {
                 <tr>
                     <td class="align-left">@calendar.DepartmentCode</td>

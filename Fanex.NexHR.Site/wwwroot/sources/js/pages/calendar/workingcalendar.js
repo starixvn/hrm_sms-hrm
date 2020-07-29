@@ -1,10 +1,11 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
+import { parse } from 'qs';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { axiosError, blockUI, initDatepicker, initFromDateOnChange, unblockUI, resolveClientUrl, sortTable, floatThead } from '../../shared/common.functions';
+import { downloadFile, axiosError, blockUI, initDatepicker, initFromDateOnChange, unblockUI, resolveClientUrl, sortTable, floatThead } from '../../shared/common.functions';
 
 const workingCalendarModule = (function ($) {
     function query() {
@@ -66,14 +67,16 @@ const workingCalendarModule = (function ($) {
         });
 
         $('#btnExcel').on('click', function () {
-            const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-            const url = 'ExportCalendar/EmployeeWorkingCalendar?fromDate=' + $('#FromDate').val()
-                + '&toDate=' + $('#ToDate').val()
-                + '&employeeId=' + $('#EmployeeId').val()
-                + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
-                + '&jobTitleIds=' + $('#JobTitle').multiSelectTreeView('getSelectedItems')
-                + '&isLocal=' + $('#IsLocal').val();
-            location.href = resolveClientUrl(url);
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportCalendar/EmployeeWorkingCalendar'),
+                method: 'GET',
+                params: parse($('form.filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
         });
     }
 

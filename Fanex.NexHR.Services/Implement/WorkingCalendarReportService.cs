@@ -1,33 +1,31 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Calendar;
-    using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.ScheduleArrange;
-    using Fanex.NexHR.Repositories;
     using OfficeOpenXml;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Web;
 
     public interface IWorkingCalendarReportService
     {
-        byte[] Export(GetWorkingCalendarWeeklyCriteria param, IEnumerable<WorkingCalendarRangeDates> calendars);
+        byte[] Export(GetWorkingCalendarWeeklyCriteria param, IEnumerable<WorkingCalendar> calendars);
     }
-public class WorkingCalendarReportService : IWorkingCalendarReportService
-{
-    private const byte MinimumWidth = 5;
-    private const byte MaximumWidth = 50;
 
-    public byte[] Export(
-        GetWorkingCalendarWeeklyCriteria param,
-        IEnumerable<WorkingCalendarRangeDates> calendars)
+    public class WorkingCalendarReportService : IWorkingCalendarReportService
     {
-        var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WorkingCalendar.xlsx");
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        private const byte MaximumWidth = 50;
+        private const byte MinimumWidth = 5;
+
+        public byte[] Export(
+        GetWorkingCalendarWeeklyCriteria param,
+        IEnumerable<WorkingCalendar> calendars)
         {
+            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WorkingCalendar.xlsx");
+            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+            {
                 using (var xlPackage = new ExcelPackage())
                 {
                     ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
@@ -56,11 +54,10 @@ public class WorkingCalendarReportService : IWorkingCalendarReportService
                         colIndex++;
                     }
 
-
                     // data
                     rowIndex++;
                     var rowNum = 1;
-                    foreach (WorkingCalendarRangeDates employee in calendars)
+                    foreach (WorkingCalendar employee in calendars)
                     {
                         colIndex = 1;
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
@@ -73,16 +70,16 @@ public class WorkingCalendarReportService : IWorkingCalendarReportService
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
 
-                        foreach(DailySchedule dailys in employee.schedules)
+                        foreach (DailySchedule dailys in employee.schedules)
                         {
                             for (var day = param.Fromtime.Date; day.Date <= param.Totime.Date; day = day.AddDays(1))
                             {
-                               if(dailys.WorkDate == day.Date)
+                                if (dailys.WorkDate == day.Date)
                                 {
                                     template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                                    worksheet.Cells[rowIndex, colIndex].Value =  GetShift(dailys);
+                                    worksheet.Cells[rowIndex, colIndex].Value = GetShift(dailys);
                                     colIndex++;
-                                }  
+                                }
                             }
                         }
 
@@ -92,37 +89,36 @@ public class WorkingCalendarReportService : IWorkingCalendarReportService
                     worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
                     worksheet.View.FreezePanes(StartBodyRow, StartDateColumn);
                     return xlPackage.GetAsByteArray();
+                }
             }
         }
-    }
 
         private static string GetShift(DailySchedule schedule)
         {
             var shift = string.Empty;
-            
-                if (schedule.IsLeaveOffDay)
-                {
-                    shift = "Off";
-                }
-                else if (schedule.IsLeaveDay)
-                {
-                    shift = GetShiftOnLeaveDay(schedule);
-                }
-                else if (schedule.IsHoliday)
-                {
-                    shift = schedule.Shift != null ? schedule.Shift.Code : "PH";
-                }
-                else if (schedule.IsOffDay)
-                {
-                    shift = schedule.Shift != null ? schedule.Shift.Code : "Off";
-                }
-                else
-                {
-                    shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
-                }
+
+            if (schedule.IsLeaveOffDay)
+            {
+                shift = "Off";
+            }
+            else if (schedule.IsLeaveDay)
+            {
+                shift = GetShiftOnLeaveDay(schedule);
+            }
+            else if (schedule.IsHoliday)
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : "PH";
+            }
+            else if (schedule.IsOffDay)
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : "Off";
+            }
+            else
+            {
+                shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
+            }
             return shift;
         }
-
 
         private static string GetShiftOnLeaveDay(DailySchedule schedule)
         {
@@ -155,4 +151,4 @@ public class WorkingCalendarReportService : IWorkingCalendarReportService
             return shift;
         }
     }
-  }
+}

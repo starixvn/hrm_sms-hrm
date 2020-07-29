@@ -29,13 +29,13 @@
             }
         }
 
-        public IEnumerable<WorkingCalendarRangeDates> GetWorkingCalendars(ICriteria criteria)
+        public IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<WorkingCalendarRangeDates> calendars = multi.Read<WorkingCalendarRangeDates>();
+                    IEnumerable<WorkingCalendar> calendars = multi.Read<WorkingCalendar>();
 
                     IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                         (dailySchedule, shift, leave, leave2) =>
@@ -56,10 +56,10 @@
         }
 
         private static void MappingData(
-            IEnumerable<WorkingCalendarRangeDates> calendars,
+            IEnumerable<WorkingCalendar> calendars,
             IEnumerable<DailySchedule> dailySchedules)
         {
-            foreach (WorkingCalendarRangeDates calendar in calendars)
+            foreach (WorkingCalendar calendar in calendars)
             {
                 calendar.schedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId).OrderBy(x => x.WorkDate);
             }

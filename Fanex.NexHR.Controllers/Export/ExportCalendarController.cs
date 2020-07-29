@@ -1,19 +1,20 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
 
     public class ExportCalendarController : BaseExportController
     {
         private readonly IWorkingCalendarService workingCalendarService;
         private readonly IWorkingCalendarReportService reportService;
+
         public ExportCalendarController(
             ISessionService sessionService,
             IWorkingCalendarService workingCalendarService,
@@ -25,7 +26,7 @@
 
         public ActionResult EmployeeWorkingCalendar(WorkingCalendarFilterViewModel model)
         {
-            string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
             var criteria = new GetWorkingCalendarWeeklyCriteria
             {
                 EmpId = model.EmployeeId,
@@ -36,7 +37,8 @@
                 IsLocal = model.IsLocal
             };
 
-            IEnumerable<WorkingCalendarRangeDates> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            IEnumerable<WorkingCalendar> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+
             byte[] bytes = reportService.Export(criteria, workingCalendars);
             return File(bytes, MimeType.XLSX, fileName);
         }

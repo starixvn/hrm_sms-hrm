@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Report
 {
     using Fanex.NexHR.Models.ScheduleArrange;
+    using System.Collections.Generic;
 
     public class WorkingCalendar
     {
@@ -11,12 +12,6 @@
         public string Team { get; set; }
         public string SectionCode { get; set; }
         public string DepartmentCode { get; set; }
-        public DailySchedule MondaySchedule { get; set; }
-        public DailySchedule TuesdaySchedule { get; set; }
-        public DailySchedule WednesdaySchedule { get; set; }
-        public DailySchedule ThursdaySchedule { get; set; }
-        public DailySchedule FridaySchedule { get; set; }
-        public DailySchedule SaturdaySchedule { get; set; }
-        public DailySchedule SundaySchedule { get; set; }
+        public IEnumerable<DailySchedule> schedules { get; set; }
     }
 }
