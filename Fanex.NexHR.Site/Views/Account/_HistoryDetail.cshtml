@@ -27,7 +27,7 @@
                             </td>
                         </tr>
                     }
-                    @foreach (LogObjectDetail item in Model)
+                    @foreach (LogObjectDetail item in teams)
                     {
                         foreach (FieldValue field in item.Fields)
                         {
@@ -69,5 +69,4 @@
             </table>
         </div>
     }
-
 }

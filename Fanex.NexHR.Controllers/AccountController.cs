@@ -31,10 +31,13 @@
 
         public ActionResult Index()
         {
-            Employee model = employeeService.GetEmployeeById(sessionService.Employee.Id);
-            model.Logs = employeeLogService.GetLogDetailById(sessionService.Employee.Id);
+            var viewModel = new AccountViewModel
+            {
+                Employee = employeeService.GetEmployeeById(sessionService.Employee.Id),
+                Logs = employeeLogService.GetLogDetailById(sessionService.Employee.Id)
+            };
 
-            return View(model);
+            return View(viewModel);
         }
 
         [HttpPost]

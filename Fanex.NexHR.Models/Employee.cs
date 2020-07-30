@@ -6,7 +6,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -230,7 +229,5 @@
         {
             return Roles?.Select(i => i.RoleId.ToString()).ToArray();
         }
-
-        public IEnumerable<LogObjectDetail> Logs { get; set; }
     }
 }
