@@ -1,5 +1,4 @@
 ﻿@using Fanex.NexHR.Resources
-
 @model Employee
 @{
     ViewBag.Title = Labels.MyProfile;
@@ -21,7 +20,7 @@
             <div class="avatar">
                 <img src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
             </div>
-            <input type="hidden" value="@Model.Id" name="Id" class="Id"/>
+            <input type="hidden" value="@Model.Id" name="Id" class="Id" />
             <div class="pinfo">
                 <span class="name">@Model.FullName</span>
                 <p class="accinfo">
@@ -249,8 +248,7 @@
             </li>
         </ul>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">HISTORY</div>
-        <div id="historyDetail"></div>
+    <div>
+        @Html.Partial("_HistoryDetail", Model.Logs)
     </div>
 </div>

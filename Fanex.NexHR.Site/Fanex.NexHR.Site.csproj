@@ -265,7 +265,6 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
-    <Content Include="wwwroot\sources\js\pages\account\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\dist\js\jobtitle.js" />
