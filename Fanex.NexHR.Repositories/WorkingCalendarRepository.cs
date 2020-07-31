@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -35,9 +34,8 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IEnumerable<WorkingCalendar> calendars = multi.Read<WorkingCalendar>();
-
-                    IEnumerable<DailySchedule> dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
+                    var calendars = multi.Read<WorkingCalendar>();
+                    var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                         (dailySchedule, shift, leave, leave2) =>
                         {
                             dailySchedule.Shift = shift;
@@ -61,7 +59,8 @@
         {
             foreach (WorkingCalendar calendar in calendars)
             {
-                calendar.schedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId).OrderBy(x => x.WorkDate);
+                calendar.Schedules = dailySchedules.Where(x => x.EmployeeId == calendar.EmployeeId)
+                    .OrderBy(x => x.WorkDate);
             }
         }
     }

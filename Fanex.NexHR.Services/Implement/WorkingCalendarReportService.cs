@@ -1,13 +1,13 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.ScheduleArrange;
     using OfficeOpenXml;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Web;
 
     public interface IWorkingCalendarReportService
     {
@@ -70,17 +70,11 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
 
-                        foreach (DailySchedule dailys in employee.schedules)
+                        foreach (DailySchedule daily in employee.Schedules)
                         {
-                            for (var day = param.Fromtime.Date; day.Date <= param.Totime.Date; day = day.AddDays(1))
-                            {
-                                if (dailys.WorkDate == day.Date)
-                                {
-                                    template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                                    worksheet.Cells[rowIndex, colIndex].Value = GetShift(dailys);
-                                    colIndex++;
-                                }
-                            }
+                            template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                            worksheet.Cells[rowIndex, colIndex].Value = GetShift(daily);
+                            colIndex++;
                         }
 
                         rowIndex++;

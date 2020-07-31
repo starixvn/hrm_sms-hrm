@@ -12,6 +12,6 @@
         public string Team { get; set; }
         public string SectionCode { get; set; }
         public string DepartmentCode { get; set; }
-        public IEnumerable<DailySchedule> schedules { get; set; }
+        public IEnumerable<DailySchedule> Schedules { get; set; }
     }
 }

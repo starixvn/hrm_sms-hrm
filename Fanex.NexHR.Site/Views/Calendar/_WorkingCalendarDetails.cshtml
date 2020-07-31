@@ -104,9 +104,9 @@
                     <td class="align-left">@calendar.SectionCode</td>
                     <td class="align-left">@calendar.Team</td>
                     <td class="align-left">@calendar.Nickname</td>
-                    @foreach (DailySchedule dailys in calendar.schedules)
+                    @foreach (DailySchedule daily in calendar.Schedules)
                     {
-                        @RenderColShift(dailys);
+                        @RenderColShift(daily);
                     }
                 </tr>
             }
