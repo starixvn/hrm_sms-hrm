@@ -62,8 +62,8 @@
         {
             var model = new WorkingCalendarFilterViewModel
             {
-                FromDate = DateTime.Now.AddDays(-7),
-                ToDate = DateTime.Now,
+                FromDate = DateTime.Now,
+                ToDate = DateTime.Now.AddDays(6),
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 

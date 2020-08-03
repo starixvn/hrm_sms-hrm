@@ -43,6 +43,7 @@
 
             li a {
                 line-height: normal;
+                color: #808080 !important;
 
                 span {
                     width: 15px;
@@ -62,4 +63,7 @@
         color: #fff;
         background-color: #1e88e5;
     }
+}
+div.floatThead-container {
+    overflow-x: visible !important;
 }
