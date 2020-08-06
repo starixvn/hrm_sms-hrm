@@ -92,6 +92,7 @@ BEGIN
 		,emp.Code
 
 	SELECT emp.EmpId AS EmployeeId
+		,emp.NickName
 		,empca.WorkDate
 		,empca.IsOvertime
 		,empca.IsLeaveOffDay

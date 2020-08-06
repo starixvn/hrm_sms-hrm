@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType_xtest] @fromtime DATE
+﻿CREATE PROCEDURE [dbo].[EmployeeAttendance_GetByType] @fromtime DATE
 	,@totime DATE
 	,@EmpId INT = NULL
 	,@TeamIds VARCHAR(MAX) = ''
@@ -15,7 +15,7 @@ DB: HRM_SMS
 Original:
 
 Revisions:
-	- 20200714@Merlin.Le: Get section and department code - Redmine Id: 110683
+	- Merlin.Le@20200713: Get section and department - Redmine Id: 110683
 Param's Explanation:
 	@type: 0-all, 1-missing checkin; 2-missing check out, 3: latein; 4-earlyout, 5- not work
 */
@@ -298,6 +298,7 @@ BEGIN
 		INNER JOIN [dbo].LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		INNER JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
+		AND ldt.WorkType IN (1, 2) -- off, leave
 	WHERE (
 			(
 				datediff(d, @fromtime, lr.FromDate) <= 0
@@ -760,7 +761,7 @@ BEGIN
 			WHEN s2.ShiftID IS NULL THEN 'OFF'
 			ELSE s2.[Name] END
 			) AS ToShift
-		,rd.InOutMins AS [Time]
+		,rd.InOutMins AS TotalMins
 		,rd.RequestType
 		,rd.LeaveTypeId
 		,l.[Name] AS LeaveTypeName

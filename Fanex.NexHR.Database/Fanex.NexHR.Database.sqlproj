@@ -230,7 +230,6 @@
     <Build Include="dbo\Stored Procedures\Message_Read.sql" />
     <Build Include="dbo\Stored Procedures\Employee_Summary_Update.sql" />
     <Build Include="dbo\Stored Procedures\Message_Update.sql" />
-    <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Stored Procedures\Report_EmployeeCalendarByDateRange.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_ProcessingAndInsert.sql" />
     <Build Include="dbo\Stored Procedures\Shift_Delete.sql" />
@@ -491,6 +490,7 @@
     <Build Include="dbo\Stored Procedures\Department_Insert.sql" />
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveMultipleRequest.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

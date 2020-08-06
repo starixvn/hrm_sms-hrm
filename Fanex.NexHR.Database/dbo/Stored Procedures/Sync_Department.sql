@@ -16,6 +16,7 @@ BEGIN
 
 	DECLARE @DepartmentIndex INT = 1000000
 		,@UnitIndex INT = 2000000
+		,@RootIndex INT = 3000000
 
 	CREATE TABLE #tblDepartment (
 		DepartmentId INT
@@ -66,6 +67,9 @@ BEGIN
 		,ModifiedDate
 	FROM dbo.Department WITH (NOLOCK)
 
+	INSERT INTO #tblDepartment (DepartmentId, Code, [Name], ParentId, IsDeleted, ModifiedDate)
+	VALUES (@RootIndex, 'SMS', 'SMS', NULL, 0, GETDATE())
+
 	INSERT INTO #tblDepartment (
 		DepartmentId
 		,Code
@@ -77,7 +81,7 @@ BEGIN
 	SELECT @UnitIndex + UnitId
 		,Code
 		,[Name]
-		,NULL
+		,@RootIndex
 		,CASE 
 			WHEN IsActive = 0
 				OR IsDeleted = 1 THEN 1
