@@ -96,10 +96,10 @@
             var record = new
             {
                 Count = rowIndex,
-                employee.Code,
                 Department = employee.Team.Section.Department.Code,
                 Section = employee.Team.Section.Code,
                 Team = employee.Team.Name,
+                employee.Code,
                 employee.FullName,
                 employee.NickName,
                 GroupDate = employee.JoinedDate,
@@ -285,10 +285,10 @@
             var record = new
             {
                 Index = currentRow - 2,
-                p.Code,
                 Department = p.DepartmentCode,
                 Section = p.SectionCode,
                 p.TeamName,
+                p.Code,
                 p.FullName,
                 p.NickName,
                 Gender = gender,

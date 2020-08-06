@@ -102,10 +102,10 @@
             {
                 Count = rowIndex,
                 attendance.AttendanceDate,
-                attendance.Code,
                 attendance.DepartmentCode,
                 attendance.SectionCode,
                 attendance.TeamCode,
+                attendance.Code,
                 attendance.FullName,
                 attendance.NickName,
                 ShiftCode = shiftCode,

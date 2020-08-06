@@ -88,10 +88,10 @@
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
 

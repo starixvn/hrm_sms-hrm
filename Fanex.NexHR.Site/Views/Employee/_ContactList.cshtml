@@ -12,12 +12,6 @@
                 <th>@Labels.SymbolCount</th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
-                        @Labels.Code
-                        <div class="fa fa-sort cell-right-div"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
                         @Labels.Department
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
@@ -36,13 +30,19 @@
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
-                        @Labels.Name
+                        @Labels.Code
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
-                        @Labels.Nick
+                        @Labels.FullName
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        @Labels.NickName
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
                 </th>
@@ -97,11 +97,10 @@
                     var cssClass = employee.Enabled ? "" : "disabled";
                     <tr class="@cssClass">
                         <td>@index</td>
-                        <td>@employee.Code</td>
                         <td>@employee.Team.Section.Department.Code</td>
                         <td>@employee.Team.Section.Code</td>
-                        
                         <td><span class="tooltip-tippy" data-tippy-content="@employee.Team.Name">@employee.Team.Code</span></td>
+                        <td>@employee.Code</td>
                         <td class="align-left">@employee.FullName</td>
                         <td>
                             <a class="avatar-tooltip" data-code="@employee.Code">@employee.NickName</a>

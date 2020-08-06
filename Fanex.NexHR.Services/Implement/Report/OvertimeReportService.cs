@@ -248,10 +248,10 @@
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
-                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
+                        worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
                         worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
@@ -317,10 +317,10 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
-                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
+                worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
@@ -388,10 +388,10 @@
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value = overtimes.Sum(x => x.NormalHours);

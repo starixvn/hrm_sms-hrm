@@ -88,10 +88,10 @@
                         templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
@@ -148,10 +148,10 @@
                         templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
                         worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+                        worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                         WriteDailyCells(worksheet.Cells[rowIndex, colIndex], monthlyWorking.DailyWorkings.First());

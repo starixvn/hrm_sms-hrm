@@ -104,12 +104,6 @@
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.Code</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
                     <div>@Labels.Department</div>
                     <div class="fa fa-sort"></div>
                 </div>
@@ -123,6 +117,12 @@
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
                     <div>@Labels.Team</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Code</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
@@ -205,56 +205,56 @@
         {
             foreach (DailyOvertimeDetails request in Model.Overtimes)
             {
-        <tr>
-            <td>@request.WorkDate.ToDateMonthYearFormatedDate()</td>
-            <td>@request.Code</td>
-            <td>@request.DepartmentCode</td>
-            <td>@request.Section</td>
-            <td>@request.Team</td>
-            <td class="align-left">@request.FullName</td>
-            <td class="align-left">@request.Nickname</td>
-            <td>@request.ShiftCode</td>
-            <td>@request.TimeIn</td>
-            <td>@request.TimeOut</td>
-            <td>
-                @if (request.ActualWorkingHours > 0)
-                {
-                    @request.ActualWorkingHours
-                }
-            </td>
-            <td>
-                @if (request.NormalHours > 0)
-                {
-                    @request.NormalHours
-                }
-            </td>
-            <td>
-                @if (request.OffHours > 0)
-                {
-                    @request.OffHours
-                }
-            </td>
-            <td>
-                @if (request.PublicHours > 0)
-                {
-                    @request.PublicHours
-                }
-            </td>
-            <td>
-                @if (request.SpecialHours > 0)
-                {
-                    @request.SpecialHours
-                }
-            </td>
-            <td class="align-left">@request.Remark</td>
-            <td>
-                @if (request.StatusId != 0)
-                {
-                    var status = (CurrentRequestStatus)request.StatusId;
-                    @status
-                }
-            </td>
-        </tr>
+                <tr>
+                    <td>@request.WorkDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@request.DepartmentCode</td>
+                    <td>@request.Section</td>
+                    <td>@request.Team</td>
+                    <td>@request.Code</td>
+                    <td class="align-left">@request.FullName</td>
+                    <td class="align-left">@request.Nickname</td>
+                    <td>@request.ShiftCode</td>
+                    <td>@request.TimeIn</td>
+                    <td>@request.TimeOut</td>
+                    <td>
+                        @if (request.ActualWorkingHours > 0)
+                        {
+                            @request.ActualWorkingHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
+                    <td class="align-left">@request.Remark</td>
+                    <td>
+                        @if (request.StatusId != 0)
+                        {
+                            var status = (CurrentRequestStatus)request.StatusId;
+                            @status
+                        }
+                    </td>
+                </tr>
             }
         }
         else

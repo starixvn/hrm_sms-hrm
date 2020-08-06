@@ -187,10 +187,10 @@
                     .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;

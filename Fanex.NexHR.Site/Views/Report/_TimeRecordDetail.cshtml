@@ -10,10 +10,10 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.Code</th>
             <th>@Labels.Department</th>
             <th>@Labels.Section</th>
             <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
             <th>@Labels.NickName</th>
             <th>@Labels.TimeRecord</th>
             <th>@Labels.InOut</th>
@@ -26,38 +26,38 @@
             @foreach (TimeRecordModel item in Model)
             {
                 index++;
-                <tr>
-                    <td>@index</td>
-                    <td>@item.Code</td>
-                    <td class="align-left">@item.DepartmentCode</td>
-                    <td class="align-left">@item.SectionCode</td>
-                    <td class="align-left">@item.Team</td>
-                    <td>
-                        <span class="tooltip-tipsy" title="@item.FullName">@item.Nickname</span>
-                    </td>
-                    <td>@item.RecordTime.ToDetailFormatedDate()</td>
-                    <td>
-                        @if (hasPermission)
+            <tr>
+                <td>@index</td>
+                <td class="align-left">@item.DepartmentCode</td>
+                <td class="align-left">@item.SectionCode</td>
+                <td class="align-left">@item.Team</td>
+                <td>@item.Code</td>
+                <td>
+                    <span class="tooltip-tipsy" title="@item.FullName">@item.Nickname</span>
+                </td>
+                <td>@item.RecordTime.ToDetailFormatedDate()</td>
+                <td>
+                    @if (hasPermission)
+                    {
+                        if (item.InOutType == 0)
                         {
-                            if (item.InOutType == 0)
-                            {
-                                <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
-                                    @item.GetInOutName
-                                </a>
-                            }
-                            else
-                            {
-                                <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
-                                    @item.GetInOutName
-                                </a>
-                            }
+                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="out-action">
+                                @item.GetInOutName
+                            </a>
                         }
                         else
                         {
-                            @item.GetInOutName
+                            <a data-id="@item.RecordTimeId" href="javascript:void(0);" class="in-action">
+                                @item.GetInOutName
+                            </a>
                         }
-                    </td>
-                </tr>
+                    }
+                    else
+                    {
+                        @item.GetInOutName
+                    }
+                </td>
+            </tr>
             }
         </tbody>
         <tfoot>

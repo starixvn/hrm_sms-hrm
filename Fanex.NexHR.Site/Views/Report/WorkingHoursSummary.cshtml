@@ -128,7 +128,6 @@
         <tr>
         <tr>
             <th rowspan="2">@Labels.SymbolCount</th>
-            <th>@Labels.Code</th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
                     <div>@Labels.Department</div>
@@ -142,6 +141,7 @@
                 </div>
             </th>
             <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
             <th>@Labels.FullName</th>
             <th>@Labels.NickName</th>
             <th>@Labels.WorkingDaysMonth</th>
@@ -185,49 +185,49 @@
                     RequestType = (int)RequestFilter.Leave,
                     ViewType = RequestViewType.CompanySpace
                 };
-            <tr>
-                <td>
-                    @(index++)
-                </td>
-                <td>@item.Code</td>
-                <td class="align-left">@item.DepartmentCode</td>
-                <td class="align-left">@item.Section</td>
-                <td class="align-left">@item.Team</td>
-                <td class="align-left">@item.FullName</td>
-                <td class="align-left">@item.Nickname</td>
-                <td>@item.WorkingDays</td>
-                <td>@item.WorkingHours</td>
-                <td>@Utilities.DisplayFloatNumber(item.TotalWorkingHours)</td>
-                <td>@item.ActualWorkingDays.ToString("0.0")</td>
-                <td>@Utilities.DisplayFloatNumber(item.PaymentWorkingDays)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.AnnualLeave)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.BusinessTrip)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.BereavementLeave)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.CompensationLeave)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.WeddingLeave)</td>
-                <td>@Utilities.DisplayFloatNumber(item.TotalPayments)</td>
-                <td>
-                    @if (item.UnpaidLeave > 0 && isHR)
-                    {
-                        <a href="@Url.Action("hrview", "request", requestModel)">
+                <tr>
+                    <td>
+                        @(index++)
+                    </td>
+                    <td class="align-left">@item.DepartmentCode</td>
+                    <td class="align-left">@item.Section</td>
+                    <td class="align-left">@item.Team</td>
+                    <td>@item.Code</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td class="align-left">@item.Nickname</td>
+                    <td>@item.WorkingDays</td>
+                    <td>@item.WorkingHours</td>
+                    <td>@Utilities.DisplayFloatNumber(item.TotalWorkingHours)</td>
+                    <td>@item.ActualWorkingDays.ToString("0.0")</td>
+                    <td>@Utilities.DisplayFloatNumber(item.PaymentWorkingDays)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.AnnualLeave)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.BusinessTrip)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.BereavementLeave)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.CompensationLeave)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.WeddingLeave)</td>
+                    <td>@Utilities.DisplayFloatNumber(item.TotalPayments)</td>
+                    <td>
+                        @if (item.UnpaidLeave > 0 && isHR)
+                        {
+                            <a href="@Url.Action("hrview", "request", requestModel)">
+                                @Utilities.DisplayEmptyFloatNumber(item.UnpaidLeave)
+                            </a>
+                        }
+                        else
+                        {
                             @Utilities.DisplayEmptyFloatNumber(item.UnpaidLeave)
-                        </a>
-                    }
-                    else
-                    {
-                        @Utilities.DisplayEmptyFloatNumber(item.UnpaidLeave)
-                    }
-                </td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.UnpaidLeaveInsurance)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.PaternityLeave)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.MaternityLeave)</td>
-                <td>@Utilities.DisplayFloatNumber(item.TotalUnpaidLeaves)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.NormalOvertimeHours)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.OffOvertimeHours)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.PublicOvertimeHours)</td>
-                <td>@Utilities.DisplayEmptyFloatNumber(item.SpecialOvertimeHours)</td>
-                <td>@Utilities.DisplayFloatNumber(item.TotalOvertimes)</td>
-            </tr>
+                        }
+                    </td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.UnpaidLeaveInsurance)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.PaternityLeave)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.MaternityLeave)</td>
+                    <td>@Utilities.DisplayFloatNumber(item.TotalUnpaidLeaves)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.NormalOvertimeHours)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.OffOvertimeHours)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.PublicOvertimeHours)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.SpecialOvertimeHours)</td>
+                    <td>@Utilities.DisplayFloatNumber(item.TotalOvertimes)</td>
+                </tr>
             }
         </tbody>
     }
