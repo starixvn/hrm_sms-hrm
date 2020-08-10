@@ -4,12 +4,10 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -165,64 +163,6 @@
             }
 
             return list;
-        }
-
-        public static IList<T> MultipleSort<T>(IList<T> data, IList<SortModel> sortExpressions)
-        {
-            // No sorting needed.
-            if (sortExpressions == null || !sortExpressions.Any())
-            {
-                return data;
-            }
-
-            // Let us sort it.
-            IEnumerable<T> query = data.Select(item => item);
-            IOrderedEnumerable<T> orderedQuery = null;
-
-            for (int i = 0; i < sortExpressions.Count; i++)
-            {
-                // We need to keep the loop index, not sure why it is altered by the Linq.
-                var index = i;
-                Func<T, object> expression = GetSortExpression<T>(sortExpressions, index);
-
-                // Need to review the functionality of 'orderedQuery'
-                orderedQuery = SortOrderedQuery(sortExpressions, query, orderedQuery, index, expression);
-            }
-
-            return orderedQuery?.ToList();
-        }
-
-        private static IOrderedEnumerable<T> SortOrderedQuery<T>(
-            IList<SortModel> sortExpressions,
-            IEnumerable<T> query,
-            IOrderedEnumerable<T> orderedQuery,
-            int index,
-            Func<T, object> expression)
-        {
-            if (sortExpressions[index].Direction == "asc")
-            {
-                if (index == 0)
-                {
-                    return query.OrderBy(expression);
-                }
-
-                return orderedQuery?.ThenBy(expression);
-            }
-            else
-            {
-                if (index == 0)
-                {
-                    return query.OrderByDescending(expression);
-                }
-
-                return orderedQuery?.ThenByDescending(expression);
-            }
-        }
-
-
-        private static Func<T, object> GetSortExpression<T>(IList<SortModel> sortExpressions, int index)
-        {
-            return item => item.GetType().GetProperty(sortExpressions[index].Property)?.GetValue(item, null);
         }
 
         public static IList<SelectListItem> TimeSteps(int minuteStep)

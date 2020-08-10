@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Model;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using Newtonsoft.Json;
 
     public class AttendanceReportController : BaseController
     {
@@ -59,29 +57,9 @@
                 IsLocal = model.IsLocal,
                 IsRealDate = model.IsRealDate
             };
-
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
 
-            employeeAttendances = SortAttendances(model.Sort, employeeAttendances);
-
             return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
-        }
-
-        private static IList<EmployeeAttendanceModel> SortAttendances(string sort, IList<EmployeeAttendanceModel> employeeAttendances)
-        {
-            IList<EmployeeAttendanceModel> memberOvertimeSorted;
-
-            if (sort != null)
-            {
-                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(sort);
-                memberOvertimeSorted = Utilities.MultipleSort(employeeAttendances, sorts);
-            }
-            else
-            {
-                memberOvertimeSorted = employeeAttendances;
-            }
-
-            return memberOvertimeSorted;
         }
 
         public ActionResult ExportExcel(EmployeeAttendanceViewModel model)
@@ -99,16 +77,10 @@
                 IsRealDate = model.IsRealDate
             };
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
-            if (model.Sort != null)
-            {
-                var sorts = JsonConvert.DeserializeObject<List<SortModel>>(model.Sort);
+            byte[] bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
-                employeeAttendances = Utilities.MultipleSort(employeeAttendances, sorts);
-            }
-
-            excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
-
-            return new EmptyResult();
+            var fileName = $"AttendanceReport_{DateTime.Now.ToString("yyyyMMdd")}.xlsx";
+            return File(bytes, MimeType.XLSX, fileName);
         }
     }
 }
