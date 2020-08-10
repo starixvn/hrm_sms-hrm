@@ -962,7 +962,6 @@
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
     <Content Include="Views\Account\ChangePwd.cshtml" />
     <Content Include="Views\Overtime\EmployeeView.cshtml" />
-    <Content Include="ExcelTemplates\AttendanceReportTemplate.xls" />
     <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
     <Content Include="Views\Employee\ManageSupervisor.cshtml" />
     <Content Include="Views\Home\_MemberRequest.cshtml" />
