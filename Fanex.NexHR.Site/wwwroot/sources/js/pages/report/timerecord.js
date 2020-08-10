@@ -1,9 +1,12 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
+import '../../../libs/SimplePagination/jquery.simplePagination';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
-import { blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert, initDatepicker, resolveClientUrl, axiosError, downloadFile } from '../../shared/common.functions';
+import {
+    blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert,
+    initDatepicker, resolveClientUrl, axiosError, downloadFile
+} from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -120,18 +123,14 @@ import { parse } from 'qs';
     }
 
     $(document).ready(function () {
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
+        axios(resolveClientUrl('Section/GetOrgChart'))
+            .then(response => {
                 $('#Team').multiSelectTreeView({
-                    data: data,
+                    data: response.data,
                     isSelectedAll: true
                 });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+                query();
+            }).catch(axiosError);
 
         $('#Employee').change(function () {
             if ($.trim($(this).val()).length === 0) {
@@ -163,6 +162,5 @@ import { parse } from 'qs';
 
         initDatepicker();
         initFromDateOnChange($('#FromDate'), $('#ToDate'));
-        query();
     });
 })();

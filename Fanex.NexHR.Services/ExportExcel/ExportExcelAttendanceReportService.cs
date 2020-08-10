@@ -18,6 +18,7 @@
         byte[] Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate);
     }
 
+#pragma warning disable S109 // Magic numbers should not be used
     public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
     {
         private const byte RowStartBody = 3;

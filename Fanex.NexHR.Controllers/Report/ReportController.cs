@@ -62,9 +62,7 @@
         public ActionResult TimesheetDetails(TimesheetViewModel model)
         {
             var fromDate = new DateTime(model.Year, model.Month, 1);
-            DateTime toDate;
-
-            toDate = (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year) ?
+            DateTime toDate = (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year) ?
                     DateTime.Now.Date : new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
 
             var criteria = new GetEmployeeAttendanceCriteria
@@ -81,16 +79,11 @@
             return PartialView("_TimesheetDetails", timesheets);
         }
 
-        public ActionResult TimeRecord(DateTime? fromDate, DateTime? toDate)
+        public ActionResult TimeRecord(TimeRecordViewModel model)
         {
-            var model = new TimeRecordViewModel
-            {
-                FromDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : fromDate.Value,
-                ToDate = (!fromDate.HasValue || !toDate.HasValue) ? DateTime.Now.Date : toDate.Value,
-                CurrentPage = Constants.CurrentPage,
-                ItemsPerPage = Constants.ItemsPerPage,
-                TeamIds= string.Join(",", teamService.GetAll().Select(x => x.Id))
-            };
+            model.CurrentPage = Constants.CurrentPage;
+            model.ItemsPerPage = Constants.ItemsPerPage;
+            model.TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id));
 
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
