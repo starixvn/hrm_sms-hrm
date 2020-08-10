@@ -230,12 +230,12 @@ $(document).ready(function () {
 
     domElements.$checkInTypeId.on('change', function () {
         getDisabledDates();
-        bindingHourAndMinute();
+        domElements.$attendantDate.trigger('change');
     });
 
     domElements.$checkOutTypeId.on('change', function () {
         getDisabledDates();
-        bindingHourAndMinute();
+        domElements.$attendantDate.trigger('change');
     });
 
     domElements.$attendantDate.on('change', function () {
