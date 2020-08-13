@@ -12,6 +12,7 @@
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
         public long? RequestId { get; set; }
+        public int LeaveTypeId { get; set; }
 
         public override string GetSettingKey() => "LeaveRequest_GetDisableDate";
 

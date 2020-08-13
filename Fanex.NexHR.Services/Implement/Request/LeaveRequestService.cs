@@ -81,6 +81,7 @@
         {
             var criteria = new GetDisabledDateCriteria
             {
+                LeaveTypeId = param.LeaveTypeId,
                 EmployeeId = param.EmployeeId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -106,7 +107,6 @@
             leaveBalance.KeepInViewByHourBalance = Math.Round(leaveBalance.KeepInViewByHourBalance / Constants.TotalMinuteInHour, 1);
             return leaveBalance;
         }
-
         public CommandResult Delete(long requestId)
         {
             var criteria = new DeleteLeaveRequestCriteria

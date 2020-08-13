@@ -1,8 +1,8 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_GetDisableDate] @empId INT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_GetDisableDate] @empId INT
 	,@fromDate DATE
 	,@toDate DATE
 	,@requestId BIGINT = NULL
+	,@LeaveTypeId INT
 AS
 /*
 Created: Tim.Trinh@2019-10-15
@@ -17,14 +17,32 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE
+		@CountDay INT
 		-- request status
-		@NotVerifiedStatusId TINYINT = 3
+		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
+
+		-- leave type 
+		,@UnpaidLeave INT = 25
+		,@UnpaidLeaveInsurance INT = 41
+		,@PaternityLeave INT = 14
+		,@MaternityLeave INT = 12
+
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
 		,@empIds = @empId
+
+	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
+
+	IF(@CountDay >= 7 AND  (@LeaveTypeId = @UnpaidLeave OR @LeaveTypeId = @UnpaidLeaveInsurance 
+	  OR @LeaveTypeId = @PaternityLeave OR @LeaveTypeId = @MaternityLeave) )
+	BEGIN
+		EXEC [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate  = @fromDate
+		,@toDate = @toDate
+		,@empIds = @empId
+	END
 
 	SELECT tmpca.RequestId
 		,tmpca.WorkDate

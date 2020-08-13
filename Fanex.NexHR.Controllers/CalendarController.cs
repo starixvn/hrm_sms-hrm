@@ -62,8 +62,8 @@
         {
             var model = new WorkingCalendarFilterViewModel
             {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now.AddDays(6),
+                FromDate = DateTime.Now.FirstDayOfWeek(),
+                ToDate = DateTime.Now.LastDayOfWeek(),
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 

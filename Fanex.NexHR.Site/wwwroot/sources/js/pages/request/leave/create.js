@@ -683,6 +683,7 @@ const LeaveRequest = (function ($) {
             $.ajax({
                 url: resolveClientUrl('leave/getTotalLeaveDay'),
                 data: {
+                    leaveTypeId: parseInt(LeaveRequest.leaveTypeId.val(), 10),
                     RequestId: LeaveRequest.requestId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
                     fromDate: LeaveRequest.fromDate.val(),
@@ -702,6 +703,7 @@ const LeaveRequest = (function ($) {
                 url: resolveClientUrl('leave/getDisableDate'),
                 method: 'GET',
                 params: {
+                    leaveTypeId: parseInt(LeaveRequest.leaveTypeId.val(), 10),
                     requestId: LeaveRequest.requestId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
                     date: new Date().toDateString()
@@ -748,6 +750,7 @@ const LeaveRequest = (function ($) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
+                    LeaveRequest.getUnavailableDate();
                 } else if (leaveTypeId === LeaveType.PublicHoliday) {
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');

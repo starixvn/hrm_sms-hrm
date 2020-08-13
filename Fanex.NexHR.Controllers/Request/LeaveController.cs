@@ -248,7 +248,7 @@
             return View(model);
         }
 
-        public CustomJsonResult GetDisableDate(int employeeId, DateTime date, long? requestId = null)
+        public CustomJsonResult GetDisableDate(int leaveTypeId, int employeeId, DateTime date, long? requestId = null)
         {
             var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
@@ -256,6 +256,7 @@
 
             var param = new GetDisabledDateParam
             {
+                LeaveTypeId = leaveTypeId,
                 RequestId = requestId,
                 EmployeeId = employeeId,
                 FromDate = fromDate,

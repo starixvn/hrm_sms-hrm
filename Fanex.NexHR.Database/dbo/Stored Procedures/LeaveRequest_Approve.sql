@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@DisciplineXml NVARCHAR(MAX) = NULL
 	,@Comment NVARCHAR(500) = ''
@@ -31,6 +30,8 @@ BEGIN
 		,@maxDate DATETIME
 		,@minDate DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
+		,@LeaveTypeId INT
+		,@CountDay INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -40,11 +41,14 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 
-	SELECT @EmpId = EmpId
+	SELECT @LeaveTypeId = LeaveType
+		,@EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
+
+	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	SELECT @maxDate = MAX(WorkDate)
 		,@minDate = MIN(WorkDate)
@@ -160,10 +164,17 @@ BEGIN
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
+		IF(@CountDay >= 7 AND  (@LeaveTypeId = 25 OR @LeaveTypeId = 41 
+			OR @LeaveTypeId = 14 OR @LeaveTypeId = 12) )
+			BEGIN
+				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId
+					,@EmpId
+					,@ActorId
+			END
 		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 			,@EmpId
 			,@ActorId
-
+		
 		EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
 			,@EmpId
 			,@FromDate
