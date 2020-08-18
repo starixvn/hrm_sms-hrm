@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
 	,@FromDate DATETIME = NULL
@@ -39,6 +38,7 @@ BEGIN
 		,@KIVByHourLeaveType TINYINT = 48
 		,@PublicHolidayLeaveType TINYINT = 13
 		,@PaternityLeaveType TINYINT = 14
+		,@MaternityLeaveType INT = 12
 		,@UnpaidLeaveType TINYINT = 25
 		,@UnpaidLeaveInsuranceType TINYINT = 41
 		,@BusinessTripLeaveType TINYINT = 9
@@ -64,6 +64,7 @@ BEGIN
 		,@BalanceDaysPaternity INT
 		,@OldFromDate DATE
 		,@OldToDate DATE
+		,@CountDay INT
 
 	CREATE TABLE #tblLeaveRequestDetail (
 		OnDate DATETIME
@@ -74,6 +75,7 @@ BEGIN
 		,FromTime DATETIME
 		,ToTime DATETIME
 		)
+	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	SELECT @IsHalfDay = CASE 
 			WHEN @TotalDays = 0.5 THEN 1
@@ -832,6 +834,17 @@ BEGIN
 			,@empIds = @EmpId
 			,@isUpdateRequestData = 1
 
+		IF @CountDay >= 7
+			AND (
+				@LeaveTypeId = @UnpaidLeaveType
+				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
+				OR @LeaveTypeId = @PaternityLeaveType
+				OR @LeaveTypeId = @MaternityLeaveType
+				)
+			BEGIN
+				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId = @RequestId
+					,@EmpId = @EmpId
+			END
 		EXEC dbo.LeaveRequest_WriteLog @RequestId
 
 		COMMIT TRANSACTION Update_LeaveMultiRequest;
@@ -850,4 +863,3 @@ BEGIN
 
 	DROP TABLE #tblLeaveRequestDetail
 END
-

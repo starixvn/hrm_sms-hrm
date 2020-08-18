@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@LeaveTypeId INT
@@ -40,6 +39,7 @@ BEGIN
 		,@PaternityLeaveType TINYINT = 14
 		,@UnpaidLeaveType TINYINT = 25
 		,@UnpaidLeaveInsuranceType TINYINT = 41
+		,@MaternityLeaveType INT = 12
 		,@BusinessTripLeaveType TINYINT = 9
 		,@BusinessDuringWorkingLeaveType TINYINT = 26
 		,@OnbehalfActionType TINYINT = 5
@@ -63,6 +63,9 @@ BEGIN
 		,@DocHandler INT
 		,@TotalDaysPaternity INT
 		,@BalanceDaysPaternity INT
+		,@CountDay INT 
+
+	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	CREATE TABLE #tblLeaveRequestDetail (
 		OnDate DATE
@@ -773,7 +776,18 @@ BEGIN
 			,@toDate = @ToDate
 			,@empIds = @EmpId
 			,@isUpdateRequestData = 1
-
+		
+		IF @CountDay >= 7
+			AND (
+				@LeaveTypeId = @UnpaidLeaveType
+				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
+				OR @LeaveTypeId = @PaternityLeaveType
+				OR @LeaveTypeId = @MaternityLeaveType
+				)
+			BEGIN
+				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId = @RequestId
+					,@EmpId = @EmpId
+			END
 		EXEC dbo.LeaveRequest_WriteLog @RequestId
 	END TRY
 
@@ -786,5 +800,3 @@ BEGIN
 
 	DROP TABLE #tblLeaveRequestDetail
 END
-
-

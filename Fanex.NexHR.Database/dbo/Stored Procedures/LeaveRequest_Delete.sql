@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -17,11 +16,17 @@ BEGIN
 	SET XACT_ABORT ON;
 
 	DECLARE @PendingStatusId TINYINT = 1
-		,@PaternityTypeId TINYINT = 14
 		,@EmpId INT
 		,@FromDate DATE
 		,@ToDate DATE
 		,@TotalDaysPaternity INT
+		,@LeaveTypeId TINYINT
+		,@CountDay INT
+		-- leave type 
+		,@PaternityLeaveType TINYINT = 14
+		,@UnpaidLeaveType TINYINT = 25
+		,@UnpaidLeaveInsuranceType TINYINT = 41
+		,@MaternityLeaveType INT = 12
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -42,7 +47,7 @@ BEGIN
 		,@EmpId = EmpId
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
-		AND LeaveType = @PaternityTypeId
+		AND LeaveType = @PaternityLeaveType
 
 	IF ISNULL(@TotalDaysPaternity, 0) = 0
 	BEGIN
@@ -52,7 +57,7 @@ BEGIN
 			,@EmpId = MIN(EmpId)
 		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
 		WHERE RequestId = @RequestId
-			AND LeaveType = @PaternityTypeId
+			AND LeaveType = @PaternityLeaveType
 	END
 
 	IF @TotalDaysPaternity > 0
@@ -67,6 +72,7 @@ BEGIN
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
+		,@LeaveTypeId = LeaveType
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
@@ -98,4 +104,18 @@ BEGIN
 		,@toDate = @ToDate
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
+
+	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
+	IF @CountDay >= 7
+			AND (
+				@LeaveTypeId = @UnpaidLeaveType
+				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
+				OR @LeaveTypeId = @PaternityLeaveType
+				OR @LeaveTypeId = @MaternityLeaveType
+				)
+	BEGIN
+		EXEC [dbo].[LeaveRequest_Reset_Off] @fromDate  = @FromDate
+		,@toDate = @ToDate
+		,@empId = @EmpId
+	END
 END

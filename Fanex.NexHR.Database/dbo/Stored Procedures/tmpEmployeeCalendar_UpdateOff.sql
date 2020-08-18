@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate DATE
 	,@toDate DATE
-	,@empIds VARCHAR(MAX) = NULL
+	,@empId INT = NULL
 AS
 /*
 Created: Teddy.le@2020-08-12
-Task: update off for tmpEmployeeCalenda
+Task: update off for tmpEmployeeCalendar
 DB: HRM
 Original:
 
@@ -18,12 +18,15 @@ BEGIN
 			,@TempFromDate DATE
 			,@TempToDate DATE
 			,@SetDayOff DATE
-			,@CountdataInWeeek TINYINT
 			,@OffDaysbyWeek TINYINT
 			,@CountDaysOff TINYINT
 			,@CountWeeken TINYINT
 			,@OffDayLeft TINYINT
 			,@I TINYINT = 0
+			,@CountDayDiff INT
+			,@StartDay DATE
+			,@CountDayWorked INT
+
 
 	CREATE TABLE #updateOffDay (
 		WorkDate DATE
@@ -39,7 +42,7 @@ BEGIN
 	INSERT INTO #dayOffDefaultPerWeek( WorkDate , DayName)	
 			SELECT  tmpEmp.WorkDate , DATENAME(DW, tmpEmp.WorkDate)
 			FROM	tmpEmployeeCalendar tmpEmp
-			WHERE   tmpEmp.EmpId = @empIds AND tmpEmp.WorkDate BETWEEN @fromDate
+			WHERE   tmpEmp.EmpId = @empId AND tmpEmp.WorkDate BETWEEN @fromDate
 			AND DATEADD(DAY, 6, @fromDate) AND tmpEmp.IsOffDay = 1 
 			AND tmpEmp.ShiftId IS NULL
 	
@@ -53,24 +56,35 @@ BEGIN
 
 	SELECT  @OffDaysbyWeek = empsum.OffDaysbyWeek
 			FROM EmployeeSummary empsum  WITH (NOLOCK) 
-			WHERE empsum.EmpId = @empIds 
-
+			WHERE empsum.EmpId = @empId 
+	SET @CountDayDiff = DATEDIFF(DAY,GETDATE(),@fromDate)
+	IF( @CountDayDiff < 0)
+	BEGIN 
+		SET @StartDay = GETDATE()
+	END
+	ELSE
+	BEGIN 
+		SET @StartDay = @fromDate
+	END
 	IF ( @OffDaysbyWeek > @CountDaysOff )
 	BEGIN
 	SET @OffDayLeft = @OffDaysbyWeek - @CountDaysOff
-		WHILE @fromDate < @toDate
+		WHILE @StartDay < @toDate
 		BEGIN
-			SELECT @CountdataInWeeek = COUNT(empca.EmpId)
-			FROM  EmployeeCalendar empca
-			WHERE empca.EmpId = @empIds
-			AND empca.WorkDate BETWEEN @fromDate AND DATEADD(DAY, 6, @fromDate)
+			SELECT @CountDayWorked = COUNT(empatt.EmpId)
+			FROM  EmployeeAttendance AS empatt  WITH (NOLOCK)
+			WHERE empatt.AttendanceDate BETWEEN @StartDay AND DATEADD(DAY, 6, @StartDay)
+			AND empatt.EmpId = @EmpId
+			AND empatt.ShiftId IS NOT NULL 
+			AND empatt.InFixed IS NOT NULL 
+			AND empatt.OutFixed IS NOT NULL 
 
-			IF(@CountdataInWeeek = 0)
+			IF(@CountDayWorked = 0)
 			BEGIN
 				INSERT INTO #tempWeekDoNotHaveData(WorkDate)
-				SELECT @fromDate
+				SELECT @StartDay
 			END
-			SET @fromDate = DATEADD(DAY, 7, @fromDate)
+			SET @StartDay = DATEADD(DAY, 7, @StartDay)
 		END
 		WHILE EXISTS (SELECT * FROM #tempWeekDoNotHaveData)
 		BEGIN
@@ -120,17 +134,16 @@ BEGIN
 				SET @TempFromDate = DATEADD(DAY, 1, @TempFromDate)
 			END		
 
-			UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
-						SET IsOffDay = 1, ShiftId = NULL
-						WHERE EmpId = @empIds AND
-							  WorkDate IN ( SELECT WorkDate  
-											FROM #updateOffDay  )
-
 			DELETE #tempWeekDoNotHaveData
 			WHERE WorkDate = @TableTempDate	
 		END
+		UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						SET IsOffDay = 1, ShiftId = NULL
+						WHERE EmpId = @empId AND
+							  WorkDate IN ( SELECT WorkDate  
+											FROM #updateOffDay  )
 		DROP TABLE #dayOffDefaultPerWeek
 		DROP TABLE #updateOffDay
 		DROP TABLE #tempWeekDoNotHaveData
+		END
 	END
-END

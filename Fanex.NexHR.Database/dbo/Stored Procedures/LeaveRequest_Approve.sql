@@ -41,6 +41,11 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 
+		--leave type
+		,@UnpaidLeaveType TINYINT = 25
+		,@UnpaidLeaveInsuranceType TINYINT = 41
+		,@PaternityLeaveType TINYINT = 14
+		,@MaternityLeaveType INT = 12
 	SELECT @LeaveTypeId = LeaveType
 		,@EmpId = EmpId
 		,@FromDate = FromDate
@@ -163,13 +168,16 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-
-		IF(@CountDay >= 7 AND  (@LeaveTypeId = 25 OR @LeaveTypeId = 41 
-			OR @LeaveTypeId = 14 OR @LeaveTypeId = 12) )
+		IF @CountDay >= 7
+			AND (
+				@LeaveTypeId = @UnpaidLeaveType
+				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
+				OR @LeaveTypeId = @PaternityLeaveType
+				OR @LeaveTypeId = @MaternityLeaveType
+				)
 			BEGIN
 				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId
 					,@EmpId
-					,@ActorId
 			END
 		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 			,@EmpId

@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[LeaveRequest_Approve_UpdateCalendar_OffDay] @RequestId BIGINT
 	,@EmpId INT
-	,@ProcessedBy INT
 AS
 /*
 Created: Teddy.Le 2020-08-06
@@ -23,12 +22,14 @@ BEGIN
 		,@ProcessedDate DATETIME = GETDATE()
 		,@DayName VARCHAR(9)
 		,@CountDaysOff TINYINT
-		,@CountDaysOffNotModify TINYINT
 		,@CountWeeken TINYINT 
 		,@OffDaysbyWeek TINYINT
 		,@OffDayLeft TINYINT
 		,@I TINYINT = 0
-		,@SetDayOff DATE;
+		,@SetDayOff DATE
+		,@CountDayWorked INT
+		,@StartDay DATE
+		,@CountDayDiff INT;
 	
 	CREATE TABLE #updateOffDay (
 		WorkDate DATE
@@ -47,6 +48,16 @@ BEGIN
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
+	SET @CountDayDiff = DATEDIFF(DAY,GETDATE(),@fromDate)
+	IF( @CountDayDiff < 0)
+	BEGIN 
+		SET @StartDay = GETDATE()
+	END
+	ELSE
+	BEGIN 
+		SET @StartDay = @fromDate
+	END
+
 	IF NOT EXISTS (
 			SELECT 1
 			FROM dbo.LeaveRequestDetail WITH (NOLOCK)
@@ -56,12 +67,12 @@ BEGIN
 		INSERT INTO #dayOffDefaultPerWeek( WorkDate , DayName)	
 		SELECT  empca.WorkDate , DATENAME(DW, empca.WorkDate)
 		FROM	EmployeeCalendar empca
-		WHERE   empca.EmpId = @EmpId AND empca.WorkDate BETWEEN @FromDate
-		AND DATEADD(DAY, 6, @fromdate) AND empca.IsOffDay = 1 
-		AND empca.ShiftId IS NULL and empca.ModifiedBy IS NULL
+		WHERE   empca.EmpId = @EmpId AND empca.WorkDate BETWEEN @StartDay
+		AND DATEADD(DAY, 6, @StartDay) AND empca.IsOffDay = 1 
+		AND empca.ShiftId IS NULL
 
-		SELECT @OffDaysbyWeek = empsum.OffDaysbyWeek
-				FROM EmployeeSummary empsum
+		SELECT @OffDaysbyWeek = empsum.OffDaysbyWeek 
+				FROM EmployeeSummary AS empsum WITH (NOLOCK)
 				WHERE empsum.EmpId = @EmpId 
 					
 		SELECT @CountWeeken = SUM(CASE  WHEN DayName ='Sunday'	 THEN 2
@@ -75,19 +86,22 @@ BEGIN
 		IF ( @OffDaysbyWeek > @CountDaysOff )
 		BEGIN
 			SET @OffDayLeft = @OffDaysbyWeek - @CountDaysOff
-			WHILE @FromDate < @ToDate
+			WHILE @StartDay < @ToDate
 			BEGIN
-				SELECT @CountDaysOffNotModify = COUNT(empca.WorkDate)
-				FROM EmployeeCalendar empca
-				WHERE empca.EmpId = @EmpId AND empca.WorkDate BETWEEN @FromDate AND DATEADD(DAY, 6, @FromDate)
-				AND empca.ModifiedBy IS NOT NULL	
-					
-				IF(@CountDaysOffNotModify = 0)
+				SELECT @CountDayWorked = COUNT(empatt.EmpId)
+				FROM  EmployeeAttendance AS empatt  WITH (NOLOCK)
+				WHERE empatt.AttendanceDate BETWEEN @StartDay AND DATEADD(DAY, 6, @StartDay)
+				AND empatt.EmpId = @EmpId
+				AND empatt.ShiftId IS NOT NULL 
+				AND empatt.InFixed IS NOT NULL 
+				AND empatt.OutFixed IS NOT NULL 
+
+				IF(@CountDayWorked = 0)
 				BEGIN
 					INSERT INTO #dayOfWeekNotModify(WorkDate)
-					select @FromDate
+					select @StartDay
 				END
-				SET @FromDate = DATEADD(DAY, 7, @FromDate)
+				SET @StartDay = DATEADD(DAY, 7, @StartDay)
 			END
 			WHILE EXISTS (SELECT * FROM #dayOfWeekNotModify)
 				  BEGIN

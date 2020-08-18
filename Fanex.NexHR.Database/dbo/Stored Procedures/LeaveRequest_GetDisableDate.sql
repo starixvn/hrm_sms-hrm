@@ -41,9 +41,14 @@ BEGIN
 	BEGIN
 		EXEC [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate  = @fromDate
 		,@toDate = @toDate
-		,@empIds = @empId
+		,@empId = @empId
 	END
-
+	ELSE
+	BEGIN
+		EXEC [dbo].[LeaveRequest_Reset_Off]@fromDate  = @fromDate
+		,@toDate = @toDate
+		,@empId = @empId
+	END
 	SELECT tmpca.RequestId
 		,tmpca.WorkDate
 		,tmpca.ShiftId
