@@ -127,15 +127,6 @@
             return model.MemberRequests;
         }
 
-        public ActionResult ListMemberOvertime(IEnumerable<MonthlyOvertimeRequest> memberRequest)
-        {
-            memberRequest = memberRequest ?? new List<MonthlyOvertimeRequest>();
-
-            ViewBag.CurrentUserId = sessionService.Employee.Id;
-
-            return PartialView("_ListMemberOvertime", memberRequest);
-        }
-
         public ActionResult MemberDetails(long id)
         {
             MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
