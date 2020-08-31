@@ -12,22 +12,6 @@ import { RequestCommand, CurrentRequestStatus, RoleSystem } from '../../shared/c
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
-function query() {
-    blockUI();
-    axios({
-        url: resolveClientUrl('overtime/ListMemberOvertime'),
-        method: 'POST',
-        params: parse($('form.filter').serialize()),
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }).then(response => {
-        $('#listMemberOvertime').html(response.data);
-        floatThead('table#data');
-    }).catch(axiosError).then(() => unblockUI());
-}
-
 function sortMember() {
     $('th.col-sorter').on('click', function () {
         sortTable('table#data', this);
