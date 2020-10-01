@@ -89,8 +89,8 @@ BEGIN
 
 	UPDATE req
 	SET [Status] = CASE 
-			WHEN @RoleId = @VerifierRoleId THEN @PendingStatusId
-			WHEN @RoleId = @ApproverRoleId THEN @VerifiedStatusId
+			WHEN @RoleId = @VerifierRoleId OR @RoleId = @ApproverRoleId THEN @PendingStatusId
+			--WHEN @RoleId = @ApproverRoleId THEN @VerifiedStatusId
 			ELSE (CASE 
 					WHEN [Status] = @VoidStatusId THEN @PendingStatusId
 					ELSE @ApprovedStatusId END
