@@ -242,7 +242,7 @@
                     value = dailyWorking.LeaveType.Code;
                     if (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
                     {
-                        value = string.Format("{0} / {1}", dailyWorking.LeaveType.Code, dailyWorking.LeaveType2.Code);
+                        value = string.Format("{0}½/{1}½", dailyWorking.LeaveType.Code, dailyWorking.LeaveType2.Code);
                     }
                 }
             }
