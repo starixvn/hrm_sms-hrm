@@ -33,7 +33,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    const byte TotalColumns = 10;
+                    const byte TotalColumns = 13;
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.EmployeeSupervisor);
                     var rowIndex = 1;
@@ -58,9 +58,12 @@
                         }
 
                         worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.NickName;
-                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.NickName;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Roles2String;
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Verifier);
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Approver);
@@ -86,7 +89,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    const byte TotalColumns = 7;
+                    const byte TotalColumns = 9;
                     ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.TeamSupervisor);
                     var rowIndex = 1;
@@ -111,6 +114,8 @@
                         }
 
                         worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
+                        worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
                         worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Verifier);
                         worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Approver);

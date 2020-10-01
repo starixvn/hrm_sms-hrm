@@ -32,5 +32,10 @@
         public TeamModel Team { get; set; }
 
         public IList<SupervisorModel> Supervisors { get; set; }
+
+        public string Department { get; set; }
+
+        public string Section { get; set; }
+
     }
 }

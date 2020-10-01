@@ -120,6 +120,8 @@ BEGIN
 		,e.Code
 		,e.NickName
 		,e.FullName
+		,sec.Code AS Section
+		,dep.Code AS Department
 		,g.GroupId AS TeamId
 		,g.Code
 		,g.[Name]
@@ -128,6 +130,8 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		LEFT JOIN #tblEmployeeSupervisor AS esu WITH (NOLOCK) ON esu.EmpId = e.EmpId
 		LEFT JOIN #tblGroup AS tblgr WITH (NOLOCK) ON g.GroupId = tblgr.GroupId
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE ISNULL(e.isDeleted, 0) = 0
 		AND ISNULL(e.[Enabled], 1) = 1
 		AND ISNULL(@EmployeeId, e.EmpId) = e.EmpId

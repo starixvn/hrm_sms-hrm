@@ -33,7 +33,11 @@ BEGIN
 	SELECT DISTINCT gr.GroupId AS TeamId
 		,gr.Code
 		,gr.[Name]
+		,sec.Code AS Section
+		,dep.Code AS Department
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
+		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
+		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE ISNULL(gr.IsDeleted, 0) = 0
 		AND (
 			--ISNULL(@TeamIds, '') = '' OR

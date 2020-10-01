@@ -3,7 +3,7 @@ import axios from 'axios';
 import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
-import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile } from '../../shared/common.functions';
+import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadFile, sortTable } from '../../shared/common.functions';
 
 (function () {
     function query() {
@@ -17,7 +17,14 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
         }).then(response => {
             $('#TeamSupervisorDetails').html(response.data);
             floatThead('table#data');
+            initSortTable();
         }).catch(axiosError).then(() => unblockUI());
+    }
+
+    function initSortTable() {
+        $('th.col-sorter').on('click', function () {
+            sortTable('table#data', this);
+        });
     }
 
     $(document).ready(function () {
