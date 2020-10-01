@@ -132,7 +132,7 @@ BEGIN
 		,lv.[Name]
 		,empca.FromTime
 		,empca.ToTime
-		,empca.LeaveTypeId AS LeaveTypeId2
+		,empca.LeaveTypeId2
 		,lv2.Code AS LeaveCode
 		,lv2.[Name] AS LeaveName
 	INTO #tblEmployeeCalendar
