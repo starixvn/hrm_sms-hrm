@@ -9,6 +9,9 @@ CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@LeaderIds VARCHAR(MAX) = ''
 	,@SupervisorIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
+	,@WorkingDays TINYINT
+	,@WorkingHours TINYINT
+	,@OffDaysbyWeek TINYINT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -78,6 +81,9 @@ BEGIN
 				,@OldSupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,WorkingDays AS '@WorkingDays'
+				,WorkingHours AS '@WorkingHours'
+				,OffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')
@@ -147,6 +153,9 @@ BEGIN
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
 		,BasicAnnualLeaveBalance = @BasicAnnualLeaveBalance
+		,WorkingDays = @WorkingDays
+		,WorkingHours = @WorkingHours
+		,OffDaysbyWeek = @OffDaysbyWeek
 	WHERE GroupId = @TeamId
 
 	SET @xml = (
@@ -159,6 +168,9 @@ BEGIN
 				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,WorkingDays AS '@WorkingDays'
+				,WorkingHours AS '@WorkingHours'
+				,OffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')

@@ -15,6 +15,9 @@
         public string LeaderIds { get; set; }
         public string SupervisorIds { get; set; }
         public byte BasicAnnualLeaveBalance { get; set; }
+        public byte WorkingDays { get; set; }
+        public byte WorkingHours { get; set; }
+        public byte OffDaysbyWeek { get; set; }
 
         public int CreatedBy { get; set; }
 

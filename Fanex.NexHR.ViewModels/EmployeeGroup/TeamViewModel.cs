@@ -58,5 +58,17 @@
         public IList<Section> Sections { get; set; }
 
         public IList<Employee> Employees { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.WorkingDaysPerMonth), ResourceType = typeof(Labels))]
+        public byte? WorkingDays { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
+        public byte? WorkingHours { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
+        public byte? OffDaysbyWeek { get; set; }
     }
 }

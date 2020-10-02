@@ -17,29 +17,29 @@
         <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
     }
     <h2 class="page-title">@ViewBag.Title</h2>
-        @using (Html.BeginForm("index", "team", FormMethod.Get, new { @class = "filter" }))
-        {
-            <div class="form-horizontal clearfix">
-                <div class="form-group form-group--m">
-                    <div class="label-form">
-                        @Html.Label(@Labels.Keyword, new { @class = "control-label" })
-                    </div>
-                    <div class="input-form">
-                        <input id="nameSearch" type="text" name="keyWord" placeholder="@Messages.SearchTeamOrCode" class="form-control" autocomplete="off" />
-                    </div>
+    @using (Html.BeginForm("index", "team", FormMethod.Get, new { @class = "filter" }))
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(@Labels.Keyword, new { @class = "control-label" })
                 </div>
-                <button class="btn btn-primary" type="submit" id="btnSearchTeam">@Labels.Submit</button>
-                @if (hasPermission)
-                {
-                    <a href="/team/create" class="btn btn-request">
-                        <span class="fa fa-plus"></span> @Labels.NewTeam
-                    </a>
-                }
-
-                @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })
-                @Html.ActionLink("Team Permission Summary", "TeamSupervisor", "report", null, new { @class = "btn btn-primary" })
+                <div class="input-form">
+                    <input id="nameSearch" type="text" name="keyWord" placeholder="@Messages.SearchTeamOrCode" class="form-control" autocomplete="off" />
+                </div>
             </div>
-        }
+            <button class="btn btn-primary" type="submit" id="btnSearchTeam">@Labels.Submit</button>
+            @if (hasPermission)
+            {
+                <a href="/team/create" class="btn btn-request">
+                    <span class="fa fa-plus"></span> @Labels.NewTeam
+                </a>
+            }
+
+            @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Team Permission Summary", "TeamSupervisor", "report", null, new { @class = "btn btn-primary" })
+        </div>
+    }
     <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
         <thead>
             <tr>
@@ -47,79 +47,97 @@
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Department</div>
-                        <div class="fa fa-sort" data-property="Department"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Section</div>
-                        <div class="fa fa-sort" data-property="Section"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Team</div>
-                        <div class="fa fa-sort" data-property="Team"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Code</div>
-                        <div class="fa fa-sort" data-property="Code"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.UnitHead</div>
-                        <div class="fa fa-sort" data-property="UnitHead"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Manager</div>
-                        <div class="fa fa-sort" data-property="Manager"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Supervisor</div>
-                        <div class="fa fa-sort" data-property="Supervisor"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TeamLeader</div>
-                        <div class="fa fa-sort" data-property="TeamLeader"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Email</div>
-                        <div class="fa fa-sort" data-property="Email"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.BasicAnnualLeaveBalance</div>
-                        <div class="fa fa-sort" data-property="BasicAnnualLeaveBalance"></div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.WorkingDaysPerMonth</div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.WorkingHoursPerDay</div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.NumberOfOffday</div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TotalExpat</div>
-                        <div class="fa fa-sort" data-property="TotalExpat"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TotalLocal</div>
-                        <div class="fa fa-sort" data-property="TotalLocal"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Total</div>
-                        <div class="fa fa-sort" data-property="Total"></div>
+                        <div class="fa fa-sort"></div>
                     </div>
                 </th>
                 <th>@Labels.DisciplineRule</th>
@@ -131,62 +149,72 @@
                 }
             </tr>
         </thead>
-        <tbody>
-            @{int index = 1;}
-            @foreach (Team team in Model)
-            {
-                var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
-            <tr id="row@(team.Id)">
-                <td>@(index++)</td>
-                <td>@team.DepartmentCode</td>
-                <td>@team.Section.Name</td>
-                <td>@team.Name</td>
-                <td>@team.Code</td>
-                <td>@(unitHead != null ? unitHead.Nickname : string.Empty)</td>
-                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(x => x.Nickname))</td>
-                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(x => x.Nickname))</td>
-                <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>
-                <td class="align-left">@team.MailGroup</td>
-                <td>@team.BasicAnnualLeaveBalance</td>
-                <td>@team.TotalExpat</td>
-                <td>@team.TotalLocal</td>
-                <td>
-                    @if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
-                    {
-                        <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
-                    }
-                    else
-                    {
-                        <span>@team.NoOfMembers</span>
-                    }
-                </td>
-                <td>
-                    <a href="@Url.Action("disciplinerule", "team", new { Id = team.Id })">Manage</a>
-                </td>
-                @if (hasPermission)
+        @if (Model != null && Model.Any())
+        {
+            <tbody>
+                @{int index = 1;}
+                @foreach (Team team in Model)
                 {
-                    <td>
-                        <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
-                    </td>
-                    <td>
-                        @if (team.NoOfMembers > 0)
+                    var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
+                    <tr id="row@(team.Id)">
+                        <td>@(index++)</td>
+                        <td>@team.DepartmentCode</td>
+                        <td>@team.Section.Name</td>
+                        <td>@team.Name</td>
+                        <td>@team.Code</td>
+                        <td>@(unitHead != null ? unitHead.Nickname : string.Empty)</td>
+                        <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(x => x.Nickname))</td>
+                        <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(x => x.Nickname))</td>
+                        <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>
+                        <td class="align-left">@team.MailGroup</td>
+                        <td>@team.BasicAnnualLeaveBalance</td>
+                        <td>@team.WorkingDays</td>
+                        <td>@team.WorkingHours</td>
+                        <td>@team.OffDaysbyWeek</td>
+                        <td>@team.TotalExpat</td>
+                        <td>@team.TotalLocal</td>
+                        <td>
+                            @if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
+                            {
+                                <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
+                            }
+                            else
+                            {
+                                <span>@team.NoOfMembers</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("disciplinerule", "team", new { Id = team.Id })">Manage</a>
+                        </td>
+                        @if (hasPermission)
                         {
-                            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                            <td>
+                                <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
+                            </td>
+                            <td>
+                                @if (team.NoOfMembers > 0)
+                                {
+                                    <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+                                        <i class="fa fa-times fa-lg icon-delete"></i>
+                                    </a>
+                                }
+                            </td>
                         }
-                        else
-                        {
-                            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                                <i class="fa fa-times fa-lg icon-delete"></i>
-                            </a>
-                        }
-                    </td>
+                    </tr>
                 }
-            </tr>
-            }
-        </tbody>
+            </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 18);
+        }
     </table>

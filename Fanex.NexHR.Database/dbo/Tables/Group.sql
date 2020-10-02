@@ -11,6 +11,9 @@
     [IsDeleted]         BIT            CONSTRAINT [DF_Group_IsDeleted] DEFAULT ((0)) NULL,
     [MailGroup]         VARCHAR (50)   NULL,
     [BasicAnnualLeaveBalance] TINYINT NULL, 
+    [WorkingDays] TINYINT NULL, 
+    [WorkingHours] TINYINT NULL, 
+    [OffDaysbyWeek] TINYINT NULL, 
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([GroupId] ASC) ON [Employee]
 );
 

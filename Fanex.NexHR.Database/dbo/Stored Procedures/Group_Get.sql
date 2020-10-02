@@ -61,6 +61,9 @@ BEGIN
 		,g.[Rank]
 		,g.MailGroup
 		,g.BasicAnnualLeaveBalance
+		,g.[WorkingDays]
+		,g.WorkingHours
+		,g.OffDaysbyWeek
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat

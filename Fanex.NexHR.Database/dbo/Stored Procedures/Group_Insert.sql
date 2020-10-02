@@ -8,6 +8,9 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@LeaderIds VARCHAR(MAX) = ''
 	,@SupervisorIds VARCHAR(MAX) = ''
 	,@BasicAnnualLeaveBalance TINYINT
+	,@WorkingDays TINYINT
+	,@WorkingHours TINYINT
+	,@OffDaysbyWeek TINYINT
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -46,6 +49,9 @@ BEGIN
 		,CreatedDate
 		,CreatedBy
 		,BasicAnnualLeaveBalance
+		,WorkingDays
+		,WorkingHours
+		,OffDaysbyWeek
 		)
 	VALUES (
 		@Code
@@ -55,6 +61,9 @@ BEGIN
 		,GETDATE()
 		,@CreatedBy
 		,@BasicAnnualLeaveBalance
+		,@WorkingDays
+		,@WorkingHours
+		,@OffDaysbyWeek
 		)
 
 	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
@@ -122,6 +131,9 @@ BEGIN
 				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
 				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,WorkingDays AS '@WorkingDays'
+				,WorkingHours AS '@WorkingHours'
+				,OffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @id
 			FOR XML PATH('Row')

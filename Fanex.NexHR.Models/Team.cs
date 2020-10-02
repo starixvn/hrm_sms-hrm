@@ -28,6 +28,12 @@
 
         public byte? BasicAnnualLeaveBalance { get; set; }
 
+        public byte? WorkingDays { get; set; }
+
+        public byte? WorkingHours { get; set; }
+
+        public byte? OffDaysbyWeek { get; set; }
+
         public Department Department { get; set; } = new Department();
         public string DepartmentCode { get; set; }
     }

@@ -139,7 +139,7 @@
         [Range(1, 31, ErrorMessage = "Working Days must be between 1 and 31.")]
         public int WorkingDays { get; set; }
 
-        [Range(1, 24, ErrorMessage = "Working Days must be between 1 and 24.")]
+        [Range(1, 24, ErrorMessage = "Working Hours must be between 1 and 24.")]
         public int WorkingHours { get; set; }
 
         public decimal KeepInViewBalance { get; set; }

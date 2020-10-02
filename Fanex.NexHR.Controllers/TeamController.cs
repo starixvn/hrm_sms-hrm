@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
@@ -19,7 +18,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Team;
-    using Newtonsoft.Json;
 
     [HRMPermission(Policy.Read, FunctionKey.TeamManagement)]
     public class TeamController : BaseController
@@ -80,7 +78,10 @@
                     SupervisorIds = model.SupervisorIds,
                     MailGroup = model.MailGroup,
                     CreatedBy = sessionService.Employee.Id,
-                    BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
+                    BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0,
+                    WorkingDays = model.WorkingDays ?? 0,
+                    WorkingHours = model.WorkingHours ?? 0,
+                    OffDaysbyWeek = model.OffDaysbyWeek ?? 0
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -115,6 +116,9 @@
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
                 BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
+                WorkingDays = team.WorkingDays ?? 0,
+                WorkingHours = team.WorkingHours ?? 0,
+                OffDaysbyWeek = team.OffDaysbyWeek ?? 0,
                 HeadId = unitHead?.EmpId,
                 UnitHead = unitHead?.DisplayName,
                 ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
@@ -150,7 +154,10 @@
                         LeaderIds = model.LeaderIds,
                         SupervisorIds = model.SupervisorIds,
                         ModifiedBy = sessionService.Employee.Id,
-                        BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0
+                        BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0,
+                        WorkingDays = model.WorkingDays ?? 0,
+                        WorkingHours = model.WorkingHours ?? 0,
+                        OffDaysbyWeek = model.OffDaysbyWeek ?? 0
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 
