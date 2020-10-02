@@ -24,6 +24,10 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
     function initSortTable() {
         $('th.col-sorter').on('click', function () {
             sortTable('table#data', this);
+            $('table#data tbody tr').each(function (index) {
+                let rowIndex = index + 1;
+                $(this).find('td:eq(0)').html(rowIndex++);
+            });
         });
     }
 
