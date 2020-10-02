@@ -27,11 +27,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 16;
+        private const ushort TotalFixedColumns = 17;
         private const ushort TotalUPLColumns = 4;
-        private const ushort StartDateColumnIndex = 21;
-        private const ushort StartUPLColumnIndex = 17;
-        private const ushort EndUPLColumnIndex = 20;
+        private const ushort StartDateColumnIndex = 22;
+        private const ushort StartUPLColumnIndex = 18;
+        private const ushort EndUPLColumnIndex = 21;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -194,14 +194,17 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
-                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
+                worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays + monthlyWorking.DailyWorkings.Count(x => IsHoliday(x));
 
                 IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
                 const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
-                var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
                 var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format("COUNTIF({0},\"PH\")", excelAddress);
+
+                var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                 // payment leaves
@@ -271,15 +274,15 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 8;
+            const byte DefaultColumns = 9;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
-                maternityLeaveColumn = 3,
-                weddingLeaveColumn = 8,
-                unpaidLeaveColumn = 9
+                maternityLeaveColumn = 4,
+                weddingLeaveColumn = 9,
+                unpaidLeaveColumn = 10
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -345,17 +348,19 @@
             dynamic templateIndex)
         {
             rowIndex = templateIndex.bodyRow;
-            var teams = monthlyWorkings.GroupBy(x => x.Team.Name)
-                .Select(x => new { Team = x.Key, Members = x.ToList() })
+            var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name })
+                .Select(x => new { Team = x.Key.Name, Members = x.ToList() })
                 .OrderBy(x => x.Team);
             foreach (var team in teams)
             {
+                var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(y => IsHoliday(y)));
                 var colIndex = 1;
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.weddingLeaveColumn]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.weddingLeaveColumn]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
-                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays);
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
+                worksheet.Cells[rowIndex, colIndex++].Value = totalHolidays;
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.MaternityLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
@@ -508,6 +513,16 @@
                 KeepInViewType = request.KeepInViewTypeId
             };
             return RequestService.ToRequestMessage(requestEntity, true);
+        }
+
+        private static bool IsHoliday(DailyWorking dailyWorking)
+        {
+            if(dailyWorking.IsLeaveDay && dailyWorking.IsHoliday)
+            {
+                return true;
+            }
+
+            return dailyWorking.TotalWorkingHours.Equals(0) && dailyWorking.IsHoliday;
         }
     }
 }
