@@ -85,11 +85,10 @@ BEGIN
 			WHEN empatt.TotalWorkHours > 0 THEN empatt.TotalWorkHours
 			ELSE (SELECT DATEDIFF(mi, min(t.RequestTime), max(t.RequestTime))/60.0
 					FROM (SELECT cio.EmpId, cio.OnDate, cio.RequestTime
-									FROM CheckInOutRequest AS cio WITH (NOLOCK)
-									INNER JOIN WorkingTimeRequest AS w ON cio.RequestId = w.RequestId
-									WHERE cio.OnDate = empatt.AttendanceDate AND w.CurrentStatus NOT IN ( 3, 5, 7))AS t)
-			END
-			) AS TotalWorkingHours
+							FROM CheckInOutRequest AS cio WITH (NOLOCK)
+							INNER JOIN WorkingTimeRequest AS w ON cio.RequestId = w.RequestId
+							WHERE cio.EmpId = emp.EmpId AND cio.OnDate = empca.WorkDate AND w.CurrentStatus NOT IN ( 3, 5, 7))AS t)
+			END ) AS TotalWorkingHours
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,empca.IsLeaveDay
