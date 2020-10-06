@@ -351,14 +351,12 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_WriteLog.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_WeekendLeave_InsertAll.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_VoidBySA.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpKIVLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpAnnualLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Update.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reset.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reject_RollbackCalendar.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Reject.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_InsertWeekendLeaveTrans.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_InsertTmpKIVLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_InsertTmpAnnualLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_InsertKIVLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Insert.sql" />

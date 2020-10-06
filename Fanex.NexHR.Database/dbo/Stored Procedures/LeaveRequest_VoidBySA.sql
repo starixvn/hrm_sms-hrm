@@ -100,9 +100,7 @@ BEGIN
 		,@EmpId = @EmpId
 		,@Status = 2
 
-	EXEC dbo.LeaveRequest_UpdateTmpKIVLeaveTrans @RequestId = @RequestId
-		,@EmpId = @EmpId
-		,@Status = 2
+	EXEC dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate
