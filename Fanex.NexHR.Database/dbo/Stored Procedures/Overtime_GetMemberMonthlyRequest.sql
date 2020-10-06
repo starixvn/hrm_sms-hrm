@@ -152,15 +152,11 @@ BEGIN
 			FROM @tblStatusIds AS tbl
 			WHERE req.CurrentStatus = tbl.StatusId
 			)
-		AND (
-			EXISTS (
+		AND EXISTS (
 				SELECT 1
 				FROM #tblEmployeeIds AS tbl
 				WHERE tbl.EmployeeId = req.EmpId
 				)
-			OR req.VerifierId = @ActorId
-			OR req.ApproverId = @ActorId
-			)
 		AND EXISTS (
 			SELECT 1
 			FROM #tblOvertimeType AS ovt
