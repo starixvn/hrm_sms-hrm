@@ -24,7 +24,7 @@ function query() {
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
-        $('#data').html(response.data);
+        $('#listEmployeeOvertime').html(response.data);
         floatThead('table#data');
         initSortTable();
         checkAll();
@@ -48,7 +48,7 @@ function search() {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
             $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-            $('form.filter').submit();
+            query();
         }
     });
 }
@@ -295,8 +295,6 @@ $(document).ready(function () {
                 selectedItems: $('#TeamIds').val()
             });
         }).catch(axiosError);
-
-    floatThead('table#data');
 
     query();
     sendMail();
