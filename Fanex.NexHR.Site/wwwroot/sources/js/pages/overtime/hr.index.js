@@ -48,7 +48,7 @@ function search() {
             toastr.error('Please select a month to search.', '', toastOptions());
         } else {
             $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-            query();
+            $('form.filter').submit();
         }
     });
 }
