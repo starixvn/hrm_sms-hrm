@@ -36,7 +36,9 @@
                 if ($('#Employee').val() === '') {
                     $('#EmployeeId').val('');
                 } else {
-                    $('#EmployeeId').val('0');
+                    if ($('#EmployeeId').val() === '') {
+                        $('#EmployeeId').val('0');
+                    }
                 }
             }
         }
