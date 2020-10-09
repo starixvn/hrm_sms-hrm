@@ -3,10 +3,11 @@ import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
+import 'floatthead/dist/jquery.floatThead';
 import toastr from 'toastr';
 import axios from 'axios';
 
-import { axiosError, confirm, toastOptions, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
+import { axiosError, confirm, toastOptions, blockUI, unblockUI, resolveClientUrl, floatThead } from '../../../shared/common.functions';
 
 $(function () {
     function cancelRequest(id) {
@@ -65,6 +66,7 @@ $(function () {
     }
 
     $(document).ready(function () {
+        floatThead('table#data');
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
         bindMenu('.menu-actions');
 
