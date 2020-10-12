@@ -17,6 +17,10 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE 
+		-- keep in view type
+		@KeepInViewByDay TINYINT = 1
+
 	CREATE TABLE #DeductKIV (
 		EmpId INT
 		,WorkDate DATETIME
@@ -115,7 +119,7 @@ BEGIN
 		INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON w.RequestId = kiv.RequestId
 		AND kiv.OnDate BETWEEN @fromdate
 			AND @todate
-	WHERE w.CurrentStatus IN (4, 6)
+	WHERE w.CurrentStatus IN (4, 6) AND kiv.KeepInViewType = @KeepInViewByDay
 	GROUP BY w.EmpId
 
 	-- KIV leave
