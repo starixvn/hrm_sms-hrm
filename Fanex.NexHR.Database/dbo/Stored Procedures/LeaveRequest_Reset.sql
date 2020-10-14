@@ -145,6 +145,10 @@ BEGIN
 				,@FromDate
 				,@ToDate
 				,1
+
+			EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @RequestId
+				,@EmpId = @EmpId
+				,@Status = 0
 		END
 
 		IF @StatusId = @RejectedStatusId
