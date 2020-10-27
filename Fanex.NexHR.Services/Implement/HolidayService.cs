@@ -132,17 +132,13 @@
             var lunarHolidays = new List<Holiday>();
             var newYear1stOnSolarDay = ConvertLunarToSolarCalendar(year, 1, 1);
             const byte TotalOffDays = 5; // holiday from 30 Dec to 4 Jan
-            for (int i = -1; i < TotalOffDays - 1; i++)
+            var holiday = new Holiday
             {
-                var tetHoliday = newYear1stOnSolarDay.AddDays(i);
-                var holiday = new Holiday
-                {
-                    HolidayName = "Traditional New Year",
-                    FromDate = tetHoliday,
-                    ToDate = tetHoliday
-                };
-                lunarHolidays.Add(holiday);
-            }
+                HolidayName = $"Lunar New Year {year}",
+                FromDate = newYear1stOnSolarDay.AddDays(-1),
+                ToDate = newYear1stOnSolarDay.AddDays(TotalOffDays - 1)
+            };
+            lunarHolidays.Add(holiday);
 
             var kingAnniSolar = ConvertLunarToSolarCalendar(year, 3, 10);
             var kingAnniHoliday = new Holiday
