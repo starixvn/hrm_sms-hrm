@@ -24,7 +24,7 @@
                 () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "15 00 * * FRI", TimeZoneInfo.Local); // every friday at 00:15AM
 
             RecurringJob.AddOrUpdate("InsertHolidayAutomatically",
-                () => backgroundJob.InsertHolidayAutomatically(), "1 0 1 1 *", TimeZoneInfo.Local);
+                () => backgroundJob.InsertHolidayAutomatically(), "01 00 1 9 *", TimeZoneInfo.Local); // 01 Sep at 00:01AM
 
             RecurringJob.AddOrUpdate("UpdateAnnualLeaveBalanceForNewEmployee",
                 () => backgroundJob.UpdateAnnualLeaveBalanceForNewEmployee(), "02 00 * * *", TimeZoneInfo.Local); // everyday at 00:02AM
