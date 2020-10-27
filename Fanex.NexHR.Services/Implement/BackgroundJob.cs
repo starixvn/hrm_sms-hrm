@@ -50,8 +50,8 @@
 
         public void InsertHolidayAutomatically()
         {
-            var nowYear = DateTime.Now.Year;
-            holidayService.AutoInsertHolidayOnYear(nowYear);
+            var year = DateTime.Now.Year + 1;
+            holidayService.AutoInsertHolidayOnYear(year);
         }
 
         public void UpdateWorkingHourPerDay()
