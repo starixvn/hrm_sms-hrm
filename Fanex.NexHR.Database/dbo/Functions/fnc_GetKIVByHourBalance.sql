@@ -23,5 +23,10 @@ BEGIN
 	WHERE EmpId = @EmpID
 		AND WorkDate > @FromDate
 
+	IF(@KIVBalance < 0)
+	BEGIN
+		SELECT @KIVBalance = 0
+	END
+
 	RETURN ISNULL(@KIVBalance, 0)
 END
