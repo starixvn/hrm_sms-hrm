@@ -4,6 +4,7 @@
     {
         None = 0,
         SMS = 1,
-        HM = 2
+        HM = 2,
+        CTS = 3
     }
 }
