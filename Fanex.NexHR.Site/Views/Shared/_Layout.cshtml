@@ -81,7 +81,9 @@
     </div>
     <footer></footer>
     <div id="message"></div>
-
+    <script type="text/javascript">
+        var siteId = @siteId;
+    </script>
     @Html.Action("GlobalScript", "UI")
     @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/wwwroot/dist/vendors/react.js"></script>

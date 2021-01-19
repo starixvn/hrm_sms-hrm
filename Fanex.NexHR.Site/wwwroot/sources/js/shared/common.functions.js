@@ -23,8 +23,20 @@ function fadeOutMessage() {
 }
 
 function confirm(message, callback, options) {
+    var title;
+    switch (siteId) {
+        case 1:
+            title = "SMS HRM";
+            break;
+        case 2:
+            title = "HM HRM";
+            break;
+        case 3:
+            title = "CTS HRM";
+            break;
+    }
     const defaults = {
-        title: 'SMS HRM',
+        title: title,
         modal: true,
         resizable: false,
         buttons: [
@@ -73,8 +85,20 @@ function getParam(name) {
 }
 
 function alert(message, callback) {
+    var title;
+    switch (siteId) {
+        case 1:
+            title = "SMS HRM";
+            break;
+        case 2:
+            title = "HM HRM";
+            break;
+        case 3:
+            title = "CTS HRM";
+            break;
+    }
     const defaults = {
-        title: 'SMS HRM',
+        title: title,
         modal: true,
         resizable: false,
         buttons: [
