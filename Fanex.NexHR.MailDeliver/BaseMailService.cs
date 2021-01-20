@@ -175,7 +175,7 @@
                 {
                     if (!string.IsNullOrEmpty(mail))
                     {
-                        mails.Add(new MailboxAddress(mail));
+                        mails.Add(new MailboxAddress(string.Empty, mail));
                     }
                 }
             }
@@ -200,7 +200,7 @@
         private MimeMessage GetMessageContent(MailRecord email)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(email.MailSetting.Username));
+            message.From.Add(new MailboxAddress(string.Empty, email.MailSetting.Username));
             GetMailAddressFromString(email.MailTo, message.To);
 
             message.Subject = email.Subject;
