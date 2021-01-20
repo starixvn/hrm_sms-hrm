@@ -19,6 +19,22 @@ export default class ConfirmRefreshDataModal extends PureComponent {
         }
     };
 
+    constructor(props) {
+        super(props);
+        this.siteId = document.getElementById('SiteId').value;
+        switch (siteId) {
+            case 1:
+                this.title = 'SMS HRM';
+                break;
+            case 2:
+                this.title = 'HM HRM';
+                break;
+            case 3:
+                this.title = 'CTS HRM';
+                break;
+        }
+    }
+
     handleSubmit = event => {
         event.preventDefault();
         this.props.onSubmit();
@@ -31,7 +47,7 @@ export default class ConfirmRefreshDataModal extends PureComponent {
                 dialogClassName="modal-dialog-centered"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>SMS HRM</Modal.Title>
+                    <Modal.Title>{this.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>It looks like you have been editing something. If you refresh before saving, your changes will be lost.</p>
