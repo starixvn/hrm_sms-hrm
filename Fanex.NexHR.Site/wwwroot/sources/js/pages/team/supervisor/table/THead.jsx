@@ -15,13 +15,13 @@ export default class THead extends PureComponent {
 
     handleSelect = (value, item) => {
         this.setState({ value, employee: item });
-    }
+    };
 
     handleChange = event => {
         const value = event.target.value;
         this.setState({ value });
         this.props.onSearchEmployees(value);
-    }
+    };
 
     handleAddEmployee = () => {
         const employee = this.state.employee;
@@ -29,7 +29,7 @@ export default class THead extends PureComponent {
             this.props.onAddEmployee(employee);
             this.setState({ value: '', employee: null });
         }
-    }
+    };
 
     render() {
         const { employeeOptions, roleId } = this.props;

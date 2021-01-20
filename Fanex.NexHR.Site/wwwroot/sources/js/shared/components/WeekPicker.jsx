@@ -26,7 +26,7 @@ export default class WeekPicker extends PureComponent {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             this.$el.hide();
         }
-    }
+    };
 
     updateWeekPicker = () => {
         const vm = this;
@@ -40,11 +40,11 @@ export default class WeekPicker extends PureComponent {
         });
 
         this.$el.weekpicker('setDate', new Date(new Date(this.props.fromDate)));
-    }
+    };
 
     handleShowCalendar = () => {
         this.$el.toggle();
-    }
+    };
 
     render() {
         return (

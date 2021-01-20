@@ -41,17 +41,17 @@ export default class ShiftMultipleModal extends Component {
         } else {
             this.props.onSubmit(shift, isOffDay);
         }
-    }
+    };
 
     handleChangeShift = (name, shift) => {
         const isValid = shift !== null;
 
         this.setState({ shift, isValid });
-    }
+    };
 
     handleChangeOffDay = event => {
         this.setState({ isOffDay: event.target.checked });
-    }
+    };
 
     render() {
         const { shift, isOffDay, isValid } = this.state;

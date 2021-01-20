@@ -9,24 +9,24 @@ export default class Search extends Component {
     handleTeamChange = selectedItems => {
         const ids = selectedItems.map(item => item.id);
         this.props.onChange('teamIds', ids.join(','));
-    }
+    };
 
     handleEmployeeChange = value => {
         this.props.onChange('employee', value);
-    }
+    };
 
     handleDateChange = (fromDate, toDate) => {
         this.props.onChange('fromDate', fromDate);
         this.props.onChange('toDate', toDate);
-    }
+    };
 
     handleCategoryChange = e => {
         this.props.onChange('isLocal', e.target.value);
-    }
+    };
 
     handleSubmit = event => {
         this.props.onSubmit(event.target.name === 'currentWeek');
-    }
+    };
 
     render() {
         return (

@@ -6,7 +6,7 @@ export default class ColDefaultShift extends PureComponent {
     handleChangeDefaultShift = (name, shift) => {
         const { teamId, employeeId } = this.props;
         this.props.onChangeDefaultShift(teamId, employeeId, shift);
-    }
+    };
 
     render() {
         const { isHost, shiftOptions, data, isUsedWeeklyDefaultShift } = this.props;

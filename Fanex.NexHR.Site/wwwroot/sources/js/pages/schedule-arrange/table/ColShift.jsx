@@ -22,23 +22,23 @@ export default class ColShift extends PureComponent {
 
     handleChangeSelectWeekDay = event => {
         this.props.onChangeSelectWeekDay(this.props.scheduleAttrName, event.target.checked);
-    }
+    };
 
     handleChangeShift = (scheduleAttrName, shift) => {
         this.props.onChangeShift(scheduleAttrName, shift);
-    }
+    };
 
     handleMouseOver = () => {
         if (!this.state.isShowCheckbox) {
             this.setState({ isShowCheckbox: true });
         }
-    }
+    };
 
     handleMouseLeave = () => {
         if (this.state.isShowCheckbox && !this.props.isChecked) {
             this.setState({ isShowCheckbox: false });
         }
-    }
+    };
 
     render() {
         const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions, isUsedWeeklyDefaultShift } = this.props;

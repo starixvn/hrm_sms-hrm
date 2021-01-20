@@ -7,7 +7,7 @@ export default class Row extends PureComponent {
     handleRemoveEmployee = () => {
         const { ownerId } = this.props.data;
         this.props.onRemoveEmployee(ownerId);
-    }
+    };
 
     render() {
         const { data } = this.props;

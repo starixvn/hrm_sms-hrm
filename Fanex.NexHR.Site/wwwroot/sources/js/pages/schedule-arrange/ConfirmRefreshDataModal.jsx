@@ -22,7 +22,7 @@ export default class ConfirmRefreshDataModal extends PureComponent {
     handleSubmit = event => {
         event.preventDefault();
         this.props.onSubmit();
-    }
+    };
 
     render() {
         return (

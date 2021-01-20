@@ -54,7 +54,7 @@ export default class Supervisor extends Component {
         } else {
             this.setState({ employeeOptions: [] });
         }
-    }
+    };
 
     getSupervisors = () => {
         blockUI();
@@ -79,14 +79,14 @@ export default class Supervisor extends Component {
         promise.then(response => {
             this.setState({ supervisors: response.data });
         }).catch(axiosError).then(() => unblockUI());
-    }
+    };
 
     handleChangeOrder = (key, employeeId) => {
         const vm = this;
         reorderSupervisor(key, employeeId, [...this.state.supervisors], function (supervisors) {
             vm.setState({ supervisors });
         });
-    }
+    };
 
     handleAddEmployee = employee => {
         const index = this.state.supervisors.findIndex(item => item.ownerId === employee.id);
@@ -106,21 +106,21 @@ export default class Supervisor extends Component {
             }];
             this.setState({ supervisors });
         }
-    }
+    };
 
     handleRemoveEmployee = employeeId => {
         const supervisors = [...this.state.supervisors],
             index = supervisors.findIndex(item => item.ownerId === employeeId);
         supervisors.splice(index, 1);
         this.setState({ supervisors });
-    }
+    };
 
     handleChangePermissionOnRequest = (employeeId, requestType, isChecked) => {
         const supervisors = [...this.state.supervisors],
             index = supervisors.findIndex(item => item.ownerId === employeeId);
         supervisors[index] = { ...supervisors[index], [requestType]: isChecked };
         this.setState({ supervisors });
-    }
+    };
 
     handleSave = () => {
         const supervisors = [];
@@ -152,7 +152,7 @@ export default class Supervisor extends Component {
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
-    }
+    };
 
     render() {
         const { employeeOptions, supervisors } = this.state;

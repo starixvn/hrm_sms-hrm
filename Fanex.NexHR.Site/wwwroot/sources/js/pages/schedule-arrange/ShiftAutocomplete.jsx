@@ -65,22 +65,22 @@ export default class ShiftAutocomplete extends PureComponent {
             options,
             isPasted: false
         });
-    }
+    };
 
     handleSelect = (value, item) => {
         this.setState({ value });
 
         this.props.onChange(this.props.name, item);
-    }
+    };
 
     handleInputFocus = event => {
         event.target.select();
         this.setState({ options: [] });
-    }
+    };
 
     handleInputPaste = () => {
         this.setState({ isPasted: true });
-    }
+    };
 
     handleInputBlur = event => {
         if (this.props.isDisabled) {
@@ -101,7 +101,7 @@ export default class ShiftAutocomplete extends PureComponent {
         } else {
             this.props.onChange(this.props.name, null);
         }
-    }
+    };
 
     render() {
         const { name, className, isDisabled, placeholder } = this.props;

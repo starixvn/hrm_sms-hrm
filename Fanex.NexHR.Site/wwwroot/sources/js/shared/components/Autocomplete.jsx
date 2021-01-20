@@ -49,11 +49,11 @@ export default class Autocomplete extends Component {
             select: (event, ui) => this.handleChange(event, ui),
             change: (event, ui) => this.handleChange(event, ui)
         });
-    }
+    };
 
     handleInput = event => {
         this.props.onInput(event.target.value);
-    }
+    };
 
     handleChange = (event, ui) => {
         let value = 0,
@@ -68,7 +68,7 @@ export default class Autocomplete extends Component {
         }
 
         this.props.onChange({ value, label });
-    }
+    };
 
     render() {
         return (

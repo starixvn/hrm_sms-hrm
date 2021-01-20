@@ -50,7 +50,7 @@ export default class App extends Component {
 
     handleFilterChange = (name, value) => {
         this.setState({ filter: { ...this.state.filter, [name]: value } });
-    }
+    };
 
     getEmployees = query => {
         axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
@@ -69,7 +69,7 @@ export default class App extends Component {
 
             this.setState({ employeeOptions: employeeOptions });
         }).catch(axiosError);
-    }
+    };
 
     getWeeklyShedules = filter => {
         const fromDate = moment(filter.fromDate).format(DateFormat);
@@ -109,7 +109,7 @@ export default class App extends Component {
                 schedules: schedules
             });
         }).catch(axiosError).then(() => unblockUI());
-    }
+    };
 
     handleGetWeeklyShedules = isCurrentWeek => {
         const filter = isCurrentWeek
@@ -117,7 +117,7 @@ export default class App extends Component {
             : this.state.filter;
         this.setState({ filter });
         this.getWeeklyShedules(filter);
-    }
+    };
 
     handleGetPreviousWeekSchedule = () => {
         const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format(DateFormat);
@@ -125,7 +125,7 @@ export default class App extends Component {
         const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
         this.getWeeklyShedules(filter);
-    }
+    };
 
     handleGetNextWeekSchedule = () => {
         const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format(DateFormat);
@@ -133,7 +133,7 @@ export default class App extends Component {
         const filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
         this.getWeeklyShedules(filter);
-    }
+    };
 
     render() {
         const { schedules } = this.state;

@@ -33,7 +33,7 @@ export default class Table extends PureComponent {
                 this.setState({ isFixedHeader: false });
             }
         }
-    }
+    };
 
     render() {
         const { fromDate, toDate, data } = this.props;

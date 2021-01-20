@@ -49,18 +49,18 @@ export default class WeeklyDefaultShiftModal extends Component {
         const { data, isUsedWeeklyDefaultShift } = this.state;
 
         this.props.onSubmit(data, isUsedWeeklyDefaultShift);
-    }
+    };
 
     handleChangeShift = (name, shift) => {
         const offday = { id: -1, code: 'Off' },
             data = { ...this.state.data, [name + 'Shift']: shift !== null ? shift : offday };
 
         this.setState({ data });
-    }
+    };
 
     handleChangeCheckbox = event => {
         this.setState({ isUsedWeeklyDefaultShift: event.target.checked });
-    }
+    };
 
     render() {
         const { isUsedWeeklyDefaultShift, data } = this.state;

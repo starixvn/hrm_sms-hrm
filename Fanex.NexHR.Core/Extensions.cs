@@ -166,10 +166,7 @@
                 values = state.Value.ConvertTo(typeof(string[]), null);
             }
 
-            if (values == null)
-            {
-                values = htmlHelper.ViewData.Eval(fullHtmlFieldName);
-            }
+            values = values ?? htmlHelper.ViewData.Eval(fullHtmlFieldName);
 
             StringBuilder sb = RenderCheckBoxList(name, ref selectList, ref htmlAttributes, fullHtmlFieldName, values);
 

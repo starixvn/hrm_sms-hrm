@@ -13,14 +13,14 @@ export default class Row extends PureComponent {
         const employeeId = data.employeeId;
 
         this.props.onChangeSelectWeekDay(teamId, employeeId, attrName, isChecked);
-    }
+    };
 
     handleChangeShift = (name, shift) => {
         const { teamId, data } = this.props;
         const employeeId = data.employeeId;
 
         this.props.onChangeShift(teamId, employeeId, name, shift);
-    }
+    };
 
     render() {
         const { isHost, shiftOptions, teamId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;

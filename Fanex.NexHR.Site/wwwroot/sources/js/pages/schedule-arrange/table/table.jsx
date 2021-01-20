@@ -34,7 +34,7 @@ export default class Table extends PureComponent {
                 this.setState({ isFixedHeader: false });
             }
         }
-    }
+    };
 
     render() {
         const { isHost, fromDate, toDate, shiftOptions, data } = this.props;

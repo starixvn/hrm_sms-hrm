@@ -48,7 +48,7 @@ export default class DisciplineManager extends Component {
         } else {
             this.setState({ employeeOptions: [] });
         }
-    }
+    };
 
     getDisciplineManagers = () => {
         blockUI();
@@ -69,26 +69,26 @@ export default class DisciplineManager extends Component {
                 this.setState({ managers: response.data });
             }).catch(axiosError).then(() => unblockUI());
         }
-    }
+    };
 
     handleAddEmployee = employee => {
         const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
         this.setState({ managers, employeeOptions: [] });
-    }
+    };
 
     handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
             index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
-    }
+    };
 
     handleChangeOrder = (key, employeeId) => {
         const vm = this;
         reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
             vm.setState({ managers });
         });
-    }
+    };
 
     handleSave = () => {
         const totalItems = this.state.managers.length;
@@ -104,7 +104,7 @@ export default class DisciplineManager extends Component {
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
-    }
+    };
 
     render() {
         const { employeeOptions, managers } = this.state;

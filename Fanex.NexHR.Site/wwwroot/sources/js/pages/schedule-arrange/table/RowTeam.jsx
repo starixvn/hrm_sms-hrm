@@ -7,27 +7,27 @@ export default class RowTeam extends PureComponent {
     handleMoveUp = () => {
         const { teamId } = this.props.data;
         this.props.onChangeTeamOrder('up', teamId);
-    }
+    };
 
     handleMoveDown = () => {
         const { teamId } = this.props.data;
         this.props.onChangeTeamOrder('down', teamId);
-    }
+    };
 
     handleMoveTop = () => {
         const { teamId } = this.props.data;
         this.props.onChangeTeamOrder('top', teamId);
-    }
+    };
 
     handleMoveBottom = () => {
         const { teamId } = this.props.data;
         this.props.onChangeTeamOrder('bottom', teamId);
-    }
+    };
 
     handleChangePublic = event => {
         const { teamId } = this.props.data;
         this.props.onChangePublics(teamId, event.target.checked);
-    }
+    };
 
     render() {
         const { isHost, draggableProvided, isDragging, shiftOptions } = this.props;

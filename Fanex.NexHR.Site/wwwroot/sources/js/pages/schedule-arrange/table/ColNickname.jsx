@@ -20,21 +20,21 @@ export default class ColNickname extends PureComponent {
             this.setState({ showPopover: true });
             this.props.onChangeShowRemarkPopover(true);
         }
-    }
+    };
 
     handleHidePopover = () => {
         this.setState({ showPopover: false });
         this.props.onChangeShowRemarkPopover(false);
-    }
+    };
 
     handleShowWeeklyDefaultShiftModal = () => {
         const { teamId, employeeId } = this.props;
         this.props.onShowWeeklyDefaultShift(teamId, employeeId);
-    }
+    };
 
     handleChangeRemark = event => {
         this.setState({ remark: event.target.value });
-    }
+    };
 
     handleUpdateRemark = () => {
         const remark = this.state.remark.trim();
@@ -43,27 +43,27 @@ export default class ColNickname extends PureComponent {
         this.handleHidePopover();
         this.props.onChangeShowRemarkPopover(false);
         this.props.onUpdateRemark(teamId, employeeId, remark);
-    }
+    };
 
     handleMoveUp = () => {
         const { teamId, employeeId } = this.props;
         this.props.onChangeOrder('up', teamId, employeeId);
-    }
+    };
 
     handleMoveDown = () => {
         const { teamId, employeeId } = this.props;
         this.props.onChangeOrder('down', teamId, employeeId);
-    }
+    };
 
     handleMoveTop = () => {
         const { teamId, employeeId } = this.props;
         this.props.onChangeOrder('top', teamId, employeeId);
-    }
+    };
 
     handleMoveBottom = () => {
         const { teamId, employeeId } = this.props;
         this.props.onChangeOrder('bottom', teamId, employeeId);
-    }
+    };
 
     render() {
         const { isHost, employeeId, nickname, remark } = this.props;

@@ -52,7 +52,7 @@ export default class ShiftManager extends Component {
         } else {
             this.setState({ employeeOptions: [] });
         }
-    }
+    };
 
     getShiftManagers = () => {
         blockUI();
@@ -75,14 +75,14 @@ export default class ShiftManager extends Component {
         promise.then(response => {
             this.setState({ managers: response.data });
         }).catch(axiosError).then(() => unblockUI());
-    }
+    };
 
     handleChangeOrder = (key, employeeId) => {
         const vm = this;
         reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
             vm.setState({ managers });
         });
-    }
+    };
 
     handleAddEmployee = employee => {
         const index = this.state.managers.findIndex(item => item.ownerId === employee.id);
@@ -91,14 +91,14 @@ export default class ShiftManager extends Component {
             const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
             this.setState({ managers });
         }
-    }
+    };
 
     handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
             index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
-    }
+    };
 
     handleSave = () => {
         const supervisors = this.state.managers.map((item, index) => {
@@ -112,7 +112,7 @@ export default class ShiftManager extends Component {
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         }
-    }
+    };
 
     render() {
         const { employeeOptions, managers } = this.state;
