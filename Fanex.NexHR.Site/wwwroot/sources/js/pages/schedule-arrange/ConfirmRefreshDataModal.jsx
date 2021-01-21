@@ -23,13 +23,13 @@ export default class ConfirmRefreshDataModal extends PureComponent {
         super(props);
         this.siteId = document.getElementById('SiteId').value;
         switch (this.siteId) {
-            case "1":
+            case '1':
                 this.title = 'SMS HRM';
                 break;
-            case "2":
+            case '2':
                 this.title = 'HM HRM';
                 break;
-            case "3":
+            case '3':
                 this.title = 'CTS HRM';
                 break;
         }
