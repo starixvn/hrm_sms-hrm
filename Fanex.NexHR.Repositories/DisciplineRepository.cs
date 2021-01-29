@@ -6,6 +6,7 @@
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Discipline;
 
     public class DisciplineRepository : IDisciplineRepository
@@ -30,12 +31,84 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                IList<dynamic> disciplines = db.Query<dynamic>(criteria).ToList();
+                using (var multi = db.QueryMultiple(criteria))
+                {
+                    IList<dynamic> disciplines = multi.Read<dynamic>().ToList();
+                    IList<IgnoredDisciplineDetailModel> ignoreDiciplines = multi.Read<IgnoredDisciplineDetailModel>().ToList();
+                    IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
+                    CalculateScore(disciplineDetails);
+                    AddIgnoreDisciplineDetail(disciplineDetails, ignoreDiciplines);
 
-                IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
-                CalculateScore(disciplineDetails);
+                    return disciplineDetails;
+                }
+            }
+        }
 
-                return disciplineDetails;
+        [SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+        private void AddIgnoreDisciplineDetail(IList<DisciplineDetailModel> disciplineDetails, IList<IgnoredDisciplineDetailModel> ignoreDiciplines)
+        {
+            foreach (DisciplineDetailModel disciplineDetail in disciplineDetails)
+            {
+                foreach (IgnoredDisciplineDetailModel ignoreDicipline in
+                    ignoreDiciplines.Where(ignore => ignore.EmployeeId == disciplineDetail.Employee.EmployeeId && ignore.WorkDate == disciplineDetail.WorkDate))
+                {
+                    switch (ignoreDicipline.DisciplineTypeId)
+                    {
+                        case (int)DisciplineType.ChangeShift:
+                            disciplineDetail.ChangeShift.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.ChangeShift.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.MissingCheckInOut:
+                            disciplineDetail.MissingCheckInOut.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.MissingCheckInOut.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.LateIn:
+                            disciplineDetail.LateIn.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.LateIn.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.EarlyOut:
+                            disciplineDetail.EarlyOut.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.EarlyOut.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.Absent:
+                            disciplineDetail.Absent.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.Absent.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.UnpaidLeave:
+                            disciplineDetail.UnpaidLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.UnpaidLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.WorkingUnderTime:
+                            disciplineDetail.WorkingUnderTime.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.WorkingUnderTime.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.UnpaidLeaveAbsent:
+                            disciplineDetail.UnpaidLeaveAbsent.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.UnpaidLeaveAbsent.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.UnplannedLeave:
+                            disciplineDetail.UnplannedLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.UnplannedLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (int)DisciplineType.WeekendLeave:
+                            disciplineDetail.WeekendLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.WeekendLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        default:
+                            // nothing
+                            break;
+                    }
+                }
             }
         }
 

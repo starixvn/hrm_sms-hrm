@@ -82,6 +82,7 @@
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
+    <Compile Include="Discipline\UpdateIgnoredDisciplineDetailCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />

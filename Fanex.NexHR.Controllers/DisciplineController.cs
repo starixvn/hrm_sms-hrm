@@ -218,6 +218,19 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [HttpPost]
+        [HRMPermission(Policy.Host, FunctionKey.Discipline)]
+        public void EditDisciplineIgnoreDetail(IEnumerable<IgnoredDisciplineDetailModel> ignoredDisciplineDetail)
+        {
+            var criteria = new UpdateIgnoredDisciplineDetailCriteria
+            {
+                IgnoreDetailXml = ignoredDisciplineDetail.ToXML().ToString(),
+                ActorId = sessionService.Employee.Id,
+            };
+
+            baseService.ExecuteNonQuery(criteria);
+        }
+
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)
         {
             IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id, keyword);

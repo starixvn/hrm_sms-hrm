@@ -146,133 +146,166 @@ import { DisciplineType } from '../../shared/constants';
         return ignoredDisciplines;
     }
 
-    function initEventForSaveChange() {
-        $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
-            const ignoreDetails = getDataChanged();
-            if (ignoreDetails.length > 0) {
-                confirm('Are you sure you want to save?',
-                    function () {
-                        axios({
-                            url: resolveClientUrl('discipline/EditDisciplineIgnore'),
-                            method: 'POST',
-                            data: stringify({ ignoreDetails }),
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            }
-                        }).then(response => {
-                            const data = response.data;
-                            if (data.isSuccessful) {
-                                toastr.success('Updated successfully!', '', toastOptions());
-                                query();
-                            } else {
-                                toastr.error(data.message, '', toastOptions());
-                            }
-                        }).catch(axiosError);
-                    });
-            }
-        });
-    }
+    function getDataIgnore() {
+        const disciplines = [];
+        $('#discipline-detail table.discipline-detail').find('tbody tr').each(function () {
 
-    function initEventForDateRangeDropdown() {
-        $('form.form-filter #DateRange').on('change', function () {
-            var dateRange = $('form.form-filter #DateRange').val();
-            if (parseInt(dateRange, 10) !== 0) {
-                const quarter = parseInt(dateRange.charAt(0), 10),
-                    year = parseInt(dateRange.substring(1, dateRange.length), 10);
+            $(this).find('td input.ignoredDiscipline').each(function () {
+                let discipline = {
+                    WorkDate: '',
+                    EmployeeId: 0,
+                    DisciplineTypeId: 0,
+                    IsIgnored: false
+                };
+                const $checkbox = $(this);
+                if ($(this).data('changed')) {
+                    const disciplineTypeId = parseInt($checkbox.data('discipline-type-id'), 10);
+                    discipline.WorkDate = $checkbox.data('workdate');
+                    discipline.EmployeeId = $checkbox.data('employee-id');
+                    discipline.DisciplineTypeId = disciplineTypeId;
+                    discipline.IsIgnored = $checkbox.prop('checked');
 
-                let fromDate = new Date($('form.form-filter #FromDate').val()),
-                    toDate = new Date($('form.form-filter #ToDate').val());
-                switch (quarter) {
-                    case 1: // First Half Year 1H
-                        fromDate.setFullYear(year, 0, 1);
-                        toDate.setFullYear(year, 5, 30);
-                        break;
-
-                    case 2: // Second Half Year 2H
-                        fromDate.setFullYear(year, 6, 1);
-                        toDate.setFullYear(year, 11, 31);
-                        break;
-
-                    default:
-                        fromDate.setFullYear(year, 0, 1);
-                        toDate.setFullYear(year, 11, 31);
-                        break;
+                    disciplines.push(discipline);
                 }
-
-                $('form.form-filter #FromDate').val(formatDate(fromDate));
-                $('form.form-filter #ToDate').val(formatDate(toDate));
-            }
-        });
-    }
-
-    function formatDate(date) {
-        const monthNames = [
-            "Jan", "Feb", "Mar",
-            "Apr", "May", "Jun", "Jul",
-            "Aug", "Sep", "Oct",
-            "Nov", "Dec"
-        ];
-
-        const day = date.getDate(),
-            monthIndex = date.getMonth(),
-            year = date.getFullYear();
-
-        return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
-    }
-
-    function query() {
-        blockUI();
-        axios({
-            url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
-            method: 'GET',
-            params: parse($('form.form-filter').serialize()),
-            responseType: 'text'
-        }).then(response => {
-            $('#discipline-detail').html(response.data);
-            floatThead("table#data");
-            initEventForIgnoreDiscipline();
-            initEventForSaveChange();
-            initTooltip();
-        }).catch(axiosError).then(() => unblockUI());
-    }
-
-    $(document).ready(function () {
-        initEventForDateRangeDropdown();
-        initDatepicker();
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
-
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    selectedItems: $('#TeamId').val()
-                });
-                query();
-            }).catch(axiosError);
-
-        $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
-            $('form.form-filter #DateRange').val('0');
-        });
-
-        $('form.form-filter #submit').on('click', function (event) {
-            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
-            query();
-        });
-
-        $('form.form-filter #btnExcel').on('click', function (event) {
-            event.preventDefault();
-
-            blockUI();
-            axios({
-                url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
-                method: 'GET',
-                params: parse($('form.form-filter').serialize()),
-                responseType: 'blob'
-            }).then(response => {
-                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
-                downloadFile(response.data, fileName);
-            }).catch(axiosError).then(() => unblockUI());
         });
     });
-})();
+
+    return disciplines;
+}
+
+    function initEventForSaveChange() {
+    $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
+        const ignoreDetails = getDataChanged();
+        const disciplines = getDataIgnore();
+        if (ignoreDetails.length > 0) {
+            confirm('Are you sure you want to save?',
+                function () {
+                    axios({
+                        url: resolveClientUrl('discipline/EditDisciplineIgnore'),
+                        method: 'POST',
+                        data: stringify({ ignoreDetails }),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }).then(response => {
+                        const data = response.data;
+                        if (data.isSuccessful) {
+                            toastr.success('Updated successfully!', '', toastOptions());
+                            axios({
+                                url: resolveClientUrl('discipline/EditDisciplineIgnoreDetail'),
+                                method: 'POST',
+                                data: disciplines
+                            })
+                            query();
+                        } else {
+                            toastr.error(data.message, '', toastOptions());
+                        }
+                    }).catch(axiosError);
+                });
+        }
+    });
+}
+
+function initEventForDateRangeDropdown() {
+    $('form.form-filter #DateRange').on('change', function () {
+        var dateRange = $('form.form-filter #DateRange').val();
+        if (parseInt(dateRange, 10) !== 0) {
+            const quarter = parseInt(dateRange.charAt(0), 10),
+                year = parseInt(dateRange.substring(1, dateRange.length), 10);
+
+            let fromDate = new Date($('form.form-filter #FromDate').val()),
+                toDate = new Date($('form.form-filter #ToDate').val());
+            switch (quarter) {
+                case 1: // First Half Year 1H
+                    fromDate.setFullYear(year, 0, 1);
+                    toDate.setFullYear(year, 5, 30);
+                    break;
+
+                case 2: // Second Half Year 2H
+                    fromDate.setFullYear(year, 6, 1);
+                    toDate.setFullYear(year, 11, 31);
+                    break;
+
+                default:
+                    fromDate.setFullYear(year, 0, 1);
+                    toDate.setFullYear(year, 11, 31);
+                    break;
+            }
+
+            $('form.form-filter #FromDate').val(formatDate(fromDate));
+            $('form.form-filter #ToDate').val(formatDate(toDate));
+        }
+    });
+}
+
+function formatDate(date) {
+    const monthNames = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"
+    ];
+
+    const day = date.getDate(),
+        monthIndex = date.getMonth(),
+        year = date.getFullYear();
+
+    return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
+}
+
+function query() {
+    blockUI();
+    axios({
+        url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
+        method: 'GET',
+        params: parse($('form.form-filter').serialize()),
+        responseType: 'text'
+    }).then(response => {
+        $('#discipline-detail').html(response.data);
+        floatThead("table#data");
+        initEventForIgnoreDiscipline();
+        initEventForSaveChange();
+        initTooltip();
+    }).catch(axiosError).then(() => unblockUI());
+}
+
+$(document).ready(function () {
+    initEventForDateRangeDropdown();
+    initDatepicker();
+    initFromDateOnChange($('#FromDate'), $('#ToDate'));
+
+    axios(resolveClientUrl('Section/GetOrgChart'))
+        .then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamId').val()
+            });
+            query();
+        }).catch(axiosError);
+
+    $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
+        $('form.form-filter #DateRange').val('0');
+    });
+
+    $('form.form-filter #submit').on('click', function (event) {
+        $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        query();
+    });
+
+    $('form.form-filter #btnExcel').on('click', function (event) {
+        event.preventDefault();
+
+        blockUI();
+        axios({
+            url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
+            method: 'GET',
+            params: parse($('form.form-filter').serialize()),
+            responseType: 'blob'
+        }).then(response => {
+            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            downloadFile(response.data, fileName);
+        }).catch(axiosError).then(() => unblockUI());
+    });
+});
+}) ();

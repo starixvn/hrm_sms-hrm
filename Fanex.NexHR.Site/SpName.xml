@@ -242,6 +242,7 @@
     <Setting Key="Report_DisciplineDetail" SpName="Report_DisciplineDetail" DbName="nexhrx" Plain="0" />
     <Setting Key="Discipline_UpdateIgnore" SpName="Discipline_UpdateIgnore" DbName="nexhrx" Plain="0" />
     <Setting Key="OtherDiscipline_GetMember" SpName="OtherDiscipline_GetMember" DbName="nexhrx" Plain="0" />
+    <Setting Key="DisciplineIgnoreDetail_Insert" SpName="DisciplineIgnoreDetail_Insert" DbName="nexhrx" Plain="0" />
   </Function>
   <Function Name="RoleManagement">
     <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="nexhrx" Plain="0"></Setting>

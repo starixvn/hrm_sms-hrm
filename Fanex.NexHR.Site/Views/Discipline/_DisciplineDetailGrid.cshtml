@@ -3,70 +3,80 @@
 @using Fanex.NexHR.Models.Discipline
 @using Fanex.NexHR.Resources
 @model IList<DisciplineDetailModel>
-@{
-    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
-    var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;
-}
-<table id="data" class="table table-custom discipline-detail">
-    <thead>
-        @if (Model != null & Model.Any() && hasPermissionToEdit)
-        {
-            <tr>
-                <th colspan="23" style="text-align: left;">
-                    <input type="button" class="btn btn-primary" id="saveChange" value="@Labels.Save" />
-                </th>
-            </tr>
-        }
-        <tr>
-            <th>@Labels.SymbolCount</th>
-            @if (hasPermissionToUpdateOutOfControlReason)
+    @{
+        var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+        var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;
+    }
+    <table id="data" class="table table-custom discipline-detail">
+        <thead>
+            @if (Model != null & Model.Any() && hasPermissionToEdit)
             {
-                <th>
-                    <input type="checkbox" class="checkbox-custom" id="checkAll"
-                            name="checkAll" value="true" />
-                    <label for="checkAll" class="header-label">@Labels.OutOfControlReason</label>
-                </th>
+                <tr>
+                    <th colspan="23" style="text-align: left;">
+                        <input type="button" class="btn btn-primary" id="saveChange" value="@Labels.Save" />
+                    </th>
+                </tr>
             }
-            <th>@Labels.Date</th>
-            <th>@Labels.Team</th>
-            <th>@Labels.Nick</th>
-            <th>@Labels.Shift</th>
-            <th>@Labels.CheckIn</th>
-            <th>@Labels.CheckOut</th>
-            <th>@Labels.TotalHours</th>
-            <th class="width-80">@Labels.MissingCheckInOut</th>
-            <th class="width-80">@Labels.WorkingUnderTime</th>
-            <th>@Labels.LateIn</th>
-            <th>@Labels.EarlyOut</th>
-            <th>@Labels.Absent</th>
-            <th>@Labels.UPL</th>
-            <th>@Labels.UPLAbsent</th>
-            <th>@Labels.ChangeShift</th>
-            <th>@Labels.LateRequestLeave</th>
-            <th>@Labels.WeekendLeave</th>
-            <th class="width-80">@Labels.DisciplinePoint</th>
-            <th class="width-80">@Labels.DisciplineByApprover</th>
-            <th class="width-80">@Labels.ApproverComment</th>
-            <th class="width-80">@Labels.EmployeeComment</th>
-        </tr>
-    </thead>
-    @if (Model != null && Model.Any())
-    {
-        int rowIndex = 0;
-        <tbody>
-            @foreach (DisciplineDetailModel item in Model)
-            {
-                int colIndex = 1, disciplinetypeId;
-                rowIndex++;
-                var checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                @if (hasPermissionToUpdateOutOfControlReason)
+                {
+                    <th>
+                        <input type="checkbox" class="checkbox-custom" id="checkAll"
+                               name="checkAll" value="true" />
+                        <label for="checkAll" class="header-label">@Labels.OutOfControlReason</label>
+                    </th>
+                }
+                <th>@Labels.Date</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Nick</th>
+                <th>@Labels.Shift</th>
+                <th>@Labels.CheckIn</th>
+                <th>@Labels.CheckOut</th>
+                <th>@Labels.TotalHours</th>
+                <th class="width-80">@Labels.MissingCheckInOut</th>
+                <th class="width-80">@Labels.WorkingUnderTime</th>
+                <th>@Labels.LateIn</th>
+                <th>@Labels.EarlyOut</th>
+                <th>@Labels.Absent</th>
+                <th>@Labels.UPL</th>
+                <th>@Labels.UPLAbsent</th>
+                <th>@Labels.ChangeShift</th>
+                <th>@Labels.LateRequestLeave</th>
+                <th>@Labels.WeekendLeave</th>
+                <th class="width-80">@Labels.DisciplinePoint</th>
+                <th class="width-80">@Labels.DisciplineByApprover</th>
+                <th class="width-80">@Labels.ApproverComment</th>
+                <th class="width-80">@Labels.EmployeeComment</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            int rowIndex = 0;
+            <tbody>
+                @foreach (DisciplineDetailModel item in Model)
+                {
+                    int colIndex = 1, disciplinetypeId;
+                    rowIndex++;
+                    var checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                    var tooltipChangeShift = string.Empty;
+                    var tooltipMissingCheckInOut = string.Empty;
+                    var tooltipLateIn = string.Empty;
+                    var tooltipEarlyOut = string.Empty;
+                    var tooltipAbsent = string.Empty;
+                    var tooltipUnpaidLeave = string.Empty;
+                    var tooltipWorkingUnderTime = string.Empty;
+                    var tooltipUnpaidLeaveAbsent = string.Empty;
+                    var tooltipUnplannedLeave = string.Empty;
+                    var tooltipWeekendLeave = string.Empty;
                 <tr>
                     <td>@rowIndex</td>
                     @if (hasPermissionToUpdateOutOfControlReason)
                     {
                         <td>
                             <input type="checkbox" class="checkbox-custom outOfControlReason" id="@checkboxId"
-                                name="@checkboxId" checked="@item.IsOutOfControlReason" data-changed="false"
-                                data-originchecked="@item.IsOutOfControlReason" />
+                                   name="@checkboxId" checked="@item.IsOutOfControlReason" data-changed="false"
+                                   data-originchecked="@item.IsOutOfControlReason" />
                             <label for="@checkboxId"></label>
                         </td>
                     }
@@ -104,7 +114,11 @@
                             <span>-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.MissingCheckInOut.IgnoreBy != null)
+                    {
+                        tooltipMissingCheckInOut = string.Format(Messages.IgnoreDisciplineDetail, @item.MissingCheckInOut.IgnoreBy, @item.MissingCheckInOut.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipMissingCheckInOut">
                         @if (item.MissingCheckInOut.Value > 0)
                         {
                             <span class="float-left">@item.MissingCheckInOut.Value</span>
@@ -113,12 +127,12 @@
                                 disciplinetypeId = (int)DisciplineType.MissingCheckInOut;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.MissingCheckInOut.HasIgnored"
-                                        disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
-                                        data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.MissingCheckInOut.HasIgnored"
+                                       disabled="@item.MissingCheckInOut.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.MissingCheckInOut.Score"
+                                       data-has-ignored="@item.MissingCheckInOut.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -127,7 +141,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.WorkingUnderTime.IgnoreBy != null)
+                    {
+                        tooltipWorkingUnderTime = string.Format(Messages.IgnoreDisciplineDetail, @item.WorkingUnderTime.IgnoreBy, @item.WorkingUnderTime.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipWorkingUnderTime">
                         @if (item.WorkingUnderTime.Value > 0)
                         {
                             <span class="float-left">1</span>
@@ -136,12 +154,12 @@
                                 disciplinetypeId = (int)DisciplineType.WorkingUnderTime;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.WorkingUnderTime.HasIgnored"
-                                        disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
-                                        data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.WorkingUnderTime.HasIgnored"
+                                       disabled="@item.WorkingUnderTime.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.WorkingUnderTime.Score"
+                                       data-has-ignored="@item.WorkingUnderTime.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -150,7 +168,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.LateIn.IgnoreBy != null)
+                    {
+                        tooltipLateIn = string.Format(Messages.IgnoreDisciplineDetail, @item.LateIn.IgnoreBy, @item.LateIn.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipLateIn">
                         @if (item.LateIn.Value > 0)
                         {
                             <div class="float-left">@item.MinutesLateIn</div>
@@ -159,12 +181,12 @@
                                 disciplinetypeId = (int)DisciplineType.LateIn;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.LateIn.HasIgnored"
-                                        disabled="@item.LateIn.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
-                                        data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.LateIn.HasIgnored"
+                                       disabled="@item.LateIn.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.LateIn.Score"
+                                       data-has-ignored="@item.LateIn.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -173,7 +195,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.EarlyOut.IgnoreBy != null)
+                    {
+                        tooltipEarlyOut = string.Format(Messages.IgnoreDisciplineDetail, @item.EarlyOut.IgnoreBy, @item.EarlyOut.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title = "@tooltipEarlyOut">
                         @if (item.EarlyOut.Value > 0)
                         {
                             <div class="float-left">@item.MinutesEarlyOut</div>
@@ -182,12 +208,12 @@
                                 disciplinetypeId = (int)DisciplineType.EarlyOut;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.EarlyOut.HasIgnored"
-                                        disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
-                                        data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.EarlyOut.HasIgnored"
+                                       disabled="@item.EarlyOut.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.EarlyOut.Score"
+                                       data-has-ignored="@item.EarlyOut.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -196,7 +222,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.Absent.IgnoreBy != null)
+                    {
+                        tooltipAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.Absent.IgnoreBy, @item.Absent.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipAbsent">
                         @if (item.Absent.Value > 0)
                         {
                             <span class="float-left">@item.Absent.Value</span>
@@ -205,12 +235,12 @@
                                 disciplinetypeId = (int)DisciplineType.Absent;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.Absent.HasIgnored"
-                                        disabled="@item.Absent.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
-                                        data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.Absent.HasIgnored"
+                                       disabled="@item.Absent.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.Absent.Score"
+                                       data-has-ignored="@item.Absent.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -219,7 +249,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.UnpaidLeave.IgnoreBy != null)
+                    {
+                        tooltipUnpaidLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeave.IgnoreBy, @item.UnpaidLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipUnpaidLeave">
                         @if (item.UnpaidLeave.Value > 0)
                         {
                             <span class="float-left">@item.UnpaidLeave.Value</span>
@@ -228,12 +262,12 @@
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeave;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.UnpaidLeave.HasIgnored"
-                                        disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
-                                        data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.UnpaidLeave.HasIgnored"
+                                       disabled="@item.UnpaidLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeave.Score"
+                                       data-has-ignored="@item.UnpaidLeave.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -242,7 +276,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.UnpaidLeaveAbsent.IgnoreBy != null)
+                    {
+                        tooltipUnpaidLeaveAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeaveAbsent.IgnoreBy, @item.UnpaidLeaveAbsent.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipUnpaidLeaveAbsent">
                         @if (item.UnpaidLeaveAbsent.Value > 0)
                         {
                             <span class="float-left">@item.UnpaidLeaveAbsent.Value</span>
@@ -251,12 +289,12 @@
                                 disciplinetypeId = (int)DisciplineType.UnpaidLeaveAbsent;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.UnpaidLeaveAbsent.HasIgnored"
-                                        disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
-                                        data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.UnpaidLeaveAbsent.HasIgnored"
+                                       disabled="@item.UnpaidLeaveAbsent.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnpaidLeaveAbsent.Score"
+                                       data-has-ignored="@item.UnpaidLeaveAbsent.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -265,7 +303,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.ChangeShift.IgnoreBy != null)
+                    {
+                        tooltipChangeShift = string.Format(Messages.IgnoreDisciplineDetail, @item.ChangeShift.IgnoreBy, @item.ChangeShift.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipChangeShift">
                         @if (item.ChangeShift.Value > 0)
                         {
                             <span class="float-left">@item.ChangeShift.Value</span>
@@ -274,12 +316,12 @@
                                 disciplinetypeId = (int)DisciplineType.ChangeShift;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.ChangeShift.HasIgnored"
-                                        disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
-                                        data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.ChangeShift.HasIgnored"
+                                       disabled="@item.ChangeShift.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.ChangeShift.Score"
+                                       data-has-ignored="@item.ChangeShift.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -288,7 +330,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.UnplannedLeave.IgnoreBy != null)
+                    {
+                        tooltipUnplannedLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnplannedLeave.IgnoreBy, @item.UnplannedLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipUnplannedLeave">
                         @if (item.UnplannedLeave.Value > 0)
                         {
                             <span class="float-left">@item.UnplannedLeave.Value</span>
@@ -297,12 +343,12 @@
                                 disciplinetypeId = (int)DisciplineType.UnplannedLeave;
                                 checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
                                 <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
-                                        id="@checkboxId" name="@checkboxId"
-                                        checked="@item.UnplannedLeave.HasIgnored"
-                                        disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
-                                        data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
-                                        data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
-                                        data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
+                                       id="@checkboxId" name="@checkboxId"
+                                       checked="@item.UnplannedLeave.HasIgnored"
+                                       disabled="@item.UnplannedLeave.HasApprovedBy.Equals(false)"
+                                       data-workdate="@item.WorkDate.Date.ToString("d")" data-employee-id="@item.Employee.EmployeeId"
+                                       data-discipline-type-id="@disciplinetypeId" data-discipline-score="@item.UnplannedLeave.Score"
+                                       data-has-ignored="@item.UnplannedLeave.HasIgnored" data-changed="false" />
                                 <label for="@checkboxId"></label>
                             }
                         }
@@ -311,7 +357,11 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    <td>
+                    @if (item.WeekendLeave.IgnoreBy != null)
+                    {
+                        tooltipWeekendLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.WeekendLeave.IgnoreBy, @item.WeekendLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                    }
+                    <td class="tooltip-tipsy" title="@tooltipWeekendLeave">
                         @if (item.WeekendLeave.Value > 0)
                         {
                             <span class="float-left">@item.WeekendLeave.Value</span>
@@ -382,11 +432,11 @@
                         <td></td>
                     }
                 </tr>
-            }
-        </tbody>
-    }
-    else
-    {
-        @RazorHelper.DisplayNoInformation(colspan: 23);
-    }
-</table>
+                }
+            </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 23);
+        }
+    </table>

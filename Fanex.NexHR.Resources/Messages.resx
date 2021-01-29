@@ -360,4 +360,7 @@
   <data name="LengthOfService" xml:space="preserve">
     <value>{0} YEARS {1} MONTHS</value>
   </data>
+  <data name="IgnoreDisciplineDetail" xml:space="preserve">
+    <value>Request ignored by {0} on {1}</value>
+  </data>
 </root>

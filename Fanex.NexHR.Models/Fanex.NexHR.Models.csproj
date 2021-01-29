@@ -94,6 +94,7 @@
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
+    <Compile Include="Discipline\IgnoredDisciplineDetailModel.cs" />
     <Compile Include="Unit\Unit.cs" />
     <Compile Include="EditEmployeeParam.cs" />
     <Compile Include="Log\MappingFieldConfig.cs" />
