@@ -16,5 +16,7 @@
         public string IgnoreBy { get; set; }
 
         public DateTime IgnoreDate { get; set; }
+
+        public bool IsIgnored { get; set; }
     }
 }

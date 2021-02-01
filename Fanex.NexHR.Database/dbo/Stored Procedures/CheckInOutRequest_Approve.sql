@@ -95,6 +95,12 @@ BEGIN
 				,@DisciplineXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+
+			EXEC dbo.DisciplineIgnoreDetail_Update
+				@ActorId = @ActorId
+				,@IgnoreDetailXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
 		END
 
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)

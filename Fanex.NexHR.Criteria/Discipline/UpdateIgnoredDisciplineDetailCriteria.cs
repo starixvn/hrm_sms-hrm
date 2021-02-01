@@ -8,7 +8,7 @@
 
         public string IgnoreDetailXml { get; set; }
 
-        public override string GetSettingKey() => "DisciplineIgnoreDetail_Insert";
+        public override string GetSettingKey() => "DisciplineIgnoreDetail_Update";
 
         public override bool IsValid() => ActorId > 0 && !string.IsNullOrWhiteSpace(IgnoreDetailXml);
     }

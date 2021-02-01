@@ -167,6 +167,12 @@ BEGIN
 				,@DisciplineXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
+
+			EXEC dbo.DisciplineIgnoreDetail_Update
+				@ActorId = @ActorId
+				,@IgnoreDetailXml = @DisciplineXml
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
 		END
 		IF @CountDay >= 7
 			AND (

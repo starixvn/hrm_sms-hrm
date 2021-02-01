@@ -682,6 +682,15 @@ BEGIN
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON empatt.ShiftId = shift.ShiftId
 	ORDER BY dis.WorkDate DESC
 
+	SELECT did.EmpId AS EmployeeId
+	,e.NickName AS IgnoreBy
+	,did.WorkDate
+	,did.DisciplineTypeId
+	,did.IgnoreDate
+	FROM dbo.DisciplineIgnoreDetail AS did WITH (NOLOCK)
+	LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = did.IgnoreBy
+	WHERE did.EmpId = @EmployeeId AND did.WorkDate BETWEEN @FromDate AND @ToDate 
+
 	DROP TABLE #tblDisciplineDetail
 
 	DROP TABLE #tblGroupIds
