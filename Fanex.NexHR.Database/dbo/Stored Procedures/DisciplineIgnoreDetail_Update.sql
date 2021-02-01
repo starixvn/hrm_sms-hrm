@@ -66,12 +66,10 @@ BEGIN
 		,IgnoreDate
 		FROM #tblIgnoredDisciplineDetail 
 		WHERE IsIgnored = 1
-			
 
 		DELETE DisciplineIgnoreDetail
-		FROM dbo.DisciplineIgnoreDetail d1
-		INNER JOIN #tblIgnoredDisciplineDetail d2 ON d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
-		WHERE d2.IsIgnored = 0;
+		FROM dbo.DisciplineIgnoreDetail d1, #tblIgnoredDisciplineDetail d2
+		WHERE d2.IsIgnored = 0 AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
 
 		EXEC sp_xml_removedocument @DocHandler
 	END

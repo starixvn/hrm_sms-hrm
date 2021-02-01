@@ -46,6 +46,11 @@ BEGIN
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
+
+		DELETE DisciplineIgnoreDetail
+		FROM dbo.DisciplineIgnoreDetail d1, DisciplineRequestTrans d2
+		WHERE d2.RequestId = @RequestId AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
+
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
 		UPDATE dis
