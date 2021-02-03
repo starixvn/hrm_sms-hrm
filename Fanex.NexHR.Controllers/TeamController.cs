@@ -61,6 +61,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         public ActionResult Create(TeamViewModel model)
         {
             model.Sections = sectionService.GetSection();
@@ -78,10 +79,14 @@
                     SupervisorIds = model.SupervisorIds,
                     MailGroup = model.MailGroup,
                     CreatedBy = sessionService.Employee.Id,
-                    BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0,
-                    WorkingDays = model.WorkingDays ?? 0,
-                    WorkingHours = model.WorkingHours ?? 0,
-                    OffDaysbyWeek = model.OffDaysbyWeek ?? 0
+                    LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
+                    LocalWorkingDays = model.LocalWorkingDays ?? 0,
+                    LocalWorkingHours = model.LocalWorkingHours ?? 0,
+                    LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+                    ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
+                    ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
+                    ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
+                    ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -101,6 +106,7 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         public ActionResult Edit(int id)
         {
             Team team = teamService.GetById(id);
@@ -115,10 +121,14 @@
                 TeamCode = team.Code,
                 TeamName = team.Name,
                 MailGroup = team.MailGroup,
-                BasicAnnualLeaveBalance = team.BasicAnnualLeaveBalance,
-                WorkingDays = team.WorkingDays ?? 0,
-                WorkingHours = team.WorkingHours ?? 0,
-                OffDaysbyWeek = team.OffDaysbyWeek ?? 0,
+                LocalBasicAnnualLeaveBalance = team.LocalBasicAnnualLeaveBalance,
+                LocalWorkingDays = team.LocalWorkingDays ?? 0,
+                LocalWorkingHours = team.LocalWorkingHours ?? 0,
+                LocalOffDaysbyWeek = team.LocalOffDaysbyWeek ?? 0,
+                ExpatBasicAnnualLeaveBalance = team.ExpatBasicAnnualLeaveBalance,
+                ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
+                ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
+                ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
                 HeadId = unitHead?.EmpId,
                 UnitHead = unitHead?.DisplayName,
                 ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
@@ -134,6 +144,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         public ActionResult Edit(TeamViewModel model)
         {
             if (model != null)
@@ -154,10 +165,14 @@
                         LeaderIds = model.LeaderIds,
                         SupervisorIds = model.SupervisorIds,
                         ModifiedBy = sessionService.Employee.Id,
-                        BasicAnnualLeaveBalance = model.BasicAnnualLeaveBalance ?? 0,
-                        WorkingDays = model.WorkingDays ?? 0,
-                        WorkingHours = model.WorkingHours ?? 0,
-                        OffDaysbyWeek = model.OffDaysbyWeek ?? 0
+                        LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
+                        LocalWorkingDays = model.LocalWorkingDays ?? 0,
+                        LocalWorkingHours = model.LocalWorkingHours ?? 0,
+                        LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+                        ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
+                        ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
+                        ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
+                        ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 

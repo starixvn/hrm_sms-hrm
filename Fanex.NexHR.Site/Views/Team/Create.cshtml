@@ -110,41 +110,84 @@
             </div>
             @Html.ValidationMessageFor(model => model.MailGroup)
         </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.BasicAnnualLeaveBalance, new { @class = "control-label" })
+        <div class="panel panel-default">
+            <div class="panel-heading">LOCAL</div>
+            <div class="form-group ">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.LocalBasicAnnualLeaveBalance)
             </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.BasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.LocalWorkingDays, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.LocalWorkingDays)
             </div>
-            @Html.ValidationMessageFor(model => model.BasicAnnualLeaveBalance)
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.LocalWorkingHours, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.LocalWorkingHours)
+            </div><div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.LocalOffDaysbyWeek, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.LocalOffDaysbyWeek)
+            </div>
         </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.WorkingDays, new { @class = "control-label" })
+
+        <div class="panel panel-default">
+            <div class="panel-heading">EXPAT</div>
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.ExpatBasicAnnualLeaveBalance)
             </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.WorkingDays, new { @class = "form-control", @type = "number" })
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ExpatWorkingDays, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.ExpatWorkingDays)
             </div>
-            @Html.ValidationMessageFor(model => model.WorkingDays)
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ExpatWorkingHours, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.ExpatWorkingHours)
+            </div><div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ExpatOffDaysbyWeek, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+                </div>
+                @Html.ValidationMessageFor(model => model.ExpatOffDaysbyWeek)
+            </div>
         </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.WorkingHours, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.WorkingHours, new { @class = "form-control", @type = "number" })
-            </div>
-            @Html.ValidationMessageFor(model => model.WorkingHours)
-        </div><div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.OffDaysbyWeek, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control", @type = "number" })
-            </div>
-            @Html.ValidationMessageFor(model => model.OffDaysbyWeek)
-        </div>
+
         <div class="form-group">
             <div class="label-form"></div>
             <div>

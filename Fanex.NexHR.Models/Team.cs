@@ -26,13 +26,21 @@
 
         public string MailGroup { get; set; }
 
-        public byte? BasicAnnualLeaveBalance { get; set; }
+        public byte? LocalBasicAnnualLeaveBalance { get; set; }
 
-        public byte? WorkingDays { get; set; }
+        public byte? LocalWorkingDays { get; set; }
 
-        public byte? WorkingHours { get; set; }
+        public byte? LocalWorkingHours { get; set; }
 
-        public byte? OffDaysbyWeek { get; set; }
+        public byte? LocalOffDaysbyWeek { get; set; }
+
+        public byte? ExpatBasicAnnualLeaveBalance { get; set; }
+
+        public byte? ExpatWorkingDays { get; set; }
+
+        public byte? ExpatWorkingHours { get; set; }
+
+        public byte? ExpatOffDaysbyWeek { get; set; }
 
         public Department Department { get; set; } = new Department();
         public string DepartmentCode { get; set; }

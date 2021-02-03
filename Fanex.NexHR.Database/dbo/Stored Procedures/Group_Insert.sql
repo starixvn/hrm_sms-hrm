@@ -7,10 +7,14 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@ManagerIds VARCHAR(MAX) = ''
 	,@LeaderIds VARCHAR(MAX) = ''
 	,@SupervisorIds VARCHAR(MAX) = ''
-	,@BasicAnnualLeaveBalance TINYINT
-	,@WorkingDays TINYINT
-	,@WorkingHours TINYINT
-	,@OffDaysbyWeek TINYINT
+	,@LocalBasicAnnualLeaveBalance TINYINT
+	,@LocalWorkingDays TINYINT
+	,@LocalWorkingHours TINYINT
+	,@LocalOffDaysbyWeek TINYINT
+	,@ExpatBasicAnnualLeaveBalance TINYINT
+	,@ExpatWorkingDays TINYINT
+	,@ExpatWorkingHours TINYINT
+	,@ExpatOffDaysbyWeek TINYINT
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -48,10 +52,14 @@ BEGIN
 		,MailGroup
 		,CreatedDate
 		,CreatedBy
-		,BasicAnnualLeaveBalance
-		,WorkingDays
-		,WorkingHours
-		,OffDaysbyWeek
+		,LocalBasicAnnualLeaveBalance
+		,LocalWorkingDays
+		,LocalWorkingHours
+		,LocalOffDaysbyWeek
+		,ExpatBasicAnnualLeaveBalance
+		,ExpatWorkingDays
+		,ExpatWorkingHours
+		,ExpatOffDaysbyWeek
 		)
 	VALUES (
 		@Code
@@ -60,10 +68,14 @@ BEGIN
 		,@MailGroup
 		,GETDATE()
 		,@CreatedBy
-		,@BasicAnnualLeaveBalance
-		,@WorkingDays
-		,@WorkingHours
-		,@OffDaysbyWeek
+		,@LocalBasicAnnualLeaveBalance
+		,@LocalWorkingDays
+		,@LocalWorkingHours
+		,@LocalOffDaysbyWeek
+		,@ExpatBasicAnnualLeaveBalance
+		,@ExpatWorkingDays
+		,@ExpatWorkingHours
+		,@ExpatOffDaysbyWeek
 		)
 
 	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
@@ -130,10 +142,10 @@ BEGIN
 				,@LeaderIds AS '@LeaderIds'
 				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
-				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
-				,WorkingDays AS '@WorkingDays'
-				,WorkingHours AS '@WorkingHours'
-				,OffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalBasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,LocalWorkingDays AS '@WorkingDays'
+				,LocalWorkingHours AS '@WorkingHours'
+				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @id
 			FOR XML PATH('Row')

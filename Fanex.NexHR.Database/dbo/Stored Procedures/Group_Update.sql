@@ -8,10 +8,14 @@ CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@ManagerIds VARCHAR(MAX) = ''
 	,@LeaderIds VARCHAR(MAX) = ''
 	,@SupervisorIds VARCHAR(MAX) = ''
-	,@BasicAnnualLeaveBalance TINYINT
-	,@WorkingDays TINYINT
-	,@WorkingHours TINYINT
-	,@OffDaysbyWeek TINYINT
+	,@LocalBasicAnnualLeaveBalance TINYINT
+	,@LocalWorkingDays TINYINT
+	,@LocalWorkingHours TINYINT
+	,@LocalOffDaysbyWeek TINYINT
+	,@ExpatBasicAnnualLeaveBalance TINYINT
+	,@ExpatWorkingDays TINYINT
+	,@ExpatWorkingHours TINYINT
+	,@ExpatOffDaysbyWeek TINYINT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -80,10 +84,10 @@ BEGIN
 				,@OldLeaderIds AS '@LeaderIds'
 				,@OldSupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
-				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
-				,WorkingDays AS '@WorkingDays'
-				,WorkingHours AS '@WorkingHours'
-				,OffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalBasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,LocalWorkingDays AS '@WorkingDays'
+				,LocalWorkingHours AS '@WorkingHours'
+				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')
@@ -152,10 +156,14 @@ BEGIN
 		,[MailGroup] = @MailGroup
 		,ModifiedDate = GETDATE()
 		,ModifiedBy = @ModifiedBy
-		,BasicAnnualLeaveBalance = @BasicAnnualLeaveBalance
-		,WorkingDays = @WorkingDays
-		,WorkingHours = @WorkingHours
-		,OffDaysbyWeek = @OffDaysbyWeek
+		,LocalBasicAnnualLeaveBalance = @LocalBasicAnnualLeaveBalance
+		,LocalWorkingDays = @LocalWorkingDays
+		,LocalWorkingHours = @LocalWorkingHours
+		,LocalOffDaysbyWeek = @LocalOffDaysbyWeek
+		,ExpatBasicAnnualLeaveBalance = @ExpatBasicAnnualLeaveBalance
+		,ExpatWorkingDays = @ExpatWorkingDays
+		,ExpatWorkingHours = @ExpatWorkingHours
+		,ExpatOffDaysbyWeek = @ExpatOffDaysbyWeek
 	WHERE GroupId = @TeamId
 
 	SET @xml = (
@@ -167,10 +175,10 @@ BEGIN
 				,@LeaderIds AS '@LeaderIds'
 				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
-				,BasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
-				,WorkingDays AS '@WorkingDays'
-				,WorkingHours AS '@WorkingHours'
-				,OffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalBasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
+				,LocalWorkingDays AS '@WorkingDays'
+				,LocalWorkingHours AS '@WorkingHours'
+				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')

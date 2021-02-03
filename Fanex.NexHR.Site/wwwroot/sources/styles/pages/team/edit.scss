@@ -13,3 +13,16 @@
     margin: 0;
     border: none;
 }
+
+.panel-default {
+    width: 350px;
+    margin-bottom: 15px;
+
+    .form-group {
+        margin-left: 10px;
+    }
+}
+
+.panel-heading {
+    margin-bottom: 15px;
+}

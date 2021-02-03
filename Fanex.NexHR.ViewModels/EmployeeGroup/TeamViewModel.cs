@@ -51,24 +51,40 @@
         [Display(Name = nameof(Labels.TeamLeader), ResourceType = typeof(Labels))]
         public string LeaderIds { get; set; }
 
-        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-        [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
-        public byte? BasicAnnualLeaveBalance { get; set; }
-
         public IList<Section> Sections { get; set; }
 
         public IList<Employee> Employees { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
+        public byte? LocalBasicAnnualLeaveBalance { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingDaysPerMonth), ResourceType = typeof(Labels))]
-        public byte? WorkingDays { get; set; }
+        public byte? LocalWorkingDays { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
-        public byte? WorkingHours { get; set; }
+        public byte? LocalWorkingHours { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
-        public byte? OffDaysbyWeek { get; set; }
+        public byte? LocalOffDaysbyWeek { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
+        public byte? ExpatBasicAnnualLeaveBalance { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.WorkingDaysPerMonth), ResourceType = typeof(Labels))]
+        public byte? ExpatWorkingDays { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
+        public byte? ExpatWorkingHours { get; set; }
+
+        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
+        [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
+        public byte? ExpatOffDaysbyWeek { get; set; }
     }
 }

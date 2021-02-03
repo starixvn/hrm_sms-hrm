@@ -10,10 +10,14 @@
     [ModifiedBy]        INT            NULL,
     [IsDeleted]         BIT            CONSTRAINT [DF_Group_IsDeleted] DEFAULT ((0)) NULL,
     [MailGroup]         VARCHAR (50)   NULL,
-    [BasicAnnualLeaveBalance] TINYINT NULL, 
-    [WorkingDays] TINYINT NULL, 
-    [WorkingHours] TINYINT NULL, 
-    [OffDaysbyWeek] TINYINT NULL, 
+    [LocalBasicAnnualLeaveBalance] TINYINT NULL, 
+    [LocalWorkingDays] TINYINT NULL, 
+    [LocalWorkingHours] TINYINT NULL, 
+    [LocalOffDaysbyWeek] TINYINT NULL, 
+    [ExpatBasicAnnualLeaveBalance] TINYINT NULL, 
+    [ExpatWorkingDays] TINYINT NULL, 
+    [ExpatWorkingHours] TINYINT NULL, 
+    [ExpatOffDaysbyWeek] TINYINT NULL,
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([GroupId] ASC) ON [Employee]
 );
 

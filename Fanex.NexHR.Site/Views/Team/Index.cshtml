@@ -43,110 +43,101 @@
     <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
         <thead>
             <tr>
-                <th>@Labels.SymbolCount</th>
-                <th class="col-sorter">
+                <th rowspan="2">@Labels.SymbolCount</th>
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Department</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Section</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Team</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Code</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.UnitHead</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Manager</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Supervisor</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TeamLeader</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Email</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.BasicAnnualLeaveBalance</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.WorkingDaysPerMonth</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.WorkingHoursPerDay</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.NumberOfOffday</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
+                <th colspan="2">@Labels.BasicAnnualLeaveBalance</th>
+                <th colspan="2">@Labels.WorkingDaysPerMonth</th>
+                <th colspan="2">@Labels.WorkingHoursPerDay</th>
+                <th colspan="2">@Labels.NumberOfOffday</th>
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TotalExpat</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.TotalLocal</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
+                <th rowspan="2" class="col-sorter">
                     <div class="cell-control-wrapper">
                         <div>@Labels.Total</div>
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th>@Labels.DisciplineRule</th>
+                <th rowspan="2">@Labels.DisciplineRule</th>
                 @if (hasPermission)
                 {
-                    <th>@Labels.Edit</th>
-                    <th>@Labels.Roles</th>
-                    <th>@Labels.Delete</th>
+                    <th rowspan="2">@Labels.Edit</th>
+                    <th rowspan="2">@Labels.Roles</th>
+                    <th rowspan="2">@Labels.Delete</th>
                 }
+            </tr>
+            <tr>
+                <th>@Labels.Local</th>
+                <th>@Labels.Expat</th>
+                <th>@Labels.Local</th>
+                <th>@Labels.Expat</th>
+                <th>@Labels.Local</th>
+                <th>@Labels.Expat</th>
+                <th>@Labels.Local</th>
+                <th>@Labels.Expat</th>
+                <th>@Labels.Local</th>
             </tr>
         </thead>
         @if (Model != null && Model.Any())
@@ -167,10 +158,14 @@
                         <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(x => x.Nickname))</td>
                         <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>
                         <td class="align-left">@team.MailGroup</td>
-                        <td>@team.BasicAnnualLeaveBalance</td>
-                        <td>@team.WorkingDays</td>
-                        <td>@team.WorkingHours</td>
-                        <td>@team.OffDaysbyWeek</td>
+                        <td>@team.LocalBasicAnnualLeaveBalance</td>
+                        <td>@team.ExpatBasicAnnualLeaveBalance</td>
+                        <td>@team.LocalWorkingDays</td>
+                        <td>@team.ExpatWorkingDays</td>
+                        <td>@team.LocalWorkingHours</td>
+                        <td>@team.ExpatWorkingHours</td>
+                        <td>@team.LocalOffDaysbyWeek</td>
+                        <td>@team.ExpatOffDaysbyWeek</td>
                         <td>@team.TotalExpat</td>
                         <td>@team.TotalLocal</td>
                         <td>
@@ -215,6 +210,6 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 21);
+            @RazorHelper.DisplayNoInformation(colspan: 25);
         }
     </table>

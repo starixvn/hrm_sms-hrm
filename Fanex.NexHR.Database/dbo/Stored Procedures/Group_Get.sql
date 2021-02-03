@@ -60,10 +60,14 @@ BEGIN
 		,g.Code
 		,g.[Rank]
 		,g.MailGroup
-		,g.BasicAnnualLeaveBalance
-		,g.[WorkingDays]
-		,g.WorkingHours
-		,g.OffDaysbyWeek
+		,g.LocalBasicAnnualLeaveBalance
+		,g.LocalWorkingDays
+		,g.LocalWorkingHours
+		,g.LocalOffDaysbyWeek
+		,g.ExpatBasicAnnualLeaveBalance
+		,g.ExpatWorkingDays
+		,g.ExpatWorkingHours
+		,g.ExpatOffDaysbyWeek
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat
