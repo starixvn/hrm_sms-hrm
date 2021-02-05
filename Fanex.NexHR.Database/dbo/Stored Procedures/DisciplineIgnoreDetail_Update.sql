@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[DisciplineIgnoreDetail_Update]
 	@ActorId INT
-	,@IgnoreDetailXml NVARCHAR(MAX) = NULL
+	,@DisciplineIgnoreXml NVARCHAR(MAX) = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -18,33 +18,33 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	CREATE TABLE #tblIgnoredDisciplineDetail (
-		EmpId INT
-		,WorkDate DATE
+	CREATE TABLE #tblIgnoredDetail (
+		WorkDate DATE
+		,EmpId INT
 		,DisciplineTypeId INT
 		,IgnoreBy INT
-		,IgnoreDate DATE
+		,IgnoreDate DATETIME
 		,IsIgnored BIT
 		)
 
-	IF ISNULL(@IgnoreDetailXml, '') <> ''
+	IF ISNULL(@DisciplineIgnoreXml, '') <> ''
 	BEGIN
 		DECLARE @DocHandler INT
 
 		EXEC sp_xml_preparedocument @DocHandler OUTPUT
-			,@IgnoreDetailXml
+			,@DisciplineIgnoreXml
 
-		INSERT INTO #tblIgnoredDisciplineDetail(
-			EmpId
-			,WorkDate
+		INSERT INTO #tblIgnoredDetail(
+			WorkDate
+			,EmpId
 			,DisciplineTypeId
 			,IgnoreBy
 			,IgnoreDate
 			,IsIgnored
 			)
 		SELECT
-			EmployeeId
-			,WorkDate
+			WorkDate
+			,EmployeeId
 			,DisciplineTypeId
 			,@ActorId
 			,GETDATE()
@@ -64,16 +64,16 @@ BEGIN
 		,DisciplineTypeId
 		,IgnoreBy
 		,IgnoreDate
-		FROM #tblIgnoredDisciplineDetail 
+		FROM #tblIgnoredDetail 
 		WHERE IsIgnored = 1
 
-		DELETE DisciplineIgnoreDetail
-		FROM dbo.DisciplineIgnoreDetail d1, #tblIgnoredDisciplineDetail d2
-		WHERE d2.IsIgnored = 0 AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
+		DELETE d1
+		FROM dbo.DisciplineIgnoreDetail d1 WITH(NOLOCK)
+		INNER JOIN #tblIgnoredDetail d2 ON d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate AND d2.IsIgnored = 0
 
 		EXEC sp_xml_removedocument @DocHandler
 	END
 
-	DROP TABLE #tblIgnoredDisciplineDetail
+	DROP TABLE #tblIgnoredDetail
 
 END

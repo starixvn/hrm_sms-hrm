@@ -295,7 +295,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request ignored by {0} on {1}.
+        ///   Looks up a localized string similar to Ignored by {0} on {1}.
         /// </summary>
         public static string IgnoreDisciplineDetail {
             get {

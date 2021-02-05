@@ -4,7 +4,6 @@ import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 import { stringify, parse } from 'qs';
 import toastr from 'toastr';
-
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -176,14 +175,14 @@ import { DisciplineType } from '../../shared/constants';
     function initEventForSaveChange() {
     $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
         const ignoreDetails = getDataChanged();
-        const disciplines = getDataIgnore();
+        const disciplinesIgnore = getDataIgnore();
         if (ignoreDetails.length > 0) {
             confirm('Are you sure you want to save?',
                 function () {
                     axios({
                         url: resolveClientUrl('discipline/EditDisciplineIgnore'),
                         method: 'POST',
-                        data: stringify({ ignoreDetails }),
+                        data: stringify({ ignoreDetails, disciplinesIgnore }),
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -192,11 +191,6 @@ import { DisciplineType } from '../../shared/constants';
                         const data = response.data;
                         if (data.isSuccessful) {
                             toastr.success('Updated successfully!', '', toastOptions());
-                            axios({
-                                url: resolveClientUrl('discipline/EditDisciplineIgnoreDetail'),
-                                method: 'POST',
-                                data: disciplines
-                            })
                             query();
                         } else {
                             toastr.error(data.message, '', toastOptions());

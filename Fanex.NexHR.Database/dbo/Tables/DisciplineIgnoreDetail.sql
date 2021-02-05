@@ -3,5 +3,5 @@
 		,EmpId INT NOT NULL
 		,DisciplineTypeId INT NOT NULL
 		,IgnoreBy INT NOT NULL
-		,IgnoreDate DATE NOT NULL
+		,IgnoreDate DATETIME NOT NULL
 		)

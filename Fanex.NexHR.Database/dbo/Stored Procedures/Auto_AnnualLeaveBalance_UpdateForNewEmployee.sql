@@ -36,7 +36,7 @@ BEGIN
 		,Amount
 		)
 	SELECT emp.EmpId
-		,ROUND((ISNULL(gr.BasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
+		,ROUND((ISNULL(gr.LocalBasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
 				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') + 1
 				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') END
 				), 0)

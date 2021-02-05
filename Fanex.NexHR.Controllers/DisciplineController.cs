@@ -205,30 +205,18 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.Discipline)]
-        public CustomJsonResult EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails)
+        public CustomJsonResult EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails, IEnumerable<IgnoredDisciplineDetailModel> disciplinesIgnore)
         {
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
                 IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
+                DisciplineIgnoreXml = disciplinesIgnore.ToXML().ToString(),
                 HasUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
                 ActorId = sessionService.Employee.Id,
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.Discipline)]
-        public void EditDisciplineIgnoreDetail(IEnumerable<IgnoredDisciplineDetailModel> ignoredDisciplineDetail)
-        {
-            var criteria = new UpdateIgnoredDisciplineDetailCriteria
-            {
-                IgnoreDetailXml = ignoredDisciplineDetail.ToXML().ToString(),
-                ActorId = sessionService.Employee.Id,
-            };
-
-            baseService.ExecuteNonQuery(criteria);
         }
 
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)

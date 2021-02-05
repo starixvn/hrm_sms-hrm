@@ -1,5 +1,6 @@
 ﻿
-CREATE PROCEDURE [dbo].[Discipline_UpdateIgnore] @ActorId INT
+CREATE  PROCEDURE [dbo].[Discipline_UpdateIgnore] @ActorId INT
+	,@DisciplineIgnoreXml NVARCHAR(MAX) = NULL
 	,@IgnoreDetailXml NVARCHAR(MAX) = NULL
 	,@HasUpdateOutOfControlReason BIT = 0
 	,@ErrCode INT = 0 OUTPUT
@@ -43,6 +44,13 @@ BEGIN
 		,ApproverSubtractScore DECIMAL(5, 2)
 		,IsOutOfControlReason BIT
 		)
+
+	IF ISNULL(@DisciplineIgnoreXml, '') <> ''
+	BEGIN
+		EXEC dbo.DisciplineIgnoreDetail_Update
+			@ActorId = @ActorId
+			,@DisciplineIgnoreXml = @DisciplineIgnoreXml
+	END
 
 	IF ISNULL(@IgnoreDetailXml, '') <> ''
 	BEGIN

@@ -116,7 +116,7 @@
                     </td>
                     @if (item.MissingCheckInOut.IgnoreBy != null)
                     {
-                        tooltipMissingCheckInOut = string.Format(Messages.IgnoreDisciplineDetail, @item.MissingCheckInOut.IgnoreBy, @item.MissingCheckInOut.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipMissingCheckInOut = string.Format(Messages.IgnoreDisciplineDetail, @item.MissingCheckInOut.IgnoreBy, @item.MissingCheckInOut.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipMissingCheckInOut">
                         @if (item.MissingCheckInOut.Value > 0)
@@ -143,7 +143,7 @@
                     </td>
                     @if (item.WorkingUnderTime.IgnoreBy != null)
                     {
-                        tooltipWorkingUnderTime = string.Format(Messages.IgnoreDisciplineDetail, @item.WorkingUnderTime.IgnoreBy, @item.WorkingUnderTime.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipWorkingUnderTime = string.Format(Messages.IgnoreDisciplineDetail, @item.WorkingUnderTime.IgnoreBy, @item.WorkingUnderTime.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipWorkingUnderTime">
                         @if (item.WorkingUnderTime.Value > 0)
@@ -170,7 +170,7 @@
                     </td>
                     @if (item.LateIn.IgnoreBy != null)
                     {
-                        tooltipLateIn = string.Format(Messages.IgnoreDisciplineDetail, @item.LateIn.IgnoreBy, @item.LateIn.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipLateIn = string.Format(Messages.IgnoreDisciplineDetail, @item.LateIn.IgnoreBy, @item.LateIn.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipLateIn">
                         @if (item.LateIn.Value > 0)
@@ -197,7 +197,7 @@
                     </td>
                     @if (item.EarlyOut.IgnoreBy != null)
                     {
-                        tooltipEarlyOut = string.Format(Messages.IgnoreDisciplineDetail, @item.EarlyOut.IgnoreBy, @item.EarlyOut.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipEarlyOut = string.Format(Messages.IgnoreDisciplineDetail, @item.EarlyOut.IgnoreBy, @item.EarlyOut.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title = "@tooltipEarlyOut">
                         @if (item.EarlyOut.Value > 0)
@@ -224,7 +224,7 @@
                     </td>
                     @if (item.Absent.IgnoreBy != null)
                     {
-                        tooltipAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.Absent.IgnoreBy, @item.Absent.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.Absent.IgnoreBy, @item.Absent.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipAbsent">
                         @if (item.Absent.Value > 0)
@@ -251,7 +251,7 @@
                     </td>
                     @if (item.UnpaidLeave.IgnoreBy != null)
                     {
-                        tooltipUnpaidLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeave.IgnoreBy, @item.UnpaidLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipUnpaidLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeave.IgnoreBy, @item.UnpaidLeave.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipUnpaidLeave">
                         @if (item.UnpaidLeave.Value > 0)
@@ -278,7 +278,7 @@
                     </td>
                     @if (item.UnpaidLeaveAbsent.IgnoreBy != null)
                     {
-                        tooltipUnpaidLeaveAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeaveAbsent.IgnoreBy, @item.UnpaidLeaveAbsent.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipUnpaidLeaveAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeaveAbsent.IgnoreBy, @item.UnpaidLeaveAbsent.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipUnpaidLeaveAbsent">
                         @if (item.UnpaidLeaveAbsent.Value > 0)
@@ -305,7 +305,7 @@
                     </td>
                     @if (item.ChangeShift.IgnoreBy != null)
                     {
-                        tooltipChangeShift = string.Format(Messages.IgnoreDisciplineDetail, @item.ChangeShift.IgnoreBy, @item.ChangeShift.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipChangeShift = string.Format(Messages.IgnoreDisciplineDetail, @item.ChangeShift.IgnoreBy, @item.ChangeShift.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipChangeShift">
                         @if (item.ChangeShift.Value > 0)
@@ -332,7 +332,7 @@
                     </td>
                     @if (item.UnplannedLeave.IgnoreBy != null)
                     {
-                        tooltipUnplannedLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnplannedLeave.IgnoreBy, @item.UnplannedLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipUnplannedLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnplannedLeave.IgnoreBy, @item.UnplannedLeave.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipUnplannedLeave">
                         @if (item.UnplannedLeave.Value > 0)
@@ -359,7 +359,7 @@
                     </td>
                     @if (item.WeekendLeave.IgnoreBy != null)
                     {
-                        tooltipWeekendLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.WeekendLeave.IgnoreBy, @item.WeekendLeave.IgnoreDate.ToDateMonthYearFormatedDate());
+                        tooltipWeekendLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.WeekendLeave.IgnoreBy, @item.WeekendLeave.IgnoreDate.ToShortFormatedDate());
                     }
                     <td class="tooltip-tipsy" title="@tooltipWeekendLeave">
                         @if (item.WeekendLeave.Value > 0)
