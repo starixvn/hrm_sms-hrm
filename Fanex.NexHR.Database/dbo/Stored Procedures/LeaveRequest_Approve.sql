@@ -170,7 +170,7 @@ BEGIN
 
 			EXEC dbo.DisciplineIgnoreDetail_Update
 				@ActorId = @ActorId
-				,@IgnoreDetailXml = @DisciplineXml
+				,@DisciplineIgnoreXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
