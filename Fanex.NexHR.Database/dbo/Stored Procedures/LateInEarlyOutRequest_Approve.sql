@@ -30,6 +30,8 @@ BEGIN
 		,@EarlyOut INT
 		,@requestTypeId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
+		,@ApproverId INT
+		,@HrApproverId INT = NULL
 		-- request type
 		,@LateInRequestTypeId TINYINT = 3
 		,@EarlyOutRequestTypeId TINYINT = 4
@@ -47,6 +49,7 @@ BEGIN
 		,@LateIn = LateInMins
 		,@EarlyOut = EarlyOutMins
 		,@requestTypeId = r.RequestType
+		,@ApproverId = r.ApproverId
 	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
@@ -79,7 +82,7 @@ BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @VerifiedStatusId
 			,VerifiedStatus = @VerifiedStatusId
-			,VerifierId = @ActorId
+			--,VerifierId = @ActorId
 			,VerifiedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
@@ -96,7 +99,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 
-				EXEC dbo.DisciplineIgnoreDetail_Update
+			EXEC dbo.DisciplineIgnoreDetail_Update
 				@ActorId = @ActorId
 				,@DisciplineIgnoreXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
@@ -107,7 +110,7 @@ BEGIN
 		SET CurrentStatus = @ApprovedStatusId
 			,ApprovedStatus = @VerifiedStatusId
 			,ApproverComment = @Comment
-			,ApproverId = @ActorId
+			--,ApproverId = @ActorId
 			,ApprovedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
@@ -144,6 +147,15 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
+	IF(@ActorId <> @ApproverId)
+	BEGIN
+		SELECT @HrApproverId = @ActorId
+	END
+
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
+		,@HrApproverId = @HrApproverId
 END
+
+
+

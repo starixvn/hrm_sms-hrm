@@ -703,6 +703,9 @@ BEGIN
 		,ap_A.EmpId AS ApproverId
 		,ap_A.NickName AS ApproverNickName
 		,ap_A.FullName AS ApproverFullName
+		,ap_AH.EmpId AS ApprovedId
+		,ap_AH.NickName AS ApprovedNickName
+		,ap_AH.FullName AS ApprovedFullName
 		,r.ApprovedDate
 		,r.ApprovedStatus
 		,ap_H.EmpId AS ProcessedId
@@ -728,6 +731,7 @@ BEGIN
 		LEFT JOIN dbo.Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
 		LEFT JOIN dbo.Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
 		LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
+		LEFT JOIN dbo.Employee AS ap_AH WITH (NOLOCK) ON ap_AH.empid = (SELECT TOP 1 ApproverId FROM WorkingTimeRequestHistory WITH (NOLOCK) WHERE RequestId = r.RequestId ORDER BY LogDate DESC)
 		LEFT JOIN #tblTotalDaysRequestInMonth AS rm ON r.empID = rm.empid
 		AND r.RequestType = rm.RequestType
 		LEFT JOIN #tblGeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId

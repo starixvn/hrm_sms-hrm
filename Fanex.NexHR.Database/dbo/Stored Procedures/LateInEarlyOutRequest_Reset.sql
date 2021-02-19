@@ -27,6 +27,7 @@ BEGIN
 		,@VerifierId INT
 		,@ApproverId INT
 		,@StatusId TINYINT
+		,@HrApproverId INT = NULL
 		-- request type
 		,@LateInRequestTypeId TINYINT = 3
 		,@EarlyOutRequestTypeId TINYINT = 4
@@ -68,19 +69,19 @@ BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
 			,VerifiedStatus = @PendingStatusId
-			,VerifierId = @ActorId
+			--,VerifierId = @ActorId
 			,VerifiedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF @RoleId = @ApproverRoleId
+	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)))
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
 			,VerifiedStatus = @PendingStatusId
 			,ApprovedStatus = @PendingStatusId
-			,ApproverId = @ActorId
+			--,ApproverId = @ActorId
 			,ApprovedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
@@ -108,7 +109,7 @@ BEGIN
 				,1
 		END
 	END
-	ELSE IF @RoleId = @HRRoleId
+	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
@@ -142,6 +143,13 @@ BEGIN
 		END
 	END
 
+	IF(@ActorId <> @ApproverId)
+	BEGIN
+		SELECT @HrApproverId = @ActorId
+	END
+
+
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
+		,@HrApproverId = @HrApproverId
 END

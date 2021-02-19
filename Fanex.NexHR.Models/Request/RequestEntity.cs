@@ -24,6 +24,8 @@
 
         public Employee ApprovedBy { get; set; }
 
+        public Employee Approver { get; set; }
+
         public Employee ProcessedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; }

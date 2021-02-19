@@ -163,11 +163,17 @@
                 NickName = requestInfo.VerifierNickName ?? string.Empty,
                 FullName = requestInfo.VerifierFullName ?? string.Empty
             };
-            entity.ApprovedBy = new Employee
+            entity.Approver = new Employee
             {
                 Id = requestInfo.ApproverId ?? 0,
                 NickName = requestInfo.ApproverNickName ?? string.Empty,
                 FullName = requestInfo.ApproverFullName ?? string.Empty
+            };
+            entity.ApprovedBy = new Employee
+            {
+                Id = requestInfo.ApprovedId ?? 0,
+                NickName = requestInfo.ApprovedNickName ?? string.Empty,
+                FullName = requestInfo.ApprovedFullName ?? string.Empty
             };
             entity.ProcessedBy = new Employee
             {

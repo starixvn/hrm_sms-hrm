@@ -29,6 +29,8 @@ BEGIN
 		,@ToDate DATE
 		,@EmpId INT
 		,@ProcessedDate DATETIME = GETDATE()
+		,@ApproverId INT
+		,@HrApproverId INT = NULL
 		-- change shift type
 		,@ChangeShift TINYINT = 1
 		,@MoveOffDay TINYINT = 2
@@ -82,7 +84,7 @@ BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @VerifiedStatusId
 			,VerifiedStatus = @VerifiedStatusId
-			,VerifierId = @ActorId
+			--,VerifierId = @ActorId
 			,VerifiedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
@@ -99,7 +101,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 
-			EXEC dbo.DisciplineIgnoreDetail_Update
+				EXEC dbo.DisciplineIgnoreDetail_Update
 				@ActorId = @ActorId
 				,@DisciplineIgnoreXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
@@ -110,7 +112,7 @@ BEGIN
 		SET CurrentStatus = @ApprovedStatusId
 			,ApprovedStatus = @VerifiedStatusId
 			,ApproverComment = @Comment
-			,ApproverId = @ActorId
+			--,ApproverId = @ActorId
 			,ApprovedDate = @ProcessedDate
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
@@ -240,6 +242,23 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
+	SELECT @ApproverId = r.ApproverId
+	FROM dbo.ChangeShiftRequest AS cr WITH (NOLOCK)
+		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cr.RequestId = r.RequestId
+		AND r.RequestId = @RequestId
+
+	IF(@ActorId <> @ApproverId)
+	BEGIN
+		SELECT @HrApproverId = @ActorId
+	END
+
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
+		,@HrApproverId = @HrApproverId
 END
+
+
+
+
+
+

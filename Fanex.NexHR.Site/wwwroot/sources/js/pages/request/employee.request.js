@@ -499,7 +499,8 @@ $(function () {
             case 'hrMenu':
                 listItem = {
                     'Process': { name: 'Process', icon: renderIconOk },
-                    'Void': { name: 'Void', icon: renderIconRemove }
+                    'Void': { name: 'Void', icon: renderIconRemove },
+                    'Reset': { name: 'Reset', icon: renderIconRemove }
                 };
                 break;
             case 'verifierMenu':

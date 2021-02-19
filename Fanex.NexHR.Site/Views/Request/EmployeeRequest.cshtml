@@ -136,7 +136,7 @@
                         {
                             <td>
                                 <div class="checkbox">
-                                    @if (request.ApprovedBy.Id == Model.CurrentUserId
+                                    @if (request.Approver.Id == Model.CurrentUserId
                                         && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
                                     {
                                         <input type="checkbox"
@@ -207,7 +207,7 @@
                             <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.ApprovedBy.FullName">@request.ApprovedBy.NickName</span>
+                            <span class="tooltip-tipsy" title="@request.Approver.FullName">@request.Approver.NickName</span>
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
@@ -394,7 +394,7 @@
     switch (request.Status.Id)
     {
         case (byte)CurrentRequestStatus.Pending:
-            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            if (request.Approver.Id == Model.CurrentUserId)
             {
                 <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                    href="javascript:void(0);" class="approver-actions tooltip-tipsy"
@@ -418,7 +418,7 @@
             }
             break;
         case (byte)CurrentRequestStatus.Verified:
-            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            if (request.Approver.Id == Model.CurrentUserId)
             {
                 <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                    href="javascript:void(0);" class="approver-actions tooltip-tipsy"
@@ -458,7 +458,7 @@
             break;
         case (byte)CurrentRequestStatus.Approved:
         case (byte)CurrentRequestStatus.Rejected:
-            if (request.ApprovedBy.Id == Model.CurrentUserId)
+            if (request.Approver.Id == Model.CurrentUserId)
             {
                 <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                    href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
@@ -523,7 +523,7 @@
             </a>
             break;
         case (byte)CurrentRequestStatus.Rejected:
-            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.Approver.NickName (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </span>
             break;

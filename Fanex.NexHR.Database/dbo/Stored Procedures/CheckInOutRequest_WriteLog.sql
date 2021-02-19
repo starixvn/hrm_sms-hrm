@@ -1,6 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[CheckInOutRequest_WriteLog] @RequestId BIGINT
 	,@Comment NVARCHAR(2000) = ''
+	,@HrApproverId INT = NULL
 AS
 /*
 Created: Quinn.Vo@20190624
@@ -102,7 +103,7 @@ BEGIN
 		,@ApproverComment
 		,@CurrentStatus
 		,@VerifierId
-		,@ApproverId
+		,ISNULL(@HrApproverId, @ApproverId)
 		,@HRId
 		,@VerifiedDate
 		,@ApprovedDate
