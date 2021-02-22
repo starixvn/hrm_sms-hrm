@@ -24,7 +24,6 @@ BEGIN
 		,@EmpId INT
 		,@ProcessedDate DATETIME = GETDATE()
 		,@ApproverId INT
-		,@HrApproverId INT = NULL
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -113,19 +112,8 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
-	SELECT @ApproverId = r.ApproverId
-	FROM dbo.KeepInViewRequest AS kr WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON kr.RequestId = r.RequestId
-		AND r.RequestId = @RequestId
-
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-		,@HrApproverId = @HrApproverId
 END
 
 

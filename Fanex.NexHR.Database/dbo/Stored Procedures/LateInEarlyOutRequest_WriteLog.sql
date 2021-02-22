@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[LateInEarlyOutRequest_WriteLog] @RequestId BIGINT
 	,@Comment NVARCHAR(2000) = ''
-	,@HrApproverId INT = NULL
 AS
 /*
 Created: Quinn.Vo@20190625
@@ -105,7 +104,7 @@ BEGIN
 		,@ApproverComment
 		,@CurrentStatus
 		,@VerifierId
-		,ISNULL(@HrApproverId, @ApproverId)
+		,@ApproverId
 		,@HRId
 		,@VerifiedDate
 		,@ApprovedDate

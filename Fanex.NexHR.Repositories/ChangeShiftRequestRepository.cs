@@ -77,15 +77,17 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, ChangeShiftRequest>(
-                    (request, employee, verifier, approver) =>
+                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
+                    (request, employee, verifier, approver, modifier, creater) =>
                     {
                         request.Requester = employee;
                         request.Verifier = verifier;
                         request.Approver = approver;
+                        request.Modifier = modifier;
+                        request.Creater = creater;
                         return request;
                     },
-                    splitOn: "EmpId, VerifierId, ApproverId",
+                    splitOn: "EmpId, VerifierId, ApproverId, ModifierId, CreaterId",
                     parameterSet: criteria);
             }
         }

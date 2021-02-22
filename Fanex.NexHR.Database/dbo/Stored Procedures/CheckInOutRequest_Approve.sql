@@ -32,7 +32,6 @@ BEGIN
 		,@RequestTime DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
 		,@ApproverId INT
-		,@HrApproverId INT = NULL
 		-- request type
 		,@CheckInRequestTypeId TINYINT = 1
 		,@CheckOutRequestTypeId TINYINT = 2
@@ -49,7 +48,6 @@ BEGIN
 		,@RequestTime = RequestTime
 		,@OnDate = OnDate
 		,@RequestTypeId = r.RequestType
-		,@ApproverId = r.ApproverId
 	FROM dbo.CheckInOutRequest AS cio WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cio.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
@@ -146,12 +144,6 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.CheckInOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-		,@HrApproverId = @HrApproverId
 END

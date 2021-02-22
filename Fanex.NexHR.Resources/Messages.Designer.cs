@@ -385,6 +385,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By {0} on {1}.
+        /// </summary>
+        public static string LogDate {
+            get {
+                return ResourceManager.GetString("LogDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Memo subject.
         /// </summary>
         public static string MemoSubject {

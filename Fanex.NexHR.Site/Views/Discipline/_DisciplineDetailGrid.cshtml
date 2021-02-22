@@ -114,7 +114,7 @@
                             <span>-</span>
                         }
                     </td>
-                    @if (item.MissingCheckInOut.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.MissingCheckInOut.IgnoreBy))
                     {
                         tooltipMissingCheckInOut = string.Format(Messages.IgnoreDisciplineDetail, @item.MissingCheckInOut.IgnoreBy, @item.MissingCheckInOut.IgnoreDate.ToShortFormatedDate());
                     }
@@ -141,7 +141,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.WorkingUnderTime.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.WorkingUnderTime.IgnoreBy))
                     {
                         tooltipWorkingUnderTime = string.Format(Messages.IgnoreDisciplineDetail, @item.WorkingUnderTime.IgnoreBy, @item.WorkingUnderTime.IgnoreDate.ToShortFormatedDate());
                     }
@@ -168,7 +168,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.LateIn.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.LateIn.IgnoreBy))
                     {
                         tooltipLateIn = string.Format(Messages.IgnoreDisciplineDetail, @item.LateIn.IgnoreBy, @item.LateIn.IgnoreDate.ToShortFormatedDate());
                     }
@@ -195,7 +195,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.EarlyOut.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.EarlyOut.IgnoreBy))
                     {
                         tooltipEarlyOut = string.Format(Messages.IgnoreDisciplineDetail, @item.EarlyOut.IgnoreBy, @item.EarlyOut.IgnoreDate.ToShortFormatedDate());
                     }
@@ -222,7 +222,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.Absent.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.Absent.IgnoreBy))
                     {
                         tooltipAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.Absent.IgnoreBy, @item.Absent.IgnoreDate.ToShortFormatedDate());
                     }
@@ -249,7 +249,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.UnpaidLeave.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.UnpaidLeave.IgnoreBy))
                     {
                         tooltipUnpaidLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeave.IgnoreBy, @item.UnpaidLeave.IgnoreDate.ToShortFormatedDate());
                     }
@@ -276,7 +276,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.UnpaidLeaveAbsent.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.UnpaidLeaveAbsent.IgnoreBy))
                     {
                         tooltipUnpaidLeaveAbsent = string.Format(Messages.IgnoreDisciplineDetail, @item.UnpaidLeaveAbsent.IgnoreBy, @item.UnpaidLeaveAbsent.IgnoreDate.ToShortFormatedDate());
                     }
@@ -303,7 +303,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.ChangeShift.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.ChangeShift.IgnoreBy))
                     {
                         tooltipChangeShift = string.Format(Messages.IgnoreDisciplineDetail, @item.ChangeShift.IgnoreBy, @item.ChangeShift.IgnoreDate.ToShortFormatedDate());
                     }
@@ -330,7 +330,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.UnplannedLeave.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.UnplannedLeave.IgnoreBy))
                     {
                         tooltipUnplannedLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.UnplannedLeave.IgnoreBy, @item.UnplannedLeave.IgnoreDate.ToShortFormatedDate());
                     }
@@ -357,7 +357,7 @@
                             <span class="float-left">-</span>
                         }
                     </td>
-                    @if (item.WeekendLeave.IgnoreBy != null)
+                    @if (!string.IsNullOrWhiteSpace(item.WeekendLeave.IgnoreBy))
                     {
                         tooltipWeekendLeave = string.Format(Messages.IgnoreDisciplineDetail, @item.WeekendLeave.IgnoreBy, @item.WeekendLeave.IgnoreDate.ToShortFormatedDate());
                     }

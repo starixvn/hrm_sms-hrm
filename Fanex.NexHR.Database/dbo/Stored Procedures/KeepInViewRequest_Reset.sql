@@ -25,7 +25,6 @@ BEGIN
 		,@ApproverId INT
 		,@TotalMinutes INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@HrApproverId INT = NULL
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -59,7 +58,7 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)))
+	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = @StatusId))
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
@@ -90,7 +89,7 @@ BEGIN
 				,1
 		END
 	END
-	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)
+	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = @StatusId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
@@ -126,12 +125,6 @@ BEGIN
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
 
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.KeepInViewRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
-		,@HrApproverId = @HrApproverId
 END

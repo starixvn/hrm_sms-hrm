@@ -40,6 +40,12 @@ BEGIN
 		,pr.EmpId AS HRId
 		,pr.NickName
 		,pr.FullName
+		,m.EmpId AS ModifierId
+		,m.NickName
+		,m.FullName
+		,c.EmpId AS CreaterId
+		,c.NickName
+		,c.FullName
 	FROM dbo.WorkingTimeRequestHistory AS wk WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequestHistory AS lr WITH (NOLOCK) ON wk.HistoryId = lr.HistoryId
 		AND lr.RequestId = @RequestId
@@ -49,6 +55,8 @@ BEGIN
 		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
 		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
 		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		LEFT JOIN dbo.Employee AS m WITH (NOLOCK) ON wk.ModifiedBy = m.EmpId
+		LEFT JOIN dbo.Employee AS c WITH (NOLOCK) ON c.EmpId = (SELECT TOP 1 CreatedBy FROM WorkingTimeRequestHistory WITH (NOLOCK) WHERE RequestId = @RequestId ORDER BY LogDate ASC)
 	ORDER BY wk.LogDate DESC
 
 	SELECT wk.HistoryId

@@ -363,4 +363,7 @@
   <data name="IgnoreDisciplineDetail" xml:space="preserve">
     <value>Ignored by {0} on {1}</value>
   </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>By {0} on {1}</value>
+  </data>
 </root>

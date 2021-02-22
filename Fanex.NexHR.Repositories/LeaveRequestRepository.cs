@@ -85,17 +85,18 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, LeaveRequest>(
-                        (request, leaveType, employee, verifier, approver, hr) =>
+                    var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, Requester, LeaveRequest >(
+                        (request, leaveType, employee, verifier, approver, hr, modifier) =>
                         {
                             request.LeaveType = leaveType;
                             request.Requester = employee;
                             request.Verifier = verifier;
                             request.Approver = approver;
                             request.HR = hr;
+                            request.Modifier = modifier;
                             return request;
                         },
-                        splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").ToList();
+                        splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId, ModifierId").ToList();
                     var leaveDetails = multi.Read<LeaveRequestDetail>();
 
                     foreach (var leave in leaves)

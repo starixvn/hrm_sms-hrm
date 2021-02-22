@@ -119,10 +119,10 @@
             @Html.LabelFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "control-label" })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number", @min = 0 })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number", @min = 0 })
         </div>
         @Html.ValidationMessageFor(model => model.LocalBasicAnnualLeaveBalance)
         @Html.ValidationMessageFor(model => model.ExpatBasicAnnualLeaveBalance)
@@ -132,10 +132,10 @@
             @Html.LabelFor(model => model.LocalWorkingDays, new { @class = "control-label" })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", @type = "number", @min = 1, @max = 31 })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", @type = "number", @min = 1, @max = 31 })
         </div>
         @Html.ValidationMessageFor(model => model.LocalWorkingDays)
         @Html.ValidationMessageFor(model => model.ExpatWorkingDays)
@@ -145,10 +145,10 @@
             @Html.LabelFor(model => model.LocalWorkingHours, new { @class = "control-label" })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", @type = "number", @min = 1, @max = 24 })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", @type = "number", @min = 1, @max = 24 })
         </div>
         @Html.ValidationMessageFor(model => model.LocalWorkingHours)
         @Html.ValidationMessageFor(model => model.ExpatWorkingHours)
@@ -157,10 +157,10 @@
             @Html.LabelFor(model => model.LocalOffDaysbyWeek, new { @class = "control-label" })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", @type = "number", @min = 0, @max = 5 })
         </div>
         <div class="input-form input-number">
-            @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+            @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", @type = "number", @min = 0, @max = 5 })
         </div>
         @Html.ValidationMessageFor(model => model.LocalOffDaysbyWeek)
         @Html.ValidationMessageFor(model => model.ExpatOffDaysbyWeek)

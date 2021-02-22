@@ -30,8 +30,6 @@ BEGIN
 		,@EarlyOut INT
 		,@requestTypeId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@ApproverId INT
-		,@HrApproverId INT = NULL
 		-- request type
 		,@LateInRequestTypeId TINYINT = 3
 		,@EarlyOutRequestTypeId TINYINT = 4
@@ -49,7 +47,6 @@ BEGIN
 		,@LateIn = LateInMins
 		,@EarlyOut = EarlyOutMins
 		,@requestTypeId = r.RequestType
-		,@ApproverId = r.ApproverId
 	FROM dbo.LateInEarlyOutRequest AS lieo WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lieo.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
@@ -147,14 +144,8 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.LateInEarlyOutRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-		,@HrApproverId = @HrApproverId
 END
 
 

@@ -24,7 +24,6 @@ BEGIN
 		,@ApproverId INT
 		,@StatusId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@HrApproverId INT = NULL
 		,@CountDay INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
@@ -120,7 +119,7 @@ BEGIN
 			EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 		END
 	END
-	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)))
+	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = @StatusId))
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
@@ -163,7 +162,7 @@ BEGIN
 			EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
 		END
 	END
-	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = (SELECT CurrentStatus FROM WorkingTimeRequest WITH (NOLOCK) WHERE RequestId = @RequestId)
+	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = @StatusId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
@@ -220,12 +219,6 @@ BEGIN
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
 
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = ''
-		,@HrApproverId = @HrApproverId
 END

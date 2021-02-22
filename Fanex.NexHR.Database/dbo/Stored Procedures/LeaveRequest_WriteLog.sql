@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[LeaveRequest_WriteLog] @RequestId BIGINT
 	,@Comment NVARCHAR(2000) = ''
-	,@HrApproverId INT = NULL
 AS
 /*
 Created: 20190620@Quinn.Vo
@@ -99,7 +98,7 @@ BEGIN
 		,@ApproverComment
 		,@CurrentStatus
 		,@VerifierId
-		,ISNULL(@HrApproverId, @ApproverId)
+		,@ApproverId
 		,@HRId
 		,@VerifiedDate
 		,@ApprovedDate

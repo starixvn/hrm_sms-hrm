@@ -32,8 +32,6 @@ BEGIN
 		,@ProcessedDate DATETIME = GETDATE()
 		,@LeaveTypeId INT
 		,@CountDay INT
-		,@ApproverId INT
-		,@HrApproverId INT = NULL
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -218,19 +216,8 @@ BEGIN
 		WHERE RequestId = @RequestId
 	END
 
-	SELECT @ApproverId = r.ApproverId
-	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
-		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
-		AND r.RequestId = @RequestId
-
-	IF(@ActorId <> @ApproverId)
-	BEGIN
-		SELECT @HrApproverId = @ActorId
-	END
-
 	EXEC dbo.LeaveRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
-		,@HrApproverId = @HrApproverId
 END
 
 
