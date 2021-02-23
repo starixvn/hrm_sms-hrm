@@ -93,6 +93,39 @@ BEGIN
 	FROM dbo.OTDailyRequest AS req WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblRequestIds AS tmp ON req.RequestId = tmp.RequestId
 
+	IF @RoleId = @ApproverRoleId
+	BEGIN
+		DECLARE @RequestId BIGINT
+			,@EmpId INT
+			,@FromDate DATE
+			,@ToDate DATE
+
+		WHILE EXISTS (
+				SELECT 1
+				FROM #tblRequestIds WITH (NOLOCK)
+				)
+		BEGIN
+			SELECT TOP 1 @RequestId = RequestId
+			FROM #tblRequestIds WITH (NOLOCK)
+
+			SELECT @EmpId = EmpId
+				,@FromDate = MIN(OvertimeDate)
+				,@ToDate = MAX(OvertimeDate)
+			FROM dbo.OTDailyRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+			GROUP BY EmpId
+
+			EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
+				,@toDate = @ToDate
+				,@empIds = @EmpId
+				,@isUpdateRequestData = 1
+
+			DELETE
+			FROM #tblRequestIds
+			WHERE RequestId = @RequestId
+		END
+	END
+
 	DROP TABLE #tblRequestIds
 
 	-- write log
