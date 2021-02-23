@@ -52,18 +52,17 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.Query<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest >(
-                        (request, employee, verifier, approver, hr, modifier, creater) =>
+                var entity = db.Query<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest >(
+                        (request, employee, verifier, approver, hr, modifier) =>
                         {
                             request.Requester = employee;
                             request.Verifier = verifier;
                             request.Approver = approver;
                             request.HR = hr;
                             request.Modifier = modifier;
-                            request.Creater = creater;
                             return request;
                         },
-                        splitOn: "EmpId, VerifierId, ApproverId, HRId, ModifierId, CreaterId",
+                        splitOn: "EmpId, VerifierId, ApproverId, HRId, ModifierId",
                         parameterSet: criteria);
 
                 return entity.ToList();

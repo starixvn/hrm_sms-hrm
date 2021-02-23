@@ -29,7 +29,6 @@
                 @foreach (LateInEarlyOutRequest request in Model)
                 {
                     var totalMins = request.RequestTypeId == (byte)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins;
-                    var logDate = string.Empty;
                     <tr>
                         <td>@(index++)</td>
                         <td>@request.Requester.Team</td>
@@ -76,15 +75,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        @if (request.Modifier != null)
-                        {
-                            logDate = string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate());
-                        }
-                        else
-                        {
-                            logDate = string.Format(Messages.LogDate, @request.Creater.Nickname, @request.InsertedDate.ToShortFormatedDate());
-                        }
-                        <td class="align-left">@logDate</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

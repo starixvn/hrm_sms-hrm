@@ -26,7 +26,6 @@
                 @{int index = 1;}
                 @foreach (KeepInViewRequest request in Model)
                 {
-                    var logDate = string.Empty;
                     var fromTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.FromTime.ToString("HH:mm");
                     var toTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.ToTime.ToString("HH:mm");
                     <tr>
@@ -62,15 +61,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        @if (request.Modifier != null)
-                        {
-                            logDate = string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate());
-                        }
-                        else
-                        {
-                            logDate = string.Format(Messages.LogDate, @request.Creater.Nickname, @request.InsertedDate.ToShortFormatedDate());
-                        }
-                        <td class="align-left">@logDate</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

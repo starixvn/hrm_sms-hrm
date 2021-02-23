@@ -332,7 +332,6 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
-    <Mapping DataField="CreaterId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
     <Setting Key="LeaveRequest_GetCalendar" SpName="LeaveRequest_GetCalendar" DbName="nexhrx" Plain="0">
@@ -365,7 +364,6 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
-    <Mapping DataField="CreaterId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="KeepInViewRequest_GetDisableDate" SpName="KeepInViewRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
   </Function>
@@ -399,7 +397,6 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
-    <Mapping DataField="CreaterId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="CheckInOutRequest_GetDetailToReviewDiscipline" SpName="CheckInOutRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestType" ObjectProperty="Id" />
@@ -432,7 +429,6 @@
       <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
-      <Mapping DataField="CreaterId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="LateInEarlyOutRequest_GetDetailToReviewDiscipline" SpName="LateInEarlyOutRequest_GetDetailToReviewDiscipline" DbName="nexhrx" Plain="0">
       <Mapping DataField="RequestType" ObjectProperty="Id" />
@@ -498,7 +494,6 @@
       <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
-    <Mapping DataField="CreaterId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="ChangeShiftRequest_Approve" SpName="ChangeShiftRequest_Approve" DbName="nexhrx" Plain="0" />
     <Setting Key="ChangeShiftRequest_Reset" SpName="ChangeShiftRequest_Reset" DbName="nexhrx" Plain="0" />

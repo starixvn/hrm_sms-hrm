@@ -48,9 +48,6 @@ BEGIN
 		,m.EmpId AS ModifierId
 		,m.NickName
 		,m.FullName
-		,c.EmpId AS CreaterId
-		,c.NickName
-		,c.FullName
 	FROM dbo.WorkingTimeRequestHistory AS wk WITH (NOLOCK)
 		INNER JOIN dbo.LateInEarlyOutRequestHistory AS le WITH (NOLOCK) ON wk.HistoryId = le.HistoryId
 		INNER JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON le.OnDate = cl.WorkDate
@@ -63,8 +60,7 @@ BEGIN
 		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
 		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
 		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
-		LEFT JOIN dbo.Employee AS m WITH (NOLOCK) ON wk.ModifiedBy = m.EmpId
-		LEFT JOIN dbo.Employee AS c WITH (NOLOCK) ON c.EmpId = (SELECT TOP 1 CreatedBy FROM WorkingTimeRequestHistory WITH (NOLOCK) WHERE RequestId = @RequestId ORDER BY LogDate ASC)
+		LEFT JOIN dbo.Employee AS m WITH (NOLOCK) ON ISNULL(wk.ModifiedBy,wk.CreatedBy) = m.EmpId
 	WHERE le.RequestId = @RequestId
 	ORDER BY wk.LogDate DESC
 END
