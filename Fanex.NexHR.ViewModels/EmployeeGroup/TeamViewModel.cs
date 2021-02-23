@@ -61,17 +61,14 @@
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingDaysPerMonth), ResourceType = typeof(Labels))]
-        [Range(1, 31, ErrorMessage = "Working Days of Local must be between 1 and 31.")]
         public byte? LocalWorkingDays { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
-        [Range(1, 24, ErrorMessage = "Working Hours of Local must be between 1 and 24.")]
         public byte? LocalWorkingHours { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
-        [Range(0, 5, ErrorMessage = "Number of Offdays of Local must be between 0 and 5.")]
         public byte? LocalOffDaysbyWeek { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
@@ -80,17 +77,14 @@
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingDaysPerMonth), ResourceType = typeof(Labels))]
-        [Range(1, 31, ErrorMessage = "Working Days of Expat must be between 1 and 31.")]
         public byte? ExpatWorkingDays { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingHoursPerDay), ResourceType = typeof(Labels))]
-        [Range(1, 24, ErrorMessage = "Working Hours of Expat must be between 1 and 24.")]
         public byte? ExpatWorkingHours { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
-        [Range(0, 5, ErrorMessage = "Number of Offdays of Expat must be between 0 and 5.")]
         public byte? ExpatOffDaysbyWeek { get; set; }
     }
 }
