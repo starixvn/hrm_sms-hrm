@@ -39,7 +39,11 @@ BEGIN
 		,Amount
 		)
 	SELECT emp.EmpId
-		,ISNULL(gr.LocalBasicAnnualLeaveBalance, 0)
+		,CASE
+			WHEN empsum.IsLocal = 1
+			THEN ISNULL(gr.LocalBasicAnnualLeaveBalance, 0)
+			ELSE ISNULL(gr.ExpatBasicAnnualLeaveBalance, 0)
+		END
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0

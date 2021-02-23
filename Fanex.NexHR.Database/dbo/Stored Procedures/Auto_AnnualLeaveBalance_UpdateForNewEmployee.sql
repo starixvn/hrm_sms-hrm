@@ -36,10 +36,17 @@ BEGIN
 		,Amount
 		)
 	SELECT emp.EmpId
-		,ROUND((ISNULL(gr.LocalBasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
+		,CASE
+			WHEN empsum.IsLocal = 1
+			THEN ROUND((ISNULL(gr.LocalBasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
 				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') + 1
 				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') END
 				), 0)
+			ELSE ROUND((ISNULL(gr.ExpatBasicAnnualLeaveBalance, 0) / 12.0) * (CASE 
+				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') + 1
+				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') END
+				), 0)
+		END
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
