@@ -5,6 +5,7 @@
     [CreditMinutes] INT      NULL,
     [DeductMinutes] INT      NULL,
     [InsertedDate]  DATETIME NULL,
+    [MinutesBalance] INT      NULL,
     CONSTRAINT [PK_KeepInViewTrans] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC, [RequestId] ASC)
 );
 

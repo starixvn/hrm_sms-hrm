@@ -60,6 +60,7 @@ BEGIN
 			,CreditMinutes
 			,DeductMinutes
 			,InsertedDate
+			,MinutesBalance
 			)
 		VALUES (
 			@EmpId
@@ -68,6 +69,7 @@ BEGIN
 			,@TotalMinutes
 			,0
 			,GETDATE()
+			,@TotalMinutes
 			)
 	END
 END

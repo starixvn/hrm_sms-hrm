@@ -12,21 +12,18 @@ BEGIN
 
 	SELECT @FromDate = DATEADD(DAY, -1, DATEADD(MONTH, -1, @Date))
 
-	SELECT @KIVBalance = SUM(ISNULL(CreditMinutes, 0)) - SUM(CASE 
-				WHEN @RequestId IS NULL THEN ISNULL(DeductMinutes, 0)
-				ELSE CASE 
-						WHEN RequestId = @RequestId THEN 0
-						ELSE ISNULL(DeductMinutes, 0)
-						END
-				END)
+	--SELECT @KIVBalance = SUM(ISNULL(CreditMinutes, 0)) - SUM(CASE 
+	--			WHEN @RequestId IS NULL THEN ISNULL(DeductMinutes, 0)
+	--			ELSE CASE 
+	--					WHEN RequestId = @RequestId THEN 0
+	--					ELSE ISNULL(DeductMinutes, 0)
+	--					END
+	--			END)
+
+	SELECT @KIVBalance = SUM(ISNULL(MinutesBalance, 0))
 	FROM dbo.KeepInViewByHourTrans WITH (NOLOCK)
 	WHERE EmpId = @EmpID
 		AND WorkDate > @FromDate
-
-	IF(@KIVBalance < 0)
-	BEGIN
-		SELECT @KIVBalance = 0
-	END
 
 	RETURN ISNULL(@KIVBalance, 0)
 END

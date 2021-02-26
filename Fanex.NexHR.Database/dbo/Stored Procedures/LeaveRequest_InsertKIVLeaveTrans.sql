@@ -19,6 +19,11 @@ BEGIN
 		,@KeepInViewByDayLeaveType INT = 10
 		,@KeepInViewByHourLeaveType INT = 48
 		,@startTime DATETIME = GETDATE()
+		,@deductMinutes INT
+		,@minutesBalance INT
+		,@empId INT
+		,@onDate DATE
+		,@RequestTransId BIGINT
 
 	IF EXISTS (
 			SELECT 1
@@ -37,6 +42,34 @@ BEGIN
 			WHERE Requestid = @RequestId
 			)
 	BEGIN
+
+		SELECT @empId = EmpId
+			,@onDate = WorkDate
+			,@deductMinutes = DeductMinutes 
+		FROM KeepInViewByHourTrans WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+
+		WHILE(@deductMinutes > 0)
+		BEGIN
+			SELECT TOP 1 @deductMinutes = @deductMinutes - CreditMinutes, @RequestTransId = RequestId
+			FROM KeepInViewByHourTrans WITH (NOLOCK)
+			WHERE EmpId = @empId AND WorkDate > DATEADD(DAY, -1, DATEADD(MONTH, -1, @onDate)) AND CreditMinutes > 0 AND CreditMinutes > MinutesBalance
+			ORDER BY WorkDate ASC
+
+			IF(@deductMinutes >= 0 )
+			BEGIN
+				UPDATE KeepInViewByHourTrans
+				SET MinutesBalance = CreditMinutes
+				WHERE RequestId = @RequestTransId
+			END
+			ELSE
+			BEGIN
+				UPDATE KeepInViewByHourTrans
+				SET MinutesBalance = MinutesBalance + CreditMinutes + @deductMinutes
+				WHERE RequestId = @RequestTransId
+			END
+		END
+
 		DELETE
 		FROM dbo.KeepInViewByHourTrans
 		WHERE RequestId = @RequestId
@@ -99,6 +132,7 @@ BEGIN
 
 	IF ISNULL(@KIVLeaveHour, 0) > 0
 	BEGIN
+
 		INSERT INTO dbo.KeepInViewByHourTrans (
 			EmpId
 			,WorkDate
@@ -106,6 +140,7 @@ BEGIN
 			,CreditMinutes
 			,DeductMinutes
 			,InsertedDate
+			,MinutesBalance
 			)
 		SELECT EmpId
 			,ldt.OnDate
@@ -113,7 +148,36 @@ BEGIN
 			,0
 			,DATEDIFF(MI, ldt.FromTime, ldt.ToTime)
 			,@startTime
+			,0
 		FROM dbo.LeaveRequestDetail ldt WITH (NOLOCK)
 		WHERE Requestid = @RequestId
+
+		SELECT @empId = EmpId
+			,@onDate = WorkDate
+			,@deductMinutes = DeductMinutes 
+		FROM KeepInViewByHourTrans WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+
+		WHILE(@deductMinutes > 0)
+		BEGIN
+
+			SELECT TOP 1 @deductMinutes = @deductMinutes - MinutesBalance , @RequestTransId = RequestId
+			FROM KeepInViewByHourTrans WITH (NOLOCK)
+			WHERE EmpId = @empId AND WorkDate > DATEADD(DAY, -1, DATEADD(MONTH, -1, @onDate)) AND MinutesBalance > 0
+			ORDER BY WorkDate ASC
+
+			IF(@deductMinutes >= 0 )
+			BEGIN
+				UPDATE KeepInViewByHourTrans
+				SET MinutesBalance = 0
+				WHERE RequestId = @RequestTransId
+			END
+			ELSE
+			BEGIN
+				UPDATE KeepInViewByHourTrans
+				SET MinutesBalance = ABS(@deductMinutes)
+				WHERE RequestId = @RequestTransId
+			END
+		END
 	END
 END

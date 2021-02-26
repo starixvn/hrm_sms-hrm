@@ -91,8 +91,10 @@ BEGIN
 	DELETE dbo.KeepInViewByDayTrans
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.KeepInViewByHourTrans
-	WHERE RequestId = @RequestId
+	--DELETE dbo.KeepInViewByHourTrans
+	--WHERE RequestId = @RequestId
+
+	EXEC dbo.LeaveRequest_InsertKIVLeaveTrans  @RequestId = @RequestId
 
 	DELETE dbo.WeekendLeaveTrans
 	WHERE RequestId = @RequestId
