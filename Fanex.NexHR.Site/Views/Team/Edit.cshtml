@@ -20,7 +20,7 @@
 <h2 class="page-title">@Labels.Edit</h2>
 @using (Html.BeginForm())
 {
-    <div class="card form-horizontal">
+    <div class="card form-horizontal" id="form">
         @Html.ValidationSummary(true)
         @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
         {
@@ -129,6 +129,8 @@
             <div class="input-form input-number">
                 @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number", @min = 0, onkeydown = "return event.keyCode !== 189" })
             </div>
+            @Html.ValidationMessageFor(model => model.LocalBasicAnnualLeaveBalance)
+            @Html.ValidationMessageFor(model => model.ExpatBasicAnnualLeaveBalance)
         </div>
         <div class="form-group">
             <div class="label-form">

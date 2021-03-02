@@ -93,10 +93,54 @@ import { resolveClientUrl } from '../../shared/common.functions';
         });
     }
 
+    function validate() {
+        var mutationObserver = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type == 'childList') {
+                    if (mutation.addedNodes.length >= 1) {
+                        var x = document.querySelectorAll("[class='field-validation-error']");
+                        var count = 0;
+                        for (var i = 0; i < x.length; i++) {
+                            if (x[i].innerText == mutation.target.innerText) {
+                                count++;
+                                if (count > 1) {
+                                    x[i].className = "field-validation-valid"
+                                }
+                            }
+                        }
+                    }
+                    if (mutation.removedNodes.length >= 1) {
+                        var messageRemove = mutation.removedNodes[0].innerText;
+                        var y = document.querySelectorAll("[class='field-validation-valid']");
+                        var count = 0;
+                        for (var i = 0; i < y.length; i++) {
+                            if (y[i].innerText == messageRemove) {
+                                count++;
+                                if (count == 1) {
+                                    y[i].className = "field-validation-error"
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        var config = {
+            attributes: true,
+            characterData: true,
+            childList: true,
+            subtree: true
+        };
+        var targetNode = document.getElementById('form');
+
+        mutationObserver.observe(targetNode, config);
+    }
+
     $(document).ready(function () {
         initSearchUnitHead();
         initSearchManager();
         initSearchSupervisor();
         initSearchLeader();
+        validate();
     });
 })();
