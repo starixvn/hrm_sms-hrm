@@ -156,7 +156,7 @@
 @helper RenderStatus(LeaveRequest request)
 {
     var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
-    var approver = request.Approver != null ? request.Approver.Nickname : string.Empty;
+    var approver = request.ApprovedBy != null ? request.ApprovedBy.Nickname : string.Empty;
     var processor = request.HR != null ? request.HR.Nickname : string.Empty;
     switch (request.Status.Id)
     {

@@ -40,12 +40,16 @@ BEGIN
 		,pr.EmpId AS HRId
 		,pr.NickName
 		,pr.FullName
+		,ap_AH.EmpId AS ApprovedById
+		,ap_AH.NickName
+		,ap_AH.FullName
 	FROM dbo.KeepInViewRequest AS kiv WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS wk WITH (NOLOCK) ON kiv.RequestId = wk.RequestId
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON kiv.EmpId = e.EmpId
 		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
 		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
 		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		LEFT JOIN dbo.Employee AS ap_AH WITH (NOLOCK) ON ap_AH.empid = (SELECT TOP 1 ModifiedBy FROM WorkingTimeRequestHistory WITH (NOLOCK) WHERE RequestId = kiv.RequestId ORDER BY LogDate DESC)
 	WHERE (
 			@EmpId IS NULL
 			OR kiv.EmpId = @EmpId

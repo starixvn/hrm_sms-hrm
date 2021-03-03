@@ -35,6 +35,9 @@ BEGIN
 		,hr.EmpId AS HRId
 		,hr.NickName
 		,hr.FullName
+		,ap_AH.EmpId AS ApprovedById
+		,ap_AH.NickName
+		,ap_AH.FullName
 	FROM dbo.WorkingTimeRequest AS wkr WITH (NOLOCK)
 		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wkr.RequestId = cs.RequestId
 		AND (
@@ -56,5 +59,6 @@ BEGIN
 		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.EmpId = wkr.VerifierId
 		LEFT JOIN dbo.Employee AS approver WITH (NOLOCK) ON approver.EmpId = wkr.ApproverId
 		LEFT JOIN dbo.Employee AS hr WITH (NOLOCK) ON hr.EmpId = wkr.EmpId
+		LEFT JOIN dbo.Employee AS ap_AH WITH (NOLOCK) ON ap_AH.empid = (SELECT TOP 1 ModifiedBy FROM WorkingTimeRequestHistory WITH (NOLOCK) WHERE RequestId = cs.RequestId ORDER BY LogDate DESC)
 	ORDER BY wkr.CreatedDate DESC
 END

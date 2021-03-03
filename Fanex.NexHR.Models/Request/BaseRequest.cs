@@ -14,6 +14,7 @@
         public Requester Requester { get; set; }
         public Requester Verifier { get; set; }
         public Requester Approver { get; set; }
+        public Requester ApprovedBy { get; set; }
         public Requester HR { get; set; }
         public Requester Modifier { get; set; }
         public Requester Creater { get; set; }
