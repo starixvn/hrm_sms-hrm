@@ -1235,6 +1235,10 @@
     <Content Include="Views\Report\DailyWorkingHours\_DailyWorkingHoursDetails.cshtml" />
     <Content Include="Views\Report\Overtime\_ListMonthlyOvertimeDetails.cshtml" />
     <Content Include="Views\Account\_HistoryDetail.cshtml" />
+    <None Include="WebConfigs\Web.PRO.CTS.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />
