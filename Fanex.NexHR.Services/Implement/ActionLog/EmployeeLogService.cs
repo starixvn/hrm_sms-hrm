@@ -30,7 +30,7 @@
             new MappingFieldConfig { FieldName = "Gender", DisplayName = Labels.Gender },
             new MappingFieldConfig { FieldName = "Marriage", DisplayName = Labels.Marriage },
             new MappingFieldConfig { FieldName = "CountryCode", DisplayName = Labels.Nationality },
-            new MappingFieldConfig { FieldName = "CardNo", DisplayName = Labels.IDCardNo },
+            new MappingFieldConfig { FieldName = "IdCardNumber", DisplayName = Labels.IDCardNo },
             new MappingFieldConfig { FieldName = "DateOfIdCard", DisplayName = Labels.IDCardIssueDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "PlaceOfIdCard", DisplayName = Labels.IDCardPlaceOfIssue },
             new MappingFieldConfig { FieldName = "PassportNo", DisplayName = Labels.PassportNo },
