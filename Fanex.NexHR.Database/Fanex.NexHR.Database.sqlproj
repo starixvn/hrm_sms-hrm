@@ -489,6 +489,7 @@
     <Build Include="dbo\Stored Procedures\Department_Update.sql" />
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveMultipleRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
+    <Build Include="dbo\Tables\RefResource.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_Approve_UpdateCalendar_OffDay.sql" />
     <Build Include="dbo\Stored Procedures\tmpEmployeeCalendar_UpdateOff.sql" />
     <Build Include="dbo\Tables\DisciplineIgnoreDetail.sql" />

@@ -1,6 +1,4 @@
-﻿/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByDate    Script Date: 7/20/2016 10:18:58 AM ******/
-/****** Object:  User Defined Function dbo.fnc_GetAnnualLeaveBalanceByDate    Script Date: 7/19/2016 5:22:10 PM ******/
-
+﻿
 CREATE FUNCTION [dbo].[fnc_GetAnnualLeaveBalanceByDate] (
 	@EmpID INT
 	,@Date DATETIME
@@ -15,14 +13,21 @@ BEGIN
 		,@CurrentAnnualLeaveCanBeUse NUMERIC(18, 2)
 		,@MaxCanBeUseInYear NUMERIC(18, 2)
 		,@IsUserHave6DaysAL BIT
+		,@Today DATE = GETDATE()
 
-	SELECT @IsUserHave6DaysAL = CASE WHEN WorkingDays = 15 THEN 1 ELSE 0 END
+	SELECT @IsUserHave6DaysAL = CASE 
+			WHEN WorkingDays = 15 THEN 1
+			ELSE 0
+			END
 	FROM dbo.EmployeeSummary WITH (NOLOCK)
 	WHERE EmpId = @EmpID
 
-	IF(YEAR(GETDATE()) = YEAR(@Date))
+	IF YEAR(@Today) = YEAR(@Date)
 	BEGIN
-		SET @Date = CASE WHEN DATEDIFF(MM, @Date, GETDATE()) > 0 THEN GETDATE() ELSE @Date END
+		SET @Date = CASE 
+				WHEN DATEDIFF(MM, @Date, @Today) > 0 THEN @Today
+				ELSE @Date
+				END
 	END
 
 	SELECT @LeaveBalanceDay = SUM(ISNULL(CreditDays, 0)) - SUM(ISNULL(DeductDays, 0))
@@ -32,34 +37,63 @@ BEGIN
 		AND ISNULL(Deleted, 0) <> 1
 
 	SELECT @OutstandingLeaveDay = SUM(ISNULL(tmp.TOTALDAYS, 0))
-	FROM dbo.tmpLeaveBalance tmp WITH (NOLOCK)
-		INNER JOIN dbo.LeaveRequest lr WITH (NOLOCK) ON tmp.EmpId = lr.EmpId
+	FROM dbo.tmpLeaveBalance AS tmp WITH (NOLOCK)
+		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON tmp.EmpId = lr.EmpId
 		AND tmp.RequestID = lr.RequestId
 	WHERE tmp.EmpId = @EmpId
 		AND tmp.[Status] = 0
 		AND tmp.InYear = YEAR(@Date)
-		AND (@RequestId IS NULL OR tmp.RequestID <> @RequestId)
+		AND (
+			@RequestId IS NULL
+			OR tmp.RequestID <> @RequestId
+			)
 
 	SELECT @MaxCanBeUseInYear = ISNULL(@LeaveBalanceDay, 0) - ISNULL(@OutstandingLeaveDay, 0)
-	
-	IF(@IsUserHave6DaysAL = 1)
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.RefResource WITH (NOLOCK)
+			WHERE RefName = 'LimitUseAnualLeaveBalance'
+				AND Value = '0'
+				AND IsActive = 1
+			)
+	BEGIN
+		RETURN ISNULL(@MaxCanBeUseInYear, 0)
+	END
+
+	IF @IsUserHave6DaysAL = 1
 	BEGIN
 		SELECT @MaxCanBeUseInYear = @MaxCanBeUseInYear * 2
 	END
 
-	IF EXISTS(SELECT 1 FROM dbo.EmployeeSummary WITH(NOLOCK) WHERE EmpId = @EmpId AND IsLocal = 1)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = @EmpId
+				AND IsLocal = 1
+			)
 	BEGIN
 		SELECT @MaxMonth = MAX(InMonth)
-		FROM dbo.tmpLeaveBalance tmp WITH (NOLOCK)
-		WHERE tmp.EmpId = @EmpId
-		AND tmp.[Status] IN (0, 1)
-		AND tmp.InYear = YEAR(@Date)
-		AND (@RequestId IS NULL OR tmp.RequestID <> @RequestId)
+		FROM dbo.tmpLeaveBalance WITH (NOLOCK)
+		WHERE EmpId = @EmpId
+			AND [Status] IN (0, 1)
+			AND InYear = YEAR(@Date)
+			AND (
+				@RequestId IS NULL
+				OR RequestID <> @RequestId
+				)
 
-		SELECT @MaxMonth = CASE WHEN @MaxMonth > MONTH(@Date) THEN @MaxMonth ELSE MONTH(@Date) END
-		SELECT @CurrentAnnualLeaveCanBeUse = @MaxCanBeUseInYear - 7 + (CASE WHEN @MaxMonth > 7 THEN 7 ELSE @MaxMonth END)
+		SELECT @MaxMonth = CASE 
+				WHEN @MaxMonth > MONTH(@Date) THEN @MaxMonth
+				ELSE MONTH(@Date)
+				END
 
-		IF(@CurrentAnnualLeaveCanBeUse <= 0)
+		SELECT @CurrentAnnualLeaveCanBeUse = @MaxCanBeUseInYear - 7 + (CASE 
+				WHEN @MaxMonth > 7 THEN 7
+				ELSE @MaxMonth END
+				)
+
+		IF @CurrentAnnualLeaveCanBeUse <= 0
 		BEGIN
 			SET @LeaveBalanceDay = 0
 		END
@@ -73,29 +107,35 @@ BEGIN
 				AND ISNULL(Deleted, 0) <> 1
 
 			SELECT @OutstandingLeaveDay = SUM(ISNULL(tmp.TOTALDAYS, 0))
-			FROM dbo.tmpLeaveBalance tmp WITH (NOLOCK)
-				LEFT JOIN dbo.LeaveRequest lr WITH (NOLOCK) ON tmp.EmpId = lr.EmpId
+			FROM dbo.tmpLeaveBalance AS tmp WITH (NOLOCK)
+				LEFT JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON tmp.EmpId = lr.EmpId
 				AND tmp.RequestID = lr.RequestId
 			WHERE tmp.EmpId = @EmpId
 				AND tmp.[Status] = 0
 				AND tmp.InYear = YEAR(@Date)
 				AND InMonth <= MONTH(@Date)
-				AND (@RequestId IS NULL OR tmp.RequestID <> @RequestId)
+				AND (
+					@RequestId IS NULL
+					OR tmp.RequestID <> @RequestId
+					)
 
 			SELECT @LeaveBalanceDay = ISNULL(@LeaveBalanceDay, 0) - ISNULL(@OutstandingLeaveDay, 0)
 
-			IF(@IsUserHave6DaysAL = 1)
+			IF @IsUserHave6DaysAL = 1
 			BEGIN
 				SELECT @LeaveBalanceDay = @LeaveBalanceDay * 2
 			END
 
-			SELECT @CurrentAnnualLeaveCanBeUse = @LeaveBalanceDay - 7 + (CASE WHEN MONTH(@Date) > 7 THEN 7 ELSE MONTH(@Date) END)
+			SELECT @CurrentAnnualLeaveCanBeUse = @LeaveBalanceDay - 7 + (CASE 
+					WHEN MONTH(@Date) > 7 THEN 7
+					ELSE MONTH(@Date) END
+					)
 
-			IF(@CurrentAnnualLeaveCanBeUse <= 0)
+			IF @CurrentAnnualLeaveCanBeUse <= 0
 			BEGIN
 				SET @LeaveBalanceDay = 0
 			END
-			ELSE IF (@CurrentAnnualLeaveCanBeUse > @MaxCanBeUseInYear)
+			ELSE IF @CurrentAnnualLeaveCanBeUse > @MaxCanBeUseInYear
 			BEGIN
 				SET @LeaveBalanceDay = @MaxCanBeUseInYear
 			END
@@ -110,10 +150,10 @@ BEGIN
 		SET @LeaveBalanceDay = @MaxCanBeUseInYear
 	END
 
-	IF(@IsUserHave6DaysAL = 1)
+	IF @IsUserHave6DaysAL = 1
 	BEGIN
 		SELECT @LeaveBalanceDay = @LeaveBalanceDay / 2.0
 	END
 
-	 RETURN ISNULL(@LeaveBalanceDay, 0)
+	RETURN ISNULL(@LeaveBalanceDay, 0)
 END

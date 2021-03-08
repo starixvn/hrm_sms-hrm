@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateOffDayReplacement] @ActorId INT
+﻿CREATE PROCEDURE [dbo].[ScheduleArrangement_UpdateOffDayReplacement] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@EmployeeIds VARCHAR(MAX) = NULL
@@ -19,6 +18,17 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.RefResource WITH (NOLOCK)
+			WHERE RefName = 'EnableOffdayReplacement'
+				AND Value = '0'
+				AND IsActive = 1
+			)
+	BEGIN
+		RETURN
+	END
 
 	DECLARE
 		-- change shift type

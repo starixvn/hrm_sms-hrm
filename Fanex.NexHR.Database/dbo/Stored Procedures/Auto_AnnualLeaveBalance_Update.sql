@@ -52,8 +52,8 @@ BEGIN
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 	WHERE (
 			(
-				empsum.CompanyDate IS NOT NULL
-				AND empsum.CompanyDate <= @FromDate
+				emp.JoinedDate IS NOT NULL
+				AND emp.JoinedDate <= @FromDate
 				)
 			OR empsum.IsLocal = 0
 			)
@@ -62,36 +62,44 @@ BEGIN
 			OR emp.EmpId = @EmpId
 			)
 
-	INSERT INTO @tblLengthOfServiceBalance (
-		EmpId
-		,Amount
-		)
-	SELECT emp.EmpId
-		,CASE 
-			WHEN empsum.WorkingDays = 15 THEN (
-					((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) / 5) + CASE 
-					WHEN ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) % 5) = 4
-						AND MONTH(empsum.CompanyDate) < 7 THEN 1
-					ELSE 0 END
-					) / 2.0
-			ELSE ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) / 5) + CASE 
-					WHEN ((DATEDIFF(YEAR, empsum.CompanyDate, @FromDate) - 1) % 5) = 4
-						AND MONTH(empsum.CompanyDate) < 7 THEN 1
-					ELSE 0
-					END
-			END
-	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-		AND ISNULL(emp.isDeleted, 0) = 0
-		AND emp.[Enabled] = 1
-		AND emp.ResignedDate IS NULL
-	WHERE empsum.CompanyDate IS NOT NULL
-		AND empsum.CompanyDate <= @FromDate
-		AND (
-			@EmpId IS NULL
-			OR emp.EmpId = @EmpId
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.RefResource WITH (NOLOCK)
+			WHERE RefName = 'EnableAdditionalAnnualLeaveBalance'
+				AND IsActive = 1
 			)
-		AND empsum.IsLocal = 1
+	BEGIN
+		INSERT INTO @tblLengthOfServiceBalance (
+			EmpId
+			,Amount
+			)
+		SELECT emp.EmpId
+			,CASE 
+				WHEN empsum.WorkingDays = 15 THEN (
+						((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) / 5) + CASE 
+						WHEN ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) % 5) = 4
+							AND MONTH(emp.JoinedDate) < 7 THEN 1
+						ELSE 0 END
+						) / 2.0
+				ELSE ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) / 5) + CASE 
+						WHEN ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) % 5) = 4
+							AND MONTH(emp.JoinedDate) < 7 THEN 1
+						ELSE 0
+						END
+				END
+		FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+			AND ISNULL(emp.isDeleted, 0) = 0
+			AND emp.[Enabled] = 1
+			AND emp.ResignedDate IS NULL
+		WHERE emp.JoinedDate IS NOT NULL
+			AND emp.JoinedDate <= @FromDate
+			AND (
+				@EmpId IS NULL
+				OR emp.EmpId = @EmpId
+				)
+			AND empsum.IsLocal = 1
+	END
 
 	MERGE @tblEmployeeBalance AS [target]
 	USING @tblLengthOfServiceBalance AS [source] ON ([target].EmpId = [source].EmpId)
