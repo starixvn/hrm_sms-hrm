@@ -40,8 +40,8 @@ BEGIN
 
 		UPDATE empca
 		SET empca.ChangeShiftId = NULL
-			,empca.ShiftId = NULL
-			,empca.IsOffDay = 1
+			--,empca.ShiftId = NULL
+			--,empca.IsOffDay = 1
 			,empca.ModifiedBy = @ActorId
 			,empca.ModifiedDate = @ModifiedDate
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -52,7 +52,7 @@ BEGIN
 
 		UPDATE empca
 		SET empca.ChangeShiftId = NULL
-			,empca.ShiftId = empca.ChangeShiftId
+			--,empca.ShiftId = empca.ChangeShiftId
 			,empca.ModifiedBy = @ActorId
 			,empca.ModifiedDate = @ModifiedDate
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
