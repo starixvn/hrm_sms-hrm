@@ -93,20 +93,6 @@ BEGIN
 			IF @TypeId = @ChangeShift
 			BEGIN
 				UPDATE empca
-				SET empca.IsOffDay = 0
-					,empca.ChangeShiftId = NULL
-					,empca.ShiftId = csdt.FromShift
-					,empca.ModifiedBy = @ActorId
-					,empca.ModifiedDate = @ProcessedDate
-				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-					AND empca.EmpId = csdt.EmpId
-					AND csdt.ToShift = - 1
-					AND csdt.RequestId = @RequestId
-				WHERE empca.EmpId = @EmpId
-					AND empca.ChangeShiftId IS NOT NULL
-
-				UPDATE empca
 				SET empca.ShiftId = NULL
 					,empca.IsOffDay = 1
 					,empca.ModifiedBy = @ActorId
@@ -120,8 +106,23 @@ BEGIN
 					AND empca.ChangeShiftId IS NULL
 
 				UPDATE empca
+				SET empca.IsOffDay = 0
+					,empca.ChangeShiftId = NULL
+					,empca.ShiftId = csdt.FromShift
+					,empca.ModifiedBy = @ActorId
+					,empca.ModifiedDate = @ProcessedDate
+				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+					INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
+					AND empca.EmpId = csdt.EmpId
+					AND csdt.FromShift <> - 1
+					AND csdt.RequestId = @RequestId
+				WHERE empca.EmpId = @EmpId
+					AND empca.ChangeShiftId IS NOT NULL
+
+				UPDATE empca
 				SET empca.ChangeShiftId = NULL
 					,empca.ShiftId = empca.ChangeShiftId
+					,empca.IsOffDay = 1
 					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -129,7 +130,7 @@ BEGIN
 					AND empca.EmpId = csdt.EmpId
 				WHERE empca.EmpId = @EmpId
 					AND csdt.RequestId = @RequestId
-					AND csdt.ToShift <> - 1
+					AND csdt.FromShift = -1 
 					AND empca.ChangeShiftId IS NOT NULL
 			END
 			ELSE

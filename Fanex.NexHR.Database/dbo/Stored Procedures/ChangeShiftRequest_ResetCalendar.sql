@@ -49,17 +49,6 @@ BEGIN
 			AND empca.EmpId = csdt.EmpId
 			AND csdt.RequestId = @RequestId
 			AND csdt.ToShift <> - 1
-
-		UPDATE empca
-		SET empca.ChangeShiftId = NULL
-			--,empca.ShiftId = empca.ChangeShiftId
-			,empca.ModifiedBy = @ActorId
-			,empca.ModifiedDate = @ModifiedDate
-		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
-			AND empca.EmpId = csdt.EmpId
-			AND csdt.RequestId = @RequestId
-			AND csdt.ToShift <> - 1
 	END
 	ELSE
 	BEGIN
