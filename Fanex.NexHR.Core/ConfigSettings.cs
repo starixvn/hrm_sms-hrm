@@ -11,6 +11,8 @@
         public static bool IsDisabledSendMail => Converter.ToBool(ConfigurationManager.AppSettings["IsDisabledSendMail"]);
         public static int SiteId => Converter.ToInt(ConfigurationManager.AppSettings["SiteId"]);
         public static string ApplicationDomain => ConfigurationManager.AppSettings["ApplicationDomain"];
+
+        public static bool EnableImportTimeRecord => Converter.ToBool(ConfigurationManager.AppSettings["EnableImportTimeRecord"]);
         public static bool EnableUpdateWorkingHourPerDay => Converter.ToBool(ConfigurationManager.AppSettings["EnableUpdateWorkingHourPerDay"]);
         public static bool EnablePublishSchedule => Converter.ToBool(ConfigurationManager.AppSettings["EnablePublishSchedule"]);
         public static bool EnableInsertScheduleByDefaultShift

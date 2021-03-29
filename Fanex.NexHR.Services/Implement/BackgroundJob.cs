@@ -16,6 +16,12 @@
             this.holidayService = holidayService;
         }
 
+        public void ImportTimeRecord()
+        {
+            var criteria = new ImportTimeRecordCriteria();
+            baseService.ExecuteNonQuery(criteria);
+        }
+
         public void PublishSchedule()
         {
             var criteria = new PublishScheduleCriteria();

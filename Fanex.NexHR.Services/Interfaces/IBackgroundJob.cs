@@ -2,6 +2,8 @@
 {
     public interface IBackgroundJobService
     {
+        void ImportTimeRecord();
+
         void PublishSchedule();
 
         void InsertScheduleByDefaultShift();

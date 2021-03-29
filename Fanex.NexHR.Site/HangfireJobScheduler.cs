@@ -21,6 +21,12 @@
                 }
             }
 
+            if (ConfigSettings.EnableImportTimeRecord)
+            {
+                RecurringJob.AddOrUpdate("ImportTimeRecord",
+                    () => backgroundJob.ImportTimeRecord(), "*/5 * * * *", TimeZoneInfo.Local); // every 5 minutes
+            }
+
             if (ConfigSettings.EnableUpdateWorkingHourPerDay)
             {
                 RecurringJob.AddOrUpdate("UpdateWorkingHourPerDay",
