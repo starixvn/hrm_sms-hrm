@@ -124,7 +124,8 @@
                 EmployeeId = model.EmployeeId,
                 FromDate = model.MinDate,
                 ToDate = model.MaxDate,
-                RequestId = model.RequestId
+                RequestId = model.RequestId,
+                LeaveTypeId = model.LeaveTypeId
             });
             model.LeaveTypeList = commonDataService.GetLeaveType();
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);

@@ -36,19 +36,20 @@ BEGIN
 
 	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
-	IF(@CountDay >= 7 AND  (@LeaveTypeId = @UnpaidLeave OR @LeaveTypeId = @UnpaidLeaveInsurance 
-	  OR @LeaveTypeId = @PaternityLeave OR @LeaveTypeId = @MaternityLeave) )
+	IF--(@CountDay >= 7 AND  
+	(@LeaveTypeId = @UnpaidLeave OR @LeaveTypeId = @UnpaidLeaveInsurance 
+	  OR @LeaveTypeId = @PaternityLeave OR @LeaveTypeId = @MaternityLeave) --)
 	BEGIN
 		EXEC [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate  = @fromDate
 		,@toDate = @toDate
 		,@empId = @empId
 	END
-	ELSE
-	BEGIN
-		EXEC [dbo].[LeaveRequest_Reset_Off]@fromDate  = @fromDate
-		,@toDate = @toDate
-		,@empId = @empId
-	END
+	--ELSE
+	--BEGIN
+	--	EXEC [dbo].[LeaveRequest_Reset_Off]@fromDate  = @fromDate
+	--	,@toDate = @toDate
+	--	,@empId = @empId
+	--END
 	SELECT tmpca.RequestId
 		,tmpca.WorkDate
 		,tmpca.ShiftId
