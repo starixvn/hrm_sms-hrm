@@ -72,6 +72,7 @@ function onUpdateRequestStatus(requestIds, command) {
         let data = response.data;
         if (data.IsSuccessful) {
             toastr.success('Updated successfully!', '', toastOptions());
+            $confirmModal.modal('hide');
             setTimeout(function () { $('#btnSearch').trigger('click'); }, 1000);
         } else {
             toastr.error(data.Message, '', toastOptions());
@@ -217,6 +218,7 @@ function renderIconRemove(opt, $itemElement, itemKey, item) {
 function processCommand(command, options) {
     const eventElement = options.$trigger,
         requestId = parseInt(eventElement.attr('requestid'), 10);
+    $btnConfirm.unbind('click');
     switch (command) {
         case 'Process':
             $confirmModal.find('.modal-body').html('Are you sure you want to <strong>Process</strong> this request?');
