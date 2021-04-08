@@ -84,10 +84,16 @@
                                     {
                                         className += " unpaidleave";
                                     }
-
                                     if (dailyWorking.IsLeaveHalfDay)
                                     {
-                                        value = string.Format("{0}½", dailyWorking.LeaveType.Code);
+                                        if (dailyWorking.LeaveType.Id == (int)LeaveTypes.KeepInViewByHour)
+                                        {
+                                            value = string.Format("{0}½", dailyWorking.LeaveType2.Code);
+                                        }
+                                        else
+                                        {
+                                            value = string.Format("{0}½", dailyWorking.LeaveType.Code);
+                                        }
                                     }
                                     else
                                     {

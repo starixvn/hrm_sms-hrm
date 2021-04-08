@@ -27,11 +27,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 17;
+        private const ushort TotalFixedColumns = 18;
         private const ushort TotalUPLColumns = 4;
-        private const ushort StartDateColumnIndex = 22;
-        private const ushort StartUPLColumnIndex = 18;
-        private const ushort EndUPLColumnIndex = 21;
+        private const ushort StartDateColumnIndex = 23;
+        private const ushort StartUPLColumnIndex = 19;
+        private const ushort EndUPLColumnIndex = 22;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -226,6 +226,10 @@
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                 leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.WeddingLeave).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+
+                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.KeepInViewByDay).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 

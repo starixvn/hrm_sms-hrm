@@ -25,6 +25,8 @@ BEGIN
 		,@Enable TINYINT = 1
 		,@Disabled TINYINT = 2
 		,@Deleted TINYINT = 3
+		-- leave type 
+		,@KIVByHourLeaveType INT = 48
 	DECLARE @tblGroupIds TABLE (GroupId INT)
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
@@ -91,7 +93,11 @@ BEGIN
 			END ) AS TotalWorkingHours
 		,empca.IsHoliday
 		,empca.IsOffDay
-		,empca.IsLeaveDay
+		--,empca.IsLeaveDay
+		,(CASE 
+			WHEN empca.IsLeaveDay = 1 AND ((empca.LeaveTypeId = @KIVByHourLeaveType AND (empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))  OR (empca.LeaveTypeId2  = @KIVByHourLeaveType AND ( empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))) THEN 0
+			ELSE empca.IsLeaveDay END
+			) AS IsLeaveDay
 		,empca.LeaveDay
 		,(CASE 
 			WHEN empca.WorkDate < GETDATE() - 1
