@@ -95,10 +95,15 @@ BEGIN
 		,empca.IsOffDay
 		--,empca.IsLeaveDay
 		,(CASE 
-			WHEN empca.IsLeaveDay = 1 AND ((empca.LeaveTypeId = @KIVByHourLeaveType AND (empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))  OR (empca.LeaveTypeId2  = @KIVByHourLeaveType AND ( empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))) THEN 0
+			WHEN empca.IsLeaveDay = 1 AND ((empca.LeaveTypeId = @KIVByHourLeaveType AND (empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))  OR (empca.LeaveTypeId2  = @KIVByHourLeaveType AND ( empca.LeaveTypeId IS NULL OR empca.LeaveTypeId = @KIVByHourLeaveType))) THEN 0
 			ELSE empca.IsLeaveDay END
 			) AS IsLeaveDay
-		,empca.LeaveDay
+		--,empca.LeaveDay
+		,(CASE 
+			WHEN empca.LeaveTypeId = @KIVByHourLeaveType AND  empca.LeaveTypeId2 = @KIVByHourLeaveType  THEN empca.LeaveDay - 1
+			WHEN empca.LeaveTypeId = @KIVByHourLeaveType OR  empca.LeaveTypeId2 = @KIVByHourLeaveType  THEN empca.LeaveDay - 0.5
+			ELSE empca.LeaveDay END
+			) AS LeaveDay
 		,(CASE 
 			WHEN empca.WorkDate < GETDATE() - 1
 				AND emp.JoinedDate >= @Today

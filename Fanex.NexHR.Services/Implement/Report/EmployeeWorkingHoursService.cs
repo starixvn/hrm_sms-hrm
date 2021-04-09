@@ -235,7 +235,9 @@
 
                 if (dailyWorking.IsLeaveHalfDay)
                 {
-                    value = string.Format("{0}½", dailyWorking.LeaveType.Code);
+                    value = dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.KeepInViewByHour
+                        ? string.Format("{0}½", dailyWorking.LeaveType2.Code)
+                        : string.Format("{0}½", dailyWorking.LeaveType.Code);
                 }
                 else
                 {
