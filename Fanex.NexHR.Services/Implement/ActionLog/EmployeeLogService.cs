@@ -7,6 +7,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services.Interfaces;
 
     public interface IEmployeeLogService
     {
@@ -51,6 +52,7 @@
             new MappingFieldConfig { FieldName = "TeamId", DisplayName = Labels.Team },
             new MappingFieldConfig { FieldName = "TeamDate", DisplayName = Labels.TeamDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
+            new MappingFieldConfig { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
             new MappingFieldConfig { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
             new MappingFieldConfig { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -71,10 +73,12 @@
 
         private readonly ICommonDataService commonDataService;
         private readonly IActionLogService actionLogService;
+        private readonly IJobLevelService jobLevelService;
         private readonly IRoleService roleService;
 
         private IEnumerable<Team> Teams { get; set; }
         private IEnumerable<LookupData> JobTitles { get; set; }
+        private IEnumerable<JobLevel> JobLevel { get; set; }
         private IEnumerable<Country> Countries { get; set; }
         private IEnumerable<SystemRoleModel> SystemRoles { get; set; }
         private IEnumerable<EntityBase<byte>> Genders { get; set; }
@@ -83,10 +87,12 @@
         public EmployeeLogService(
             ICommonDataService commonDataService,
             IActionLogService actionLogService,
+            IJobLevelService jobLevelService,
             IRoleService roleService)
         {
             this.commonDataService = commonDataService;
             this.actionLogService = actionLogService;
+            this.jobLevelService = jobLevelService;
             this.roleService = roleService;
         }
 
@@ -94,6 +100,7 @@
         {
             Teams = commonDataService.GetAllTeam();
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
+            JobLevel = jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
             SystemRoles = roleService.GetRoles();
             Genders = commonDataService.GetGender();
@@ -141,6 +148,10 @@
                     MappingJobTitle(field);
                     break;
 
+                case "JobLevelId":
+                    MappingJobLevel(field);
+                    break;
+
                 case "Gender":
                     MappingGender(field);
                     break;
@@ -184,6 +195,15 @@
 
             int.TryParse(field.Value, out jobTitleId);
             field.Value = JobTitles.FirstOrDefault(x => x.Id == jobTitleId)?.Name;
+        }
+
+        private void MappingJobLevel(FieldValue field)
+        {
+            int.TryParse(field.OldValue, out int jobLevelId);
+            field.OldValue = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
+
+            int.TryParse(field.Value, out jobLevelId);
+            field.Value = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
         }
 
         private void MappingCountry(FieldValue field)

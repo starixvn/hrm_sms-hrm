@@ -30,8 +30,6 @@ const jobLevel = (function ($) {
     function initButtonCreateEvent() {
         $(domElement.BtnCreate).on('click', function () {
             removeMsg($(domElement.CreateDialog));
-            $(domElement.CreateDialog).find('input[name="name"]').val('');
-            $(domElement.CreateDialog).find('input[name="IsActive"]').val('');
             $(domElement.CreateDialog).dialog({
                 modal: true,
                 title: 'Add Job Level',
@@ -60,7 +58,7 @@ const jobLevel = (function ($) {
     function onCreateJobLevel() {
         const data = {
             name: $(domElement.CreateDialog).find('input[name="name"]').val(),
-            isActive: $(domElement.CreateDialog).find('input[id="IsActive"]').val()
+            isActive: $(domElement.CreateDialog).find('input[name="isActive"]').prop('checked')
         };
 
         if (isValid($(domElement.CreateDialog))) {
@@ -117,7 +115,7 @@ const jobLevel = (function ($) {
                 isActive = $(this).attr('data-isActive'),
                 jobLevel = $(this).attr('data-joblevel-name');
             $(domElement.EditDialog).find('input[name="name"]').val(jobLevel);
-            $(domElement.EditDialog).find('select[name="IsActive"]').val(isActive);
+            document.getElementById("IsActive").checked = (isActive == 'True');
 
             $(domElement.EditDialog).dialog({
                 modal: true,
@@ -128,7 +126,7 @@ const jobLevel = (function ($) {
                         class: 'btn btn-primary',
                         click: function () {
                             const newJobLevel = $(domElement.EditDialog).find('input[name="name"]').val(),
-                                newIsActive = $(domElement.EditDialog).find('input[name="IsActive"]').val();
+                                newIsActive = $(domElement.EditDialog).find('input[name="IsActive"]').prop('checked');
                             onEditJobLevel(jobLevelId, newJobLevel, newIsActive);
                         }
                     },
@@ -205,7 +203,7 @@ const jobLevel = (function ($) {
             url: resolveClientUrl('jobLevel/GetJobLevel'),
             dataType: 'html',
             data: {
-                isActive: $('#Active').val()
+                isActive: $('#Status').val()
             },
             beforeSend: function () {
                 blockUI();

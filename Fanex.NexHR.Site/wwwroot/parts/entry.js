@@ -81,6 +81,7 @@ module.exports = {
         [`${styleDistPath}/addtimerecord`]: `${styleSourcePath}/pages/addtimerecord.scss`,
         [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
         [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
+        [`${styleDistPath}/joblevel`]: `${styleSourcePath}/pages/joblevel/joblevel.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',

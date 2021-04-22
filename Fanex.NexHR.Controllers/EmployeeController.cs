@@ -521,8 +521,7 @@
         private void ComposeViewBagsForEditEmployee()
         {
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
-            ViewBag.JobLevel = jobLevelService.GetJobLevel(true);
-
+            ViewBag.JobLevel = jobLevelService.GetJobLevel();
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
         }

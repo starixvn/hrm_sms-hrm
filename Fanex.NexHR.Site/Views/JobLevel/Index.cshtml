@@ -8,7 +8,7 @@
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/jobtitle.css" rel="stylesheet" />
+    <link href="~/wwwroot/dist/styles/joblevel.css" rel="stylesheet" />
 }
 @section js{
     <script src="~/wwwroot/dist/js/joblevel.js"></script>
@@ -32,7 +32,7 @@
             @Html.Label(@Labels.Status, new { @class = "control-label" })
         </div>
         <div class="select-form">
-            @Html.DropDownList("Active", status, new { @class = "form-control" })
+            @Html.DropDownList("Status", status, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group form-group--m">
@@ -66,7 +66,7 @@
                     <label class="control-label" for="IsActive">@Labels.IsActive</label>
                 </div>
                 <div class="input-form">
-                    @Html.CheckBoxCustomFor(model => model.IsActive)
+                    @Html.CheckBox("isActive", true)
                 </div>
             </div>
         </div>

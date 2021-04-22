@@ -1238,6 +1238,7 @@
     <Content Include="Views\Account\_HistoryDetail.cshtml" />
     <Content Include="Views\JobLevel\Index.cshtml" />
     <Content Include="Views\JobLevel\_JobLevelGrid.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\joblevel\joblevel.scss" />
     <Content Include="WebConfigs\Web.PRO.CTS.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

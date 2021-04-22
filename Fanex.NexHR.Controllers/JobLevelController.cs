@@ -9,25 +9,17 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.JobLevel;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
 
     public class JobLevelController : BaseController
     {
-        private readonly ICommonDataService commonDataService;
-        private readonly IBaseService baseService;
         private readonly IJobLevelService jobLevelService;
 
         public JobLevelController(
             ISessionService sessionService,
-            ICommonDataService commonDataService,
-            IJobLevelService jobLevelService,
-
-            IBaseService baseService) : base(sessionService)
+            IJobLevelService jobLevelService) : base(sessionService)
         {
-            this.commonDataService = commonDataService;
             this.jobLevelService = jobLevelService;
-            this.baseService = baseService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]

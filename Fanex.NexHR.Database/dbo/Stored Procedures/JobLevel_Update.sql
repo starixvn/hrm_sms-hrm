@@ -22,7 +22,7 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.JobLevel WITH (NOLOCK)
-			WHERE Name = @Name
+			WHERE Name = @Name AND JobLevelId <> @JobLevelId
 			)
 	BEGIN
 		SELECT @ErrCode = 1

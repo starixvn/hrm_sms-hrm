@@ -37,9 +37,9 @@
 
         public CommandResult Delete(int id)
         {
-            var criteria = new DeleteDepartmentCriteria
+            var criteria = new DeleteJobLevelCriteria
             {
-                departmentId = id
+                jobLevelId = id
             };
 
             return baseService.ExecuteNonQuery(criteria);
