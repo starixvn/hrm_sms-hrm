@@ -506,4 +506,12 @@
     <Setting Key="DisciplineRule_GetByGroupId" SpName="DisciplineRule_GetByGroupId" DbName="nexhrx" Plain="0" />
     <Setting Key="DisciplineRule_Update" SpName="DisciplineRule_Update" DbName="nexhrx" Plain="0"></Setting>
   </Function>
+    <Function Name="JobLevel">
+        <Setting Key="JobLevel_Get" SpName="JobLevel_Get" DbName="nexhrx" Plain="0">
+            <Mapping DataField="JobLevelId" ObjectProperty="Id" Class="JobLevel" />
+        </Setting>
+        <Setting Key="JobLevel_Insert" SpName="JobLevel_Insert" DbName="nexhrx" Plain="0"></Setting>
+        <Setting Key="JobLevel_Update" SpName="JobLevel_Update" DbName="nexhrx" Plain="0"></Setting>
+        <Setting Key="JobLevel_Delete" SpName="JobLevel_Delete" DbName="nexhrx" Plain="0"></Setting>
+    </Function>
 </Functions>

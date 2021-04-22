@@ -1,0 +1,33 @@
+﻿CREATE PROCEDURE [dbo].[JobLevel_Delete] @JobLevelId INT
+	,@ErrCode INT = 0 OUTPUT
+	,@ErrMsg NVARCHAR(200) = '' OUTPUT
+AS
+/*
+Created: 20210420@Lilac.Nguyen
+Task: Delete Job Level 
+DB: HRM_SMS
+Original:
+
+Revisions:
+Param's Explanation:
+*/
+BEGIN
+	SET NOCOUNT ON;
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.JobLevel AS j WITH (NOLOCK)
+				INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON j.JobLevelId = emp.JobLevelId
+			WHERE emp.isDeleted = 0
+				AND emp.[Enabled] = 1
+				AND j.JobLevelId = @JobLevelId
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = 'The Job Level is not empty so cannot delete it'
+
+		RETURN
+	END
+
+	DELETE FROM JobLevel WHERE JobLevelId = @JobLevelId
+END

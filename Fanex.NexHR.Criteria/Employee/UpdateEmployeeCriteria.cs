@@ -25,6 +25,8 @@
 
         public int? JobTitleId { get; set; }
 
+        public int? JobLevelId { get; set; }
+
         public DateTime? PromotionDate { get; set; }
 
         public bool Enabled { get; set; }

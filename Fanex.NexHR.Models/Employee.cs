@@ -54,6 +54,8 @@
 
         public int? JobTitleId { get; set; }
 
+        public int? JobLevelId { get; set; }
+
         public bool Enabled { get; set; }
 
         public bool IsDeleted { get; set; }
@@ -103,6 +105,8 @@
         public decimal AnnualLeaveBalance { get; set; }
 
         public string JobTitle { get; set; }
+
+        public string JobLevel { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? PromotionDate { get; set; }

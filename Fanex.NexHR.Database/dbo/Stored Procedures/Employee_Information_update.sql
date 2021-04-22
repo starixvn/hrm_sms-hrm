@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
+﻿CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@Code VARCHAR(20)
 	,@DomainUsername VARCHAR(50) = ''
 	,@FullName NVARCHAR(50) = ''
@@ -7,6 +6,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@DOB DATE = NULL
 	,@Email VARCHAR(50) = NULL
 	,@JobTitleId INT = NULL
+	,@JobLevelId INT = NULL
 	,@Enabled BIT
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL
@@ -131,6 +131,7 @@ BEGIN
 				,DOB AS '@DOB'
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
+				,JobLevelId AS '@JobLevelId'
 				,[Enabled] AS '@Enabled'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
@@ -190,6 +191,7 @@ BEGIN
 		,DOB = @DOB
 		,Email = REPLACE(@Email, ' ', '')
 		,JobTitleId = @JobTitleId
+		,JobLevelId = @JobLevelId
 		,[Enabled] = @Enabled
 		,Phone = @Phone
 		,Gender = @Gender
@@ -255,6 +257,7 @@ BEGIN
 				,DOB AS '@DOB'
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
+				,JobLevelId AS '@JobLevelId'
 				,[Enabled] AS '@Enabled'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'

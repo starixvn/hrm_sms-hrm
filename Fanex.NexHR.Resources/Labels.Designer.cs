@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Labels {
@@ -948,6 +948,15 @@ namespace Fanex.NexHR.Resources {
         public static string CreateHoliday {
             get {
                 return ResourceManager.GetString("CreateHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Job Level.
+        /// </summary>
+        public static string CreateJobLevel {
+            get {
+                return ResourceManager.GetString("CreateJobLevel", resourceCulture);
             }
         }
         
@@ -2203,6 +2212,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string IsActive {
+            get {
+                return ResourceManager.GetString("IsActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Read.
         /// </summary>
         public static string IsRead {
@@ -2235,6 +2253,24 @@ namespace Fanex.NexHR.Resources {
         public static string JobCategory {
             get {
                 return ResourceManager.GetString("JobCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Level.
+        /// </summary>
+        public static string JobLevel {
+            get {
+                return ResourceManager.GetString("JobLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Level Management.
+        /// </summary>
+        public static string JobLevelManagement {
+            get {
+                return ResourceManager.GetString("JobLevelManagement", resourceCulture);
             }
         }
         

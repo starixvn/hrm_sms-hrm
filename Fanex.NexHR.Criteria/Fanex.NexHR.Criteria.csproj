@@ -83,6 +83,10 @@
     <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
     <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
     <Compile Include="Department\DeleteDepartmentCriteria.cs" />
+    <Compile Include="JobLevel\DeleteJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\GetJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\UpdateJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\InsertJobLevelCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />
     <Compile Include="Unit\GetUnitByIdCriteria.cs" />

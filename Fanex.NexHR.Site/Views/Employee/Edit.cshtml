@@ -369,6 +369,14 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
+                    @Html.LabelFor(model => model.JobLevelId, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">

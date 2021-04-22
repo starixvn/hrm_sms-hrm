@@ -133,6 +133,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JobLevelController.cs" />
     <Compile Include="UnitController.cs" />
     <Compile Include="EmailController.cs" />
     <Compile Include="Export\BaseExportController.cs" />

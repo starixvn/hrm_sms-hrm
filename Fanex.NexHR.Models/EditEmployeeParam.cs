@@ -13,6 +13,7 @@
         public DateTime? DateOfBirth { get; set; }
         public string Email { get; set; }
         public int? JobTitleId { get; set; }
+        public int? JobLevelId { get; set; }
         public DateTime? PromotionDate { get; set; }
         public bool Enabled { get; set; }
         public string Phone { get; set; }

@@ -174,5 +174,6 @@ module.exports = {
         [`${jsDistPath}/addtimerecord`]: `${jsSourcePath}/addtimerecord.js`,
         [`${jsDistPath}/department.edit`]: `${jsSourcePath}/department/edit.js`,
         [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
+        [`${jsDistPath}/joblevel`]: `${jsSourcePath}/joblevel/joblevel.js`,
     }
 };

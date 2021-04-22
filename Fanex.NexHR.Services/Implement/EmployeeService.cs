@@ -236,6 +236,7 @@
                 DateOfBirth = param.DateOfBirth,
                 Email = param.Email,
                 JobTitleId = param.JobTitleId,
+                JobLevelId = param.JobLevelId,
                 Enabled = param.Enabled,
                 Phone = param.Phone,
                 Gender = param.Gender,

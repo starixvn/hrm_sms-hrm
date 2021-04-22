@@ -1920,4 +1920,16 @@
   <data name="LengthOfService" xml:space="preserve">
     <value>Length of Service</value>
   </data>
+  <data name="JobLevelManagement" xml:space="preserve">
+    <value>Job Level Management</value>
+  </data>
+  <data name="CreateJobLevel" xml:space="preserve">
+    <value>New Job Level</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="JobLevel" xml:space="preserve">
+    <value>Job Level</value>
+  </data>
 </root>

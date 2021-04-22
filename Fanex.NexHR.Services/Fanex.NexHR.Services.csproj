@@ -168,6 +168,7 @@
     <Compile Include="Implement\AuthService.cs" />
     <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
+    <Compile Include="Implement\JobLevelService .cs" />
     <Compile Include="Implement\UnitService.cs" />
     <Compile Include="Implement\SectionService.cs" />
     <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />
+    <Compile Include="Interfaces\IJobLevelService.cs" />
     <Compile Include="Interfaces\IUnitService.cs" />
     <Compile Include="Interfaces\ISectionService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />

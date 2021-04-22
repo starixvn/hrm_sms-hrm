@@ -19,6 +19,7 @@
     using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
     using Simplicode.Imaging;
@@ -31,7 +32,9 @@
         private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ITeamService teamService;
+        private readonly IJobLevelService jobLevelService;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "<Pending>")]
         public EmployeeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
@@ -39,7 +42,8 @@
             IRoleService roleService,
             IAuthService authService,
             IEmployeeLogService employeeLogService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService,
+            IJobLevelService jobLevelService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
@@ -47,6 +51,7 @@
             this.authService = authService;
             this.employeeLogService = employeeLogService;
             this.teamService = teamService;
+            this.jobLevelService = jobLevelService;
         }
 
         public ActionResult Index()
@@ -516,6 +521,7 @@
         private void ComposeViewBagsForEditEmployee()
         {
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
+            ViewBag.JobLevel = jobLevelService.GetJobLevel(true);
 
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
@@ -534,6 +540,7 @@
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 JobTitleId = model.JobTitleId,
+                JobLevelId = model.JobLevelId,
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,
