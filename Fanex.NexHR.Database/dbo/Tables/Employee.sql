@@ -47,6 +47,7 @@
     [TeamDate]      DATE           NULL,
     [PromotionDate]    DATE           NULL,
     [LetsTalk]         VARCHAR (100)  NULL,
+    [JobLevelId]       INT         NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
 
