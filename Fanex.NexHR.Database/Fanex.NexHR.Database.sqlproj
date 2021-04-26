@@ -499,6 +499,7 @@
     <Build Include="dbo\Stored Procedures\JobLevel_Insert.sql" />
     <Build Include="dbo\Stored Procedures\JobLevel_Get.sql" />
     <Build Include="dbo\Stored Procedures\JobLevel_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Sync_JobLevel.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

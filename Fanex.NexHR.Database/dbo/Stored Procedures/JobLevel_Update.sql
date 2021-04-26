@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[JobLevel_Update]
 	@JobLevelId INT
 	,@Name nvarchar(150)
 	,@IsActive BIT
-	,@CreatedBy INT
+	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
 AS
@@ -35,7 +35,7 @@ BEGIN
 	UPDATE dbo.JobLevel WITH (ROWLOCK, UPDLOCK)
 	SET Name = @Name
 		,IsActive = @IsActive
-		,CreatedBy = @CreatedBy
-		,CreatedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
+		,ModifiedDate = GETDATE()
 	WHERE JobLevelId = @JobLevelId
 END

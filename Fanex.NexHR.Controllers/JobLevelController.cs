@@ -49,7 +49,7 @@
             {
                 Name = name,
                 IsActive = isActive,
-                CreatedBy = sessionService.Employee.Id
+                ModifiedBy = sessionService.Employee.Id
             };
 
             CommandResult result = jobLevelService.Insert(criteria);
@@ -67,7 +67,7 @@
                 JobLevelId = id,
                 Name = name,
                 IsActive = isActive,
-                CreatedBy = sessionService.Employee.Id
+                ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = jobLevelService.Update(criteria);
 

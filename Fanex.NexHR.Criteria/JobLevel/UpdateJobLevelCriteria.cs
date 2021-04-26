@@ -10,7 +10,7 @@
 
         public bool IsActive { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {
