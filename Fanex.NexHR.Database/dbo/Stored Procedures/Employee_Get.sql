@@ -61,7 +61,8 @@ BEGIN
 	es.IsLocal,
 	e.GroupId AS TeamId,
 	CASE WHEN e.ModifiedDate IS NULL THEN e.CreatedDate ELSE e.ModifiedDate END AS ModifiedDate,
-	es.Unit AS CostCenter
+	es.Unit AS CostCenter,
+	e.JobLevelId
 	FROM dbo.Employee AS e WITH (NOLOCK)
 	INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE @FromDate IS NULL
