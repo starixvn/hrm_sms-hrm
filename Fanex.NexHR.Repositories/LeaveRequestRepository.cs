@@ -69,8 +69,10 @@
                         },
                         splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId").FirstOrDefault();
 
-                    IEnumerable<LeaveRequestDetail> leaveDetails = multi.Read<LeaveRequestDetail>();
-                    leave.LeaveDetail = leaveDetails.ToList();
+                    if (leave != null)
+                    {
+                        leave.LeaveDetail = multi.Read<LeaveRequestDetail>().ToList();
+                    }
 
                     return leave;
                 }

@@ -321,7 +321,6 @@ var LeaveRequestDetail = (function ($) {
 }(jQuery));
 
 $(document).ready(function () {
-    console.log('a');
     LeaveRequestDetail.init();
     $('form').areYouSure();
 });

@@ -411,7 +411,7 @@
                 Status = request.Status
             };
 
-            if (request.IsHalfDay)
+            if (request.IsHalfDay && request.LeaveType.Id != (short)LeaveTypes.GeneralLeave)
             {
                 GetTimeForHalfDayRequest(request, model);
             }

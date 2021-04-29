@@ -535,6 +535,7 @@ const LeaveRequest = (function ($) {
                 fromDate = LeaveRequest.fromDate.val(), toDate = LeaveRequest.toDate.val(),
                 approver = LeaveRequest.approverId.val(), verifier = LeaveRequest.verifierId.val(),
                 remark = $('#Remark').val();
+            const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
 
             let start = $("[name='FromDate']").datepicker('getDate'),
                 end = $("[name='ToDate']").datepicker('getDate'),
@@ -553,21 +554,45 @@ const LeaveRequest = (function ($) {
                 errorString.push('To Date field is required.');
             }
 
-            if (LeaveRequest.halfDayOff.prop('checked')) {
-                fromDate = moment(LeaveRequest.fromDate.val());
-                toDate = moment(LeaveRequest.fromDate.val());
-                if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
-                    fromDate = fromDate.add(1, 'day');
+            if (leaveTypeId === LeaveType.GeneralLeave) {
+                const rows = $('.tabledata tbody tr'),
+                    totalRows = rows.length;
+                for (let i = 0; i < totalRows; i++) {
+                    const row = $(rows[i]),
+                        leaveDate = $.trim($('td.tdleavedate', row).first().attr('data-date')),
+                        isHalfDay = $('td input.chkhalfday', row).first().prop('checked');
+                    let fromTime = moment(leaveDate + (isHalfDay ? (' ' + $('td select.ddlfromtime', row).first().val()) : '')),
+                        toTime = moment(leaveDate + (isHalfDay ? (' ' + $('td select.ddltotime', row).first().val()) : ''));
+
+                    if ($('td input.chkIsFromAfterday', row).first().prop('checked')) {
+                        fromTime.add(1, 'days');
+                    }
+
+                    if ($('td input.chkIsToAfterday', row).first().prop('checked')) {
+                        toTime.add(1, 'days');
+                    }
+
+                    if (fromTime.isAfter(toTime)) {
+                        errorString.push('To Time is invalid.');
+                    }
                 }
-                if (LeaveRequest.isToTimeAfterDay.prop('checked')) {
-                    toDate = toDate.add(1, 'day');
-                }
-                fromDate = fromDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2));
-                fromDate = fromDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2));
-                toDate = toDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2));
-                toDate = toDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2));
-                if (fromDate.isAfter(toDate)) {
-                    errorString.push('Time is not valid.');
+            } else {
+                if (LeaveRequest.halfDayOff.prop('checked')) {
+                    fromDate = moment(LeaveRequest.fromDate.val());
+                    toDate = moment(LeaveRequest.fromDate.val());
+                    if (LeaveRequest.isFromTimeAfterDay.prop('checked')) {
+                        fromDate = fromDate.add(1, 'day');
+                    }
+                    if (LeaveRequest.isToTimeAfterDay.prop('checked')) {
+                        toDate = toDate.add(1, 'day');
+                    }
+                    fromDate = fromDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2));
+                    fromDate = fromDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.fromTimeMinute.val(), 2));
+                    toDate = toDate.set('hour', LeaveRequest.leftPadding(LeaveRequest.toTimeHour.val(), 2));
+                    toDate = toDate.set('minute', LeaveRequest.leftPadding(LeaveRequest.toTimeMinute.val(), 2));
+                    if (fromDate.isAfter(toDate)) {
+                        errorString.push('Time is invalid.');
+                    }
                 }
             }
 
