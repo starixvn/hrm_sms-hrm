@@ -197,7 +197,7 @@ BEGIN
 		,tmpca.MoveOffFromDate
 		,tmpca.MoveOffToDate
 	INTO #tblEmployeeCalendar
-	FROM #tblEmployee AS emp
+	FROM #tblEmployee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmployeeId = tmpca.EmpId
 		AND tmpca.WorkDate BETWEEN @tmpFromDate
 			AND @tmpToDate
@@ -227,7 +227,7 @@ BEGIN
 		FROM @tblEmployeeWeekly AS emp
 			CROSS APPLY (
 			SELECT COUNT(1) AS TotalOffDaysUsed
-			FROM #tblEmployeeCalendar AS empca
+			FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
 			WHERE empca.EmployeeId = emp.EmployeeId
 				AND empca.WorkDate BETWEEN emp.FromDate AND emp.ToDate
 				AND empca.IsHoliday = 0
@@ -239,10 +239,10 @@ BEGIN
 						AND empca.MoveOffToDate IS NOT NULL
 						)
 					OR (
-						(empca.IsOffDay = 1 AND (empca.IsFixedOffDay = 1 OR empca.ShiftId IS NULL))
+						(empca.IsOffDay = 1 AND (empca.IsFixedOffDay = 1 OR empca.ShiftId IS NULL OR (empca.ShiftId IS NOT NULL AND empca.IsOvertime = 1)))
 						AND NOT EXISTS (
 							SELECT 1
-							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
+							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 							WHERE emp.EmployeeId = offrep.EmployeeId
 								AND empca.WorkDate = offrep.WorkDate
 								--AND empca.ModifierId IS NULL
@@ -250,7 +250,7 @@ BEGIN
 							)
 						AND NOT EXISTS (
 							SELECT 1
-							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
+							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 							WHERE emp.EmployeeId = offrep.EmployeeId
 								AND empca.WorkDate = offrep.WorkDate
 								AND offrep.ReplaceForDate NOT BETWEEN emp.FromDate AND emp.ToDate
@@ -267,8 +267,11 @@ BEGIN
 			INNER JOIN @tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
+			INNER JOIN #tblEmployeeCalendar AS tmpempca WITH (NOLOCK) ON empca.EmpId = tmpempca.EmployeeId
+			AND empca.WorkDate = tmpempca.WorkDate
 		WHERE empca.IsOffDay = 1
 			AND ISNULL(empca.IsFixedOffDay, 0) = 0
+			AND tmpempca.IsOvertime = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
@@ -292,6 +295,7 @@ BEGIN
 			AND emp.ToDate = @ToDate
 		WHERE empca.IsOffDay = 1
 			AND empca.IsFixedOffDay = 0
+			AND empca.IsOvertime = 0
 			AND EXISTS (
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
@@ -741,3 +745,4 @@ BEGIN
 
 	DROP TABLE #tblEmployeeCalendar
 END
+
