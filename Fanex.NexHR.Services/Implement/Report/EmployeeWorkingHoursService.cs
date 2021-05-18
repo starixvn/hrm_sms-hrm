@@ -235,9 +235,7 @@
 
                 if (dailyWorking.IsLeaveHalfDay)
                 {
-                    value = dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.KeepInViewByHour
-                        ? string.Format("{0}½", dailyWorking.LeaveType2.Code)
-                        : string.Format("{0}½", dailyWorking.LeaveType.Code);
+                    value = CheckLeaveType(dailyWorking);
                 }
                 else
                 {
@@ -255,6 +253,13 @@
                 cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 cell.Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(backgroundColor));
             }
+        }
+
+        private static string CheckLeaveType(DailyWorking dailyWorking)
+        {
+            return dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.KeepInViewByHour
+                        ? string.Format("{0}½", dailyWorking.LeaveType2.Code)
+                        : string.Format("{0}½", dailyWorking.LeaveType.Code);
         }
 
         public static bool IsUnpaidLeave(DailyWorking dailyWorking)
