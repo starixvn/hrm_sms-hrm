@@ -15,6 +15,7 @@ BEGIN
 
 	SELECT JobLevelId
 		,[Name]
+		,IsDeleted
 		,ModifiedDate
 	FROM JobLevel WITH (NOLOCK)
 	WHERE @FromDate IS NULL
