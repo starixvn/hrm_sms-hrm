@@ -179,6 +179,7 @@
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
+    <Content Include="wwwroot\dist\js\joblevel.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
     <Content Include="wwwroot\dist\js\section.index.js" />
     <Content Include="wwwroot\dist\js\unit.edit.js" />
@@ -1243,6 +1244,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="wwwroot\dist\js\joblevel.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

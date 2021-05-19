@@ -3,7 +3,7 @@ import 'bootstrap/dist/js/bootstrap';
 import 'floatthead/dist/jquery.floatThead';
 import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
 
-const jobTitle = (function ($) {
+const jobTitleModule = (function ($) {
     const domElement = {
         Keyword: '#keyword',
         Table: '#data',
@@ -68,7 +68,7 @@ const jobTitle = (function ($) {
             categoryId: $(domElement.CreateDialog).find('select[name="categoryId"]').val()
         };
 
-        if (isValid($(domElement.CreateDialog))) {
+        if (validate($(domElement.CreateDialog))) {
             $.ajax({
                 method: 'POST',
                 url: resolveClientUrl('JobTitle/Insert'),
@@ -88,7 +88,7 @@ const jobTitle = (function ($) {
         }
     }
 
-    function isValid($form) {
+    function validate($form) {
         let isValid = true,
             errorMsg = '',
             jobTitle = $form.find('input[name="name"]').val(),
@@ -162,7 +162,7 @@ const jobTitle = (function ($) {
             categoryId: categoryId
         };
 
-        if (isValid($(domElement.EditDialog))) {
+        if (validate($(domElement.EditDialog))) {
             $.ajax({
                 method: 'POST',
                 url: resolveClientUrl('JobTitle/Update'),
@@ -234,17 +234,17 @@ const jobTitle = (function ($) {
         });
     }
 
-    function initJobtitle() {
+    function initModule() {
         getJobtitle();
         initFilterEvent();
         initButtonCreateEvent();
     }
 
     return {
-        initJobtitle
+        initModule
     };
 })(jQuery);
 
 $(document).ready(function () {
-    jobTitle.initJobtitle();
+    jobTitleModule.initModule();
 });

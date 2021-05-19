@@ -174,13 +174,6 @@
                 <div class="plabel">@Labels.JobTitle:</div>
                 <div class="pcontent bold">@Model.Employee.JobTitle</div>
             </li>
-            @if (Model.Employee.PromotionDate.HasValue)
-            {
-                <li class="list-group-item">
-                    <div class="plabel">@Labels.PromotionDate:</div>
-                    <div class="pcontent bold">@Model.Employee.PromotionDate.ToDateMonthYearFormatedDate()</div>
-                </li>
-            }
             <li class="list-group-item">
                 <div class="plabel">@Labels.Team:</div>
                 <div class="pcontent bold">@Model.Employee.Team.Name</div>
@@ -241,10 +234,6 @@
                     </div>
                 </li>
             }
-            <li class="list-group-item">
-                <div class="plabel">@Labels.Unit:</div>
-                <div class="pcontent bold">@Model.Employee.Unit</div>
-            </li>
         </ul>
     </div>
     <div>

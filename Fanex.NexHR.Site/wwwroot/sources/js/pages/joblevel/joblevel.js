@@ -3,7 +3,7 @@ import 'bootstrap/dist/js/bootstrap';
 import 'floatthead/dist/jquery.floatThead';
 import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
 
-const jobLevel = (function ($) {
+const jobLevelModule = (function ($) {
     const domElement = {
         Table: '#data',
         CreateDialog: '#create-dialog',
@@ -47,7 +47,7 @@ const jobLevel = (function ($) {
             name: $(domElement.CreateDialog).find('input[name="name"]').val(),
         };
 
-        if (isValid($(domElement.CreateDialog))) {
+        if (validate($(domElement.CreateDialog))) {
             $.ajax({
                 method: 'POST',
                 url: resolveClientUrl('JobLevel/Insert'),
@@ -67,7 +67,7 @@ const jobLevel = (function ($) {
         }
     }
 
-    function isValid($form) {
+    function validate($form) {
         let isValid = true,
             errorMsg = '',
             jobLevel = $form.find('input[name="name"]').val().trim();
@@ -133,7 +133,7 @@ const jobLevel = (function ($) {
             name: jobLevel
         };
 
-        if (isValid($(domElement.EditDialog))) {
+        if (validate($(domElement.EditDialog))) {
             $.ajax({
                 method: 'POST',
                 url: resolveClientUrl('JobLevel/Update'),
@@ -203,16 +203,16 @@ const jobLevel = (function ($) {
         });
     }
 
-    function initJobLevel() {
+    function initModule() {
         getJobLevel();
         initButtonCreateEvent();
     }
 
     return {
-        initJobLevel
+        initModule
     };
 })(jQuery);
 
 $(document).ready(function () {
-    jobLevel.initJobLevel();
+    jobLevelModule.initModule();
 });
