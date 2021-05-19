@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[JobLevel_Insert]
 	@Name nvarchar(150)
-	,@IsActive BIT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -31,14 +30,13 @@ BEGIN
 
 	INSERT INTO dbo.JobLevel(
 		[Name]
-		,[IsActive]
+		,[IsDeleted]
 		,[ModifiedBy]
 		,[ModifiedDate]
-
 		)
 	VALUES (
 		@Name
-		,@IsActive
+		,0
 		,@ModifiedBy
 		,GETDATE()
 		)

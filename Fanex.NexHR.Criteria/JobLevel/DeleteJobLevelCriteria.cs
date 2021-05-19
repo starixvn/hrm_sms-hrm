@@ -4,7 +4,8 @@
 
     public class DeleteJobLevelCriteria : CriteriaBase
     {
-        public int jobLevelId { get; set; }
+        public int JobLevelId { get; set; }
+        public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {
@@ -13,7 +14,7 @@
 
         public override bool IsValid()
         {
-            return jobLevelId > 0;
+            return JobLevelId > 0;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[JobLevel_Delete] @JobLevelId INT
+	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -29,5 +30,9 @@ BEGIN
 		RETURN
 	END
 
-	DELETE FROM JobLevel WHERE JobLevelId = @JobLevelId
+	UPDATE dbo.JobLevel WITH (ROWLOCK, UPDLOCK)
+	SET IsDeleted = 1
+		,ModifiedDate = GETDATE()
+		,ModifiedBy = @ModifiedBy
+	WHERE JobLevelId = @JobLevelId
 END

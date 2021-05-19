@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[JobLevel_Get]
-	@IsActive BIT = NULL
 AS
 /*
 Created: 20210420@Lilac.Nguyen
@@ -14,10 +13,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT j.JobLevelId AS Id
-		,j.Name
-		,j.IsActive
-
+		,j.[Name]
 	FROM dbo.JobLevel AS j WITH (NOLOCK)
-	WHERE j.IsActive = @IsActive OR @IsActive IS NULL
+	WHERE j.IsDeleted = 0
 
 END

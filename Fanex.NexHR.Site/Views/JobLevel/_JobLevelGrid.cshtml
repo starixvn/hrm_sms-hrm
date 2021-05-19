@@ -1,5 +1,4 @@
-﻿@using Fanex.NexHR.Core
-@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models
 @{
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -11,7 +10,6 @@
             <tr>
                 <th>@Labels.SymbolCount</th>
                 <th>@Labels.Name</th>
-                <th>@Labels.Active</th>
                 @if (hasPermission)
                 {
                     <th>@Labels.Edit</th>
@@ -28,12 +26,6 @@
                     <tr id="row@(jobLevel.Id)">
                         <td>@(index++)</td>
                         <td>@jobLevel.Name</td>
-                        <td>
-                            @if (jobLevel.IsActive)
-                            {
-                                <i class="fa fa-check fa-lg icon-check"></i>
-                            }
-                        </td>
                         @if (hasPermission)
                         {
                             <td>

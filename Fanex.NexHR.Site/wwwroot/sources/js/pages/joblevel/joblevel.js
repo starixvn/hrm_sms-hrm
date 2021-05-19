@@ -5,27 +5,14 @@ import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from
 
 const jobLevel = (function ($) {
     const domElement = {
-        Keyword: '#keyword',
         Table: '#data',
         CreateDialog: '#create-dialog',
         EditDialog: '#edit-dialog',
-        BtnGetJobLevel: '#btnGetJobLevel',
         BtnCreate: '#btnNewJobLevel',
         EditJobLevel: '.edit-jobLevel',
         DelJobLevel: '.delete-jobLevel'
     };
 
-    function initFilterEvent() {
-        $(domElement.BtnGetJobLevel).on('click', function () {
-            getJobLevel();
-        });
-
-        $(domElement.Keyword).keyup(function (event) {
-            if (event.keyCode === 13) {
-                getJobLevel();
-            }
-        });
-    }
 
     function initButtonCreateEvent() {
         $(domElement.BtnCreate).on('click', function () {
@@ -58,7 +45,6 @@ const jobLevel = (function ($) {
     function onCreateJobLevel() {
         const data = {
             name: $(domElement.CreateDialog).find('input[name="name"]').val(),
-            isActive: $(domElement.CreateDialog).find('input[name="isActive"]').prop('checked')
         };
 
         if (isValid($(domElement.CreateDialog))) {
@@ -112,10 +98,8 @@ const jobLevel = (function ($) {
         $(domElement.EditJobLevel).on('click', function () {
             removeMsg($(domElement.EditDialog));
             const jobLevelId = $(this).attr('data-id'),
-                isActive = $(this).attr('data-isActive'),
                 jobLevel = $(this).attr('data-joblevel-name');
             $(domElement.EditDialog).find('input[name="name"]').val(jobLevel);
-            document.getElementById("IsActive").checked = (isActive == 'True');
 
             $(domElement.EditDialog).dialog({
                 modal: true,
@@ -125,9 +109,8 @@ const jobLevel = (function ($) {
                         text: 'Submit',
                         class: 'btn btn-primary',
                         click: function () {
-                            const newJobLevel = $(domElement.EditDialog).find('input[name="name"]').val(),
-                                newIsActive = $(domElement.EditDialog).find('input[name="IsActive"]').prop('checked');
-                            onEditJobLevel(jobLevelId, newJobLevel, newIsActive);
+                            const newJobLevel = $(domElement.EditDialog).find('input[name="name"]').val();
+                            onEditJobLevel(jobLevelId, newJobLevel);
                         }
                     },
                     {
@@ -144,11 +127,10 @@ const jobLevel = (function ($) {
         });
     }
 
-    function onEditJobLevel(jobLevelId, jobLevel, isActive) {
+    function onEditJobLevel(jobLevelId, jobLevel) {
         const data = {
             id: jobLevelId,
-            name: jobLevel,
-            isActive: isActive
+            name: jobLevel
         };
 
         if (isValid($(domElement.EditDialog))) {
@@ -202,9 +184,7 @@ const jobLevel = (function ($) {
             type: 'POST',
             url: resolveClientUrl('jobLevel/GetJobLevel'),
             dataType: 'html',
-            data: {
-                isActive: $('#Status').val()
-            },
+            data: {},
             beforeSend: function () {
                 blockUI();
             },
@@ -225,7 +205,6 @@ const jobLevel = (function ($) {
 
     function initJobLevel() {
         getJobLevel();
-        initFilterEvent();
         initButtonCreateEvent();
     }
 

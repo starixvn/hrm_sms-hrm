@@ -1,6 +1,4 @@
 ﻿@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Models
-@using Fanex.NexHR.Core
 
 @model JobLevel
 @{
@@ -17,34 +15,14 @@
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@using (Html.BeginForm("GetJobLevel", "joblevel", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
+@if (hasPermission)
 {
-    var status = new List<SelectListItem>
-{
-            new SelectListItem() {Text = "All", Value = ""},
-            new SelectListItem() {Text = "Active", Value = "true"},
-            new SelectListItem() {Text = "Inactive", Value = "false"}
-        };
-
-<div class="form-horizontal clearfix">
-    <div class="form-group">
-        <div class="label-form label--xs">
-            @Html.Label(@Labels.Status, new { @class = "control-label" })
-        </div>
-        <div class="select-form">
-            @Html.DropDownList("Status", status, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group form-group--m">
-        <button class="btn btn-primary" type="button" id="btnGetJobLevel">@Labels.Submit</button>
-        @if (hasPermission)
-        {
-            <button id="btnNewJobLevel" class="btn btn-request" type="button">
-                <span class="fa fa-plus"></span> @Labels.CreateJobLevel
-            </button>
-        }
-    </div>
-</div>
+    using (Html.BeginForm("GetJobLevel", "joblevel", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
+    {
+        <button id="btnNewJobLevel" class="btn btn-request" type="button">
+            <span class="fa fa-plus"></span> @Labels.CreateJobLevel
+        </button>
+    }
 }
 
 <div id="data"></div>
@@ -61,14 +39,6 @@
                     <input type="text" name="name" id="name" class="form-control" autocomplete="off" />
                 </div>
             </div>
-            <div class="form-group">
-                <div class="label-form">
-                    <label class="control-label" for="IsActive">@Labels.IsActive</label>
-                </div>
-                <div class="input-form">
-                    @Html.CheckBox("isActive", true)
-                </div>
-            </div>
         </div>
     </form>
 </div>
@@ -82,15 +52,7 @@
                     <label class="control-label" for="name">@Labels.JobLevel</label>
                 </div>
                 <div class="input-form">
-                    <input type="text" name="name" id="name" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="label-form">
-                    <label class="control-label" for="IsActive">@Labels.IsActive</label>
-                </div>
-                <div class="input-form">
-                    @Html.CheckBoxCustomFor(model => model.IsActive)
+                    <input type="text" name="name" id="name" class="form-control" autocomplete="off"  />
                 </div>
             </div>
         </div>

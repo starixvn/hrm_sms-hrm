@@ -31,11 +31,11 @@
 
         [ValidateInput(false)]
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
-        public ActionResult GetJobLevel(bool? isActive = null)
+        public ActionResult GetJobLevel()
         {
             ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
 
-            IList<JobLevel> jobLevel = jobLevelService.GetJobLevel(isActive);
+            IList<JobLevel> jobLevel = jobLevelService.GetJobLevel();
 
             return PartialView("~/Views/JobLevel/_JobLevelGrid.cshtml", jobLevel);
         }
@@ -43,12 +43,11 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.JobLevelManagement)]
-        public JsonResult Insert(string name, bool isActive)
+        public JsonResult Insert(string name)
         {
             var criteria = new InsertJobLevelCriteria
             {
                 Name = name,
-                IsActive = isActive,
                 ModifiedBy = sessionService.Employee.Id
             };
 
@@ -60,13 +59,12 @@
         [ValidateInput(false)]
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.JobLevelManagement)]
-        public JsonResult Update(int id, string name, bool isActive)
+        public JsonResult Update(int id, string name)
         {
             var criteria = new UpdateJobLevelCriteria
             {
                 JobLevelId = id,
                 Name = name,
-                IsActive = isActive,
                 ModifiedBy = sessionService.Employee.Id
             };
             CommandResult result = jobLevelService.Update(criteria);
@@ -78,7 +76,7 @@
         [HRMPermission(Policy.Host, FunctionKey.JobLevelManagement)]
         public JsonResult Delete(int id)
         {
-            CommandResult result = jobLevelService.Delete(id);
+            CommandResult result = jobLevelService.Delete(id, sessionService.Employee.Id);
 
             return Json(result);
         }

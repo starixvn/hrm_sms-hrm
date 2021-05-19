@@ -7,12 +7,12 @@
 
     public interface IJobLevelService
     {
-        IList<JobLevel> GetJobLevel(bool? isActive = true);
+        IList<JobLevel> GetJobLevel();
 
         CommandResult Insert(InsertJobLevelCriteria criteria);
 
         CommandResult Update(UpdateJobLevelCriteria criteria);
 
-        CommandResult Delete(int id);
+        CommandResult Delete(int id, int actorId);
     }
 }

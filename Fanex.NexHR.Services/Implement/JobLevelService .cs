@@ -2,7 +2,6 @@
 {
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Department;
     using Fanex.NexHR.Criteria.JobLevel;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
@@ -18,9 +17,9 @@
             this.baseService = baseService;
         }
 
-        public IList<JobLevel> GetJobLevel(bool? isActive = true)
+        public IList<JobLevel> GetJobLevel()
         {
-            var criteria = new GetJobLevelCriteria { IsActive = isActive };
+            var criteria = new GetJobLevelCriteria {};
 
             return baseService.GetData<JobLevel>(criteria).ToList();
         }
@@ -35,11 +34,12 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult Delete(int id)
+        public CommandResult Delete(int id, int actorId)
         {
             var criteria = new DeleteJobLevelCriteria
             {
-                jobLevelId = id
+                JobLevelId = id,
+                ModifiedBy = actorId
             };
 
             return baseService.ExecuteNonQuery(criteria);
