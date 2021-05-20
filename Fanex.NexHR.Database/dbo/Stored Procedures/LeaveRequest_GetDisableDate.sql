@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_GetDisableDate] @empId INT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_GetDisableDate] @empId INT
 	,@fromDate DATE
 	,@toDate DATE
 	,@requestId BIGINT = NULL
@@ -16,19 +17,16 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE
-		@CountDay INT
+	DECLARE @CountDay INT
 		-- request status
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
-
 		-- leave type 
 		,@UnpaidLeave INT = 25
 		,@UnpaidLeaveInsurance INT = 41
 		,@PaternityLeave INT = 14
 		,@MaternityLeave INT = 12
-
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @fromDate
 		,@toDate = @toDate
@@ -36,20 +34,16 @@ BEGIN
 
 	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
-	IF--(@CountDay >= 7 AND  
-	(@LeaveTypeId = @UnpaidLeave OR @LeaveTypeId = @UnpaidLeaveInsurance 
-	  OR @LeaveTypeId = @PaternityLeave OR @LeaveTypeId = @MaternityLeave) --)
+	IF @LeaveTypeId = @UnpaidLeave
+		OR @LeaveTypeId = @UnpaidLeaveInsurance
+		OR @LeaveTypeId = @PaternityLeave
+		OR @LeaveTypeId = @MaternityLeave
 	BEGIN
-		EXEC [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate  = @fromDate
-		,@toDate = @toDate
-		,@empId = @empId
+		EXEC dbo.tmpEmployeeCalendar_UpdateOff @fromDate = @fromDate
+			,@toDate = @toDate
+			,@empId = @empId
 	END
-	--ELSE
-	--BEGIN
-	--	EXEC [dbo].[LeaveRequest_Reset_Off]@fromDate  = @fromDate
-	--	,@toDate = @toDate
-	--	,@empId = @empId
-	--END
+
 	SELECT tmpca.RequestId
 		,tmpca.WorkDate
 		,tmpca.ShiftId

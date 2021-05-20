@@ -2,7 +2,7 @@
 AS
 /*
 Created: 20210420@Lilac.Nguyen
-Task: get joblevel by active
+Task: get joblevel
 DB: HRM
 Original: 
 
@@ -12,9 +12,8 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT j.JobLevelId AS Id
-		,j.[Name]
-	FROM dbo.JobLevel AS j WITH (NOLOCK)
-	WHERE j.IsDeleted = 0
-
+	SELECT JobLevelId AS Id
+		,[Name]
+	FROM dbo.JobLevel WITH (NOLOCK)
+	WHERE IsDeleted = 0
 END

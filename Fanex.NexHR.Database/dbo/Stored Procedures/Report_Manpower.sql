@@ -1,7 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.Report_Manpower    Script Date: 7/20/2016 10:19:17 AM ******/
-/****** Object:  Stored Procedure dbo.Report_Manpower    Script Date: 7/19/2016 5:22:20 PM ******/
-
--- [dbo].[Report_Manpower] 2015
+﻿
 CREATE PROCEDURE [dbo].[Report_Manpower] @Year INT
 AS
 /*
@@ -67,10 +64,8 @@ BEGIN
 				END) AS NewHire
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUser
 		,SUM(CASE 
@@ -89,10 +84,8 @@ BEGIN
 				END) AS NewHireJan
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Jan) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Jan, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserJan
 		,SUM(CASE 
@@ -111,10 +104,8 @@ BEGIN
 				END) AS NewHireFeb
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Feb) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Feb, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserFeb
 		,SUM(CASE 
@@ -133,10 +124,8 @@ BEGIN
 				END) AS NewHireMar
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Mar) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Mar, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserMar
 		,SUM(CASE 
@@ -155,10 +144,8 @@ BEGIN
 				END) AS NewHireApr
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Apr) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Apr, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserApr
 		,SUM(CASE 
@@ -177,10 +164,8 @@ BEGIN
 				END) AS NewHireMay
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @May) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @May, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserMay
 		,SUM(CASE 
@@ -199,10 +184,8 @@ BEGIN
 				END) AS NewHireJun
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Jun) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Jun, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserJun
 		,SUM(CASE 
@@ -221,10 +204,8 @@ BEGIN
 				END) AS NewHireJul
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Jul) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Jul, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserJul
 		,SUM(CASE 
@@ -243,10 +224,8 @@ BEGIN
 				END) AS NewHireAug
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Aug) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Aug, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserAug
 		,SUM(CASE 
@@ -265,10 +244,8 @@ BEGIN
 				END) AS NewHireSep
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Sep) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Sep, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserSep
 		,SUM(CASE 
@@ -287,10 +264,8 @@ BEGIN
 				END) AS NewHireOct
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Oct) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Oct, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserOct
 		,SUM(CASE 
@@ -309,10 +284,8 @@ BEGIN
 				END) AS NewHireNov
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Nov) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Nov, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserNov
 		,SUM(CASE 
@@ -331,10 +304,8 @@ BEGIN
 				END) AS NewHireDec
 		,SUM(CASE 
 				WHEN DATEDIFF(MM, e.JoinedDate, @Dec) >= 0
-					AND (
-						e.ResignedDate IS NULL
-						OR DATEDIFF(MM, @Dec, e.ResignedDate) > 0
-						) THEN 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1 THEN 1
 				ELSE 0
 				END) AS ActiveUserDec
 	FROM dbo.Employee AS e WITH (NOLOCK)

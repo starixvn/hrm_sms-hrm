@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_ResetCalendar] @RequestId BIGINT
 	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -40,8 +42,6 @@ BEGIN
 
 		UPDATE empca
 		SET empca.ChangeShiftId = NULL
-			--,empca.ShiftId = NULL
-			--,empca.IsOffDay = 1
 			,empca.ModifiedBy = @ActorId
 			,empca.ModifiedDate = @ModifiedDate
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)

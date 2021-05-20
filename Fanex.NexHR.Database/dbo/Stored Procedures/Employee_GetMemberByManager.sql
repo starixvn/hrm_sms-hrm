@@ -20,6 +20,12 @@ BEGIN
 
 	DECLARE @searchGO NVARCHAR(100)
 
+	DECLARE @tblEmployeeIds TABLE (EmpId INT)
+
+	INSERT INTO @tblEmployeeIds (EmpId)
+	SELECT EmpId 
+	FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 1)
+
 	SELECT e.EmpId,
 		e.NickName,
 		e.FullName
@@ -27,7 +33,7 @@ BEGIN
 	WHERE 
 		(e.NickName LIKE  @query + '%'
 		OR e.FullName LIKE @query + '%')
-		AND EXISTS (SELECT 1 FROM [dbo].[fnc_GetEmployeeByActorId](@SupervisorId, 1, 1) WHERE EmpId = e.EmpId)
+		AND EXISTS (SELECT 1 FROM @tblEmployeeIds WHERE EmpId = e.EmpId)
 		AND e.Enabled = 1 
 		AND ISNULL(e.isDeleted, 0) = 0
 END

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate DATE
+﻿
+CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOff] @fromDate DATE
 	,@toDate DATE
 	,@empId INT = NULL
 AS
@@ -14,136 +15,159 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE  @TableTempDate DATE
-			,@TempFromDate DATE
-			,@TempToDate DATE
-			,@SetDayOff DATE
-			,@OffDaysbyWeek TINYINT
-			,@CountDaysOff TINYINT
-			,@CountWeeken TINYINT
-			,@OffDayLeft TINYINT
-			,@I TINYINT = 0
-			,@CountDayDiff INT
-			,@StartDay DATE
-			,@CountDayWorked INT
+	DECLARE @TableTempDate DATE
+		,@TempFromDate DATE
+		,@TempToDate DATE
+		,@SetDayOff DATE
+		,@OffDaysbyWeek TINYINT
+		,@CountDaysOff TINYINT
+		,@CountWeeken TINYINT
+		,@OffDayLeft TINYINT
+		,@I TINYINT = 0
+		,@CountDayDiff INT
+		,@StartDay DATE
+		,@CountDayWorked INT
 
+	CREATE TABLE #updateOffDay (WorkDate DATE)
 
-	CREATE TABLE #updateOffDay (
-		WorkDate DATE
-		)
-	CREATE TABLE #tempWeekDoNotHaveData (
-		WorkDate DATE
-		)
-	CREATE TABLE #dayOffDefaultPerWeek (
-		WorkDate DATE
-		,DayName VARCHAR(9)
-		)
-	
-	INSERT INTO #dayOffDefaultPerWeek( WorkDate , DayName)	
-			SELECT  tmpEmp.WorkDate , DATENAME(DW, tmpEmp.WorkDate)
-			FROM	tmpEmployeeCalendar tmpEmp
-			WHERE   tmpEmp.EmpId = @empId AND tmpEmp.WorkDate BETWEEN @fromDate
-			AND DATEADD(DAY, 6, @fromDate) AND tmpEmp.IsOffDay = 1 
-			AND tmpEmp.ShiftId IS NULL
-	
-	SELECT @CountWeeken = SUM(CASE  WHEN DayName ='Sunday'	 THEN 2
-									WHEN DayName ='Saturday' THEN 1
-									ELSE 0
-							  END)
-	FROM #dayOffDefaultPerWeek
+	CREATE TABLE #tempWeekDoNotHaveData (WorkDate DATE)
 
-	SELECT @CountDaysOff = COUNT(WorkDate) FROM #dayOffDefaultPerWeek
+	CREATE TABLE #dayOffDefaultPerWeek (WorkDate DATE, [DayName] VARCHAR(9))
 
-	SELECT  @OffDaysbyWeek = empsum.OffDaysbyWeek
-			FROM EmployeeSummary empsum  WITH (NOLOCK) 
-			WHERE empsum.EmpId = @empId 
-	SET @CountDayDiff = DATEDIFF(DAY,GETDATE(),@fromDate)
-	IF( @CountDayDiff < 0)
-	BEGIN 
+	INSERT INTO #dayOffDefaultPerWeek (WorkDate, [DayName])
+	SELECT WorkDate, DATENAME(DW, WorkDate)
+	FROM dbo.tmpEmployeeCalendar WITH (NOLOCK)
+	WHERE EmpId = @empId
+		AND WorkDate BETWEEN @fromDate
+			AND DATEADD(DAY, 6, @fromDate)
+		AND IsOffDay = 1
+		AND ShiftId IS NULL
+
+	SELECT @CountWeeken = SUM(CASE 
+				WHEN DayName = 'Sunday' THEN 2
+				WHEN DayName = 'Saturday' THEN 1
+				ELSE 0
+				END)
+	FROM #dayOffDefaultPerWeek WITH (NOLOCK)
+
+	SELECT @CountDaysOff = COUNT(WorkDate)
+	FROM #dayOffDefaultPerWeek WITH (NOLOCK)
+
+	SELECT @OffDaysbyWeek = OffDaysbyWeek
+	FROM dbo.EmployeeSummary WITH (NOLOCK)
+	WHERE EmpId = @empId
+
+	SET @CountDayDiff = DATEDIFF(DAY, GETDATE(), @fromDate)
+
+	IF @CountDayDiff < 0
+	BEGIN
 		SET @StartDay = GETDATE()
 	END
 	ELSE
-	BEGIN 
+	BEGIN
 		SET @StartDay = @fromDate
 	END
-	IF ( @OffDaysbyWeek > @CountDaysOff )
+
+	IF @OffDaysbyWeek > @CountDaysOff
 	BEGIN
-	SET @OffDayLeft = @OffDaysbyWeek - @CountDaysOff
+		SET @OffDayLeft = @OffDaysbyWeek - @CountDaysOff
+
 		WHILE @StartDay < @toDate
 		BEGIN
 			SELECT @CountDayWorked = COUNT(empatt.EmpId)
-			FROM  EmployeeAttendance AS empatt  WITH (NOLOCK)
-			WHERE empatt.AttendanceDate BETWEEN @StartDay AND DATEADD(DAY, 6, @StartDay)
-			AND empatt.EmpId = @EmpId
-			AND empatt.ShiftId IS NOT NULL 
-			AND empatt.InFixed IS NOT NULL 
-			AND empatt.OutFixed IS NOT NULL 
+			FROM dbo.EmployeeAttendance AS empatt WITH (NOLOCK)
+			WHERE empatt.AttendanceDate BETWEEN @StartDay
+					AND DATEADD(DAY, 6, @StartDay)
+				AND empatt.EmpId = @EmpId
+				AND empatt.ShiftId IS NOT NULL
+				AND empatt.InFixed IS NOT NULL
+				AND empatt.OutFixed IS NOT NULL
 
-			IF(@CountDayWorked = 0)
+			IF @CountDayWorked = 0
 			BEGIN
-				INSERT INTO #tempWeekDoNotHaveData(WorkDate)
+				INSERT INTO #tempWeekDoNotHaveData (WorkDate)
 				SELECT @StartDay
 			END
+
 			SET @StartDay = DATEADD(DAY, 7, @StartDay)
 		END
-		WHILE EXISTS (SELECT * FROM #tempWeekDoNotHaveData)
+
+		WHILE EXISTS (
+				SELECT 1
+				FROM #tempWeekDoNotHaveData WITH (NOLOCK)
+				)
 		BEGIN
 			SELECT TOP 1 @TableTempDate = WorkDate
-			FROM #tempWeekDoNotHaveData
+			FROM #tempWeekDoNotHaveData WITH (NOLOCK)
+
 			SET @TempFromDate = @TableTempDate
-			IF(DATEDIFF(DAY, @TempFromDate, @toDate) >= 6 )
+
+			IF DATEDIFF(DAY, @TempFromDate, @toDate) >= 6
 			BEGIN
 				SET @TempToDate = DATEADD(DAY, 6, @TableTempDate)
-			END				
+			END
 			ELSE
 			BEGIN
 				SET @TempToDate = @toDate
 			END
+
 			WHILE @TempFromDate <= @TempToDate
-			BEGIN	
-				IF(DATEPART(dw, @TempFromDate) = 1)
+			BEGIN
+				IF DATEPART(dw, @TempFromDate) = 1
 				BEGIN
 					WHILE @I < @OffDayLeft
-					BEGIN	
-						IF(@CountWeeken = 3)
+					BEGIN
+						IF @CountWeeken = 3
 						BEGIN
-							SET @SetDayOff = DATEADD(DAY, - (@I +2), @TempFromDate )	
+							SET @SetDayOff = DATEADD(DAY, - (@I + 2), @TempFromDate)
 						END
-						ELSE IF(@CountWeeken = 2)
-						BEGIN	
-							SET @SetDayOff = DATEADD(DAY, - (@I + 1), @TempFromDate )
+						ELSE IF @CountWeeken = 2
+						BEGIN
+							SET @SetDayOff = DATEADD(DAY, - (@I + 1), @TempFromDate)
 						END
-						ELSE IF(@CountWeeken = 1)
-						BEGIN	
-							 SET @SetDayOff = DATEADD(DAY, - (@I), @TempFromDate )
-							 IF(@I >= 1)
-							 BEGIN
-							 SET @SetDayOff = DATEADD(DAY, - (@I +1), @TempFromDate )
-							 END
+						ELSE IF @CountWeeken = 1
+						BEGIN
+							SET @SetDayOff = DATEADD(DAY, - (@I), @TempFromDate)
+
+							IF @I >= 1
+							BEGIN
+								SET @SetDayOff = DATEADD(DAY, - (@I + 1), @TempFromDate)
+							END
 						END
 						ELSE
 						BEGIN
-							 SET @SetDayOff = DATEADD(DAY, - (@I), @TempFromDate )
+							SET @SetDayOff = DATEADD(DAY, - (@I), @TempFromDate)
 						END
-						SET @I = @I +1
+
+						SET @I = @I + 1
+
 						INSERT INTO #updateOffDay (WorkDate)
-							   SELECT @SetDayOff
+						SELECT @SetDayOff
 					END
+
 					SET @I = 0
 				END
+
 				SET @TempFromDate = DATEADD(DAY, 1, @TempFromDate)
-			END		
+			END
 
 			DELETE #tempWeekDoNotHaveData
-			WHERE WorkDate = @TableTempDate	
+			WHERE WorkDate = @TableTempDate
 		END
+
 		UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
-						SET IsOffDay = 1, ShiftId = NULL
-						WHERE EmpId = @empId AND
-							  WorkDate IN ( SELECT WorkDate  
-											FROM #updateOffDay  )
-		DROP TABLE #dayOffDefaultPerWeek
-		DROP TABLE #updateOffDay
-		DROP TABLE #tempWeekDoNotHaveData
-		END
+		SET IsOffDay = 1
+			,ShiftId = NULL
+		WHERE EmpId = @empId
+			AND WorkDate IN (
+				SELECT WorkDate
+				FROM #updateOffDay WITH (NOLOCK)
+				)
 	END
+
+	DROP TABLE #dayOffDefaultPerWeek
+
+	DROP TABLE #updateOffDay
+
+	DROP TABLE #tempWeekDoNotHaveData
+END

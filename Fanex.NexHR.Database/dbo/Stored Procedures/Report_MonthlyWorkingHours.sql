@@ -85,23 +85,29 @@ BEGIN
 		,empca.WorkDate
 		,(CASE 
 			WHEN empatt.TotalWorkHours > 0 THEN empatt.TotalWorkHours
-			ELSE (SELECT DATEDIFF(mi, min(t.RequestTime), max(t.RequestTime))/60.0
-					FROM (SELECT cio.EmpId, cio.OnDate, cio.RequestTime
-							FROM CheckInOutRequest AS cio WITH (NOLOCK)
-							INNER JOIN WorkingTimeRequest AS w ON cio.RequestId = w.RequestId
-							WHERE cio.EmpId = emp.EmpId AND cio.OnDate = empca.WorkDate AND w.CurrentStatus NOT IN ( 3, 5, 7))AS t)
-			END ) AS TotalWorkingHours
+			ELSE (
+				SELECT DATEDIFF(mi, min(t.RequestTime), max(t.RequestTime)) / 60.0
+				FROM (
+					SELECT cio.EmpId, cio.OnDate, cio.RequestTime
+					FROM dbo.CheckInOutRequest AS cio WITH (NOLOCK)
+						INNER JOIN dbo.WorkingTimeRequest AS w WITH (NOLOCK) ON cio.RequestId = w.RequestId
+					WHERE cio.EmpId = emp.EmpId AND cio.OnDate = empca.WorkDate AND w.CurrentStatus NOT IN (3, 5, 7)
+				) AS t
+			)
+			END) AS TotalWorkingHours
 		,empca.IsHoliday
 		,empca.IsOffDay
 		--,empca.IsLeaveDay
 		,(CASE 
-			WHEN empca.IsLeaveDay = 1 AND ((empca.LeaveTypeId = @KIVByHourLeaveType AND (empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))  OR (empca.LeaveTypeId2  = @KIVByHourLeaveType AND ( empca.LeaveTypeId IS NULL OR empca.LeaveTypeId = @KIVByHourLeaveType))) THEN 0
+			WHEN empca.IsLeaveDay = 1
+				AND ((empca.LeaveTypeId = @KIVByHourLeaveType AND (empca.LeaveTypeId2 IS NULL OR empca.LeaveTypeId2 = @KIVByHourLeaveType))
+					OR (empca.LeaveTypeId2 = @KIVByHourLeaveType AND (empca.LeaveTypeId IS NULL OR empca.LeaveTypeId = @KIVByHourLeaveType))) THEN 0
 			ELSE empca.IsLeaveDay END
 			) AS IsLeaveDay
 		--,empca.LeaveDay
 		,(CASE 
-			WHEN empca.LeaveTypeId = @KIVByHourLeaveType AND  empca.LeaveTypeId2 = @KIVByHourLeaveType  THEN empca.LeaveDay - 1
-			WHEN empca.LeaveTypeId = @KIVByHourLeaveType OR  empca.LeaveTypeId2 = @KIVByHourLeaveType  THEN empca.LeaveDay - 0.5
+			WHEN empca.LeaveTypeId = @KIVByHourLeaveType AND empca.LeaveTypeId2 = @KIVByHourLeaveType THEN empca.LeaveDay - 1
+			WHEN empca.LeaveTypeId = @KIVByHourLeaveType OR empca.LeaveTypeId2 = @KIVByHourLeaveType THEN empca.LeaveDay - 0.5
 			ELSE empca.LeaveDay END
 			) AS LeaveDay
 		,(CASE 

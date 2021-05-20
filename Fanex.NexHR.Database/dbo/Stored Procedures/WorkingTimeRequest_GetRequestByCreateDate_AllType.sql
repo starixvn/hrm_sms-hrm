@@ -1,7 +1,9 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetRequestByCreateDate_AllType] @SupervisorID INT = NULL
 	,@empid INT = NULL
-	,@teamIds VARCHAR(max) = ''
+	,@TeamIds VARCHAR(max) = ''
 	,@fromdate DATETIME
 	,@todate DATETIME
 	,@status VARCHAR(max) = NULL
@@ -59,11 +61,11 @@ BEGIN
 		FROM dbo.fnc_strSplit(@status, ',')
 	END
 
-	IF ISNULL(@teamIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupsList (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@teamIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
 	IF @empid IS NULL
@@ -596,14 +598,14 @@ BEGIN
 		,ap_V.EmpId AS VerifierId
 		,ap_V.NickName AS VerifierNickName
 		,ap_V.FullName AS VerifierFullName
-		,ap_AH.EmpId AS ApprovedId
-		,ap_AH.NickName AS ApprovedNickName
-		,ap_AH.FullName AS ApprovedFullName
 		,r.VerifiedDate
 		,r.VerifiedStatus
 		,ap_A.EmpId AS ApproverId
 		,ap_A.NickName AS ApproverNickName
 		,ap_A.FullName AS ApproverFullName
+		,ap_AH.EmpId AS ApprovedId
+		,ap_AH.NickName AS ApprovedNickName
+		,ap_AH.FullName AS ApprovedFullName
 		,r.ApprovedDate
 		,r.ApprovedStatus
 		,ap_H.EmpId AS ProcessedId
@@ -643,6 +645,11 @@ BEGIN
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeID = lr.LeaveType
 		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
 		LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
+
+		OUTER APPLY ( SELECT TOP 1 ApproverId
+                  FROM WorkingTimeRequestHistory
+                  WHERE RequestId = r.RequestId
+                  ORDER BY LogDate DESC) AS rh
 	WHERE @leaveTypeId IS NULL
 		OR lr.LeaveType = @leaveTypeId
 	ORDER BY r.CreatedDate DESC

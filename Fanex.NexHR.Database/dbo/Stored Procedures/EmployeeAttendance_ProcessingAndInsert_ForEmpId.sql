@@ -296,7 +296,7 @@ BEGIN
 						,EarlyOut = @ActualEarlyOut
 						,LeaveTypeId = @LeaveTypeId
 						,Absence = @Absence
-						--,TotalWorkHours = @TotalWorkHours
+						,TotalWorkHours = @TotalWorkHours
 						,IsRightShift = @IsRightShift
 						,LeaveDay = @LeaveDay
 						,InsertDate = GETDATE()

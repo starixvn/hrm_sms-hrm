@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetRequestByRequestDate_AllType] @SupervisorId INT = NULL
 	,@empid INT = NULL
-	,@teamIds VARCHAR(max) = ''
+	,@TeamIds VARCHAR(max) = ''
 	,@fromdate DATETIME
 	,@todate DATETIME
 	,@status VARCHAR(max) = NULL
@@ -21,6 +21,11 @@ Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
+
+	-- work type
+	DECLARE @OffDay TINYINT = 1
+		,@LeaveDay TINYINT = 2
+		,@Onduty TINYINT = 3
 
 	CREATE TABLE #tblstatus (Currentstatus TINYINT)
 	CREATE TABLE #tblGroupsList (GroupId INT)
@@ -61,11 +66,11 @@ BEGIN
 		FROM dbo.fnc_strSplit(@status, ',')
 	END
 
-	IF ISNULL(@teamIds, '') <> ''
+	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
 		INSERT INTO #tblGroupsList (GroupId)
 		SELECT val
-		FROM dbo.fnc_strSplit(@teamIds, ',')
+		FROM dbo.fnc_strSplit(@TeamIds, ',')
 	END
 
 	IF @empid IS NULL
@@ -582,7 +587,7 @@ BEGIN
 				FROM (
 					SELECT RequestId
 						,CASE 
-							WHEN (IsOffDay = 1) THEN 'Off'
+							WHEN IsOffDay = 1 THEN 'Off'
 							ELSE CASE 
 									WHEN IsHoliday = 1 THEN 'PH'
 									ELSE Code
@@ -595,16 +600,18 @@ BEGIN
 							END AS LeaveDay
 					FROM (
 						SELECT ldt.RequestId
+							,ldt.LeaveType AS LeaveTypeId
 							,lt1.Code
 							,CASE 
-								WHEN ldt.IsHalfDay = 0 THEN 1
-								ELSE 0.5
+								WHEN ldt.LeaveType <> 0 and ldt.IsHalfDay = 0 THEN 1
+								WHEN ldt.LeaveType <> 0 and ldt.IsHalfDay = 1 THEN 0.5
+								ELSE 0
 								END AS LeaveDay
 							,CASE 
 								WHEN (
 										ldt.WorkType = 1
 										OR (
-											WorkType IN (0, 3)
+											WorkType <> @Onduty
 											AND cl.IsOffDay = 1
 											)
 										) THEN 1
@@ -614,7 +621,7 @@ BEGIN
 								WHEN (
 										ldt.WorkType = 1
 										OR (
-											WorkType IN (0, 3)
+											WorkType <> @Onduty
 											AND cl.IsHoliday = 1
 											)
 										) THEN 1
@@ -625,8 +632,9 @@ BEGIN
 							LEFT JOIN dbo.LeaveType AS lt1 WITH (NOLOCK) ON lt1.LeaveTypeId = ldt.LeaveType
 							LEFT JOIN dbo.EmployeeCalendar AS cl WITH (NOLOCK) ON ldt.OnDate = cl.WorkDate
 							AND ldt.EmpId = cl.EmpId
-						WHERE ldt.WorkType <> 3
+						WHERE ldt.WorkType <> @Onduty
 						) AS a
+					WHERE a.LeaveTypeId <> 0 OR a.IsOffDay = 1 OR a.IsHoliday = 1
 					) AS b
 				WHERE b.RequestId = wt.RequestId
 				GROUP BY b.RequestId

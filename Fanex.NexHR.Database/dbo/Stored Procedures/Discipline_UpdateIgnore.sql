@@ -1,5 +1,5 @@
 ﻿
-CREATE  PROCEDURE [dbo].[Discipline_UpdateIgnore] @ActorId INT
+CREATE PROCEDURE [dbo].[Discipline_UpdateIgnore] @ActorId INT
 	,@DisciplineIgnoreXml NVARCHAR(MAX) = NULL
 	,@IgnoreDetailXml NVARCHAR(MAX) = NULL
 	,@HasUpdateOutOfControlReason BIT = 0
@@ -50,6 +50,8 @@ BEGIN
 		EXEC dbo.DisciplineIgnoreDetail_Update
 			@ActorId = @ActorId
 			,@DisciplineIgnoreXml = @DisciplineIgnoreXml
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
 	END
 
 	IF ISNULL(@IgnoreDetailXml, '') <> ''

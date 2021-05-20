@@ -23,7 +23,6 @@ BEGIN
 		,@TotalMinutes INT
 		,@EmpId INT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@ApproverId INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3

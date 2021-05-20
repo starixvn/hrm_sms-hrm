@@ -500,6 +500,7 @@
     <Build Include="dbo\Stored Procedures\JobLevel_Get.sql" />
     <Build Include="dbo\Stored Procedures\JobLevel_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Sync_JobLevel.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_Reset_Off.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

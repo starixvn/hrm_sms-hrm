@@ -31,7 +31,6 @@ BEGIN
 		,@RequestTypeId SMALLINT
 		,@RequestTime DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
-		,@ApproverId INT
 		-- request type
 		,@CheckInRequestTypeId TINYINT = 1
 		,@CheckOutRequestTypeId TINYINT = 2

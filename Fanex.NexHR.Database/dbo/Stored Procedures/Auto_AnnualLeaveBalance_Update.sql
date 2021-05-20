@@ -25,16 +25,17 @@ BEGIN
 
 	SELECT @ToDate = DATEADD(DAY, - 1, DATEADD(YEAR, 1, @FromDate))
 
-	DECLARE @tblEmployeeBalance TABLE (
-		EmpId INT
-		,Amount DECIMAL(5, 2)
-		)
-	DECLARE @tblLengthOfServiceBalance TABLE (
+	CREATE TABLE #tblEmployeeBalance (
 		EmpId INT
 		,Amount DECIMAL(5, 2)
 		)
 
-	INSERT INTO @tblEmployeeBalance (
+	CREATE TABLE #tblLengthOfServiceBalance (
+		EmpId INT
+		,Amount DECIMAL(5, 2)
+		)
+
+	INSERT INTO #tblEmployeeBalance (
 		EmpId
 		,Amount
 		)
@@ -69,7 +70,7 @@ BEGIN
 				AND IsActive = 1
 			)
 	BEGIN
-		INSERT INTO @tblLengthOfServiceBalance (
+		INSERT INTO #tblLengthOfServiceBalance (
 			EmpId
 			,Amount
 			)
@@ -101,8 +102,8 @@ BEGIN
 			AND empsum.IsLocal = 1
 	END
 
-	MERGE @tblEmployeeBalance AS [target]
-	USING @tblLengthOfServiceBalance AS [source] ON ([target].EmpId = [source].EmpId)
+	MERGE #tblEmployeeBalance AS [target]
+	USING #tblLengthOfServiceBalance AS [source] ON ([target].EmpId = [source].EmpId)
 	WHEN MATCHED THEN
 			UPDATE
 			SET [target].Amount = [target].Amount + [source].Amount
@@ -117,7 +118,7 @@ BEGIN
 				);
 
 	DELETE
-	FROM @tblEmployeeBalance
+	FROM #tblEmployeeBalance
 	WHERE Amount = 0
 
 	IF @IsDelete = 1
@@ -131,7 +132,7 @@ BEGIN
 			AND lt.RequestId IS NULL
 		WHERE EXISTS (
 				SELECT 1
-				FROM @tblEmployeeBalance AS tbl
+				FROM #tblEmployeeBalance AS tbl WITH (NOLOCK)
 				WHERE empsum.EmpId = tbl.EmpId
 				)
 
@@ -142,7 +143,7 @@ BEGIN
 			AND lt.RequestId IS NULL
 			AND EXISTS (
 				SELECT 1
-				FROM @tblEmployeeBalance AS tbl
+				FROM #tblEmployeeBalance AS tbl WITH (NOLOCK)
 				WHERE lt.EmpId = tbl.EmpId
 				)
 	END
@@ -150,7 +151,7 @@ BEGIN
 	UPDATE empsum
 	SET empsum.AnnualLeaveBalance = empsum.AnnualLeaveBalance + emp.Amount
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN @tblEmployeeBalance AS emp ON emp.EmpId = empsum.EmpId
+		INNER JOIN #tblEmployeeBalance AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 
 	INSERT INTO dbo.LeaveTrans (
 		EmpId
@@ -172,5 +173,8 @@ BEGIN
 		,@CreatedDate
 		,NULL AS CreatedBy
 		,0 AS Deleted
-	FROM @tblEmployeeBalance
+	FROM #tblEmployeeBalance WITH (NOLOCK)
+
+	DROP TABLE #tblEmployeeBalance
+	DROP TABLE #tblLengthOfServiceBalance
 END

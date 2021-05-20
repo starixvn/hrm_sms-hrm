@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestId BIGINT
+﻿
+
+CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
 	,@ErrCode INT = 0 OUTPUT
@@ -24,7 +26,6 @@ BEGIN
 		,@ApproverId INT
 		,@StatusId TINYINT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@CountDay INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -41,12 +42,6 @@ BEGIN
 		,@TotalDaysPaternity INT
 		,@tmpFromDate DATE
 		,@tmpToDate DATE
-		--leave type
-		,@LeaveTypeId TINYINT
-		,@UnpaidLeaveType TINYINT = 25
-		,@UnpaidLeaveInsuranceType TINYINT = 41
-		,@PaternityLeaveType TINYINT = 14
-		,@MaternityLeaveType INT = 12
 
 	SELECT @EmpId = lr.EmpId
 		,@FromDate = lr.FromDate
@@ -54,12 +49,9 @@ BEGIN
 		,@VerifierId = r.VerifierId
 		,@ApproverId = r.ApproverId
 		,@StatusId = r.CurrentStatus
-		,@LeaveTypeId = lr.LeaveType
 	FROM dbo.LeaveRequest AS lr WITH (NOLOCK)
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON lr.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
-
-	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	SELECT @TotalDaysPaternity = TotalDays
 		,@tmpFromDate = FromDate
@@ -197,20 +189,6 @@ BEGIN
 				,@FromDate
 				,@ToDate
 				,1
-
-			IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-			BEGIN
-				EXEC [dbo].[LeaveRequest_Reset_Off] @fromDate = @FromDate
-				,@toDate = @ToDate
-				,@empId  = @EmpId
-			END
-
 		END
 	END
 

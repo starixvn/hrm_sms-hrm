@@ -207,7 +207,7 @@ BEGIN
 		,tmpca.MoveOffFromDate
 		,tmpca.MoveOffToDate
 	INTO #tblEmployeeCalendar
-	FROM #tblEmployee AS emp WITH (NOLOCK)
+	FROM #tblEmployee AS emp
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmployeeId = tmpca.EmpId
 		AND tmpca.WorkDate BETWEEN @tmpFromDate
 			AND @tmpToDate

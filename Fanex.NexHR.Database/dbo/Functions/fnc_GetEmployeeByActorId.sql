@@ -1,4 +1,5 @@
-﻿CREATE FUNCTION [dbo].[fnc_GetEmployeeByActorId] (
+﻿
+CREATE FUNCTION [dbo].[fnc_GetEmployeeByActorId] (
 	@EmpId INT = NULL
 	,@ExcludeUserDelete INT = 1
 	,@IsShowUserInTeam BIT = 1
@@ -146,7 +147,10 @@ RETURN WITH cteEmployee AS (
 		SELECT e.EmpId
 		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-		WHERE OwnerId = @EmpId
+			LEFT JOIN dbo.EmployeeSupervisor AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
+					AND es.ActionType = 5
+					AND ISNULL(es.IsDeleted, 0) = 0
+		WHERE gs.OwnerId = @EmpId
 			AND (
 				(
 					@ExcludeUserDelete = 1
@@ -157,17 +161,7 @@ RETURN WITH cteEmployee AS (
 				)
 			AND ISNULL(gs.IsDeleted, 0) = 0
 			AND gs.ActionType = 5
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON es.EmpId = ee.EmpId
-				WHERE es.EmpId = e.EmpId
-					AND es.ActionType = 5
-					AND ISNULL(es.IsDeleted, 0) = 0
-					AND ISNULL(ee.IsDeleted, 0) = 0
-					AND ISNULL(ee.[Enabled], 0) = 1
-				)
-			GROUP BY e.EmpId
+			AND es.EmpId IS NULL
 		
 		UNION ALL
 		SELECT e.EmpId

@@ -25,7 +25,7 @@ BEGIN
 			)
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = 'The Job Level is not empty so cannot delete it'
+			,@ErrMsg = 'Delete unsuccessful, it has been already used.'
 
 		RETURN
 	END

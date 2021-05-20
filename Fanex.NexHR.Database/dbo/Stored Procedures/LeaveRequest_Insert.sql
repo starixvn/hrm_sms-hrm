@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@LeaveTypeId INT
@@ -555,8 +556,7 @@ BEGIN
 			RETURN
 		END
 
-		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
-			OR EXISTS (
+		IF EXISTS (
 				SELECT 1
 				FROM #tblLeaveRequestDetail WITH (NOLOCK)
 				WHERE IsHalfDay = 1

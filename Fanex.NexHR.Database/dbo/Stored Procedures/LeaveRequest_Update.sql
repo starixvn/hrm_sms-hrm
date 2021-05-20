@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
+﻿
+
+CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
 	,@FromDate DATETIME = NULL
@@ -598,8 +600,7 @@ BEGIN
 			RETURN
 		END
 
-		IF DATEDIFF(DD, @FromDate, @ToDate) > 0
-			OR EXISTS (
+		IF EXISTS (
 				SELECT 1
 				FROM #tblLeaveRequestDetail WITH (NOLOCK)
 				WHERE IsHalfDay = 1
