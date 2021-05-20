@@ -367,11 +367,11 @@ const LeaveRequest = (function ($) {
                 $('.time-businesstrip').hide();
                 $('#grbHalfDay').hide();
             } else if (leaveTypeId === LeaveType.KeepInViewByHour || leaveTypeId === LeaveType.BusinessDuringWorking) {
-                    $('.time-businesstrip').show();
-                    $('#grbHalfDay').hide();
-                    $('#grbTotalDay').hide();
-                } else {
-                    $('.time-businesstrip').show();
+                $('.time-businesstrip').show();
+                $('#grbHalfDay').hide();
+                $('#grbTotalDay').hide();
+            } else {
+                $('.time-businesstrip').show();
             }
 
             LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
@@ -736,15 +736,15 @@ const LeaveRequest = (function ($) {
                 || leaveTypeId === LeaveType.BusinessDuringWorking) {
                 LeaveRequest.halfDayOff.prop('checked', true);
                 $('#grbTotalDay').hide();
+            } else {
+                $('#grbTotalDay').show();
+                if (leaveTypeId !== LeaveType.UnpaidLeaveInsurance) {
+                    $('#grbHalfDay').show();
                 } else {
-                    $('#grbTotalDay').show();
-                    if (!(leaveTypeId === LeaveType.UnpaidLeaveInsurance)) {
-                        $('#grbHalfDay').show();
-                    } else {
-                        LeaveRequest.halfDayOff.prop('checked', false);
-                        LeaveRequest.bindHalfDay();
-                        $('#grbHalfDay').hide();
-                    }
+                    LeaveRequest.halfDayOff.prop('checked', false);
+                    LeaveRequest.bindHalfDay();
+                    $('#grbHalfDay').hide();
+                }
 
                 if (leaveTypeId === LeaveType.MaternityLeave) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
