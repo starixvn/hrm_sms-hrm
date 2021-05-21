@@ -61,8 +61,8 @@
 
             /// Fill report header.
             writer.CopyRows(RowStartHeader, 2);
-            writer.WriteCellRange(2, 1, 6, 6 + range, $"Take {type} {year}");
-            writer.WriteCellRange(2, 1, 12 + range, 1, $"Total Of {type} {year}");
+            writer.WriteCellValue(RowStartHeader, 6, $"Take {type} {year}");
+            writer.WriteCellValue(RowStartHeader, 12 + range, $"Total Of {type} {year}");
 
             FillContentRowReport(leaveSummaries, ref writer, period);
 
@@ -108,7 +108,6 @@
                     Jun = leaveSummary.Jun * 1.00,
                     LeaveBalance = (leaveSummary.Jan + leaveSummary.Feb + leaveSummary.Mar + leaveSummary.Apr + leaveSummary.May + leaveSummary.Jun) * 1.00
                 };
-               
             }
             else if (period == "2")
             {

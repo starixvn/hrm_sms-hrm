@@ -237,6 +237,8 @@
     <Content Include="wwwroot\dist\styles\holiday.index.css" />
     <Content Include="wwwroot\dist\styles\holiday.index.js" />
     <Content Include="wwwroot\dist\styles\images\icons.png" />
+    <Content Include="wwwroot\dist\styles\joblevel.css" />
+    <Content Include="wwwroot\dist\styles\joblevel.js" />
     <Content Include="wwwroot\dist\styles\leave.create.css" />
     <Content Include="wwwroot\dist\styles\leave.create.js" />
     <Content Include="wwwroot\dist\styles\memo.css" />
@@ -1245,6 +1247,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="wwwroot\dist\js\joblevel.js.map" />
+    <Content Include="wwwroot\dist\styles\joblevel.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />
