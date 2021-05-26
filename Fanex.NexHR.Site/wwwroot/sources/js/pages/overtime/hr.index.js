@@ -14,7 +14,7 @@ import '../../shared/employee.search.in.team';
 
 let $confirmModal = $('#confirmModal'),
     $btnConfirm = $confirmModal.find('#btnConfirm'),
-    $table = $('table#data');
+    $table = $('#listEmployeeOvertime');
 
 function query() {
     blockUI();
