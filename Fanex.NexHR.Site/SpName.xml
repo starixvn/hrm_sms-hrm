@@ -31,6 +31,8 @@
     </Setting>
     <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="TimeRecord_Insert" SpName="TimeRecord_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TimeRecord_InsertCheckInOutTime" SpName="TimeRecord_InsertCheckInOutTime" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="TimeRecord_GetPrivilegeCreateCheckInOut" SpName="TimeRecord_GetPrivilegeCreateCheckInOut" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_GenerateEmployeeCode" SpName="Employee_GetNewEmployeeCode" DbName="nexhrx" Plain="0"></Setting>
     <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="nexhrx" Plain="0"></Setting>
@@ -514,4 +516,12 @@
         <Setting Key="JobLevel_Update" SpName="JobLevel_Update" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="JobLevel_Delete" SpName="JobLevel_Delete" DbName="nexhrx" Plain="0"></Setting>
     </Function>
+
+  <Function Name="EmployeeWorkFromHome">
+    <Setting Key="EmployeeWorkFromHome_Get" SpName="EmployeeWorkFromHome_Get" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeWorkFromHome_GetById" SpName="EmployeeWorkFromHome_GetById" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeWorkFromHome_Insert" SpName="EmployeeWorkFromHome_Insert" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeWorkFromHome_Update" SpName="EmployeeWorkFromHome_Update" DbName="nexhrx" Plain="0"></Setting>
+    <Setting Key="EmployeeWorkFromHome_Delete" SpName="EmployeeWorkFromHome_Delete" DbName="nexhrx" Plain="0"></Setting>
+  </Function>
 </Functions>

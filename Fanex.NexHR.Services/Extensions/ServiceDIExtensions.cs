@@ -75,6 +75,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IShiftStatisticReportService, ShiftStatisticReportService>();
             container.RegisterType<IDepartmentService, DepartmentService>();
             container.RegisterType<IJobLevelService, JobLevelService>();
+            container.RegisterType<IEmployeeWorkFromHomeService, EmployeeWorkFromHomeService>();
 
             // excel
             container.RegisterType<IExportExcelService, ExportExcelService>();

@@ -1,0 +1,63 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
+@model IList<EmployeeWorkFromHome>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{int index = 1;}
+        @if (Model != null && Model.Count > 0)
+        {
+
+            foreach (EmployeeWorkFromHome employeeWorkFromHome in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td>@employeeWorkFromHome.Nickname</td>
+                    <td class="align-left">@employeeWorkFromHome.Fullname</td>
+                    <td>@employeeWorkFromHome.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@employeeWorkFromHome.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(employeeWorkFromHome.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@employeeWorkFromHome.Remark"></span>
+                        }
+                    </td>
+                    <td>@employeeWorkFromHome.Modifier</td>
+                    <td>@employeeWorkFromHome.ModifiedDate.ToFormatedDate()</td>
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@employeeWorkFromHome.EmployeeWorkFromHomeId" class="edit-employeeworkfromhome" title="@Labels.Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                            <a data-id="@employeeWorkFromHome.EmployeeWorkFromHomeId" class="delete-employeeworkfromhome" title="@Labels.Delete">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 9);
+        }
+    </tbody>
+</table>

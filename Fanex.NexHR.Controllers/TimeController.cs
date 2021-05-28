@@ -65,5 +65,53 @@
 
             return View(model);
         }
+
+        [HttpPost]
+        public JsonResult AddChekInTime()
+        {
+            var criteria = new InsertCheckInOutRecordCriteria
+            {
+                EmpId = sessionService.Employee.Id,
+                RecordTime = DateTime.Now,
+                InOutType = 0,
+                IPAddress = GetClientIpAddress(),
+                Platform = Request.Headers["User-Agent"]
+            };
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public JsonResult AddChekOutTime()
+        {
+            var criteria = new InsertCheckInOutRecordCriteria
+            {
+                EmpId = sessionService.Employee.Id,
+                RecordTime = DateTime.Now,
+                InOutType = 1,
+                IPAddress = GetClientIpAddress(),
+                Platform = Request.Headers["User-Agent"]
+            };
+            CommandResult result = baseService.ExecuteNonQuery(criteria);
+            return Json(result);
+        }
+
+        public string GetClientIpAddress()
+        {
+            var clientIp = Request.ServerVariables["X_FORWARDED_FOR"];
+
+            if (string.IsNullOrEmpty(clientIp))
+            {
+                clientIp = Request.UserHostAddress;
+            }
+            else
+            {
+                var forwardedIps = clientIp.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                clientIp = forwardedIps[forwardedIps.Length - 1];
+            }
+
+            return clientIp;
+        }
     }
 }

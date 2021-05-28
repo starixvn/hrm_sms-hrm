@@ -84,5 +84,10 @@
         {
             return baseService.GetData<WeekendLeaveDetail>(criteria).ToList();
         }
+
+        public bool GetIsPrivilegeCreateCheckInOut(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
+        {
+            return baseService.GetDataEntity<bool>(criteria);
+        }
     }
 }

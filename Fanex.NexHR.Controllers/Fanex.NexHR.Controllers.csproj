@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JobLevelController.cs" />
+    <Compile Include="EmployeeWorkFromHomeController.cs" />
     <Compile Include="UnitController.cs" />
     <Compile Include="EmailController.cs" />
     <Compile Include="Export\BaseExportController.cs" />

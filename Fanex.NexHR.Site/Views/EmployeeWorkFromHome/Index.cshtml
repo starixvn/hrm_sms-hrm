@@ -1,0 +1,53 @@
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.EmployeeWorkFromHome
+@model EmployeeWorkFromHomeFilterViewModel
+@{
+    ViewBag.Title = Labels.EmployeeWorkFromHome;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/employee.workfromhome.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/employee.workfromhome.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="/employee/usermanagement">@Labels.EmployeeManagement</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<div class="filter">
+    @using (Html.BeginGetForm())
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FromDateFilter, Labels.FromDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter).ToString(), Model.FromDateFilter.ToDateMonthYearFormatedDate(),
+                        new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ToDateFilter, Labels.ToDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter).ToString(), Model.ToDateFilter.ToDateMonthYearFormatedDate(),
+                        new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <input class="btn btn-primary" type="submit" id="submit" value="@Labels.Submit" />
+                <button class="btn btn-request" id="add-workfromhome" type="button">
+                    <span class="fa fa-plus"></span>
+                    @Labels.AddEmployeeWorkFromHome
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<div id="list-workfromhome"></div>
+<div id="dialog"></div>

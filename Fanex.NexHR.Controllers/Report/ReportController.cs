@@ -52,7 +52,8 @@
             var model = new TimesheetViewModel
             {
                 Year = DateTime.Now.Year,
-                EmpId = sessionService.Employee.Id
+                EmpId = sessionService.Employee.Id,
+                IsHavePrivilegeCreateCheckInOutRecord = IsPrivilegeCreateCheckInOut()
             };
 
             return View(model);
@@ -279,6 +280,17 @@
                                                                                     });
 
             return new CustomJsonResult { Data = multiSelectViewModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        private bool IsPrivilegeCreateCheckInOut()
+        {
+            var criteria = new GetPrivilegeCreateCheckInOutRecordCriteria
+            {
+                EmpId = sessionService.Employee.Id
+            };
+
+            var isPrivilegeCreateCheckInOut = reportService.GetIsPrivilegeCreateCheckInOut(criteria);
+            return isPrivilegeCreateCheckInOut;
         }
     }
 }

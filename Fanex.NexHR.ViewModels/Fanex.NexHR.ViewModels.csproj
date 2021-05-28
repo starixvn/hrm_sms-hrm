@@ -69,6 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployeeWorkFromHome\EmployeeWorkFromHomeFilterViewModel.cs" />
+    <Compile Include="EmployeeWorkFromHome\EmployeeWorkFromHomeViewModel.cs" />
     <Compile Include="Employee\AccountViewModel.cs" />
     <Compile Include="Information\EmployeeRelationshipViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveTransactionViewModel.cs" />

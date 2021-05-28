@@ -82,6 +82,7 @@ module.exports = {
         [`${styleDistPath}/department.index`]: `${styleSourcePath}/pages/department/index.scss`,
         [`${styleDistPath}/department.create`]: `${styleSourcePath}/pages/department/create.scss`,
         [`${styleDistPath}/joblevel`]: `${styleSourcePath}/pages/joblevel/joblevel.scss`,
+        [`${styleDistPath}/employee.workfromhome`]: `${styleSourcePath}/pages/workfromhome/index.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -176,5 +177,6 @@ module.exports = {
         [`${jsDistPath}/department.edit`]: `${jsSourcePath}/department/edit.js`,
         [`${jsDistPath}/department.index`]: `${jsSourcePath}/department/index.js`,
         [`${jsDistPath}/joblevel`]: `${jsSourcePath}/joblevel/joblevel.js`,
+        [`${jsDistPath}/employee.workfromhome`]: `${jsSourcePath}/employeeworkfromhome/index.js`,
     }
 };

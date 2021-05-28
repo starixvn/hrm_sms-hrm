@@ -7,5 +7,7 @@
         public int Month { get; set; }
 
         public int? EmpId { get; set; }
+
+        public bool IsHavePrivilegeCreateCheckInOutRecord { get; set; }
     }
 }

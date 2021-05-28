@@ -223,6 +223,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add WFH.
+        /// </summary>
+        public static string AddEmployeeWorkFromHome {
+            get {
+                return ResourceManager.GetString("AddEmployeeWorkFromHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a half.
         /// </summary>
         public static string AddHalfDay {
@@ -1650,6 +1659,15 @@ namespace Fanex.NexHR.Resources {
         public static string EmployeeView {
             get {
                 return ResourceManager.GetString("EmployeeView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee Work From Home.
+        /// </summary>
+        public static string EmployeeWorkFromHome {
+            get {
+                return ResourceManager.GetString("EmployeeWorkFromHome", resourceCulture);
             }
         }
         

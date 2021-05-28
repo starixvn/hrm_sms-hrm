@@ -29,8 +29,13 @@
                 @Html.HiddenFor(model => model.EmpId)
             </div>
         </div>
-        <div class="form-group form-group--m">
+        <div class="form-group">
             <button type="submit" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+            @if (Model.IsHavePrivilegeCreateCheckInOutRecord)
+            {
+                <a href="javascript:;" class="btn btn-request" id="btnCreateCheckIn"><span class="fa fa-plus"></span> @Labels.CheckIn</a>
+                <a href="javascript:;" class="btn btn-request" id="btnCreateCheckOut"><span class="fa fa-plus"></span> @Labels.CheckOut</a>
+            }
         </div>
     </div>
 </form>
