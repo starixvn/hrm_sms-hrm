@@ -227,6 +227,7 @@
     <Content Include="wwwroot\dist\styles\discipline.details.js" />
     <Content Include="wwwroot\dist\styles\discipline.summary.css" />
     <Content Include="wwwroot\dist\styles\discipline.summary.js" />
+    <Content Include="wwwroot\dist\styles\employee.workfromhome.css" />
     <Content Include="wwwroot\dist\styles\employee.workfromhome.js" />
     <Content Include="wwwroot\dist\styles\extensionno.create.css" />
     <Content Include="wwwroot\dist\styles\extensionno.create.js" />
