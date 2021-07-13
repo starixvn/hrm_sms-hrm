@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
 
-    public class UCSession : IUClSession
+    public class UCSession : IUCSession
     {
         private readonly IHttpContextAccessor accessor;
 

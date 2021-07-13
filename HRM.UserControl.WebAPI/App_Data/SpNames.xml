@@ -2,10 +2,13 @@
 <Functions>
     <Function Name="UserLogin">
         <Setting Key="API_User_GetByEmail" SpName="API_User_GetByEmail" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_GetById" SpName="API_User_GetById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_GetUserSites_ById" SpName="User_GetUserSites_ById" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_InsertLoginLog" SpName="API_User_InsertLoginLog" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Common">
         <Setting Key="Common_Site_GetById" SpName="Common_Site_GetById" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetUserSiteCompany_ByUserId" SpName="User_GetUserSiteCompany_ByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Role">
         <Setting Key="API_UserRole_GetBySiteId" SpName="API_UserRole_GetBySiteId" DbName="bodb_IUC" Plain="0" />

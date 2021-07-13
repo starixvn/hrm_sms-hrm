@@ -11,6 +11,7 @@
             services.AddTransient<IJwtManagerService, JwtManagerService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISiteService, SiteService>();
+            services.AddTransient<IRoleService, RoleService>();
         }
     }
 }

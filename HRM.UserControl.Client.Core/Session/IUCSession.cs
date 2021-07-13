@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using HRM.UserControl.Client.Core.Models.Role;
 
-    public interface IUClSession
+    public interface IUCSession
     {
         int UserId { get; set; }
 

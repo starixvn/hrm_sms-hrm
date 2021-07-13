@@ -28,19 +28,19 @@
 
         public async Task<IList<Company>> GetCompanyAsync()
         {
-            var companies = await roleClient.GetUserCompanyOnCurrentSite();
+            var companies = await roleClient.GetUserCompanyOnCurrentSiteAsync();
             return companies;
         }
 
         public async Task<IList<CompanyRoleFunction>> GetPermissionAsync()
         {
-            var permissions = await roleClient.GetUserRoleOnSite();
+            var permissions = await roleClient.GetUserRoleOnSiteAsync();
             return permissions;
         }
 
         public async Task<CompanyRoleFunction> GetPermissionOnCompanyAsync(int companyId)
         {
-            var permission = await roleClient.GetUserRoleOnCompany(companyId);
+            var permission = await roleClient.GetUserRoleOnCompanyAsync(companyId);
             return permission;
         }
 

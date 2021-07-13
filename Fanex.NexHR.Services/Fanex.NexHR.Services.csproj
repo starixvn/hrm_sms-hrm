@@ -303,6 +303,14 @@
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.AspNetMvc\HRM.UserControl.Client.AspNetMvc.csproj">
+      <Project>{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7}</Project>
+      <Name>HRM.UserControl.Client.AspNetMvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">
+      <Project>{AC67689C-B499-4BF0-86F2-805863047A53}</Project>
+      <Name>HRM.UserControl.Client.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -43,9 +43,9 @@ namespace HRM.UserControl.API.Core.Services
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.NickName),
+                    new Claim("UserId", user.UserId.ToString()),
+                    new Claim("Email", user.Email),
+                    new Claim("Name", user.NickName),
                     new Claim("SiteId", site.SiteId.ToString()),
                     new Claim(nameof(site.AccessToken), site.AccessToken),
                     }),

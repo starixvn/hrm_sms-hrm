@@ -36,7 +36,7 @@
             return Ok(user);
         }
 
-        [Route("api/auth/login")]
+        [Route("api/auth/signin")]
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromBody] LoginParam loginParams)
         {
@@ -60,7 +60,7 @@
             loginResult.IsLoginSuccess = true;
             loginResult.CompanyId = loginParams.CompanyId;
 
-            await WriteLogForLogin(user.UserId, currentRequestSite.SiteId, loginParams);
+            //await WriteLogForLogin(user.UserId, currentRequestSite.SiteId, loginParams);
 
             return Ok(loginResult);
         }
@@ -82,13 +82,20 @@
 
         private SiteModel GetUserSiteFromRequestHeader()
         {
-            string jwtToken = httpContextAccessor.HttpContext.Request.Headers["SiteIdentity"].ToString();
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwtToken);
-            var siteJson = token.Payload.SerializeToJson();
-            var site = JsonConvert.DeserializeObject<SiteModel>(siteJson);
+            try
+            {
+                string jwtToken = httpContextAccessor.HttpContext.Request.Headers["SiteIdentity"].ToString();
+                var handler = new JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(jwtToken.Replace("Bearer ", string.Empty));
+                var siteJson = token.Payload.SerializeToJson();
+                var site = JsonConvert.DeserializeObject<SiteModel>(siteJson);
 
-            return site;
+                return site;
+            }
+            catch (System.Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

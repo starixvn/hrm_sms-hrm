@@ -8,6 +8,9 @@
     using Fanex.Data.SqlServer;
     using Fanex.NexHR.Core.Providers;
     using Fanex.NexHR.Resources;
+    using HRM.UserControl.Client.AspNetMvc.Configurations;
+    using HRM.UserControl.Client.AspNetMvc.Session;
+    using HRM.UserControl.Client.Core;
 
     public class MvcApplication : HttpApplication
     {
@@ -25,6 +28,10 @@
                 .Run();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
             log4net.Config.XmlConfigurator.Configure();
+
+            UserControlClientManager
+               .UseSettings(new UserControlSettings())
+               .UseSession(new UCSession());
         }
 
         [ValidateInput(false)]

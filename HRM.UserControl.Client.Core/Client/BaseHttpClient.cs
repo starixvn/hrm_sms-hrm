@@ -18,7 +18,7 @@
     {
         private static readonly HttpClient httpClient = new HttpClient();
         private readonly IUserControlSettings ucSettings;
-        private readonly IUClSession ucSession;
+        private readonly IUCSession ucSession;
 
         public BaseHttpClient()
         {
@@ -108,6 +108,9 @@
                 {
                     throw new UnauthorizedAccessException();
                 }
+
+                var message = response.Content.ReadAsStringAsync().Result;
+                throw new Exception(message);
             }
         }
     }

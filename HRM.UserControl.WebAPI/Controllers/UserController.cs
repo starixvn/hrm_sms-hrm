@@ -6,6 +6,7 @@
     using HRM.UserControl.API.Core.Services.Interfaces;
     using HRM.UserControl.Models;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [Authorize]
@@ -17,13 +18,15 @@
 
         public UserController(IRoleService roleService,
             IJwtManagerService jwtManagerService,
-            IUserService userService)
+            IUserService userService,
+            IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             this.roleService = roleService;
             this.jwtManagerService = jwtManagerService;
             this.userService = userService;
         }
 
+        [HttpGet]
         [Route("api/user/getById")]
         public async Task<IActionResult> GetUserById(int userId)
         {
@@ -32,6 +35,7 @@
             return Ok(user);
         }
 
+        [HttpGet]
         [Route("api/user/getRolesOnSite")]
         public async Task<IActionResult> GetCompanyRolesOnSite()
         {
@@ -39,6 +43,7 @@
             return Ok(companyRoles);
         }
 
+        [HttpGet]
         [Route("api/user/getRoleOnCompany")]
         public async Task<IActionResult> GetRoleOnCompany(int companyId)
         {
@@ -47,6 +52,7 @@
             return View(companyRole);
         }
 
+        [HttpGet]
         [Route("api/user/companies")]
         public async Task<IActionResult> GetUserCompanyList()
         {
@@ -54,6 +60,7 @@
             return Ok(companies);
         }
 
+        [HttpGet]
         [Route("api/refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {

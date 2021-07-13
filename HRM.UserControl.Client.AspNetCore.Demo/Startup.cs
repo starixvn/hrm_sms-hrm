@@ -31,7 +31,7 @@ namespace HRM.UserControl.Client.AspNetCore.Demo
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSingleton<IUClSession, UCSession>();
+            services.AddSingleton<IUCSession, UCSession>();
             services.AddScoped<IUserService, UserService>();
         }
 
@@ -39,7 +39,7 @@ namespace HRM.UserControl.Client.AspNetCore.Demo
         {
             UserControlClientManager
                 .UseSettings(app.ApplicationServices.GetService<IUserControlSettings>())
-                .UseSession(app.ApplicationServices.GetService<IUClSession>());
+                .UseSession(app.ApplicationServices.GetService<IUCSession>());
 
             if (env.IsDevelopment())
             {

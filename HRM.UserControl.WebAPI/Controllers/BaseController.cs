@@ -1,12 +1,16 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.UserControl.WebAPI.Controllers
 {
     public class BaseController : Controller
     {
-        public BaseController()
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public BaseController(IHttpContextAccessor httpContextAccessor)
         {
+            this.httpContextAccessor = httpContextAccessor;
             GetIdentityFromClaims();
         }
 
@@ -16,7 +20,7 @@ namespace HRM.UserControl.WebAPI.Controllers
 
         private void GetIdentityFromClaims()
         {
-            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            if (httpContextAccessor.HttpContext.User is ClaimsPrincipal identity)
             {
                 UserId = int.Parse(identity.FindFirst("UserId").Value);
                 SiteId = int.Parse(identity.FindFirst("SiteId").Value);

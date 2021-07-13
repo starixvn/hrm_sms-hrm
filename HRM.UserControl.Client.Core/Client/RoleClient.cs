@@ -7,31 +7,23 @@
 
     public interface IRoleClient
     {
-        Task<IList<CompanyRoleFunction>> GetUserRoleOnSite();
+        Task<IList<CompanyRoleFunction>> GetUserRoleOnSiteAsync();
 
-        Task<CompanyRoleFunction> GetUserRoleOnCompany(int companyId);
+        Task<CompanyRoleFunction> GetUserRoleOnCompanyAsync(int companyId);
 
-        Task<IList<Company>> GetUserCompanyOnCurrentSite();
+        Task<IList<Company>> GetUserCompanyOnCurrentSiteAsync();
     }
 
     internal class RoleClient : BaseHttpClient, IRoleClient
     {
-        public async Task<IList<Company>> GetUserCompanyOnCurrentSite()
-        {
-            var companies = await GetAsync<IList<Company>>(RelativePaths.GetUserComapnyList);
-            return companies;
-        }
+        public async Task<IList<Company>> GetUserCompanyOnCurrentSiteAsync()
+            => await GetAsync<IList<Company>>(RelativePaths.GetUserComapnyList);
 
-        public async Task<CompanyRoleFunction> GetUserRoleOnCompany(int companyId)
-        {
-            string requestUrl = string.Format(RelativePaths.GetRoleOnCompanyPath, companyId);
-            return await GetAsync<CompanyRoleFunction>(requestUrl);
-        }
+        public async Task<CompanyRoleFunction> GetUserRoleOnCompanyAsync(int companyId)
+            => await GetAsync<CompanyRoleFunction>(string.Format(RelativePaths.GetRoleOnCompanyPath, companyId));
 
-        public async Task<IList<CompanyRoleFunction>> GetUserRoleOnSite()
-        {
-            return await GetAsync<IList<CompanyRoleFunction>>(RelativePaths.GetRoleOnSitePath);
-        }
+        public async Task<IList<CompanyRoleFunction>> GetUserRoleOnSiteAsync()
+            => await GetAsync<IList<CompanyRoleFunction>>(RelativePaths.GetRoleOnSitePath);
 
         private static class RelativePaths
         {

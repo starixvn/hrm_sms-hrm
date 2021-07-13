@@ -1,31 +1,41 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Security;
     using Core.Services;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
+    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Models.Auth;
+    using HRM.UserControl.Client.Core.Models.Role;
+    using HRM.UserControl.Client.Core.Services.Interfaces;
+    using HRM.UserControl.Client.Core.Session;
 
     public class AuthController : Controller
     {
         private readonly IBaseService baseService;
         private readonly ISessionService sessionService;
         private readonly IAuthService authService;
+        private readonly IUserService userService;
+        private readonly IUCSession ucSession;
 
         public AuthController(
             IBaseService baseService,
             ISessionService sessionService,
-            IAuthService authService)
+            IAuthService authService,
+            IUserService userService,
+            IUCSession ucSession)
         {
             this.baseService = baseService;
             this.sessionService = sessionService;
             this.authService = authService;
+            this.userService = userService;
+            this.ucSession = ucSession;
         }
 
         [HttpGet]
@@ -35,40 +45,90 @@
         }
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                EmployeeSession employee = authService.GetEmployeeByCode(model.UserName);
-                int retCode = authService.Validate(employee, model.Password);
-                switch (retCode)
+                var user = await userService.GetByEmailAsync(model.UserName);
+                if (user != null)
                 {
-                    case (short)ValidateUserStatus.Success:
-                        LogEmployeeLogin(employee.Id);
-                        sessionService.IsShowLeftNavigation = true;
-                        sessionService.Employee = employee;
-                        sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
-                        sessionService.Functions = authService.GetFunctionByEmployeeId(employee.Id);
-                        FormsAuthentication.SetAuthCookie(model.UserName, false);
-                        return RedirectToAction("Index", "Home");
+                    var loginResult = await LoginAsync(user);
 
-                    case (short)ValidateUserStatus.Deleted:
-                        ModelState.AddModelError(string.Empty, Messages.DeletedUser);
-                        break;
-
-                    case (short)ValidateUserStatus.Disabled:
-                        ModelState.AddModelError(string.Empty, Messages.DisabledUser);
-                        break;
-
-                    default: // wrong username/password
-                        ModelState.AddModelError(string.Empty, Messages.WrongUsernameOrPassword);
-                        break;
+                    if (loginResult.IsLoginSuccess)
+                    {
+                        ucSession.UserId = loginResult.UserId;
+                        ucSession.OnCompanyId = loginResult.CompanyId;
+                        ucSession.JwtToken = loginResult.Token;
+                        ucSession.Roles = await GetUserRolesOnCompany();
+                    }
                 }
             }
-
             return View(model);
         }
+
+        private async Task<IList<CompanyRoleFunction>> GetUserRolesOnCompany()
+        {
+            var roles = await userService.GetPermissionAsync();
+
+            return roles;
+        }
+
+        private async Task<LoginResult> LoginAsync(User user)
+        {
+            var loginParam = new LoginParam
+            {
+                UserId = user.UserId,
+                CompanyId = 2,
+                Ip = Request.UserHostAddress,
+                Platform = Request.Headers["User-Agent"],
+                BrowserName = Request.Headers["User-Agent"]
+            };
+            var loginResult = await userService.LoginAsync(loginParam);
+
+            return loginResult;
+        }
+
+        private static bool IsValidPassword(string plainPwd, string encryptedPwd)
+        {
+            return true;
+        }
+
+        //[HttpPost]
+        //public ActionResult Login(LoginViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+        //        EmployeeSession employee = authService.GetEmployeeByCode(model.UserName);
+        //        int retCode = authService.Validate(employee, model.Password);
+        //        switch (retCode)
+        //        {
+        //            case (short)ValidateUserStatus.Success:
+        //                LogEmployeeLogin(employee.Id);
+        //                sessionService.IsShowLeftNavigation = true;
+        //                sessionService.Employee = employee;
+        //                sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
+        //                sessionService.Functions = authService.GetFunctionByEmployeeId(employee.Id);
+        //                FormsAuthentication.SetAuthCookie(model.UserName, false);
+        //                return RedirectToAction("Index", "Home");
+
+        //            case (short)ValidateUserStatus.Deleted:
+        //                ModelState.AddModelError(string.Empty, Messages.DeletedUser);
+        //                break;
+
+        //            case (short)ValidateUserStatus.Disabled:
+        //                ModelState.AddModelError(string.Empty, Messages.DisabledUser);
+        //                break;
+
+        //            default: // wrong username/password
+        //                ModelState.AddModelError(string.Empty, Messages.WrongUsernameOrPassword);
+        //                break;
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
 
         [HttpGet]
         public ActionResult Logout()
