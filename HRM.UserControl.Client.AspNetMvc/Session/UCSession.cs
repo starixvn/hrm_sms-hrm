@@ -33,8 +33,8 @@
 
         public IList<CompanyRoleFunction> Roles
         {
-            get => JsonConvert.DeserializeObject<IList<CompanyRoleFunction>>(Session[SessionKey.SessionJwtToken]?.ToString());
-            set => Session.Add(SessionKey.SessionJwtToken, JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<IList<CompanyRoleFunction>>(Session[SessionKey.SessionRoles]?.ToString());
+            set => Session.Add(SessionKey.SessionRoles, JsonConvert.SerializeObject(value));
         }
 
         public void ClearAll()

@@ -1,4 +1,4 @@
-﻿namespace HRM.UserControl.Client.Client.Core
+﻿namespace HRM.UserControl.Client.Core.Client
 {
     using System;
     using System.Collections.Generic;

@@ -15,21 +15,22 @@
     public class HomeController : Controller
     {
         private readonly IUserService userService;
+        private readonly ISecurityService securityService;
         private readonly IUCSession ucSession;
 
-        public HomeController() : this(null, null)
+        public HomeController() : this(null, null, null)
         {
         }
 
-        public HomeController(IUserService userService, IUCSession ucSession)
+        public HomeController(IUserService userService, IUCSession ucSession, ISecurityService securityService)
         {
             this.userService = userService ?? new UserService();
             this.ucSession = ucSession ?? new UCSession();
+            this.securityService = securityService ?? new SecurityService();
         }
 
         public async Task<ActionResult> Index()
         {
-            var s = Session;
             var user = await userService.GetByEmailAsync("oliver.dang@nexcel.vn");
             if (user != null)
             {
@@ -45,6 +46,13 @@
             }
 
             return Json(user, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> ReCheckIn()
+        {
+            var newToken = await securityService.RefreshToken();
+            ucSession.JwtToken = newToken;
+            return Json(ucSession);
         }
 
         private async Task<IList<CompanyRoleFunction>> GetUserRolesOnCompany()
@@ -64,7 +72,7 @@
                 Platform = Request.Headers["User-Agent"],
                 BrowserName = Request.Headers["User-Agent"]
             };
-            var loginResult = await userService.LoginAsync(loginParam);
+            var loginResult = await securityService.LoginAsync(loginParam);
 
             return loginResult;
         }

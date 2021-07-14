@@ -1,11 +1,11 @@
-﻿namespace HRM.UserControl.Client.Client.Core
+﻿namespace HRM.UserControl.Client.Core.Client
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Role;
 
-    public interface IRoleClient
+    internal interface IRoleClient
     {
         Task<IList<CompanyRoleFunction>> GetUserRoleOnSiteAsync();
 

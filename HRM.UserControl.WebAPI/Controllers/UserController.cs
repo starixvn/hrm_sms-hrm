@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
 
     [Authorize]
     public class UserController : BaseController
@@ -52,7 +53,7 @@
             return View(companyRole);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/user/companies")]
         public async Task<IActionResult> GetUserCompanyList()
         {
@@ -60,13 +61,13 @@
             return Ok(companies);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
             string token = await jwtManagerService.GenerateToken(UserId, SiteId);
 
-            return Ok(token);
+            return Ok(JsonConvert.SerializeObject(token));
         }
     }
 }
