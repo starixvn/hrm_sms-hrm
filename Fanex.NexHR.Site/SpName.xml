@@ -337,6 +337,7 @@
       <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
     </Setting>
     <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="nexhrx" Plain="0" />
+    <Setting Key="LeaveRequest_GetTotalLeaveDay" SpName="LeaveRequest_GetTotalLeaveDay" DbName="nexhrx" Plain="0" />
     <Setting Key="LeaveRequest_GetCalendar" SpName="LeaveRequest_GetCalendar" DbName="nexhrx" Plain="0">
       <Mapping DataField="ShiftId" ObjectProperty="Id" />
       <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />

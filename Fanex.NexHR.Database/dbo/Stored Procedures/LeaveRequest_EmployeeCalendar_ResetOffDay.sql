@@ -1,11 +1,12 @@
 ﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Reset_Off] @fromDate DATE
+CREATE PROCEDURE [dbo].[LeaveRequest_EmployeeCalendar_ResetOffDay] @empId INT
+	,@LeaveTypeId INT
+	,@fromDate DATE
 	,@toDate DATE
-	,@empId INT = NULL
 AS
 /*
-Created: Teddy.Le 2020-08-06
-Task: update calendar when approved request greater than 7 days (UPL,UPLI,  Maternity Leave, Paternity Leave).
+Created: Tim.Trinh@2021-08-03
+Task: reset off day
 DB: HRM
 Original: 
 
@@ -17,14 +18,34 @@ BEGIN
 
 	DECLARE @OffDayShiftId SMALLINT = - 1
 		,@IsDefaultSchedule TINYINT
+		,@Today DATE = GETDATE()
+		-- leave type 
+		,@UnpaidLeave TINYINT = 25
+		,@UnpaidLeaveInsurance TINYINT = 41
+		,@PaternityLeave TINYINT = 14
+		,@MaternityLeave TINYINT = 12
 
-	CREATE TABLE #tblResetOff (EmpId INT, WorkDate DATE)
+	IF @LeaveTypeId NOT IN (@UnpaidLeave, @UnpaidLeaveInsurance, @PaternityLeave, @MaternityLeave)
+		OR @ToDate < DATEADD(DAY, - 1, (DATEADD(MONTH, 1, @FromDate)))
+	BEGIN
+		RETURN
+	END
 
-	INSERT INTO #tblResetOff (EmpId, WorkDate)
-	SELECT empca.EmpId, empca.WorkDate
+	CREATE TABLE #tblResetOff (
+		EmpId INT
+		,WorkDate DATE
+		)
+
+	INSERT INTO #tblResetOff (
+		EmpId
+		,WorkDate
+		)
+	SELECT empca.EmpId
+		,empca.WorkDate
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
 	WHERE empca.ShiftId IS NULL
 		AND empca.IsOffDay = 1
+		AND empca.WorkDate > @Today
 
 	SELECT @IsDefaultSchedule = IsDefaultSchedule
 	FROM dbo.EmployeeSummary AS empsum WITH (NOLOCK)
@@ -32,6 +53,8 @@ BEGIN
 
 	IF @IsDefaultSchedule = 1
 	BEGIN
+		SET @fromDate = @Today
+
 		WHILE @fromDate <= @toDate
 		BEGIN
 			UPDATE empca
@@ -65,6 +88,8 @@ BEGIN
 				INNER JOIN dbo.EmployeeDefaultShift AS empshift WITH (NOLOCK) ON empca.EmpId = empshift.EmpId
 				AND empca.EmpId = @empId
 				AND empca.WorkDate = @fromDate
+				INNER JOIN #tblResetOff AS resoff WITH (NOLOCK) ON empca.EmpId = resoff.EmpId
+				AND empca.WorkDate = resoff.WorkDate
 
 			SET @fromDate = DATEADD(d, 1, @fromDate)
 		END

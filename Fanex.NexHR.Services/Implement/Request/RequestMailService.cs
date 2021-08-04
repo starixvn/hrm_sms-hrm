@@ -70,8 +70,10 @@
         private static bool CheckGetMailVerifier(RequestRelatedPeopleModel relatedPeople, string sendTo)
         {
             bool isNotExistVerifier = (relatedPeople.Verifier != null && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email));
-            bool isVerifierDifferenceApprover = (relatedPeople.Verifier != null && relatedPeople.Approver != null) &&
-                !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
+            bool isVerifierDifferenceApprover = (relatedPeople.Verifier != null && relatedPeople.Approver != null)
+                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
+                && !string.IsNullOrWhiteSpace(relatedPeople.Approver.Email)
+                && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
             return relatedPeople.EmailSetting.AllowSendVerifier
                    && isNotExistVerifier
                    && (string.IsNullOrWhiteSpace(sendTo))

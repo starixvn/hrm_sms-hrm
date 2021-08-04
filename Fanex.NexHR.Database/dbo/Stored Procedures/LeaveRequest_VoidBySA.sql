@@ -23,6 +23,7 @@ BEGIN
 		,@FromDate DATE
 		,@ToDate DATE
 		,@EmpId INT
+		,@LeaveTypeId INT
 		-- request status
 		,@PaternityTypeId TINYINT = 14
 		,@ApprovedStatusId TINYINT = 4
@@ -62,6 +63,7 @@ BEGIN
 		,@FromDate = lr.FromDate
 		,@ToDate = lr.ToDate
 		,@EmpId = r.EmpId
+		,@LeaveTypeId = lr.LeaveType
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		AND lr.RequestId = @RequestId
@@ -101,6 +103,11 @@ BEGIN
 		,@Status = 2
 
 	EXEC dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId
+
+	EXEC dbo.LeaveRequest_EmployeeCalendar_ResetOffDay @empId = @EmpId
+		,@LeaveTypeId = @LeaveTypeId
+		,@fromDate = @FromDate
+		,@toDate = @ToDate
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate

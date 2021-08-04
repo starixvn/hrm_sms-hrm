@@ -490,8 +490,6 @@
     <Build Include="dbo\Stored Procedures\WorkingTimeRequest_ApproveMultipleRequest.sql" />
     <Build Include="dbo\Stored Procedures\EmployeeAttendance_GetByType.sql" />
     <Build Include="dbo\Tables\RefResource.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_Approve_UpdateCalendar_OffDay.sql" />
-    <Build Include="dbo\Stored Procedures\tmpEmployeeCalendar_UpdateOff.sql" />
     <Build Include="dbo\Tables\DisciplineIgnoreDetail.sql" />
     <Build Include="dbo\Stored Procedures\DisciplineIgnoreDetail_Update.sql" />
     <Build Include="dbo\Tables\JobLevel.sql" />
@@ -500,7 +498,19 @@
     <Build Include="dbo\Stored Procedures\JobLevel_Get.sql" />
     <Build Include="dbo\Stored Procedures\JobLevel_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Sync_JobLevel.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_Reset_Off.sql" />
+    <Build Include="dbo\Tables\TimeRecordExt.sql" />
+    <Build Include="dbo\Tables\EmployeeWorkFromHome.sql" />
+    <Build Include="dbo\Stored Procedures\tmpEmployeeCalendar_UpdateOffDayForLeaveRequest.sql" />
+    <Build Include="dbo\Stored Procedures\TimeRecord_InsertCheckInOutTime.sql" />
+    <Build Include="dbo\Stored Procedures\TimeRecord_GetPrivilegeCreateCheckInOut.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_GetTotalLeaveDay.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_EmployeeCalendar_UpdateOffDay.sql" />
+    <Build Include="dbo\Stored Procedures\LeaveRequest_EmployeeCalendar_ResetOffDay.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeWorkFromHome_Update.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeWorkFromHome_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeWorkFromHome_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeWorkFromHome_Get.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeWorkFromHome_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

@@ -1,6 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetRequestByEmpID    Script Date: 7/20/2016 10:19:07 AM ******/
-/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetRequestByEmpID    Script Date: 7/19/2016 5:22:15 PM ******/
-
+﻿
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetRequestByEmpID] @EmpId INT
 	,@Role TINYINT = NULL
 AS
@@ -48,7 +46,7 @@ BEGIN
 					WHEN RequestType IN (8) THEN 1
 					ELSE 0
 					END) Overtimes
-			,isnull(g.GroupID, - 1) AS [TeamID]
+			,isnull(g.GroupID, - 1) AS [TeamId]
 			,isnull(g.NAME, '') AS [TeamCode]
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 			INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
@@ -76,7 +74,7 @@ BEGIN
 			,0 Leaves
 			,0 KeepInViews
 			,0 Overtimes
-			,isnull(g.GroupID, - 1) AS [TeamID]
+			,isnull(g.GroupID, - 1) AS [TeamId]
 			,isnull(g.NAME, '') AS [TeamCode]
 		FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 			INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
@@ -104,7 +102,7 @@ BEGIN
 			,su.KeepInViews
 			,su.Overtimes
 			,su.TeamId
-			,su.[Team] AS [TeamCode]
+			,su.[Team] AS TeamCode
 			,ROW_NUMBER() OVER (
 				ORDER BY MIN(ord.OrderNo)
 				) OrderNo
@@ -139,7 +137,7 @@ BEGIN
 						WHEN RequestType IN (8) THEN 1
 						ELSE 0
 						END) Overtimes
-				,isnull(g.GroupID, - 1) AS [TeamID]
+				,isnull(g.GroupID, - 1) AS [TeamId]
 				,isnull(g.NAME, '') AS [Team]
 			FROM [dbo].[EmployeeSupervisor] su WITH (NOLOCK)
 				INNER JOIN [dbo].Employee ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId

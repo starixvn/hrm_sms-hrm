@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
@@ -191,6 +190,8 @@ BEGIN
 				,1
 		END
 	END
+
+	EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate

@@ -269,7 +269,15 @@
 
         public CustomJsonResult GetTotalLeaveDay(GetDisabledDateParam param)
         {
-            IEnumerable<DateTime> dates = leaveRequestService.GetDisabledDate(param);
+            var criteria = new GetTotalLeaveDayCriteria
+            {
+                LeaveTypeId = param.LeaveTypeId,
+                EmployeeId = param.EmployeeId,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                RequestId = param.RequestId
+            };
+            IEnumerable<DateTime> dates = baseService.GetData<DateTime>(criteria);
             var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
 
             return new CustomJsonResult { Data = totalDays, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

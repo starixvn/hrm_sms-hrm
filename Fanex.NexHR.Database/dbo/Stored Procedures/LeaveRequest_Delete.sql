@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -21,12 +22,8 @@ BEGIN
 		,@ToDate DATE
 		,@TotalDaysPaternity INT
 		,@LeaveTypeId TINYINT
-		,@CountDay INT
 		-- leave type 
 		,@PaternityLeaveType TINYINT = 14
-		,@UnpaidLeaveType TINYINT = 25
-		,@UnpaidLeaveInsuranceType TINYINT = 41
-		,@MaternityLeaveType INT = 12
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -102,22 +99,13 @@ BEGIN
 	DELETE dbo.DisciplineRequestTrans
 	WHERE RequestId = @RequestId
 
+	EXEC dbo.LeaveRequest_EmployeeCalendar_ResetOffDay @empId = @EmpId
+		,@LeaveTypeId = @LeaveTypeId
+		,@fromDate = @FromDate
+		,@toDate = @ToDate
+
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
-
-	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
-	IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-	BEGIN
-		EXEC [dbo].[LeaveRequest_Reset_Off] @fromDate  = @FromDate
-		,@toDate = @ToDate
-		,@empId = @EmpId
-	END
 END

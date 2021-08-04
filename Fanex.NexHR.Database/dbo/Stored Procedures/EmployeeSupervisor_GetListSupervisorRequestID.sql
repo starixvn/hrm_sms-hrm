@@ -1,6 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetListSupervisorRequestID    Script Date: 7/20/2016 10:19:07 AM ******/
-/****** Object:  Stored Procedure dbo.EmployeeSupervisor_GetListSupervisorRequestID    Script Date: 7/19/2016 5:22:15 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿
 CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetListSupervisorRequestID]
 	@RequestId  BIGINT,
 	@Action INT = NULL
@@ -15,7 +13,7 @@ Revisions:
 Param's Explanation:
 */
 SET NOCOUNT ON
-	DECLARE @ApproverId  INT, @VerifierId INT, @EmpId INT, @HRId INT, @TeamId INT, @IsExistSetting BIT
+	DECLARE @ApproverId  INT, @VerifierId INT, @EmpId INT, @HRId INT,  @TeamId INT, @IsExistSetting BIT
 
 	SELECT @ApproverId =  wr.ApproverId  , @VerifierId = wr.VerifierId ,@EmpId= wr.EmpId,@HRId = wr.HRId
 	FROM WorkingTimeRequest wr WITH(NOLOCK)
@@ -59,12 +57,12 @@ SET NOCOUNT ON
 					AND RoleId = 7
 					)
 	
-	SELECT @TeamId = GroupId FROM dbo.Employee WHERE EmpId = @EmpId
+	SELECT  @TeamId = GroupId FROM dbo.Employee WHERE EmpId = @EmpId
 
-	IF EXISTS (SELECT 1 FROM dbo.MailSettings WHERE GroupId = @TeamId AND Action = @Action)
+	IF EXISTS (SELECT 1 FROM dbo.MailSettings WHERE GroupId =  @TeamId AND Action = @Action)
 	BEGIN
 		SELECT GroupId, Action, AllowSendUser, AllowSendVerifier, AllowSendApprover, AllowSendHR, AllowSendMailGroup
-		FROM dbo.MailSettings WHERE GroupId = @TeamId AND Action = @Action
+		FROM dbo.MailSettings WHERE GroupId =  @TeamId AND Action = @Action
 	END
 	ELSE
 	BEGIN

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@DisciplineXml NVARCHAR(MAX) = NULL
 	,@Comment NVARCHAR(500) = ''
@@ -30,8 +31,6 @@ BEGIN
 		,@maxDate DATETIME
 		,@minDate DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
-		,@LeaveTypeId INT
-		,@CountDay INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -41,19 +40,11 @@ BEGIN
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
 
-		--leave type
-		,@UnpaidLeaveType TINYINT = 25
-		,@UnpaidLeaveInsuranceType TINYINT = 41
-		,@PaternityLeaveType TINYINT = 14
-		,@MaternityLeaveType INT = 12
-	SELECT @LeaveTypeId = LeaveType
-		,@EmpId = EmpId
+	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
 		,@ToDate = ToDate
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
-
-	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	SELECT @maxDate = MAX(WorkDate)
 		,@minDate = MIN(WorkDate)
@@ -168,27 +159,18 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 
-				EXEC dbo.DisciplineIgnoreDetail_Update
-				@ActorId = @ActorId
+			EXEC dbo.DisciplineIgnoreDetail_Update @ActorId = @ActorId
 				,@DisciplineIgnoreXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-		IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-			BEGIN
-				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId
-					,@EmpId
-			END
+
 		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 			,@EmpId
 			,@ActorId
-		
+
+		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
+
 		EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
 			,@EmpId
 			,@FromDate

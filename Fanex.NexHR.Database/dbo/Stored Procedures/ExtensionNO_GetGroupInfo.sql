@@ -1,6 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.ExtensionNO_GetGroupInfo    Script Date: 7/20/2016 10:19:08 AM ******/
-/****** Object:  Stored Procedure dbo.ExtensionNO_GetGroupInfo    Script Date: 7/19/2016 5:22:15 PM ******/
-
+﻿
 CREATE PROCEDURE [dbo].[ExtensionNO_GetGroupInfo]
 	@isInternal BIT = NULL,
 	@TeamId INT = NULL

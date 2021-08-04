@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Reject] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Reject] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
 	,@Comment NVARCHAR(500) = ''
@@ -22,7 +23,6 @@ BEGIN
 		,@FromDate DATETIME
 		,@ToDate DATETIME
 		,@ProcessedDate DATETIME = GETDATE()
-		,@CountDay INT
 		-- system role
 		,@VerifierRoleId TINYINT = 2
 		,@ApproverRoleId TINYINT = 3
@@ -35,10 +35,6 @@ BEGIN
 		,@TotalDaysPaternity INT
 		-- leave type
 		,@LeaveTypeId TINYINT
-		,@PaternityLeaveType TINYINT = 14
-		,@UnpaidLeaveType TINYINT = 25
-		,@UnpaidLeaveInsuranceType TINYINT = 41
-		,@MaternityLeaveType INT = 12
 
 	SELECT @TotalDaysPaternity = TotalDays
 		,@FromDate = FromDate
@@ -47,7 +43,6 @@ BEGIN
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 		AND LeaveType = @PaternityTypeId
-
 
 	IF ISNULL(@TotalDaysPaternity, 0) = 0
 	BEGIN
@@ -75,7 +70,7 @@ BEGIN
 		,@LeaveTypeId = LeaveType
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
-	
+
 	EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
 		,@ActorId = @ActorId
 		,@RequestStatusId = @NotVerifiedStatusId
@@ -103,20 +98,6 @@ BEGIN
 			,ModifiedBy = @ActorId
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
-
-		SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
-		IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-		BEGIN
-			EXEC [dbo].[LeaveRequest_Reset_Off] @fromDate  = @FromDate
-			,@toDate = @ToDate
-			,@empId = @EmpId
-		END
 	END
 	ELSE IF @RoleId = @HRRoleId
 	BEGIN
@@ -150,6 +131,11 @@ BEGIN
 	EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
 		,@Status = 2
+
+	EXEC dbo.LeaveRequest_EmployeeCalendar_ResetOffDay @empId = @EmpId
+		,@LeaveTypeId = @LeaveTypeId
+		,@fromDate = @FromDate
+		,@toDate = @ToDate
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 		,@toDate = @ToDate

@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -66,7 +65,6 @@ BEGIN
 		,@BalanceDaysPaternity INT
 		,@OldFromDate DATE
 		,@OldToDate DATE
-		,@CountDay INT
 
 	CREATE TABLE #tblLeaveRequestDetail (
 		OnDate DATETIME
@@ -77,7 +75,6 @@ BEGIN
 		,FromTime DATETIME
 		,ToTime DATETIME
 		)
-	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	SELECT @IsHalfDay = CASE 
 			WHEN @TotalDays = 0.5 THEN 1
@@ -427,11 +424,12 @@ BEGIN
 
 	IF EXISTS (
 			SELECT 1
-			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-				LEFT JOIN dbo.EmployeeCalendar c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
+			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest AS l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
 					AND l.ToDate
 				AND c.empid = l.EmpId
+				LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON c.ShiftId = s.ShiftID
 			WHERE r.empid = @empid
 				AND r.RequestType = @RequestType
 				AND r.RequestId <> @RequestId
@@ -465,13 +463,14 @@ BEGIN
 							)
 						)
 					)
+				AND (s.ShiftID IS NULL OR (s.IsOutAfterDay = 0 AND CAST(l.ToDate AS DATE) >= @TmpFromDate) OR (s.IsOutAfterDay = 1 AND CAST(l.ToDate AS DATE) > @TmpFromDate))
 			)
 		OR EXISTS (
 			SELECT 1
-			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-				INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
-				INNER JOIN #tblLeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
+			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
+				INNER JOIN dbo.LeaveRequest AS l WITH (NOLOCK) ON r.RequestId = l.RequestId
+				INNER JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
+				INNER JOIN #tblLeaveRequestDetail AS ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
 			WHERE r.empid = @empid
 				AND r.RequestType = @RequestType
 				AND r.RequestId <> @RequestId
@@ -830,22 +829,13 @@ BEGIN
 				,@isUpdateRequestData = 1
 		END
 
+		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
+
 		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 			,@toDate = @ToDate
 			,@empIds = @EmpId
 			,@isUpdateRequestData = 1
 
-		IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-			BEGIN
-				EXEC dbo.LeaveRequest_Approve_UpdateCalendar_OffDay @RequestId = @RequestId
-					,@EmpId = @EmpId
-			END
 		EXEC dbo.LeaveRequest_WriteLog @RequestId
 
 		COMMIT TRANSACTION Update_LeaveMultiRequest;

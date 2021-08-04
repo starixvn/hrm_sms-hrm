@@ -1,7 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.LeaveType_GetAll    Script Date: 7/20/2016 10:19:11 AM ******/
-/****** Object:  Stored Procedure dbo.LeaveType_GetAll    Script Date: 7/19/2016 5:22:16 PM ******/
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+﻿
 CREATE PROCEDURE [dbo].[LeaveType_GetAll]
 	@ExcludeNotShown bit = null
 AS

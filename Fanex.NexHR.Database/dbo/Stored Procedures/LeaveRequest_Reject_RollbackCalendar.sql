@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Reject_RollbackCalendar] @RequestId BIGINT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Reject_RollbackCalendar] @RequestId BIGINT
 	,@EmpId INT
 	,@ProcessedBy INT
 AS
@@ -22,14 +23,6 @@ BEGIN
 		,@KIVLeave NUMERIC(18, 2)
 		,@LeaveTransId BIGINT
 		,@ProcessedDate DATETIME = GETDATE()
-		,@CountDay INT
-		-- leave type
-		,@GeneralLeaveTypeId TINYINT = 0
-		,@HolidayLeaveTypeId TINYINT = 13
-		,@UnpaidLeaveType TINYINT = 25
-		,@UnpaidLeaveInsuranceType TINYINT = 41
-		,@PaternityLeaveType TINYINT = 14
-		,@MaternityLeaveType INT = 12
 	DECLARE @LeaveTypeId_Old INT
 		,@LeaveTypeId2_Old INT
 		,@LeaveDay_Old INT
@@ -45,8 +38,6 @@ BEGIN
 	FROM dbo.WorkingTimeRequest AS rq WITH (NOLOCK)
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON rq.RequestId = lr.RequestId
 	WHERE rq.RequestId = @RequestId
-
-	SET @CountDay = DATEDIFF(day, @FromDate, @ToDate) + 1
 
 	IF NOT EXISTS (
 			SELECT 1
@@ -73,19 +64,6 @@ BEGIN
 			WHERE EmpId = @EmpId
 				AND DATEDIFF(D, @FromDate, WorkDate) >= 0
 				AND DATEDIFF(D, WorkDate, @ToDate) >= 0
-
-			IF @CountDay >= 7
-			AND (
-				@LeaveTypeId = @UnpaidLeaveType
-				OR @LeaveTypeId = @UnpaidLeaveInsuranceType
-				OR @LeaveTypeId = @PaternityLeaveType
-				OR @LeaveTypeId = @MaternityLeaveType
-				)
-			BEGIN
-				EXEC [dbo].[LeaveRequest_Reset_Off] @fromDate = @FromDate
-				,@toDate = @ToDate
-				,@empId  = @EmpId
-			END
 		END
 		ELSE IF @LeaveTypeId2_Old IS NOT NULL
 		BEGIN
