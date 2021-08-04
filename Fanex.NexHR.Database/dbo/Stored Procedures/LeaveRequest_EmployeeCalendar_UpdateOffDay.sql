@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[LeaveRequest_EmployeeCalendar_UpdateOffDay] @RequestId BIGINT
 AS
 /*
@@ -46,6 +48,10 @@ BEGIN
 	SET @FromDate = DATEADD(DAY, - 1 * (6 + DATEPART(dw, @FromDate)) % 7, @FromDate)
 	SET @ToDate = DATEADD(DAY, 7 - DATEPART(dw, @ToDate), @ToDate)
 	SET DATEFIRST @DefaultDateFirst
+
+	EXEC dbo.EmployeeCalendar_Insert @EmpId = @EmpId
+		,@fromdate = @FromDate
+		,@todate = @ToDate
 
 	SELECT @OffDaysbyWeek = OffDaysbyWeek
 	FROM dbo.EmployeeSummary WITH (NOLOCK)

@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
@@ -345,13 +347,13 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT @TotalDays_tmp = SUM(1)
-		FROM dbo.EmployeeCalendar cl WITH (NOLOCK)
-		WHERE EmpID = @EmpID
-			AND WorkDate BETWEEN @TmpFromDate
-				AND @TmpToDate
-			AND IsHoliday = 0
-			AND IsOffDay = 0
+		--SELECT @TotalDays_tmp = SUM(1)
+		--FROM dbo.EmployeeCalendar cl WITH (NOLOCK)
+		--WHERE EmpID = @EmpID
+		--	AND WorkDate BETWEEN @TmpFromDate
+		--		AND @TmpToDate
+		--	AND IsHoliday = 0
+		--	AND IsOffDay = 0
 
 		IF @isHalfDay = 1
 			AND ISNULL(@TotalDays_tmp, 1) = 1

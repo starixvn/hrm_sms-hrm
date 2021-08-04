@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_GetTotalLeaveDay] @empId INT
 	,@LeaveTypeId INT
 	,@fromDate DATE
@@ -50,7 +51,8 @@ BEGIN
 		,@toDate = @toDate
 		,@empIds = @empId
 
-	EXEC dbo.tmpEmployeeCalendar_UpdateOffDayForLeaveRequest @empId = @empId
+	EXEC dbo.tmpEmployeeCalendar_UpdateOffDayForLeaveRequest @RequestId = @RequestId
+		,@empId = @empId
 		,@LeaveTypeId = @LeaveTypeId
 		,@fromDate = @fromDate
 		,@toDate = @toDate

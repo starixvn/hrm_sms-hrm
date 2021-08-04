@@ -1,6 +1,8 @@
 ﻿
-CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOffDayForLeaveRequest] @empId INT
-	,@LeaveTypeId INT
+
+CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOffDayForLeaveRequest] @requestId BIGINT = NULL
+	,@empId INT
+	,@leaveTypeId INT
 	,@fromDate DATE
 	,@toDate DATE
 AS
@@ -25,7 +27,7 @@ BEGIN
 		,@UnpaidLeaveInsurance TINYINT = 41
 		,@PaternityLeave TINYINT = 14
 		,@MaternityLeave TINYINT = 12
-	
+
 	IF @LeaveTypeId NOT IN (@UnpaidLeave, @UnpaidLeaveInsurance, @PaternityLeave, @MaternityLeave)
 		OR @ToDate < DATEADD(DAY, - 1, (DATEADD(MONTH, 1, @FromDate)))
 	BEGIN
@@ -72,7 +74,13 @@ BEGIN
 					AND @tempToDate
 				AND empca.EmpId = @EmpId
 				AND empca.IsOffDay = 0
-				AND empca.IsLeaveDay = 0
+				AND (
+					empca.IsLeaveDay = 0
+					OR (
+						empca.IsLeaveDay = 1
+						AND empca.RequestId = @requestId
+						)
+					)
 				AND empca.IsHoliday = 0
 				AND empca.IsKeepInView = 0
 				AND (
@@ -111,6 +119,12 @@ BEGIN
 	UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 	SET IsOffDay = 1
 		,ShiftId = NULL
+		,RequestId = NULL
+		,RequestTypeId = NULL
+		,LeaveTypeId = 0
+		,IsLeaveDay = 0
+		,IsLeaveOffDay = 0
+		,LeaveDay = 0
 	WHERE EmpId = @empId
 		AND WorkDate IN (
 			SELECT WorkDate

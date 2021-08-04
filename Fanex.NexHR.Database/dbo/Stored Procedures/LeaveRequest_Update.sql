@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -389,13 +391,13 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT @TotalDays_tmp = SUM(1)
-		FROM dbo.EmployeeCalendar cl WITH (NOLOCK)
-		WHERE EmpID = @EmpID
-			AND WorkDate BETWEEN @TmpFromDate
-				AND @TmpToDate
-			AND IsHoliday = 0
-			AND IsOffDay = 0
+		--SELECT @TotalDays_tmp = SUM(1)
+		--FROM dbo.EmployeeCalendar cl WITH (NOLOCK)
+		--WHERE EmpID = @EmpID
+		--	AND WorkDate BETWEEN @TmpFromDate
+		--		AND @TmpToDate
+		--	AND IsHoliday = 0
+		--	AND IsOffDay = 0
 
 		IF @isHalfDay = 1
 			AND ISNULL(@TotalDays_tmp, 1) = 1
@@ -407,7 +409,7 @@ BEGIN
 		BEGIN
 			SELECT @AnnualLeaveDay = @TotalDays
 		END
-		ELSE IF @LeaveTypeID = @KIVLeaveType
+		ELSE IF @LeaveTypeId = @KIVLeaveType
 		BEGIN
 			SELECT @KIVLeaveDay = @TotalDays
 		END

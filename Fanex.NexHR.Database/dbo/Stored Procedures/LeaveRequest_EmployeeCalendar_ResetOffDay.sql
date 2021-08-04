@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_EmployeeCalendar_ResetOffDay] @empId INT
 	,@LeaveTypeId INT
 	,@fromDate DATE
@@ -43,9 +44,11 @@ BEGIN
 	SELECT empca.EmpId
 		,empca.WorkDate
 	FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
-	WHERE empca.ShiftId IS NULL
+	WHERE empca.EmpId = @empId
+		AND empca.ShiftId IS NULL
 		AND empca.IsOffDay = 1
-		AND empca.WorkDate > @Today
+		AND empca.WorkDate BETWEEN @Today
+			AND @ToDate
 
 	SELECT @IsDefaultSchedule = IsDefaultSchedule
 	FROM dbo.EmployeeSummary AS empsum WITH (NOLOCK)
