@@ -69,15 +69,12 @@
 
         private static bool CheckGetMailVerifier(RequestRelatedPeopleModel relatedPeople, string sendTo)
         {
-            bool isNotExistVerifier = (relatedPeople.Verifier != null && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email));
-            bool isVerifierDifferenceApprover = (relatedPeople.Verifier != null && relatedPeople.Approver != null)
-                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
-                && !string.IsNullOrWhiteSpace(relatedPeople.Approver.Email)
+            bool isValidVerifier = relatedPeople.Verifier != null && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email);
+            bool isVerifierDifferenceApprover = isValidVerifier && relatedPeople.Approver != null
                 && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
             return relatedPeople.EmailSetting.AllowSendVerifier
-                   && isNotExistVerifier
-                   && (string.IsNullOrWhiteSpace(sendTo))
-                   || isVerifierDifferenceApprover;
+                   && isValidVerifier
+                   && (string.IsNullOrWhiteSpace(sendTo) || isVerifierDifferenceApprover);
         }
 
         public string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
