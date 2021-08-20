@@ -6,6 +6,8 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
@@ -58,6 +60,7 @@
             return new CustomJsonResult { Data = workingSchedule, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.WorkingCalendars)]
         public ActionResult WorkingCalendars()
         {
             var model = new WorkingCalendarFilterViewModel
@@ -70,6 +73,7 @@
             return View(model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.WorkingCalendars)]
         public ActionResult WorkingCalendarDetails(WorkingCalendarFilterViewModel model)
         {
             var criteria = new GetWorkingCalendarWeeklyCriteria

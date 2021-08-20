@@ -54,6 +54,7 @@
             this.jobLevelService = jobLevelService;
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.ContactList)]
         public ActionResult Index()
         {
             var model = new UserManagementViewModel
@@ -68,10 +69,10 @@
         }
 
         [HttpPost]
+        [HRMPermission(Policy.Read, FunctionKey.ContactList)]
         public ActionResult ContactList(UserManagementViewModel model)
         {
             IList<Employee> employees = new List<Employee>();
-
             if (model != null)
             {
                 var criteria = new GetAllEmployeeCriteria
@@ -111,14 +112,29 @@
                 Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
 
+            bool? isLocal = null;
+            if(sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+            {
+                isLocal = true;
+            }
+            else
+            {
+                if(sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+                {
+                    isLocal = false;
+                }
+            }
+
             var model = new UserManagementViewModel
             {
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds,
                 IsEnable = true,
+                IsLocal = isLocal,
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
-                ItemsPerPage = Constants.ItemsPerPage
+                ItemsPerPage = Constants.ItemsPerPage,
+                IsShowDropdownCategory = sessionService.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
             };
 
             return View(model);
@@ -129,9 +145,21 @@
         public ActionResult ListEmployee(UserManagementViewModel model)
         {
             IList<Employee> employees = new List<Employee>();
-
             if (model != null)
             {
+                bool? isLocal = model.IsLocal;
+                if (sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+                {
+                    isLocal = true;
+                }
+                else
+                {
+                    if (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+                    {
+                        isLocal = false;
+                    }
+                }
+
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
@@ -139,11 +167,10 @@
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,
-                    IsLocalUser = model.IsLocal,
+                    IsLocalUser = isLocal,
                     PageNumber = model.CurrentPage,
                     PageSize = model.ItemsPerPage
                 };
-
                 employees = employeeService.GetEmployees(criteria);
 
                 var pagerOption = new PagerOptionModel
@@ -216,21 +243,31 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(int id)
         {
-            Employee model = employeeService.GetEmployeeById(id);
-            if (model != null)
+            Employee employee = employeeService.GetEmployeeById(id);
+            if (employee != null)
             {
-                model.Coutries = commonDataService.GetAllCountry();
-                IList<SupervisorNameModel> supervisors = GetSupervisors(id);
-                model.Verifier = GetVerifiers(supervisors);
-                model.Approver = GetApprovers(supervisors);
-                model.Disciplinarian = GetDisciplineSupervisors(supervisors);
-                model.EmpShiftList = GetShiftMonitors(supervisors);
-                model.ActingEmpList = GetActingSupervisors(supervisors);
-                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(model);
-            }
+                if ((sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
+                    || (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
+                {
+                    return RedirectToAction("AccessDenied", "Error");
+                }
 
-            ComposeViewBagsForEditEmployee();
-            return View(model);
+                employee.Coutries = commonDataService.GetAllCountry();
+                IList<SupervisorNameModel> supervisors = GetSupervisors(id);
+                employee.Verifier = GetVerifiers(supervisors);
+                employee.Approver = GetApprovers(supervisors);
+                employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
+                employee.EmpShiftList = GetShiftMonitors(supervisors);
+                employee.ActingEmpList = GetActingSupervisors(supervisors);
+                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(employee);
+
+                ComposeViewBagsForEditEmployee();
+                return View(employee);
+            }
+            else
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
         }
 
         [ValidateInput(false)]
@@ -486,7 +523,7 @@
 
                 if (supervisorsFilter.Count > MaxDisplayItems)
                 {
-                    supervisorsName = supervisorsName + ",...";
+                    supervisorsName += ",...";
                 }
             }
 

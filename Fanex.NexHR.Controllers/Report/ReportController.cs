@@ -187,6 +187,7 @@
             return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
         public ActionResult UnpaidLeaveSummary()
         {
             var model = new LeaveSummaryViewModel
@@ -202,6 +203,7 @@
             return View(model);
         }
 
+        [HRMPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
         public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel model)
         {
             var criteria = new GetUnpaidLeaveCriteria

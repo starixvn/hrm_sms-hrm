@@ -72,6 +72,8 @@
     <Compile Include="EmployeeWorkFromHome\EmployeeWorkFromHomeFilterViewModel.cs" />
     <Compile Include="EmployeeWorkFromHome\EmployeeWorkFromHomeViewModel.cs" />
     <Compile Include="Employee\AccountViewModel.cs" />
+    <Compile Include="HospitalizationLeave\HospitalizationLeaveTransactionViewModel.cs" />
+    <Compile Include="HospitalizationLeave\HospitalizationLeaveBalanceViewModel.cs" />
     <Compile Include="Information\EmployeeRelationshipViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveTransactionViewModel.cs" />
     <Compile Include="AnnualLeave\AnnualLeaveBalanceMultiViewModel.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="Report\EmployeeAttendanceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\WorkingCalendarSummaryViewModel.cs" />
+    <Compile Include="UI\HeaderViewModel.cs" />
     <Compile Include="Unit\AddUnitViewModel.cs" />
     <Compile Include="Unit\EditUnitViewModel.cs" />
     <Compile Include="Unit\UnitViewModel.cs" />

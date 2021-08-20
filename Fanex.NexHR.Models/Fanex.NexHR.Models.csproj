@@ -96,6 +96,8 @@
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Discipline\IgnoredDisciplineDetailModel.cs" />
     <Compile Include="EmployeeWorkFromHome.cs" />
+    <Compile Include="HospitalizationLeave\HospitalizationLeaveBalanceSummaryReport.cs" />
+    <Compile Include="HospitalizationLeave\HospitalizationLeaveTransaction.cs" />
     <Compile Include="JobLevel.cs" />
     <Compile Include="Unit\Unit.cs" />
     <Compile Include="EditEmployeeParam.cs" />

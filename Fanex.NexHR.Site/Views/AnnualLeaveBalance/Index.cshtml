@@ -62,36 +62,21 @@
                     <div class="input-form" id="Team"></div>
                 </div>
 
-                <div class="form-group form-group--m">
-                    <div class="label-form">
-                        @Html.Label(@Labels.MinBalance, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        <select id="MinAnnualBalance" name="MinAnnualBalance" class="category form-control">
-                            <option value="0">@Labels.None</option>
-                            @for (int i = 1; i <= 10; i++)
-                            {
-                                <option selected="@(Model.MinAnnualBalance == i)" value="@i">@i</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">@Labels.Submit</button>
-                    <button type="button" class="btn btn-excel" id="btnExcel">Excel</button>
+                    <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
                     @if (Model.IsShowCloseBalance)
                     {
                         <a href="javascript:;" class="btn btn-request" id="resetblc">
                             <span class="fa fa-plus"></span>
-                            Close Balance
+                            @Labels.CloseBalance
                         </a>
                     }
                     @if (hasPermissionToEdit)
                     {
                         <a href="javascript:;" class="btn btn-request" id="addadj">
                             <span class="fa fa-plus"></span>
-                            Adjustment
+                            @Labels.Adjustment
                         </a>
                     }
                 </div>
@@ -272,8 +257,6 @@
     <div id="insertform" title="Adjust annual leave balance">
         @Html.Action("MultipleInsert")
     </div>
-</div>
-<div class="hide">
     <div id="resetform" title="Close balance for year @DateTime.Now.AddYears(-1).Year">
         @Html.Action("MultipleReset")
     </div>

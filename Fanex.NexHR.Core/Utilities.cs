@@ -39,19 +39,6 @@
             }
         }
 
-        public static IList<SelectListItem> LocalLeaveTypes
-        {
-            get
-            {
-                return new List<SelectListItem>
-                {
-                    new SelectListItem { Text = Labels.StandardLeave, Value = ((short)LocalLeave.StandardLeave).ToString() },
-                    new SelectListItem { Text = Labels.AccumulationLeave, Value = ((short)LocalLeave.AccumulationLeave).ToString() },
-                    new SelectListItem { Text = Labels.KeepInViewLeave, Value = ((short)LocalLeave.KIVLeave).ToString() }
-                };
-            }
-        }
-
         public static IList<SelectListItem> Marriages
         {
             get

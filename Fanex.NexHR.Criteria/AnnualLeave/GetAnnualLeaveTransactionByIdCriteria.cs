@@ -4,7 +4,7 @@
 
     public class GetAnnualLeaveTransactionByIdCriteria : CriteriaBase
     {
-        public int LeaveTransId { get; set; }
+        public long LeaveTransId { get; set; }
 
         public override string GetSettingKey() => "AnnualLeave_GetByID";
 

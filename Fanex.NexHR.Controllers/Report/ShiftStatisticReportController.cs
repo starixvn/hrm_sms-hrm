@@ -14,7 +14,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
 
-    [HRMPermission(Policy.Read, FunctionKey.ScheduleArrange)]
+    [HRMPermission(Policy.Read, FunctionKey.ShiftStatisticReport)]
     public class ShiftStatisticReportController : BaseController
     {
         private readonly IShiftStatisticReportService statisticReportService;

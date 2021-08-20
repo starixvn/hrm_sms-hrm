@@ -279,8 +279,6 @@
 
         private static string AddMailToList(string mailList, string mail)
         {
-            string fullMailList = string.Empty;
-
             if (string.IsNullOrWhiteSpace(mail))
             {
                 return mailList;
@@ -291,9 +289,7 @@
                 return mail;
             }
 
-            fullMailList = mailList + ";" + mail;
-
-            return fullMailList;
+            return mailList + ";" + mail;
         }
 
         private static EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)

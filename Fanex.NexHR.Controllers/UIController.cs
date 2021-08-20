@@ -4,10 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Models.Message;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.ViewModels.UI;
 
     public class UIController : BaseController
     {
@@ -31,16 +34,14 @@
         [ChildActionOnly]
         public ActionResult Header()
         {
-            var param = new GetMessageByEmployeeParam
+            var viewModel = new HeaderViewModel
             {
-                EmployeeId = sessionService.Employee.Id,
-                FromDate = DateTime.Today,
-                ToDate = DateTime.Today,
-                IsDisabled = 0
+                SiteId = ConfigSettings.SiteId,
+                Employee = sessionService.Employee,
+                IsShowSearchBox = sessionService.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
             };
 
-            ViewBag.Messages = messageService.GetMessageByEmployee(param);
-            return PartialView("_Header", sessionService.Employee);
+            return PartialView("_Header", viewModel);
         }
 
         [ChildActionOnly]

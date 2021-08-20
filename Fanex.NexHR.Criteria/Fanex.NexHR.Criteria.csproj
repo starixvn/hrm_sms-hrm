@@ -88,6 +88,14 @@
     <Compile Include="EmployeeWorkFromHome\GetEmployeeWorkFromHomeCriteria.cs" />
     <Compile Include="EmployeeWorkFromHome\InsertEmployeeWorkFromHomeCriteria.cs" />
     <Compile Include="EmployeeWorkFromHome\UpdateEmployeeWorkFromHomeCriteria.cs" />
+    <Compile Include="HospitalizationLeave\DeleteTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetTransactionByIdCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetTransactionByEmployeeIdCriteria.cs" />
+    <Compile Include="HospitalizationLeave\InsertTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\ResetMultipleTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\InsertMultipleTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetSummaryReportCriteria.cs" />
+    <Compile Include="HospitalizationLeave\UpdateTransactionCriteria.cs" />
     <Compile Include="JobLevel\DeleteJobLevelCriteria.cs" />
     <Compile Include="JobLevel\GetJobLevelCriteria.cs" />
     <Compile Include="JobLevel\UpdateJobLevelCriteria.cs" />

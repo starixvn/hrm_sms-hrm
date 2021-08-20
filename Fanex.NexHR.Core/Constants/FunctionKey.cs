@@ -2,28 +2,16 @@
 {
     public static class FunctionKey
     {
-        public const string Memo = "Memo";
-
         public const string Discipline = "Discipline";
 
         public const string OtherDiscipline = "OtherDiscipline";
 
         public const string UpdateOutOfControlReason = "UpdateOutOfControlReason";
 
-        public const string Message = "Message";
-
-        public const string JobTitleManagement = "JobTitleManagement";
-
-        public const string JobLevelManagement = "JobLevelManagement";
-
-        public const string TeamManagement = "TeamManagement";
-
-        public const string EmployeeManagement = "EmployeeManagement";
-
         public const string CreateAccount = "CreateAccount";
 
         public const string SectionManagement = "SectionManagement";
-        
+
         public const string UnitManagement = "UnitManagement";
 
         public const string MenuManagement = "MenuManagement";
@@ -32,12 +20,6 @@
 
         public const string Holiday = "Holiday";
 
-        public const string ExtensionNumber = "ExtensionNumber";
-
-        public const string TimeRecord = "TimeRecord";
-
-        public const string AnnualLeaveBalance = "AnnualLeaveBalance";
-
         public const string ShiftManagement = "ShiftManagement";
 
         public const string CanFilterUnpaidLeaveSummary = "CanFilterUnpaidLeaveSummary";
@@ -45,17 +27,11 @@
         public const string CanOnBehalfOthers = "CanOnBehalfOthers";
 
         public const string VerifyRequest = "VerifyRequest";
-
         public const string ApproveRequest = "ApproveRequest";
-
         public const string ProcessRequest = "ProcessRequest";
-
         public const string VoidRequest = "VoidRequest";
-
         public const string VerifyOvertime = "VerifyOvertime";
-
         public const string ApproveOvertime = "ApproveOvertime";
-
         public const string ProcessOvertime = "ProcessOvertime";
 
         public const string RequestStatisticMember = "RequestStatisticMember";
@@ -80,5 +56,28 @@
         public const string ManpowerCategoryReport = "ManpowerCategoryReport";
         public const string DepartmentManagement = "DepartmentManagement";
 
+        // HR space
+        public const string EmployeeManagement = "EmployeeManagement";
+        public const string ManageAllEmployee = "ManageAllEmployee";
+        public const string ManageLocalEmployee = "ManageLocalEmployee";
+        public const string ManageExpatEmployee = "ManageExpatEmployee";
+
+        public const string TeamManagement = "TeamManagement";
+        public const string JobTitleManagement = "JobTitleManagement";
+        public const string JobLevelManagement = "JobLevelManagement";
+        public const string TimeRecord = "TimeRecord";
+        public const string Message = "Message";
+
+        // Company space
+        public const string ContactList = "ContactList";
+        public const string WorkingCalendars = "WorkingCalendars";
+        public const string DailyRequest = "DailyRequest";
+        public const string AttendanceReport = "AttendanceReport";
+        public const string AnnualLeaveBalance = "AnnualLeaveBalance";
+        public const string HospitalizationLeaveBalance = "HospitalizationLeaveBalance";
+        public const string UnpaidLeaveSummary = "UnpaidLeaveSummary";
+        public const string ExtensionNumber = "ExtensionNumber";
+        public const string Memo = "Memo";
+        public const string ShiftStatisticReport = "ShiftStatisticReport";
     }
 }

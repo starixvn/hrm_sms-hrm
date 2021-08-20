@@ -163,7 +163,6 @@
     <Compile Include="Constants\FunctionKey.cs" />
     <Compile Include="Enums\JobTitleCategory.cs" />
     <Compile Include="Enums\KeepInViewTypes.cs" />
-    <Compile Include="Enums\LocalLeave.cs" />
     <Compile Include="Enums\MarriageStatus.cs" />
     <Compile Include="Enums\AttendanceFilter.cs" />
     <Compile Include="Enums\MessageCategory.cs" />

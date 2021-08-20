@@ -133,6 +133,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HospitalizationLeaveBalanceController.cs" />
     <Compile Include="JobLevelController.cs" />
     <Compile Include="EmployeeWorkFromHomeController.cs" />
     <Compile Include="UnitController.cs" />

@@ -47,19 +47,15 @@
             string employee,
             int? year = null,
             int? employeeId = null,
-            int? minAnnualBalance = null,
             int? category = null)
         {
-            bool hasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
-            ViewBag.HasPermissionToEdit = hasPermissionToEdit;
-
+            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
             var model = new LeaveSummaryViewModel
             {
                 Year = year ?? DateTime.Now.Year,
-                TeamIds = teamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id)),
+                TeamIds = teamIds,
                 Employee = employee,
                 EmployeeId = employeeId ?? -1,
-                MinAnnualBalance = minAnnualBalance ?? 0,
                 Category = category,
                 IsShowCloseBalance = ConfigSettings.IsShowCloseBalance
             };
@@ -72,6 +68,7 @@
         public ActionResult Index(LeaveSummaryViewModel model)
         {
             model.Teams = teamService.GetBySupervisor(sessionService.Employee.Id);
+            model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
             model.LeaveSumaries = GetAnnualLeaveBalance(model);
 
@@ -100,13 +97,13 @@
         public JsonResult Reset(int minbalance, string descriptionReset)
         {
             int lastYear = DateTime.Now.AddYears(-1).Year;
-            DateTime date = new DateTime(lastYear, 12, 31);
-
+            var date = new DateTime(lastYear, 12, 31);
+            var teams = teamService.GetBySupervisor(sessionService.Employee.Id);
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = lastYear,
                 EmpId = null,
-                TeamIds = null,
+                TeamIds = string.Join(",", teams.Select(x => x.Id)),
                 IsLocal = null,
                 Role = string.Empty,
                 SupervisorId = null
@@ -128,12 +125,11 @@
         [ChildActionOnly]
         public PartialViewResult MultipleInsert()
         {
-            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
             var model = new AnnualLeaveBalanceMultiViewModel
             {
                 AffectedFrom = DateTime.Now
             };
-            return PartialView(model);
+            return PartialView("MultipleInsert", model);
         }
 
         [ChildActionOnly]
@@ -165,9 +161,8 @@
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(AnnualLeaveBalanceViewModel model)
         {
-            model.ExcludedRequestTrans = !model.ExcludedRequestTrans;
             model.Employee = employeeService.GetEmployeeById(model.EmployeeId);
-            model.AnnualLeaveBalances = GetAnnualLeaveTransactions(model.EmployeeId, model.ExcludedRequestTrans, model.Year);
+            model.AnnualLeaveBalances = GetAnnualLeaveTransactions(model.EmployeeId, !model.ExcludedRequestTrans, model.Year);
 
             return View(model);
         }
@@ -177,8 +172,6 @@
         {
             AnnualLeaveTransactionViewModel model = employeeService.GetAnnualLeaveTransaction(id);
             ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
-            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-
             return View(model);
         }
 
@@ -188,8 +181,6 @@
         public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
         {
             ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
-            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-
             if (formCollection["command"].Equals(Labels.Delete))
             {
                 return Delete(model);
@@ -202,8 +193,6 @@
         public ActionResult Create(int id)
         {
             ViewBag.Employee = employeeService.GetEmployeeById(id);
-            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-
             var model = new AnnualLeaveTransactionViewModel
             {
                 EmpId = id,
@@ -217,8 +206,6 @@
         public ActionResult Create(AnnualLeaveTransactionViewModel model)
         {
             ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
-            ViewBag.LocalLeaveTypes = Utilities.LocalLeaveTypes;
-
             if (ModelState.IsValid)
             {
                 var criteria = new InsertAnnualLeaveTransactionCriteria

@@ -180,6 +180,7 @@
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
     <Content Include="wwwroot\dist\js\employee.workfromhome.js" />
+    <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js" />
     <Content Include="wwwroot\dist\js\joblevel.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
     <Content Include="wwwroot\dist\js\section.index.js" />
@@ -271,6 +272,7 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\dist\js\jobtitle.js" />
@@ -1259,6 +1261,12 @@
     <Content Include="wwwroot\sources\styles\pages\workfromhome\index.scss" />
     <Content Include="wwwroot\dist\js\employee.workfromhome.js.map" />
     <Content Include="wwwroot\dist\styles\employee.workfromhome.js.map" />
+    <Content Include="Views\HospitalizationLeaveBalance\Index.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\MultipleInsert.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\MultipleReset.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Employee.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Edit.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

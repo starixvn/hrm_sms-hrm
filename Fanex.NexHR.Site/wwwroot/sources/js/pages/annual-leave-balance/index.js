@@ -28,7 +28,6 @@ const annualLeaveBalance = (function ($) {
             + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
             + '&Employee=' + $('#Employee').val()
             + '&EmployeeId=' + $('#EmployeeId').val()
-            + '&MinAnnualBalance=' + $('#MinAnnualBalance').val()
             + '&Category=' + $('#Category').val());
     }
 
@@ -112,8 +111,7 @@ const annualLeaveBalance = (function ($) {
                                 EmpIds: $("#EmpIds").val(),
                                 Description: $form.find("#Description").val(),
                                 AffectedFrom: $form.find("#AffectedFrom").val(),
-                                TotalDays: parseInt($form.find("#TotalDays").val(), 10),
-                                LocalLeave: $form.find("#LocalLeave").val()
+                                TotalDays: parseInt($form.find("#TotalDays").val(), 10)
                             };
                             $.ajax({
                                 type: 'POST',
@@ -200,7 +198,7 @@ const annualLeaveBalance = (function ($) {
         var totalDays = parseInt($form.find('input[name="MinBalance"]').val());
 
         if (totalDays == null || totalDays === "" || isNaN(totalDays)) {
-            errorString = "* The Min balance field is required.";
+            errorString = "Max Balance is required.";
         }
 
         if (errorString.length > 0) {

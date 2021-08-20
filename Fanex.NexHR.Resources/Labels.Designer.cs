@@ -313,6 +313,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjustment.
+        /// </summary>
+        public static string Adjustment {
+            get {
+                return ResourceManager.GetString("Adjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Affect from.
         /// </summary>
         public static string AffectFrom {
@@ -372,6 +381,15 @@ namespace Fanex.NexHR.Resources {
         public static string AllTitles {
             get {
                 return ResourceManager.GetString("AllTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annual Hospitalization Leave.
+        /// </summary>
+        public static string AnnualHospitalizationLeave {
+            get {
+                return ResourceManager.GetString("AnnualHospitalizationLeave", resourceCulture);
             }
         }
         
@@ -777,6 +795,15 @@ namespace Fanex.NexHR.Resources {
         public static string ChineseName {
             get {
                 return ResourceManager.GetString("ChineseName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Balance.
+        /// </summary>
+        public static string CloseBalance {
+            get {
+                return ResourceManager.GetString("CloseBalance", resourceCulture);
             }
         }
         
@@ -2050,6 +2077,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hospitalization Leave Balance.
+        /// </summary>
+        public static string HospitalizationLeaveBalance {
+            get {
+                return ResourceManager.GetString("HospitalizationLeaveBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Host.
         /// </summary>
         public static string Host {
@@ -2613,15 +2649,6 @@ namespace Fanex.NexHR.Resources {
         public static string Local {
             get {
                 return ResourceManager.GetString("Local", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Local leave.
-        /// </summary>
-        public static string LocalLeave {
-            get {
-                return ResourceManager.GetString("LocalLeave", resourceCulture);
             }
         }
         

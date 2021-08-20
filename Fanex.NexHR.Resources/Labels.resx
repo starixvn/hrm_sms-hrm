@@ -996,9 +996,6 @@
   <data name="KeepInViewLeave" xml:space="preserve">
     <value>Keep In View Leave</value>
   </data>
-  <data name="LocalLeave" xml:space="preserve">
-    <value>Local leave</value>
-  </data>
   <data name="StandardLeave" xml:space="preserve">
     <value>Standard Leave</value>
   </data>
@@ -1937,5 +1934,17 @@
   </data>
   <data name="EmployeeWorkFromHome" xml:space="preserve">
     <value>Employee Work From Home</value>
+  </data>
+  <data name="Adjustment" xml:space="preserve">
+    <value>Adjustment</value>
+  </data>
+  <data name="AnnualHospitalizationLeave" xml:space="preserve">
+    <value>Annual Hospitalization Leave</value>
+  </data>
+  <data name="CloseBalance" xml:space="preserve">
+    <value>Close Balance</value>
+  </data>
+  <data name="HospitalizationLeaveBalance" xml:space="preserve">
+    <value>Hospitalization Leave Balance</value>
   </data>
 </root>

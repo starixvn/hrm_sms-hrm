@@ -21,5 +21,6 @@
         public IList<Models.Team> Groups { get; set; }
 
         public IList<SelectListItem> JobTitles { get; set; }
+        public bool IsShowDropdownCategory { get; set; }
     }
 }

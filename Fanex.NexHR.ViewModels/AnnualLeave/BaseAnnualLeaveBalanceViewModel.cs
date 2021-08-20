@@ -29,8 +29,6 @@
 
         public decimal CreditDays => TotalDays.HasValue && TotalDays.Value > 0 ? TotalDays.Value : 0;
 
-        public int LocalLeave { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             IList<ValidationResult> result = new List<ValidationResult>();

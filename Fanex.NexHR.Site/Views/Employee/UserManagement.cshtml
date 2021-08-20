@@ -33,7 +33,6 @@
                new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete="off" })
             </div>
         </div>
-
         <div class="form-group form-group--m">
             <div class="label-form">
                 <label class="control-label">@Labels.SectionTeam</label>
@@ -48,24 +47,27 @@
                 @Html.DropDownList("title", Model.JobTitles, Labels.AllTitles, new { @class = "title-select form-control" })
             </div>
         </div>
-
-        <div class="form-group form-group--m">
-            <div class="label-form">
-                <label class="control-label">@Labels.Category</label>
+        @if (!Model.IsShowDropdownCategory)
+        {
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Category</label>
+                </div>
+                <div class="select-form">
+                    @{
+                        var category = new List<SelectListItem>
+                        {
+                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                            new SelectListItem() {Text = @Labels.Expat, Value = "0"},
+                            new SelectListItem() {Text = @Labels.Local, Value = "1"},
+                        };
+                    }
+                    @Html.DropDownList("category", category, new { @class = "category form-control" })
+                </div>
             </div>
-            <div class="select-form">
-                @{
-                    var category = new List<SelectListItem>
-                    {
-                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                        new SelectListItem() {Text = @Labels.Expat, Value = "0"},
-                        new SelectListItem() {Text = @Labels.Local, Value = "1"},
-                    };
-                }
-                @Html.DropDownList("category", category, new { @class = "category form-control" })
-            </div>
-        </div>
-
+        }
+    </div>
+    <div class="form-horizontal clearfix">
         <div class="form-group user-status" id="usertype">
             <input type="radio" id="enabled" checked="checked" />
             <label for="enabled">@Labels.ActiveUsers</label>
