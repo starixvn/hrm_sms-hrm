@@ -385,15 +385,6 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Annual Hospitalization Leave.
-        /// </summary>
-        public static string AnnualHospitalizationLeave {
-            get {
-                return ResourceManager.GetString("AnnualHospitalizationLeave", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Annual Leave.
         /// </summary>
         public static string AnnualLeave {
@@ -2073,6 +2064,15 @@ namespace Fanex.NexHR.Resources {
         public static string HomePhone {
             get {
                 return ResourceManager.GetString("HomePhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hospitalization Leave.
+        /// </summary>
+        public static string HospitalizationLeave {
+            get {
+                return ResourceManager.GetString("HospitalizationLeave", resourceCulture);
             }
         }
         
@@ -4431,6 +4431,24 @@ namespace Fanex.NexHR.Resources {
         public static string ShowWholeTeam {
             get {
                 return ResourceManager.GetString("ShowWholeTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sick Leave.
+        /// </summary>
+        public static string SickLeave {
+            get {
+                return ResourceManager.GetString("SickLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sick Leave Balance.
+        /// </summary>
+        public static string SickLeaveBalance {
+            get {
+                return ResourceManager.GetString("SickLeaveBalance", resourceCulture);
             }
         }
         

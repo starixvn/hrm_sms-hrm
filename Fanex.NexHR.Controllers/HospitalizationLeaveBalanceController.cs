@@ -16,23 +16,27 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.HospitalizationLeave;
+    using NPOI.HSSF.UserModel;
 
     [HRMPermission(Policy.Read, FunctionKey.HospitalizationLeaveBalance)]
-    public class HospitalizationLeaveBalanceController : BaseController
+    public class HospitalizationLeaveBalanceController : BaseExportController
     {
         private readonly IEmployeeService employeeService;
         private readonly ITeamService teamService;
         private readonly IBaseService baseService;
+        private readonly IExportExcelService exportExcelService;
 
         public HospitalizationLeaveBalanceController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             ITeamService teamService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService,
+            IExportExcelService exportExcelService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.baseService = baseService;
+            this.exportExcelService = exportExcelService;
         }
 
         public ActionResult Index(
@@ -124,6 +128,7 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        [HRMPermission(Policy.Host, FunctionKey.HospitalizationLeaveBalance)]
         public ActionResult Employee(int id)
         {
             var employee = employeeService.GetEmployeeById(id);
@@ -145,6 +150,7 @@
         }
 
         [HttpPost]
+        [HRMPermission(Policy.Host, FunctionKey.HospitalizationLeaveBalance)]
         public ActionResult Employee(HospitalizationLeaveTransactionViewModel model)
         {
             var employee = employeeService.GetEmployeeById(model.EmployeeId);
@@ -234,6 +240,23 @@
                     return View(model);
                 }
             }
+        }
+
+        public ActionResult ExportSummaryReport(HospitalizationLeaveBalanceViewModel model)
+        {
+            string fileName = "HospitalizationLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            var criteria = new GetSummaryReportCriteria
+            {
+                Year = model.Year,
+                EmployeeId = model.EmployeeId,
+                TeamIds = model.TeamIds,
+                IsLocal = model.IsLocal,
+                SupervisorId = sessionService.Employee.Id
+            };
+            var employees = baseService.GetData<HospitalizationLeaveBalanceSummaryReport>(criteria);
+            HSSFWorkbook hssfworkbook = exportExcelService.ExportHospitalizationLeaveSummary(employees, model.Year);
+
+            return ExcelFile(hssfworkbook, fileName);
         }
 
         private IEnumerable<HospitalizationLeaveTransaction> GetHospitalizationLeaveTransaction(int employeeId, int year, bool includedRequestTrans = true)

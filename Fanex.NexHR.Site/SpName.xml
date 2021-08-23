@@ -536,4 +536,14 @@
         <Setting Key="HospitalizationLeave_UpdateTransaction" SpName="HospitalizationLeave_UpdateTransaction" DbName="nexhrx" Plain="0" />
         <Setting Key="HospitalizationLeave_DeleteTransaction" SpName="HospitalizationLeave_DeleteTransaction" DbName="nexhrx" Plain="0" />
     </Function>
+    <Function Name="Sick Leave">
+        <Setting Key="SickLeave_SummaryReport" SpName="SickLeave_SummaryReport" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_InsertMultipleTransactions" SpName="SickLeave_InsertMultipleTransactions" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_ResetMultipleTransactions" SpName="SickLeave_ResetMultipleTransactions" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_GetTransByEmpId" SpName="SickLeave_GetTransByEmpId" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_GetTransById" SpName="SickLeave_GetTransById" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_InsertTransaction" SpName="SickLeave_InsertTransaction" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_UpdateTransaction" SpName="SickLeave_UpdateTransaction" DbName="nexhrx" Plain="0" />
+        <Setting Key="SickLeave_DeleteTransaction" SpName="SickLeave_DeleteTransaction" DbName="nexhrx" Plain="0" />
+    </Function>
 </Functions>

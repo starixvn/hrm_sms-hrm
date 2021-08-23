@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.HospitalizationLeave;
     using Fanex.NexHR.Models.Request;
     using NPOI.HSSF.UserModel;
 
@@ -10,5 +11,9 @@
         HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year);
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
+
+        HSSFWorkbook ExportHospitalizationLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
+
+        HSSFWorkbook ExportSickLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
     }
 }

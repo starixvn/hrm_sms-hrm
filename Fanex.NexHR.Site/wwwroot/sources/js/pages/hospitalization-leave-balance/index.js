@@ -41,8 +41,8 @@ const hospitalizationLeaveBalance = (function ($) {
 
     function initExportExcelEvent() {
         $('#btnExcel').click(function () {
-            var postToUrl = 'HospitalizationLeaveBalance/ExportSummaryReport?year=';
-            var url = submitData(postToUrl);
+            const postToUrl = 'HospitalizationLeaveBalance/ExportSummaryReport?year=';
+            const url = submitData(postToUrl);
             location.href = url;
         });
     }
@@ -62,7 +62,7 @@ const hospitalizationLeaveBalance = (function ($) {
 
     function initCheckSingleRowEvent() {
         $('table#data tbody input.checkbox-custom').click(function () {
-            var tr = $(this).closest('tr');
+            const tr = $(this).closest('tr');
             if (tr.hasClass('selected')) {
                 tr.removeClass();
             } else {
@@ -75,7 +75,7 @@ const hospitalizationLeaveBalance = (function ($) {
         $('#btnAdjustment').click(function () {
             const empIds = [];
             $('table#data tbody input.checkbox-custom').each(function (index, item) {
-                var checked = $(item).prop('checked');
+                const checked = $(item).prop('checked');
                 if (checked) {
                     empIds.push($(item).attr('data-id'));
                 }

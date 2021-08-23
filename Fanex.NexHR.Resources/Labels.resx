@@ -1938,13 +1938,19 @@
   <data name="Adjustment" xml:space="preserve">
     <value>Adjustment</value>
   </data>
-  <data name="AnnualHospitalizationLeave" xml:space="preserve">
-    <value>Annual Hospitalization Leave</value>
+  <data name="HospitalizationLeave" xml:space="preserve">
+    <value>Hospitalization Leave</value>
   </data>
   <data name="CloseBalance" xml:space="preserve">
     <value>Close Balance</value>
   </data>
   <data name="HospitalizationLeaveBalance" xml:space="preserve">
     <value>Hospitalization Leave Balance</value>
+  </data>
+  <data name="SickLeaveBalance" xml:space="preserve">
+    <value>Sick Leave Balance</value>
+  </data>
+  <data name="SickLeave" xml:space="preserve">
+    <value>Sick Leave</value>
   </data>
 </root>

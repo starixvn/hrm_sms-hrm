@@ -75,6 +75,7 @@
         public const string AttendanceReport = "AttendanceReport";
         public const string AnnualLeaveBalance = "AnnualLeaveBalance";
         public const string HospitalizationLeaveBalance = "HospitalizationLeaveBalance";
+        public const string SickLeaveBalance = "SickLeaveBalance";
         public const string UnpaidLeaveSummary = "UnpaidLeaveSummary";
         public const string ExtensionNumber = "ExtensionNumber";
         public const string Memo = "Memo";

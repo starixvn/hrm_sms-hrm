@@ -184,6 +184,7 @@
     <Content Include="wwwroot\dist\js\joblevel.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
     <Content Include="wwwroot\dist\js\section.index.js" />
+    <Content Include="wwwroot\dist\js\sick.leave.balance.index.js" />
     <Content Include="wwwroot\dist\js\unit.edit.js" />
     <Content Include="wwwroot\dist\js\department.edit.js" />
     <Content Include="wwwroot\dist\js\department.index.js" />
@@ -272,6 +273,7 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
@@ -1135,6 +1137,8 @@
     <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls" />
     <Content Include="ExcelTemplates\WorkingCalendar.xlsx" />
     <Content Include="ExcelTemplates\AttendanceReport.xlsx" />
+    <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
@@ -1267,6 +1271,14 @@
     <Content Include="Views\HospitalizationLeaveBalance\Employee.cshtml" />
     <Content Include="Views\HospitalizationLeaveBalance\Edit.cshtml" />
     <Content Include="Views\HospitalizationLeaveBalance\Create.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Create.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Edit.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Employee.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Index.cshtml" />
+    <Content Include="Views\SickLeaveBalance\MultipleInsert.cshtml" />
+    <Content Include="Views\SickLeaveBalance\MultipleReset.cshtml" />
+    <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js.map" />
+    <Content Include="wwwroot\dist\js\sick.leave.balance.index.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />
