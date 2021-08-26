@@ -110,6 +110,7 @@
     <Compile Include="SickLeave\InsertTransactionCriteria.cs" />
     <Compile Include="SickLeave\ResetMultipleTransactionCriteria.cs" />
     <Compile Include="SickLeave\UpdateTransactionCriteria.cs" />
+    <Compile Include="SystemSetting\GetSystemSettingCriteria.cs" />
     <Compile Include="Time\GetPrivilegeCreateCheckInOutRecordCriteria.cs" />
     <Compile Include="Time\InsertCheckInOutRecordCriteria.cs" />
     <Compile Include="Unit\DeleteUnitCriteria.cs" />

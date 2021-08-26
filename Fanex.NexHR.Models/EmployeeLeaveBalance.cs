@@ -13,5 +13,7 @@
         public decimal WeekedLeaveDayTaken { get; set; }
 
         public decimal KeepInViewByHourBalance { get; set; }
+        public decimal HospitalizationLeaveBalance { get; set; }
+        public decimal SickLeaveBalance { get; set; }
     }
 }

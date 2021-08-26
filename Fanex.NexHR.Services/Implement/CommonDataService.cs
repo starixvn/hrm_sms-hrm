@@ -4,10 +4,12 @@
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Helpers;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Country;
     using Fanex.NexHR.Criteria.LeaveType;
     using Fanex.NexHR.Criteria.Lookup;
+    using Fanex.NexHR.Criteria.SystemSetting;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
 
@@ -26,6 +28,8 @@
         IEnumerable<EntityBase<byte>> GetMarriageStatus();
 
         IEnumerable<EntityBase<byte>> GetGender();
+
+        SystemSetting GetSystemSetting();
     }
 
     public class CommonDataService : ICommonDataService
@@ -134,6 +138,12 @@
                     Name = EnumerationHelper.GetDescription(Gender.Unknown)
                 }
             };
+        }
+
+        public SystemSetting GetSystemSetting()
+        {
+            var criteria = new GetSystemSettingCriteria();
+            return baseService.GetDataEntity<SystemSetting>(criteria);
         }
     }
 }

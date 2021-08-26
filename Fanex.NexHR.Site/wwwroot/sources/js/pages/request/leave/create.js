@@ -676,6 +676,8 @@ const LeaveRequest = (function ($) {
                         LeaveRequest.keepInViewByHourBalance.html(response.KeepInViewByHourBalance);
                         LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
                         LeaveRequest.weekendLeaveTaken.html(response.WeekedLeaveDayTaken);
+                        $('#lblHospitalizationLeaveBalance').html(response.HospitalizationLeaveBalance);
+                        $('#lblSickLeaveBalance').html(response.SickLeaveBalance);
                     }
                 });
         },

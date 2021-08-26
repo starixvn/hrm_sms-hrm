@@ -62,6 +62,7 @@
         public ActionResult Create()
         {
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.Leave);
+            SystemSetting setting = commonDataService.GetSystemSetting();
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
@@ -74,7 +75,9 @@
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
-                MinDate = DateTime.Today.FirstDayOfMonth().AddMonths(-5)
+                MinDate = DateTime.Today.FirstDayOfMonth().AddMonths(-5),
+                EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
+                EnableSickLeaveBalance = setting.EnableSickLeaveBalance
             };
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -131,9 +134,12 @@
             model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.Leave);
+            SystemSetting setting = commonDataService.GetSystemSetting();
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
             model.Files = requestService.GetAttachFile(id);
+            model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
+            model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
 
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;

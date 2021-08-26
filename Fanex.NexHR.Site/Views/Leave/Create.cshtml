@@ -52,6 +52,30 @@
                     <span class="numberbalance" id="lblKeepInViewByHourBalance">@Model.EmployeeLeaveBalance.KeepInViewByHourBalance.ToString("0.#")</span> hour(s)
                 </span>
             </span>
+            @if(Model.EnableHospitalizationLeaveBalance)
+            {
+                <br />
+                <span id="hospitalizationLeaveBalance">
+                    ※<span class="infobalance">
+                        Hospitalization Leave balance:
+                        <span class="numberbalance" id="lblHospitalizationLeaveBalance">
+                            @Model.EmployeeLeaveBalance.HospitalizationLeaveBalance.ToString("0.#")
+                        </span> day(s)
+                    </span>
+                </span>
+            }
+            @if(Model.EnableSickLeaveBalance)
+            {
+                <br />
+                <span id="sickLeaveBalance">
+                    ※<span class="infobalance">
+                        Sick Leave balance:
+                        <span class="numberbalance" id="lblSickLeaveBalance">
+                            @Model.EmployeeLeaveBalance.SickLeaveBalance.ToString("0.#")
+                        </span> day(s)
+                    </span>
+                </span>
+            }
         </div>
 
         <div class="form-group">

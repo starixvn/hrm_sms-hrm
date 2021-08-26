@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
-    using System.Linq;
     using Fanex.NexHR.Models.Supervisor;
-    using System.Web;
 
     public class LeaveRequestViewModel : IValidatableObject
     {
@@ -65,7 +64,6 @@
             get
             {
                 return LeaveTypeList.FirstOrDefault(t => t.Id == LeaveTypeId).Description;
-
             }
         }
 
@@ -117,5 +115,7 @@
         }
 
         public List<string> Files { get; set; }
+        public bool EnableHospitalizationLeaveBalance { get; set; }
+        public bool EnableSickLeaveBalance { get; set; }
     }
 }

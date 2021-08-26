@@ -6,19 +6,11 @@
     public class GetLeaveBalanceCriteria : CriteriaBase
     {
         public int EmpId { get; set; }
-
         public long? RequestId { get; set; }
-
         public DateTime? EffectedDay { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "LeaveRequest_GetLeaveBalance";
-        }
+        public override string GetSettingKey() => "LeaveRequest_GetLeaveBalance";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }
