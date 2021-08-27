@@ -47,6 +47,7 @@
             var criteria = new CreateHolidayCriteria
             {
                 HolidayName = model.HolidayName,
+                TypeId = model.TypeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ModifiedBy = actorId,
@@ -61,6 +62,7 @@
             {
                 Id = model.Id,
                 HolidayName = model.HolidayName,
+                TypeId = model.TypeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ModifiedBy = actorId,

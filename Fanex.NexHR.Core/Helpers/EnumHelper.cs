@@ -3,10 +3,11 @@
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Reflection;
     using Fanex.Common.Extensions;
 
-    public static class EnumerationHelper
+    public static class EnumHelper
     {
         public static string GetDescription(Enum enumType)
         {
@@ -22,18 +23,11 @@
             return description;
         }
 
-        public static string GetDisplayName(Enum enumType)
+        public static string GetDisplayName(this Enum val)
         {
-            var description = string.Empty;
-            if (enumType != null)
-            {
-                FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
-                DisplayAttribute[] attributes =
-                    (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);
-                description = attributes.Length > 0 ? attributes[0].Description : enumType.ToString();
-            }
-
-            return description;
+            return val.GetType().GetMember(val.ToString())
+                .FirstOrDefault()?.GetCustomAttribute<DisplayAttribute>()?.GetName()
+                ?? val.ToString();
         }
 
         public static string GetStringValue(Enum enumType)

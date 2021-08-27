@@ -93,27 +93,27 @@
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Default,
-                    Name = EnumerationHelper.GetStringValue(MarriageStatus.Default)
+                    Name = EnumHelper.GetStringValue(MarriageStatus.Default)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Married,
-                    Name = EnumerationHelper.GetStringValue(MarriageStatus.Married)
+                    Name = EnumHelper.GetStringValue(MarriageStatus.Married)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Divorced,
-                    Name = EnumerationHelper.GetStringValue(MarriageStatus.Divorced)
+                    Name = EnumHelper.GetStringValue(MarriageStatus.Divorced)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Single,
-                    Name = EnumerationHelper.GetStringValue(MarriageStatus.Single)
+                    Name = EnumHelper.GetStringValue(MarriageStatus.Single)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Widow,
-                    Name = EnumerationHelper.GetStringValue(MarriageStatus.Widow)
+                    Name = EnumHelper.GetStringValue(MarriageStatus.Widow)
                 }
             };
         }
@@ -125,17 +125,17 @@
                 new EntityBase<byte>
                 {
                     Id = (byte)Gender.Female,
-                    Name = EnumerationHelper.GetDescription(Gender.Female)
+                    Name = EnumHelper.GetDescription(Gender.Female)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)Gender.Male,
-                    Name = EnumerationHelper.GetDescription(Gender.Male)
+                    Name = EnumHelper.GetDescription(Gender.Male)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)Gender.Unknown,
-                    Name = EnumerationHelper.GetDescription(Gender.Unknown)
+                    Name = EnumHelper.GetDescription(Gender.Unknown)
                 }
             };
         }

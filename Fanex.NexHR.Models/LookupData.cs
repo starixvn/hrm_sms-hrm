@@ -21,6 +21,6 @@
 
         public int CategoryId { get; set; }
 
-        public string CategoryName => EnumerationHelper.GetStringValue((JobTitleCategory)CategoryId);
+        public string CategoryName => EnumHelper.GetStringValue((JobTitleCategory)CategoryId);
     }
 }

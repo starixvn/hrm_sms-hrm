@@ -1,4 +1,5 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models.Overtime
 @using Fanex.NexHR.ViewModels.Overtime
 @model EditMonthlyRequestViewModel
@@ -138,17 +139,19 @@
                             }
                         </td>
                         <td class="cell-overtime">
-                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsHoliday)
+                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
+                                && request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Regular)
                             {
                                 @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", @maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
-                            @if (Model.MonthlyRequest.Requester.SpecialOT > 0
+                            @if ((Model.MonthlyRequest.Requester.SpecialOT > 0
                                 && request.ActualWorkingHours > 0
                                 && !request.IsKeepInView
                                 && !request.IsOffDay && !request.IsHoliday
                                 && request.ActualWorkingHours >= (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
+                                || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
                             {
                                 @Html.TextBoxFor(model => request.SpecialHours, new { @class = "specialHours form-control", @maxlength = 5, autocomplete = "off" })
                             }

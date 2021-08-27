@@ -40,5 +40,8 @@
 
         [XmlIgnore]
         public bool IsKeepInView { get; set; }
+
+        [XmlIgnore]
+        public byte HolidayTypeId { get; set; }
     }
 }

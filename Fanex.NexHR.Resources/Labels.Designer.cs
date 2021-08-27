@@ -3886,6 +3886,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Regular.
+        /// </summary>
+        public static string Regular {
+            get {
+                return ResourceManager.GetString("Regular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
         public static string Reject {
@@ -4476,6 +4485,15 @@ namespace Fanex.NexHR.Resources {
         public static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special.
+        /// </summary>
+        public static string Special {
+            get {
+                return ResourceManager.GetString("Special", resourceCulture);
             }
         }
         

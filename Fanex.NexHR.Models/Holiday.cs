@@ -23,5 +23,7 @@
         public DateTime ModifiedDate { get; set; }
 
         public int ModifiedBy { get; set; }
+
+        public byte TypeId { get; set; }
     }
 }

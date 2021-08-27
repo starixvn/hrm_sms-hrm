@@ -1953,4 +1953,10 @@
   <data name="SickLeave" xml:space="preserve">
     <value>Sick Leave</value>
   </data>
+  <data name="Regular" xml:space="preserve">
+    <value>Regular</value>
+  </data>
+  <data name="Special" xml:space="preserve">
+    <value>Special</value>
+  </data>
 </root>

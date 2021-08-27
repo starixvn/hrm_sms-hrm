@@ -82,7 +82,6 @@ $(document).ready(function () {
                 if (normalHours !== 0 && specialHours !== 0) {
                     toastr.error('Can not claim both normal and special.', '', toastOptions());
                     isValid = false;
-                    return;
                 }
             });
         }

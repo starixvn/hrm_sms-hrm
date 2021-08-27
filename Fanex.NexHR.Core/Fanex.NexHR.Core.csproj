@@ -156,6 +156,7 @@
     <Compile Include="Enums\DateRangeOption.cs" />
     <Compile Include="Enums\EmployeeStatus.cs" />
     <Compile Include="Enums\Gender.cs" />
+    <Compile Include="Enums\HolidayType.cs" />
     <Compile Include="Enums\LateInEarlyOutReason.cs" />
     <Compile Include="Enums\CheckInOutReason.cs" />
     <Compile Include="Enums\RequestCommand.cs" />
@@ -192,7 +193,7 @@
     <Compile Include="CoreDIExtensions.cs" />
     <Compile Include="Filters\HRMAuthorizeAttribute.cs" />
     <Compile Include="Filters\HRMPermissionAttribute.cs" />
-    <Compile Include="Helpers\EnumerationHelper.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="HSSFSheetExtensions.cs" />
     <Compile Include="JsonConverter.cs" />
     <Compile Include="Models\CommandResult.cs" />

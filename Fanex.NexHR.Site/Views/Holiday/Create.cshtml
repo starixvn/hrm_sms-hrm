@@ -1,7 +1,14 @@
-﻿@using Fanex.NexHR.Resources
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Core.Helpers
+@using Fanex.NexHR.Resources
 @model Holiday
 @{
     ViewBag.Title = Labels.Holiday;
+    var holidayTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = ((byte)HolidayType.Regular).ToString(), Text = HolidayType.Regular.GetDisplayName() },
+        new SelectListItem { Value = ((byte)HolidayType.Special).ToString(), Text = HolidayType.Special.GetDisplayName() }
+    };
 }
 @section css{
     <link href="~/wwwroot/dist/styles/holiday.create.css" rel="stylesheet" />
@@ -40,8 +47,15 @@
             </div>
             <div class="form-group">
                 <div class="label-form">
-                    Date(s)
+                    @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
                 </div>
+                <div class="input-form">
+                    @Html.DropDownListFor(model => model.TypeId, holidayTypes, new { @class = "form-control", @autocomplete = "off" })
+                </div>
+                @Html.ValidationMessageFor(model => model.TypeId)
+            </div>
+            <div class="form-group">
+                <div class="label-form">Date(s)</div>
                 <div class="input-form">
                     @{
                         var numDay = Model.ToDate.Day - Model.FromDate.Day + 1;

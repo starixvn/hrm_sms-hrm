@@ -21,7 +21,7 @@
             {
                 if (ActionType > 0)
                 {
-                    return EnumerationHelper.GetStringValue((SupervisorActionType)ActionType);
+                    return EnumHelper.GetStringValue((SupervisorActionType)ActionType);
                 }
 
                 return string.Empty;

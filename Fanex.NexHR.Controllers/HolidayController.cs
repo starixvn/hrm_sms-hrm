@@ -67,6 +67,7 @@
         {
             var holiday = new Holiday
             {
+                TypeId = (byte)HolidayType.Regular,
                 FromDate = DateTime.Now,
                 ToDate = DateTime.Now
             };

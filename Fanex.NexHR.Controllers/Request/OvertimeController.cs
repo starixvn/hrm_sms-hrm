@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Model;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -19,7 +18,6 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
-    using Newtonsoft.Json;
 
     public class OvertimeController : BaseController
     {

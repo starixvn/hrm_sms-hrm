@@ -127,7 +127,7 @@
 
         public IList<RequestEntity> Requests { get; set; }
 
-        public string BreadcrumbText => EnumerationHelper.GetStringValue(ViewType);
+        public string BreadcrumbText => EnumHelper.GetStringValue(ViewType);
 
         public string PageTitle
         {
