@@ -21,39 +21,57 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
+	DECLARE @maximumBalanceForLocal SMALLINT
+		,@maximumBalanceForExpat SMALLINT
+
+	SELECT @maximumBalanceForLocal = Value
+	FROM dbo.RefResource WITH (NOLOCK)
+	WHERE RefName = 'AnnualLeaveBalanceForLocal'
+
+	SELECT @maximumBalanceForExpat = Value
+	FROM dbo.RefResource WITH (NOLOCK)
+	WHERE RefName = 'AnnualLeaveBalanceForExpat'
+
+	SET @maximumBalanceForLocal = ISNULL(@maximumBalanceForLocal, 0)
+	SET @maximumBalanceForExpat = ISNULL(@maximumBalanceForExpat, 0)
+
 	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
 
 	INSERT INTO #tblEmployeeIds (EmployeeId)
 	SELECT val
 	FROM dbo.[fnc_strSplit](@EmployeeIds, ',')
 
-	IF EXISTS (
+	IF @maximumBalanceForLocal > 0
+		AND EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeSummary AS empsum WITH (NOLOCK)
 				INNER JOIN #tblEmployeeIds AS empid ON empsum.EmpId = empid.EmployeeId
 			WHERE empsum.IsLocal = 1
-				AND @CreditDays > 13
+				AND @CreditDays > @maximumBalanceForLocal
 			)
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'Employees - Local: 12. '
+			,@ErrMsg = N'Employees - Local: ' + CAST(@maximumBalanceForLocal AS VARCHAR(2))
 
 		RETURN
 	END
-	ELSE IF EXISTS (
+	
+	IF @maximumBalanceForExpat > 0
+		AND EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeSummary AS empsum WITH (NOLOCK)
 				INNER JOIN #tblEmployeeIds AS empid ON empsum.EmpId = empid.EmployeeId
 			WHERE empsum.IsLocal = 0
-				AND @CreditDays > 42
+				AND @CreditDays > @maximumBalanceForExpat
 			)
 	BEGIN
 		SELECT @ErrCode = 100
-			,@ErrMsg = N'Employees - Expat: no rules (only 42 ALs a day).'
+			,@ErrMsg = N'Employees - Expat: no rules (only ' + + CAST(@maximumBalanceForExpat AS VARCHAR(2)) + ' ALs a day).'
 
 		RETURN
 	END
-	ELSE IF EXISTS (
+	
+	IF EXISTS (
 			SELECT 1
 			FROM dbo.Employee AS emp WITH (NOLOCK)
 				INNER JOIN #tblEmployeeIds AS empid ON emp.EmpId = empid.EmployeeId

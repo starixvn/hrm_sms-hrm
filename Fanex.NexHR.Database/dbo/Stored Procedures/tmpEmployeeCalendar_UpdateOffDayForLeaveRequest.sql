@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOffDayForLeaveRequest] @requestId BIGINT = NULL
 	,@empId INT
 	,@leaveTypeId INT
@@ -121,7 +120,8 @@ BEGIN
 		,ShiftId = NULL
 		,RequestId = NULL
 		,RequestTypeId = NULL
-		,LeaveTypeId = 0
+		,LeaveTypeId = NULL
+		,LeaveTypeId2 = NULL
 		,IsLeaveDay = 0
 		,IsLeaveOffDay = 0
 		,LeaveDay = 0

@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@DisciplineXml NVARCHAR(MAX) = NULL
@@ -179,6 +180,24 @@ BEGIN
 
 		EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @Requestid
 			,@EmpId = @EmpId
+			,@Status = 1
+
+		EXEC dbo.HospitalizationLeave_InsertTransactionByRequestId @RequestId
+			,@EmpId
+			,@FromDate
+			,@ToDate
+			,@ActorId
+
+		EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId
+			,@Status = 1
+
+		EXEC dbo.SickLeave_InsertTransactionByRequestId @RequestId
+			,@EmpId
+			,@FromDate
+			,@ToDate
+			,@ActorId
+
+		EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId
 			,@Status = 1
 
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId

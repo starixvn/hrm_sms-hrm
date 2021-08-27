@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
@@ -91,6 +92,14 @@ BEGIN
 		EXEC dbo.AnnualLeave_DeleteTransactionByRequestId @RequestId
 			,@ProcessedDate
 			,@ActorId
+		
+		EXEC dbo.HospitalizationLeave_DeleteTransactionByRequestId @RequestId
+			,@ProcessedDate
+			,@ActorId
+
+		EXEC dbo.SickLeave_DeleteTransactionByRequestId @RequestId
+			,@ProcessedDate
+			,@ActorId
 
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 			,@FromDate
@@ -100,6 +109,12 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
+		,@Status = 2
+
+	EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+		,@Status = 2
+
+	EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
 		,@Status = 2
 
 	EXEC dbo.LeaveRequest_DeleteKIVLeaveTrans @RequestId = @RequestId

@@ -53,7 +53,7 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.RefResource WITH (NOLOCK)
-			WHERE RefName = 'LimitUseAnualLeaveBalance'
+			WHERE RefName = 'LimitUseAnnualLeaveBalance'
 				AND Value = '0'
 				AND IsActive = 1
 			)

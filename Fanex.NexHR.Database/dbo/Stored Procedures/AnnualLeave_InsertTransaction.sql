@@ -25,37 +25,55 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
+	DECLARE @maximumBalanceForLocal SMALLINT
+		,@maximumBalanceForExpat SMALLINT
+
+	SELECT @maximumBalanceForLocal = Value
+	FROM dbo.RefResource WITH (NOLOCK)
+	WHERE RefName = 'AnnualLeaveBalanceForLocal'
+
+	SELECT @maximumBalanceForExpat = Value
+	FROM dbo.RefResource WITH (NOLOCK)
+	WHERE RefName = 'AnnualLeaveBalanceForExpat'
+
+	SET @maximumBalanceForLocal = ISNULL(@maximumBalanceForLocal, 0)
+	SET @maximumBalanceForExpat = ISNULL(@maximumBalanceForExpat, 0)
+
+	IF @maximumBalanceForLocal > 0
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = @EmpId
+				AND IsLocal = 1
+				AND @CreditDays > @maximumBalanceForLocal
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Employees - Local: ' + CAST(@maximumBalanceForLocal AS VARCHAR(2))
+
+		RETURN
+	END
+
+	IF @maximumBalanceForExpat > 0
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeSummary WITH (NOLOCK)
+			WHERE EmpId = @EmpId
+				AND IsLocal = 0
+				AND @CreditDays > @maximumBalanceForExpat
+			)
+	BEGIN
+		SELECT @ErrCode = 100
+			,@ErrMsg = N'Employees - Expat: no rules (only ' + + CAST(@maximumBalanceForExpat AS VARCHAR(2)) + ' ALs a day).'
+
+		RETURN
+	END
+
 	IF EXISTS (
 			SELECT 1
-			FROM EmployeeSummary es WITH (NOLOCK)
-			WHERE es.EmpId = @EmpId
-				AND es.IsLocal = 1
-				AND @CreditDays > 13
-			)
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Employees - Local: 12. '
-
-		RETURN
-	END
-	ELSE IF EXISTS (
-			SELECT 1
-			FROM EmployeeSummary es WITH (NOLOCK)
-			WHERE es.EmpId = @EmpId
-				AND es.IsLocal = 0
-				AND @CreditDays > 42
-			)
-	BEGIN
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Employees - Expat: no rules (only 42 ALs a day).'
-
-		RETURN
-	END
-	ELSE IF EXISTS (
-			SELECT 1
-			FROM Employee es WITH (NOLOCK)
-			WHERE es.EmpId = @EmpId
-				AND ISNULL(es.ConfirmedDate, GETDATE() - 365) > @FromDate
+			FROM dbo.Employee WITH (NOLOCK)
+			WHERE EmpId = @EmpId
+				AND ISNULL(ConfirmedDate, GETDATE() - 365) > @FromDate
 				AND @CreditDays > 0
 			)
 	BEGIN

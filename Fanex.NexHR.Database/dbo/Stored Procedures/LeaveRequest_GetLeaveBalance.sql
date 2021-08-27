@@ -26,12 +26,16 @@ BEGIN
 		,@LeaveBalanceDay NUMERIC(18, 2)
 		,@CurrenLeaveDay NUMERIC(18, 2)
 		,@WeekedLeaveDayTaken NUMERIC(18, 2)
+		,@HospitalizationLeaveBalance NUMERIC(18, 2)
+		,@SickLeaveBalance NUMERIC(18, 2)
 
 	SELECT @KIVBalance = dbo.fnc_GetKIVByDayBalance(@EmpId, @EffectedDay, @RequestId)
 		,@KIVByHourBalance = dbo.fnc_GetKIVByHourBalance(@EmpId, @EffectedDay, @RequestId)
 		,@LeaveBalanceDay = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@EffectedDay), @RequestId)
 		,@CurrenLeaveDay = dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @EffectedDay, @RequestId)
 		,@WeekedLeaveDayTaken = dbo.fnc_GetWeekendLeaveTaken(@EmpId, @EffectedDay, @RequestId)
+		,@HospitalizationLeaveBalance = dbo.fnc_GetHospitalizationLeaveBalance(@EmpId, YEAR(@EffectedDay), @RequestId)
+		,@SickLeaveBalance = dbo.fnc_GetSickLeaveBalance(@EmpId, YEAR(@EffectedDay), @RequestId)
 
 	SELECT @EmpId AS EmployeeId
 		,@LeaveBalanceDay AS AnnualBalance
@@ -39,4 +43,6 @@ BEGIN
 		,@KIVByHourBalance AS KeepInViewByHourBalance
 		,@CurrenLeaveDay AS CurrentLeaveBalanceDay
 		,@WeekedLeaveDayTaken AS WeekedLeaveDayTaken
+		,@HospitalizationLeaveBalance AS HospitalizationLeaveBalance
+		,@SickLeaveBalance AS SickLeaveBalance
 END

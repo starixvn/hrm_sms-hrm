@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Reset] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
@@ -105,6 +106,12 @@ BEGIN
 				,@EmpId = @EmpId
 				,@Status = 0
 
+			EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+				,@Status = 0
+
+			EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
+				,@Status = 0
+
 			EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
 			EXEC dbo.LeaveRequest_InsertWeekendLeaveTrans @RequestId = @RequestId
@@ -132,6 +139,14 @@ BEGIN
 				,@ProcessedDate
 				,@ActorId
 
+			EXEC dbo.HospitalizationLeave_DeleteTransactionByRequestId @RequestId
+				,@ProcessedDate
+				,@ActorId
+
+			EXEC dbo.SickLeave_DeleteTransactionByRequestId @RequestId
+				,@ProcessedDate
+				,@ActorId
+
 			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 				,@FromDate
 				,@ToDate
@@ -140,12 +155,24 @@ BEGIN
 			EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @Requestid = @RequestId
 				,@EmpId = @EmpId
 				,@Status = 0
+
+			EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+				,@Status = 0
+
+			EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
+				,@Status = 0
 		END
 
 		IF @StatusId = @RejectedStatusId
 		BEGIN
 			EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 				,@EmpId = @EmpId
+				,@Status = 0
+
+			EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+				,@Status = 0
+
+			EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
 				,@Status = 0
 
 			EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
@@ -174,11 +201,29 @@ BEGIN
 				,@EmpId = @EmpId
 				,@Status = 1
 
+			EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+				,@Status = 1
+
+			EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
+				,@Status = 1
+
 			EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
 				,@EmpId
 				,@ActorId
 
 			EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
+				,@EmpId
+				,@FromDate
+				,@ToDate
+				,@ActorId
+
+			EXEC dbo.HospitalizationLeave_InsertTransactionByRequestId @RequestId
+				,@EmpId
+				,@FromDate
+				,@ToDate
+				,@ActorId
+
+			EXEC dbo.SickLeave_InsertTransactionByRequestId @RequestId
 				,@EmpId
 				,@FromDate
 				,@ToDate

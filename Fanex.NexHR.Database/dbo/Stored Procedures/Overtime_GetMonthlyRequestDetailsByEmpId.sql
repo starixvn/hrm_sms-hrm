@@ -61,7 +61,10 @@ BEGIN
 		,empca.IsHoliday
 		,empca.IsOffDay
 		,empca.IsKeepInView
+		,holiday.TypeId AS HolidayTypeId
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON empca.WorkDate BETWEEN holiday.FromDate
+			AND holiday.ToDate
 		LEFT JOIN [dbo].OTDailyRequest AS ot WITH (NOLOCK) ON empca.WorkDate = ot.OvertimeDate
 		AND ot.EmpId = empca.EmpId
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.ShiftId = ot.[Schedule]

@@ -1,6 +1,5 @@
 ﻿
 
-
 CREATE PROCEDURE [dbo].[LeaveRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -46,16 +45,18 @@ BEGIN
 		,@UnpaidLeaveInsuranceType TINYINT = 41
 		,@BusinessTripLeaveType TINYINT = 9
 		,@BusinessDuringWorkingLeaveType TINYINT = 26
+		,@SickLeaveTypeId TINYINT = 29
+		,@HospitalizationLeaveTypeId TINYINT = 39
 		,@OnbehalfActionType TINYINT = 5
 		,@VerifyActionType TINYINT = 2
 		,@ApproveActionType TINYINT = 3
 		,@LeaveWorkType TINYINT = 2
 		,@TotalDays_tmp NUMERIC(5, 1)
 		,@AnnualLeaveDay DECIMAL(18, 2)
-		,@AnnualLeavePending DECIMAL(18, 2)
-		,@AnnualLeaveBalance DECIMAL(18, 2)
+		,@SickLeaveDay DECIMAL(18, 2)
+		,@HospitalizationLeaveDay DECIMAL(18, 2)
 		,@KIVLeaveDay DECIMAL(18, 2)
-		,@KIVLeaveBalance DECIMAL(18, 2)
+		,@KIVLeaveMinutes INT
 		,@isHalfDay BIT
 		,@ModifiedDate DATETIME
 		,@IsTopManager BIT
@@ -374,20 +375,39 @@ BEGIN
 			WHERE lrd.WorkType = @LeaveWorkType
 		END
 
-		SELECT @AnnualLeaveDay = SUM(CASE cl.IsHalfDay
-					WHEN 1 THEN 0.5
-					ELSE 1
+		SELECT @AnnualLeaveDay = SUM(CASE 
+					WHEN LeaveType = @AnnualLeaveType THEN CASE 
+							WHEN IsHalfDay = 1 THEN 0.5
+							ELSE 1
+							END
+					ELSE 0
 					END)
-		FROM #tblLeaveRequestDetail cl WITH (NOLOCK)
-			INNER JOIN dbo.LeaveType l WITH (NOLOCK) ON cl.LeaveType = l.LeaveTypeId
-		WHERE IsALDeduction = 1
-
-		SELECT @KIVLeaveDay = SUM(CASE IsHalfDay
-					WHEN 1 THEN 0.5
-					ELSE 1
+			,@SickLeaveDay = SUM(CASE 
+					WHEN LeaveType = @SickLeaveTypeId THEN CASE 
+							WHEN IsHalfDay = 1 THEN 0.5
+							ELSE 1
+							END
+					ELSE 0
+					END)
+			,@HospitalizationLeaveDay = SUM(CASE 
+					WHEN LeaveType = @HospitalizationLeaveTypeId THEN CASE 
+							WHEN IsHalfDay = 1 THEN 0.5
+							ELSE 1
+							END
+					ELSE 0
+					END)
+			,@KIVLeaveDay = SUM(CASE 
+					WHEN LeaveType = @KIVLeaveType THEN CASE IsHalfDay
+							WHEN 1 THEN 0.5
+							ELSE 1
+							END
+					ELSE 0
+					END)
+			,@KIVLeaveMinutes = SUM(CASE 
+					WHEN LeaveType = @KIVByHourLeaveType THEN DATEDIFF(MI, FromTime, ToTime)
+					ELSE 0
 					END)
 		FROM #tblLeaveRequestDetail WITH (NOLOCK)
-		WHERE LeaveType = @KIVLeaveType
 	END
 	ELSE
 	BEGIN
@@ -409,6 +429,14 @@ BEGIN
 		BEGIN
 			SELECT @AnnualLeaveDay = @TotalDays
 		END
+		ELSE IF @LeaveTypeId = @SickLeaveTypeId
+		BEGIN
+			SELECT @SickLeaveDay = @TotalDays
+		END
+		ELSE IF @LeaveTypeId = @HospitalizationLeaveTypeId
+		BEGIN
+			SELECT @HospitalizationLeaveDay = @TotalDays
+		END
 		ELSE IF @LeaveTypeId = @KIVLeaveType
 		BEGIN
 			SELECT @KIVLeaveDay = @TotalDays
@@ -416,7 +444,7 @@ BEGIN
 	END
 
 	IF ISNULL(@TotalDays_tmp, 0) <= 0
-		AND @LeaveTypeID <> @PublicHolidayLeaveType
+		AND @LeaveTypeId <> @PublicHolidayLeaveType
 	BEGIN
 		SET @ErrCode = 105
 		SET @ErrMsg = 'Your leave days invalid.'
@@ -512,30 +540,53 @@ BEGIN
 		SET @TotalDays = @TotalDays_tmp
 
 	SELECT @AnnualLeaveDay = ISNULL(@AnnualLeaveDay, 0)
-
 	IF @AnnualLeaveDay > 0
 	BEGIN
-		SELECT @AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @ToDate, @RequestId)
-
-		IF @AnnualLeaveDay > @AnnualLeaveBalance
+		IF @AnnualLeaveDay > dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @ToDate, @RequestId)
 		BEGIN
 			SET @ErrCode = 108
-			SET @ErrMsg = 'You have not enough annual leave days to request'
+			SET @ErrMsg = 'You have not enough annual leave days to request.'
 
 			RETURN;
 		END
 	END
 
-	SELECT @KIVLeaveDay = ISNULL(@KIVLeaveDay, 0)
+	DECLARE @Year INT = YEAR(@ToDate)
+	EXEC dbo.LeaveRequest_CheckSickLeaveBalance @EmpId = @EmpId
+		,@LeaveDays = @SickLeaveDay
+		,@Year = @Year
+		,@ErrCode = @ErrCode OUT
+		,@ErrMsg = @ErrMsg OUT
 
+	IF @ErrCode > 0 RETURN;
+
+	EXEC dbo.LeaveRequest_CheckHospitalizationLeaveBalance @EmpId = @EmpId
+		,@LeaveDays = @HospitalizationLeaveDay
+		,@Year = @Year
+		,@ErrCode = @ErrCode OUT
+		,@ErrMsg = @ErrMsg OUT
+
+	IF @ErrCode > 0 RETURN;
+
+	SELECT @KIVLeaveDay = ISNULL(@KIVLeaveDay, 0)
 	IF @KIVLeaveDay > 0
 	BEGIN
-		SELECT @KIVLeaveBalance = dbo.fnc_GetKIVByDayBalance(@EmpId, @ToDate, @RequestId)
-
-		IF @KIVLeaveDay > @KIVLeaveBalance
+		IF @KIVLeaveDay > dbo.fnc_GetKIVByDayBalance(@EmpId, @ToDate, @RequestId)
 		BEGIN
 			SET @ErrCode = 111
-			SET @ErrMsg = 'You have not enough Keep In View leave days to request'
+			SET @ErrMsg = 'You have not enough Keep In View leave days to request.'
+
+			RETURN;
+		END
+	END
+
+	SELECT @KIVLeaveMinutes = ISNULL(@KIVLeaveMinutes, 0)
+	IF @KIVLeaveMinutes > 0
+	BEGIN
+		IF @KIVLeaveMinutes > dbo.fnc_GetKIVByHourBalance(@EmpId, @FromDate, @RequestId)
+		BEGIN
+			SET @ErrCode = 111
+			SET @ErrMsg = 'You have not enough Keep In View leave hours balance to request.'
 
 			RETURN;
 		END
@@ -804,8 +855,14 @@ BEGIN
 			,WorkType
 		FROM #tblLeaveRequestDetail WITH (NOLOCK)
 
+		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
+
 		EXEC dbo.LeaveRequest_InsertTmpAnnualLeaveTrans @RequestId = @RequestId
 			,@EmpId = @EmpId
+		
+		EXEC dbo.LeaveRequest_InsertTmpHospitalizationLeaveTrans @RequestId = @RequestId
+
+		EXEC dbo.LeaveRequest_InsertTmpSickLeaveTrans @RequestId = @RequestId
 
 		EXEC dbo.LeaveRequest_InsertKIVLeaveTrans @RequestId = @RequestId
 
@@ -830,8 +887,6 @@ BEGIN
 				,@empIds = @EmpId
 				,@isUpdateRequestData = 1
 		END
-
-		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
 
 		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 			,@toDate = @ToDate

@@ -118,6 +118,14 @@ BEGIN
 			,@ProcessedDate
 			,@ActorId
 
+		EXEC dbo.HospitalizationLeave_DeleteTransactionByRequestId @RequestId
+			,@ProcessedDate
+			,@ActorId
+
+		EXEC dbo.SickLeave_DeleteTransactionByRequestId @RequestId
+			,@ProcessedDate
+			,@ActorId
+
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
 			,@FromDate
 			,@ToDate
@@ -130,6 +138,12 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_UpdateTmpAnnualLeaveTrans @RequestId = @RequestId
 		,@EmpId = @EmpId
+		,@Status = 2
+
+	EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId = @RequestId
+		,@Status = 2
+
+	EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId = @RequestId
 		,@Status = 2
 
 	EXEC dbo.LeaveRequest_EmployeeCalendar_ResetOffDay @empId = @EmpId

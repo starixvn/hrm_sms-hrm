@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
+	,@SupervisorId INT = NULL
 	,@FromDate DATE
 	,@ToDate DATE
 	,@TeamIds VARCHAR(MAX) = ''
@@ -21,10 +22,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	IF OBJECT_ID('tempdb..#tblTimeRecord') IS NOT NULL
-	BEGIN
-		DROP TABLE #tblTimeRecord
-	END
+	CREATE TABLE #tblEmployeeId (EmpId INT)
 
 	CREATE TABLE #tblTimeRecord (
 		RecordTimeId INT
@@ -45,6 +43,18 @@ BEGIN
 	SELECT val
 	FROM fnc_strSplit(@TeamIds, ',')
 
+	IF @EmpId IS NULL
+	BEGIN
+		INSERT INTO #tblEmployeeId (EmpId)
+		SELECT EmpId
+		FROM dbo.fnc_GetEmployeeByActorId(@SupervisorId, 1, 0)
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tblEmployeeId (EmpId)
+		VALUES (@EmpId)
+	END
+
 	INSERT INTO #tblTimeRecord
 	SELECT t.Id
 		,t.RecordTime
@@ -59,6 +69,7 @@ BEGIN
 	FROM dbo.TimeRecord AS t WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON t.EmpID = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		INNER JOIN @tblGroupId AS tblgr ON g.GroupId = tblgr.GroupId
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
@@ -67,13 +78,6 @@ BEGIN
 		AND (
 			@EmpId IS NULL
 			OR e.EmpId = @EmpId
-			)
-		AND (
-			--ISNULL(@TeamIds, '') = ''OR
-			e.GroupId IN (
-				SELECT GroupId
-				FROM @tblGroupId
-				)
 			)
 		AND (
 			@IsLocal IS NULL
@@ -95,8 +99,8 @@ BEGIN
 			,Team
 			,SectionCode
 			,DepartmentCode
-		FROM #tblTimeRecord AS t
-		ORDER BY t.RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
+		FROM #tblTimeRecord WITH (NOLOCK)
+		ORDER BY RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
 
 		FETCH NEXT @ItemsPerPage ROWS ONLY;
 	END
@@ -112,15 +116,14 @@ BEGIN
 			,Team
 			,SectionCode
 			,DepartmentCode
-		FROM #tblTimeRecord AS t
-		ORDER BY t.RecordTime DESC
+		FROM #tblTimeRecord WITH (NOLOCK)
+		ORDER BY RecordTime DESC
 	END
 
 	SELECT @TotalItem = COUNT(1)
-	FROM #tblTimeRecord
+	FROM #tblTimeRecord WITH (NOLOCK)
 
-	IF OBJECT_ID('tempdb..#tblTimeRecord') IS NOT NULL
-	BEGIN
-		DROP TABLE #tblTimeRecord
-	END
+	DROP TABLE #tblEmployeeId
+
+	DROP TABLE #tblTimeRecord
 END

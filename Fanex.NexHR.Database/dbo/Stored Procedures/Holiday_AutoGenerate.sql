@@ -58,10 +58,12 @@ BEGIN
 	BEGIN TRY
 		INSERT INTO dbo.Holiday (
 			HolidayName
+			,TypeId
 			,FromDate
 			,ToDate
 			)
 		SELECT holiday.HolidayName
+			,1
 			,holiday.Fromdate
 			,holiday.ToDate
 		FROM #tblHoliday AS holiday WITH (NOLOCK)

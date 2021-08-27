@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -73,19 +74,19 @@ BEGIN
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.WorkingTimeRequest
+	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.LeaveRequest
+	DELETE dbo.LeaveRequest WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.LeaveRequestDetail
+	DELETE dbo.LeaveRequestDetail WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.tmpLeaveBalance
+	DELETE dbo.tmpLeaveBalance WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.KeepInViewByDayTrans
+	DELETE dbo.KeepInViewByDayTrans WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
 	--DELETE dbo.KeepInViewByHourTrans
@@ -93,10 +94,16 @@ BEGIN
 
 	EXEC dbo.LeaveRequest_InsertKIVLeaveTrans  @RequestId = @RequestId
 
-	DELETE dbo.WeekendLeaveTrans
+	DELETE dbo.WeekendLeaveTrans WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.DisciplineRequestTrans
+	DELETE dbo.DisciplineRequestTrans WITH (ROWLOCK, UPDLOCK)
+	WHERE RequestId = @RequestId
+
+	DELETE dbo.tmpHospitalizationLeaveBalance WITH (ROWLOCK, UPDLOCK)
+	WHERE RequestId = @RequestId
+
+	DELETE dbo.tmpSickLeaveBalance WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
 	EXEC dbo.LeaveRequest_EmployeeCalendar_ResetOffDay @empId = @EmpId
