@@ -30,10 +30,11 @@
             var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
+                SupervisorId = sessionService.Employee.Id,
                 TeamIds = model.TeamIds,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                IsLocal = model.IsLocal,
+                IsLocal = model.IsLocal
             };
 
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);

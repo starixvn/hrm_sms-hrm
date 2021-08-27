@@ -3,7 +3,7 @@
 @model IList<TimeRecordModel>
 @{
     Layout = null;
-    var hasPermission = (bool)ViewBag.HasPermission;
+    var isHost = (bool)ViewBag.HasPermission;
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
 }
 <table id="data" class="table table-custom">
@@ -37,7 +37,7 @@
                 </td>
                 <td>@item.RecordTime.ToDetailFormatedDate()</td>
                 <td>
-                    @if (hasPermission)
+                    @if (isHost)
                     {
                         if (item.InOutType == 0)
                         {

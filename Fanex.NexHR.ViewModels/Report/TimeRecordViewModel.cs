@@ -6,17 +6,11 @@
     public class TimeRecordViewModel : PagerOptionModel
     {
         public DateTime FromDate { get; set; } = DateTime.Now.Date;
-
         public DateTime ToDate { get; set; } = DateTime.Now.Date;
-
         public int EmployeeId { get; set; }
-
         public string Employee { get; set; }
-
         public string TeamIds { get; set; }
-
         public IList<Models.Team> Teams { get; set; }
-
         public byte? IsLocal { get; set; }
     }
 }

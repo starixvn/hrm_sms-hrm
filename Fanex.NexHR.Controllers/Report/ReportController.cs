@@ -62,9 +62,10 @@
         [HttpPost]
         public ActionResult TimesheetDetails(TimesheetViewModel model)
         {
+            var today = DateTime.Today;
             var fromDate = new DateTime(model.Year, model.Month, 1);
-            DateTime toDate = (DateTime.Now.Month == model.Month && DateTime.Now.Year == model.Year) ?
-                    DateTime.Now.Date : new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
+            var toDate = (today.Month == model.Month && today.Year == model.Year) ?
+                    today.Date : new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
 
             var criteria = new GetEmployeeAttendanceCriteria
             {
@@ -84,9 +85,10 @@
         {
             model.CurrentPage = Constants.CurrentPage;
             model.ItemsPerPage = Constants.ItemsPerPage;
-            model.TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id));
+            model.TeamIds = string.Join(",", teamService.GetBySupervisor(sessionService.Employee.Id).Select(x => x.Id));
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+                || sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             return View(model);
         }
@@ -94,13 +96,12 @@
         [HttpPost]
         public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
-            bool hasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
             int? employeeId = null;
-            if (!hasPermissionToEdit)
+            if (!sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+                && !sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
             {
                 employeeId = sessionService.Employee.Id;
             }
-
             var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
@@ -109,10 +110,11 @@
                 ToDate = model.ToDate,
                 IsLocal = model.IsLocal,
                 PageIndex = model.CurrentPage - 1,
-                ItemsPerPage = model.ItemsPerPage
+                ItemsPerPage = model.ItemsPerPage,
+                SupervisorId = sessionService.Employee.Id
             };
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
-            ViewBag.HasPermission = hasPermissionToEdit;
+            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             var pagerOption = new PagerOptionModel
             {
