@@ -2,7 +2,7 @@
 {
     public class DisciplineTypeModel
     {
-        public int DisciplineTypeId { get; set; }
+        public short DisciplineTypeId { get; set; }
 
         public string Name { get; set; }
 

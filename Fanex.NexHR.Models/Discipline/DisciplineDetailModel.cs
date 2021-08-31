@@ -39,6 +39,7 @@
         public DisciplineModel UnpaidLeaveAbsent { get; set; }
 
         public DisciplineModel WeekendLeave { get; set; }
+        public DisciplineModel SevenDaysLeave { get; set; }
 
         public decimal SystemSubtractScore { get; set; }
 

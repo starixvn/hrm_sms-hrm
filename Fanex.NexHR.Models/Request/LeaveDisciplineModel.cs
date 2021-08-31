@@ -8,43 +8,41 @@
     public class LeaveDisciplineModel
     {
         public DateTime WorkDate { get; set; }
-
         public bool IsOffDayOrHoliday { get; set; }
-
         public string ScheduleStatus { get; set; }
-
         public bool IsUnpaidLeaveAbsent { get; set; }
-
         public bool IsUnpaidLeave { get; set; }
-
         public bool IsAbsent { get; set; }
-
         public bool IsUnplannedLeave { get; set; }
-
         public bool IsWeekendLeave { get; set; }
+        public bool IsSevenDaysLeave { get; set; }
 
         public IList<LeaveDisciplineDetailModel> LeaveDetail { get; set; }
 
-        public int DisciplineTypeId
+        public short DisciplineTypeId
         {
             get
             {
-                int disciplineTypeId;
+                short disciplineTypeId;
                 if (IsUnpaidLeaveAbsent)
                 {
-                    disciplineTypeId = (int)DisciplineType.UnpaidLeaveAbsent;
+                    disciplineTypeId = (short)DisciplineType.UnpaidLeaveAbsent;
                 }
                 else if (IsAbsent)
                 {
-                    disciplineTypeId = (int)DisciplineType.Absent;
+                    disciplineTypeId = (short)DisciplineType.Absent;
                 }
                 else if (IsUnplannedLeave)
                 {
-                    disciplineTypeId = (int)DisciplineType.UnplannedLeave;
+                    disciplineTypeId = (short)DisciplineType.UnplannedLeave;
                 }
                 else if (IsUnpaidLeave)
                 {
-                    disciplineTypeId = (int)DisciplineType.UnpaidLeave;
+                    disciplineTypeId = (short)DisciplineType.UnpaidLeave;
+                }
+                else if (IsSevenDaysLeave)
+                {
+                    disciplineTypeId = (short)DisciplineType.SevenDaysLeave;
                 }
                 else
                 {
@@ -75,6 +73,10 @@
                 else if (IsUnpaidLeave)
                 {
                     disciplineName = Labels.UnpaidLeave;
+                }
+                else if (IsSevenDaysLeave)
+                {
+                    disciplineName = Labels.SevenDaysLeave;
                 }
                 else
                 {

@@ -11,7 +11,7 @@
 
         public int EmployeeId { get; set; }
 
-        public int DisciplineTypeId { get; set; }
+        public short DisciplineTypeId { get; set; }
 
         public string IgnoreBy { get; set; }
 

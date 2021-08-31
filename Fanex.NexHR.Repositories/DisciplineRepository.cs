@@ -54,54 +54,59 @@
                 {
                     switch (ignoreDicipline.DisciplineTypeId)
                     {
-                        case (int)DisciplineType.ChangeShift:
+                        case (short)DisciplineType.ChangeShift:
                             disciplineDetail.ChangeShift.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.ChangeShift.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.MissingCheckInOut:
+                        case (short)DisciplineType.MissingCheckInOut:
                             disciplineDetail.MissingCheckInOut.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.MissingCheckInOut.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.LateIn:
+                        case (short)DisciplineType.LateIn:
                             disciplineDetail.LateIn.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.LateIn.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.EarlyOut:
+                        case (short)DisciplineType.EarlyOut:
                             disciplineDetail.EarlyOut.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.EarlyOut.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.Absent:
+                        case (short)DisciplineType.Absent:
                             disciplineDetail.Absent.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.Absent.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.UnpaidLeave:
+                        case (short)DisciplineType.UnpaidLeave:
                             disciplineDetail.UnpaidLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.UnpaidLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.WorkingUnderTime:
+                        case (short)DisciplineType.WorkingUnderTime:
                             disciplineDetail.WorkingUnderTime.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.WorkingUnderTime.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.UnpaidLeaveAbsent:
+                        case (short)DisciplineType.UnpaidLeaveAbsent:
                             disciplineDetail.UnpaidLeaveAbsent.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.UnpaidLeaveAbsent.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.UnplannedLeave:
+                        case (short)DisciplineType.UnplannedLeave:
                             disciplineDetail.UnplannedLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.UnplannedLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
-                        case (int)DisciplineType.WeekendLeave:
+                        case (short)DisciplineType.WeekendLeave:
                             disciplineDetail.WeekendLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
                             disciplineDetail.WeekendLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
+                            break;
+
+                        case (short)DisciplineType.SevenDaysLeave:
+                            disciplineDetail.SevenDaysLeave.IgnoreBy = ignoreDicipline.IgnoreBy;
+                            disciplineDetail.SevenDaysLeave.IgnoreDate = ignoreDicipline.IgnoreDate;
                             break;
 
                         default:
@@ -152,6 +157,7 @@
                     WorkingUnderTime = GetWorkingUnderTime(discipline),
                     UnpaidLeaveAbsent = GetUnpaidLeaveAbsent(discipline),
                     WeekendLeave = GetWeekendLeave(discipline),
+                    SevenDaysLeave = GetSevenDaysLeave(discipline),
                     EmployeeComment = discipline.EmployeeComment,
                     ApproverComment = discipline.ApproverComment,
                     IsOutOfControlReason = discipline.IsOutOfControlReason
@@ -289,6 +295,19 @@
             };
         }
 
+        private static DisciplineModel GetSevenDaysLeave(dynamic discipline)
+        {
+            return new DisciplineModel
+            {
+                DisciplineId = discipline.SevenDaysLeaveId,
+                Value = discipline.SevenDaysLeaveValue,
+                Score = discipline.SevenDaysLeaveScore,
+                HasViolated = discipline.SevenDaysLeaveHasViolated,
+                HasIgnored = discipline.SevenDaysLeaveHasIgnored,
+                HasApprovedBy = discipline.SevenDaysLeaveHasApprovedBy
+            };
+        }
+
         private static void CalculateScore(IList<DisciplineDetailModel> disciplineDetails)
         {
             foreach (DisciplineDetailModel disciplineDetail in disciplineDetails)
@@ -310,7 +329,8 @@
                 disciplineDetail.UnpaidLeave,
                 disciplineDetail.UnpaidLeaveAbsent,
                 disciplineDetail.ChangeShift,
-                disciplineDetail.WeekendLeave
+                disciplineDetail.WeekendLeave,
+                disciplineDetail.SevenDaysLeave
             };
 
             foreach (DisciplineModel violation in violations.Where(violation => violation != null && violation.HasViolated))

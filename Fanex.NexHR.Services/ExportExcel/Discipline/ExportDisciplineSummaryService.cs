@@ -5,7 +5,6 @@
     using System.Web;
     using Core;
     using Criteria.Discipline;
-    using Fanex.NexHR.Core.Constants;
     using Models.Discipline;
     using Resources;
 
@@ -15,7 +14,7 @@
         private const string TemplatePath = @"~\ExcelTemplates\DisciplineSummaryReport.xls";
         private const int HeaderRow = 2;
         private const int BodyRow = 3;
-        private const int TotalRow = 19;
+        private const int TotalCol = 20;
 
         public void Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
         {
@@ -48,7 +47,7 @@
             writer.CopyRows(HeaderRow, 1);
 
             FillContentRow(disciplines, ref writer);
-            writer.SyncColumnsWidth(TotalRow);
+            writer.SyncColumnsWidth(TotalCol);
             writer.CreateFreezePane(6, 3);
 
             writer.Render();
@@ -57,7 +56,6 @@
         private void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
-
             foreach (DisciplineSummaryModel discipline in disciplines)
             {
                 FillRow(discipline, ref writer, ref rowIndex);
@@ -80,21 +78,22 @@
             var record = new
             {
                 Count = rowIndex,
-                Team = discipline.Employee.TeamName,
-                Code = discipline.Employee.Code,
-                Nick = discipline.Employee.NickName,
-                FullName = discipline.Employee.FullName,
+                discipline.Employee.TeamName,
+                discipline.Employee.Code,
+                discipline.Employee.NickName,
+                discipline.Employee.FullName,
                 Category = discipline.Employee.IsLocal ? Labels.Local : Labels.Expat,
-                MissingCheckInOut = discipline.MissingCheckInOut,
-                WorkingUnderTime = discipline.WorkingUnderTime,
-                LateIn = discipline.LateIn,
-                EarlyOut = discipline.EarlyOut,
-                Absent = discipline.Absent,
-                UnpaidLeave = discipline.UnpaidLeave,
-                UnpaidLeaveAbsent = discipline.UnpaidLeaveAbsent,
-                ChangeShift = discipline.ChangeShift,
-                UnplannedLeave = discipline.UnplannedLeave,
+                discipline.MissingCheckInOut,
+                discipline.WorkingUnderTime,
+                discipline.LateIn,
+                discipline.EarlyOut,
+                discipline.Absent,
+                discipline.UnpaidLeave,
+                discipline.UnpaidLeaveAbsent,
+                discipline.ChangeShift,
+                discipline.UnplannedLeave,
                 WeekendLeave = (decimal)weekendLeave,
+                discipline.SevenDaysLeave,
                 OtherDiscipline = (decimal)otherDisciplines,
                 SystemSubtractScore = (decimal)systemSubtractScore,
                 ApproverSubtractScore = (decimal)approverSubtractScore

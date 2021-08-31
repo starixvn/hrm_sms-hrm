@@ -105,9 +105,11 @@
                         </span>
                     </td>
                     <td rowspan="@rowspan" class="td-active">
-                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave)
+                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave || item.IsSevenDaysLeave)
                         {
-                            <input class="chk-ignore" type="radio" data-workdate="@item.WorkDate.Date.ToString("d")" data-disciplinetypeid="@item.DisciplineTypeId" />
+                            <input class="chk-ignore" type="radio" 
+                                   data-workdate="@item.WorkDate.Date.ToString("d")"
+                                   data-disciplinetypeid="@item.DisciplineTypeId" />
                         }
                         else
                         {
@@ -115,7 +117,7 @@
                         }
                     </td>
                     <td rowspan="@rowspan" class="td-active">
-                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave)
+                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave || item.IsSevenDaysLeave)
                         {
                             <input class="chk-record" type="radio" />
                         }
@@ -142,7 +144,6 @@
                         <td rowspan="@rowspan" class="td-active">
                             @if (item.IsWeekendLeave)
                             {
-                                var disciplinetypeId = (int)DisciplineType.WeekendLeave;
                                 <input class="chk-weekend-ignore" type="radio" data-workdate="@item.WorkDate.Date.ToString("d")" />
                             }
                             else

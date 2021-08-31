@@ -9,7 +9,7 @@
     {
         public DateTime WorkDate { get; set; }
         public int EmployeeId { get; set; }
-        public int DisciplineTypeId { get; set; }
+        public short DisciplineTypeId { get; set; }
         public bool IsIgnored { get; set; }
         public bool IsConfirmed => !IsIgnored;
     }

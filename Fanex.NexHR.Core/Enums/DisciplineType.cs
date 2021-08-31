@@ -32,6 +32,9 @@
         UnplannedLeave = 9,
 
         [Description("Weekend Leave")]
-        WeekendLeave = 10
+        WeekendLeave = 10,
+
+        [Description("Seven Days Leave")]
+        SevenDaysLeave = 11
     }
 }

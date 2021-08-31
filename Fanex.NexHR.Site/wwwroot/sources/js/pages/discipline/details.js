@@ -148,7 +148,6 @@ import { DisciplineType } from '../../shared/constants';
     function getDataIgnore() {
         const disciplines = [];
         $('#discipline-detail table.discipline-detail').find('tbody tr').each(function () {
-
             $(this).find('td input.ignoredDiscipline').each(function () {
                 let discipline = {
                     WorkDate: '',
@@ -166,140 +165,140 @@ import { DisciplineType } from '../../shared/constants';
 
                     disciplines.push(discipline);
                 }
+            });
         });
-    });
 
-    return disciplines;
-}
+        return disciplines;
+    }
 
     function initEventForSaveChange() {
-    $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
-        const ignoreDetails = getDataChanged();
-        const disciplinesIgnore = getDataIgnore();
-        if (ignoreDetails.length > 0) {
-            confirm('Are you sure you want to save?',
-                function () {
-                    axios({
-                        url: resolveClientUrl('discipline/EditDisciplineIgnore'),
-                        method: 'POST',
-                        data: stringify({ ignoreDetails, disciplinesIgnore }),
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        }
-                    }).then(response => {
-                        const data = response.data;
-                        if (data.isSuccessful) {
-                            toastr.success('Updated successfully!', '', toastOptions());
-                            query();
-                        } else {
-                            toastr.error(data.message, '', toastOptions());
-                        }
-                    }).catch(axiosError);
-                });
-        }
-    });
-}
-
-function initEventForDateRangeDropdown() {
-    $('form.form-filter #DateRange').on('change', function () {
-        var dateRange = $('form.form-filter #DateRange').val();
-        if (parseInt(dateRange, 10) !== 0) {
-            const quarter = parseInt(dateRange.charAt(0), 10),
-                year = parseInt(dateRange.substring(1, dateRange.length), 10);
-
-            let fromDate = new Date($('form.form-filter #FromDate').val()),
-                toDate = new Date($('form.form-filter #ToDate').val());
-            switch (quarter) {
-                case 1: // First Half Year 1H
-                    fromDate.setFullYear(year, 0, 1);
-                    toDate.setFullYear(year, 5, 30);
-                    break;
-
-                case 2: // Second Half Year 2H
-                    fromDate.setFullYear(year, 6, 1);
-                    toDate.setFullYear(year, 11, 31);
-                    break;
-
-                default:
-                    fromDate.setFullYear(year, 0, 1);
-                    toDate.setFullYear(year, 11, 31);
-                    break;
+        $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
+            const ignoreDetails = getDataChanged();
+            const disciplinesIgnore = getDataIgnore();
+            if (ignoreDetails.length > 0) {
+                confirm('Are you sure you want to save?',
+                    function () {
+                        axios({
+                            url: resolveClientUrl('discipline/EditDisciplineIgnore'),
+                            method: 'POST',
+                            data: stringify({ ignoreDetails, disciplinesIgnore }),
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            }
+                        }).then(response => {
+                            const data = response.data;
+                            if (data.isSuccessful) {
+                                toastr.success('Updated successfully!', '', toastOptions());
+                                query();
+                            } else {
+                                toastr.error(data.message, '', toastOptions());
+                            }
+                        }).catch(axiosError);
+                    });
             }
+        });
+    }
 
-            $('form.form-filter #FromDate').val(formatDate(fromDate));
-            $('form.form-filter #ToDate').val(formatDate(toDate));
-        }
-    });
-}
+    function initEventForDateRangeDropdown() {
+        $('form.form-filter #DateRange').on('change', function () {
+            var dateRange = $('form.form-filter #DateRange').val();
+            if (parseInt(dateRange, 10) !== 0) {
+                const quarter = parseInt(dateRange.charAt(0), 10),
+                    year = parseInt(dateRange.substring(1, dateRange.length), 10);
 
-function formatDate(date) {
-    const monthNames = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun", "Jul",
-        "Aug", "Sep", "Oct",
-        "Nov", "Dec"
-    ];
+                let fromDate = new Date($('form.form-filter #FromDate').val()),
+                    toDate = new Date($('form.form-filter #ToDate').val());
+                switch (quarter) {
+                    case 1: // First Half Year 1H
+                        fromDate.setFullYear(year, 0, 1);
+                        toDate.setFullYear(year, 5, 30);
+                        break;
 
-    const day = date.getDate(),
-        monthIndex = date.getMonth(),
-        year = date.getFullYear();
+                    case 2: // Second Half Year 2H
+                        fromDate.setFullYear(year, 6, 1);
+                        toDate.setFullYear(year, 11, 31);
+                        break;
 
-    return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
-}
+                    default:
+                        fromDate.setFullYear(year, 0, 1);
+                        toDate.setFullYear(year, 11, 31);
+                        break;
+                }
 
-function query() {
-    blockUI();
-    axios({
-        url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
-        method: 'GET',
-        params: parse($('form.form-filter').serialize()),
-        responseType: 'text'
-    }).then(response => {
-        $('#discipline-detail').html(response.data);
-        floatThead("table#data");
-        initEventForIgnoreDiscipline();
-        initEventForSaveChange();
-        initTooltip();
-    }).catch(axiosError).then(() => unblockUI());
-}
+                $('form.form-filter #FromDate').val(formatDate(fromDate));
+                $('form.form-filter #ToDate').val(formatDate(toDate));
+            }
+        });
+    }
 
-$(document).ready(function () {
-    initEventForDateRangeDropdown();
-    initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
+    function formatDate(date) {
+        const monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sep", "Oct",
+            "Nov", "Dec"
+        ];
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#TeamId').val()
-            });
-            query();
-        }).catch(axiosError);
+        const day = date.getDate(),
+            monthIndex = date.getMonth(),
+            year = date.getFullYear();
 
-    $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
-        $('form.form-filter #DateRange').val('0');
-    });
+        return (day < 10 ? "0" + day : day) + ' ' + monthNames[monthIndex] + ', ' + year;
+    }
 
-    $('form.form-filter #submit').on('click', function (event) {
-        $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
-        query();
-    });
-
-    $('form.form-filter #btnExcel').on('click', function (event) {
-        event.preventDefault();
-
+    function query() {
         blockUI();
         axios({
-            url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
+            url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
             method: 'GET',
             params: parse($('form.form-filter').serialize()),
-            responseType: 'blob'
+            responseType: 'text'
         }).then(response => {
-            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
-            downloadFile(response.data, fileName);
+            $('#discipline-detail').html(response.data);
+            floatThead("table#data");
+            initEventForIgnoreDiscipline();
+            initEventForSaveChange();
+            initTooltip();
         }).catch(axiosError).then(() => unblockUI());
+    }
+
+    $(document).ready(function () {
+        initEventForDateRangeDropdown();
+        initDatepicker();
+        initFromDateOnChange($('#FromDate'), $('#ToDate'));
+
+        axios(resolveClientUrl('Section/GetOrgChart'))
+            .then(response => {
+                $('#Team').multiSelectTreeView({
+                    data: response.data,
+                    selectedItems: $('#TeamId').val()
+                });
+                query();
+            }).catch(axiosError);
+
+        $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
+            $('form.form-filter #DateRange').val('0');
+        });
+
+        $('form.form-filter #submit').on('click', function (event) {
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            query();
+        });
+
+        $('form.form-filter #btnExcel').on('click', function (event) {
+            event.preventDefault();
+
+            blockUI();
+            axios({
+                url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
+                method: 'GET',
+                params: parse($('form.form-filter').serialize()),
+                responseType: 'blob'
+            }).then(response => {
+                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                downloadFile(response.data, fileName);
+            }).catch(axiosError).then(() => unblockUI());
+        });
     });
-});
-}) ();
+})();

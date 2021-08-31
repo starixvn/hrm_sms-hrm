@@ -16,7 +16,7 @@
         private const int HeaderRow = 2;
         private const int BodyRow = 3;
         private const int WeekendRow = 4;
-        private const int TotalRow = 24;
+        private const int TotalCol = 25;
 
         public void Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
         {
@@ -49,7 +49,7 @@
             writer.CopyRows(HeaderRow, 1);
 
             FillContentRow(disciplines, ref writer);
-            writer.SyncColumnsWidth(TotalRow);
+            writer.SyncColumnsWidth(TotalCol);
             writer.CreateFreezePane(6, 3);
 
             writer.Render();
@@ -58,7 +58,6 @@
         private void FillContentRow(IList<DisciplineDetailModel> disciplines, ref ExcelTemplateWriter writer)
         {
             int rowIndex = 1;
-
             foreach (DisciplineDetailModel discipline in disciplines)
             {
                 FillRow(discipline, ref writer, ref rowIndex);
@@ -91,17 +90,18 @@
             string unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
             string changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
             string unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
+            string sevenDaysLeave = ReturnValueOrEmtpyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
             string isOutOfControlReason = ReturnValueOrEmtpyString(discipline.IsOutOfControlReason, Labels.Yes);
 
             var record = new
             {
-                Shift = discipline.Employee.Code,
-                Nick = discipline.Employee.NickName,
-                FullName = discipline.Employee.FullName,
+                discipline.Employee.Code,
+                discipline.Employee.NickName,
+                discipline.Employee.FullName,
                 Category = discipline.Employee.IsLocal ? Labels.Local : Labels.Expat,
-                Team = discipline.Employee.TeamName,
-                Date = discipline.WorkDate,
-                ShiftName = discipline.ShiftName,
+                discipline.Employee.TeamName,
+                discipline.WorkDate,
+                discipline.ShiftName,
                 CheckIn = checkIn,
                 CheckOut = checkOut,
                 TotalHours = totalHours,
@@ -114,10 +114,11 @@
                 UnpaidLeaveAbsent = unpaidLeaveAbsent,
                 ChangeShift = changeShift,
                 UnplannedLeave = unplannedLeave,
+                SevenDaysLeave = sevenDaysLeave,
                 SystemSubtractScore = systemSubtractScore,
                 ApproverSubtractScore = approverSubtractScore,
-                ApproverComment = discipline.ApproverComment,
-                EmployeeComment = discipline.EmployeeComment,
+                discipline.ApproverComment,
+                discipline.EmployeeComment,
                 IsOutOfControlReason = isOutOfControlReason
             };
             rowIndex++;

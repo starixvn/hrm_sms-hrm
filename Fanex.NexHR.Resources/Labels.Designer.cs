@@ -4327,6 +4327,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seven Days Leave.
+        /// </summary>
+        public static string SevenDaysLeave {
+            get {
+                return ResourceManager.GetString("SevenDaysLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift.
         /// </summary>
         public static string Shift {

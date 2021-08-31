@@ -1959,4 +1959,7 @@
   <data name="Special" xml:space="preserve">
     <value>Special</value>
   </data>
+  <data name="SevenDaysLeave" xml:space="preserve">
+    <value>Seven Days Leave</value>
+  </data>
 </root>

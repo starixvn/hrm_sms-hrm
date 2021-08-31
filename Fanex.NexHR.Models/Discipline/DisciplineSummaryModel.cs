@@ -14,6 +14,7 @@
         public int ChangeShift { get; set; }
         public int UnplannedLeave { get; set; }
         public int WeekendLeave { get; set; }
+        public int SevenDaysLeave { get; set; }
 
         public float OtherDisciplineScore { get; set; }
         public float SystemSubtractScore { get; set; }
