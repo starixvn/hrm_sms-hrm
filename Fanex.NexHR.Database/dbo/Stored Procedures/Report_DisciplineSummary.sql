@@ -42,6 +42,7 @@ BEGIN
 		,UnpaidLeave INT
 		,WorkingUnderTime INT
 		,UnpaidLeaveAbsent INT
+		,SevenDaysLeave INT
 		,VerbalWarning INT
 		,WrittenWarning INT
 		,OtherDiscipline INT
@@ -61,6 +62,7 @@ BEGIN
 		,UnpaidLeave
 		,WorkingUnderTime
 		,UnpaidLeaveAbsent
+		,SevenDaysLeave
 		,VerbalWarning
 		,WrittenWarning
 		,OtherDiscipline
@@ -168,6 +170,16 @@ BEGIN
 			WHEN 1 THEN d.IsUnpaidLeaveAbsent
 			ELSE 0 END
 			) AS UnpaidLeaveAbsent
+		,(CASE (
+				SELECT drule.[Value]
+				FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
+				WHERE drule.DisciplineTypeId = 11 -- seven days leave
+					AND drule.GroupId = emp.GroupId
+					AND drule.IsLocal = empSum.IsLocal
+				)
+			WHEN 1 THEN d.IsSevenDaysLeave
+			ELSE 0 END
+			) AS SevenDaysLeave
 		,0 AS VerbalWarning
 		,0 AS WrittenWarning
 		,0 AS OtherDiscipline
@@ -202,6 +214,7 @@ BEGIN
 		,0 AS UnpaidLeave
 		,0 AS WorkingUnderTime
 		,0 AS UnpaidLeaveAbsent
+		,0 AS SevenDaysLeave
 		,(CASE 
 			WHEN dis.DisciplineTypeId = - 1 THEN 1
 			ELSE 0 END
@@ -254,7 +267,8 @@ BEGIN
 		  + tbldis.WorkingUnderTime * dbo.fncGetDisciplineScoreById(7)
 		  + tbldis.UnpaidLeaveAbsent * dbo.fncGetDisciplineScoreById(8)
 		  + tbldis.UnplannedLeave * dbo.fncGetDisciplineScoreById(9)
-		  + tbldis.WeekendLeave * dbo.fncGetDisciplineScoreById(10)) AS SystemSubtractScore
+		  + tbldis.WeekendLeave * dbo.fncGetDisciplineScoreById(10)
+		  + tbldis.SevenDaysLeave * dbo.fncGetDisciplineScoreById(11)) AS SystemSubtractScore
 		,CASE 
 			WHEN ignored.ApproverSubtractScore IS NOT NULL THEN ignored.ApproverSubtractScore
 			ELSE 0
@@ -304,6 +318,10 @@ BEGIN
 					WHEN dis.IsWeekendLeave = 1
 						AND ignored.IsIgnoredWeekendLeave = 0 THEN dbo.fncGetDisciplineScoreById(10)
 					ELSE 0 END
+					) + (CASE 
+					WHEN dis.IsSevenDaysLeave = 1
+						AND ignored.IsIgnoredSevenDaysLeave = 0 THEN dbo.fncGetDisciplineScoreById(11)
+					ELSE 0 END
 					)
 				) AS ApproverSubtractScore
 		FROM dbo.Discipline AS dis WITH (NOLOCK)
@@ -313,16 +331,17 @@ BEGIN
 			AND ignored.WorkDate = tbldis.WorkDate
 		) AS ignored
 	WHERE (
-			[Absent] > 0
-			OR UnplannedLeave > 0
-			OR WeekendLeave > 0
-			OR ChangeShift > 0
-			OR EarlyOut > 0
-			OR LateIn > 0
-			OR UnpaidLeave > 0
-			OR WorkingUnderTime > 0
-			OR UnpaidLeaveAbsent > 0
-			OR MissingCheckInOut > 0
+			tbldis.[Absent] > 0
+			OR tbldis.UnplannedLeave > 0
+			OR tbldis.WeekendLeave > 0
+			OR tbldis.ChangeShift > 0
+			OR tbldis.EarlyOut > 0
+			OR tbldis.LateIn > 0
+			OR tbldis.UnpaidLeave > 0
+			OR tbldis.WorkingUnderTime > 0
+			OR tbldis.UnpaidLeaveAbsent > 0
+			OR tbldis.MissingCheckInOut > 0
+			OR tbldis.SevenDaysLeave > 0
 			)
 		AND tbldis.OtherDisciplineScore = 0
 
@@ -353,6 +372,7 @@ BEGIN
 		,SUM(ISNULL(empD.UnpaidLeave, 0)) AS UnpaidLeave
 		,SUM(ISNULL(empD.WorkingUnderTime, 0)) AS WorkingUnderTime
 		,SUM(ISNULL(empD.UnpaidLeaveAbsent, 0)) AS UnpaidLeaveAbsent
+		,SUM(ISNULL(empD.SevenDaysLeave, 0)) AS SevenDaysLeave
 		,SUM(ISNULL(empD.OtherDisciplineScore, 0)) AS OtherDisciplineScore
 		,SUM(CASE 
 				WHEN ISNULL(empD.OtherDisciplineScore, 0) = 0 THEN ISNULL(empF.SystemSubtractScore, 0)
@@ -534,6 +554,10 @@ BEGIN
 			OR (
 				@ReasonId = 8
 				AND empD.UnpaidLeaveAbsent > 0
+				)
+			OR (
+				@ReasonId = 11
+				AND empD.SevenDaysLeave > 0
 				)
 			OR (
 				@ReasonId = - 1

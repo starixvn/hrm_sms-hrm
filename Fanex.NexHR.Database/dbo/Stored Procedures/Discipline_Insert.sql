@@ -29,14 +29,14 @@ BEGIN
 		,@KeepInViewLeaveType INT = 10
 		,@PublicHolidayLeaveType INT = 13
 
-	CREATE TABLE #MissingCheckInOutDiscipline (
+	CREATE TABLE #tblMissingCheckInOutDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #MissingCheckInOutDiscipline (
+	INSERT INTO #tblMissingCheckInOutDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -110,14 +110,14 @@ BEGIN
 				AND DisciplineTypeId = 2
 			)
 
-	CREATE TABLE #LateInDiscipline (
+	CREATE TABLE #tblLateInDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #LateInDiscipline (
+	INSERT INTO #tblLateInDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -166,14 +166,14 @@ BEGIN
 				AND DisciplineTypeId = 3
 			)
 
-	CREATE TABLE #EarlyOutDiscipline (
+	CREATE TABLE #tblEarlyOutDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #EarlyOutDiscipline (
+	INSERT INTO #tblEarlyOutDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -223,14 +223,14 @@ BEGIN
 				AND DisciplineTypeId = 4
 			)
 
-	CREATE TABLE #ChangeShiftDiscipline (
+	CREATE TABLE #tblChangeShiftDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #ChangeShiftDiscipline (
+	INSERT INTO #tblChangeShiftDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -250,14 +250,14 @@ BEGIN
 			AND @ToDate
 		AND DisciplineTypeId = 1
 
-	CREATE TABLE #WorkingUnderTimeDiscipline (
+	CREATE TABLE #tblWorkingUnderTimeDiscipline (
 		WorkDate DATE
 		,EmpId INT
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #WorkingUnderTimeDiscipline (
+	INSERT INTO #tblWorkingUnderTimeDiscipline (
 		WorkDate
 		,EmpId
 		,IsIgnored
@@ -311,14 +311,14 @@ BEGIN
 				)
 			)
 
-	CREATE TABLE #UnpaidLeaveAbsentDiscipline (
+	CREATE TABLE #tblUnpaidLeaveAbsentDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #UnpaidLeaveAbsentDiscipline (
+	INSERT INTO #tblUnpaidLeaveAbsentDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -352,14 +352,14 @@ BEGIN
 	GROUP BY EmpId
 		,WorkDate
 
-	CREATE TABLE #AbsentDiscipline (
+	CREATE TABLE #tblAbsentDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #AbsentDiscipline (
+	INSERT INTO #tblAbsentDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -392,7 +392,7 @@ BEGIN
 		AND DisciplineTypeId = 5
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #UnpaidLeaveAbsentDiscipline
+			FROM #tblUnpaidLeaveAbsentDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
@@ -420,14 +420,14 @@ BEGIN
 		AND @ModifiedDate > att.ExpectedOutTime
 		AND ISNULL(att.LeaveDay, 0) <> 1
 
-	CREATE TABLE #UnplannedDiscipline (
+	CREATE TABLE #tblUnplannedDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #UnplannedDiscipline (
+	INSERT INTO #tblUnplannedDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -460,27 +460,27 @@ BEGIN
 		AND DisciplineTypeId = 9
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #UnpaidLeaveAbsentDiscipline
+			FROM #tblUnpaidLeaveAbsentDiscipline
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #AbsentDiscipline
+			FROM #tblAbsentDiscipline
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 	GROUP BY EmpId
 		,WorkDate
 
-	CREATE TABLE #UnpaidLeaveDiscipline (
+	CREATE TABLE #tblUnpaidLeaveDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #UnplannedDiscipline (
+	INSERT INTO #tblUnpaidLeaveDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -513,33 +513,33 @@ BEGIN
 		AND DisciplineTypeId = 6
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #UnpaidLeaveAbsentDiscipline
+			FROM #tblUnpaidLeaveAbsentDiscipline
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #AbsentDiscipline
+			FROM #tblAbsentDiscipline
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #UnplannedDiscipline
+			FROM #tblUnplannedDiscipline
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 	GROUP BY EmpId
 		,WorkDate
 
-	CREATE TABLE #WeekendLeaveDiscipline (
+	CREATE TABLE #tblWeekendLeaveDiscipline (
 		EmpId INT
 		,WorkDate DATE
 		,IsIgnored BIT
 		,IsOutOfControl BIT
 		)
 
-	INSERT INTO #WeekendLeaveDiscipline (
+	INSERT INTO #tblWeekendLeaveDiscipline (
 		EmpId
 		,WorkDate
 		,IsIgnored
@@ -573,7 +573,48 @@ BEGIN
 	GROUP BY EmpId
 		,WorkDate
 
-	CREATE TABLE #Discipline (
+	CREATE TABLE #tblSevenDaysLeaveDiscipline (
+		EmpId INT
+		,WorkDate DATE
+		,IsIgnored BIT
+		,IsOutOfControl BIT
+		)
+
+	INSERT INTO #tblSevenDaysLeaveDiscipline (
+		EmpId
+		,WorkDate
+		,IsIgnored
+		,IsOutOfControl
+		)
+	SELECT EmpId
+		,WorkDate
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsIgnored = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+		,CASE 
+			WHEN SUM(CASE 
+						WHEN IsOutOfControl = 0 THEN 1
+						ELSE 0
+						END) > 0 THEN 0
+			ELSE 1
+			END
+	FROM dbo.DisciplineRequestTrans AS drt WITH (NOLOCK)
+	WHERE (
+			@EmpId IS NULL
+			OR EmpId = @EmpId
+			)
+		AND WorkDate >= @SyncFromDate
+		AND WorkDate BETWEEN @FromDate
+			AND @ToDate
+		AND DisciplineTypeId = 11
+	GROUP BY EmpId
+		,WorkDate
+
+	CREATE TABLE #tblDiscipline (
 		[EmpId] [int] NOT NULL
 		,[WorkDate] [date] NOT NULL
 		,[DisciplineScore] [decimal](5, 2) NULL
@@ -590,6 +631,7 @@ BEGIN
 		,[IsUnpaidLeaveAbsent] [bit] NULL
 		,[IsUnplannedLeave] [bit] NULL
 		,[IsWeekendLeave] [bit] NULL
+		,IsSevenDaysLeave BIT NULL
 		,[IsIgnoredMissingCheckInOut] [bit] NULL
 		,[IsIgnoredLateIn] [bit] NULL
 		,[IsIgnoredEarlyOut] [bit] NULL
@@ -600,6 +642,7 @@ BEGIN
 		,[IsIgnoredUnpaidLeaveAbsent] [bit] NULL
 		,[IsIgnoredUnplannedLeave] [bit] NULL
 		,[IsIgnoredWeekendLeave] [bit] NULL
+		,IsIgnoredSevenDaysLeave BIT NULL
 		,[IsOutOfControlMissingCheckInOut] [bit] NULL
 		,[IsOutOfControlLateIn] [bit] NULL
 		,[IsOutOfControlEarlyOut] [bit] NULL
@@ -610,9 +653,10 @@ BEGIN
 		,[IsOutOfControlUnpaidLeaveAbsent] [bit] NULL
 		,[IsOutOfControlUnplannedLeave] [bit] NULL
 		,[IsOutOfControlWeekendLeave] [bit] NULL
+		,IsOutOfControlSevenDaysLeave BIT NULL
 		)
 
-	INSERT #Discipline (
+	INSERT #tblDiscipline (
 		[EmpId]
 		,[WorkDate]
 		,[DisciplineScore]
@@ -628,6 +672,7 @@ BEGIN
 		,[IsUnpaidLeaveAbsent]
 		,[IsUnplannedLeave]
 		,[IsWeekendLeave]
+		,IsSevenDaysLeave
 		,[IsIgnoredMissingCheckInOut]
 		,[IsIgnoredLateIn]
 		,[IsIgnoredEarlyOut]
@@ -638,6 +683,7 @@ BEGIN
 		,[IsIgnoredUnpaidLeaveAbsent]
 		,[IsIgnoredUnplannedLeave]
 		,[IsIgnoredWeekendLeave]
+		,IsIgnoredSevenDaysLeave
 		,[IsOutOfControlMissingCheckInOut]
 		,[IsOutOfControlLateIn]
 		,[IsOutOfControlEarlyOut]
@@ -648,31 +694,32 @@ BEGIN
 		,[IsOutOfControlUnpaidLeaveAbsent]
 		,[IsOutOfControlUnplannedLeave]
 		,[IsOutOfControlWeekendLeave]
+		,IsOutOfControlSevenDaysLeave
 		)
 	SELECT e.EmpId
 		,cal.WorkDate
 		,(CASE 
 			WHEN (
-					upa.EmpId IS NOT NULL
-					AND ISNULL(upa.IsIgnored, 0) = 0
+					upla.EmpId IS NOT NULL
+					AND ISNULL(upla.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(8)
 			ELSE 0 END + CASE 
 			WHEN (
-					upl.EmpId IS NOT NULL
-					AND ISNULL(upl.IsIgnored, 0) = 0
+					lateleave.EmpId IS NOT NULL
+					AND ISNULL(lateleave.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(9)
 			ELSE 0 END + CASE 
 			WHEN (
 					ab.EmpId IS NOT NULL
-					AND upa.EmpId IS NULL
+					AND upla.EmpId IS NULL
 					AND ISNULL(ab.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(5)
 			ELSE 0 END + CASE 
 			WHEN (
-					up.EmpId IS NOT NULL
-					AND upa.EmpId IS NULL
+					upl.EmpId IS NOT NULL
+					AND upla.EmpId IS NULL
 					AND ab.EmpId IS NULL
-					AND ISNULL(up.IsIgnored, 0) = 0
+					AND ISNULL(upl.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(6)
 			ELSE 0 END + CASE 
 			WHEN (
@@ -696,14 +743,20 @@ BEGIN
 					) THEN dbo.fncGetDisciplineScoreById(2)
 			ELSE 0 END + CASE 
 			WHEN (
-					chs.EmpId IS NOT NULL
-					AND ISNULL(chs.IsIgnored, 0) = 0
+					changeshift.EmpId IS NOT NULL
+					AND ISNULL(changeshift.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(1)
 			ELSE 0 END + CASE 
 			WHEN (
 					wld.EmpId IS NOT NULL
 					AND ISNULL(wld.IsIgnored, 0) = 0
 					) THEN dbo.fncGetDisciplineScoreById(10)
+			ELSE 0 END + CASE 
+			WHEN (
+					lateleave.EmpId IS NULL
+					AND sevendays.EmpId IS NOT NULL
+					AND ISNULL(sevendays.IsIgnored, 0) = 0
+					) THEN dbo.fncGetDisciplineScoreById(11)
 			ELSE 0 END
 			)
 		,(
@@ -747,81 +800,87 @@ BEGIN
 			ELSE 1
 			END
 		,CASE 
-			WHEN chs.EmpId IS NULL THEN 0
+			WHEN changeshift.EmpId IS NULL THEN 0
 			ELSE 1
 			END
 		,CASE 
-			WHEN (
-					upa.EmpId IS NOT NULL
-					OR ab.EmpId IS NULL
-					) THEN 0
+			WHEN upla.EmpId IS NOT NULL
+				OR ab.EmpId IS NULL THEN 0
 			ELSE 1
 			END
 		,CASE 
-			WHEN (
-					upa.EmpId IS NOT NULL
-					OR ab.EmpId IS NOT NULL
-					OR up.EmpId IS NULL
-					) THEN 0
+			WHEN upla.EmpId IS NOT NULL
+				OR ab.EmpId IS NOT NULL
+				OR sevendays.EmpId IS NOT NULL
+				OR upl.EmpId IS NULL THEN 0
 			ELSE 1
 			END
 		,CASE 
-			WHEN upa.EmpId IS NULL THEN 0
+			WHEN upla.EmpId IS NULL THEN 0
 			ELSE 1
 			END
 		,CASE 
-			WHEN upl.EmpId IS NULL THEN 0
+			WHEN lateleave.EmpId IS NULL THEN 0
 			ELSE 1
 			END
 		,CASE 
 			WHEN wld.EmpId IS NULL THEN 0
 			ELSE 1
 			END
+		,CASE 
+			WHEN lateleave.EmpId IS NOT NULL
+				OR sevendays.EmpId IS NULL THEN 0
+			ELSE 1
+			END
 		,ISNULL(mis.IsIgnored, 0)
 		,ISNULL(la.IsIgnored, 0)
 		,ISNULL(ear.IsIgnored, 0)
 		,ISNULL(wud.IsIgnored, 0)
-		,ISNULL(chs.IsIgnored, 0)
+		,ISNULL(changeshift.IsIgnored, 0)
 		,ISNULL(ab.IsIgnored, 0)
-		,ISNULL(up.IsIgnored, 0)
-		,ISNULL(upa.IsIgnored, 0)
 		,ISNULL(upl.IsIgnored, 0)
+		,ISNULL(upla.IsIgnored, 0)
+		,ISNULL(lateleave.IsIgnored, 0)
 		,ISNULL(wld.IsIgnored, 0)
+		,ISNULL(sevendays.IsIgnored, 0)
 		,ISNULL(mis.IsOutOfControl, 0)
 		,ISNULL(la.IsOutOfControl, 0)
 		,ISNULL(ear.IsOutOfControl, 0)
 		,ISNULL(wud.IsOutOfControl, 0)
-		,ISNULL(chs.IsOutOfControl, 0)
+		,ISNULL(changeshift.IsOutOfControl, 0)
 		,ISNULL(ab.IsOutOfControl, 0)
-		,ISNULL(up.IsOutOfControl, 0)
-		,ISNULL(upa.IsOutOfControl, 0)
 		,ISNULL(upl.IsOutOfControl, 0)
+		,ISNULL(upla.IsOutOfControl, 0)
+		,ISNULL(lateleave.IsOutOfControl, 0)
 		,ISNULL(wld.IsOutOfControl, 0)
+		,ISNULL(sevendays.IsOutOfControl, 0)
 	FROM dbo.Employee AS e WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeCalendar AS cal WITH (NOLOCK) ON e.EmpId = cal.EmpId
 		LEFT JOIN dbo.EmployeeAttendance AS att WITH (NOLOCK) ON e.EmpId = att.EmpId
 		AND cal.WorkDate = att.AttendanceDate
 		LEFT JOIN dbo.[Shift] AS sh WITH (NOLOCK) ON cal.ShiftId = sh.ShiftId
-		LEFT JOIN #UnpaidLeaveAbsentDiscipline AS upa WITH (NOLOCK) ON e.EmpId = upa.EmpId
-		AND cal.WorkDate = upa.WorkDate
-		LEFT JOIN #AbsentDiscipline AS ab WITH (NOLOCK) ON e.EmpId = ab.EmpId
+		LEFT JOIN #tblUnpaidLeaveAbsentDiscipline AS upla WITH (NOLOCK) ON e.EmpId = upla.EmpId
+		AND cal.WorkDate = upla.WorkDate
+		LEFT JOIN #tblAbsentDiscipline AS ab WITH (NOLOCK) ON e.EmpId = ab.EmpId
 		AND cal.WorkDate = ab.WorkDate
-		LEFT JOIN #UnplannedDiscipline AS upl WITH (NOLOCK) ON e.EmpId = upl.EmpId
+		LEFT JOIN #tblUnplannedDiscipline AS lateleave WITH (NOLOCK) ON e.EmpId = lateleave.EmpId
+		AND cal.WorkDate = lateleave.WorkDate
+		LEFT JOIN #tblUnpaidLeaveDiscipline AS upl WITH (NOLOCK) ON e.EmpId = upl.EmpId
 		AND cal.WorkDate = upl.WorkDate
-		LEFT JOIN #UnpaidLeaveDiscipline AS up WITH (NOLOCK) ON e.EmpId = up.EmpId
-		AND cal.WorkDate = up.WorkDate
-		LEFT JOIN #WeekendLeaveDiscipline AS wld WITH (NOLOCK) ON e.EmpId = wld.EmpId
+		LEFT JOIN #tblWeekendLeaveDiscipline AS wld WITH (NOLOCK) ON e.EmpId = wld.EmpId
 		AND cal.WorkDate = wld.WorkDate
-		LEFT JOIN #LateInDiscipline AS la WITH (NOLOCK) ON e.EmpId = la.EmpId
+		LEFT JOIN #tblLateInDiscipline AS la WITH (NOLOCK) ON e.EmpId = la.EmpId
 		AND cal.WorkDate = la.WorkDate
-		LEFT JOIN #EarlyOutDiscipline AS ear WITH (NOLOCK) ON e.EmpId = ear.EmpId
+		LEFT JOIN #tblEarlyOutDiscipline AS ear WITH (NOLOCK) ON e.EmpId = ear.EmpId
 		AND cal.WorkDate = ear.WorkDate
-		LEFT JOIN #WorkingUnderTimeDiscipline AS wud WITH (NOLOCK) ON e.EmpId = wud.EmpId
+		LEFT JOIN #tblWorkingUnderTimeDiscipline AS wud WITH (NOLOCK) ON e.EmpId = wud.EmpId
 		AND cal.WorkDate = wud.WorkDate
-		LEFT JOIN #MissingCheckInOutDiscipline AS mis WITH (NOLOCK) ON e.EmpId = mis.EmpId
+		LEFT JOIN #tblMissingCheckInOutDiscipline AS mis WITH (NOLOCK) ON e.EmpId = mis.EmpId
 		AND cal.WorkDate = mis.WorkDate
-		LEFT JOIN #ChangeShiftDiscipline AS chs WITH (NOLOCK) ON e.EmpId = chs.EmpId
-		AND cal.WorkDate = chs.WorkDate
+		LEFT JOIN #tblChangeShiftDiscipline AS changeshift WITH (NOLOCK) ON e.EmpId = changeshift.EmpId
+		AND cal.WorkDate = changeshift.WorkDate
+		LEFT JOIN #tblSevenDaysLeaveDiscipline AS sevendays WITH (NOLOCK) ON e.EmpId = sevendays.EmpId
+		AND cal.WorkDate = sevendays.WorkDate
 	WHERE ISNULL(e.isDeleted, 0) = 0
 		AND e.[Enabled] = 1
 		AND ISNULL(@EmpId, e.EmpId) = e.EmpId
@@ -829,16 +888,17 @@ BEGIN
 		AND cal.WorkDate BETWEEN @FromDate
 			AND @ToDate
 		AND (
-			upa.EmpId IS NOT NULL
-			OR up.EmpId IS NOT NULL
-			OR ab.EmpId IS NOT NULL
+			upla.EmpId IS NOT NULL
 			OR upl.EmpId IS NOT NULL
+			OR ab.EmpId IS NOT NULL
+			OR lateleave.EmpId IS NOT NULL
 			OR wld.EmpId IS NOT NULL
 			OR la.EmpId IS NOT NULL
 			OR ear.EmpId IS NOT NULL
 			OR wud.EmpId IS NOT NULL
 			OR mis.EmpId IS NOT NULL
-			OR chs.EmpId IS NOT NULL
+			OR changeshift.EmpId IS NOT NULL
+			OR sevendays.EmpId IS NOT NULL
 			)
 
 	UPDATE edi
@@ -855,10 +915,11 @@ BEGIN
 		,edi.IsUnpaidLeave = dis.IsUnpaidLeave
 		,edi.IsUnpaidLeaveAbsent = dis.IsUnpaidLeaveAbsent
 		,edi.IsWeekendLeave = dis.IsWeekendLeave
+		,edi.IsSevenDaysLeave = dis.IsSevenDaysLeave
 		,edi.IsDeleted = 0
 		,edi.ModifiedDate = @ModifiedDate
 	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON edi.EmpId = dis.EmpId
+		INNER JOIN #tblDiscipline AS dis WITH (NOLOCK) ON edi.EmpId = dis.EmpId
 		AND edi.WorkDate = dis.WorkDate
 
 	UPDATE edi
@@ -871,12 +932,13 @@ BEGIN
 		,edi.IsUnpaidLeave = 0
 		,edi.IsUnpaidLeaveAbsent = 0
 		,edi.IsWeekendLeave = 0
+		,edi.IsSevenDaysLeave = 0
 		,edi.IsDeleted = 1
 		,edi.ModifiedDate = @ModifiedDate
 	FROM dbo.Discipline AS edi WITH (ROWLOCK, UPDLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM #Discipline WITH (NOLOCK)
+			FROM #tblDiscipline WITH (NOLOCK)
 			WHERE edi.EmpId = EmpId
 				AND edi.WorkDate = WorkDate
 			)
@@ -900,6 +962,7 @@ BEGIN
 		,[IsUnpaidLeave]
 		,[IsUnpaidLeaveAbsent]
 		,[IsWeekendLeave]
+		,IsSevenDaysLeave
 		,[IsDeleted]
 		,[ModifiedBy]
 		,[ModifiedDate]
@@ -919,10 +982,11 @@ BEGIN
 		,dis.IsUnpaidLeave
 		,dis.IsUnpaidLeaveAbsent
 		,dis.IsWeekendLeave
+		,dis.IsSevenDaysLeave
 		,0
 		,NULL
 		,@ModifiedDate
-	FROM #Discipline AS dis WITH (NOLOCK)
+	FROM #tblDiscipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
 			FROM dbo.Discipline WITH (NOLOCK)
@@ -941,15 +1005,16 @@ BEGIN
 		,di.IsIgnoredUnpaidLeave = dis.IsIgnoredUnpaidLeave
 		,di.IsIgnoredUnpaidLeaveAbsent = dis.IsIgnoredUnpaidLeaveAbsent
 		,di.IsIgnoredWeekendLeave = dis.IsIgnoredWeekendLeave
+		,di.IsIgnoredSevenDaysLeave = dis.IsIgnoredSevenDaysLeave
 	FROM dbo.DisciplineIgnore AS di WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON di.EmpId = dis.EmpId
+		INNER JOIN #tblDiscipline AS dis WITH (NOLOCK) ON di.EmpId = dis.EmpId
 		AND di.WorkDate = dis.WorkDate
 
 	DELETE di
-	FROM dbo.DisciplineIgnore AS di
+	FROM dbo.DisciplineIgnore AS di WITH (ROWLOCK, UPDLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM #Discipline WITH (NOLOCK)
+			FROM #tblDiscipline WITH (NOLOCK)
 			WHERE di.EmpId = EmpId
 				AND di.WorkDate = WorkDate
 			)
@@ -970,6 +1035,7 @@ BEGIN
 		,IsIgnoredUnpaidLeave
 		,IsIgnoredUnpaidLeaveAbsent
 		,IsIgnoredWeekendLeave
+		,IsIgnoredSevenDaysLeave
 		)
 	SELECT EmpId
 		,WorkDate
@@ -983,7 +1049,8 @@ BEGIN
 		,IsIgnoredUnpaidLeave
 		,IsIgnoredUnpaidLeaveAbsent
 		,IsIgnoredWeekendLeave
-	FROM #Discipline AS dis
+		,IsIgnoredSevenDaysLeave
+	FROM #tblDiscipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
 			FROM dbo.DisciplineIgnore
@@ -1002,15 +1069,16 @@ BEGIN
 		,doc.IsOutOfControlUnpaidLeave = dis.IsOutOfControlUnpaidLeave
 		,doc.IsOutOfControlUnpaidLeaveAbsent = dis.IsOutOfControlUnpaidLeaveAbsent
 		,doc.IsOutOfControlWeekendLeave = dis.IsOutOfControlWeekendLeave
+		,doc.IsOutOfControlSevenDaysLeave = dis.IsOutOfControlSevenDaysLeave
 	FROM dbo.DisciplineOutOfControl AS doc WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #Discipline AS dis WITH (NOLOCK) ON doc.EmpId = dis.EmpId
+		INNER JOIN #tblDiscipline AS dis WITH (NOLOCK) ON doc.EmpId = dis.EmpId
 		AND doc.WorkDate = dis.WorkDate
 
 	DELETE doc
-	FROM dbo.DisciplineOutOfControl AS doc
+	FROM dbo.DisciplineOutOfControl AS doc WITH (ROWLOCK, UPDLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM #Discipline WITH (NOLOCK)
+			FROM #tblDiscipline WITH (NOLOCK)
 			WHERE doc.EmpId = EmpId
 				AND doc.WorkDate = WorkDate
 			)
@@ -1031,6 +1099,7 @@ BEGIN
 		,IsOutOfControlUnpaidLeave
 		,IsOutOfControlUnpaidLeaveAbsent
 		,IsOutOfControlWeekendLeave
+		,IsOutOfControlSevenDaysLeave
 		)
 	SELECT EmpId
 		,WorkDate
@@ -1044,33 +1113,36 @@ BEGIN
 		,IsOutOfControlUnpaidLeave
 		,IsOutOfControlUnpaidLeaveAbsent
 		,IsOutOfControlWeekendLeave
-	FROM #Discipline AS dis
+		,IsOutOfControlSevenDaysLeave
+	FROM #tblDiscipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM dbo.DisciplineOutOfControl
+			FROM dbo.DisciplineOutOfControl WITH (NOLOCK)
 			WHERE EmpId = dis.EmpId
 				AND WorkDate = dis.WorkDate
 			)
 
-	DROP TABLE #MissingCheckInOutDiscipline
+	DROP TABLE #tblMissingCheckInOutDiscipline
 
-	DROP TABLE #LateInDiscipline
+	DROP TABLE #tblLateInDiscipline
 
-	DROP TABLE #EarlyOutDiscipline
+	DROP TABLE #tblEarlyOutDiscipline
 
-	DROP TABLE #ChangeShiftDiscipline
+	DROP TABLE #tblChangeShiftDiscipline
 
-	DROP TABLE #WorkingUnderTimeDiscipline
+	DROP TABLE #tblWorkingUnderTimeDiscipline
 
-	DROP TABLE #UnpaidLeaveAbsentDiscipline
+	DROP TABLE #tblUnpaidLeaveAbsentDiscipline
 
-	DROP TABLE #AbsentDiscipline
+	DROP TABLE #tblAbsentDiscipline
 
-	DROP TABLE #UnplannedDiscipline
+	DROP TABLE #tblUnplannedDiscipline
 
-	DROP TABLE #UnpaidLeaveDiscipline
+	DROP TABLE #tblUnpaidLeaveDiscipline
 
-	DROP TABLE #WeekendLeaveDiscipline
+	DROP TABLE #tblWeekendLeaveDiscipline
 
-	DROP TABLE #Discipline
+	DROP TABLE #tblSevenDaysLeaveDiscipline
+
+	DROP TABLE #tblDiscipline
 END

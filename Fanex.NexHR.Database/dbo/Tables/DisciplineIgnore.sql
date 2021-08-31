@@ -11,8 +11,11 @@
     [IsIgnoredUnpaidLeaveAbsent] BIT  CONSTRAINT [DF_DisciplineIgnore_IsIgnoredUnpaidLeaveAbsent] DEFAULT ((0)) NOT NULL,
     [IsIgnoredUnplannedLeave]    BIT  CONSTRAINT [DF_DisciplineIgnore_IsIgnoredUnplannedLeave] DEFAULT ((0)) NOT NULL,
     [IsIgnoredWeekendLeave]      BIT  CONSTRAINT [DF_DisciplineIgnore_IsIgnoredWeekendLeave] DEFAULT ((0)) NOT NULL,
+    [IsIgnoredSevenDaysLeave]    BIT  CONSTRAINT [DF_DisciplineIgnore_IsIgnoredSevenDaysLeave] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_DisciplineIgnore] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC)
 );
+
+
 
 
 

@@ -44,6 +44,7 @@ BEGIN
 		,IsAbsent BIT
 		,IsUnplannedLeave BIT
 		,IsWeekendLeave BIT
+		,IsSevenDaysLeave BIT
 		)
 
 	INSERT INTO @tblDisciplineDetail (
@@ -54,6 +55,7 @@ BEGIN
 		,IsAbsent
 		,IsUnplannedLeave
 		,IsWeekendLeave
+		,IsSevenDaysLeave
 		)
 	SELECT EmployeeId
 		,WorkDate
@@ -62,6 +64,7 @@ BEGIN
 		,IsAbsent
 		,IsUnplannedLeave
 		,IsWeekendLeave
+		,IsSevenDaysLeave
 	FROM dbo.fnc_GetDisciplineDetailByLeaveRequestId(@RequestId)
 
 	-- reset/reject request
@@ -70,10 +73,12 @@ BEGIN
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
-
 		DELETE d1
-		FROM dbo.DisciplineIgnoreDetail d1 WITH (NOLOCK)
-		INNER JOIN DisciplineRequestTrans d2 ON d2.RequestId = @RequestId AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
+		FROM dbo.DisciplineIgnoreDetail AS d1 WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.DisciplineRequestTrans AS d2 ON d2.RequestId = @RequestId
+			AND d1.EmpId = d2.EmpId
+			AND d1.DisciplineTypeId = d2.DisciplineTypeId
+			AND d1.WorkDate = d2.WorkDate
 
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
@@ -83,6 +88,7 @@ BEGIN
 			,dis.IsUnpaidLeaveAbsent = 0
 			,dis.IsUnplannedLeave = 0
 			,dis.IsWeekendLeave = 0
+			,dis.IsSevenDaysLeave = 0
 			,dis.IsDeleted = CASE 
 				WHEN @RequestStatusId = @PendingStatusId THEN 1
 				ELSE dis.IsDeleted
@@ -99,6 +105,7 @@ BEGIN
 			,dis.IsIgnoredUnpaidLeaveAbsent = 0
 			,dis.IsIgnoredUnplannedLeave = 0
 			,dis.IsIgnoredWeekendLeave = 0
+			,dis.IsIgnoredSevenDaysLeave = 0
 		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN @tblDisciplineDetail AS tbl ON dis.EmpId = tbl.EmpId
 			AND dis.WorkDate = tbl.WorkDate
@@ -163,12 +170,8 @@ BEGIN
 		FROM @tblDiscipline
 
 		-- insert
-		INSERT INTO dbo.Discipline (
-			EmpId
-			,WorkDate
-			)
-		SELECT DISTINCT EmpId
-			,WorkDate
+		INSERT INTO dbo.Discipline (EmpId, WorkDate)
+		SELECT DISTINCT EmpId, WorkDate
 		FROM @tblDiscipline AS tbl
 		WHERE NOT EXISTS (
 				SELECT 1
@@ -177,12 +180,8 @@ BEGIN
 					AND dis.WorkDate = tbl.WorkDate
 				)
 
-		INSERT INTO dbo.DisciplineIgnore (
-			EmpId
-			,WorkDate
-			)
-		SELECT DISTINCT EmpId
-			,WorkDate
+		INSERT INTO dbo.DisciplineIgnore (EmpId, WorkDate)
+		SELECT DISTINCT EmpId, WorkDate
 		FROM @tblDiscipline AS tbl
 		WHERE NOT EXISTS (
 				SELECT 1
@@ -213,6 +212,10 @@ BEGIN
 				WHEN tbl.DisciplineTypeId = 10 THEN 1
 				ELSE dis.IsWeekendLeave
 				END
+			,dis.IsSevenDaysLeave = CASE 
+				WHEN tbl.DisciplineTypeId = 11 THEN 1
+				ELSE dis.IsSevenDaysLeave
+				END
 			,dis.IsDeleted = 0
 			,dis.ModifiedBy = @ActorId
 			,dis.ModifiedDate = @ModifiedDate
@@ -240,6 +243,10 @@ BEGIN
 			,dis.IsIgnoredWeekendLeave = CASE 
 				WHEN tbl.DisciplineTypeId = 10 THEN tbl.IsIgnored
 				ELSE dis.IsIgnoredWeekendLeave
+				END
+			,dis.IsIgnoredSevenDaysLeave = CASE 
+				WHEN tbl.DisciplineTypeId = 11 THEN tbl.IsIgnored
+				ELSE dis.IsIgnoredSevenDaysLeave
 				END
 		FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate

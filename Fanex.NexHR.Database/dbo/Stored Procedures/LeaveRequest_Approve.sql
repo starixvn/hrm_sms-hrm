@@ -151,6 +151,12 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 
+		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
+			,@EmpId
+			,@ActorId
+
+		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
+
 		IF ISNULL(@DisciplineXml, '') <> ''
 		BEGIN
 			EXEC dbo.LeaveRequest_UpdateDiscipline @RequestId = @RequestId
@@ -165,12 +171,6 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 		END
-
-		EXEC dbo.LeaveRequest_Approve_UpdateCalendar @RequestId
-			,@EmpId
-			,@ActorId
-
-		EXEC dbo.LeaveRequest_EmployeeCalendar_UpdateOffDay @RequestId
 
 		EXEC dbo.AnnualLeave_InsertTransactionByRequestId @RequestId
 			,@EmpId

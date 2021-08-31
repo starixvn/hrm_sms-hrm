@@ -18,8 +18,11 @@
     [IsDeleted]            BIT            CONSTRAINT [DF_Discipline_IsDeleted] DEFAULT ((0)) NOT NULL,
     [ModifiedBy]           INT            NULL,
     [ModifiedDate]         DATETIME       NULL,
+    [IsSevenDaysLeave]     BIT            CONSTRAINT [DF_Discipline_IsSevenDaysLeave] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_Discipline] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC)
 );
+
+
 
 
 

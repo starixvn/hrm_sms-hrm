@@ -26,7 +26,7 @@ BEGIN
 	FROM dbo.LeaveRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	CREATE TABLE #LeaveDetail (
+	CREATE TABLE #tblLeaveDetail (
 		WorkDate DATETIME
 		,LeaveTypeId INT
 		,LeaveTypeName NVARCHAR(200)
@@ -40,7 +40,7 @@ BEGIN
 	IF @LeaveType = @GeneralLeaveType
 		OR @TotalDays = 0.5
 	BEGIN
-		INSERT INTO #LeaveDetail (
+		INSERT INTO #tblLeaveDetail (
 			WorkDate
 			,LeaveTypeId
 			,LeaveTypeName
@@ -73,7 +73,7 @@ BEGIN
 		OR @LeaveType = @KIVLeaveType
 		OR @LeaveType = @UnpaidLeaveType
 	BEGIN
-		INSERT INTO #LeaveDetail (
+		INSERT INTO #tblLeaveDetail (
 			WorkDate
 			,LeaveTypeId
 			,LeaveTypeName
@@ -99,6 +99,7 @@ BEGIN
 		,IsAbsent
 		,IsUnplannedLeave
 		,IsWeekendLeave
+		,IsSevenDaysLeave
 	FROM dbo.fnc_GetDisciplineDetailByLeaveRequestId(@RequestId)
 	ORDER BY WorkDate
 
@@ -110,7 +111,7 @@ BEGIN
 		,ToTime
 		,IsFromAfterday
 		,IsToAfterday
-	FROM #LeaveDetail
+	FROM #tblLeaveDetail WITH (NOLOCK)
 
-	DROP TABLE #LeaveDetail
+	DROP TABLE #tblLeaveDetail
 END

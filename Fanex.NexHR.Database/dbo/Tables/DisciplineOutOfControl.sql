@@ -11,8 +11,11 @@
     [IsOutOfControlUnpaidLeaveAbsent] BIT  CONSTRAINT [DF_DisciplineOutOfControl_IsOutOfControlUnpaidLeaveAbsent] DEFAULT ((0)) NOT NULL,
     [IsOutOfControlUnplannedLeave]    BIT  CONSTRAINT [DF_DisciplineOutOfControl_IsOutOfControlUnplannedLeave] DEFAULT ((0)) NOT NULL,
     [IsOutOfControlWeekendLeave]      BIT  CONSTRAINT [DF_DisciplineOutOfControl_IsOutOfControlWeekendLeave] DEFAULT ((0)) NOT NULL,
+    [IsOutOfControlSevenDaysLeave]    BIT  CONSTRAINT [DF_DisciplineOutOfControl_IsOutOfControlSevenDaysLeave] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_DisciplineOutOfControl] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC)
 );
+
+
 
 
 

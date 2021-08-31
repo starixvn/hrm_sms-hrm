@@ -31,23 +31,24 @@ BEGIN
 
 	DECLARE @HasEditDisciplineRole INT = 0
 	--request type
-	DECLARE @ChangeShift INT = 5
-		,@CheckIn INT = 1
-		,@CheckOut INT = 2
-		,@LateIn INT = 3
-		,@EarlyOut INT = 4
-		,@Leave INT = 6
+	DECLARE @ChangeShift TINYINT = 5
+		,@CheckIn TINYINT = 1
+		,@CheckOut TINYINT = 2
+		,@LateIn TINYINT = 3
+		,@EarlyOut TINYINT = 4
+		,@Leave TINYINT = 6
 	-- discipline type
-	DECLARE @ChangeShiftId INT = 1
-		,@MissingCheckInOutId INT = 2
-		,@LateInId INT = 3
-		,@EarlyOutId INT = 4
-		,@AbsentId INT = 5
-		,@UnpaidLeaveId INT = 6
-		,@WorkingUnderTimeId INT = 7
-		,@UnpaidLeaveAbsentId INT = 8
-		,@UnplannedLeaveId INT = 9
-		,@WeekendLeaveId INT = 10
+	DECLARE @ChangeShiftId TINYINT = 1
+		,@MissingCheckInOutId TINYINT = 2
+		,@LateInId TINYINT = 3
+		,@EarlyOutId TINYINT = 4
+		,@AbsentId TINYINT = 5
+		,@UnpaidLeaveId TINYINT = 6
+		,@WorkingUnderTimeId TINYINT = 7
+		,@UnpaidLeaveAbsentId TINYINT = 8
+		,@UnplannedLeaveId TINYINT = 9
+		,@WeekendLeaveId TINYINT = 10
+		,@SevenDaysLeaveId TINYINT = 11
 	DECLARE @tblRole TABLE (RoleId INT)
 
 	CREATE TABLE #tblDisciplineDetail (
@@ -113,6 +114,12 @@ BEGIN
 		,WeekendLeaveHasViolated BIT
 		,WeekendLeaveHasIgnored BIT
 		,WeekendLeaveHasApprovedBy BIT
+		,SevenDaysLeaveId INT
+		,SevenDaysLeaveValue INT
+		,SevenDaysLeaveScore DECIMAL(5, 2)
+		,SevenDaysLeaveHasViolated BIT
+		,SevenDaysLeaveHasIgnored BIT
+		,SevenDaysLeaveHasApprovedBy BIT
 		,EmployeeComment NVARCHAR(MAX)
 		,ApproverComment NVARCHAR(MAX)
 		,IsOutOfControlReason BIT
@@ -340,6 +347,27 @@ BEGIN
 				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
 			ELSE 0 END
 			) AS WeekendLeaveHasApprovedBy
+		,@SevenDaysLeaveId AS SevenDaysLeaveId
+		,dis.IsSevenDaysLeave AS SevenDaysLeaveValue
+		,dbo.fncGetDisciplineScoreById(@SevenDaysLeaveId) AS SevenDaysLeaveScore
+		,(CASE 
+			WHEN dis.IsSevenDaysLeave = 1
+				AND EXISTS (
+					SELECT 1
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
+					WHERE drule.GroupId = emp.GroupId
+						AND drule.DisciplineTypeId = @SevenDaysLeaveId
+						AND drule.Value = 1
+						AND drule.IsLocal = empSum.IsLocal
+					) THEN 1
+			ELSE 0 END
+			) AS SevenDaysLeaveHasViolated
+		,ignored.IsIgnoredSevenDaysLeave AS SevenDaysLeaveHasIgnored
+		,(CASE 
+			WHEN @HasEditDisciplineRole = 1
+				AND dbo.fncCheckPermissionIgnoreDisciplineInReport(@ApproverId, gr.GroupId, emp.EmpId) = 1 THEN 1
+			ELSE 0 END
+			) AS SevenDaysLeaveHasApprovedBy
 		,dis.EmployeeComment
 		,dis.ApproverComment
 		,dis.IsOutOfControlReason
@@ -356,16 +384,17 @@ BEGIN
 			AND @ToDate
 		AND ISNULL(@EmployeeId, emp.EmpId) = emp.EmpId
 		AND (
-			dis.IsChangeShift > 0
-			OR dis.IsMissingCheckInOut > 0
-			OR dis.IsLateIn > 0
-			OR dis.IsEarlyOut > 0
-			OR dis.IsAbsent > 0
-			OR dis.IsUnplannedLeave > 0
-			OR dis.IsUnpaidLeave > 0
-			OR dis.IsWorkingUnderTime > 0
-			OR dis.IsUnpaidLeaveAbsent > 0
-			OR dis.IsWeekendLeave > 0
+			dis.IsChangeShift = 1
+			OR dis.IsMissingCheckInOut = 1
+			OR dis.IsLateIn = 1
+			OR dis.IsEarlyOut = 1
+			OR dis.IsAbsent = 1
+			OR dis.IsUnplannedLeave = 1
+			OR dis.IsUnpaidLeave = 1
+			OR dis.IsWorkingUnderTime = 1
+			OR dis.IsUnpaidLeaveAbsent = 1
+			OR dis.IsWeekendLeave = 1
+			OR dis.IsSevenDaysLeave = 1
 			)
 		AND (
 			@ReasonId IS NULL
@@ -489,10 +518,22 @@ BEGIN
 						AND drule.IsLocal = empSum.IsLocal
 					)
 				)
+			OR (
+				@ReasonId = @SevenDaysLeaveId
+				AND dis.IsSevenDaysLeave = 1
+				AND EXISTS (
+					SELECT 1
+					FROM dbo.DisciplineGroupRule AS drule WITH (NOLOCK)
+					WHERE drule.DisciplineTypeId = @SevenDaysLeaveId
+						AND drule.Value = 1
+						AND drule.GroupId = emp.GroupId
+						AND drule.IsLocal = empSum.IsLocal
+					)
+				)
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl WITH (NOLOCK)
 			WHERE emp.GroupId = tbl.TmpGroupId
 			)
 		AND (
@@ -609,6 +650,10 @@ BEGIN
 						dis.IsWeekendLeave = 1
 						AND ignored.IsIgnoredWeekendLeave = 1
 						)
+					OR (
+						dis.IsSevenDaysLeave = 1
+						AND ignored.IsIgnoredSevenDaysLeave = 1
+						)
 					)
 				)
 			OR (
@@ -654,6 +699,10 @@ BEGIN
 						dis.IsWeekendLeave = 1
 						AND ignored.IsIgnoredWeekendLeave = 0
 						)
+					OR (
+						dis.IsSevenDaysLeave = 1
+						AND ignored.IsIgnoredSevenDaysLeave = 0
+						)
 					)
 				)
 			)
@@ -683,12 +732,12 @@ BEGIN
 	ORDER BY dis.WorkDate DESC
 
 	SELECT did.EmpId AS EmployeeId
-	,e.NickName AS IgnoreBy
-	,did.WorkDate
-	,did.DisciplineTypeId
-	,did.IgnoreDate
+		,e.NickName AS IgnoreBy
+		,did.WorkDate
+		,did.DisciplineTypeId
+		,did.IgnoreDate
 	FROM dbo.DisciplineIgnoreDetail AS did WITH (NOLOCK)
-	LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = did.IgnoreBy
+		LEFT JOIN dbo.Employee AS e WITH (NOLOCK) ON e.EmpId = did.IgnoreBy
 	WHERE did.EmpId = @EmployeeId AND did.WorkDate BETWEEN @FromDate AND @ToDate 
 
 	DROP TABLE #tblDisciplineDetail
