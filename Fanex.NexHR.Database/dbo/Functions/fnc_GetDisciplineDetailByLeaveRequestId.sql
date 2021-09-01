@@ -168,7 +168,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 5
+		AND rul.DisciplineTypeId = 9
 		INNER JOIN (
 		SELECT lv.RequestId
 			,lv.EmpId
@@ -192,7 +192,7 @@ BEGIN
 		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 		INNER JOIN dbo.DisciplineGroupRule AS rul WITH (NOLOCK) ON e.GroupId = rul.GroupId
 		AND es.IsLocal = rul.IsLocal
-		AND rul.DisciplineTypeId = 5
+		AND rul.DisciplineTypeId = 9
 		INNER JOIN (
 		SELECT lv.RequestId
 			,lv.EmpId
@@ -204,12 +204,6 @@ BEGIN
 			AND lv.LeaveType = @GeneralLeaveType
 			AND lvt.LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KeepInViewLeaveType, @PublicHolidayLeaveType)
 			AND wk.CurrentStatus IN (1, 2, 4, 6) -- pending/verified/approved/processed
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.LeaveRequestDetail WITH (NOLOCK)
-				WHERE RequestId = lv.RequestId
-					AND LeaveType = @UnpaidLeaveType
-				)
 			AND lvt.OnDate = (
 				SELECT MIN(OnDate)
 				FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
@@ -363,6 +357,7 @@ BEGIN
 			,(CASE 
 				WHEN upla.WorkDate IS NULL
 					AND sevendays.WorkDate IS NULL
+					AND lateleave.WorkDate IS NULL
 					AND upl.WorkDate IS NOT NULL THEN 1
 				ELSE 0 END
 				) AS IsUnpaidLeave

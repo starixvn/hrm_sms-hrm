@@ -197,7 +197,7 @@ BEGIN
 			,@ToDate
 			,@ActorId
 
-		EXEC dbo.LeaveRequest_UpdateTmpHospitalizationLeaveTrans @RequestId
+		EXEC dbo.LeaveRequest_UpdateTmpSickLeaveTrans @RequestId
 			,@Status = 1
 
 		EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId

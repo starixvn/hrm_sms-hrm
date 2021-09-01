@@ -32,6 +32,8 @@ BEGIN
 		,@BereavementLeaveTypeId SMALLINT = 21
 		,@CompensationLeaveTypeId SMALLINT = 27
 		,@WeddingLeaveTypeId SMALLINT = 6
+		,@SuspendWorkLeaveTypeId SMALLINT = 3
+		,@HospitalizationLeaveTypeId SMALLINT = 9
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
@@ -185,6 +187,34 @@ BEGIN
 						END
 				ELSE 0
 				END) AS WeddingLeave
+		,SUM(CASE 
+				WHEN empca.IsOffDay = 0
+					AND empca.IsHoliday = 0
+					AND empca.IsLeaveDay = 1
+					AND (
+						empca.LeaveTypeId = @SuspendWorkLeaveTypeId
+						OR empca.LeaveTypeId2 = @SuspendWorkLeaveTypeId
+						) THEN CASE 
+						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
+							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
+						ELSE empca.LeaveDay
+						END
+				ELSE 0
+				END) AS SuspendWork
+		,SUM(CASE 
+				WHEN empca.IsOffDay = 0
+					AND empca.IsHoliday = 0
+					AND empca.IsLeaveDay = 1
+					AND (
+						empca.LeaveTypeId = @HospitalizationLeaveTypeId
+						OR empca.LeaveTypeId2 = @HospitalizationLeaveTypeId
+						) THEN CASE 
+						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
+							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
+						ELSE empca.LeaveDay
+						END
+				ELSE 0
+				END) AS HospitalizationLeave
 		,SUM(CASE 
 				WHEN empca.IsOffDay = 0
 					AND empca.IsHoliday = 0
