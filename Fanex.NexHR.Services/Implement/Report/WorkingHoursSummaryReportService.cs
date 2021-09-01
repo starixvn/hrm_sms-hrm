@@ -74,7 +74,7 @@
             GetWorkingHoursSummaryParam param,
             IEnumerable<WorkingHoursSummary> workingHours)
         {
-            const byte TotalColumns = 28;
+            const byte TotalColumns = 30;
             const byte TotalHeaderRows = 2;
             const byte StartBodyRow = 4;
             var rowIndex = 1;
@@ -117,6 +117,8 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = item.BereavementLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.CompensationLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WeddingLeave;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.SuspendWork;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.HospitalizationLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.TotalPayments;
 
                 worksheet.Cells[rowIndex, colIndex++].Value = item.UnpaidLeave;

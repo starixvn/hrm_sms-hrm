@@ -2,7 +2,6 @@
 {
     using Fanex.Common.Extensions;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1717:OnlyFlagsEnumsShouldHavePluralNames", Justification = "Ok.")]
     public enum LeaveTypes
     {
         [StringValue("General Leave")]
@@ -10,6 +9,9 @@
 
         [StringValue("Annual Leave")]
         AnnualLeave = 2,
+
+        [StringValue("Suspend Work")]
+        SuspendWork = 3,
 
         [StringValue("Employee Wedding (3 Days)")]
         WeddingLeave = 6,
@@ -37,6 +39,9 @@
 
         [StringValue("Compensation Leave")]
         CompensationLeave = 27,
+
+        [StringValue("Hospitalization Leave")]
+        HospitalizationLeave = 39,
 
         [StringValue("Unpaid Leave (Insurance)")]
         UnpaidLeaveInsurance = 41,

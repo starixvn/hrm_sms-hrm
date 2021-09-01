@@ -27,11 +27,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 18;
+        private const ushort TotalFixedColumns = 20;
         private const ushort TotalUPLColumns = 4;
-        private const ushort StartDateColumnIndex = 23;
-        private const ushort StartUPLColumnIndex = 19;
-        private const ushort EndUPLColumnIndex = 22;
+        private const ushort StartDateColumnIndex = 25;
+        private const ushort StartUPLColumnIndex = 21;
+        private const ushort EndUPLColumnIndex = 24;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -154,7 +154,7 @@
                     .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex + TotalUPLColumns - 1]);
                 worksheet.Cells[StartHeaderRowIndex, colIndex].Value = $"Unpaid Leaves {month.ToString("MMM-yyyy")}";
 
-                colIndex = colIndex + TotalUPLColumns;
+                colIndex += TotalUPLColumns;
             }
 
             for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
@@ -203,33 +203,41 @@
                 var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format("COUNTIF({0},\"PH\")", excelAddress);
 
-                var leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.MaternityLeave).Code;
+                var leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.MaternityLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                 // payment leaves
                 var annualLeaveColumnIndex = colIndex;
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.AnnualLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.AnnualLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.BusinessTrip).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.BusinessTrip).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.BereavementLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.BereavementLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.CompensationLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.CompensationLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.WeddingLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.WeddingLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.KeepInViewByDay).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.SuspendWork).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.HospitalizationLeave).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.KeepInViewByDay).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
@@ -247,13 +255,13 @@
                     excelAddress = $"{worksheet.Cells[rowIndex, startColumnIndex].Address}:{worksheet.Cells[rowIndex, endColumnIndex].Address}";
 
                     var unpaidLeaveColumnIndex = colIndex;
-                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.UnpaidLeave).Code;
                     worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.UnpaidLeaveInsurance).Code;
                     worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                    leaveCode = LeaveTypes.First(x => x.Id == (int)Core.Enums.LeaveTypes.PaternityLeave).Code;
+                    leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.PaternityLeave).Code;
                     worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                     excelAddress = $"{worksheet.Cells[rowIndex, unpaidLeaveColumnIndex].Address}:{worksheet.Cells[rowIndex, colIndex++].Address}";
@@ -278,20 +286,19 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 9;
+            const byte DefaultColumns = 11;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
                 maternityLeaveColumn = 4,
-                weddingLeaveColumn = 9,
-                unpaidLeaveColumn = 10
+                weddingLeaveColumn = 11,
+                unpaidLeaveColumn = 12
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
             var rowIndex = 1;
-            var colIndex = 1;
 
             // title
             template.Cells[1, 1, 1, DefaultColumns].Copy(worksheet.Cells[1, 1, 1, DefaultColumns]);
@@ -309,7 +316,7 @@
             // summary
             if (monthlyWorkings.Any())
             {
-                colIndex = 1;
+                var colIndex = 1;
                 template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
                 for (var i = 2; i <= TotalColumns; i++)
                 {
@@ -377,6 +384,10 @@
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.SuspendWork));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.HospitalizationLeave));
 
                 foreach (DateTime month in months)
                 {
@@ -473,14 +484,14 @@
             return months;
         }
 
-        private static decimal SummaryLeaveDay(IEnumerable<DailyWorking> dailyWorkings, Core.Enums.LeaveTypes leaveType)
+        private static decimal SummaryLeaveDay(IEnumerable<DailyWorking> dailyWorkings, LeaveTypes leaveType)
         {
             decimal totals = 0;
             foreach (DailyWorking dailyWorking in dailyWorkings)
             {
                 if (dailyWorking.IsLeaveDay
-                    && (dailyWorking.LeaveType.Id == (int)leaveType
-                        || (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType2.Id == (int)leaveType)))
+                    && (dailyWorking.LeaveType.Id == (short)leaveType
+                        || (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType2.Id == (short)leaveType)))
                 {
                     if (dailyWorking.IsLeaveHalfDay
                         || (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id))
