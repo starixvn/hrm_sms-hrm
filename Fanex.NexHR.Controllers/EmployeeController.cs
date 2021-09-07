@@ -112,25 +112,12 @@
                 Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
 
-            bool? isLocal = null;
-            if(sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
-            {
-                isLocal = true;
-            }
-            else
-            {
-                if(sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
-                {
-                    isLocal = false;
-                }
-            }
-
             var model = new UserManagementViewModel
             {
                 JobTitleId = jobTitleId,
                 TeamIds = teamIds,
                 IsEnable = true,
-                IsLocal = isLocal,
+                IsLocal = GetCategory(),
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage,
@@ -147,19 +134,6 @@
             IList<Employee> employees = new List<Employee>();
             if (model != null)
             {
-                bool? isLocal = model.IsLocal;
-                if (sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
-                {
-                    isLocal = true;
-                }
-                else
-                {
-                    if (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
-                    {
-                        isLocal = false;
-                    }
-                }
-
                 var criteria = new GetAllEmployeeCriteria
                 {
                     Query = model.Keyword,
@@ -167,7 +141,7 @@
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,
-                    IsLocalUser = isLocal,
+                    IsLocalUser = GetCategory(model.IsLocal),
                     PageNumber = model.CurrentPage,
                     PageSize = model.ItemsPerPage
                 };
@@ -247,7 +221,7 @@
             if (employee != null)
             {
                 if ((sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
-                    || (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
+                    && (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
                 {
                     return RedirectToAction("AccessDenied", "Error");
                 }
@@ -635,6 +609,27 @@
         private static string BuildDefaultRole()
         {
             return ((int)RoleSystem.Member).ToString();
+        }
+
+        private bool? GetCategory(bool? isLocal = null)
+        {
+            bool? category = isLocal;
+            if (!sessionService.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
+            {
+                if (sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+                {
+                    category = true;
+                }
+                else
+                {
+                    if (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+                    {
+                        category = false;
+                    }
+                }
+            }
+
+            return category;
         }
     }
 }

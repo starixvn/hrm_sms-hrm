@@ -29,6 +29,12 @@
         DisciplineManager = 8,
 
         [StringValue("Shift Manager")]
-        ShiftManager2 = 9
+        ShiftManager2 = 9,
+
+        [StringValue("Local HR")]
+        LocalHR = 10,
+
+        [StringValue("Expat HR")]
+        ExpatHR = 11
     }
 }
