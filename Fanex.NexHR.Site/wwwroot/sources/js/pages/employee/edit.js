@@ -13,7 +13,7 @@ import { axiosError, confirm, alert, initDatepicker, toastOptions, resolveClient
 
 $(document).ready(function () {
     function bindSARole(onload) {
-        let combineSARole = $('#Roles2Array2, #Roles2Array3, #Roles2Array4, #Roles2Array5, #Roles2Array6,#Roles2Array8,#Roles2Array9');
+        let combineSARole = $('input[id*=Roles2Array]').not('#Roles2Array7');
         if ($('#Roles2Array7').prop('checked')) {
             combineSARole.prop('checked', true).prop('readonly', 'readonly');
         } else if (!onload) {
