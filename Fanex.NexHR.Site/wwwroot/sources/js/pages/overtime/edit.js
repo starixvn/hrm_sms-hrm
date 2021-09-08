@@ -97,7 +97,7 @@ $(document).ready(function () {
         const workingHours = parseFloat($('#WorkingHours').val());
         const totalHours = parseFloat(row.find('.totalHours').html().trim());
 
-        if ($this.hasClass('normalHours') || $this.hasClass('specialHours')) {
+        if ($this.hasClass('normalHours') || ($this.hasClass('specialHours') && !$this.hasClass('specialPH'))) {
             if (totalHours >= workingHours) {
                 const limit = parseFloat((totalHours - workingHours + 0.09).toFixed(2));
                 rangeTextBox($this, 0, limit);
