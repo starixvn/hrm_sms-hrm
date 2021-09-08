@@ -146,6 +146,10 @@
                             }
                         </td>
                         <td class="cell-overtime">
+                            @{ 
+                                className = string.Format("form-control {0}",
+                                    request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? string.Empty : "specialHours");
+                            }
                             @if ((Model.MonthlyRequest.Requester.SpecialOT > 0
                                 && request.ActualWorkingHours > 0
                                 && !request.IsKeepInView
@@ -153,13 +157,13 @@
                                 && request.ActualWorkingHours >= (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
                                 || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
                             {
-                                @Html.TextBoxFor(model => request.SpecialHours, new { @class = "specialHours form-control", @maxlength = 5, autocomplete = "off" })
+                                @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, @maxlength = 5, autocomplete = "off" })
                             }
                             else
                             {
                                 if (request.SpecialHours > 0)
                                 {
-                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = "specialHours form-control", @maxlength = 5, autocomplete = "off", @readonly = "readonly" })
+                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, @maxlength = 5, autocomplete = "off", @readonly = "readonly" })
                                 }
                             }
                         </td>
