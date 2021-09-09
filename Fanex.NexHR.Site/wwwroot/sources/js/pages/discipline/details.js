@@ -92,6 +92,7 @@ import { DisciplineType } from '../../shared/constants';
                     IsIgnoredWorkingUnderTime: false,
                     IsIgnoredUnpaidLeaveAbsent: false,
                     IsIgnoredWeekendLeave: false,
+                    IsIgnoredSevenDaysLeave: false,
                     ApproverSubtractScore: Math.abs(approverSubstractScore),
                     IsOutOfControlReason: false
                 };
@@ -135,6 +136,9 @@ import { DisciplineType } from '../../shared/constants';
                         case DisciplineType.WeekendLeave:
                             ignoredDiscipline.IsIgnoredWeekendLeave = $checkbox.prop('checked');
                             break;
+                        case DisciplineType.SevenDaysLeave:
+                            ignoredDiscipline.IsIgnoredSevenDaysLeave = $checkbox.prop('checked');
+                            break;
                     }
                 });
 
@@ -174,14 +178,14 @@ import { DisciplineType } from '../../shared/constants';
     function initEventForSaveChange() {
         $('#discipline-detail table.discipline-detail input#saveChange').on('click', function () {
             const ignoreDetails = getDataChanged();
-            const disciplinesIgnore = getDataIgnore();
+            const disciplineIgnores = getDataIgnore();
             if (ignoreDetails.length > 0) {
                 confirm('Are you sure you want to save?',
                     function () {
                         axios({
                             url: resolveClientUrl('discipline/EditDisciplineIgnore'),
                             method: 'POST',
-                            data: stringify({ ignoreDetails, disciplinesIgnore }),
+                            data: stringify({ ignoreDetails, disciplineIgnores }),
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
                                 'Content-Type': 'application/x-www-form-urlencoded'

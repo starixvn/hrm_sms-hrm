@@ -35,7 +35,10 @@ export const RoleSystem = {
     OnBehalfRequest: 5,
     HR: 6,
     SystemAdmin: 7,
-    DisciplineManager: 8
+    DisciplineManager: 8,
+    ShiftManager2: 9,
+    LocalHR: 10,
+    ExpatHR: 11
 };
 export const RequestCommand = {
     Accept: 1,
@@ -75,7 +78,8 @@ export const DisciplineType = {
     WorkingUnderTime: 7,
     UnpaidLeaveAbsent: 8,
     UnplannedLeave: 9,
-    WeekendLeave: 10
+    WeekendLeave: 10,
+    SevenDaysLeave: 11
 };
 export const Messages = {
     notAvailable: 'Not available',

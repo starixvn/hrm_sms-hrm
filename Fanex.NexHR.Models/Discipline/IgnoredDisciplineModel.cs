@@ -21,6 +21,7 @@
         public bool IsIgnoredWorkingUnderTime { get; set; }
         public bool IsIgnoredUnpaidLeaveAbsent { get; set; }
         public bool IsIgnoredWeekendLeave { get; set; }
+        public bool IsIgnoredSevenDaysLeave { get; set; }
         public decimal ApproverSubtractScore { get; set; }
         public bool IsOutOfControlReason { get; set; }
     }

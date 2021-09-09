@@ -205,12 +205,13 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.Discipline)]
-        public CustomJsonResult EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails, IEnumerable<IgnoredDisciplineDetailModel> disciplinesIgnore)
+        public CustomJsonResult EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails,
+            IEnumerable<IgnoredDisciplineDetailModel> disciplineIgnores)
         {
             var criteria = new UpdateIgnoredDisciplineCriteria
             {
                 IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
-                DisciplineIgnoreXml = disciplinesIgnore.ToXML().ToString(),
+                DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
                 HasUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
                 ActorId = sessionService.Employee.Id,
             };
