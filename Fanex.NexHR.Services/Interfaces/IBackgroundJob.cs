@@ -17,5 +17,7 @@
         void UpdateAnnualLeaveBalance();
 
         void UpdateAnnualLeaveBalanceForNewEmployee();
+
+        void SyncWorkingShift();
     }
 }

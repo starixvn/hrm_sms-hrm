@@ -104,6 +104,8 @@
     <Compile Include="Report\MealAllowance\GetMealAllowanceSummaryReportCriteria.cs" />
     <Compile Include="Request\Leave\GetTotalLeaveDayCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
+    <Compile Include="SyncData\GetWorkingShiftLastSyncDateCriteria.cs" />
+    <Compile Include="SyncData\ImportWorkingShiftCommand.cs" />
     <Compile Include="SickLeave\DeleteTransactionCriteria.cs" />
     <Compile Include="SickLeave\GetSummaryReportCriteria.cs" />
     <Compile Include="SickLeave\GetTransactionByEmployeeIdCriteria.cs" />

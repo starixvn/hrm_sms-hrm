@@ -4,16 +4,19 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
+    using Fanex.NexHR.Services.Implement;
 
     public class BackgroundJobService : IBackgroundJobService
     {
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
+        private readonly ISyncWorkingShiftService syncWorkingShiftService;
 
-        public BackgroundJobService(IBaseService baseService, IHolidayService holidayService)
+        public BackgroundJobService(IBaseService baseService, IHolidayService holidayService, ISyncWorkingShiftService syncWorkingShiftService)
         {
             this.baseService = baseService;
             this.holidayService = holidayService;
+            this.syncWorkingShiftService = syncWorkingShiftService;
         }
 
         public void ImportTimeRecord()
@@ -85,6 +88,10 @@
             };
 
             baseService.ExecuteNonQuery(criteria);
+        }
+        public void SyncWorkingShift()
+        {
+            syncWorkingShiftService.SyncWorkingShift();
         }
     }
 }

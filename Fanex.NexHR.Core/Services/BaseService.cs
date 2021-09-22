@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Core.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Repositories;
@@ -48,6 +49,16 @@
             }
 
             return commandResult;
+        }
+
+        public async Task<T> GetDataEntityAsync<T>(ICriteria criteria)
+        {
+            if (criteria != null && criteria.IsValid())
+            {
+                return await dynamicRepository.GetAsync<T>(criteria);
+            }
+
+            return default(T);
         }
     }
 }
