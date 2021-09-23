@@ -27,6 +27,7 @@ BEGIN
 		,UnpaidLeaveAbsent DECIMAL(5, 2)
 		,UnplannedLeave DECIMAL(5, 2)
 		,WeekendLeave DECIMAL(5, 2)
+		,SevenDaysLeave DECIMAL(5, 2)
 		,OtherDisciplines DECIMAL(5, 2)
 		,SystemSubtractScore DECIMAL(5, 2)
 		,ModifiedDate DATETIME
@@ -46,6 +47,7 @@ BEGIN
 		,UnpaidLeaveAbsent DECIMAL(5, 2)
 		,UnplannedLeave DECIMAL(5, 2)
 		,WeekendLeave DECIMAL(5, 2)
+		,SevenDaysLeave DECIMAL(5, 2)
 		,OtherDisciplines DECIMAL(5, 2)
 		,SystemSubtractScore DECIMAL(5, 2)
 		,ModifiedDate DATETIME
@@ -65,6 +67,7 @@ BEGIN
 		,UnpaidLeaveAbsent
 		,UnplannedLeave
 		,WeekendLeave
+		,SevenDaysLeave
 		,OtherDisciplines
 		,SystemSubtractScore
 		,ModifiedDate
@@ -82,6 +85,7 @@ BEGIN
 		,0 AS UnpaidLeaveAbsent
 		,0 AS UnplannedLeave
 		,0 AS WeekendLeave
+		,0 AS SevenDaysLeave
 		,0 AS OtherDisciplines
 		,0 AS SystemSubtractScore
 		,MAX(ModifiedDate) AS ModifiedDate
@@ -105,6 +109,7 @@ BEGIN
 		,UnpaidLeaveAbsent
 		,UnplannedLeave
 		,WeekendLeave
+		,SevenDaysLeave
 		,OtherDisciplines
 		,SystemSubtractScore
 		,ModifiedDate
@@ -172,6 +177,12 @@ BEGIN
 					AND unplanned.DisciplineTypeId IS NOT NULL THEN dbo.fncGetDisciplineScoreById(10)
 				ELSE 0
 				END) AS WeekendLeave
+		,SUM(CASE 
+				WHEN d.IsSevenDaysLeave = 1
+					AND ignore.IsIgnoredSevenDaysLeave = 0
+					AND sevendaysleave.DisciplineTypeId IS NOT NULL THEN dbo.fncGetDisciplineScoreById(11)
+				ELSE 0
+				END) AS SevenDaysLeave
 		,0 AS OtherDisciplines
 		,SUM(CASE 
 				WHEN d.IsChangeShift = 1 THEN dbo.fncGetDisciplineScoreById(1)
@@ -202,6 +213,9 @@ BEGIN
 				ELSE 0
 				END) + SUM(CASE 
 				WHEN d.IsWeekendLeave = 1 THEN dbo.fncGetDisciplineScoreById(10)
+				ELSE 0
+				END) + SUM(CASE 
+				WHEN d.IsSevenDaysLeave = 1 THEN dbo.fncGetDisciplineScoreById(11)
 				ELSE 0
 				END) AS SystemSubtractScore
 		,MAX(d.ModifiedDate) AS ModifiedDate
@@ -264,6 +278,11 @@ BEGIN
 		AND weekendleave.GroupId = emp.GroupId
 		AND weekendleave.IsLocal = es.IsLocal
 		AND weekendleave.Value = 1
+	-- seven days leave
+		LEFT JOIN dbo.DisciplineGroupRule AS sevendaysleave WITH (NOLOCK) ON sevendaysleave.DisciplineTypeId = 11
+		AND sevendaysleave.GroupId = emp.GroupId
+		AND sevendaysleave.IsLocal = es.IsLocal
+		AND sevendaysleave.Value = 1
 	WHERE d.ModifiedDate > @LastModifiedDate
 		AND d.IsDeleted = 0
 	GROUP BY d.EmpId
@@ -282,6 +301,7 @@ BEGIN
 		,UnpaidLeaveAbsent
 		,UnplannedLeave
 		,WeekendLeave
+		,SevenDaysLeave
 		,OtherDisciplines
 		,SystemSubtractScore
 		,ModifiedDate
@@ -299,6 +319,7 @@ BEGIN
 		,0 AS UnpaidLeaveAbsent
 		,0 AS UnplannedLeave
 		,0 AS WeekendLeave
+		,0 AS SevenDaysLeave
 		,CASE WHEN otherdis.IsDeleted = 0 THEN otherdis.Score ELSE 0 END AS OtherDisciplines
 		,0 AS SystemSubtractScore
 		,otherdis.ModifiedDate
@@ -319,6 +340,7 @@ BEGIN
 		,UnpaidLeaveAbsent
 		,UnplannedLeave
 		,WeekendLeave
+		,SevenDaysLeave
 		,OtherDisciplines
 		,SystemSubtractScore
 		,ModifiedDate
@@ -336,6 +358,7 @@ BEGIN
 		,SUM(UnpaidLeaveAbsent) AS UnpaidLeaveAbsent
 		,SUM(UnplannedLeave) AS UnplannedLeave
 		,SUM(WeekendLeave) AS WeekendLeave
+		,SUM(SevenDaysLeave) AS SevenDaysLeave
 		,SUM(OtherDisciplines) AS OtherDisciplines
 		,SUM(SystemSubtractScore) AS SystemSubtractScore
 		,MAX(ModifiedDate) AS ModifiedDate
