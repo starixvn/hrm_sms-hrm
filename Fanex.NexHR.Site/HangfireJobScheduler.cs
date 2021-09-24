@@ -68,9 +68,12 @@
                 RecurringJob.AddOrUpdate("UpdateAnnualLeaveBalance",
                     () => backgroundJob.UpdateAnnualLeaveBalance(), "05 00 1 9 *", TimeZoneInfo.Local); // run once a year at 00:05AM of 1 September
             }
-
-            RecurringJob.AddOrUpdate("SyncWorkingShift",
-                () => backgroundJob.SyncWorkingShift(), "05 00 1 9 *", TimeZoneInfo.Local);
+            if (ConfigSettings.EnableSyncWorkingShift)
+            {
+                RecurringJob.AddOrUpdate("SyncWorkingShift",
+                    () => backgroundJob.SyncWorkingShift(), "05 00 1 9 *", TimeZoneInfo.Local); // every 5 minutes
+            }
+            
         }
     }
 }

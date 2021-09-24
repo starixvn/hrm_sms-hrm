@@ -2,25 +2,33 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Dashboard;
+    using Fanex.NexHR.Models.SyncData;
     using Fanex.NexHR.Services;
+    using Fanex.NexHR.Services.Implement;
 
     public class HomeController : BaseController
     {
         private readonly IDashboardService dashboardService;
         private readonly IEmployeeService employeeService;
+        private readonly ISyncWorkingShiftService syncWorkingShiftService;
 
         public HomeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
-            IDashboardService dashboardService) : base(sessionService)
+            IDashboardService dashboardService,
+            ISyncWorkingShiftService syncWorkingShiftService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.dashboardService = dashboardService;
+            this.syncWorkingShiftService = syncWorkingShiftService;
         }
 
         public ActionResult Index()
@@ -39,6 +47,12 @@
             IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(sessionService.Employee.Id, DateTime.Now);
 
             return PartialView("_MemberRequest", model);
+        }
+
+        public async Task<ActionResult> TestApi()
+        {
+            await syncWorkingShiftService.SyncWorkingShift();
+            return null;
         }
     }
 }

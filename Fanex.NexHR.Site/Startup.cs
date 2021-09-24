@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Web.Configuration;
 using Fanex.Common;
 using Fanex.NexHR.Core;
@@ -17,6 +18,7 @@ namespace Fanex.NexHR.Site
     {
         public static void Configuration(IAppBuilder app)
         {
+            
             var connectionString = Cryptography.DeCryptConnectionString(WebConfigurationManager.ConnectionStrings["nexhrx"].ConnectionString);
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 
@@ -30,6 +32,7 @@ namespace Fanex.NexHR.Site
             app.UseHangfireServer();
 
             HangfireJobScheduler.ScheduleRecurringJobs();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12;
         }
     }
 

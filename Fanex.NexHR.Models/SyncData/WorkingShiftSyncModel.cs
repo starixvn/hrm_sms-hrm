@@ -8,12 +8,24 @@
 
         public string ShiftCode { get; set; }
 
-        public DateTime ShiftDate { get; set; }
+        public string ShiftDate { get; set; }
 
-        public DateTime ShiftStartTime { get; set; }
+        public string ShiftStartTime { get; set; }
 
-        public DateTime ShiftEndTime { get; set; }
+        public string ShiftEndTime { get; set; }
 
-        public DateTime ModifiedDate { get; set; }
+        public string LastUpdated { get; set; }
+
+        public int IsInAfterDay { get; set; }
+
+        public int IsOutAfterDay { get; set; }
+
+        public int IsCrossDay { get; set; }
+
+        public double TotalHours { get; set; }
+
+        public string CheckInTime { get; set; } = "00:00";
+
+        public string CheckOutTime { get; set; } = "00:00";
     }
 }

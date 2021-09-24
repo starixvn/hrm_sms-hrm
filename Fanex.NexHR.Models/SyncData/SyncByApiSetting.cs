@@ -2,9 +2,9 @@
 {
     public class SyncByApiSetting
     {
-        public string BaseUrl { get; set; } = "http://localhost:51384/api";
+        public string BaseUrl { get; set; } = "https://owp1.oneops.net/api";
 
-        public string SyncShiftUrl { get; set; } = "/SyncData/GetShift";
+        public string SyncShiftUrl { get; set; } = "/SyncWorkingShift/2021-09-22/2021-09-22";
 
         public string AuthenticateUrl { get; set; } = "/Token/GetToken";
 
