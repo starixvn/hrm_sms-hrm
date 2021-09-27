@@ -19,51 +19,37 @@
     public class SyncWorkingShiftService : ISyncWorkingShiftService
     {
         private readonly IBaseService baseService;
+        private static HttpClient Client = new HttpClient();
+
         public SyncWorkingShiftService(IBaseService baseService)
         {
             this.baseService = baseService;
         }
         public async Task SyncWorkingShift()
         {
-            
-            using (HttpClient client = new HttpClient())
+            Client.BaseAddress = new Uri(ConfigSettings.SyncWorkingShiftBaseUrl);
+            Client.DefaultRequestHeaders.Accept.Clear();
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var criteria = new GetWorkingShiftLastSyncDateCriteria { };
+            DateTime lastSyncDate = await baseService.GetDataEntityAsync<DateTime>(criteria);
+            var SyncUrl = $"SyncWorkingShift/{lastSyncDate.ToString("yyyy-MM-dd")}/{DateTime.Now.ToString("yyyy-MM-dd")}";
+            var response = await Client.GetAsync(SyncUrl);
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri(ConfigSettings.SyncWorkingShiftBaseUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var criteria = new GetWorkingShiftLastSyncDateCriteria { };
-                DateTime lastSyncDate = await baseService.GetDataEntityAsync<DateTime>(criteria);
-                var SyncUrl = $"SyncWorkingShift/{lastSyncDate.ToString("yyyy-MM-dd")}/{DateTime.Now.ToString("yyyy-MM-dd")}";
-                var response = await client.GetAsync(SyncUrl);
-                if (response.IsSuccessStatusCode)
+                var workingShifts = (await response.Content.ReadAsAsync<IEnumerable<WorkingShiftSyncModel>>()).ToList();
+                if (workingShifts != null && workingShifts.Any())
                 {
-                    var workingShifts = (await response.Content.ReadAsAsync<IEnumerable<WorkingShiftSyncModel>>()).ToList();
-                    if (workingShifts != null && workingShifts.Any())
+                    foreach (var shift in workingShifts)
                     {
-                        var i = 0;
-                        foreach (var shift in workingShifts)
-                        {
-                            if (i == 0)
-                            {
-                                shift.EmployeeID = "00319";
-                                shift.ShiftCode = "WFH";
-                            }
-                            if (i == 1)
-                            {
-                                shift.EmployeeID = "00407";
-                            }
-                            ProcessSyncData(shift);
-                            i++;
-                        }
-                        var command = new ImportWorkingShiftCommand
-                        {
-                            WorkingShiftXml = workingShifts.ToXML().ToString()
-                        };
-                        baseService.GetData<WorkingShiftSyncModel>(command);
+                        ProcessSyncData(shift);
                     }
+                    var command = new ImportWorkingShiftCommand
+                    {
+                        WorkingShiftXml = workingShifts.ToXML().ToString()
+                    };
+                    baseService.GetData<WorkingShiftSyncModel>(command);
                 }
             }
-            
         }
 
         public static void ProcessSyncData(WorkingShiftSyncModel shift)

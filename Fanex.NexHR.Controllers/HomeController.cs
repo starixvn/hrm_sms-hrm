@@ -48,11 +48,5 @@
 
             return PartialView("_MemberRequest", model);
         }
-
-        public async Task<ActionResult> TestApi()
-        {
-            await syncWorkingShiftService.SyncWorkingShift();
-            return null;
-        }
     }
 }
