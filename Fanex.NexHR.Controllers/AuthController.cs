@@ -23,19 +23,22 @@
         private readonly IAuthService authService;
         private readonly IUserService userService;
         private readonly IUCSession ucSession;
+        private readonly ISecurityService securityService;
 
         public AuthController(
             IBaseService baseService,
             ISessionService sessionService,
             IAuthService authService,
             IUserService userService,
-            IUCSession ucSession)
+            IUCSession ucSession,
+            ISecurityService securityService)
         {
             this.baseService = baseService;
             this.sessionService = sessionService;
             this.authService = authService;
             this.userService = userService;
             this.ucSession = ucSession;
+            this.securityService = securityService;
         }
 
         [HttpGet]
@@ -84,7 +87,7 @@
                 Platform = Request.Headers["User-Agent"],
                 BrowserName = Request.Headers["User-Agent"]
             };
-            var loginResult = await userService.LoginAsync(loginParam);
+            var loginResult = await securityService.LoginAsync(loginParam);
 
             return loginResult;
         }
