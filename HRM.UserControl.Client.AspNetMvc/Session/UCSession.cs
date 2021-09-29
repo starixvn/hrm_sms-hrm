@@ -8,9 +8,9 @@
     using HRM.UserControl.Client.Core.Session;
     using Newtonsoft.Json;
 
-    public class UCSession : IUCSession
+    public class UCSession : IUCSession, IRequiresSessionState
     {
-        private static HttpSessionState Session => HttpContext.Current.Session;
+        private static HttpSessionState Session => HttpContext.Current?.Session;
 
         public int UserId
 
@@ -33,7 +33,14 @@
 
         public IList<CompanyRoleFunction> Roles
         {
-            get => JsonConvert.DeserializeObject<IList<CompanyRoleFunction>>(Session[SessionKey.SessionRoles]?.ToString());
+            get
+            {
+                if (Session[SessionKey.SessionRoles] != null)
+                {
+                    return JsonConvert.DeserializeObject<IList<CompanyRoleFunction>>(Session[SessionKey.SessionRoles]?.ToString());
+                }
+                return new List<CompanyRoleFunction>();
+            }
             set => Session.Add(SessionKey.SessionRoles, JsonConvert.SerializeObject(value));
         }
 

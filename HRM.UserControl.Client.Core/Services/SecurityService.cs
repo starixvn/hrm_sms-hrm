@@ -14,10 +14,16 @@
             securityClient = new SecurityClient();
         }
 
-        public async Task<string> RefreshToken()
-            => await securityClient.GetRefreshedToken();
+        public async Task<string> RefreshTokenAsync()
+            => await securityClient.GetRefreshedTokenAsync();
 
         public async Task<LoginResult> LoginAsync(LoginParam loginParam)
             => await securityClient.LoginAsync(loginParam);
+
+        public LoginResult Login(LoginParam loginParam)
+        => securityClient.Login(loginParam);
+
+        public string RefreshToken()
+            => securityClient.GetRefreshedToken();
     }
 }

@@ -231,6 +231,10 @@
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.AspNetMvc\HRM.UserControl.Client.AspNetMvc.csproj">
+      <Project>{bf1e5c00-7ad4-482e-bf32-fddc465bedc7}</Project>
+      <Name>HRM.UserControl.Client.AspNetMvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">
       <Project>{AC67689C-B499-4BF0-86F2-805863047A53}</Project>
       <Name>HRM.UserControl.Client.Core</Name>

@@ -11,7 +11,6 @@
     using HRM.UserControl.Client.Core.Services.Interfaces;
     using HRM.UserControl.Client.Core.Session;
 
-    [SessionState(System.Web.SessionState.SessionStateBehavior.Required)]
     public class HomeController : Controller
     {
         private readonly IUserService userService;
@@ -50,7 +49,7 @@
 
         public async Task<ActionResult> ReCheckIn()
         {
-            var newToken = await securityService.RefreshToken();
+            var newToken = await securityService.RefreshTokenAsync();
             ucSession.JwtToken = newToken;
             return Json(ucSession);
         }
@@ -75,20 +74,6 @@
             var loginResult = await securityService.LoginAsync(loginParam);
 
             return loginResult;
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

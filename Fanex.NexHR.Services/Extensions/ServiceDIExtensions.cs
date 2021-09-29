@@ -87,6 +87,7 @@ namespace Fanex.NexHR.Services.Extensions
             // user control
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IUCSession, UCSession>();
+            container.RegisterType<ISecurityService, SecurityService>();
         }
 
         private static void ResolveRepositoryDI(IUnityContainer container)

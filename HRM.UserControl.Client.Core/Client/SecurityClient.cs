@@ -7,15 +7,37 @@
 
     internal interface ISecurityClient
     {
-        Task<string> GetRefreshedToken();
+        Task<string> GetRefreshedTokenAsync();
+
+        string GetRefreshedToken();
 
         Task<LoginResult> LoginAsync(LoginParam loginParam);
+
+        LoginResult Login(LoginParam loginParam);
     }
 
     internal class SecurityClient : BaseHttpClient, ISecurityClient
     {
-        public async Task<string> GetRefreshedToken()
-       => await PostAsync<string>(RelativePaths.RefreshTokenPath, null);
+        public string GetRefreshedToken()
+            => Post<string>(RelativePaths.RefreshTokenPath, null);
+
+        public async Task<string> GetRefreshedTokenAsync()
+            => await PostAsync<string>(RelativePaths.RefreshTokenPath, null);
+
+        public LoginResult Login(LoginParam loginParam)
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"userId", loginParam.UserId },
+                {"companyId", loginParam.CompanyId },
+                {"ip", loginParam.Ip },
+                {"browserName", loginParam.BrowserName },
+                {"domain", loginParam.Domain },
+                {"platform", Environment.OSVersion.Platform.ToString() }
+            };
+
+            return Post<LoginResult>(RelativePaths.LoginPath, data);
+        }
 
         public async Task<LoginResult> LoginAsync(LoginParam loginParam)
         {

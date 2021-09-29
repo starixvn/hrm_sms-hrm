@@ -26,6 +26,12 @@
             ucSession = UserControlClientManager.UserControlSession;
         }
 
+        protected T Get<T>(string requestUrl, IDictionary<string, object> data = null)
+            => Send<T>(requestUrl, HttpMethod.Get, data);
+
+        protected T Post<T>(string requestUrl, IDictionary<string, object> data)
+            => Send<T>(requestUrl, HttpMethod.Post, data);
+
         protected async Task<T> GetAsync<T>(string requestUrl, IDictionary<string, object> data = null)
             => await SendAsync<T>(requestUrl, HttpMethod.Get, data);
 
@@ -51,6 +57,35 @@
                     if (response.IsSuccessStatusCode)
                     {
                         var responseData = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<T>(responseData);
+
+                        return result;
+                    }
+
+                    return default;
+                }
+            }
+        }
+
+        private T Send<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
+        {
+            ValidateEndPoint(endPoint);
+
+            using (var request = CreateRequest(endPoint, method))
+            {
+                if (data != null)
+                {
+                    var encodedData = JsonConvert.SerializeObject(data);
+                    var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
+                    request.Content = content;
+                }
+                using (var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None).Result)
+                {
+                    ThrowExceptionWhenNotSuccess(response);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseData = response.Content.ReadAsStringAsync().Result;
                         var result = JsonConvert.DeserializeObject<T>(responseData);
 
                         return result;

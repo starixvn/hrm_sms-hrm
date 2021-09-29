@@ -59,6 +59,7 @@
             loginResult.Token = await jwtManagerService.GenerateToken(user.UserId, currentRequestSite.SiteId);
             loginResult.IsLoginSuccess = true;
             loginResult.CompanyId = loginParams.CompanyId;
+            loginResult.UserId = user.UserId;
 
             //await WriteLogForLogin(user.UserId, currentRequestSite.SiteId, loginParams);
 

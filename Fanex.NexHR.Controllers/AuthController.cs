@@ -8,7 +8,6 @@
     using System.Web.Security;
     using Core.Services;
     using Fanex.NexHR.Criteria.Employee;
-    using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
@@ -20,7 +19,6 @@
     {
         private readonly IBaseService baseService;
         private readonly ISessionService sessionService;
-        private readonly IAuthService authService;
         private readonly IUserService userService;
         private readonly IUCSession ucSession;
         private readonly ISecurityService securityService;
@@ -28,14 +26,12 @@
         public AuthController(
             IBaseService baseService,
             ISessionService sessionService,
-            IAuthService authService,
             IUserService userService,
             IUCSession ucSession,
             ISecurityService securityService)
         {
             this.baseService = baseService;
             this.sessionService = sessionService;
-            this.authService = authService;
             this.userService = userService;
             this.ucSession = ucSession;
             this.securityService = securityService;
@@ -48,22 +44,20 @@
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(LoginViewModel model)
+        public ActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                var user = await userService.GetByEmailAsync(model.UserName);
+                var user = userService.GetByEmail(model.UserName);
                 if (user != null)
                 {
-                    var loginResult = await LoginAsync(user);
-
+                    var loginResult = LoginUserControl(user);
                     if (loginResult.IsLoginSuccess)
                     {
                         ucSession.UserId = loginResult.UserId;
                         ucSession.OnCompanyId = loginResult.CompanyId;
                         ucSession.JwtToken = loginResult.Token;
-                        ucSession.Roles = await GetUserRolesOnCompany();
                     }
                 }
             }
@@ -77,7 +71,7 @@
             return roles;
         }
 
-        private async Task<LoginResult> LoginAsync(User user)
+        private LoginResult LoginUserControl(User user)
         {
             var loginParam = new LoginParam
             {
@@ -87,7 +81,7 @@
                 Platform = Request.Headers["User-Agent"],
                 BrowserName = Request.Headers["User-Agent"]
             };
-            var loginResult = await securityService.LoginAsync(loginParam);
+            var loginResult = securityService.Login(loginParam);
 
             return loginResult;
         }

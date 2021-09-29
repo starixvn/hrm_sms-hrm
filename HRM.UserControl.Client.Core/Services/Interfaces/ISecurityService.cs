@@ -5,8 +5,12 @@
 
     public interface ISecurityService
     {
-        Task<string> RefreshToken();
+        Task<string> RefreshTokenAsync();
+
+        string RefreshToken();
 
         Task<LoginResult> LoginAsync(LoginParam loginParam);
+
+        LoginResult Login(LoginParam loginParam);
     }
 }
