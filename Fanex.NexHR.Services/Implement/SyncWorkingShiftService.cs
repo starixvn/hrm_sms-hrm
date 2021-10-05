@@ -19,21 +19,19 @@
     public class SyncWorkingShiftService : ISyncWorkingShiftService
     {
         private readonly IBaseService baseService;
-        private static HttpClient Client = new HttpClient();
+        private readonly HttpClient _httpClient;
 
-        public SyncWorkingShiftService(IBaseService baseService)
+        public SyncWorkingShiftService(IBaseService baseService, HttpClient httpClient)
         {
             this.baseService = baseService;
+            _httpClient = httpClient;
         }
         public async Task SyncWorkingShift()
         {
-            Client.BaseAddress = new Uri(ConfigSettings.SyncWorkingShiftBaseUrl);
-            Client.DefaultRequestHeaders.Accept.Clear();
-            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var criteria = new GetWorkingShiftLastSyncDateCriteria { };
-            DateTime lastSyncDate = await baseService.GetDataEntityAsync<DateTime>(criteria);
-            var SyncUrl = $"SyncWorkingShift/{lastSyncDate.ToString("yyyy-MM-dd")}/{DateTime.Now.ToString("yyyy-MM-dd")}";
-            var response = await Client.GetAsync(SyncUrl);
+            _httpClient.BaseAddress = new Uri(ConfigSettings.SyncWorkingShiftBaseUrl);
+            DateTime lastSyncDate = await baseService.GetDataEntityAsync<DateTime>(new GetWorkingShiftLastSyncDateCriteria { });
+            var SyncUrl = $"SyncWorkingShift/{lastSyncDate:yyyy-MM-dd}/{DateTime.Now:yyyy-MM-dd}";
+            var response = await _httpClient.GetAsync(SyncUrl);
             if (response.IsSuccessStatusCode)
             {
                 var workingShifts = (await response.Content.ReadAsAsync<IEnumerable<WorkingShiftSyncModel>>()).ToList();
