@@ -3,11 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Web.Security;
+    using BCrypt.Net;
     using Core.Services;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
@@ -19,6 +21,7 @@
     {
         private readonly IBaseService baseService;
         private readonly ISessionService sessionService;
+        private readonly IAuthService authService;
         private readonly IUserService userService;
         private readonly IUCSession ucSession;
         private readonly ISecurityService securityService;
@@ -26,12 +29,14 @@
         public AuthController(
             IBaseService baseService,
             ISessionService sessionService,
+            IAuthService authService,
             IUserService userService,
             IUCSession ucSession,
             ISecurityService securityService)
         {
             this.baseService = baseService;
             this.sessionService = sessionService;
+            this.authService = authService;
             this.userService = userService;
             this.ucSession = ucSession;
             this.securityService = securityService;
@@ -50,7 +55,7 @@
             {
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
                 var user = userService.GetByEmail(model.UserName);
-                if (user != null)
+                if (user != null && IsValidPassword(model.Password, user.Password))
                 {
                     var loginResult = LoginUserControl(user);
                     if (loginResult.IsLoginSuccess)
@@ -58,15 +63,31 @@
                         ucSession.UserId = loginResult.UserId;
                         ucSession.OnCompanyId = loginResult.CompanyId;
                         ucSession.JwtToken = loginResult.Token;
+                        ucSession.Roles = GetUserRolesOnCompany();
+                        //HRM session
+                        var employee = new EmployeeSession { Id = 195 };
+                        sessionService.IsShowLeftNavigation = true;
+                        sessionService.Employee = employee;
+                        sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
+                        sessionService.Functions = authService.GetFunctionByEmployeeId(employee.Id);
+                        FormsAuthentication.SetAuthCookie(model.UserName, false);
+                        return RedirectToAction("Index", "Home");
                     }
+                    {
+                        ModelState.AddModelError(string.Empty, loginResult.ErrorMessage);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid username or password");
                 }
             }
             return View(model);
         }
 
-        private async Task<IList<CompanyRoleFunction>> GetUserRolesOnCompany()
+        private IList<CompanyRoleFunction> GetUserRolesOnCompany()
         {
-            var roles = await userService.GetPermissionAsync();
+            var roles = userService.GetPermission();
 
             return roles;
         }
@@ -88,7 +109,7 @@
 
         private static bool IsValidPassword(string plainPwd, string encryptedPwd)
         {
-            return true;
+            return BCrypt.Verify(plainPwd, encryptedPwd); ;
         }
 
         //[HttpPost]
