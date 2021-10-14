@@ -9,10 +9,55 @@ BEGIN
 
 	DECLARE @i INT
 		,@TempEmpId INT
+		,@tempFromDate DATE = @fromTime
+		,@tempToDate DATE = @toTime
+		,@today DATE = GETDATE()
+	DECLARE @tblDateRange TABLE (WorkDate DATE)
 	DECLARE @tblEmployee TABLE (
 		Id INT PRIMARY KEY IDENTITY(1, 1)
 		,EmpId INT
 		)
+
+	IF @tempToDate > @today
+	BEGIN
+		SET @tempToDate = @today
+	END
+
+	WHILE @tempFromDate <= @tempToDate
+	BEGIN
+		IF NOT EXISTS (
+				SELECT 1
+				FROM @tblDateRange
+				WHERE WorkDate = @tempFromDate
+				)
+		BEGIN
+			INSERT INTO @tblDateRange (WorkDate)
+			VALUES (@tempFromDate)
+		END
+
+		SET @tempFromDate = DATEADD(DAY, 1, @tempFromDate)
+	END
+
+	IF EXISTS (
+			SELECT EmpId
+			FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
+				LEFT JOIN @tblDateRange AS tbldate ON empca.WorkDate = tbldate.WorkDate
+			WHERE (
+					@empId IS NULL
+					OR EmpId = @empId
+					)
+				AND tbldate.WorkDate IS NULL
+			)
+	BEGIN
+		DECLARE @ErrCode INT = 0
+			,@ErrMsg VARCHAR(200) = ''
+
+		EXEC dbo.EmployeeCalendar_Insert @EmpId = @empId
+			,@fromdate = @fromTime
+			,@todate = @tempToDate
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	IF EXISTS (
 			SELECT *
