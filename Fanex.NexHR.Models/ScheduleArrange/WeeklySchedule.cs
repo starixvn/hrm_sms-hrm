@@ -23,7 +23,17 @@
         public string Modifier { get; set; }
         public DateTime ModifiedDate { get; set; }
 
-        public bool IsPublic => MondaySchedule != null && MondaySchedule.IsPublic;
+#pragma warning disable S1541 // Methods and properties should not be too complex
+#pragma warning disable S1067 // Expressions should not be too complex
+        public bool IsPublic => MondaySchedule != null && MondaySchedule.IsPublic
+#pragma warning restore S1541 // Methods and properties should not be too complex
+            && TuesdaySchedule != null && TuesdaySchedule.IsPublic
+            && WednesdaySchedule != null && WednesdaySchedule.IsPublic
+            && ThursdaySchedule != null && ThursdaySchedule.IsPublic
+            && FridaySchedule != null && FridaySchedule.IsPublic
+            && SaturdaySchedule != null && SaturdaySchedule.IsPublic
+            && SundaySchedule != null && SundaySchedule.IsPublic;
+#pragma warning restore S1067 // Expressions should not be too complex
 
         public DailySchedule MondaySchedule { get; set; }
         public DailySchedule TuesdaySchedule { get; set; }
