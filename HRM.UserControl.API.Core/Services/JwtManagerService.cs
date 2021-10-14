@@ -1,14 +1,14 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using HRM.UserControl.API.Core.Services.Interfaces;
-using IUC.API.Core.Models;
-using Microsoft.IdentityModel.Tokens;
-
-namespace HRM.UserControl.API.Core.Services
+﻿namespace HRM.UserControl.API.Core.Services
 {
+    using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
+    using HRM.UserControl.API.Core.Services.Interfaces;
+    using IUC.API.Core.Models;
+    using Microsoft.IdentityModel.Tokens;
+
     public interface IJwtManagerService
     {
         Task<string> GenerateToken(int userId, int siteId);
@@ -34,7 +34,7 @@ namespace HRM.UserControl.API.Core.Services
             string tokenValue = string.Empty;
             if (userId > 0 && siteId > 0)
             {
-                var user = await userService.GetUserByIdAsync(userId);
+                var user = await userService.GetByIdAsync(userId);
                 var site = await siteService.GetSiteById(siteId);
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -45,7 +45,7 @@ namespace HRM.UserControl.API.Core.Services
                     {
                     new Claim("UserId", user.UserId.ToString()),
                     new Claim("Email", user.Email),
-                    new Claim("Name", user.NickName),
+                    new Claim("Nickname", user.Nickname),
                     new Claim("SiteId", site.SiteId.ToString()),
                     new Claim(nameof(site.AccessToken), site.AccessToken),
                     }),

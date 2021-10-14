@@ -27,12 +27,11 @@
             this.jwtManagerService = jwtManagerService;
         }
 
-        [Route("api/user/getbyemail")]
+        [Route("api/user/getByUsername")]
         [HttpGet]
-        public async Task<IActionResult> GetUserByEmail(string email)
+        public async Task<IActionResult> GetByUsername(string username)
         {
-            User user = await userService.GetUserByEmailAsync(email);
-
+            User user = await userService.GetByUsernameAsync(username);
             return Ok(user);
         }
 
@@ -41,7 +40,7 @@
         public async Task<IActionResult> LoginAsync([FromBody] LoginParam loginParams)
         {
             LoginResult loginResult = new();
-            User user = await userService.GetUserByIdAsync(loginParams.UserId);
+            User user = await userService.GetByIdAsync(loginParams.UserId);
 
             if (user is null)
             {

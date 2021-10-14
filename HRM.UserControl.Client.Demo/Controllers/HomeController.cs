@@ -30,7 +30,7 @@
 
         public async Task<ActionResult> Index()
         {
-            var user = await userService.GetByEmailAsync("oliver.dang@nexcel.vn");
+            var user = await userService.GetByUsernameAsync("oliver.dang");
             if (user != null)
             {
                 var loginResult = await LoginAsync(user);

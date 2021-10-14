@@ -11,9 +11,9 @@
 
         Task<User> GetByIdAsync(int userId);
 
-        User GetByEmail(string email);
+        User GetByUsername(string username);
 
-        Task<User> GetByEmailAsync(string email);
+        Task<User> GetByUsernameAsync(string username);
 
         IList<CompanyRoleFunction> GetPermission();
 

@@ -31,7 +31,7 @@
         [Route("api/user/getById")]
         public async Task<IActionResult> GetUserById(int userId)
         {
-            User user = await userService.GetUserByIdAsync(userId);
+            User user = await userService.GetByIdAsync(userId);
 
             return Ok(user);
         }

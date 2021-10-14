@@ -15,7 +15,7 @@ namespace HRM.UserControl.Client.AspNetCore.Demo.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await userService.GetByEmailAsync("oliver.dang@nexcel.vn");
+            var user = await userService.GetByUsernameAsync("oliver.dang");
             return Ok(user);
         }
     }

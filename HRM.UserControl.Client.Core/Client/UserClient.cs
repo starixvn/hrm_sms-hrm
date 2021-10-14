@@ -5,33 +5,33 @@
 
     internal interface IUserClient
     {
-        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetByUsernameAsync(string email);
 
-        User GetUserByEmail(string email);
+        User GetByUsername(string email);
 
-        User GetUserById(int userId);
+        User GetById(int userId);
 
-        Task<User> GetUserByIdAsync(int userId);
+        Task<User> GetByIdAsync(int userId);
     }
 
     internal class UserClient : BaseHttpClient, IUserClient
     {
-        public User GetUserByEmail(string email)
-            => Get<User>(string.Format(RelativePaths.GetUserByEmailPath, email));
+        public User GetByUsername(string email)
+            => Get<User>(string.Format(RelativePaths.GetByUsernamePath, email));
 
-        public async Task<User> GetUserByEmailAsync(string email)
-            => await GetAsync<User>(string.Format(RelativePaths.GetUserByEmailPath, email));
+        public async Task<User> GetByUsernameAsync(string email)
+            => await GetAsync<User>(string.Format(RelativePaths.GetByUsernamePath, email));
 
-        public User GetUserById(int userId)
-            => Get<User>(string.Format(RelativePaths.GetUserByIdPath, userId));
+        public User GetById(int userId)
+            => Get<User>(string.Format(RelativePaths.GetByIdPath, userId));
 
-        public async Task<User> GetUserByIdAsync(int userId)
-            => await GetAsync<User>(string.Format(RelativePaths.GetUserByIdPath, userId));
+        public async Task<User> GetByIdAsync(int userId)
+            => await GetAsync<User>(string.Format(RelativePaths.GetByIdPath, userId));
 
         private static class RelativePaths
         {
-            public const string GetUserByEmailPath = "api/user/getByEmail?email={0}";
-            public const string GetUserByIdPath = "api/user/{0}";
+            public const string GetByUsernamePath = "api/user/getByUsername?username={0}";
+            public const string GetByIdPath = "api/user/{0}";
         }
     }
 }

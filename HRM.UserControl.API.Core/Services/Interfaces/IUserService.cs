@@ -8,9 +8,9 @@
 
     public interface IUserService
     {
-        Task<User> GetUserByIdAsync(int userId);
+        Task<User> GetByUsernameAsync(string username);
 
-        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetByIdAsync(int userId);
 
         Task<IEnumerable<SiteModel>> GetUserSiteCompanyAsync(int userId);
 

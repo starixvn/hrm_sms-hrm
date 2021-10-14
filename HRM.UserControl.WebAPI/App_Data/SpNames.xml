@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
     <Function Name="UserLogin">
-        <Setting Key="API_User_GetByEmail" SpName="API_User_GetByEmail" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetByUsername" SpName="User_GetByUsername" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_GetById" SpName="API_User_GetById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_GetUserSites_ById" SpName="User_GetUserSites_ById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_InsertLoginLog" SpName="API_User_InsertLoginLog" DbName="bodb_IUC" Plain="0" />

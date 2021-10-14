@@ -19,17 +19,16 @@
             this.baseService = baseService;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<User> GetByUsernameAsync(string username)
         {
-            var criteria = new GetUserByEmailCriteria
+            var criteria = new GetUserByUsernameCriteria
             {
-                Email = email
+                Username = username
             };
-
             return await baseService.GetDataEntityAsync<User>(criteria);
         }
 
-        public async Task<User> GetUserByIdAsync(int userId)
+        public async Task<User> GetByIdAsync(int userId)
         {
             var criteria = new GetUserByIdCriteria
             {

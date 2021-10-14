@@ -54,7 +54,7 @@
             if (ModelState.IsValid)
             {
                 model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                var user = userService.GetByEmail(model.UserName);
+                var user = userService.GetByUsername(model.UserName);
                 if (user != null && IsValidPassword(model.Password, user.Password))
                 {
                     var loginResult = LoginUserControl(user);
@@ -65,7 +65,7 @@
                         ucSession.JwtToken = loginResult.Token;
                         ucSession.Roles = GetUserRolesOnCompany();
                         //HRM session
-                        var employee = new EmployeeSession { Id = 195 };
+                        var employee = new EmployeeSession { Id = 421 };
                         sessionService.IsShowLeftNavigation = true;
                         sessionService.Employee = employee;
                         sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
@@ -73,6 +73,7 @@
                         FormsAuthentication.SetAuthCookie(model.UserName, false);
                         return RedirectToAction("Index", "Home");
                     }
+                    else
                     {
                         ModelState.AddModelError(string.Empty, loginResult.ErrorMessage);
                     }
@@ -82,6 +83,7 @@
                     ModelState.AddModelError(string.Empty, "Invalid username or password");
                 }
             }
+
             return View(model);
         }
 
@@ -109,7 +111,7 @@
 
         private static bool IsValidPassword(string plainPwd, string encryptedPwd)
         {
-            return BCrypt.Verify(plainPwd, encryptedPwd); ;
+            return BCrypt.Verify(plainPwd, encryptedPwd);
         }
 
         //[HttpPost]

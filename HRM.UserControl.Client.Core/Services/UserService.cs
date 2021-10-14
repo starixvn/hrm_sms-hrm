@@ -19,16 +19,16 @@
         }
 
         public async Task<User> GetByIdAsync(int userId)
-             => await userClient.GetUserByIdAsync(userId);
+             => await userClient.GetByIdAsync(userId);
 
         public User GetById(int userId)
-            => userClient.GetUserById(userId);
+            => userClient.GetById(userId);
 
-        public async Task<User> GetByEmailAsync(string email)
-            => await userClient.GetUserByEmailAsync(email);
+        public async Task<User> GetByUsernameAsync(string username)
+            => await userClient.GetByUsernameAsync(username);
 
-        public User GetByEmail(string email)
-            => userClient.GetUserByEmail(email);
+        public User GetByUsername(string username)
+            => userClient.GetByUsername(username);
 
         public async Task<IList<Company>> GetCompanyAsync()
              => await roleClient.GetUserCompanyOnCurrentSiteAsync();
