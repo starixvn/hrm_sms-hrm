@@ -74,7 +74,7 @@
             {
                 UserId = userId,
                 SiteId = siteId,
-                IPAddress = loginModel.Ip,
+                IP = loginModel.IP,
                 Browser = loginModel.BrowserName,
                 Domain = loginModel.Domain,
                 Platform = loginModel.Platform

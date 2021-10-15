@@ -3,8 +3,8 @@
     <Function Name="User">
         <Setting Key="User_GetByUsername" SpName="User_GetByUsername" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_GetById" SpName="User_GetById" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="User_GetUserSites_ById" SpName="User_GetUserSites_ById" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="User_InsertLogUserLogin" SpName="User_InsertLogUserLogin" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_UpdatePassword" SpName="User_UpdatePassword" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">
         <Setting Key="Site_GetById" SpName="Site_GetById" DbName="bodb_IUC" Plain="0" />

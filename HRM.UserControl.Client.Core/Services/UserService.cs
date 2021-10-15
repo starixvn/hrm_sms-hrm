@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Client;
-    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services.Interfaces;
 
     public class UserService : IUserService

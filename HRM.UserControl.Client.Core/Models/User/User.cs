@@ -1,4 +1,4 @@
-﻿namespace HRM.UserControl.Client.Core.Models
+﻿namespace HRM.UserControl.Client.Core.Models.User
 {
     public class User
     {

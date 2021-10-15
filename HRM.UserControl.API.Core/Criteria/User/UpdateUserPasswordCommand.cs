@@ -1,0 +1,16 @@
+﻿namespace HRM.UserControl.API.Core.Criteria.User
+{
+    using HRM.UserControl.Core.Models;
+
+    public class UpdateUserPasswordCommand : BaseCommandNonQuery
+    {
+        public int UserId { get; set; }
+        public string Password { get; set; }
+        public short SiteId { get; set; }
+        public int ModifiedBy { get; set; }
+
+        public override string GetSettingKey() => "User_UpdatePassword";
+
+        public override bool IsValid() => UserId > 0 && SiteId > 0 && !string.IsNullOrWhiteSpace(Password) && ModifiedBy > 0;
+    }
+}

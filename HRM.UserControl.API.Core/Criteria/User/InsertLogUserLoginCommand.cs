@@ -8,7 +8,7 @@
 
         public short SiteId { get; set; }
 
-        public string IPAddress { get; set; }
+        public string IP { get; set; }
 
         public string Browser { get; set; }
 
@@ -16,8 +16,8 @@
 
         public string Platform { get; set; }
 
-        public override string GetSettingKey() => "User_InsertLogUserLogin";
+        public override string GetSettingKey() => "Log_UserLogin_Insert";
 
-        public override bool IsValid() => UserId > 0 && SiteId > 0 && !string.IsNullOrEmpty(IPAddress);
+        public override bool IsValid() => UserId > 0 && SiteId > 0 && !string.IsNullOrEmpty(IP);
     }
 }

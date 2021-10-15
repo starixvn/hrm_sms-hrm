@@ -3,8 +3,8 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using HRM.UserControl.Client.AspNetMvc.Session;
-    using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
+    using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Services.Interfaces;
     using HRM.UserControl.Client.Core.Session;

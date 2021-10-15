@@ -12,6 +12,8 @@
 
         Task<User> GetByIdAsync(int userId);
 
+        Task<CommandResult> UpdatePasswordAsync(UpdateUserPasswordCommand command);
+
         Task<CommandResult> UserLoginWriteLogAsync(InsertLogUserLoginCommand command);
     }
 
@@ -41,6 +43,11 @@
             };
 
             return await baseService.GetDataEntityAsync<User>(criteria);
+        }
+
+        public async Task<CommandResult> UpdatePasswordAsync(UpdateUserPasswordCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
         }
 
         public async Task<CommandResult> UserLoginWriteLogAsync(InsertLogUserLoginCommand command)
