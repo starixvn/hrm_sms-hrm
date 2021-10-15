@@ -5,13 +5,12 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Services.Interfaces;
     using IUC.API.Core.Models;
     using Microsoft.IdentityModel.Tokens;
 
     public interface IJwtManagerService
     {
-        Task<string> GenerateToken(int userId, int siteId);
+        Task<string> GenerateTokenAsync(int userId, short siteId);
     }
 
     public class JwtManagerService : IJwtManagerService
@@ -29,13 +28,13 @@
             this.settings = settings;
         }
 
-        public async Task<string> GenerateToken(int userId, int siteId)
+        public async Task<string> GenerateTokenAsync(int userId, short siteId)
         {
             string tokenValue = string.Empty;
             if (userId > 0 && siteId > 0)
             {
                 var user = await userService.GetByIdAsync(userId);
-                var site = await siteService.GetSiteById(siteId);
+                var site = await siteService.GetByIdAsync(siteId);
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(settings.SecretKey);

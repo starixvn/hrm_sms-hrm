@@ -1,7 +1,6 @@
 ﻿namespace HRM.UserControl.API.Core
 {
     using HRM.UserControl.API.Core.Services;
-    using HRM.UserControl.API.Core.Services.Interfaces;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class DI
@@ -11,7 +10,6 @@
             services.AddTransient<IJwtManagerService, JwtManagerService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISiteService, SiteService>();
-            services.AddTransient<IRoleService, RoleService>();
         }
     }
 }

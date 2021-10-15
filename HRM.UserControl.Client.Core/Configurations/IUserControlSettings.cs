@@ -2,9 +2,7 @@
 {
     public interface IUserControlSettings
     {
-        int SiteId { get; }
-
-        string SiteName { get; }
+        short SiteId { get; }
 
         string AccessToken { get; }
 

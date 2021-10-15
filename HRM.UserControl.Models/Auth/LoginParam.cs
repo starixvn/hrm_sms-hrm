@@ -3,9 +3,7 @@
     public class LoginParam
     {
         public int UserId { get; set; }
-
-        public int CompanyId { get; set; }
-
+        public short SiteId { get; set; }
         public string Ip { get; set; }
 
         public string BrowserName { get; set; }

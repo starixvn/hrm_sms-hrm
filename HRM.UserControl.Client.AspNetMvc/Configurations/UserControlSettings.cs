@@ -8,23 +8,19 @@
     {
         public UserControlSettings()
         {
-            SiteId = GetValue<int>("HRM.UserControl.Client.Configurations:SiteId");
-            SiteName = GetValue<string>("HRM.UserControl.Client.Configurations:SiteName");
+            SiteId = GetValue<short>("HRM.UserControl.Client.Configurations:SiteId");
             AccessToken = GetValue<string>("HRM.UserControl.Client.Configurations:AccessToken");
             ServiceUrl = GetValue<string>("HRM.UserControl.Client.Configurations:ServiceUrl");
         }
 
-        public UserControlSettings(int siteId, string siteName, string accessToken, string serviceUrl)
+        public UserControlSettings(short siteId, string accessToken, string serviceUrl)
         {
             SiteId = siteId;
-            SiteName = siteName;
             AccessToken = accessToken;
             ServiceUrl = serviceUrl;
         }
 
-        public int SiteId { get; set; }
-
-        public string SiteName { get; set; }
+        public short SiteId { get; set; }
 
         public string AccessToken { get; set; }
 

@@ -3,9 +3,8 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Criteria;
+    using HRM.UserControl.API.Core.Criteria.User;
     using HRM.UserControl.API.Core.Services;
-    using HRM.UserControl.API.Core.Services.Interfaces;
     using HRM.UserControl.Models;
     using HRM.UserControl.Models.Auth;
     using Microsoft.AspNetCore.Http;
@@ -16,14 +15,18 @@
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IUserService userService;
+        private readonly ISiteService siteService;
         private readonly IJwtManagerService jwtManagerService;
 
-        public AuthController(IHttpContextAccessor httpContextAccessor,
+        public AuthController(
+            IHttpContextAccessor httpContextAccessor,
             IUserService userService,
+            ISiteService siteService,
             IJwtManagerService jwtManagerService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.userService = userService;
+            this.siteService = siteService;
             this.jwtManagerService = jwtManagerService;
         }
 
@@ -47,17 +50,17 @@
                 loginResult.ErrorMessage = "User does not exists";
                 return Ok(loginResult);
             }
-            var currentRequestSite = GetUserSiteFromRequestHeader();
-            var userSites = await userService.GetUserSiteCompanyAsync(loginParams.UserId);
-            if (!userSites.Any(site => site.SiteId == currentRequestSite.SiteId))
+
+            var requestSite = GetSiteFromRequestHeader();
+            var sites = await siteService.GetByUserIdAsync(loginParams.UserId);
+            if (!sites.Any(site => site.SiteId == requestSite.SiteId && site.IsActive))
             {
                 loginResult.ErrorMessage = "User have not permission on this site";
                 return Ok(loginResult);
             }
 
-            loginResult.Token = await jwtManagerService.GenerateToken(user.UserId, currentRequestSite.SiteId);
-            loginResult.IsLoginSuccess = true;
-            loginResult.CompanyId = loginParams.CompanyId;
+            loginResult.Token = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
+            loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
 
             //await WriteLogForLogin(user.UserId, currentRequestSite.SiteId, loginParams);
@@ -65,9 +68,9 @@
             return Ok(loginResult);
         }
 
-        private async Task WriteLogForLogin(int userId, int siteId, LoginParam loginModel)
+        private async Task WriteLogForLogin(int userId, short siteId, LoginParam loginModel)
         {
-            var command = new InsertUserLoginLogCommand
+            var command = new InsertLogUserLoginCommand
             {
                 UserId = userId,
                 SiteId = siteId,
@@ -80,7 +83,7 @@
             await userService.UserLoginWriteLogAsync(command);
         }
 
-        private SiteModel GetUserSiteFromRequestHeader()
+        private SiteModel GetSiteFromRequestHeader()
         {
             try
             {

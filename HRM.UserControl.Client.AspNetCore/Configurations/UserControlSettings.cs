@@ -12,15 +12,12 @@
         public UserControlSettings(IConfiguration configuration)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            SiteId = GetValue<int>("HRM.UserControl.Client.Configurations:SiteId");
-            SiteName = GetValue<string>("HRM.UserControl.Client.Configurations:SiteName");
+            SiteId = GetValue<short>("HRM.UserControl.Client.Configurations:SiteId");
             AccessToken = GetValue<string>("HRM.UserControl.Client.Configurations:AccessToken");
             ServiceUrl = GetValue<string>("HRM.UserControl.Client.Configurations:ServiceUrl");
         }
 
-        public int SiteId { get; }
-
-        public string SiteName { get; }
+        public short SiteId { get; }
 
         public string AccessToken { get; }
 

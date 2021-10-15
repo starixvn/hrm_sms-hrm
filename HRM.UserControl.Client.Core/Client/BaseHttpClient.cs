@@ -124,7 +124,6 @@
             var data = new Dictionary<string, object>
             {
                 {nameof(ucSettings.SiteId), ucSettings.SiteId },
-                {nameof(ucSettings.SiteName), ucSettings.SiteName},
                 {nameof(ucSettings.AccessToken), ucSettings.AccessToken }
             };
             return JWT.Encode(data, Encoding.UTF8.GetBytes(ucSettings.AccessToken), JwsAlgorithm.HS256);

@@ -1,9 +1,8 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using HRM.UserControl.API.Core.Services;
-    using HRM.UserControl.API.Core.Services.Interfaces;
     using HRM.UserControl.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -13,18 +12,19 @@
     [Authorize]
     public class UserController : BaseController
     {
-        private readonly IRoleService roleService;
         private readonly IJwtManagerService jwtManagerService;
         private readonly IUserService userService;
+        private readonly ISiteService siteService;
 
-        public UserController(IRoleService roleService,
+        public UserController(
             IJwtManagerService jwtManagerService,
             IUserService userService,
+            ISiteService siteService,
             IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
-            this.roleService = roleService;
             this.jwtManagerService = jwtManagerService;
             this.userService = userService;
+            this.siteService = siteService;
         }
 
         [HttpGet]
@@ -37,35 +37,18 @@
         }
 
         [HttpGet]
-        [Route("api/user/getRolesOnSite")]
-        public async Task<IActionResult> GetCompanyRolesOnSite()
+        [Route("api/user/getSite")]
+        public async Task<IActionResult> GetSite()
         {
-            var companyRoles = await roleService.GetUserRolesOnSite(UserId, SiteId);
-            return Ok(companyRoles);
-        }
-
-        [HttpGet]
-        [Route("api/user/getRoleOnCompany")]
-        public async Task<IActionResult> GetRoleOnCompany(int companyId)
-        {
-            var companyRoles = await roleService.GetUserRolesOnSite(UserId, SiteId);
-            var companyRole = companyRoles.FirstOrDefault(company => company.CompanyId == companyId);
-            return View(companyRole);
-        }
-
-        [HttpPost]
-        [Route("api/user/companies")]
-        public async Task<IActionResult> GetUserCompanyList()
-        {
-            var companies = await userService.GetUserCompanyBySiteAsync(UserId, SiteId);
-            return Ok(companies);
+            IEnumerable<SiteModel> sites = await siteService.GetByUserIdAsync(UserId);
+            return Ok(sites);
         }
 
         [HttpPost]
         [Route("api/refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
-            string token = await jwtManagerService.GenerateToken(UserId, SiteId);
+            string token = await jwtManagerService.GenerateTokenAsync(UserId, SiteId);
 
             return Ok(JsonConvert.SerializeObject(token));
         }

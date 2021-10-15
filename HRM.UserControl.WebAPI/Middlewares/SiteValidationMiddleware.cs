@@ -32,13 +32,14 @@
 
             var site = DecodeJwtToken(jwtToken);
 
-            if (site is null || site.SiteId == 0 || string.IsNullOrWhiteSpace(site.SiteName) || string.IsNullOrWhiteSpace(site.AccessToken))
+            if (site is null || site.SiteId == 0
+                || string.IsNullOrWhiteSpace(site.SiteName) || string.IsNullOrWhiteSpace(site.AccessToken))
             {
                 await UnAuthorizedResponse(context);
                 return;
             }
 
-            var siteInfo = await siteService.GetSiteById(site.SiteId);
+            var siteInfo = await siteService.GetByIdAsync(site.SiteId);
 
             if (siteInfo == null || (siteInfo.AccessToken != site.AccessToken) || !siteInfo.IsActive)
             {

@@ -29,7 +29,6 @@
             var data = new Dictionary<string, object>
             {
                 {"userId", loginParam.UserId },
-                {"companyId", loginParam.CompanyId },
                 {"ip", loginParam.Ip },
                 {"browserName", loginParam.BrowserName },
                 {"domain", loginParam.Domain },
@@ -44,7 +43,6 @@
             var data = new Dictionary<string, object>
             {
                 {"userId", loginParam.UserId },
-                {"companyId", loginParam.CompanyId },
                 {"ip", loginParam.Ip },
                 {"browserName", loginParam.BrowserName },
                 {"domain", loginParam.Domain },

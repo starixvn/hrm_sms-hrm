@@ -4,9 +4,7 @@
     {
         public int UserId { get; set; }
 
-        public int CompanyId { get; set; }
-
-        public bool IsLoginSuccess { get; set; }
+        public bool IsSuccessfull { get; set; }
 
         public string ErrorMessage { get; set; }
 

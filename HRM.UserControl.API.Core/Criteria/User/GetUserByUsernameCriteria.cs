@@ -1,4 +1,4 @@
-﻿namespace HRM.UserControl.API.Core.Criteria
+﻿namespace HRM.UserControl.API.Core.Criteria.User
 {
     using Fanex.Data.Repository;
 

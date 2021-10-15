@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Text;
     using System.Web.Mvc;
     using System.Web.Security;
@@ -13,7 +12,6 @@
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
-    using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Services.Interfaces;
     using HRM.UserControl.Client.Core.Session;
 
@@ -58,12 +56,10 @@
                 if (user != null && IsValidPassword(model.Password, user.Password))
                 {
                     var loginResult = LoginUserControl(user);
-                    if (loginResult.IsLoginSuccess)
+                    if (loginResult.IsSuccessfull)
                     {
                         ucSession.UserId = loginResult.UserId;
-                        ucSession.OnCompanyId = loginResult.CompanyId;
                         ucSession.JwtToken = loginResult.Token;
-                        ucSession.Roles = GetUserRolesOnCompany();
                         //HRM session
                         var employee = new EmployeeSession { Id = 421 };
                         sessionService.IsShowLeftNavigation = true;
@@ -87,19 +83,11 @@
             return View(model);
         }
 
-        private IList<CompanyRoleFunction> GetUserRolesOnCompany()
-        {
-            var roles = userService.GetPermission();
-
-            return roles;
-        }
-
         private LoginResult LoginUserControl(User user)
         {
             var loginParam = new LoginParam
             {
                 UserId = user.UserId,
-                CompanyId = 2,
                 Ip = Request.UserHostAddress,
                 Platform = Request.Headers["User-Agent"],
                 BrowserName = Request.Headers["User-Agent"]

@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace HRM.UserControl.Models
+﻿namespace HRM.UserControl.Models
 {
+    using System.Collections.Generic;
+
     public class Function
     {
         public int RoleId { get; set; }
-
-        public int CompanyId { get; set; }
 
         public int FunctionId { get; set; }
 

@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
-using HRM.UserControl.API.Core.Criteria;
-using HRM.UserControl.Core.Services;
-using HRM.UserControl.Models;
-
-namespace HRM.UserControl.API.Core.Services
+﻿namespace HRM.UserControl.API.Core.Services
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using HRM.UserControl.API.Core.Criteria.Site;
+    using HRM.UserControl.Core.Services;
+    using HRM.UserControl.Models;
+
     public interface ISiteService
     {
-        public Task<SiteModel> GetSiteById(int siteId);
+        Task<SiteModel> GetByIdAsync(short siteId);
+
+        Task<IEnumerable<SiteModel>> GetByUserIdAsync(int userId, bool? isActive = null);
     }
 
     public class SiteService : ISiteService
@@ -19,7 +22,7 @@ namespace HRM.UserControl.API.Core.Services
             this.baseService = baseService;
         }
 
-        public async Task<SiteModel> GetSiteById(int siteId)
+        public async Task<SiteModel> GetByIdAsync(short siteId)
         {
             var criteria = new GetSiteByIdCriteria
             {
@@ -27,6 +30,16 @@ namespace HRM.UserControl.API.Core.Services
             };
 
             return await baseService.GetDataEntityAsync<SiteModel>(criteria);
+        }
+
+        public async Task<IEnumerable<SiteModel>> GetByUserIdAsync(int userId, bool? isActive = null)
+        {
+            var criteria = new GetSiteByUserIdCriteria
+            {
+                UserId = userId,
+                IsActive = isActive
+            };
+            return await baseService.GetDataAsync<SiteModel>(criteria);
         }
     }
 }
