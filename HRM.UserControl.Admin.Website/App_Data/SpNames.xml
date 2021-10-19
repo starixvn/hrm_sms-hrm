@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+    <Function Name="User">
+        <Setting Key="User_GetByUsername" SpName="User_GetByUsername" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetById" SpName="User_GetById" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_UpdatePassword" SpName="User_UpdatePassword" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Site">
+        <Setting Key="Site_GetById" SpName="Site_GetById" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Site_GetByUserId" SpName="Site_GetByUserId" DbName="bodb_IUC" Plain="0" />
+    </Function>
+</Functions>

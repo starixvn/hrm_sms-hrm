@@ -1,0 +1,158 @@
+﻿@import '../../abstracts/mixins';
+@import '../../components/forms';
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: #ffffff;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 12.2% 12.1%;
+
+    @include ipad-landscape {
+        padding: 5%;
+        align-items: center;
+    }
+
+    @include ipad-portrait {
+    }
+}
+
+.block {
+    @include border-radius(5px);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    width: 390px;
+    min-height: 395px;
+    background-color: #fff;
+    padding: 50px 45px 42px;
+    font-size: 16px;
+    position: relative;
+
+    .image-visual {
+        position: absolute;
+        right: 41.1rem;
+        top: -7px;
+
+        @include ipad-landscape {
+            right: 37rem;
+            top: 50%;
+            width: 55rem;
+            transform: translate(0,-50%);
+        }
+
+        @include ipad-portrait {
+            right: 32rem;
+            top: 50%;
+            width: 39rem;
+            transform: translate(0, -50%);
+        }
+    }
+
+    .logo {
+        margin: 0 auto 41px;
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+    }
+
+    .btn-login:hover {
+        background: #003DA1;
+    }
+
+    .group-login {
+        margin-bottom: 20px !important;
+    }
+
+    .group {
+        margin-bottom: 12px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: 38px;
+        margin-bottom: 24px;
+
+        &:last-child {
+            border: 0;
+            margin-bottom: 0;
+            padding-top: 8px;
+            height: auto;
+        }
+
+        .fa {
+            position: absolute;
+            top: 8px;
+            left: 0px;
+        }
+
+        &--error {
+            border: 0;
+            margin-bottom: 0;
+        }
+
+        .form-control {
+            border: 0;
+            appearance: none;
+            background: none;
+            padding: 3px 13px 5px 28px;
+            font-size: 16px;
+            font-style: italic;
+            font-weight: 600;
+            color: #47668A;
+            border-bottom: 1px solid #47668A;
+            outline: none;
+
+            &::placeholder {
+                color: #47668A;
+            }
+
+            &::-webkit-input-placeholder {
+                color: #47668A;
+            }
+
+            &:-ms-input-placeholder {
+                color: #47668A;
+            }
+
+            &.is-invalid {
+                border-bottom-color: #dc3545;
+
+                &:focus {
+                    box-shadow: none;
+                }
+
+                &::placeholder {
+                    color: #dc3545;
+                }
+
+                &::-webkit-input-placeholder {
+                    color: #dc3545;
+                }
+
+                &:-ms-input-placeholder {
+                    color: #dc3545;
+                }
+
+                ~ .ic {
+                    &:before {
+                        color: #dc3545;
+                    }
+                }
+            }
+        }
+
+        .icon {
+            font-size: 16px;
+        }
+
+        .btn.btn-primary {
+            font-size: 16px;
+            text-transform: uppercase;
+            padding: 9px 27px;
+        }
+    }
+}

@@ -10,7 +10,6 @@
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
-    using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
     using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services.Interfaces;

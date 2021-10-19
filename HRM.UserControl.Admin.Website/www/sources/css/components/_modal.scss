@@ -1,0 +1,27 @@
+﻿.modal-dialog {
+    .modal-content {
+        background-clip: unset;
+        border: unset;
+
+        .modal-header {
+            background: #324476;
+            color: $white;
+            padding: .75rem;
+
+            .close {
+                color: $white;
+                padding: .75rem;
+                text-shadow: unset;
+                opacity: 1;
+                outline: none;
+                font-weight: normal;
+            }
+        }
+    }
+
+    &.react-draggable {
+        .modal-header {
+            cursor: move;
+        }
+    }
+}

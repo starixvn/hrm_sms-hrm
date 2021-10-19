@@ -1,0 +1,29 @@
+﻿@import "../abstracts/variables";
+@import "../abstracts/mixins";
+
+.btn {
+    outline: none;
+    min-width: 50px;
+    font-size: 13px;
+    line-height: 22px;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 4px 27px;
+    border: none;
+
+    &:focus, &:active {
+        box-shadow: none;
+    }
+
+    &.disabled, &:disabled {
+        cursor: not-allowed;
+    }
+
+    &.btn-primary {
+        background: $bg-color-button-blue;
+    }
+
+    &.btn-secondary {
+        background: $bg-color-button-gray;
+    }
+}

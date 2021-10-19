@@ -69,6 +69,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetMvc", "AspNetMvc", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.UserControl.Client.AspNetMvc", "HRM.UserControl.Client.AspNetMvc\HRM.UserControl.Client.AspNetMvc.csproj", "{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.UserControl.Admin.Website", "HRM.UserControl.Admin.Website\HRM.UserControl.Admin.Website.csproj", "{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -289,6 +293,18 @@ Global
 		{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7}.Release|x86.Build.0 = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Debug|x86.Build.0 = Debug|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|x86.ActiveCfg = Release|Any CPU
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -317,6 +333,8 @@ Global
 		{4D1DA3A0-B6F5-48E6-9769-4D259EC01B70} = {B5C78ABE-9381-49F1-B893-7CA77966064D}
 		{ECE238EC-DA3D-44DD-B268-640118514328} = {B5C78ABE-9381-49F1-B893-7CA77966064D}
 		{BF1E5C00-7AD4-482E-BF32-FDDC465BEDC7} = {ECE238EC-DA3D-44DD-B268-640118514328}
+		{D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F} = {12E1BE00-4FC9-4325-8460-935F8EA1FE0C}
+		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6} = {D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45

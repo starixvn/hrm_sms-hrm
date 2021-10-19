@@ -808,7 +808,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The User name or Password provided is incorrect..
+        ///   Looks up a localized string similar to Username or Password provided is incorrect..
         /// </summary>
         public static string WrongUsernameOrPassword {
             get {

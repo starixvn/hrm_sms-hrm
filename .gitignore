@@ -35,9 +35,15 @@ $tf*/
 /Fanex.NexHR.Site/Logs
 /Fanex.NexHR.Site/file/uploads/profile
 *.Publish.xml
-packages/
 *.orig
 *.vs
 Fanex.NexHR.Database/Fanex.NexHR.Database.dbmdl
 /Fanex.NexHR.Database/Fanex.NexHR.Database.jfm
+
+packages/
 node_modules/
+*/CoverageReports/
+*/wwwroot/css/dev/
+*/wwwroot/js/dev/
+*/coverage/
+*.cobertura.xml
