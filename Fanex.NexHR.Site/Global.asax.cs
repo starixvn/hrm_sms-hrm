@@ -31,7 +31,7 @@
 
             UserControlClientManager
                .UseSettings(new UserControlSettings())
-               .UseSession(new UCSession());
+               .UseSession(new UserControlSession());
         }
 
         [ValidateInput(false)]

@@ -5,7 +5,7 @@
     using HRM.UserControl.Client.Core.Helpers.Constants;
     using HRM.UserControl.Client.Core.Session;
 
-    public class UCSession : IUCSession, IRequiresSessionState
+    public class UserControlSession : IUserControlSession, IRequiresSessionState
     {
         private static HttpSessionState Session => HttpContext.Current?.Session;
 

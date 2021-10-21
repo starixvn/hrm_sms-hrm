@@ -17,11 +17,13 @@ function generateConfig(environment) {
             [`${jsPath}/lib/lang-en-US`]: pathConfig.scriptPaths.language,
             [`${jsPath}/main`]: pathConfig.scriptPaths.main,
             [`${jsPath}/pages/auth/login`]: pathConfig.scriptPaths.auth_login,
+            [`${jsPath}/pages/site/index`]: pathConfig.scriptPaths.site_index,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
             [`${cssPath}/error`]: pathConfig.cssPaths.error,
-            [`${cssPath}/pages/auth/login`]: pathConfig.cssPaths.auth_login
+            [`${cssPath}/pages/auth/login`]: pathConfig.cssPaths.auth_login,
+            [`${cssPath}/pages/site/index`]: pathConfig.cssPaths.site_index
         },
         output: {
             path: pathConfig.projectRoot,

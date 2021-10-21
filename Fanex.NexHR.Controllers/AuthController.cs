@@ -21,7 +21,7 @@
         private readonly ISessionService sessionService;
         private readonly IAuthService authService;
         private readonly IUserService userService;
-        private readonly IUCSession ucSession;
+        private readonly IUserControlSession userControlSession;
         private readonly ISecurityService securityService;
 
         public AuthController(
@@ -29,14 +29,14 @@
             ISessionService sessionService,
             IAuthService authService,
             IUserService userService,
-            IUCSession ucSession,
+            IUserControlSession userControlSession,
             ISecurityService securityService)
         {
             this.baseService = baseService;
             this.sessionService = sessionService;
             this.authService = authService;
             this.userService = userService;
-            this.ucSession = ucSession;
+            this.userControlSession = userControlSession;
             this.securityService = securityService;
         }
 
@@ -58,8 +58,8 @@
                     var loginResult = LoginUserControl(user);
                     if (loginResult.IsSuccessfull)
                     {
-                        ucSession.UserId = loginResult.UserId;
-                        ucSession.JwtToken = loginResult.Token;
+                        userControlSession.UserId = loginResult.UserId;
+                        userControlSession.JwtToken = loginResult.Token;
                         //HRM session
                         var employee = new EmployeeSession { Id = 421 };
                         sessionService.IsShowLeftNavigation = true;

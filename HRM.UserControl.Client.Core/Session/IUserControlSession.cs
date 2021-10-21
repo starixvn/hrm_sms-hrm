@@ -1,6 +1,6 @@
 ﻿namespace HRM.UserControl.Client.Core.Session
 {
-    public interface IUCSession
+    public interface IUserControlSession
     {
         int UserId { get; set; }
 

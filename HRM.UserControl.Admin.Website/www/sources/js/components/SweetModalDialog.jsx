@@ -1,7 +1,6 @@
 ﻿import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-import DraggableModalDialog from './DraggableModalDialog';
 
 class SweetModalDialog extends Component {
     static propTypes = {
@@ -33,7 +32,7 @@ class SweetModalDialog extends Component {
     render() {
         const { size, title, contents, buttons, backdropClassName, className } = this.props;
         return (
-            <Modal show backdrop="static" dialogAs={DraggableModalDialog}
+            <Modal show backdrop="static"
                 backdropClassName={backdropClassName} className={className}
                 keyboard={false} size={size} centered
                 onHide={this.props.onClose}

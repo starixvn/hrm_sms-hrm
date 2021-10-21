@@ -79,6 +79,24 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Url.
+        /// </summary>
+        public static string InvalidUrl {
+            get {
+                return ResourceManager.GetString("InvalidUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Site Management.
+        /// </summary>
+        public static string SiteManagement {
+            get {
+                return ResourceManager.GetString("SiteManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong username or password!.
         /// </summary>
         public static string WrongUsernameOrPassword {

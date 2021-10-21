@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Configurations\UserControlSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Session\UCSession.cs" />
+    <Compile Include="Session\UserControlSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">

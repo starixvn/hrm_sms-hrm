@@ -1,7 +1,23 @@
 ﻿window._language_en_US = {
+    AccessToken: 'Access Token',
+    Action: 'Action',
+    ActivatedSuccessfully: 'Activated successfully!',
+    Active: 'Active',
+    Cancel: 'Cancel',
+    Confirmation: 'Confirmation',
+    CreateSite: 'Create Site',
+    CreateSiteSuccessfully: 'Create site successfully!',
+    DeactivatedSuccessfully: 'Deactivated successfully!',
     FieldMaxLength: '{0} must not over {1} characters long!',
     FieldRequired: '{0} is required!',
     Login: 'Login',
+    Name: 'Name',
+    OK: 'OK',
     Password: 'Password',
-    Username: 'Username'
+    ThereIsNoData: 'There is no data',
+    UpdateSite: 'Update Site',
+    UpdateSiteSuccessfully: 'Update site successfully!',
+    URL: 'URL',
+    Username: 'Username',
+    Users: 'Users'
 };

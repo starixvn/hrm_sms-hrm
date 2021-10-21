@@ -6,7 +6,7 @@
 
     public class UserControlClientManager
     {
-        private IUCSession ucSession;
+        private IUserControlSession userControlSession;
         private IUserControlSettings userControlSettings;
         private static UserControlClientManager CurrentInstance = new UserControlClientManager();
 
@@ -17,9 +17,9 @@
             return CurrentInstance;
         }
 
-        public UserControlClientManager UseSession(IUCSession userControlSession)
+        public UserControlClientManager UseSession(IUserControlSession userControlSession)
         {
-            CurrentInstance.ucSession = userControlSession ?? throw new ArgumentNullException(nameof(userControlSession));
+            CurrentInstance.userControlSession = userControlSession ?? throw new ArgumentNullException(nameof(userControlSession));
 
             return CurrentInstance;
         }
@@ -27,7 +27,7 @@
         public static IUserControlSettings UserControlSettings
             => CurrentInstance.userControlSettings ?? throw new InvalidOperationException(nameof(CurrentInstance.userControlSettings));
 
-        public static IUCSession UserControlSession
-            => CurrentInstance.ucSession ?? throw new InvalidOperationException(nameof(CurrentInstance.ucSession));
+        public static IUserControlSession UserControlSession
+            => CurrentInstance.userControlSession ?? throw new InvalidOperationException(nameof(CurrentInstance.userControlSession));
     }
 }

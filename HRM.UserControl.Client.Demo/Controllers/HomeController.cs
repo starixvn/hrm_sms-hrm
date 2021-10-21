@@ -13,16 +13,19 @@
     {
         private readonly IUserService userService;
         private readonly ISecurityService securityService;
-        private readonly IUCSession ucSession;
+        private readonly IUserControlSession userControlSession;
 
         public HomeController() : this(null, null, null)
         {
         }
 
-        public HomeController(IUserService userService, IUCSession ucSession, ISecurityService securityService)
+        public HomeController(
+            IUserService userService,
+            IUserControlSession userControlSession,
+            ISecurityService securityService)
         {
             this.userService = userService ?? new UserService();
-            this.ucSession = ucSession ?? new UCSession();
+            this.userControlSession = userControlSession ?? new UserControlSession();
             this.securityService = securityService ?? new SecurityService();
         }
 
@@ -35,8 +38,8 @@
 
                 if (loginResult.IsSuccessfull)
                 {
-                    ucSession.UserId = loginResult.UserId;
-                    ucSession.JwtToken = loginResult.Token;
+                    userControlSession.UserId = loginResult.UserId;
+                    userControlSession.JwtToken = loginResult.Token;
                 }
             }
 
@@ -46,8 +49,8 @@
         public async Task<ActionResult> ReCheckIn()
         {
             var newToken = await securityService.RefreshTokenAsync();
-            ucSession.JwtToken = newToken;
-            return Json(ucSession);
+            userControlSession.JwtToken = newToken;
+            return Json(userControlSession);
         }
 
         private async Task<LoginResult> LoginAsync(User user)

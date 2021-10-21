@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = ViewResources.SiteManagement;
+}
+@section Styles {
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev/pages/site/index.chunk.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/pro/pages/site/index.chunk.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts{
+    <environment include="Development">
+        <script src="~/js/dev/pages/site/index.chunk.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/pro/pages/site/index.chunk.js" asp-append-version="true"></script>
+    </environment>
+}
+@section Breadcrumb {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">@ViewResources.SiteManagement</li>
+    </ol>
+}
+<div id="app-container"></div>

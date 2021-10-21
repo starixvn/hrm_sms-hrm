@@ -17,13 +17,13 @@
     internal class BaseHttpClient
     {
         private static readonly HttpClient httpClient = new HttpClient();
-        private readonly IUserControlSettings ucSettings;
-        private readonly IUCSession ucSession;
+        private readonly IUserControlSettings settings;
+        private readonly IUserControlSession session;
 
         public BaseHttpClient()
         {
-            ucSettings = UserControlClientManager.UserControlSettings;
-            ucSession = UserControlClientManager.UserControlSession;
+            settings = UserControlClientManager.UserControlSettings;
+            session = UserControlClientManager.UserControlSession;
         }
 
         protected T Get<T>(string requestUrl, IDictionary<string, object> data = null)
@@ -106,14 +106,14 @@
 
         private HttpRequestMessage CreateRequest(string endPoint, HttpMethod method)
         {
-            Uri url = new Uri($"{ucSettings.ServiceUrl}{endPoint}");
+            Uri url = new Uri($"{settings.ServiceUrl}{endPoint}");
             var request = new HttpRequestMessage(method, url);
             request.Headers.Accept.Clear();
             string siteIdentity = GenerateSiteIdentity();
             request.Headers.Add("SiteIdentity", $"Bearer {siteIdentity}");
-            if (!string.IsNullOrWhiteSpace(ucSession.JwtToken))
+            if (!string.IsNullOrWhiteSpace(session.JwtToken))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ucSession.JwtToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.JwtToken);
             }
 
             return request;
@@ -123,10 +123,10 @@
         {
             var data = new Dictionary<string, object>
             {
-                {nameof(ucSettings.SiteId), ucSettings.SiteId },
-                {nameof(ucSettings.AccessToken), ucSettings.AccessToken }
+                {nameof(settings.SiteId), settings.SiteId },
+                {nameof(settings.AccessToken), settings.AccessToken }
             };
-            return JWT.Encode(data, Encoding.UTF8.GetBytes(ucSettings.AccessToken), JwsAlgorithm.HS256);
+            return JWT.Encode(data, Encoding.UTF8.GetBytes(settings.AccessToken), JwsAlgorithm.HS256);
         }
 
         private void ThrowExceptionWhenNotSuccess(HttpResponseMessage response)

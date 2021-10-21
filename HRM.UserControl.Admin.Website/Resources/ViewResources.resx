@@ -123,6 +123,12 @@
   <data name="DisabledUser" xml:space="preserve">
     <value>User was disabled.</value>
   </data>
+  <data name="InvalidUrl" xml:space="preserve">
+    <value>Invalid Url</value>
+  </data>
+  <data name="SiteManagement" xml:space="preserve">
+    <value>Site Management</value>
+  </data>
   <data name="WrongUsernameOrPassword" xml:space="preserve">
     <value>Wrong username or password!</value>
   </data>

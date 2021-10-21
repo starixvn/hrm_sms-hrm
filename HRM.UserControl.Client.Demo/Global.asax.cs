@@ -19,7 +19,7 @@ namespace HRM.UserControl.Client.Demo
 
             UserControlClientManager
                .UseSettings(new UserControlSettings())
-               .UseSession(new UCSession());
+               .UseSession(new UserControlSession());
         }
     }
 }

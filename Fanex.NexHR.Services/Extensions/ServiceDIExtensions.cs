@@ -86,7 +86,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
             // user control
             container.RegisterType<IUserService, UserService>();
-            container.RegisterType<IUCSession, UCSession>();
+            container.RegisterType<IUserControlSession, UserControlSession>();
             container.RegisterType<ISecurityService, SecurityService>();
         }
 

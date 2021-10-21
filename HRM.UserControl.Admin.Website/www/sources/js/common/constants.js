@@ -11,7 +11,7 @@ export const DateTimeFormat = 'MM/dd/yyyy hh:mm:ss a';
 export const TimeFormat = 'hh:mm:ss a';
 
 export const ActiveStatusOptions = [
-    { value: '', label: LangHelper.getResource('All') },
+    { value: null, label: LangHelper.getResource('All') },
     { value: true, label: LangHelper.getResource('Active') },
     { value: false, label: LangHelper.getResource('Inactive') }
 ];

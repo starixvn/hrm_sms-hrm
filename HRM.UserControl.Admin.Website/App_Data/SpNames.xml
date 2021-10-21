@@ -7,6 +7,10 @@
         <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">
+        <Setting Key="Site_GetAll" SpName="Site_GetAll" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Site_Insert" SpName="Site_Insert" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Site_Update" SpName="Site_Update" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Site_UpdateStatus" SpName="Site_UpdateStatus" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Site_GetById" SpName="Site_GetById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Site_GetByUserId" SpName="Site_GetByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>

@@ -5,11 +5,11 @@
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
 
-    public class UCSession : IUCSession
+    public class UserControlSession : IUserControlSession
     {
         private readonly IHttpContextAccessor accessor;
 
-        public UCSession(IHttpContextAccessor accessor)
+        public UserControlSession(IHttpContextAccessor accessor)
         {
             this.accessor = accessor;
         }
