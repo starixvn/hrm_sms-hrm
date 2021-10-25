@@ -97,6 +97,15 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Management.
+        /// </summary>
+        public static string UserManagement {
+            get {
+                return ResourceManager.GetString("UserManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong username or password!.
         /// </summary>
         public static string WrongUsernameOrPassword {

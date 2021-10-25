@@ -129,6 +129,9 @@
   <data name="SiteManagement" xml:space="preserve">
     <value>Site Management</value>
   </data>
+  <data name="UserManagement" xml:space="preserve">
+    <value>User Management</value>
+  </data>
   <data name="WrongUsernameOrPassword" xml:space="preserve">
     <value>Wrong username or password!</value>
   </data>
