@@ -52,8 +52,8 @@
             var criteria = new GetEmployeeCalendarByMonthCriteria
             {
                 EmpId = sessionService.Employee.Id,
-                FromDate = date,
-                ToDate = date.AddMonths(1).AddDays(-1)
+                FromDate = date.FirstDayOfMonth(),
+                ToDate = date.LastDayOfMonth()
             };
             IEnumerable<DailySchedule> workingSchedule = workingCalendarService.GetWorkingSchedule(criteria);
 

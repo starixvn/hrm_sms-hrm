@@ -12,6 +12,7 @@ $(document).ready(function () {
     let calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin],
         defaultView: 'dayGridMonth',
+        locale: 'vi',
         height: 500,
         firstDay: 1,
         editable: false,
@@ -26,7 +27,7 @@ $(document).ready(function () {
             blockUI();
             axios(resolveClientUrl('calendar/GetWorkingSchedule'), {
                 params: {
-                    date: fetchInfo.start
+                    date: moment(fetchInfo.start).format('DD-MMM-YYYY')
                 }
             }).then(response => {
                 let data = [];
