@@ -53,7 +53,7 @@
             {
                 EmpId = sessionService.Employee.Id,
                 FromDate = date.FirstDayOfMonth(),
-                ToDate = date.LastDayOfMonth()
+                ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
             };
             IEnumerable<DailySchedule> workingSchedule = workingCalendarService.GetWorkingSchedule(criteria);
 

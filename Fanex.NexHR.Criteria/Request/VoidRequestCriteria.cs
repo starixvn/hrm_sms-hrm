@@ -8,14 +8,15 @@
     {
         public long RequestId { get; set; }
         public int ActorId { get; set; }
-        public string Comment { get; set; }
 
         [SpParam(Ignored = true)]
         public RequestType RequestTypeId { get; set; }
 
+        public string Comment { get; set; }
+
         public override string GetSettingKey()
         {
-            var key = string.Empty;
+            string key;
             switch (RequestTypeId)
             {
                 case RequestType.CheckIn:
