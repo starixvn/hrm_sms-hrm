@@ -4,29 +4,33 @@
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Paternity;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Paternity;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class PaternityController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IPaternityService paternityService;
 
         public PaternityController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IPaternityService paternityService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.paternityService = paternityService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return View();
         }
 
@@ -34,7 +38,7 @@
         public ActionResult ListPaternity(int year)
         {
             var paternities = paternityService.GetAll(year);
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_ListPaternity", paternities);
         }
 

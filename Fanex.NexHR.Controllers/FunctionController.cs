@@ -5,7 +5,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -13,17 +12,22 @@
     using Fanex.NexHR.Models.Function;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Function;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class FunctionController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IFunctionService functionService;
         private readonly IRoleService roleService;
 
         public FunctionController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IFunctionService functionService,
             IRoleService roleService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.functionService = functionService;
             this.roleService = roleService;
         }
@@ -36,7 +40,7 @@
             var functionTrees = new TreeFunctionViewModel
             {
                 RoleId = roleId ?? systemRoles.First().RoleId,
-                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
+                IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
                 Functions = GetFunctionTrees(functions)
             };
 

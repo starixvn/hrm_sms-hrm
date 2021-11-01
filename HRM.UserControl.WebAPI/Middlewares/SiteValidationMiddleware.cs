@@ -23,7 +23,6 @@
         public async Task Invoke(HttpContext context)
         {
             string jwtToken = context.Request.Headers["SiteIdentity"].ToString().Replace("Bearer ", string.Empty);
-
             if (string.IsNullOrWhiteSpace(jwtToken))
             {
                 await UnAuthorizedResponse(context);
@@ -31,16 +30,13 @@
             }
 
             var site = DecodeJwtToken(jwtToken);
-
-            if (site is null || site.SiteId == 0
-                || string.IsNullOrWhiteSpace(site.SiteName) || string.IsNullOrWhiteSpace(site.AccessToken))
+            if (site is null || site.SiteId == 0 || string.IsNullOrWhiteSpace(site.AccessToken))
             {
                 await UnAuthorizedResponse(context);
                 return;
             }
 
             var siteInfo = await siteService.GetByIdAsync(site.SiteId);
-
             if (siteInfo == null || (siteInfo.AccessToken != site.AccessToken) || !siteInfo.IsActive)
             {
                 await UnAuthorizedResponse(context);

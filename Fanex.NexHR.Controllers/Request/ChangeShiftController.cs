@@ -17,10 +17,13 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ChangeShiftController : BaseController
     {
         private const string UploadFolderPath = "/file/uploads/request/";
+        private readonly IUserControlSession userControlSession;
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
@@ -28,11 +31,13 @@
 
         public ChangeShiftController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
             IShiftService shiftService,
             IAttachFileService attachFileService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
             this.shiftService = shiftService;
@@ -71,8 +76,8 @@
             };
             ViewBag.IsHost = true;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
-            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
             return View(model);
         }
 

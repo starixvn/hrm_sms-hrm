@@ -8,7 +8,6 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Services.Interfaces;
     using HRM.UserControl.Client.AspNetMvc.Session;
     using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Services.Interfaces;
     using HRM.UserControl.Client.Core.Session;
     using Unity;
 
@@ -17,6 +16,13 @@ namespace Fanex.NexHR.Services.Extensions
         public static void ResolveServiceCoreDI(this IUnityContainer container)
         {
             ResolveRepositoryDI(container);
+
+            // user control
+            container.RegisterType<IUserService, UserService>();
+            container.RegisterType<IUserControlSession, UserControlSession>();
+            container.RegisterType<ISecurityService, SecurityService>();
+            container.RegisterType<ICryptoService, CryptoService>();
+
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();

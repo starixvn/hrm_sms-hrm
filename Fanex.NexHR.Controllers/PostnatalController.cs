@@ -5,30 +5,34 @@
     using System.Linq;
     using System.Web.Mvc;
     using Core.Constants;
-    using Core.Enums;
     using Core.Models;
     using Criteria.Postnatal;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
     using ViewModels.Postnatal;
 
     public class PostnatalController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IPostnatalService postnatalService;
 
         public PostnatalController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IPostnatalService postnatalService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.postnatalService = postnatalService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return View();
         }
 
@@ -36,7 +40,7 @@
         public ActionResult GetPostnatalGrid(int year)
         {
             IList<EmployeePostnatal> postnatals = postnatalService.GetAll(year);
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_PostnatalGrid", postnatals);
         }
 

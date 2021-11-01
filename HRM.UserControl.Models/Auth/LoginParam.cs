@@ -2,8 +2,9 @@
 {
     public class LoginParam
     {
-        public int UserId { get; set; }
-        public short SiteId { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Token { get; set; }
         public string IP { get; set; }
         public string BrowserName { get; set; }
         public string Domain { get; set; }

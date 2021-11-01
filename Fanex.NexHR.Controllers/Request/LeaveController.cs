@@ -17,10 +17,13 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class LeaveController : BaseController
     {
         private const string UploadFolderPath = "/file/uploads/request/";
+        private readonly IUserControlSession userControlSession;
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
@@ -29,12 +32,14 @@
 
         public LeaveController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
             ICommonDataService commonDataService,
             IAttachFileService attachFileService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
@@ -84,8 +89,8 @@
                 EnableSickLeaveBalance = setting.EnableSickLeaveBalance
             };
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -147,8 +152,8 @@
 
             ViewBag.IsView = false;
             ViewBag.IsTopManager = request.Requester.IsTopManager;
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }
@@ -199,8 +204,8 @@
             model.Approvers = supervisor.Approvers;
 
             ViewBag.IsView = true;
-            ViewBag.HasOnBehalfOthersPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(model);
         }

@@ -11,20 +11,25 @@
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
     using Resources;
 
     public class JobTitleController : BaseExportController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IJobTitleExportService jobTitleExportService;
         private readonly IBaseService baseService;
 
         public JobTitleController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ICommonDataService commonDataService,
             IJobTitleExportService jobTitleExportService,
             IBaseService baseService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;
             this.jobTitleExportService = jobTitleExportService;
             this.baseService = baseService;
@@ -34,7 +39,7 @@
         public ActionResult JobTitleManagement()
         {
             IList<SelectListItem> jobCategories = GetJobCategories();
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return View(jobCategories);
         }
@@ -44,7 +49,7 @@
         public ActionResult GetJobTitles(string jobTitle)
         {
             IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
 
             return PartialView("~/Views/JobTitle/_JobTitleGrid.cshtml", jobTitles);
         }

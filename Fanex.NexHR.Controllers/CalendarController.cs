@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
@@ -14,6 +13,7 @@
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Enumerables;
 
     public class CalendarController : BaseController
     {

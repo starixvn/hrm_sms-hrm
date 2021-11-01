@@ -2,7 +2,7 @@
 {
     using HRM.UserControl.Core.Models;
 
-    public class UpdateUserPasswordCommand : BaseCommandNonQuery
+    public class UpdateUserPasswordCommand : BaseNonQueryCommand
     {
         public int UserId { get; set; }
         public string Password { get; set; }

@@ -10,4 +10,10 @@
         <Setting Key="Site_GetById" SpName="Site_GetById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Site_GetByUserId" SpName="Site_GetByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
+    <Function Name="Function">
+        <Setting Key="API_Function_GetByUserId" SpName="API_Function_GetByUserId" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Menu">
+        <Setting Key="API_MenuItem_GetByUserId" SpName="API_MenuItem_GetByUserId" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

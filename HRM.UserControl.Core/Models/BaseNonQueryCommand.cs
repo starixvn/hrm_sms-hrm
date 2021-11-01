@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public abstract class BaseCommandNonQuery : NonQueryCommand
+    public abstract class BaseNonQueryCommand : NonQueryCommand
     {
         public int ErrCode { get; set; }
 

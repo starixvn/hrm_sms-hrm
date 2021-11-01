@@ -14,10 +14,13 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class CheckInOutController : BaseController
     {
         private const string UploadFolderPath = "/file/uploads/request/";
+        private readonly IUserControlSession userControlSession;
         private readonly ICheckInOutRequestService checkInOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
@@ -26,12 +29,14 @@
 
         public CheckInOutController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IShiftService shiftService,
             IAttachFileService attachFileService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.checkInOutRequestService = checkInOutRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
@@ -82,8 +87,8 @@
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
             ViewBag.Shift = shift;
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
-            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(viewModel);
         }

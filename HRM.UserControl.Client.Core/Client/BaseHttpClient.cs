@@ -41,7 +41,6 @@
         private async Task<T> SendAsync<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
         {
             ValidateEndPoint(endPoint);
-
             using (var request = CreateRequest(endPoint, method))
             {
                 if (data != null)
@@ -53,7 +52,6 @@
                 using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
                 {
                     ThrowExceptionWhenNotSuccess(response);
-
                     if (response.IsSuccessStatusCode)
                     {
                         var responseData = await response.Content.ReadAsStringAsync();
@@ -70,7 +68,6 @@
         private T Send<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
         {
             ValidateEndPoint(endPoint);
-
             using (var request = CreateRequest(endPoint, method))
             {
                 if (data != null)

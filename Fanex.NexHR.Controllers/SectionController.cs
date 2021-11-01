@@ -7,7 +7,6 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Section;
     using Fanex.NexHR.Models;
@@ -15,9 +14,12 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Section;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class SectionController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IUnitService unitService;
         private readonly ISectionService sectionService;
@@ -27,11 +29,13 @@
         public SectionController(
             IUnitService unitService,
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ICommonDataService commonDataService,
             IDepartmentService departmentService,
             ISectionService sectionService,
             IBaseService baseService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;
             this.sectionService = sectionService;
             this.baseService = baseService;
@@ -42,7 +46,7 @@
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
         public ActionResult Index(bool? isActive = null)
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
             var model = new SectionViewModel
             {
                 IsActive = isActive,
@@ -61,7 +65,7 @@
                 model.Sections = sectionService.GetSection(isActive: model.IsActive);
             }
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
 
             return View(model);
         }

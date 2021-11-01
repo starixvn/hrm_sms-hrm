@@ -16,10 +16,13 @@
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.ScheduleArrange;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ScheduleArrangeController : BaseController
     {
         private const string DateFormat = "dd-MMM-yyyy";
+        private readonly IUserControlSession userControlSession;
         private readonly IRoleService roleService;
         private readonly IScheduleArrangeService scheduleArrangeService;
         private readonly ISyncWorkingShiftService syncWorkingShiftService;
@@ -27,11 +30,13 @@
 
         public ScheduleArrangeController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IRoleService roleService,
             IScheduleArrangeService scheduleArrangeService,
             ISyncWorkingShiftService syncWorkingShiftService,
             IExportExcelScheduleService exportExcelService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.roleService = roleService;
             this.scheduleArrangeService = scheduleArrangeService;
             this.syncWorkingShiftService = syncWorkingShiftService;
@@ -42,8 +47,8 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult Index()
         {
-            ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
-            ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
+            ViewBag.HasPermissionToViewHoliday = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
+            ViewBag.HasPermissionToViewShift = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
             ViewBag.EnableSyncWorkingShift = ConfigSettings.EnableManualSyncWorkingShift;
             ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
                 .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
@@ -190,15 +195,15 @@
             bool isHost = false;
             DateTime firstDayOfWeek = DateTime.Now.FirstDayOfWeek();
 
-            if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host))
+            if (userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host))
             {
                 isHost = true;
             }
-            else if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleFromCurrentWeek, Policy.Host))
+            else if (userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleFromCurrentWeek, Policy.Host))
             {
                 isHost = fromDate.Date >= firstDayOfWeek;
             }
-            else if (sessionService.HasPermissionOnFunction(FunctionKey.EditScheduleFromNextWeek, Policy.Host))
+            else if (userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleFromNextWeek, Policy.Host))
             {
                 const int NextWeek = 7;
                 isHost = fromDate.Date >= firstDayOfWeek.AddDays(NextWeek);

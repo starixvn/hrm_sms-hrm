@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.Core.Constants
-@using Fanex.NexHR.Core.Models
-@model IEnumerable<FunctionSession>
+@using HRM.UserControl.Client.Core.Models
+@model IEnumerable<FunctionPermission>
 @{
     ViewBag.Title = Labels.Reports;
 }
@@ -26,7 +26,7 @@
         @if (Model != null && Model.Count() > 0)
         {
             var rowIndex = 1;
-            foreach (FunctionSession function in Model)
+            foreach (FunctionPermission function in Model)
             {
                 switch (function.FunctionKey)
                 {

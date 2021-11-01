@@ -171,7 +171,6 @@
     <Compile Include="Enums\OvertimeType.cs" />
     <Compile Include="Enums\Permision.cs" />
     <Compile Include="Enums\LeaveTypes.cs" />
-    <Compile Include="Enums\Policy.cs" />
     <Compile Include="Enums\Relationship.cs" />
     <Compile Include="Enums\RequestViewType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
@@ -198,8 +197,6 @@
     <Compile Include="JsonConverter.cs" />
     <Compile Include="Models\CommandResult.cs" />
     <Compile Include="Models\EmployeeSession.cs" />
-    <Compile Include="Models\FunctionSession.cs" />
-    <Compile Include="Models\MenuItemSession.cs" />
     <Compile Include="Models\SortModel.cs" />
     <Compile Include="Models\SystemSetting.cs" />
     <Compile Include="NPOIExtensions\HSSFCellExtensions.cs" />
@@ -254,6 +251,14 @@
     <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
       <Project>{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168}</Project>
       <Name>Fanex.NexHR.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.AspNetMvc\HRM.UserControl.Client.AspNetMvc.csproj">
+      <Project>{bf1e5c00-7ad4-482e-bf32-fddc465bedc7}</Project>
+      <Name>HRM.UserControl.Client.AspNetMvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">
+      <Project>{ac67689c-b499-4bf0-86f2-805863047a53}</Project>
+      <Name>HRM.UserControl.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

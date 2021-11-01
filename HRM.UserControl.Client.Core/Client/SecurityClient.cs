@@ -28,8 +28,9 @@
         {
             var data = new Dictionary<string, object>
             {
-                {"userId", loginParam.UserId },
-                {"ip", loginParam.Ip },
+                {"username", loginParam.Username },
+                {"password", loginParam.Password },
+                {"token", loginParam.Token },
                 {"browserName", loginParam.BrowserName },
                 {"domain", loginParam.Domain },
                 {"platform", Environment.OSVersion.Platform.ToString() }
@@ -42,8 +43,10 @@
         {
             var data = new Dictionary<string, object>
             {
-                {"userId", loginParam.UserId },
-                {"ip", loginParam.Ip },
+                {"username", loginParam.Username },
+                {"password", loginParam.Password },
+                {"token", loginParam.Token },
+                {"ip", loginParam.IP },
                 {"browserName", loginParam.BrowserName },
                 {"domain", loginParam.Domain },
                 {"platform", Environment.OSVersion.Platform.ToString() }
@@ -54,7 +57,7 @@
 
         private static class RelativePaths
         {
-            public const string LoginPath = "api/auth/signin";
+            public const string LoginPath = "api/auth/login";
             public const string RefreshTokenPath = "api/refreshToken";
         }
     }

@@ -1,6 +1,10 @@
 ﻿namespace HRM.UserControl.Client.AspNetCore.Session
 {
-    using HRM.UserControl.Client.Core.Helpers.Constants;
+    using System.Collections.Generic;
+    using System.Linq;
+    using HRM.UserControl.Client.Core.Constants;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
@@ -24,6 +28,43 @@
         {
             get => accessor.HttpContext.Session?.GetString(SessionKey.SessionJwtToken) ?? string.Empty;
             set => accessor.HttpContext.Session.SetString(SessionKey.SessionJwtToken, value);
+        }
+
+        public IList<FunctionPermission> Functions
+        {
+            get => accessor.HttpContext.Session.Get<List<FunctionPermission>>(SessionKey.SessionFunctions);
+            set => accessor.HttpContext.Session.Set(SessionKey.SessionFunctions, value);
+        }
+
+        public IList<MenuItem> MenuItems
+        {
+            get => accessor.HttpContext.Session.Get<List<MenuItem>>(SessionKey.SessionMenuItems);
+            set => accessor.HttpContext.Session.Set(SessionKey.SessionMenuItems, value);
+        }
+
+        public bool HasPermissionOnFunction(string functionKey, Policy policy)
+        {
+            var result = false;
+
+            if (Functions != null && Functions.Any(x => x.FunctionKey == functionKey))
+            {
+                switch (policy)
+                {
+                    case Policy.Read:
+                        result = Functions.Any(x => x.FunctionKey == functionKey && (x.IsRead || x.IsHost));
+                        break;
+
+                    case Policy.Host:
+                        result = Functions.Any(x => x.FunctionKey == functionKey && x.IsHost);
+                        break;
+
+                    default:
+                        result = false;
+                        break;
+                }
+            }
+
+            return result;
         }
 
         public void ClearAll()

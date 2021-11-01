@@ -3,24 +3,28 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class MenuController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IMenuService menuService;
         private readonly IFunctionService functionService;
 
         public MenuController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IMenuService menuService,
             IFunctionService functionService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.menuService = menuService;
             this.functionService = functionService;
         }
@@ -30,7 +34,7 @@
         public ActionResult Index()
         {
             IEnumerable<MenuViewModel> menus = menuService.GetMenus();
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.MenuManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.MenuManagement, Policy.Host);
 
             return View(menus);
         }

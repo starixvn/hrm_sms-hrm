@@ -1,4 +1,4 @@
-﻿@using Fanex.NexHR.Core.Enums
+﻿@using HRM.UserControl.Client.Core.Enumerables
 @using Fanex.NexHR.Models
 @using Fanex.NexHR.ViewModels.Function
 
@@ -23,7 +23,7 @@
             @function.Name
         </td>
         <td>
-            @if (function.Policy == (int)Policy.None || function.Policy == (int)Policy.Read)
+            @if (function.Policy == (byte)Policy.None || function.Policy == (byte)Policy.Read)
             {
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" name="criteria.funcRead" id="funcRead@(function.FunctionId)"
@@ -34,7 +34,7 @@
             }
         </td>
         <td>
-            @if (function.Policy == (int)Policy.None || function.Policy == (int)Policy.Host)
+            @if (function.Policy == (byte)Policy.None || function.Policy == (byte)Policy.Host)
             {
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" name="criteria.funcHost" id="funcHost@(function.FunctionId)"

@@ -4,28 +4,32 @@
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Unit;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Unit;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class UnitController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IUnitService unitService;
 
         public UnitController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IUnitService unitService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.unitService = unitService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.UnitManagement)]
         public ActionResult Index(bool? isActive = null)
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
             var model = new UnitViewModel
             {
                 IsActive = isActive,

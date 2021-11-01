@@ -13,11 +13,14 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class LateInEarlyOutController : BaseController
     {
         private const string UploadFolderPath = "/file/uploads/request/";
         private const int DefaultMinutes = 60;
+        private readonly IUserControlSession userControlSession;
         private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
@@ -25,11 +28,13 @@
 
         public LateInEarlyOutController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IAttachFileService attachFileService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
@@ -70,8 +75,8 @@
                 Approvers = supervisor.Approvers
             };
             ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
-            ViewBag.HasOnBehalfRequestPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
             return View(viewModel);
         }

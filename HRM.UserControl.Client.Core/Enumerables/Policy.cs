@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Core.Enums
+﻿namespace HRM.UserControl.Client.Core.Enumerables
 {
     public enum Policy
     {

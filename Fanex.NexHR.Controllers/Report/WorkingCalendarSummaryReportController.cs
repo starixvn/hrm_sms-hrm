@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Dynamic;
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
@@ -12,6 +11,7 @@
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
+    using HRM.UserControl.Client.Core.Enumerables;
 
     [HRMPermission(Policy.Read, FunctionKey.WorkingCalendarReport)]
     public class WorkingCalendarSummaryReportController : BaseController

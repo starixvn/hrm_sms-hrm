@@ -43,8 +43,6 @@
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                     new Claim("UserId", user.UserId.ToString()),
-                    new Claim("Email", user.Email),
-                    new Claim("Nickname", user.Nickname),
                     new Claim("SiteId", site.SiteId.ToString()),
                     new Claim(nameof(site.AccessToken), site.AccessToken),
                     }),

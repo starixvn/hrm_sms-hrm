@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Report;
@@ -20,20 +19,26 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Report;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Session;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IReportService reportService;
         private readonly ITeamService teamService;
         private readonly ICommonDataService commonDataService;
 
         public ReportController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IReportService reportSevice,
             ICommonDataService commonDataService,
             ITeamService teamService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.reportService = reportSevice;
             this.teamService = teamService;
             this.commonDataService = commonDataService;
@@ -42,7 +47,7 @@
         [HRMPermission(Policy.Read, FunctionKey.ReportHome)]
         public ActionResult Index()
         {
-            IEnumerable<FunctionSession> functions = sessionService.Functions.Where(x => x.IsRead || x.IsHost);
+            IEnumerable<FunctionPermission> functions = userControlSession.Functions.Where(x => x.IsRead || x.IsHost);
             return View(functions);
         }
 
@@ -87,8 +92,8 @@
             model.ItemsPerPage = Constants.ItemsPerPage;
             model.TeamIds = string.Join(",", teamService.GetBySupervisor(sessionService.Employee.Id).Select(x => x.Id));
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             return View(model);
         }
@@ -97,8 +102,8 @@
         public ActionResult TimeRecordDetail(TimeRecordViewModel model)
         {
             int? employeeId = null;
-            if (!sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-                && !sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
+            if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+                && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
             {
                 employeeId = sessionService.Employee.Id;
             }
@@ -114,7 +119,7 @@
                 SupervisorId = sessionService.Employee.Id
             };
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
             var pagerOption = new PagerOptionModel
             {
@@ -199,8 +204,8 @@
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
-                || sessionService.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
             return View(model);
         }
@@ -289,15 +294,14 @@
         {
             IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
             IEnumerable<MultiSelectViewModel> multiSelectViewModel = leaveTypes.Where(x => x.Id == (int)LeaveTypes.MaternityLeave
-                                                                                    || x.Id == (int)LeaveTypes.PaternityLeave
-                                                                                    || x.Id == (int)LeaveTypes.UnpaidLeave
-                                                                                    || x.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                                                                                    ).Select(u => new MultiSelectViewModel
-                                                                                    {
-                                                                                        Id = u.Id,
-                                                                                        Text = u.Name,
-                                                                                        IsLeaf = true,
-                                                                                    });
+                || x.Id == (int)LeaveTypes.PaternityLeave
+                || x.Id == (int)LeaveTypes.UnpaidLeave
+                || x.Id == (int)LeaveTypes.UnpaidLeaveInsurance).Select(u => new MultiSelectViewModel
+                {
+                    Id = u.Id,
+                    Text = u.Name,
+                    IsLeaf = true,
+                });
 
             return new CustomJsonResult { Data = multiSelectViewModel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

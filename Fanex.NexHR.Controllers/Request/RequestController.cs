@@ -17,6 +17,7 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
+    using HRM.UserControl.Client.Core.Enumerables;
 
     public class RequestController : BaseController
     {

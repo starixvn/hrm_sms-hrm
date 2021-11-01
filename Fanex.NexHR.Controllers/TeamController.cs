@@ -18,10 +18,13 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Team;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.TeamManagement)]
     public class TeamController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly ITeamService teamService;
         private readonly ISectionService sectionService;
         private readonly IBaseService baseService;
@@ -29,11 +32,13 @@
 
         public TeamController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             ITeamService teamService,
             ISectionService sectionService,
             IBaseService baseService,
             IEmployeeService employeeService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.teamService = teamService;
             this.sectionService = sectionService;
             this.baseService = baseService;
@@ -43,8 +48,8 @@
         public ActionResult Index(string keyword = null)
         {
             IList<Team> teams = teamService.GetAll(keyword: keyword);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
-            ViewBag.HasPermissionToViewEmployee = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
+            ViewBag.HasPermissionToViewEmployee = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
             return View(teams);
         }
 
@@ -287,7 +292,7 @@
             {
                 TeamId = team.Id,
                 Team = team.Name,
-                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
+                IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
                 DisciplineRules = teamService.GetDisciplineRuleByTeam(id)
             };
             return View(model);

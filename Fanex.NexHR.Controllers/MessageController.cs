@@ -3,26 +3,30 @@
     using System;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models.Message;
     using Fanex.NexHR.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class MessageController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IMessageService messageService;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
 
         public MessageController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IMessageService messageService,
             ICommonDataService commonDataService,
             IEmployeeService employeeService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.messageService = messageService;
             this.commonDataService = commonDataService;
             this.employeeService = employeeService;
@@ -40,7 +44,7 @@
             };
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
             return View(param);
         }
@@ -55,7 +59,7 @@
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
             return View(param);
         }

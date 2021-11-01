@@ -5,7 +5,6 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.Department;
@@ -13,19 +12,24 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Department;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class DepartmentController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IDepartmentService departmentService;
         private readonly IBaseService baseService;
         private readonly IUnitService unitService;
 
         public DepartmentController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IDepartmentService departmentService,
             IUnitService unitService,
             IBaseService baseService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.departmentService = departmentService;
             this.baseService = baseService;
             this.unitService = unitService;
@@ -34,7 +38,7 @@
         [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
         public ActionResult Index(bool? isActive = null)
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
             IList<Department> departments = departmentService.GetDepartment(isActive);
             return View(departments);
         }

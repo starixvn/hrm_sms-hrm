@@ -71,8 +71,6 @@
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="Auth\GetEmployeeLoginByCodeCriteria.cs" />
-    <Compile Include="Auth\GetFunctionsByUserIdCriteria.cs" />
-    <Compile Include="Auth\GetMenusByUserIdCriteria.cs" />
     <Compile Include="BackgroundJob\GetAnnualLeaveBalanceCriteria.cs" />
     <Compile Include="BackgroundJob\ImportTimeRecordCriteria.cs" />
     <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />

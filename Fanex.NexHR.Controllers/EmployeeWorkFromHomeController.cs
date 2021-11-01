@@ -6,7 +6,6 @@
     using System.Web;
     using System.Web.Mvc;
     using Core.Constants;
-    using Core.Enums;
     using Core.Models;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Filters;
@@ -15,9 +14,12 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeWorkFromHome;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class EmployeeWorkFromHomeController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IEmployeeWorkFromHomeService employeeWorkFromHomeService;
         private readonly IBaseService baseService;
         private readonly IAttachFileService attachFileService;
@@ -25,10 +27,12 @@
 
         public EmployeeWorkFromHomeController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IBaseService baseService,
             IAttachFileService attachFileService,
             IEmployeeWorkFromHomeService employeeWorkFromHomeService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.baseService = baseService;
             this.employeeWorkFromHomeService = employeeWorkFromHomeService;
             this.attachFileService = attachFileService;
@@ -43,7 +47,7 @@
                 ToDateFilter = DateTime.Now,
             };
 
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return View(model);
         }
 
@@ -55,7 +59,8 @@
             {
                 employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, UploadFolderPath);
             }
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_EmployeeWorkFromHomeGrid", employees);
         }
 

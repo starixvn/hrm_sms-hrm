@@ -12,6 +12,7 @@
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<ICryptoService, CryptoService>();
         }
     }
 }

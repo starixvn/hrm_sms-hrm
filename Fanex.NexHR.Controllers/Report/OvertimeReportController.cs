@@ -11,6 +11,7 @@
     using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.Overtime;
+    using HRM.UserControl.Client.Core.Enumerables;
 
     public class OvertimeReportController : BaseController
     {

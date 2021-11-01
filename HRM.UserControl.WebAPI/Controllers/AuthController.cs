@@ -5,6 +5,8 @@
     using System.Threading.Tasks;
     using HRM.UserControl.API.Core.Criteria.User;
     using HRM.UserControl.API.Core.Services;
+    using HRM.UserControl.Core.Models;
+    using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
     using HRM.UserControl.Models.Auth;
     using Microsoft.AspNetCore.Http;
@@ -14,48 +16,61 @@
     public class AuthController : Controller
     {
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IJwtManagerService jwtManagerService;
         private readonly IUserService userService;
         private readonly ISiteService siteService;
-        private readonly IJwtManagerService jwtManagerService;
+        private readonly ICryptoService cryptoService;
 
         public AuthController(
             IHttpContextAccessor httpContextAccessor,
+            IJwtManagerService jwtManagerService,
             IUserService userService,
             ISiteService siteService,
-            IJwtManagerService jwtManagerService)
+            ICryptoService cryptoService)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.jwtManagerService = jwtManagerService;
             this.userService = userService;
             this.siteService = siteService;
-            this.jwtManagerService = jwtManagerService;
+            this.cryptoService = cryptoService;
         }
 
-        [Route("api/user/getByUsername")]
-        [HttpGet]
-        public async Task<IActionResult> GetByUsername(string username)
-        {
-            User user = await userService.GetByUsernameAsync(username);
-            return Ok(user);
-        }
-
-        [Route("api/auth/signin")]
+        [Route("api/auth/login")]
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromBody] LoginParam loginParams)
         {
-            LoginResult loginResult = new();
-            User user = await userService.GetByIdAsync(loginParams.UserId);
+            string[] keyiv = loginParams.Token.Split(":");
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            loginParams.Username = cryptoService.Decrypt(loginParams.Username, rijndaelKey, rijndaelIV);
+            loginParams.Password = cryptoService.Decrypt(loginParams.Password, rijndaelKey, rijndaelIV);
 
-            if (user is null)
+            var loginResult = new LoginResult();
+            User user = await userService.GetByUsernameAsync(loginParams.Username);
+
+            if (user is null || !IsValidPassword(loginParams.Password, user))
             {
-                loginResult.ErrorMessage = "User does not exists";
+                loginResult.ErrorMessage = "Invalid username or password.";
+                return Ok(loginResult);
+            }
+
+            if (!user.IsActive)
+            {
+                loginResult.ErrorMessage = "User was disabled.";
+                return Ok(loginResult);
+            }
+
+            if (user.IsDeleted)
+            {
+                loginResult.ErrorMessage = "User was deleted.";
                 return Ok(loginResult);
             }
 
             var requestSite = GetSiteFromRequestHeader();
-            var sites = await siteService.GetByUserIdAsync(loginParams.UserId);
+            var sites = await siteService.GetByUserIdAsync(user.UserId);
             if (!sites.Any(site => site.SiteId == requestSite.SiteId && site.IsActive))
             {
-                loginResult.ErrorMessage = "User have not permission on this site";
+                loginResult.ErrorMessage = "User do not have permission on this site.";
                 return Ok(loginResult);
             }
 
@@ -63,12 +78,12 @@
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
 
-            //await WriteLogForLogin(user.UserId, currentRequestSite.SiteId, loginParams);
+            await LogUserLoginAsync(user.UserId, requestSite.SiteId, loginParams);
 
             return Ok(loginResult);
         }
 
-        private async Task WriteLogForLogin(int userId, short siteId, LoginParam loginModel)
+        private async Task<CommandResult> LogUserLoginAsync(int userId, short siteId, LoginParam loginModel)
         {
             var command = new InsertLogUserLoginCommand
             {
@@ -80,25 +95,26 @@
                 Platform = loginModel.Platform
             };
 
-            await userService.UserLoginWriteLogAsync(command);
+            return await userService.LogUserLoginAsync(command);
         }
 
         private SiteModel GetSiteFromRequestHeader()
         {
-            try
-            {
-                string jwtToken = httpContextAccessor.HttpContext.Request.Headers["SiteIdentity"].ToString();
-                var handler = new JwtSecurityTokenHandler();
-                var token = handler.ReadJwtToken(jwtToken.Replace("Bearer ", string.Empty));
-                var siteJson = token.Payload.SerializeToJson();
-                var site = JsonConvert.DeserializeObject<SiteModel>(siteJson);
+            string jwtToken = httpContextAccessor.HttpContext.Request.Headers["SiteIdentity"].ToString();
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(jwtToken.Replace("Bearer ", string.Empty));
+            var siteJson = token.Payload.SerializeToJson();
+            return JsonConvert.DeserializeObject<SiteModel>(siteJson);
+        }
 
-                return site;
-            }
-            catch (System.Exception ex)
+        private bool IsValidPassword(string plainPwd, User user)
+        {
+            if (!string.IsNullOrWhiteSpace(user.Password))
             {
-                throw;
+                return BCrypt.Net.BCrypt.Verify(plainPwd, user.Password);
             }
+
+            return cryptoService.CompareStringToHash(plainPwd, user.OldPassword);
         }
     }
 }

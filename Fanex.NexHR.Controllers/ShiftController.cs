@@ -10,15 +10,20 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Shifts;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ShiftController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IShiftService shiftService;
 
         public ShiftController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IShiftService shiftService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.shiftService = shiftService;
         }
 
@@ -30,7 +35,7 @@
                 StatusId = statusId.Value,
                 Shifts = shiftService.GetAll(statusId.Value)
             };
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
@@ -90,7 +95,7 @@
             }
 
             ViewBag.Successed = false;
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }
@@ -113,7 +118,7 @@
                 }
             }
 
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
             return View(model);
         }

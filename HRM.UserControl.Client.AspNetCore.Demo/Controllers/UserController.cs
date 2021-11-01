@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
-using HRM.UserControl.Client.Core.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-
-namespace HRM.UserControl.Client.AspNetCore.Demo.Controllers
+﻿namespace HRM.UserControl.Client.AspNetCore.Demo.Controllers
 {
+    using HRM.UserControl.Client.Core.Services;
+    using Microsoft.AspNetCore.Mvc;
+
     public class UserController : Controller
     {
         private readonly IUserService userService;
@@ -13,10 +12,9 @@ namespace HRM.UserControl.Client.AspNetCore.Demo.Controllers
             this.userService = userService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await userService.GetByUsernameAsync("oliver.dang");
-            return Ok(user);
+            return Ok();
         }
     }
 }

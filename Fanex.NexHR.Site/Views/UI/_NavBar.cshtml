@@ -1,29 +1,31 @@
-﻿@using Fanex.NexHR.Core.Models
-@model IEnumerable<MenuItemSession>
+﻿@using HRM.UserControl.Client.Core.Models
+@model IEnumerable<MenuItem>
 @{
+    var menus = Model.GroupBy(i => i.MenuItemName).Select(g => g.First()).ToList();
     var unreadMessage = (int)ViewBag.UnreadMessage;
-    var selectedMenu = (MenuItemSession)ViewBag.SelectedMenu;
-    var idSelected = selectedMenu != null ? selectedMenu.Name + "_" + selectedMenu.MenuId : string.Empty;
+    var selectedMenu = (MenuItem)ViewBag.SelectedMenu;
+    var idSelected = selectedMenu != null ? selectedMenu.MenuItemName + "_" + selectedMenu.MenuItemId : string.Empty;
 }
 
 <div class="nav_links">
-    @foreach (var parentMenu in Model.Where(i => i.ParentId == null).OrderBy(i => i.DisplayOrder))
+    @foreach (MenuItem parentMenu in menus.Where(i => !i.ParentId.HasValue).OrderBy(i => i.DisplayOrder))
     {
-        if (Model.Any(i => i.ParentId == parentMenu.MenuId))
+        if (menus.Any(i => i.ParentId == parentMenu.MenuItemId))
         {
-            <div class="overview_section togglable_section" id="@parentMenu.MenuId">
+            <div class="overview_section togglable_section" id="@parentMenu.MenuItemId">
                 <div class="separator">
-                    <strong>@parentMenu.Text</strong>
+                    <strong>@parentMenu.MenuItemName</strong>
                 </div>
             </div>
                 <div class="navItem">
-                    @foreach (var childMenu in Model.Where(i => i.ParentId == parentMenu.MenuId).OrderBy(i => i.DisplayOrder))
+                    @foreach (MenuItem childMenu in menus.Where(i => i.ParentId == parentMenu.MenuItemId).OrderBy(i => i.DisplayOrder))
                     {
-                        var menuText = childMenu.Name.Equals("MyMessage") && unreadMessage > 0 ? childMenu.Text + " (" + unreadMessage + ")" : childMenu.Text;
-
-                        <div id="@(childMenu.Name + "_"+childMenu.MenuId)" class="el">
-                            <span class="xicon @childMenu.Name"></span>
-                            <a href="@childMenu.Link">@menuText</a>
+                        var menuText = childMenu.MenuItemName.Equals("My Message", StringComparison.CurrentCultureIgnoreCase) && unreadMessage > 0
+                            ? childMenu.MenuItemName + " (" + unreadMessage + ")" : childMenu.MenuItemName;
+                        var icon = childMenu.MenuItemName.ToLowerInvariant().Replace(" ", string.Empty).Replace("'", string.Empty);
+                        <div id="@(icon + "_"+childMenu.MenuItemId)" class="el">
+                            <span class="xicon @icon"></span>
+                            <a href="@childMenu.URL">@menuText</a>
                         </div>
                     }
                 </div>

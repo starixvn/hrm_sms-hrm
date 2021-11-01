@@ -5,7 +5,6 @@ namespace HRM.UserControl.Client.AspNetCore.Demo
     using HRM.UserControl.Client.Core;
     using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Services.Interfaces;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

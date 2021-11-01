@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -54,27 +52,6 @@
             }
 
             return (short)ValidateUserStatus.Deleted;
-        }
-
-        public IEnumerable<FunctionSession> GetFunctionByEmployeeId(int employeeId)
-        {
-            var criteria = new GetFunctionByUserIdCriteria
-            {
-                UserId = employeeId
-            };
-            return baseService.GetData<FunctionSession>(criteria);
-        }
-
-        public IEnumerable<MenuItemSession> GetMenuByEmployeeId(int employeeId)
-        {
-            var criteria = new GetMenusByUserIdCriteria
-            {
-                UserId = employeeId
-            };
-            IEnumerable<MenuItemSession> menus = baseService.GetData<MenuItemSession>(criteria);
-            menus = menus.GroupBy(i => i.Name).Select(g => g.First()).ToList();
-
-            return menus;
         }
     }
 }

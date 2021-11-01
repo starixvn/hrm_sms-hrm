@@ -6,20 +6,24 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
-    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.UI;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Session;
 
     public class UIController : BaseController
     {
         private readonly IMessageService messageService;
+        private readonly IUserControlSession userControlSession;
 
         public UIController(
+            IUserControlSession userControlSession,
             ISessionService sessionService,
             IMessageService messageService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.messageService = messageService;
         }
 
@@ -38,7 +42,7 @@
             {
                 SiteId = ConfigSettings.SiteId,
                 Employee = sessionService.Employee,
-                IsShowSearchBox = sessionService.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
+                IsShowSearchBox = userControlSession.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
             };
 
             return PartialView("_Header", viewModel);
@@ -47,25 +51,17 @@
         [ChildActionOnly]
         public PartialViewResult NavBar()
         {
-            var menus = GetNavBar();
-            return PartialView("_NavBar", menus);
-        }
-
-        private IEnumerable<MenuItemSession> GetNavBar()
-        {
+            IEnumerable<MenuItem> menus = userControlSession.MenuItems;
             var routeData = ControllerContext.ParentActionViewContext.RouteData;
             var controller = routeData.Values["controller"];
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
-            var selectedMenu = sessionService.MenuItems.FirstOrDefault(i => !string.IsNullOrEmpty(i.Link) && i.Link.Equals(link, StringComparison.OrdinalIgnoreCase));
-
-            IEnumerable<MenuItemSession> menus = sessionService.MenuItems;
+            var selectedMenu = menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.URL) && i.URL.Equals(link, StringComparison.OrdinalIgnoreCase));
             var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(sessionService.Employee.Id).Count;
 
             ViewBag.SelectedMenu = selectedMenu;
             ViewBag.UnreadMessage = unreadMessageCount;
-
-            return menus;
+            return PartialView("_NavBar", menus);
         }
     }
 }

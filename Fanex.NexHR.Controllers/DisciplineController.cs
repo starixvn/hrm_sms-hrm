@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -16,9 +15,12 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class DisciplineController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IDisciplineService disciplineService;
         private readonly IBaseService baseService;
 
@@ -27,6 +29,7 @@
             IDisciplineService disciplineService,
             IBaseService baseService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.disciplineService = disciplineService;
             this.baseService = baseService;
         }
@@ -42,8 +45,8 @@
                 model.DateRange = GetDateRangeByQuarter();
             }
 
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
-            ViewBag.IsHostOtherDiscipline = sessionService.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHostOtherDiscipline = userControlSession.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
             return View(model);
         }
 
@@ -64,7 +67,7 @@
 
             IList<DisciplineSummaryModel> disciplines = disciplineService.GetDisciplineSummary(criteria);
 
-            ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_DisciplineSummaryGrid", disciplines);
         }
@@ -108,8 +111,8 @@
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
-            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
-            ViewBag.HasPermissionToUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
+            ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            ViewBag.HasPermissionToUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
             return PartialView("_DisciplineDetailGrid", disciplines);
         }
@@ -127,7 +130,7 @@
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
             IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id);
             ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
-                && sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+                && userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
             return PartialView("_ViewOtherDiscipline", otherDisciplines);
         }
@@ -195,7 +198,7 @@
             {
                 IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
                 DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
-                HasUpdateOutOfControlReason = sessionService.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
+                HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
                 ActorId = sessionService.Employee.Id,
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

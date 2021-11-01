@@ -5,10 +5,10 @@
     using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.ViewModels.Time;
+    using HRM.UserControl.Client.Core.Enumerables;
 
     public class TimeController : BaseController
     {

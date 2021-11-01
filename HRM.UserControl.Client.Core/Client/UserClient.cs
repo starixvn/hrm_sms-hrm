@@ -7,28 +7,28 @@
 
     internal interface IUserClient
     {
-        Task<User> GetByUsernameAsync(string email);
+        IList<MenuItem> GetMenuItem();
 
-        User GetByUsername(string email);
+        Task<IList<MenuItem>> GetMenuItemAsync();
 
-        User GetById(int userId);
+        IList<FunctionPermission> GetFunctionPermission();
 
-        Task<User> GetByIdAsync(int userId);
+        Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
     }
 
     internal class UserClient : BaseHttpClient, IUserClient
     {
-        public User GetByUsername(string email)
-            => Get<User>(string.Format(RelativePaths.GetByUsernamePath, email));
+        public IList<MenuItem> GetMenuItem()
+            => Get<IList<MenuItem>>(RelativePaths.GetMenuItemPath);
 
-        public async Task<User> GetByUsernameAsync(string email)
-            => await GetAsync<User>(string.Format(RelativePaths.GetByUsernamePath, email));
+        public async Task<IList<MenuItem>> GetMenuItemAsync()
+            => await GetAsync<IList<MenuItem>>(RelativePaths.GetMenuItemPath);
 
-        public User GetById(int userId)
-            => Get<User>(string.Format(RelativePaths.GetByIdPath, userId));
+        public IList<FunctionPermission> GetFunctionPermission()
+            => Get<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath);
 
-        public async Task<User> GetByIdAsync(int userId)
-            => await GetAsync<User>(string.Format(RelativePaths.GetByIdPath, userId));
+        public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync()
+            => await GetAsync<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath);
 
         public CommandResult UpdatePassword(UpdatePasswordParam param)
         {
@@ -56,8 +56,8 @@
 
         private static class RelativePaths
         {
-            public const string GetByUsernamePath = "api/user/getByUsername?username={0}";
-            public const string GetByIdPath = "api/user/{0}";
+            public const string GetMenuItemPath = "api/user/getMenuItem";
+            public const string GetFunctionPermissionPath = "api/user/getFunctionPermission";
             public const string UpdatePasswordPath = "api/user/updatePassword";
         }
     }

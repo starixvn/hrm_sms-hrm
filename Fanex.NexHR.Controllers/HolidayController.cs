@@ -9,17 +9,21 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
-    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class HolidayController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IHolidayService holidayService;
 
         public HolidayController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IHolidayService holidayService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.holidayService = holidayService;
         }
 
@@ -28,7 +32,7 @@
         public ActionResult Index(int? year)
         {
             int yearToCheck = year ?? DateTime.Now.Year;
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
             ViewBag.Year = yearToCheck;
 
             IList<Holiday> holidays = holidayService.GetByYear(yearToCheck);

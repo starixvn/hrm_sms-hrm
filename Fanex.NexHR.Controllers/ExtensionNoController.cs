@@ -7,25 +7,29 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.ExtensionNumber;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.ExtensionNumber;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExtensionNoController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IExtensionNumberService extensionNumberService;
         private readonly ICommonDataService commonDataService;
         private readonly IBaseService baseService;
 
         public ExtensionNoController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IExtensionNumberService extensionNumberService,
             ICommonDataService commonDataService,
             IBaseService baseService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.extensionNumberService = extensionNumberService;
             this.commonDataService = commonDataService;
             this.baseService = baseService;
@@ -39,7 +43,7 @@
             var model = (from item in lstEntity
                          group item by item.TeamName into g
                          select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
 
             return View(model);
         }

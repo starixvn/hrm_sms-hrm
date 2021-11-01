@@ -14,7 +14,7 @@
 
         Task<CommandResult> UpdatePasswordAsync(UpdateUserPasswordCommand command);
 
-        Task<CommandResult> UserLoginWriteLogAsync(InsertLogUserLoginCommand command);
+        Task<CommandResult> LogUserLoginAsync(InsertLogUserLoginCommand command);
     }
 
     public class UserService : IUserService
@@ -50,7 +50,7 @@
             return await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public async Task<CommandResult> UserLoginWriteLogAsync(InsertLogUserLoginCommand command)
+        public async Task<CommandResult> LogUserLoginAsync(InsertLogUserLoginCommand command)
         {
             return await baseService.ExecuteNonQueryAsync(command);
         }

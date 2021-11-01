@@ -5,27 +5,31 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Memo;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class MemoController : BaseController
     {
         private const int UploadMemoType = 1;
+        private readonly IUserControlSession userControlSession;
         private readonly IMemoService memoService;
         private readonly ICommonDataService commonDataService;
         private readonly IEmailService emailService;
 
         public MemoController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IMemoService memoService,
             ICommonDataService commonDataService,
             IEmailService emailService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.memoService = memoService;
             this.commonDataService = commonDataService;
             this.emailService = emailService;
@@ -43,7 +47,7 @@
             model.Year = year ?? model.Year;
 
             model.Memos = memoService.GetAll(model.Year, model.Category);
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
             return View(model);
         }

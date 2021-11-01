@@ -18,9 +18,12 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
     using Hangfire;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class OvertimeController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly IOvertimeRequestService overtimeService;
@@ -29,12 +32,14 @@
 
         public OvertimeController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
             IRequestService requestService,
             IOvertimeRequestService overtimeService,
             IExportOvertimeService exportOvertimeService,
             ITeamService teamService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.overtimeService = overtimeService;
@@ -89,8 +94,8 @@
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             model.MemberRequests = GetMemberOvertimeRequest(model);
             ViewBag.CurrentUserId = sessionService.Employee.Id;
-            ViewBag.IsVerifier = sessionService.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
-            ViewBag.IsApprover = sessionService.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+            ViewBag.IsVerifier = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+            ViewBag.IsApprover = userControlSession.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
             return View(model);
         }

@@ -22,10 +22,13 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
     using Simplicode.Imaging;
 
     public class EmployeeController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
         private readonly IRoleService roleService;
@@ -36,6 +39,7 @@
 
         public EmployeeController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ICommonDataService commonDataService,
             IRoleService roleService,
@@ -44,6 +48,7 @@
             ITeamService teamService,
             IJobLevelService jobLevelService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
             this.roleService = roleService;
@@ -120,7 +125,7 @@
                 JobTitles = jobTitles,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage,
-                IsShowDropdownCategory = sessionService.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
+                IsShowDropdownCategory = userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
             };
 
             return View(model);
@@ -155,7 +160,7 @@
                 ViewBag.PagerOption = pagerOption;
             }
 
-            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
 
             return PartialView("_ListEmployee", employees);
         }
@@ -172,7 +177,7 @@
             ViewBag.Thu = employeeShift.ThuShiftName;
             ViewBag.Fri = employeeShift.FriShiftName;
             ViewBag.Sat = employeeShift.SatShiftName;
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
 
             return View(model);
         }
@@ -219,8 +224,8 @@
             Employee employee = employeeService.GetEmployeeById(id);
             if (employee != null)
             {
-                if ((sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
-                    && (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
+                if ((userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
+                    && (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
                 {
                     return RedirectToAction("AccessDenied", "Error");
                 }
@@ -613,15 +618,15 @@
         private bool? GetCategory(bool? isLocal = null)
         {
             bool? category = isLocal;
-            if (!sessionService.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
+            if (!userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
             {
-                if (sessionService.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+                if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
                 {
                     category = true;
                 }
                 else
                 {
-                    if (sessionService.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+                    if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
                     {
                         category = false;
                     }

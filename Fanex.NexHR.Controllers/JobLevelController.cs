@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Enums;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
@@ -10,22 +9,27 @@
     using Fanex.NexHR.Criteria.JobLevel;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class JobLevelController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IJobLevelService jobLevelService;
 
         public JobLevelController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IJobLevelService jobLevelService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.jobLevelService = jobLevelService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
         public ActionResult Index()
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
             return View();
         }
 
@@ -33,8 +37,7 @@
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
         public ActionResult GetJobLevel()
         {
-            ViewBag.HasPermission = sessionService.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
-
+            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
             IList<JobLevel> jobLevel = jobLevelService.GetJobLevel();
 
             return PartialView("~/Views/JobLevel/_JobLevelGrid.cshtml", jobLevel);

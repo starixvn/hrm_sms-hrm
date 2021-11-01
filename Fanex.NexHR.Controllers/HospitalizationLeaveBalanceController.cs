@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -16,11 +15,14 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.HospitalizationLeave;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     [HRMPermission(Policy.Read, FunctionKey.HospitalizationLeaveBalance)]
     public class HospitalizationLeaveBalanceController : BaseExportController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IEmployeeService employeeService;
         private readonly ITeamService teamService;
         private readonly IBaseService baseService;
@@ -28,11 +30,13 @@
 
         public HospitalizationLeaveBalanceController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ITeamService teamService,
             IBaseService baseService,
             IExportExcelService exportExcelService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.baseService = baseService;
@@ -53,7 +57,7 @@
                 Employee = employee,
                 EmployeeId = employeeId,
                 IsLocal = isLocal,
-                IsHost = sessionService.HasPermissionOnFunction(FunctionKey.HospitalizationLeaveBalance, Policy.Host)
+                IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.HospitalizationLeaveBalance, Policy.Host)
             };
 
             return Index(model);

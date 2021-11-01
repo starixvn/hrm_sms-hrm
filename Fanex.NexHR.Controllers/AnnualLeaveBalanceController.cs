@@ -8,7 +8,6 @@
     using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Models;
@@ -17,9 +16,12 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class AnnualLeaveBalanceController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IEmployeeService employeeService;
         private readonly ITeamService teamService;
         private readonly IReportService reportService;
@@ -27,6 +29,7 @@
         private readonly IAnnualLeaveBalanceService annualLeaveBalanceService;
 
         public AnnualLeaveBalanceController(
+            IUserControlSession userControlSession,
             ISessionService sessionService,
             IEmployeeService employeeService,
             ITeamService teamService,
@@ -34,6 +37,7 @@
             IBaseService baseService,
             IAnnualLeaveBalanceService annualLeaveBalanceService) : base(sessionService)
         {
+            this.userControlSession = userControlSession;
             this.employeeService = employeeService;
             this.teamService = teamService;
             this.reportService = reportService;
@@ -49,7 +53,7 @@
             int? employeeId = null,
             int? category = null)
         {
-            ViewBag.HasPermissionToEdit = sessionService.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
+            ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
             var model = new LeaveSummaryViewModel
             {
                 Year = year ?? DateTime.Now.Year,
