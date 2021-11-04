@@ -6,7 +6,7 @@
     {
         public short SiteId { get; set; }
 
-        public override string GetSettingKey() => "Site_GetById";
+        public override string GetSettingKey() => "API_Site_GetById";
 
         public override bool IsValid() => SiteId > 0;
     }

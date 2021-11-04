@@ -139,10 +139,7 @@
     <Compile Include="EmployeeInformation\EmployeeRelationship.cs" />
     <Compile Include="EmployeeRole.cs" />
     <Compile Include="EmployeeSuggestion.cs" />
-    <Compile Include="Function\FunctionModel.cs" />
-    <Compile Include="Function\FunctionPermission.cs" />
     <Compile Include="Dashboard\MemberRequest.cs" />
-    <Compile Include="MenuModel.cs" />
     <Compile Include="Message\GetMessageByCreatorParam.cs" />
     <Compile Include="Message\GetMessageByEmployeeParam.cs" />
     <Compile Include="Message\Message.cs" />

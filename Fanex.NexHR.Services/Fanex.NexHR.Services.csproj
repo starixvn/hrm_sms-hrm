@@ -197,9 +197,7 @@
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
     <Compile Include="Implement\ExtensionNumberService.cs" />
     <Compile Include="Implement\DisciplineService.cs" />
-    <Compile Include="Implement\FunctionService.cs" />
     <Compile Include="Implement\ActionLog\ActionLogService.cs" />
-    <Compile Include="Implement\MenuService.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
@@ -223,8 +221,6 @@
     <Compile Include="Interfaces\ISectionService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
-    <Compile Include="Interfaces\IFunctionService.cs" />
-    <Compile Include="Interfaces\IMenuService.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />

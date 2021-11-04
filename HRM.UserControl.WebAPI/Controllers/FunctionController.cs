@@ -1,7 +1,7 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Criteria.MenuItem;
+    using HRM.UserControl.API.Core.Criteria.Function;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
     using Microsoft.AspNetCore.Authorization;
@@ -20,17 +20,30 @@
             this.baseService = baseService;
         }
 
-        [HttpPost]
-        [Route("api/menuItem/getByUserId")]
-        public async Task<IActionResult> UpdatePassword(int userId)
+        [HttpGet]
+        [Route("api/function")]
+        public async Task<IActionResult> GetBySiteId(bool? isActive = null)
         {
-            var criteria = new GetMenuItemByUserIdCriteria
+            var criteria = new GetFunctionBySiteIdCriteria
             {
-                UserId = userId,
-                SiteId = SiteId
+                SiteId = SiteId,
+                IsActive = isActive
             };
-            var menuItems = await baseService.GetDataAsync<MenuItem>(criteria);
-            return Ok(menuItems);
+            var functions = await baseService.GetDataAsync<Function>(criteria);
+            return Ok(functions);
+        }
+
+        [HttpGet]
+        [Route("api/function/getPermissionByRoleId")]
+        public async Task<IActionResult> GetByRoleId(short roleId)
+        {
+            var criteria = new GetFunctionByRoleIdCriteria
+            {
+                SiteId = SiteId,
+                RoleId = roleId
+            };
+            var functionPermissions = await baseService.GetDataAsync<FunctionPermission>(criteria);
+            return Ok(functionPermissions);
         }
     }
 }

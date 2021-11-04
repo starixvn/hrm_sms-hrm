@@ -150,8 +150,6 @@
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
     <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
     <Compile Include="Function\AssignFunctionToRoleCriteria.cs" />
-    <Compile Include="Function\GetFunctionsByRoleIdCriteria.cs" />
-    <Compile Include="Function\GetFunctionsCriteria.cs" />
     <Compile Include="Holidays\AutoGenerateHoliDayCriteria.cs" />
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
@@ -159,11 +157,6 @@
     <Compile Include="Holidays\CreateHolidayCriteria.cs" />
     <Compile Include="Holidays\EditHolidayCriteria.cs" />
     <Compile Include="Log\GetLogObjectByIdCriteria.cs" />
-    <Compile Include="Menu\DeleteMenuCriteria.cs" />
-    <Compile Include="Menu\GetMenuByIdCriteria.cs" />
-    <Compile Include="Menu\GetMenusCriteria.cs" />
-    <Compile Include="Menu\InsertMenuCriteria.cs" />
-    <Compile Include="Menu\UpdateMenuCriteria.cs" />
     <Compile Include="Department\GetDepartmentByActiveCriteria.cs" />
     <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
     <Compile Include="Department\InsertDepartmentCriteria.cs" />

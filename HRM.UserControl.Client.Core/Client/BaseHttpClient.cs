@@ -14,7 +14,7 @@
     using Jose;
     using Newtonsoft.Json;
 
-    internal class BaseHttpClient
+    public class BaseHttpClient
     {
         private static readonly HttpClient httpClient = new HttpClient();
         private readonly IUserControlSettings settings;

@@ -93,7 +93,6 @@
     <Compile Include="Employee\EmployeeFileUpload.cs" />
     <Compile Include="Employee\UserManagementViewModel.cs" />
     <Compile Include="Function\TreeFunctionViewModel.cs" />
-    <Compile Include="MenuViewModel.cs" />
     <Compile Include="MultiSelectViewModel.cs" />
     <Compile Include="Department\CreateDepartmentViewModel.cs" />
     <Compile Include="Department\EditDepartmentViewModel.cs" />
@@ -162,6 +161,10 @@
     <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
       <Project>{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168}</Project>
       <Name>Fanex.NexHR.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">
+      <Project>{ac67689c-b499-4bf0-86f2-805863047a53}</Project>
+      <Name>HRM.UserControl.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

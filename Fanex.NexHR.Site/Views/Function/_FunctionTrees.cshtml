@@ -1,6 +1,6 @@
-﻿@using HRM.UserControl.Client.Core.Enumerables
-@using Fanex.NexHR.Models
-@using Fanex.NexHR.ViewModels.Function
+﻿@using Fanex.NexHR.ViewModels.Function
+@using HRM.UserControl.Client.Core.Enumerables
+@using HRM.UserControl.Client.Core.Models
 
 @model TreeFunctionViewModel
 
@@ -8,8 +8,9 @@
     var disabled = Model.IsHost ? string.Empty : "disabled";
 }
 
-@foreach (FunctionModel function in Model.Functions)
+@foreach (Function function in Model.Functions)
 {
+    var permission = Model.FunctionPermissions.FirstOrDefault(x => x.FunctionId == function.FunctionId);
     <tr class="@(function.Level == 0 ? "root-row" : "child-row")" data-fid="@function.FunctionId">
         <td class="align-left">
             @if (function.Level > 0)
@@ -20,38 +21,42 @@
                 }
                 <span class="icon-child-level">&#9495;</span>
             }
-            @function.Name
+            @function.FunctionName
         </td>
         <td>
-            @if (function.Policy == (byte)Policy.None || function.Policy == (byte)Policy.Read)
+            @if (!function.Policy.HasValue || function.Policy == (byte)Policy.Read)
             {
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" name="criteria.funcRead" id="funcRead@(function.FunctionId)"
-                           data-pid="@function.ParentFunctionId" data-fid="@function.FunctionId"
-                           @(function.IsRead ? "checked" : string.Empty) @disabled />
+                           data-pid="@function.ParentId" data-fid="@function.FunctionId"
+                           @(permission != null && permission.IsRead ? "checked" : string.Empty) @disabled />
                     <label for="funcRead@(function.FunctionId)"></label>
                 </div>
             }
         </td>
         <td>
-            @if (function.Policy == (byte)Policy.None || function.Policy == (byte)Policy.Host)
+            @if (!function.Policy.HasValue || function.Policy == (byte)Policy.Host)
             {
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" name="criteria.funcHost" id="funcHost@(function.FunctionId)"
-                           data-pid="@function.ParentFunctionId" data-fid="@function.FunctionId"
-                           @(function.IsHost ? "checked" : string.Empty) @disabled />
+                           data-pid="@function.ParentId" data-fid="@function.FunctionId"
+                           @(permission != null && permission.IsHost ? "checked" : string.Empty) @disabled />
                     <label for="funcHost@(function.FunctionId)"></label>
                 </div>
             }
         </td>
     </tr>
 
-    var functionTrees = new TreeFunctionViewModel
+    if (function.Childs != null && function.Childs.Any())
     {
-        RoleId = Model.RoleId,
-        IsHost = Model.IsHost,
-        Functions = function.Childs
-    };
+        var functionTrees = new TreeFunctionViewModel
+        {
+            RoleId = Model.RoleId,
+            IsHost = Model.IsHost,
+            Functions = function.Childs,
+            FunctionPermissions = Model.FunctionPermissions
+        };
 
-    @Html.Partial("_FunctionTrees", functionTrees)
+        @Html.Partial("_FunctionTrees", functionTrees)
+    }
 }

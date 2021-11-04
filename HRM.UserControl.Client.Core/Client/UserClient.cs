@@ -5,7 +5,7 @@
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;
 
-    internal interface IUserClient
+    public interface IUserClient
     {
         IList<MenuItem> GetMenuItem();
 
@@ -16,7 +16,7 @@
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
     }
 
-    internal class UserClient : BaseHttpClient, IUserClient
+    public class UserClient : BaseHttpClient, IUserClient
     {
         public IList<MenuItem> GetMenuItem()
             => Get<IList<MenuItem>>(RelativePaths.GetMenuItemPath);

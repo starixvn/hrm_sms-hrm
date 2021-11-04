@@ -1171,9 +1171,6 @@
     <Content Include="Views\Team\DisciplineManager.cshtml" />
     <Content Include="Views\Employee\DisciplineManager.cshtml" />
     <Content Include="Views\Employee\_ContactList.cshtml" />
-    <Content Include="Views\Menu\Index.cshtml" />
-    <Content Include="Views\Menu\Create.cshtml" />
-    <Content Include="Views\Menu\Edit.cshtml" />
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\_JobTitleGrid.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
