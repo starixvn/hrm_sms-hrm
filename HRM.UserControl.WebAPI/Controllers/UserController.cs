@@ -8,6 +8,7 @@
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
+    using HRM.UserControl.Models.User;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -17,27 +18,21 @@
     public class UserController : BaseController
     {
         private readonly IJwtManagerService jwtManagerService;
-        private readonly IUserService userService;
         private readonly IBaseService baseService;
+        private readonly ICryptoService cryptoService;
+        private readonly IUserService userService;
 
         public UserController(
             IHttpContextAccessor httpContextAccessor,
             IJwtManagerService jwtManagerService,
-            IUserService userService,
-            IBaseService baseService) : base(httpContextAccessor)
+            IBaseService baseService,
+            ICryptoService cryptoService,
+            IUserService userService) : base(httpContextAccessor)
         {
             this.jwtManagerService = jwtManagerService;
-            this.userService = userService;
             this.baseService = baseService;
-        }
-
-        [HttpPost]
-        [Route("api/user/updatePassword")]
-        public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordCommand command)
-        {
-            command.ModifiedBy = UserId;
-            CommandResult commandResult = await userService.UpdatePasswordAsync(command);
-            return Ok(commandResult);
+            this.userService = userService;
+            this.cryptoService = cryptoService;
         }
 
         [HttpPost]
@@ -72,6 +67,47 @@
             };
             var functions = await baseService.GetDataAsync<FunctionPermission>(criteria);
             return Ok(functions);
+        }
+
+        [HttpPost]
+        [Route("api/user/updatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordParam param)
+        {
+            string[] keyiv = param.Token.Split(":");
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            param.OldPassword = cryptoService.Decrypt(param.OldPassword, rijndaelKey, rijndaelIV);
+            param.Password = cryptoService.Decrypt(param.Password, rijndaelKey, rijndaelIV);
+            var commandResult = new CommandResult();
+            var user = await userService.GetByIdAsync(UserId);
+            if (!IsValidPassword(param.OldPassword, user))
+            {
+                commandResult.Message = "Wrong password.";
+            }
+            else
+            {
+                var command = new UpdateUserPasswordCommand
+                {
+                    UserId = UserId,
+                    SiteId = SiteId,
+                    Password = BCrypt.Net.BCrypt.HashPassword(param.Password),
+                    IsResetPassword = false,
+                    ModifiedBy = UserId
+                };
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
+
+            return Ok(commandResult);
+        }
+
+        private bool IsValidPassword(string plainPwd, User user)
+        {
+            if (!string.IsNullOrWhiteSpace(user.Password))
+            {
+                return BCrypt.Net.BCrypt.Verify(plainPwd, user.Password);
+            }
+
+            return cryptoService.CompareStringToHash(plainPwd, user.OldPassword);
         }
     }
 }

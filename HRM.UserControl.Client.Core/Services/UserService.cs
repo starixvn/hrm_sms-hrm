@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Client;
     using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Models.User;
 
     public interface IUserService
     {
@@ -14,6 +15,10 @@
         IList<FunctionPermission> GetFunctionPermission();
 
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
+
+        CommandResult UpdatePassword(UpdatePasswordParam param);
+
+        Task<CommandResult> UpdatePasswordAsync(UpdatePasswordParam param);
     }
 
     public class UserService : IUserService
@@ -36,5 +41,11 @@
 
         public IList<FunctionPermission> GetFunctionPermission()
             => userClient.GetFunctionPermission();
+
+        public CommandResult UpdatePassword(UpdatePasswordParam param)
+            => userClient.UpdatePassword(param);
+
+        public async Task<CommandResult> UpdatePasswordAsync(UpdatePasswordParam param)
+            => await userClient.UpdatePasswordAsync(param);
     }
 }

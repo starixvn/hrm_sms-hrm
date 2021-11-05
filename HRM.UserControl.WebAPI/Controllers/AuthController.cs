@@ -7,11 +7,12 @@
     using HRM.UserControl.API.Core.Services;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
-    using HRM.UserControl.Models;
+    using HRM.UserControl.Models.User;
     using HRM.UserControl.Models.Auth;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using HRM.UserControl.Models;
 
     public class AuthController : Controller
     {

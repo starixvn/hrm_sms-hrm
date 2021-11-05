@@ -14,6 +14,10 @@
         IList<FunctionPermission> GetFunctionPermission();
 
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
+
+        CommandResult UpdatePassword(UpdatePasswordParam param);
+
+        Task<CommandResult> UpdatePasswordAsync(UpdatePasswordParam param);
     }
 
     public class UserClient : BaseHttpClient, IUserClient
@@ -34,10 +38,9 @@
         {
             var data = new Dictionary<string, object>
             {
-                {"userId", param.UserId },
-                {"siteId", param.SiteId },
+                {"oldPassword", param.OldPassword },
                 {"password", param.Password },
-                {"modifiedBy", param.ModifiedBy }
+                {"token", param.Token }
             };
             return Post<CommandResult>(RelativePaths.UpdatePasswordPath, data);
         }
@@ -46,10 +49,9 @@
         {
             var data = new Dictionary<string, object>
             {
-                {"userId", param.UserId },
-                {"siteId", param.SiteId },
+                {"oldPassword", param.OldPassword },
                 {"password", param.Password },
-                {"modifiedBy", param.ModifiedBy }
+                {"token", param.Token }
             };
             return await PostAsync<CommandResult>(RelativePaths.UpdatePasswordPath, data);
         }

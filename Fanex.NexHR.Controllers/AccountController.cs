@@ -1,10 +1,8 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
-    using Core.Models;
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Models;
@@ -12,22 +10,31 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Models.User;
+    using HRM.UserControl.Client.Core.Services;
 
     public class AccountController : BaseController
     {
         private readonly IEmployeeService employeeService;
         private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
+        private readonly ICryptoService cryptoService;
+        private readonly IUserService userService;
 
         public AccountController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IEmployeeLogService employeeLogService,
-            IAuthService authService) : base(sessionService)
+            IAuthService authService,
+            ICryptoService cryptoService,
+            IUserService userService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.authService = authService;
             this.employeeLogService = employeeLogService;
+            this.cryptoService = cryptoService;
+            this.userService = userService;
         }
 
         public ActionResult Index()
@@ -44,7 +51,7 @@
         [HttpPost]
         public ActionResult EditPasswordResetStatus(bool status)
         {
-            CommandResult commandResult = employeeService.EditPasswordResetStatus(sessionService.Employee.Id, status);
+            Core.Models.CommandResult commandResult = employeeService.EditPasswordResetStatus(sessionService.Employee.Id, status);
             return Json(commandResult);
         }
 
@@ -58,7 +65,7 @@
                 Password = Encryptor.ComputeHash(authService.HashProvider, "123456"),
                 IsReset = true
             };
-            CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, model);
+            Core.Models.CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, model);
             return Json(commandResult);
         }
 
@@ -74,37 +81,23 @@
         {
             if (ModelState.IsValid)
             {
-                int retCode = authService.Validate(sessionService.Employee, model.Password);
-                if (retCode == (short)ValidateUserStatus.Success)
+                var token = cryptoService.GenerateRijndaelKeyIV();
+                string[] keyiv = token.Split(':');
+                var rijndaelKey = keyiv[0];
+                var rijndaelIV = keyiv[1];
+                CommandResult commandResult = userService.UpdatePassword(new UpdatePasswordParam
                 {
-                    var param = new EditPassword
-                    {
-                        EmployeeId = sessionService.Employee.Id,
-                        Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
-                    };
-                    CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, param);
-                    switch (commandResult.Code)
-                    {
-                        case (short)ValidateUserStatus.Success: // OK
-                            ViewBag.ChangePwdOK = Messages.ChangePwdOK;
-                            break;
-
-                        case (short)ValidateUserStatus.Deleted:
-                            ModelState.AddModelError(string.Empty, Messages.DeletedUser);
-                            break;
-
-                        case (short)ValidateUserStatus.Disabled:
-                            ModelState.AddModelError(string.Empty, Messages.DisabledUser);
-                            break;
-
-                        default: // wrong password
-                            ModelState.AddModelError(string.Empty, Messages.WrongPassword);
-                            break;
-                    }
+                    OldPassword = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
+                    Password = cryptoService.Encrypt(model.NewPassword, rijndaelKey, rijndaelIV),
+                    Token = token
+                });
+                if (commandResult.IsSuccessful)
+                {
+                    ViewBag.ChangePwdOK = Messages.ChangePwdOK;
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, Messages.WrongPassword);
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
                 }
             }
 

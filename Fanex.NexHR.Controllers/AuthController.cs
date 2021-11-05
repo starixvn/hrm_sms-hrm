@@ -89,6 +89,7 @@
         public ActionResult Logout()
         {
             sessionService.ClearAll();
+            userControlSession.ClearAll();
 
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");

@@ -4,7 +4,7 @@
     using HRM.UserControl.API.Core.Criteria.User;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
-    using HRM.UserControl.Models;
+    using HRM.UserControl.Models.User;
 
     public interface IUserService
     {

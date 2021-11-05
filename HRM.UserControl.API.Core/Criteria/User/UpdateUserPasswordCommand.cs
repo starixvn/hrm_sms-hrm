@@ -4,9 +4,10 @@
 
     public class UpdateUserPasswordCommand : BaseNonQueryCommand
     {
+        public short SiteId { get; set; }
         public int UserId { get; set; }
         public string Password { get; set; }
-        public short SiteId { get; set; }
+        public bool IsResetPassword { get; set; }
         public int ModifiedBy { get; set; }
 
         public override string GetSettingKey() => "API_User_UpdatePassword";
