@@ -610,6 +610,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search Employee Id.
+        /// </summary>
+        public static string SearchEmployeeId {
+            get {
+                return ResourceManager.GetString("SearchEmployeeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to full name or nickname.
         /// </summary>
         public static string SearchEmployeeWatermark {

@@ -1,0 +1,102 @@
+﻿namespace Fanex.NexHR.Controllers.Report
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Filters;
+    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.Report.MealAllowance;
+    using Fanex.NexHR.Models.Report.MealAllowance;
+    using Fanex.NexHR.Services.Implement.Report;
+    using Fanex.NexHR.ViewModels.Report;
+
+    [HRMPermission(Policy.Read, FunctionKey.MealAllowanceReport)]
+    public class MealAllowanceReportController : BaseController
+    {
+        private readonly IMealAllowanceSummaryService reportService;
+
+        public MealAllowanceReportController(
+            ISessionService sessionService,
+            IMealAllowanceSummaryService reportService) : base(sessionService)
+        {
+            this.reportService = reportService;
+        }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            var today = DateTime.Today;
+            var model = new MealAllowanceReportViewModel
+            {
+                FromDate = today,
+                ToDate = today,
+                EmployeeId = null
+            };
+
+            return View("~/Views/Report/MealAllowance/Index.cshtml", model);
+        }
+
+        [HttpGet]
+        public ActionResult MealAllowanceDetails(MealAllowanceReportViewModel model)
+        {
+            var criteria = new GetMealAllowanceDetailReportCriteria
+            {
+                EmployeeId = model.Employee,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                IsLocal = model.IsLocal,
+                TeamId = model.TeamIds,
+            };
+            IEnumerable<MealAllowanceDetail> mealAllowanceDetails = reportService.GetMealAllowanceDetails(criteria);
+            ViewData["Filter"] = model;
+            return View("~/Views/Report/MealAllowance/MealAllowanceDetails.cshtml", mealAllowanceDetails);
+        }
+
+        public ActionResult GetMealAllowanceSummary(MealAllowanceReportViewModel model)
+        {
+            var criteria = new GetMealAllowanceSummaryReportCriteria
+            {
+                EmployeeId = model.EmployeeId,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                IsLocal = model.IsLocal,
+                TeamId = model.TeamIds,
+            };
+            IEnumerable<MealAllowanceSummary> mealAllowanceSummary = reportService.GetMealAllowanceSummary(criteria);
+            ViewBag.FromDate = model.FromDate;
+            ViewBag.ToDate = model.ToDate;
+            return PartialView("~/Views/Report/MealAllowance/_MealAllowanceSummary.cshtml", mealAllowanceSummary);
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportExcel(MealAllowanceReportViewModel model)
+        {
+            var criteriaSummary = new GetMealAllowanceSummaryReportCriteria
+            {
+                EmployeeId = model.EmployeeId,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                IsLocal = model.IsLocal,
+                TeamId = model.TeamIds,
+            };
+
+            var criteriaDetails = new GetMealAllowanceDetailReportCriteria
+            {
+                EmployeeId = model.EmployeeId,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                IsLocal = model.IsLocal,
+                TeamId = model.TeamIds,
+            };
+            IEnumerable<MealAllowanceSummary> mealAllowanceSummary = reportService.GetMealAllowanceSummary(criteriaSummary);
+            IEnumerable<MealAllowanceDetail> mealAllowanceDetails = reportService.GetMealAllowanceDetails(criteriaDetails);
+            byte[] bytes = reportService.Export(model, mealAllowanceSummary, mealAllowanceDetails);
+
+            var fileName = $"Meal Allowance {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            return File(bytes, MimeType.XLSX, fileName);
+        }
+    }
+}

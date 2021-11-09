@@ -99,6 +99,8 @@
     <Compile Include="HospitalizationLeave\HospitalizationLeaveBalanceSummaryReport.cs" />
     <Compile Include="HospitalizationLeave\HospitalizationLeaveTransaction.cs" />
     <Compile Include="JobLevel.cs" />
+    <Compile Include="Report\MealAllowance\MealAllowanceDetail.cs" />
+    <Compile Include="Report\MealAllowance\MealAllowanceSummary.cs" />
     <Compile Include="Unit\Unit.cs" />
     <Compile Include="EditEmployeeParam.cs" />
     <Compile Include="Log\MappingFieldConfig.cs" />

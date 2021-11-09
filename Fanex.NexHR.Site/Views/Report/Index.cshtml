@@ -110,6 +110,14 @@
                             </td>
                         </tr>
                         break;
+                    case FunctionKey.MealAllowanceReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.MealAllowanceReport, "Index", "MealAllowanceReport")
+                            </td>
+                        </tr>
+                        break;
                 }
             }
         }

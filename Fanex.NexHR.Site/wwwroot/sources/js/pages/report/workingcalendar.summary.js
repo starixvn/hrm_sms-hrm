@@ -38,7 +38,6 @@ $(document).ready(function () {
 
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-        console.log('sadadsadsdsa212121');
         query();
     });
 

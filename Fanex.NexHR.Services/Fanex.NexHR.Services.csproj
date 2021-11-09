@@ -170,6 +170,7 @@
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\JobLevelService .cs" />
     <Compile Include="Implement\EmployeeWorkFromHomeService.cs" />
+    <Compile Include="Implement\Report\MealAllowanceSummaryServicecs.cs" />
     <Compile Include="Implement\UnitService.cs" />
     <Compile Include="Implement\SectionService.cs" />
     <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />

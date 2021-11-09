@@ -273,6 +273,7 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
@@ -1139,6 +1140,7 @@
     <Content Include="ExcelTemplates\AttendanceReport.xlsx" />
     <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
     <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
@@ -1279,6 +1281,10 @@
     <Content Include="Views\SickLeaveBalance\MultipleReset.cshtml" />
     <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js.map" />
     <Content Include="wwwroot\dist\js\sick.leave.balance.index.js.map" />
+    <Content Include="Views\Report\MealAllowance\Index.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\report\meal.allowance.scss" />
+    <Content Include="Views\Report\MealAllowance\_MealAllowanceSummary.cshtml" />
+    <Content Include="Views\Report\MealAllowance\MealAllowanceDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

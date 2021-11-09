@@ -366,4 +366,7 @@
   <data name="LogDate" xml:space="preserve">
     <value>By {0} on {1}</value>
   </data>
+  <data name="SearchEmployeeId" xml:space="preserve">
+    <value>Search Employee Id</value>
+  </data>
 </root>

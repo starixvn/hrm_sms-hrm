@@ -4,6 +4,7 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Repositories.Interfaces;
     using Fanex.NexHR.Services.Implement;
+    using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.Services.Interfaces;
     using Unity;
 
@@ -68,6 +69,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IOvertimeReportService, OvertimeReportService>();
             container.RegisterType<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
             container.RegisterType<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
+            container.RegisterType<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
             container.RegisterType<IWorkingCalendarReportService, WorkingCalendarReportService>();
             container.RegisterType<IManpowerReportService, ManpowerReportService>();
             container.RegisterType<IActionLogService, ActionLogService>();

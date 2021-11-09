@@ -549,4 +549,8 @@
     <Function Name="System Setting">
         <Setting Key="SystemSetting_Get" SpName="SystemSetting_Get" DbName="nexhrx" Plain="0" />
     </Function>
+    <Function Name="Meal Allowance Report">
+        <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="nexhrx" Plain="0"></Setting>
+        <Setting Key="WorkFromHome_MealAllowanceSummaryReport" SpName="WorkFromHome_MealAllowanceSummaryReport" DbName="nexhrx" Plain="0"></Setting>
+    </Function>
 </Functions>

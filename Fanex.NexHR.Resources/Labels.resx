@@ -1962,4 +1962,25 @@
   <data name="SevenDaysLeave" xml:space="preserve">
     <value>Seven Days Leave</value>
   </data>
+  <data name="MealAllowanceReport" xml:space="preserve">
+    <value>Meal Allowance Report</value>
+  </data>
+  <data name="MealAllowanceDetails" xml:space="preserve">
+    <value>Meal Allowance Details</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="TeamId" xml:space="preserve">
+    <value>Team Id</value>
+  </data>
+  <data name="ShiftCode" xml:space="preserve">
+    <value>Shift Code</value>
+  </data>
+  <data name="InFixed" xml:space="preserve">
+    <value>In Fixed</value>
+  </data>
+  <data name="OutFixed" xml:space="preserve">
+    <value>Out Fixed</value>
+  </data>
 </root>

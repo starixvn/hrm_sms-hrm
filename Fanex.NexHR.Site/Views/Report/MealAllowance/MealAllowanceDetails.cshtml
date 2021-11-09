@@ -1,0 +1,76 @@
+﻿@using Fanex.NexHR.ViewModels.Report;
+@using Fanex.NexHR.Models.Report.MealAllowance;
+
+@model IEnumerable<MealAllowanceDetail>
+@{
+    MealAllowanceReportViewModel filter = ViewData["filter"] as MealAllowanceReportViewModel;
+    ViewBag.Title = Labels.MealAllowanceDetails + " of " + Model.FirstOrDefault().NickName;
+}
+
+@section css{
+    <link href="~/wwwroot/dist/styles/report.meal.allowance.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/report.meal.allowance.report.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+
+<input id="fromDate" type="hidden" value="@filter.FromDate" />
+<input id="toDate" type="hidden" value="@filter.ToDate" />
+<input id="teamIds" type="hidden" value="@filter.TeamIds" />
+<input id="employeeId" type="hidden" value="@filter.EmployeeId" />
+<input id="isLocal" type="hidden" value="@filter.IsLocal" />
+
+<div class="header-control">
+    <h2 class="page-title">@ViewBag.Title</h2>
+    <div>
+        <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+        <button type="button" class="btn btn btn-excel" id="btnExcelDetails">@Labels.Excel</button>
+    </div>
+</div>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.ShiftCode</th>
+            <th>@Labels.InFixed</th>
+            <th>@Labels.OutFixed</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int index = 0;
+        <tbody>
+            @foreach (var detail in Model)
+            {
+                index++;
+            <tr>
+                <td class="align-left">@detail.Department</td>
+                <td class="align-left">@detail.Section</td>
+                <td class="align-left">@detail.Team</td>
+                <td class="align-center">@detail.Code</td>
+                <td class="align-left">@detail.FullName</td>
+                <td class="align-left">@detail.NickName</td>
+                <td class="align-center">@detail.ShiftCode</td>
+                <td class="align-left">@detail.InFixed.ToShortFormatedDate()</td>
+                <td class="align-left">@detail.OutFixed.ToShortFormatedDate()</td>
+            </tr>
+            }
+        </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 14)
+        }
+    </table>

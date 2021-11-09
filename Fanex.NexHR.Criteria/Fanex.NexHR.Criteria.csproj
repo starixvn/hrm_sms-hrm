@@ -100,6 +100,8 @@
     <Compile Include="JobLevel\GetJobLevelCriteria.cs" />
     <Compile Include="JobLevel\UpdateJobLevelCriteria.cs" />
     <Compile Include="JobLevel\InsertJobLevelCriteria.cs" />
+    <Compile Include="Report\MealAllowance\GetMealAllowanceDetailReportCriteria.cs" />
+    <Compile Include="Report\MealAllowance\GetMealAllowanceSummaryReportCriteria.cs" />
     <Compile Include="Request\Leave\GetTotalLeaveDayCriteria.cs" />
     <Compile Include="Section\DeleteSectionCriteria.cs" />
     <Compile Include="SickLeave\DeleteTransactionCriteria.cs" />
