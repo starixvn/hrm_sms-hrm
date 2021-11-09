@@ -11,6 +11,7 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class Employee : EntityBase<int>
     {
+        public int UserId { get; set; }
         public string DomainUsername { get; set; }
 
         [Display(ResourceType = typeof(Labels), Name = nameof(Labels.FullName))]

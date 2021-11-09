@@ -57,15 +57,18 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult ResetPassword(int id)
+        public ActionResult ResetPassword(int userId)
         {
-            var model = new EditPassword
+            var token = cryptoService.GenerateRijndaelKeyIV();
+            string[] keyiv = token.Split(':');
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            CommandResult commandResult = userService.ResetPassword(new UpdatePasswordParam
             {
-                EmployeeId = id,
-                Password = Encryptor.ComputeHash(authService.HashProvider, "123456"),
-                IsReset = true
-            };
-            Core.Models.CommandResult commandResult = employeeService.EditPassword(sessionService.Employee.Id, model);
+                UserId = userId,
+                Password = cryptoService.Encrypt("123456", rijndaelKey, rijndaelIV),
+                Token = token
+            });
             return Json(commandResult);
         }
 

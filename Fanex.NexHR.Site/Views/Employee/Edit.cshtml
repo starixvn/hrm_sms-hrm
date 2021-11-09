@@ -585,6 +585,7 @@
     <div class="menu">
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.UserId)
         <input type="button" value="@Labels.Save" id="postform" class="btn btn-primary" />
         <input type="button" id="delete" value="@Labels.Delete" class="btn btn-danger" />
         <input type="button" id="resetpassword" value="Reset Password" class="btn btn-primary" />

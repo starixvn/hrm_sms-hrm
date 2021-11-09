@@ -23,6 +23,8 @@
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models.User;
+    using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Simplicode.Imaging;
 
@@ -31,22 +33,26 @@
         private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
-        private readonly IRoleService roleService;
+        private readonly Services.IRoleService roleService;
         private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ITeamService teamService;
         private readonly IJobLevelService jobLevelService;
+        private readonly ICryptoService cryptoService;
+        private readonly IUserService userService;
 
         public EmployeeController(
             ISessionService sessionService,
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ICommonDataService commonDataService,
-            IRoleService roleService,
+            Services.IRoleService roleService,
             IAuthService authService,
             IEmployeeLogService employeeLogService,
             ITeamService teamService,
-            IJobLevelService jobLevelService) : base(sessionService)
+            IJobLevelService jobLevelService,
+            ICryptoService cryptoService,
+            IUserService userService) : base(sessionService)
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;
@@ -56,6 +62,8 @@
             this.employeeLogService = employeeLogService;
             this.teamService = teamService;
             this.jobLevelService = jobLevelService;
+            this.cryptoService = cryptoService;
+            this.userService = userService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ContactList)]
@@ -207,7 +215,27 @@
                 CommandResult commandResult = employeeService.Create(sessionService.Employee.Id, param);
                 if (commandResult.IsSuccessful)
                 {
-                    return RedirectToAction("Edit", new { id = commandResult.OutputId });
+                    var token = cryptoService.GenerateRijndaelKeyIV();
+                    string[] keyiv = token.Split(':');
+                    var rijndaelKey = keyiv[0];
+                    var rijndaelIV = keyiv[1];
+                    var result = userService.Create(new CreateUserParam
+                    {
+                        Code = param.Code,
+                        Nickname = param.Nickname,
+                        FullName = param.FullName,
+                        Password = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIV),
+                        Token = token
+                    });
+
+                    if (result.IsSuccessful)
+                    {
+                        return RedirectToAction("Edit", new { id = commandResult.OutputId });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                    }
                 }
                 else
                 {
@@ -224,12 +252,14 @@
             Employee employee = employeeService.GetEmployeeById(id);
             if (employee != null)
             {
+                User user = userService.GetByCode(employee.Code);
                 if ((userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
                     && (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
                 {
                     return RedirectToAction("AccessDenied", "Error");
                 }
 
+                employee.UserId = user != null ? user.UserId : 0;
                 employee.Coutries = commonDataService.GetAllCountry();
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
                 employee.Verifier = GetVerifiers(supervisors);
@@ -254,13 +284,22 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Edit(Employee model)
         {
-            if (model != null)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                EditEmployeeParam param = MappingEditEmployeeParam(model);
+                CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
+                if (commandResult.IsSuccessful)
                 {
-                    EditEmployeeParam param = MappingEditEmployeeParam(model);
-                    CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
-                    if (commandResult.IsSuccessful)
+                    var result = userService.UpdateInfo(new UpdateUserInfoParam
+                    {
+                        UserId = model.UserId,
+                        Code = param.Code,
+                        Nickname = param.Nickname,
+                        FullName = param.FullName,
+                        Email = param.Email,
+                        RoleIds = param.Roles
+                    });
+                    if (result.IsSuccessful)
                     {
                         ViewBag.Updated = true;
                         UpdateUserSession(model.Id, model.Code);
@@ -268,18 +307,23 @@
                     else
                     {
                         ViewBag.Updated = false;
-                        ModelState.AddModelError(string.Empty, commandResult.Message);
+                        ModelState.AddModelError(string.Empty, result.Message);
                     }
                 }
-
-                model.Coutries = commonDataService.GetAllCountry();
-                IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
-                model.Verifier = GetVerifiers(supervisors);
-                model.Approver = GetApprovers(supervisors);
-                model.Disciplinarian = GetDisciplineSupervisors(supervisors);
-                model.EmpShiftList = GetShiftMonitors(supervisors);
-                model.ActingEmpList = GetActingSupervisors(supervisors);
+                else
+                {
+                    ViewBag.Updated = false;
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
+                }
             }
+
+            model.Coutries = commonDataService.GetAllCountry();
+            IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
+            model.Verifier = GetVerifiers(supervisors);
+            model.Approver = GetApprovers(supervisors);
+            model.Disciplinarian = GetDisciplineSupervisors(supervisors);
+            model.EmpShiftList = GetShiftMonitors(supervisors);
+            model.ActingEmpList = GetActingSupervisors(supervisors);
 
             ComposeViewBagsForEditEmployee();
 
@@ -291,6 +335,11 @@
         public ActionResult Delete(DeleteEmployeeParam param)
         {
             CommandResult commandResult = employeeService.Delete(sessionService.Employee.Id, param);
+            if (commandResult.IsSuccessful)
+            {
+                var result = userService.Delete(param.UserId);
+                return Json(result);
+            }
 
             return Json(commandResult);
         }

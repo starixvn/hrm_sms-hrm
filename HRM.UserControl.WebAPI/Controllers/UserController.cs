@@ -69,6 +69,43 @@
             return Ok(functions);
         }
 
+        [HttpGet]
+        [Route("api/user/getByCode")]
+        public async Task<IActionResult> GetByCode(string code)
+        {
+            var criteria = new GetUserByCodeCriteria
+            {
+                Code = code
+            };
+            var user = await baseService.GetDataEntityAsync<User>(criteria);
+            return Ok(user);
+        }
+
+        [HttpPost]
+        [Route("api/user/create")]
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
+        {
+            string[] keyiv = command.Token.Split(":");
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            command.Password = cryptoService.Decrypt(command.Password, rijndaelKey, rijndaelIV);
+            command.Password = BCrypt.Net.BCrypt.HashPassword(command.Password);
+            command.SiteId = SiteId;
+            command.CreatedBy = UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Ok(commandResult);
+        }
+
+        [HttpPost]
+        [Route("api/user/update")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserInfoCommand command)
+        {
+            command.SiteId = SiteId;
+            command.ModifiedBy = UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Ok(commandResult);
+        }
+
         [HttpPost]
         [Route("api/user/updatePassword")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordParam param)
@@ -97,6 +134,37 @@
                 commandResult = await baseService.ExecuteNonQueryAsync(command);
             }
 
+            return Ok(commandResult);
+        }
+
+        [HttpPost]
+        [Route("api/user/resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] UpdatePasswordParam param)
+        {
+            string[] keyiv = param.Token.Split(":");
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            param.Password = cryptoService.Decrypt(param.Password, rijndaelKey, rijndaelIV);
+            var command = new UpdateUserPasswordCommand
+            {
+                UserId = param.UserId,
+                SiteId = SiteId,
+                Password = BCrypt.Net.BCrypt.HashPassword(param.Password),
+                IsResetPassword = true,
+                ModifiedBy = UserId
+            };
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+
+            return Ok(commandResult);
+        }
+
+        [HttpPost]
+        [Route("api/user/delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteUserCommand command)
+        {
+            command.SiteId = SiteId;
+            command.ModifiedBy = UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Ok(commandResult);
         }
 

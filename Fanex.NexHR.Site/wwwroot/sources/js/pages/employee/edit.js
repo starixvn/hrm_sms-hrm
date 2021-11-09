@@ -71,13 +71,13 @@ $(document).ready(function () {
     }
 
     function resetPassword() {
-        const id = $('#Id').val();
+        const userId = $('#UserId').val();
         const nickName = $('#NickName').val();
         confirm('Are you sure you want to reset ' + nickName + "'s password?", function () {
             axios({
                 url: resolveClientUrl('Account/ResetPassword'),
                 method: 'POST',
-                data: stringify({ id: id }),
+                data: stringify({ userId: userId }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -207,7 +207,7 @@ $(document).ready(function () {
             axios({
                 url: resolveClientUrl('Employee/Delete'),
                 method: 'POST',
-                data: stringify({ employeeId: $('#Id').val(), resignedDate: resignedDate }),
+                data: stringify({ employeeId: $('#Id').val(), resignedDate: resignedDate, userId: $('#UserId').val() }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
