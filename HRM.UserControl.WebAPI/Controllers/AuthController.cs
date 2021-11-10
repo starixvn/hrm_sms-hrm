@@ -79,6 +79,20 @@
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
 
+            if(loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
+            {
+                var command = new UpdateUserPasswordCommand
+                {
+                    UserId = user.UserId,
+                    SiteId = requestSite.SiteId,
+                    Password = BCrypt.Net.BCrypt.HashPassword(loginParams.Password),
+                    IsResetPassword = false,
+                    ModifiedBy = user.UserId
+                };
+
+                await userService.UpdatePasswordAsync(command);
+            }
+
             await LogUserLoginAsync(user.UserId, requestSite.SiteId, loginParams);
 
             return Ok(loginResult);

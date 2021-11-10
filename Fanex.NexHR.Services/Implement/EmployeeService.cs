@@ -46,12 +46,6 @@
             return baseService.GetDataEntity<string>(criteria);
         }
 
-        public bool CheckResetPassword(int employeeId)
-        {
-            var criteria = new CheckResetPasswordCriteria { EmployeeId = employeeId };
-            return baseService.GetDataEntity<bool>(criteria);
-        }
-
         public Employee GetEmployeeById(int id)
         {
             var criteria = new GetEmployeeByIdCriteria
@@ -177,16 +171,6 @@
         public IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
         {
             return employeeRepository.GetEmployeeFullInformation(criteria);
-        }
-
-        public CommandResult EditPasswordResetStatus(int employeeId, bool status)
-        {
-            var criteria = new EditPasswordResetStatusCriteria
-            {
-                EmpId = employeeId,
-                PasswordReset = status
-            };
-            return baseService.ExecuteNonQuery(criteria);
         }
 
         public CommandResult EditPassword(int actorId, EditPassword model)

@@ -70,6 +70,14 @@
         }
 
         [HttpGet]
+        [Route("api/user/getById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            User user = await userService.GetByIdAsync(id);
+            return Ok(user);
+        }
+
+        [HttpGet]
         [Route("api/user/getByCode")]
         public async Task<IActionResult> GetByCode(string code)
         {
@@ -131,7 +139,7 @@
                     IsResetPassword = false,
                     ModifiedBy = UserId
                 };
-                commandResult = await baseService.ExecuteNonQueryAsync(command);
+                commandResult = await userService.UpdatePasswordAsync(command);
             }
 
             return Ok(commandResult);

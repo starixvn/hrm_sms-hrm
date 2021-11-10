@@ -143,7 +143,6 @@
     <Compile Include="EmployeeRelationship\GetRelationshipByEmployeeIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\GetRelationshipByIdCriteria.cs" />
     <Compile Include="EmployeeRelationship\InsertRelationshipCriteria.cs" />
-    <Compile Include="Employee\CheckResetPasswordCriteria.cs" />
     <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
     <Compile Include="Employee\GetEmployeeFullProfileCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
@@ -245,7 +244,6 @@
     <Compile Include="Employee\EditPasswordCriteria.cs" />
     <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
     <Compile Include="Overtime\GetEmployeeToRemindClaimOvertimeCriteria.cs" />
-    <Compile Include="Employee\EditPasswordResetStatusCriteria.cs" />
     <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
     <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
     <Compile Include="Group\GetTeamSupervisorByRoleIdCriteria.cs" />

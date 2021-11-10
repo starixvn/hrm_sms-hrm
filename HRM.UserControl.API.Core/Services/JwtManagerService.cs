@@ -42,9 +42,9 @@
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim("UserId", user.UserId.ToString()),
-                    new Claim("SiteId", site.SiteId.ToString()),
-                    new Claim(nameof(site.AccessToken), site.AccessToken),
+                        new Claim("UserId", user.UserId.ToString()),
+                        new Claim("SiteId", site.SiteId.ToString()),
+                        new Claim(nameof(site.AccessToken), site.AccessToken)
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(settings.Expiration),
                     SigningCredentials = new SigningCredentials(

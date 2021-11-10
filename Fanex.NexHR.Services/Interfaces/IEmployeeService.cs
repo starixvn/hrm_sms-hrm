@@ -17,8 +17,6 @@
     {
         string GenerateEmployeeCode();
 
-        bool CheckResetPassword(int employeeId);
-
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
         IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId);
@@ -48,8 +46,6 @@
         IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
         CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
-
-        CommandResult EditPasswordResetStatus(int employeeId, bool status);
 
         CommandResult EditPassword(int actorId, EditPassword model);
 

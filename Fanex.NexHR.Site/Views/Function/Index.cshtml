@@ -22,7 +22,7 @@
                 <label class="control-label">@Labels.Role</label>
             </div>
             <div class="select-form">
-                @Html.DropDownList("RoleId", new SelectList(systemRoles, "RoleId", "RoleName"), new { @class = "form-control" })
+                @Html.DropDownList("RoleId", new SelectList(systemRoles, "RoleId", "Name"), new { @class = "form-control" })
             </div>
         </div>
     </form>

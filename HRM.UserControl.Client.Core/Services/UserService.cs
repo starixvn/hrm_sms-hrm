@@ -16,6 +16,10 @@
 
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
 
+        User GetById(int id);
+
+        Task<User> GetByIdAsync(int id);
+
         User GetByCode(string code);
 
         Task<User> GetByCodeAsync(string code);
@@ -61,6 +65,12 @@
 
         public IList<FunctionPermission> GetFunctionPermission()
             => userClient.GetFunctionPermission();
+
+        public User GetById(int id)
+            => userClient.GetById(id);
+
+        public async Task<User> GetByIdAsync(int id)
+            => await userClient.GetByIdAsync(id);
 
         public User GetByCode(string code)
             => userClient.GetByCode(code);

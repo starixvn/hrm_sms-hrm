@@ -15,6 +15,10 @@
 
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
 
+        User GetById(int id);
+
+        Task<User> GetByIdAsync(int id);
+
         User GetByCode(string code);
 
         Task<User> GetByCodeAsync(string code);
@@ -53,6 +57,12 @@
 
         public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync()
             => await GetAsync<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath);
+
+        public User GetById(int id)
+            => Get<User>(string.Format(RelativePaths.GetUserByIdPath, id));
+
+        public async Task<User> GetByIdAsync(int id)
+            => await GetAsync<User>(string.Format(RelativePaths.GetUserByIdPath, id));
 
         public User GetByCode(string code)
             => Get<User>(string.Format(RelativePaths.GetUserByCodePath, code));
@@ -182,6 +192,7 @@
         {
             public const string GetMenuItemPath = "api/user/getMenuItem";
             public const string GetFunctionPermissionPath = "api/user/getFunctionPermission";
+            public const string GetUserByIdPath = "api/user/getById/{0}";
             public const string GetUserByCodePath = "api/user/getByCode?code={0}";
             public const string CreateUserPath = "api/user/create";
             public const string UpdateUserInfoPath = "api/user/update";

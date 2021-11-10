@@ -4,8 +4,6 @@
     using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Security;
-    using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
@@ -17,7 +15,6 @@
     public class AccountController : BaseController
     {
         private readonly IEmployeeService employeeService;
-        private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ICryptoService cryptoService;
         private readonly IUserService userService;
@@ -26,12 +23,10 @@
             ISessionService sessionService,
             IEmployeeService employeeService,
             IEmployeeLogService employeeLogService,
-            IAuthService authService,
             ICryptoService cryptoService,
             IUserService userService) : base(sessionService)
         {
             this.employeeService = employeeService;
-            this.authService = authService;
             this.employeeLogService = employeeLogService;
             this.cryptoService = cryptoService;
             this.userService = userService;
@@ -46,13 +41,6 @@
             };
 
             return View(viewModel);
-        }
-
-        [HttpPost]
-        public ActionResult EditPasswordResetStatus(bool status)
-        {
-            Core.Models.CommandResult commandResult = employeeService.EditPasswordResetStatus(sessionService.Employee.Id, status);
-            return Json(commandResult);
         }
 
         [HttpPost]
