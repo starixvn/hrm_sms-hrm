@@ -121,6 +121,7 @@ module.exports = {
         [`${jsDistPath}/report.manpower.category`]: `${jsSourcePath}/report/manpower.category.js`,
         [`${jsDistPath}/report.manpower`]: `${jsSourcePath}/report/manpower.js`,
         [`${jsDistPath}/report.meal.allowance.report`]: `${jsSourcePath}/report/meal.allowance.report.js`,
+        [`${jsDistPath}/report.meal.allowance.report.details`]: `${jsSourcePath}/report/meal.allowance.report.details.js`,
         [`${jsDistPath}/report.unpaid.leave.summary`]: `${jsSourcePath}/report/unpaid.leave.summary.js`,
         [`${jsDistPath}/report.employee.supervisor`]: `${jsSourcePath}/report/employee.supervisor.js`,
         [`${jsDistPath}/report.team.supervisor`]: `${jsSourcePath}/report/team.supervisor.js`,

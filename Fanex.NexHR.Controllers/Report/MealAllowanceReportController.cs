@@ -31,8 +31,7 @@
             var model = new MealAllowanceReportViewModel
             {
                 FromDate = today,
-                ToDate = today,
-                EmployeeId = null
+                ToDate = today
             };
 
             return View("~/Views/Report/MealAllowance/Index.cshtml", model);
@@ -41,17 +40,22 @@
         [HttpGet]
         public ActionResult MealAllowanceDetails(MealAllowanceReportViewModel model)
         {
+            return View("~/Views/Report/MealAllowance/MealAllowanceDetails.cshtml", model);
+        }
+
+        [HttpGet]
+        public ActionResult MealAllowanceDetailsGrid(MealAllowanceReportViewModel model)
+        {
             var criteria = new GetMealAllowanceDetailReportCriteria
             {
-                EmployeeId = model.Employee,
+                EmployeeId = model.IsFirstLoad ? model.EmpId : model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 IsLocal = model.IsLocal,
                 TeamId = model.TeamIds,
             };
-            IEnumerable<MealAllowanceDetail> mealAllowanceDetails = reportService.GetMealAllowanceDetails(criteria);
-            ViewData["Filter"] = model;
-            return View("~/Views/Report/MealAllowance/MealAllowanceDetails.cshtml", mealAllowanceDetails);
+            var mealAllowanceDetails = reportService.GetMealAllowanceDetails(criteria);
+            return PartialView("~/Views/Report/MealAllowance/_MealAllowanceDetailsGrid.cshtml", mealAllowanceDetails);
         }
 
         public ActionResult GetMealAllowanceSummary(MealAllowanceReportViewModel model)

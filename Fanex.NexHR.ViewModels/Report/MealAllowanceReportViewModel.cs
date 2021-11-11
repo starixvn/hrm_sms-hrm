@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using Fanex.NexHR.Models;
 
     public class MealAllowanceReportViewModel
@@ -10,8 +11,12 @@
         public DateTime ToDate { get; set; }
         public byte? IsLocal { get; set; }
         public string TeamIds { get; set; }
+
+        [Display(Name = "Employee")]
         public int? EmployeeId { get; set; }
-        public int Employee { get; set; }
+        public int EmpId { get; set; }
+        public bool IsFirstLoad { get; set; }
+        public string Employee { get; set; }
         public IEnumerable<EntityBase<int>> Teams { get; set; }
     }
 }

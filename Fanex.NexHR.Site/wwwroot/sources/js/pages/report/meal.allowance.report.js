@@ -4,6 +4,7 @@ import axios from 'axios';
 import { parse } from 'qs';
 import 'floatthead/dist/jquery.floatThead';
 
+import '../../shared/employee.search.in.team';
 import '../../shared/multiselect-tree-view';
 import {
     axiosError, initDatepicker, initFromDateOnChange, floatThead,
@@ -63,17 +64,12 @@ $(document).ready(function () {
     });
 
     $('#btnExcelDetails').on('click', function () {
-        var FromDate = $("#fromDate").val();
-        var ToDate = $("#toDate").val();
-        var TeamIds = $("#teamIds").val();
-        var EmployeeId = $("#employeeId").val();
-        var IsLocal = $("#isLocal").val();
-        var params = { FromDate, ToDate, TeamIds, EmployeeId, IsLocal};
+        $('.filter-details #TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
         axios({
             url: resolveClientUrl('MealAllowanceReport/ExportExcel'),
             method: 'GET',
-            params: params,
+            params: parse($('.filter-details form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {
             const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
@@ -84,6 +80,6 @@ $(document).ready(function () {
 });
 
 $(document).on('click', '.viewdetails', function () {
-    var filterSerialize = $('form.filter').serialize() + "&Employee=" + $(this).attr('id');
-    window.location.href = "MealAllowanceReport/MealAllowanceDetails?" + filterSerialize;
+    var filterSerialize = $('form.filter').serialize() + "&EmpId=" + $(this).attr('id');
+    window.open(resolveClientUrl('MealAllowanceReport/MealAllowanceDetails?' + filterSerialize), '_blank');
 });

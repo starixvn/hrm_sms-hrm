@@ -182,6 +182,7 @@
     <Content Include="wwwroot\dist\js\employee.workfromhome.js" />
     <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js" />
     <Content Include="wwwroot\dist\js\joblevel.js" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js" />
     <Content Include="wwwroot\dist\js\report.meal.allowance.report.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
     <Content Include="wwwroot\dist\js\section.index.js" />
@@ -276,6 +277,7 @@
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
@@ -1290,6 +1292,8 @@
     <Content Include="Views\Report\MealAllowance\MealAllowanceDetails.cshtml" />
     <Content Include="wwwroot\dist\js\report.meal.allowance.report.js.map" />
     <Content Include="wwwroot\dist\styles\report.meal.allowance.js.map" />
+    <Content Include="Views\Report\MealAllowance\_MealAllowanceDetailsGrid.cshtml" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

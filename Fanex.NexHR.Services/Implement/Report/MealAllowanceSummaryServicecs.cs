@@ -24,7 +24,6 @@
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
         private readonly IBaseService baseService;
-        private const string DateFormat = "dd-MMM-yyyy";
 
         public MealAllowanceSummaryService(IBaseService baseService)
         {
@@ -116,7 +115,7 @@
             IEnumerable<MealAllowanceDetail> details)
         {
             const byte StartBodyRow = 3;
-            const byte TotalFixedColumnsDetail = 10;
+            const byte TotalFixedColumnsDetail = 13;
             var rowIndex = 1;
             var colIndex = 1;
 
@@ -140,6 +139,7 @@
                 template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                worksheet.Cells[rowIndex, colIndex++].Value = detail.WorkDate;
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.Department;
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.Team;
@@ -148,7 +148,9 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.NickName;
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.ShiftCode;
                 worksheet.Cells[rowIndex, colIndex++].Value = detail.InFixed.ToString(@"dd MMM, yyyy - HH") + "h" + detail.InFixed.ToString(@"mm\'");
-                worksheet.Cells[rowIndex, colIndex].Value = detail.OutFixed.ToString(@"dd MMM, yyyy - HH") + "h" + detail.OutFixed.ToString(@"mm\'");
+                worksheet.Cells[rowIndex, colIndex++].Value = detail.OutFixed.ToString(@"dd MMM, yyyy - HH") + "h" + detail.OutFixed.ToString(@"mm\'");
+                worksheet.Cells[rowIndex, colIndex++].Value = detail.TotalWorkHours;
+                worksheet.Cells[rowIndex, colIndex].Value = detail.TotalDays;
                 rowIndex++;
             }
 

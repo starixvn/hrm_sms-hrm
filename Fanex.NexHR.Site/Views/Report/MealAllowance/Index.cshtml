@@ -72,11 +72,12 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.EmployeeID, new { @class = "control-label" })
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
-            <div class="input-form" type="number">
-                @Html.TextBoxFor(model => model.EmployeeId,
-                new { placeholder = Messages.SearchEmployeeId, @class = "form-control", @type = "number", @min = 1, @maxlength = 200, autocomplete = "off" })
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>
         <div class="form-group form-group--m">
