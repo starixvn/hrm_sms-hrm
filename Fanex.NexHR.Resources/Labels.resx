@@ -1983,4 +1983,7 @@
   <data name="OutFixed" xml:space="preserve">
     <value>Out Fixed</value>
   </data>
+  <data name="CheckInOutOnline" xml:space="preserve">
+    <value>Check In/Out Online</value>
+  </data>
 </root>

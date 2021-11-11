@@ -37,5 +37,7 @@
         public string SectionCode { get; set; }
 
         public string DepartmentCode { get; set; }
+
+        public bool IsCheckInOutOnline { get; set; }
     }
 }

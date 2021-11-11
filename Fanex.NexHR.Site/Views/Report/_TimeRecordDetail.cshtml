@@ -17,6 +17,7 @@
             <th>@Labels.NickName</th>
             <th>@Labels.TimeRecord</th>
             <th>@Labels.InOut</th>
+            <th class="width-5-percent">@Labels.CheckInOutOnline</th>
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -57,6 +58,9 @@
                         @item.GetInOutName
                     }
                 </td>
+                <td>
+                    <input type="checkbox" id="isCheckInOutOnline" disabled checked=@item.IsCheckInOutOnline />
+                </td>
             </tr>
             }
         </tbody>
@@ -87,6 +91,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 8);
+        @RazorHelper.DisplayNoInformation(colspan: 9);
     }
 </table>

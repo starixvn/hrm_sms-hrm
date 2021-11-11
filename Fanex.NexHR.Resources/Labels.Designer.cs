@@ -745,6 +745,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check In/Out Online.
+        /// </summary>
+        public static string CheckInOutOnline {
+            get {
+                return ResourceManager.GetString("CheckInOutOnline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check in time.
         /// </summary>
         public static string CheckInTime {
