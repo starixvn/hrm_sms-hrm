@@ -80,6 +80,14 @@ $(document).ready(function () {
 });
 
 $(document).on('click', '.viewdetails', function () {
-    var filterSerialize = $('form.filter').serialize() + "&EmpId=" + $(this).attr('id');
-    window.open(resolveClientUrl('MealAllowanceReport/MealAllowanceDetails?' + filterSerialize), '_blank');
+    var empId = $(this).data('empid'),
+        employee = $(this).data('employee'),
+        teamIds = $('form.filter #TeamIds').val(),
+        isLocal = $('form.filter #IsLocal').val(),
+        fromDate = $('form.filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
+        toDate = $('form.filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val();
+
+    window.open(resolveClientUrl('MealAllowanceReport/MealAllowanceDetails?fromDate=' + fromDate + '&toDate=' + toDate
+        + '&employeeId=' + empId + '&employee=' + employee + '&teamIds=' + teamIds
+        + '&isLocal=' + isLocal), '_blank');
 });

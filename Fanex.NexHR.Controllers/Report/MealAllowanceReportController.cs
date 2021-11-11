@@ -48,7 +48,7 @@
         {
             var criteria = new GetMealAllowanceDetailReportCriteria
             {
-                EmployeeId = model.IsFirstLoad ? model.EmpId : model.EmployeeId,
+                EmployeeId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 IsLocal = model.IsLocal,

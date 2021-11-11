@@ -73,7 +73,11 @@
                 <td class="align-left">@summary.NickName</td>
                 <td class="align-center">@summary.TotalDays</td>
                 <td>
-                    <a href="javascript:;" class="viewdetails" id="@summary.EmpId">
+                    @{
+                        var empId = summary.EmpId;
+                        var employee = summary.NickName + " (" + summary.FullName + ")";
+                    }
+                    <a href="javascript:;" class="viewdetails" data-empid="@empId" data-employee="@employee">
                         <i class="fa-lg fa fa-search"></i>
                     </a>
                 </td>

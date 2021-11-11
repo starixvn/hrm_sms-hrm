@@ -14,16 +14,15 @@ import {
 
 $(document).on('click', '#btnSearchDetails', function () {
     $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-    query(false);
+    query();
 });
 
-let query = function (IsFirstLoad) {
+let query = function () {
     blockUI();
-    var params = $('form.filter-detail').serialize() + "&IsFirstLoad=" + IsFirstLoad;
     axios({
         url: resolveClientUrl('MealAllowanceReport/MealAllowanceDetailsGrid'),
         method: 'GET',
-        params: parse(params),
+        params: parse($('form.filter-detail').serialize()),
         responseType: 'text'
     }).then(response => {
         $('#MealAllowanceDetaills').html(response.data);
@@ -63,6 +62,6 @@ $(document).ready(function () {
                 data: response.data,
                 isSelectedAll: true
             });
-            query(true);
+            query();
         }).catch(axiosError);
 });

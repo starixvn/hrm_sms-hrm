@@ -14,8 +14,6 @@
 
         [Display(Name = "Employee")]
         public int? EmployeeId { get; set; }
-        public int EmpId { get; set; }
-        public bool IsFirstLoad { get; set; }
         public string Employee { get; set; }
         public IEnumerable<EntityBase<int>> Teams { get; set; }
     }
