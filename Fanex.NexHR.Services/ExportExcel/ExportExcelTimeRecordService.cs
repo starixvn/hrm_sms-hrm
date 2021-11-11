@@ -16,7 +16,7 @@
         public byte[] Export(IList<TimeRecordModel> timeRecords)
         {
             const byte startBodyRow = 4;
-            const byte totalColumns = 9;
+            const byte totalColumns = 10;
             const byte headerAndTitleRow = 2;
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TimeRecordTemplate.xlsx");
 
@@ -51,7 +51,7 @@
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.RecordTime.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + detail.RecordTime.ToString(@"mm\'");
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.GetInOutName;
-                        workSheet.Cells[rowIndex, colIndex].Value = detail.IsCheckInOutOnline;
+                        workSheet.Cells[rowIndex, colIndex].Value = detail.IsCheckInOutOnline ? "Yes" : "No";
                         rowIndex++;
                         colIndex = 1;
                         count++;
