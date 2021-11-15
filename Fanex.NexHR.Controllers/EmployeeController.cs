@@ -23,6 +23,7 @@
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -33,37 +34,37 @@
         private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
-        private readonly Services.IRoleService roleService;
         private readonly IAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ITeamService teamService;
         private readonly IJobLevelService jobLevelService;
         private readonly ICryptoService cryptoService;
         private readonly IUserService userService;
+        private readonly IRoleService roleService;
 
         public EmployeeController(
             ISessionService sessionService,
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ICommonDataService commonDataService,
-            Services.IRoleService roleService,
             IAuthService authService,
             IEmployeeLogService employeeLogService,
             ITeamService teamService,
             IJobLevelService jobLevelService,
             ICryptoService cryptoService,
-            IUserService userService) : base(sessionService)
+            IUserService userService,
+            IRoleService roleService) : base(sessionService)
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
-            this.roleService = roleService;
             this.authService = authService;
             this.employeeLogService = employeeLogService;
             this.teamService = teamService;
             this.jobLevelService = jobLevelService;
             this.cryptoService = cryptoService;
             this.userService = userService;
+            this.roleService = roleService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ContactList)]
@@ -106,7 +107,8 @@
                     TotalItem = (int)criteria.TotalRow
                 };
                 ViewBag.PagerOption = pagerOption;
-                ViewBag.IsShowJobtitle = roleService.GetRolesByUserId(sessionService.Employee.Id).Any(r => r.Code == RoleSystem.HR.ToString() || r.Code == RoleSystem.SystemAdmin.ToString());
+                ViewBag.IsShowJobtitle = roleService.GetByUserId(userControlSession.UserId)
+                    .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
             }
 
             return PartialView("_ContactList", employees);
@@ -392,10 +394,9 @@
             return View();
         }
 
-        public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)
+        public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
         {
             IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, roleId);
-
             return new CustomJsonResult { Data = supervisors, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -418,7 +419,7 @@
 
         public CustomJsonResult GetShiftManagerByEmployeeId(int employeeId)
         {
-            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, RoleSystem.ShiftManager);
+            IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, (short)RoleSystem.ShiftManager);
             return new CustomJsonResult
             {
                 Data = supervisors.Select(x => new Supervisor { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }),
@@ -537,7 +538,7 @@
             return supervisors;
         }
 
-        private static string GetSupervisors(IList<SupervisorNameModel> supervisors, int roleSystem)
+        private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
         {
             string supervisorsName = string.Empty;
             IList<SupervisorNameModel> supervisorsFilter;
@@ -545,7 +546,7 @@
 
             if (supervisors != null)
             {
-                supervisorsFilter = supervisors.Where(x => x.ActionType == roleSystem).Take(MaxDisplayItems).ToList();
+                supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(MaxDisplayItems).ToList();
                 supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
 
                 if (supervisorsFilter.Count > MaxDisplayItems)
@@ -559,27 +560,27 @@
 
         private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.Verifier);
+            return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
         }
 
         private static string GetApprovers(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.Approver);
+            return GetSupervisors(supervisors, (short)RoleSystem.Approver);
         }
 
         private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.ShiftManager);
+            return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
         }
 
         private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.OnBehalfRequest);
+            return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
         }
 
         private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (int)RoleSystem.DisciplineManager);
+            return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
         }
 
         private void ComposeViewBagsForEditEmployee()
@@ -587,7 +588,7 @@
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             ViewBag.JobLevel = jobLevelService.GetJobLevel();
             ViewBag.Marriages = Utilities.Marriages;
-            ViewBag.Roles = roleService.GetRoles().Where(i => !i.Code.Equals(RoleSystem.Member.ToString()));
+            ViewBag.Roles = roleService.Get().Where(i => i.RoleId != (short)RoleSystem.Member).ToList();
         }
 
         private EditEmployeeParam MappingEditEmployeeParam(Employee model)
@@ -648,7 +649,7 @@
             };
         }
 
-        private static string BuildRole(IList<SystemRoleModel> roles)
+        private string BuildRole(IList<Role> roles)
         {
             var result = string.Empty;
             if (roles != null)
@@ -659,9 +660,10 @@
             return string.IsNullOrEmpty(result) ? BuildDefaultRole() : BuildDefaultRole() + "," + result;
         }
 
-        private static string BuildDefaultRole()
+        private string BuildDefaultRole()
         {
-            return ((int)RoleSystem.Member).ToString();
+            IList<Role> roles = roleService.Get();
+            return string.Join(",", roles.Where(x => x.IsDefault).Select(x => x.RoleId));
         }
 
         private bool? GetCategory(bool? isLocal = null)

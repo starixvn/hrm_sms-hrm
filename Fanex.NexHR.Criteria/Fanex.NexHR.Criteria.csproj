@@ -213,8 +213,6 @@
     <Compile Include="Request\Leave\DeleteLeaveRequestCriteria.cs" />
     <Compile Include="Request\VoidRequestCriteria.cs" />
     <Compile Include="Request\ResetRequestCriteria.cs" />
-    <Compile Include="Role\GetRolesByUserIdCriteria.cs" />
-    <Compile Include="Role\GetRolesCriteria.cs" />
     <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />
     <Compile Include="ScheduleArrange\EditDisplayOrderCriteria.cs" />
     <Compile Include="ScheduleArrange\EditWeeklyDefaultShiftCriteria.cs" />

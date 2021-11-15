@@ -27,7 +27,6 @@ namespace Fanex.NexHR.Services.Extensions
 
 
             container.RegisterType<IBaseMailService, BaseMailService>();
-            container.RegisterType<Services.IRoleService, Services.RoleService>();
             container.RegisterType<IAuthService, AuthService>();
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<ISectionService, SectionService>();

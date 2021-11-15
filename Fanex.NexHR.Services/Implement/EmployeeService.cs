@@ -20,24 +20,28 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using HRM.UserControl.Client.Core.Services;
 
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository employeeRepository;
-        private readonly IRoleService roleService;
         private readonly IBaseService baseService;
         private readonly IAuthService authService;
+        private readonly IUserService userService;
+        private readonly IRoleService roleService;
 
         public EmployeeService(
             IEmployeeRepository employeeRepository,
-            IRoleService roleService,
             IBaseService baseService,
-            IAuthService authService)
+            IAuthService authService,
+            IRoleService roleService,
+            IUserService userService)
         {
             this.employeeRepository = employeeRepository;
             this.roleService = roleService;
             this.baseService = baseService;
             this.authService = authService;
+            this.userService = userService;
         }
 
         public string GenerateEmployeeCode()
@@ -55,7 +59,8 @@
             Employee employee = employeeRepository.GetEmployeeById(criteria);
             if (employee != null)
             {
-                employee.Roles = roleService.GetRolesByUserId(employee.Id).ToList();
+                var user = userService.GetByCode(employee.Code);
+                employee.Roles = roleService.GetByUserId(user != null ? user.UserId : 0).ToList();
             }
 
             return employee;
@@ -111,12 +116,12 @@
             return baseService.GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
         }
 
-        public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId)
+        public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
         {
             var criteria = new GetEmployeeSupervisorCriteria
             {
                 EmpId = employeeId,
-                Role = (short)roleId
+                Role = roleId
             };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }

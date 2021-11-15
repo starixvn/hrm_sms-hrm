@@ -7,9 +7,13 @@
 
     public interface IRoleClient
     {
-        IList<Role> Get(bool? isActive = null);
+        IList<Role> Get(bool? isActive = true);
 
-        Task<IList<Role>> GetAsync(bool? isActive = null);
+        Task<IList<Role>> GetAsync(bool? isActive = true);
+
+        IList<Role> GetByUserId(int userId);
+
+        Task<IList<Role>> GetByUserIdAsync(int userId);
 
         CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions);
 
@@ -18,11 +22,17 @@
 
     public class RoleClient : BaseHttpClient, IRoleClient
     {
-        public IList<Role> Get(bool? isActive = null)
+        public IList<Role> Get(bool? isActive = true)
             => Get<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, isActive));
 
-        public async Task<IList<Role>> GetAsync(bool? isActive = null)
+        public async Task<IList<Role>> GetAsync(bool? isActive = true)
             => await GetAsync<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, isActive));
+
+        public IList<Role> GetByUserId(int userId)
+            => Get<IList<Role>>(string.Format(RelativePaths.GetRoleByUserIdPath, userId));
+
+        public async Task<IList<Role>> GetByUserIdAsync(int userId)
+            => await GetAsync<IList<Role>>(string.Format(RelativePaths.GetRoleByUserIdPath, userId));
 
         public CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions)
         {
@@ -47,6 +57,7 @@
         private static class RelativePaths
         {
             public const string GetRoleBySiteIdPath = "api/role?isActive={0}";
+            public const string GetRoleByUserIdPath = "api/role/getByUserId?userId={0}";
             public const string AssignPermissionToRolePath = "api/role/assignPermission";
         }
     }

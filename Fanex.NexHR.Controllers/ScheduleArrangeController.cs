@@ -17,6 +17,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.ScheduleArrange;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
 
     public class ScheduleArrangeController : BaseController
@@ -50,8 +51,8 @@
             ViewBag.HasPermissionToViewHoliday = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
             ViewBag.EnableSyncWorkingShift = ConfigSettings.EnableManualSyncWorkingShift;
-            ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
-                .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
+            ViewBag.IsSystemAdmin = roleService.GetByUserId(userControlSession.UserId)
+                .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
             return View();
         }
 

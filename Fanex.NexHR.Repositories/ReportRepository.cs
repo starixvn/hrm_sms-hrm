@@ -7,6 +7,7 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Models.Role;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -49,16 +50,14 @@
                     (su, team) =>
                     {
                         su.Team = team;
-
                         return su;
                     },
                     splitOn: "TeamId").ToList();
 
-                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    IEnumerable<EmployeeRole> roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
                         (er, r) =>
                         {
                             er.Role = r;
-
                             return er;
                         },
                         "RoleId");
@@ -67,7 +66,6 @@
                     (su, e) =>
                     {
                         su.Supervisor = e;
-
                         return su;
                     },
                     splitOn: "EmpId").ToList();
@@ -95,7 +93,6 @@
                     (su, team) =>
                     {
                         su.Team = team;
-
                         return su;
                     },
                     splitOn: "TeamId").ToList();

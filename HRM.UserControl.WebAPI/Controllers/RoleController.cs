@@ -23,12 +23,25 @@
 
         [HttpGet]
         [Route("api/role")]
-        public async Task<IActionResult> GetBySiteId(bool? isActive = null)
+        public async Task<IActionResult> GetBySiteId(bool? isActive = true)
         {
             var criteria = new GetRoleBySiteIdCriteria
             {
                 SiteId = SiteId,
                 IsActive = isActive
+            };
+            var roles = await baseService.GetDataAsync<Role>(criteria);
+            return Ok(roles);
+        }
+
+        [HttpGet]
+        [Route("api/role/getByUserId")]
+        public async Task<IActionResult> GetByUserId(int userId)
+        {
+            var criteria = new GetRoleByUserIdCriteria
+            {
+                SiteId = SiteId,
+                UserId = userId
             };
             var roles = await baseService.GetDataAsync<Role>(criteria);
             return Ok(roles);

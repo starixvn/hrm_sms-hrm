@@ -19,7 +19,7 @@
 
         IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
-        IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, RoleSystem roleId);
+        IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId);
 
         Employee GetEmployeeById(int id);
 

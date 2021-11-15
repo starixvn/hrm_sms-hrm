@@ -13,7 +13,7 @@
         [StringValue("Approver")]
         Approver = 3,
 
-        [StringValue("Shift Manager")]
+        [StringValue("Shift Current Week Editor")]
         ShiftManager = 4,
 
         [StringValue("On Behalf Request")]
@@ -28,7 +28,7 @@
         [StringValue("Discipline Manager")]
         DisciplineManager = 8,
 
-        [StringValue("Shift Manager")]
+        [StringValue("Shift Arrange")]
         ShiftManager2 = 9,
 
         [StringValue("Local HR")]

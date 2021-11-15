@@ -7,6 +7,7 @@
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
+    using HRM.UserControl.Client.Core.Models.Role;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class Employee : EntityBase<int>
@@ -180,7 +181,7 @@
 
         public bool PasswordReset { get; set; }
 
-        public List<SystemRoleModel> Roles { get; set; }
+        public List<Role> Roles { get; set; }
 
         public string[] Roles2Array
         {
@@ -192,7 +193,7 @@
             set
             {
                 {
-                    Roles = value != null ? value.Select(i => new SystemRoleModel { RoleId = Convert.ToInt32(i) }).ToList() : new List<SystemRoleModel>();
+                    Roles = value != null ? value.Select(i => new Role { RoleId = Convert.ToInt16(i) }).ToList() : new List<Role>();
                 }
             }
         }

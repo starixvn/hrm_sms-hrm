@@ -208,7 +208,6 @@
     <Compile Include="Implement\Report\ShiftStatisticReportService.cs" />
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
-    <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\WorkingCalendarReportService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAttachFileService.cs" />
@@ -227,7 +226,6 @@
     <Compile Include="Interfaces\IPaternityService.cs" />
     <Compile Include="Interfaces\IPostnatalService.cs" />
     <Compile Include="Interfaces\Request\IRequestMailService.cs" />
-    <Compile Include="Interfaces\IRoleService.cs" />
     <Compile Include="Interfaces\IWorkingCalendarService.cs" />
     <Compile Include="Implement\Request\KeepInViewRequestService.cs" />
     <Compile Include="Implement\Request\ChangeShiftRequestService.cs" />

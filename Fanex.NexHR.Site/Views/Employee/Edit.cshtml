@@ -2,10 +2,11 @@
 @using Fanex.NexHR.Core.Enums
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.Models
+@using HRM.UserControl.Client.Core.Models.Role
 @model Employee
 @{
     ViewBag.Title = Labels.EditEmployeeInfo;
-    var roles = (IEnumerable<SystemRoleModel>)ViewBag.Roles;
+    var roles = (IEnumerable<Role>)ViewBag.Roles;
     var roleItems = roles.Select(i => new SelectListItem() { Text = i.Name, Value = i.RoleId.ToString() });
 }
 @section css{

@@ -227,7 +227,7 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
-        public CustomJsonResult GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId)
+        public CustomJsonResult GetTeamSupervisorByRoleId(int teamId, short roleId)
         {
             IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisorByRoleId(teamId, roleId);
 
@@ -246,7 +246,7 @@
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public CustomJsonResult GetShiftManagerByTeamId(int teamId)
         {
-            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisorByRoleId(teamId, RoleSystem.ShiftManager);
+            IEnumerable<SupervisorModel> supervisors = teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager);
 
             return new CustomJsonResult
             {

@@ -8,6 +8,8 @@
     using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
+    using HRM.UserControl.Client.Core.Models.Role;
+    using HRM.UserControl.Client.Core.Services;
 
     public interface IEmployeeLogService
     {
@@ -81,7 +83,7 @@
         private IEnumerable<LookupData> JobTitles { get; set; }
         private IEnumerable<JobLevel> JobLevel { get; set; }
         private IEnumerable<Country> Countries { get; set; }
-        private IEnumerable<SystemRoleModel> SystemRoles { get; set; }
+        private IEnumerable<Role> SystemRoles { get; set; }
         private IEnumerable<EntityBase<byte>> Genders { get; set; }
         private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
 
@@ -103,7 +105,7 @@
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             JobLevel = jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
-            SystemRoles = roleService.GetRoles();
+            SystemRoles = roleService.Get();
             Genders = commonDataService.GetGender();
             MarriageStatuses = commonDataService.GetMarriageStatus();
             IEnumerable<LogObjectDetail> logs = actionLogService.GetLogDetailById(LogObjectType.Employee, employeeId);

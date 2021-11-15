@@ -6,6 +6,7 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
+    using HRM.UserControl.Client.Core.Models.Role;
 
     public class EmployeeRepository : IEmployeeRepository
     {
@@ -67,11 +68,10 @@
                         },
                         splitOn: "TeamID");
 
-                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
                         (er, r) =>
                         {
                             er.Role = r;
-
                             return er;
                         },
                         "RoleId");
@@ -97,11 +97,10 @@
                         },
                         splitOn: "TeamID");
 
-                    var roles = multi.Read<EmployeeRole, SystemRoleModel, EmployeeRole>(
+                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
                             (er, r) =>
                             {
                                 er.Role = r;
-
                                 return er;
                             },
                             "RoleId");

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Supervisor
 {
     using Fanex.NexHR.Models.Group;
+    using HRM.UserControl.Client.Core.Models.Role;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -19,7 +20,7 @@
 
         public string Code { get; set; }
 
-        public List<SystemRoleModel> Roles { get; set; }
+        public List<Role> Roles { get; set; }
 
         public string Roles2String
         {

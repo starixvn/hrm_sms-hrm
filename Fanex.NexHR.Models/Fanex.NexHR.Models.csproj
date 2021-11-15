@@ -208,7 +208,6 @@
     <Compile Include="Supervisor\SupervisorReportModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorReportModel.cs" />
-    <Compile Include="SystemRole.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="ExtensionNoModel.cs" />
     <Compile Include="Country.cs" />
@@ -262,6 +261,10 @@
     <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
       <Project>{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168}</Project>
       <Name>Fanex.NexHR.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj">
+      <Project>{ac67689c-b499-4bf0-86f2-805863047a53}</Project>
+      <Name>HRM.UserControl.Client.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

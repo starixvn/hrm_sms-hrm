@@ -70,7 +70,7 @@
         }
 
         [HttpGet]
-        [Route("api/user/getById")]
+        [Route("api/user/getById/{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             User user = await userService.GetByIdAsync(id);

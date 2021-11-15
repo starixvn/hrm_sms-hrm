@@ -27,15 +27,15 @@
                 switch (RequestViewType)
                 {
                     case RequestViewType.PersonalSpace:
-                        role = ((int)RoleSystem.Verifier).ToString() + "," + ((int)RoleSystem.Approver).ToString();
+                        role = ((short)RoleSystem.Verifier).ToString() + "," + ((short)RoleSystem.Approver).ToString();
                         break;
 
                     case RequestViewType.HRSpace:
-                        role = ((int)RoleSystem.HR).ToString();
+                        role = ((short)RoleSystem.HR).ToString();
                         break;
 
                     default:
-                        role = ((int)RoleSystem.Member).ToString();
+                        role = ((short)RoleSystem.Member).ToString();
                         break;
                 }
 

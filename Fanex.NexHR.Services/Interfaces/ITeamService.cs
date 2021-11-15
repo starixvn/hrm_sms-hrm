@@ -17,7 +17,7 @@
 
         IList<Team> GetBySupervisor(int supervisorId);
 
-        IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId);
+        IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, short roleId);
 
         IEnumerable<TeamSupervisorModel> GetSupervisorByTeamId(int id);
 

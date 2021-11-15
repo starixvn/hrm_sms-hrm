@@ -68,12 +68,12 @@
             return baseService.GetData<Team>(criteria).ToList();
         }
 
-        public IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, RoleSystem roleId)
+        public IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, short roleId)
         {
             var criteria = new GetTeamSupervisorByRoleIdCriteria
             {
                 TeamId = teamId,
-                Role = (short)roleId
+                Role = roleId
             };
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }
