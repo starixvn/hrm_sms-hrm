@@ -31,6 +31,7 @@ export class DataGrid extends Component {
             <HeaderRow>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('ID')}</HeaderCell>
                 <HeaderCell colWidth={20}>{LangHelper.getResource('Name')}</HeaderCell>
+                <HeaderCell colWidth={20}>{LangHelper.getResource('Company')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Users')}</HeaderCell>
                 <HeaderCell colWidth={20}>{LangHelper.getResource('URL')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Active')}</HeaderCell>
@@ -51,6 +52,7 @@ export class DataGrid extends Component {
         <Row key={item.siteId}>
             <Cell className="text-center">{item.siteId}</Cell>
             <Cell>{item.siteName}</Cell>
+            <Cell>{item.companyName}</Cell>
             <Cell className="text-center">{item.numOfUser}</Cell>
             <Cell>{item.siteURL}</Cell>
             <Cell className="text-center">

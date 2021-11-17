@@ -21,6 +21,7 @@ export class DataGrid extends Component {
             <HeaderRow>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Username')}</HeaderCell>
+                <HeaderCell colWidth={10}>{LangHelper.getResource('Code')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Nickname')}</HeaderCell>
                 <HeaderCell colWidth={15}>{LangHelper.getResource('FullName')}</HeaderCell>
                 <HeaderCell colWidth={15}>{LangHelper.getResource('Email')}</HeaderCell>
@@ -47,6 +48,7 @@ export class DataGrid extends Component {
         <Row key={`row-${index}`}>
             <Cell className="text-center">{index}</Cell>
             <Cell>{item.username}</Cell>
+            <Cell>{item.code}</Cell>
             <Cell>{item.nickname}</Cell>
             <Cell>{item.fullName}</Cell>
             <Cell>{item.email}</Cell>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using HRM.UserControl.Admin.Website.Services
+@inject ISessionService sessionService
+@{
     var currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLowerInvariant();
     var currentAction = ViewContext.RouteData.Values["Action"].ToString().ToLowerInvariant();
     var currentUrl = string.Format("/{0}/{1}", currentController, currentAction);
@@ -61,6 +63,9 @@
         <script src="~/js/pro/lib/react-vendor.chunk.js" asp-append-version="true"></script>
         <script src="~/js/pro/lib/react-bootstrap-vendor.chunk.js" asp-append-version="true"></script>
     </environment>
+    <script>
+        window.companies = @Json.Serialize(sessionService.Companies);
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

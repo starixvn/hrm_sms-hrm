@@ -13,6 +13,6 @@
 
         public override string GetSettingKey() => "Log_UserLogin_Insert";
 
-        public override bool IsValid() => UserId > 0 && SiteId > 0 && !string.IsNullOrEmpty(IP);
+        public override bool IsValid() => UserId > 0 && SiteId > 0;
     }
 }

@@ -71,7 +71,7 @@ class AppContainer extends Component {
                 <img className="image-visual" src={Site.resolveClientUrl('css/images/login/keyvisual.png')} alt="user login" />
                 {
                     result && !result.isSuccessful &&
-                    <div className="group group--error"><div className="text-danger text-center">{result.message}</div></div>
+                    <div className="group group--error"><div className="text-danger">{result.message}</div></div>
                 }
                 <div className="group">
                     <span className="fa fa-user" />

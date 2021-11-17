@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../actions';
 import { Button, Col, Form, Modal, Row, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Formik } from 'formik';
+import Select from 'react-select';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import SweetModalDialog from '@jsroot/components/SweetModalDialog';
@@ -43,6 +44,7 @@ export class UpdateSite extends Component {
     handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
         const params = {
+            companyId: values.company.value,
             siteId: values.siteId,
             siteName: values.name,
             accessToken: values.accessToken,
@@ -69,6 +71,10 @@ export class UpdateSite extends Component {
         handleSubmit,
         isSubmitting
     }) => {
+        const companyOptions = window.companies ? window.companies.map(item => {
+            return { value: item.companyId, label: item.name };
+        }) : [];
+
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
@@ -125,11 +131,19 @@ export class UpdateSite extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3"
-                            htmlFor="isActive"
-                        >
-                            {LangHelper.getResource('Status')}
+                        <Form.Label column sm="4" md="3" className="required">
+                            {LangHelper.getResource('Company')}
                         </Form.Label>
+                        <Col sm="8" md="9">
+                            <Select className={`react-select-container ${errors && errors.company ? 'is-invalid' : ''}`}
+                                classNamePrefix="react-select" isSearchable={false}
+                                options={companyOptions} value={values.company} placeholder={LangHelper.getResource('PleaseSelect')}
+                                onChange={value => setFieldValue('company', value)}
+                            />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label column sm="4" md="3" htmlFor="isActive">{LangHelper.getResource('Status')}</Form.Label>
                         <Col sm="8" md="9">
                             <Form.Check type="checkbox"
                                 checked={values.isActive}
@@ -156,6 +170,7 @@ export class UpdateSite extends Component {
         const { selectedSite, confirmModalDialog } = this.props;
 
         const initialValues = {
+            company: { value: selectedSite.companyId, label: selectedSite.companyName },
             siteId: selectedSite.siteId,
             name: selectedSite.siteName,
             url: selectedSite.siteURL,

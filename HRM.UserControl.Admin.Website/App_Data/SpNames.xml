@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+    <Function Name="Company">
+        <Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_IUC" Plain="0" />
+    </Function>
     <Function Name="User">
         <Setting Key="User_GetByUsername" SpName="User_GetByUsername" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />

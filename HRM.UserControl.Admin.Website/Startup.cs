@@ -9,6 +9,12 @@ namespace HRM.UserControl.Admin.Website
     using HRM.UserControl.Admin.Website.Middlewares;
     using HRM.UserControl.Admin.Website.Repositories;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.AspNetCore.Configurations;
+    using HRM.UserControl.Client.AspNetCore.Session;
+    using HRM.UserControl.Client.Core;
+    using HRM.UserControl.Client.Core.Configurations;
+    using HRM.UserControl.Client.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -55,7 +61,7 @@ namespace HRM.UserControl.Admin.Website
                     options.SlidingExpiration = true;
                     options.Cookie = new CookieBuilder
                     {
-                        Name = ".UserControl.Cookies",
+                        Name = ".UserControl.Admin.Cookies",
                         SecurePolicy = CookieSecurePolicy.SameAsRequest
                     };
                     options.Events.OnSigningOut = context =>
@@ -67,7 +73,7 @@ namespace HRM.UserControl.Admin.Website
 
             services.AddSession(options =>
             {
-                options.Cookie.Name = ".UserControl.Session";
+                options.Cookie.Name = ".UserControl.Admin.Session";
                 options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
                 options.Cookie.IsEssential = true;
             });
@@ -80,6 +86,10 @@ namespace HRM.UserControl.Admin.Website
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UserControlClientManager
+                   .UseSettings(app.ApplicationServices.GetService<IUserControlSettings>())
+                   .UseSession(app.ApplicationServices.GetService<IUserControlSession>());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -106,16 +116,24 @@ namespace HRM.UserControl.Admin.Website
             });
         }
 
-        private static void RegisterDI(IServiceCollection services)
+        private void RegisterDI(IServiceCollection services)
         {
+            services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddScoped<IDynamicRepository, DynamicRepository>();
-            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
+            services.AddSingleton<IBaseRepository, BaseRepository>();
 
-            services.AddScoped<ISessionService, SessionService>();
-            services.AddScoped<ICryptoService, CryptoService>();
-            services.AddScoped<IBaseService, BaseService>();
+            //
+            services.AddSingleton<IUserControlSession, UserControlSession>();
+            services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton<ICryptoService, CryptoService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IFunctionService, FunctionService>();
+
+            services.AddSingleton<ISessionService, SessionService>();
+            services.AddSingleton<IBaseService, BaseService>();
         }
     }
 }

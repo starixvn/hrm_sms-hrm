@@ -5,6 +5,7 @@
     using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Models.User;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Services;
     using Microsoft.AspNetCore.Mvc;
 
     public class UserController : Controller

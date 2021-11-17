@@ -17,7 +17,7 @@ export const validateFormik = values => {
     }
 
     if (!values.url || values.url.trim().length === 0) {
-        errors.name = LangHelper.formatString(
+        errors.url = LangHelper.formatString(
             LangHelper.getResource('FieldRequired'),
             LangHelper.getResource('URL'));
     } else {
@@ -27,6 +27,12 @@ export const validateFormik = values => {
                 LangHelper.getResource('URL'),
                 100);
         }
+    }
+
+    if (!values.company) {
+        errors.company = LangHelper.formatString(
+            LangHelper.getResource('FieldRequired'),
+            LangHelper.getResource('Company'));
     }
 
     return errors;

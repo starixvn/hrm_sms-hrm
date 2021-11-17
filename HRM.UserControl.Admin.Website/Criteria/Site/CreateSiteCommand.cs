@@ -6,11 +6,12 @@
         public string SiteName { get; set; }
         public string SiteURL { get; set; }
         public string AccessToken { get; set; }
+        public short CompanyId { get; set; }
         public bool IsActive { get; set; }
         public int CreatedBy { get; set; }
 
         public override string GetSettingKey() => "Site_Insert";
 
-        public override bool IsValid() => !string.IsNullOrWhiteSpace(SiteName) && CreatedBy > 0;
+        public override bool IsValid() => CompanyId > 0 && !string.IsNullOrWhiteSpace(SiteName) && CreatedBy > 0;
     }
 }

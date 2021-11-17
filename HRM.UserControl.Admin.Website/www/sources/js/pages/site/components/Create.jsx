@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../actions';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
+import Select from 'react-select';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import LangHelper from '@jsroot/common/langHelper';
@@ -24,6 +25,7 @@ export class CreateSite extends Component {
     handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
         const params = {
+            companyId: values.company.value,
             siteName: values.name,
             siteURL: values.url,
             isActive: values.isActive
@@ -45,9 +47,14 @@ export class CreateSite extends Component {
         errors,
         touched,
         handleChange,
+        setFieldValue,
         handleSubmit,
         isSubmitting
     }) => {
+        const companyOptions = window.companies ? window.companies.map(item => {
+            return { value: item.companyId, label: item.name };
+        }) : [];
+
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
@@ -85,11 +92,19 @@ export class CreateSite extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3"
-                            htmlFor="isActive"
-                        >
-                            {LangHelper.getResource('Status')}
+                        <Form.Label column sm="4" md="3" className="required">
+                            {LangHelper.getResource('Company')}
                         </Form.Label>
+                        <Col sm="8" md="9">
+                            <Select className={`react-select-container ${errors && errors.company ? 'is-invalid' : ''}`}
+                                classNamePrefix="react-select" isSearchable={false}
+                                options={companyOptions} value={values.company} placeholder={LangHelper.getResource('PleaseSelect')}
+                                onChange={value => setFieldValue('company', value)}
+                            />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row}>
+                        <Form.Label column sm="4" md="3" htmlFor="isActive">{LangHelper.getResource('Status')}</Form.Label>
                         <Col sm="8" md="9">
                             <Form.Check type="checkbox"
                                 checked={values.isActive}
@@ -116,6 +131,7 @@ export class CreateSite extends Component {
         const initialValues = {
             name: '',
             url: '',
+            company: null,
             isActive: true
         };
         return (

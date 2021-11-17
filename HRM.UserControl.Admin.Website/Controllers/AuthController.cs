@@ -3,12 +3,12 @@
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using HRM.UserControl.Admin.Website.Criteria.Auth;
+    using HRM.UserControl.Admin.Website.Criteria.Company;
     using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Models.Auth;
-    using HRM.UserControl.Admin.Website.Models.Session;
-    using HRM.UserControl.Admin.Website.Resources;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Mvc;
@@ -16,17 +16,26 @@
     public class AuthController : Controller
     {
         private readonly ISessionService sessionService;
-        private readonly ICryptoService cryptoService;
+        private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
+        private readonly IUserService userService;
+        private readonly ICryptoService cryptoService;
+        private readonly ISecurityService securityService;
 
         public AuthController(
             ISessionService sessionService,
+            IUserControlSession userControlSession,
+            IBaseService baseService,
+            IUserService userService,
             ICryptoService cryptoService,
-            IBaseService baseService)
+            ISecurityService securityService)
         {
             this.sessionService = sessionService;
-            this.cryptoService = cryptoService;
+            this.userControlSession = userControlSession;
             this.baseService = baseService;
+            this.cryptoService = cryptoService;
+            this.userService = userService;
+            this.securityService = securityService;
         }
 
         public IActionResult Login()
@@ -38,44 +47,46 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginParam model)
         {
-            string[] keyiv = model.Token.Split(":");
-            var rijndaelKey = keyiv[0];
-            var rijndaelIV = keyiv[1];
-            model.Username = cryptoService.Decrypt(model.Username, rijndaelKey, rijndaelIV);
-            model.Password = cryptoService.Decrypt(model.Password, rijndaelKey, rijndaelIV);
-
-            var criteria = new GetUserByUsernameCriteria
+            var loginParam = new Client.Core.Models.Auth.LoginParam
             {
-                Username = model.Username
+                Username = model.Username,
+                Password = model.Password,
+                Token = model.Token,
+                IP = HttpContext.Connection?.RemoteIpAddress?.ToString(),
+                Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
+                BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString()
             };
-            var user = await baseService.GetDataEntityAsync<UserSession>(criteria);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            var loginResult = securityService.Login(loginParam);
+            if (loginResult.IsSuccessfull)
             {
-                return Json(new CommandResult { Code = 1, Message = ViewResources.WrongUsernameOrPassword });
+                userControlSession.UserId = loginResult.UserId;
+                userControlSession.JwtToken = loginResult.Token;
+                userControlSession.MenuItems = await userService.GetMenuItemAsync();
+                userControlSession.Functions = await userService.GetFunctionPermissionAsync();
+
+                await DoLoginAsync(loginResult.UserId);
+
+                return Json(new CommandResult { Code = 0, Message = string.Empty });
             }
 
-            if (!user.IsActive)
-            {
-                return Json(new CommandResult { Code = 1, Message = ViewResources.DisabledUser });
-            }
-
-            if (user.IsDeleted)
-            {
-                return Json(new CommandResult { Code = 1, Message = ViewResources.DeletedUser });
-            }
-
-            await DoLoginAsync(user);
-            return Json(new CommandResult { Code = 0, Message = string.Empty });
+            return Json(new CommandResult { Code = 1, Message = loginResult.ErrorMessage });
         }
 
-        protected internal virtual async Task DoLoginAsync(UserSession user)
+        public async Task<IActionResult> Logout()
         {
-            sessionService.User = user;
+            sessionService.ClearAll();
+            userControlSession.ClearAll();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+
+        protected internal virtual async Task DoLoginAsync(int userId)
+        {
+            sessionService.Companies = await baseService.GetDataAsync<Company>(new GetAllCompanyCriteria { IsActive = true });
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

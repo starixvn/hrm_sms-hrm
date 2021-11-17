@@ -8,5 +8,8 @@
         public string AccessToken { get; set; }
         public bool IsActive { get; set; }
         public int NumOfUser { get; set; }
+
+        public short CompanyId { get; set; }
+        public string CompanyName { get; set; }
     }
 }
