@@ -1,8 +1,9 @@
 ﻿import React, { Component, Fragment } from 'react';
-import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Dropdown } from 'react-bootstrap';
 import { ActionCreators } from '../actions';
+import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import { PAGING_SIZES } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
@@ -25,6 +26,8 @@ export class DataGrid extends Component {
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Nickname')}</HeaderCell>
                 <HeaderCell colWidth={15}>{LangHelper.getResource('FullName')}</HeaderCell>
                 <HeaderCell colWidth={15}>{LangHelper.getResource('Email')}</HeaderCell>
+                <HeaderCell colWidth={10}>{LangHelper.getResource('Status')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
         );
     };
@@ -44,14 +47,50 @@ export class DataGrid extends Component {
         ];
     };
 
-    renderRow = (item, index) => (
+    getStatus = user => {
+        let status = LangHelper.getResource('Active');
+        if (!user.isActive) {
+            if (user.isDeleted) {
+                status = LangHelper.getResource('Deleted');
+            } else {
+                status = LangHelper.getResource('Inactive');
+            }
+        }
+
+        return status;
+    };
+
+    handleOpenResetPasswordModalDialog = user => {
+        this.props.setResetPasswordModalDialog({ show: true, user });
+    };
+
+    renderActionCell = user => {
+        const customDropdown = React.forwardRef(({ onClick }, ref) => (
+            <span ref={ref} onClick={event => onClick(event)} className="fa fa-cog"></span>
+        ));
+
+        return <Dropdown>
+            <Dropdown.Toggle as={customDropdown} id="dropdown-basic" />
+            <Dropdown.Menu>
+                <Dropdown.Item onClick={() => this.handleOpenResetPasswordModalDialog(user)}>{LangHelper.getResource('ResetPassword')}</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item>Another action</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item>Something else</Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>;
+    };
+
+    renderRow = (user, index) => (
         <Row key={`row-${index}`}>
             <Cell className="text-center">{index}</Cell>
-            <Cell>{item.username}</Cell>
-            <Cell>{item.code}</Cell>
-            <Cell>{item.nickname}</Cell>
-            <Cell>{item.fullName}</Cell>
-            <Cell>{item.email}</Cell>
+            <Cell>{user.username}</Cell>
+            <Cell>{user.code}</Cell>
+            <Cell>{user.nickname}</Cell>
+            <Cell>{user.fullName}</Cell>
+            <Cell>{user.email}</Cell>
+            <Cell className="text-center">{this.getStatus(user)}</Cell>
+            <Cell className="text-center action-cell">{this.renderActionCell(user)}</Cell>
         </Row>
     );
 

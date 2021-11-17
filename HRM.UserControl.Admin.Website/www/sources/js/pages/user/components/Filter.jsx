@@ -2,6 +2,7 @@
 import { Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Select from 'react-select';
 import { ActionCreators } from '../actions';
 import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
@@ -11,7 +12,9 @@ export class Filter extends Component {
         super(props);
 
         this.state = {
-            username: ''
+            username: '',
+            status: { value: 1, label: 'Active' },
+            site: null
         };
     }
 
@@ -22,10 +25,9 @@ export class Filter extends Component {
     }
 
     getParams = () => {
-        const state = this.state;
-
         return {
-            username: state.username,
+            username: this.state.username,
+            statusId: this.state.status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
         };
@@ -47,7 +49,11 @@ export class Filter extends Component {
     };
 
     render() {
-        const { username } = this.state;
+        const { username, status, site } = this.state;
+        const statusOptions = [{ value: null, label: 'All' },
+            { value: 1, label: 'Active' },
+            { value: 2, label: 'Inactive' },
+            { value: 3, label: 'Deleted' }];
         return (
             <Form className="form-filter" onSubmit={this.handleSubmit}>
                 <Form.Row bsPrefix="form-row">
@@ -57,6 +63,21 @@ export class Filter extends Component {
                             name="username" id="username"
                             className="shadow-none" autoComplete="off"
                             onChange={event => this.handleChange('username', event.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>{LangHelper.getResource('Site')}</Form.Label>
+                        <Select className={`react-select-container`} classNamePrefix="react-select"
+                            options={[]} value={site}
+                            onChange={value => this.handleChange('site', value)}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>{LangHelper.getResource('Status')}</Form.Label>
+                        <Select className={`react-select-container`}
+                            classNamePrefix="react-select" isSearchable={false}
+                            options={statusOptions} value={status}
+                            onChange={value => this.handleChange('status', value)}
                         />
                     </Form.Group>
                     <Form.Group>

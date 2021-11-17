@@ -5,8 +5,8 @@
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.Company;
     using HRM.UserControl.Admin.Website.Models;
-    using HRM.UserControl.Admin.Website.Models.Auth;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Models.Auth;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Authentication;
@@ -47,16 +47,11 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginParam model)
         {
-            var loginParam = new Client.Core.Models.Auth.LoginParam
-            {
-                Username = model.Username,
-                Password = model.Password,
-                Token = model.Token,
-                IP = HttpContext.Connection?.RemoteIpAddress?.ToString(),
-                Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
-                BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString()
-            };
-            var loginResult = securityService.Login(loginParam);
+            model.IP = HttpContext.Connection?.RemoteIpAddress?.ToString();
+            model.Platform = HttpContext.Request?.Headers["User-Agent"].ToString();
+            model.BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString();
+
+            LoginResult loginResult = securityService.Login(model);
             if (loginResult.IsSuccessfull)
             {
                 userControlSession.UserId = loginResult.UserId;

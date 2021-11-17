@@ -7,3 +7,29 @@
 @import '../../components/react-select';
 @import "../../components/modal";
 @import "../../components/messages";
+
+.table-container {
+    .body-content {
+        .action-cell {
+            overflow: visible;
+
+            .dropdown {
+                .fa {
+                    cursor: pointer;
+                }
+
+                .dropdown-menu {
+                    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+
+                    .dropdown-item {
+                        color: inherit;
+
+                        &:active {
+                            background-color: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

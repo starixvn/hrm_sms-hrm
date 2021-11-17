@@ -10,7 +10,9 @@ const userSlice = createSlice({
         },
         userGridData: null,
         createModalDialog: { show: false },
-        createUserResult: null
+        createUserResult: null,
+        resetPasswordModalDialog: { show: false },
+        resetPasswordResult: null
     },
     reducers: {
         setGetAllUserParams: (state, action) => {
@@ -24,6 +26,12 @@ const userSlice = createSlice({
         },
         setCreateUserResult: (state, action) => {
             state.createUserResult = action.payload;
+        },
+        setResetPasswordModalDialog: (state, action) => {
+            state.resetPasswordModalDialog = action.payload;
+        },
+        setResetPasswordResult: (state, action) => {
+            state.resetPasswordResult = action.payload;
         }
     }
 });
@@ -34,7 +42,9 @@ export const {
     setGetAllUserParams,
     setUserGridData,
     setCreateModalDialog,
-    setCreateUserResult
+    setCreateUserResult,
+    setResetPasswordModalDialog,
+    setResetPasswordResult
 } = actions;
 
 export default reducer;
