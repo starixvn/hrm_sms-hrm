@@ -7,6 +7,7 @@
     {
         public short SiteId { get; set; }
         public int UserId { get; set; }
+        public string Username { get; set; }
         public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
@@ -19,6 +20,6 @@
 
         public override string GetSettingKey() => "API_User_Insert";
 
-        public override bool IsValid() => SiteId > 0 && CreatedBy > 0 && !string.IsNullOrWhiteSpace(Code);
+        public override bool IsValid() => SiteId > 0 && !string.IsNullOrWhiteSpace(Password) && CreatedBy > 0;
     }
 }

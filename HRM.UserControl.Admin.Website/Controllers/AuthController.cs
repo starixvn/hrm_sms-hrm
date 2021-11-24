@@ -6,6 +6,7 @@
     using HRM.UserControl.Admin.Website.Criteria.Company;
     using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Auth;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -55,6 +56,7 @@
             if (loginResult.IsSuccessfull)
             {
                 userControlSession.UserId = loginResult.UserId;
+                userControlSession.SiteId = loginResult.SiteId;
                 userControlSession.JwtToken = loginResult.Token;
                 userControlSession.MenuItems = await userService.GetMenuItemAsync();
                 userControlSession.Functions = await userService.GetFunctionPermissionAsync();

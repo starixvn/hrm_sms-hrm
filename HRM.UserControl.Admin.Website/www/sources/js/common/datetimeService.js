@@ -1,8 +1,8 @@
 ﻿import moment from 'moment';
 
 const ShortDateFormat = 'MMM DD, YYYY';
-const ShortDateTimeFormat = 'MMM DD, YYYY hh:mm a';
-const LongDateTimeFormat = 'MMM DD, YYYY hh:mm:ss a';
+const ShortDateTimeFormat = 'MMM DD, YYYY hh:mm A';
+const LongDateTimeFormat = 'MMM DD, YYYY hh:mm:ss A';
 
 export default class DateTimeService {
     static startOfDay(date) {

@@ -2,6 +2,7 @@
 {
     public class CreateUserParam
     {
+        public string Username { get; set; }
         public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }

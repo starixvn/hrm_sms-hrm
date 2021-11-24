@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Dropdown } from 'react-bootstrap';
 import { ActionCreators } from '../actions';
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
+import Site from '@jsroot/common/site';
 import { PAGING_SIZES } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
@@ -74,7 +75,7 @@ export class DataGrid extends Component {
             <Dropdown.Menu>
                 <Dropdown.Item onClick={() => this.handleOpenResetPasswordModalDialog(user)}>{LangHelper.getResource('ResetPassword')}</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>Another action</Dropdown.Item>
+                <Dropdown.Item href={Site.resolveClientUrl(`user/assignSite/${user.userId}`)}>View Sites</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item>Something else</Dropdown.Item>
             </Dropdown.Menu>

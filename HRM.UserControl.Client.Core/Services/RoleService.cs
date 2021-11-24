@@ -8,9 +8,9 @@
 
     public interface IRoleService
     {
-        IList<Role> Get(bool? isActive = true);
+        IList<Role> GetBySiteId(short siteId, bool? isActive = true);
 
-        Task<IList<Role>> GetAsync(bool? isActive = true);
+        Task<IList<Role>> GetBySiteIdAsync(short siteId, bool? isActive = true);
 
         IList<Role> GetByUserId(int userId);
 
@@ -30,11 +30,11 @@
             roleClient = new RoleClient();
         }
 
-        public IList<Role> Get(bool? isActive = true)
-            => roleClient.Get(isActive);
+        public IList<Role> GetBySiteId(short siteId, bool? isActive = true)
+            => roleClient.GetBySiteId(siteId, isActive);
 
-        public async Task<IList<Role>> GetAsync(bool? isActive = true)
-             => await roleClient.GetAsync(isActive);
+        public async Task<IList<Role>> GetBySiteIdAsync(short siteId, bool? isActive = true)
+             => await roleClient.GetBySiteIdAsync(siteId, isActive);
 
         public IList<Role> GetByUserId(int userId)
             => roleClient.GetByUserId(userId);

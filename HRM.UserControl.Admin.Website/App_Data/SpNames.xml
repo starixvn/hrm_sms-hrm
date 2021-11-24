@@ -4,12 +4,11 @@
         <Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="User">
-        <Setting Key="User_GetByUsername" SpName="User_GetByUsername" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_GetAll" SpName="User_GetAll" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="User_Insert" SpName="User_Insert" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="User_GetById" SpName="User_GetById" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="User_UpdatePassword" SpName="User_UpdatePassword" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_UpdateSiteStatus" SpName="User_UpdateSiteStatus" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_UpdateSiteRole" SpName="User_UpdateSiteRole" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetAvailableSites" SpName="User_GetAvailableSites" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_AssignSite" SpName="User_AssignSite" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">
         <Setting Key="Site_GetAll" SpName="Site_GetAll" DbName="bodb_IUC" Plain="0" />

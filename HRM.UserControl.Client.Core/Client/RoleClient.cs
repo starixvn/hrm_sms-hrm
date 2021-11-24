@@ -7,9 +7,9 @@
 
     public interface IRoleClient
     {
-        IList<Role> Get(bool? isActive = true);
+        IList<Role> GetBySiteId(short siteId, bool? isActive = true);
 
-        Task<IList<Role>> GetAsync(bool? isActive = true);
+        Task<IList<Role>> GetBySiteIdAsync(short siteId, bool? isActive = true);
 
         IList<Role> GetByUserId(int userId);
 
@@ -22,11 +22,11 @@
 
     public class RoleClient : BaseHttpClient, IRoleClient
     {
-        public IList<Role> Get(bool? isActive = true)
-            => Get<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, isActive));
+        public IList<Role> GetBySiteId(short siteId, bool? isActive = true)
+            => Get<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, siteId, isActive));
 
-        public async Task<IList<Role>> GetAsync(bool? isActive = true)
-            => await GetAsync<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, isActive));
+        public async Task<IList<Role>> GetBySiteIdAsync(short siteId, bool? isActive = true)
+            => await GetAsync<IList<Role>>(string.Format(RelativePaths.GetRoleBySiteIdPath, siteId, isActive));
 
         public IList<Role> GetByUserId(int userId)
             => Get<IList<Role>>(string.Format(RelativePaths.GetRoleByUserIdPath, userId));
@@ -56,7 +56,7 @@
 
         private static class RelativePaths
         {
-            public const string GetRoleBySiteIdPath = "api/role?isActive={0}";
+            public const string GetRoleBySiteIdPath = "api/role/getBySiteId?siteId={0}&isActive={1}";
             public const string GetRoleByUserIdPath = "api/role/getByUserId?userId={0}";
             public const string AssignPermissionToRolePath = "api/role/assignPermission";
         }

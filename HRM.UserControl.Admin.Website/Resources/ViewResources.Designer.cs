@@ -61,6 +61,15 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign Site.
+        /// </summary>
+        public static string AssignSite {
+            get {
+                return ResourceManager.GetString("AssignSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User was deleted..
         /// </summary>
         public static string DeletedUser {

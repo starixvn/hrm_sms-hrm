@@ -71,7 +71,7 @@ namespace HRM.UserControl.WebAPI
             });
 
             services.InjectCoreDI();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             services.RegisterDI();
         }

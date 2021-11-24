@@ -15,10 +15,15 @@
         private static HttpSessionState Session => HttpContext.Current?.Session;
 
         public int UserId
-
         {
             get => int.Parse(Session[SessionKey.SessionUserId]?.ToString() ?? "0");
             set => Session.Add(SessionKey.SessionUserId, value);
+        }
+
+        public short SiteId
+        {
+            get => short.Parse(Session[SessionKey.SessionSiteId]?.ToString() ?? "0");
+            set => Session.Add(SessionKey.SessionSiteId, value);
         }
 
         public string JwtToken

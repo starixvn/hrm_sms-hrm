@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
-    using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Repositories;
+    using HRM.UserControl.Client.Core.Models;
 
     public interface IBaseService
     {

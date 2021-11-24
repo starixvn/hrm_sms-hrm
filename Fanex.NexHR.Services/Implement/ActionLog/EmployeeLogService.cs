@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Log;
@@ -10,6 +11,7 @@
     using Fanex.NexHR.Services.Interfaces;
     using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
 
     public interface IEmployeeLogService
     {
@@ -74,6 +76,7 @@
             new MappingFieldConfig { FieldName = "ChineseName", DisplayName = Labels.ChineseName }
         };
 
+        private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IActionLogService actionLogService;
         private readonly IJobLevelService jobLevelService;
@@ -88,11 +91,13 @@
         private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
 
         public EmployeeLogService(
+            IUserControlSession userControlSession,
             ICommonDataService commonDataService,
             IActionLogService actionLogService,
             IJobLevelService jobLevelService,
             IRoleService roleService)
         {
+            this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;
             this.actionLogService = actionLogService;
             this.jobLevelService = jobLevelService;
@@ -105,7 +110,7 @@
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             JobLevel = jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
-            SystemRoles = roleService.Get();
+            SystemRoles = roleService.GetBySiteId(userControlSession.SiteId);
             Genders = commonDataService.GetGender();
             MarriageStatuses = commonDataService.GetMarriageStatus();
             IEnumerable<LogObjectDetail> logs = actionLogService.GetLogDetailById(LogObjectType.Employee, employeeId);

@@ -4,18 +4,23 @@
     using System.Security.Cryptography;
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.Site;
-    using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Resources;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
-    public class SiteController : Controller
+    public class SiteController : BaseController
     {
+        private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
 
-        public SiteController(IBaseService baseService)
+        public SiteController(
+            IUserControlSession userControlSession,
+            IBaseService baseService)
         {
+            this.userControlSession = userControlSession;
             this.baseService = baseService;
         }
 
@@ -50,7 +55,7 @@
                 return Json(commandResult);
             }
 
-            command.CreatedBy = 4;
+            command.CreatedBy = userControlSession.UserId;
             command.AccessToken = GenerateAccessToken();
             commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
@@ -68,7 +73,7 @@
                 return Json(commandResult);
             }
 
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
@@ -76,7 +81,7 @@
         [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateSiteStatusCommand command)
         {
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }

@@ -24,6 +24,12 @@
             set => accessor.HttpContext.Session.SetInt32(SessionKey.SessionUserId, value);
         }
 
+        public short SiteId
+        {
+            get => accessor.HttpContext.Session?.Get<short>(SessionKey.SessionSiteId) ?? 0;
+            set => accessor.HttpContext.Session.Set<short>(SessionKey.SessionSiteId, value);
+        }
+
         public string JwtToken
         {
             get => accessor.HttpContext.Session?.GetString(SessionKey.SessionJwtToken) ?? string.Empty;

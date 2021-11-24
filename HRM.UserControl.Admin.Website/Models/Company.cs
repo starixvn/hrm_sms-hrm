@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Admin.Website.Models
 {
+    using System;
+
+    [Serializable]
     public class Company
     {
         public short CompanyId { get; set; }

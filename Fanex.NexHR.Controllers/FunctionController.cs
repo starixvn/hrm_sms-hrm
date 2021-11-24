@@ -39,7 +39,7 @@
         [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
         public ActionResult Index(short? roleId = null)
         {
-            IList<Role> systemRoles = roleService.Get(true);
+            IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
             IList<Function> functions = ucfunctionService.Get(true);
             var functionTrees = new TreeFunctionViewModel
             {

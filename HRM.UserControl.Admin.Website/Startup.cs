@@ -37,11 +37,11 @@ namespace HRM.UserControl.Admin.Website
         public void ConfigureServices(IServiceCollection services)
         {
             var connections = Configuration.GetSection("ConnectionStrings")
-                            .GetChildren()
-                            .AsEnumerable()
-                            .Where(x => !string.IsNullOrWhiteSpace(x.GetValue<string>("Name")))
-                            .ToDictionary(x => x.GetValue<string>("Name"),
-                                y => new ConnectionConfiguration(y.GetValue<string>("Name"), y.GetValue<string>("ConnectionString"), y.GetValue<string>("ProviderName")));
+                .GetChildren()
+                .AsEnumerable()
+                .Where(x => !string.IsNullOrWhiteSpace(x.GetValue<string>("Name")))
+                .ToDictionary(x => x.GetValue<string>("Name"),
+                    y => new ConnectionConfiguration(y.GetValue<string>("Name"), y.GetValue<string>("ConnectionString"), y.GetValue<string>("ProviderName")));
 
             DbSettingProviderManager
                .StartNewSession()
@@ -118,9 +118,9 @@ namespace HRM.UserControl.Admin.Website
 
         private void RegisterDI(IServiceCollection services)
         {
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
 

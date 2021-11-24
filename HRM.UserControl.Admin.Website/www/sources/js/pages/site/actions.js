@@ -42,12 +42,12 @@ const updateSite = params => async dispatch => {
     });
 };
 
-const updateSiteStatus = params => async dispatch => {
+const updateSiteStatus = params => async () => {
     const url = Site.resolveClientUrl('site/updateStatus');
     return await DataService.postDataAsync(url, params).then(response => response);
 };
 
-const generateToken = () => async dispatch => {
+const generateToken = () => async () => {
     const url = Site.resolveClientUrl('site/generateToken');
     return await DataService.postDataAsync(url).then(response => response);
 };

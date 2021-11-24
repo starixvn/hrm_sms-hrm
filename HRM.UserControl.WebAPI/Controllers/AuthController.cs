@@ -78,6 +78,7 @@
             loginResult.Token = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
+            loginResult.SiteId = requestSite.SiteId;
 
             if(loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
             {

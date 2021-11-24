@@ -19,13 +19,15 @@ function generateConfig(environment) {
             [`${jsPath}/pages/auth/login`]: pathConfig.scriptPaths.auth_login,
             [`${jsPath}/pages/site/index`]: pathConfig.scriptPaths.site_index,
             [`${jsPath}/pages/user/index`]: pathConfig.scriptPaths.user_index,
+            [`${jsPath}/pages/user/assign-site`]: pathConfig.scriptPaths.user_assign_site,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
             [`${cssPath}/error`]: pathConfig.cssPaths.error,
             [`${cssPath}/pages/auth/login`]: pathConfig.cssPaths.auth_login,
             [`${cssPath}/pages/site/index`]: pathConfig.cssPaths.site_index,
-            [`${cssPath}/pages/user/index`]: pathConfig.cssPaths.user_index
+            [`${cssPath}/pages/user/index`]: pathConfig.cssPaths.user_index,
+            [`${cssPath}/pages/user/assign-site`]: pathConfig.cssPaths.user_assign_site
         },
         output: {
             path: pathConfig.projectRoot,
