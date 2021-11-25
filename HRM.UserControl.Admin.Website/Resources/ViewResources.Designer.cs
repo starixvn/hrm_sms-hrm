@@ -106,6 +106,24 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage Function.
+        /// </summary>
+        public static string ManageFunction {
+            get {
+                return ResourceManager.GetString("ManageFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menu Management.
+        /// </summary>
+        public static string MenuManagement {
+            get {
+                return ResourceManager.GetString("MenuManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Site Management.
         /// </summary>
         public static string SiteManagement {

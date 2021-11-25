@@ -1,0 +1,39 @@
+@import '../../abstracts/mixins';
+@import '../../components/react-grid/react-grid';
+@import '../../components/form-filter';
+@import '../../components/forms';
+@import '../../components/icons';
+@import '../../components/tables';
+@import '../../components/react-select';
+@import "../../components/modal";
+@import "../../components/messages";
+
+.sweet-alert-modal-backdrop {
+    z-index: 1050 !important;
+}
+
+.has-child {
+    border: none !important;
+}
+
+.odd-row td{
+    background:#f2f1f0 !important;
+}
+.even-row td{
+     background:#fff !important;
+}
+
+tr .Read {
+    font-weight: bold;
+    color: #1d9476 !important;
+}
+
+tr .Host{
+    font-weight: bold;
+    color: #923a49 !important;
+}
+
+tr .All{
+    font-weight: bold;
+    color: #fc3 !important;
+}
