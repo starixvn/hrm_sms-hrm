@@ -12,9 +12,9 @@
 
         Task<IList<MenuItem>> GetMenuItemAsync();
 
-        IList<FunctionPermission> GetFunctionPermission();
+        IList<FunctionPermission> GetFunctionPermission(short siteId, int userId);
 
-        Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
+        Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId);
 
         User GetById(int id);
 
@@ -60,11 +60,11 @@
         public IList<MenuItem> GetMenuItem()
             => userClient.GetMenuItem();
 
-        public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync()
-             => await userClient.GetFunctionPermissionAsync();
+        public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId)
+             => await userClient.GetFunctionPermissionAsync(siteId, userId);
 
-        public IList<FunctionPermission> GetFunctionPermission()
-            => userClient.GetFunctionPermission();
+        public IList<FunctionPermission> GetFunctionPermission(short siteId, int userId)
+            => userClient.GetFunctionPermission(siteId, userId);
 
         public User GetById(int id)
             => userClient.GetById(id);

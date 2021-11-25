@@ -97,6 +97,15 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string Permission {
+            get {
+                return ResourceManager.GetString("Permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Site Management.
         /// </summary>
         public static string SiteManagement {

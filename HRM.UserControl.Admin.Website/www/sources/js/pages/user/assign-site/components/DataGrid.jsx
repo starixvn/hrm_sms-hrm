@@ -1,4 +1,4 @@
-﻿import React, { Component, Fragment } from 'react';
+﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../../actions';
@@ -67,16 +67,14 @@ export class DataGrid extends Component {
 
     render() {
         return (
-            <Fragment>
-                <Table
-                    width={960}
-                    autoWidth={false}
-                    header={this.buildHeader()}
-                    body={this.buildBody()}
-                    containerPadding={0}
-                    adjustedHeight={10}
-                />
-            </Fragment>
+            <Table
+                width={960}
+                autoWidth={false}
+                header={this.buildHeader()}
+                body={this.buildBody()}
+                containerPadding={0}
+                adjustedHeight={10}
+            />
         );
     }
 }

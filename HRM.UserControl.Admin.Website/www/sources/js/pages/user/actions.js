@@ -3,9 +3,11 @@ import DataService from '@jsroot/common/dataService';
 import {
     setGetAllUserParams,
     setUserGridData,
+    setSites,
     setUserSites,
     setSiteRoles,
     setAvailableSites,
+    setUserPermission,
     setCreateModalDialog,
     setCreateUserResult,
     setResetPasswordModalDialog,
@@ -16,6 +18,14 @@ import {
     setUpdateUserSiteRoleModalDialog,
     setUpdateUserSiteRoleResult
 } from './userSlice';
+
+const getAllSite = params => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl('common/getAllSite');
+    await DataService.getDataAsync(url, params).then(response => {
+        dispatch(setSites(response.data));
+    }).then(() => Site.unblockUI());
+};
 
 const getAllUser = params => async dispatch => {
     Site.blockUI();
@@ -58,7 +68,7 @@ const getAvailableSiteByUserId = userId => async dispatch => {
 
 const getRoleBySiteId = siteId => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl(`user/getRoleBySiteId?siteId=${siteId}`);
+    const url = Site.resolveClientUrl(`common/getRoleBySiteId?siteId=${siteId}`);
     await DataService.getDataAsync(url).then(response => {
         dispatch(setSiteRoles(response.data));
     }).then(() => Site.unblockUI());
@@ -80,6 +90,14 @@ const updateUserSiteRole = params => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const getUserPermission = params => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl(`user/getUserPermission`);
+    await DataService.getDataAsync(url, params).then(response => {
+        dispatch(setUserPermission(response.data));
+    }).then(() => Site.unblockUI());
+};
+
 const updateUserSiteStatus = params => async () => {
     const url = Site.resolveClientUrl('user/updateUserSiteStatus');
     return await DataService.postDataAsync(url, params).then(response => response);
@@ -88,9 +106,11 @@ const updateUserSiteStatus = params => async () => {
 export const ActionCreators = {
     setGetAllUserParams,
     setUserGridData,
+    setSites,
     setUserSites,
     setSiteRoles,
     setAvailableSites,
+    setUserPermission,
     setCreateModalDialog,
     setCreateUserResult,
     setResetPasswordModalDialog,
@@ -100,6 +120,7 @@ export const ActionCreators = {
     setAssignNewSiteResult,
     setUpdateUserSiteRoleModalDialog,
     setUpdateUserSiteRoleResult,
+    getAllSite,
     getAllUser,
     createUser,
     resetPassword,
@@ -108,5 +129,6 @@ export const ActionCreators = {
     getRoleBySiteId,
     assignSiteToUser,
     updateUserSiteRole,
-    updateUserSiteStatus
+    updateUserSiteStatus,
+    getUserPermission
 };

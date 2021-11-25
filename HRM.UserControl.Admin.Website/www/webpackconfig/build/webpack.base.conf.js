@@ -20,6 +20,7 @@ function generateConfig(environment) {
             [`${jsPath}/pages/site/index`]: pathConfig.scriptPaths.site_index,
             [`${jsPath}/pages/user/index`]: pathConfig.scriptPaths.user_index,
             [`${jsPath}/pages/user/assign-site`]: pathConfig.scriptPaths.user_assign_site,
+            [`${jsPath}/pages/user/permission`]: pathConfig.scriptPaths.user_permission,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
@@ -27,7 +28,8 @@ function generateConfig(environment) {
             [`${cssPath}/pages/auth/login`]: pathConfig.cssPaths.auth_login,
             [`${cssPath}/pages/site/index`]: pathConfig.cssPaths.site_index,
             [`${cssPath}/pages/user/index`]: pathConfig.cssPaths.user_index,
-            [`${cssPath}/pages/user/assign-site`]: pathConfig.cssPaths.user_assign_site
+            [`${cssPath}/pages/user/assign-site`]: pathConfig.cssPaths.user_assign_site,
+            [`${cssPath}/pages/user/permission`]: pathConfig.cssPaths.user_permission
         },
         output: {
             path: pathConfig.projectRoot,

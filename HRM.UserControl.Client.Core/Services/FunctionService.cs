@@ -7,9 +7,9 @@
 
     public interface IFunctionService
     {
-        IList<Function> Get(bool? isActive = null);
+        IList<Function> GetBySiteId(short siteId, bool? isActive = true);
 
-        Task<IList<Function>> GetAsync(bool? isActive = null);
+        Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true);
 
         IList<FunctionPermission> GetPermissionByRoleId(short roleId);
 
@@ -25,11 +25,11 @@
             functionClient = new FunctionClient();
         }
 
-        public async Task<IList<Function>> GetAsync(bool? isActive = null)
-             => await functionClient.GetAsync(isActive);
+        public async Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true)
+             => await functionClient.GetBySiteIdAsync(siteId, isActive);
 
-        public IList<Function> Get(bool? isActive = null)
-            => functionClient.Get(isActive);
+        public IList<Function> GetBySiteId(short siteId, bool? isActive = true)
+            => functionClient.GetBySiteId(siteId, isActive);
 
         public async Task<IList<FunctionPermission>> GetPermissionByRoleIdAsync(short roleId)
             => await functionClient.GetPermissionByRoleIdAsync(roleId);

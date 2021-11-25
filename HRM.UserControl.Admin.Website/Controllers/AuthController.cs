@@ -59,7 +59,7 @@
                 userControlSession.SiteId = loginResult.SiteId;
                 userControlSession.JwtToken = loginResult.Token;
                 userControlSession.MenuItems = await userService.GetMenuItemAsync();
-                userControlSession.Functions = await userService.GetFunctionPermissionAsync();
+                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
 
                 await DoLoginAsync(loginResult.UserId);
 

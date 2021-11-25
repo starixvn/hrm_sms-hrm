@@ -40,7 +40,7 @@
         public ActionResult Index(short? roleId = null)
         {
             IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
-            IList<Function> functions = ucfunctionService.Get(true);
+            IList<Function> functions = ucfunctionService.GetBySiteId(userControlSession.SiteId, true);
             var functionTrees = new TreeFunctionViewModel
             {
                 RoleId = roleId ?? systemRoles.First().RoleId,

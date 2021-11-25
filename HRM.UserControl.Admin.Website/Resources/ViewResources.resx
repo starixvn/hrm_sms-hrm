@@ -129,6 +129,9 @@
   <data name="InvalidUrl" xml:space="preserve">
     <value>Invalid Url</value>
   </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
   <data name="SiteManagement" xml:space="preserve">
     <value>Site Management</value>
   </data>

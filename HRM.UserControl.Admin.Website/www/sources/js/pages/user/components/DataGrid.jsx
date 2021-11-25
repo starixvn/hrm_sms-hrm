@@ -1,4 +1,4 @@
-﻿import React, { Component, Fragment } from 'react';
+﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Dropdown } from 'react-bootstrap';
@@ -77,7 +77,7 @@ export class DataGrid extends Component {
                 <Dropdown.Divider />
                 <Dropdown.Item href={Site.resolveClientUrl(`user/assignSite/${user.userId}`)}>View Sites</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item>Something else</Dropdown.Item>
+                <Dropdown.Item href={Site.resolveClientUrl(`user/permission/${user.userId}`)}>View Permission</Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>;
     };
@@ -109,20 +109,18 @@ export class DataGrid extends Component {
             PageList: PAGING_SIZES
         };
         return (
-            <Fragment>
-                <Table
-                    minWidth={720}
-                    maxWidth={document.getElementById('app-container').clientWidth}
-                    autoWidth
-                    header={this.buildHeader()}
-                    body={this.buildBody()}
-                    isPaging
-                    pageOption={pagingOption}
-                    onPaging={this.onPaging}
-                    containerPadding={0}
-                    adjustedHeight={10}
-                />
-            </Fragment>
+            <Table
+                minWidth={720}
+                maxWidth={document.getElementById('app-container').clientWidth}
+                autoWidth
+                header={this.buildHeader()}
+                body={this.buildBody()}
+                isPaging
+                pageOption={pagingOption}
+                onPaging={this.onPaging}
+                containerPadding={0}
+                adjustedHeight={10}
+            />
         );
     }
 }

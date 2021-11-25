@@ -5,13 +5,18 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         getAllUserParams: {
+            username: '',
+            statusId: null,
+            siteId: null,
             pageIndex: 1,
             pageSize: DefaultPageSize
         },
+        sites: [],
         userGridData: null,
         userSites: [],
         availableSites: [],
         siteRoles: [],
+        userPermission: null,
         createModalDialog: { show: false },
         createUserResult: null,
         resetPasswordModalDialog: { show: false },
@@ -29,6 +34,9 @@ const userSlice = createSlice({
         setUserGridData: (state, action) => {
             state.userGridData = action.payload;
         },
+        setSites: (state, action) => {
+            state.sites = action.payload;
+        },
         setUserSites: (state, action) => {
             state.userSites = action.payload;
         },
@@ -37,6 +45,9 @@ const userSlice = createSlice({
         },
         setAvailableSites: (state, action) => {
             state.availableSites = action.payload;
+        },
+        setUserPermission: (state, action) => {
+            state.userPermission = action.payload;
         },
         setCreateModalDialog: (state, action) => {
             state.createModalDialog = action.payload;
@@ -73,9 +84,11 @@ const { actions, reducer } = userSlice;
 export const {
     setGetAllUserParams,
     setUserGridData,
+    setSites,
     setUserSites,
     setSiteRoles,
     setAvailableSites,
+    setUserPermission,
     setCreateModalDialog,
     setCreateUserResult,
     setResetPasswordModalDialog,

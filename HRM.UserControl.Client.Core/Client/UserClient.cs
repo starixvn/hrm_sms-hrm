@@ -11,9 +11,9 @@
 
         Task<IList<MenuItem>> GetMenuItemAsync();
 
-        IList<FunctionPermission> GetFunctionPermission();
+        IList<FunctionPermission> GetFunctionPermission(short siteId, int userId);
 
-        Task<IList<FunctionPermission>> GetFunctionPermissionAsync();
+        Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId);
 
         User GetById(int id);
 
@@ -52,11 +52,25 @@
         public async Task<IList<MenuItem>> GetMenuItemAsync()
             => await GetAsync<IList<MenuItem>>(RelativePaths.GetMenuItemPath);
 
-        public IList<FunctionPermission> GetFunctionPermission()
-            => Get<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath);
+        public IList<FunctionPermission> GetFunctionPermission(short siteId, int userId)
+        {
+            var data = new Dictionary<string, object>
+            {
+                { "siteId", siteId },
+                { "userId", userId }
+            };
+            return Get<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath, data);
+        }
 
-        public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync()
-            => await GetAsync<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath);
+        public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId)
+        {
+            var data = new Dictionary<string, object>
+            {
+                { "siteId", siteId },
+                { "userId", userId }
+            };
+            return await GetAsync<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath, data);
+        }
 
         public User GetById(int id)
             => Get<User>(string.Format(RelativePaths.GetUserByIdPath, id));

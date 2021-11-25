@@ -69,7 +69,7 @@
                     userControlSession.SiteId = loginResult.SiteId;
                     userControlSession.JwtToken = loginResult.Token;
                     userControlSession.MenuItems = userService.GetMenuItem();
-                    userControlSession.Functions = userService.GetFunctionPermission();
+                    userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
                     //HRM session
                     EmployeeSession employee = authService.GetEmployeeByCode(model.Username);
                     sessionService.IsShowLeftNavigation = true;

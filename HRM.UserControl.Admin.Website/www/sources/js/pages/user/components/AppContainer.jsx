@@ -12,6 +12,10 @@ export class AppContainer extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        this.props.getAllSite();
+    }
+
     render() {
         const { createModalDialog, resetPasswordModalDialog } = this.props;
         return (

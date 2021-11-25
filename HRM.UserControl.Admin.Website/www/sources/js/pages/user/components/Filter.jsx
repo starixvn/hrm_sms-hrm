@@ -14,7 +14,7 @@ export class Filter extends Component {
         this.state = {
             username: '',
             status: { value: 1, label: 'Active' },
-            site: null
+            site: { value: null, label: 'All' }
         };
     }
 
@@ -27,6 +27,7 @@ export class Filter extends Component {
     getParams = () => {
         return {
             username: this.state.username,
+            siteId: this.state.site.value,
             statusId: this.state.status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
@@ -50,10 +51,14 @@ export class Filter extends Component {
 
     render() {
         const { username, status, site } = this.state;
+        const siteOptions = this.props.sites.map(item => { return { value: item.siteId, label: item.siteName }; });
+        siteOptions.unshift({ value: null, label: 'All' });
+
         const statusOptions = [{ value: null, label: 'All' },
             { value: 1, label: 'Active' },
             { value: 2, label: 'Inactive' },
             { value: 3, label: 'Deleted' }];
+
         return (
             <Form className="form-filter" onSubmit={this.handleSubmit}>
                 <Form.Row bsPrefix="form-row">
@@ -68,7 +73,7 @@ export class Filter extends Component {
                     <Form.Group>
                         <Form.Label>{LangHelper.getResource('Site')}</Form.Label>
                         <Select className={`react-select-container`} classNamePrefix="react-select"
-                            options={[]} value={site}
+                            options={siteOptions} value={site}
                             onChange={value => this.handleChange('site', value)}
                         />
                     </Form.Group>
@@ -97,8 +102,8 @@ export class Filter extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllUserParams } = state;
-    return { getAllUserParams };
+    const { getAllUserParams, sites } = state;
+    return { getAllUserParams, sites };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter);

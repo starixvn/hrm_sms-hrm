@@ -21,14 +21,9 @@
         }
 
         [HttpGet]
-        [Route("api/function")]
-        public async Task<IActionResult> GetBySiteId(bool? isActive = null)
+        [Route("api/function/getBySiteId")]
+        public async Task<IActionResult> GetBySiteId([FromBody] GetFunctionBySiteIdCriteria criteria)
         {
-            var criteria = new GetFunctionBySiteIdCriteria
-            {
-                SiteId = SiteId,
-                IsActive = isActive
-            };
             var functions = await baseService.GetDataAsync<Function>(criteria);
             return Ok(functions);
         }

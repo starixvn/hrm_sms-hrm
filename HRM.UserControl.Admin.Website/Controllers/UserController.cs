@@ -1,5 +1,6 @@
 ﻿namespace HRM.UserControl.Admin.Website.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.User;
@@ -17,21 +18,21 @@
         private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
         private readonly ICryptoService cryptoService;
+        private readonly IFunctionService functionService;
         private readonly IUserService userService;
-        private readonly IRoleService roleService;
 
         public UserController(
             IUserControlSession userControlSession,
             IBaseService baseService,
             ICryptoService cryptoService,
-            IUserService userService,
-            IRoleService roleService)
+            IFunctionService functionService,
+            IUserService userService)
         {
             this.userControlSession = userControlSession;
             this.baseService = baseService;
             this.cryptoService = cryptoService;
+            this.functionService = functionService;
             this.userService = userService;
-            this.roleService = roleService;
         }
 
         public IActionResult Index()
@@ -78,12 +79,6 @@
             return Json(sites);
         }
 
-        public async Task<IActionResult> GetRoleBySiteId(short siteId)
-        {
-            var roles = await roleService.GetBySiteIdAsync(siteId);
-            return Json(roles);
-        }
-
         public async Task<IActionResult> GetAvailableSiteByUserId(int id)
         {
             var criteria = new GetAvailableSiteByUserIdCriteria { UserId = id };
@@ -113,6 +108,49 @@
             command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
+        }
+
+        public IActionResult Permission(int id)
+        {
+            return View(id);
+        }
+
+        public async Task<IActionResult> GetUserPermission(short siteId, int userId)
+        {
+            IList<Function> functions = await functionService.GetBySiteIdAsync(siteId, true);
+            IList<FunctionPermission> permissions = await userService.GetFunctionPermissionAsync(siteId, userId);
+            return Json(new { functions = GetFunctionTrees(functions), permissions });
+        }
+
+        private IList<Function> GetFunctionTrees(IList<Function> functions)
+        {
+            IList<Function> functionTrees = functions.Where(func => !func.ParentId.HasValue).ToList();
+            foreach (Function function in functionTrees)
+            {
+                function.Level = 0;
+                GetChildFunctions(function, functions);
+            }
+
+            return functionTrees;
+        }
+
+        private void GetChildFunctions(Function function, IList<Function> functions)
+        {
+            IList<Function> functionItems = functions.Where(x => x.ParentId == function.FunctionId).ToList();
+            if (functionItems.Any())
+            {
+                if (function.Childs == null)
+                {
+                    function.Childs = new List<Function>();
+                }
+
+                foreach (Function item in functionItems)
+                {
+                    item.Level = (byte)(function.Level + 1);
+                    function.Childs.Add(item);
+                    GetChildFunctions(item, functions);
+                }
+            }
         }
     }
 }

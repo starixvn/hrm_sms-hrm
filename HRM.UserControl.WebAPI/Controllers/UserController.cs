@@ -58,13 +58,8 @@
 
         [HttpGet]
         [Route("api/user/getFunctionPermission")]
-        public async Task<IActionResult> GetFunctionPermission()
+        public async Task<IActionResult> GetFunctionPermission([FromBody] GetFunctionByUserIdCriteria criteria)
         {
-            var criteria = new GetFunctionByUserIdCriteria
-            {
-                UserId = UserId,
-                SiteId = SiteId
-            };
             var functions = await baseService.GetDataAsync<FunctionPermission>(criteria);
             return Ok(functions);
         }
