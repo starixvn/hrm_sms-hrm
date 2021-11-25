@@ -26,6 +26,7 @@
     FullName: 'Full Name',
     LastLoginDate: 'Last Login Date',
     FunctionName: 'Function Name',
+    FunctionKey: 'Function Key',
     Login: 'Login',
     ModifiedDate: 'Modified Date',
     ModifiedBy: 'Modified By',

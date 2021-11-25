@@ -4,12 +4,9 @@
     using System.Linq;
     using HRM.UserControl.Admin.Website.Criteria.Function;
     using HRM.UserControl.Admin.Website.Criteria.Site;
-    using HRM.UserControl.Admin.Website.Models.Function;
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Services;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Client.Core.Models;
 
     public class FunctionController : Controller

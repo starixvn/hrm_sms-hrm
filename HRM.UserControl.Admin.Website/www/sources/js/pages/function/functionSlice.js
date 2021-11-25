@@ -13,7 +13,8 @@ const functionSlice = createSlice({
         updateFunctionResult: null,
         selectedFunction: null,
         updateStatusModalDialog: { show: false },
-        confirmModalDialog: { show: false, params: null }
+        confirmModalDialog: { show: false, params: null },
+        confirmModalRegenerateKeyDialog: { show: false }
     },
     reducers: {
         setGetSiteParams: (state, action) => {
@@ -48,6 +49,9 @@ const functionSlice = createSlice({
         },
         setConfirmModalDialog: (state, action) => {
             state.confirmModalDialog = action.payload;
+        },
+        setConfirmRegenerateKeyModalDialog: (state, action) => {
+            state.confirmModalRegenerateKeyDialog = action.payload;
         }
     }
 });
@@ -65,7 +69,8 @@ export const {
     setUpdateFunctionResult,
     setSelectedFunction,
     setUpdateStatusModalDialog,
-    setConfirmModalDialog
+    setConfirmModalDialog,
+    setConfirmRegenerateKeyModalDialog
 } = actions;
 
 export default reducer;

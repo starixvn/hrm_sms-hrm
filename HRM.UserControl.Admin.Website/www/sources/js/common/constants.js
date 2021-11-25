@@ -17,14 +17,13 @@ export const ActiveStatusOptions = [
 ];
 
 export const PolicyOptions = [
-    { value: null, label: LangHelper.getResource('None') },
-    { value: 0, label: LangHelper.getResource('All') },
+    { value: null, label: LangHelper.getResource('All') },
     { value: 1, label: LangHelper.getResource('Read') },
     { value: 2, label: LangHelper.getResource('Host') }
 ];
 
 export const Policy = {
-    None: 0,
+    All: 0,
     Read: 1,
     Host: 2
 };

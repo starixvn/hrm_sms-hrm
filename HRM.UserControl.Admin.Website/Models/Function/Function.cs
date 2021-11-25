@@ -7,6 +7,7 @@
     {
         public int FunctionId { get; set; }
         public string FunctionName { get; set; }
+        public string FunctionKey { get; set; }
         public short SiteId { get; set; }
         public int ParentId { get; set; }
         public short? Policy { get; set; }

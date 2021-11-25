@@ -10,7 +10,8 @@ import {
     setUpdateModalDialog,
     setUpdateFunctionResult,
     setUpdateStatusModalDialog,
-    setConfirmModalDialog
+    setConfirmModalDialog,
+    setConfirmRegenerateKeyModalDialog 
 } from './functionSlice';
 
 const getFunctionById = id => async dispatch => {
@@ -70,5 +71,6 @@ export const ActionCreators = {
     setUpdateFunctionResult,
     updateFunctionStatus,
     setUpdateStatusModalDialog,
-    setConfirmModalDialog
+    setConfirmModalDialog,
+    setConfirmRegenerateKeyModalDialog
 };

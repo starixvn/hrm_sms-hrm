@@ -5,7 +5,7 @@ import { Form } from 'react-bootstrap';
 import { ActionCreators } from '../actions';
 import { Table, HeaderRow, HeaderCell, Row, Cell } from '@jsroot/components/react-grid/index';
 import LangHelper from '@jsroot/common/langHelper';
-import DateTimeService from '@jsroot/common/DateTimeService';
+import DateTimeService from '@jsroot/common/dateTimeService';
 
 export class DataGrid extends Component {
     static defaultProps = {
@@ -33,7 +33,7 @@ export class DataGrid extends Component {
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Order')}</HeaderCell>
                 <HeaderCell colWidth={12}>{LangHelper.getResource('Policy')}</HeaderCell>
                 <HeaderCell colWidth={22}>{LangHelper.getResource('ModifiedDate')}</HeaderCell>
-                <HeaderCell colWidth={20}>{LangHelper.getResource('ModifiedBy')}</HeaderCell>
+                <HeaderCell colWidth={15}>{LangHelper.getResource('ModifiedBy')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Active')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
@@ -150,7 +150,7 @@ export class DataGrid extends Component {
     renderPolicy = policy =>{
         let policyName = '';
         switch(policy) {
-            case 0:
+            case null:
                 policyName = 'All';
                 break;
             case 1:

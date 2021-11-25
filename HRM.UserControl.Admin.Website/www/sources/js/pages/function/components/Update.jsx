@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../actions';
-import { Button, Col, Form, Modal, Row, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
@@ -67,6 +67,15 @@ export class Update extends Component {
         this.props.setConfirmModalDialog({ show: false });
     }
 
+    handleOpenConfirmRegenerateKeyModalDialog = () => {
+        this.props.setConfirmRegenerateKeyModalDialog({ show: true});
+    }
+
+    handleCloseConfirmRegenerateKeyModalDialog = () => {
+        this.props.setConfirmRegenerateKeyModalDialog({ show: false });
+    }
+
+
     handleCloseModalDialog = () => {
         this.props.setUpdateModalDialog({ show: false });
         if (this.props.updateFunctionResult) {
@@ -85,6 +94,7 @@ export class Update extends Component {
         const params = {
             functionId: this.props.functionSelected.functionId,
             functionName: values.functionName,
+            functionKey: values.functionKey,
             siteId: site.value,
             parentId: parent.value,
             policy: values.policy.value,
@@ -98,6 +108,7 @@ export class Update extends Component {
     handleConfirmUpdate = () =>{
         const {updateFunction, confirmModalDialog} = this.props;
         const params = confirmModalDialog.params;
+        this.handleCloseConfirmModalDialog();
         updateFunction(params).then(() => {
             if (this.props.updateFunctionResult.isSuccessful) {
                 setTimeout(() => {
@@ -109,6 +120,12 @@ export class Update extends Component {
                 setSubmitting(false);
             }
         });
+    }
+
+    handleRegenerateFunctionKey = () => {
+        const functionKey = this.formik.values.functionName.replace(/\s/g, '');
+        this.formik.setFieldValue('functionKey', functionKey);
+        this.handleCloseConfirmRegenerateKeyModalDialog();
     }
 
     renderForm = ({
@@ -135,7 +152,7 @@ export class Update extends Component {
                         <Form.Label column sm="4" md="3" className="required" htmlFor="functionName">
                             {LangHelper.getResource('FunctionName')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Form.Control type="text" size="sm" value={values.functionName}
                                 name="functionName" id="functionName"
                                 className="shadow-none" autoComplete="off"
@@ -145,10 +162,24 @@ export class Update extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
+                        <Form.Label column sm="4" md="3" htmlFor="functionKey">
+                            {LangHelper.getResource('FunctionKey')}
+                        </Form.Label>
+                        <Col sm="7" md="8">
+                            <Form.Control type="text" size="sm" value={values.functionKey}
+                                disabled
+                                name="functionKey" id="functionKey"
+                                className='shadow-none' autoComplete="off"
+                                onChange={handleChange}
+                            />
+                        </Col>
+                        <span className="fa fa-pencil-square-o pt-2 cursor-pointer" aria-hidden="true" onClick={this.handleOpenConfirmRegenerateKeyModalDialog}/>
+                    </Form.Group>
+                    <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" htmlFor="site">
                             {LangHelper.getResource('Site')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Select className='react-select-container' classNamePrefix="react-select" isSearchable={false}
                                 options={siteOptions} value={site}
                                 onChange={value => this.handleChangeSite(value)}
@@ -159,11 +190,10 @@ export class Update extends Component {
                         <Form.Label column sm="4" md="3" htmlFor="description">
                             {LangHelper.getResource('Description')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Form.Control type="text" size="sm" value={values.description}
                                 name="description" id="description"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.description && errors.description}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -172,7 +202,7 @@ export class Update extends Component {
                         <Form.Label column sm="4" md="3" htmlFor="policy">
                             {LangHelper.getResource('Policy')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Select className='react-select-container' classNamePrefix="react-select" isSearchable={false}
                                 options={PolicyOptions} value={values.policy}
                                 onChange={value => setFieldValue('policy', value)}
@@ -183,7 +213,7 @@ export class Update extends Component {
                         <Form.Label column sm="4" md="3" htmlFor="parent">
                             {LangHelper.getResource('Parent')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Select className='react-select-container' classNamePrefix="react-select" isSearchable
                                 options={parentOptions} value={parent}
                                 onChange={value => this.setState({parent: value})}
@@ -194,11 +224,10 @@ export class Update extends Component {
                         <Form.Label column sm="4" md="3" htmlFor="order">
                             {LangHelper.getResource('Order')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Form.Control type="number" size="sm" value={values.order}
                                 name="order" id="order"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.order && errors.order}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -209,7 +238,7 @@ export class Update extends Component {
                         >
                             {LangHelper.getResource('Status')}
                         </Form.Label>
-                        <Col sm="8" md="9">
+                        <Col sm="7" md="8">
                             <Form.Check type="checkbox"
                                 checked={values.isActive}
                                 name="isActive" id="isActive"
@@ -236,6 +265,7 @@ export class Update extends Component {
         const policy = PolicyOptions.filter(x=>x.value === functionSelected.policy);
         const initialValues = {
             functionName: functionSelected.functionName,
+            functionKey: functionSelected.functionKey,
             description: functionSelected.description,
             policy: policy,
             order: functionSelected.displayOrder,
@@ -277,6 +307,24 @@ export class Update extends Component {
                         onClose={this.handleCloseConfirmModalDialog}
                     />
                 }
+                {
+                    this.props.confirmModalRegenerateKeyDialog.show &&
+                    <SweetModalDialog size='sm'
+                        title={LangHelper.getResource('Confirmation')}
+                        contents={
+                            <div>Do you want to regenerate function key ?</div>
+                        }
+                        buttons={[
+                            <Button variant="primary" size="sm" onClick={this.handleRegenerateFunctionKey}>
+                                {LangHelper.getResource('OK')}
+                            </Button>,
+                            <Button variant="secondary" size="sm" onClick={this.handleCloseConfirmRegenerateKeyModalDialog}>
+                                {LangHelper.getResource('Cancel')}
+                            </Button>
+                        ]}
+                        onClose={this.handleCloseConfirmRegenerateKeyModalDialog}
+                    />
+                }
             </>
         );
     }
@@ -285,8 +333,8 @@ export class Update extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog } = state;
-    return { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog };
+    const { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog, confirmModalRegenerateKeyDialog } = state;
+    return { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog, confirmModalRegenerateKeyDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Update);

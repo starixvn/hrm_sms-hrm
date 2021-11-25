@@ -217,7 +217,7 @@ export class Create extends Component {
         const initialValues = {
             functionName: '',
             description: '',
-            policy: PolicyOptions[2],
+            policy: PolicyOptions[1],
             order: 0,
             isActive: true
         };
