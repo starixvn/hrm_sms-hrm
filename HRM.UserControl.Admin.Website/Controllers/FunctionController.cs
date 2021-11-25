@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using HRM.UserControl.Admin.Website.Models;
+    using HRM.UserControl.Client.Core.Models;
 
     public class FunctionController : Controller
     {
@@ -35,7 +36,7 @@
         public async Task<IActionResult> GetById(short id)
         {
             var criteria = new GetFunctionBySiteIdCriteria { SiteId = id };
-            var functions = await baseService.GetDataAsync<Function>(criteria);
+            var functions = await baseService.GetDataAsync<Models.Function.Function>(criteria);
             return Json(functions);
         }
 

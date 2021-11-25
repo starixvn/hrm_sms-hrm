@@ -21,7 +21,7 @@ function generateConfig(environment) {
             [`${jsPath}/pages/user/index`]: pathConfig.scriptPaths.user_index,
             [`${jsPath}/pages/user/assign-site`]: pathConfig.scriptPaths.user_assign_site,
             [`${jsPath}/pages/user/permission`]: pathConfig.scriptPaths.user_permission,
-            [`${jsPath}/pages/function/index`]: pathConfig.scriptPaths.function
+            [`${jsPath}/pages/function/index`]: pathConfig.scriptPaths.function,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,

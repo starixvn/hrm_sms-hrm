@@ -11,7 +11,7 @@ const cssPaths = {
     site_index: ['./www/sources/css/pages/site/index.scss'],
     user_index: ['./www/sources/css/pages/user/index.scss'],
     user_assign_site: ['./www/sources/css/pages/user/assign-site.scss'],
-    user_permission: ['./www/sources/css/pages/user/permission.scss']
+    user_permission: ['./www/sources/css/pages/user/permission.scss'],
     function: ['./www/sources/css/pages/function/index.scss']
 };
 
