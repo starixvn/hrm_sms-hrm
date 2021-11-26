@@ -43,14 +43,14 @@ export class AppContainer extends Component {
     };
 
     render() {
-        const { createModalDialog, updateModalDialog, functionSelected, updateStatusModalDialog, sites, params } = this.props;
+        const { createModalDialog, updateModalDialog, functionSelected, updateStatusModalDialog, sites } = this.props;
         if(sites.length === 0){
             return null;
         }
 
         return (
             <div>
-                <Filter siteSelected={params}/>
+                <Filter />
                 <DataGrid />
                 {
                     createModalDialog.show &&

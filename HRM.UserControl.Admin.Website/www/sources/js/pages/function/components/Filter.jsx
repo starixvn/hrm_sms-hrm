@@ -44,6 +44,7 @@ export class Filter extends Component {
         this.props.setGetSiteParams(site.value);
         this.props.getFunctionById(site.value);
     }
+
     handleSubmit = event => {
         event.preventDefault();
         this.props.setGetSiteParams(this.state.site.value);
@@ -87,8 +88,8 @@ export class Filter extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { functions, sites, params, isCreateFunction } = state;
-    return { functions, sites, params, isCreateFunction };
+    const { sites, params } = state;
+    return { sites, params };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter);

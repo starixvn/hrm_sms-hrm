@@ -22,5 +22,8 @@
         <Setting Key="Function_UpdateStatus" SpName="Function_UpdateStatus" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Insert" SpName="Function_Insert" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Update" SpName="Function_Update" DbName="bodb_IUC" Plain="0" />
-    </Function>   
+    </Function>
+    <Function Name="Menu">
+        <Setting Key="Menu_GetBySiteId" SpName="Menu_GetBySiteId" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

@@ -1,15 +1,13 @@
 ﻿namespace HRM.UserControl.Admin.Website.Controllers
 {
     using System.Threading.Tasks;
-    using System.Linq;
     using HRM.UserControl.Admin.Website.Criteria.Function;
-    using HRM.UserControl.Admin.Website.Criteria.Site;
-    using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Services;
     using Microsoft.AspNetCore.Mvc;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.API.Core.Criteria.Function;
+    using HRM.UserControl.Admin.Website.Criteria.Site;
+    using HRM.UserControl.Admin.Website.Models.Site;
 
     public class FunctionController : Controller
     {
@@ -29,7 +27,7 @@
 
         public async Task<IActionResult> GetAllSites()
         {
-            var criteria = new GetAllSiteCriteria { IsActive = true };
+            var criteria = new GetAllSiteCriteria();
             var sites = await baseService.GetDataAsync<Site>(criteria);
             return Json(sites);
         }
