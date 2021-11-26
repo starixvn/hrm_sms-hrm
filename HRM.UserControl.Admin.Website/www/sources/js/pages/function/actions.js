@@ -10,7 +10,6 @@ import {
     setUpdateModalDialog,
     setUpdateFunctionResult,
     setUpdateStatusModalDialog,
-    setConfirmModalDialog,
     setConfirmRegenerateKeyModalDialog 
 } from './functionSlice';
 
@@ -71,6 +70,5 @@ export const ActionCreators = {
     setUpdateFunctionResult,
     updateFunctionStatus,
     setUpdateStatusModalDialog,
-    setConfirmModalDialog,
     setConfirmRegenerateKeyModalDialog
 };

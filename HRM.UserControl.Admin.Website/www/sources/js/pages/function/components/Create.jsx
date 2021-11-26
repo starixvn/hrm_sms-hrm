@@ -127,11 +127,12 @@ export class Create extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3" htmlFor="site">
+                        <Form.Label column sm="4" md="3" className="required" htmlFor="site">
                             {LangHelper.getResource('Site')}
                         </Form.Label>
                         <Col sm="8" md="9">
-                            <Select className='react-select-container' classNamePrefix="react-select" isSearchable={false}
+                            <Select className={`react-select-container ${errors.siteId && errors.siteId ? 'is-invalid' : ''}`}
+                                classNamePrefix="react-select" isSearchable={false}
                                 options={siteOptions} value={site}
                                 onChange={value => this.handleChangeSite(value)}
                             />
@@ -186,16 +187,14 @@ export class Create extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3"
-                            htmlFor="isActive"
-                        >
-                            {LangHelper.getResource('Status')}
+                        <Form.Label column sm="4" md="3" htmlFor="isActive">
+                            {LangHelper.getResource('Active')}
                         </Form.Label>
                         <Col sm="8" md="9">
                             <Form.Check type="checkbox"
                                 checked={values.isActive}
                                 name="isActive" id="isActive"
-                                className="shadow-none"
+                                className='shadow-none'
                                 onChange={handleChange}
                             />
                         </Col>
@@ -232,7 +231,7 @@ export class Create extends Component {
                 </Modal.Header>
                 <Formik
                     initialValues={initialValues}
-                    validate={validateFormik}
+                    validate={values =>validateFormik(values, this.state.site.value, true)}
                     onSubmit={this.handleSubmit}
                 >
                     {this.renderForm}

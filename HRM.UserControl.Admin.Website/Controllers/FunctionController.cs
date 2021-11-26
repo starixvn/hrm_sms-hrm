@@ -8,14 +8,18 @@
     using HRM.UserControl.Admin.Website.Services;
     using Microsoft.AspNetCore.Mvc;
     using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Services;
+    using HRM.UserControl.API.Core.Criteria.Function;
 
     public class FunctionController : Controller
     {
         private readonly IBaseService baseService;
+        private readonly IFunctionService functionService;
 
-        public FunctionController(IBaseService baseService)
+        public FunctionController(IBaseService baseService, IFunctionService functionService)
         {
             this.baseService = baseService;
+            this.functionService = functionService;
         }
 
         public IActionResult Index()
@@ -32,8 +36,7 @@
 
         public async Task<IActionResult> GetById(short id)
         {
-            var criteria = new GetFunctionBySiteIdCriteria { SiteId = id };
-            var functions = await baseService.GetDataAsync<Models.Function.Function>(criteria);
+            var functions = await functionService.GetBySiteIdAsync(id);
             return Json(functions);
         }
 

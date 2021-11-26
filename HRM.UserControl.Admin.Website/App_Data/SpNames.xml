@@ -19,7 +19,6 @@
         <Setting Key="Site_GetByUserId" SpName="Site_GetByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Function">
-        <Setting Key="Function_GetBySiteId" SpName="Function_GetBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_UpdateStatus" SpName="Function_UpdateStatus" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Insert" SpName="Function_Insert" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Update" SpName="Function_Update" DbName="bodb_IUC" Plain="0" />

@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../actions';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, Form, Modal, Row, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Formik } from 'formik';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import Select from 'react-select';
-import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 import { PolicyOptions } from '@jsroot/common/constants';
 import { validateFormik } from '../common.functions';
@@ -58,15 +57,6 @@ export class Update extends Component {
         this.setState({parentOptions, parent});
     }
 
-    
-    handleOpenConfirmModalDialog = params => {
-        this.props.setConfirmModalDialog({ show: true, params: params });
-    }
-
-    handleCloseConfirmModalDialog = () => {
-        this.props.setConfirmModalDialog({ show: false });
-    }
-
     handleOpenConfirmRegenerateKeyModalDialog = () => {
         this.props.setConfirmRegenerateKeyModalDialog({ show: true});
     }
@@ -102,14 +92,8 @@ export class Update extends Component {
             description: values.description,
             isActive: values.isActive
         };
-        this.handleOpenConfirmModalDialog(params);
-    };
 
-    handleConfirmUpdate = () =>{
-        const {updateFunction, confirmModalDialog} = this.props;
-        const params = confirmModalDialog.params;
-        this.handleCloseConfirmModalDialog();
-        updateFunction(params).then(() => {
+        this.props.updateFunction(params).then(() => {
             if (this.props.updateFunctionResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
@@ -120,7 +104,7 @@ export class Update extends Component {
                 setSubmitting(false);
             }
         });
-    }
+    };
 
     handleRegenerateFunctionKey = () => {
         const functionKey = this.formik.values.functionName.replace(/\s/g, '');
@@ -173,14 +157,19 @@ export class Update extends Component {
                                 onChange={handleChange}
                             />
                         </Col>
-                        <span className="fa fa-pencil-square-o pt-2 cursor-pointer" aria-hidden="true" onClick={this.handleOpenConfirmRegenerateKeyModalDialog}/>
+                        <OverlayTrigger overlay={<Tooltip id="tooltip-refresh-token">Regenerate Key</Tooltip>}>
+                                <span className="text-center rounded-circle fa fa-refresh icon-edit"
+                                    onClick={this.handleOpenConfirmRegenerateKeyModalDialog}
+                                />
+                            </OverlayTrigger>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3" htmlFor="site">
+                        <Form.Label column sm="4" md="3" className="required" htmlFor="site">
                             {LangHelper.getResource('Site')}
                         </Form.Label>
                         <Col sm="7" md="8">
-                            <Select className='react-select-container' classNamePrefix="react-select" isSearchable={false}
+                            <Select className={`react-select-container ${errors.siteId && errors.siteId ? 'is-invalid' : ''}`}
+                                classNamePrefix="react-select" isSearchable={false}
                                 options={siteOptions} value={site}
                                 onChange={value => this.handleChangeSite(value)}
                             />
@@ -233,13 +222,11 @@ export class Update extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3"
-                            htmlFor="isActive"
-                        >
+                        <Form.Label column sm="4" md="3" htmlFor="isActive" className="required">
                             {LangHelper.getResource('Status')}
                         </Form.Label>
                         <Col sm="7" md="8">
-                            <Form.Check type="checkbox"
+                            <Form.Check type="checkbox"                        
                                 checked={values.isActive}
                                 name="isActive" id="isActive"
                                 className="shadow-none"
@@ -261,7 +248,7 @@ export class Update extends Component {
     };
 
     render() {
-        const { functionSelected, confirmModalDialog } = this.props;
+        const { functionSelected } = this.props;
         const policy = PolicyOptions.filter(x=>x.value === functionSelected.policy);
         const initialValues = {
             functionName: functionSelected.functionName,
@@ -283,30 +270,12 @@ export class Update extends Component {
                     <Formik
                         innerRef={el => this.formik = el}
                         initialValues={initialValues}
-                        validate={validateFormik}
+                        validate={values =>validateFormik(values, this.state.site.value)}
                         onSubmit={this.handleSubmit}
                     >
                         {this.renderForm}
                     </Formik>
                 </Modal>
-                {
-                    confirmModalDialog.show &&
-                    <SweetModalDialog size='sm'
-                        title={LangHelper.getResource('Confirmation')}
-                        contents={
-                            <div>Are you sure you want to update?</div>
-                        }
-                        buttons={[
-                            <Button variant="primary" size="sm" onClick={this.handleConfirmUpdate}>
-                                {LangHelper.getResource('OK')}
-                            </Button>,
-                            <Button variant="secondary" size="sm" onClick={this.handleCloseConfirmModalDialog}>
-                                {LangHelper.getResource('Cancel')}
-                            </Button>
-                        ]}
-                        onClose={this.handleCloseConfirmModalDialog}
-                    />
-                }
                 {
                     this.props.confirmModalRegenerateKeyDialog.show &&
                     <SweetModalDialog size='sm'

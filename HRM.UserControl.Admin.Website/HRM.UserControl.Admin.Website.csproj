@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HRM.UserControl.API.Core\HRM.UserControl.API.Core.csproj" />
     <ProjectReference Include="..\HRM.UserControl.Client.AspNetCore\HRM.UserControl.Client.AspNetCore.csproj" />
   </ItemGroup>
 

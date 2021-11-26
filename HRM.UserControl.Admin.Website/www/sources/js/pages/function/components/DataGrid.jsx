@@ -42,7 +42,8 @@ export class DataGrid extends Component {
 
     buildGridBody = functionsInfo => {
         if (functionsInfo.length > 0) {
-            const hierarchyFunctions = functionsInfo.filter(x=>x.parentId === 0).map(func => {
+            const functionsInfoSort = functionsInfo.filter(x=>x.parentId === null).sort((first, second) => first.displayOrder - second.displayOrder);
+            const hierarchyFunctions = functionsInfoSort.map(func => {
                 const copyFunc = {...func};
                 const child = this.GetChildren(func.functionId);
                 const childSortOrder = child.sort((first, second) => first.displayOrder - second.displayOrder);
