@@ -17,7 +17,7 @@ const siteSlice = createSlice({
     },
     reducers: {
         setGetAllSiteParams: (state, action) => {
-            state.sites = action.payload;
+            state.getAllSiteParams = action.payload;
         },
         setSites: (state, action) => {
             state.sites = action.payload;

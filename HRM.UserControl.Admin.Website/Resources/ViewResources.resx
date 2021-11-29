@@ -147,4 +147,7 @@
   <data name="WrongUsernameOrPassword" xml:space="preserve">
     <value>Wrong username or password!</value>
   </data>
+  <data name="RoleManagement" xml:space="preserve">
+    <value>Role Management</value>
+  </data>
 </root>

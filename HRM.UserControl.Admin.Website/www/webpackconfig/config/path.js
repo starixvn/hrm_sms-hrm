@@ -13,7 +13,8 @@ const cssPaths = {
     user_assign_site: ['./www/sources/css/pages/user/assign-site.scss'],
     user_permission: ['./www/sources/css/pages/user/permission.scss'],
     function: ['./www/sources/css/pages/function/index.scss'],
-    menu: ['./www/sources/css/pages/menu/index.scss']
+    menu: ['./www/sources/css/pages/menu/index.scss'],
+    role_index: ['./www/sources/css/pages/role/index.scss']
 };
 
 const scriptPaths = {
@@ -27,7 +28,8 @@ const scriptPaths = {
     user_assign_site: ['./www/sources/js/pages/user/assign-site/index.js'],
     user_permission: ['./www/sources/js/pages/user/permission/index.js'],
     function: ['./www/sources/js/pages/function/index.js'],
-    menu: ['./www/sources/js/pages/menu/index.js']
+    menu: ['./www/sources/js/pages/menu/index.js'],
+    role_index: ['./www/sources/js/pages/role/index.js']
 };
 
 module.exports = {

@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { Form } from 'react-bootstrap';
 import { ActionCreators } from '../actions';
 import { Table, HeaderRow, HeaderCell, Row, Cell } from '@jsroot/components/react-grid/index';
-import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 
 export class DataGrid extends Component {
@@ -42,10 +41,10 @@ export class DataGrid extends Component {
 
     buildGridBody = sites => {
         if (sites.length > 0) {
-            return sites.map((item, index) => this.renderRow(item));
+            return sites.map(item => this.renderRow(item));
         }
 
-        return [<Row key={`body${1}`} className="no-data"><Cell colSpan="6">{LangHelper.getResource('ThereIsNoData')}</Cell></Row>];
+        return [<Row key={`body${1}`} className="no-data"><Cell colSpan="7">{LangHelper.getResource('ThereIsNoData')}</Cell></Row>];
     };
 
     renderRow = item => (

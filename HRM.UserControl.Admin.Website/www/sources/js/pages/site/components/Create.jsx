@@ -104,7 +104,7 @@ export class CreateSite extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3" htmlFor="isActive">{LangHelper.getResource('Status')}</Form.Label>
+                        <Form.Label column sm="4" md="3" htmlFor="isActive">{LangHelper.getResource('Active')}</Form.Label>
                         <Col sm="8" md="9">
                             <Form.Check type="checkbox"
                                 checked={values.isActive}

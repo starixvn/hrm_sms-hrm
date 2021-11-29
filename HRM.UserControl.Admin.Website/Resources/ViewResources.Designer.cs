@@ -97,15 +97,6 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permission.
-        /// </summary>
-        public static string Permission {
-            get {
-                return ResourceManager.GetString("Permission", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage Function.
         /// </summary>
         public static string ManageFunction {
@@ -120,6 +111,24 @@ namespace HRM.UserControl.Admin.Website.Resources {
         public static string MenuManagement {
             get {
                 return ResourceManager.GetString("MenuManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string Permission {
+            get {
+                return ResourceManager.GetString("Permission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Management.
+        /// </summary>
+        public static string RoleManagement {
+            get {
+                return ResourceManager.GetString("RoleManagement", resourceCulture);
             }
         }
         

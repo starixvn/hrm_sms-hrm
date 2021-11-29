@@ -7,5 +7,8 @@
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public bool IsDefault { get; set; }
+
+        public short SiteId { get; set; }
+        public string SiteName { get; set; }
     }
 }
