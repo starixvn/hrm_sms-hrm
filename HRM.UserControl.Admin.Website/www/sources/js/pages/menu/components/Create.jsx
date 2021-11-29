@@ -8,7 +8,7 @@ import Select from 'react-select';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import LangHelper from '@jsroot/common/langHelper';
-// import { validateFormik } from '../common.functions';
+import { validateFormik } from '../common.functions';
 
 export class Create extends Component {
     static defaultProps = {
@@ -86,27 +86,34 @@ export class Create extends Component {
 
     handleChangeSite = site =>{
         this.setState({site});
-        this.props.getParentById(site.value).then(data => { this.handleParentOptions(data.data); });
+        this.props.getParentById(site.value).then(data => { 
+            this.handleParentOptions(data.data); 
+        });
+        this.props.getFunctionById(site.value).then(response =>{
+            this.handleFunctionOptions(response.data);
+        });
     }
 
     handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-        const {site, parent} = this.state;
+        const {site, parent, func} = this.state;
         const params = {
-            functionName: values.functionName,
+            menuItemName: values.menuItemName,
             siteId: site.value,
+            FunctionId: func.value,
             parentId: parent.value,
+            url: values.url,
             displayOrder: values.order,
             description: values.description,
             isActive: values.isActive
         };
 
-        this.props.setGetSiteParams(params.siteId);
-        this.props.createFunction(params).then(() => {
-            if (this.props.createFunctionResult.isSuccessful) {
+        this.props.setSiteParams(params.siteId);
+        this.props.createMenu(params).then(() => {
+            if (this.props.createMenuResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.getFunctionById(params.siteId);
+                    this.props.getMenuById(params.siteId);
                 }, 3000);
             } else {
                 setSubmitting(false);
@@ -120,7 +127,6 @@ export class Create extends Component {
         touched,
         handleChange,
         handleSubmit,
-        setFieldValue,
         isSubmitting
     }) => {
         const {siteOptions, site, parent, parentOptions, func, functionOptions } = this.state;
@@ -135,14 +141,14 @@ export class Create extends Component {
                         />
                     }
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3" className="required" htmlFor="menuName">
-                            {LangHelper.getResource('Name')}
+                        <Form.Label column sm="4" md="3" className="required" htmlFor="menuItemName">
+                            {LangHelper.getResource('MenuName')}
                         </Form.Label>
                         <Col sm="8" md="9">
-                            <Form.Control type="text" size="sm" value={values.menuName}
-                                name="menuName" id="menuName"
+                            <Form.Control type="text" size="sm" value={values.menuItemName}
+                                name="menuItemName" id="menuItemName"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.menuName && errors.menuName}
+                                isInvalid={touched.menuItemName && errors.menuItemName}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -203,7 +209,7 @@ export class Create extends Component {
                         <Col sm="8" md="9">
                             <Select className='react-select-container' classNamePrefix="react-select" isSearchable
                                 options={functionOptions} value={func}
-                                onChange={value => this.setState({parent: value})}
+                                onChange={value => this.setState({func: value})}
                             />
                         </Col>
                     </Form.Group>
@@ -248,7 +254,7 @@ export class Create extends Component {
 
     render() {
         const initialValues = {
-            menuName: '',
+            menuItemName: '',
             description: '',
             url: '',
             order: 0,
@@ -261,11 +267,11 @@ export class Create extends Component {
                 onHide={this.handleCloseModalDialog}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title as="div">{LangHelper.getResource('CreateFunction')}</Modal.Title>
+                    <Modal.Title as="div">{LangHelper.getResource('CreateMenu')}</Modal.Title>
                 </Modal.Header>
                 <Formik
                     initialValues={initialValues}
-                    // validate={values =>validateFormik(values, this.state.site.value, true)}
+                    validate={values =>validateFormik(values, this.state.site.value)}
                     onSubmit={this.handleSubmit}
                 >
                     {this.renderForm}

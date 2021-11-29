@@ -47,7 +47,7 @@ export class DataGrid extends Component {
                 const copyFunc = {...func};
                 const child = this.GetChildren(func.functionId);
                 const childSortOrder = child.sort((first, second) => first.displayOrder - second.displayOrder);
-                copyFunc.children = childSortOrder;
+                copyFunc.childs = childSortOrder;
                 return copyFunc;
             });
             return hierarchyFunctions.map((item, index) => this.renderRow(item, index));
@@ -60,7 +60,7 @@ export class DataGrid extends Component {
         const func = this.props.functions;
         return  func.filter(x=>x.parentId === parentId).map(child => {
             const copyChild = {...child};
-            copyChild.children = this.GetChildren(child.functionId);
+            copyChild.childs = this.GetChildren(child.functionId);
             return copyChild;
         });
     }
@@ -73,7 +73,7 @@ export class DataGrid extends Component {
         const formatDate = item.modifiedDate !== null ? DateTimeService.toLongDateTimeFormat(item.modifiedDate) : '';
         const parents = (
             <Row key={item.functionId} className={classEvenOdd}>
-                <Cell className={`first-level ${item.children.length > 0 ? 'has-child' : ''}`}>
+                <Cell className={`first-level ${item.childs.length > 0 ? 'has-child' : ''}`}>
                         <span className="fa fa-minus-circle pr-2" aria-hidden="true" />
                         <span>{item.functionName}</span>
                 </Cell>
@@ -96,9 +96,9 @@ export class DataGrid extends Component {
             </Row>
         );
         rows.push(parents);
-        if(item.children.length > 0){
+        if(item.childs.length > 0){
             levelChild ++;
-            const childRow = item.children.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
+            const childRow = item.childs.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
             rows.push(childRow);
         }
 
@@ -117,7 +117,7 @@ export class DataGrid extends Component {
             <Row key={item.functionId} className={classEvenOdd}>
                 <Cell style={styleChild} className='child-class'>
                     <span className='pr-2'>└──</span>
-                    { item.children.length > 0 ? <span className="fa fa-minus-circle pr-2" aria-hidden="true" /> : <span />}
+                    { item.childs.length > 0 ? <span className="fa fa-minus-circle pr-2" aria-hidden="true" /> : <span />}
                     <span>{item.functionName}</span>
                 </Cell>
                 <Cell className="text-center">{item.displayOrder}</Cell>
@@ -139,9 +139,9 @@ export class DataGrid extends Component {
             </Row>
         );
         rows.push(child);
-        if(item.children.length > 0){
+        if(item.childs.length > 0){
             levelChild ++;
-            const childRow = item.children.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
+            const childRow = item.childs.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
             rows.push(childRow);
         }
 

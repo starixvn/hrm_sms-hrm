@@ -231,7 +231,7 @@ export class Create extends Component {
                 </Modal.Header>
                 <Formik
                     initialValues={initialValues}
-                    validate={values =>validateFormik(values, this.state.site.value, true)}
+                    validate={values =>validateFormik(values, this.state.site.value)}
                     onSubmit={this.handleSubmit}
                 >
                     {this.renderForm}

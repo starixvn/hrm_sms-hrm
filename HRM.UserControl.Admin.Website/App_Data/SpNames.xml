@@ -19,11 +19,15 @@
         <Setting Key="Site_GetByUserId" SpName="Site_GetByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Function">
+        <Setting Key="API_Function_GetBySiteId" SpName="API_Function_GetBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_UpdateStatus" SpName="Function_UpdateStatus" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Insert" SpName="Function_Insert" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Function_Update" SpName="Function_Update" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Menu">
         <Setting Key="Menu_GetBySiteId" SpName="Menu_GetBySiteId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Menu_Insert" SpName="Menu_Insert" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Menu_Update" SpName="Menu_Update" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Menu_UpdateStatus" SpName="Menu_UpdateStatus" DbName="bodb_IUC" Plain="0" />
     </Function>
 </Functions>

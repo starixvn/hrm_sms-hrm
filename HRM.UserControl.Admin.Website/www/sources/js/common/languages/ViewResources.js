@@ -14,7 +14,7 @@
     CreateSite: 'Create Site',
     CreateUser: 'Create User',
     CreateFunction: 'Create Function',
-    CreateMenu: 'CreateFunction',
+    CreateMenu: 'Create Menu',
     CreateSiteSuccessfully: 'Create site successfully!',
     CreateUserSuccessfully: 'Create user successfully!',
     CreateFunctionSuccessfully: 'Create Function Successfully!',
@@ -32,6 +32,7 @@
     Login: 'Login',
     ModifiedDate: 'Modified Date',
     ModifiedBy: 'Modified By',
+    MenuName: 'Menu Name',
     Name: 'Name',
     NewPassword: 'New Password',
     Nickname: 'Nickname',
@@ -46,9 +47,11 @@
     UpdateSite: 'Update Site',
     UpdateSiteSuccessfully: 'Update site successfully!',
     UpdateFunctionSuccessfully: 'Update Function Successfully!',
+    UpdateMenuSuccessfully: 'Update Menu Successfully!',
     URL: 'URL',
     Username: 'Username',
     Users: 'Users',
+    UpdateMenu: 'Update Menu',
     Order: 'Order',
     Policy: 'Policy'
 };

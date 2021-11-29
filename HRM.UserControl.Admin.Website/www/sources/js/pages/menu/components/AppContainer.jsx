@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 import Filter from './Filter';
 import DataGrid from './DataGrid';
 import Create from './Create';
-// import Update from './Update';
+import Update from './Update';
 import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 
@@ -21,29 +21,29 @@ export class AppContainer extends Component {
         this.props.getAllSites();
     }
 
-    // updateStatus = () => {
-    //     Site.blockUI();
-    //     const { functionId, isActive } = this.props.functionSelected;
-    //     this.props.updateFunctionStatus({ functionId, isActive: !isActive }).then(response => {
-    //         Site.unblockUI();
-    //         this.closeConfirmUpdateStatus();
-    //         if (response.data.isSuccessful) {
-    //             const message = isActive ? 'DeactivatedSuccessfully' : 'ActivatedSuccessfully';
-    //             toast.success(LangHelper.getResource(message));
-    //             this.props.getFunctionById(this.props.params);
-    //         } else {
-    //             toast.error(response.data.message);
-    //         }
-    //     });
-    // };
+    updateStatus = () => {
+        Site.blockUI();
+        const { menuItemId, isActive } = this.props.menuSelected;
+        this.props.updateMenuStatus({ menuItemId, isActive: !isActive }).then(response => {
+            Site.unblockUI();
+            this.closeConfirmUpdateStatus();
+            if (response.data.isSuccessful) {
+                const message = isActive ? 'DeactivatedSuccessfully' : 'ActivatedSuccessfully';
+                toast.success(LangHelper.getResource(message));
+                this.props.getMenuById(this.props.params);
+            } else {
+                toast.error(response.data.message);
+            }
+        });
+    };
 
-    // closeConfirmUpdateStatus = () => {
-    //     this.props.setUpdateStatusModalDialog({ show: false });
-    //     this.props.setFunctionSelected(null);
-    // };
+    closeConfirmUpdateStatus = () => {
+        this.props.setUpdateStatusModalDialog({ show: false });
+        this.props.setMenuSelected(null);
+    };
 
     render() {
-        const { sites, createModalDialog } = this.props;
+        const { sites, menuSelected, createModalDialog, updateStatusModalDialog, updateMenuModalDialog  } = this.props;
         if(sites.length === 0){
             return null;
         }
@@ -56,13 +56,8 @@ export class AppContainer extends Component {
                     createModalDialog.show &&
                     <Create />
                 }
-                {/* <DataGrid />
                 {
-                    createModalDialog.show &&
-                    <Create />
-                }
-                {
-                    updateModalDialog.show && functionSelected &&
+                    updateMenuModalDialog.show && menuSelected &&
                     <Update />
                 }
                 {
@@ -72,8 +67,8 @@ export class AppContainer extends Component {
                         title={LangHelper.getResource('Confirmation')}
                         contents={
                             <div>
-                                Are you sure you want to {functionSelected.isActive ? 'deactivate ' : 'active '}
-                                <strong>{functionSelected.functionName}</strong>?
+                                Are you sure you want to {menuSelected.isActive ? 'deactivate ' : 'active '}
+                                <strong>{menuSelected.menuItemName}</strong>?
                             </div>
                         }
                         buttons={[
@@ -86,7 +81,7 @@ export class AppContainer extends Component {
                         ]}
                         onClose={this.closeConfirmUpdateStatus}
                     />
-                } */}
+                }
             </div>
         );
     }

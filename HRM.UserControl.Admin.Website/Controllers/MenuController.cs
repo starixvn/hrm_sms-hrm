@@ -6,6 +6,7 @@
     using HRM.UserControl.Admin.Website.Models.Menu;
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Models;
     using Microsoft.AspNetCore.Mvc;
 
 
@@ -37,29 +38,28 @@
             return Json(menus);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create([FromBody] CreateFunctionCommand command)
-        //{
-        //    command.CreatedBy = 4;
-        //    command.FunctionKey = command.FunctionName.Trim().Replace(" ", "");
-        //    var commandResult = await baseService.ExecuteNonQueryAsync(command);
-        //    return Json(commandResult);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateMenuCommand command)
+        {
+            command.CreatedBy = 4;
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Update([FromBody] EditFunctionCommand command)
-        //{
-        //    command.ModifiedBy = 4;
-        //    var commandResult = await baseService.ExecuteNonQueryAsync(command);
-        //    return Json(commandResult);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody] EditMenuCommand command)
+        {
+            command.ModifiedBy = 4;
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateStatus([FromBody] UpdateFunctionStatusCommand command)
-        //{
-        //    command.ModifiedBy = 4;
-        //    CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-        //    return Json(commandResult);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateMenuStatusCommand command)
+        {
+            command.ModifiedBy = 4;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
     }
 }

@@ -53,7 +53,8 @@ export class Update extends Component {
                 label: item.functionName
             };
         });
-        const parent = functionSelected.parentId === 0 ? parentOptions[0] : parentOptions.filter(x=>x.value === functionSelected.parentId)[0];
+        const parentFilter = parentOptions.filter(x=>x.value === functionSelected.parentId);
+        const parent = (functionSelected.parentId === 0 || parentFilter.length === 0) ? parentOptions[0] : parentFilter[0];
         this.setState({parentOptions, parent});
     }
 
