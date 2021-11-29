@@ -6,11 +6,11 @@ export const validateFormik = (values, siteId) => {
     if (!values.menuItemName || values.menuItemName.trim().length === 0) {
         errors.menuItemName = LangHelper.formatString(
             LangHelper.getResource('FieldRequired'),
-            LangHelper.getResource('Name'));
+            LangHelper.getResource('MenuName'));
     } else if(values.menuItemName.trim().length > 50) {
             errors.menuItemName = LangHelper.formatString(
             LangHelper.getResource('FieldMaxLength'),
-            LangHelper.getResource('Name'),
+            LangHelper.getResource('MenuName'),
             50);
     }
     if(!siteId || siteId === null) {

@@ -30,11 +30,11 @@ export class DataGrid extends Component {
         return (
             <HeaderRow>
                 <HeaderCell colWidth={35}>{LangHelper.getResource('Name')}</HeaderCell>
-                <HeaderCell colWidth={30}>{LangHelper.getResource('URL')}</HeaderCell>
+                <HeaderCell colWidth={35}>{LangHelper.getResource('URL')}</HeaderCell>
                 <HeaderCell colWidth={30}>{LangHelper.getResource('Function')}</HeaderCell>
                 <HeaderCell colWidth={12}>{LangHelper.getResource('Order')}</HeaderCell>
                 <HeaderCell colWidth={20}>{LangHelper.getResource('ModifiedDate')}</HeaderCell>
-                <HeaderCell colWidth={15}>{LangHelper.getResource('ModifiedBy')}</HeaderCell>
+                <HeaderCell colWidth={12}>{LangHelper.getResource('ModifiedBy')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Active')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>

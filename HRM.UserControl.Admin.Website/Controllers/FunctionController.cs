@@ -34,7 +34,7 @@
 
         public async Task<IActionResult> GetById(short id)
         {
-            var functions = await functionService.GetBySiteIdAsync(id);
+            var functions = await functionService.GetBySiteIdAsync(id, null);
             return Json(functions);
         }
 

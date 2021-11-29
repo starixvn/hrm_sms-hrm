@@ -270,7 +270,6 @@ export class Update extends Component {
                         <Modal.Title as="div">{LangHelper.getResource('UpdateMenu')}</Modal.Title>
                     </Modal.Header>
                     <Formik
-                        innerRef={el => this.formik = el}
                         initialValues={initialValues}
                         validate={values =>validateFormik(values, this.state.site.value)}
                         onSubmit={this.handleSubmit}
