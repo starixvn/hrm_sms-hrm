@@ -6,18 +6,23 @@
     using Microsoft.AspNetCore.Mvc;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Admin.Website.Criteria.Site;
-    using HRM.UserControl.Admin.Website.Models.Site;
+    using HRM.UserControl.Client.Core.Session;
 
     public class FunctionController : Controller
     {
         private readonly IBaseService baseService;
         private readonly IFunctionService functionService;
+        private readonly IUserControlSession userControlSession;
 
-        public FunctionController(IBaseService baseService, IFunctionService functionService)
+
+        public FunctionController(
+            IBaseService baseService,
+            IFunctionService functionService,
+            IUserControlSession userControlSession)
         {
             this.baseService = baseService;
             this.functionService = functionService;
+            this.userControlSession = userControlSession;
         }
 
         public IActionResult Index()
@@ -34,7 +39,7 @@
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateFunctionCommand command)
         {
-            command.CreatedBy = 4;
+            command.CreatedBy = userControlSession.UserId;
             command.FunctionKey = command.FunctionName.Trim().Replace(" ", "");
             var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
@@ -43,7 +48,7 @@
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] EditFunctionCommand command)
         {
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
@@ -51,7 +56,7 @@
         [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateFunctionStatusCommand command)
         {
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }

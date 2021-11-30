@@ -2,21 +2,22 @@
 {
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.Menu;
-    using HRM.UserControl.Admin.Website.Criteria.Site;
     using HRM.UserControl.Admin.Website.Models.Menu;
-    using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Services;
     using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
 
     public class MenuController : Controller
     {
         private readonly IBaseService baseService;
+        private readonly IUserControlSession userControlSession;
 
-        public MenuController(IBaseService baseService)
+        public MenuController(IBaseService baseService, IUserControlSession userControlSession)
         {
             this.baseService = baseService;
+            this.userControlSession = userControlSession;
         }
 
         public IActionResult Index()
@@ -34,7 +35,7 @@
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMenuCommand command)
         {
-            command.CreatedBy = 4;
+            command.CreatedBy = userControlSession.UserId;
             var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
@@ -42,7 +43,7 @@
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] EditMenuCommand command)
         {
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
@@ -50,7 +51,7 @@
         [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateMenuStatusCommand command)
         {
-            command.ModifiedBy = 4;
+            command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
