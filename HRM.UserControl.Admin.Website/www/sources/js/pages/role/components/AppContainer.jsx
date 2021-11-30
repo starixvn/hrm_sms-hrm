@@ -25,12 +25,12 @@ export class AppContainer extends Component {
         Site.blockUI();
         const { siteId, roleId, isActive } = this.props.updateStatusModalDialog.role;
         this.props.updateRoleStatus({ siteId, roleId, isActive: !isActive }).then(response => {
-            Site.unblockUI()
+            Site.unblockUI();
             this.closeConfirmUpdateStatus();
             if (response.data.isSuccessful) {
                 const message = isActive ? 'DeactivatedSuccessfully' : 'ActivatedSuccessfully';
                 toast.success(LangHelper.getResource(message));
-                this.props.getAllRole(this.props.getAllRoleParams);
+                this.props.getRoleBySiteId(this.props.getRoleParams);
             } else {
                 toast.error(response.data.message);
             }
@@ -85,8 +85,8 @@ export class AppContainer extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllRoleParams, createModalDialog, updateModalDialog, updateStatusModalDialog } = state;
-    return { getAllRoleParams, createModalDialog, updateModalDialog, updateStatusModalDialog };
+    const { getRoleParams, createModalDialog, updateModalDialog, updateStatusModalDialog } = state;
+    return { getRoleParams, createModalDialog, updateModalDialog, updateStatusModalDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

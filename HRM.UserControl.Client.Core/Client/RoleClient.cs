@@ -15,9 +15,9 @@
 
         Task<IList<Role>> GetByUserIdAsync(int userId);
 
-        CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions);
+        CommandResult AssignPermission(short siteId, short roleId, IList<FunctionPermission> permissions);
 
-        Task<CommandResult> AssignFunctionAsync(short roleId, IList<FunctionPermission> permissions);
+        Task<CommandResult> AssignPermissionAsync(short siteId, short roleId, IList<FunctionPermission> permissions);
     }
 
     public class RoleClient : BaseHttpClient, IRoleClient
@@ -34,20 +34,22 @@
         public async Task<IList<Role>> GetByUserIdAsync(int userId)
             => await GetAsync<IList<Role>>(string.Format(RelativePaths.GetRoleByUserIdPath, userId));
 
-        public CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions)
+        public CommandResult AssignPermission(short siteId, short roleId, IList<FunctionPermission> permissions)
         {
             var data = new Dictionary<string, object>
             {
+                {"siteId", siteId },
                 {"roleId", roleId },
                 {"permissions", permissions }
             };
             return Post<CommandResult>(RelativePaths.AssignPermissionToRolePath, data);
         }
 
-        public async Task<CommandResult> AssignFunctionAsync(short roleId, IList<FunctionPermission> permissions)
+        public async Task<CommandResult> AssignPermissionAsync(short siteId, short roleId, IList<FunctionPermission> permissions)
         {
             var data = new Dictionary<string, object>
             {
+                {"siteId", siteId },
                 {"roleId", roleId },
                 {"permissions", permissions }
             };

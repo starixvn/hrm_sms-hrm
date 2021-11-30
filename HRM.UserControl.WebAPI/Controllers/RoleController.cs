@@ -46,7 +46,6 @@
         [Route("api/role/assignPermission")]
         public async Task<IActionResult> AssignPermission([FromBody] AssignFunctionToRoleCommand command)
         {
-            command.SiteId = SiteId;
             command.ModifiedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Ok(commandResult);

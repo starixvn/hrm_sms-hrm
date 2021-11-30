@@ -10,9 +10,9 @@
 
         Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = null);
 
-        IList<FunctionPermission> GetPermissionByRoleId(short roleId);
+        IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId);
 
-        Task<IList<FunctionPermission>> GetPermissionByRoleIdAsync(short roleId);
+        Task<IList<FunctionPermission>> GetPermissionBySiteAndRoleIdAsync(short siteId, short roleId);
     }
 
     public class FunctionClient : BaseHttpClient, IFunctionClient
@@ -37,16 +37,16 @@
             return await GetAsync<IList<Function>>(RelativePaths.GetFunctionBySiteIdPath, data);
         }
 
-        public IList<FunctionPermission> GetPermissionByRoleId(short roleId)
-            => Get<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionByRoleIdPath, roleId));
+        public IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId)
+            => Get<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionByRoleIdPath, siteId, roleId));
 
-        public async Task<IList<FunctionPermission>> GetPermissionByRoleIdAsync(short roleId)
-            => await GetAsync<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionByRoleIdPath, roleId));
+        public async Task<IList<FunctionPermission>> GetPermissionBySiteAndRoleIdAsync(short siteId, short roleId)
+            => await GetAsync<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionByRoleIdPath, siteId, roleId));
 
         private static class RelativePaths
         {
             public const string GetFunctionBySiteIdPath = "api/function/getBySiteId";
-            public const string GetFunctionPermissionByRoleIdPath = "api/function/getPermissionByRoleId?roleId={0}";
+            public const string GetFunctionPermissionByRoleIdPath = "api/function/getPermissionBySiteAndRoleId?siteId={0}&roleId={1}";
         }
     }
 }

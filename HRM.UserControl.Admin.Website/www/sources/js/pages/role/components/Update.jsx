@@ -35,7 +35,7 @@ export class UpdateRole extends Component {
             if (this.props.updateRoleResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.getAllRole(this.props.getAllRoleParams);
+                    this.props.getRoleBySiteId(this.props.getRoleParams);
                 }, 3000);
             } else {
                 setSubmitting(false);
@@ -162,8 +162,8 @@ export class UpdateRole extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllRoleParams, sites, updateModalDialog, updateRoleResult } = state;
-    return { getAllRoleParams, sites, updateModalDialog, updateRoleResult };
+    const { getRoleParams, sites, updateModalDialog, updateRoleResult } = state;
+    return { getRoleParams, sites, updateModalDialog, updateRoleResult };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateRole);

@@ -16,9 +16,9 @@
 
         Task<IList<Role>> GetByUserIdAsync(int userId);
 
-        CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions);
+        CommandResult AssignPermission(short siteId, short roleId, IList<FunctionPermission> permissions);
 
-        Task<CommandResult> AssignFunctionAsync(short roleId, IList<FunctionPermission> permissions);
+        Task<CommandResult> AssignPermissionAsync(short siteId, short roleId, IList<FunctionPermission> permissions);
     }
 
     public class RoleService : IRoleService
@@ -42,10 +42,10 @@
         public async Task<IList<Role>> GetByUserIdAsync(int userId)
             => await roleClient.GetByUserIdAsync(userId);
 
-        public CommandResult AssignFunction(short roleId, IList<FunctionPermission> permissions)
-            => roleClient.AssignFunction(roleId, permissions);
+        public CommandResult AssignPermission(short siteId, short roleId, IList<FunctionPermission> permissions)
+            => roleClient.AssignPermission(siteId, roleId, permissions);
 
-        public async Task<CommandResult> AssignFunctionAsync(short roleId, IList<FunctionPermission> permissions)
-            => await roleClient.AssignFunctionAsync(roleId, permissions);
+        public async Task<CommandResult> AssignPermissionAsync(short siteId, short roleId, IList<FunctionPermission> permissions)
+            => await roleClient.AssignPermissionAsync(siteId, roleId, permissions);
     }
 }

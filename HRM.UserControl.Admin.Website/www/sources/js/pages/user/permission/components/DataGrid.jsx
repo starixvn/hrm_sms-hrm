@@ -5,6 +5,7 @@ import { Form } from 'react-bootstrap';
 import { ActionCreators } from '../../actions';
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import LangHelper from '@jsroot/common/langHelper';
+import { Policy } from '@jsroot/common/constants';
 
 export class DataGrid extends Component {
     buildHeader = () => {
@@ -58,13 +59,13 @@ export class DataGrid extends Component {
                 </Cell>
                 <Cell className="text-center">
                     {
-                        (func.policy === null || func.policy === 1) &&
+                        (func.policy === null || func.policy === Policy.Read) &&
                         <Form.Check type='checkbox' disabled checked={permission && permission.isRead} />
                     }
                 </Cell>
                 <Cell className="text-center">
                     {
-                        (func.policy === null || func.policy === 2) &&
+                        (func.policy === null || func.policy === Policy.Host) &&
                         <Form.Check type='checkbox' disabled checked={permission && permission.isHost} />
                     }
                 </Cell>

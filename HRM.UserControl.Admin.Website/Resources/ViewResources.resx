@@ -150,4 +150,7 @@
   <data name="RoleManagement" xml:space="preserve">
     <value>Role Management</value>
   </data>
+  <data name="RolePermission" xml:space="preserve">
+    <value>Role Permission</value>
+  </data>
 </root>

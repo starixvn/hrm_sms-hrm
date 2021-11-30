@@ -7,3 +7,11 @@
 @import '../../components/react-select';
 @import "../../components/modal";
 @import "../../components/messages";
+
+.form-filter {
+    .form-row {
+        .group-button {
+            width: auto;
+        }
+    }
+}

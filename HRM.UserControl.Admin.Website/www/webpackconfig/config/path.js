@@ -14,7 +14,8 @@ const cssPaths = {
     user_permission: ['./www/sources/css/pages/user/permission.scss'],
     function: ['./www/sources/css/pages/function/index.scss'],
     menu: ['./www/sources/css/pages/menu/index.scss'],
-    role_index: ['./www/sources/css/pages/role/index.scss']
+    role_index: ['./www/sources/css/pages/role/index.scss'],
+    role_permission: ['./www/sources/css/pages/role/permission.scss']
 };
 
 const scriptPaths = {
@@ -29,7 +30,8 @@ const scriptPaths = {
     user_permission: ['./www/sources/js/pages/user/permission/index.js'],
     function: ['./www/sources/js/pages/function/index.js'],
     menu: ['./www/sources/js/pages/menu/index.js'],
-    role_index: ['./www/sources/js/pages/role/index.js']
+    role_index: ['./www/sources/js/pages/role/index.js'],
+    role_permission: ['./www/sources/js/pages/role/permission/index.js']
 };
 
 module.exports = {

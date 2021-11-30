@@ -9,6 +9,6 @@
 
         public override string GetSettingKey() => "API_Function_GetByRoleId";
 
-        public override bool IsValid() => SiteId > 0;
+        public override bool IsValid() => SiteId > 0 && RoleId > 0;
     }
 }

@@ -133,6 +133,15 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role Permission.
+        /// </summary>
+        public static string RolePermission {
+            get {
+                return ResourceManager.GetString("RolePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Site Management.
         /// </summary>
         public static string SiteManagement {

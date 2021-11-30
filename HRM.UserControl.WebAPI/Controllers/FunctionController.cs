@@ -29,16 +29,11 @@
         }
 
         [HttpGet]
-        [Route("api/function/getPermissionByRoleId")]
-        public async Task<IActionResult> GetByRoleId(short roleId)
+        [Route("api/function/getPermissionBySiteAndRoleId")]
+        public async Task<IActionResult> GetBySiteAndRoleId(GetFunctionByRoleIdCriteria criteria)
         {
-            var criteria = new GetFunctionByRoleIdCriteria
-            {
-                SiteId = SiteId,
-                RoleId = roleId
-            };
-            var functionPermissions = await baseService.GetDataAsync<FunctionPermission>(criteria);
-            return Ok(functionPermissions);
+            var permissions = await baseService.GetDataAsync<FunctionPermission>(criteria);
+            return Ok(permissions);
         }
     }
 }

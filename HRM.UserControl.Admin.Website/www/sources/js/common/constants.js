@@ -23,7 +23,7 @@ export const PolicyOptions = [
 ];
 
 export const Policy = {
-    All: 0,
+    None: 0,
     Read: 1,
     Host: 2
 };

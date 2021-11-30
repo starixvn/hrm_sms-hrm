@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import Select from 'react-select';
 import { ActionCreators } from '../actions';
 import { ActiveStatusOptions } from '@jsroot/common/constants';
+import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 
 export class Filter extends Component {
@@ -21,8 +22,8 @@ export class Filter extends Component {
             const site = this.props.sites[0];
             this.setState({ site: { value: site.siteId, label: site.siteName } }, () => {
                 const params = this.getParams();
-                this.props.setGetAllRoleParams(params);
-                this.props.getAllRole(params);
+                this.props.setGetRoleParams(params);
+                this.props.getRoleBySiteId(params);
             });
         }
     }
@@ -38,8 +39,8 @@ export class Filter extends Component {
     handleSubmit = event => {
         event.preventDefault();
         const params = this.getParams();
-        this.props.setGetAllRoleParams(params);
-        this.props.getAllRole(params);
+        this.props.setGetRoleParams(params);
+        this.props.getRoleBySiteId(params);
     };
 
     handleOpenCreateModalDialog = () => {
@@ -51,7 +52,8 @@ export class Filter extends Component {
     };
 
     render() {
-        const siteOptions = this.props.sites.map(item => {
+        const { getRoleParams, sites } = this.props;
+        const siteOptions = sites.map(item => {
             return { value: item.siteId, label: item.siteName };
         });
 
@@ -72,12 +74,17 @@ export class Filter extends Component {
                             onChange={value => this.handleChange('status', value)}
                         />
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group className="group-button">
                         <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleSubmit}>
                             {LangHelper.getResource('Submit')}
                         </Button>
-                        <Button variant="primary" size="sm" onClick={this.handleOpenCreateModalDialog}>
+                        <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
                             {LangHelper.getResource('Create')}
+                        </Button>
+                        <Button variant="primary" size="sm"
+                            onClick={() => window.location = Site.resolveClientUrl(`role/permission?siteId=${getRoleParams.siteId}`)}
+                        >
+                            {LangHelper.getResource('RolePermission')}
                         </Button>
                     </Form.Group>
                 </Form.Row>
@@ -89,8 +96,8 @@ export class Filter extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllSiteParams, sites } = state;
-    return { getAllSiteParams, sites };
+    const { getRoleParams, sites } = state;
+    return { getRoleParams, sites };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filter);

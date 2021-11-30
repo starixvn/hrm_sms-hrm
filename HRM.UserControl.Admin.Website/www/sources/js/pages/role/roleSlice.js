@@ -3,12 +3,17 @@
 const roleSlice = createSlice({
     name: 'role',
     initialState: {
-        getAllRoleParams: {
-            siteId: 0,
+        getRoleParams: {
+            siteId: null,
             isActive: null
+        },
+        getRolePermissionParams: {
+            siteId: null,
+            roleId: null
         },
         sites: [],
         roles: [],
+        rolePermission: null,
         createModalDialog: { show: false },
         createRoleResult: null,
         updateModalDialog: { show: false },
@@ -17,14 +22,20 @@ const roleSlice = createSlice({
         confirmModalDialog: { show: false }
     },
     reducers: {
-        setGetAllRoleParams: (state, action) => {
-            state.getAllRoleParams = action.payload;
+        setGetRoleParams: (state, action) => {
+            state.getRoleParams = action.payload;
         },
         setSites: (state, action) => {
             state.sites = action.payload;
         },
         setRoles: (state, action) => {
             state.roles = action.payload;
+        },
+        setGetRolePermissionParams: (state, action) => {
+            state.getRolePermissionParams = action.payload;
+        },
+        setRolePermission: (state, action) => {
+            state.rolePermission = action.payload;
         },
         setCreateModalDialog: (state, action) => {
             state.createModalDialog = action.payload;
@@ -50,9 +61,11 @@ const roleSlice = createSlice({
 const { actions, reducer } = roleSlice;
 
 export const {
-    setGetAllRoleParams,
+    setGetRoleParams,
     setSites,
     setRoles,
+    setGetRolePermissionParams,
+    setRolePermission,
     setCreateModalDialog,
     setCreateRoleResult,
     setUpdateModalDialog,

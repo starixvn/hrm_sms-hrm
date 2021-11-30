@@ -1,9 +1,11 @@
 ﻿import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import {
-    setGetAllRoleParams,
+    setGetRoleParams,
     setSites,
     setRoles,
+    setGetRolePermissionParams,
+    setRolePermission,
     setCreateModalDialog,
     setCreateRoleResult,
     setUpdateModalDialog,
@@ -20,11 +22,19 @@ const getAllSite = params => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
-const getAllRole = params => async dispatch => {
+const getRoleBySiteId = params => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('role/getAll');
+    const url = Site.resolveClientUrl('role/getBySiteId');
     await DataService.getDataAsync(url, params).then(response => {
         dispatch(setRoles(response.data));
+    }).then(() => Site.unblockUI());
+};
+
+const getRolePermission = params => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl('role/getRolePermission');
+    await DataService.getDataAsync(url, params).then(response => {
+        dispatch(setRolePermission(response.data));
     }).then(() => Site.unblockUI());
 };
 
@@ -47,9 +57,16 @@ const updateRoleStatus = params => async () => {
     return await DataService.postDataAsync(url, params).then(response => response);
 };
 
+const assignPermission = params => async () => {
+    const url = Site.resolveClientUrl('role/assignPermission');
+    return await DataService.postDataAsync(url, params).then(response => response);
+};
+
 export const ActionCreators = {
-    setGetAllRoleParams,
+    setGetRoleParams,
     setRoles,
+    setGetRolePermissionParams,
+    setRolePermission,
     setCreateModalDialog,
     setCreateRoleResult,
     setUpdateModalDialog,
@@ -57,8 +74,10 @@ export const ActionCreators = {
     setUpdateStatusModalDialog,
     setConfirmModalDialog,
     getAllSite,
-    getAllRole,
+    getRoleBySiteId,
+    getRolePermission,
     createRole,
     updateRole,
-    updateRoleStatus
+    updateRoleStatus,
+    assignPermission
 };

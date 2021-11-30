@@ -40,13 +40,13 @@
         public ActionResult Index(short? roleId = null)
         {
             IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
-            IList<Function> functions = ucfunctionService.GetBySiteId(userControlSession.SiteId, true);
+            IList<Function> functions = ucfunctionService.GetBySiteId(userControlSession.SiteId);
             var functionTrees = new TreeFunctionViewModel
             {
                 RoleId = roleId ?? systemRoles.First().RoleId,
                 IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
                 Functions = GetFunctionTrees(functions),
-                FunctionPermissions = ucfunctionService.GetPermissionByRoleId(roleId ?? systemRoles.First().RoleId)
+                FunctionPermissions = ucfunctionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, roleId ?? systemRoles.First().RoleId)
             };
 
             ViewBag.SystemRoles = systemRoles;
@@ -58,7 +58,7 @@
         [HRMPermission(Policy.Host, FunctionKey.FunctionManagement)]
         public CustomJsonResult AssignPermission(short roleId, IList<FunctionPermission> permissions)
         {
-            CommandResult commandResult = roleService.AssignFunction(roleId, permissions);
+            CommandResult commandResult = roleService.AssignPermission(userControlSession.SiteId, roleId, permissions);
             if (commandResult.IsSuccessful)
             {
                 var permissionXml = new StringBuilder("<Root>");

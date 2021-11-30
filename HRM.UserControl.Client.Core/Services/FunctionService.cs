@@ -1,6 +1,7 @@
 ﻿namespace HRM.UserControl.Client.Core.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Client;
     using HRM.UserControl.Client.Core.Models;
@@ -11,9 +12,13 @@
 
         Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true);
 
-        IList<FunctionPermission> GetPermissionByRoleId(short roleId);
+        IList<Function> GetHierarchyBySiteId(short siteId, bool? isActive = true);
 
-        Task<IList<FunctionPermission>> GetPermissionByRoleIdAsync(short roleId);
+        Task<IList<Function>> GetHierarchyBySiteIdAsync(short siteId, bool? isActive = true);
+
+        IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId);
+
+        Task<IList<FunctionPermission>> GetPermissionBySiteAndRoleIdAsync(short siteId, short roleId);
     }
 
     public class FunctionService : IFunctionService
@@ -25,16 +30,67 @@
             functionClient = new FunctionClient();
         }
 
-        public async Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true)
-             => await functionClient.GetBySiteIdAsync(siteId, isActive);
-
         public IList<Function> GetBySiteId(short siteId, bool? isActive = true)
-            => functionClient.GetBySiteId(siteId, isActive);
+        {
+            IList<Function> functions = functionClient.GetBySiteId(siteId, isActive);
+            return functions.OrderBy(x => x.DisplayOrder).ToList();
+        }
 
-        public async Task<IList<FunctionPermission>> GetPermissionByRoleIdAsync(short roleId)
-            => await functionClient.GetPermissionByRoleIdAsync(roleId);
+        public async Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true)
+        {
+            IList<Function> functions = await functionClient.GetBySiteIdAsync(siteId, isActive);
+            return functions.OrderBy(x => x.DisplayOrder).ToList();
+        }
 
-        public IList<FunctionPermission> GetPermissionByRoleId(short roleId)
-            => functionClient.GetPermissionByRoleId(roleId);
+        public IList<Function> GetHierarchyBySiteId(short siteId, bool? isActive = true)
+        {
+            IList<Function> functions = functionClient.GetBySiteId(siteId, isActive);
+            return GetHierarchyFunction(functions);
+        }
+
+        public async Task<IList<Function>> GetHierarchyBySiteIdAsync(short siteId, bool? isActive = true)
+        {
+            IList<Function> functions = await functionClient.GetBySiteIdAsync(siteId, isActive);
+            return GetHierarchyFunction(functions);
+        }
+
+        public IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId)
+            => functionClient.GetPermissionBySiteAndRoleId(siteId, roleId);
+
+        public async Task<IList<FunctionPermission>> GetPermissionBySiteAndRoleIdAsync(short siteId, short roleId)
+            => await functionClient.GetPermissionBySiteAndRoleIdAsync(siteId, roleId);
+
+        private IList<Function> GetHierarchyFunction(IList<Function> functions)
+        {
+            IList<Function> functionTrees = functions.Where(func => !func.ParentId.HasValue)
+                .OrderBy(x => x.DisplayOrder).ToList();
+            foreach (Function function in functionTrees)
+            {
+                function.Level = 0;
+                GetChildFunctions(function, functions);
+            }
+
+            return functionTrees;
+        }
+
+        private void GetChildFunctions(Function function, IList<Function> functions)
+        {
+            IList<Function> functionItems = functions.Where(x => x.ParentId == function.FunctionId)
+                .OrderBy(x => x.DisplayOrder).ToList();
+            if (functionItems.Any())
+            {
+                if (function.Childs == null)
+                {
+                    function.Childs = new List<Function>();
+                }
+
+                foreach (Function item in functionItems)
+                {
+                    item.Level = (byte)(function.Level + 1);
+                    function.Childs.Add(item);
+                    GetChildFunctions(item, functions);
+                }
+            }
+        }
     }
 }

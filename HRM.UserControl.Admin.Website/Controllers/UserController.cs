@@ -117,40 +117,9 @@
 
         public async Task<IActionResult> GetUserPermission(short siteId, int userId)
         {
-            IList<Function> functions = await functionService.GetBySiteIdAsync(siteId, true);
+            IList<Function> functions = await functionService.GetHierarchyBySiteIdAsync(siteId, true);
             IList<FunctionPermission> permissions = await userService.GetFunctionPermissionAsync(siteId, userId);
-            return Json(new { functions = GetFunctionTrees(functions), permissions });
-        }
-
-        private IList<Function> GetFunctionTrees(IList<Function> functions)
-        {
-            IList<Function> functionTrees = functions.Where(func => !func.ParentId.HasValue).ToList();
-            foreach (Function function in functionTrees)
-            {
-                function.Level = 0;
-                GetChildFunctions(function, functions);
-            }
-
-            return functionTrees;
-        }
-
-        private void GetChildFunctions(Function function, IList<Function> functions)
-        {
-            IList<Function> functionItems = functions.Where(x => x.ParentId == function.FunctionId).ToList();
-            if (functionItems.Any())
-            {
-                if (function.Childs == null)
-                {
-                    function.Childs = new List<Function>();
-                }
-
-                foreach (Function item in functionItems)
-                {
-                    item.Level = (byte)(function.Level + 1);
-                    function.Childs.Add(item);
-                    GetChildFunctions(item, functions);
-                }
-            }
+            return Json(new { functions, permissions });
         }
     }
 }

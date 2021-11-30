@@ -34,7 +34,7 @@ export class CreateRole extends Component {
             if (this.props.createRoleResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.getAllRole(this.props.getAllRoleParams);
+                    this.props.getRoleBySiteId(this.props.getRoleParams);
                 }, 3000);
             } else {
                 setSubmitting(false);
@@ -126,8 +126,8 @@ export class CreateRole extends Component {
     };
 
     render() {
-        const { sites, getAllRoleParams } = this.props;
-        let site = sites.find(item => item.siteId === getAllRoleParams.siteId);
+        const { sites, getRoleParams } = this.props;
+        let site = sites.find(item => item.siteId === getRoleParams.siteId);
         const initialValues = {
             name: '',
             site: site ? { value: site.siteId, label: site.siteName } : null,
@@ -157,8 +157,8 @@ export class CreateRole extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllRoleParams, sites, createRoleResult } = state;
-    return { getAllRoleParams, sites, createRoleResult };
+    const { getRoleParams, sites, createRoleResult } = state;
+    return { getRoleParams, sites, createRoleResult };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateRole);
