@@ -79,8 +79,9 @@
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
             loginResult.SiteId = requestSite.SiteId;
+            loginResult.Nickname = user.Nickname;
 
-            if(loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
+            if (loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
             {
                 var command = new UpdateUserPasswordCommand
                 {

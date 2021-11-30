@@ -7,6 +7,7 @@
     public interface IUserControlSession
     {
         int UserId { get; set; }
+        string Nickname { get; set; }
         short SiteId { get; set; }
         string JwtToken { get; set; }
 

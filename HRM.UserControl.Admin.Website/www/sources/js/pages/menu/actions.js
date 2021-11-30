@@ -15,25 +15,25 @@ import {
 
 const getMenuById = id => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl(`menu/getById/${id}`);
+    const url = Site.resolveClientUrl(`menu/getBySiteId/${id}`);
     await DataService.getDataAsync(url).then(response => {
         dispatch(setMenu(response.data));
     }).then(() => Site.unblockUI());
 };
 
 const getFunctionById = id => async () => {
-    const url = Site.resolveClientUrl(`function/GetById/${id}`);
+    const url = Site.resolveClientUrl(`function/getBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 
 const getParentById = id => async() => {
-    const url = Site.resolveClientUrl(`menu/getById/${id}`);
+    const url = Site.resolveClientUrl(`menu/getBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 
 const getAllSites = () => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('menu/getAllSites/');
+    const url = Site.resolveClientUrl('common/getAllSite/');
     await DataService.getDataAsync(url).then(response => {
         dispatch(setAllSites(response.data));
     }).then(() => Site.unblockUI());

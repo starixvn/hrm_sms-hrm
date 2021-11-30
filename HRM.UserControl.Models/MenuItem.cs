@@ -12,6 +12,6 @@
         public bool IsActive { get; set; }
         public int? ParentId { get; set; }
         public short DisplayOrder { get; set; }
-        public IList<MenuItem> Childs { get; set; }
+        public IList<MenuItem> Childs { get; set; } = new List<MenuItem>();
     }
 }

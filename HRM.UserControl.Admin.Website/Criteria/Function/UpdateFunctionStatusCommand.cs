@@ -2,7 +2,7 @@
 {
     public class UpdateFunctionStatusCommand : BaseNonQueryCommand
     {
-        public short FunctionId { get; set; }
+        public int FunctionId { get; set; }
         public bool IsActive { get; set; }
         public int ModifiedBy { get; set; }
 

@@ -19,6 +19,11 @@
             get => int.Parse(Session[SessionKey.SessionUserId]?.ToString() ?? "0");
             set => Session.Add(SessionKey.SessionUserId, value);
         }
+        public string Nickname
+        {
+            get => Session?[SessionKey.SessionNickname]?.ToString() ?? string.Empty;
+            set => Session.Add(SessionKey.SessionNickname, value);
+        }
 
         public short SiteId
         {

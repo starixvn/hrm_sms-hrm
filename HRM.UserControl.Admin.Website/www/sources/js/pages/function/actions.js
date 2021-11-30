@@ -15,20 +15,20 @@ import {
 
 const getFunctionById = id => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl(`function/GetById/${id}`);
+    const url = Site.resolveClientUrl(`function/getBySiteId/${id}`);
     await DataService.getDataAsync(url).then(response => {
         dispatch(setFunctions(response.data));
     }).then(() => Site.unblockUI());
 };
 
 const getParentById = id => async() => {
-    const url = Site.resolveClientUrl(`function/GetById/${id}`);
+    const url = Site.resolveClientUrl(`function/getBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 
 const getAllSites = () => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('function/getAllSites/');
+    const url = Site.resolveClientUrl('common/getAllSite/');
     await DataService.getDataAsync(url).then(response => {
         dispatch(setAllSites(response.data));
     }).then(() => Site.unblockUI());

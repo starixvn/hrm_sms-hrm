@@ -14,7 +14,7 @@ import {
 
 const getAllSite = params => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('function/getAll');
+    const url = Site.resolveClientUrl('common/getAllSite');
     await DataService.postDataAsync(url, params).then(response => {
         dispatch(setSites(response.data));
     }).then(() => Site.unblockUI());

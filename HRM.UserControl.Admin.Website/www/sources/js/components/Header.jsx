@@ -27,8 +27,8 @@ export default class Header extends PureComponent {
         });
     };
 
-    isActive = (menuItem, currentUrl) => (menuItem.link !== null && menuItem.link.toLowerCase().localeCompare(currentUrl) === 0)
-        || menuItem.childrenMenus.filter(child => child.link.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
+    isActive = (menuItem, currentUrl) => (menuItem.url !== null && menuItem.url.toLowerCase().localeCompare(currentUrl) === 0)
+        || menuItem.childs.filter(child => child.url.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
 
     render() {
         const { menus, nickname, expended } = this.state;
@@ -49,17 +49,17 @@ export default class Header extends PureComponent {
                             menus.map((item, index) => {
                                 let isActive = this.isActive(item, currentUrl);
                                 const activeClass = isActive ? 'active' : '';
-                                if (item.childrenMenus.length > 0) {
+                                if (item.childs.length > 0) {
                                     return (
                                         <li key={index} className={`dropdown ${activeClass}`}>
-                                            <a>{item.name} <i className="fa fa-angle-down" /></a>
+                                            <a>{item.menuItemName} <i className="fa fa-angle-down" /></a>
                                             <ul className="dropdown-menu">
                                                 {
-                                                    item.childrenMenus.map(child => {
-                                                        isActive = child.link.toLowerCase().localeCompare(currentUrl) === 0;
+                                                    item.childs.map(child => {
+                                                        isActive = child.url.toLowerCase().localeCompare(currentUrl) === 0;
                                                         return (
-                                                            <li key={child.menuId} className={`dropdown ${isActive ? 'active' : ''}`}>
-                                                                <a href={child.link}>{child.name}</a>
+                                                            <li key={child.menuItemId} className={`dropdown ${isActive ? 'active' : ''}`}>
+                                                                <a href={child.url}>{child.menuItemName}</a>
                                                             </li>
                                                         );
                                                     })
@@ -70,7 +70,7 @@ export default class Header extends PureComponent {
                                 } else {
                                     return (
                                         <li key={index} className={`${activeClass}`}>
-                                            <a href={item.link}>{item.name}</a>
+                                            <a href={item.url}>{item.menuItemName}</a>
                                         </li>
                                     );
                                 }

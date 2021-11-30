@@ -1,6 +1,7 @@
 ﻿namespace HRM.UserControl.Admin.Website.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.Company;
@@ -56,6 +57,7 @@
             if (loginResult.IsSuccessfull)
             {
                 userControlSession.UserId = loginResult.UserId;
+                userControlSession.Nickname = loginResult.Nickname;
                 userControlSession.SiteId = loginResult.SiteId;
                 userControlSession.JwtToken = loginResult.Token;
                 userControlSession.MenuItems = await userService.GetMenuItemAsync();
@@ -67,6 +69,42 @@
             }
 
             return Json(new CommandResult { Code = 1, Message = loginResult.ErrorMessage });
+        }
+
+        public async Task<IActionResult> GetHeader()
+        {
+            var menus = GetMenuTrees(userControlSession.MenuItems);
+            var header = new
+            {
+                menus = menus,
+                nickname = userControlSession.Nickname
+            };
+
+            return Json(header);
+        }
+
+        private IList<MenuItem> GetMenuTrees(IList<MenuItem> menus)
+        {
+            IList<MenuItem> menuTrees = menus.Where(menu => !menu.ParentId.HasValue).ToList();
+            foreach (MenuItem menu in menuTrees)
+            {
+                menu.Childs = new List<MenuItem>();
+                GetChildMenus(menu, menus);
+            }
+            return menuTrees;
+        }
+
+        private void GetChildMenus(MenuItem menu, IList<MenuItem> menus)
+        {
+            IList<MenuItem> menuItems = menus.Where(x => x.ParentId == menu.MenuItemId).ToList();
+            if (menuItems.Any())
+            {
+                foreach (MenuItem item in menuItems)
+                {
+                    menu.Childs.Add(item);
+                    GetChildMenus(item, menus);
+                }
+            }
         }
 
         public async Task<IActionResult> Logout()

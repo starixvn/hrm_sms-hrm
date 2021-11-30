@@ -3,7 +3,7 @@
     public class CreateMenuCommand : BaseNonQueryCommand
     {
         public short SiteId { get; set; }
-        public short? FunctionId { get; set; }
+        public int? FunctionId { get; set; }
         public string MenuItemName { get; set; }
         public string Description { get; set; }
         public int? ParentId { get; set; }

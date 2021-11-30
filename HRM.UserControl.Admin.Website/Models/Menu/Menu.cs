@@ -13,7 +13,7 @@ namespace HRM.UserControl.Admin.Website.Models.Menu
         public short? ParentId { get; set; }
         public string FunctionName { get; set; }
         public string Description { get; set; }
-        public short? FunctionId { get; set; }
+        public int? FunctionId { get; set; }
         public short DisplayOrder { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

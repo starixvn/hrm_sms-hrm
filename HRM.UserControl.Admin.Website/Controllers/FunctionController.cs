@@ -25,14 +25,7 @@
             return View();
         }
 
-        public async Task<IActionResult> GetAllSites()
-        {
-            var criteria = new GetAllSiteCriteria();
-            var sites = await baseService.GetDataAsync<Site>(criteria);
-            return Json(sites);
-        }
-
-        public async Task<IActionResult> GetById(short id)
+        public async Task<IActionResult> GetBySiteId(short id)
         {
             var functions = await functionService.GetBySiteIdAsync(id, null);
             return Json(functions);

@@ -7,7 +7,7 @@
         public string FunctionName { get; set; }
         public string FunctionKey { get; set; }
         public int? ParentId { get; set; }
-        public short? Policy { get; set; }
+        public byte? Policy { get; set; }
         public short DisplayOrder { get; set; }
         public string Description { get; set; }
         public int ModifiedBy { get; set; }
