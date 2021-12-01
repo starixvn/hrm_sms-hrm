@@ -71,7 +71,7 @@
             return Json(new CommandResult { Code = 1, Message = loginResult.ErrorMessage });
         }
 
-        public async Task<IActionResult> GetHeader()
+        public IActionResult GetHeader()
         {
             var menus = GetMenuTrees(userControlSession.MenuItems);
             var header = new
