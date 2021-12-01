@@ -59,6 +59,7 @@
     Username: 'Username',
     Users: 'Users',
     UpdateMenu: 'Update Menu',
+    UpdateFunction: 'Update Function',
     Order: 'Order',
     Policy: 'Policy'
 };

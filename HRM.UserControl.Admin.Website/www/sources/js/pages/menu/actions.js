@@ -5,7 +5,6 @@ import {
     setMenu,
     setFunctions,
     setAllSites,
-    setMenuSelected,
     setCreateModalDialog,
     setCreateMenuResult,
     setUpdateModalDialog,
@@ -27,7 +26,7 @@ const getFunctionById = id => async () => {
 };
 
 const getParentById = id => async() => {
-    const url = Site.resolveClientUrl(`menu/getBySiteId/${id}`);
+    const url = Site.resolveClientUrl(`menu/getParentBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 
@@ -68,7 +67,6 @@ export const ActionCreators = {
     getParentById,
     getFunctionById,
     setFunctions,
-    setMenuSelected,
     setCreateModalDialog,
     createMenu,
     setCreateMenuResult,

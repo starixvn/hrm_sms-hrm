@@ -16,7 +16,6 @@ export class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            siteOptions: null,
             site: null,
             parentOptions: null,
             parent: null
@@ -24,20 +23,18 @@ export class Update extends Component {
     }
 
     componentDidMount() {
-        this.handleSiteOptions();
-        this.handleParentOptions(this.props.functions);
+        this.handleSiteSelected();
+        this.props.getParentById(this.props.params).then(response => { this.handleParentOptions(response.data); });
     }
 
-    handleSiteOptions = () =>{
-        const {functionSelected, sites} = this.props;
-        const siteOptions = sites.map(item =>{
-            return {
-                value: item.siteId,
-                label: item.siteName
-            };
-        });
-        const site = siteOptions.filter(x=>x.value === functionSelected.siteId)[0];
-        this.setState({siteOptions, site});
+    handleSiteSelected = () =>{
+        const {updateModalDialog, sites} = this.props;
+        const siteFilter = sites.filter(x=>x.siteId === updateModalDialog.item.siteId)[0];
+        const site = {
+            value: siteFilter.siteId,
+            label: siteFilter.siteName
+        };
+        this.setState({site});
     }
 
     handleParentOptions = parents =>{
@@ -45,7 +42,7 @@ export class Update extends Component {
             functionId: null,
             functionName: 'None'
         }];
-        const functionSelected = this.props.functionSelected;
+        const functionSelected = this.props.updateModalDialog.item;
         const parentCopy = [...defaultParent, ...parents];
         const parentOptions = parentCopy.map(item =>{
             return {
@@ -83,7 +80,7 @@ export class Update extends Component {
         setSubmitting(true);
         const {site, parent} = this.state;
         const params = {
-            functionId: this.props.functionSelected.functionId,
+            functionId: this.props.updateModalDialog.item.functionId,
             functionName: values.functionName,
             functionKey: values.functionKey,
             siteId: site.value,
@@ -98,7 +95,7 @@ export class Update extends Component {
             if (this.props.updateFunctionResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.setGetSiteParams(params.siteId);
+                    this.props.setSiteParams(params.siteId);
                     this.props.getFunctionById(params.siteId);
                 }, 3000);
             } else {
@@ -122,7 +119,13 @@ export class Update extends Component {
         setFieldValue,
         isSubmitting
     }) => {
-        const {siteOptions, site, parent, parentOptions} = this.state;
+        const {site, parent, parentOptions} = this.state;
+        const siteOptions = this.props.sites.map(item =>{
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
@@ -183,6 +186,7 @@ export class Update extends Component {
                         <Col sm="7" md="8">
                             <Form.Control type="text" size="sm" value={values.description}
                                 name="description" id="description"
+                                isInvalid={touched.description && errors.description}
                                 className="shadow-none" autoComplete="off"
                                 onChange={handleChange}
                             />
@@ -223,7 +227,7 @@ export class Update extends Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3" htmlFor="isActive" className="required">
+                        <Form.Label column sm="4" md="3" htmlFor="isActive">
                             {LangHelper.getResource('Status')}
                         </Form.Label>
                         <Col sm="7" md="8">
@@ -249,7 +253,7 @@ export class Update extends Component {
     };
 
     render() {
-        const { functionSelected } = this.props;
+        const functionSelected = this.props.updateModalDialog.item;
         const policy = PolicyOptions.filter(x=>x.value === functionSelected.policy);
         const initialValues = {
             functionName: functionSelected.functionName,
@@ -303,8 +307,8 @@ export class Update extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog, confirmModalRegenerateKeyDialog } = state;
-    return { params, sites, functions, functionSelected, updateFunctionResult, confirmModalDialog, confirmModalRegenerateKeyDialog };
+    const { params, sites, functions, updateFunctionResult, updateModalDialog, confirmModalRegenerateKeyDialog } = state;
+    return { params, sites, functions, updateFunctionResult, updateModalDialog, confirmModalRegenerateKeyDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Update);

@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const functionSlice = createSlice({
-    name: 'menuFunction',
+    name: 'function',
     initialState: {
         functions: [],
-        functionSelected: null,
         sites: [],
         params: null,
         createModalDialog: { show: false },
@@ -15,14 +14,11 @@ const functionSlice = createSlice({
         confirmModalRegenerateKeyDialog: { show: false }
     },
     reducers: {
-        setGetSiteParams: (state, action) => {
+        setSiteParams: (state, action) => {
             state.params = action.payload;
         },
         setFunctions: (state, action) => {
             state.functions = action.payload;
-        },
-        setFunctionSelected: (state, action) => {
-            state.functionSelected = action.payload;
         },
         setAllSites: (state, action) => {
             state.sites = action.payload;
@@ -51,9 +47,8 @@ const functionSlice = createSlice({
 const { actions, reducer } = functionSlice;
 
 export const {
-    setGetSiteParams,
+    setSiteParams,
     setFunctions,
-    setFunctionSelected,
     setAllSites,
     setCreateModalDialog,
     setCreateFunctionResult,

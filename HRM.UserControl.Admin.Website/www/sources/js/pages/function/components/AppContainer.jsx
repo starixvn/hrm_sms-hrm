@@ -23,7 +23,7 @@ export class AppContainer extends Component {
 
     updateStatus = () => {
         Site.blockUI();
-        const { functionId, isActive } = this.props.functionSelected;
+        const { functionId, isActive } = this.props.updateStatusModalDialog.item;
         this.props.updateFunctionStatus({ functionId, isActive: !isActive }).then(response => {
             Site.unblockUI();
             this.closeConfirmUpdateStatus();
@@ -38,12 +38,11 @@ export class AppContainer extends Component {
     };
 
     closeConfirmUpdateStatus = () => {
-        this.props.setUpdateStatusModalDialog({ show: false });
-        this.props.setFunctionSelected(null);
+        this.props.setUpdateStatusModalDialog({ show: false, item: null });
     };
 
     render() {
-        const { createModalDialog, updateModalDialog, functionSelected, updateStatusModalDialog, sites } = this.props;
+        const { createModalDialog, updateModalDialog, updateStatusModalDialog, sites } = this.props;
         if(sites.length === 0){
             return null;
         }
@@ -57,7 +56,7 @@ export class AppContainer extends Component {
                     <Create />
                 }
                 {
-                    updateModalDialog.show && functionSelected &&
+                    updateModalDialog.show && updateModalDialog.item &&
                     <Update />
                 }
                 {
@@ -67,8 +66,8 @@ export class AppContainer extends Component {
                         title={LangHelper.getResource('Confirmation')}
                         contents={
                             <div>
-                                Are you sure you want to {functionSelected.isActive ? 'deactivate ' : 'active '}
-                                <strong>{functionSelected.functionName}</strong>?
+                                Are you sure you want to {updateStatusModalDialog.item.isActive ? 'deactivate ' : 'active '}
+                                <strong>{updateStatusModalDialog.item.functionName}</strong>?
                             </div>
                         }
                         buttons={[

@@ -15,7 +15,6 @@ export class Create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            siteOptions: null,
             site: null,
             parentOptions: null,
             parent: null
@@ -23,20 +22,18 @@ export class Create extends Component {
     }
 
     componentDidMount() {
-        this.handleSiteOptions();
-        this.handleParentOptions(this.props.functions);
+        this.handleSiteSelected();
+        this.props.getParentById(this.props.params).then(response => { this.handleParentOptions(response.data); });
     }
 
-    handleSiteOptions = () =>{
+    handleSiteSelected = () =>{
         const {params, sites} = this.props;
-        const siteOptions = sites.map(item =>{
-            return {
-                value: item.siteId,
-                label: item.siteName
-            };
-        });
-        const site = siteOptions.filter(x=>x.value === params)[0];
-        this.setState({siteOptions, site});
+        const siteFilter = sites.filter(x=>x.siteId === params)[0];
+        const site = {
+            value: siteFilter.siteId,
+            label: siteFilter.siteName
+        };
+        this.setState({site});
     }
 
     handleParentOptions = parents =>{
@@ -80,7 +77,7 @@ export class Create extends Component {
             isActive: values.isActive
         };
 
-        this.props.setGetSiteParams(params.siteId);
+        this.props.setSiteParams(params.siteId);
         this.props.createFunction(params).then(() => {
             if (this.props.createFunctionResult.isSuccessful) {
                 setTimeout(() => {
@@ -102,7 +99,13 @@ export class Create extends Component {
         setFieldValue,
         isSubmitting
     }) => {
-        const {siteOptions, site, parent, parentOptions} = this.state;
+        const {site, parent, parentOptions} = this.state;
+        const siteOptions = this.props.sites.map(item =>{
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>

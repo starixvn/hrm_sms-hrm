@@ -1,9 +1,8 @@
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import {
-    setGetSiteParams,
+    setSiteParams,
     setFunctions,
-    setFunctionSelected,
     setAllSites,
     setCreateModalDialog,
     setCreateFunctionResult,
@@ -22,7 +21,7 @@ const getFunctionById = id => async dispatch => {
 };
 
 const getParentById = id => async() => {
-    const url = Site.resolveClientUrl(`function/getBySiteId/${id}`);
+    const url = Site.resolveClientUrl(`function/getParentBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 
@@ -55,11 +54,10 @@ const updateFunctionStatus = params => async() => {
 };
 
 export const ActionCreators = {
-    setGetSiteParams,
+    setSiteParams,
     getFunctionById,
     setFunctions,
     getParentById,
-    setFunctionSelected,
     getAllSites,
     setAllSites,
     setCreateModalDialog,

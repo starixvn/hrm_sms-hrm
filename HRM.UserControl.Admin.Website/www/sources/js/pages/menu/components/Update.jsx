@@ -14,7 +14,6 @@ export class Update extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            siteOptions: null,
             site: null,
             parentOptions: null,
             parent: null,
@@ -24,23 +23,24 @@ export class Update extends Component {
     }
 
     componentDidMount() {
-        this.handleSiteOptions();
-        this.props.getFunctionById(this.props.params).then(response =>{
+        const params = this.props.params;
+        this.handleSiteSelected();
+        this.props.getFunctionById(params).then(response =>{
             this.handleFunctionOptions(response.data);
         });
-        this.handleParentOptions(this.props.menus);
+        this.props.getParentById(params).then(response => { 
+            this.handleParentOptions(response.data); 
+        });
     }
 
-    handleSiteOptions = () =>{
-        const {menuSelected, sites} = this.props;
-        const siteOptions = sites.map(item =>{
-            return {
-                value: item.siteId,
-                label: item.siteName
-            };
-        });
-        const site = siteOptions.filter(x=>x.value === menuSelected.siteId)[0];
-        this.setState({siteOptions, site});
+    handleSiteSelected = () =>{
+        const {params, sites} = this.props;
+        const siteFilter = sites.filter(x=>x.siteId === params)[0];
+        const site = {
+            value: siteFilter.siteId,
+            label: siteFilter.siteName
+        };
+        this.setState({site});
     }
 
     handleFunctionOptions = functions => {
@@ -55,8 +55,8 @@ export class Update extends Component {
                 label: item.functionName
             };
         });
-        const funcFilter = functionOptions.filter(x=>x.value === this.props.menuSelected.functionId);
-        const func = (this.props.menuSelected.functionId === null || funcFilter.length === 0) ? functionOptions[0] : funcFilter[0];
+        const funcFilter = functionOptions.filter(x=>x.value === this.props.updateMenuModalDialog.item.functionId);
+        const func = (this.props.updateMenuModalDialog.item.functionId === null || funcFilter.length === 0) ? functionOptions[0] : funcFilter[0];
         this.setState({functionOptions, func});
     }
 
@@ -65,7 +65,7 @@ export class Update extends Component {
             menuItemId: null,
             menuItemName: 'None'
         }];
-        const menuSelected = this.props.menuSelected;
+        const menuSelected = this.props.updateMenuModalDialog.item;
         const parentCopy = [...defaultParent, ...parents];
         const parentOptions = parentCopy.map(item =>{
             return {
@@ -96,7 +96,7 @@ export class Update extends Component {
         setSubmitting(true);
         const {site, parent, func} = this.state;
         const params = {
-            menuItemId: this.props.menuSelected.menuItemId,
+            menuItemId: this.props.updateMenuModalDialog.item.menuItemId,
             menuItemName: values.menuItemName,
             functionId: func.value,
             siteId: site.value,
@@ -128,7 +128,13 @@ export class Update extends Component {
         handleSubmit,
         isSubmitting
     }) => {
-        const {siteOptions, site, parent, parentOptions, functionOptions , func} = this.state;
+        const {site, parent, parentOptions, functionOptions , func} = this.state;
+        const siteOptions = this.props.sites.map(item =>{
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
@@ -185,7 +191,6 @@ export class Update extends Component {
                             <Form.Control type="text" size="sm" value={values.url}
                                 name="url" id="url"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.url && errors.url}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -220,7 +225,6 @@ export class Update extends Component {
                             <Form.Control type="number" size="sm" value={values.order}
                                 name="order" id="order"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.order && errors.order}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -252,7 +256,7 @@ export class Update extends Component {
     };
 
     render() {
-        const { menuSelected } = this.props;
+        const menuSelected = this.props.updateMenuModalDialog.item;
         const initialValues = {
             menuItemName: menuSelected.menuItemName,
             url: menuSelected.url,
@@ -285,8 +289,8 @@ export class Update extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { params, sites, menus, functions, menuSelected, updateMenuResult } = state;
-    return { params, sites, menus, functions, menuSelected, updateMenuResult };
+    const { params, sites, menus, functions, updateMenuResult, updateMenuModalDialog } = state;
+    return { params, sites, menus, functions, updateMenuResult, updateMenuModalDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Update);

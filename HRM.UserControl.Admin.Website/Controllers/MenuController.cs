@@ -1,5 +1,7 @@
 ﻿namespace HRM.UserControl.Admin.Website.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using HRM.UserControl.Admin.Website.Criteria.Menu;
     using HRM.UserControl.Admin.Website.Models.Menu;
@@ -29,6 +31,14 @@
         {
             var criteria = new GetMenuBySiteId { SiteId = id };
             var menus = await baseService.GetDataAsync<Menu>(criteria);
+            var hierarchyMenus = GetHierarchyMenu(menus.ToList());
+            return Json(hierarchyMenus);
+        }
+
+        public async Task<IActionResult> GetParentBySiteId(short id)
+        {
+            var criteria = new GetMenuBySiteId { SiteId = id };
+            var menus = await baseService.GetDataAsync<Menu>(criteria);
             return Json(menus);
         }
 
@@ -54,6 +64,39 @@
             command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
+        }
+
+        private IList<Menu> GetHierarchyMenu(IList<Menu> menus)
+        {
+            IList<Menu> menuTrees = menus.Where(menu => !menu.ParentId.HasValue)
+                .OrderBy(x => x.DisplayOrder).ToList();
+            foreach (Menu menu in menuTrees)
+            {
+                menu.Level = 0;
+                GetChildMenus(menu, menus);
+            }
+
+            return menuTrees;
+        }
+
+        private void GetChildMenus(Menu menu, IList<Menu> menus)
+        {
+            IList<Menu> menuItems = menus.Where(x => x.ParentId == menu.MenuItemId)
+                .OrderBy(x => x.DisplayOrder).ToList();
+            if (menuItems.Any())
+            {
+                if (menu.Childs == null)
+                {
+                    menu.Childs = new List<Menu>();
+                }
+
+                foreach (Menu item in menuItems)
+                {
+                    item.Level = (byte)(item.Level + 1);
+                    menu.Childs.Add(item);
+                    GetChildMenus(item, menus);
+                }
+            }
         }
     }
 }

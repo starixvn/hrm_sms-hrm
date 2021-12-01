@@ -7,6 +7,7 @@
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
+    using System.Collections.Generic;
 
     public class FunctionController : Controller
     {
@@ -32,7 +33,13 @@
 
         public async Task<IActionResult> GetBySiteId(short id)
         {
-            var functions = await functionService.GetBySiteIdAsync(id, null);
+            IList<Function> functions = await functionService.GetHierarchyBySiteIdAsync(id, null);
+            return Json(functions);
+        }
+
+        public async Task<IActionResult> GetParentBySiteId(short id)
+        {
+            IList<Function> functions = await functionService.GetBySiteIdAsync(id, null);
             return Json(functions);
         }
 

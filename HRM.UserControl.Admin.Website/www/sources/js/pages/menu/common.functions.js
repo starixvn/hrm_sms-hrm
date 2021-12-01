@@ -13,11 +13,16 @@ export const validateFormik = (values, siteId) => {
             LangHelper.getResource('MenuName'),
             50);
     }
+    if(values.description !== null && values.description.trim().length > 200) {
+        errors.description = LangHelper.formatString(
+        LangHelper.getResource('FieldMaxLength'),
+        LangHelper.getResource('Description'),
+        200);
+    }
     if(!siteId || siteId === null) {
         errors.siteId = LangHelper.formatString(
             LangHelper.getResource('FieldRequired'),
             LangHelper.getResource('Site'));
     }   
-
     return errors;
 };

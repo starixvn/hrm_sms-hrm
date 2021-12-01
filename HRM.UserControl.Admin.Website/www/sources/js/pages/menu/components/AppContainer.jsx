@@ -23,7 +23,7 @@ export class AppContainer extends Component {
 
     updateStatus = () => {
         Site.blockUI();
-        const { menuItemId, isActive } = this.props.menuSelected;
+        const { menuItemId, isActive } = this.props.updateStatusModalDialog.item;
         this.props.updateMenuStatus({ menuItemId, isActive: !isActive }).then(response => {
             Site.unblockUI();
             this.closeConfirmUpdateStatus();
@@ -38,12 +38,11 @@ export class AppContainer extends Component {
     };
 
     closeConfirmUpdateStatus = () => {
-        this.props.setUpdateStatusModalDialog({ show: false });
-        this.props.setMenuSelected(null);
+        this.props.setUpdateStatusModalDialog({ show: false, item: null });
     };
 
     render() {
-        const { sites, menuSelected, createModalDialog, updateStatusModalDialog, updateMenuModalDialog  } = this.props;
+        const { sites, createModalDialog, updateStatusModalDialog, updateMenuModalDialog  } = this.props;
         if(sites.length === 0){
             return null;
         }
@@ -57,7 +56,7 @@ export class AppContainer extends Component {
                     <Create />
                 }
                 {
-                    updateMenuModalDialog.show && menuSelected &&
+                    updateMenuModalDialog.show && updateMenuModalDialog.item &&
                     <Update />
                 }
                 {
@@ -67,8 +66,8 @@ export class AppContainer extends Component {
                         title={LangHelper.getResource('Confirmation')}
                         contents={
                             <div>
-                                Are you sure you want to {menuSelected.isActive ? 'deactivate ' : 'active '}
-                                <strong>{menuSelected.menuItemName}</strong>?
+                                Are you sure you want to {updateStatusModalDialog.item.isActive ? 'deactivate ' : 'active '}
+                                <strong>{updateStatusModalDialog.item.menuItemName}</strong>?
                             </div>
                         }
                         buttons={[
@@ -90,8 +89,8 @@ export class AppContainer extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { sites, menuSelected, params, createModalDialog, updateMenuModalDialog, updateStatusModalDialog} = state;
-    return { sites, menuSelected, params, createModalDialog, updateMenuModalDialog, updateStatusModalDialog};
+    const { sites, params, createModalDialog, updateMenuModalDialog, updateStatusModalDialog} = state;
+    return { sites, params, createModalDialog, updateMenuModalDialog, updateStatusModalDialog};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

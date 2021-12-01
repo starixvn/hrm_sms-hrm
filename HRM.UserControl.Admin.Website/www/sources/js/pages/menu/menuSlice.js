@@ -7,7 +7,6 @@ const menuSlice = createSlice({
         menus: [],
         functions: [],
         sites: [],
-        menuSelected: null,
         createModalDialog: { show: false },
         createMenuResult: null,
         updateMenuModalDialog: { show: false },
@@ -26,9 +25,6 @@ const menuSlice = createSlice({
         },
         setAllSites: (state, action) => {
             state.sites = action.payload;
-        },
-        setMenuSelected: (state, action) => {
-            state.menuSelected = action.payload;
         },
         setCreateModalDialog: (state, action) => {
             state.createModalDialog = action.payload;
@@ -55,7 +51,6 @@ export const {
     setMenu,
     setFunctions,
     setAllSites,
-    setMenuSelected,
     setCreateModalDialog,
     setCreateMenuResult,
     setUpdateModalDialog,

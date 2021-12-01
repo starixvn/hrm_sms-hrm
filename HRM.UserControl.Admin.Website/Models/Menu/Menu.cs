@@ -11,6 +11,7 @@ namespace HRM.UserControl.Admin.Website.Models.Menu
         public short SiteId { get; set; }
         public string URL { get; set; }
         public short? ParentId { get; set; }
+        public byte Level { get; set; }
         public string FunctionName { get; set; }
         public string Description { get; set; }
         public int? FunctionId { get; set; }

@@ -17,7 +17,6 @@ export class Create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            siteOptions: [],
             site: null,
             parentOptions: [],
             parent: null,
@@ -27,23 +26,24 @@ export class Create extends Component {
     }
 
     componentDidMount() {
-        this.props.getFunctionById(this.props.params).then(response =>{
+        const params = this.props.params;
+        this.props.getFunctionById(params).then(response =>{
             this.handleFunctionOptions(response.data);
         });
-        this.handleSiteOptions();
-        this.handleParentOptions(this.props.menus);
+        this.handleSiteSelected();
+        this.props.getParentById(params).then(response => { 
+            this.handleParentOptions(response.data); 
+        });
     }
 
-    handleSiteOptions = () =>{
+    handleSiteSelected = () =>{
         const {params, sites} = this.props;
-        const siteOptions = sites.map(item =>{
-            return {
-                value: item.siteId,
-                label: item.siteName
-            };
-        });
-        const site = siteOptions.filter(x=>x.value === params)[0];
-        this.setState({siteOptions, site});
+        const siteFilter = sites.filter(x=>x.siteId === params)[0];
+        const site = {
+            value: siteFilter.siteId,
+            label: siteFilter.siteName
+        };
+        this.setState({site});
     }
 
     handleFunctionOptions = functions =>{
@@ -129,7 +129,13 @@ export class Create extends Component {
         handleSubmit,
         isSubmitting
     }) => {
-        const {siteOptions, site, parent, parentOptions, func, functionOptions } = this.state;
+        const {site, parent, parentOptions, func, functionOptions } = this.state;
+        const siteOptions = this.props.sites.map(item =>{
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
@@ -186,7 +192,6 @@ export class Create extends Component {
                             <Form.Control type="text" size="sm" value={values.url}
                                 name="url" id="url"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.url && errors.url}
                                 onChange={handleChange}
                             />
                         </Col>
@@ -221,7 +226,6 @@ export class Create extends Component {
                             <Form.Control type="number" size="sm" value={values.order}
                                 name="order" id="order"
                                 className="shadow-none" autoComplete="off"
-                                isInvalid={touched.order && errors.order}
                                 onChange={handleChange}
                             />
                         </Col>

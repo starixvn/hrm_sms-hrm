@@ -10,22 +10,21 @@ export class Filter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            siteOptions: null,
             site: null
         };
     }
     
     componentDidMount() {
-        this.handleSiteOptions();
+        this.handleSiteSelected();
     }
 
     componentDidUpdate(prevProps){
         if ( this.props.params !== prevProps.params ) {
-            this.handleUpdateSiteOption();
+            this.handleUpdateSite();
         }
     }
 
-    handleUpdateSiteOption = () =>{
+    handleUpdateSite = () =>{
         const siteFilter = this.props.sites.filter(x=>x.siteId === this.props.params).map(item =>{
             return {
                 value: item.siteId,
@@ -43,15 +42,13 @@ export class Filter extends Component {
         this.props.getMenuById(siteId);
     };
 
-    handleSiteOptions = () =>{
-        const siteOptions = this.props.sites.map(item =>{
-            return {
-                value: item.siteId,
-                label: item.siteName
-            };
-        });
-        const site = siteOptions[0];
-        this.setState({siteOptions, site});
+    handleSiteSelected = () =>{
+        const siteFirst = this.props.sites[0];
+        const site = {
+            value: siteFirst.siteId,
+            label: siteFirst.siteName
+        };
+        this.setState({site});
         this.props.setSiteParams(site.value);
         this.props.getMenuById(site.value);
     }
@@ -60,19 +57,21 @@ export class Filter extends Component {
         this.props.setCreateModalDialog({ show: true });
     };
 
-    handleChange = value => {
-        this.setState({ site: value });
-    };
-
     render() {
+        const siteOptions = this.props.sites.map(item =>{
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         return (
             <Form className="form-filter" onSubmit={this.handleSubmit}>
                 <Form.Row bsPrefix="form-row">
                     <Form.Group>
                         <Form.Label>{LangHelper.getResource('Site')}</Form.Label>
                         <Select classNamePrefix="react-select" className='react-select-container'  isSearchable={false}
-                            value={this.state.site} options={this.state.siteOptions} 
-                            onChange={value => this.handleChange(value)}
+                            value={this.state.site} options={siteOptions} 
+                            onChange={value => this.setState({site:value})}
 
                         />
                     </Form.Group>

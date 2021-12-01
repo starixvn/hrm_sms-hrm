@@ -17,13 +17,11 @@ export class DataGrid extends Component {
     }
 
     handleUpdateStatus = item => {
-        this.props.setFunctionSelected(item);
-        this.props.setUpdateStatusModalDialog({ show: true });
+        this.props.setUpdateStatusModalDialog({ show: true, item: item });
     };
 
     handleUpdate = item => {
-        this.props.setFunctionSelected(item);
-        this.props.setUpdateModalDialog({ show: true });
+        this.props.setUpdateModalDialog({ show: true, item: item});
     };
 
     buildGridHeader = () => {
@@ -40,42 +38,34 @@ export class DataGrid extends Component {
         );
     };
 
-    buildGridBody = functionsInfo => {
-        if (functionsInfo.length > 0) {
-            const functionsInfoSort = functionsInfo.filter(x=>x.parentId === null).sort((first, second) => first.displayOrder - second.displayOrder);
-            const hierarchyFunctions = functionsInfoSort.map(func => {
-                const copyFunc = {...func};
-                const child = this.GetChildren(func.functionId);
-                const childSortOrder = child.sort((first, second) => first.displayOrder - second.displayOrder);
-                copyFunc.childs = childSortOrder;
-                return copyFunc;
-            });
-            return hierarchyFunctions.map((item, index) => this.renderRow(item, index));
+    buildGridBody = functions => {
+        if (functions.length > 0) {
+            const rows = [];
+            for (let i = 0; i < functions.length; i++) {
+                rows.push(...this.renderRow(functions[i]));
+            }
+            return rows;
         }
 
         return [<Row key={`body${1}`} className="no-data"><Cell colSpan="7">{LangHelper.getResource('ThereIsNoData')}</Cell></Row>];
     };
 
-    GetChildren = parentId =>{
-        const func = this.props.functions;
-        return  func.filter(x=>x.parentId === parentId).map(child => {
-            const copyChild = {...child};
-            copyChild.childs = this.GetChildren(child.functionId);
-            return copyChild;
-        });
-    }
-
-    renderRow = (item, index) => {
-        const rows = [];
-        let levelChild = 0;
-        const classEvenOdd = index % 2 === 0 ? 'even-row' : 'odd-row';
+    renderRow = item => {
+        const trees = [];
+        for (let i = 0; i < item.level; i++) {
+            if (i === item.level - 1) {
+                trees.push(<span key={i}>&#9492;&#9472;&#9472;</span>);
+            } else {
+                trees.push(<span key={i} className="invisible">&#9492;&#9472;&#9472;</span>);
+            }
+        }
         const policy = this.renderPolicy(item.policy);
         const formatDate = item.modifiedDate !== null ? DateTimeService.toLongDateTimeFormat(item.modifiedDate) : '';
-        const parents = (
-            <Row key={item.functionId} className={classEvenOdd}>
-                <Cell className={`first-level ${item.childs.length > 0 ? 'has-child' : ''}`}>
-                        <span className="fa fa-minus-circle pr-2" aria-hidden="true" />
-                        <span>{item.functionName}</span>
+        const rows = [
+            <Row key={`row-${item.functionId}`}>
+                <Cell className={`${item.childs && item.childs.length > 0 && item.level === 0 ? 'border-bottom-0' : ''} ${item.level > 0 ? 'border-top-0 border-bottom-0' : ''}`}>
+                    {trees.map(item => item)}
+                    <span> {item.functionName}</span>
                 </Cell>
                 <Cell className="text-center">{item.displayOrder}</Cell>
                 <Cell className={`text-center ${policy}`}><span />{policy}</Cell>
@@ -94,60 +84,17 @@ export class DataGrid extends Component {
                     />
                 </Cell>
             </Row>
-        );
-        rows.push(parents);
-        if(item.childs.length > 0){
-            levelChild ++;
-            const childRow = item.childs.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
-            rows.push(childRow);
+        ];
+        if (item.childs && item.childs.length > 0) {
+            const totalChilds = item.childs.length;
+            for (let i = 0; i < totalChilds; i++) {
+                rows.push(...this.renderRow(item.childs[i]));
+            }
         }
 
         return rows;
     }
-
-    renderChildRow = (item, levelChild, classEvenOdd) => {
-        const rows = [];
-        const styleChild = {
-            paddingLeft: this.calculatePadding(levelChild),
-            border: "none"
-        };
-        const formatDate = item.modifiedDate !== null ? DateTimeService.toLongDateTimeFormat(item.modifiedDate) : '';
-        const policy = this.renderPolicy(item.policy);
-        const child = (
-            <Row key={item.functionId} className={classEvenOdd}>
-                <Cell style={styleChild} className='child-class'>
-                    <span className='pr-2'>└──</span>
-                    { item.childs.length > 0 ? <span className="fa fa-minus-circle pr-2" aria-hidden="true" /> : <span />}
-                    <span>{item.functionName}</span>
-                </Cell>
-                <Cell className="text-center">{item.displayOrder}</Cell>
-                <Cell className={`text-center ${policy}`}><span />{policy}</Cell>
-                <Cell className="text-center">{formatDate}</Cell>
-                <Cell className="text-center">{item.modifiedBy}</Cell>
-                <Cell className="text-center">
-                    <Form.Check
-                        type='checkbox' 
-                        checked={item.isActive}
-                        onChange={() => this.handleUpdateStatus(item)}
-                    />
-                </Cell>
-                <Cell className="text-center">
-                    <span className="rounded-circle fa fa-pencil icon-edit"
-                        onClick={() => this.handleUpdate(item)}
-                    />
-                </Cell>
-            </Row>
-        );
-        rows.push(child);
-        if(item.childs.length > 0){
-            levelChild ++;
-            const childRow = item.childs.map(item => this.renderChildRow(item, levelChild, classEvenOdd));
-            rows.push(childRow);
-        }
-
-        return rows;
-    };
-
+    
     renderPolicy = policy =>{
         let policyName = '';
         switch(policy) {
@@ -166,31 +113,6 @@ export class DataGrid extends Component {
         }
         return policyName;    
     }   
-
-    calculatePadding  = levelChild => {
-        let levelPadding = 0;
-        switch(levelChild) {
-            case 1:
-                levelPadding = 5;
-                break;
-            case 2:
-                levelPadding = 40;
-                break;
-            case 3:
-                levelPadding = 75;
-                break;
-            case 4:
-                levelPadding = 110;
-                break;
-            case 5:
-                levelPadding = 145;  
-                break; 
-            default:
-                levelPadding = 180;  
-                break; 
-          }
-        return levelPadding;
-    }
 
     render() {
         return (
