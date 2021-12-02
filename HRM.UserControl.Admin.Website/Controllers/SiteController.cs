@@ -3,14 +3,18 @@
     using System;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
+    using HRM.UserControl.Admin.Website.Constants;
     using HRM.UserControl.Admin.Website.Criteria.Site;
+    using HRM.UserControl.Admin.Website.Filters;
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Resources;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
+    [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Read)]
     public class SiteController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -26,7 +30,8 @@
 
         public IActionResult Index()
         {
-            return View();
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.SiteManagement, Policy.Host);
+            return View(isHost);
         }
 
         [HttpPost]
@@ -44,6 +49,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateSiteCommand command)
         {
             var commandResult = new CommandResult { Code = 0, Message = string.Empty };
@@ -62,6 +68,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateSiteCommand command)
         {
             var commandResult = new CommandResult { Code = 0, Message = string.Empty };
@@ -79,6 +86,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateSiteStatusCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -87,6 +95,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public IActionResult GenerateToken()
         {
             return Json(GenerateAccessToken());

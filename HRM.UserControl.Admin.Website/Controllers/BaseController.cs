@@ -1,9 +1,9 @@
 ﻿namespace HRM.UserControl.Admin.Website.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
+    using HRM.UserControl.Admin.Website.Filters;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize]
+    [UCAuthorize]
     public class BaseController : Controller
     {
     }

@@ -53,24 +53,10 @@
             => await GetAsync<IList<MenuItem>>(RelativePaths.GetMenuItemPath);
 
         public IList<FunctionPermission> GetFunctionPermission(short siteId, int userId)
-        {
-            var data = new Dictionary<string, object>
-            {
-                { "siteId", siteId },
-                { "userId", userId }
-            };
-            return Get<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath, data);
-        }
+            => Get<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionPath, siteId, userId));
 
         public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId)
-        {
-            var data = new Dictionary<string, object>
-            {
-                { "siteId", siteId },
-                { "userId", userId }
-            };
-            return await GetAsync<IList<FunctionPermission>>(RelativePaths.GetFunctionPermissionPath, data);
-        }
+            => await GetAsync<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionPath, siteId, userId));
 
         public User GetById(int id)
             => Get<User>(string.Format(RelativePaths.GetUserByIdPath, id));
@@ -205,7 +191,7 @@
         private static class RelativePaths
         {
             public const string GetMenuItemPath = "api/user/getMenuItem";
-            public const string GetFunctionPermissionPath = "api/user/getFunctionPermission";
+            public const string GetFunctionPermissionPath = "api/user/getFunctionPermission?siteId={0}&userId={1}";
             public const string GetUserByIdPath = "api/user/getById/{0}";
             public const string GetUserByCodePath = "api/user/getByCode?code={0}";
             public const string CreateUserPath = "api/user/create";
