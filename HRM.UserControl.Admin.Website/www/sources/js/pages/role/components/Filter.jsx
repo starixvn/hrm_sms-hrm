@@ -78,9 +78,12 @@ export class Filter extends Component {
                         <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleSubmit}>
                             {LangHelper.getResource('Submit')}
                         </Button>
-                        <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
-                            {LangHelper.getResource('Create')}
-                        </Button>
+                        {
+                            window.hasHostPermissionOnRole &&
+                            <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
+                                {LangHelper.getResource('Create')}
+                            </Button>
+                        }
                         <Button variant="primary" size="sm"
                             onClick={() => window.location = Site.resolveClientUrl(`role/permission?siteId=${getRoleParams.siteId}`)}
                         >

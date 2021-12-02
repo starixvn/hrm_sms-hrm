@@ -10,10 +10,21 @@
         <link rel="stylesheet" href="~/css/pro/pages/role/permission.chunk.css" asp-append-version="true" />
     </environment>
 }
-@section Scripts{
-    <script>
-        window.selectedSiteId = @Model;
-    </script>
+@section Scripts {
+    @if ((bool)ViewBag.isHost)
+    {
+        <script>
+            window.selectedSiteId = @Model;
+            window.hasHostPermissionOnRole = true;
+        </script>
+    }
+    else
+    {
+        <script>
+            window.selectedSiteId = @Model;
+            window.hasHostPermissionOnRole = false;
+        </script>
+    }
     <environment include="Development">
         <script src="~/js/dev/pages/role/permission.chunk.js" asp-append-version="true"></script>
     </environment>

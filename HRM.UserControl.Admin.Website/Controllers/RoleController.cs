@@ -2,15 +2,19 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using HRM.UserControl.Admin.Website.Constants;
     using HRM.UserControl.Admin.Website.Criteria.Role;
+    using HRM.UserControl.Admin.Website.Filters;
     using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
+    [UCPermission(FunctionKey = FunctionKey.RoleManagement, Policy = Policy.Read)]
     public class RoleController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -32,7 +36,8 @@
 
         public IActionResult Index()
         {
-            return View();
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.RoleManagement, Policy.Host);
+            return View(isHost);
         }
 
         public async Task<IActionResult> GetBySiteId(short siteId, bool? isActive = null)
@@ -42,6 +47,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.RoleManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateRoleCommand command)
         {
             command.CreatedBy = userControlSession.UserId;
@@ -50,6 +56,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.RoleManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateRoleCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -58,6 +65,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.RoleManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateRoleStatusCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -67,10 +75,12 @@
 
         public IActionResult Permission(short? siteId)
         {
+            ViewBag.isHost = userControlSession.HasPermissionOnFunction(FunctionKey.RoleManagement, Policy.Host);
             return View(siteId);
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.RoleManagement, Policy = Policy.Host)]
         public async Task<IActionResult> AssignPermission([FromBody] AssignPermissionToRole model)
         {
             CommandResult commandResult = await roleService.AssignPermissionAsync(model.SiteId, model.RoleId, model.Permissions);

@@ -31,7 +31,10 @@ export class DataGrid extends Component {
                 <HeaderCell colWidth={20}>{LangHelper.getResource('Site')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Active')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Default')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Action')}</HeaderCell>
+                {
+                    window.hasHostPermissionOnRole &&
+                    <HeaderCell colWidth={8}>{LangHelper.getResource('Action')}</HeaderCell>
+                }
             </HeaderRow>
         );
     };
@@ -53,6 +56,7 @@ export class DataGrid extends Component {
                 <Form.Check
                     type='checkbox'
                     checked={item.isActive}
+                    disabled={!window.hasHostPermissionOnRole}
                     onChange={() => this.handleUpdateStatus(item)}
                 />
             </Cell>
@@ -62,11 +66,14 @@ export class DataGrid extends Component {
                     checked={item.isDefault}
                 />
             </Cell>
-            <Cell className="text-center">
-                <span className="rounded-circle fa fa-pencil icon-edit"
-                    onClick={() => this.handleUpdate(item)}
-                />
-            </Cell>
+            {
+                window.hasHostPermissionOnRole &&
+                <Cell className="text-center">
+                    <span className="rounded-circle fa fa-pencil icon-edit"
+                        onClick={() => this.handleUpdate(item)}
+                    />
+                </Cell>
+            }
         </Row>
     );
 

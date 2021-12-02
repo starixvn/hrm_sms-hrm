@@ -39,7 +39,9 @@ export class AppContainer extends Component {
                 <Filter />
                 <DataGrid />
                 {
-                    sites.length > 0 && roles.length > 0 && rolePermission && rolePermission.functions.length > 0 &&
+                    window.hasHostPermissionOnRole &&
+                    sites.length > 0 && roles.length > 0 &&
+                    rolePermission && rolePermission.functions.length > 0 &&
                     <Button variant="primary" size="sm" className="mt-3" type="submit" onClick={this.handleSubmit}>
                         {LangHelper.getResource('Submit')}
                     </Button>
