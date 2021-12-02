@@ -6,9 +6,9 @@ namespace HRM.UserControl.WebAPI
     using Fanex.Data;
     using Fanex.Data.SqlServer;
     using HRM.UserControl.API.Core;
+    using HRM.UserControl.API.Core.Models;
     using HRM.UserControl.Core.Extensions;
     using HRM.UserControl.WebAPI.Middlewares;
-    using IUC.API.Core.Models;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

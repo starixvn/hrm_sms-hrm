@@ -2,10 +2,10 @@
 {
     using System;
     using System.Linq;
+    using System.Net;
     using System.Web.Mvc;
     using System.Web.Routing;
-
-    using HRM.UserControl.Client.AspNetMvc.Session;
+    using HRM.UserControl.Client.Core;
     using HRM.UserControl.Client.Core.Enumerables;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
@@ -23,11 +23,19 @@
 
         public void OnAuthorization(AuthorizationContext filterContext)
         {
-            var userControlSession = new UserControlSession();
-            if (userControlSession.UserId <= 0
-                || !FunctionKeys.Select(functionKey => userControlSession.HasPermissionOnFunction(functionKey, Policy)).Any(x => x))
+            var session = UserControlClientManager.UserControlSession;
+            if (!FunctionKeys.Select(functionKey => session.HasPermissionOnFunction(functionKey, Policy)).Any(x => x))
             {
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
+                if (!filterContext.HttpContext.Request.IsAjaxRequest())
+                {
+                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
+                }
+                else
+                {
+                    var response = filterContext.HttpContext.Response;
+                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                    response.Write("<center><b>Access denied!</b></center>");
+                }
             }
         }
     }

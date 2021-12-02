@@ -67,7 +67,7 @@
                 {
                     userControlSession.UserId = loginResult.UserId;
                     userControlSession.SiteId = loginResult.SiteId;
-                    userControlSession.JwtToken = loginResult.Token;
+                    userControlSession.JwtToken = loginResult.JwtToken;
                     userControlSession.MenuItems = userService.GetMenuItem();
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
                     //HRM session

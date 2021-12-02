@@ -7,10 +7,6 @@
 
     internal interface ISecurityClient
     {
-        Task<string> GetRefreshedTokenAsync();
-
-        string GetRefreshedToken();
-
         Task<LoginResult> LoginAsync(LoginParam loginParam);
 
         LoginResult Login(LoginParam loginParam);
@@ -18,12 +14,6 @@
 
     internal class SecurityClient : BaseHttpClient, ISecurityClient
     {
-        public string GetRefreshedToken()
-            => Post<string>(RelativePaths.RefreshTokenPath, null);
-
-        public async Task<string> GetRefreshedTokenAsync()
-            => await PostAsync<string>(RelativePaths.RefreshTokenPath, null);
-
         public LoginResult Login(LoginParam loginParam)
         {
             var data = new Dictionary<string, object>
@@ -58,7 +48,6 @@
         private static class RelativePaths
         {
             public const string LoginPath = "api/auth/login";
-            public const string RefreshTokenPath = "api/refreshToken";
         }
     }
 }

@@ -24,7 +24,7 @@
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (session.UserId  <= 0)
+            if (session.UserId  <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {

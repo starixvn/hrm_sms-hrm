@@ -108,9 +108,9 @@
             request.Headers.Accept.Clear();
             string siteIdentity = GenerateSiteIdentity();
             request.Headers.Add("SiteIdentity", $"Bearer {siteIdentity}");
-            if (!string.IsNullOrWhiteSpace(session.JwtToken))
+            if (session.JwtToken != null && !string.IsNullOrWhiteSpace(session.JwtToken.Token))
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.JwtToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.JwtToken.Token);
             }
 
             return request;

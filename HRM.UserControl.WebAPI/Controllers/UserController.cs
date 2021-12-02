@@ -12,7 +12,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json;
 
     [Authorize]
     public class UserController : BaseController
@@ -33,14 +32,6 @@
             this.baseService = baseService;
             this.userService = userService;
             this.cryptoService = cryptoService;
-        }
-
-        [HttpPost]
-        [Route("api/refreshToken")]
-        public async Task<IActionResult> RefreshToken()
-        {
-            string token = await jwtManagerService.GenerateTokenAsync(UserId, SiteId);
-            return Ok(JsonConvert.SerializeObject(token));
         }
 
         [HttpGet]

@@ -5,6 +5,7 @@
     using HRM.UserControl.Client.Core.Constants;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
+    using HRM.UserControl.Client.Core.Models.Auth;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
@@ -36,10 +37,10 @@
             set => accessor.HttpContext.Session.Set<short>(SessionKey.SessionSiteId, value);
         }
 
-        public string JwtToken
+        public JwtToken JwtToken
         {
-            get => accessor.HttpContext.Session?.GetString(SessionKey.SessionJwtToken) ?? string.Empty;
-            set => accessor.HttpContext.Session.SetString(SessionKey.SessionJwtToken, value);
+            get => accessor.HttpContext.Session?.Get<JwtToken>(SessionKey.SessionJwtToken);
+            set => accessor.HttpContext.Session.Set(SessionKey.SessionJwtToken, value);
         }
 
         public IList<FunctionPermission> Functions

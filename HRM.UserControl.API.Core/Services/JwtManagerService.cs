@@ -5,12 +5,13 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
-    using IUC.API.Core.Models;
+    using HRM.UserControl.API.Core.Models;
+    using HRM.UserControl.Models.Auth;
     using Microsoft.IdentityModel.Tokens;
 
     public interface IJwtManagerService
     {
-        Task<string> GenerateTokenAsync(int userId, short siteId);
+        Task<JwtToken> GenerateTokenAsync(int userId, short siteId);
     }
 
     public class JwtManagerService : IJwtManagerService
@@ -19,7 +20,8 @@
         private readonly ISiteService siteService;
         private readonly AuthenticationSettings settings;
 
-        public JwtManagerService(IUserService userService,
+        public JwtManagerService(
+            IUserService userService,
             ISiteService siteService,
             AuthenticationSettings settings)
         {
@@ -28,9 +30,9 @@
             this.settings = settings;
         }
 
-        public async Task<string> GenerateTokenAsync(int userId, short siteId)
+        public async Task<JwtToken> GenerateTokenAsync(int userId, short siteId)
         {
-            string tokenValue = string.Empty;
+            var jwtToken = new JwtToken();
             if (userId > 0 && siteId > 0)
             {
                 var user = await userService.GetByIdAsync(userId);
@@ -52,10 +54,12 @@
                         SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-                tokenValue = tokenHandler.WriteToken(token);
+                jwtToken.Token = tokenHandler.WriteToken(token);
+                jwtToken.ValidFrom = token.ValidFrom;
+                jwtToken.ValidTo = token.ValidTo;
             }
 
-            return tokenValue;
+            return jwtToken;
         }
     }
 }

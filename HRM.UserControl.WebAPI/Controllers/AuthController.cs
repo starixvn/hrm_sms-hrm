@@ -75,7 +75,7 @@
                 return Ok(loginResult);
             }
 
-            loginResult.Token = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
+            loginResult.JwtToken = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
             loginResult.SiteId = requestSite.SiteId;

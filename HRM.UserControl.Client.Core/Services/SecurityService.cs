@@ -6,10 +6,6 @@
 
     public interface ISecurityService
     {
-        Task<string> RefreshTokenAsync();
-
-        string RefreshToken();
-
         Task<LoginResult> LoginAsync(LoginParam loginParam);
 
         LoginResult Login(LoginParam loginParam);
@@ -29,11 +25,5 @@
 
         public LoginResult Login(LoginParam loginParam)
         => securityClient.Login(loginParam);
-
-        public async Task<string> RefreshTokenAsync()
-            => await securityClient.GetRefreshedTokenAsync();
-
-        public string RefreshToken()
-            => securityClient.GetRefreshedToken();
     }
 }

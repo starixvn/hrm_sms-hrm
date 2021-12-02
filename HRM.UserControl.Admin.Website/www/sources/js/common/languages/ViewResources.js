@@ -54,7 +54,7 @@
     UpdateSite: 'Update Site',
     UpdateSiteSuccessfully: 'Update site successfully!',
     UpdateFunctionSuccessfully: 'Update function successfully!',
-    UpdateMenuSuccessfully: 'Update menu Successfully!',
+    UpdateMenuSuccessfully: 'Update menu successfully!',
     URL: 'URL',
     Username: 'Username',
     Users: 'Users',

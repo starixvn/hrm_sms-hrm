@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NexHR.Core.Services;
+    using HRM.UserControl.Client.Core;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class HRMAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
@@ -15,8 +16,7 @@
                 && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
             {
                 var currentSession = new SessionService();
-
-                if (currentSession.Employee.Id <= 0)
+                if (currentSession.Employee == null || currentSession.Employee.Id <= 0 || !IsValidUserControlSession())
                 {
                     FormsAuthentication.SignOut();
 
@@ -32,6 +32,12 @@
                     }
                 }
             }
+        }
+
+        private static bool IsValidUserControlSession()
+        {
+            var ucsession = UserControlClientManager.UserControlSession;
+            return !(ucsession.UserId <= 0 || ucsession.JwtToken == null || ucsession.JwtToken.IsExpired);
         }
     }
 }

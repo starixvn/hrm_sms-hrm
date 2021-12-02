@@ -1,4 +1,4 @@
-﻿namespace IUC.API.Core.Models
+﻿namespace HRM.UserControl.API.Core.Models
 {
     public class AuthenticationSettings
     {

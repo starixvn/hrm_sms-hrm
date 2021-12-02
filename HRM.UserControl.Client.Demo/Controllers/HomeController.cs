@@ -50,18 +50,11 @@
             if (loginResult.IsSuccessfull)
             {
                 userControlSession.UserId = loginResult.UserId;
-                userControlSession.JwtToken = loginResult.Token;
+                userControlSession.JwtToken = loginResult.JwtToken;
                 userControlSession.MenuItems = userService.GetMenuItem();
             }
 
             return Json(loginResult, JsonRequestBehavior.AllowGet);
-        }
-
-        public async Task<ActionResult> ReCheckIn()
-        {
-            var newToken = await securityService.RefreshTokenAsync();
-            userControlSession.JwtToken = newToken;
-            return Json(userControlSession);
         }
     }
 }

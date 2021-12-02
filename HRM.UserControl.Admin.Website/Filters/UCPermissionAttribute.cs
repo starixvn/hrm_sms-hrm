@@ -1,6 +1,8 @@
 ﻿namespace HRM.UserControl.Admin.Website.Filters
 {
     using System;
+    using System.Net;
+    using System.Threading.Tasks;
     using HRM.UserControl.Client.Core;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -9,7 +11,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class UCPermissionAttribute : Attribute, IAuthorizationFilter
+    public class UCPermissionAttribute : Attribute, IAsyncAuthorizationFilter
     {
         private readonly IUserControlSession session;
 
@@ -25,22 +27,17 @@
         public string FunctionKey { get; set; }
         public Policy Policy { get; set; }
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            if (session.UserId <= 0)
+            if (!session.HasPermissionOnFunction(FunctionKey, Policy))
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
-                    context.Result = new UnauthorizedResult();
+                    var response = context.HttpContext.Response;
+                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                    await response.WriteAsync("<center><b>Access denied!</b></center>");
                 }
                 else
-                {
-                    context.Result = new RedirectToActionResult("logout", "auth", null);
-                }
-            }
-            else
-            {
-                if (!session.HasPermissionOnFunction(FunctionKey, Policy))
                 {
                     context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
                 }
