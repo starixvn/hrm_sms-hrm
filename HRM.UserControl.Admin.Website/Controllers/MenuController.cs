@@ -3,14 +3,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using HRM.UserControl.Admin.Website.Constants;
     using HRM.UserControl.Admin.Website.Criteria.Menu;
+    using HRM.UserControl.Admin.Website.Filters;
     using HRM.UserControl.Admin.Website.Models.Menu;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
-
+    [UCPermission(FunctionKey = FunctionKey.MenuManagement, Policy = Policy.Read)]
     public class MenuController : Controller
     {
         private readonly IBaseService baseService;
@@ -24,7 +27,8 @@
 
         public IActionResult Index()
         {
-            return View();
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MenuManagement, Policy.Host);
+            return View(isHost);
         }
 
         public async Task<IActionResult> GetBySiteId(short id)
@@ -43,6 +47,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.MenuManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateMenuCommand command)
         {
             command.CreatedBy = userControlSession.UserId;
@@ -51,6 +56,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.MenuManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] EditMenuCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -59,6 +65,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.MenuManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateMenuStatusCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

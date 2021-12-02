@@ -79,9 +79,12 @@ export class Filter extends Component {
                         <Button className="mr-3" type="submit" variant="primary" size="sm"  onClick={this.handleSubmit}>
                             {LangHelper.getResource('Submit')}
                         </Button>
-                        <Button size="sm" variant="primary" onClick={this.handleOpenCreateModal}>
-                            {LangHelper.getResource('Create')}
-                        </Button>
+                        {
+                            window.hasHostPermissionOnMenu &&
+                            <Button size="sm" variant="primary" onClick={this.handleOpenCreateModal}>
+                                {LangHelper.getResource('Create')}
+                            </Button>
+                        }
                     </Form.Group>
                 </Form.Row>
             </Form>

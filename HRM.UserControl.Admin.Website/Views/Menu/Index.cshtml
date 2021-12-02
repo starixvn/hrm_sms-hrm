@@ -10,6 +10,19 @@
     </environment>
 }
 @section Scripts{
+    @if (Model)
+    {
+        <script>
+            window.hasHostPermissionOnMenu = true;
+        </script>
+    }
+    else
+    {
+        <script>
+            window.hasHostPermissionOnMenu = false;
+        </script>
+    }
+
     <environment include="Development">
         <script src="~/js/dev/pages/menu/index.chunk.js"></script>
     </environment>

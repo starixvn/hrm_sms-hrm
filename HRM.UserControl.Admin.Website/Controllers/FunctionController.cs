@@ -8,8 +8,12 @@
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using System.Collections.Generic;
+    using HRM.UserControl.Admin.Website.Filters;
+    using HRM.UserControl.Admin.Website.Constants;
+    using HRM.UserControl.Client.Core.Enumerables;
 
-    public class FunctionController : Controller
+    [UCPermission(FunctionKey = FunctionKey.FunctionManagement, Policy = Policy.Read)]
+    public class FunctionController : BaseController
     {
         private readonly IBaseService baseService;
         private readonly IFunctionService functionService;
@@ -28,7 +32,8 @@
 
         public IActionResult Index()
         {
-            return View();
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host);
+            return View(isHost);
         }
 
         public async Task<IActionResult> GetBySiteId(short id)
@@ -44,6 +49,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.FunctionManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateFunctionCommand command)
         {
             command.CreatedBy = userControlSession.UserId;
@@ -53,6 +59,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.FunctionManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] EditFunctionCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -61,6 +68,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.FunctionManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateFunctionStatusCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
