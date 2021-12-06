@@ -73,8 +73,15 @@ export class DataGrid extends Component {
         return <Dropdown>
             <Dropdown.Toggle as={customDropdown} id="dropdown-basic" />
             <Dropdown.Menu>
-                <Dropdown.Item onClick={() => this.handleOpenResetPasswordModalDialog(user)}>{LangHelper.getResource('ResetPassword')}</Dropdown.Item>
-                <Dropdown.Divider />
+                {
+                    window.hasHostPermissionOnUser &&
+                    <>
+                        <Dropdown.Item onClick={() => this.handleOpenResetPasswordModalDialog(user)}>
+                            {LangHelper.getResource('ResetPassword')}
+                        </Dropdown.Item>
+                        <Dropdown.Divider />
+                    </>
+                }
                 <Dropdown.Item href={Site.resolveClientUrl(`user/assignSite/${user.userId}`)}>View Sites</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item href={Site.resolveClientUrl(`user/permission/${user.userId}`)}>View Permission</Dropdown.Item>

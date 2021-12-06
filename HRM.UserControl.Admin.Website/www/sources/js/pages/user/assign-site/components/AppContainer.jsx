@@ -48,15 +48,18 @@ export class AppContainer extends Component {
         const { assignNewSiteModalDialog, updateUserSiteRoleModalDialog, updateUserSiteStatusModalDialog } = this.props;
         return (
             <>
-                <Form className="form-filter">
-                    <Form.Row bsPrefix="form-row">
-                        <Form.Group>
-                            <Button variant="primary" size="sm" onClick={this.handleOpenAssignNewSiteModalDialog}>
-                                {LangHelper.getResource('AssignNewSite')}
-                            </Button>
-                        </Form.Group>
-                    </Form.Row>
-                </Form>
+                {
+                    window.hasHostPermissionOnUser &&
+                    <Form className="form-filter">
+                        <Form.Row bsPrefix="form-row">
+                            <Form.Group>
+                                <Button variant="primary" size="sm" onClick={this.handleOpenAssignNewSiteModalDialog}>
+                                    {LangHelper.getResource('AssignNewSite')}
+                                </Button>
+                            </Form.Group>
+                        </Form.Row>
+                    </Form>
+                }
                 <DataGrid />
                 {
                     assignNewSiteModalDialog.show &&

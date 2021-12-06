@@ -3,16 +3,20 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using HRM.UserControl.Admin.Website.Constants;
     using HRM.UserControl.Admin.Website.Criteria.User;
+    using HRM.UserControl.Admin.Website.Filters;
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Models.User;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
+    [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Read)]
     public class UserController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -38,6 +42,7 @@
         public IActionResult Index()
         {
             var token = cryptoService.GenerateRijndaelKeyIV();
+            ViewBag.isHost = userControlSession.HasPermissionOnFunction(FunctionKey.UserManagement, Policy.Host);
             return View("Index", token);
         }
 
@@ -49,6 +54,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateUserParam param)
         {
             CommandResult commandResult = await userService.CreateAsync(param);
@@ -56,6 +62,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
         public async Task<IActionResult> ResetPassword([FromBody] UpdatePasswordParam param)
         {
             CommandResult commandResult = await userService.ResetPasswordAsync(param);
@@ -64,7 +71,17 @@
 
         public IActionResult AssignSite(int id)
         {
+            ViewBag.isHost = userControlSession.HasPermissionOnFunction(FunctionKey.UserManagement, Policy.Host);
             return View(id);
+        }
+
+        [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> AssignSite([FromBody] AssignSiteToUserCommand command)
+        {
+            command.CreatedBy = userControlSession.UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
         }
 
         public async Task<IActionResult> GetSiteByUserId(int id)
@@ -87,14 +104,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignSite([FromBody] AssignSiteToUserCommand command)
-        {
-            command.CreatedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-            return Json(commandResult);
-        }
-
-        [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateUserSiteStatus([FromBody] UpdateUserSiteStatusCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -103,6 +113,7 @@
         }
 
         [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateUserSiteRole([FromBody] UpdateUserSiteRoleCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

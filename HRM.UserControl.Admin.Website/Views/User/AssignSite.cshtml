@@ -11,9 +11,20 @@
     </environment>
 }
 @section Scripts{
-    <script>
-        window.selectedUserId = @Model;
-    </script>
+    @if ((bool)ViewBag.isHost)
+    {
+        <script>
+            window.selectedUserId = @Model;
+            window.hasHostPermissionOnUser = true;
+        </script>
+    }
+    else
+    {
+        <script>
+            window.selectedUserId = @Model;
+            window.hasHostPermissionOnUser = false;
+        </script>
+    }
     <environment include="Development">
         <script src="~/js/dev/pages/user/assign-site.chunk.js" asp-append-version="true"></script>
     </environment>

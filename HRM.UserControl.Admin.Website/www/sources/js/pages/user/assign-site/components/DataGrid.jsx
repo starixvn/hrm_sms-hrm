@@ -9,6 +9,10 @@ import LangHelper from '@jsroot/common/langHelper';
 
 export class DataGrid extends Component {
     handleOpenUpdateUserSiteStatusModalDialog = site => {
+        if (!window.hasHostPermissionOnUser) {
+            return;
+        }
+
         this.props.setUpdateUserSiteStatusModalDialog({ show: true, site });
     };
 
@@ -24,7 +28,10 @@ export class DataGrid extends Component {
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Roles')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('LastLoginDate')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Active')}</HeaderCell>
-                <HeaderCell colWidth={5}>{LangHelper.getResource('Action')}</HeaderCell>
+                {
+                    window.hasHostPermissionOnUser &&
+                    <HeaderCell colWidth={5}>{LangHelper.getResource('Action')}</HeaderCell>
+                }
             </HeaderRow>
         );
     };
@@ -51,17 +58,20 @@ export class DataGrid extends Component {
             <Cell className="text-center">
                 <Form.Check
                     type='checkbox'
-                    checked={site.isActive}
+                    checked={site.isActive} disabled={!window.hasHostPermissionOnUser}
                     onChange={() => this.handleOpenUpdateUserSiteStatusModalDialog(site)}
                 />
             </Cell>
-            <Cell className="text-center">
-                <OverlayTrigger placement="auto" overlay={<Tooltip id="tooltip-assign-role">{LangHelper.getResource('AssignRole')}</Tooltip>}>
-                    <span className="rounded-circle fa fa-pencil icon-edit"
-                        onClick={() => this.handleOpenUpdateUserSiteRoleModalDialog(site)}
-                    />
-                </OverlayTrigger>
-            </Cell>
+            {
+                window.hasHostPermissionOnUser &&
+                <Cell className="text-center">
+                    <OverlayTrigger placement="auto" overlay={<Tooltip id="tooltip-assign-role">{LangHelper.getResource('AssignRole')}</Tooltip>}>
+                        <span className="rounded-circle fa fa-pencil icon-edit"
+                            onClick={() => this.handleOpenUpdateUserSiteRoleModalDialog(site)}
+                        />
+                    </OverlayTrigger>
+                </Cell>
+            }
         </Row>
     );
 

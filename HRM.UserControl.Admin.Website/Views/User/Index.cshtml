@@ -10,7 +10,15 @@
         <link rel="stylesheet" href="~/css/pro/pages/user/index.chunk.css" asp-append-version="true" />
     </environment>
 }
-@section Scripts{
+@section Scripts {
+    @if ((bool)ViewBag.isHost)
+    {
+        <script>window.hasHostPermissionOnUser = true;</script>
+    }
+    else
+    {
+        <script>window.hasHostPermissionOnUser = false;</script>
+    }
     <environment include="Development">
         <script src="~/js/dev/pages/user/index.chunk.js" asp-append-version="true"></script>
     </environment>
