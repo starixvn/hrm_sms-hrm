@@ -4,7 +4,6 @@
     using System.Net;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Fanex.NexHR.Core.Services;
     using HRM.UserControl.Client.Core;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
@@ -15,8 +14,8 @@
             if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
                 && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
             {
-                var currentSession = new SessionService();
-                if (currentSession.Employee == null || currentSession.Employee.Id <= 0 || !IsValidUserControlSession())
+                var ucsession = UserControlClientManager.UserControlSession;
+                if (ucsession.UserId <= 0 || ucsession.JwtToken == null || ucsession.JwtToken.IsExpired)
                 {
                     FormsAuthentication.SignOut();
 

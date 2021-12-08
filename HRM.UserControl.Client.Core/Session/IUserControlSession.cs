@@ -11,10 +11,12 @@
         string Nickname { get; set; }
         short SiteId { get; set; }
         JwtToken JwtToken { get; set; }
-
         IList<FunctionPermission> Functions { get; set; }
-
         IList<MenuItem> MenuItems { get; set; }
+
+        T Get<T>(string key);
+
+        void Set<T>(string key, T value);
 
         bool HasPermissionOnFunction(string functionKey, Policy policy);
 

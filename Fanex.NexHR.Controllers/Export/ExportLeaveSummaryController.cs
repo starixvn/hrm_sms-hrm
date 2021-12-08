@@ -10,6 +10,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class ExportLeaveSummaryController : BaseExportController
@@ -19,10 +20,10 @@
         private readonly IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService;
 
         public ExportLeaveSummaryController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IReportService reportService,
             IExportExcelService exportExcelService,
-            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService) : base(sessionService)
+            IExportExcelUnpaidLeaveSummaryReportService exportExcelUnpaidLeaveSummaryReportService) : base(userControlSession)
         {
             this.reportService = reportService;
             this.exportExcelService = exportExcelService;
@@ -65,7 +66,7 @@
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 LeaveType = model.LeaveType
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetUnpaidLeave(criteria);

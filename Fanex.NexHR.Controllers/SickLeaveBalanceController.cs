@@ -29,12 +29,11 @@
         private readonly IExportExcelService exportExcelService;
 
         public SickLeaveBalanceController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ITeamService teamService,
             IBaseService baseService,
-            IExportExcelService exportExcelService) : base(sessionService)
+            IExportExcelService exportExcelService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;
@@ -66,7 +65,7 @@
         [HttpPost]
         public ActionResult Index(HospitalizationLeaveBalanceViewModel model)
         {
-            model.Teams = teamService.GetBySupervisor(sessionService.Employee.Id);
+            model.Teams = teamService.GetBySupervisor(EmployeeSession.Id);
             model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
             var criteria = new GetSummaryReportCriteria
             {
@@ -74,7 +73,7 @@
                 EmployeeId = model.EmployeeId,
                 TeamIds = model.TeamIds,
                 IsLocal = model.IsLocal,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = EmployeeSession.Id
             };
             model.Employees = baseService.GetData<HospitalizationLeaveBalanceSummaryReport>(criteria);
 
@@ -113,7 +112,7 @@
                 CreditDays = model.CreditDays,
                 DeductDays = model.DeductDays,
                 FromDate = model.AffectedFrom,
-                ActorId = sessionService.Employee.Id
+                ActorId = EmployeeSession.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -125,7 +124,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SickLeaveBalance)]
         public JsonResult Reset(ResetMultipleTransactionCriteria criteria)
         {
-            criteria.ActorId = sessionService.Employee.Id;
+            criteria.ActorId = EmployeeSession.Id;
             criteria.Year = DateTime.Now.AddYears(-1).Year;
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -191,7 +190,7 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = sessionService.Employee.Id
+                    CreatedBy = EmployeeSession.Id
                 };
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -255,7 +254,7 @@
                 EmployeeId = model.EmployeeId,
                 TeamIds = model.TeamIds,
                 IsLocal = model.IsLocal,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = EmployeeSession.Id
             };
             var employees = baseService.GetData<HospitalizationLeaveBalanceSummaryReport>(criteria);
             HSSFWorkbook hssfworkbook = exportExcelService.ExportSickLeaveSummary(employees, model.Year);
@@ -285,7 +284,7 @@
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = sessionService.Employee.Id
+                ModifiedBy = EmployeeSession.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
@@ -306,7 +305,7 @@
             {
                 TransId = model.TransId,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = sessionService.Employee.Id
+                ModifiedBy = EmployeeSession.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)

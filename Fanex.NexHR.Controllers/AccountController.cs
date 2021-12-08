@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
-    using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Resources;
@@ -11,6 +10,7 @@
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
 
     public class AccountController : BaseController
     {
@@ -20,11 +20,11 @@
         private readonly IUserService userService;
 
         public AccountController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
             IEmployeeLogService employeeLogService,
             ICryptoService cryptoService,
-            IUserService userService) : base(sessionService)
+            IUserService userService) : base(userControlSession)
         {
             this.employeeService = employeeService;
             this.employeeLogService = employeeLogService;
@@ -36,8 +36,8 @@
         {
             var viewModel = new AccountViewModel
             {
-                Employee = employeeService.GetEmployeeById(sessionService.Employee.Id),
-                Logs = employeeLogService.GetLogDetailById(sessionService.Employee.Id)
+                Employee = employeeService.GetEmployeeById(EmployeeSession.Id),
+                Logs = employeeLogService.GetLogDetailById(EmployeeSession.Id)
             };
 
             return View(viewModel);

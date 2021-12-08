@@ -2,7 +2,7 @@
 {
     public class UpdateMenuStatusCommand : BaseNonQueryCommand
     {
-        public short MenuItemId { get; set; }
+        public int MenuItemId { get; set; }
         public bool IsActive { get; set; }
         public int ModifiedBy { get; set; }
 

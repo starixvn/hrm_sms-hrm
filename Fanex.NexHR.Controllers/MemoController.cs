@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Memo;
@@ -23,11 +22,10 @@
         private readonly IEmailService emailService;
 
         public MemoController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IMemoService memoService,
             ICommonDataService commonDataService,
-            IEmailService emailService) : base(sessionService)
+            IEmailService emailService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.memoService = memoService;

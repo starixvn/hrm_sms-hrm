@@ -27,12 +27,11 @@
         private readonly IAttachFileService attachFileService;
 
         public LateInEarlyOutController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IAttachFileService attachFileService) : base(sessionService)
+            IAttachFileService attachFileService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
@@ -48,7 +47,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetLateInEarlyOutRequestByDateCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -62,11 +61,11 @@
 
         public ActionResult Create()
         {
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.LateIn);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.LateIn);
             var viewModel = new LateInEarlyOutRequestViewModel
             {
-                Employee = sessionService.Employee.DisplayName,
-                EmployeeId = sessionService.Employee.Id,
+                Employee = EmployeeSession.DisplayName,
+                EmployeeId = EmployeeSession.Id,
                 OnDate = DateTime.Today,
                 Minute = DefaultMinutes,
                 ReasonId = (byte)LateInEarlyOutReason.Other,
@@ -74,7 +73,7 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
-            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -96,7 +95,7 @@
                 ReasonId = model.ReasonId,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                CreatedBy = sessionService.Employee.Id
+                CreatedBy = EmployeeSession.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
@@ -112,7 +111,7 @@
         {
             LateInEarlyOutRequest request = lateInEarlyOutRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -167,7 +166,7 @@
                 EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                ModifiedBy = sessionService.Employee.Id
+                ModifiedBy = EmployeeSession.Id
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

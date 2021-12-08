@@ -74,6 +74,21 @@
             set => Session.Add(SessionKey.SessionMenuItems, JsonConvert.SerializeObject(value));
         }
 
+        public T Get<T>(string key)
+        {
+            if (Session[key] != null)
+            {
+                return JsonConvert.DeserializeObject<T>(Session[key]?.ToString());
+            }
+
+            return default(T);
+        }
+
+        public void Set<T>(string key, T value)
+        {
+            Session.Add(key, JsonConvert.SerializeObject(value));
+        }
+
         public bool HasPermissionOnFunction(string functionKey, Policy policy)
         {
             var result = false;

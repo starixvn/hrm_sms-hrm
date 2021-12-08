@@ -5,7 +5,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models.Message;
     using Fanex.NexHR.Services;
@@ -20,11 +19,10 @@
         private readonly IEmployeeService employeeService;
 
         public MessageController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IMessageService messageService,
             ICommonDataService commonDataService,
-            IEmployeeService employeeService) : base(sessionService)
+            IEmployeeService employeeService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.messageService = messageService;
@@ -40,7 +38,7 @@
                 ToDate = DateTime.Now,
                 FromDate = DateTime.Now.AddMonths(-3),
                 IsDisabled = 0,
-                CreatedBy = sessionService.Employee.Id
+                CreatedBy = EmployeeSession.Id
             };
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
@@ -55,7 +53,7 @@
         {
             if (param != null)
             {
-                param.CreatedBy = sessionService.Employee.Id;
+                param.CreatedBy = EmployeeSession.Id;
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
@@ -91,7 +89,7 @@
 
             if (model != null && ModelState.IsValid)
             {
-                commandResult = messageService.Create(sessionService.Employee.Id, model);
+                commandResult = messageService.Create(EmployeeSession.Id, model);
                 if (model.HasSendEmail && commandResult.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
@@ -130,7 +128,7 @@
 
             if (model != null && ModelState.IsValid)
             {
-                commandResult = messageService.Edit(sessionService.Employee.Id, model);
+                commandResult = messageService.Edit(EmployeeSession.Id, model);
                 if (model.HasSendEmail && commandResult.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
@@ -144,7 +142,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Message)]
         public JsonResult Delete(int id)
         {
-            CommandResult commandResult = messageService.Delete(sessionService.Employee.Id, id);
+            CommandResult commandResult = messageService.Delete(EmployeeSession.Id, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
@@ -156,7 +154,7 @@
                 FromDate = DateTime.Today,
                 ToDate = DateTime.Today,
                 IsDisabled = 0,
-                EmployeeId = sessionService.Employee.Id
+                EmployeeId = EmployeeSession.Id
             };
             ViewBag.Messages = messageService.GetMessageByEmployee(param);
 
@@ -168,7 +166,7 @@
         {
             if (param != null)
             {
-                param.EmployeeId = sessionService.Employee.Id;
+                param.EmployeeId = EmployeeSession.Id;
             }
 
             ViewBag.Messages = messageService.GetMessageByEmployee(param);
@@ -179,7 +177,7 @@
         [HttpPost]
         public JsonResult DeleteMessageByEmployee(int id)
         {
-            CommandResult commandResult = messageService.DeleteMessageByEmployee(sessionService.Employee.Id, id);
+            CommandResult commandResult = messageService.DeleteMessageByEmployee(EmployeeSession.Id, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
@@ -199,7 +197,7 @@
 
         public JsonResult EditMessageStatus(int id)
         {
-            CommandResult commandResult = messageService.EditStatus(sessionService.Employee.Id, id);
+            CommandResult commandResult = messageService.EditStatus(EmployeeSession.Id, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }

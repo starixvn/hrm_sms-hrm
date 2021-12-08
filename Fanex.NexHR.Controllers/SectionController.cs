@@ -28,12 +28,11 @@
 
         public SectionController(
             IUnitService unitService,
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ICommonDataService commonDataService,
             IDepartmentService departmentService,
             ISectionService sectionService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;
@@ -93,7 +92,7 @@
                     Name = model.Name,
                     IsActive = model.IsActive,
                     DepartmentId = model.DepartmentId,
-                    ModifiedBy = sessionService.Employee.Id
+                    ModifiedBy = EmployeeSession.Id
                 };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
@@ -137,7 +136,7 @@
                     Name = model.Name,
                     IsActive = model.IsActive,
                     DepartmentId = model.DepartmentId,
-                    ModifiedBy = sessionService.Employee.Id
+                    ModifiedBy = EmployeeSession.Id
                 };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
@@ -149,7 +148,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public CustomJsonResult Delete(int id)
         {
-            CommandResult commandResult = sectionService.Delete(sessionService.Employee.Id, id);
+            CommandResult commandResult = sectionService.Delete(EmployeeSession.Id, id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

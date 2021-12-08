@@ -7,12 +7,12 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.ShiftStatisticReport)]
     public class ShiftStatisticReportController : BaseController
@@ -23,11 +23,11 @@
         private readonly ITeamService teamService;
 
         public ShiftStatisticReportController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IShiftStatisticReportService statisticReportService,
             IShiftService shiftService,
             IExportExcelShiftStatisticService exportExcelService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService) : base(userControlSession)
         {
             this.statisticReportService = statisticReportService;
             this.shiftService = shiftService;
@@ -50,7 +50,7 @@
         {
             var param = new GetShiftStatisticParam
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -71,7 +71,7 @@
         {
             var param = new GetShiftStatisticDetailParam
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
@@ -87,7 +87,7 @@
         {
             var param = new GetShiftStatisticDetailParam
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
@@ -107,7 +107,7 @@
         {
             var param = new GetShiftStatisticParam
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

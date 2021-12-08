@@ -6,11 +6,11 @@ namespace HRM.UserControl.Admin.Website.Models.Menu
 
     public class Menu
     {
-        public short MenuItemId { get; set; }
+        public int MenuItemId { get; set; }
         public string MenuItemName { get; set; }
         public short SiteId { get; set; }
         public string URL { get; set; }
-        public short? ParentId { get; set; }
+        public int? ParentId { get; set; }
         public byte Level { get; set; }
         public string FunctionName { get; set; }
         public string Description { get; set; }

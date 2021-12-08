@@ -8,7 +8,6 @@
     using Core.Models;
     using Criteria.Postnatal;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using HRM.UserControl.Client.Core.Enumerables;
@@ -21,9 +20,8 @@
         private readonly IPostnatalService postnatalService;
 
         public PostnatalController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IPostnatalService postnatalService) : base(sessionService)
+            IPostnatalService postnatalService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.postnatalService = postnatalService;
@@ -68,7 +66,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    CreatedBy = sessionService.Employee.Id,
+                    CreatedBy = EmployeeSession.Id,
                     Remark = model.Remark,
                     WorkingHours = model.WorkingHours ?? 0
                 };
@@ -113,7 +111,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = sessionService.Employee.Id,
+                    ModifiedBy = EmployeeSession.Id,
                     Remark = model.Remark,
                     WorkingHours = model.WorkingHours ?? 0
                 };

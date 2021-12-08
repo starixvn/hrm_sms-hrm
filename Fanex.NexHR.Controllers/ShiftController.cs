@@ -6,7 +6,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Shifts;
@@ -19,9 +18,8 @@
         private readonly IShiftService shiftService;
 
         public ShiftController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IShiftService shiftService) : base(sessionService)
+            IShiftService shiftService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.shiftService = shiftService;
@@ -55,7 +53,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                CommandResult commandResult = shiftService.Create(sessionService.Employee.Id, model);
+                CommandResult commandResult = shiftService.Create(EmployeeSession.Id, model);
                 if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");
@@ -107,7 +105,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                CommandResult commandResult = shiftService.Edit(sessionService.Employee.Id, model);
+                CommandResult commandResult = shiftService.Edit(EmployeeSession.Id, model);
                 if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");

@@ -1,6 +1,6 @@
 ﻿namespace HRM.UserControl.Client.Core.Constants
 {
-    public static class SessionKey
+    public static partial class SessionKey
     {
         public const string SessionUserId = "SessionUserId";
         public const string SessionSiteId = "SessionSiteId";

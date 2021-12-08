@@ -26,12 +26,11 @@
         private readonly IAttachFileService attachFileService;
 
         public KeepInViewController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IAttachFileService attachFileService) : base(sessionService)
+            IAttachFileService attachFileService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.keepInViewRequestService = keepInViewRequestService;
@@ -47,7 +46,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetKeepInViewRequestByDateCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -63,11 +62,11 @@
         public ActionResult Create()
         {
             var today = DateTime.Today;
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.KeepInView);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.KeepInView);
             var model = new KeepInViewRequestViewModel
             {
-                Employee = sessionService.Employee.DisplayName,
-                EmployeeId = sessionService.Employee.Id,
+                Employee = EmployeeSession.DisplayName,
+                EmployeeId = EmployeeSession.Id,
                 Date = today,
                 KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
                 Verifiers = supervisor.Verifiers,
@@ -75,7 +74,7 @@
                 MinDate = today.FirstDayOfMonth().AddMonths(-1),
                 MaxDate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
             };
-            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -103,7 +102,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                CreatedBy = sessionService.Employee.Id
+                CreatedBy = EmployeeSession.Id
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -120,7 +119,7 @@
         {
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -172,7 +171,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                ModifiedBy = sessionService.Employee.Id,
+                ModifiedBy = EmployeeSession.Id,
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

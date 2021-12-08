@@ -6,7 +6,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Paternity;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Paternity;
@@ -19,9 +18,8 @@
         private readonly IPaternityService paternityService;
 
         public PaternityController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IPaternityService paternityService) : base(sessionService)
+            IPaternityService paternityService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.paternityService = paternityService;
@@ -66,7 +64,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    CreatedBy = sessionService.Employee.Id,
+                    CreatedBy = EmployeeSession.Id,
                     Remark = model.Remark
                 };
 
@@ -110,7 +108,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    ModifiedBy = sessionService.Employee.Id,
+                    ModifiedBy = EmployeeSession.Id,
                     Remark = model.Remark
                 };
 

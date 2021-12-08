@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Session;
 
     public class AttendanceReportController : BaseController
     {
@@ -17,10 +17,10 @@
         private readonly ITeamService teamService;
 
         public AttendanceReportController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IReportService reportSevice,
             IExportExcelAttendanceReportService excelService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService) : base(userControlSession)
         {
             this.reportService = reportSevice;
             this.excelService = excelService;
@@ -36,7 +36,7 @@
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
             };
 
             return View("~/Views/Report/Attendance/Index.cshtml", model);

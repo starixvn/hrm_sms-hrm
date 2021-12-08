@@ -1,17 +1,21 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Core.Models;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMAuthorize]
     public class BaseController : Controller
     {
-        protected readonly ISessionService sessionService;
+        private readonly IUserControlSession userControlSession;
 
-        public BaseController(ISessionService sessionService)
+        public BaseController(IUserControlSession userControlSession)
         {
-            this.sessionService = sessionService;
+            this.userControlSession = userControlSession;
         }
+
+        public EmployeeSession EmployeeSession => userControlSession.Get<EmployeeSession>(SessionKey.Employee);
     }
 }

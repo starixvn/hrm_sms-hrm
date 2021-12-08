@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExportSupervisorController : BaseExportController
     {
@@ -16,9 +16,9 @@
         private readonly IExportSupervisorService exportSupervisorService;
 
         public ExportSupervisorController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IReportService reportService,
-            IExportSupervisorService exportSupervisorService) : base(sessionService)
+            IExportSupervisorService exportSupervisorService) : base(userControlSession)
         {
             this.reportService = reportService;
             this.exportSupervisorService = exportSupervisorService;

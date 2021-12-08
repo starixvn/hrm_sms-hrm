@@ -5,7 +5,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.Report.Overtime;
     using Fanex.NexHR.Services;
@@ -22,11 +21,10 @@
         private readonly ITeamService teamService;
 
         public WorkingHoursSummaryReportController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IWorkingHoursSummaryReportService reportService,
             IOvertimeReportService overtimeReportService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.reportService = reportService;
@@ -40,7 +38,7 @@
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -60,7 +58,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -80,7 +78,7 @@
         {
             var param = new GetDailyOvertimeDetailsParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

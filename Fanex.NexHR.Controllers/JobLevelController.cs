@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Core.Services;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
@@ -18,9 +17,8 @@
         private readonly IJobLevelService jobLevelService;
 
         public JobLevelController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IJobLevelService jobLevelService) : base(sessionService)
+            IJobLevelService jobLevelService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.jobLevelService = jobLevelService;
@@ -51,7 +49,7 @@
             var criteria = new InsertJobLevelCriteria
             {
                 Name = name,
-                ModifiedBy = sessionService.Employee.Id
+                ModifiedBy = EmployeeSession.Id
             };
 
             CommandResult result = jobLevelService.Insert(criteria);
@@ -68,7 +66,7 @@
             {
                 JobLevelId = id,
                 Name = name,
-                ModifiedBy = sessionService.Employee.Id
+                ModifiedBy = EmployeeSession.Id
             };
             CommandResult result = jobLevelService.Update(criteria);
 
@@ -79,7 +77,7 @@
         [HRMPermission(Policy.Host, FunctionKey.JobLevelManagement)]
         public JsonResult Delete(int id)
         {
-            CommandResult result = jobLevelService.Delete(id, sessionService.Employee.Id);
+            CommandResult result = jobLevelService.Delete(id, EmployeeSession.Id);
 
             return Json(result);
         }

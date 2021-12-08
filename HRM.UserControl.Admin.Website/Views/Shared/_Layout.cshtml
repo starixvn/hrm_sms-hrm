@@ -1,9 +1,12 @@
-﻿@using HRM.UserControl.Admin.Website.Services
-@inject ISessionService sessionService
+﻿@using HRM.UserControl.Admin.Website.Constants
+@using HRM.UserControl.Admin.Website.Models
+@using HRM.UserControl.Client.Core.Session
+@inject IUserControlSession userControlSession
 @{
     var currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLowerInvariant();
     var currentAction = ViewContext.RouteData.Values["Action"].ToString().ToLowerInvariant();
     var currentUrl = string.Format("/{0}/{1}", currentController, currentAction);
+    var companies = userControlSession.Get<IList<Company>>(SessionKey.InternalCompanies);
 }
 <!DOCTYPE html>
 <html>
@@ -64,7 +67,7 @@
         <script src="~/js/pro/lib/react-bootstrap-vendor.chunk.js" asp-append-version="true"></script>
     </environment>
     <script>
-        window.companies = @Json.Serialize(sessionService.Companies);
+        window.companies = @Json.Serialize(companies);
     </script>
     @RenderSection("Scripts", required: false)
 </body>

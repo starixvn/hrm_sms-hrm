@@ -25,9 +25,9 @@
         private readonly IBaseService baseService;
 
         public DisciplineController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IDisciplineService disciplineService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.disciplineService = disciplineService;
@@ -61,7 +61,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = sessionService.Employee.Id,
+                ApproverId = EmployeeSession.Id,
                 IsShowAll = model.IsShowAll
             };
 
@@ -107,7 +107,7 @@
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
                 HasIgnored = model.HasIgnored,
-                ApproverId = sessionService.Employee.Id
+                ApproverId = EmployeeSession.Id
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
@@ -128,7 +128,7 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id);
+            IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.Id);
             ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
                 && userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
@@ -164,7 +164,7 @@
                 DisciplineTypeId = model.DisciplineTypeId,
                 Score = model.MinusScore,
                 Comment = model.Comment,
-                ActorId = sessionService.Employee.Id
+                ActorId = EmployeeSession.Id
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -177,7 +177,7 @@
         {
             if (criteria != null)
             {
-                criteria.ActorId = sessionService.Employee.Id;
+                criteria.ActorId = EmployeeSession.Id;
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)
@@ -199,7 +199,7 @@
                 IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
                 DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
                 HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -208,7 +208,7 @@
 
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)
         {
-            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id, keyword);
+            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.Id, keyword);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }

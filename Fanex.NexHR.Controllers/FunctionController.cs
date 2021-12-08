@@ -24,11 +24,10 @@
         private readonly IFunctionService ucfunctionService;
 
         public FunctionController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IBaseService baseService,
             IRoleService roleService,
-            IFunctionService ucfunctionService) : base(sessionService)
+            IFunctionService ucfunctionService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.baseService = baseService;
@@ -74,7 +73,7 @@
                 var criteria = new AssignFunctionToRoleCriteria
                 {
                     RoleId = roleId,
-                    ActorId = sessionService.Employee.Id,
+                    ActorId = EmployeeSession.Id,
                     PermissionXml = permissionXml.Append("</Root>").ToString()
                 };
 

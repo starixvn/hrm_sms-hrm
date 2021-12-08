@@ -12,7 +12,6 @@
             container.RegisterType<IDynamicRepository, DynamicRepository>();
             container.RegisterType<IBaseRepository, BaseRepository>();
             container.RegisterType<IBaseService, BaseService>();
-            container.RegisterType<ISessionService, SessionService>();
         }
     }
 }

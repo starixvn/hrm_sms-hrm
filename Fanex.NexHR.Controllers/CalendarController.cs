@@ -14,6 +14,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class CalendarController : BaseController
     {
@@ -23,11 +24,11 @@
         private readonly ITeamService teamService;
 
         public CalendarController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IWorkingCalendarService workingCalendarService,
             IShiftService shiftService,
             ICommonDataService commonDataService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService) : base(userControlSession)
         {
             this.workingCalendarService = workingCalendarService;
             this.shiftService = shiftService;
@@ -51,7 +52,7 @@
         {
             var criteria = new GetEmployeeCalendarByMonthCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 FromDate = date.FirstDayOfMonth(),
                 ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
             };

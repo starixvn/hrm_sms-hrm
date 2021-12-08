@@ -9,7 +9,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
@@ -18,6 +17,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class RequestController : BaseController
     {
@@ -30,12 +30,12 @@
         private readonly IAttachFileService attachFileService;
 
         public RequestController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
             IRequestService requestService,
             ICommonDataService commonDataService,
             ITeamService teamService,
-            IAttachFileService attachFileService) : base(sessionService)
+            IAttachFileService attachFileService) : base(userControlSession)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
@@ -122,7 +122,7 @@
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 Role = role,
                 RequestType = requestType,
                 Query = query.Trim(),
@@ -186,27 +186,27 @@
                 case RequestCommand.Accept:
                 case RequestCommand.Approve:
                 case RequestCommand.Process:
-                    commandResult = requestService.ApproveRequest(sessionService.Employee.Id, model);
+                    commandResult = requestService.ApproveRequest(EmployeeSession.Id, model);
                     break;
 
                 case RequestCommand.Reset:
-                    commandResult = requestService.ResetRequest(sessionService.Employee.Id, model);
+                    commandResult = requestService.ResetRequest(EmployeeSession.Id, model);
                     break;
 
                 case RequestCommand.NotAccept:
                 case RequestCommand.Reject:
                 case RequestCommand.Void:
-                    commandResult = requestService.RejectRequest(sessionService.Employee.Id, model);
+                    commandResult = requestService.RejectRequest(EmployeeSession.Id, model);
                     break;
 
                 default:
-                    commandResult = requestService.VoidRequest(sessionService.Employee.Id, model);
+                    commandResult = requestService.VoidRequest(EmployeeSession.Id, model);
                     break;
             }
 
             if (commandResult.IsSuccessful)
             {
-                requestService.SendMailProcessRequest(model, sessionService.Employee, model.Command);
+                requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -217,13 +217,13 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         public CustomJsonResult ProcessMultipleRequests(ApproveRequestsParam model)
         {
-            model.ActorId = sessionService.Employee.Id;
+            model.ActorId = EmployeeSession.Id;
 
             var commandResult = requestService.ApproveRequests(model);
 
             if (commandResult.IsSuccessful)
             {
-                requestService.SendMailProcessRequests(model, sessionService.Employee, model.Command);
+                requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -279,13 +279,13 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
                 LeaveTypeId = request.LeaveType
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            request.CurrentUserId = sessionService.Employee.Id;
+            request.CurrentUserId = EmployeeSession.Id;
             request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
         }
 
@@ -297,8 +297,8 @@
         private bool SortRequestValidate(RequestEntity t)
         {
             bool pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                && (t.ApprovedBy.Id == sessionService.Employee.Id || t.VerifiedBy.Id == sessionService.Employee.Id);
-            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == sessionService.Employee.Id);
+                && (t.ApprovedBy.Id == EmployeeSession.Id || t.VerifiedBy.Id == EmployeeSession.Id);
+            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.Id);
             return pending || verified;
         }
     }

@@ -26,11 +26,10 @@
         private const string UploadFolderPath = "/file/uploads/wfh/";
 
         public EmployeeWorkFromHomeController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IBaseService baseService,
             IAttachFileService attachFileService,
-            IEmployeeWorkFromHomeService employeeWorkFromHomeService) : base(sessionService)
+            IEmployeeWorkFromHomeService employeeWorkFromHomeService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.baseService = baseService;
@@ -89,7 +88,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    CreatedBy = sessionService.Employee.Id,
+                    CreatedBy = EmployeeSession.Id,
                     Remark = model.Remark
                 };
 
@@ -139,7 +138,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = sessionService.Employee.Id,
+                    ModifiedBy = EmployeeSession.Id,
                     Remark = model.Remark
                 };
 

@@ -2,12 +2,12 @@
 {
     using System.IO;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class BaseExportController : BaseController
     {
-        public BaseExportController(ISessionService sessionService) : base(sessionService)
+        public BaseExportController(IUserControlSession userControlSession) : base(userControlSession)
         {
         }
 

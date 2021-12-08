@@ -55,10 +55,13 @@
             set => accessor.HttpContext.Session.Set(SessionKey.SessionMenuItems, value);
         }
 
+        public T Get<T>(string key) => accessor.HttpContext.Session.Get<T>(key);
+
+        public void Set<T>(string key, T value) => accessor.HttpContext.Session.Set(key, value);
+
         public bool HasPermissionOnFunction(string functionKey, Policy policy)
         {
             var result = false;
-
             if (Functions != null && Functions.Any(x => x.FunctionKey == functionKey))
             {
                 switch (policy)

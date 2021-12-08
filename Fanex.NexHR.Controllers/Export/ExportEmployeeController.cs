@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExportEmployeeController : BaseExportController
     {
@@ -15,9 +15,9 @@
         private readonly IExportExcelEmployeeInfoService excelService;
 
         public ExportEmployeeController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IEmployeeService employeeService,
-            IExportExcelEmployeeInfoService excelService) : base(sessionService)
+            IExportExcelEmployeeInfoService excelService) : base(userControlSession)
         {
             this.employeeService = employeeService;
             this.excelService = excelService;

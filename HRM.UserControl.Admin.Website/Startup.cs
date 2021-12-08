@@ -117,7 +117,7 @@ namespace HRM.UserControl.Admin.Website
 
         private void RegisterDI(IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
@@ -130,7 +130,6 @@ namespace HRM.UserControl.Admin.Website
             services.AddSingleton<IRoleService, RoleService>();
             services.AddSingleton<IFunctionService, FunctionService>();
 
-            services.AddSingleton<ISessionService, SessionService>();
             services.AddSingleton<IBaseService, BaseService>();
         }
     }

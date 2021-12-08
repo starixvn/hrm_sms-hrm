@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using HRM.UserControl.Client.Core.Enumerables;
@@ -19,9 +18,8 @@
         private readonly IHolidayService holidayService;
 
         public HolidayController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IHolidayService holidayService) : base(sessionService)
+            IHolidayService holidayService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.holidayService = holidayService;
@@ -54,7 +52,7 @@
         {
             if (ModelState.IsValid)
             {
-                CommandResult commandResult = holidayService.Edit(sessionService.Employee.Id, model);
+                CommandResult commandResult = holidayService.Edit(EmployeeSession.Id, model);
                 ViewBag.Updated = commandResult.IsSuccessful;
 
                 if (!commandResult.IsSuccessful)
@@ -85,7 +83,7 @@
         {
             if (ModelState.IsValid)
             {
-                CommandResult commandResult = holidayService.Create(sessionService.Employee.Id, model);
+                CommandResult commandResult = holidayService.Create(EmployeeSession.Id, model);
                 ViewBag.Updated = commandResult.IsSuccessful;
 
                 if (!commandResult.IsSuccessful)
@@ -101,7 +99,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
-            CommandResult commandResult = holidayService.Delete(sessionService.Employee.Id, id);
+            CommandResult commandResult = holidayService.Delete(EmployeeSession.Id, id);
 
             return Json(commandResult);
         }

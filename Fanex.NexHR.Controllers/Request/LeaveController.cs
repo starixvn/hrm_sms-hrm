@@ -31,13 +31,12 @@
         private readonly IAttachFileService attachFileService;
 
         public LeaveController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
             ICommonDataService commonDataService,
-            IAttachFileService attachFileService) : base(sessionService)
+            IAttachFileService attachFileService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.leaveRequestService = leaveRequestService;
@@ -53,7 +52,7 @@
             int tempYear = year ?? DateTime.Today.Year;
             var criteria = new GetLeaveRequestByDateCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -70,13 +69,13 @@
 
         public ActionResult Create()
         {
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.Leave);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.Leave);
             SystemSetting setting = commonDataService.GetSystemSetting();
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
-                Employee = sessionService.Employee.DisplayName,
-                EmployeeId = sessionService.Employee.Id,
+                Employee = EmployeeSession.DisplayName,
+                EmployeeId = EmployeeSession.Id,
                 FromDate = DateTime.Now.Date,
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
@@ -88,7 +87,7 @@
                 EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
                 EnableSickLeaveBalance = setting.EnableSickLeaveBalance
             };
-            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -108,7 +107,7 @@
             }
 
             criteria.RequestDetail = leaveRequestDetail;
-            criteria.CreatedBy = sessionService.Employee.Id;
+            criteria.CreatedBy = EmployeeSession.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
@@ -124,7 +123,7 @@
         {
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -171,7 +170,7 @@
                         .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
             }
 
-            criteria.ModifiedBy = sessionService.Employee.Id;
+            criteria.ModifiedBy = EmployeeSession.Id;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
@@ -476,7 +475,7 @@
         {
             var criteria = new GetLeaveBalanceCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 RequestId = requestId,
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };

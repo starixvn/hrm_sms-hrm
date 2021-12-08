@@ -23,11 +23,10 @@
         private readonly IBaseService baseService;
 
         public JobTitleController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ICommonDataService commonDataService,
             IJobTitleExportService jobTitleExportService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;

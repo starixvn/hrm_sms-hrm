@@ -16,19 +16,16 @@
     [Authorize]
     public class UserController : BaseController
     {
-        private readonly IJwtManagerService jwtManagerService;
         private readonly IBaseService baseService;
         private readonly ICryptoService cryptoService;
         private readonly IUserService userService;
 
         public UserController(
             IHttpContextAccessor httpContextAccessor,
-            IJwtManagerService jwtManagerService,
             IBaseService baseService,
             ICryptoService cryptoService,
             IUserService userService) : base(httpContextAccessor)
         {
-            this.jwtManagerService = jwtManagerService;
             this.baseService = baseService;
             this.userService = userService;
             this.cryptoService = cryptoService;

@@ -2,7 +2,7 @@
 {
     using System.Configuration;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Services;
+    using HRM.UserControl.Client.Core.Session;
     using Resources;
     using Services;
 
@@ -11,8 +11,8 @@
         private readonly IEmailService emailService;
 
         public EmailController(
-            ISessionService sessionService,
-            IEmailService emailService) : base(sessionService)
+            IUserControlSession userControlSession,
+            IEmailService emailService) : base(userControlSession)
         {
             this.emailService = emailService;
         }

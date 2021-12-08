@@ -7,12 +7,12 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Report.MonthlyWorkingHours;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.WorkingHours;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.AttendanceWeeklyReport)]
     public class WeeklyWorkingHoursController : BaseController
@@ -20,8 +20,8 @@
         private readonly IEmployeeWorkingHoursService workingHoursService;
 
         public WeeklyWorkingHoursController(
-            ISessionService sessionService,
-            IEmployeeWorkingHoursService workingHoursService) : base(sessionService)
+            IUserControlSession userControlSession,
+            IEmployeeWorkingHoursService workingHoursService) : base(userControlSession)
         {
             this.workingHoursService = workingHoursService;
         }
@@ -45,7 +45,7 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -65,7 +65,7 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

@@ -31,12 +31,11 @@
         private readonly IEmployeeService employeeService;
 
         public TeamController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ITeamService teamService,
             ISectionService sectionService,
             IBaseService baseService,
-            IEmployeeService employeeService) : base(sessionService)
+            IEmployeeService employeeService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.teamService = teamService;
@@ -83,7 +82,7 @@
                     LeaderIds = model.LeaderIds,
                     SupervisorIds = model.SupervisorIds,
                     MailGroup = model.MailGroup,
-                    CreatedBy = sessionService.Employee.Id,
+                    CreatedBy = EmployeeSession.Id,
                     LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
                     LocalWorkingDays = model.LocalWorkingDays ?? 0,
                     LocalWorkingHours = model.LocalWorkingHours ?? 0,
@@ -169,7 +168,7 @@
                         ManagerIds = model.ManagerIds,
                         LeaderIds = model.LeaderIds,
                         SupervisorIds = model.SupervisorIds,
-                        ModifiedBy = sessionService.Employee.Id,
+                        ModifiedBy = EmployeeSession.Id,
                         LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
                         LocalWorkingDays = model.LocalWorkingDays ?? 0,
                         LocalWorkingHours = model.LocalWorkingHours ?? 0,
@@ -203,7 +202,7 @@
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public CustomJsonResult Delete(int id)
         {
-            CommandResult commandResult = teamService.Delete(sessionService.Employee.Id, id);
+            CommandResult commandResult = teamService.Delete(EmployeeSession.Id, id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -274,7 +273,7 @@
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public CustomJsonResult EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
-            CommandResult commandResult = teamService.EditTeamSupervisor(sessionService.Employee.Id, teamId, roleId, supervisors);
+            CommandResult commandResult = teamService.EditTeamSupervisor(EmployeeSession.Id, teamId, roleId, supervisors);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -302,7 +301,7 @@
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
         public CustomJsonResult EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
         {
-            CommandResult commandResult = teamService.EditDisciplineRule(sessionService.Employee.Id, teamId, disciplineRules);
+            CommandResult commandResult = teamService.EditDisciplineRule(EmployeeSession.Id, teamId, disciplineRules);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

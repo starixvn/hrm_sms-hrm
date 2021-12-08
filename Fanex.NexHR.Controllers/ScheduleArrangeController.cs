@@ -10,7 +10,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.ScheduleArrange;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
@@ -30,12 +29,11 @@
         private readonly IExportExcelScheduleService exportExcelService;
 
         public ScheduleArrangeController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IRoleService roleService,
             IScheduleArrangeService scheduleArrangeService,
             ISyncWorkingShiftService syncWorkingShiftService,
-            IExportExcelScheduleService exportExcelService) : base(sessionService)
+            IExportExcelScheduleService exportExcelService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.roleService = roleService;
@@ -65,7 +63,7 @@
         [AllowAnonymous]
         public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
-            filter.ActorId = sessionService.Employee.Id;
+            filter.ActorId = EmployeeSession.Id;
             IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(filter);
 
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -74,7 +72,7 @@
         [AllowAnonymous]
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
-            filter.ActorId = sessionService.Employee.Id;
+            filter.ActorId = EmployeeSession.Id;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
                 .Select(x => new WeeklyScheduleViewModel
@@ -100,7 +98,7 @@
             IEnumerable<EditDefaultShift> defaultShifts)
         {
             CommandResult commandResult = scheduleArrangeService.EditWeekly(
-                sessionService.Employee.Id,
+                EmployeeSession.Id,
                 fromDate,
                 toDate,
                 weeklySchedules,
@@ -129,7 +127,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditRemark(EditRemark model)
         {
-            CommandResult commandResult = scheduleArrangeService.EditRemark(sessionService.Employee.Id, model);
+            CommandResult commandResult = scheduleArrangeService.EditRemark(EmployeeSession.Id, model);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -138,7 +136,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditDisplayOrder(IEnumerable<EditDisplayOrder> displayOrders)
         {
-            CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(sessionService.Employee.Id, displayOrders);
+            CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(EmployeeSession.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -147,7 +145,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditTeamOrder(IEnumerable<EditTeamOrder> displayOrders)
         {
-            CommandResult commandResult = scheduleArrangeService.EditTeamOrder(sessionService.Employee.Id, displayOrders);
+            CommandResult commandResult = scheduleArrangeService.EditTeamOrder(EmployeeSession.Id, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -156,7 +154,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditWeeklyDefaultShift(WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
         {
-            CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(sessionService.Employee.Id, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+            CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(EmployeeSession.Id, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -165,7 +163,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ExportExcel(WeeklyScheduleFilter filter)
         {
-            filter.ActorId = sessionService.Employee.Id;
+            filter.ActorId = EmployeeSession.Id;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             byte[] bytes = exportExcelService.Export(filter, weeklySchedules);
 
@@ -179,11 +177,11 @@
         {
             Actor actor = new Actor
             {
-                ActorId = sessionService.Employee.Id,
-                Nickname = sessionService.Employee.Nickname,
-                FullName = sessionService.Employee.FullName
+                ActorId = EmployeeSession.Id,
+                Nickname = EmployeeSession.Nickname,
+                FullName = EmployeeSession.FullName
             };
-            filter.ActorId = sessionService.Employee.Id;
+            filter.ActorId = EmployeeSession.Id;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             byte[] bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
 

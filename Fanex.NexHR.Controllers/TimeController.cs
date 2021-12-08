@@ -9,14 +9,15 @@
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.ViewModels.Time;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     public class TimeController : BaseController
     {
         private readonly IBaseService baseService;
 
         public TimeController(
-            ISessionService sessionService,
-            IBaseService baseService) : base(sessionService)
+            IUserControlSession userControlSession,
+            IBaseService baseService) : base(userControlSession)
         {
             this.baseService = baseService;
         }
@@ -27,7 +28,7 @@
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = sessionService.Employee.Id;
+                criteria.ModifiedBy = EmployeeSession.Id;
                 criteria.ModifiedDate = DateTime.Now;
             }
 
@@ -71,7 +72,7 @@
         {
             var criteria = new InsertCheckInOutRecordCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 RecordTime = DateTime.Now,
                 InOutType = 0,
                 IPAddress = GetClientIpAddress(),
@@ -86,7 +87,7 @@
         {
             var criteria = new InsertCheckInOutRecordCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 RecordTime = DateTime.Now,
                 InOutType = 1,
                 IPAddress = GetClientIpAddress(),

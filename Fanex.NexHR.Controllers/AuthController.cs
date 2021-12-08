@@ -4,7 +4,7 @@
     using System.Text;
     using System.Web.Mvc;
     using System.Web.Security;
-    using Core.Services;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
@@ -14,7 +14,6 @@
 
     public class AuthController : Controller
     {
-        private readonly ISessionService sessionService;
         private readonly IAuthService authService;
         private readonly IUserService userService;
         private readonly IUserControlSession userControlSession;
@@ -22,14 +21,12 @@
         private readonly ICryptoService cryptoService;
 
         public AuthController(
-            ISessionService sessionService,
             IAuthService authService,
             IUserService userService,
             IUserControlSession userControlSession,
             ISecurityService securityService,
             ICryptoService cryptoService)
         {
-            this.sessionService = sessionService;
             this.authService = authService;
             this.userService = userService;
             this.userControlSession = userControlSession;
@@ -70,10 +67,9 @@
                     userControlSession.JwtToken = loginResult.JwtToken;
                     userControlSession.MenuItems = userService.GetMenuItem();
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
+                    userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, true);
+                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetEmployeeByCode(model.Username));
                     //HRM session
-                    EmployeeSession employee = authService.GetEmployeeByCode(model.Username);
-                    sessionService.IsShowLeftNavigation = true;
-                    sessionService.Employee = employee;
                     FormsAuthentication.SetAuthCookie(model.Username, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -89,7 +85,6 @@
         [HttpGet]
         public ActionResult Logout()
         {
-            sessionService.ClearAll();
             userControlSession.ClearAll();
 
             FormsAuthentication.SignOut();

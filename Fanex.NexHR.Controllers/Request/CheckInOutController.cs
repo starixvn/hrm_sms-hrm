@@ -28,13 +28,12 @@
         private readonly IAttachFileService attachFileService;
 
         public CheckInOutController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             ICheckInOutRequestService checkInOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
             IShiftService shiftService,
-            IAttachFileService attachFileService) : base(sessionService)
+            IAttachFileService attachFileService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.checkInOutRequestService = checkInOutRequestService;
@@ -51,7 +50,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetCheckInOutRequestByDateCriteria
             {
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -68,11 +67,11 @@
         public ActionResult Create()
         {
             var today = DateTime.Today;
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(sessionService.Employee.Id, RequestType.CheckIn);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.CheckIn);
             var viewModel = new CheckInOutRequestViewModel
             {
-                Employee = sessionService.Employee.DisplayName,
-                EmployeeId = sessionService.Employee.Id,
+                Employee = EmployeeSession.DisplayName,
+                EmployeeId = EmployeeSession.Id,
                 ForDate = today,
                 AttendantDate = today,
                 Hour = DateTime.Now.Hour,
@@ -82,11 +81,11 @@
                 Approvers = supervisor.Approvers
             };
 
-            Shift shift = shiftService.GetByDate(sessionService.Employee.Id, today);
+            Shift shift = shiftService.GetByDate(EmployeeSession.Id, today);
             CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
             ViewBag.Shift = shift;
-            ViewBag.IsTopManager = sessionService.Employee.IsTopManager;
+            ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -106,7 +105,7 @@
                 ReasonId = model.ReasonId,
                 RefNo = model.RefNO,
                 Remark = model.Remark,
-                CreatedBy = sessionService.Employee.Id,
+                CreatedBy = EmployeeSession.Id,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId
             };
@@ -125,7 +124,7 @@
         {
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(sessionService.Employee.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -142,7 +141,7 @@
                     RequestTypeId = request.RequestTypeId
                 };
                 IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(param);
-                Shift shift = shiftService.GetByDate(sessionService.Employee.Id, request.OnDate);
+                Shift shift = shiftService.GetByDate(EmployeeSession.Id, request.OnDate);
                 var viewModel = new CheckInOutRequestViewModel
                 {
                     RequestId = request.RequestId,
@@ -184,7 +183,7 @@
                 ReasonId = model.ReasonId,
                 RefNo = model.RefNO,
                 Remark = model.Remark,
-                ModifiedBy = sessionService.Employee.Id,
+                ModifiedBy = EmployeeSession.Id,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId
             };

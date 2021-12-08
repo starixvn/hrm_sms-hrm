@@ -7,13 +7,13 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class ExportRequestController : BaseExportController
@@ -22,9 +22,9 @@
         private readonly IRequestService requestService;
 
         public ExportRequestController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IExportExcelService exportExcelService,
-            IRequestService requestService) : base(sessionService)
+            IRequestService requestService) : base(userControlSession)
         {
             this.exportExcelService = exportExcelService;
             this.requestService = requestService;
@@ -46,7 +46,7 @@
 
             var criteria = new GetRequestCriteria
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -85,7 +85,7 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
@@ -116,7 +116,7 @@
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 RequestViewType = model.ViewType,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
+    using HRM.UserControl.Admin.Website.Constants;
     using HRM.UserControl.Admin.Website.Criteria.Company;
     using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Services;
@@ -17,7 +18,6 @@
 
     public class AuthController : Controller
     {
-        private readonly ISessionService sessionService;
         private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
         private readonly IUserService userService;
@@ -25,14 +25,12 @@
         private readonly ISecurityService securityService;
 
         public AuthController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IBaseService baseService,
             IUserService userService,
             ICryptoService cryptoService,
             ISecurityService securityService)
         {
-            this.sessionService = sessionService;
             this.userControlSession = userControlSession;
             this.baseService = baseService;
             this.cryptoService = cryptoService;
@@ -109,7 +107,6 @@
 
         public async Task<IActionResult> Logout()
         {
-            sessionService.ClearAll();
             userControlSession.ClearAll();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
@@ -117,8 +114,8 @@
 
         protected internal virtual async Task DoLoginAsync(int userId)
         {
-            sessionService.Companies = await baseService.GetDataAsync<Company>(new GetAllCompanyCriteria { IsActive = true });
-
+            var companies = (await baseService.GetDataAsync<Company>(new GetAllCompanyCriteria { IsActive = true })).ToList();
+            userControlSession.Set<IList<Company>>(SessionKey.InternalCompanies, companies);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())

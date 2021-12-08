@@ -1,14 +1,14 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExportCalendarController : BaseExportController
     {
@@ -16,9 +16,9 @@
         private readonly IWorkingCalendarReportService reportService;
 
         public ExportCalendarController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IWorkingCalendarService workingCalendarService,
-            IWorkingCalendarReportService reportService) : base(sessionService)
+            IWorkingCalendarReportService reportService) : base(userControlSession)
         {
             this.workingCalendarService = workingCalendarService;
             this.reportService = reportService;

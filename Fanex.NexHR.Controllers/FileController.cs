@@ -7,14 +7,14 @@
     using System.Web.Hosting;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Resources;
+    using HRM.UserControl.Client.Core.Session;
 
     public class FileController : BaseController
     {
         private const int MaxSizeFileUpload = 5 * 1024 * 1024;
 
-        public FileController(ISessionService sessionService) : base(sessionService)
+        public FileController(IUserControlSession userControlSession) : base(userControlSession)
         {
         }
 
@@ -83,7 +83,7 @@
                 foreach (var file in files)
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    string basePath = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + sessionService.Employee.Code;
+                    string basePath = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + EmployeeSession.Code;
                     if (!Directory.Exists(basePath))
                     {
                         Directory.CreateDirectory(basePath);
@@ -95,7 +95,7 @@
                     }
                     else
                     {
-                        var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), sessionService.Employee.Code, fileName);
+                        var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), EmployeeSession.Code, fileName);
                         file.SaveAs(path);
                     }
                 }
@@ -129,7 +129,7 @@
         {
             bool isSuccessful = false;
             string message = string.Empty;
-            string path = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + sessionService.Employee.Code + "/" + fileName;
+            string path = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName;
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);

@@ -11,7 +11,6 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Criteria.Supervisor;
     using Fanex.NexHR.Models;
@@ -43,7 +42,6 @@
         private readonly IRoleService roleService;
 
         public EmployeeController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ICommonDataService commonDataService,
@@ -53,7 +51,7 @@
             IJobLevelService jobLevelService,
             ICryptoService cryptoService,
             IUserService userService,
-            IRoleService roleService) : base(sessionService)
+            IRoleService roleService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;
@@ -214,7 +212,7 @@
                     TeamId = model.TeamId
                 };
 
-                CommandResult commandResult = employeeService.Create(sessionService.Employee.Id, param);
+                CommandResult commandResult = employeeService.Create(EmployeeSession.Id, param);
                 if (commandResult.IsSuccessful)
                 {
                     var token = cryptoService.GenerateRijndaelKeyIV();
@@ -289,7 +287,7 @@
             if (ModelState.IsValid)
             {
                 EditEmployeeParam param = MappingEditEmployeeParam(model);
-                CommandResult commandResult = employeeService.Edit(sessionService.Employee.Id, param);
+                CommandResult commandResult = employeeService.Edit(EmployeeSession.Id, param);
                 if (commandResult.IsSuccessful)
                 {
                     var result = userService.UpdateInfo(new UpdateUserInfoParam
@@ -336,7 +334,7 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(DeleteEmployeeParam param)
         {
-            CommandResult commandResult = employeeService.Delete(sessionService.Employee.Id, param);
+            CommandResult commandResult = employeeService.Delete(EmployeeSession.Id, param);
             if (commandResult.IsSuccessful)
             {
                 var result = userService.Delete(param.UserId);
@@ -349,7 +347,7 @@
         [AllowAnonymous]
         public FileResult Avatar(string id)
         {
-            var avatarName = string.IsNullOrEmpty(id) ? sessionService.Employee.Code + ".jpg" : id + ".jpg";
+            var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
             if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
             {
                 return File("/avatars/" + avatarName, "image/jpeg");
@@ -403,7 +401,7 @@
         [HttpPost]
         public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
-            CommandResult commandResult = employeeService.EditEmployeeSupervisor(sessionService.Employee.Id, employeeId, roleId, supervisors);
+            CommandResult commandResult = employeeService.EditEmployeeSupervisor(EmployeeSession.Id, employeeId, roleId, supervisors);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -430,7 +428,7 @@
         [HttpPost]
         public void ToogleLeftNavigation(bool isShow)
         {
-            sessionService.IsShowLeftNavigation = isShow;
+            userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, isShow);
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -451,7 +449,7 @@
         {
             var criteria = new GetMemberByManagerCriteria
             {
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 Query = keyword,
                 ExcludedManager = false
             };
@@ -520,9 +518,9 @@
 
         private void UpdateUserSession(int employeeId, string code)
         {
-            if (sessionService.Employee.Id == employeeId)
+            if (EmployeeSession.Id == employeeId)
             {
-                sessionService.Employee = authService.GetEmployeeByCode(code);
+                userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetEmployeeByCode(code));
             }
         }
 

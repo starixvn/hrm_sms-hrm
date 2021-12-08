@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Dashboard;
     using Fanex.NexHR.Services;
     using HRM.UserControl.Client.Core.Enumerables;
@@ -19,11 +18,10 @@
         private readonly IUserService userService;
 
         public HomeController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             IDashboardService dashboardService) : base(sessionService)
-            IUserService userService) : base(sessionService)
+            IUserService userService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;
@@ -34,7 +32,7 @@
         public ActionResult Index()
         {
             var user = userService.GetById(userControlSession.UserId);
-            IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
+            IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(EmployeeSession.Id, DateTime.Now);
             ViewBag.IsResetPassword = user.IsResetPassword;
             ViewBag.IsVerifierApprover = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
@@ -45,7 +43,7 @@
         [ChildActionOnly]
         public ActionResult MemberRequest()
         {
-            IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(sessionService.Employee.Id, DateTime.Now);
+            IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(EmployeeSession.Id, DateTime.Now);
 
             return PartialView("_MemberRequest", model);
         }

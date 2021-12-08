@@ -18,9 +18,8 @@
         private readonly IUnitService unitService;
 
         public UnitController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
-            IUnitService unitService) : base(sessionService)
+            IUnitService unitService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.unitService = unitService;
@@ -69,7 +68,7 @@
                     Code = model.Code,
                     Name = model.Name,
                     IsActive = model.IsActive,
-                    CreatedBy = sessionService.Employee.Id
+                    CreatedBy = EmployeeSession.Id
                 };
                 commandResult = unitService.Create(criteria);
             }
@@ -109,7 +108,7 @@
                     Code = model.Code,
                     Name = model.Name,
                     IsActive = model.IsActive,
-                    ModifiedBy = sessionService.Employee.Id
+                    ModifiedBy = EmployeeSession.Id
                 };
                 commandResult = unitService.Edit(criteria);
             }

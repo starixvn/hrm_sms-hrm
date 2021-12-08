@@ -12,6 +12,7 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
     using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.WorkingCalendarReport)]
     public class WorkingCalendarSummaryReportController : BaseController
@@ -19,8 +20,8 @@
         private readonly IWorkingCalendarSummaryReportService reportService;
 
         public WorkingCalendarSummaryReportController(
-            ISessionService sessionService,
-            IWorkingCalendarSummaryReportService reportService) : base(sessionService)
+            IUserControlSession userControlSession,
+            IWorkingCalendarSummaryReportService reportService) : base(userControlSession)
         {
             this.reportService = reportService;
         }
@@ -44,7 +45,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -65,7 +66,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.Id,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

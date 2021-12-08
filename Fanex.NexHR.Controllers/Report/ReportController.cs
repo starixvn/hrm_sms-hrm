@@ -8,7 +8,6 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Criteria.Supervisor;
@@ -32,11 +31,10 @@
         private readonly ICommonDataService commonDataService;
 
         public ReportController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IReportService reportSevice,
             ICommonDataService commonDataService,
-            ITeamService teamService) : base(sessionService)
+            ITeamService teamService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.reportService = reportSevice;
@@ -57,7 +55,7 @@
             var model = new TimesheetViewModel
             {
                 Year = DateTime.Now.Year,
-                EmpId = sessionService.Employee.Id,
+                EmpId = EmployeeSession.Id,
                 IsHavePrivilegeCreateCheckInOutRecord = IsPrivilegeCreateCheckInOut()
             };
 
@@ -90,7 +88,7 @@
         {
             model.CurrentPage = Constants.CurrentPage;
             model.ItemsPerPage = Constants.ItemsPerPage;
-            model.TeamIds = string.Join(",", teamService.GetBySupervisor(sessionService.Employee.Id).Select(x => x.Id));
+            model.TeamIds = string.Join(",", teamService.GetBySupervisor(EmployeeSession.Id).Select(x => x.Id));
 
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
@@ -105,7 +103,7 @@
             if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
                 && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
             {
-                employeeId = sessionService.Employee.Id;
+                employeeId = EmployeeSession.Id;
             }
             var criteria = new GetTimeRecordCriteria
             {
@@ -116,7 +114,7 @@
                 IsLocal = model.IsLocal,
                 PageIndex = model.CurrentPage - 1,
                 ItemsPerPage = model.ItemsPerPage,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = EmployeeSession.Id
             };
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
@@ -155,7 +153,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 MinTotalLeave = model.MinTotalLeave,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = EmployeeSession.Id
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
@@ -186,7 +184,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 LeaveTypeId = model.LeaveTypeId,
-                SupervisorId = sessionService.Employee.Id
+                SupervisorId = EmployeeSession.Id
             };
 
             IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
@@ -222,7 +220,7 @@
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 LeaveType = model.LeaveType
             };
 
@@ -310,7 +308,7 @@
         {
             var criteria = new GetPrivilegeCreateCheckInOutRecordCriteria
             {
-                EmpId = sessionService.Employee.Id
+                EmpId = EmployeeSession.Id
             };
 
             var isPrivilegeCreateCheckInOut = reportService.GetIsPrivilegeCreateCheckInOut(criteria);

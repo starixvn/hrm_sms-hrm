@@ -23,11 +23,10 @@
         private readonly IBaseService baseService;
 
         public ExtensionNoController(
-            ISessionService sessionService,
             IUserControlSession userControlSession,
             IExtensionNumberService extensionNumberService,
             ICommonDataService commonDataService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.extensionNumberService = extensionNumberService;

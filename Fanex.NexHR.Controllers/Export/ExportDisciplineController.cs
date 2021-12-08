@@ -7,6 +7,7 @@
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExportDisciplineController : BaseController
     {
@@ -15,10 +16,10 @@
         private readonly IExportDisciplineDetailService exportDisciplineDetailService;
 
         public ExportDisciplineController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IDisciplineService disciplineService,
             IExportDisciplineSummaryService exportDisciplineSummaryService,
-            IExportDisciplineDetailService exportDisciplineDetailService) : base(sessionService)
+            IExportDisciplineDetailService exportDisciplineDetailService) : base(userControlSession)
         {
             this.disciplineService = disciplineService;
             this.exportDisciplineSummaryService = exportDisciplineSummaryService;
@@ -35,7 +36,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = sessionService.Employee.Id,
+                ApproverId = EmployeeSession.Id,
                 EmployeeName = model.Employee,
                 TeamName = model.TeamName
             };
@@ -56,7 +57,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = sessionService.Employee.Id,
+                ApproverId = EmployeeSession.Id,
                 EmployeeName = model.Employee,
                 TeamName = model.TeamName
             };

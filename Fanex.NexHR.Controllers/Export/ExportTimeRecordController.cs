@@ -3,12 +3,12 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
+    using HRM.UserControl.Client.Core.Session;
 
     public class ExportTimeRecordController : BaseController
     {
@@ -16,9 +16,9 @@
         private readonly IExportExcelTimeRecordService exportTimeRecordService;
 
         public ExportTimeRecordController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IReportService reportSevice,
-            IExportExcelTimeRecordService exportTimeRecordService) : base(sessionService)
+            IExportExcelTimeRecordService exportTimeRecordService) : base(userControlSession)
         {
             this.reportService = reportSevice;
             this.exportTimeRecordService = exportTimeRecordService;
@@ -30,7 +30,7 @@
             var criteria = new GetTimeRecordCriteria
             {
                 EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
-                SupervisorId = sessionService.Employee.Id,
+                SupervisorId = EmployeeSession.Id,
                 TeamIds = model.TeamIds,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,

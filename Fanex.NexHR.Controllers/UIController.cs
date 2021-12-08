@@ -6,7 +6,6 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.UI;
     using HRM.UserControl.Client.Core.Enumerables;
@@ -20,8 +19,7 @@
 
         public UIController(
             IUserControlSession userControlSession,
-            ISessionService sessionService,
-            IMessageService messageService) : base(sessionService)
+            IMessageService messageService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.messageService = messageService;
@@ -30,8 +28,8 @@
         [ChildActionOnly]
         public ActionResult GlobalScript()
         {
-            ViewBag.Employee = sessionService.Employee;
-            ViewBag.IsShowLeftNavigation = sessionService.IsShowLeftNavigation;
+            ViewBag.Employee = EmployeeSession;
+            ViewBag.IsShowLeftNavigation = userControlSession.Get<bool>(SessionKey.IsShowLeftNavigation);
             return PartialView();
         }
 
@@ -41,7 +39,7 @@
             var viewModel = new HeaderViewModel
             {
                 SiteId = ConfigSettings.SiteId,
-                Employee = sessionService.Employee,
+                Employee = EmployeeSession,
                 IsShowSearchBox = userControlSession.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
             };
 
@@ -57,7 +55,7 @@
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.URL) && i.URL.Equals(link, StringComparison.OrdinalIgnoreCase));
-            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(sessionService.Employee.Id).Count;
+            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(EmployeeSession.Id).Count;
 
             ViewBag.SelectedMenu = selectedMenu;
             ViewBag.UnreadMessage = unreadMessageCount;
