@@ -16,11 +16,13 @@
     {
         public async Task<CommandResult> ExecuteNonQueryAsync(INonQueryCommand command)
         {
-            using var db = ObjectDbFactory.CreateInstance(command.GetSettingKey());
-            await db.ExecuteNonQueryAsync(command);
-            CommandResult commandResult = GetCommandResult(db.GetOutputParams());
+            using (var db = ObjectDbFactory.CreateInstance(command.GetSettingKey()))
+            {
+                await db.ExecuteNonQueryAsync(command);
+                CommandResult commandResult = GetCommandResult(db.GetOutputParams());
 
-            return commandResult;
+                return commandResult;
+            }
         }
 
         private static CommandResult GetCommandResult(Hashtable hash)
