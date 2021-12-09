@@ -71,13 +71,14 @@ $(document).ready(function () {
     }
 
     function resetPassword() {
+        const employeeId = $('#Id').val();
         const userId = $('#UserId').val();
-        const nickName = $('#NickName').val();
-        confirm('Are you sure you want to reset ' + nickName + "'s password?", function () {
+        const nickname = $('#NickName').val();
+        confirm('Are you sure you want to reset ' + nickname + "'s password?", function () {
             axios({
                 url: resolveClientUrl('Account/ResetPassword'),
                 method: 'POST',
-                data: stringify({ userId: userId }),
+                data: stringify({ employeeId: employeeId, userId: userId }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
