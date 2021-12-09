@@ -107,7 +107,8 @@
                 {"nickname", param.Nickname },
                 {"fullName", param.FullName },
                 {"email", param.Email },
-                {"roleIds", param.RoleIds }
+                {"roleIds", param.RoleIds },
+                {"isActive", param.IsActive }
             };
             return Post<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
         }
@@ -121,7 +122,8 @@
                 {"nickname", param.Nickname },
                 {"fullName", param.FullName },
                 {"email", param.Email },
-                {"roleIds", param.RoleIds }
+                {"roleIds", param.RoleIds },
+                {"isActive", param.IsActive }
             };
             return await PostAsync<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
         }

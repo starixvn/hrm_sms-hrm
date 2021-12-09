@@ -11,6 +11,7 @@
         public string FullName { get; set; }
         public string Email { get; set; }
         public string RoleIds { get; set; }
+        public bool IsActive { get; set; }
         public int ModifiedBy { get; set; }
 
         public override string GetSettingKey() => "API_User_Update";

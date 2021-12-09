@@ -297,7 +297,8 @@
                         Nickname = param.Nickname,
                         FullName = param.FullName,
                         Email = param.Email,
-                        RoleIds = param.Roles
+                        RoleIds = param.Roles,
+                        IsActive = param.Enabled
                     });
                     if (result.IsSuccessful)
                     {
