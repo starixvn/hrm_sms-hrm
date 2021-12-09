@@ -22,7 +22,7 @@
 
         [HttpGet]
         [Route("api/function/getBySiteId")]
-        public async Task<IActionResult> GetBySiteId([FromBody] GetFunctionBySiteIdCriteria criteria)
+        public async Task<IActionResult> GetBySiteId(GetFunctionBySiteIdCriteria criteria)
         {
             var functions = await baseService.GetDataAsync<Function>(criteria);
             return Ok(functions);

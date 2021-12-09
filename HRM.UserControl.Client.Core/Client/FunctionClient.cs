@@ -8,7 +8,7 @@
     {
         IList<Function> GetBySiteId(short siteId, bool? isActive = true);
 
-        Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = null);
+        Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true);
 
         IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId);
 
@@ -18,24 +18,10 @@
     public class FunctionClient : BaseHttpClient, IFunctionClient
     {
         public IList<Function> GetBySiteId(short siteId, bool? isActive = true)
-        {
-            var data = new Dictionary<string, object>
-            {
-                { "siteId", siteId },
-                { "isActive", isActive }
-            };
-            return Get<IList<Function>>(RelativePaths.GetFunctionBySiteIdPath, data);
-        }
+         => Get<IList<Function>>(string.Format(RelativePaths.GetFunctionBySiteIdPath, siteId, isActive));
 
-        public async Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = null)
-        {
-            var data = new Dictionary<string, object>
-            {
-                { "siteId", siteId },
-                { "isActive", isActive }
-            };
-            return await GetAsync<IList<Function>>(RelativePaths.GetFunctionBySiteIdPath, data);
-        }
+        public async Task<IList<Function>> GetBySiteIdAsync(short siteId, bool? isActive = true)
+            => await GetAsync<IList<Function>>(string.Format(RelativePaths.GetFunctionBySiteIdPath, siteId, isActive));
 
         public IList<FunctionPermission> GetPermissionBySiteAndRoleId(short siteId, short roleId)
             => Get<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionByRoleIdPath, siteId, roleId));
@@ -45,7 +31,7 @@
 
         private static class RelativePaths
         {
-            public const string GetFunctionBySiteIdPath = "api/function/getBySiteId";
+            public const string GetFunctionBySiteIdPath = "api/function/getBySiteId?siteId={0}&isActive={1}";
             public const string GetFunctionPermissionByRoleIdPath = "api/function/getPermissionBySiteAndRoleId?siteId={0}&roleId={1}";
         }
     }
