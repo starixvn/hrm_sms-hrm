@@ -4,6 +4,7 @@
     using System.IO;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report.MealAllowance;
     using Fanex.NexHR.Models.Report.MealAllowance;
@@ -21,7 +22,7 @@
 
     public class MealAllowanceSummaryService : IMealAllowanceSummaryService
     {
-        private const byte MinimumWidth = 5;
+        private const byte MinimumWidth = 10;
         private const byte MaximumWidth = 50;
         private readonly IBaseService baseService;
 
@@ -71,6 +72,8 @@
         {
             const byte StartBodyRow = 3;
             const byte TotalFixedColumns = 8;
+            const byte SumColumn = 8;
+            const byte StartSumRow = 4;
             var rowIndex = 1;
             var colIndex = 1;
 
@@ -105,6 +108,10 @@
                 rowIndex++;
             }
 
+            // total
+            template.Cells[StartSumRow, 1, StartSumRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
+            var excelAddress = $"{worksheet.Cells[StartBodyRow, SumColumn].Address}:{worksheet.Cells[rowIndex - 1, SumColumn].Address}";
+            worksheet.Cells[rowIndex, SumColumn].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         }
 
@@ -116,7 +123,9 @@
         {
             const byte StartBodyRow = 3;
             const byte TotalFixedColumnsDetail = 13;
-            var rowIndex = 1;
+            const byte SumColumn = 13;
+            const byte StartSumRow = 4;
+           var rowIndex = 1;
             var colIndex = 1;
 
             // title
@@ -152,6 +161,11 @@
                 worksheet.Cells[rowIndex, colIndex].Value = detail.TotalDays;
                 rowIndex++;
             }
+
+            // total
+            template.Cells[StartSumRow, 1, StartSumRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumnsDetail]);
+            var excelAddress = $"{worksheet.Cells[StartBodyRow, SumColumn].Address}:{worksheet.Cells[rowIndex - 1, SumColumn].Address}";
+            worksheet.Cells[rowIndex, SumColumn].Formula = string.Format(Constants.SummaryFormula, excelAddress);
 
             worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         }
