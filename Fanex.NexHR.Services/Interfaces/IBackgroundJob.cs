@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System.Threading.Tasks;
+
     public interface IBackgroundJobService
     {
         void ImportTimeRecord();
@@ -18,6 +20,6 @@
 
         void UpdateAnnualLeaveBalanceForNewEmployee();
 
-        void SyncWorkingShift();
+        Task SyncWorkingShiftAsync();
     }
 }

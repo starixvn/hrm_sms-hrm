@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
@@ -89,9 +90,10 @@
 
             baseService.ExecuteNonQuery(criteria);
         }
-        public void SyncWorkingShift()
+
+        public async Task SyncWorkingShiftAsync()
         {
-            syncWorkingShiftService.SyncWorkingShift();
+            await syncWorkingShiftService.SyncWorkingShiftAsync();
         }
     }
 }

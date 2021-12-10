@@ -71,7 +71,7 @@
             if (ConfigSettings.EnableSyncWorkingShift)
             {
                 RecurringJob.AddOrUpdate("SyncWorkingShift",
-                    () => backgroundJob.SyncWorkingShift(), "*/20 * * * *", TimeZoneInfo.Local); // every 20 minutes
+                    () => backgroundJob.SyncWorkingShiftAsync(), "*/5 * * * *", TimeZoneInfo.Local); // every 5 minutes
             }
             
         }

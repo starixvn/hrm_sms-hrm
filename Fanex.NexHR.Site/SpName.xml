@@ -554,7 +554,7 @@
         <Setting Key="WorkFromHome_MealAllowanceSummaryReport" SpName="WorkFromHome_MealAllowanceSummaryReport" DbName="nexhrx" Plain="0"></Setting>
     </Function>
     <Function Name="Sync Data">
-        <Setting Key="SyncData_GetWorkingShiftLastSyncDate" SpName="SyncData_GetWorkingShiftLastSyncDate" DbName="nexhrx" Plain="0" />
-        <Setting Key="SyncData_WorkingShiftXml_Import" SpName="SyncData_WorkingShiftXml_Import" DbName="nexhrx" Plain="0" />
+        <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="nexhrx" Plain="0" />
+        <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="nexhrx" Plain="0" />
     </Function>
 </Functions>
