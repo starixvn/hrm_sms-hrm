@@ -64,6 +64,7 @@
         public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
             filter.ActorId = EmployeeSession.Id;
+            filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(filter);
 
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -73,6 +74,7 @@
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
             filter.ActorId = EmployeeSession.Id;
+            filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
                 .Select(x => new WeeklyScheduleViewModel
@@ -191,9 +193,9 @@
 
         private bool CheckPermission(DateTime fromDate)
         {
-            bool isHost = false;
             DateTime firstDayOfWeek = DateTime.Now.FirstDayOfWeek();
 
+            bool isHost;
             if (userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host))
             {
                 isHost = true;

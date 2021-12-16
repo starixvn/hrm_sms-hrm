@@ -36,7 +36,8 @@
                 ActorId = filter.ActorId,
                 TeamIds = filter.TeamIds,
                 Query = filter.Query,
-                IsIFrame = filter.IsIFrame
+                IsIFrame = filter.IsIFrame,
+                IsEditUnlimited = filter.IsEditUnlimited
             };
 
             return baseService.GetData<EmployeeSuggestion>(criteria);
@@ -53,7 +54,8 @@
                 EmpId = filter.EmployeeId,
                 TeamIds = filter.TeamIds,
                 IsIFrame = filter.IsIFrame,
-                IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal
+                IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal,
+                IsEditUnlimited = filter.IsEditUnlimited
             };
 
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);

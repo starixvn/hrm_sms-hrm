@@ -1,6 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetGroup] @ActorId INT
 	,@IsIFrame BIT = 0
+	,@IsEditUnlimited BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-05-02
@@ -15,7 +16,6 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @ShiftManagerRoleId TINYINT = 4
-		,@EditScheduleUnlimited VARCHAR(100) = 'EditScheduleUnlimited'
 
 	SELECT gr.GroupId AS TeamId
 		,gr.Code
@@ -24,16 +24,7 @@ BEGIN
 	WHERE gr.IsDeleted = 0
 		AND (
 			@IsIFrame = 1
-			OR EXISTS (
-				SELECT 1
-				FROM dbo.RoleFunction AS rf WITH (NOLOCK)
-					INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
-					AND f.FunctionKey = @EditScheduleUnlimited
-					AND f.IsActive = 1
-					INNER JOIN dbo.EmployeeRole AS erole WITH (NOLOCK) ON rf.RoleId = erole.RoleId
-					AND erole.EmployeeId = @ActorId
-				WHERE rf.IsRead = 1
-				)
+			OR @IsEditUnlimited = 1
 			OR EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)

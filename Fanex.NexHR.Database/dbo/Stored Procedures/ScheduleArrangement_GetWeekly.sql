@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@fromtime DATE
 	,@totime DATE
@@ -7,6 +6,7 @@ CREATE PROCEDURE [dbo].[ScheduleArrangement_GetWeekly] @ActorId INT
 	,@TeamIds VARCHAR(MAX) = ''
 	,@IsIFrame BIT = 0
 	,@isLocal BIT = NULL
+	,@IsEditUnlimited BIT = 0
 AS
 /*
 Created: Tim.Trinh@2019-04-12
@@ -23,7 +23,6 @@ BEGIN
 
 	DECLARE @Today DATE = GETDATE()
 		,@EmployeeIds VARCHAR(MAX)
-		,@EditScheduleUnlimited VARCHAR(100) = 'EditScheduleUnlimited'
 		,@ShiftManagerRoleId TINYINT = 4
 		,@GeneralLeaveId TINYINT = 0
 		,@OffDayShiftId SMALLINT = - 1
@@ -89,16 +88,7 @@ BEGIN
 			)
 
 	IF @IsIFrame = 1
-		OR EXISTS (
-			SELECT 1
-			FROM dbo.RoleFunction AS rf WITH (NOLOCK)
-				INNER JOIN dbo.[Function] AS f WITH (NOLOCK) ON rf.FunctionId = f.FunctionId
-				AND f.FunctionKey = @EditScheduleUnlimited
-				AND f.IsActive = 1
-				INNER JOIN dbo.EmployeeRole AS erole WITH (NOLOCK) ON rf.RoleId = erole.RoleId
-				AND erole.EmployeeId = @ActorId
-			WHERE rf.IsRead = 1
-			)
+		OR @IsEditUnlimited = 1
 	BEGIN
 		INSERT INTO #tblEmployeeIds (EmpId)
 		SELECT EmpId

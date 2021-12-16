@@ -2,13 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.Function;
     using Fanex.NexHR.ViewModels.Function;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
@@ -19,18 +16,15 @@
     public class FunctionController : BaseController
     {
         private readonly IUserControlSession userControlSession;
-        private readonly IBaseService baseService;
         private readonly IRoleService roleService;
         private readonly IFunctionService ucfunctionService;
 
         public FunctionController(
             IUserControlSession userControlSession,
-            IBaseService baseService,
             IRoleService roleService,
             IFunctionService ucfunctionService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
-            this.baseService = baseService;
             this.roleService = roleService;
             this.ucfunctionService = ucfunctionService;
         }
@@ -58,29 +52,6 @@
         public CustomJsonResult AssignPermission(short roleId, IList<FunctionPermission> permissions)
         {
             CommandResult commandResult = roleService.AssignPermission(userControlSession.SiteId, roleId, permissions);
-            if (commandResult.IsSuccessful)
-            {
-                var permissionXml = new StringBuilder("<Root>");
-                if (permissions != null && permissions.Any())
-                {
-                    const string AssignPermissionTpl = "<Row FunctionId='{0}' IsRead='{1}' IsHost='{2}' />";
-                    foreach (var permission in permissions)
-                    {
-                        permissionXml.AppendFormat(AssignPermissionTpl, permission.FunctionId, permission.IsRead, permission.IsHost);
-                    }
-                }
-
-                var criteria = new AssignFunctionToRoleCriteria
-                {
-                    RoleId = roleId,
-                    ActorId = EmployeeSession.Id,
-                    PermissionXml = permissionXml.Append("</Root>").ToString()
-                };
-
-                var result = baseService.ExecuteNonQuery(criteria);
-                return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            }
-
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
