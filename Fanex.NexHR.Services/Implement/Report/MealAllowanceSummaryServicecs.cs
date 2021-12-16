@@ -55,7 +55,8 @@
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
                     WriteMealAllowanceSummary(template, worksheet, param, summaries);
 
-                    template = templatePackage.Workbook.Worksheets[2];
+                    const byte DetailSheetIndex = 2;
+                    template = templatePackage.Workbook.Worksheets[DetailSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Details");
                     WriteMealAllowanceDetails(template, worksheet, param, details);
 
