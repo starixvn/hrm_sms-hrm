@@ -238,6 +238,13 @@ BEGIN
 				)
 			)
 
+	UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+	SET IsOffDay = 0
+	WHERE WorkDate BETWEEN @fromDate
+			AND @toDate
+		AND IsOffDay = 1
+		AND IsHoliday = 1
+
 	IF @isUpdateRequestData = 0 RETURN
 
 	-- overtime
