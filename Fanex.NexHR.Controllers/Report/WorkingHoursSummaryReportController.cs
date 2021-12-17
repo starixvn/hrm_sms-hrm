@@ -70,8 +70,7 @@
             IEnumerable<DailyOvertimeDetails> overtimes = GetOvertimeDetails(model);
             byte[] bytes = reportService.Export(param, workingHours, overtimes);
 
-            const string fileName = "Attendance Statistic for Payroll.xlsx";
-            return File(bytes, MimeType.XLSX, fileName);
+            return File(bytes, MimeType.XLSX, "Attendance Statistic for Payroll.xlsx");
         }
 
         private IEnumerable<DailyOvertimeDetails> GetOvertimeDetails(WorkingHoursSummaryViewModel model)

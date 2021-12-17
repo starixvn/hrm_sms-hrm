@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HRM.UserControl.Client.AspNetMvc")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("HRM.UserControl.Client.AspNetMvc")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2021")]
 [assembly: AssemblyTrademark("")]

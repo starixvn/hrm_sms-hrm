@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>HRM</PackageTags>
+    <Authors>HRM.UserControl.Client.Core</Authors>
+    <Company>HRM.UserControl.Client.Core</Company>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,12 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Fanex.NexHR.Controllers\bin\Debug\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 </Project>

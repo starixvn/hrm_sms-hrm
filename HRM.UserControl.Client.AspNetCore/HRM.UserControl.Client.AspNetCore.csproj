@@ -1,11 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>HRM.UserControl.Client.AspNetCore</Authors>
+    <Product />
+    <Company>HRM.UserControl.Client.AspNetCore</Company>
+    <PackageTags>HRM</PackageTags>
+    <Copyright>2021</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj" />
+    <PackageReference Include="HRM.UserControl.Client.Core" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

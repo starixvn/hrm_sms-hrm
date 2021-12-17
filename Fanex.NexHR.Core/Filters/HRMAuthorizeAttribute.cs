@@ -32,11 +32,5 @@
                 }
             }
         }
-
-        private static bool IsValidUserControlSession()
-        {
-            var ucsession = UserControlClientManager.UserControlSession;
-            return !(ucsession.UserId <= 0 || ucsession.JwtToken == null || ucsession.JwtToken.IsExpired);
-        }
     }
 }

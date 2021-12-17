@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>HRM.UserControl.Client.AspNetMvc</id>
+    <version>1.0.0</version>
+    <authors>tim.trinh</authors>
+    <description>HRM.UserControl.Client.AspNetMvc</description>
+    <copyright>2021</copyright>
+    <tags>HRM</tags>
+  </metadata>
+</package>
