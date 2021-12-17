@@ -500,10 +500,6 @@
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.Roles</div>
                 <div id="userRole" class="user-role">
-                    <div class="checkbox">
-                        <input type="checkbox" class="checkbox-custom" name="Member" id="Member" checked disabled />
-                        <label for="Member">@Labels.Member</label>
-                    </div>
                     @Html.CheckBoxListFor(model => model.Roles2Array, roleItems)
                 </div>
             </li>

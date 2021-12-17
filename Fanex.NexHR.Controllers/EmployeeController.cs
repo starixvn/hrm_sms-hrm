@@ -587,7 +587,7 @@
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             ViewBag.JobLevel = jobLevelService.GetJobLevel();
             ViewBag.Marriages = Utilities.Marriages;
-            ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId).Where(i => i.RoleId != (short)RoleSystem.Member).ToList();
+            ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId);
         }
 
         private EditEmployeeParam MappingEditEmployeeParam(Employee model)
