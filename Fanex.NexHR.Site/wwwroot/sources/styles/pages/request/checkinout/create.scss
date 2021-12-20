@@ -30,6 +30,7 @@
     .request-time {
         display: flex;
         align-items: center;
+
         .form-control {
             margin: 0 4px;
         }
@@ -38,6 +39,6 @@
 
 @-moz-document url-prefix() {
     .card .request-time {
-        width: 69px;
+        width: 150px;
     }
 }
