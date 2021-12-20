@@ -206,7 +206,10 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
+#pragma warning disable S1541 // Methods and properties should not be too complex
+#pragma warning disable S1067 // Expressions should not be too complex
         public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel model)
+#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             var criteria = new GetUnpaidLeaveCriteria
             {
@@ -223,10 +226,23 @@
             string leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
             ViewBag.HeaderTitle = string.Format("{0} {1}", leaveType, model.Year);
 
-            model.LeaveSumaries = reportService.GetUnpaidLeave(criteria);
+            var leaveSumaries = reportService.GetUnpaidLeave(criteria);
+            if (model.Period.Equals("1"))
+            {
+                model.LeaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+            }
+            else if (model.Period.Equals("2"))
+            {
+                model.LeaveSumaries = leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+            }
+            else
+            {
+                model.LeaveSumaries = leaveSumaries;
+            }
 
             return PartialView("_UnpaidLeaveSummaryDetails", model);
         }
+#pragma warning restore S1067 // Expressions should not be too complex
 
         public ActionResult EmployeeSupervisor()
         {

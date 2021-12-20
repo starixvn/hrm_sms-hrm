@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
@@ -53,7 +54,10 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
+#pragma warning disable S1541 // Methods and properties should not be too complex
+#pragma warning disable S1067 // Expressions should not be too complex
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
+#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             var criteria = new GetUnpaidLeaveCriteria
             {
@@ -64,10 +68,23 @@
                 SupervisorId = sessionService.Employee.Id,
                 LeaveType = model.LeaveType
             };
-            IList<LeaveSummary> leaveSummary = reportService.GetUnpaidLeave(criteria);
-            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSummary, model.Year, model.LeaveType, model.Period);
+            IList<LeaveSummary> leaveSumaries = reportService.GetUnpaidLeave(criteria);
+            if (model.Period.Equals("1"))
+            {
+                leaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+            }
+            else
+            {
+                if (model.Period.Equals("2"))
+                {
+                    leaveSumaries = leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+                }
+            }
+
+            exportExcelUnpaidLeaveSummaryReportService.Export(leaveSumaries, model.Year, model.LeaveType, model.Period);
 
             return new EmptyResult();
         }
+#pragma warning restore S1067 // Expressions should not be too complex
     }
 }
