@@ -57,10 +57,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.UserControl.Models", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.UserControl.Client.Core", "HRM.UserControl.Client.Core\HRM.UserControl.Client.Core.csproj", "{AC67689C-B499-4BF0-86F2-805863047A53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.UserControl.Client.AspNetCore.Demo", "HRM.UserControl.Client.AspNetCore.Demo\HRM.UserControl.Client.AspNetCore.Demo.csproj", "{D43FFED3-B15D-460E-8879-1836525457B6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.UserControl.Client.Demo", "HRM.UserControl.Client.Demo\HRM.UserControl.Client.Demo.csproj", "{DD4F58D6-D927-4212-AC22-F4CB05F785CC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.UserControl.Client.AspNetCore", "HRM.UserControl.Client.AspNetCore\HRM.UserControl.Client.AspNetCore.csproj", "{6CECE2B0-8DEA-4599-8680-2714E9CA22BD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNetCore", "AspNetCore", "{4D1DA3A0-B6F5-48E6-9769-4D259EC01B70}"
@@ -71,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.UserControl.Client.AspN
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.UserControl.Admin.Website", "HRM.UserControl.Admin.Website\HRM.UserControl.Admin.Website.csproj", "{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.UserControl.Admin.Website", "HRM.UserControl.Admin.Website\HRM.UserControl.Admin.Website.csproj", "{6EBA8B9E-C539-4E5F-9221-83634F09A9C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -245,30 +241,6 @@ Global
 		{AC67689C-B499-4BF0-86F2-805863047A53}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AC67689C-B499-4BF0-86F2-805863047A53}.Release|x86.ActiveCfg = Release|Any CPU
 		{AC67689C-B499-4BF0-86F2-805863047A53}.Release|x86.Build.0 = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Debug|x86.Build.0 = Debug|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|x86.ActiveCfg = Release|Any CPU
-		{D43FFED3-B15D-460E-8879-1836525457B6}.Release|x86.Build.0 = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Debug|x86.Build.0 = Debug|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|x86.ActiveCfg = Release|Any CPU
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC}.Release|x86.Build.0 = Release|Any CPU
 		{6CECE2B0-8DEA-4599-8680-2714E9CA22BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6CECE2B0-8DEA-4599-8680-2714E9CA22BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CECE2B0-8DEA-4599-8680-2714E9CA22BD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -327,8 +299,6 @@ Global
 		{2FFDE2B9-3F1A-4BCE-A2C6-EFADBDE17305} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
 		{7D742579-1379-47A0-9508-F2A960D19BB7} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
 		{AC67689C-B499-4BF0-86F2-805863047A53} = {B5C78ABE-9381-49F1-B893-7CA77966064D}
-		{D43FFED3-B15D-460E-8879-1836525457B6} = {4D1DA3A0-B6F5-48E6-9769-4D259EC01B70}
-		{DD4F58D6-D927-4212-AC22-F4CB05F785CC} = {ECE238EC-DA3D-44DD-B268-640118514328}
 		{6CECE2B0-8DEA-4599-8680-2714E9CA22BD} = {4D1DA3A0-B6F5-48E6-9769-4D259EC01B70}
 		{4D1DA3A0-B6F5-48E6-9769-4D259EC01B70} = {B5C78ABE-9381-49F1-B893-7CA77966064D}
 		{ECE238EC-DA3D-44DD-B268-640118514328} = {B5C78ABE-9381-49F1-B893-7CA77966064D}
@@ -337,9 +307,9 @@ Global
 		{6EBA8B9E-C539-4E5F-9221-83634F09A9C6} = {D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
 		SolutionGuid = {B18C2D6B-E5BD-4918-B5BE-13471712599F}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
 	EndGlobalSection
 	GlobalSection(JSLint) = preSolution
 		SolutionConfigurationLocation = JSLintOptions.xml
