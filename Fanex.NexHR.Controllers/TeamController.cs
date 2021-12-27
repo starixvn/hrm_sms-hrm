@@ -65,7 +65,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         public ActionResult Create(TeamViewModel model)
         {
             model.Sections = sectionService.GetSection();

@@ -141,7 +141,8 @@
                 }
 
                 var message = response.Content.ReadAsStringAsync().Result;
-                throw new Exception(message);
+                var exception = new Exception(message);
+                throw exception;
             }
         }
     }

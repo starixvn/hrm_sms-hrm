@@ -33,12 +33,11 @@
         public ActionResult Index(short? roleId = null)
         {
             IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
-            IList<Function> functions = ucfunctionService.GetBySiteId(userControlSession.SiteId);
             var functionTrees = new TreeFunctionViewModel
             {
                 RoleId = roleId ?? systemRoles.First().RoleId,
                 IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
-                Functions = GetFunctionTrees(functions),
+                Functions = ucfunctionService.GetHierarchyBySiteId(userControlSession.SiteId),
                 FunctionPermissions = ucfunctionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, roleId ?? systemRoles.First().RoleId)
             };
 
@@ -53,33 +52,6 @@
         {
             CommandResult commandResult = roleService.AssignPermission(userControlSession.SiteId, roleId, permissions);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
-
-        private IList<Function> GetFunctionTrees(IList<Function> functions)
-        {
-            IList<Function> functionTrees = functions.Where(func => !func.ParentId.HasValue).ToList();
-            foreach (Function function in functionTrees)
-            {
-                function.Childs = new List<Function>();
-                function.Level = 0;
-                GetChildFunctions(function, functions);
-            }
-
-            return functionTrees;
-        }
-
-        private void GetChildFunctions(Function function, IList<Function> functions)
-        {
-            IList<Function> functionItems = functions.Where(x => x.ParentId == function.FunctionId).ToList();
-            if (functionItems.Any())
-            {
-                foreach (Function item in functionItems)
-                {
-                    item.Level = (byte)(function.Level + 1);
-                    function.Childs.Add(item);
-                    GetChildFunctions(item, functions);
-                }
-            }
         }
     }
 }

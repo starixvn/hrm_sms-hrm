@@ -92,10 +92,7 @@
                 .OrderBy(x => x.DisplayOrder).ToList();
             if (menuItems.Any())
             {
-                if (menu.Childs == null)
-                {
-                    menu.Childs = new List<Menu>();
-                }
+                menu.Childs ??= new List<Menu>();
 
                 foreach (Menu item in menuItems)
                 {

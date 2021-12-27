@@ -41,6 +41,7 @@
         private readonly IUserService userService;
         private readonly IRoleService roleService;
 
+#pragma warning disable S107 // Methods should not have too many parameters
         public EmployeeController(
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
@@ -52,6 +53,7 @@
             ICryptoService cryptoService,
             IUserService userService,
             IRoleService roleService) : base(userControlSession)
+#pragma warning restore S107 // Methods should not have too many parameters
         {
             this.userControlSession = userControlSession;
             this.employeeService = employeeService;

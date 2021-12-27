@@ -79,10 +79,7 @@
                 .OrderBy(x => x.DisplayOrder).ToList();
             if (functionItems.Any())
             {
-                if (function.Childs == null)
-                {
-                    function.Childs = new List<Function>();
-                }
+                function.Childs = function.Childs ?? new List<Function>();
 
                 foreach (Function item in functionItems)
                 {
