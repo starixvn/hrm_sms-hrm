@@ -445,9 +445,6 @@ BEGIN
 							AND IsLeaveOffDay = 0
 							AND (IsOffDay = 0 OR WorkDate = @WorkDate)
 
-						INSERT INTO @tblOffDayReplacement (EmployeeId, WorkDate, ReplaceForDate)
-						VALUES (@EmployeeId, @ReplacedDate, @PHDate)
-
 						INSERT INTO @tblResetOffDay (EmployeeId, WorkDate)
 						VALUES (@EmployeeId, @WorkDate)
 
@@ -456,10 +453,20 @@ BEGIN
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @WorkDate
 
-						DELETE
-						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
-						WHERE EmployeeId = @EmployeeId
-							AND WorkDate = @ReplacedDate
+						IF @ReplacedDate IS NOT NULL
+						BEGIN
+							INSERT INTO @tblOffDayReplacement (EmployeeId, WorkDate, ReplaceForDate)
+							VALUES (@EmployeeId, @ReplacedDate, @PHDate)
+
+							DELETE
+							FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+							WHERE EmployeeId = @EmployeeId
+								AND WorkDate = @ReplacedDate
+
+							SET @TotalClaimOffDays = @TotalClaimOffDays - 1
+
+							CONTINUE
+						END
 					END
 					ELSE
 					BEGIN
@@ -470,11 +477,11 @@ BEGIN
 						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @WorkDate
+
+						SET @TotalClaimOffDays = @TotalClaimOffDays - 1
+
+						CONTINUE
 					END
-
-					SET @TotalClaimOffDays = @TotalClaimOffDays - 1
-
-					CONTINUE
 				END
 
 				-- normal day
