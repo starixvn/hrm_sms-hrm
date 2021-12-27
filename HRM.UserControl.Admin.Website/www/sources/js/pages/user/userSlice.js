@@ -5,7 +5,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         getAllUserParams: {
-            username: '',
+            keyword: '',
             statusId: null,
             siteId: null,
             pageIndex: 1,

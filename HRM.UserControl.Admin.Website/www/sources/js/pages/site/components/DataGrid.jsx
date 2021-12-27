@@ -15,14 +15,12 @@ export class DataGrid extends Component {
         super(props);
     }
 
-    handleUpdateStatus = item => {
-        this.props.setSelectedSite(item);
-        this.props.setUpdateStatusModalDialog({ show: true });
+    handleUpdateStatus = site => {
+        this.props.setUpdateStatusModalDialog({ show: true, site });
     };
 
-    handleUpdate = item => {
-        this.props.getSiteById(item.siteId);
-        this.props.setUpdateModalDialog({ show: true });
+    handleUpdate = site => {
+        this.props.setUpdateModalDialog({ show: true, site });
     };
 
     buildGridHeader = () => {

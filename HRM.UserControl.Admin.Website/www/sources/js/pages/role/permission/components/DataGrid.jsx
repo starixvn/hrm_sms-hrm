@@ -62,7 +62,7 @@ export class DataGrid extends Component {
                         (func.policy === null || func.policy === Policy.Read) &&
                         <Form.Check type='checkbox' name="funcRead"
                             disabled={!window.hasHostPermissionOnRole}
-                            checked={permission && permission.isRead}
+                            checked={permission !== undefined && permission.isRead}
                             onChange={event => this.handleChangePermission(func, event)}
                         />
                     }
@@ -71,7 +71,7 @@ export class DataGrid extends Component {
                     {
                         (func.policy === null || func.policy === Policy.Host) &&
                         <Form.Check type='checkbox' name="funcHost"
-                            checked={permission && permission.isHost}
+                            checked={permission !== undefined && permission.isHost}
                             disabled={!window.hasHostPermissionOnRole}
                             onChange={event => this.handleChangePermission(func, event)}
                         />

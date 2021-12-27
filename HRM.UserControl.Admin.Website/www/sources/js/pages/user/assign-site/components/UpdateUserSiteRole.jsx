@@ -13,6 +13,7 @@ export class UpdateUserSiteRole extends Component {
     }
 
     componentDidMount() {
+        this.props.setSiteRoles([]);
         const { site } = this.props.updateUserSiteRoleModalDialog;
         this.props.getRoleBySiteId(site.siteId);
     }

@@ -167,15 +167,16 @@ export class UpdateSite extends Component {
     };
 
     render() {
-        const { selectedSite, confirmModalDialog } = this.props;
+        const { updateModalDialog, confirmModalDialog } = this.props;
+        const site = updateModalDialog.site;
 
         const initialValues = {
-            company: { value: selectedSite.companyId, label: selectedSite.companyName },
-            siteId: selectedSite.siteId,
-            name: selectedSite.siteName,
-            url: selectedSite.siteURL,
-            accessToken: selectedSite.accessToken,
-            isActive: selectedSite.isActive
+            company: { value: site.companyId, label: site.companyName },
+            siteId: site.siteId,
+            name: site.siteName,
+            url: site.siteURL,
+            accessToken: site.accessToken,
+            isActive: site.isActive
         };
         return (
             <>
@@ -221,8 +222,8 @@ export class UpdateSite extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAllSiteParams, selectedSite, updateSiteResult, confirmModalDialog } = state;
-    return { getAllSiteParams, selectedSite, updateSiteResult, confirmModalDialog };
+    const { getAllSiteParams, updateModalDialog, updateSiteResult, confirmModalDialog } = state;
+    return { getAllSiteParams, updateModalDialog, updateSiteResult, confirmModalDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateSite);

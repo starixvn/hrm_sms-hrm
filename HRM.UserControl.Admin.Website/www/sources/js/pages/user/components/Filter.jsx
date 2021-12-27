@@ -12,7 +12,7 @@ export class Filter extends Component {
         super(props);
 
         this.state = {
-            username: '',
+            keyword: '',
             status: { value: 1, label: 'Active' },
             site: { value: null, label: 'All' }
         };
@@ -26,7 +26,7 @@ export class Filter extends Component {
 
     getParams = () => {
         return {
-            username: this.state.username,
+            keyword: this.state.keyword,
             siteId: this.state.site.value,
             statusId: this.state.status.value,
             pageIndex: 1,
@@ -50,7 +50,7 @@ export class Filter extends Component {
     };
 
     render() {
-        const { username, status, site } = this.state;
+        const { keyword, status, site } = this.state;
         const siteOptions = this.props.sites.map(item => { return { value: item.siteId, label: item.siteName }; });
         siteOptions.unshift({ value: null, label: 'All' });
 
@@ -63,11 +63,11 @@ export class Filter extends Component {
             <Form className="form-filter" onSubmit={this.handleSubmit}>
                 <Form.Row bsPrefix="form-row">
                     <Form.Group>
-                        <Form.Label>{LangHelper.getResource('Username')}</Form.Label>
-                        <Form.Control type="text" size="sm" value={username}
-                            name="username" id="username"
+                        <Form.Label>{LangHelper.getResource('Keyword')}</Form.Label>
+                        <Form.Control type="text" size="sm" value={keyword}
+                            name="keyword" id="keyword"
                             className="shadow-none" autoComplete="off"
-                            onChange={event => this.handleChange('username', event.target.value)}
+                            onChange={event => this.handleChange('keyword', event.target.value)}
                         />
                     </Form.Group>
                     <Form.Group>

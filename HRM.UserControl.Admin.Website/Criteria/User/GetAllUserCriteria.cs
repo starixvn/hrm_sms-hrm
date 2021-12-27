@@ -4,7 +4,7 @@
 
     public class GetAllUserCriteria : CriteriaBase
     {
-        public string Username { get; set; }
+        public string Keyword { get; set; }
         public short? SiteId { get; set; }
         public byte? StatusId { get; set; }
         public int PageIndex { get; set; }

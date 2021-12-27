@@ -11,7 +11,6 @@ const siteSlice = createSlice({
         createSiteResult: null,
         updateModalDialog: { show: false },
         updateSiteResult: null,
-        selectedSite: null,
         updateStatusModalDialog: { show: false },
         confirmModalDialog: { show: false }
     },
@@ -34,9 +33,6 @@ const siteSlice = createSlice({
         setUpdateSiteResult: (state, action) => {
             state.updateSiteResult = action.payload;
         },
-        setSelectedSite: (state, action) => {
-            state.selectedSite = action.payload;
-        },
         setUpdateStatusModalDialog: (state, action) => {
             state.updateStatusModalDialog = action.payload;
         },
@@ -55,7 +51,6 @@ export const {
     setCreateSiteResult,
     setUpdateModalDialog,
     setUpdateSiteResult,
-    setSelectedSite,
     setUpdateStatusModalDialog,
     setConfirmModalDialog
 } = actions;
