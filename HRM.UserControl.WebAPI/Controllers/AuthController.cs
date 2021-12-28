@@ -1,5 +1,6 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
+    using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Threading.Tasks;
@@ -7,12 +8,12 @@
     using HRM.UserControl.API.Core.Services;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
+    using HRM.UserControl.Models;
     using HRM.UserControl.Models.User;
     using HRM.UserControl.Models.Auth;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
-    using HRM.UserControl.Models;
 
     public class AuthController : Controller
     {
@@ -21,19 +22,22 @@
         private readonly IUserService userService;
         private readonly ISiteService siteService;
         private readonly ICryptoService cryptoService;
+        private readonly IBaseService baseService;
 
         public AuthController(
             IHttpContextAccessor httpContextAccessor,
             IJwtManagerService jwtManagerService,
             IUserService userService,
             ISiteService siteService,
-            ICryptoService cryptoService)
+            ICryptoService cryptoService,
+            IBaseService baseService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.jwtManagerService = jwtManagerService;
             this.userService = userService;
             this.siteService = siteService;
             this.cryptoService = cryptoService;
+            this.baseService = baseService;
         }
 
         [Route("api/auth/login")]
@@ -47,34 +51,34 @@
             loginParams.Password = cryptoService.Decrypt(loginParams.Password, rijndaelKey, rijndaelIV);
 
             var loginResult = new LoginResult();
-            User user = await userService.GetByUsernameAsync(loginParams.Username);
-
-            if (user is null || !IsValidPassword(loginParams.Password, user))
+            var criteria = new GetUserByUsernameCriteria
+            {
+                Username = loginParams.Username
+            };
+            var users = await baseService.GetDataAsync<User>(criteria);
+            var validUsers = GetValidUsers(users, loginParams.Password);
+            if (validUsers.Count == 0)
             {
                 loginResult.ErrorMessage = "Invalid username or password.";
                 return Ok(loginResult);
             }
 
-            if (!user.IsActive)
+            validUsers = validUsers.Where(x => x.IsActive && !x.IsDeleted).ToList();
+            if(validUsers.Count == 0)
             {
-                loginResult.ErrorMessage = "User was disabled.";
-                return Ok(loginResult);
-            }
-
-            if (user.IsDeleted)
-            {
-                loginResult.ErrorMessage = "User was deleted.";
+                loginResult.ErrorMessage = "User was disabled or deleted.";
                 return Ok(loginResult);
             }
 
             var requestSite = GetSiteFromRequestHeader();
-            var sites = await siteService.GetByUserIdAsync(user.UserId);
-            if (!sites.Any(site => site.SiteId == requestSite.SiteId && site.IsActive))
+            var userSites = await GetValidUsersOnSiteAsync(validUsers, requestSite.SiteId);
+            if (userSites.Count == 0)
             {
                 loginResult.ErrorMessage = "User do not have permission on this site.";
                 return Ok(loginResult);
             }
 
+            var user = userSites.First();
             loginResult.JwtToken = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
@@ -122,6 +126,35 @@
             var token = handler.ReadJwtToken(jwtToken.Replace("Bearer ", string.Empty));
             var siteJson = token.Payload.SerializeToJson();
             return JsonConvert.DeserializeObject<SiteModel>(siteJson);
+        }
+
+        private IList<User> GetValidUsers(IEnumerable<User> users, string password)
+        {
+            var validUsers = new List<User>();
+            foreach (var user in users)
+            {
+                if (IsValidPassword(password, user))
+                {
+                    validUsers.Add(user);
+                }
+            }
+
+            return validUsers;
+        }
+
+        private async Task<IList<User>> GetValidUsersOnSiteAsync(IEnumerable<User> users, short siteId)
+        {
+            var validUsers = new List<User>();
+            foreach (var user in users)
+            {
+                var sites = await siteService.GetByUserIdAsync(user.UserId);
+                if (sites.Any(site => site.SiteId == siteId && site.IsActive))
+                {
+                    validUsers.Add(user);
+                }
+            }
+
+            return validUsers;
         }
 
         private bool IsValidPassword(string plainPwd, User user)
