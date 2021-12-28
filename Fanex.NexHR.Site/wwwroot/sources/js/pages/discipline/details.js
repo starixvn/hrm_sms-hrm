@@ -215,13 +215,13 @@ import { DisciplineType } from '../../shared/constants';
                     toDate = new Date($('form.form-filter #ToDate').val());
                 switch (quarter) {
                     case 1: // First Half Year 1H
-                        fromDate.setFullYear(year, 0, 1);
-                        toDate.setFullYear(year, 5, 30);
+                        fromDate.setFullYear(year - 1, 11, 1);
+                        toDate.setFullYear(year, 5, 0);
                         break;
 
                     case 2: // Second Half Year 2H
-                        fromDate.setFullYear(year, 6, 1);
-                        toDate.setFullYear(year, 11, 31);
+                        fromDate.setFullYear(year, 5, 1);
+                        toDate.setFullYear(year, 11, 0);
                         break;
 
                     default:

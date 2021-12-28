@@ -262,13 +262,13 @@ import {
                 var toDate = new Date($('form.form-filter #ToDate').val());
                 switch (parseInt(quarter)) {
                     case 1: // First Half Year 1H
-                        fromDate.setFullYear(parseInt(year), 0, 1);
-                        toDate.setFullYear(parseInt(year), 5, 30);
+                        fromDate.setFullYear(parseInt(year) - 1, 11, 1);
+                        toDate.setFullYear(parseInt(year), 5, 0);
                         break;
 
                     case 2: // Second Half Year 2H
-                        fromDate.setFullYear(parseInt(year), 6, 1);
-                        toDate.setFullYear(parseInt(year), 11, 31);
+                        fromDate.setFullYear(parseInt(year), 5, 1);
+                        toDate.setFullYear(parseInt(year), 11, 0);
                         break;
 
                     default:

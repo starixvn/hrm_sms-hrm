@@ -314,28 +314,6 @@
             return statusName;
         }
 
-        public static IList<SelectListItem> GetDateRangeByQuarter()
-        {
-            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-            var currentDate = DateTime.Today;
-            for (int i = 0; i < 6; i++)
-            {
-                int currentMonth = currentDate.Month;
-                int currentYear = currentDate.Year;
-                int currentHalfYear = (currentMonth <= 6) ? 1 : 2;
-
-                dateRange.Add(new SelectListItem
-                {
-                    Text = currentHalfYear + Labels.SymbolHalfYear + currentYear,
-                    Value = currentHalfYear + string.Empty + currentYear
-                });
-
-                currentDate = currentDate.AddMonths(-6);
-            }
-
-            return dateRange;
-        }
-
         public static IList<SelectListItem> GetDateRangeByYear()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };

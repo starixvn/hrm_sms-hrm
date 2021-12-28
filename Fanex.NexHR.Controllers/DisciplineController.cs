@@ -13,6 +13,7 @@
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models.Discipline;
+    using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
 
@@ -38,7 +39,7 @@
                 model.FromDate = GetFromDate();
                 model.ToDate = GetToDate();
                 model.DisciplineTypes = GetDisciplineType(true);
-                model.DateRange = Utilities.GetDateRangeByQuarter();
+                model.DateRange = GetDateRangeByQuarter();
             }
 
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
@@ -85,28 +86,10 @@
                 }
 
                 model.DisciplineTypes = GetDisciplineType(false);
-                model.DateRange = Utilities.GetDateRangeByQuarter();
+                model.DateRange = GetDateRangeByQuarter();
             }
 
             return View(model);
-        }
-
-        private static DateTime GetFromDate()
-        {
-            var today = DateTime.Today;
-            int month = DateTime.Today.Month;
-            DateTime fromDate = (month >= 1 && month <= 6) ? new DateTime(today.Year, 1, 1) : new DateTime(today.Year, 7, 1);
-            return fromDate;
-        }
-
-        private static DateTime GetToDate()
-        {
-            var today = DateTime.Today;
-            int month = DateTime.Today.Month;
-            DateTime toDate = (month >= 1 && month <= 6)
-                    ? new DateTime(today.Year, 6, DateTime.DaysInMonth(today.Year, 6))
-                    : new DateTime(today.Year, 12, DateTime.DaysInMonth(today.Year, 12));
-            return toDate;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
@@ -225,6 +208,95 @@
             IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(sessionService.Employee.Id, keyword);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
+        }
+
+        private static IList<SelectListItem> GetDateRangeByQuarter()
+        {
+            var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
+            var currentDate = DateTime.Today;
+            const byte May = 5;
+            const byte June = 6;
+            const byte December = 12;
+            for (int i = 0; i < June; i++)
+            {
+                int currentMonth = currentDate.Month;
+                int currentYear = currentDate.Year;
+                if(currentMonth == December)
+                {
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = string.Format("1H - {0}", currentYear + 1),
+                        Value = string.Format("1{0}", currentYear + 1)
+                    });
+                }
+                else if(currentMonth >= 1 && currentMonth <= May)
+                {
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = string.Format("1H - {0}", currentYear),
+                        Value = string.Format("1{0}", currentYear)
+                    });
+                }
+                else
+                {
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = string.Format("2H - {0}", currentYear),
+                        Value = string.Format("2{0}", currentYear)
+                    });
+                }
+
+                currentDate = currentDate.AddMonths(-June);
+            }
+
+            return dateRange;
+        }
+
+        private static DateTime GetFromDate()
+        {
+            const byte May = 5;
+            const byte June = 6;
+            const byte December = 12;
+            var today = DateTime.Today;
+            var month = DateTime.Today.Month;
+            DateTime fromDate;
+            if (month == December)
+            {
+                fromDate = new DateTime(today.Year, month, 1);
+            }
+            else if (month >= 1 && month <= May)
+            {
+                fromDate = new DateTime(today.Year - 1, December, 1);
+            }
+            else
+            {
+                fromDate = new DateTime(today.Year, June, 1);
+            }
+
+            return fromDate;
+        }
+
+        private static DateTime GetToDate()
+        {
+            const byte May = 5;
+            const byte December = 12;
+            var today = DateTime.Today;
+            var month = DateTime.Today.Month;
+            DateTime toDate;
+            if (month == December)
+            {
+                toDate = new DateTime(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May));
+            }
+            else if (month >= 1 && month <= May)
+            {
+                toDate = new DateTime(today.Year, May, DateTime.DaysInMonth(today.Year, May));
+            }
+            else
+            {
+                toDate = new DateTime(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1));
+            }
+
+            return toDate;
         }
 
         private IList<DisciplineTypeModel> GetDisciplineType(bool includeOtherType)
