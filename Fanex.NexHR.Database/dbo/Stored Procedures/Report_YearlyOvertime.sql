@@ -4,6 +4,7 @@ CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @ActorId INT
 	,@TeamIds VARCHAR(MAX) = ''
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
+	,@IsLocal BIT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-09
@@ -47,9 +48,11 @@ BEGIN
 		)
 
 	IF ISNULL(@TeamIds, '') <> ''
+	BEGIN
 		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
+	END
 
 	EXEC sp_xml_preparedocument @DocHandler OUTPUT
 		,@MonthXml
@@ -69,6 +72,8 @@ BEGIN
 	INSERT INTO #tblEmployeeIds (EmpId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN #tblGroupIds AS tblgr WITH (NOLOCK) ON emp.GroupId = tblgr.GroupId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
@@ -94,10 +99,9 @@ BEGIN
 			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
 			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
-		AND EXISTS (
-			SELECT 1
-			FROM #tblGroupIds AS tbl
-			WHERE tbl.GroupId = emp.GroupId
+		AND (
+			@IsLocal IS NULL
+			OR empsum.IsLocal = @IsLocal
 			)
 
 	INSERT INTO #tblOvertimeSummary (

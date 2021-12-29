@@ -1,11 +1,11 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@Employee NVARCHAR(200) = NULL
 	,@EmployeeStatusId TINYINT = NULL
 	,@TeamIds VARCHAR(MAX) = ''
+	,@IsLocal BIT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-09
@@ -74,7 +74,7 @@ BEGIN
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
-		AND empsum.IsLocal = 1
+		INNER JOIN @tblGroupIds AS tblgr ON emp.GroupId = tblgr.GroupId
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
@@ -100,10 +100,9 @@ BEGIN
 			emp.NickName LIKE '%' + ISNULL(@Employee, '') + '%'
 			OR emp.FullName LIKE '%' + ISNULL(@Employee, '') + '%'
 			)
-		AND EXISTS (
-			SELECT 1
-			FROM @tblGroupIds AS tbl
-			WHERE tbl.GroupId = emp.GroupId
+		AND (
+			@IsLocal IS NULL
+			OR empsum.IsLocal = @IsLocal
 			)
 
 	SELECT emp.EmpId

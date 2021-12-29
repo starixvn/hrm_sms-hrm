@@ -6,6 +6,7 @@ CREATE PROCEDURE [dbo].[Overtime_GetMemberMonthlyRequest] @ActorId INT
 	,@StatusIds VARCHAR(MAX) = NULL
 	,@IsProcessor BIT = 0
 	,@OvertimeType SMALLINT = NULL
+	,@IsLocal BIT = NULL
 AS
 /*
 Created: Tim.Trinh@2019-07-05
@@ -125,7 +126,9 @@ BEGIN
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
 		AND emp.[Enabled] = 1
 		AND emp.isDeleted = 0
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
+		INNER JOIN #tblGroupIds AS tblgr WITH (NOLOCK) ON gr.GroupId = tblgr.GroupId
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
 		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.EmpId = req.VerifierId
@@ -142,10 +145,9 @@ BEGIN
 			@Month IS NULL
 			OR req.[Month] = @Month
 			)
-		AND EXISTS (
-			SELECT 1
-			FROM #tblGroupIds AS tbl
-			WHERE gr.GroupId = tbl.GroupId
+		AND (
+			@IsLocal IS NULL
+			OR empsum.IsLocal = @IsLocal
 			)
 		AND EXISTS (
 			SELECT 1
@@ -156,7 +158,7 @@ BEGIN
 				SELECT 1
 				FROM #tblEmployeeIds AS tbl
 				WHERE tbl.EmployeeId = req.EmpId
-				)
+			)
 		AND EXISTS (
 			SELECT 1
 			FROM #tblOvertimeType AS ovt
@@ -173,4 +175,3 @@ BEGIN
 
 	DROP TABLE #tblOvertimeType
 END
-
