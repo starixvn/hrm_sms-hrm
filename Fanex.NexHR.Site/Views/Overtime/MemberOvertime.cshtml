@@ -44,6 +44,16 @@
                 @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control")
             </div>
         </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.CategoryDropDownList("IsLocal",
+                    classHTML: "form-control",
+                    selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty)
+            </div>
+        </div>
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">

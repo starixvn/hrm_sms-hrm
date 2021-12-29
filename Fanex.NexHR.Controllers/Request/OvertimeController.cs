@@ -112,13 +112,15 @@
             {
                 statusIds = model.StatusId.ToString();
             }
+
             var param = new GetMonthlyOvertimeRequestParam
             {
                 ActorId = sessionService.Employee.Id,
                 Month = model.Month,
                 TeamIds = model.TeamIds,
                 EmployeeId = model.EmployeeId,
-                StatusIds = statusIds
+                StatusIds = statusIds,
+                IsLocal = model.IsLocal
             };
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
@@ -163,6 +165,7 @@
             {
                 statusIds = model.StatusId.ToString();
             }
+
             var param = new GetMonthlyOvertimeRequestParam
             {
                 ActorId = sessionService.Employee.Id,
@@ -171,9 +174,9 @@
                 EmployeeId = model.EmployeeId,
                 StatusIds = statusIds,
                 IsProcessor = true,
-                OvertimeType = model.OvertimeType
+                OvertimeType = model.OvertimeType,
+                IsLocal = model.IsLocal
             };
-
             model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
 
             return model.MemberRequests;

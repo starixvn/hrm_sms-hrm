@@ -9,6 +9,7 @@
         public string Employee { get; set; }
         public byte? EmployeeStatusId { get; set; }
         public string MonthXml { get; set; }
+        public byte? IsLocal { get; set; }
 
         public override string GetSettingKey() => "Report_YearlyOvertime";
 

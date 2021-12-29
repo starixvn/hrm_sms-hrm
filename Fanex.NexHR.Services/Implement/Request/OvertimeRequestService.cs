@@ -90,7 +90,8 @@
                 TeamIds = param.TeamIds,
                 EmployeeId = param.EmployeeId,
                 IsProcessor = param.IsProcessor,
-                OvertimeType = param.OvertimeType
+                OvertimeType = param.OvertimeType,
+                IsLocal = param.IsLocal
             };
             IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
             return memberRequests;

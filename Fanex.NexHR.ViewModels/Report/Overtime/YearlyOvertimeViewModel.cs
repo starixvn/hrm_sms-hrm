@@ -14,6 +14,7 @@
         public string TeamIds { get; set; }
         public byte Calendar { get; set; } = (byte)CalendarType.Normal;
         public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
+        public byte? IsLocal { get; set; }
         public IEnumerable<YearlyOvertime> Overtimes { get; set; } = new List<YearlyOvertime>();
     }
 }

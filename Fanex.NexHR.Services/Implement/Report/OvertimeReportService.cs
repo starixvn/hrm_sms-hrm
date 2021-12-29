@@ -57,6 +57,7 @@
                 TeamIds = param.TeamIds,
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId,
+                IsLocal = param.IsLocal,
                 MonthXml = monthxml.ToString()
             };
             return baseService.GetData<YearlyOvertime>(criteria);
@@ -92,7 +93,8 @@
                 ToDate = param.ToDate,
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId,
-                TeamIds = param.TeamIds
+                TeamIds = param.TeamIds,
+                IsLocal = param.IsLocal
             };
             return overtimeReportRepository.GetMonthlyOvertime(criteria);
         }

@@ -8,5 +8,6 @@
         public string TeamIds { get; set; }
         public byte Calendar { get; set; }
         public byte? EmployeeStatusId { get; set; }
+        public byte? IsLocal { get; set; }
     }
 }
