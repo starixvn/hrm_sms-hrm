@@ -32,37 +32,41 @@ BEGIN
 		,@ProcessedStatusId TINYINT = 6
 		,@VoidStatusId TINYINT = 7
 
-	CREATE TABLE #tblRequestIds (RequestId BIGINT)
+	CREATE TABLE #tblRequestIds (
+		RequestId BIGINT
+		,StatusId TINYINT
+		)
 
 	INSERT INTO #tblRequestIds (RequestId)
 	SELECT val
 	FROM dbo.fnc_strSplit(@RequestIds, ',')
 
+	UPDATE tbl
+	SET tbl.StatusId = req.CurrentStatus
+	FROM #tblRequestIds AS tbl WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON tbl.RequestId = req.RequestId
+
 	IF @RoleId = @VerifierRoleId
 	BEGIN
-		DELETE tmp
-		FROM #tblRequestIds AS tmp
-			INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON req.RequestId = tmp.RequestId
-			AND req.CurrentStatus IN (@PendingStatusId, @ApprovedStatusId, @RejectedStatusId, @ProcessedStatusId, @VoidStatusId)
+		DELETE #tblRequestIds WITH (ROWLOCK, UPDLOCK)
+		WHERE StatusId IN (@PendingStatusId, @ApprovedStatusId, @RejectedStatusId, @ProcessedStatusId, @VoidStatusId)
 
 		UPDATE req
 		SET CurrentStatus = @PendingStatusId
-			,VerifierId = @ActorId
+			--,VerifierId = @ActorId
 			,VerifiedDate = @ModifiedDate
 			,VerifiedStatus = @PendingStatusId
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
-			INNER JOIN #tblRequestIds tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
+			INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
 	END
 	ELSE IF @RoleId = @ApproverRoleId
 	BEGIN
-		DELETE tmp
-		FROM #tblRequestIds tmp
-			INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON req.RequestId = tmp.RequestId
-			AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ProcessedStatusId, @VoidStatusId)
+		DELETE #tblRequestIds WITH (ROWLOCK, UPDLOCK)
+		WHERE StatusId IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ProcessedStatusId, @VoidStatusId)
 
 		UPDATE req
 		SET CurrentStatus = @PendingStatusId
-			,ApproverId = @ActorId
+			--,ApproverId = @ActorId
 			,ApprovedDate = @ModifiedDate
 			,ApprovedStatus = @PendingStatusId
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
@@ -70,10 +74,8 @@ BEGIN
 	END
 	ELSE IF @RoleId = @HRRoleId
 	BEGIN
-		DELETE tmp
-		FROM #tblRequestIds tmp
-			INNER JOIN dbo.OTMonthlyRequest AS req WITH (NOLOCK) ON req.RequestId = tmp.RequestId
-			AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @ApprovedStatusId, @RejectedStatusId)
+		DELETE #tblRequestIds WITH (ROWLOCK, UPDLOCK)
+		WHERE StatusId IN (@PendingStatusId, @VerifiedStatusId, @NotVerifiedStatusId, @RejectedStatusId)
 
 		UPDATE req
 		SET CurrentStatus = CASE 
@@ -85,12 +87,29 @@ BEGIN
 			,HRStatus = 0
 		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
+			AND tmp.StatusId <> @ApprovedStatusId
+
+		UPDATE req
+		SET CurrentStatus = @PendingStatusId
+			--,ApproverId = @ActorId
+			,ApprovedDate = @ModifiedDate
+			,ApprovedStatus = @PendingStatusId
+		FROM dbo.OTMonthlyRequest AS req WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN #tblRequestIds AS tmp WITH (NOLOCK) ON req.RequestId = tmp.RequestId
+			AND tmp.StatusId = @ApprovedStatusId
+
+		DELETE #tblRequestIds WITH (ROWLOCK, UPDLOCK)
+		WHERE StatusId <> @ApprovedStatusId
 	END
 
 	UPDATE req
 	SET [Status] = CASE 
-			WHEN @RoleId = @VerifierRoleId OR @RoleId = @ApproverRoleId THEN @PendingStatusId
-			--WHEN @RoleId = @ApproverRoleId THEN @VerifiedStatusId
+			WHEN @RoleId = @VerifierRoleId
+				OR @RoleId = @ApproverRoleId
+				OR (
+					@RoleId = @HRRoleId
+					AND tmp.StatusId = @ApprovedStatusId
+					) THEN @PendingStatusId
 			ELSE (CASE 
 					WHEN [Status] = @VoidStatusId THEN @PendingStatusId
 					ELSE @ApprovedStatusId END
@@ -117,7 +136,7 @@ BEGIN
 			,@ToDate = MAX(OvertimeDate)
 		FROM dbo.OTDailyRequest WITH (NOLOCK)
 		WHERE RequestId = @RequestId
-		GROUP by EmpId
+		GROUP BY EmpId
 
 		EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @FromDate
 			,@toDate = @ToDate
@@ -125,7 +144,7 @@ BEGIN
 			,@isUpdateRequestData = 1
 
 		DELETE
-		FROM #tblRequestIds
+		FROM #tblRequestIds WITH (ROWLOCK, UPDLOCK)
 		WHERE RequestId = @RequestId
 	END
 
