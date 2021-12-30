@@ -386,7 +386,6 @@ $(function () {
 
                         if (role != RoleSystem.Verifier) {
                             toastr.error('You don\'t have permission to verify some requests', '', toastOptions());
-                            isValid = false;
                         }
 
                         requests.push({
@@ -431,7 +430,6 @@ $(function () {
 
                         if (role != RoleSystem.HR) {
                             toastr.error('You don\'t have permission to process some requests', '', toastOptions());
-                            isValid = false;
                         }
 
                         requests.push({

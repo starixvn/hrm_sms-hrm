@@ -9,6 +9,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.EmployeeWorkFromHome;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeWorkFromHome;
 
@@ -31,8 +32,8 @@
         {
             var model = new EmployeeWorkFromHomeFilterViewModel
             {
-                FromDateFilter = DateTime.Now,
-                ToDateFilter = DateTime.Now,
+                FromDate = DateTime.Now,
+                ToDate = DateTime.Now,
             };
 
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
@@ -40,9 +41,9 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-        public ActionResult GetEmployeeWorkFromHomeGrid(DateTime fromDate, DateTime toDate)
+        public ActionResult GetEmployeeWorkFromHomeGrid(GetEmployeeWorkFromHomeCriteria criteria)
         {
-            var employees = employeeWorkFromHomeService.GetAll(fromDate, toDate);
+            var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_EmployeeWorkFromHomeGrid", employees);
         }
@@ -93,7 +94,7 @@
             {
                 EmployeeWorkFromHomeId = employeeWorkFromHome.EmployeeWorkFromHomeId,
                 EmployeeId = employeeWorkFromHome.EmpId,
-                Employee = string.Format("{0} ({1})", employeeWorkFromHome.Nickname, employeeWorkFromHome.Fullname),
+                Employee = string.Format("{0} ({1})", employeeWorkFromHome.Nickname, employeeWorkFromHome.FullName),
                 FromDate = employeeWorkFromHome.FromDate,
                 ToDate = employeeWorkFromHome.ToDate,
                 Remark = employeeWorkFromHome.Remark

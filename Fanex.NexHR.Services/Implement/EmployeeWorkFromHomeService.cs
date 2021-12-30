@@ -1,12 +1,9 @@
 ﻿namespace Fanex.NexHR.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Core.Models;
-    using Core.Services;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.EmployeeWorkFromHome;
-    using Models;
+    using Fanex.NexHR.Models;
 
     public class EmployeeWorkFromHomeService : IEmployeeWorkFromHomeService
     {
@@ -15,16 +12,6 @@
         public EmployeeWorkFromHomeService(IBaseService baseService)
         {
             this.baseService = baseService;
-        }
-
-        public IList<EmployeeWorkFromHome> GetAll(DateTime fromDate, DateTime toDate)
-        {
-            var criteria = new GetEmployeeWorkFromHomeCriteria 
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            return baseService.GetData<EmployeeWorkFromHome>(criteria).ToList();
         }
 
         public EmployeeWorkFromHome GetById(int id)

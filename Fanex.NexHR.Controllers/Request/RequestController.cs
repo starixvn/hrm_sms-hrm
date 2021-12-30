@@ -78,7 +78,7 @@
         {
             foreach (var request in requests)
             {
-                StringBuilder content = new StringBuilder();
+                var content = new StringBuilder();
                 string path = pathFolder + request.Id;
                 string dir = Server.MapPath(path);
                 if (Directory.Exists(dir))

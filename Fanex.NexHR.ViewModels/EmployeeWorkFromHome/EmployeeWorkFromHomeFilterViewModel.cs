@@ -4,8 +4,9 @@
 
     public class EmployeeWorkFromHomeFilterViewModel
     {
-        public DateTime FromDateFilter { get; set; }
-
-        public DateTime ToDateFilter { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string TeamIds { get; set; }
+        public byte? IsLocal { get; set; }
     }
 }

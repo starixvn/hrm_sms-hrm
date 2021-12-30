@@ -3,8 +3,15 @@ import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import moment from 'moment';
+import axios from 'axios';
+import { parse } from 'qs';
 
-import { floatThead, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import '../../shared/multiselect-tree-view';
+
+import {
+    axiosError, floatThead, confirm, alert,
+    blockUI, unblockUI, initDatepicker, resolveClientUrl
+} from '../../shared/common.functions';
 
 const workFromHomeModule = (function ($) {
     const domElement = {
@@ -16,28 +23,20 @@ const workFromHomeModule = (function ($) {
     };
 
     function getEmployeeWorkFromHome() {
-        $.ajax({
-            type: 'GET',
-            url: resolveClientUrl("EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid?fromDate="
-                + $("#FromDateFilter").val() + "&toDate=" + $("#ToDateFilter").val()),
-            dataType: 'html',
-            beforeSend: function () {
-                blockUI();
-            },
-            success: function (data) {
-                $(domElement.Table).html(data);
-                floatThead('#data');
-                initEditEvent();
-                initDeleteEvent();
-                initToolTip();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                unblockUI();
-            }
-        });
+        blockUI();
+        $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        axios({
+            url: resolveClientUrl('EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid'),
+            method: 'GET',
+            params: parse($('form.filter').serialize()),
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Table).html(response.data);
+            floatThead('#data');
+            initEditEvent();
+            initDeleteEvent();
+            initToolTip();
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     function initToolTip() {
@@ -274,9 +273,17 @@ const workFromHomeModule = (function ($) {
 
     function initModule() {
         initSubmitFiler();
-        getEmployeeWorkFromHome();
         initAddEvent();
         initDatepicker();
+
+        axios(resolveClientUrl('Section/GetOrgChart'))
+            .then(response => {
+                $('#Team').multiSelectTreeView({
+                    data: response.data,
+                    isSelectedAll: true
+                });
+                getEmployeeWorkFromHome();
+            }).catch(axiosError);
     }
 
     return {

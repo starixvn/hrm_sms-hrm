@@ -7,8 +7,12 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.NickName</th>
+            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
             <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
             <th>@Labels.From</th>
             <th>@Labels.To</th>
             <th>@Labels.Remark</th>
@@ -25,29 +29,33 @@
         @if (Model != null && Model.Count > 0)
         {
 
-            foreach (EmployeeWorkFromHome employeeWorkFromHome in Model)
+            foreach (EmployeeWorkFromHome item in Model)
             {
                 <tr>
                     <td>@(index++)</td>
-                    <td>@employeeWorkFromHome.Nickname</td>
-                    <td class="align-left">@employeeWorkFromHome.Fullname</td>
-                    <td>@employeeWorkFromHome.FromDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@employeeWorkFromHome.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td class="align-left">@item.Department</td>
+                    <td class="align-left">@item.Section</td>
+                    <td class="align-left">@item.Team</td>
+                    <td>@item.Code</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td>@item.Nickname</td>
+                    <td>@item.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.ToDate.ToDateMonthYearFormatedDate()</td>
                     <td>
-                        @if (!string.IsNullOrWhiteSpace(employeeWorkFromHome.Remark))
+                        @if (!string.IsNullOrWhiteSpace(item.Remark))
                         {
-                            <span class="fa fa-comment tooltip-tipsy" original-title="@employeeWorkFromHome.Remark"></span>
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@item.Remark"></span>
                         }
                     </td>
-                    <td>@employeeWorkFromHome.Modifier</td>
-                    <td>@employeeWorkFromHome.ModifiedDate.ToFormatedDate()</td>
+                    <td>@item.Modifier</td>
+                    <td>@item.ModifiedDate.ToFormatedDate()</td>
                     @if (ViewBag.IsHost)
                     {
                         <td class="action-column">
-                            <a data-id="@employeeWorkFromHome.EmployeeWorkFromHomeId" class="edit-employeeworkfromhome" title="@Labels.Edit">
+                            <a data-id="@item.EmployeeWorkFromHomeId" class="edit-employeeworkfromhome" title="@Labels.Edit">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
-                            <a data-id="@employeeWorkFromHome.EmployeeWorkFromHomeId" class="delete-employeeworkfromhome" title="@Labels.Delete">
+                            <a data-id="@item.EmployeeWorkFromHomeId" class="delete-employeeworkfromhome" title="@Labels.Delete">
                                 <i class="fa fa-times fa-lg icon-delete"></i>
                             </a>
                         </td>
@@ -57,7 +65,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 9);
+            @RazorHelper.DisplayNoInformation(colspan: 13);
         }
     </tbody>
 </table>

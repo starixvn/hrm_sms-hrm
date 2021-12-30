@@ -6,17 +6,12 @@
     public class GetEmployeeWorkFromHomeCriteria : CriteriaBase
     {
         public DateTime FromDate { get; set; }
-
         public DateTime ToDate { get; set; }
+        public string TeamIds { get; set; }
+        public byte? IsLocal { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeWorkFromHome_Get";
-        }
+        public override string GetSettingKey() => "EmployeeWorkFromHome_Get";
 
-        public override bool IsValid()
-        {
-            return ToDate >= FromDate;
-        }
+        public override bool IsValid() => ToDate >= FromDate;
     }
 }
