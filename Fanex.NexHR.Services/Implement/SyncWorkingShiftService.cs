@@ -37,7 +37,8 @@
             {
                 var rawData = await response.Content.ReadAsStringAsync();
                 var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
-                workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID) && x.LastUpdated > lastModifiedDate).ToList();
+                workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)
+                    && (!x.LastUpdated.HasValue || x.LastUpdated.Value > lastModifiedDate)).ToList();
                 if (workingShifts != null && workingShifts.Any())
                 {
                     foreach (var shift in workingShifts)
@@ -54,8 +55,20 @@
             }
         }
 
-        public static void ProcessData(WorkingShiftSyncModel shift)
+        private static void ProcessData(WorkingShiftSyncModel shift)
         {
+            shift.ShiftCode = shift.ShiftCode?.Trim();
+
+            if (shift.ShiftCode.IndexOf("OFF", StringComparison.OrdinalIgnoreCase) >= 0 && !shift.IsOffDay)
+            {
+                shift.IsOffDay = true;
+            }
+
+            if (shift.ShiftCode.IndexOf("PH", StringComparison.OrdinalIgnoreCase) >= 0 && !shift.IsPublicHoliday)
+            {
+                shift.IsPublicHoliday = true;
+            }
+
             if (shift.ShiftStartTime.HasValue)
             {
                 shift.CheckInTime = shift.ShiftStartTime.Value.ToString("HH:mm");
@@ -74,9 +87,14 @@
                 }
             }
 
+            GetTotalHours(shift);
+        }
+
+        private static void GetTotalHours(WorkingShiftSyncModel shift)
+        {
             if (shift.ShiftStartTime.HasValue && shift.ShiftEndTime.HasValue)
             {
-                if(shift.ShiftStartTime.Value.Date != shift.ShiftEndTime.Value.Date)
+                if (shift.ShiftStartTime.Value.Date != shift.ShiftEndTime.Value.Date)
                 {
                     shift.IsCrossDay = true;
                 }

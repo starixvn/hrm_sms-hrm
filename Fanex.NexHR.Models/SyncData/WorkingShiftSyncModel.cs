@@ -19,16 +19,17 @@
         [XmlIgnore]
         public DateTime? ShiftStartTime { get; set; }
 
-        [XMLName("ShiftStartTime")]
-        public string ShiftStartTimeXml => FormatDateTime(ShiftStartTime);
-
         [XmlIgnore]
         public DateTime? ShiftEndTime { get; set; }
 
-        [XMLName("ShiftEndTime")]
-        public string ShiftEndTimeXml => FormatDateTime(ShiftEndTime);
+        [XmlIgnore]
+        public DateTime? LastUpdated { get; set; }
 
-        public DateTime LastUpdated { get; set; }
+        [XMLName("LastUpdated")]
+        public string LastUpdatedXml => FormatDateTime(LastUpdated);
+
+        public bool IsOffDay { get; set; }
+        public bool IsPublicHoliday { get; set; }
 
         public bool IsInAfterDay { get; set; }
 
@@ -38,9 +39,9 @@
 
         public double TotalHours { get; set; }
 
-        public string CheckInTime { get; set; } = "00:00";
+        public string CheckInTime { get; set; }
 
-        public string CheckOutTime { get; set; } = "00:00";
+        public string CheckOutTime { get; set; }
 
         private static string FormatDateTime(DateTime? date)
             => date.HasValue ? date.Value.ToString(DateTimeFormat) : string.Empty;

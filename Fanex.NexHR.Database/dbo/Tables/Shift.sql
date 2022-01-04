@@ -21,8 +21,8 @@
     [ModifiedBy]        INT             NULL,
     [ModifiedDate]      DATETIME        NULL,
     [IsInBeforeDay] BIT NULL, 
-    [SyncDate] DATETIME NULL, 
-    [SyncModifiedDate] DATETIME NULL, 
+    [OWPModifiedDate] DATETIME NULL, 
+    [OWPSyncDate] DATETIME NULL, 
     CONSTRAINT [PK_Shift] PRIMARY KEY CLUSTERED ([ShiftID] ASC) ON [EmpCommon]
 );
 

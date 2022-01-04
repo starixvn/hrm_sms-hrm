@@ -18,7 +18,8 @@
     [LeaveTypeId2]          INT             NULL,
     [IsPublic]              BIT             CONSTRAINT [DF_EmployeeCalendar_IsPublicDay] DEFAULT ((1)) NULL,
     [IsFixedOffDay] BIT NULL, 
-    [SyncDate] DATETIME NULL, 
+    [OWPModifiedDate] DATETIME NULL, 
+    [OWPSyncDate] DATETIME NULL, 
     CONSTRAINT [PK_EmployeeCalendar] PRIMARY KEY CLUSTERED ([WorkDate] ASC, [EmpId] ASC) ON [EmpAttendance]
 ) ON [EmpAttendance];
 

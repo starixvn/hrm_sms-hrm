@@ -10,8 +10,7 @@
     <ProjectGuid>{3628ed2e-fab1-41c3-a091-6887c1eecbee}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>Fanex.NexHR.Database</RootNamespace>
     <AssemblyName>Fanex.NexHR.Database</AssemblyName>
     <ModelCollation>1033,CI</ModelCollation>
@@ -53,7 +52,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -547,6 +545,8 @@
     <Build Include="dbo\Stored Procedures\HospitalizationLeave_DeleteTransaction.sql" />
     <Build Include="dbo\Stored Procedures\WorkFromHome_MealAllowanceDetailReport.sql" />
     <Build Include="dbo\Stored Procedures\WorkFromHome_MealAllowanceSummaryReport.sql" />
+    <Build Include="dbo\Stored Procedures\Sync_WorkingShift_Import.sql" />
+    <Build Include="dbo\Stored Procedures\Sync_WorkingShift_GetLastModifiedDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
