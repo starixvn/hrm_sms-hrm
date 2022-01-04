@@ -224,7 +224,7 @@ BEGIN
 
 	SELECT @RowIndex = 1
 		,@TotalRows = COUNT(1)
-	FROM #tblWeeklyHasHoliday
+	FROM #tblWeeklyHasHoliday WITH (NOLOCK)
 
 	WHILE @RowIndex <= @TotalRows
 	BEGIN
@@ -250,7 +250,20 @@ BEGIN
 						AND empca.MoveOffToDate IS NOT NULL
 						)
 					OR (
-						(empca.IsOffDay = 1 AND (empca.IsFixedOffDay = 1 OR empca.ShiftId IS NULL OR (empca.ShiftId IS NOT NULL AND empca.IsOvertime = 1)))
+						(
+						empca.IsOffDay = 1
+						AND (
+							empca.IsFixedOffDay = 1
+							OR empca.ShiftId IS NULL
+							OR (
+								empca.ShiftId IS NOT NULL
+								AND (
+									empca.IsOvertime = 1
+									OR DATEPART(DW, empca.WorkDate) IN (1, 7) -- sat, sun
+									)
+								)
+							)
+						)
 						AND NOT EXISTS (
 							SELECT 1
 							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
