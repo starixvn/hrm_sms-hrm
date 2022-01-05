@@ -545,6 +545,8 @@
     <Build Include="dbo\Stored Procedures\HospitalizationLeave_GetTransByEmpId.sql" />
     <Build Include="dbo\Stored Procedures\HospitalizationLeave_DeleteTransactionByRequestId.sql" />
     <Build Include="dbo\Stored Procedures\HospitalizationLeave_DeleteTransaction.sql" />
+    <Build Include="dbo\Stored Procedures\WorkFromHome_MealAllowanceDetailReport.sql" />
+    <Build Include="dbo\Stored Procedures\WorkFromHome_MealAllowanceSummaryReport.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
