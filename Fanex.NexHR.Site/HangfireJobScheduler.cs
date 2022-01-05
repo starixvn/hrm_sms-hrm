@@ -9,7 +9,9 @@
 
     public static class HangfireJobScheduler
     {
+#pragma warning disable S1541 // Methods and properties should not be too complex
         public static void ScheduleRecurringJobs()
+#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             IBackgroundJobService backgroundJob = DependencyResolver.Current.GetService<BackgroundJobService>();
 
@@ -68,6 +70,7 @@
                 RecurringJob.AddOrUpdate("UpdateAnnualLeaveBalance",
                     () => backgroundJob.UpdateAnnualLeaveBalance(), "05 00 1 9 *", TimeZoneInfo.Local); // run once a year at 00:05AM of 1 September
             }
+
             if (ConfigSettings.EnableSyncWorkingShift)
             {
                 RecurringJob.AddOrUpdate("SyncWorkingShift",
