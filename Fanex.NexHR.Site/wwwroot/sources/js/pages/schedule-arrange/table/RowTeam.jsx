@@ -29,9 +29,15 @@ export default class RowTeam extends PureComponent {
         this.props.onChangePublics(teamId, event.target.checked);
     };
 
+    handleSelectEmployeeOfTeam = event => {
+        const { teamId } = this.props.data;
+        this.props.onSelectEmployeeOfTeam(teamId, null, event.target.checked);
+    };
+
     render() {
         const { isHost, draggableProvided, isDragging, shiftOptions } = this.props;
-        const { teamId, name, isPublic, members } = this.props.data;
+        const { teamId, name, isPublic, isSelected, members } = this.props.data;
+        const enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
         return (
             <div className={`${isDragging ? 'dragging' : ''}`}
@@ -50,12 +56,25 @@ export default class RowTeam extends PureComponent {
                             />
                         }
                     </div>
-                    <div className="publish">
-                        <div className="checkbox">
-                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-publish${teamId}`}
-                                checked={isPublic} disabled={!isHost} onChange={this.handleChangePublic}
-                            />
-                            <label htmlFor={`ckb-publish${teamId}`}> Publish</label>
+                    <div className="right-container">
+                        {
+                            isHost && enableSyncWorkingShift &&
+                            <div className="cell-syncdata">
+                                <div className="checkbox">
+                                    <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata${teamId}`}
+                                        checked={isSelected} onChange={this.handleSelectEmployeeOfTeam}
+                                    />
+                                    <label htmlFor={`ckb-syncdata${teamId}`} />
+                                </div>
+                            </div>
+                        }
+                        <div className="cell-public">
+                            <div className="checkbox">
+                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-public${teamId}`}
+                                    checked={isPublic} disabled={!isHost} onChange={this.handleChangePublic}
+                                />
+                                <label htmlFor={`ckb-public${teamId}`}> Publish</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -70,6 +89,7 @@ export default class RowTeam extends PureComponent {
                     onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                     onUpdateRemark={this.props.onUpdateRemark}
                     onChangeOrder={this.props.onChangeOrder}
+                    onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
                 />
             </div>
         );

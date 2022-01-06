@@ -10,6 +10,7 @@
         public string Code { get; set; }
         public string Name { get; set; }
         public bool IsPublic => !Members.Any(x => !x.IsPublic);
+        public bool IsSelected => !Members.Any(x => !x.IsSelected);
 
         public IEnumerable<WeeklySchedule> Members { get; set; } = new List<WeeklySchedule>();
     }

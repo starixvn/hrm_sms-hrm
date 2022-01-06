@@ -547,6 +547,7 @@
     <Build Include="dbo\Stored Procedures\WorkFromHome_MealAllowanceSummaryReport.sql" />
     <Build Include="dbo\Stored Procedures\Sync_WorkingShift_Import.sql" />
     <Build Include="dbo\Stored Procedures\Sync_WorkingShift_GetLastModifiedDate.sql" />
+    <Build Include="dbo\Stored Procedures\ScheduleArrangement_SyncWorkingShift.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

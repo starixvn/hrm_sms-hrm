@@ -17,6 +17,7 @@ export default class THead extends PureComponent {
     render() {
         const { isHost, fromDate, toDate } = this.props;
         const isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
+        const enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
         return (
             <Fragment>
@@ -69,6 +70,14 @@ export default class THead extends PureComponent {
                                 </div>
                             );
                         })
+                    }
+                    {
+                        isHost && enableSyncWorkingShift &&
+                        <div className="table-cell cell-syncdata">
+                            <span className="fa fa-refresh" title="Sync data from OWP"
+                                onClick={this.props.onSyncData}
+                            />
+                        </div>
                     }
                     <div className="table-cell cell-modifier">Modified by</div>
                 </div>

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -10,6 +11,7 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.ScheduleArrange;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Services;
@@ -20,16 +22,19 @@
         private const string DateFormat = "dd-MMM-yyyy";
         private readonly IRoleService roleService;
         private readonly IScheduleArrangeService scheduleArrangeService;
+        private readonly ISyncWorkingShiftService syncWorkingShiftService;
         private readonly IExportExcelScheduleService exportExcelService;
 
         public ScheduleArrangeController(
             ISessionService sessionService,
             IRoleService roleService,
             IScheduleArrangeService scheduleArrangeService,
+            ISyncWorkingShiftService syncWorkingShiftService,
             IExportExcelScheduleService exportExcelService) : base(sessionService)
         {
             this.roleService = roleService;
             this.scheduleArrangeService = scheduleArrangeService;
+            this.syncWorkingShiftService = syncWorkingShiftService;
             this.exportExcelService = exportExcelService;
         }
 
@@ -39,7 +44,7 @@
         {
             ViewBag.HasPermissionToViewHoliday = sessionService.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
             ViewBag.HasPermissionToViewShift = sessionService.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
-
+            ViewBag.EnableSyncWorkingShift = ConfigSettings.EnableManualSyncWorkingShift;
             ViewBag.IsSystemAdmin = roleService.GetRolesByUserId(sessionService.Employee.Id)
                 .Any(r => r.RoleId == (int)RoleSystem.HR || r.RoleId == (int)RoleSystem.SystemAdmin);
             return View();
@@ -94,6 +99,22 @@
                 toDate,
                 weeklySchedules,
                 defaultShifts);
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
+        public async Task<ActionResult> SyncWorkingShift(DateTime fromDate, DateTime toDate, string employeeIds)
+        {
+            var command = new SyncWorkingShiftCommand
+            {
+                ActorId = sessionService.Employee.Id,
+                FromDate = fromDate,
+                ToDate = toDate,
+                EmployeeIds = employeeIds
+            };
+            CommandResult commandResult = await syncWorkingShiftService.SyncWorkingShiftAsync(command);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

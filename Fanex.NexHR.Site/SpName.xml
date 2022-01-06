@@ -283,6 +283,7 @@
         <Setting Key="ScheduleArrangement_UpdateDisplayOrder" SpName="ScheduleArrangement_UpdateDisplayOrder" DbName="nexhrx" Plain="0" />
         <Setting Key="ScheduleArrangement_UpdateTeamOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="nexhrx" Plain="0" />
         <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="nexhrx" Plain="0" />
+        <Setting Key="ScheduleArrangement_SyncWorkingShift" SpName="ScheduleArrangement_SyncWorkingShift" DbName="nexhrx" Plain="0" />
     </Function>
     <Function Name="Background Job">
         <Setting Key="TimeRecord_ImportData" SpName="TimeRecord_ImportData" DbName="nexhrx" Plain="0" />

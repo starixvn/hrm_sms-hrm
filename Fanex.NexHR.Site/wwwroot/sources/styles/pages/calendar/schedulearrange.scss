@@ -50,6 +50,10 @@ input[type="text"] {
 .table-wrapper {
     width: 1330px;
     margin-top: 10px;
+
+    &.has-syncdata {
+        width: 1370px;
+    }
 }
 
 .team-content.iframe {
@@ -80,6 +84,16 @@ input[type="text"] {
     .cell-shift {
         width: 120px;
         min-width: 120px;
+    }
+
+    .cell-syncdata {
+        width: 40px;
+        min-width: 40px;
+        text-align: center;
+
+        .fa-refresh {
+            cursor: pointer;
+        }
     }
 
     .cell-modifier {
@@ -223,14 +237,31 @@ input[type="text"] {
                 }
             }
 
-            .publish {
-                padding: 7px;
+            .right-container {
+                display: flex;
+                align-items: center;
 
-                .checkbox-custom {
-                    margin-left: 20px;
+                .cell-syncdata {
+                    width: 41px;
+                    border-left: 1px solid #d2d2d2;
+                    border-right: 1px solid #d2d2d2;
+                    padding: 13px 8px;
+                }
 
-                    & + label {
-                        padding-left: 18px;
+                .cell-public {
+                    width: 138px;
+                    padding: 8px;
+
+                    .checkbox {
+                        text-align: right;
+
+                        .checkbox-custom {
+                            margin-left: 20px;
+
+                            & + label {
+                                padding-left: 18px;
+                            }
+                        }
                     }
                 }
             }

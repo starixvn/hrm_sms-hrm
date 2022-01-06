@@ -38,10 +38,11 @@ export default class Table extends PureComponent {
 
     render() {
         const { isHost, fromDate, toDate, shiftOptions, data } = this.props;
+        const enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
         return (
             <Fragment>
-                <div className="table-wrapper">
+                <div className={`table-wrapper ${isHost && enableSyncWorkingShift ? 'has-syncdata' : ''}`}>
                     <div className={`table-header ${this.state.isFixedHeader ? 'fixed' : ''}`}>
                         <THead fromDate={fromDate} toDate={toDate} isHost={isHost}
                             onSave={this.props.onSave}
@@ -53,6 +54,7 @@ export default class Table extends PureComponent {
                             onFixedOffDay={this.props.onFixedOffDay}
                             onPrevious={this.props.onPrevious}
                             onNext={this.props.onNext}
+                            onSyncData={this.props.onSyncData}
                         />
                     </div>
                     <div className="table-body">
@@ -77,6 +79,7 @@ export default class Table extends PureComponent {
                                     onUpdateRemark={this.props.onUpdateRemark}
                                     onChangeTeamOrder={this.props.onChangeTeamOrder}
                                     onChangeOrder={this.props.onChangeOrder}
+                                    onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
                                 />
                             </DragDropContext>
                         }

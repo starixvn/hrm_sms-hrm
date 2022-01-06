@@ -22,8 +22,15 @@ export default class Row extends PureComponent {
         this.props.onChangeShift(teamId, employeeId, name, shift);
     };
 
+    handleSelectEmployee = event => {
+        const { teamId, data } = this.props;
+        const employeeId = data.employeeId;
+        this.props.onSelectEmployeeOfTeam(teamId, employeeId, event.target.checked);
+    };
+
     render() {
         const { isHost, shiftOptions, teamId, data, showRemarkPopover, draggableProvided, isDragging } = this.props;
+        const enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
         return (
             <div className={`table-row ${isDragging ? 'dragging' : ''}`}
@@ -92,6 +99,17 @@ export default class Row extends PureComponent {
                     onChangeShift={this.handleChangeShift}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
                 />
+                {
+                    isHost && enableSyncWorkingShift &&
+                    <div className="table-cell cell-syncdata">
+                        <div className="checkbox">
+                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata${data.employeeId}`}
+                                checked={data.isSelected} onChange={this.handleSelectEmployee}
+                            />
+                            <label htmlFor={`ckb-syncdata${data.employeeId}`} />
+                        </div>
+                    </div>
+                }
                 <div className="table-cell cell-modifier">
                     {
                         data.modifier &&

@@ -14,6 +14,7 @@ import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
+import SweetModalDialog from '../../shared/components/SweetModalDialog';
 import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
@@ -37,8 +38,10 @@ export default class App extends Component {
             },
             schedules: [],
             employeeOptions: [],
+            selectedEmployeeIds: [],
             showShiftMultipleModal: false,
             showConfirmRefreshDataModal: false,
+            showConfirmSyncDataModalDialog: false,
             showRemarkPopover: false,
             editWeeklyDefaultShift: {
                 show: false,
@@ -1040,6 +1043,86 @@ export default class App extends Component {
         this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
     }
 
+    handleSelectEmployeeOfTeam = (teamId, employeeId, isSelected) => {
+        let schedules = [...this.state.schedules];
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        let members = [...schedules[gindex].members];
+
+        if (employeeId !== null) {
+            const eindex = members.findIndex(item => item.employeeId === employeeId);
+            members[eindex] = { ...members[eindex], isSelected };
+            schedules[gindex] = { ...schedules[gindex], isSelected: members.findIndex(item => !item.isSelected) < 0 };
+        } else {
+            schedules[gindex] = { ...schedules[gindex], isSelected };
+            const totalItems = members.length;
+            for (let eindex = 0; eindex < totalItems; eindex++) {
+                members[eindex] = { ...members[eindex], isSelected };
+            }
+        }
+
+        schedules[gindex] = { ...schedules[gindex], members };
+        this.setState({ schedules });
+    };
+
+    handleSyncData = () => {
+        const employeeIds = [];
+        const schedules = this.state.schedules,
+            totalItems = schedules.length;
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+            const totalMembers = schedules[gindex].members.length;
+            for (let eindex = 0; eindex < totalMembers; eindex++) {
+                if (schedules[gindex].members[eindex].isSelected) {
+                    employeeIds.push(schedules[gindex].members[eindex].employeeId);
+                }
+            }
+        }
+
+        if (employeeIds.length > 0) {
+            this.setState({
+                selectedEmployeeIds: employeeIds,
+                showConfirmSyncDataModalDialog: true
+            });
+        } else {
+            toast.warn('Please select at least a employee to continue!');
+        }
+    };
+
+    handleCloseConfirmSyncDataModalDialog = () => {
+        this.setState({
+            selectedEmployeeIds: [],
+            showConfirmSyncDataModalDialog: false
+        });
+    };
+
+    handleSubmitSyncData = () => {
+        blockUI();
+        const { fromDate, toDate } = this.selectedWeek;
+
+        axios({
+            url: resolveClientUrl('ScheduleArrange/SyncWorkingShift'),
+            method: 'POST',
+            data: stringify({ fromDate, toDate, employeeIds: this.state.selectedEmployeeIds.join(',') }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            const data = response.data;
+            if (data.isSuccessful) {
+                toast.success('Synced successfully!');
+
+                this.setState({
+                    selectedEmployeeIds: [],
+                    showConfirmSyncDataModalDialog: false
+                });
+
+                this.getWeeklyShedules(this.state.filter);
+            } else {
+                toast.error(data.message);
+            }
+        }).catch(axiosError).then(() => unblockUI());
+    };
+
     render() {
         const {
             isHost,
@@ -1047,7 +1130,8 @@ export default class App extends Component {
             showShiftMultipleModal,
             showConfirmRefreshDataModal,
             showRemarkPopover,
-            editWeeklyDefaultShift
+            editWeeklyDefaultShift,
+            showConfirmSyncDataModalDialog
         } = this.state;
 
         return (
@@ -1087,6 +1171,8 @@ export default class App extends Component {
                     onDragEnd={this.handleDragEnd}
                     onChangeTeamOrder={this.handleChangeTeamOrder}
                     onChangeOrder={this.handleChangeOrder}
+                    onSelectEmployeeOfTeam={this.handleSelectEmployeeOfTeam}
+                    onSyncData={this.handleSyncData}
                     onSave={this.handleSave}
                 />
                 {
@@ -1113,6 +1199,14 @@ export default class App extends Component {
                         shiftOptions={this.shiftOptions}
                         onHide={this.handleCloseWeeklyDefaultShiftModal}
                         onSubmit={this.handleChangeWeeklyDefaultShift}
+                    />
+                }
+                {
+                    showConfirmSyncDataModalDialog &&
+                    <SweetModalDialog show={showConfirmSyncDataModalDialog}
+                        contents={<p>Are you sure you want to sync data from OWP?</p>}
+                        onHide={this.handleCloseConfirmSyncDataModalDialog}
+                        onSubmit={this.handleSubmitSyncData}
                     />
                 }
             </Fragment>

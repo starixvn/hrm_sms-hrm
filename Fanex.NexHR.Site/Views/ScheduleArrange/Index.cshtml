@@ -5,6 +5,7 @@
     var isSystemAdmin = (bool)ViewBag.IsSystemAdmin;
     var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
     var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
+    var enableSyncWorkingShift = (bool)ViewBag.EnableSyncWorkingShift;
     int siteId = ConfigSettings.SiteId;
 }
 @section css{
@@ -37,4 +38,5 @@
 
 @Html.Hidden("SiteId", siteId)
 <input type="checkbox" id="IsSystemAdmin" hidden @(isSystemAdmin ? "checked" : string.Empty) />
+<input type="checkbox" id="EnableSyncWorkingShift" hidden @(enableSyncWorkingShift ? "checked" : string.Empty) />
 <div id="schedule-wrapper"></div>

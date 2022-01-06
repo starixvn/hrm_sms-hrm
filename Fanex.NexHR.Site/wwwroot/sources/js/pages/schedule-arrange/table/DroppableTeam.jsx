@@ -30,8 +30,9 @@ export default class DroppableTeam extends PureComponent {
                                                         onChangeShowRemarkPopover={this.props.onChangeShowRemarkPopover}
                                                         onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                                         onUpdateRemark={this.props.onUpdateRemark}
-                                                        onChangeTeamOrder={this.props.onChangeteamOrder}
+                                                        onChangeTeamOrder={this.props.onChangeTeamOrder}
                                                         onChangeOrder={this.props.onChangeOrder}
+                                                        onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
                                                     />
                                                     {teamProvided.placeholder}
                                                 </div>

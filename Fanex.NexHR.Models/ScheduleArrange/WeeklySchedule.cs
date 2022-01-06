@@ -35,6 +35,8 @@
             && SundaySchedule != null && SundaySchedule.IsPublic;
 #pragma warning restore S1067 // Expressions should not be too complex
 
+        public bool IsSelected { get; set; }
+
         public DailySchedule MondaySchedule { get; set; }
         public DailySchedule TuesdaySchedule { get; set; }
         public DailySchedule WednesdaySchedule { get; set; }

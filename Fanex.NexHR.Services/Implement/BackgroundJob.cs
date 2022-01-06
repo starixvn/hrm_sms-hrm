@@ -5,7 +5,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
-    using Fanex.NexHR.Services.Implement;
 
     public class BackgroundJobService : IBackgroundJobService
     {

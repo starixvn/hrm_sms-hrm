@@ -27,5 +27,7 @@
             => Converter.ToBool(ConfigurationManager.AppSettings["EnableUpdateAnnualLeaveBalance"]);
         public static bool EnableSyncWorkingShift
             => Converter.ToBool(ConfigurationManager.AppSettings["EnableSyncWorkingShift"]);
+        public static bool EnableManualSyncWorkingShift
+            => Converter.ToBool(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Services.Implement
+﻿namespace Fanex.NexHR.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,10 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
+    using Fanex.NexHR.Criteria.ScheduleArrange;
     using Fanex.NexHR.Criteria.SyncData;
     using Fanex.NexHR.Models.SyncData;
     using Newtonsoft.Json;
@@ -15,6 +17,8 @@
     public interface ISyncWorkingShiftService
     {
         Task SyncWorkingShiftAsync();
+
+        Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
     }
 
     public class SyncWorkingShiftService : ISyncWorkingShiftService
@@ -55,19 +59,37 @@
             }
         }
 
+        public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
+        {
+            var commandResult = new CommandResult { Code = 0, Message = string.Empty };
+            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{command.FromDate:yyyy-MM-dd}/{command.ToDate:yyyy-MM-dd}");
+            var response = await _httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var rawData = await response.Content.ReadAsStringAsync();
+                var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
+                workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)).ToList();
+                if (workingShifts != null && workingShifts.Any())
+                {
+                    foreach (var shift in workingShifts)
+                    {
+                        ProcessData(shift);
+                    }
+
+                    command.WorkingShiftXml = workingShifts.ToXML().ToString();
+                    commandResult = baseService.ExecuteNonQuery(command);
+                }
+            }
+
+            return commandResult;
+        }
+
         private static void ProcessData(WorkingShiftSyncModel shift)
         {
             shift.ShiftCode = shift.ShiftCode?.Trim();
 
-            if (shift.ShiftCode.IndexOf("OFF", StringComparison.OrdinalIgnoreCase) >= 0 && !shift.IsOffDay)
-            {
-                shift.IsOffDay = true;
-            }
-
-            if (shift.ShiftCode.IndexOf("PH", StringComparison.OrdinalIgnoreCase) >= 0 && !shift.IsPublicHoliday)
-            {
-                shift.IsPublicHoliday = true;
-            }
+            CheckOffDay(shift);
+            CheckPublicHoliday(shift);
 
             if (shift.ShiftStartTime.HasValue)
             {
@@ -88,6 +110,25 @@
             }
 
             GetTotalHours(shift);
+        }
+
+        private static void CheckOffDay(WorkingShiftSyncModel shift)
+        {
+            if (shift.ShiftCode?.IndexOf("OFF", StringComparison.OrdinalIgnoreCase) >= 0
+                && !shift.IsOffDay)
+            {
+                shift.IsOffDay = true;
+            }
+        }
+
+        private static void CheckPublicHoliday(WorkingShiftSyncModel shift)
+        {
+            if (!string.IsNullOrWhiteSpace(shift.ShiftCode)
+                && shift.ShiftCode.Equals("PH", StringComparison.OrdinalIgnoreCase)
+                && !shift.IsPublicHoliday)
+            {
+                shift.IsPublicHoliday = true;
+            }
         }
 
         private static void GetTotalHours(WorkingShiftSyncModel shift)

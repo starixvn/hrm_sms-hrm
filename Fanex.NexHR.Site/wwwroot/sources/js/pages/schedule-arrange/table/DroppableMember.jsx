@@ -31,6 +31,7 @@ export default class DroppableMember extends PureComponent {
                                                         onShowWeeklyDefaultShift={this.props.onShowWeeklyDefaultShift}
                                                         onUpdateRemark={this.props.onUpdateRemark}
                                                         onChangeOrder={this.props.onChangeOrder}
+                                                        onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
                                                     />
                                                     {memberProvided.placeholder}
                                                 </div>
