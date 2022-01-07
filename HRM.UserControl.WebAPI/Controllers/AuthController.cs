@@ -4,8 +4,6 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Criteria.User;
-    using HRM.UserControl.API.Core.Services;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
@@ -14,6 +12,8 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
+    using HRM.UserControl.WebAPI.Services;
+    using HRM.UserControl.WebAPI.Criteria.User;
 
     public class AuthController : Controller
     {

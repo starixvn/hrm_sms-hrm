@@ -38,10 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRM.UserControl.API.Core\HRM.UserControl.API.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\ViewResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

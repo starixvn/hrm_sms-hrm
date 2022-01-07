@@ -1,14 +1,14 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Criteria.Function;
-    using HRM.UserControl.API.Core.Criteria.MenuItem;
-    using HRM.UserControl.API.Core.Criteria.User;
-    using HRM.UserControl.API.Core.Services;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
     using HRM.UserControl.Models.User;
+    using HRM.UserControl.WebAPI.Criteria.Function;
+    using HRM.UserControl.WebAPI.Criteria.MenuItem;
+    using HRM.UserControl.WebAPI.Criteria.User;
+    using HRM.UserControl.WebAPI.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

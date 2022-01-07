@@ -4,13 +4,6 @@
     using HRM.UserControl.Client.Core.Client;
     using HRM.UserControl.Client.Core.Models.Auth;
 
-    public interface ISecurityService
-    {
-        Task<LoginResult> LoginAsync(LoginParam loginParam);
-
-        LoginResult Login(LoginParam loginParam);
-    }
-
     public class SecurityService : ISecurityService
     {
         private readonly SecurityClient securityClient;

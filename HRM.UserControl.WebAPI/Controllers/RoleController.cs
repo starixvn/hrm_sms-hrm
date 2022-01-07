@@ -1,10 +1,10 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
     using System.Threading.Tasks;
-    using HRM.UserControl.API.Core.Criteria.Role;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models.Role;
+    using HRM.UserControl.WebAPI.Criteria.Role;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

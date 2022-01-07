@@ -35,13 +35,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRM.UserControl.API.Core\HRM.UserControl.API.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Fanex.NexHR.Services\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HRM.UserControl.Core\HRM.UserControl.Core.csproj" />
+    <ProjectReference Include="..\HRM.UserControl.Models\HRM.UserControl.Models.csproj" />
   </ItemGroup>
 
 </Project>

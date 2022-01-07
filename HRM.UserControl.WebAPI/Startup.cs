@@ -5,10 +5,10 @@ namespace HRM.UserControl.WebAPI
     using System.Text;
     using Fanex.Data;
     using Fanex.Data.SqlServer;
-    using HRM.UserControl.API.Core;
-    using HRM.UserControl.API.Core.Models;
     using HRM.UserControl.Core.Extensions;
     using HRM.UserControl.WebAPI.Middlewares;
+    using HRM.UserControl.WebAPI.Models;
+    using HRM.UserControl.WebAPI.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -70,10 +70,12 @@ namespace HRM.UserControl.WebAPI
                 };
             });
 
-            services.InjectCoreDI();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.RegisterDI();
+            services.InjectCoreDI();
+            services.AddSingleton<IJwtManagerService, JwtManagerService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<ISiteService, SiteService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

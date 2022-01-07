@@ -6,17 +6,6 @@
     using System.Security.Cryptography;
     using System.Text;
 
-    public interface ICryptoService
-    {
-        string GenerateRijndaelKeyIV();
-
-        string Encrypt(string plainText, string rijndaelKey, string rijndaelIV);
-
-        string Decrypt(string cipherText, string rijndaelKey, string rijndaelIV);
-
-        bool CompareStringToHash(string plainText, string encrypt, int saltSize = 8);
-    }
-
     public class CryptoService : ICryptoService
     {
         private const byte FeedbackSize = 128;
