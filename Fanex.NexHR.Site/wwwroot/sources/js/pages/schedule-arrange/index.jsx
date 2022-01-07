@@ -15,7 +15,6 @@ import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
-import ConfirmRefreshDataModal from './ConfirmRefreshDataModal';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
@@ -1184,13 +1183,6 @@ export default class App extends Component {
                     />
                 }
                 {
-                    showConfirmRefreshDataModal &&
-                    <ConfirmRefreshDataModal show={showConfirmRefreshDataModal}
-                        onHide={this.handleCloseConfirmRefreshDataModal}
-                        onSubmit={this.handleSubmitRefreshData}
-                    />
-                }
-                {
                     editWeeklyDefaultShift.show &&
                     <WeeklyDefaultShiftModal show={editWeeklyDefaultShift.show}
                         isHost={isHost} nickname={editWeeklyDefaultShift.nickname}
@@ -1199,6 +1191,14 @@ export default class App extends Component {
                         shiftOptions={this.shiftOptions}
                         onHide={this.handleCloseWeeklyDefaultShiftModal}
                         onSubmit={this.handleChangeWeeklyDefaultShift}
+                    />
+                }
+                {
+                    showConfirmRefreshDataModal &&
+                    <SweetModalDialog show={showConfirmRefreshDataModal}
+                        contents={<p>It looks like you have been editing something. If you refresh before saving, your changes will be lost.</p>}
+                        onHide={this.handleCloseConfirmRefreshDataModal}
+                        onSubmit={this.handleSubmitRefreshData}
                     />
                 }
                 {
