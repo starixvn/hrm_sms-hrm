@@ -53,6 +53,15 @@
         }
 
         [HttpGet]
+        [Route("api/user/getAll")]
+        public async Task<IActionResult> GetBySiteId(GetUserBySiteIdCriteria criteria)
+        {
+            criteria.SiteId = SiteId;
+            var users = await baseService.GetDataAsync<User>(criteria);
+            return Ok(users);
+        }
+
+        [HttpGet]
         [Route("api/user/getById/{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {

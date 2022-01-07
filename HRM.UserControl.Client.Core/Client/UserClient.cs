@@ -15,6 +15,10 @@
 
         Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId);
 
+        IList<User> GetAll(string keyword = null, byte? statusId = null);
+
+        Task<IList<User>> GetAllAsync(string keyword = null, byte? statusId = null);
+
         User GetById(int id);
 
         Task<User> GetByIdAsync(int id);
@@ -57,6 +61,12 @@
 
         public async Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId)
             => await GetAsync<IList<FunctionPermission>>(string.Format(RelativePaths.GetFunctionPermissionPath, siteId, userId));
+
+        public IList<User> GetAll(string keyword = null, byte? statusId = null)
+            => Get<IList<User>>(string.Format(RelativePaths.GetAllUserPath, keyword, statusId));
+
+        public async Task<IList<User>> GetAllAsync(string keyword = null, byte? statusId = null)
+            => await GetAsync<IList<User>>(string.Format(RelativePaths.GetAllUserPath, keyword, statusId));
 
         public User GetById(int id)
             => Get<User>(string.Format(RelativePaths.GetUserByIdPath, id));
@@ -194,6 +204,7 @@
         {
             public const string GetMenuItemPath = "api/user/getMenuItem";
             public const string GetFunctionPermissionPath = "api/user/getFunctionPermission?siteId={0}&userId={1}";
+            public const string GetAllUserPath = "api/user/getAll?keyword={0}&statusId={1}";
             public const string GetUserByIdPath = "api/user/getById/{0}";
             public const string GetUserByCodePath = "api/user/getByCode?code={0}";
             public const string CreateUserPath = "api/user/create";

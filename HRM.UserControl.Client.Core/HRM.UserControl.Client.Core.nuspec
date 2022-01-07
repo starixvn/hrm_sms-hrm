@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>HRM.UserControl.Client.Core</id>
+    <version>1.0.1</version>
+    <authors>tim.trinh</authors>
+    <description>HRM.UserControl.Client.Core</description>
+    <copyright>2021</copyright>
+    <tags>HRM</tags>
+  </metadata>
+</package>
