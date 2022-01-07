@@ -63,7 +63,7 @@
                 var rijndaelIV = keyiv[1];
                 var result = userService.ResetPassword(new UpdatePasswordParam
                 {
-                    UserId = model.UserId ?? 0,
+                    UserId = model.UserId,
                     Password = cryptoService.Encrypt("123456", rijndaelKey, rijndaelIV),
                     Token = token
                 });

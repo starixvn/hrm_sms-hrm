@@ -254,13 +254,16 @@
             Employee employee = employeeService.GetEmployeeById(id);
             if (employee != null)
             {
-                User user = userService.GetByCode(employee.Code);
                 if ((userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
                     && (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
                 {
                     return RedirectToAction("AccessDenied", "Error");
                 }
 
+                IList<User> users = userService.GetAll(employee.Code);
+                User user = users.FirstOrDefault(x => x.Code.Equals(employee.Code)
+                    && x.Nickname.Equals(employee.NickName)
+                    && x.FullName.Equals(employee.FullName));
                 employee.UserId = user != null ? user.UserId : 0;
                 employee.Coutries = commonDataService.GetAllCountry();
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
