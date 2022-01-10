@@ -39,12 +39,6 @@
         public async Task<User> GetByIdAsync(int id)
             => await userClient.GetByIdAsync(id);
 
-        public User GetByCode(string code)
-            => userClient.GetByCode(code);
-
-        public async Task<User> GetByCodeAsync(string code)
-            => await userClient.GetByCodeAsync(code);
-
         public CommandResult Create(CreateUserParam param)
             => userClient.Create(param);
 
@@ -56,6 +50,12 @@
 
         public async Task<CommandResult> UpdateInfoAsync(UpdateUserInfoParam param)
             => await userClient.UpdateInfoAsync(param);
+
+        public CommandResult AssignRole(AssignRoleParam param)
+            => userClient.AssignRole(param);
+
+        public async Task<CommandResult> AssignRoleAsync(AssignRoleParam param)
+            => await userClient.AssignRoleAsync(param);
 
         public CommandResult UpdatePassword(UpdatePasswordParam param)
             => userClient.UpdatePassword(param);

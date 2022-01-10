@@ -23,10 +23,6 @@
 
         Task<User> GetByIdAsync(int id);
 
-        User GetByCode(string code);
-
-        Task<User> GetByCodeAsync(string code);
-
         CommandResult Create(CreateUserParam param);
 
         Task<CommandResult> CreateAsync(CreateUserParam param);
@@ -34,6 +30,10 @@
         CommandResult UpdateInfo(UpdateUserInfoParam param);
 
         Task<CommandResult> UpdateInfoAsync(UpdateUserInfoParam param);
+
+        CommandResult AssignRole(AssignRoleParam param);
+
+        Task<CommandResult> AssignRoleAsync(AssignRoleParam param);
 
         CommandResult UpdatePassword(UpdatePasswordParam param);
 

@@ -3,12 +3,12 @@
     <Function Name="User">
         <Setting Key="API_User_GetByUsername" SpName="API_User_GetByUsername" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_GetById" SpName="API_User_GetById" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="API_User_GetByCode" SpName="API_User_GetByCode" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_GetBySiteId" SpName="API_User_GetBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_Insert" SpName="API_User_Insert" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_Update" SpName="API_User_Update" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_Delete" SpName="API_User_Delete" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_UpdatePassword" SpName="API_User_UpdatePassword" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_AssignRole" SpName="API_User_AssignRole" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">

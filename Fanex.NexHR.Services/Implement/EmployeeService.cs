@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Security;
     using Fanex.NexHR.Core.Services;
@@ -20,6 +19,7 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
 
     public class EmployeeService : IEmployeeService
@@ -59,7 +59,11 @@
             Employee employee = employeeRepository.GetEmployeeById(criteria);
             if (employee != null)
             {
-                var user = userService.GetByCode(employee.Code);
+                IList<User> users = userService.GetAll(employee.Code);
+                User user = users.FirstOrDefault(x => x.Code.Equals(employee.Code)
+                    && x.Nickname.Equals(employee.NickName)
+                    && x.FullName.Equals(employee.FullName));
+                employee.UserId = user != null ? user.UserId : 0;
                 employee.Roles = roleService.GetByUserId(user != null ? user.UserId : 0).ToList();
             }
 

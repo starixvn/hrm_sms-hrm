@@ -5,14 +5,7 @@
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Models.Auth;
 
-    internal interface ISecurityClient
-    {
-        Task<LoginResult> LoginAsync(LoginParam loginParam);
-
-        LoginResult Login(LoginParam loginParam);
-    }
-
-    internal class SecurityClient : BaseHttpClient, ISecurityClient
+    public class SecurityClient : BaseHttpClient, ISecurityClient
     {
         public LoginResult Login(LoginParam loginParam)
         {

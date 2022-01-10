@@ -69,18 +69,6 @@
             return Ok(user);
         }
 
-        [HttpGet]
-        [Route("api/user/getByCode")]
-        public async Task<IActionResult> GetByCode(string code)
-        {
-            var criteria = new GetUserByCodeCriteria
-            {
-                Code = code
-            };
-            var user = await baseService.GetDataEntityAsync<User>(criteria);
-            return Ok(user);
-        }
-
         [HttpPost]
         [Route("api/user/create")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
@@ -99,6 +87,16 @@
         [HttpPost]
         [Route("api/user/update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserInfoCommand command)
+        {
+            command.SiteId = SiteId;
+            command.ModifiedBy = UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Ok(commandResult);
+        }
+
+        [HttpPost]
+        [Route("api/user/assignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] AssignRoleToUserCommand command)
         {
             command.SiteId = SiteId;
             command.ModifiedBy = UserId;

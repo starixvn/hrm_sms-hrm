@@ -5,49 +5,6 @@
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;
 
-    public interface IUserClient
-    {
-        IList<MenuItem> GetMenuItem();
-
-        Task<IList<MenuItem>> GetMenuItemAsync();
-
-        IList<FunctionPermission> GetFunctionPermission(short siteId, int userId);
-
-        Task<IList<FunctionPermission>> GetFunctionPermissionAsync(short siteId, int userId);
-
-        IList<User> GetAll(string keyword = null, byte? statusId = null);
-
-        Task<IList<User>> GetAllAsync(string keyword = null, byte? statusId = null);
-
-        User GetById(int id);
-
-        Task<User> GetByIdAsync(int id);
-
-        User GetByCode(string code);
-
-        Task<User> GetByCodeAsync(string code);
-
-        CommandResult Create(CreateUserParam param);
-
-        Task<CommandResult> CreateAsync(CreateUserParam param);
-
-        CommandResult UpdateInfo(UpdateUserInfoParam param);
-
-        Task<CommandResult> UpdateInfoAsync(UpdateUserInfoParam param);
-
-        CommandResult UpdatePassword(UpdatePasswordParam param);
-
-        Task<CommandResult> UpdatePasswordAsync(UpdatePasswordParam param);
-
-        CommandResult ResetPassword(UpdatePasswordParam param);
-
-        Task<CommandResult> ResetPasswordAsync(UpdatePasswordParam param);
-
-        CommandResult Delete(int userId);
-
-        Task<CommandResult> DeleteAsync(int userId);
-    }
-
     public class UserClient : BaseHttpClient, IUserClient
     {
         public IList<MenuItem> GetMenuItem()
@@ -73,12 +30,6 @@
 
         public async Task<User> GetByIdAsync(int id)
             => await GetAsync<User>(string.Format(RelativePaths.GetUserByIdPath, id));
-
-        public User GetByCode(string code)
-            => Get<User>(string.Format(RelativePaths.GetUserByCodePath, code));
-
-        public async Task<User> GetByCodeAsync(string code)
-            => await GetAsync<User>(string.Format(RelativePaths.GetUserByCodePath, code));
 
         public CommandResult Create(CreateUserParam param)
         {
@@ -117,7 +68,6 @@
                 {"nickname", param.Nickname },
                 {"fullName", param.FullName },
                 {"email", param.Email },
-                {"roleIds", param.RoleIds },
                 {"isActive", param.IsActive }
             };
             return Post<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
@@ -132,10 +82,29 @@
                 {"nickname", param.Nickname },
                 {"fullName", param.FullName },
                 {"email", param.Email },
-                {"roleIds", param.RoleIds },
                 {"isActive", param.IsActive }
             };
             return await PostAsync<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
+        }
+
+        public CommandResult AssignRole(AssignRoleParam param)
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"userId", param.UserId },
+                {"roleIds", param.RoleIds }
+            };
+            return Post<CommandResult>(RelativePaths.AssignRoleToUserPath, data);
+        }
+
+        public async Task<CommandResult> AssignRoleAsync(AssignRoleParam param)
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"userId", param.UserId },
+                {"roleIds", param.RoleIds }
+            };
+            return await PostAsync<CommandResult>(RelativePaths.AssignRoleToUserPath, data);
         }
 
         public CommandResult UpdatePassword(UpdatePasswordParam param)
@@ -206,9 +175,9 @@
             public const string GetFunctionPermissionPath = "api/user/getFunctionPermission?siteId={0}&userId={1}";
             public const string GetAllUserPath = "api/user/getAll?keyword={0}&statusId={1}";
             public const string GetUserByIdPath = "api/user/getById/{0}";
-            public const string GetUserByCodePath = "api/user/getByCode?code={0}";
             public const string CreateUserPath = "api/user/create";
             public const string UpdateUserInfoPath = "api/user/update";
+            public const string AssignRoleToUserPath = "api/user/assignRole";
             public const string UpdatePasswordPath = "api/user/updatePassword";
             public const string ResetPasswordPath = "api/user/resetPassword";
             public const string DeleteUserPath = "api/user/delete";

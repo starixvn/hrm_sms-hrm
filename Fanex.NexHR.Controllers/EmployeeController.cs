@@ -295,26 +295,7 @@
                 CommandResult commandResult = employeeService.Edit(EmployeeSession.Id, param);
                 if (commandResult.IsSuccessful)
                 {
-                    var result = userService.UpdateInfo(new UpdateUserInfoParam
-                    {
-                        UserId = model.UserId,
-                        Code = param.Code,
-                        Nickname = param.Nickname,
-                        FullName = param.FullName,
-                        Email = param.Email,
-                        RoleIds = param.Roles,
-                        IsActive = param.Enabled
-                    });
-                    if (result.IsSuccessful)
-                    {
-                        ViewBag.Updated = true;
-                        UpdateUserSession(model.Id, model.Code);
-                    }
-                    else
-                    {
-                        ViewBag.Updated = false;
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
+                    UpdateUserInfo(model.UserId, param);
                 }
                 else
                 {
@@ -520,6 +501,43 @@
             ViewBag.Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName);
 
             return View("ActivityLog", logs);
+        }
+
+        private void UpdateUserInfo(int userId, EditEmployeeParam param)
+        {
+            var result = userService.UpdateInfo(new UpdateUserInfoParam
+            {
+                UserId = userId,
+                Code = param.Code,
+                Nickname = param.Nickname,
+                FullName = param.FullName,
+                Email = param.Email,
+                IsActive = param.Enabled
+            });
+            if (result.IsSuccessful)
+            {
+                result = userService.AssignRole(new AssignRoleParam
+                {
+                    UserId = userId,
+                    RoleIds = param.Roles
+                });
+
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Updated = true;
+                    UpdateUserSession(param.EmployeeId, param.Code);
+                }
+                else
+                {
+                    ViewBag.Updated = false;
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+            }
+            else
+            {
+                ViewBag.Updated = false;
+                ModelState.AddModelError(string.Empty, result.Message);
+            }
         }
 
         private void UpdateUserSession(int employeeId, string code)
