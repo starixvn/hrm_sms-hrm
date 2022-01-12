@@ -66,7 +66,7 @@
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 LeaveType = model.LeaveType
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetUnpaidLeave(criteria);

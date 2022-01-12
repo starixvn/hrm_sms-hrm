@@ -49,7 +49,7 @@
             var criteria = new InsertJobLevelCriteria
             {
                 Name = name,
-                ModifiedBy = EmployeeSession.Id
+                ModifiedBy = EmployeeSession.EmpId
             };
 
             CommandResult result = jobLevelService.Insert(criteria);
@@ -66,7 +66,7 @@
             {
                 JobLevelId = id,
                 Name = name,
-                ModifiedBy = EmployeeSession.Id
+                ModifiedBy = EmployeeSession.EmpId
             };
             CommandResult result = jobLevelService.Update(criteria);
 
@@ -77,7 +77,7 @@
         [HRMPermission(Policy.Host, FunctionKey.JobLevelManagement)]
         public JsonResult Delete(int id)
         {
-            CommandResult result = jobLevelService.Delete(id, EmployeeSession.Id);
+            CommandResult result = jobLevelService.Delete(id, EmployeeSession.EmpId);
 
             return Json(result);
         }

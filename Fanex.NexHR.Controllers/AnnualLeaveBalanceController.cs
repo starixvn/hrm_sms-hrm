@@ -70,7 +70,7 @@
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Index(LeaveSummaryViewModel model)
         {
-            model.Teams = teamService.GetBySupervisor(EmployeeSession.Id);
+            model.Teams = teamService.GetBySupervisor(EmployeeSession.EmpId);
             model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
             model.IsShowCloseBalance = ConfigSettings.IsShowCloseBalance;
             model.LeaveSumaries = GetAnnualLeaveBalance(model);
@@ -91,7 +91,7 @@
                 DeductDays = model.DeductDays,
                 AffectedFrom = model.AffectedFrom
             };
-            CommandResult commandResult = annualLeaveBalanceService.Adjust(EmployeeSession.Id, annualLeave);
+            CommandResult commandResult = annualLeaveBalanceService.Adjust(EmployeeSession.EmpId, annualLeave);
 
             return Json(commandResult);
         }
@@ -101,7 +101,7 @@
         {
             int lastYear = DateTime.Now.AddYears(-1).Year;
             var date = new DateTime(lastYear, 12, 31);
-            var teams = teamService.GetBySupervisor(EmployeeSession.Id);
+            var teams = teamService.GetBySupervisor(EmployeeSession.EmpId);
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = lastYear,
@@ -114,7 +114,7 @@
             IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
             var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 Description = descriptionReset,
                 AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
                 FromDate = date,
@@ -220,7 +220,7 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = EmployeeSession.Id
+                    CreatedBy = EmployeeSession.EmpId
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -246,7 +246,7 @@
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
                 Role = string.Empty,
-                SupervisorId = EmployeeSession.Id
+                SupervisorId = EmployeeSession.EmpId
             };
             IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
             return leaveSumaries;
@@ -276,7 +276,7 @@
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = EmployeeSession.Id
+                    ModifiedBy = EmployeeSession.EmpId
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -303,7 +303,7 @@
             {
                 LeaveTransId = model.LeaveTransId,
                 ModifiedDate = DateTime.Now,
-                ModifiedBy = EmployeeSession.Id
+                ModifiedBy = EmployeeSession.EmpId
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 

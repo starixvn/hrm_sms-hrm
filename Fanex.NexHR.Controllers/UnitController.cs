@@ -68,7 +68,7 @@
                     Code = model.Code,
                     Name = model.Name,
                     IsActive = model.IsActive,
-                    CreatedBy = EmployeeSession.Id
+                    CreatedBy = EmployeeSession.EmpId
                 };
                 commandResult = unitService.Create(criteria);
             }
@@ -108,7 +108,7 @@
                     Code = model.Code,
                     Name = model.Name,
                     IsActive = model.IsActive,
-                    ModifiedBy = EmployeeSession.Id
+                    ModifiedBy = EmployeeSession.EmpId
                 };
                 commandResult = unitService.Edit(criteria);
             }

@@ -36,7 +36,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = EmployeeSession.Id,
+                ApproverId = EmployeeSession.EmpId,
                 EmployeeName = model.Employee,
                 TeamName = model.TeamName
             };
@@ -57,7 +57,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = EmployeeSession.Id,
+                ApproverId = EmployeeSession.EmpId,
                 EmployeeName = model.Employee,
                 TeamName = model.TeamName
             };

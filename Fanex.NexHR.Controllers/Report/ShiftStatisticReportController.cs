@@ -50,7 +50,7 @@
         {
             var param = new GetShiftStatisticParam
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -71,7 +71,7 @@
         {
             var param = new GetShiftStatisticDetailParam
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
@@ -87,7 +87,7 @@
         {
             var param = new GetShiftStatisticDetailParam
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 WorkDate = model.WorkDate,
                 ShiftId = model.ShiftId,
                 EmployeeId = model.EmployeeId,
@@ -107,7 +107,7 @@
         {
             var param = new GetShiftStatisticParam
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

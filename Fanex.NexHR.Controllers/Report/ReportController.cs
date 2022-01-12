@@ -55,7 +55,7 @@
             var model = new TimesheetViewModel
             {
                 Year = DateTime.Now.Year,
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 IsHavePrivilegeCreateCheckInOutRecord = IsPrivilegeCreateCheckInOut()
             };
 
@@ -88,7 +88,7 @@
         {
             model.CurrentPage = Constants.CurrentPage;
             model.ItemsPerPage = Constants.ItemsPerPage;
-            model.TeamIds = string.Join(",", teamService.GetBySupervisor(EmployeeSession.Id).Select(x => x.Id));
+            model.TeamIds = string.Join(",", teamService.GetBySupervisor(EmployeeSession.EmpId).Select(x => x.Id));
 
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
@@ -103,7 +103,7 @@
             if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
                 && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
             {
-                employeeId = EmployeeSession.Id;
+                employeeId = EmployeeSession.EmpId;
             }
             var criteria = new GetTimeRecordCriteria
             {
@@ -114,7 +114,7 @@
                 IsLocal = model.IsLocal,
                 PageIndex = model.CurrentPage - 1,
                 ItemsPerPage = model.ItemsPerPage,
-                SupervisorId = EmployeeSession.Id
+                SupervisorId = EmployeeSession.EmpId
             };
             IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
@@ -153,7 +153,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 MinTotalLeave = model.MinTotalLeave,
-                SupervisorId = EmployeeSession.Id
+                SupervisorId = EmployeeSession.EmpId
             };
 
             IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
@@ -184,7 +184,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 LeaveTypeId = model.LeaveTypeId,
-                SupervisorId = EmployeeSession.Id
+                SupervisorId = EmployeeSession.EmpId
             };
 
             IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
@@ -220,7 +220,7 @@
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
                 IsLocal = (byte?)model.Category,
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 LeaveType = model.LeaveType
             };
 
@@ -308,7 +308,7 @@
         {
             var criteria = new GetPrivilegeCreateCheckInOutRecordCriteria
             {
-                EmpId = EmployeeSession.Id
+                EmpId = EmployeeSession.EmpId
             };
 
             var isPrivilegeCreateCheckInOut = reportService.GetIsPrivilegeCreateCheckInOut(criteria);

@@ -7,7 +7,7 @@
     {
         HashProvider HashProvider { get; }
 
-        EmployeeSession GetEmployeeByCode(string code);
+        EmployeeSession GetByUserId(int userId);
 
         int Validate(EmployeeSession employee, string password);
     }

@@ -68,8 +68,7 @@
                     userControlSession.MenuItems = userService.GetMenuItem();
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
                     userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, true);
-                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetEmployeeByCode(model.Username));
-                    //HRM session
+                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetByUserId(loginResult.UserId));
                     FormsAuthentication.SetAuthCookie(model.Username, false);
                     return RedirectToAction("Index", "Home");
                 }

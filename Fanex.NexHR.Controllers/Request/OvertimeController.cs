@@ -50,7 +50,7 @@
         public ActionResult EmployeeView(MonthlyOvertimeRequestViewModel model)
         {
             model.Employee = model.Employee ?? EmployeeSession.DisplayName;
-            model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.Id : model.EmployeeId;
+            model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
             model.OvertimeRequests = overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
             return View(model);
@@ -83,7 +83,7 @@
         [HttpPost]
         public CustomJsonResult Edit(EditMonthlyOvertimeRequest model)
         {
-            CommandResult commandResult = overtimeService.EditMonthlyRequest(EmployeeSession.Id, model);
+            CommandResult commandResult = overtimeService.EditMonthlyRequest(EmployeeSession.EmpId, model);
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -92,7 +92,7 @@
         {
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             model.MemberRequests = GetMemberOvertimeRequest(model);
-            ViewBag.CurrentUserId = EmployeeSession.Id;
+            ViewBag.CurrentUserId = EmployeeSession.EmpId;
             ViewBag.IsVerifier = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
             ViewBag.IsApprover = userControlSession.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
@@ -118,7 +118,7 @@
 
             var param = new GetMonthlyOvertimeRequestParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 Month = model.Month,
                 TeamIds = model.TeamIds,
                 EmployeeId = model.EmployeeId,
@@ -133,7 +133,7 @@
         public ActionResult MemberDetails(long id)
         {
             MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
-            ViewBag.CurrentUserId = EmployeeSession.Id;
+            ViewBag.CurrentUserId = EmployeeSession.EmpId;
             return View(monthlyRequest);
         }
 
@@ -171,7 +171,7 @@
 
             var param = new GetMonthlyOvertimeRequestParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 Month = model.Month,
                 TeamIds = model.TeamIds,
                 EmployeeId = model.EmployeeId,
@@ -195,7 +195,7 @@
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 Role = (byte)RoleSystem.OnBehalfRequest,
                 RequestType = (byte)RequestType.Overtime,
                 Query = string.IsNullOrWhiteSpace(query) ? string.Empty : query.Trim(),
@@ -210,7 +210,7 @@
         [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
         public JsonResult EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
         {
-            CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(EmployeeSession.Id, requestIds, command, roleId);
+            CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(EmployeeSession.EmpId, requestIds, command, roleId);
             return Json(commandResult);
         }
 

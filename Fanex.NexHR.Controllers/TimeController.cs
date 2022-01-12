@@ -28,7 +28,7 @@
         {
             if (criteria != null)
             {
-                criteria.ModifiedBy = EmployeeSession.Id;
+                criteria.ModifiedBy = EmployeeSession.EmpId;
                 criteria.ModifiedDate = DateTime.Now;
             }
 
@@ -72,7 +72,7 @@
         {
             var criteria = new InsertCheckInOutRecordCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 RecordTime = DateTime.Now,
                 InOutType = 0,
                 IPAddress = GetClientIpAddress(),
@@ -87,7 +87,7 @@
         {
             var criteria = new InsertCheckInOutRecordCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 RecordTime = DateTime.Now,
                 InOutType = 1,
                 IPAddress = GetClientIpAddress(),

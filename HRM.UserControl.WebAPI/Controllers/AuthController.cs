@@ -40,9 +40,9 @@
             this.baseService = baseService;
         }
 
-        [Route("api/auth/login")]
         [HttpPost]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginParam loginParams)
+        [Route("api/auth/login")]
+        public async Task<IActionResult> Login([FromBody] LoginParam loginParams)
         {
             string[] keyiv = loginParams.Token.Split(":");
             var rijndaelKey = keyiv[0];

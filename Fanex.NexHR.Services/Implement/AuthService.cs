@@ -19,11 +19,11 @@
 
         public HashProvider HashProvider => HashProvider.Sha1;
 
-        public EmployeeSession GetEmployeeByCode(string code)
+        public EmployeeSession GetByUserId(int userId)
         {
-            var criteria = new GetEmployeeLoginByCodeCriteria
+            var criteria = new GetEmployeeLoginByUserIdCriteria
             {
-                Code = code
+                UserId = userId
             };
             return baseService.GetDataEntity<EmployeeSession>(criteria);
         }

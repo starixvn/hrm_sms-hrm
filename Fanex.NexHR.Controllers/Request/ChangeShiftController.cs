@@ -48,7 +48,7 @@
             int tempYear = year ?? DateTime.Today.Year;
             var fromDate = new DateTime(tempYear, 1, 1);
             var toDate = new DateTime(tempYear, 12, 31).ToEndOfDay();
-            IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(EmployeeSession.Id, fromDate, toDate);
+            IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(EmployeeSession.EmpId, fromDate, toDate);
             foreach (var request in requests)
             {
                 request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
@@ -61,14 +61,14 @@
         public ActionResult Create()
         {
             var today = DateTime.Today;
-            VerifierAndApproverForRequest supervisor = GetVerifierApprover(EmployeeSession.Id);
+            VerifierAndApproverForRequest supervisor = GetVerifierApprover(EmployeeSession.EmpId);
             var model = new ChangeShiftViewModel
             {
                 Employee = EmployeeSession.DisplayName,
-                EmployeeId = EmployeeSession.Id,
+                EmployeeId = EmployeeSession.EmpId,
                 FromDate = today,
                 ToDate = today,
-                TotalRequestInMonth = changeShiftService.GetNumberOfRequest(EmployeeSession.Id, today.FirstDayOfMonth(), today.LastDayOfMonth()),
+                TotalRequestInMonth = changeShiftService.GetNumberOfRequest(EmployeeSession.EmpId, today.FirstDayOfMonth(), today.LastDayOfMonth()),
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
@@ -87,7 +87,7 @@
             List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
             criteria.Details = requestDetail;
 
-            CommandResult commandResult = changeShiftService.Create(EmployeeSession.Id, criteria);
+            CommandResult commandResult = changeShiftService.Create(EmployeeSession.EmpId, criteria);
 
             if (commandResult.IsSuccessful)
             {
@@ -102,7 +102,7 @@
         {
             ChangeShiftRequest request = changeShiftService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -148,7 +148,7 @@
             List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
             criteria.Details = requestDetail;
 
-            CommandResult commandResult = changeShiftService.Edit(EmployeeSession.Id, criteria);
+            CommandResult commandResult = changeShiftService.Edit(EmployeeSession.EmpId, criteria);
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailEditRequest(criteria.RequestId);
@@ -165,7 +165,7 @@
         public CustomJsonResult Delete(long id)
         {
             changeShiftService.SendMailDeleteRequest(id);
-            CommandResult commandResult = changeShiftService.Delete(EmployeeSession.Id, id);
+            CommandResult commandResult = changeShiftService.Delete(EmployeeSession.EmpId, id);
 
             if (commandResult.IsSuccessful)
             {

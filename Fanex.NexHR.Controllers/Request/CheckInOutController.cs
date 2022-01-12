@@ -50,7 +50,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetCheckInOutRequestByDateCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -67,11 +67,11 @@
         public ActionResult Create()
         {
             var today = DateTime.Today;
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.CheckIn);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.CheckIn);
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = EmployeeSession.DisplayName,
-                EmployeeId = EmployeeSession.Id,
+                EmployeeId = EmployeeSession.EmpId,
                 ForDate = today,
                 AttendantDate = today,
                 Hour = DateTime.Now.Hour,
@@ -81,7 +81,7 @@
                 Approvers = supervisor.Approvers
             };
 
-            Shift shift = shiftService.GetByDate(EmployeeSession.Id, today);
+            Shift shift = shiftService.GetByDate(EmployeeSession.EmpId, today);
             CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
             ViewBag.Shift = shift;
@@ -105,7 +105,7 @@
                 ReasonId = model.ReasonId,
                 RefNo = model.RefNO,
                 Remark = model.Remark,
-                CreatedBy = EmployeeSession.Id,
+                CreatedBy = EmployeeSession.EmpId,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId
             };
@@ -124,7 +124,7 @@
         {
             CheckInOutRequest request = checkInOutRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -141,7 +141,7 @@
                     RequestTypeId = request.RequestTypeId
                 };
                 IEnumerable<DateTime> disabledDates = checkInOutRequestService.GetDisabledDate(param);
-                Shift shift = shiftService.GetByDate(EmployeeSession.Id, request.OnDate);
+                Shift shift = shiftService.GetByDate(EmployeeSession.EmpId, request.OnDate);
                 var viewModel = new CheckInOutRequestViewModel
                 {
                     RequestId = request.RequestId,
@@ -183,7 +183,7 @@
                 ReasonId = model.ReasonId,
                 RefNo = model.RefNO,
                 Remark = model.Remark,
-                ModifiedBy = EmployeeSession.Id,
+                ModifiedBy = EmployeeSession.EmpId,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId
             };

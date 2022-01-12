@@ -52,7 +52,7 @@
             int tempYear = year ?? DateTime.Today.Year;
             var criteria = new GetLeaveRequestByDateCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -69,13 +69,13 @@
 
         public ActionResult Create()
         {
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.Leave);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.Leave);
             SystemSetting setting = commonDataService.GetSystemSetting();
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
                 Employee = EmployeeSession.DisplayName,
-                EmployeeId = EmployeeSession.Id,
+                EmployeeId = EmployeeSession.EmpId,
                 FromDate = DateTime.Now.Date,
                 ToDate = DateTime.Now.Date,
                 TotalDays = 1,
@@ -107,7 +107,7 @@
             }
 
             criteria.RequestDetail = leaveRequestDetail;
-            criteria.CreatedBy = EmployeeSession.Id;
+            criteria.CreatedBy = EmployeeSession.EmpId;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
@@ -123,7 +123,7 @@
         {
             LeaveRequest request = leaveRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -170,7 +170,7 @@
                         .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
             }
 
-            criteria.ModifiedBy = EmployeeSession.Id;
+            criteria.ModifiedBy = EmployeeSession.EmpId;
 
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
@@ -475,7 +475,7 @@
         {
             var criteria = new GetLeaveBalanceCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 RequestId = requestId,
                 EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
             };

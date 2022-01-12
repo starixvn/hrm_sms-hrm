@@ -46,7 +46,7 @@
 
             var criteria = new GetRequestCriteria
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -85,7 +85,7 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
             };
 
@@ -116,7 +116,7 @@
                 RequestType = model.RequestType,
                 IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
                 RequestViewType = model.ViewType,
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
             };
 

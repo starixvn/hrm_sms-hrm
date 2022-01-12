@@ -32,7 +32,7 @@
         public ActionResult Index()
         {
             var user = userService.GetById(userControlSession.UserId);
-            IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(EmployeeSession.Id, DateTime.Now);
+            IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(EmployeeSession.EmpId, DateTime.Now);
             ViewBag.IsResetPassword = user.IsResetPassword;
             ViewBag.IsVerifierApprover = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
@@ -43,7 +43,7 @@
         [ChildActionOnly]
         public ActionResult MemberRequest()
         {
-            IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(EmployeeSession.Id, DateTime.Now);
+            IEnumerable<MemberRequest> model = dashboardService.GetMemberRequest(EmployeeSession.EmpId, DateTime.Now);
 
             return PartialView("_MemberRequest", model);
         }

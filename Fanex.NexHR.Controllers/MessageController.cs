@@ -38,7 +38,7 @@
                 ToDate = DateTime.Now,
                 FromDate = DateTime.Now.AddMonths(-3),
                 IsDisabled = 0,
-                CreatedBy = EmployeeSession.Id
+                CreatedBy = EmployeeSession.EmpId
             };
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
@@ -53,7 +53,7 @@
         {
             if (param != null)
             {
-                param.CreatedBy = EmployeeSession.Id;
+                param.CreatedBy = EmployeeSession.EmpId;
             }
 
             ViewBag.Messages = messageService.GetMessageByCreator(param);
@@ -89,7 +89,7 @@
 
             if (model != null && ModelState.IsValid)
             {
-                commandResult = messageService.Create(EmployeeSession.Id, model);
+                commandResult = messageService.Create(EmployeeSession.EmpId, model);
                 if (model.HasSendEmail && commandResult.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
@@ -128,7 +128,7 @@
 
             if (model != null && ModelState.IsValid)
             {
-                commandResult = messageService.Edit(EmployeeSession.Id, model);
+                commandResult = messageService.Edit(EmployeeSession.EmpId, model);
                 if (model.HasSendEmail && commandResult.IsSuccessful)
                 {
                     messageService.SendMailToStaff(model);
@@ -142,7 +142,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Message)]
         public JsonResult Delete(int id)
         {
-            CommandResult commandResult = messageService.Delete(EmployeeSession.Id, id);
+            CommandResult commandResult = messageService.Delete(EmployeeSession.EmpId, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
@@ -154,7 +154,7 @@
                 FromDate = DateTime.Today,
                 ToDate = DateTime.Today,
                 IsDisabled = 0,
-                EmployeeId = EmployeeSession.Id
+                EmployeeId = EmployeeSession.EmpId
             };
             ViewBag.Messages = messageService.GetMessageByEmployee(param);
 
@@ -166,7 +166,7 @@
         {
             if (param != null)
             {
-                param.EmployeeId = EmployeeSession.Id;
+                param.EmployeeId = EmployeeSession.EmpId;
             }
 
             ViewBag.Messages = messageService.GetMessageByEmployee(param);
@@ -177,7 +177,7 @@
         [HttpPost]
         public JsonResult DeleteMessageByEmployee(int id)
         {
-            CommandResult commandResult = messageService.DeleteMessageByEmployee(EmployeeSession.Id, id);
+            CommandResult commandResult = messageService.DeleteMessageByEmployee(EmployeeSession.EmpId, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }
@@ -197,7 +197,7 @@
 
         public JsonResult EditMessageStatus(int id)
         {
-            CommandResult commandResult = messageService.EditStatus(EmployeeSession.Id, id);
+            CommandResult commandResult = messageService.EditStatus(EmployeeSession.EmpId, id);
 
             return Json(commandResult, JsonRequestBehavior.AllowGet);
         }

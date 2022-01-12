@@ -41,8 +41,8 @@
         {
             var viewModel = new AccountViewModel
             {
-                Employee = employeeService.GetEmployeeById(EmployeeSession.Id),
-                Logs = employeeLogService.GetLogDetailById(EmployeeSession.Id)
+                Employee = employeeService.GetEmployeeById(EmployeeSession.EmpId),
+                Logs = employeeLogService.GetLogDetailById(EmployeeSession.EmpId)
             };
 
             return View(viewModel);
@@ -54,7 +54,7 @@
         {
             model.Password = Encryptor.ComputeHash(authService.HashProvider, "123456");
             model.IsReset = true;
-            var commandResult = employeeService.EditPassword(EmployeeSession.Id, model);
+            var commandResult = employeeService.EditPassword(EmployeeSession.EmpId, model);
             if (commandResult.IsSuccessful)
             {
                 var token = cryptoService.GenerateRijndaelKeyIV();
@@ -90,10 +90,10 @@
                 {
                     var param = new EditPassword
                     {
-                        EmployeeId = EmployeeSession.Id,
+                        EmployeeId = EmployeeSession.EmpId,
                         Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
                     };
-                    var commandResult = employeeService.EditPassword(EmployeeSession.Id, param);
+                    var commandResult = employeeService.EditPassword(EmployeeSession.EmpId, param);
                     switch (commandResult.Code)
                     {
                         case (short)ValidateUserStatus.Success: // OK

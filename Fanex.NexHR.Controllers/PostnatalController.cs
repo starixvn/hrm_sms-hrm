@@ -66,7 +66,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    CreatedBy = EmployeeSession.Id,
+                    CreatedBy = EmployeeSession.EmpId,
                     Remark = model.Remark,
                     WorkingHours = model.WorkingHours ?? 0
                 };
@@ -111,7 +111,7 @@
                     EmpId = model.EmployeeId,
                     FromDate = model.FromDate,
                     ToDate = model.ToDate,
-                    ModifiedBy = EmployeeSession.Id,
+                    ModifiedBy = EmployeeSession.EmpId,
                     Remark = model.Remark,
                     WorkingHours = model.WorkingHours ?? 0
                 };

@@ -46,7 +46,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetKeepInViewRequestByDateCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -62,11 +62,11 @@
         public ActionResult Create()
         {
             var today = DateTime.Today;
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.KeepInView);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.KeepInView);
             var model = new KeepInViewRequestViewModel
             {
                 Employee = EmployeeSession.DisplayName,
-                EmployeeId = EmployeeSession.Id,
+                EmployeeId = EmployeeSession.EmpId,
                 Date = today,
                 KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
                 Verifiers = supervisor.Verifiers,
@@ -102,7 +102,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                CreatedBy = EmployeeSession.Id
+                CreatedBy = EmployeeSession.EmpId
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -119,7 +119,7 @@
         {
             KeepInViewRequest request = keepInViewRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -171,7 +171,7 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                ModifiedBy = EmployeeSession.Id,
+                ModifiedBy = EmployeeSession.EmpId,
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

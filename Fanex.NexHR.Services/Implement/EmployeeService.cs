@@ -19,7 +19,6 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
-    using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
 
     public class EmployeeService : IEmployeeService
@@ -27,21 +26,18 @@
         private readonly IEmployeeRepository employeeRepository;
         private readonly IBaseService baseService;
         private readonly IAuthService authService;
-        private readonly IUserService userService;
         private readonly IRoleService roleService;
 
         public EmployeeService(
             IEmployeeRepository employeeRepository,
             IBaseService baseService,
             IAuthService authService,
-            IRoleService roleService,
-            IUserService userService)
+            IRoleService roleService)
         {
             this.employeeRepository = employeeRepository;
             this.roleService = roleService;
             this.baseService = baseService;
             this.authService = authService;
-            this.userService = userService;
         }
 
         public string GenerateEmployeeCode()
@@ -59,12 +55,7 @@
             Employee employee = employeeRepository.GetEmployeeById(criteria);
             if (employee != null)
             {
-                IList<User> users = userService.GetAll(employee.Code);
-                User user = users.FirstOrDefault(x => x.Code.Equals(employee.Code)
-                    && x.Nickname.Equals(employee.NickName)
-                    && x.FullName.Equals(employee.FullName));
-                employee.UserId = user != null ? user.UserId : 0;
-                employee.Roles = roleService.GetByUserId(user != null ? user.UserId : 0).ToList();
+                employee.Roles = roleService.GetByUserId(employee.UserId).ToList();
             }
 
             return employee;
@@ -281,6 +272,11 @@
                 ResignedDate = param.ResignedDate
             };
             return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult UpdateUserId(UpdateUserIdCommand command)
+        {
+            return baseService.ExecuteNonQuery(command);
         }
 
         public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryToDate, DateTime? militaryFromDate)

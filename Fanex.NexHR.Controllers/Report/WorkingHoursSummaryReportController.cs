@@ -38,7 +38,7 @@
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -58,7 +58,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -77,7 +77,7 @@
         {
             var param = new GetDailyOvertimeDetailsParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

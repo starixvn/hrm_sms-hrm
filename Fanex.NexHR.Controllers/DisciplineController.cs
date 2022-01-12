@@ -61,7 +61,7 @@
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
-                ApproverId = EmployeeSession.Id,
+                ApproverId = EmployeeSession.EmpId,
                 IsShowAll = model.IsShowAll
             };
 
@@ -107,7 +107,7 @@
                 EmployeeId = model.EmployeeId,
                 ReasonId = model.ReasonId,
                 HasIgnored = model.HasIgnored,
-                ApproverId = EmployeeSession.Id
+                ApproverId = EmployeeSession.EmpId
             };
 
             IList<DisciplineDetailModel> disciplines = disciplineService.GetDisciplineDetail(criteria);
@@ -128,7 +128,7 @@
             };
 
             IList<OtherDisciplineModel> otherDisciplines = disciplineService.GetOtherDiscipline(criteria);
-            IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.Id);
+            IEnumerable<EmployeeInfoModel> members = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.EmpId);
             ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
                 && userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
@@ -164,7 +164,7 @@
                 DisciplineTypeId = model.DisciplineTypeId,
                 Score = model.MinusScore,
                 Comment = model.Comment,
-                ActorId = EmployeeSession.Id
+                ActorId = EmployeeSession.EmpId
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -177,7 +177,7 @@
         {
             if (criteria != null)
             {
-                criteria.ActorId = EmployeeSession.Id;
+                criteria.ActorId = EmployeeSession.EmpId;
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
                 if (!commandResult.IsSuccessful)
@@ -199,7 +199,7 @@
                 IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
                 DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
                 HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
@@ -208,7 +208,7 @@
 
         public JsonResult GetMemberToAddOtherDiscipline(string keyword)
         {
-            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.Id, keyword);
+            IEnumerable<EmployeeInfoModel> employees = disciplineService.GetMemberToAddOtherDiscipline(EmployeeSession.EmpId, keyword);
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }

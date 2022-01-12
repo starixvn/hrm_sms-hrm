@@ -52,7 +52,7 @@
         {
             var criteria = new GetEmployeeCalendarByMonthCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 FromDate = date.FirstDayOfMonth(),
                 ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
             };

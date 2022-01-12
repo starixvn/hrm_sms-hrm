@@ -60,8 +60,8 @@
     <Reference Include="Fanex.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Common.1.1.0.1\lib\net40\Fanex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="HRM.UserControl.Client.Core, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.1.3\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
+    <Reference Include="HRM.UserControl.Client.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.1.4\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
     </Reference>
     <Reference Include="jose-jwt, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jose-jwt.3.1.1\lib\net461\jose-jwt.dll</HintPath>

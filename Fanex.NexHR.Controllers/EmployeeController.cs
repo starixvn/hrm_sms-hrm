@@ -214,7 +214,7 @@
                     TeamId = model.TeamId
                 };
 
-                CommandResult commandResult = employeeService.Create(EmployeeSession.Id, param);
+                CommandResult commandResult = employeeService.Create(EmployeeSession.EmpId, param);
                 if (commandResult.IsSuccessful)
                 {
                     var token = cryptoService.GenerateRijndaelKeyIV();
@@ -232,6 +232,12 @@
 
                     if (result.IsSuccessful)
                     {
+                        employeeService.UpdateUserId(new UpdateUserIdCommand
+                        {
+                            EmpId = (int)commandResult.OutputId,
+                            UserId = result.ObjectId,
+                            ModifiedBy = EmployeeSession.EmpId
+                        });
                         return RedirectToAction("Edit", new { id = commandResult.OutputId });
                     }
                     else
@@ -260,11 +266,6 @@
                     return RedirectToAction("AccessDenied", "Error");
                 }
 
-                IList<User> users = userService.GetAll(employee.Code);
-                User user = users.FirstOrDefault(x => x.Code.Equals(employee.Code)
-                    && x.Nickname.Equals(employee.NickName)
-                    && x.FullName.Equals(employee.FullName));
-                employee.UserId = user != null ? user.UserId : 0;
                 employee.Coutries = commonDataService.GetAllCountry();
                 IList<SupervisorNameModel> supervisors = GetSupervisors(id);
                 employee.Verifier = GetVerifiers(supervisors);
@@ -292,7 +293,7 @@
             if (ModelState.IsValid)
             {
                 EditEmployeeParam param = MappingEditEmployeeParam(model);
-                CommandResult commandResult = employeeService.Edit(EmployeeSession.Id, param);
+                CommandResult commandResult = employeeService.Edit(EmployeeSession.EmpId, param);
                 if (commandResult.IsSuccessful)
                 {
                     UpdateUserInfo(model.UserId, param);
@@ -321,7 +322,7 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Delete(DeleteEmployeeParam param)
         {
-            CommandResult commandResult = employeeService.Delete(EmployeeSession.Id, param);
+            CommandResult commandResult = employeeService.Delete(EmployeeSession.EmpId, param);
             if (commandResult.IsSuccessful)
             {
                 var result = userService.Delete(param.UserId);
@@ -388,7 +389,7 @@
         [HttpPost]
         public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
-            CommandResult commandResult = employeeService.EditEmployeeSupervisor(EmployeeSession.Id, employeeId, roleId, supervisors);
+            CommandResult commandResult = employeeService.EditEmployeeSupervisor(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -436,7 +437,7 @@
         {
             var criteria = new GetMemberByManagerCriteria
             {
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 Query = keyword,
                 ExcludedManager = false
             };
@@ -525,7 +526,7 @@
                 if (result.IsSuccessful)
                 {
                     ViewBag.Updated = true;
-                    UpdateUserSession(param.EmployeeId, param.Code);
+                    UpdateUserSession(param.EmployeeId);
                 }
                 else
                 {
@@ -540,11 +541,11 @@
             }
         }
 
-        private void UpdateUserSession(int employeeId, string code)
+        private void UpdateUserSession(int employeeId)
         {
-            if (EmployeeSession.Id == employeeId)
+            if (EmployeeSession.EmpId == employeeId)
             {
-                userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetEmployeeByCode(code));
+                userControlSession.Set<EmployeeSession>(SessionKey.Employee, authService.GetByUserId(userControlSession.UserId));
             }
         }
 

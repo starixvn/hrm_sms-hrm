@@ -45,7 +45,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,
@@ -66,7 +66,7 @@
         {
             var param = new GetWorkingHoursSummaryParam
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamIds = model.TeamIds,

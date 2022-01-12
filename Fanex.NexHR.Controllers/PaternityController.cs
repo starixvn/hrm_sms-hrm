@@ -64,7 +64,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    CreatedBy = EmployeeSession.Id,
+                    CreatedBy = EmployeeSession.EmpId,
                     Remark = model.Remark
                 };
 
@@ -108,7 +108,7 @@
                     EmpId = model.EmployeeId,
                     ChildBornDate = model.ChildBornDate,
                     LeaveDay = model.LeaveDay,
-                    ModifiedBy = EmployeeSession.Id,
+                    ModifiedBy = EmployeeSession.EmpId,
                     Remark = model.Remark
                 };
 

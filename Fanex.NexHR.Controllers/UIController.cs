@@ -55,7 +55,7 @@
             var action = routeData.Values["action"];
             var link = string.Format("/{0}/{1}", controller, action);
             var selectedMenu = menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.URL) && i.URL.Equals(link, StringComparison.OrdinalIgnoreCase));
-            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(EmployeeSession.Id).Count;
+            var unreadMessageCount = messageService.GetUnreadMessageOfEmployee(EmployeeSession.EmpId).Count;
 
             ViewBag.SelectedMenu = selectedMenu;
             ViewBag.UnreadMessage = unreadMessageCount;

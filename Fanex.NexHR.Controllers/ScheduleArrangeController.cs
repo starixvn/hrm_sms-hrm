@@ -63,7 +63,7 @@
         [AllowAnonymous]
         public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
-            filter.ActorId = EmployeeSession.Id;
+            filter.ActorId = EmployeeSession.EmpId;
             filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(filter);
 
@@ -73,7 +73,7 @@
         [AllowAnonymous]
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
-            filter.ActorId = EmployeeSession.Id;
+            filter.ActorId = EmployeeSession.EmpId;
             filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
@@ -100,7 +100,7 @@
             IEnumerable<EditDefaultShift> defaultShifts)
         {
             CommandResult commandResult = scheduleArrangeService.EditWeekly(
-                EmployeeSession.Id,
+                EmployeeSession.EmpId,
                 fromDate,
                 toDate,
                 weeklySchedules,
@@ -129,7 +129,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditRemark(EditRemark model)
         {
-            CommandResult commandResult = scheduleArrangeService.EditRemark(EmployeeSession.Id, model);
+            CommandResult commandResult = scheduleArrangeService.EditRemark(EmployeeSession.EmpId, model);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -138,7 +138,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditDisplayOrder(IEnumerable<EditDisplayOrder> displayOrders)
         {
-            CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(EmployeeSession.Id, displayOrders);
+            CommandResult commandResult = scheduleArrangeService.EditDisplayOrder(EmployeeSession.EmpId, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -147,7 +147,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditTeamOrder(IEnumerable<EditTeamOrder> displayOrders)
         {
-            CommandResult commandResult = scheduleArrangeService.EditTeamOrder(EmployeeSession.Id, displayOrders);
+            CommandResult commandResult = scheduleArrangeService.EditTeamOrder(EmployeeSession.EmpId, displayOrders);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -156,7 +156,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult EditWeeklyDefaultShift(WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
         {
-            CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(EmployeeSession.Id, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+            CommandResult commandResult = scheduleArrangeService.EditWeeklyDefaultShift(EmployeeSession.EmpId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
@@ -165,7 +165,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ScheduleArrange)]
         public ActionResult ExportExcel(WeeklyScheduleFilter filter)
         {
-            filter.ActorId = EmployeeSession.Id;
+            filter.ActorId = EmployeeSession.EmpId;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             byte[] bytes = exportExcelService.Export(filter, weeklySchedules);
 
@@ -179,11 +179,11 @@
         {
             Actor actor = new Actor
             {
-                ActorId = EmployeeSession.Id,
+                ActorId = EmployeeSession.EmpId,
                 Nickname = EmployeeSession.Nickname,
                 FullName = EmployeeSession.FullName
             };
-            filter.ActorId = EmployeeSession.Id;
+            filter.ActorId = EmployeeSession.EmpId;
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             byte[] bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
 

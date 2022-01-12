@@ -52,7 +52,7 @@
         {
             if (ModelState.IsValid)
             {
-                CommandResult commandResult = holidayService.Edit(EmployeeSession.Id, model);
+                CommandResult commandResult = holidayService.Edit(EmployeeSession.EmpId, model);
                 ViewBag.Updated = commandResult.IsSuccessful;
 
                 if (!commandResult.IsSuccessful)
@@ -83,7 +83,7 @@
         {
             if (ModelState.IsValid)
             {
-                CommandResult commandResult = holidayService.Create(EmployeeSession.Id, model);
+                CommandResult commandResult = holidayService.Create(EmployeeSession.EmpId, model);
                 ViewBag.Updated = commandResult.IsSuccessful;
 
                 if (!commandResult.IsSuccessful)
@@ -99,7 +99,7 @@
         [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public JsonResult Delete(int id)
         {
-            CommandResult commandResult = holidayService.Delete(EmployeeSession.Id, id);
+            CommandResult commandResult = holidayService.Delete(EmployeeSession.EmpId, id);
 
             return Json(commandResult);
         }

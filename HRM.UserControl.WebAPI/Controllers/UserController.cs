@@ -81,6 +81,7 @@
             command.SiteId = SiteId;
             command.CreatedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            commandResult.ObjectId = command.UserId;
             return Ok(commandResult);
         }
 

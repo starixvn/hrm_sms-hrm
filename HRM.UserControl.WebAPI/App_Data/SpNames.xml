@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+    <Function Name="Sync Data">
+        <Setting Key="API_SyncData_InsertUser" SpName="API_SyncData_InsertUser" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_SyncData_UpdateUser" SpName="API_SyncData_UpdateUser" DbName="bodb_IUC" Plain="0" />
+    </Function>
     <Function Name="User">
         <Setting Key="API_User_GetByUsername" SpName="API_User_GetByUsername" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_GetById" SpName="API_User_GetById" DbName="bodb_IUC" Plain="0" />

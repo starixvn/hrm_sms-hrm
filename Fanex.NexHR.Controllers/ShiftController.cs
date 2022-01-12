@@ -53,7 +53,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                CommandResult commandResult = shiftService.Create(EmployeeSession.Id, model);
+                CommandResult commandResult = shiftService.Create(EmployeeSession.EmpId, model);
                 if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");
@@ -105,7 +105,7 @@
         {
             if (model != null && ModelState.IsValid)
             {
-                CommandResult commandResult = shiftService.Edit(EmployeeSession.Id, model);
+                CommandResult commandResult = shiftService.Edit(EmployeeSession.EmpId, model);
                 if (commandResult.IsSuccessful)
                 {
                     return RedirectToAction("Index", "Shift");

@@ -56,5 +56,8 @@
         CommandResult Delete(int actorId, DeleteEmployeeParam param);
 
         string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryToDate, DateTime? militaryFromDate);
+
+        CommandResult UpdateUserId(UpdateUserIdCommand command);
+
     }
 }

@@ -47,7 +47,7 @@
             ViewBag.Year = tempYear;
             var criteria = new GetLateInEarlyOutRequestByDateCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 FromDate = new DateTime(tempYear, 1, 1),
                 ToDate = new DateTime(tempYear, 12, 31)
             };
@@ -61,11 +61,11 @@
 
         public ActionResult Create()
         {
-            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.Id, RequestType.LateIn);
+            VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.LateIn);
             var viewModel = new LateInEarlyOutRequestViewModel
             {
                 Employee = EmployeeSession.DisplayName,
-                EmployeeId = EmployeeSession.Id,
+                EmployeeId = EmployeeSession.EmpId,
                 OnDate = DateTime.Today,
                 Minute = DefaultMinutes,
                 ReasonId = (byte)LateInEarlyOutReason.Other,
@@ -95,7 +95,7 @@
                 ReasonId = model.ReasonId,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                CreatedBy = EmployeeSession.Id
+                CreatedBy = EmployeeSession.EmpId
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
@@ -111,7 +111,7 @@
         {
             LateInEarlyOutRequest request = lateInEarlyOutRequestService.GetById(id);
             if (request == null
-                || !Utilities.CheckUserCanEditRequest(EmployeeSession.Id, request.Requester.EmpId)
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
                 || request.Status.Id != (byte)CurrentRequestStatus.Pending)
             {
                 return RedirectToAction("AccessDenied", "Error");
@@ -166,7 +166,7 @@
                 EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                ModifiedBy = EmployeeSession.Id
+                ModifiedBy = EmployeeSession.EmpId
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

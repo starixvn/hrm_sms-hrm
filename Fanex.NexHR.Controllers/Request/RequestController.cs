@@ -122,7 +122,7 @@
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
-                EmpId = EmployeeSession.Id,
+                EmpId = EmployeeSession.EmpId,
                 Role = role,
                 RequestType = requestType,
                 Query = query.Trim(),
@@ -186,21 +186,21 @@
                 case RequestCommand.Accept:
                 case RequestCommand.Approve:
                 case RequestCommand.Process:
-                    commandResult = requestService.ApproveRequest(EmployeeSession.Id, model);
+                    commandResult = requestService.ApproveRequest(EmployeeSession.EmpId, model);
                     break;
 
                 case RequestCommand.Reset:
-                    commandResult = requestService.ResetRequest(EmployeeSession.Id, model);
+                    commandResult = requestService.ResetRequest(EmployeeSession.EmpId, model);
                     break;
 
                 case RequestCommand.NotAccept:
                 case RequestCommand.Reject:
                 case RequestCommand.Void:
-                    commandResult = requestService.RejectRequest(EmployeeSession.Id, model);
+                    commandResult = requestService.RejectRequest(EmployeeSession.EmpId, model);
                     break;
 
                 default:
-                    commandResult = requestService.VoidRequest(EmployeeSession.Id, model);
+                    commandResult = requestService.VoidRequest(EmployeeSession.EmpId, model);
                     break;
             }
 
@@ -217,7 +217,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ApproveRequest)]
         public CustomJsonResult ProcessMultipleRequests(ApproveRequestsParam model)
         {
-            model.ActorId = EmployeeSession.Id;
+            model.ActorId = EmployeeSession.EmpId;
 
             var commandResult = requestService.ApproveRequests(model);
 
@@ -279,13 +279,13 @@
                 RequestType = request.RequestType,
                 IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
                 RequestViewType = request.ViewType,
-                SupervisorId = EmployeeSession.Id,
+                SupervisorId = EmployeeSession.EmpId,
                 IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
                 LeaveTypeId = request.LeaveType
             };
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-            request.CurrentUserId = EmployeeSession.Id;
+            request.CurrentUserId = EmployeeSession.EmpId;
             request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
         }
 
@@ -297,8 +297,8 @@
         private bool SortRequestValidate(RequestEntity t)
         {
             bool pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                && (t.ApprovedBy.Id == EmployeeSession.Id || t.VerifiedBy.Id == EmployeeSession.Id);
-            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.Id);
+                && (t.ApprovedBy.Id == EmployeeSession.EmpId || t.VerifiedBy.Id == EmployeeSession.EmpId);
+            bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId);
             return pending || verified;
         }
     }

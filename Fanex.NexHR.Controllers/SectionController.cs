@@ -92,7 +92,7 @@
                     Name = model.Name,
                     IsActive = model.IsActive,
                     DepartmentId = model.DepartmentId,
-                    ModifiedBy = EmployeeSession.Id
+                    ModifiedBy = EmployeeSession.EmpId
                 };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
@@ -136,7 +136,7 @@
                     Name = model.Name,
                     IsActive = model.IsActive,
                     DepartmentId = model.DepartmentId,
-                    ModifiedBy = EmployeeSession.Id
+                    ModifiedBy = EmployeeSession.EmpId
                 };
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
@@ -148,7 +148,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public CustomJsonResult Delete(int id)
         {
-            CommandResult commandResult = sectionService.Delete(EmployeeSession.Id, id);
+            CommandResult commandResult = sectionService.Delete(EmployeeSession.EmpId, id);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }

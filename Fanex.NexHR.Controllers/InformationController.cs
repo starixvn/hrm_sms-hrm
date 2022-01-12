@@ -38,7 +38,7 @@
 
         public ActionResult UpdateInformation()
         {
-            Employee employee = employeeService.GetEmployeeById(EmployeeSession.Id);
+            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
             ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + EmployeeSession.Code + "/";
             return View(employee);
@@ -71,7 +71,7 @@
         public ActionResult UpdateInformation(Employee model)
         {
             ModelState.Clear();
-            model.Id = EmployeeSession.Id;
+            model.Id = EmployeeSession.EmpId;
             var criteria = SetUpdatePersonalInfoCriteria(model);
 
             var result = baseService.ExecuteNonQuery(criteria);
@@ -106,7 +106,7 @@
                 IdCardNumber = employee.CardNo,
                 PassportNo = employee.PassportNo,
                 PassportExp = employee.PassportExp,
-                ModifiedBy = EmployeeSession.Id,
+                ModifiedBy = EmployeeSession.EmpId,
                 CountryCode = employee.CountryCode
             };
 
@@ -140,7 +140,7 @@
         {
             var criteria = new GetRelationshipByEmployeeIdCriteria
             {
-                EmployeeId = EmployeeSession.Id
+                EmployeeId = EmployeeSession.EmpId
             };
 
             var relationships = baseService.GetData<EmployeeRelationship>(criteria);
@@ -167,14 +167,14 @@
             {
                 var criteria = new InsertRelationshipCriteria
                 {
-                    EmployeeId = EmployeeSession.Id,
+                    EmployeeId = EmployeeSession.EmpId,
                     FullName = viewModel.FullName,
                     Gender = viewModel.Gender,
                     DateOfBirth = viewModel.BirthDay,
                     Phone = viewModel.Phone,
                     Relationship = viewModel.Relationship,
                     IsEmergency = viewModel.IsEmergency,
-                    Creator = EmployeeSession.Id
+                    Creator = EmployeeSession.EmpId
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -221,7 +221,7 @@
                     Phone = string.IsNullOrEmpty(viewModel.Phone) ? string.Empty : viewModel.Phone,
                     Relationship = viewModel.Relationship,
                     IsEmergency = viewModel.IsEmergency,
-                    Modifier = EmployeeSession.Id
+                    Modifier = EmployeeSession.EmpId
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
@@ -240,7 +240,7 @@
             var criteria = new DeleteRelationshipCriteria
             {
                 RelationshipId = id,
-                ActorId = EmployeeSession.Id
+                ActorId = EmployeeSession.EmpId
             };
 
             var result = baseService.ExecuteNonQuery(criteria);
