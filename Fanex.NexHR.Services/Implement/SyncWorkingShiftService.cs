@@ -23,6 +23,7 @@
 
     public class SyncWorkingShiftService : ISyncWorkingShiftService
     {
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SyncWorkingShiftService));
         private readonly IBaseService baseService;
         private readonly HttpClient _httpClient;
 
@@ -57,6 +58,11 @@
                     baseService.ExecuteNonQuery(command);
                 }
             }
+            else
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+            }
         }
 
         public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
@@ -79,6 +85,13 @@
                     command.WorkingShiftXml = workingShifts.ToXML().ToString();
                     commandResult = baseService.ExecuteNonQuery(command);
                 }
+            }
+            else
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                commandResult.Code = (int)response.StatusCode;
+                commandResult.Message = message;
             }
 
             return commandResult;
