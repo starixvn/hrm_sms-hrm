@@ -115,7 +115,7 @@
         {
             var command = new SyncWorkingShiftCommand
             {
-                ActorId = sessionService.Employee.Id,
+                ActorId = EmployeeSession.EmpId,
                 FromDate = fromDate,
                 ToDate = toDate,
                 EmployeeIds = employeeIds

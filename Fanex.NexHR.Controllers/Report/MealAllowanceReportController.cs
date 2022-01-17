@@ -4,13 +4,13 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report.MealAllowance;
     using Fanex.NexHR.Models.Report.MealAllowance;
     using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.ViewModels.Report;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.MealAllowanceReport)]
     public class MealAllowanceReportController : BaseController
@@ -18,8 +18,8 @@
         private readonly IMealAllowanceSummaryService reportService;
 
         public MealAllowanceReportController(
-            ISessionService sessionService,
-            IMealAllowanceSummaryService reportService) : base(sessionService)
+            IUserControlSession userControlSession,
+            IMealAllowanceSummaryService reportService) : base(userControlSession)
         {
             this.reportService = reportService;
         }
