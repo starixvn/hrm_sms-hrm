@@ -1,4 +1,5 @@
-﻿@model int
+﻿@using HRM.UserControl.Client.Core.Models.User
+@model User
 @{
     ViewData["Title"] = ViewResources.Permission;
 }
@@ -12,7 +13,7 @@
 }
 @section Scripts{
     <script>
-        window.selectedUserId = @Model;
+        window.selectedUser = @Json.Serialize(Model);
     </script>
     <environment include="Development">
         <script src="~/js/dev/pages/user/permission.chunk.js" asp-append-version="true"></script>

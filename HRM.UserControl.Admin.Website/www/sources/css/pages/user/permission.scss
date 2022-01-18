@@ -5,3 +5,11 @@
 @import '../../components/icons';
 @import '../../components/tables';
 @import '../../components/react-select';
+
+#app-container {
+    width: 720px;
+
+    .user-info {
+        background-color: #e9ecef;
+    }
+}

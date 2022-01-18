@@ -10,11 +10,11 @@ import { Policy } from '@jsroot/common/constants';
 export class DataGrid extends Component {
     buildHeader = () => {
         return [
-            <HeaderRow>
+            <HeaderRow key="header1">
                 <HeaderCell colWidth={20} rowSpan={2}>{LangHelper.getResource('Function')}</HeaderCell>
                 <HeaderCell colWidth={10} colSpan={2}>{LangHelper.getResource('Permission')}</HeaderCell>
             </HeaderRow>,
-            <HeaderRow>
+            <HeaderRow key="header2">
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Read')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Host')}</HeaderCell>
             </HeaderRow>

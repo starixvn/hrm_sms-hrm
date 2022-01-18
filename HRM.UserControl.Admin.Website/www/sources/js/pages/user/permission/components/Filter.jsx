@@ -27,7 +27,7 @@ export class Filter extends Component {
 
     getParams = () => {
         return {
-            userId: window.selectedUserId,
+            userId: window.selectedUser.userId,
             siteId: this.state.site.value
         };
     };

@@ -29,14 +29,14 @@ export class UpdateUserSiteRole extends Component {
         setSubmitting(true);
         const params = {
             siteId: values.siteId,
-            userId: window.selectedUserId,
+            userId: window.selectedUser.userId,
             roleIds: values.roles.filter(item => item.checked).map(item => item.roleId).join(',')
         };
         this.props.updateUserSiteRole(params).then(() => {
             if (this.props.updateUserSiteRoleResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.getSiteByUserId(window.selectedUserId);
+                    this.props.getSiteByUserId(window.selectedUser.userId);
                 }, 3000);
             } else {
                 setSubmitting(false);

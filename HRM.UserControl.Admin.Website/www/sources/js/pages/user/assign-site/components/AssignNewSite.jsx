@@ -17,7 +17,7 @@ export class AssignNewSite extends Component {
     }
 
     componentDidMount() {
-        this.props.getAvailableSiteByUserId(window.selectedUserId);
+        this.props.getAvailableSiteByUserId(window.selectedUser.userId);
     }
 
     handleCloseModalDialog = () => {
@@ -31,14 +31,14 @@ export class AssignNewSite extends Component {
         setSubmitting(true);
         const params = {
             siteId: values.site.value,
-            userId: window.selectedUserId,
+            userId: window.selectedUser.userId,
             roleIds: values.roles.filter(item => item.checked).map(item => item.roleId).join(',')
         };
         this.props.assignSiteToUser(params).then(() => {
             if (this.props.assignNewSiteResult.isSuccessful) {
                 setTimeout(() => {
                     this.handleCloseModalDialog();
-                    this.props.getSiteByUserId(window.selectedUserId);
+                    this.props.getSiteByUserId(window.selectedUser.userId);
                 }, 3000);
             } else {
                 setSubmitting(false);

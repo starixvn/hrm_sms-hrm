@@ -69,10 +69,17 @@
             return Json(commandResult);
         }
 
-        public IActionResult AssignSite(int id)
+        public async Task<IActionResult> AssignSite(int id)
         {
-            ViewBag.isHost = userControlSession.HasPermissionOnFunction(FunctionKey.UserManagement, Policy.Host);
-            return View(id);
+            var user = await userService.GetByIdAsync(id);
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            user.Password = string.Empty;
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.UserManagement, Policy.Host);
+            return View(user);
         }
 
         [HttpPost]
@@ -121,9 +128,16 @@
             return Json(commandResult);
         }
 
-        public IActionResult Permission(int id)
+        public async Task<IActionResult> Permission(int id)
         {
-            return View(id);
+            var user = await userService.GetByIdAsync(id);
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            user.Password = string.Empty;
+            return View(user);
         }
 
         public async Task<IActionResult> GetUserPermission(short siteId, int userId)

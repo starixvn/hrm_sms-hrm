@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { ActionCreators } from '../../actions';
 import SweetModalDialog from '@jsroot/components/SweetModalDialog';
@@ -17,7 +17,7 @@ export class AppContainer extends Component {
     }
 
     componentDidMount() {
-        this.props.getSiteByUserId(window.selectedUserId);
+        this.props.getSiteByUserId(window.selectedUser.userId);
     }
 
     handleOpenAssignNewSiteModalDialog = () => {
@@ -27,13 +27,13 @@ export class AppContainer extends Component {
     updateUserSiteStatus = () => {
         Site.blockUI();
         const { siteId, isActive } = this.props.updateUserSiteStatusModalDialog.site;
-        this.props.updateUserSiteStatus({ userId: window.selectedUserId, siteId, isActive: !isActive }).then(response => {
+        this.props.updateUserSiteStatus({ userId: window.selectedUser.userId, siteId, isActive: !isActive }).then(response => {
             Site.unblockUI()
             this.closeConfirmUpdateUserSiteStatus();
             if (response.data.isSuccessful) {
                 const message = isActive ? 'DeactivatedSuccessfully' : 'ActivatedSuccessfully';
                 toast.success(LangHelper.getResource(message));
-                this.props.getSiteByUserId(window.selectedUserId);
+                this.props.getSiteByUserId(window.selectedUser.userId);
             } else {
                 toast.error(response.data.message);
             }
@@ -46,8 +46,39 @@ export class AppContainer extends Component {
 
     render() {
         const { assignNewSiteModalDialog, updateUserSiteRoleModalDialog, updateUserSiteStatusModalDialog } = this.props;
+        const selectedUser = window.selectedUser;
         return (
             <>
+                <Form className="user-info mb-3 p-3 border">
+                    <Form.Group as={Row} className="mb-1">
+                        <Col sm="6">
+                            <Form.Label column sm="4">
+                                {LangHelper.getResource('Username')}:
+                            </Form.Label>
+                            <Form.Label column sm="7" className="font-weight-bold">{selectedUser.username}</Form.Label>
+                        </Col>
+                        <Col sm="6">
+                            <Form.Label column sm="4">
+                                {LangHelper.getResource('Code')}:
+                            </Form.Label>
+                            <Form.Label column sm="7" className="font-weight-bold">{selectedUser.code}</Form.Label>
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} className="mb-0">
+                        <Col sm="6">
+                            <Form.Label column sm="4">
+                                {LangHelper.getResource('Nickname')}:
+                            </Form.Label>
+                            <Form.Label column sm="7" className="font-weight-bold">{selectedUser.nickname}</Form.Label>
+                        </Col>
+                        <Col sm="6">
+                            <Form.Label column sm="4">
+                                {LangHelper.getResource('FullName')}:
+                            </Form.Label>
+                            <Form.Label column sm="7" className="font-weight-bold">{selectedUser.fullName}</Form.Label>
+                        </Col>
+                    </Form.Group>
+                </Form>
                 {
                     window.hasHostPermissionOnUser &&
                     <Form className="form-filter">
