@@ -127,10 +127,10 @@ BEGIN
 			@EmpId IS NULL
 			OR emp.EmpId = @EmpId
 			)
-		AND (
-			emp.ResignedDate IS NULL
-			OR emp.ResignedDate > @fromdate
-			)
+		--AND (
+		--	emp.ResignedDate IS NULL
+		--	OR emp.ResignedDate > @fromdate
+		--	)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
@@ -182,10 +182,10 @@ BEGIN
 			@EmpId IS NULL
 			OR emp.EmpId = @EmpId
 			)
-		AND (
-			emp.ResignedDate IS NULL
-			OR emp.ResignedDate > @fromdate
-			)
+		--AND (
+		--	emp.ResignedDate IS NULL
+		--	OR emp.ResignedDate > @fromdate
+		--	)
 		AND NOT EXISTS (
 			SELECT 1
 			FROM dbo.EmployeeCalendar AS empca WITH (NOLOCK)
