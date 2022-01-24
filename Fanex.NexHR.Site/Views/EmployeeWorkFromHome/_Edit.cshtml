@@ -1,6 +1,10 @@
 ﻿@using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.EmployeeWorkFromHome
 @model EmployeeWorkFromHomeViewModel
+@{
+    var today = DateTime.Today;
+    var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
+}
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
 {
@@ -25,9 +29,10 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new
-                         {
-                        @class = "datepicker form-control"
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        maxdate = maxDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -41,9 +46,10 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new
-                         {
-                        @class = "datepicker form-control"
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        maxdate = maxDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>

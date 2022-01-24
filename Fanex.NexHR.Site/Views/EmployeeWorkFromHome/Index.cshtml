@@ -3,6 +3,8 @@
 @model EmployeeWorkFromHomeFilterViewModel
 @{
     ViewBag.Title = Labels.EmployeeWorkFromHome;
+    var today = DateTime.Today;
+    var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
 }
 @section css{
     <link href="~/wwwroot/dist/styles/employee.workfromhome.css" rel="stylesheet" />
@@ -22,21 +24,31 @@
         <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.FromDateFilter, Labels.FromDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToDateMonthYearFormatedDate(),
-                        new { @class = "datepicker form-control" })
+                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter).ToString(),
+                        Model.FromDateFilter.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            @readonly = "readonly",
+                            maxdate = maxDate.ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>
             <div class="form-group form-group--m">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.ToDateFilter, Labels.ToDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToDateMonthYearFormatedDate(),
-                        new { @class = "datepicker form-control" })
+                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter).ToString(),
+                        Model.ToDateFilter.ToDateMonthYearFormatedDate(),
+                        new {
+                            @class = "datepicker form-control",
+                            @readonly = "readonly",
+                            maxdate = maxDate.ToString("yyyy/MM/dd")
+                        })
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </div>

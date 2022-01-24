@@ -32,8 +32,8 @@
         {
             var model = new EmployeeWorkFromHomeFilterViewModel
             {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now,
+                FromDateFilter = DateTime.Now,
+                ToDateFilter = DateTime.Now,
             };
 
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);

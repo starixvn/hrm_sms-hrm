@@ -28,7 +28,12 @@ const workFromHomeModule = (function ($) {
         axios({
             url: resolveClientUrl('EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid'),
             method: 'GET',
-            params: parse($('form.filter').serialize()),
+            params: {
+                fromDate: $("#FromDateFilter").val(),
+                toDate: $("#ToDateFilter").val(),
+                teamIds: $('#TeamIds').val(),
+                isLocal: $('#IsLocal').val()
+            },
             responseType: 'text'
         }).then(response => {
             $(domElement.Table).html(response.data);
