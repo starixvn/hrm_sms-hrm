@@ -73,7 +73,6 @@ BEGIN
 	--BEGIN
 	--	SET @fromDate = DATEADD(MONTH, - 6, GETDATE())
 	--END
-
 	INSERT INTO #tempEmployeeCalendar (
 		EmpId
 		,WorkDate
@@ -175,31 +174,34 @@ BEGIN
 		SET @tempDate = DATEADD(d, 1, @tempDate)
 	END
 
-	MERGE dbo.tmpEmployeeCalendar AS [target]
-	USING #tempEmployeeCalendar AS [source] ON (
-				[target].EmpId = [source].EmpId
-				AND [target].WorkDate = [source].WorkDate
-				)
-	WHEN MATCHED THEN
-			UPDATE
-			SET [target].ShiftId = [source].ShiftId
-				,[target].IsOffDay = [source].IsOffDay
-				,[target].IsHoliday = [source].IsHoliday
-	WHEN NOT MATCHED BY TARGET THEN
-			INSERT (
-				EmpId
-				,WorkDate
-				,ShiftId
-				,IsOffDay
-				,IsHoliday
-				)
-			VALUES (
-				[source].EmpId
-				,[source].WorkDate
-				,[source].ShiftId
-				,[source].IsOffDay
-				,[source].IsHoliday
-				);
+	UPDATE empca
+	SET empca.ShiftId = tmp.ShiftId
+		,empca.IsOffDay = tmp.IsOffDay
+		,empca.IsHoliday = tmp.IsHoliday
+	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tempEmployeeCalendar AS tmp WITH (ROWLOCK) ON empca.EmpId = tmp.EmpId
+		AND empca.WorkDate = tmp.WorkDate
+	WHERE empca.RequestId IS NULL
+
+	INSERT INTO dbo.tmpEmployeeCalendar (
+		EmpId
+		,WorkDate
+		,ShiftId
+		,IsOffDay
+		,IsHoliday
+		)
+	SELECT EmpId
+		,WorkDate
+		,ShiftId
+		,IsOffDay
+		,IsHoliday
+	FROM #tempEmployeeCalendar AS tmp WITH (ROWLOCK)
+	WHERE NOT EXISTS (
+			SELECT empca.EmpId
+			FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
+			WHERE empca.EmpId = tmp.EmpId
+				AND empca.WorkDate = tmp.WorkDate
+			)
 
 	UPDATE empca
 	SET empca.IsHoliday = (CASE 
