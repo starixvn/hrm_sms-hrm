@@ -29,6 +29,7 @@ BEGIN
 		,@KeepInViewLeaveType INT = 10
 		,@PublicHolidayLeaveType INT = 13
 
+	-- missing check in/out
 	CREATE TABLE #tblMissingCheckInOutDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -110,6 +111,18 @@ BEGIN
 				AND DisciplineTypeId = 2
 			)
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblMissingCheckInOutDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredMissingCheckInOut = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 2
+	WHERE dis.IsIgnored = 0
+
+	-- late in
 	CREATE TABLE #tblLateInDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -166,6 +179,18 @@ BEGIN
 				AND DisciplineTypeId = 3
 			)
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblLateInDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredLateIn = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 3
+	WHERE dis.IsIgnored = 0
+
+	-- early out
 	CREATE TABLE #tblEarlyOutDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -223,6 +248,18 @@ BEGIN
 				AND DisciplineTypeId = 4
 			)
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblEarlyOutDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredEarlyOut = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 4
+	WHERE dis.IsIgnored = 0
+
+	-- change shift
 	CREATE TABLE #tblChangeShiftDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -250,6 +287,18 @@ BEGIN
 			AND @ToDate
 		AND DisciplineTypeId = 1
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblChangeShiftDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredChangeShift = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 1
+	WHERE dis.IsIgnored = 0
+
+	-- working under time
 	CREATE TABLE #tblWorkingUnderTimeDiscipline (
 		WorkDate DATE
 		,EmpId INT
@@ -311,6 +360,18 @@ BEGIN
 				)
 			)
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblWorkingUnderTimeDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredWorkingUnderTime = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 7
+	WHERE dis.IsIgnored = 0
+
+	-- unpaid leave absent
 	CREATE TABLE #tblUnpaidLeaveAbsentDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -350,8 +411,20 @@ BEGIN
 			AND @ToDate
 		AND DisciplineTypeId = 8
 	GROUP BY EmpId
-		,WorkDate
+		,WorkDate	
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblUnpaidLeaveAbsentDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredUnpaidLeaveAbsent = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 8
+	WHERE dis.IsIgnored = 0
+
+	-- absent
 	CREATE TABLE #tblAbsentDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -420,6 +493,18 @@ BEGIN
 		AND @ModifiedDate > att.ExpectedOutTime
 		AND ISNULL(att.LeaveDay, 0) <> 1
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblAbsentDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredAbsent = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 5
+	WHERE dis.IsIgnored = 0
+
+	-- unplanned leave
 	CREATE TABLE #tblUnplannedDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -460,19 +545,31 @@ BEGIN
 		AND DisciplineTypeId = 9
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblUnpaidLeaveAbsentDiscipline
+			FROM #tblUnpaidLeaveAbsentDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblAbsentDiscipline
+			FROM #tblAbsentDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 	GROUP BY EmpId
 		,WorkDate
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblUnplannedDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredUnplannedLeave = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 9
+	WHERE dis.IsIgnored = 0
+
+	-- unpaid leave
 	CREATE TABLE #tblUnpaidLeaveDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -513,25 +610,37 @@ BEGIN
 		AND DisciplineTypeId = 6
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblUnpaidLeaveAbsentDiscipline
+			FROM #tblUnpaidLeaveAbsentDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblAbsentDiscipline
+			FROM #tblAbsentDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 		AND NOT EXISTS (
 			SELECT 1
-			FROM #tblUnplannedDiscipline
+			FROM #tblUnplannedDiscipline WITH (NOLOCK)
 			WHERE EmpId = drt.EmpId
 				AND WorkDate = drt.WorkDate
 			)
 	GROUP BY EmpId
 		,WorkDate
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblUnpaidLeaveDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredUnpaidLeave = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 6
+	WHERE dis.IsIgnored = 0
+
+	-- weekend leave
 	CREATE TABLE #tblWeekendLeaveDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -573,6 +682,18 @@ BEGIN
 	GROUP BY EmpId
 		,WorkDate
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblWeekendLeaveDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredWeekendLeave = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 10
+	WHERE dis.IsIgnored = 0
+
+	-- seven days
 	CREATE TABLE #tblSevenDaysLeaveDiscipline (
 		EmpId INT
 		,WorkDate DATE
@@ -614,6 +735,18 @@ BEGIN
 	GROUP BY EmpId
 		,WorkDate
 
+	UPDATE dis
+	SET dis.IsIgnored = 1
+	FROM #tblSevenDaysLeaveDiscipline AS dis WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.DisciplineIgnore AS dig WITH (NOLOCK) ON dis.EmpId = dig.EmpId
+		AND dis.WorkDate = dig.WorkDate
+		AND dig.IsIgnoredSevenDaysLeave = 1
+		INNER JOIN dbo.DisciplineIgnoreDetail AS dd WITH (NOLOCK) ON dis.EmpId = dd.EmpId
+		AND dis.WorkDate = dd.WorkDate
+		AND dd.DisciplineTypeId = 11
+	WHERE dis.IsIgnored = 0
+
+	--
 	CREATE TABLE #tblDiscipline (
 		[EmpId] [int] NOT NULL
 		,[WorkDate] [date] NOT NULL
@@ -1053,7 +1186,7 @@ BEGIN
 	FROM #tblDiscipline AS dis WITH (NOLOCK)
 	WHERE NOT EXISTS (
 			SELECT 1
-			FROM dbo.DisciplineIgnore
+			FROM dbo.DisciplineIgnore WITH (NOLOCK)
 			WHERE EmpId = dis.EmpId
 				AND WorkDate = dis.WorkDate
 			)
