@@ -28,84 +28,67 @@ BEGIN
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
 
-	CREATE TABLE #tblIgnoredDisciplineDetail (
-		WorkDate DATE
-		,EmployeeId INT
-		,IsIgnoredChangeShift BIT
-		,IsIgnoredMissingCheckInOut BIT
-		,IsIgnoredLateIn BIT
-		,IsIgnoredEarlyOut BIT
-		,IsIgnoredAbsent BIT
-		,IsIgnoredUnplannedLeave BIT
-		,IsIgnoredUnpaidLeave BIT
-		,IsIgnoredWorkingUnderTime BIT
-		,IsIgnoredUnpaidLeaveAbsent BIT
-		,IsIgnoredWeekendLeave BIT
-		,ApproverSubtractScore DECIMAL(5, 2)
-		,IsOutOfControlReason BIT
-		)
-
-	IF ISNULL(@DisciplineIgnoreXml, '') <> ''
-	BEGIN
-		EXEC dbo.DisciplineIgnoreDetail_Update
-			@ActorId = @ActorId
-			,@DisciplineIgnoreXml = @DisciplineIgnoreXml
-			,@ErrCode = @ErrCode OUTPUT
-			,@ErrMsg = @ErrMsg OUTPUT
-	END
-
 	IF ISNULL(@IgnoreDetailXml, '') <> ''
 	BEGIN
-		BEGIN TRY
-			DECLARE @DocHandler INT
+		DECLARE @DocHandler INT
 
-			EXEC sp_xml_preparedocument @DocHandler OUTPUT
-				,@IgnoreDetailXml
+		CREATE TABLE #tblIgnoredDisciplineDetail (
+			WorkDate DATE
+			,EmployeeId INT
+			,IsIgnoredChangeShift BIT
+			,IsIgnoredMissingCheckInOut BIT
+			,IsIgnoredLateIn BIT
+			,IsIgnoredEarlyOut BIT
+			,IsIgnoredAbsent BIT
+			,IsIgnoredUnplannedLeave BIT
+			,IsIgnoredUnpaidLeave BIT
+			,IsIgnoredWorkingUnderTime BIT
+			,IsIgnoredUnpaidLeaveAbsent BIT
+			,IsIgnoredWeekendLeave BIT
+			,IsIgnoredSevenDaysLeave BIT
+			,ApproverSubtractScore DECIMAL(5, 2)
+			,IsOutOfControlReason BIT
+			)
 
-			INSERT INTO #tblIgnoredDisciplineDetail (
-				WorkDate
-				,EmployeeId
-				,IsIgnoredChangeShift
-				,IsIgnoredMissingCheckInOut
-				,IsIgnoredLateIn
-				,IsIgnoredEarlyOut
-				,IsIgnoredAbsent
-				,IsIgnoredUnplannedLeave
-				,IsIgnoredUnpaidLeave
-				,IsIgnoredWorkingUnderTime
-				,IsIgnoredUnpaidLeaveAbsent
-				,IsIgnoredWeekendLeave
-				,ApproverSubtractScore
-				,IsOutOfControlReason
-				)
-			SELECT DISTINCT WorkDate
-				,EmployeeId
-				,IsIgnoredChangeShift
-				,IsIgnoredMissingCheckInOut
-				,IsIgnoredLateIn
-				,IsIgnoredEarlyOut
-				,IsIgnoredAbsent
-				,IsIgnoredUnplannedLeave
-				,IsIgnoredUnpaidLeave
-				,IsIgnoredWorkingUnderTime
-				,IsIgnoredUnpaidLeaveAbsent
-				,IsIgnoredWeekendLeave
-				,ApproverSubtractScore
-				,IsOutOfControlReason
-			FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, EmployeeId INT, IsIgnoredChangeShift BIT, IsIgnoredMissingCheckInOut BIT, IsIgnoredLateIn BIT, IsIgnoredEarlyOut BIT, IsIgnoredAbsent BIT, IsIgnoredUnplannedLeave BIT, IsIgnoredUnpaidLeave BIT, IsIgnoredWorkingUnderTime BIT, IsIgnoredUnpaidLeaveAbsent BIT, IsIgnoredWeekendLeave BIT, ApproverSubtractScore DECIMAL(5, 2), IsOutOfControlReason BIT) AS Data
+		EXEC sp_xml_preparedocument @DocHandler OUTPUT
+			,@IgnoreDetailXml
 
-			EXEC sp_xml_removedocument @DocHandler
-		END TRY
+		INSERT INTO #tblIgnoredDisciplineDetail (
+			WorkDate
+			,EmployeeId
+			,IsIgnoredChangeShift
+			,IsIgnoredMissingCheckInOut
+			,IsIgnoredLateIn
+			,IsIgnoredEarlyOut
+			,IsIgnoredAbsent
+			,IsIgnoredUnplannedLeave
+			,IsIgnoredUnpaidLeave
+			,IsIgnoredWorkingUnderTime
+			,IsIgnoredUnpaidLeaveAbsent
+			,IsIgnoredWeekendLeave
+			,IsIgnoredSevenDaysLeave
+			,ApproverSubtractScore
+			,IsOutOfControlReason
+			)
+		SELECT DISTINCT WorkDate
+			,EmployeeId
+			,IsIgnoredChangeShift
+			,IsIgnoredMissingCheckInOut
+			,IsIgnoredLateIn
+			,IsIgnoredEarlyOut
+			,IsIgnoredAbsent
+			,IsIgnoredUnplannedLeave
+			,IsIgnoredUnpaidLeave
+			,IsIgnoredWorkingUnderTime
+			,IsIgnoredUnpaidLeaveAbsent
+			,IsIgnoredWeekendLeave
+			,IsIgnoredSevenDaysLeave
+			,ApproverSubtractScore
+			,IsOutOfControlReason
+		FROM OPENXML(@DocHandler, '/Root/Row', 1) WITH (WorkDate DATE, EmployeeId INT, IsIgnoredChangeShift BIT, IsIgnoredMissingCheckInOut BIT, IsIgnoredLateIn BIT, IsIgnoredEarlyOut BIT, IsIgnoredAbsent BIT, IsIgnoredUnplannedLeave BIT, IsIgnoredUnpaidLeave BIT, IsIgnoredWorkingUnderTime BIT, IsIgnoredUnpaidLeaveAbsent BIT, IsIgnoredWeekendLeave BIT, IsIgnoredSevenDaysLeave BIT, ApproverSubtractScore DECIMAL(5, 2), IsOutOfControlReason BIT) AS Data
 
-		BEGIN CATCH
-			SELECT @ErrCode = 1
-				,@ErrMsg = N'Parameter invalid.'
+		EXEC sp_xml_removedocument @DocHandler
 
-			RETURN
-		END CATCH
-	END
-
-	BEGIN TRY
 		IF @HasUpdateOutOfControlReason = 1
 		BEGIN
 			UPDATE dis
@@ -175,16 +158,29 @@ BEGIN
 				,dis.IsIgnoredWorkingUndertime = ignore.IsIgnoredWorkingUnderTime
 				,dis.IsIgnoredUnpaidLeaveAbsent = ignore.IsIgnoredUnpaidLeaveAbsent
 				,dis.IsIgnoredWeekendLeave = ignore.IsIgnoredWeekendLeave
+				,dis.IsIgnoredSevenDaysLeave = ignore.IsIgnoredSevenDaysLeave
 			FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
 				INNER JOIN #tblIgnoredDisciplineDetail AS ignore WITH (NOLOCK) ON dis.WorkDate = ignore.WorkDate
 				AND dis.EmpId = ignore.EmployeeId
 		END
-	END TRY
 
-	BEGIN CATCH
-		SELECT @ErrCode = 1
-			,@ErrMsg = N'Update unsuccessfully.'
-	END CATCH
+		DROP TABLE #tblIgnoredDisciplineDetail
+	END
 
-	DROP TABLE #tblIgnoredDisciplineDetail
+	EXEC dbo.DisciplineIgnoreDetail_Update @ActorId = @ActorId
+		,@DisciplineIgnoreXml = @DisciplineIgnoreXml
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
+
+	EXEC dbo.Log_WriteLog @LogActionId = 1010
+		,@LogDate = @ModifiedDate
+		,@Description = 'Discipline review'
+		,@TrackingValue = @IgnoreDetailXml
+		,@UserId = @ActorId
+
+	EXEC dbo.Log_WriteLog @LogActionId = 1011
+		,@LogDate = @ModifiedDate
+		,@Description = 'Discipline review - log detail'
+		,@TrackingValue = @DisciplineIgnoreXml
+		,@UserId = @ActorId
 END
