@@ -17,6 +17,8 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @tmpToDate DATETIME = DATEADD(SECOND, -1, DATEADD(DAY, 2, CONVERT(DATETIME, @ToDate)))
+
 	CREATE TABLE #tblEmpIds (EmpId INT)
 
 	CREATE TABLE #tblGroupIds (TmpGroupId INT)
@@ -63,12 +65,13 @@ BEGIN
 		EmpId
 		,RecordTime
 		)
-	SELECT EmpId
+	SELECT tr.EmpId
 		,RecordTime
 	FROM dbo.TimeRecord AS tr WITH (NOLOCK)
 		INNER JOIN dbo.TimeRecordExt AS te WITH (NOLOCK) ON tr.ID = te.ID
+		--INNER JOIN #tblEmpIds AS tmpemp WITH (NOLOCK) ON tr.EmpId = tmpemp.EmpId
 	WHERE tr.RecordTime BETWEEN DATEADD(dd, - 1, @FromDate)
-			AND DATEADD(dd, 1, @ToDate)
+			AND @tmpToDate
 
 	CREATE TABLE #tblEmpAttandance (
 		EmpId INT
