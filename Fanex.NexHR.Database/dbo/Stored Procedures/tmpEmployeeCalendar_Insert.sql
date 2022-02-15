@@ -426,16 +426,20 @@ BEGIN
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cs.RequestId = r.RequestId
 			AND r.CurrentStatus NOT IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId)
 		) AS cs
-	WHERE (
-			empca.RequestId IS NOT NULL
-			AND empca.RequestTypeId = @ChangeShiftRequestTypeId
-			AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
-			AND empca.MoveOffFromDate IS NOT NULL
-			--AND cs.RequestId IS NULL
-			)
-		OR (
-			empca.RequestId IS NULL
-			AND cs.RequestId IS NOT NULL
+	WHERE empca.WorkDate BETWEEN @fromDate
+			AND @toDate
+		AND (
+			(
+				empca.RequestId IS NOT NULL
+				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+				AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
+				AND empca.MoveOffFromDate IS NOT NULL
+				--AND cs.RequestId IS NULL
+				)
+			OR (
+				empca.RequestId IS NULL
+				AND cs.RequestId IS NOT NULL
+				)
 			)
 
 	-- leave request
