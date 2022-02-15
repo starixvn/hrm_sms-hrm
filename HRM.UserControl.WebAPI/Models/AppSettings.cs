@@ -2,6 +2,5 @@
 {
     public class AppSettings
     {
-        public string SuperPassword { get; set; }
     }
 }
