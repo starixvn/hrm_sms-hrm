@@ -40,10 +40,6 @@ BEGIN
 		,@VerifiedStatusId TINYINT = 2
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
-	DECLARE @tblChangeShiftDetail TABLE (
-		OnDate DATE
-		,ToDate DATE
-		)
 
 	SELECT @EmpId = EmpId
 		,@FromDate = FromDate
@@ -71,11 +67,61 @@ BEGIN
 		RETURN
 	END
 
-	EXEC dbo.EmployeeCalendar_Insert @empid = @empid
-		,@fromdate = @FromDate
-		,@todate = @ToDate
-		,@ErrCode = @ErrCode OUTPUT
-		,@ErrMsg = @ErrMsg OUTPUT
+	CREATE TABLE #tblChangeShiftDetail (
+		RowIndex INT IDENTITY(1, 1)
+		,OnDate DATE
+		,ToDate DATE
+		)
+
+	INSERT INTO #tblChangeShiftDetail (
+		OnDate
+		,ToDate
+		)
+	SELECT OnDate
+		,ToDate
+	FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+	WHERE RequestId = @RequestId
+
+	DECLARE @TotalRows INT
+		,@RowIndex INT = 1
+		,@tmpOnDate DATE
+		,@tmpToDate DATE
+
+	IF @TypeId = @ChangeShift
+	BEGIN
+		EXEC dbo.EmployeeCalendar_Insert @empid = @empid
+			,@fromdate = @FromDate
+			,@todate = @ToDate
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
+	ELSE
+	BEGIN
+		SELECT @TotalRows = COUNT(1)
+		FROM #tblChangeShiftDetail WITH (NOLOCK)
+
+		WHILE @RowIndex <= @TotalRows
+		BEGIN
+			SELECT @tmpOnDate = OnDate
+				,@tmpToDate = ToDate
+			FROM #tblChangeShiftDetail WITH (NOLOCK)
+			WHERE RowIndex = @RowIndex
+
+			EXEC dbo.EmployeeCalendar_Insert @empid = @empid
+				,@fromdate = @tmpOnDate
+				,@todate = @tmpOnDate
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+
+			EXEC dbo.EmployeeCalendar_Insert @empid = @empid
+				,@fromdate = @tmpToDate
+				,@todate = @tmpToDate
+				,@ErrCode = @ErrCode OUTPUT
+				,@ErrMsg = @ErrMsg OUTPUT
+
+			SET @RowIndex = @RowIndex + 1
+		END
+	END
 
 	IF @RoleId = @VerifierRoleId
 	BEGIN
@@ -99,8 +145,7 @@ BEGIN
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
 
-				EXEC dbo.DisciplineIgnoreDetail_Update
-				@ActorId = @ActorId
+			EXEC dbo.DisciplineIgnoreDetail_Update @ActorId = @ActorId
 				,@DisciplineIgnoreXml = @DisciplineXml
 				,@ErrCode = @ErrCode OUTPUT
 				,@ErrMsg = @ErrMsg OUTPUT
@@ -189,43 +234,29 @@ BEGIN
 				AND empca.IsOffDay = 0
 		END
 
-		INSERT INTO @tblChangeShiftDetail (
-			OnDate
-			,ToDate
-			)
-		SELECT OnDate
-			,ToDate
-		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
-		WHERE RequestId = @RequestId
+		SET @RowIndex = 1
 
-		WHILE EXISTS (
-				SELECT 1
-				FROM @tblChangeShiftDetail
-				)
+		WHILE @RowIndex <= @TotalRows
 		BEGIN
-			SELECT TOP 1 @FromDate = OnDate
-			FROM @tblChangeShiftDetail
+			SELECT @tmpOnDate = OnDate
+				,@tmpToDate = ToDate
+			FROM #tblChangeShiftDetail WITH (NOLOCK)
+			WHERE RowIndex = @RowIndex
 
 			EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-				,@FromDate
-				,@FromDate
+				,@tmpOnDate
+				,@tmpOnDate
 				,1
 
 			IF @TypeId = @MoveOffDay
 			BEGIN
-				SELECT TOP 1 @ToDate = ToDate
-				FROM @tblChangeShiftDetail
-				WHERE OnDate = @FromDate
-
 				EXEC dbo.EmployeeAttendance_ProcessingAndInsert @EmpId
-					,@ToDate
-					,@ToDate
+					,@tmpToDate
+					,@tmpToDate
 					,1
 			END
 
-			DELETE
-			FROM @tblChangeShiftDetail
-			WHERE OnDate = @FromDate
+			SET @RowIndex = @RowIndex + 1
 		END
 	END
 	ELSE IF @RoleId = @HRRoleId
@@ -242,4 +273,6 @@ BEGIN
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment
+
+	DROP TABLE #tblChangeShiftDetail
 END
