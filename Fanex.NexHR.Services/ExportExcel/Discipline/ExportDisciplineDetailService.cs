@@ -16,7 +16,7 @@
         private const int HeaderRow = 2;
         private const int BodyRow = 3;
         private const int WeekendRow = 4;
-        private const int TotalCol = 25;
+        private const int TotalCol = 26;
 
         public void Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
         {
@@ -90,6 +90,7 @@
             string unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
             string changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
             string unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
+            string weekendLeave = ReturnValueOrEmtpyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
             string sevenDaysLeave = ReturnValueOrEmtpyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
             string isOutOfControlReason = ReturnValueOrEmtpyString(discipline.IsOutOfControlReason, Labels.Yes);
 
@@ -114,6 +115,7 @@
                 UnpaidLeaveAbsent = unpaidLeaveAbsent,
                 ChangeShift = changeShift,
                 UnplannedLeave = unplannedLeave,
+                WeekendLeave = weekendLeave,
                 SevenDaysLeave = sevenDaysLeave,
                 SystemSubtractScore = systemSubtractScore,
                 ApproverSubtractScore = approverSubtractScore,
