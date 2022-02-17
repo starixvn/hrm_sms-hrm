@@ -71,7 +71,6 @@
         private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
         {
             float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
-            float weekendLeave = discipline.WeekendLeave > 0 ? -discipline.WeekendLeave : 0;
             float systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
             float approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
@@ -92,7 +91,7 @@
                 discipline.UnpaidLeaveAbsent,
                 discipline.ChangeShift,
                 discipline.UnplannedLeave,
-                WeekendLeave = (decimal)weekendLeave,
+                discipline.WeekendLeave,
                 discipline.SevenDaysLeave,
                 OtherDiscipline = (decimal)otherDisciplines,
                 SystemSubtractScore = (decimal)systemSubtractScore,
