@@ -20,7 +20,7 @@
             DbSettingProviderManager
                 .StartNewSession()
                 .WithSqlServer(
-                    resourcePath: "~/"
+                    resourcePath: "~/App_Data/SpNames.xml"
                 )
                 .Run();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
