@@ -1168,11 +1168,11 @@
     <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
     <Content Include="Views\JobTitle\_JobTitleGrid.cshtml" />
     <Content Include="Views\Report\_TimesheetDetails.cshtml" />
-    <Content Include="WebConfigs\Web.PRO.sms.config">
+    <Content Include="WebConfigs\Web.SMS_PROD.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="WebConfigs\Web.PRO.hm.config">
+    <Content Include="WebConfigs\Web.HM_PROD.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1259,7 +1259,7 @@
     <Content Include="Views\JobLevel\Index.cshtml" />
     <Content Include="Views\JobLevel\_JobLevelGrid.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\joblevel\joblevel.scss" />
-    <Content Include="WebConfigs\Web.PRO.CTS.config">
+    <Content Include="WebConfigs\Web.CTS_PROD.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
