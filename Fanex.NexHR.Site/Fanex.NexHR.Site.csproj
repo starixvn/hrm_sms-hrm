@@ -1035,8 +1035,9 @@
     <Content Include="Views\ChangeShift\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.local.config">
+    <Content Include="WebConfigs\Web.Local.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Deployment.ignore" />
     <Content Include="Views\Request\EmployeeRequest.cshtml" />
