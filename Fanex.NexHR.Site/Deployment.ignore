@@ -1,3 +1,5 @@
 \\Avatars\\.*
 \\file\.*
 \\SystemLog\\.*
+\\wwwroot\\parts
+\\wwwroot\\sources
