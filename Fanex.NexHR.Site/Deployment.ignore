@@ -1,6 +1,6 @@
 \\Avatars\\.*
 \\file\.*
-\\SystemLog\\.*
+\\SystemLog
 \\wwwroot\\parts
 \\wwwroot\\sources
 \\*.Debug.config
