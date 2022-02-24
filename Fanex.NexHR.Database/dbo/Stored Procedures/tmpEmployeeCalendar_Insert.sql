@@ -182,6 +182,10 @@ BEGIN
 		INNER JOIN #tempEmployeeCalendar AS tmp WITH (ROWLOCK) ON empca.EmpId = tmp.EmpId
 		AND empca.WorkDate = tmp.WorkDate
 	WHERE empca.RequestId IS NULL
+		OR (
+			empca.RequestId IS NOT NULL
+			AND empca.RequestTypeId = @ChangeShiftRequestTypeId
+			)
 
 	INSERT INTO dbo.tmpEmployeeCalendar (
 		EmpId
