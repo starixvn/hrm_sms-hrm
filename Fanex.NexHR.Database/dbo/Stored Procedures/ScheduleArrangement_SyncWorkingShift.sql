@@ -199,7 +199,10 @@ BEGIN
 				)
 			OR (
 				s.ShiftID IS NOT NULL
-				AND ec.ShiftId != s.ShiftID
+				AND (
+					ec.ShiftId IS NULL
+					OR ec.ShiftId != s.ShiftID
+					)
 				)
 			)
 
