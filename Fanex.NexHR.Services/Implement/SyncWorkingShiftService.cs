@@ -23,6 +23,7 @@
 
     public class SyncWorkingShiftService : ISyncWorkingShiftService
     {
+        private const int BatchSize = 1000;
         private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SyncWorkingShiftService));
         private readonly IBaseService baseService;
         private readonly HttpClient _httpClient;
@@ -51,11 +52,15 @@
                         ProcessData(shift);
                     }
 
-                    var command = new ImportWorkingShiftCommand
+                    int totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
+                    for (int i = 0; i < totalBatch; i++)
                     {
-                        WorkingShiftXml = workingShifts.ToXML().ToString()
-                    };
-                    baseService.ExecuteNonQuery(command);
+                        var command = new ImportWorkingShiftCommand
+                        {
+                            WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString()
+                        };
+                        baseService.ExecuteNonQuery(command);
+                    }
                 }
             }
             else
@@ -82,8 +87,12 @@
                         ProcessData(shift);
                     }
 
-                    command.WorkingShiftXml = workingShifts.ToXML().ToString();
-                    commandResult = baseService.ExecuteNonQuery(command);
+                    int totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
+                    for (int i = 0; i < totalBatch; i++)
+                    {
+                        command.WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString();
+                        commandResult = baseService.ExecuteNonQuery(command);
+                    }
                 }
             }
             else
@@ -99,6 +108,7 @@
 
         private static void ProcessData(WorkingShiftSyncModel shift)
         {
+            shift.EmployeeID = shift.EmployeeID.Trim();
             shift.ShiftCode = shift.ShiftCode?.Trim();
 
             CheckOffDay(shift);
