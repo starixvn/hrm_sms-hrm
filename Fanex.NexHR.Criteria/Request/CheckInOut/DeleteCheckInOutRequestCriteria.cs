@@ -6,14 +6,8 @@
     {
         public long RequestId { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "KeepInViewRequest_Delete";
-        }
+        public override string GetSettingKey() => "CheckInOutRequest_Delete";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
     }
 }

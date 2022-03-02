@@ -38,13 +38,16 @@ BEGIN
 	FROM dbo.KeepInViewRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK)
+	DELETE dbo.WorkingTimeRequestHistory WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.KeepInViewRequest WITH (ROWLOCK)
+	DELETE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
-	DELETE dbo.KeepInViewRequestHistory WITH (ROWLOCK)
+	DELETE dbo.KeepInViewRequestHistory WITH (ROWLOCK, UPDLOCK)
+	WHERE RequestId = @RequestId
+
+	DELETE dbo.KeepInViewRequest WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
 	EXEC dbo.tmpEmployeeCalendar_Insert @fromDate = @OnDate
