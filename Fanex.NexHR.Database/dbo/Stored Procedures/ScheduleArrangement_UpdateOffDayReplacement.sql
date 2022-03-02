@@ -300,13 +300,13 @@ BEGIN
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmpId = offrep.EmployeeId
-					AND (
-						(
-							emp.TotalOffDaysUsed < emp.OffDaysByWeek
-							AND empca.ModifiedBy IS NULL
-							)
-						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
-						)
+					--AND (
+					--	(
+					--		emp.TotalOffDaysUsed < emp.OffDaysByWeek
+					--		AND empca.ModifiedBy IS NULL
+					--		)
+					--	OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+					--	)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate AND emp.ToDate
 				)
@@ -324,13 +324,13 @@ BEGIN
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmployeeId = offrep.EmployeeId
-					AND (
-						(
-							emp.TotalOffDaysUsed < emp.OffDaysByWeek
-							AND empca.ModifierId IS NULL
-							)
-						OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
-						)
+					--AND (
+					--	(
+					--		emp.TotalOffDaysUsed < emp.OffDaysByWeek
+					--		AND empca.ModifierId IS NULL
+					--		)
+					--	OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
+					--	)
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate

@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[Report_DisciplineSummary] @FromDate DATE
 	,@ToDate DATE
 	,@ApproverId INT
@@ -374,14 +376,8 @@ BEGIN
 		,SUM(ISNULL(empD.UnpaidLeaveAbsent, 0)) AS UnpaidLeaveAbsent
 		,SUM(ISNULL(empD.SevenDaysLeave, 0)) AS SevenDaysLeave
 		,SUM(ISNULL(empD.OtherDisciplineScore, 0)) AS OtherDisciplineScore
-		,SUM(CASE 
-				WHEN ISNULL(empD.OtherDisciplineScore, 0) = 0 THEN ISNULL(empF.SystemSubtractScore, 0)
-				ELSE ISNULL(empD.OtherDisciplineScore, 0)
-				END) AS SystemSubtractScore
-		,SUM(CASE 
-				WHEN ISNULL(empD.OtherDisciplineScore, 0) = 0 THEN ISNULL(empF.ApproverSubtractScore, 0)
-				ELSE ISNULL(empD.OtherDisciplineScore, 0)
-				END) + SUM(ISNULL(empD.WeekendLeave, 0)) AS ApproverSubtractScore
+		,SUM(ISNULL(empD.OtherDisciplineScore, 0) + ISNULL(empF.SystemSubtractScore, 0)) AS SystemSubtractScore
+		,SUM(ISNULL(empD.OtherDisciplineScore, 0) + ISNULL(empF.ApproverSubtractScore, 0)) AS ApproverSubtractScore
 		,Permission = (CASE 
 			WHEN EXISTS (
 					SELECT 1

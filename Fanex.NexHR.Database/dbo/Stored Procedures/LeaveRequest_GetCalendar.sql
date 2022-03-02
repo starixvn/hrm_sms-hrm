@@ -27,10 +27,10 @@ BEGIN
 		,empca.IsLeaveOffDay
 		,empca.IsLeaveDay
 		,empca.LeaveDay
-		,empca.ShiftId
+		,shift.ShiftId
 		,shift.Code
 		,shift.[Name]
-		,empca.LeaveTypeId
+		,lv1.LeaveTypeId
 		,lv1.Code
 		,lv1.[Name]
 		,lv2.LeaveTypeId AS LeaveTypeId2

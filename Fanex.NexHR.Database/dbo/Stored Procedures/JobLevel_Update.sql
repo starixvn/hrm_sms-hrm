@@ -1,7 +1,7 @@
 ﻿
-CREATE PROCEDURE [dbo].[JobLevel_Update]
-	@JobLevelId INT
-	,@Name nvarchar(150)
+
+CREATE PROCEDURE [dbo].[JobLevel_Update] @JobLevelId INT
+	,@Name NVARCHAR(150)
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -21,18 +21,19 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.JobLevel WITH (NOLOCK)
-			WHERE Name = @Name AND JobLevelId <> @JobLevelId
+			WHERE [Name] = @Name
+				AND JobLevelId <> @JobLevelId
+				AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1
-			,@ErrMsg = N'The Job Level has already exists'
+			,@ErrMsg = N'Job Level ' + @Name + ' has already exists'
 
 		RETURN
 	END
 
-
 	UPDATE dbo.JobLevel WITH (ROWLOCK, UPDLOCK)
-	SET Name = @Name
+	SET [Name] = @Name
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = GETDATE()
 	WHERE JobLevelId = @JobLevelId

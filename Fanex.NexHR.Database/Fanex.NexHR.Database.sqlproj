@@ -529,7 +529,6 @@
     <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpSickLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_UpdateTmpHospitalizationLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_InsertTmpSickLeaveTrans.sql" />
-    <Build Include="dbo\Stored Procedures\LeaveRequest_InsertTmpKIVLeaveTrans_delete.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_InsertTmpHospitalizationLeaveTrans.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_CheckSickLeaveBalance.sql" />
     <Build Include="dbo\Stored Procedures\LeaveRequest_CheckHospitalizationLeaveBalance.sql" />

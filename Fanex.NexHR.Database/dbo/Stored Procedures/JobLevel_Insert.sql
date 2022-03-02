@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[JobLevel_Insert]
-	@Name nvarchar(150)
+﻿
+
+CREATE PROCEDURE [dbo].[JobLevel_Insert] @Name NVARCHAR(150)
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -19,7 +20,8 @@ BEGIN
 	IF EXISTS (
 			SELECT 1
 			FROM dbo.JobLevel WITH (NOLOCK)
-			WHERE Name = @Name
+			WHERE [Name] = @Name
+				AND IsDeleted = 0
 			)
 	BEGIN
 		SELECT @ErrCode = 1
@@ -28,16 +30,33 @@ BEGIN
 		RETURN
 	END
 
-	INSERT INTO dbo.JobLevel(
-		[Name]
-		,[IsDeleted]
-		,[ModifiedBy]
-		,[ModifiedDate]
-		)
-	VALUES (
-		@Name
-		,0
-		,@ModifiedBy
-		,GETDATE()
-		)
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.JobLevel WITH (NOLOCK)
+			WHERE [Name] = @Name
+				AND IsDeleted = 1
+			)
+	BEGIN
+		UPDATE dbo.JobLevel WITH (ROWLOCK, UPDLOCK)
+		SET IsDeleted = 0
+			,ModifiedBy = @ModifiedBy
+			,ModifiedDate = GETDATE()
+		WHERE [Name] = @Name
+			AND IsDeleted = 1
+	END
+	ELSE
+	BEGIN
+		INSERT INTO dbo.JobLevel (
+			[Name]
+			,[IsDeleted]
+			,[ModifiedBy]
+			,[ModifiedDate]
+			)
+		VALUES (
+			@Name
+			,0
+			,@ModifiedBy
+			,GETDATE()
+			)
+	END
 END

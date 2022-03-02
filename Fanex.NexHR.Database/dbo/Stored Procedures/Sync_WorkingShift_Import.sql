@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Sync_WorkingShift_Import] @WorkingShiftXml NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -21,6 +22,9 @@ BEGIN
 	DECLARE @SyncDate DATETIME = GETDATE()
 		,@Today DATE = GETDATE()
 		,@EmpId INT
+		,@EmployeeIds VARCHAR(MAX)
+		,@FromDate DATE
+		,@ToDate DATE
 		,@WorkDate DATE
 		,@DocHandler INT
 
@@ -238,6 +242,26 @@ BEGIN
 			WHERE ec.EmpId = e.EmpId
 				AND CAST(tmpws.ShiftDate AS DATE) = CAST(ec.WorkDate AS DATE)
 			)
+
+	IF EXISTS (
+			SELECT 1
+			FROM #tmpEmployeeCalendar WITH (NOLOCK)
+			)
+	BEGIN
+		SELECT @FromDate = MIN(WorkDate)
+			,@ToDate = MAX(WorkDate)
+		FROM #tmpEmployeeCalendar WITH (NOLOCK)
+
+		SELECT @EmployeeIds = COALESCE(@EmployeeIds + ',', '') + CAST(EmpId AS VARCHAR(10))
+		FROM #tmpEmployeeCalendar WITH (NOLOCK)
+
+		EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = - 1
+			,@EmployeeIds = @EmployeeIds
+			,@FromDate = @FromDate
+			,@ToDate = @ToDate
+			,@ErrCode = @ErrCode OUTPUT
+			,@ErrMsg = @ErrMsg OUTPUT
+	END
 
 	DELETE
 	FROM #tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)

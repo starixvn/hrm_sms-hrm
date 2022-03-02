@@ -1,5 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/20/2016 10:19:09 AM ******/
-/****** Object:  Stored Procedure dbo.GroupSupervisor_Get    Script Date: 7/19/2016 5:22:16 PM ******/
+﻿
 
 CREATE PROCEDURE [dbo].[GroupSupervisor_Get] @TeamIds VARCHAR(MAX) = ''
 AS
@@ -15,17 +14,11 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	CREATE TABLE #Group (GroupId INT)
-
-	CREATE TABLE #GroupSupervisor (
-		GroupId INT
-		,OwnerId INT
-		,ActionType TINYINT
-		)
+	CREATE TABLE #tblGroup (GroupId INT)
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
-		INSERT INTO #Group (GroupId)
+		INSERT INTO #tblGroup (GroupId)
 		SELECT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
@@ -36,16 +29,10 @@ BEGIN
 		,sec.Code AS Section
 		,dep.Code AS Department
 	FROM dbo.[Group] AS gr WITH (NOLOCK)
+		INNER JOIN #tblGroup AS tblgr WITH (NOLOCK) ON gr.GroupId = tblgr.GroupId
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = gr.SectionId
 		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
 	WHERE ISNULL(gr.IsDeleted, 0) = 0
-		AND (
-			--ISNULL(@TeamIds, '') = '' OR
-			gr.GroupId IN (
-				SELECT GroupId
-				FROM #Group
-				)
-			)
 	ORDER BY gr.Code
 
 	SELECT DISTINCT su.OwnerId
@@ -63,7 +50,5 @@ BEGIN
 	WHERE su.ActionType IN (2, 3, 4, 5, 8)
 		AND ISNULL(su.IsDeleted, 0) = 0
 
-	DROP TABLE #Group
-
-	DROP TABLE #GroupSupervisor
+	DROP TABLE #tblGroup
 END

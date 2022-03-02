@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
+﻿
+
+CREATE PROCEDURE [dbo].[TimeRecord_Get] @EmpId INT = NULL
 	,@SupervisorId INT = NULL
 	,@FromDate DATE
 	,@ToDate DATE
@@ -8,6 +10,7 @@
 	,@ItemsPerPage INT = NULL
 	,@TotalItem INT = 0 OUT
 AS
+
 /*
 Created: Quinn.Vo@2014-01-24
 Task: Get Time Record
@@ -35,6 +38,7 @@ BEGIN
 		,Team NVARCHAR(50)
 		,SectionCode NVARCHAR(50)
 		,DepartmentCode NVARCHAR(50)
+		,IsCheckInOutOnline BIT
 		)
 
 	DECLARE @tblGroupId TABLE (GroupId INT)
@@ -66,6 +70,10 @@ BEGIN
 		,g.[Name]
 		,sec.Code SectionCode
 		,dep.Code DepartmentCode
+		,CASE
+			WHEN tex.ID IS NOT NULL THEN 1
+			ELSE 0
+		END AS IsInOutOnline
 	FROM dbo.TimeRecord AS t WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON t.EmpID = e.EmpId
 		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
@@ -73,6 +81,7 @@ BEGIN
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 		INNER JOIN dbo.Department AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
 		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		LEFT JOIN dbo.TimeRecordExt AS tex WITH (NOLOCK) ON t.ID = tex.ID
 	WHERE CAST(RecordTime AS DATE) BETWEEN @FromDate
 			AND @ToDate
 		AND (
@@ -99,6 +108,7 @@ BEGIN
 			,Team
 			,SectionCode
 			,DepartmentCode
+			,IsCheckInOutOnline
 		FROM #tblTimeRecord WITH (NOLOCK)
 		ORDER BY RecordTime DESC OFFSET(@PageIndex * @ItemsPerPage) ROWS
 
@@ -116,6 +126,7 @@ BEGIN
 			,Team
 			,SectionCode
 			,DepartmentCode
+			,IsCheckInOutOnline
 		FROM #tblTimeRecord WITH (NOLOCK)
 		ORDER BY RecordTime DESC
 	END
