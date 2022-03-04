@@ -4,7 +4,6 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import moment from 'moment';
 import axios from 'axios';
-import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
 
