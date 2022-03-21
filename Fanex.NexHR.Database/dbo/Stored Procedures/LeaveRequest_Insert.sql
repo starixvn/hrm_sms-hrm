@@ -425,7 +425,7 @@ BEGIN
 							)
 						)
 					)
-				AND (s.ShiftID IS NULL OR (s.IsOutAfterDay = 0 AND CAST(l.ToDate AS DATE) >= @TmpFromDate) OR (s.IsOutAfterDay = 1 AND CAST(l.ToDate AS DATE) > @TmpFromDate))
+				--AND (s.ShiftID IS NULL OR (s.IsOutAfterDay = 0 AND CAST(l.ToDate AS DATE) >= @TmpFromDate) OR (s.IsOutAfterDay = 1 AND CAST(l.ToDate AS DATE) > @TmpFromDate))
 			)
 		OR EXISTS (
 			SELECT 1
