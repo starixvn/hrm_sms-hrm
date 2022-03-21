@@ -551,6 +551,11 @@ BEGIN
 			WHEN lr.RequestId IS NOT NULL THEN 1
 			ELSE 0
 			END
+		,empca.FromTime = NULL
+		,empca.ToTime = NULL
+		,empca.LeaveTypeId2 = NULL
+		,empca.FromTime2 = NULL
+		,empca.ToTime2 = NULL
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN #tblLeaveRequest AS lr ON empca.EmpId = lr.EmpId
