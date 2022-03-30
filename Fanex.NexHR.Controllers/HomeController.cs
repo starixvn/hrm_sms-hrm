@@ -2,17 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Constants;
+    using Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Models.Dashboard;
-    using Fanex.NexHR.Models.SyncData;
     using Fanex.NexHR.Services;
-    using Fanex.NexHR.Services.Implement;
 
     public class HomeController : BaseController
     {
@@ -33,6 +28,7 @@
 
         public ActionResult Index()
         {
+            string pathToFiles = Server.MapPath("~/app_data/emails/remindUseAL.cshtml");
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
             ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
             ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)

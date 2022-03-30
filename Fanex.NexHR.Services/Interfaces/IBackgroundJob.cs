@@ -16,6 +16,8 @@
 
         void UpdateWorkingHourPerDay();
 
+        void SendMailRemindUserToUseAnnualLeave();
+
         void UpdateAnnualLeaveBalance();
 
         void UpdateAnnualLeaveBalanceForNewEmployee();
