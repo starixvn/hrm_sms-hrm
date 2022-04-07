@@ -28,7 +28,6 @@
 
         public ActionResult Index()
         {
-            string pathToFiles = Server.MapPath("~/app_data/emails/remindUseAL.cshtml");
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
             ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
             ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)

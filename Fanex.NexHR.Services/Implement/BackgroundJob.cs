@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web.Hosting;
-using Fanex.NexHR.Criteria.AnnualLeave;
-using Fanex.NexHR.Models;
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Hosting;
+    using Fanex.NexHR.Criteria.AnnualLeave;
+    using Fanex.NexHR.Models;
     using System;
-    using System.Web;
     using System.Threading.Tasks;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
