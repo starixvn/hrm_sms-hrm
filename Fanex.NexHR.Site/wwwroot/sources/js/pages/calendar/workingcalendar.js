@@ -71,7 +71,14 @@ const workingCalendarModule = (function ($) {
             axios({
                 url: resolveClientUrl('ExportCalendar/EmployeeWorkingCalendar'),
                 method: 'GET',
-                params: parse($('form.filter').serialize()),
+                params: {
+                    fromDate: $('#FromDate').val(),
+                    toDate: $('#ToDate').val(),
+                    teamIds: $('#Team').multiSelectTreeView('getSelectedItems'),
+                    jobTitleIds: $('#JobTitle').multiSelectTreeView('getSelectedItems'),
+                    employeeId: $('#EmployeeId').val(),
+                    isLocal: $('#IsLocal').val()
+                },
                 responseType: 'blob'
             }).then(response => {
                 const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
