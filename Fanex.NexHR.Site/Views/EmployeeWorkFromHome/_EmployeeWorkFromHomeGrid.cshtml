@@ -16,6 +16,7 @@
             <th>@Labels.From</th>
             <th>@Labels.To</th>
             <th>@Labels.Remark</th>
+            <th>@Labels.FileAttach</th>
             <th>@Labels.CreatedBy</th>
             <th>@Labels.CreatedDate</th>
             @if (ViewBag.IsHost)
@@ -47,6 +48,7 @@
                             <span class="fa fa-comment tooltip-tipsy" original-title="@item.Remark"></span>
                         }
                     </td>
+                    <td>@Html.Raw(item.ContentFile)</td>
                     <td>@item.Modifier</td>
                     <td>@item.ModifiedDate.ToFormatedDate()</td>
                     @if (ViewBag.IsHost)

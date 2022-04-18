@@ -179,6 +179,7 @@
     <Compile Include="ExportExcel\ExportExcelTimeRecordService.cs" />
     <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
+    <Compile Include="Implement\AttachFileService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
     <Compile Include="Extensions\ServiceDIExtensions.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Implement\RoleService.cs" />
     <Compile Include="Implement\WorkingCalendarReportService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
+    <Compile Include="Interfaces\IAttachFileService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />

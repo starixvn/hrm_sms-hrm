@@ -1051,6 +1051,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current File(s).
+        /// </summary>
+        public static string CurrentFile {
+            get {
+                return ResourceManager.GetString("CurrentFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Month.
         /// </summary>
         public static string CurrentMonth {

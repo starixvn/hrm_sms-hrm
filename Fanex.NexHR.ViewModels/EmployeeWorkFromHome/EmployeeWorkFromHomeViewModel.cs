@@ -1,10 +1,13 @@
-﻿namespace Fanex.NexHR.ViewModels.EmployeeWorkFromHome
+﻿using System.Collections.Generic;
+
+namespace Fanex.NexHR.ViewModels.EmployeeWorkFromHome
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
     public class EmployeeWorkFromHomeViewModel
     {
+        public long RequestId { get; set; }
         public int EmployeeWorkFromHomeId { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Employee is required")]
@@ -22,5 +25,7 @@
         public DateTime ToDate { get; set; }
 
         public string Remark { get; set; }
+
+        public List<string> Files { get; set; }
     }
 }

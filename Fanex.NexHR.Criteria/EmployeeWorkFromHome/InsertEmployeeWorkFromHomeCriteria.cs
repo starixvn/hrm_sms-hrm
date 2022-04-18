@@ -5,6 +5,7 @@
 
     public class InsertEmployeeWorkFromHomeCriteria : CriteriaBase
     {
+        public long RequestId { get; set; }
         public int EmpId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

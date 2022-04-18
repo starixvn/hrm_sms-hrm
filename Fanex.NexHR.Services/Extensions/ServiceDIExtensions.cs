@@ -49,6 +49,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IReportService, ReportService>();
             container.RegisterType<IRequestMailService, RequestMailService>();
             container.RegisterType<IRequestService, RequestService>();
+            container.RegisterType<IAttachFileService, AttachFileService>();
             container.RegisterType<IShiftService, ShiftService>();
             container.RegisterType<ITeamService, TeamService>();
             container.RegisterType<IWorkingCalendarService, WorkingCalendarService>();

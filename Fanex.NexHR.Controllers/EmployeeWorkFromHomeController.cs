@@ -1,4 +1,9 @@
-﻿namespace Fanex.NexHR.Controllers
+﻿using System.Collections.Generic;
+using System.Web;
+using Fanex.NexHR.Core;
+using Fanex.NexHR.Services.Interfaces;
+
+namespace Fanex.NexHR.Controllers
 {
     using System;
     using System.Linq;
@@ -17,14 +22,18 @@
     {
         private readonly IEmployeeWorkFromHomeService employeeWorkFromHomeService;
         private readonly IBaseService baseService;
+        private readonly IAttachFileService attachFileService;
+        private const string PathFolder = "/file/uploads/wfh/";
 
         public EmployeeWorkFromHomeController(
             ISessionService sessionService,
             IBaseService baseService,
+            IAttachFileService attachFileService,
             IEmployeeWorkFromHomeService employeeWorkFromHomeService) : base(sessionService)
         {
             this.baseService = baseService;
             this.employeeWorkFromHomeService = employeeWorkFromHomeService;
+            this.attachFileService = attachFileService;
         }
 
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -44,6 +53,10 @@
         public ActionResult GetEmployeeWorkFromHomeGrid(GetEmployeeWorkFromHomeCriteria criteria)
         {
             var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
+            foreach (var employee in employees)
+            {
+                employee.ContentFile = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, PathFolder);
+            }
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_EmployeeWorkFromHomeGrid", employees);
         }
@@ -61,8 +74,9 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult Create(EmployeeWorkFromHomeViewModel model)
+        public ActionResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            var model = JsonConverter.FromJson<EmployeeWorkFromHomeViewModel>(requestModel);
             var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
@@ -77,6 +91,10 @@
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
+                if (result.IsSuccessful)
+                {
+                    attachFileService.UploadFile(files, criteria.RequestId, PathFolder);
+                }
             }
             else
             {
@@ -97,15 +115,17 @@
                 Employee = string.Format("{0} ({1})", employeeWorkFromHome.Nickname, employeeWorkFromHome.FullName),
                 FromDate = employeeWorkFromHome.FromDate,
                 ToDate = employeeWorkFromHome.ToDate,
-                Remark = employeeWorkFromHome.Remark
+                Remark = employeeWorkFromHome.Remark,
+                Files = attachFileService.GetAttachFile(id, PathFolder)
             };
             return PartialView("_Edit", model);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult Edit(EmployeeWorkFromHomeViewModel model)
+        public ActionResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
+            var model = JsonConverter.FromJson<EmployeeWorkFromHomeViewModel>(requestModel);
             var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
@@ -121,6 +141,14 @@
                 };
 
                 result = baseService.ExecuteNonQuery(criteria);
+                if (result.IsSuccessful)
+                {
+                    if (!string.IsNullOrWhiteSpace(filesRemove))
+                    {
+                        attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.EmployeeWorkFromHomeId, PathFolder);
+                    }
+                    attachFileService.UploadFile(files, criteria.EmployeeWorkFromHomeId, PathFolder);
+                }
             }
             else
             {

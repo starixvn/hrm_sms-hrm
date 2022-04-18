@@ -12,6 +12,8 @@ import {
     blockUI, unblockUI, initDatepicker, resolveClientUrl
 } from '../../shared/common.functions';
 
+var tempFile = [];
+
 const workFromHomeModule = (function ($) {
     const domElement = {
         AddButton: '#add-workfromhome',
@@ -57,6 +59,8 @@ const workFromHomeModule = (function ($) {
             fromDate = domElement.$dialog.find('#FromDate').val(),
             toDate = domElement.$dialog.find('#ToDate').val(),
             workingHours = domElement.$dialog.find('#WorkingHours').val();
+        let files = document.getElementById('file_emp_wfh').files,
+            allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
         if (!empId || parseInt(empId, 10) <= 0) {
             errorMsg += '<li>Employee is required.</li>';
@@ -68,6 +72,15 @@ const workFromHomeModule = (function ($) {
 
         if (workingHours === '' || parseInt(workingHours, 10) < 1 || parseInt(workingHours, 10) > 24) {
             errorMsg += '<li>Working hours per day must be an integer and between 1 and 24.</li>';
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5120) {
+                errorMsg += `<li>Attach file ('${files[i].name}') is to large to upload!. Maximum = 5120kb</li>`;
+            }
+            if (!allowedExtensions.exec(files[i].name)) {
+                errorMsg += `<li>File type of '${files[i].name}' incorrect!</li>`;
+            }
         }
 
         if (errorMsg.length > 0) {
@@ -101,22 +114,33 @@ const workFromHomeModule = (function ($) {
                     click: function (e) {
                         removeMsg(domElement.$dialog);
                         if (validateAddEmployeeWorkFromHome()) {
-                            $.ajax({
-                                type: 'POST',
-                                url: resolveClientUrl('EmployeeWorkFromHome/Create'),
-                                data: $(domElement.CreateForm).serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
+                            const model = {
+                                employeeId: $("#EmployeeId").val(),
+                                fromDate: $("#FromDate").val(),
+                                toDate: $("#ToDate").val(),
+                                remark: $("#Remark").val()
+                            }
+
+                            var files = document.getElementById('file_emp_wfh').files;
+                            var fd = new FormData();
+                            for (var i = 0; i < files.length; i++) {
+                                fd.append('files[' + i + ']', files[i]);
+                            }
+                            fd.append('requestModel', JSON.stringify(model));
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    if (response.IsSuccessful) {
                                         domElement.$dialog.dialog('close');
                                         alert('Create employee work from home successfully!', getEmployeeWorkFromHome);
                                     } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
+                                        showErrorMsg(domElement.$dialog, '<li>' + response.Message + '</li>');
                                     }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
                                 }
-                            });
+                            }
+                            xhr.open('POST', resolveClientUrl('EmployeeWorkFromHome/Create'));
+                            xhr.send(fd);
                         }
                     }
                 },
@@ -154,22 +178,35 @@ const workFromHomeModule = (function ($) {
                     click: function () {
                         removeMsg(domElement.$dialog);
                         if (validateAddEmployeeWorkFromHome()) {
-                            $.ajax({
-                                type: 'POST',
-                                url: resolveClientUrl('EmployeeWorkFromHome/Edit/' + employeeworkfromhomeId),
-                                data: $(domElement.EditForm).serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
+                            const model = {
+                                employeeId: $("#EmployeeId").val(),
+                                fromDate: $("#FromDate").val(),
+                                toDate: $("#ToDate").val(),
+                                remark: $("#Remark").val(),
+                                employeeWorkFromHomeId: $("#EmployeeWorkFromHomeId").val()
+                            }
+
+                            var files = document.getElementById('file_emp_wfh').files;
+                            var fd = new FormData();
+                            for (var i = 0; i < files.length; i++) {
+                                fd.append('files[' + i + ']', files[i]);
+                            }
+                            fd.append('requestModel', JSON.stringify(model));
+                            fd.append('filesRemove', JSON.stringify(tempFile));
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    if (response.IsSuccessful) {
                                         domElement.$dialog.dialog('close');
                                         alert('Update employee work from home successfully!', getEmployeeWorkFromHome);
                                     } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
+                                        showErrorMsg(domElement.$dialog, '<li>' + response.Message + '</li>');
                                     }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
                                 }
-                            });
+                            }
+                            xhr.open('POST', resolveClientUrl('EmployeeWorkFromHome/Edit'));
+                            xhr.send(fd);
                         }
                     }
                 },
@@ -294,6 +331,13 @@ const workFromHomeModule = (function ($) {
         initModule
     };
 })(jQuery);
+
+$(document).on('click', '.delete-file', function () {
+    const fileName = $(this).attr("data-id");
+    var classDelete = document.getElementById(fileName);
+    classDelete.remove();
+    tempFile.push(fileName);
+});
 
 $(document).ready(function () {
     workFromHomeModule.initModule();
