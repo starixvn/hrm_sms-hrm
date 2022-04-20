@@ -312,10 +312,31 @@ const workFromHomeModule = (function ($) {
         });
     }
 
+    function initExportExcel() {
+        $('#btnExcel').on('click', function (e) {
+            e.preventDefault();
+            var postToUrl = 'ExportEmployeeWorkFromHome/EmployeeWorkFromHome?';
+
+            $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            var url = resolveClientUrl(postToUrl +
+                'teamIds=' +
+                $('#TeamIds').val() +
+                '&fromDate=' +
+                $("#FromDateFilter").val() +
+                '&toDate=' +
+                $("#ToDateFilter").val() +
+                '&isLocal=' +
+                $('#IsLocal').val()
+            );
+            location.href = url;
+        });
+    }
+
     function initModule() {
         initSubmitFiler();
         initAddEvent();
         initDatepicker();
+        initExportExcel();
 
         axios(resolveClientUrl('Section/GetOrgChart'))
             .then(response => {

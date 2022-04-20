@@ -1163,6 +1163,7 @@
     <Content Include="App_Data\Emails\RemindUseAL.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

@@ -29,7 +29,8 @@
                 <div class="calendar-form">
                     @Html.TextBox(Html.NameFor(model => model.FromDateFilter).ToString(),
                         Model.FromDateFilter.ToDateMonthYearFormatedDate(),
-                        new {
+                        new
+                             {
                             @class = "datepicker form-control",
                             @readonly = "readonly",
                             maxdate = maxDate.ToString("yyyy/MM/dd")
@@ -44,7 +45,8 @@
                 <div class="calendar-form">
                     @Html.TextBox(Html.NameFor(model => model.ToDateFilter).ToString(),
                         Model.ToDateFilter.ToDateMonthYearFormatedDate(),
-                        new {
+                        new
+                             {
                             @class = "datepicker form-control",
                             @readonly = "readonly",
                             maxdate = maxDate.ToString("yyyy/MM/dd")
@@ -76,6 +78,7 @@
                     <span class="fa fa-plus"></span>
                     @Labels.AddEmployeeWorkFromHome
                 </button>
+                <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
             </div>
         </div>
     }

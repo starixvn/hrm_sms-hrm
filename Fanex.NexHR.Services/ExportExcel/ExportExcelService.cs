@@ -21,9 +21,59 @@
         private const int _RowStartBodyWorkingCalendar = 5;
 
         private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
+        private const string _EmployeeWFH = "~\\ExcelTemplates\\EmployeeWorkFromHome.xls";
         private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
         private const string HospitalizationLeaveSummaryTemplatePath = "~\\ExcelTemplates\\HospitalizationLeaveSummary.xls";
         private const string SickLeaveSummaryTemplatePath = "~\\ExcelTemplates\\SickLeaveSummary.xls";
+
+        public HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList)
+        {
+            HSSFWorkbook hssfworkbook;
+
+            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWFH);
+            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            {
+                hssfworkbook = new HSSFWorkbook(template);
+            }
+
+            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
+            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "EmployeeWorkFromHome");
+
+            #region render body
+            var rowIndex = _RowStartBodyLeaveSummary;
+            var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
+            var index = 0;
+
+            foreach (EmployeeWorkFromHome item in employeeWfhList)
+            {
+                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+                var row = sheet.GetRow(rowIndex);
+                row.Height = height;
+
+                row.GetCell(0).SetCellValue(index + 1);
+                row.GetCell(1).SetCellValue(item.Department);
+                row.GetCell(2).SetCellValue(item.Section);
+                row.GetCell(3).SetCellValue(item.Team);
+                row.GetCell(4).SetCellValue(item.Code);
+                row.GetCell(5).SetCellValue(item.FullName);
+                row.GetCell(6).SetCellValue(item.Nickname);
+                row.GetCell(7).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
+                row.GetCell(8).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
+                row.GetCell(9).SetCellValue(item.Remark);
+                row.GetCell(10).SetCellValue(item.Modifier);
+                row.GetCell(11).SetCellValue(item.ModifiedDate.ToFormatedDate());
+                index++;
+                rowIndex++;
+            }
+
+            #endregion
+
+            //// remove sheet & row template
+            hssfworkbook.RemoveSheetAt(0);
+
+            return hssfworkbook;
+        }
 
         public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year)
         {

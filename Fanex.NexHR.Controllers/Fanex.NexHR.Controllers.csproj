@@ -134,6 +134,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\ExportEmployeeWorkFromHomeController.cs" />
     <Compile Include="Report\MealAllowanceReportController.cs" />
     <Compile Include="SickLeaveBalanceController.cs" />
     <Compile Include="HospitalizationLeaveBalanceController.cs" />
