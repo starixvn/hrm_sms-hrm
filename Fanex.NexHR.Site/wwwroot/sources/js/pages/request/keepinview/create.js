@@ -141,7 +141,7 @@ $(document).ready(function () {
                 method: 'GET',
                 params: {
                     role: RoleSystem.OnBehalfRequest,
-                    requestType: RequestType.LateIn,
+                    requestType: RequestType.KeepInView,
                     query: request.term
                 }
             }).then(rs => {
