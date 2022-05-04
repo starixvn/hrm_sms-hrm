@@ -389,7 +389,6 @@ BEGIN
 					AND IsKeepInView = 0
 					AND IsOvertime = 0
 					AND IsLeaveDay = 0
-					AND (IsLeaveOffDay = 1 OR IsOffDay = 1)
 					AND DATEPART(DW, WorkDate) NOT IN (1, 7) -- sat, sun
 
 				IF @WorkDate IS NOT NULL
@@ -545,14 +544,14 @@ BEGIN
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0
-						AND (IsLeaveOffDay = 1 OR IsOffDay = 1)
 
 					IF @WorkDate IS NOT NULL
 						AND NOT EXISTS (
 							SELECT 1
 							FROM #tblEmployeeCalendar WITH (NOLOCK)
 							WHERE EmployeeId = @EmployeeId
-								AND WorkDate BETWEEN @tmpFromDate AND @WorkDate
+								AND WorkDate >= @tmpFromDate
+								AND WorkDate < @WorkDate
 								AND IsHoliday = 0
 								AND IsLeaveOffDay = 0
 								AND ChangeShiftTypeId IS NULL
