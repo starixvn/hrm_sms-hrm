@@ -87,6 +87,9 @@ BEGIN
 		,@tmpOnDate DATE
 		,@tmpToDate DATE
 
+	SELECT @TotalRows = COUNT(1)
+	FROM #tblChangeShiftDetail WITH (NOLOCK)
+
 	IF @TypeId = @ChangeShift
 	BEGIN
 		EXEC dbo.EmployeeCalendar_Insert @empid = @empid
@@ -97,9 +100,6 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		SELECT @TotalRows = COUNT(1)
-		FROM #tblChangeShiftDetail WITH (NOLOCK)
-
 		WHILE @RowIndex <= @TotalRows
 		BEGIN
 			SELECT @tmpOnDate = OnDate
