@@ -30,7 +30,7 @@
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
                     new
-                         {
+                    {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
                         maxdate = maxDate.ToString("yyyy/MM/dd")
@@ -48,7 +48,7 @@
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
                     new
-                         {
+                    {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
                         maxdate = maxDate.ToString("yyyy/MM/dd")
@@ -79,16 +79,14 @@
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
-            <div class="label-form">
-                @Html.LabelFor(model => model.Files, Labels.CurrentFile, new { @class = "control-label" })
-            </div>
-            <div class="input-form" id="@Model.EmployeeWorkFromHomeId" style="margin-top: 7px">
+            <div class="label-form">&nbsp;</div>
+            <div class="input-form" id="@Model.EmployeeWorkFromHomeId">
                 @if (Model.Files != null)
                 {
                     foreach (string file in Model.Files)
                     {
                         <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
-                            <i class="fa fa-close">@file</i><br>
+                            <i class="fa fa-close"></i>@file
                         </a>
                     }
                 }

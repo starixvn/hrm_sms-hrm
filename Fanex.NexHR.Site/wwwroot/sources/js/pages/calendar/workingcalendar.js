@@ -1,7 +1,6 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
-import { parse } from 'qs';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';

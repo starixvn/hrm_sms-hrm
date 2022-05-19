@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Fanex.NexHR.ViewModels.EmployeeWorkFromHome
+﻿namespace Fanex.NexHR.ViewModels.EmployeeWorkFromHome
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class EmployeeWorkFromHomeViewModel

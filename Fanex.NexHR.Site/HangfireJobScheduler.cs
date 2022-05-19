@@ -77,7 +77,7 @@
                     () => backgroundJob.SyncWorkingShiftAsync(), "*/5 * * * *", TimeZoneInfo.Local); // every 5 minutes
             }
 
-            if (ConfigSettings.EnableSendRemindMail)
+            if (ConfigSettings.EnableRemindAnnualLeaveBalance)
             {
                 RecurringJob.AddOrUpdate("SendMailRemindUserToUseAnnualLeave",
                     () => backgroundJob.SendMailRemindUserToUseAnnualLeave(), "0 10 1 3,6,9,12 *", TimeZoneInfo.Local); // first day of month, only in Mar, Jun, Sep, Dec

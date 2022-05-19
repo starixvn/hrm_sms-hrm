@@ -13,6 +13,17 @@
             cursor: pointer;
         }
     }
+
+    .attach-file {
+        display: flex;
+
+        .file-name {
+            width: 150px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 }
 
 .dialog-form {
@@ -49,6 +60,20 @@
 
         .workinghours {
             width: 150px;
+        }
+
+        .delete-file {
+            display: block;
+            color: #337ab7;
+            line-height: 1.5em;
+
+            .fa-close {
+                margin-right: 0.5em;
+
+                &:hover {
+                    color: #da5350;
+                }
+            }
         }
     }
 }

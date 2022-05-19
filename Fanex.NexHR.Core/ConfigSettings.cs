@@ -29,7 +29,7 @@
             => Converter.ToBool(ConfigurationManager.AppSettings["EnableSyncWorkingShift"]);
         public static bool EnableManualSyncWorkingShift
             => Converter.ToBool(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
-        public static bool EnableSendRemindMail
-            => Converter.ToBool(ConfigurationManager.AppSettings["EnableSendRemindMail"]);
+        public static bool EnableRemindAnnualLeaveBalance
+            => Converter.ToBool(ConfigurationManager.AppSettings["EnableRemindAnnualLeaveBalance"]);
     }
 }

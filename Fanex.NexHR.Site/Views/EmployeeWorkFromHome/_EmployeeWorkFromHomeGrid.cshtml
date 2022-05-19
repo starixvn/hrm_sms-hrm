@@ -48,7 +48,14 @@
                             <span class="fa fa-comment tooltip-tipsy" original-title="@item.Remark"></span>
                         }
                     </td>
-                    <td>@Html.Raw(item.ContentFile)</td>
+                    <td>
+                        @foreach (var file in item.AttachFiles)
+                        {
+                            <a href="@file.Path" class="attach-file">
+                                <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                            </a>
+                        }
+                    </td>
                     <td>@item.Modifier</td>
                     <td>@item.ModifiedDate.ToFormatedDate()</td>
                     @if (ViewBag.IsHost)

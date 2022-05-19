@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models
 {
     using System;
+    using System.Collections.Generic;
 
     public class EmployeeWorkFromHome
     {
@@ -25,6 +26,6 @@
         public DateTime ModifiedDate { get; set; }
 
         public string Remark { get; set; }
-        public string ContentFile { get; set; }
+        public IList<AttachFile> AttachFiles { get; set; }
     }
 }

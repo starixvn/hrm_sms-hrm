@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
-
-namespace Fanex.NexHR.Services
+﻿namespace Fanex.NexHR.Services
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+    using Fanex.NexHR.Models;
+
     public class AttachFileService : IAttachFileService
     {
         public void UploadFile(IList<HttpPostedFileBase> files, long fileId, string pathFolder)
@@ -55,9 +55,9 @@ namespace Fanex.NexHR.Services
             }
         }
 
-        public string GetInfoAttachFile(long fileId, string pathFolder)
+        public IList<AttachFile> GetInfoAttachFile(long fileId, string pathFolder)
         {
-            var content = new StringBuilder();
+            var attachFiles = new List<AttachFile>();
             string path = pathFolder + fileId;
             string dir = HttpContext.Current.Server.MapPath(path);
             if (Directory.Exists(dir))
@@ -65,11 +65,17 @@ namespace Fanex.NexHR.Services
                 string[] files = Directory.GetFiles(dir);
                 foreach (string file in files)
                 {
-                    content.Append($"<a href=\'{pathFolder + fileId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
+                    attachFiles.Add(new AttachFile
+                    {
+                        Path = $"{pathFolder + fileId}/{Path.GetFileName(file)}",
+                        FileName = Path.GetFileName(file),
+                        FileNameWithoutExtension = Path.GetFileNameWithoutExtension(file),
+                        Extension = Path.GetExtension(file)
+                    });
                 }
             }
 
-            return content.ToString();
+            return attachFiles;
         }
 
         public void DeleteFolderAttachFile(long id, string pathFolder)

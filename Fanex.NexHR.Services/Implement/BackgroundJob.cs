@@ -1,16 +1,16 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web.Hosting;
-    using Fanex.NexHR.Criteria.AnnualLeave;
-    using Fanex.NexHR.Models;
-    using System;
     using System.Threading.Tasks;
+    using System.Web.Hosting;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
+    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.BackgroundJob;
+    using Fanex.NexHR.Models;
 
     public class BackgroundJobService : IBackgroundJobService
     {
@@ -117,7 +117,6 @@
         #region Auto send mail remind user to use AL
         public void SendMailRemindUserToUseAnnualLeave()
         {
-
             IList<LeaveSummary> leaveSumaries = GetLeaveSumaries();
             var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
 
@@ -125,24 +124,23 @@
             {
                 float percentAnnualLeaveRemaining = leave.LeaveBalance / leave.AnnualLeaveCurrentYear * 100;
                 bool isSentMail = false;
-                string percentInMail = "";
+                var percentInMail = string.Empty;
 
                 CheckSendMail(ref isSentMail, ref percentInMail, percentAnnualLeaveRemaining);
 
-                if (leave.Email != null && isSentMail)
+                if (!string.IsNullOrWhiteSpace(leave.Email) && isSentMail)
                 {
                     var body = string.Format(bodyTemplate, leave.Nickname, percentInMail, DateTime.Now.Year + 1, leave.LeaveBalance + "/" + leave.AnnualLeaveCurrentYear);
-                    emailService.SendEmail("mailservice@starixvn.com", leave.Email, "", "Annual Leave Balance Reminder", body);
+                    emailService.SendEmail(ConfigSettings.EmailSetting, leave.Email, string.Empty, "Annual Leave Balance Reminder", body);
                 }
             }
         }
 
         private IList<LeaveSummary> GetLeaveSumaries()
         {
-            IList<Team> teams = teamService.GetAll(false, null);
-            string teamIds = string.Join(",", teams.Select(x => x.Id));
-
-            var criteriaGetAnnualLeaveBalance = new GetAnnualLeaveBalanceCriteria
+            IList<Team> teams = teamService.GetAll();
+            var teamIds = string.Join(",", teams.Select(x => x.Id));
+            var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = DateTime.Now.Year,
                 EmpId = null,
@@ -151,42 +149,50 @@
                 Role = string.Empty,
                 SupervisorId = null
             };
-            IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteriaGetAnnualLeaveBalance);
+            IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
             return leaveSumaries;
         }
 
-        private void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)
+        private static void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)
         {
+            const byte March = 3;
+            const byte June = 6;
+            const byte September = 9;
+            const byte December = 12;
+            const byte TwentyFive = 25;
+            const byte Fifty = 50;
+            const byte SeventyFive = 75;
             switch (DateTime.Now.Month)
             {
-                case 3:
-                    if (percentAnnualLeaveRemaining > 75)
+                case March:
+                    if (percentAnnualLeaveRemaining > SeventyFive)
                     {
                         isSentMail = true;
                         percentInMail = "over 75% ";
                     }
                     break;
-                case 6:
-                    if (percentAnnualLeaveRemaining > 50)
+                case June:
+                    if (percentAnnualLeaveRemaining > Fifty)
                     {
                         isSentMail = true;
                         percentInMail = "over 50% ";
                     }
                     break;
-                case 9:
-                    if (percentAnnualLeaveRemaining > 25)
+                case September:
+                    if (percentAnnualLeaveRemaining > TwentyFive)
                     {
                         isSentMail = true;
                         percentInMail = "over 25% ";
                     }
                     break;
-                case 12:
+                case December:
                     if (percentAnnualLeaveRemaining > 0)
                     {
                         isSentMail = true;
                     }
                     break;
                 default:
+                    // nothing
                     break;
             }
         }

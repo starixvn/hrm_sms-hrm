@@ -13,17 +13,14 @@
     {
         private readonly IDashboardService dashboardService;
         private readonly IEmployeeService employeeService;
-        private readonly ISyncWorkingShiftService syncWorkingShiftService;
 
         public HomeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
-            IDashboardService dashboardService,
-            ISyncWorkingShiftService syncWorkingShiftService) : base(sessionService)
+            IDashboardService dashboardService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.dashboardService = dashboardService;
-            this.syncWorkingShiftService = syncWorkingShiftService;
         }
 
         public ActionResult Index()

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
+    <Compile Include="AttachFile.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Discipline\IgnoredDisciplineDetailModel.cs" />

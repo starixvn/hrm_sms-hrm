@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
@@ -150,7 +149,7 @@
             var body = string.Format(emailTemplatePath, subject, content);
 
             emailService.SendEmail(
-                ConfigurationManager.AppSettings["Email"],
+                ConfigSettings.EmailSetting,
                 sendToEmail,
                 string.Empty,
                 Resources.Messages.MessageSubject + " " + subject,

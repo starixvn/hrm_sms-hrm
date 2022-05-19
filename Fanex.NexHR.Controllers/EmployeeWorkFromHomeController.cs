@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using Fanex.NexHR.Core;
-using Fanex.NexHR.Services.Interfaces;
-
-namespace Fanex.NexHR.Controllers
+﻿namespace Fanex.NexHR.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
     using Core.Constants;
     using Core.Enums;
     using Core.Models;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.EmployeeWorkFromHome;
@@ -55,7 +53,7 @@ namespace Fanex.NexHR.Controllers
             var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
             foreach (var employee in employees)
             {
-                employee.ContentFile = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, PathFolder);
+                employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, PathFolder);
             }
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_EmployeeWorkFromHomeGrid", employees);

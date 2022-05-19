@@ -40,16 +40,14 @@
             var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "EmployeeWorkFromHome");
 
             #region render body
-            var rowIndex = _RowStartBodyLeaveSummary;
-            var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
+            var rowIndex = 4;
             var index = 0;
 
             foreach (EmployeeWorkFromHome item in employeeWfhList)
             {
-                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                var rowCopy = 4 + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
-                row.Height = height;
 
                 row.GetCell(0).SetCellValue(index + 1);
                 row.GetCell(1).SetCellValue(item.Department);
@@ -69,7 +67,7 @@
 
             #endregion
 
-            //// remove sheet & row template
+            // remove sheet & row template
             hssfworkbook.RemoveSheetAt(0);
 
             return hssfworkbook;

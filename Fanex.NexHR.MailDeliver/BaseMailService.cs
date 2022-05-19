@@ -98,8 +98,8 @@
                 if (!string.IsNullOrEmpty(email.MailTo))
                 {
                     GetMailFromString(email.MailTo, msg.To);
-                    //GetMailFromString(email.MailCc, msg.CC);
-                    //GetMailFromString(email.MailBcc, msg.Bcc);
+                    GetMailFromString(email.MailCc, msg.CC);
+                    GetMailFromString(email.MailBcc, msg.Bcc);
 
                     msg.Subject = email.Subject;
                     msg.SubjectEncoding = Encoding.UTF8;
@@ -170,13 +170,12 @@
             if (!string.IsNullOrWhiteSpace(mailString))
             {
                 var emails = RemoveDoubleComma(mailString);
-                var mailArrs = emails.Split(',');
+                var mailArrs = emails.Split(';');
                 foreach (var mail in mailArrs)
                 {
                     if (!string.IsNullOrEmpty(mail))
                     {
-                        string FormatMail = mail.Replace("\r\n", "");
-                        mails.Add(new MailboxAddress(string.Empty, FormatMail));
+                        mails.Add(new MailboxAddress(string.Empty, mail));
                     }
                 }
             }
@@ -187,7 +186,7 @@
             var emails = mails;
             while (emails.Contains(",,"))
             {
-                emails = emails.Replace(",,", ",");
+                emails = emails.Replace(",,", ";");
             }
 
             while (emails.Contains(";;"))
