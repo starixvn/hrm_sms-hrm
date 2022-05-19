@@ -80,7 +80,7 @@
             if (ConfigSettings.EnableRemindAnnualLeaveBalance)
             {
                 RecurringJob.AddOrUpdate("SendMailRemindUserToUseAnnualLeave",
-                    () => backgroundJob.SendMailRemindUserToUseAnnualLeave(), "0 10 1 3,6,9,12 *", TimeZoneInfo.Local); // first day of month, only in Mar, Jun, Sep, Dec
+                    () => backgroundJob.SendMailRemindUserToUseAnnualLeave(), "20 00 1 3,6,9,12 *", TimeZoneInfo.Local); // first day of month, only in Mar, Jun, Sep, Dec
             }
         }
     }
