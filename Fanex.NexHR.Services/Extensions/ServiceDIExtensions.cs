@@ -12,24 +12,7 @@ namespace Fanex.NexHR.Services.Extensions
     {
         public static void ResolveServiceCoreDI(this IUnityContainer container)
         {
-            container.RegisterType<ISectionRepository, SectionRepository>();
-            container.RegisterType<IEmployeeRepository, EmployeeRepository>();
-            container.RegisterType<IOvertimeRequestRepository, OvertimeRequestRepository>();
-            container.RegisterType<IReportRepository, ReportRepository>();
-            container.RegisterType<IRequestRepository, RequestRepository>();
-            container.RegisterType<ITeamRepository, TeamRepository>();
-            container.RegisterType<IWorkingCalendarRepository, WorkingCalendarRepository>();
-            container.RegisterType<IDisciplineRepository, DisciplineRepository>();
-            container.RegisterType<IMenuRepository, MenuRepository>();
-            container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
-            container.RegisterType<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
-            container.RegisterType<ILeaveRequestRepository, LeaveRequestRepository>();
-            container.RegisterType<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
-            container.RegisterType<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
-            container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
-            container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
-            container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
-            container.RegisterType<IDepartmentRepository, DepartmentRepository>();
+            ResolveRepositoryDI(container);
 
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IRoleService, RoleService>();
@@ -96,6 +79,28 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
             container.RegisterType<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
             container.RegisterType<IExportOvertimeService, ExportOvertimeService>();
+        }
+
+        private static void ResolveRepositoryDI(IUnityContainer container)
+        {
+            container.RegisterType<ISectionRepository, SectionRepository>();
+            container.RegisterType<IEmployeeRepository, EmployeeRepository>();
+            container.RegisterType<IOvertimeRequestRepository, OvertimeRequestRepository>();
+            container.RegisterType<IReportRepository, ReportRepository>();
+            container.RegisterType<IRequestRepository, RequestRepository>();
+            container.RegisterType<ITeamRepository, TeamRepository>();
+            container.RegisterType<IWorkingCalendarRepository, WorkingCalendarRepository>();
+            container.RegisterType<IDisciplineRepository, DisciplineRepository>();
+            container.RegisterType<IMenuRepository, MenuRepository>();
+            container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
+            container.RegisterType<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
+            container.RegisterType<ILeaveRequestRepository, LeaveRequestRepository>();
+            container.RegisterType<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
+            container.RegisterType<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
+            container.RegisterType<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
+            container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
+            container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
+            container.RegisterType<IDepartmentRepository, DepartmentRepository>();
         }
     }
 }
