@@ -1,6 +1,5 @@
 \\Avatars\\.*
 \\file\.*
 \\SystemLog
-\\wwwroot
 \\*.Debug.config
 \\*.Release.config

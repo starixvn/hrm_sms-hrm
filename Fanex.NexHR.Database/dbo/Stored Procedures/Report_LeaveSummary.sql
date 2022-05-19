@@ -17,7 +17,7 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE 
+	DECLARE
 		-- keep in view type
 		@KeepInViewByDay TINYINT = 1
 
@@ -39,6 +39,7 @@ BEGIN
 		SELECT val
 		FROM fnc_strSplit(@TeamIds, ',')
 	END
+
 	--ELSE
 	--BEGIN
 	--	IF EXISTS (
@@ -54,7 +55,6 @@ BEGIN
 	--		FROM dbo.[Group] WITH (NOLOCK)
 	--	END
 	--END
-
 	IF @empid IS NULL
 	BEGIN
 		INSERT INTO #EmployeeId (EmpId)
@@ -119,7 +119,8 @@ BEGIN
 		INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON w.RequestId = kiv.RequestId
 		AND kiv.OnDate BETWEEN @fromdate
 			AND @todate
-	WHERE w.CurrentStatus IN (4, 6) AND kiv.KeepInViewType = @KeepInViewByDay
+	WHERE w.CurrentStatus IN (4, 6)
+		AND kiv.KeepInViewType = @KeepInViewByDay
 	GROUP BY w.EmpId
 
 	-- KIV leave
@@ -361,9 +362,10 @@ BEGIN
 		,cb.EmpId
 		,e.Code
 		,FullName
+		,Email
 		,NickName
 		,g.[Rank]
-		,g.GroupId As TeamId
+		,g.GroupId AS TeamId
 		,g.[Name] AS Team
 		,sec.Code AS Section
 		,dep.Code AS Department
@@ -404,6 +406,7 @@ BEGIN
 		,op.EmpId
 		,e.[Code]
 		,FullName
+		,Email
 		,NickName
 		,g.[Rank]
 		,g.GroupId AS TeamId
@@ -427,8 +430,7 @@ BEGIN
 			@isLocal IS NULL
 			OR es.IsLocal = @isLocal
 			)
-	ORDER BY
-		g.[Name]
+	ORDER BY g.[Name]
 		,e.[Code]
 
 	DROP TABLE #OpenBalance

@@ -6,6 +6,7 @@ CREATE PROCEDURE [dbo].[EmployeeWorkFromHome_Insert] @EmpId INT
 	,@Remark NVARCHAR(500) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
+	,@RequestId BIGINT OUTPUT
 AS
 /*
 Created: 20210528@Quinn.Vo
@@ -53,4 +54,6 @@ BEGIN
 		,@CreatedBy
 		,GETDATE()
 		)
+
+	SELECT @RequestId = CAST(SCOPE_IDENTITY() AS BIGINT)
 END
