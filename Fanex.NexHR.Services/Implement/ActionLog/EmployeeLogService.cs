@@ -233,7 +233,7 @@
         private static void MappingCategory(FieldValue field)
         {
             field.OldValue = field.OldValue == "1" ? Labels.Local : Labels.Expat;
-            field.Value = field.OldValue == "1" ? Labels.Local : Labels.Expat;
+            field.Value = field.Value == "1" ? Labels.Local : Labels.Expat;
         }
     }
 }
