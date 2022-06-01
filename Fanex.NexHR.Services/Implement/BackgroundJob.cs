@@ -11,6 +11,7 @@
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.BackgroundJob;
     using Fanex.NexHR.Models;
+    using Hangfire;
 
     public class BackgroundJobService : IBackgroundJobService
     {
@@ -130,8 +131,18 @@
 
                 if (!string.IsNullOrWhiteSpace(leave.Email) && isSentMail)
                 {
-                    var body = string.Format(bodyTemplate, leave.Nickname, percentInMail, DateTime.Now.Year + 1, leave.LeaveBalance + "/" + leave.AnnualLeaveCurrentYear);
-                    emailService.SendEmail(ConfigSettings.EmailSetting, leave.Email, string.Empty, "Annual Leave Balance Reminder", body);
+                    var body = string.Format(
+                        bodyTemplate,
+                        leave.Nickname,
+                        percentInMail,
+                        DateTime.Now.Year + 1,
+                        string.Format("{0}/{1}", leave.LeaveBalance, leave.AnnualLeaveCurrentYear));
+                    BackgroundJob.Enqueue(() => emailService.SendEmail(
+                        ConfigSettings.EmailSetting,
+                        leave.Email,
+                        string.Empty,
+                        "Annual Leave Balance Reminder",
+                        body));
                 }
             }
         }

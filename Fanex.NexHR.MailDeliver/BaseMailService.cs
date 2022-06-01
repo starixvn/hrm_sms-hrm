@@ -186,7 +186,8 @@
             var emails = mails;
             while (emails.Contains(",,"))
             {
-                emails = emails.Replace(",,", ";");
+                emails = emails.Replace(",,", ",");
+                emails = emails.Replace(",", ";");
             }
 
             while (emails.Contains(";;"))
