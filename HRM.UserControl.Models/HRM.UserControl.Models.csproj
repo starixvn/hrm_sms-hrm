@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <CodeAnalysisRuleSet>..\SonarQube\smshrmcsharp.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>HRM.UserControl.Models.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.22.0.31243">
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.34.0.42011">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

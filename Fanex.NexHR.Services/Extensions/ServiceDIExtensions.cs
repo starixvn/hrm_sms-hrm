@@ -110,7 +110,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ITeamRepository, TeamRepository>();
             container.RegisterType<IWorkingCalendarRepository, WorkingCalendarRepository>();
             container.RegisterType<IDisciplineRepository, DisciplineRepository>();
-            container.RegisterType<IMenuRepository, MenuRepository>();
             container.RegisterType<IScheduleArrangeRepository, ScheduleArrangeRepository>();
             container.RegisterType<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
             container.RegisterType<ILeaveRequestRepository, LeaveRequestRepository>();

@@ -1,15 +1,12 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.EmployeeWorkFromHome;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
+    using HRM.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class ExportEmployeeWorkFromHomeController : BaseExportController
@@ -18,9 +15,9 @@
         private readonly IExportExcelService exportExcelService;
 
         public ExportEmployeeWorkFromHomeController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IExportExcelService exportExcelService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService) : base(userControlSession)
         {
             this.baseService = baseService;
             this.exportExcelService = exportExcelService;

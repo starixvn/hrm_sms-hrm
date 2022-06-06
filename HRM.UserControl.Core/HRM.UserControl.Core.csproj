@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <CodeAnalysisRuleSet>..\SonarQube\smshrmcsharp.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>HRM.UserControl.Core.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +13,7 @@
       <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
       <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.22.0.31243">
+      <PackageReference Include="SonarAnalyzer.CSharp" Version="8.34.0.42011">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>

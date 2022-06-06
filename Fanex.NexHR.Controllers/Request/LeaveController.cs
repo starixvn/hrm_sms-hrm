@@ -335,7 +335,7 @@
            Models.ScheduleArrange.DailySchedule calendar)
         {
             string tempScheduleStatus = string.Empty;
-            LeaveRequestDetail tempLeaveDetailModel = null;
+            LeaveRequestDetail tempLeaveDetailModel;
             var isOffOrHoliday = calendar.IsOffDay || calendar.IsHoliday;
 
             if (!calendar.IsLeaveDay)
@@ -390,7 +390,7 @@
             DateTime workDate)
         {
             string tempScheduleStatus = Labels.NA;
-            LeaveRequestDetail tempLeaveDetailModel = null;
+            LeaveRequestDetail tempLeaveDetailModel;
 
             if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
             {

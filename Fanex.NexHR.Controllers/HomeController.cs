@@ -20,7 +20,7 @@
         public HomeController(
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
-            IDashboardService dashboardService) : base(sessionService)
+            IDashboardService dashboardService,
             IUserService userService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
