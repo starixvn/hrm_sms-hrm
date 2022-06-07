@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models.Request
 {
     using System;
+    using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
 
@@ -85,5 +86,7 @@
                 return requestTypeName;
             }
         }
+
+        public IList<AttachFile> AttachFiles { get; set; }
     }
 }

@@ -40,7 +40,7 @@
 
         public string Remark { get; set; }
 
-        public string ContentFile { get; set; }
+        public IList<AttachFile> AttachFiles { get; set; }
 
         public string RefNO { get; set; }
 

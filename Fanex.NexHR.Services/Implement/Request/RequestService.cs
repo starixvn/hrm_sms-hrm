@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -31,7 +29,6 @@
         private readonly IChangeShiftRequestService changeShiftRequestService;
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IKeepInViewRequestService keepInViewRequestService;
-        private const string pathFolder = "~/file/uploads/request/";
 
         public RequestService(
             IRequestRepository requestRepository,
@@ -451,80 +448,6 @@
         private static string GetTotalDay(decimal totalDays)
         {
             return totalDays != 0 ? string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#")) : string.Empty;
-        }
-
-        public void UploadFile(IList<HttpPostedFileBase> files, long requestId)
-        {
-            if (files != null && files.Any(x => x.ContentLength > 0))
-            {
-                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId);
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                foreach (var file in files)
-                {
-                    if (file.ContentLength > 0)
-                    {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var path = Path.Combine(dir, fileName);
-                        file.SaveAs(path);
-                    }
-                }
-            }
-        }
-
-        public void DeleteFile(List<string> files, long requestId)
-        {
-            foreach (string file in files)
-            {
-                string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId + '/' + file);
-                File.Delete(dir);
-            }
-        }
-
-        public string GetInfoAttachFile(long requestId)
-        {
-            var content = new StringBuilder();
-            string path = pathFolder + requestId;
-            string dir = HttpContext.Current.Server.MapPath(path);
-            if (Directory.Exists(dir))
-            {
-                string[] files = Directory.GetFiles(dir);
-                foreach (string file in files)
-                {
-                    content.Append($"<a href=\'{"/file/uploads/request/" + requestId}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
-                }
-            }
-
-            return content.ToString();
-        }
-
-        public List<string> GetAttachFile(long requestId)
-        {
-            var files = new List<string>();
-            string dir = HttpContext.Current.Server.MapPath(pathFolder + requestId);
-            if (Directory.Exists(dir))
-            {
-                string[] filePaths = Directory.GetFiles(dir);
-                foreach (string filePath in filePaths)
-                {
-                    files.Add(Path.GetFileName(filePath));
-                }
-            }
-
-            return files;
-        }
-
-        public void DeleteFolderAttachFile(long id)
-        {
-            string dir = HttpContext.Current.Server.MapPath(pathFolder + id);
-
-            if (Directory.Exists(dir))
-            {
-                Directory.Delete(dir, true);
-            }
         }
     }
 }

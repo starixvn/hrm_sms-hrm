@@ -13,10 +13,7 @@
         public bool IsHalfDay { get; set; }
 
         public DateTime FromTime { get; set; }
-
         public DateTime ToTime { get; set; }
-
-        public string ContentFile { get; set; }
 
         public string KeepInViewTypeName
         {

@@ -22,26 +22,27 @@
 
     public class RequestController : BaseController
     {
+        private const string PathFolder = "/file/uploads/request/";
         private const string EmployeeRequestViewName = "EmployeeRequest";
         private readonly IEmployeeService employeeService;
         private readonly IRequestService requestService;
         private readonly ICommonDataService commonDataService;
         private readonly ITeamService teamService;
-
-        private const string pathFolder = "~/file/uploads/request/";
+        private readonly IAttachFileService attachFileService;
 
         public RequestController(
             ISessionService sessionService,
             IEmployeeService employeeService,
             IRequestService requestService,
             ICommonDataService commonDataService,
-             ITeamService teamService
-            ) : base(sessionService)
+            ITeamService teamService,
+            IAttachFileService attachFileService) : base(sessionService)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.commonDataService = commonDataService;
             this.teamService = teamService;
+            this.attachFileService = attachFileService;
         }
 
         [HttpPost]
@@ -78,20 +79,7 @@
         {
             foreach (var request in requests)
             {
-                var content = new StringBuilder();
-                string path = pathFolder + request.Id;
-                string dir = Server.MapPath(path);
-                if (Directory.Exists(dir))
-                {
-                    string[] files = Directory.GetFiles(dir);
-
-                    foreach (string file in files)
-                    {
-                        content.Append($"<a href=\'{"/file/uploads/request/" + request.Id}/{Path.GetFileName(file)}'> {Path.GetFileName(file)}</a></br>");
-                    }
-
-                    request.ContentFile = content.ToString();
-                }
+                request.AttachFiles = attachFileService.GetInfoAttachFile(request.Id, PathFolder);
             }
         }
 

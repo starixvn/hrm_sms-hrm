@@ -7,6 +7,5 @@
         public byte TypeId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public string ContentFile { get; set; }
     }
 }

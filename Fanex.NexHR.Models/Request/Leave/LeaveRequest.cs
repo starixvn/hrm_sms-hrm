@@ -18,7 +18,5 @@
         public IList<LeaveRequestDetail> LeaveDetail { get; set; } = new List<LeaveRequestDetail>();
 
         public bool IsHalfDay => TotalDays == Constants.HalfDayOffValue;
-
-        public string ContentFile { get; set; }
     }
 }

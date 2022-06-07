@@ -76,7 +76,14 @@
                         <span>-</span>
                     }
                 </td>
-                <td>@Html.Raw(request.ContentFile)</td>
+                <td>
+                    @foreach (var file in request.AttachFiles)
+                    {
+                        <a href="@file.Path" class="attach-file">
+                            <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                        </a>
+                    }
+                </td>
                 <td>
                     @if (request.Verifier != null)
                     {

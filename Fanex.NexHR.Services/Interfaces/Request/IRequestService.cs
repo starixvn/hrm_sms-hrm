@@ -35,15 +35,5 @@
         void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
 
         void SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command);
-
-        void UploadFile(IList<HttpPostedFileBase> files, long requestId);
-
-        List<string> GetAttachFile(long requestId);
-
-        void DeleteFile(List<string> files, long requestId);
-
-        string GetInfoAttachFile(long requestId);
-
-        void DeleteFolderAttachFile(long id);
     }
 }

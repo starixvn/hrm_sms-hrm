@@ -14,8 +14,6 @@
 
         public string ShiftName { get; set; }
 
-        public string ContentFile { get; set; }
-
         public string ReasonName
         {
             get

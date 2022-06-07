@@ -16,19 +16,23 @@
 
     public class KeepInViewController : BaseController
     {
+        private const string UploadFolderPath = "/file/uploads/request/";
         private readonly IKeepInViewRequestService keepInViewRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
+        private readonly IAttachFileService attachFileService;
 
         public KeepInViewController(
             ISessionService sessionService,
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
-            IBaseService baseService) : base(sessionService)
+            IBaseService baseService,
+            IAttachFileService attachFileService) : base(sessionService)
         {
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
+            this.attachFileService = attachFileService;
         }
 
         [HttpGet]
@@ -45,7 +49,7 @@
             IList<KeepInViewRequest> requests = keepInViewRequestService.GetByDate(criteria);
             foreach (var request in requests)
             {
-                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+                request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
             }
 
             return View(requests);
@@ -101,7 +105,7 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
-                requestService.UploadFile(files, criteria.RequestId);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -137,7 +141,7 @@
                 Approvers = supervisor.Approvers,
                 MinDate = request.OnDate.AddMonths(-1),
                 MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
-                Files = requestService.GetAttachFile(id)
+                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
             };
 
             ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -170,10 +174,10 @@
             if (commandResult.IsSuccessful)
             {
                 keepInViewRequestService.SendMailEditRequest(model.RequestId);
-                requestService.UploadFile(files, criteria.RequestId);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
+                    attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
             }
 
@@ -188,7 +192,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                requestService.DeleteFolderAttachFile(id);
+                attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

@@ -7,3 +7,16 @@
 @import '../../../layout/filter';
 @import '../../../layout/table';
 @import '../../../layout/toastr';
+
+.table {
+    .attach-file {
+        display: flex;
+
+        .file-name {
+            max-width: 150px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}

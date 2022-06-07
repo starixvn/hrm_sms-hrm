@@ -19,3 +19,16 @@
         }
     }
 }
+
+.table {
+    .attach-file {
+        display: flex;
+
+        .file-name {
+            max-width: 150px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}

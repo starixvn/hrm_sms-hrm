@@ -221,7 +221,14 @@
                         </td>
                         @if (@Model.ViewType != RequestViewType.CompanySpace)
                         {
-                            <td>@Html.Raw(request.ContentFile)</td>
+                            <td>
+                                @foreach (var file in request.AttachFiles)
+                                {
+                                    <a href="@file.Path" class="attach-file">
+                                        <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                                    </a>
+                                }
+                            </td>
                         }
                         <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@RenderStatus(Model, request)</td>

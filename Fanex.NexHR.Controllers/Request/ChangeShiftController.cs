@@ -20,19 +20,23 @@
 
     public class ChangeShiftController : BaseController
     {
+        private const string UploadFolderPath = "/file/uploads/request/";
         private readonly IChangeShiftRequestService changeShiftService;
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
+        private readonly IAttachFileService attachFileService;
 
         public ChangeShiftController(
             ISessionService sessionService,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
-            IShiftService shiftService) : base(sessionService)
+            IShiftService shiftService,
+            IAttachFileService attachFileService) : base(sessionService)
         {
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
             this.shiftService = shiftService;
+            this.attachFileService = attachFileService;
         }
 
         [HttpGet]
@@ -44,7 +48,7 @@
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(sessionService.Employee.Id, fromDate, toDate);
             foreach (var request in requests)
             {
-                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+                request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
             }
             ViewBag.Year = tempYear;
 
@@ -85,7 +89,7 @@
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailCreateRequest(commandResult.OutputId);
-                requestService.UploadFile(files, commandResult.OutputId);
+                attachFileService.UploadFile(files, commandResult.OutputId, UploadFolderPath);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -115,7 +119,7 @@
                 Details = changeShiftService.GetDetailById(id),
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
-                Files = requestService.GetAttachFile(id)
+                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
             };
 
             if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
@@ -145,10 +149,10 @@
             if (commandResult.IsSuccessful)
             {
                 changeShiftService.SendMailEditRequest(criteria.RequestId);
-                requestService.UploadFile(files, criteria.RequestId);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
+                    attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
             }
 
@@ -162,7 +166,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                requestService.DeleteFolderAttachFile(id);
+                attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -190,7 +194,7 @@
                 Status = request.Status,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
-                Files = requestService.GetAttachFile(id)
+                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
             };
 
             ViewBag.IsHost = false;

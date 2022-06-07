@@ -21,7 +21,7 @@
         private readonly IEmployeeWorkFromHomeService employeeWorkFromHomeService;
         private readonly IBaseService baseService;
         private readonly IAttachFileService attachFileService;
-        private const string PathFolder = "/file/uploads/wfh/";
+        private const string UploadFolderPath = "/file/uploads/wfh/";
 
         public EmployeeWorkFromHomeController(
             ISessionService sessionService,
@@ -53,7 +53,7 @@
             var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
             foreach (var employee in employees)
             {
-                employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, PathFolder);
+                employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, UploadFolderPath);
             }
             ViewBag.IsHost = sessionService.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
             return PartialView("_EmployeeWorkFromHomeGrid", employees);
@@ -91,7 +91,7 @@
                 result = baseService.ExecuteNonQuery(criteria);
                 if (result.IsSuccessful)
                 {
-                    attachFileService.UploadFile(files, criteria.RequestId, PathFolder);
+                    attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
                 }
             }
             else
@@ -114,7 +114,7 @@
                 FromDate = employeeWorkFromHome.FromDate,
                 ToDate = employeeWorkFromHome.ToDate,
                 Remark = employeeWorkFromHome.Remark,
-                Files = attachFileService.GetAttachFile(id, PathFolder)
+                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
             };
             return PartialView("_Edit", model);
         }
@@ -143,9 +143,9 @@
                 {
                     if (!string.IsNullOrWhiteSpace(filesRemove))
                     {
-                        attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.EmployeeWorkFromHomeId, PathFolder);
+                        attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.EmployeeWorkFromHomeId, UploadFolderPath);
                     }
-                    attachFileService.UploadFile(files, criteria.EmployeeWorkFromHomeId, PathFolder);
+                    attachFileService.UploadFile(files, criteria.EmployeeWorkFromHomeId, UploadFolderPath);
                 }
             }
             else

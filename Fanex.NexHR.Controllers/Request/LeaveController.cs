@@ -20,22 +20,26 @@
 
     public class LeaveController : BaseController
     {
+        private const string UploadFolderPath = "/file/uploads/request/";
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly ICommonDataService commonDataService;
+        private readonly IAttachFileService attachFileService;
 
         public LeaveController(
             ISessionService sessionService,
             ILeaveRequestService leaveRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            ICommonDataService commonDataService) : base(sessionService)
+            ICommonDataService commonDataService,
+            IAttachFileService attachFileService) : base(sessionService)
         {
             this.leaveRequestService = leaveRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.commonDataService = commonDataService;
+            this.attachFileService = attachFileService;
         }
 
         [HttpGet]
@@ -52,7 +56,7 @@
             IList<LeaveRequest> leaves = leaveRequestService.GetByDate(criteria);
             foreach (var request in leaves)
             {
-                request.ContentFile = requestService.GetInfoAttachFile(request.RequestId);
+                request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
             }
             ViewBag.Year = tempYear;
             ViewBag.EmployeeBalance = GetLeaveBalance(null, year);
@@ -105,7 +109,7 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailCreateRequest(criteria);
-                requestService.UploadFile(files, criteria.RequestId);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 
             return Json(result);
@@ -137,7 +141,7 @@
             SystemSetting setting = commonDataService.GetSystemSetting();
             model.Verifiers = supervisor.Verifiers;
             model.Approvers = supervisor.Approvers;
-            model.Files = requestService.GetAttachFile(id);
+            model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
             model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
             model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
 
@@ -168,10 +172,10 @@
             if (result.IsSuccessful)
             {
                 leaveRequestService.SendMailEditRequest(criteria);
-                requestService.UploadFile(files, criteria.RequestId);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    requestService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId);
+                    attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
             }
 
@@ -188,7 +192,7 @@
 
             LeaveRequestViewModel model = ConvertRequestToModel(request);
             model.LeaveTypeList = commonDataService.GetLeaveType();
-            model.Files = requestService.GetAttachFile(id);
+            model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
 
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
             model.Verifiers = supervisor.Verifiers;
@@ -209,7 +213,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                requestService.DeleteFolderAttachFile(id);
+                attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
