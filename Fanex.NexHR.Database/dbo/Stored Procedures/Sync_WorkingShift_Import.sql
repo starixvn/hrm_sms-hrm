@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[Sync_WorkingShift_Import] @WorkingShiftXml NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -46,6 +45,9 @@ BEGIN
 	CREATE TABLE #tmpEmployeeCalendar (
 		EmpId INT
 		,WorkDate DATE
+		,ShiftId INT
+		,IsOffDay BIT
+		,IsHoliday BIT
 		)
 
 	EXEC sp_xml_preparedocument @DocHandler OUTPUT
@@ -153,43 +155,48 @@ BEGIN
 		,ec.OWPSyncDate = @SyncDate
 	OUTPUT INSERTED.EmpId
 		,INSERTED.WorkDate
-	INTO #tmpEmployeeCalendar(EmpId, WorkDate)
+		,INSERTED.ShiftId
+		,INSERTED.IsOffDay
+		,INSERTED.IsHoliday
+	INTO #tmpEmployeeCalendar(EmpId, WorkDate, ShiftId, IsOffDay, IsHoliday)
 	FROM dbo.EmployeeCalendar AS ec WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON ec.EmpId = e.EmpId
 		INNER JOIN #tmpWorkingShift AS tmpws WITH (NOLOCK) ON e.Code = tmpws.EmployeeID
 		AND CAST(ec.WorkDate AS DATE) = CAST(tmpws.ShiftDate AS DATE)
+		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON ec.EmpId = tmpca.EmpId
+		AND ec.WorkDate = tmpca.WorkDate
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.Code = tmpws.ShiftCode
 		LEFT JOIN dbo.Holiday AS h WITH (NOLOCK) ON tmpws.ShiftDate BETWEEN h.FromDate
 			AND h.ToDate
-	WHERE ec.ChangeShiftId IS NULL
-		AND ec.IsLeaveDay = 0
-		AND ec.IsKeepInView = 0
+	WHERE tmpca.ChangeShiftTypeId IS NULL
+		AND tmpca.IsLeaveDay = 0
+		AND tmpca.IsKeepInView = 0
 		AND (
 			(
 				s.ShiftID IS NULL
 				AND (
 					(
 						tmpws.IsOffDay = 1
-						AND ec.IsOffDay = 0
+						AND tmpca.IsOffDay = 0
 						)
 					OR (
 						tmpws.IsOffDay = 0
-						AND ec.IsOffDay = 1
+						AND tmpca.IsOffDay = 1
 						)
 					OR (
 						tmpws.IsHoliday = 1
-						AND ec.IsHoliday = 0
+						AND tmpca.IsHoliday = 0
 						AND h.Id IS NOT NULL
 						)
 					OR (
 						tmpws.IsHoliday = 0
-						AND ec.IsHoliday = 1
+						AND tmpca.IsHoliday = 1
 						)
 					)
 				)
 			OR (
 				s.ShiftID IS NOT NULL
-				AND ec.ShiftId != s.ShiftID
+				AND tmpca.ShiftId != s.ShiftID
 				)
 			)
 
@@ -205,11 +212,23 @@ BEGIN
 		)
 	OUTPUT INSERTED.EmpId
 		,INSERTED.WorkDate
-	INTO #tmpEmployeeCalendar(EmpId, WorkDate)
+		,INSERTED.ShiftId
+		,INSERTED.IsOffDay
+		,INSERTED.IsHoliday
+	INTO #tmpEmployeeCalendar(EmpId, WorkDate, ShiftId, IsOffDay, IsHoliday)
 	SELECT tmpws.ShiftDate
 		,e.EmpId
 		,s.ShiftID
-		,tmpws.IsOffDay
+		,CASE 
+			WHEN tmpca.EmpId IS NULL
+				OR (
+					tmpca.EmpId IS NOT NULL
+					AND tmpca.IsLeaveDay = 0
+					AND tmpca.IsKeepInView = 0
+					AND tmpca.ChangeShiftTypeId IS NULL
+					) THEN tmpws.IsOffDay
+			ELSE 0
+			END
 		,CASE 
 			WHEN tmpws.IsHoliday = 1
 				AND h.Id IS NOT NULL THEN 1
@@ -223,6 +242,8 @@ BEGIN
 		LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON s.Code = tmpws.ShiftCode
 		LEFT JOIN dbo.Holiday AS h WITH (NOLOCK) ON tmpws.ShiftDate BETWEEN h.FromDate
 			AND h.ToDate
+		LEFT JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON e.EmpId = tmpca.EmpId
+		AND CAST(tmpws.ShiftDate AS DATE) = CAST(tmpca.WorkDate AS DATE)
 	WHERE (
 			(
 				s.ShiftID IS NULL
@@ -261,6 +282,25 @@ BEGIN
 			,@ToDate = @ToDate
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
+
+		DECLARE @xml NVARCHAR(MAX)
+
+		SET @xml = CAST((
+					SELECT EmpId AS '@EmpId'
+						,WorkDate AS '@WorkDate'
+						,ShiftId AS '@ShiftId'
+						,IsOffDay AS '@IsOffDay'
+						,IsHoliday AS '@IsHoliday'
+					FROM #tmpEmployeeCalendar WITH (NOLOCK)
+					FOR XML PATH('Row')
+						,ROOT('Root')
+					) AS NVARCHAR(MAX))
+
+		EXEC dbo.Log_WriteLog @LogActionId = 1004
+			,@LogDate = @SyncDate
+			,@Description = 'Sync working shift from OWP'
+			,@TrackingValue = @xml
+			,@UserId = - 1
 	END
 
 	DELETE
