@@ -229,7 +229,7 @@
             var leaveSumaries = reportService.GetUnpaidLeave(criteria);
             if (model.Period.Equals("1"))
             {
-                model.LeaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+                model.LeaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList();
             }
             else if (model.Period.Equals("2"))
             {
