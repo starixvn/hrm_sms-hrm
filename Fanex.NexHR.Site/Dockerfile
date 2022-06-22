@@ -69,7 +69,7 @@ WORKDIR C:\Compiled
 
 # Transform config
 RUN echo "%DEPLOY_ENV%" `
-    && xcopy "Web.%DEPLOY_ENV%.config" "Web.config" /Y
+    && xcopy "WebConfigs\Web.%DEPLOY_ENV%.config" "Web.config" /Y
 
 FROM hub.nexdev.net/base/dotnet/framework/aspnet:4.7.2-windowsservercore-ltsc2019 AS base
 
