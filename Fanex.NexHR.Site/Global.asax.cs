@@ -30,26 +30,23 @@
         [ValidateInput(false)]
         protected void Application_Error(object sender, EventArgs e)
         {
-            if (!Request.IsLocal)
-            {
-                Exception ex = Server.GetLastError().GetBaseException();
-                log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            Exception ex = Server.GetLastError().GetBaseException();
+            log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-                string message = string.Format(
-                    "{0}{1}{2}{3}{1}{4}{5}{1}{6}{7}{1}{8}{9}",
-                    ex.Message,
-                    Environment.NewLine,
-                    Labels.Source,
-                    ex.Source,
-                    Labels.Domain,
-                    HttpContext.Current.Request.Headers["Host"],
-                    Labels.TargetSite,
-                    ex.TargetSite,
-                    Labels.StackTrace,
-                    ex.StackTrace);
+            var message = string.Format(
+                "{0}{1}{2}{3}{1}{4}{5}{1}{6}{7}{1}{8}{9}",
+                ex.Message,
+                Environment.NewLine,
+                Labels.Source,
+                ex.Source,
+                Labels.Domain,
+                HttpContext.Current.Request.Headers["Host"],
+                Labels.TargetSite,
+                ex.TargetSite,
+                Labels.StackTrace,
+                ex.StackTrace);
 
-                log.Error(message);
-            }
+            log.Error(message);
         }
     }
 }
