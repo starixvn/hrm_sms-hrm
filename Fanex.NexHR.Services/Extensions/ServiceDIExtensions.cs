@@ -79,6 +79,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
             container.RegisterType<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
             container.RegisterType<IExportOvertimeService, ExportOvertimeService>();
+            container.RegisterType<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
         }
 
         private static void ResolveRepositoryDI(IUnityContainer container)

@@ -100,6 +100,8 @@
     <Compile Include="HospitalizationLeave\HospitalizationLeaveBalanceSummaryReport.cs" />
     <Compile Include="HospitalizationLeave\HospitalizationLeaveTransaction.cs" />
     <Compile Include="JobLevel.cs" />
+    <Compile Include="Report\DisciplineSummaryPerYear\DisciplineSummaryPerYearDetail.cs" />
+    <Compile Include="Report\DisciplineSummaryPerYear\DisciplineSummaryPerYear.cs" />
     <Compile Include="SyncData\SyncByApiSetting.cs" />
     <Compile Include="SyncData\WorkingShiftSyncModel.cs" />
     <Compile Include="Report\MealAllowance\MealAllowanceDetail.cs" />

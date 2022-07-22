@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
@@ -59,6 +60,16 @@
             }
 
             return default(T);
+        }
+
+        public ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>> FetchMultiple<TFirst, TSecond>(ICriteria criteria)
+        {
+            if (criteria != null && criteria.IsValid())
+            {
+                return dynamicRepository.FetchMultiple<TFirst, TSecond>(criteria);
+            }
+
+            return new ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>>(new List<TFirst>(), new List<TSecond>());
         }
     }
 }

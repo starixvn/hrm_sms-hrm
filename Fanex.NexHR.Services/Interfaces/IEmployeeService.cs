@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
+    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
@@ -58,6 +59,6 @@
 
         CommandResult Delete(int actorId, DeleteEmployeeParam param);
 
-        string CaculateLengthOfService(Employee model);
+        string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryToDate, DateTime? militaryFromDate);
     }
 }

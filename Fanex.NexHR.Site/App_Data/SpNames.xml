@@ -472,6 +472,7 @@
         <Setting Key="Report_MonthlyOvertimeDetails" SpName="Report_MonthlyOvertimeDetails" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="Report_MonthlyOvertime" SpName="Report_MonthlyOvertime" DbName="nexhrx" Plain="0" />
         <Setting Key="Report_DailyOvertime" SpName="Report_DailyOvertime" DbName="nexhrx" Plain="0" />
+        <Setting Key="Report_DisciplineSummaryPerYear" SpName="Report_DisciplineSummaryPerYear" DbName="nexhrx" Plain="0" />
     </Function>
     <Function Name="Log">
         <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="nexhrx" Plain="0" />

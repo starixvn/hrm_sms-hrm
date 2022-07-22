@@ -182,6 +182,7 @@
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
+    <Content Include="wwwroot\dist\js\discipline.summary.per.year.js" />
     <Content Include="wwwroot\dist\js\employee.workfromhome.js" />
     <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js" />
     <Content Include="wwwroot\dist\js\joblevel.js" />
@@ -234,6 +235,8 @@
     <Content Include="wwwroot\dist\styles\discipline.details.js" />
     <Content Include="wwwroot\dist\styles\discipline.summary.css" />
     <Content Include="wwwroot\dist\styles\discipline.summary.js" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.css" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js" />
     <Content Include="wwwroot\dist\styles\employee.workfromhome.css" />
     <Content Include="wwwroot\dist\styles\employee.workfromhome.js" />
     <Content Include="wwwroot\dist\styles\extensionno.create.css" />
@@ -282,6 +285,7 @@
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
+    <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
     <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
@@ -1130,6 +1134,7 @@
     <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
     <Content Include="App_Data\Emails\RemindUseAL.cshtml" />
     <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
+    <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
@@ -1275,6 +1280,12 @@
     <Content Include="wwwroot\dist\styles\report.meal.allowance.js.map" />
     <Content Include="Views\Report\MealAllowance\_MealAllowanceDetailsGrid.cshtml" />
     <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js.map" />
+    <Content Include="Views\Report\DisciplineSummaryPerYear\Index.cshtml" />
+    <Content Include="wwwroot\sources\styles\pages\report\discipline.summary.per.year.scss" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.css.map" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js.map" />
+    <Content Include="wwwroot\dist\js\discipline.summary.per.year.js.map" />
+    <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

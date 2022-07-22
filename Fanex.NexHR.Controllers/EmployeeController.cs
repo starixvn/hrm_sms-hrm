@@ -34,7 +34,6 @@
         private readonly ITeamService teamService;
         private readonly IJobLevelService jobLevelService;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S107:Methods should not have too many parameters", Justification = "<Pending>")]
         public EmployeeController(
             ISessionService sessionService,
             IEmployeeService employeeService,
@@ -233,7 +232,7 @@
                 employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
                 employee.EmpShiftList = GetShiftMonitors(supervisors);
                 employee.ActingEmpList = GetActingSupervisors(supervisors);
-                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(employee);
+                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
 
                 ComposeViewBagsForEditEmployee();
                 return View(employee);

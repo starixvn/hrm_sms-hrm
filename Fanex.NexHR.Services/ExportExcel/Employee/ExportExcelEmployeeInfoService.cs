@@ -106,7 +106,7 @@
                 employee.CompanyDate,
                 employee.ConfirmedDate,
                 employee.ResignedDate,
-                LengthOfService = employeeService.CaculateLengthOfService(employee),
+                LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
                 DoB = employee.DateOfBirth,
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,

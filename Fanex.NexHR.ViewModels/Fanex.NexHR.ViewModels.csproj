@@ -81,6 +81,7 @@
     <Compile Include="AnnualLeave\BaseAnnualLeaveBalanceViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarViewModel.cs" />
     <Compile Include="Calendar\WorkingCalendarFilterViewModel.cs" />
+    <Compile Include="Report\DisciplineSummaryPerYearViewModel.cs" />
     <Compile Include="Report\MealAllowanceReportViewModel.cs" />
     <Compile Include="Section\AddSectionViewModel.cs" />
     <Compile Include="Section\SectionViewModel.cs" />

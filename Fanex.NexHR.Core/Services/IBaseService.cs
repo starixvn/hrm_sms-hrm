@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.Core.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
@@ -14,5 +15,7 @@
         CommandResult ExecuteNonQuery(ICriteria criteria);
 
         Task<T> GetDataEntityAsync<T>(ICriteria criteria);
+
+        ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>> FetchMultiple<TFirst, TSecond>(ICriteria criteria);
     }
 }

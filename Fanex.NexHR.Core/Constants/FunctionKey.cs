@@ -56,6 +56,7 @@
         public const string ManpowerCategoryReport = "ManpowerCategoryReport";
         public const string DepartmentManagement = "DepartmentManagement";
         public const string MealAllowanceReport = "MealAllowanceReport";
+        public const string DisciplineSummaryPerYear = "DisciplineSummaryPerYear";
 
         // HR space
         public const string EmployeeManagement = "EmployeeManagement";

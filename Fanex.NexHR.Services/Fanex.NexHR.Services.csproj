@@ -173,6 +173,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportExcel\ExportDisciplineSummaryPerYearService.cs" />
     <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
     <Compile Include="ExportExcel\ExportOvertimeService.cs" />
     <Compile Include="ExportExcel\JobTitleExportService.cs" />

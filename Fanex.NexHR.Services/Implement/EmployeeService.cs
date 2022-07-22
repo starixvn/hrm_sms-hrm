@@ -23,10 +23,6 @@
 
     public class EmployeeService : IEmployeeService
     {
-        private const int halfMonth = 15;
-        private const int dayOfYear = 365;
-        private const int dayOfMonth = 30;
-        private const int monthOfYear = 12;
         private readonly IEmployeeRepository employeeRepository;
         private readonly IRoleService roleService;
         private readonly IBaseService baseService;
@@ -294,28 +290,33 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public string CaculateLengthOfService(Employee model)
+        public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryToDate, DateTime? militaryFromDate)
         {
+            const byte HalfMonth = 15;
+            const short DayOfYear = 365;
+            const byte DayOfMonth = 30;
+            const byte MonthOfYear = 12;
             int totalDays;
             int years;
             int months;
             int days;
             string lengOfService = string.Empty;
-            if (model.JoinedDate.HasValue)
+            if (joinedDate.HasValue)
             {
-                totalDays = ((TimeSpan)(DateTime.Today - model.JoinedDate)).Days;
-                if (model.MilitaryToDate.HasValue && model.MilitaryFromDate.HasValue)
+                totalDays = ((TimeSpan)(DateTime.Today - joinedDate)).Days;
+                if (militaryToDate.HasValue && militaryFromDate.HasValue)
                 {
-                    totalDays = totalDays - ((TimeSpan)(model.MilitaryToDate - model.MilitaryFromDate)).Days;
+                    totalDays -= ((TimeSpan)(militaryToDate - militaryFromDate)).Days;
                 }
-                years = totalDays / dayOfYear;
-                months = (totalDays - (years * dayOfYear)) / dayOfMonth;
-                days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
-                if (days >= halfMonth)
+                years = totalDays / DayOfYear;
+                months = (totalDays - (years * DayOfYear)) / DayOfMonth;
+                days = totalDays - (years * DayOfYear) - (months * DayOfMonth);
+                if (days >= HalfMonth)
                 {
                     months++;
                 }
-                if (months >= monthOfYear)
+
+                if (months >= MonthOfYear)
                 {
                     years++;
                     months = 0;

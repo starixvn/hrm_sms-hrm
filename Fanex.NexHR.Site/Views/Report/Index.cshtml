@@ -118,6 +118,14 @@
                             </td>
                         </tr>
                         break;
+                    case FunctionKey.DisciplineSummaryPerYear:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("5 Years Discipline Summary", "Index", "DisciplineSummaryPerYear")
+                            </td>
+                        </tr>
+                        break;
                 }
             }
         }
