@@ -1278,7 +1278,6 @@
     <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js.map" />
     <Content Include="Views\Report\DisciplineSummaryPerYear\Index.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\report\discipline.summary.per.year.scss" />
-    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.css.map" />
     <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js.map" />
     <Content Include="wwwroot\dist\js\discipline.summary.per.year.js.map" />
     <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
