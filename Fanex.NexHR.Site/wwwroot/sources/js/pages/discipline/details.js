@@ -8,7 +8,7 @@ import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import {
-    axiosError, blockUI, floatThead, unblockUI, confirm, initDatepicker, initFromDateOnChange, initTooltip,
+    axiosError, blockUI, floatThead, unblockUI, confirm, initDatepicker, initTooltip,
     resolveClientUrl, toastOptions, downloadFile
 } from '../../shared/common.functions';
 import { DisciplineType } from '../../shared/constants';
@@ -270,7 +270,6 @@ import { DisciplineType } from '../../shared/constants';
     $(document).ready(function () {
         initEventForDateRangeDropdown();
         initDatepicker();
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
         axios(resolveClientUrl('Section/GetOrgChart'))
             .then(response => {

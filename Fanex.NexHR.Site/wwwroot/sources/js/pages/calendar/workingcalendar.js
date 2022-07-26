@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { downloadFile, axiosError, blockUI, initDatepicker, initFromDateOnChange, unblockUI, resolveClientUrl, sortTable, floatThead } from '../../shared/common.functions';
+import { downloadFile, axiosError, blockUI, initDatepicker, unblockUI, resolveClientUrl, sortTable, floatThead } from '../../shared/common.functions';
 
 const workingCalendarModule = (function ($) {
     function query() {
@@ -59,7 +59,6 @@ const workingCalendarModule = (function ($) {
             }).catch(axiosError);
 
         initDatepicker();
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
         $('#btnSearch').on('click', function () {
             query();

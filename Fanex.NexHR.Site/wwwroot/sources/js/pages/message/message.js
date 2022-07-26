@@ -1,7 +1,7 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios'
-import { initFromDateOnChange, confirm, initDatepicker, autoIndex, axiosError, resolveClientUrl } from '../../shared/common.functions';
+import { confirm, initDatepicker, autoIndex, axiosError, resolveClientUrl } from '../../shared/common.functions';
 import '../../date';
 
 var deleteMessage = function (messageId) {
@@ -33,7 +33,6 @@ var detailMessage = function (messageId) {
 
 var init = function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('.message-detail').on('click', function () {
         var id = $(this).attr('data-id');

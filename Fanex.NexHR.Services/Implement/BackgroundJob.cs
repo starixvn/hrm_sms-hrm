@@ -1,14 +1,12 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.BackgroundJob;
     using Fanex.NexHR.Models;
     using Hangfire;
@@ -20,23 +18,17 @@
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
         private readonly ISyncWorkingShiftService syncWorkingShiftService;
-        private readonly ITeamService teamService;
         private readonly IEmailService emailService;
-        private readonly IReportService reportService;
 
         public BackgroundJobService(IBaseService baseService,
             IHolidayService holidayService,
             ISyncWorkingShiftService syncWorkingShiftService,
-            ITeamService teamService,
-            IEmailService emailService,
-            IReportService reportService)
+            IEmailService emailService)
         {
             this.baseService = baseService;
             this.holidayService = holidayService;
             this.syncWorkingShiftService = syncWorkingShiftService;
-            this.teamService = teamService;
             this.emailService = emailService;
-            this.reportService = reportService;
         }
 
         public void ImportTimeRecord()
@@ -118,50 +110,37 @@
         #region Auto send mail remind user to use AL
         public void SendMailRemindUserToUseAnnualLeave()
         {
-            IList<LeaveSummary> leaveSumaries = GetLeaveSumaries();
+            var criteria = new GetAnnualLeaveBalanceCriteria
+            {
+                Year = DateTime.Now.Year
+            };
+            (var employees, var supervisors) = baseService.FetchMultiple<LeaveSummary, LeaveSummary>(criteria);
             var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
 
-            foreach (var leave in leaveSumaries)
+            foreach (var employee in employees)
             {
-                float percentAnnualLeaveRemaining = leave.LeaveBalance / leave.AnnualLeaveCurrentYear * 100;
+                float percentAnnualLeaveRemaining = employee.LeaveBalance / employee.AnnualLeaveCurrentYear * 100;
                 bool isSentMail = false;
                 var percentInMail = string.Empty;
 
                 CheckSendMail(ref isSentMail, ref percentInMail, percentAnnualLeaveRemaining);
 
-                if (!string.IsNullOrWhiteSpace(leave.Email) && isSentMail)
+                if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
                 {
                     var body = string.Format(
                         bodyTemplate,
-                        leave.Nickname,
+                        employee.Nickname,
                         percentInMail,
                         DateTime.Now.Year + 1,
-                        string.Format("{0}/{1}", leave.LeaveBalance, leave.AnnualLeaveCurrentYear));
+                        string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
-                        leave.Email,
-                        string.Empty,
+                        employee.Email,
+                        string.Join(";", supervisors.Where(x => x.EmpId == employee.EmpId).Select(x => x.Email)),
                         "Annual Leave Balance Reminder",
                         body));
                 }
             }
-        }
-
-        private IList<LeaveSummary> GetLeaveSumaries()
-        {
-            IList<Team> teams = teamService.GetAll();
-            var teamIds = string.Join(",", teams.Select(x => x.Id));
-            var criteria = new GetAnnualLeaveBalanceCriteria
-            {
-                Year = DateTime.Now.Year,
-                EmpId = null,
-                TeamIds = teamIds,
-                IsLocal = null,
-                Role = string.Empty,
-                SupervisorId = null
-            };
-            IList<LeaveSummary> leaveSumaries = reportService.GetAnnualLeaveBalanceReport(criteria);
-            return leaveSumaries;
         }
 
         private static void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)

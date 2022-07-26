@@ -5,7 +5,7 @@ import 'chosen-js/chosen.jquery';
 import '../../shared/multiselect-tree-view';
 import axios from 'axios';
 import {
-    initFromDateOnChange, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors,
+    initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors,
     axiosError, resolveClientUrl
 } from '../../shared/common.functions';
 import '../../date';
@@ -67,11 +67,6 @@ function initSearchTeam() {
             selectedItems: $('#TeamIds').val()
         });
     }).catch(axiosError);
-}
-
-function initDatePicker() {
-    initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 }
 
 function GetSelectedEmployeeEmails() {
@@ -197,6 +192,6 @@ $(document).ready(function () {
     bindingDataIfEditMode();
     initSearchEmployee();
     initSearchTeam();
-    initDatePicker();
+    initDatepicker();
     Submit();
 });

@@ -4,7 +4,7 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import 'jquery-contextmenu/dist/jquery.contextMenu';
 import {
-    blockUI, floatThead, unblockUI, initFromDateOnChange, confirm, alert,
+    blockUI, floatThead, unblockUI, confirm, alert,
     initDatepicker, resolveClientUrl, axiosError, downloadFile
 } from '../../shared/common.functions';
 import '../../date';
@@ -161,6 +161,5 @@ import { parse } from 'qs';
         });
 
         initDatepicker();
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
     });
 })();

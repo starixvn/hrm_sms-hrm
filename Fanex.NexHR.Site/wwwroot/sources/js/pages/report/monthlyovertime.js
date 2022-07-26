@@ -4,7 +4,7 @@ import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 import 'floatthead/dist/jquery.floatThead';
 
-import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, initFromDateOnChange, sortTable, floatThead } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl, blockUI, unblockUI, downloadFile, initDatepicker, sortTable, floatThead } from '../../shared/common.functions';
 
 $(document).ready(function () {
 
@@ -29,7 +29,6 @@ $(document).ready(function () {
     };
 
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {

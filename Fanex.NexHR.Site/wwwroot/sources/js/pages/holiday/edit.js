@@ -2,7 +2,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import moment from 'moment';
-import { initFromDateOnChange, initDatepicker } from '../../shared/common.functions';
+import { initDatepicker } from '../../shared/common.functions';
 
 const editHoliday = (function ($) {
     const me = {};
@@ -53,6 +53,5 @@ const editHoliday = (function ($) {
 
 $(document).ready(function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     editHoliday.init();
 });

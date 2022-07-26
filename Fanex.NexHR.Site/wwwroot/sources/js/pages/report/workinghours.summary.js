@@ -6,7 +6,7 @@ import { parse } from 'qs';
 import '../../shared/multiselect-tree-view';
 import '../../date';
 import {
-    axiosError, floatThead, initDatepicker, initFromDateOnChange, setDateRange,
+    axiosError, floatThead, initDatepicker, setDateRange,
     blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
@@ -72,7 +72,6 @@ $(document).ready(function () {
     floatThead('table#data');
     initSortTable();
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     dataChangeEvent();
     GetOrgChart();
     searchKeyword();

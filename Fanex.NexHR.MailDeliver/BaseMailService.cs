@@ -28,21 +28,21 @@
             {
                 email.MailSetting = GetMailSettingById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
                 InsertMailRecord(email);
-                var message = GetMessageContent(email);
-                isSucessfull = Send(email, message);
+                isSucessfull = Send(email);
             }
 
             return isSucessfull;
         }
 
-        private bool Send(MailRecord email, MimeMessage message)
+        private bool Send(MailRecord email)
         {
-            var isSucessfull = email.MailSetting.Port == 465 ? SendByMailKit(email, message) : SendByMailNet(email);
+            var isSucessfull = email.MailSetting.Port == 465 ? SendByMailKit(email) : SendByMailNet(email);
             return isSucessfull;
         }
 
-        private bool SendByMailKit(MailRecord email, MimeMessage message)
+        private bool SendByMailKit(MailRecord email)
         {
+            MimeMessage message = GetMessageContent(email);
             var isSucessfull = false;
 
             using (var mailclient = new MailKit.Net.Smtp.SmtpClient())
@@ -203,6 +203,8 @@
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(string.Empty, email.MailSetting.Username));
             GetMailAddressFromString(email.MailTo, message.To);
+            GetMailAddressFromString(email.MailCc, message.Cc);
+            GetMailAddressFromString(email.MailBcc, message.Bcc);
 
             message.Subject = email.Subject;
             message.Priority = (MessagePriority)email.Priority;

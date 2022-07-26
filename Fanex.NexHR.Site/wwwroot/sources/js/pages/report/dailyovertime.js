@@ -5,7 +5,7 @@ import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl,
+    axiosError, floatThead, initDatepicker, resolveClientUrl,
     blockUI, unblockUI, downloadFile, sortTable
 } from '../../shared/common.functions';
 
@@ -51,7 +51,6 @@ function exportExcel() {
 }
 $(document).ready(function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     floatThead('table#data');
     initSortTable();
     getOrgChart();

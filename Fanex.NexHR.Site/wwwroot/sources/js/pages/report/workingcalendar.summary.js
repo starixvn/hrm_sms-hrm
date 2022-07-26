@@ -5,7 +5,7 @@ import 'floatthead/dist/jquery.floatThead';
 
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, initDatepicker, initFromDateOnChange, floatThead,
+    axiosError, initDatepicker, floatThead,
     blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
@@ -13,7 +13,6 @@ import {
 
 $(document).ready(function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     let query = function () {
         blockUI();

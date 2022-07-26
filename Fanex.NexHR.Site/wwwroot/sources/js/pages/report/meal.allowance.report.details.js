@@ -7,7 +7,7 @@ import 'floatthead/dist/jquery.floatThead';
 import '../../shared/employee.search.in.team';
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, initDatepicker, initFromDateOnChange, floatThead,
+    axiosError, initDatepicker, floatThead,
     blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
@@ -54,7 +54,6 @@ $(document).on('click', '#btnExcelDetails', function () {
 
 $(document).ready(function () {
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {

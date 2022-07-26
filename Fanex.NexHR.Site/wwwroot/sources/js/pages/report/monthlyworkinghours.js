@@ -6,7 +6,7 @@ import { parse } from 'qs';
 
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, blockUI, unblockUI, floatThead, initDatepicker, initFromDateOnChange, resolveClientUrl, downloadFile, sortTable
+    axiosError, blockUI, unblockUI, floatThead, initDatepicker, resolveClientUrl, downloadFile, sortTable
 } from '../../shared/common.functions';
 
 $(document).ready(function () {
@@ -31,7 +31,6 @@ $(document).ready(function () {
     };
 
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {

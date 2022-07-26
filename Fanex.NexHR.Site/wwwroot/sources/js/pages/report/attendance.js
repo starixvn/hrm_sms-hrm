@@ -9,7 +9,7 @@ import '../../shared/employee.search.in.team';
 import '../../date';
 import '../request/date.filter';
 import {
-    blockUI, unblockUI, floatThead, initFromDateOnChange, initDatepicker,
+    blockUI, unblockUI, floatThead, initDatepicker,
     resolveClientUrl, downloadFile, axiosError, sortTable
 } from '../../shared/common.functions';
 import { CurrentRequestStatus } from '../../shared/constants';
@@ -104,7 +104,6 @@ $(document).ready(function () {
             query();
         }).catch(axiosError);
 
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
     initDatepicker();
 
     $('form.filter #category').on('change', function () {

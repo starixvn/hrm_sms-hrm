@@ -9,7 +9,7 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import {
     axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker,
-    initFromDateOnChange, resolveClientUrl, downloadFile
+    resolveClientUrl, downloadFile
 } from '../../shared/common.functions';
 
 (function () {
@@ -335,7 +335,6 @@ import {
         $dialogViewOtherDiscipline = $('#dialogViewOtherDiscipline');
         $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
         initDatepicker();
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
         initEventForDateRangeDropdown();
         $.ajax({
             url: resolveClientUrl('Section/GetOrgChart'),

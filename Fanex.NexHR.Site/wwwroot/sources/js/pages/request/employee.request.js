@@ -13,7 +13,7 @@ import '../../shared/employee.search.in.team';
 import './date.filter';
 import {
     axiosError, blockUI, unblockUI, floatThead, confirm, initDatepicker,
-    initFromDateOnChange, toastOptions, resolveClientUrl, sortTable
+    toastOptions, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 import { RequestCommand, RoleSystem } from '../../shared/constants';
 
@@ -601,8 +601,6 @@ $(function () {
                 });
             }).catch(axiosError).then(() => unblockUI());
         });
-
-        initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
         $('form').submit(function (e) {
             e.preventDefault();

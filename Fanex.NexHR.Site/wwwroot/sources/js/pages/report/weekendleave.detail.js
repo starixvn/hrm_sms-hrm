@@ -9,7 +9,7 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import '../../date';
 import {
-    axiosError, blockUI, unblockUI, initDatepicker, initFromDateOnChange, floatThead,
+    axiosError, blockUI, unblockUI, initDatepicker, floatThead,
     resolveClientUrl, downloadFile
 } from '../../shared/common.functions';
 
@@ -72,7 +72,6 @@ $(document).ready(function () {
         }).catch(axiosError);
 
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     $('form.filter #btnSubmit').on('click', function (event) {
         $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));

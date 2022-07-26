@@ -2,7 +2,7 @@
 import axios from 'axios';
 import '../../shared/multiselect-tree-view';
 import {
-    axiosError, blockUI, unblockUI, initDatepicker, initFromDateOnChange,
+    axiosError, blockUI, unblockUI, initDatepicker,
     resolveClientUrl, downloadFile
 } from '../../shared/common.functions';
 
@@ -27,7 +27,6 @@ $(document).ready(function () {
     };
 
     initDatepicker();
-    initFromDateOnChange($('#FromDate'), $('#ToDate'));
 
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
