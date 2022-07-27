@@ -1,5 +1,4 @@
 ﻿
-
 CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
@@ -531,16 +530,24 @@ BEGIN
 		RETURN;
 	END
 
+	DECLARE @WorkingHours INT
+		,@MaxHalfDayMinutes INT
+	SELECT @WorkingHours = WorkingHours
+	FROM dbo.EmployeeSummary WITH (NOLOCK)
+	WHERE EmpId = @EmpId
+
+	SET @MaxHalfDayMinutes = CASE WHEN @WorkingHours IS NULL THEN 300 ELSE @WorkingHours * 60 / 2 END
+
 	IF EXISTS (
 			SELECT 1
 			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-				AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
+				AND DATEDIFF(MINUTE, FromTime, ToTime) > @MaxHalfDayMinutes
 			)
 	BEGIN
 		SET @ErrCode = 113
-		SET @ErrMsg = 'You can not request leave half day over 5 hours.'
+		SET @ErrMsg = 'You can not request leave half day over ' + CAST(@MaxHalfDayMinutes AS NVARCHAR(10)) + ' minutes.'
 
 		RETURN;
 	END

@@ -36,10 +36,12 @@ BEGIN
 		,Amount
 		)
 	SELECT emp.EmpId
-		,ROUND((ISNULL(CASE 
-							WHEN empsum.IsLocal = 1 THEN gr.LocalBasicAnnualLeaveBalance
-							ELSE gr.ExpatBasicAnnualLeaveBalance 
-						END, 0) / 12.0) * (CASE 
+		,ROUND((
+				ISNULL(CASE 
+						WHEN empsum.IsLocal = 1 THEN gr.LocalBasicAnnualLeaveBalance
+						ELSE gr.ExpatBasicAnnualLeaveBalance
+						END, 0) / 12.0
+				) * (CASE 
 				WHEN DAY(emp.JoinedDate) <= 15 THEN DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') + 1
 				ELSE DATEDIFF(MONTH, emp.JoinedDate, CONVERT(NVARCHAR(10), YEAR(emp.ConfirmedDate)) + '/12/01') END
 				), 0)
@@ -91,6 +93,14 @@ BEGIN
 	SET empsum.AnnualLeaveBalance = empsum.AnnualLeaveBalance + emp.Amount
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblEmployeeBalance AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
+			WHERE emp.EmpId = lt.EmpId
+				AND lt.FromDate >= @FromDate
+				AND lt.CreditDays > 0
+				AND lt.RequestId IS NULL
+			)
 
 	INSERT INTO dbo.LeaveTrans (
 		EmpId
@@ -112,7 +122,15 @@ BEGIN
 		,@CreatedDate
 		,NULL AS CreatedBy
 		,0 AS Deleted
-	FROM #tblEmployeeBalance WITH (NOLOCK)
+	FROM #tblEmployeeBalance AS emp WITH (NOLOCK)
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
+			WHERE emp.EmpId = lt.EmpId
+				AND lt.FromDate >= @FromDate
+				AND lt.CreditDays > 0
+				AND lt.RequestId IS NULL
+			)
 
 	DROP TABLE #tblEmployeeBalance
 END

@@ -111,8 +111,7 @@ BEGIN
 			ELSE empca.LeaveDay END
 			) AS LeaveDay
 		,(CASE 
-			WHEN empca.WorkDate < GETDATE() - 1
-				AND emp.JoinedDate >= @Today
+			WHEN empca.WorkDate < DATEADD(DAY, -1, @Today)
 				AND empatt.ShiftId IS NOT NULL
 				AND empatt.InFixed IS NULL
 				AND empatt.OutFixed IS NOT NULL
@@ -120,8 +119,7 @@ BEGIN
 			ELSE 0 END
 			) AS IsMissingCheckIn
 		,(CASE 
-			WHEN empca.WorkDate < GETDATE() - 1
-				AND emp.JoinedDate >= @Today
+			WHEN empca.WorkDate < DATEADD(DAY, -1, @Today)
 				AND empatt.ShiftId IS NOT NULL
 				AND empatt.OutFixed IS NULL
 				AND empatt.InFixed IS NOT NULL
@@ -129,8 +127,7 @@ BEGIN
 			ELSE 0 END
 			) AS IsMissingCheckOut
 		,(CASE 
-			WHEN empca.WorkDate < GETDATE() - 1
-				AND emp.JoinedDate >= @Today
+			WHEN empca.WorkDate < DATEADD(DAY, -1, @Today)
 				AND empca.ShiftId IS NOT NULL
 				AND (
 					empsum.IsDefaultSchedule = 0

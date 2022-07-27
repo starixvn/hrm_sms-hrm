@@ -32,6 +32,9 @@ BEGIN
 
 	CREATE TABLE #tblLengthOfServiceBalance (
 		EmpId INT
+		,JoinedDate DATE
+		,WorkingDays INT
+		,LengthOfService INT
 		,Amount DECIMAL(5, 2)
 		)
 
@@ -40,11 +43,10 @@ BEGIN
 		,Amount
 		)
 	SELECT emp.EmpId
-		,CASE
-			WHEN empsum.IsLocal = 1
-			THEN ISNULL(gr.LocalBasicAnnualLeaveBalance, 0)
+		,CASE 
+			WHEN empsum.IsLocal = 1 THEN ISNULL(gr.LocalBasicAnnualLeaveBalance, 0)
 			ELSE ISNULL(gr.ExpatBasicAnnualLeaveBalance, 0)
-		END
+			END
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		AND ISNULL(emp.isDeleted, 0) = 0
@@ -72,23 +74,20 @@ BEGIN
 	BEGIN
 		INSERT INTO #tblLengthOfServiceBalance (
 			EmpId
-			,Amount
+			,JoinedDate
+			,WorkingDays
+			,LengthOfService
 			)
 		SELECT emp.EmpId
-			,CASE 
-				WHEN empsum.WorkingDays = 15 THEN (
-						((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) / 5) + CASE 
-						WHEN ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) % 5) = 4
-							AND MONTH(emp.JoinedDate) < 7 THEN 1
-						ELSE 0 END
-						) / 2.0
-				ELSE ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) / 5) + CASE 
-						WHEN ((DATEDIFF(YEAR, emp.JoinedDate, @FromDate) - 1) % 5) = 4
-							AND MONTH(emp.JoinedDate) < 7 THEN 1
-						ELSE 0
-						END
-				END
-		FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
+			,emp.JoinedDate
+			,empsum.WorkingDays
+			,FLOOR((
+					DATEDIFF(MONTH, emp.JoinedDate, @FromDate) - 1 - CASE 
+					WHEN empsum.MilitaryFromDate IS NOT NULL
+						AND empsum.MilitaryToDate IS NOT NULL THEN DATEDIFF(MONTH, empsum.MilitaryFromDate, empsum.MilitaryToDate)
+					ELSE 0 END
+					) / 12.0)
+		FROM dbo.EmployeeSummary AS empsum WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 			AND ISNULL(emp.isDeleted, 0) = 0
 			AND emp.[Enabled] = 1
@@ -100,6 +99,22 @@ BEGIN
 				OR emp.EmpId = @EmpId
 				)
 			AND empsum.IsLocal = 1
+
+		UPDATE lsb
+		SET lsb.Amount = CASE 
+				WHEN lsb.WorkingDays = 15 THEN (
+						(lsb.LengthOfService / 5) + CASE 
+						WHEN lsb.LengthOfService % 5 = 4
+							AND MONTH(lsb.JoinedDate) < 7 THEN 1
+						ELSE 0 END
+						) / 2.0
+				ELSE (lsb.LengthOfService / 5) + CASE 
+						WHEN lsb.LengthOfService % 5 = 4
+							AND MONTH(lsb.JoinedDate) < 7 THEN 1
+						ELSE 0
+						END
+				END
+		FROM #tblLengthOfServiceBalance AS lsb WITH (ROWLOCK, UPDLOCK)
 	END
 
 	MERGE #tblEmployeeBalance AS [target]
@@ -176,5 +191,6 @@ BEGIN
 	FROM #tblEmployeeBalance WITH (NOLOCK)
 
 	DROP TABLE #tblEmployeeBalance
+
 	DROP TABLE #tblLengthOfServiceBalance
 END
