@@ -33,7 +33,7 @@
         private readonly IUserControlSession userControlSession;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
-        private readonly IAuthService authService;
+        private readonly IHRMAuthService authService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ITeamService teamService;
         private readonly IJobLevelService jobLevelService;
@@ -46,7 +46,7 @@
             IUserControlSession userControlSession,
             IEmployeeService employeeService,
             ICommonDataService commonDataService,
-            IAuthService authService,
+            IHRMAuthService authService,
             IEmployeeLogService employeeLogService,
             ITeamService teamService,
             IJobLevelService jobLevelService,

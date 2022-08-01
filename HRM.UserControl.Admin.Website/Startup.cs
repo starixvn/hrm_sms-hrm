@@ -7,6 +7,7 @@ namespace HRM.UserControl.Admin.Website
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
     using HRM.UserControl.Admin.Website.Middlewares;
+    using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Repositories;
     using HRM.UserControl.Admin.Website.Services;
     using HRM.UserControl.Client.AspNetCore.Configurations;
@@ -19,7 +20,6 @@ namespace HRM.UserControl.Admin.Website
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -77,6 +77,9 @@ namespace HRM.UserControl.Admin.Website
                 options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddSingleton(Configuration.GetSection("HRM.UserControl.Client.Configurations").Get<UserControlConfigs>());
+
             RegisterDI(services);
 
             services.AddControllersWithViews();
@@ -124,7 +127,7 @@ namespace HRM.UserControl.Admin.Website
 
             //
             services.AddSingleton<IUserControlSession, UserControlSession>();
-            services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<ICryptoService, CryptoService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();

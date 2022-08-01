@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models
 {
+    using System;
+
+    [Serializable]
     public class CommandResult
     {
         public int ObjectId { get; set; }

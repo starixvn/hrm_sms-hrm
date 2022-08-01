@@ -13,6 +13,10 @@
         <Setting Key="API_User_Delete" SpName="API_User_Delete" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_UpdatePassword" SpName="API_User_UpdatePassword" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_User_AssignRole" SpName="API_User_AssignRole" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_CheckIn" SpName="API_User_CheckIn" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_ReCheckIn" SpName="API_User_ReCheckIn" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_SSOCheckIn" SpName="API_User_SSOCheckIn" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_User_Logout" SpName="API_User_Logout" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Log_UserLogin_Insert" SpName="Log_UserLogin_Insert" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">

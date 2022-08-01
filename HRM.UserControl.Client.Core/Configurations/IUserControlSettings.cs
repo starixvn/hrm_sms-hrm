@@ -7,5 +7,7 @@
         string AccessToken { get; }
 
         string ServiceUrl { get; }
+
+        bool EnableReCheckin { get; }
     }
 }

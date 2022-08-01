@@ -1,5 +1,6 @@
 ﻿namespace HRM.UserControl.WebAPI.Services
 {
+    using System;
     using System.Threading.Tasks;
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
@@ -30,11 +31,30 @@
             {
                 UserId = userId
             };
-
             return await baseService.GetDataEntityAsync<User>(criteria);
         }
 
         public async Task<CommandResult> UpdatePasswordAsync(UpdateUserPasswordCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
+        public async Task<CommandResult> UserCheckInAsync(UserCheckInCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
+        public async Task<CommandResult> UserReCheckInAsync(UserReCheckInCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
+        public async Task<CommandResult> UserLogoutAsync(UserLogoutCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
+        public async Task<CommandResult> SSOCheckInAsync(SSOCheckInCommand command)
         {
             return await baseService.ExecuteNonQueryAsync(command);
         }

@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models.Role
 {
+    using System;
+
+    [Serializable]
     public class Role
     {
         public short RoleId { get; set; }

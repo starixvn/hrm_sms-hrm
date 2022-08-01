@@ -2,6 +2,7 @@ namespace HRM.UserControl.WebAPI
 {
     using System;
     using System.IO;
+    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
     using Serilog;
@@ -27,7 +28,7 @@ namespace HRM.UserControl.WebAPI
             try
             {
                 Log.Information("Application start.");
-                CreateHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
@@ -39,12 +40,10 @@ namespace HRM.UserControl.WebAPI
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .UseUrls($"http://*:5000")
+                .UseStartup<Startup>();
     }
 }

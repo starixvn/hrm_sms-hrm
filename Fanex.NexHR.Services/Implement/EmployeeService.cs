@@ -25,13 +25,13 @@
     {
         private readonly IEmployeeRepository employeeRepository;
         private readonly IBaseService baseService;
-        private readonly IAuthService authService;
+        private readonly IHRMAuthService authService;
         private readonly IRoleService roleService;
 
         public EmployeeService(
             IEmployeeRepository employeeRepository,
             IBaseService baseService,
-            IAuthService authService,
+            IHRMAuthService authService,
             IRoleService roleService)
         {
             this.employeeRepository = employeeRepository;

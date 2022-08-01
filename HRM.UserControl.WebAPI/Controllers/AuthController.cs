@@ -14,8 +14,8 @@
     using Newtonsoft.Json;
     using HRM.UserControl.WebAPI.Services;
     using HRM.UserControl.WebAPI.Criteria.User;
-    using HRM.UserControl.WebAPI.Models;
     using System;
+    using Microsoft.AspNetCore.Authorization;
 
     public class AuthController : Controller
     {
@@ -44,21 +44,21 @@
 
         [HttpPost]
         [Route("api/auth/login")]
-        public async Task<IActionResult> Login([FromBody] LoginParam loginParams)
+        public async Task<IActionResult> Login([FromBody] LoginParam loginParam)
         {
-            string[] keyiv = loginParams.Token.Split(":");
+            string[] keyiv = loginParam.Token.Split(":");
             var rijndaelKey = keyiv[0];
             var rijndaelIV = keyiv[1];
-            loginParams.Username = cryptoService.Decrypt(loginParams.Username, rijndaelKey, rijndaelIV);
-            loginParams.Password = cryptoService.Decrypt(loginParams.Password, rijndaelKey, rijndaelIV);
+            loginParam.Username = cryptoService.Decrypt(loginParam.Username, rijndaelKey, rijndaelIV);
+            loginParam.Password = cryptoService.Decrypt(loginParam.Password, rijndaelKey, rijndaelIV);
 
             var loginResult = new LoginResult();
             var criteria = new GetUserByUsernameCriteria
             {
-                Username = loginParams.Username
+                Username = loginParam.Username
             };
             var users = await baseService.GetDataAsync<User>(criteria);
-            var validUsers = GetValidUsers(users, loginParams.Password);
+            var validUsers = GetValidUsers(users, loginParam.Password);
             if (validUsers.Count == 0)
             {
                 loginResult.ErrorMessage = "Invalid username or password.";
@@ -72,7 +72,7 @@
                 return Ok(loginResult);
             }
 
-            var requestSite = GetSiteFromRequestHeader();
+            SiteModel requestSite = GetSiteFromRequestHeader();
             var userSites = await GetValidUsersOnSiteAsync(validUsers, requestSite.SiteId);
             if (userSites.Count == 0)
             {
@@ -84,8 +84,6 @@
             loginResult.JwtToken = await jwtManagerService.GenerateTokenAsync(user.UserId, requestSite.SiteId);
             loginResult.IsSuccessfull = true;
             loginResult.UserId = user.UserId;
-            loginResult.SiteId = requestSite.SiteId;
-            loginResult.Nickname = user.Nickname;
 
             if (loginResult.IsSuccessfull && string.IsNullOrWhiteSpace(user.Password))
             {
@@ -93,7 +91,7 @@
                 {
                     UserId = user.UserId,
                     SiteId = requestSite.SiteId,
-                    Password = BCrypt.Net.BCrypt.HashPassword(loginParams.Password),
+                    Password = BCrypt.Net.BCrypt.HashPassword(loginParam.Password),
                     IsResetPassword = false,
                     ModifiedBy = user.UserId
                 };
@@ -101,21 +99,109 @@
                 await userService.UpdatePasswordAsync(command);
             }
 
-            await LogUserLoginAsync(user.UserId, requestSite.SiteId, loginParams);
+            loginResult.OnUserId = await UserCheckInAsync(user.UserId, requestSite.SiteId, loginParam);
+
+            await LogUserLoginAsync(user.UserId, requestSite.SiteId, loginParam);
 
             return Ok(loginResult);
         }
 
-        private async Task<CommandResult> LogUserLoginAsync(int userId, short siteId, LoginParam loginModel)
+        [HttpGet]
+        [Route("api/sso/gettime")]
+        public IActionResult GetTime()
+        {
+            var time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss:fff");
+            return Ok(time);
+        }
+
+        [HttpPost]
+        [Route("api/sso/login")]
+        public async Task<IActionResult> SingleSignOn([FromBody] SSOLoginParam ssoParam)
+        {
+            var loginResult = new LoginResult();
+            SiteModel requestSite = GetSiteFromRequestHeader();
+            var userSites = await GetValidUsersOnSiteAsync(new List<User> { new User { UserId = ssoParam.UserId } }, requestSite.SiteId);
+            if (userSites.Count == 0)
+            {
+                loginResult.ErrorMessage = "User do not have permission on this site.";
+                return Ok(loginResult);
+            }
+
+            var command = new SSOCheckInCommand
+            {
+                UserId = ssoParam.UserId,
+                SiteId = requestSite.SiteId,
+                CheckOnUserId = ssoParam.CheckOnUserId,
+                IP = ssoParam.IP,
+                NetSessionId = ssoParam.NetSessionId
+            };
+            await userService.SSOCheckInAsync(command);
+            await LogUserLoginAsync(ssoParam, requestSite.SiteId);
+
+            loginResult.OnUserId = command.OnUserId;
+            loginResult.JwtToken = await jwtManagerService.GenerateTokenAsync(ssoParam.UserId, requestSite.SiteId);
+            loginResult.IsSuccessfull = true;
+
+            return Ok(loginResult);
+        }
+
+        [HttpPost]
+        [Route("api/auth/logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout([FromBody] UserLogoutCommand command)
+        {
+            await userService.UserLogoutAsync(command);
+            return Ok(true);
+        }
+
+        [HttpPost]
+        [Route("api/auth/recheckin")]
+        [Authorize]
+        public async Task<IActionResult> ReCheckIn([FromBody] UserReCheckInCommand command)
+        {
+            await userService.UserReCheckInAsync(command);
+            return Ok(command.IsKickedOut ? 1 : 0);
+        }
+
+        private async Task<long> UserCheckInAsync(int userId, short siteId, LoginParam loginParam)
+        {
+            var command = new UserCheckInCommand
+            {
+                UserId = userId,
+                SiteId = siteId,
+                IP = loginParam.IP,
+                NetSessionId = loginParam.NetSessionId
+            };
+
+            await userService.UserCheckInAsync(command);
+            return command.OnUserId;
+        }
+
+        private async Task<CommandResult> LogUserLoginAsync(int userId, short siteId, LoginParam loginParam)
         {
             var command = new InsertLogUserLoginCommand
             {
                 UserId = userId,
                 SiteId = siteId,
-                IP = loginModel.IP,
-                Browser = loginModel.BrowserName,
-                Domain = loginModel.Domain,
-                Platform = loginModel.Platform
+                IP = loginParam.IP,
+                Browser = loginParam.BrowserName,
+                Domain = loginParam.Domain,
+                Platform = loginParam.Platform
+            };
+
+            return await userService.LogUserLoginAsync(command);
+        }
+
+        private async Task<CommandResult> LogUserLoginAsync(SSOLoginParam ssoParam, short siteId)
+        {
+            var command = new InsertLogUserLoginCommand
+            {
+                UserId = ssoParam.UserId,
+                SiteId = siteId,
+                IP = ssoParam.IP,
+                Browser = ssoParam.BrowserName,
+                Domain = ssoParam.Domain,
+                Platform = ssoParam.Platform
             };
 
             return await userService.LogUserLoginAsync(command);

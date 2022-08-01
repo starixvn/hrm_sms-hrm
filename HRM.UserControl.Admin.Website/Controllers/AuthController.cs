@@ -18,24 +18,27 @@
 
     public class AuthController : Controller
     {
+        private readonly UserControlConfigs userControlConfigs;
         private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
         private readonly IUserService userService;
         private readonly ICryptoService cryptoService;
-        private readonly ISecurityService securityService;
+        private readonly IAuthService authService;
 
         public AuthController(
+            UserControlConfigs userControlConfigs,
             IUserControlSession userControlSession,
             IBaseService baseService,
             IUserService userService,
             ICryptoService cryptoService,
-            ISecurityService securityService)
+            IAuthService authService)
         {
+            this.userControlConfigs = userControlConfigs;
             this.userControlSession = userControlSession;
             this.baseService = baseService;
             this.cryptoService = cryptoService;
             this.userService = userService;
-            this.securityService = securityService;
+            this.authService = authService;
         }
 
         public IActionResult Login()
@@ -51,15 +54,14 @@
             model.Platform = HttpContext.Request?.Headers["User-Agent"].ToString();
             model.BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString();
 
-            LoginResult loginResult = securityService.Login(model);
+            LoginResult loginResult = await authService.LoginAsync(model);
             if (loginResult.IsSuccessfull)
             {
                 userControlSession.UserId = loginResult.UserId;
-                userControlSession.Nickname = loginResult.Nickname;
-                userControlSession.SiteId = loginResult.SiteId;
+                userControlSession.SiteId = userControlConfigs.SiteId;
                 userControlSession.JwtToken = loginResult.JwtToken;
                 userControlSession.MenuItems = await userService.GetMenuItemAsync();
-                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
+                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlConfigs.SiteId, userControlSession.UserId);
 
                 await DoLoginAsync(loginResult.UserId);
 
@@ -75,7 +77,7 @@
             var header = new
             {
                 menus = menus,
-                nickname = userControlSession.Nickname
+                nickname = string.Empty
             };
 
             return Json(header);

@@ -23,22 +23,22 @@
         {
             var data = new Dictionary<string, object>
             {
-                {"siteId", siteId },
-                {"roleId", roleId },
-                {"permissions", permissions }
+                { "siteId", siteId },
+                { "roleId", roleId },
+                { "permissions", permissions }
             };
-            return Post<CommandResult>(RelativePaths.AssignPermissionToRolePath, data);
+            return Post<Dictionary<string, object>, CommandResult >(RelativePaths.AssignPermissionToRolePath, data);
         }
 
         public async Task<CommandResult> AssignPermissionAsync(short siteId, short roleId, IList<FunctionPermission> permissions)
         {
             var data = new Dictionary<string, object>
             {
-                {"siteId", siteId },
-                {"roleId", roleId },
-                {"permissions", permissions }
+                { "siteId", siteId },
+                { "roleId", roleId },
+                { "permissions", permissions }
             };
-            return await PostAsync<CommandResult>(RelativePaths.AssignPermissionToRolePath, data);
+            return await PostAsync<Dictionary<string, object>, CommandResult >(RelativePaths.AssignPermissionToRolePath, data);
         }
 
         private static class RelativePaths

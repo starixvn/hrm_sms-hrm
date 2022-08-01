@@ -19,7 +19,7 @@ namespace Fanex.NexHR.Services.Extensions
 
             // user control
             container.RegisterType<IUserControlSession, UserControlSession>();
-            container.RegisterType<ISecurityService, SecurityService>();
+            container.RegisterType<IAuthService, AuthService>();
             container.RegisterType<ICryptoService, CryptoService>();
             container.RegisterType<IUserService, UserService>();
             container.RegisterType<IRoleService, RoleService>();
@@ -27,7 +27,7 @@ namespace Fanex.NexHR.Services.Extensions
 
 
             container.RegisterType<IBaseMailService, BaseMailService>();
-            container.RegisterType<IAuthService, AuthService>();
+            container.RegisterType<IHRMAuthService, HRMAuthService>();
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<ISectionService, SectionService>();
             container.RegisterType<IUnitService, UnitService>();

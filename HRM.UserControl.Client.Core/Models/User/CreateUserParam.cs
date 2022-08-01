@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models.User
 {
+    using System;
+
+    [Serializable]
     public class CreateUserParam
     {
         public string Username { get; set; }

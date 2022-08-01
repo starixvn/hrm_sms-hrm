@@ -2,11 +2,11 @@
 {
     public static partial class SessionKey
     {
-        public const string SessionUserId = "SessionUserId";
-        public const string SessionSiteId = "SessionSiteId";
-        public const string SessionNickname = "SessionNickname";
-        public const string SessionJwtToken = "SessionJwtToken";
-        public const string SessionFunctions = "SessionFunctions";
-        public const string SessionMenuItems = "SessionMenuItems";
+        public const string SessionUserId = "UserControl_Session_UserId";
+        public const string SessionOnUserId = "UserControl_Session_OnUserId";
+        public const string SessionSiteId = "UserControl_Session_SiteId";
+        public const string SessionJwtToken = "UserControl_Session_JwtToken";
+        public const string SessionFunctions = "UserControl_Session_Functions";
+        public const string SessionMenuItems = "UserControl_Session_MenuItems";
     }
 }

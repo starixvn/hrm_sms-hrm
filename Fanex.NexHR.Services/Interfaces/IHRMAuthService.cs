@@ -3,7 +3,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
 
-    public interface IAuthService
+    public interface IHRMAuthService
     {
         HashProvider HashProvider { get; }
 

@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models.User
 {
+    using System;
+
+    [Serializable]
     public class UpdatePasswordParam
     {
         public int UserId { get; set; }

@@ -15,6 +15,7 @@
             SiteId = GetValue<short>("HRM.UserControl.Client.Configurations:SiteId");
             AccessToken = GetValue<string>("HRM.UserControl.Client.Configurations:AccessToken");
             ServiceUrl = GetValue<string>("HRM.UserControl.Client.Configurations:ServiceUrl");
+            EnableReCheckin = GetValue<bool>("HRM.UserControl.Client.Configurations:EnableReCheckin");
         }
 
         public short SiteId { get; }
@@ -22,6 +23,8 @@
         public string AccessToken { get; }
 
         public string ServiceUrl { get; }
+
+        public bool EnableReCheckin { get; set; }
 
         private T GetValue<T>(string key)
         {

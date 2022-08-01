@@ -26,29 +26,32 @@
             session = UserControlClientManager.UserControlSession;
         }
 
-        protected T Get<T>(string requestUrl, IDictionary<string, object> data = null)
-            => Send<T>(requestUrl, HttpMethod.Get, data);
-
-        protected T Post<T>(string requestUrl, IDictionary<string, object> data)
-            => Send<T>(requestUrl, HttpMethod.Post, data);
-
-        protected async Task<T> GetAsync<T>(string requestUrl, IDictionary<string, object> data = null)
-            => await SendAsync<T>(requestUrl, HttpMethod.Get, data);
-
-        protected async Task<T> PostAsync<T>(string requestUrl, IDictionary<string, object> data)
-            => await SendAsync<T>(requestUrl, HttpMethod.Post, data);
-
-        private async Task<T> SendAsync<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
+        protected T Get<T>(string requestUrl)
         {
-            ValidateEndPoint(endPoint);
-            using (var request = CreateRequest(endPoint, method))
+            ValidateEndPoint(requestUrl);
+            using (var request = CreateRequest(requestUrl, HttpMethod.Get))
             {
-                if (data != null)
+                using (var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None).Result)
                 {
-                    var encodedData = JsonConvert.SerializeObject(data);
-                    var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
-                    request.Content = content;
+                    ThrowExceptionWhenNotSuccess(response);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseData = response.Content.ReadAsStringAsync().Result;
+                        var result = JsonConvert.DeserializeObject<T>(responseData);
+
+                        return result;
+                    }
+
+                    return default;
                 }
+            }
+        }    
+
+        protected async Task<T> GetAsync<T>(string requestUrl)
+        {
+            ValidateEndPoint(requestUrl);
+            using (var request = CreateRequest(requestUrl, HttpMethod.Get))
+            {
                 using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
                 {
                     ThrowExceptionWhenNotSuccess(response);
@@ -65,17 +68,14 @@
             }
         }
 
-        private T Send<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
+        protected TOutput Post<TInput, TOutput>(string requestUrl, TInput data)
         {
-            ValidateEndPoint(endPoint);
-            using (var request = CreateRequest(endPoint, method))
+            ValidateEndPoint(requestUrl);
+            using (var request = CreateRequest(requestUrl, HttpMethod.Post))
             {
-                if (data != null)
-                {
-                    var encodedData = JsonConvert.SerializeObject(data);
-                    var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
-                    request.Content = content;
-                }
+                var encodedData = JsonConvert.SerializeObject(data);
+                var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
+                request.Content = content;
                 using (var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None).Result)
                 {
                     ThrowExceptionWhenNotSuccess(response);
@@ -83,7 +83,31 @@
                     if (response.IsSuccessStatusCode)
                     {
                         var responseData = response.Content.ReadAsStringAsync().Result;
-                        var result = JsonConvert.DeserializeObject<T>(responseData);
+                        var result = JsonConvert.DeserializeObject<TOutput>(responseData);
+
+                        return result;
+                    }
+
+                    return default;
+                }
+            }
+        }
+
+        protected async Task<TOutput> PostAsync<TInput, TOutput>(string requestUrl, TInput data)
+        {
+            ValidateEndPoint(requestUrl);
+            using (var request = CreateRequest(requestUrl, HttpMethod.Post))
+            {
+                var encodedData = JsonConvert.SerializeObject(data);
+                var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
+                request.Content = content;
+                using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
+                {
+                    ThrowExceptionWhenNotSuccess(response);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        var result = JsonConvert.DeserializeObject<TOutput>(responseData);
 
                         return result;
                     }

@@ -16,7 +16,7 @@
 
     public class AccountController : BaseController
     {
-        private readonly IAuthService authService;
+        private readonly IHRMAuthService authService;
         private readonly IEmployeeService employeeService;
         private readonly IEmployeeLogService employeeLogService;
         private readonly ICryptoService cryptoService;
@@ -24,7 +24,7 @@
 
         public AccountController(
             IUserControlSession userControlSession,
-            IAuthService authService,
+            IHRMAuthService authService,
             IEmployeeService employeeService,
             IEmployeeLogService employeeLogService,
             ICryptoService cryptoService,

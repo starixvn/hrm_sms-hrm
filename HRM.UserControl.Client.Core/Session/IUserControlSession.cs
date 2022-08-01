@@ -8,7 +8,7 @@
     public interface IUserControlSession
     {
         int UserId { get; set; }
-        string Nickname { get; set; }
+        long OnUserId { get; set; }
         short SiteId { get; set; }
         JwtToken JwtToken { get; set; }
         IList<FunctionPermission> Functions { get; set; }

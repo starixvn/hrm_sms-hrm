@@ -50,7 +50,7 @@ namespace HRM.UserControl.WebAPI
             });
 
             services.AddControllers();
-            services.AddSingleton(Configuration.GetSection("AppSettings").Get<AppSettings>());
+            ////services.AddSingleton(Configuration.GetSection("AppSettings").Get<AppSettings>());
             services.AddSingleton(Configuration.GetSection("AuthenticationSettings").Get<AuthenticationSettings>());
             services.AddAuthentication(x =>
             {

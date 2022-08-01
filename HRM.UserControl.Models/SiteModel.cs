@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Models
 {
+    using System;
+
+    [Serializable]
     public class SiteModel
     {
         public short SiteId { get; set; }

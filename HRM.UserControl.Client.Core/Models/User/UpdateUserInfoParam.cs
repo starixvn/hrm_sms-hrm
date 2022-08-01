@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models.User
 {
+    using System;
+
+    [Serializable]
     public class UpdateUserInfoParam
     {
         public int UserId { get; set; }

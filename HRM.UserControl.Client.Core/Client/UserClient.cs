@@ -32,124 +32,34 @@
             => await GetAsync<User>(string.Format(RelativePaths.GetUserByIdPath, id));
 
         public CommandResult Create(CreateUserParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"code", param.Code },
-                {"nickname", param.Nickname },
-                {"fullName", param.FullName },
-                {"password", param.Password },
-                {"token", param.Token },
-                {"email", param.Email }
-            };
-            return Post<CommandResult>(RelativePaths.CreateUserPath, data);
-        }
+            => Post<CreateUserParam, CommandResult>(RelativePaths.CreateUserPath, param);
 
         public async Task<CommandResult> CreateAsync(CreateUserParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"code", param.Code },
-                {"nickname", param.Nickname },
-                {"fullName", param.FullName },
-                {"password", param.Password },
-                {"token", param.Token },
-                {"email", param.Email }
-            };
-            return await PostAsync<CommandResult>(RelativePaths.CreateUserPath, data);
-        }
+            => await PostAsync<CreateUserParam, CommandResult>(RelativePaths.CreateUserPath, param);
 
         public CommandResult UpdateInfo(UpdateUserInfoParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"code", param.Code },
-                {"nickname", param.Nickname },
-                {"fullName", param.FullName },
-                {"email", param.Email },
-                {"isActive", param.IsActive }
-            };
-            return Post<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
-        }
+            => Post<UpdateUserInfoParam, CommandResult>(RelativePaths.UpdateUserInfoPath, param);
 
         public async Task<CommandResult> UpdateInfoAsync(UpdateUserInfoParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"code", param.Code },
-                {"nickname", param.Nickname },
-                {"fullName", param.FullName },
-                {"email", param.Email },
-                {"isActive", param.IsActive }
-            };
-            return await PostAsync<CommandResult>(RelativePaths.UpdateUserInfoPath, data);
-        }
+            => await PostAsync<UpdateUserInfoParam, CommandResult>(RelativePaths.UpdateUserInfoPath, param);
 
         public CommandResult AssignRole(AssignRoleParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"roleIds", param.RoleIds }
-            };
-            return Post<CommandResult>(RelativePaths.AssignRoleToUserPath, data);
-        }
+            => Post<AssignRoleParam, CommandResult>(RelativePaths.AssignRoleToUserPath, param);
 
         public async Task<CommandResult> AssignRoleAsync(AssignRoleParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"roleIds", param.RoleIds }
-            };
-            return await PostAsync<CommandResult>(RelativePaths.AssignRoleToUserPath, data);
-        }
+            => await PostAsync<AssignRoleParam, CommandResult>(RelativePaths.AssignRoleToUserPath, param);
 
         public CommandResult UpdatePassword(UpdatePasswordParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"oldPassword", param.OldPassword },
-                {"password", param.Password },
-                {"token", param.Token }
-            };
-            return Post<CommandResult>(RelativePaths.UpdatePasswordPath, data);
-        }
+            => Post<UpdatePasswordParam, CommandResult>(RelativePaths.UpdatePasswordPath, param);
 
         public async Task<CommandResult> UpdatePasswordAsync(UpdatePasswordParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"oldPassword", param.OldPassword },
-                {"password", param.Password },
-                {"token", param.Token }
-            };
-            return await PostAsync<CommandResult>(RelativePaths.UpdatePasswordPath, data);
-        }
+            => await PostAsync<UpdatePasswordParam, CommandResult>(RelativePaths.UpdatePasswordPath, param);
 
         public CommandResult ResetPassword(UpdatePasswordParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"password", param.Password },
-                {"token", param.Token }
-            };
-            return Post<CommandResult>(RelativePaths.ResetPasswordPath, data);
-        }
+            => Post<UpdatePasswordParam, CommandResult>(RelativePaths.ResetPasswordPath, param);
 
         public async Task<CommandResult> ResetPasswordAsync(UpdatePasswordParam param)
-        {
-            var data = new Dictionary<string, object>
-            {
-                {"userId", param.UserId },
-                {"password", param.Password },
-                {"token", param.Token }
-            };
-            return await PostAsync<CommandResult>(RelativePaths.ResetPasswordPath, data);
-        }
+            => await PostAsync<UpdatePasswordParam, CommandResult>(RelativePaths.ResetPasswordPath, param);
 
         public CommandResult Delete(int userId)
         {
@@ -157,7 +67,7 @@
             {
                 {"userId", userId }
             };
-            return Post<CommandResult>(RelativePaths.DeleteUserPath, data);
+            return Post<Dictionary<string, object>, CommandResult>(RelativePaths.DeleteUserPath, data);
         }
 
         public async Task<CommandResult> DeleteAsync(int userId)
@@ -166,7 +76,7 @@
             {
                 {"userId", userId }
             };
-            return await PostAsync<CommandResult>(RelativePaths.DeleteUserPath, data);
+            return await PostAsync<Dictionary<string, object>, CommandResult>(RelativePaths.DeleteUserPath, data);
         }
 
         private static class RelativePaths

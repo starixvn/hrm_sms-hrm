@@ -8,11 +8,11 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Auth;
 
-    public class AuthService : IAuthService
+    public class HRMAuthService : IHRMAuthService
     {
         private readonly IBaseService baseService;
 
-        public AuthService(IBaseService baseService)
+        public HRMAuthService(IBaseService baseService)
         {
             this.baseService = baseService;
         }

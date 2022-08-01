@@ -25,10 +25,10 @@
             set => accessor.HttpContext.Session.SetInt32(SessionKey.SessionUserId, value);
         }
 
-        public string Nickname
+        public long OnUserId
         {
-            get => accessor.HttpContext.Session?.GetString(SessionKey.SessionNickname) ?? string.Empty;
-            set => accessor.HttpContext.Session.SetString(SessionKey.SessionNickname, value);
+            get => accessor.HttpContext.Session?.Get<long>(SessionKey.SessionOnUserId) ?? 0;
+            set => accessor.HttpContext.Session.Set<long>(SessionKey.SessionOnUserId, value);
         }
 
         public short SiteId

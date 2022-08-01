@@ -20,10 +20,11 @@
             get => int.Parse(Session[SessionKey.SessionUserId]?.ToString() ?? "0");
             set => Session.Add(SessionKey.SessionUserId, value);
         }
-        public string Nickname
+
+        public long OnUserId
         {
-            get => Session?[SessionKey.SessionNickname]?.ToString() ?? string.Empty;
-            set => Session.Add(SessionKey.SessionNickname, value);
+            get => long.Parse(Session[SessionKey.SessionOnUserId]?.ToString() ?? "0");
+            set => Session.Add(SessionKey.SessionOnUserId, value);
         }
 
         public short SiteId
