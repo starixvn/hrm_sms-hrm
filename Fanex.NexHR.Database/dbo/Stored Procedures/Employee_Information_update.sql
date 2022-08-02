@@ -72,6 +72,8 @@ BEGIN
 		,@FullName_exist NVARCHAR(50)
 		,@Code_exist NVARCHAR(50)
 		,@Roles_old VARCHAR(100)
+		,@Enabled_old BIT
+		,@IsDeleted_old BIT
 		,@IsDefaultSchedule_old BIT
 		,@AnnualLeaveBalance_old NUMERIC(18, 1) = 0
 		,@KeepInViewBalance_old NUMERIC(18, 1) = 0
@@ -112,6 +114,11 @@ BEGIN
 		RETURN
 	END
 
+	SELECT @Enabled_old = [Enabled]
+		,@IsDeleted_old = isDeleted
+	FROM dbo.Employee WITH (NOLOCK)
+	WHERE EmpId = @EmpId
+	
 	SELECT @IsDefaultSchedule_old = IsDefaultSchedule
 		,@AnnualLeaveBalance_old = AnnualLeaveBalance
 		,@KeepInViewBalance_old = KeepInViewBalance
@@ -133,6 +140,7 @@ BEGIN
 				,JobTitleId AS '@JobTitleId'
 				,JobLevelId AS '@JobLevelId'
 				,[Enabled] AS '@Enabled'
+				,emp.isDeleted AS '@IsDeleted'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,GroupId AS '@TeamId'
@@ -183,7 +191,14 @@ BEGIN
 			)
 	SET @logOldData = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
 
-	UPDATE dbo.Employee WITH (ROWLOCK)
+	IF @Enabled_old = 0 AND @Enabled = 1 AND @IsDeleted_old = 1
+	BEGIN
+		UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
+		SET isDeleted = 0
+		WHERE EmpId = @EmpId
+	END
+
+	UPDATE dbo.Employee WITH (ROWLOCK, UPDLOCK)
 	SET Code = @Code
 		,DomainUsername = @DomainUsername
 		,FullName = @FullName
@@ -259,6 +274,7 @@ BEGIN
 				,JobTitleId AS '@JobTitleId'
 				,JobLevelId AS '@JobLevelId'
 				,[Enabled] AS '@Enabled'
+				,emp.isDeleted AS '@IsDeleted'
 				,Phone AS '@Phone'
 				,Gender AS '@Gender'
 				,GroupId AS '@TeamId'
@@ -317,3 +333,4 @@ BEGIN
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 END
+

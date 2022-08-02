@@ -116,16 +116,9 @@
                                 </a>
                             </td>
                             <td>
-                                @if (!employee.IsDeleted)
-                                {
-                                    <a href="@Url.Action("edit", "employee", new { id = employee.Id })" title="Edit">
-                                        <i class="fa fa-pencil fa-lg icon-edit"></i>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span>-</span>
-                                }
+                                <a href="@Url.Action("edit", "employee", new { id = employee.Id })" title="Edit">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
                             </td>
                         }
                     </tr>

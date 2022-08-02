@@ -68,6 +68,7 @@
             new MappingFieldConfig { FieldName = "IsLocal", DisplayName = Labels.Category, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "IsExpatUseHoliday", DisplayName = Labels.ExpatApplicableHoliday, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "Enabled", DisplayName = Labels.EnabledUser, DataType = MappingDataType.Boolean },
+            new MappingFieldConfig { FieldName = "IsDeleted", DisplayName = Labels.Deleted, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "ChineseName", DisplayName = Labels.ChineseName }
         };
 
