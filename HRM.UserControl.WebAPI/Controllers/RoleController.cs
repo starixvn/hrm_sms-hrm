@@ -26,7 +26,7 @@
         public async Task<IActionResult> GetBySiteId(GetRoleBySiteIdCriteria criteria)
         {
             var roles = await baseService.GetDataAsync<Role>(criteria);
-            return Ok(roles);
+            return Json(roles);
         }
 
         [HttpGet]
@@ -39,7 +39,7 @@
                 UserId = userId
             };
             var roles = await baseService.GetDataAsync<Role>(criteria);
-            return Ok(roles);
+            return Json(roles);
         }
 
         [HttpPost]
@@ -48,7 +48,7 @@
         {
             command.ModifiedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-            return Ok(commandResult);
+            return Json(commandResult);
         }
     }
 }

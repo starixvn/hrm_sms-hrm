@@ -24,25 +24,25 @@
         }
 
         [HttpPost]
-        [Route("api/syncData/createUser")]
+        [Route("api/sync-data/user/create")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
             var requestSite = GetSiteFromRequestHeader();
             command.SiteId = requestSite.SiteId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             commandResult.ObjectId = command.UserId;
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
-        [Route("api/syncData/updateUser")]
+        [Route("api/sync-data/user/update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserInfoCommand command)
         {
             var requestSite = GetSiteFromRequestHeader();
             command.SiteId = requestSite.SiteId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             commandResult.ObjectId = command.UserId;
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         private SiteModel GetSiteFromRequestHeader()

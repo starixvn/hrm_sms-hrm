@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Admin.Website.Models.User
 {
+    using System;
+
+    [Serializable]
     public class UserRole
     {
         public short SiteId { get; set; }

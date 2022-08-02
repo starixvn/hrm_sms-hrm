@@ -33,7 +33,7 @@
 
         public async Task<IActionResult> GetBySiteId(short id)
         {
-            var criteria = new GetMenuBySiteId { SiteId = id };
+            var criteria = new GetMenuBySiteIdCriteria { SiteId = id };
             var menus = await baseService.GetDataAsync<Menu>(criteria);
             var hierarchyMenus = GetHierarchyMenu(menus.ToList());
             return Json(hierarchyMenus);
@@ -41,7 +41,7 @@
 
         public async Task<IActionResult> GetParentBySiteId(short id)
         {
-            var criteria = new GetMenuBySiteId { SiteId = id };
+            var criteria = new GetMenuBySiteIdCriteria { SiteId = id };
             var menus = await baseService.GetDataAsync<Menu>(criteria);
             return Json(menus);
         }

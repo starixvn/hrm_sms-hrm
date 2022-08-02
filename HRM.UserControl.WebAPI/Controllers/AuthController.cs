@@ -62,14 +62,14 @@
             if (validUsers.Count == 0)
             {
                 loginResult.ErrorMessage = "Invalid username or password.";
-                return Ok(loginResult);
+                return Json(loginResult);
             }
 
             validUsers = validUsers.Where(x => x.IsActive && !x.IsDeleted).ToList();
             if(validUsers.Count == 0)
             {
                 loginResult.ErrorMessage = "User was disabled or deleted.";
-                return Ok(loginResult);
+                return Json(loginResult);
             }
 
             SiteModel requestSite = GetSiteFromRequestHeader();
@@ -77,7 +77,7 @@
             if (userSites.Count == 0)
             {
                 loginResult.ErrorMessage = "User do not have permission on this site.";
-                return Ok(loginResult);
+                return Json(loginResult);
             }
 
             var user = userSites.First();
@@ -103,15 +103,15 @@
 
             await LogUserLoginAsync(user.UserId, requestSite.SiteId, loginParam);
 
-            return Ok(loginResult);
+            return Json(loginResult);
         }
 
         [HttpGet]
         [Route("api/sso/gettime")]
         public IActionResult GetTime()
         {
-            var time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss:fff");
-            return Ok(time);
+            var time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return Json(time);
         }
 
         [HttpPost]
@@ -124,7 +124,7 @@
             if (userSites.Count == 0)
             {
                 loginResult.ErrorMessage = "User do not have permission on this site.";
-                return Ok(loginResult);
+                return Json(loginResult);
             }
 
             var command = new SSOCheckInCommand
@@ -142,16 +142,15 @@
             loginResult.JwtToken = await jwtManagerService.GenerateTokenAsync(ssoParam.UserId, requestSite.SiteId);
             loginResult.IsSuccessfull = true;
 
-            return Ok(loginResult);
+            return Json(loginResult);
         }
 
         [HttpPost]
         [Route("api/auth/logout")]
-        [Authorize]
         public async Task<IActionResult> Logout([FromBody] UserLogoutCommand command)
         {
             await userService.UserLogoutAsync(command);
-            return Ok(true);
+            return Json(true);
         }
 
         [HttpPost]
@@ -160,7 +159,7 @@
         public async Task<IActionResult> ReCheckIn([FromBody] UserReCheckInCommand command)
         {
             await userService.UserReCheckInAsync(command);
-            return Ok(command.IsKickedOut ? 1 : 0);
+            return Json(command.IsKickedOut ? 1 : 0);
         }
 
         private async Task<long> UserCheckInAsync(int userId, short siteId, LoginParam loginParam)

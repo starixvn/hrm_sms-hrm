@@ -3,7 +3,7 @@ namespace HRM.UserControl.Admin.Website.Criteria.Menu
 {
     using Fanex.Data.Repository;
 
-    public class GetMenuBySiteId : CriteriaBase
+    public class GetMenuBySiteIdCriteria : CriteriaBase
     {
         public short SiteId { get; set; }
 

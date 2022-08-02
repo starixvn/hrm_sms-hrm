@@ -25,7 +25,7 @@
         public async Task<IActionResult> GetBySiteId(GetFunctionBySiteIdCriteria criteria)
         {
             var functions = await baseService.GetDataAsync<Function>(criteria);
-            return Ok(functions);
+            return Json(functions);
         }
 
         [HttpGet]
@@ -33,7 +33,7 @@
         public async Task<IActionResult> GetBySiteAndRoleId(GetFunctionByRoleIdCriteria criteria)
         {
             var permissions = await baseService.GetDataAsync<FunctionPermission>(criteria);
-            return Ok(permissions);
+            return Json(permissions);
         }
     }
 }

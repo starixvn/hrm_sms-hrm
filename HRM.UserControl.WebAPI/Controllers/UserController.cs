@@ -41,7 +41,7 @@
                 SiteId = SiteId
             };
             var menuItems = await baseService.GetDataAsync<MenuItem>(criteria);
-            return Ok(menuItems);
+            return Json(menuItems);
         }
 
         [HttpGet]
@@ -49,7 +49,7 @@
         public async Task<IActionResult> GetFunctionPermission(GetFunctionByUserIdCriteria criteria)
         {
             var functions = await baseService.GetDataAsync<FunctionPermission>(criteria);
-            return Ok(functions);
+            return Json(functions);
         }
 
         [HttpGet]
@@ -58,7 +58,7 @@
         {
             criteria.SiteId = SiteId;
             var users = await baseService.GetDataAsync<User>(criteria);
-            return Ok(users);
+            return Json(users);
         }
 
         [HttpGet]
@@ -66,7 +66,7 @@
         public async Task<IActionResult> GetById(int id)
         {
             User user = await userService.GetByIdAsync(id);
-            return Ok(user);
+            return Json(user);
         }
 
         [HttpPost]
@@ -82,7 +82,7 @@
             command.CreatedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             commandResult.ObjectId = command.UserId;
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
@@ -92,7 +92,7 @@
             command.SiteId = SiteId;
             command.ModifiedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@
             command.SiteId = SiteId;
             command.ModifiedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
@@ -133,7 +133,7 @@
                 commandResult = await userService.UpdatePasswordAsync(command);
             }
 
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
@@ -154,7 +154,7 @@
             };
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
 
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         [HttpPost]
@@ -164,7 +164,7 @@
             command.SiteId = SiteId;
             command.ModifiedBy = UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
-            return Ok(commandResult);
+            return Json(commandResult);
         }
 
         private bool IsValidPassword(string plainPwd, User user)

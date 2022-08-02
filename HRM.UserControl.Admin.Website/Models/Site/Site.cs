@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Admin.Website.Models.Site
 {
+    using System;
+
+    [Serializable]
     public class Site
     {
         public short SiteId { get; set; }

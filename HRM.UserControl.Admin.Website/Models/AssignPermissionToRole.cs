@@ -1,8 +1,10 @@
 ﻿namespace HRM.UserControl.Admin.Website.Models
 {
+    using System;
     using System.Collections.Generic;
     using HRM.UserControl.Client.Core.Models;
 
+    [Serializable]
     public class AssignPermissionToRole
     {
         public short RoleId { get; set; }

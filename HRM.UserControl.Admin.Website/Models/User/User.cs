@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Admin.Website.Models.User
 {
+    using System;
+
+    [Serializable]
     public class User
     {
         public int UserId { get; set; }

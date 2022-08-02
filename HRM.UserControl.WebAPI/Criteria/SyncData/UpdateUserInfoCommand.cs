@@ -16,7 +16,7 @@
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
 
-        public override string GetSettingKey() => "API_SyncData_UpdateUser";
+        public override string GetSettingKey() => "API_SyncData_User_Update";
 
         public override bool IsValid() => UserId > 0 && SiteId > 0;
     }

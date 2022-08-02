@@ -78,8 +78,6 @@ namespace HRM.UserControl.Admin.Website
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddSingleton(Configuration.GetSection("HRM.UserControl.Client.Configurations").Get<UserControlConfigs>());
-
             RegisterDI(services);
 
             services.AddControllersWithViews();

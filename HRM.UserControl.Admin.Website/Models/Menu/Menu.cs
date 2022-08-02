@@ -4,6 +4,7 @@ namespace HRM.UserControl.Admin.Website.Models.Menu
     using System;
     using System.Collections.Generic;
 
+    [Serializable]
     public class Menu
     {
         public int MenuItemId { get; set; }

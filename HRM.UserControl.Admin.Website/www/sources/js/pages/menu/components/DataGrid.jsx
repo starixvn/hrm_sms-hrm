@@ -67,7 +67,7 @@ export class DataGrid extends Component {
         const rows = [
             <Row key={`row-${item.menuItemId}`}>
                 <Cell className={`${item.childs && item.childs.length > 0 && item.level === 0 ? 'border-bottom-0' : ''} ${item.level > 0 ? 'border-top-0 border-bottom-0' : ''}`}>
-                    {trees.map(item => item)}
+                    {trees.map(i => i)}
                     <span> {item.menuItemName}</span>
                 </Cell>
                 <Cell >{item.url}</Cell>

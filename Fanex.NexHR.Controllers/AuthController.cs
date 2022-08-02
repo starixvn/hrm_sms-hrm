@@ -101,7 +101,8 @@
             var onUserIdValue = Cryptography.DecryptPassword(onUserId.Replace(" ", "+"));
             var timeValue = Cryptography.DecryptPassword(time.Replace(" ", "+"));
             var currentTime = authService.SSOGetTime();
-            TimeSpan expiration = DateTime.Parse(currentTime) - DateTime.Parse(timeValue);
+            TimeSpan expiration = DateTime.ParseExact(currentTime, "yyyy-MM-dd HH:mm:ss.fff", null)
+                - DateTime.ParseExact(timeValue, "yyyy-MM-dd HH:mm:ss.fff", null);
             const byte TimeExpiration = 30;
             if (expiration.TotalSeconds <= TimeExpiration)
             {
@@ -126,7 +127,7 @@
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
                     userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, true);
 
-                    EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
+                    EmployeeSession employee = hrmAuthService.GetByUserId(userControlSession.UserId);
                     userControlSession.Set<EmployeeSession>(SessionKey.Employee, employee);
                     FormsAuthentication.SetAuthCookie(employee.Code, false);
                     return !string.IsNullOrWhiteSpace(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");

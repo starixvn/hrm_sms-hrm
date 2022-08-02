@@ -28,7 +28,7 @@ namespace HRM.UserControl.Admin.Website
             try
             {
                 Log.Information("Application start.");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
@@ -40,10 +40,12 @@ namespace HRM.UserControl.Admin.Website
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .UseUrls($"http://*:5000")
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseUrls($"http://*:5000").UseStartup<Startup>();
+                })
+                .UseSerilog();
     }
 }
