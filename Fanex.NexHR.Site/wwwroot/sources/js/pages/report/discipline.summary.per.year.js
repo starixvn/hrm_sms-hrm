@@ -3,6 +3,7 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 import { parse } from 'qs';
+import moment from 'moment';
 
 import '../../date';
 import '../../shared/multiselect-tree-view';
@@ -15,6 +16,22 @@ import {
 (function () {
     var $disciplineTable;
 
+    function initEventForViewDisciplineDetail() {
+        $disciplineTable.find('a.viewDisciplineDetail').on('click', function () {
+            var year = parseInt($(this).data('year'), 10),
+                empId = $(this).data('empid'),
+                employee = $(this).data('employee'),
+                teamId = $('form.form-filter #TeamId').val(),
+                isLocal = $('form.form-filter #IsLocal').val(),
+                fromDate = moment(new Date(year, 0, 1)).format('DD MMM, YYYY'),
+                toDate = moment(new Date(year + 1, 0, 1)).subtract(1, 'days').format('DD MMM, YYYY');
+
+            window.open(resolveClientUrl('discipline/DisciplineDetail?fromDate=' + fromDate + '&toDate=' + toDate
+                + '&employeeId=' + empId + '&employee=' + employee + '&teamId=' + teamId
+                + '&isLocal=' + isLocal + '&hasIgnored=false'), '_blank');
+        });
+    }
+
     function query() {
         blockUI();
         $.ajax({
@@ -24,6 +41,7 @@ import {
             success: function (data) {
                 $disciplineTable.html(data);
                 floatThead("table#data");
+                initEventForViewDisciplineDetail();
                 unblockUI();
             }
         });

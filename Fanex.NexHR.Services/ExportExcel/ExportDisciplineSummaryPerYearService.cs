@@ -59,7 +59,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.LengthOfService;
                         for (var i = toYear; i >= fromYear; i--)
                         {
-                            var discipline = employee.Disciplines.Where(x => x.Year >= i).Sum(x => x.ApproverSubtractScore);
+                            var discipline = employee.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
                             worksheet.Cells[rowIndex, colIndex++].Value = discipline > 0 ? -discipline : 0;
                         }
 

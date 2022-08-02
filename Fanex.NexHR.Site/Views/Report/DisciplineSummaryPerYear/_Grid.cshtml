@@ -47,11 +47,17 @@
                     <td>@item.LengthOfService</td>
                     @for (var i = (int)ViewBag.ToYear; i >= (int)ViewBag.FromYear; i--)
                     {
-                        var discipline = item.Disciplines.Where(x => x.Year >= i).Sum(x => x.ApproverSubtractScore);
+                        var discipline = item.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
                         <td>
                             @if(discipline > 0)
                             {
-                                <span style="color: red">-@discipline</span>
+                                var empId = item.EmployeeId;
+                                var employee = item.Nickname + " (" + item.FullName + ")";
+
+                                <a href="javascript:;" class="viewDisciplineDetail" style="color: red"
+                                   data-empid="@empId" data-employee="@employee" data-year="@i">
+                                    -@discipline
+                                </a>
                             }
                             else
                             {
