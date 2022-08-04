@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+    <Function Name="User">
+        <Setting Key="User_GetSiteAndMenuItemByUserId" SpName="User_GetSiteAndMenuItemByUserId" DbName="bodb_IUC" Plain="0" />
+    </Function>
+</Functions>

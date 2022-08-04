@@ -1,0 +1,46 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - GO System</title>
+    <link rel="icon" type="image/ico" href="~/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,600;0,700;1,400;1,600&display=swap">
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev/main.chunk.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/dev/pages/login.chunk.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/pro/main.chunk.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/pro/pages/login.chunk.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <section class="block">
+        <div id="app-container"></div>
+    </section>
+    <input type="hidden" id="RootUrl" value="@Url.Content("~/")" />
+    <input type="hidden" id="token" value="@Model" />
+    @Html.AntiForgeryToken()
+
+    <environment include="Development">
+        <script src="~/js/dev/lib/lang-en-US.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/dev/lib/react-vendor.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/dev/lib/react-bootstrap-vendor.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/dev/pages/login.chunk.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/pro/lib/lang-en-US.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/pro/lib/react-vendor.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/pro/lib/react-bootstrap-vendor.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/pro/pages/login.chunk.js" asp-append-version="true"></script>
+    </environment>
+</body>
+</html>
