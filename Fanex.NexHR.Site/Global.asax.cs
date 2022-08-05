@@ -22,9 +22,7 @@
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             DbSettingProviderManager
                 .StartNewSession()
-                .WithSqlServer(
-                    resourcePath: "~/App_Data/SpNames.xml"
-                )
+                .WithSqlServer("~/App_Data/SpNames.xml")
                 .Run();
             ModelMetadataProviders.Current = new FriendlyNameModelMetadataProvider();
             log4net.Config.XmlConfigurator.Configure();

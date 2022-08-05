@@ -5,11 +5,11 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.Data;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
+    using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Models.Auth;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -17,21 +17,24 @@
     public class AuthController : Controller
     {
         private readonly IHRMAuthService hrmAuthService;
-        private readonly IUserService userService;
+        private readonly IUserControlSettings userControlSettings;
         private readonly IUserControlSession userControlSession;
+        private readonly IUserService userService;
         private readonly IAuthService authService;
         private readonly ICryptoService cryptoService;
 
         public AuthController(
             IHRMAuthService hrmAuthService,
-            IUserService userService,
+            IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
+            IUserService userService,
             IAuthService authService,
             ICryptoService cryptoService)
         {
             this.hrmAuthService = hrmAuthService;
-            this.userService = userService;
+            this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
+            this.userService = userService;
             this.authService = authService;
             this.cryptoService = cryptoService;
         }
@@ -66,14 +69,16 @@
                 if (loginResult.IsSuccessfull)
                 {
                     userControlSession.UserId = loginResult.UserId;
-                    userControlSession.SiteId = ConfigSettings.SiteId;
+                    userControlSession.SiteId = userControlSettings.SiteId;
                     userControlSession.JwtToken = loginResult.JwtToken;
                     userControlSession.OnUserId = loginResult.OnUserId;
                     userControlSession.MenuItems = userService.GetMenuItem();
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
                     userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, true);
-                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, hrmAuthService.GetByUserId(loginResult.UserId));
-                    FormsAuthentication.SetAuthCookie(model.Username, false);
+
+                    EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
+                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, employee);
+                    FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -120,7 +125,7 @@
                 if (loginResult.IsSuccessfull)
                 {
                     userControlSession.UserId = Convert.ToInt32(userIdValue);
-                    userControlSession.SiteId = ConfigSettings.SiteId;
+                    userControlSession.SiteId = userControlSettings.SiteId;
                     userControlSession.JwtToken = loginResult.JwtToken;
                     userControlSession.OnUserId = loginResult.OnUserId;
                     userControlSession.MenuItems = userService.GetMenuItem();
@@ -129,8 +134,8 @@
 
                     EmployeeSession employee = hrmAuthService.GetByUserId(userControlSession.UserId);
                     userControlSession.Set<EmployeeSession>(SessionKey.Employee, employee);
-                    FormsAuthentication.SetAuthCookie(employee.Code, false);
-                    return !string.IsNullOrWhiteSpace(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
+                    FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
+                    return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
                 }
             }
 

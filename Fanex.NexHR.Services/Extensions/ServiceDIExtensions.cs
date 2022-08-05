@@ -6,7 +6,9 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.Services.Interfaces;
+    using HRM.UserControl.Client.AspNetMvc.Configurations;
     using HRM.UserControl.Client.AspNetMvc.Session;
+    using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Unity;
@@ -18,6 +20,7 @@ namespace Fanex.NexHR.Services.Extensions
             ResolveRepositoryDI(container);
 
             // user control
+            container.RegisterType<IUserControlSettings, UserControlSettings>();
             container.RegisterType<IUserControlSession, UserControlSession>();
             container.RegisterType<IAuthService, AuthService>();
             container.RegisterType<ICryptoService, CryptoService>();
