@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -18,9 +19,9 @@
     {
         public byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees)
         {
-            const byte LengthOfServiceColIndex = 8;
+            const byte LengthOfServiceColIndex = 9;
             const byte BodyRowIndex = 5;
-            const byte TotalColumns = 13;
+            const byte TotalColumns = 14;
             const byte MinimumWidth = 5;
             const byte MaximumWidth = 50;
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DisciplineSummaryPerYear.xlsx");
@@ -35,10 +36,10 @@
 
                     // title & header
                     template.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns]);
+                    colIndex = LengthOfServiceColIndex + 1;
                     for (var i = toYear; i >= fromYear; i--)
                     {
-                        var diff = DateTime.Today.Year - i;
-                        worksheet.Cells[BodyRowIndex - 1, LengthOfServiceColIndex + diff].Value = diff == 1 ? "Last Year" : $"Last {diff} Years";
+                        worksheet.Cells[BodyRowIndex - 1, colIndex++].Value = i;
                     }
 
                     // data
@@ -56,11 +57,11 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Labels.Local : Labels.Expat;
+                        worksheet.Cells[rowIndex, colIndex++].Value = employee.JoinedDate;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.LengthOfService;
                         for (var i = toYear; i >= fromYear; i--)
                         {
-                            var discipline = employee.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
-                            worksheet.Cells[rowIndex, colIndex++].Value = discipline > 0 ? -discipline : 0;
+                            FillDisciplineCell(worksheet.Cells[rowIndex, colIndex++], employee, i);
                         }
 
                         rowIndex++;
@@ -71,6 +72,24 @@
 
                     return xlPackage.GetAsByteArray();
                 }
+            }
+        }
+
+        private static void FillDisciplineCell(ExcelRange cell, DisciplineSummaryPerYear employee, int year)
+        {
+            const byte July = 7;
+            if (employee.JoinedDate.HasValue && employee.JoinedDate.Value.Date < new DateTime(year, July, 1))
+            {
+                var discipline = employee.Disciplines.Where(x => x.Year == year).Sum(x => x.ApproverSubtractScore);
+                cell.Value = discipline > 0 ? -discipline : 0;
+                if (discipline > 0)
+                {
+                    cell.Style.Font.Color.SetColor(Color.Red);
+                }
+            }
+            else
+            {
+                cell.Value = "-";
             }
         }
     }

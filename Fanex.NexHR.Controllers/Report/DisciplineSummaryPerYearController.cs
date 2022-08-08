@@ -33,10 +33,10 @@
 
         public ActionResult Index(DisciplineSummaryPerYearViewModel model)
         {
-            const byte DateRange = 5;
+            const byte DateRange = 4;
             if (model != null)
             {
-                model.ToYear = DateTime.Today.Year - 1;
+                model.ToYear = DateTime.Today.Year;
                 model.FromYear = DateTime.Today.Year - DateRange;
             }
 

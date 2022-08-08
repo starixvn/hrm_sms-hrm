@@ -11,21 +11,14 @@
             <th rowspan="2">@Labels.FullName</th>
             <th rowspan="2">@Labels.NickName</th>
             <th rowspan="2">@Labels.Category</th>
+            <th rowspan="2">@Labels.GroupDate</th>
             <th rowspan="2">@Labels.LengthOfService</th>
             <th colspan="5">Total Discipline by Approver</th>
         </tr>
         <tr>
             @for (var i = (int)ViewBag.ToYear; i >= (int)ViewBag.FromYear; i--)
             {
-                var diff = DateTime.Today.Year - i;
-                if (diff == 1)
-                {
-                    <th>Last Year</th>
-                }
-                else
-                {
-                    <th>Last @diff Years</th>
-                }
+                <th>@i</th>
             }
         </tr>
     </thead>
@@ -44,24 +37,37 @@
                     <td class="align-left">@item.FullName</td>
                     <td>@item.Nickname</td>
                     <td>@(item.IsLocal ? Labels.Local : Labels.Expat)</td>
+                    <td>
+                        @if (item.JoinedDate.HasValue)
+                        {
+                            @item.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                        }
+                    </td>
                     <td>@item.LengthOfService</td>
                     @for (var i = (int)ViewBag.ToYear; i >= (int)ViewBag.FromYear; i--)
                     {
-                        var discipline = item.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
                         <td>
-                            @if(discipline > 0)
+                            @if (item.JoinedDate.HasValue && item.JoinedDate.Value.Date < new DateTime(i, 7, 1))
                             {
-                                var empId = item.EmployeeId;
-                                var employee = item.Nickname + " (" + item.FullName + ")";
+                                var discipline = item.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
+                                if (discipline > 0)
+                                {
+                                    var empId = item.EmployeeId;
+                                    var employee = item.Nickname + " (" + item.FullName + ")";
 
-                                <a href="javascript:;" class="viewDisciplineDetail" style="color: red"
-                                   data-empid="@empId" data-employee="@employee" data-year="@i">
-                                    -@discipline
-                                </a>
+                                    <a href="javascript:;" class="viewDisciplineDetail" style="color: red"
+                                       data-empid="@empId" data-employee="@employee" data-year="@i">
+                                        -@discipline
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
                             }
                             else
                             {
-                                <span>0</span>
+                                <span>-</span>
                             }
                         </td>
                     }
@@ -70,7 +76,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 19);
+            @RazorHelper.DisplayNoInformation(colspan: 14);
         }
     </tbody>
 </table>
