@@ -75,40 +75,42 @@ BEGIN
 		,LeaveBalance
 	FROM #tmpEmployeeLeaveBalance WITH (NOLOCK)
 
-	SELECT DISTINCT tmpemp.EmpId
-		,su.OwnerId
-		,suemp.Code
-		,suemp.FullName
-		,suemp.Nickname
-		,suemp.Email
-	FROM dbo.EmployeeSupervisor AS su WITH (NOLOCK)
-		INNER JOIN #tmpEmployeeLeaveBalance AS tmpemp WITH (NOLOCK) ON su.EmpId = tmpemp.EmpId
-		INNER JOIN dbo.Employee AS suemp WITH (NOLOCK) ON su.OwnerId = suemp.EmpId
-		AND suemp.[Enabled] = 1
-		AND suemp.isDeleted = 0
-	WHERE su.RequestType = 6
-		AND su.ActionType IN (2, 3)
-		AND ISNULL(su.IsDeleted, 0) = 0
+	--SELECT DISTINCT tmpemp.EmpId
+	--	,su.OwnerId
+	--	,suemp.Code
+	--	,suemp.FullName
+	--	,suemp.Nickname
+	--	,suemp.Email
+	--FROM dbo.EmployeeSupervisor AS su WITH (NOLOCK)
+	--	INNER JOIN #tmpEmployeeLeaveBalance AS tmpemp WITH (NOLOCK) ON su.EmpId = tmpemp.EmpId
+	--	INNER JOIN dbo.Employee AS suemp WITH (NOLOCK) ON su.OwnerId = suemp.EmpId
+	--	AND suemp.[Enabled] = 1
+	--	AND suemp.isDeleted = 0
+	--WHERE su.RequestType = 6
+	--	AND su.ActionType IN (2, 3)
+	--	AND ISNULL(su.IsDeleted, 0) = 0
 	
-	UNION ALL
-	SELECT DISTINCT tmpemp.EmpId
-		,su.OwnerId
-		,suemp.Code
-		,suemp.FullName
-		,suemp.Nickname
-		,suemp.Email
-	FROM dbo.GroupSupervisor AS su WITH (NOLOCK)
-		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON su.GroupId = e.GroupId
-		INNER JOIN #tmpEmployeeLeaveBalance AS tmpemp WITH (NOLOCK) ON e.EmpId = tmpemp.EmpId
-		INNER JOIN dbo.Employee AS suemp WITH (NOLOCK) ON su.OwnerId = suemp.EmpId
-	WHERE su.RequestType = 6
-		AND su.ActionType IN (2, 3)
-		AND ISNULL(su.IsDeleted, 0) = 0
-		AND NOT EXISTS (
-			SELECT 1
-			FROM dbo.EmployeeSupervisor AS empsu WITH (NOLOCK)
-			WHERE e.EmpId = empsu.EmpId
-			)
+	--UNION ALL
+	--SELECT DISTINCT tmpemp.EmpId
+	--	,su.OwnerId
+	--	,suemp.Code
+	--	,suemp.FullName
+	--	,suemp.Nickname
+	--	,suemp.Email
+	--FROM dbo.GroupSupervisor AS su WITH (NOLOCK)
+	--	INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON su.GroupId = e.GroupId
+	--	INNER JOIN #tmpEmployeeLeaveBalance AS tmpemp WITH (NOLOCK) ON e.EmpId = tmpemp.EmpId
+	--	INNER JOIN dbo.Employee AS suemp WITH (NOLOCK) ON su.OwnerId = suemp.EmpId
+	--WHERE su.RequestType = 6
+	--	AND su.ActionType IN (2, 3)
+	--	AND ISNULL(su.IsDeleted, 0) = 0
+	--	AND NOT EXISTS (
+	--		SELECT 1
+	--		FROM dbo.EmployeeSupervisor AS empsu WITH (NOLOCK)
+	--		WHERE e.EmpId = empsu.EmpId
+	--		)
+
+	DROP TABLE #tmpEmployeeLeaveBalance
 
 	DROP TABLE #tmpCurrenBalace
 END

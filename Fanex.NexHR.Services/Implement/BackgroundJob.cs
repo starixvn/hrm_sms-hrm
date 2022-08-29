@@ -2,13 +2,12 @@
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
-    using Fanex.NexHR.Models;
+    using Fanex.NexHR.Models.BackgroundJob;
     using Hangfire;
 
     public class BackgroundJobService : IBackgroundJobService
@@ -114,7 +113,7 @@
             {
                 Year = DateTime.Now.Year
             };
-            (var employees, var supervisors) = baseService.FetchMultiple<LeaveSummary, LeaveSummary>(criteria);
+            var employees = baseService.GetData<AnnualLeaveBalance>(criteria);
             var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
 
             foreach (var employee in employees)
@@ -136,7 +135,7 @@
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
                         employee.Email,
-                        string.Join(";", supervisors.Where(x => x.EmpId == employee.EmpId).Select(x => x.Email)),
+                        string.Empty,
                         "Annual Leave Balance Reminder",
                         body));
                 }
