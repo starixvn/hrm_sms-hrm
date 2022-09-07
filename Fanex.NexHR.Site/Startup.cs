@@ -18,12 +18,11 @@ namespace Fanex.NexHR.Site
     {
         public static void Configuration(IAppBuilder app)
         {
-            
             var connectionString = Cryptography.DeCryptConnectionString(WebConfigurationManager.ConnectionStrings["nexhrx"].ConnectionString);
             GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
 
-            var hangfireContainer = new UnityContainer();
-            GlobalConfiguration.Configuration.UseActivator(new UnityJobActivator(hangfireContainer));
+            var unityContainer = new UnityContainer();
+            GlobalConfiguration.Configuration.UseActivator(new UnityJobActivator(unityContainer));
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
@@ -38,18 +37,18 @@ namespace Fanex.NexHR.Site
 
     public class UnityJobActivator : JobActivator
     {
-        private readonly IUnityContainer hangfireContainer;
+        private readonly IUnityContainer unityContainer;
 
-        public UnityJobActivator(IUnityContainer hangfireContainer)
+        public UnityJobActivator(IUnityContainer unityContainer)
         {
-            this.hangfireContainer = hangfireContainer;
-            this.hangfireContainer.ResolveCoreDI();
-            this.hangfireContainer.ResolveServiceCoreDI();
+            this.unityContainer = unityContainer;
+            this.unityContainer.ResolveCoreDI();
+            this.unityContainer.ResolveServiceCoreDI();
         }
 
         public override object ActivateJob(Type jobType)
         {
-            return hangfireContainer.Resolve(jobType);
+            return unityContainer.Resolve(jobType);
         }
     }
 }
