@@ -5,13 +5,14 @@
     using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Report;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
     public class DisciplineSummaryPerYearController : BaseController
@@ -21,10 +22,10 @@
         private readonly IExportDisciplineSummaryPerYearService exportService;
 
         public DisciplineSummaryPerYearController(
-            ISessionService sessionService,
+            IUserControlSession userControlSession,
             IBaseService baseService,
             IEmployeeService employeeService,
-            IExportDisciplineSummaryPerYearService exportService) : base(sessionService)
+            IExportDisciplineSummaryPerYearService exportService) : base(userControlSession)
         {
             this.baseService = baseService;
             this.employeeService = employeeService;
@@ -69,7 +70,7 @@
                 TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,
-                ApproverId = sessionService.Employee.Id,
+                ApproverId = EmployeeSession.EmpId,
                 IsShowAll = model.IsShowAll
             };
             (var employees, var disciplines) = baseService.FetchMultiple<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);

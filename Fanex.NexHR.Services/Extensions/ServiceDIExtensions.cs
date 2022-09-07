@@ -28,7 +28,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IRoleService, RoleService>();
             container.RegisterType<IFunctionService, FunctionService>();
 
-
             container.RegisterType<IBaseMailService, BaseMailService>();
             container.RegisterType<IHRMAuthService, HRMAuthService>();
             container.RegisterType<IEmailService, EmailService>();
@@ -97,10 +96,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
             container.RegisterType<IExportOvertimeService, ExportOvertimeService>();
             container.RegisterType<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
-            // user control
-            container.RegisterType<IUserService, UserService>();
-            container.RegisterType<IUserControlSession, UserControlSession>();
-            container.RegisterType<ISecurityService, SecurityService>();
         }
 
         private static void ResolveRepositoryDI(IUnityContainer container)
