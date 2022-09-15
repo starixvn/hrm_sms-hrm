@@ -322,9 +322,9 @@
                     .Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex - 1]);
                 for (var i = templateIndex.actualWorkingDaysColumn; i <= TotalColumns; i++)
                 {
-                    template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                    template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colStartTotal]);
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colStartTotal].Address}:{worksheet.Cells[rowIndex - 1, colStartTotal].Address}";
+                    worksheet.Cells[rowIndex, colStartTotal++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
@@ -373,6 +373,7 @@
 
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Department;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.FirstOrDefault().Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
                 worksheet.Cells[rowIndex, colIndex++].Value = totalHolidays;
