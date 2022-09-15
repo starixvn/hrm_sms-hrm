@@ -100,6 +100,7 @@
                 </th>
                 <th colspan="2">@Labels.BasicAnnualLeaveBalance</th>
                 <th colspan="2">@Labels.WorkingDaysPerMonth</th>
+                <th colspan="2">@Labels.WorkingHoursPerWeek</th>
                 <th colspan="2">@Labels.WorkingHoursPerDay</th>
                 <th colspan="2">@Labels.NumberOfOffday</th>
                 <th rowspan="2" class="col-sorter">
@@ -137,6 +138,8 @@
                 <th>@Labels.Expat</th>
                 <th>@Labels.Local</th>
                 <th>@Labels.Expat</th>
+                <th>@Labels.Local</th>
+                <th>@Labels.Expat</th>
             </tr>
         </thead>
         @if (Model != null && Model.Any())
@@ -161,6 +164,8 @@
                         <td>@team.ExpatBasicAnnualLeaveBalance</td>
                         <td>@team.LocalWorkingDays</td>
                         <td>@team.ExpatWorkingDays</td>
+                        <td>@team.LocalWorkingHoursbyWeek</td>
+                        <td>@team.ExpatWorkingHoursbyWeek</td>
                         <td>@team.LocalWorkingHours</td>
                         <td>@team.ExpatWorkingHours</td>
                         <td>@team.LocalOffDaysbyWeek</td>

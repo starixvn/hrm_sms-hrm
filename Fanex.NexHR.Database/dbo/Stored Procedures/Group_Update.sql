@@ -12,10 +12,12 @@ CREATE PROCEDURE [dbo].[Group_Update] @TeamId INT
 	,@LocalWorkingDays TINYINT
 	,@LocalWorkingHours TINYINT
 	,@LocalOffDaysbyWeek TINYINT
+	,@LocalWorkingHoursbyWeek TINYINT
 	,@ExpatBasicAnnualLeaveBalance TINYINT
 	,@ExpatWorkingDays TINYINT
 	,@ExpatWorkingHours TINYINT
 	,@ExpatOffDaysbyWeek TINYINT
+	,@ExpatWorkingHoursbyWeek TINYINT
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -88,6 +90,7 @@ BEGIN
 				,LocalWorkingDays AS '@WorkingDays'
 				,LocalWorkingHours AS '@WorkingHours'
 				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalWorkingHoursbyWeek As '@WorkingHoursbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')
@@ -160,10 +163,12 @@ BEGIN
 		,LocalWorkingDays = @LocalWorkingDays
 		,LocalWorkingHours = @LocalWorkingHours
 		,LocalOffDaysbyWeek = @LocalOffDaysbyWeek
+		,LocalWorkingHoursbyWeek = @LocalWorkingHoursbyWeek
 		,ExpatBasicAnnualLeaveBalance = @ExpatBasicAnnualLeaveBalance
 		,ExpatWorkingDays = @ExpatWorkingDays
 		,ExpatWorkingHours = @ExpatWorkingHours
 		,ExpatOffDaysbyWeek = @ExpatOffDaysbyWeek
+		,ExpatWorkingHoursbyWeek = @ExpatWorkingHoursbyWeek
 	WHERE GroupId = @TeamId
 
 	SET @xml = (
@@ -179,6 +184,7 @@ BEGIN
 				,LocalWorkingDays AS '@WorkingDays'
 				,LocalWorkingHours AS '@WorkingHours'
 				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalWorkingHoursbyWeek As '@WorkingHoursbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @TeamId
 			FOR XML PATH('Row')

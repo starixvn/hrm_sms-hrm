@@ -18,6 +18,8 @@
     [ExpatWorkingDays] TINYINT NULL, 
     [ExpatWorkingHours] TINYINT NULL, 
     [ExpatOffDaysbyWeek] TINYINT NULL,
+	[LocalWorkingHoursbyWeek] TINYINT NULL,
+	[ExpatWorkingHoursbyWeek] TINYINT NULL
     CONSTRAINT [PK_Group] PRIMARY KEY CLUSTERED ([GroupId] ASC) ON [Employee]
 );
 
