@@ -7,6 +7,7 @@ CREATE PROCEDURE [dbo].[Employee_Summary_Update] @EmpID INT
 	,@IsLocal BIT = 0
 	,@WorkingDays INT = 0
 	,@WorkingHours INT = 0
+	,@WorkingHoursbyWeek INT = 0
 	,@CompanyDate DATETIME = NULL
 	,@CountryCode NVARCHAR(5) = NULL
 	,@Unit NVARCHAR(2000) = NULL
@@ -41,6 +42,7 @@ BEGIN
 			,[IsLocal] = @IsLocal
 			,[WorkingDays] = @WorkingDays
 			,[WorkingHours] = @WorkingHours
+			,[WorkingHoursbyWeek] = @WorkingHoursbyWeek
 			,[IsDefaultSchedule] = @IsDefaultSchedule
 			,IsTopManager = @IsTopManager
 			,[CompanyDate] = @CompanyDate

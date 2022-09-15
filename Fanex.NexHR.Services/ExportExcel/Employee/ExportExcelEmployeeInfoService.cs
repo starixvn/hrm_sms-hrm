@@ -189,6 +189,7 @@
                 ConfirmedDate = confirmedDate,
                 ResignedDate = resignedDate,
                 WorkingDays = employee.WorkingDays,
+                WorkingHoursbyWeek = employee.WorkingHoursbyWeek,
                 WorkingHours = employee.WorkingHours,
                 OffDaysbyWeek = employee.OffDaysbyWeek,
                 AnnualLeaveBalance = employee.AnnualLeaveBalance,

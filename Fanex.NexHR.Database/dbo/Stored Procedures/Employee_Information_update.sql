@@ -31,6 +31,7 @@
 	,@IsLocal BIT
 	,@WorkingDays INT
 	,@WorkingHours INT
+	,@WorkingHoursbyWeek INT
 	,@CompanyDate DATE = NULL
 	,@CountryCode VARCHAR(5) = NULL
 	,@IsTopManager BIT = 0
@@ -175,6 +176,7 @@ BEGIN
 				,IsLocal AS '@IsLocal'
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
+				,WorkingHoursbyWeek AS '@WorkingHoursbyWeek'
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
@@ -252,6 +254,7 @@ BEGIN
 		,@IsLocal = @IsLocal
 		,@WorkingDays = @WorkingDays
 		,@WorkingHours = @WorkingHours
+		,@WorkingHoursbyWeek = @WorkingHoursbyWeek
 		,@CompanyDate = @CompanyDate
 		,@CountryCode = @CountryCode
 		,@Unit = @Unit
@@ -309,6 +312,7 @@ BEGIN
 				,IsLocal AS '@IsLocal'
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
+				,WorkingHoursbyWeek AS '@WorkingHoursbyWeek'
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
