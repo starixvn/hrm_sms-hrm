@@ -19,6 +19,7 @@
     [SpecialOT]                   DECIMAL (3, 1)  NULL,
     [HospitalizationLeaveBalance] DECIMAL (18, 1) NULL,
     [SickLeaveBalance]            DECIMAL (18, 1) NULL,
+	[WorkingHoursbyWeek]                INT             NULL,
     CONSTRAINT [PK_EmployeeSummary] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
 
