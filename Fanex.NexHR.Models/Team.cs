@@ -34,6 +34,8 @@
 
         public byte? LocalOffDaysbyWeek { get; set; }
 
+        public byte? LocalWorkingHoursbyWeek { get; set; }
+
         public byte? ExpatBasicAnnualLeaveBalance { get; set; }
 
         public byte? ExpatWorkingDays { get; set; }
@@ -42,7 +44,10 @@
 
         public byte? ExpatOffDaysbyWeek { get; set; }
 
+        public byte? ExpatWorkingHoursbyWeek { get; set; }
+
         public Department Department { get; set; } = new Department();
+
         public string DepartmentCode { get; set; }
     }
 }
