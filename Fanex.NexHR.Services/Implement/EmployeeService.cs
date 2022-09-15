@@ -257,6 +257,7 @@
                 SpecialOT = param.SpecialOT,
                 WorkingDays = param.WorkingDays,
                 WorkingHours = param.WorkingHours,
+                WorkingHoursbyWeek = param.WorkingHoursbyWeek,
                 IsTopManager = param.IsTopManager,
                 OffDaysbyWeek = param.OffDaysbyWeek,
                 Unit = param.Unit,

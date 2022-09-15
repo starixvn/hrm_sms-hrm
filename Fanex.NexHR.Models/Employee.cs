@@ -146,6 +146,9 @@
         [Range(1, 24, ErrorMessage = "Working Hours must be between 1 and 24.")]
         public int WorkingHours { get; set; }
 
+        [Range(1, 120, ErrorMessage = "Working Hours per week must be between 1 and 120.")]
+        public int WorkingHoursbyWeek { get; set; }
+
         public decimal KeepInViewBalance { get; set; }
 
         public bool CanOT { get; set; }

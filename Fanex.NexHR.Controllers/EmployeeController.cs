@@ -573,6 +573,7 @@
                 SpecialOT = model.SpecialOT,
                 WorkingDays = model.WorkingDays,
                 WorkingHours = model.WorkingHours,
+                WorkingHoursbyWeek = model.WorkingHoursbyWeek,
                 IsTopManager = model.IsTopManager,
                 OffDaysbyWeek = model.OffDaysbyWeek,
                 Unit = model.Unit,
