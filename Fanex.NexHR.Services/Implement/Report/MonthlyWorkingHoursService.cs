@@ -286,15 +286,15 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 11;
+            const byte DefaultColumns = 14;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
                 maternityLeaveColumn = 4,
-                weddingLeaveColumn = 11,
-                unpaidLeaveColumn = 12
+                weddingLeaveColumn = 14,
+                unpaidLeaveColumn = 15
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -316,13 +316,14 @@
             // summary
             if (monthlyWorkings.Any())
             {
-                var colIndex = 1;
-                template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
-                for (var i = 2; i <= TotalColumns; i++)
+                const int colIndex = 1;
+                var colStartTotal = 5;
+                template.Cells[templateIndex.summaryRow, colIndex, templateIndex.summaryRow, templateIndex.summaryRow].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.summaryRow]);
+                for (var i = 5; i <= TotalColumns; i++)
                 {
-                    template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+                    template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colStartTotal]);
+                    var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colStartTotal].Address}:{worksheet.Cells[rowIndex - 1, colStartTotal].Address}";
+                    worksheet.Cells[rowIndex, colStartTotal++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
                 }
             }
 
@@ -362,6 +363,8 @@
             var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name })
                 .Select(x => new { Team = x.Key.Name, Members = x.ToList() })
                 .OrderBy(x => x.Team);
+
+            var rowNum = 1;
             foreach (var team in teams)
             {
                 var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(y => IsHoliday(y)));
@@ -369,6 +372,9 @@
                 template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.weddingLeaveColumn]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.weddingLeaveColumn]);
 
+                worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.FirstOrDefault().Department;
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.FirstOrDefault().Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
                 worksheet.Cells[rowIndex, colIndex++].Value = totalHolidays;
