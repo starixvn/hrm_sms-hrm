@@ -11,10 +11,12 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@LocalWorkingDays TINYINT
 	,@LocalWorkingHours TINYINT
 	,@LocalOffDaysbyWeek TINYINT
+	,@LocalWorkingHoursbyWeek TINYINT
 	,@ExpatBasicAnnualLeaveBalance TINYINT
 	,@ExpatWorkingDays TINYINT
 	,@ExpatWorkingHours TINYINT
 	,@ExpatOffDaysbyWeek TINYINT
+	,@ExpatWorkingHoursbyWeek TINYINT
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -56,10 +58,12 @@ BEGIN
 		,LocalWorkingDays
 		,LocalWorkingHours
 		,LocalOffDaysbyWeek
+		,LocalWorkingHoursbyWeek
 		,ExpatBasicAnnualLeaveBalance
 		,ExpatWorkingDays
 		,ExpatWorkingHours
 		,ExpatOffDaysbyWeek
+		,ExpatWorkingHoursbyWeek
 		)
 	VALUES (
 		@Code
@@ -72,10 +76,12 @@ BEGIN
 		,@LocalWorkingDays
 		,@LocalWorkingHours
 		,@LocalOffDaysbyWeek
+		,@LocalWorkingHoursbyWeek
 		,@ExpatBasicAnnualLeaveBalance
 		,@ExpatWorkingDays
 		,@ExpatWorkingHours
 		,@ExpatOffDaysbyWeek
+		,@ExpatWorkingHoursbyWeek
 		)
 
 	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
@@ -146,6 +152,7 @@ BEGIN
 				,LocalWorkingDays AS '@WorkingDays'
 				,LocalWorkingHours AS '@WorkingHours'
 				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
+				,LocalWorkingHoursbyWeek As '@WorkingHoursbyWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @id
 			FOR XML PATH('Row')

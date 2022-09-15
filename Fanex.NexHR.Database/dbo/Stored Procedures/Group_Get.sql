@@ -64,10 +64,12 @@ BEGIN
 		,g.LocalWorkingDays
 		,g.LocalWorkingHours
 		,g.LocalOffDaysbyWeek
+		,g.LocalWorkingHoursbyWeek
 		,g.ExpatBasicAnnualLeaveBalance
 		,g.ExpatWorkingDays
 		,g.ExpatWorkingHours
 		,g.ExpatOffDaysbyWeek
+		,g.ExpatWorkingHoursbyWeek
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat
