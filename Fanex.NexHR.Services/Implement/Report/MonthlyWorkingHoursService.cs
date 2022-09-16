@@ -286,15 +286,15 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 14;
+            const byte DefaultColumns = 15;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
                 maternityLeaveColumn = 4,
-                weddingLeaveColumn = 14,
-                unpaidLeaveColumn = 15
+                weddingLeaveColumn = 15,
+                unpaidLeaveColumn = 16
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -394,6 +394,8 @@
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.SuspendWork));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.HospitalizationLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.KeepInViewByDay));
 
                 foreach (DateTime month in months)
                 {
