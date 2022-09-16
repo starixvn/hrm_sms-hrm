@@ -761,9 +761,7 @@
     <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
     <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
     <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
-    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
     <Content Include="wwwroot\sources\styles\components\_buttons-new.scss" />
     <Content Include="Views\LateInEarlyOut\_ViewHistory.cshtml" />
     <Content Include="Views\Report\WeeklyWorkingHours\Index.cshtml" />
