@@ -286,7 +286,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 14;
+            const byte DefaultColumns = 15;
             var templateIndex = new
             {
                 headerRow = 2,
