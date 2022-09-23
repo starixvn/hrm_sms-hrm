@@ -8,6 +8,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
@@ -24,16 +25,19 @@
         private readonly IBaseService baseService;
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
+        private readonly IEmailService emailService;
 
         public InformationController(
             IUserControlSession userControlSession,
             IBaseService baseService,
             ICommonDataService commonDataService,
-            IEmployeeService employeeService) : base(userControlSession)
+            IEmployeeService employeeService,
+            IEmailService emailService) : base(userControlSession)
         {
             this.baseService = baseService;
             this.commonDataService = commonDataService;
             this.employeeService = employeeService;
+            this.emailService = emailService;
         }
 
         public ActionResult UpdateInformation()
@@ -73,10 +77,55 @@
             ModelState.Clear();
             model.Id = EmployeeSession.EmpId;
             var criteria = SetUpdatePersonalInfoCriteria(model);
-
+            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
+            
             var result = baseService.ExecuteNonQuery(criteria);
 
+            if (result.IsSuccessful)
+            {
+                SendMailUpdateInfo(model, employee);
+            }
+
             return Json(result);
+        }
+
+        public bool IsValidRoleToSendMail(List<SystemRoleModel> roles)
+        {
+            foreach (var role in roles)
+            {
+                if (role.RoleId == (int)RoleSystem.HR || role.RoleId == (int)RoleSystem.Verifier || role.RoleId == (int)RoleSystem.Approver)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
+        {
+            if (employee.CardNo != model.CardNo ||
+                employee.Phone != model.Phone ||
+                employee.Address != model.Address ||
+                employee.CurrentAddress != model.CurrentAddress              
+            )
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void SendMailUpdateInfo(Employee model, Employee employee)
+        {
+            if (IsValidUpdateFieldSendMail(model, employee) && IsValidRoleToSendMail(employee.Roles))
+            {
+                emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    receiverEmail: employee.Email,
+                    mailCC: string.Empty,
+                    subject: Messages.UpdateInformation,
+                    body: Messages.UpdatedSuccessfully
+                );
+            }
         }
 
         private UpdateEmployeePersonalInformationCriteria SetUpdatePersonalInfoCriteria(Employee employee)
