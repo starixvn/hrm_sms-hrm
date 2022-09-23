@@ -369,4 +369,7 @@
   <data name="SearchEmployeeId" xml:space="preserve">
     <value>Search Employee Id</value>
   </data>
+  <data name="UpdateInformation" xml:space="preserve">
+    <value>Update Information</value>
+  </data>
 </root>
