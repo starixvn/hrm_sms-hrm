@@ -30,11 +30,12 @@ namespace HRM.UserControl.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Dictionary<string, ConnectionConfiguration> connections = Configuration
-                .GetSection("ConnectionStrings")
+            var connections = Configuration.GetSection("ConnectionStrings")
                 .GetChildren()
-                .ToDictionary(connection => connection.Key,
-                              connection => new ConnectionConfiguration(connection.Key, connection.Value));
+                .AsEnumerable()
+                .Where(x => !string.IsNullOrWhiteSpace(x.GetValue<string>("Name")))
+                .ToDictionary(x => x.GetValue<string>("Name"),
+                    y => new ConnectionConfiguration(y.GetValue<string>("Name"), y.GetValue<string>("ConnectionString"), y.GetValue<string>("ProviderName")));
 
             DbSettingProviderManager
                .StartNewSession()
