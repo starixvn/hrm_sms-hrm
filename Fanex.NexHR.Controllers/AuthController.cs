@@ -2,6 +2,7 @@
 {
     using System;
     using System.Text;
+    using System.Threading;
     using System.Web.Mvc;
     using System.Web.Security;
     using Core.Services;
@@ -45,7 +46,7 @@
                 switch (retCode)
                 {
                     case (short)ValidateUserStatus.Success:
-                        LogEmployeeLogin(employee.Id);
+                        LogEmployeeLogin(employee.Id, true);
                         sessionService.IsShowLeftNavigation = true;
                         sessionService.Employee = employee;
                         sessionService.MenuItems = authService.GetMenuByEmployeeId(employee.Id);
@@ -67,19 +68,20 @@
                 }
             }
 
+
             return View(model);
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
+            LogEmployeeLogin(sessionService.Employee.Id, false);
             sessionService.ClearAll();
-
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 
-        private void LogEmployeeLogin(int employeeId)
+        private void LogEmployeeLogin(int employeeId, bool isLogin)
         {
             var criteria = new LogEmployeeLoginCriteria
             {
@@ -87,7 +89,7 @@
                 IP = Request.UserHostAddress,
                 Platform = Request.Headers["User-Agent"],
                 LoginTime = DateTime.Now,
-                IsLogin = true
+                IsLogin = isLogin
             };
 
             baseService.ExecuteNonQuery(criteria);

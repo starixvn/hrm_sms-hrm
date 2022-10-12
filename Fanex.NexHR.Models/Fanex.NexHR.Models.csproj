@@ -95,6 +95,7 @@
     <Compile Include="AttachFile.cs" />
     <Compile Include="BackgroundJob\AnnualLeaveBalance.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
+    <Compile Include="Dashboard\EmployeeLogin.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Discipline\IgnoredDisciplineDetailModel.cs" />
     <Compile Include="EmployeeWorkFromHome.cs" />

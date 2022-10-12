@@ -5263,6 +5263,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User online.
+        /// </summary>
+        public static string UserOnline {
+            get {
+                return ResourceManager.GetString("UserOnline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Status.
         /// </summary>
         public static string UserStatus {

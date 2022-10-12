@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = Labels.Dashboard;
     var isResetPassword = (bool)ViewBag.IsResetPassword;
+    var currentEmployeeLogin = (IEnumerable<EmployeeLogin>)ViewBag.CurrentEmployeeLogin;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/home.index.css" rel="stylesheet" />
@@ -15,7 +16,13 @@
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <span class="step">@ViewBag.Title</span>
 }
-
+<h2 class="page-title">@Labels.UserOnline</h2>
+@foreach (EmployeeLogin employee in currentEmployeeLogin)
+{
+    <div class="avatar">
+        <img src="~/employee/avatar/@(employee.EmployeeId)" alt="@employee.Nickname" />
+    </div>
+}
 <h2 class="page-title">@Labels.MySpace</h2>
 <table class="table table-custom">
     <thead>

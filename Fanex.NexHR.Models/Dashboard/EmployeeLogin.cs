@@ -1,0 +1,9 @@
+﻿namespace Fanex.NexHR.Models.Dashboard
+{
+    public class EmployeeLogin
+    {
+        public int EmployeeId { get; set; }
+        public string FullName { get; set; }
+        public string Nickname { get; set; }
+    }
+}

@@ -26,9 +26,11 @@
         public ActionResult Index()
         {
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
+            var employeesLogin = dashboardService.GetCurrentEmployeeLogin();
             ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
             ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
+            ViewBag.CurrentEmployeeLogin = employeesLogin;
 
             return View(model);
         }

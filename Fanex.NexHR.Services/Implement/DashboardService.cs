@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Dashboard;
+    using Fanex.NexHR.Criteria.Employee;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Dashboard;
 
     public class DashboardService : IDashboardService
@@ -33,6 +35,12 @@
                 Date = date
             };
             return baseService.GetData<MemberRequest>(criteria);
+        }
+
+        public IEnumerable<EmployeeLogin> GetCurrentEmployeeLogin()
+        {
+            var criteria = new GetCurrentEmployeeLoginCriteria();
+            return baseService.GetData<EmployeeLogin>(criteria);
         }
     }
 }
