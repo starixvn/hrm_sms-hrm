@@ -1,5 +1,4 @@
-﻿import 'jquery-ui-bundle/jquery-ui';
-import { showFullAvatar } from './shared/common.functions';
+﻿import { showFullAvatar } from './shared/common.functions';
 
 $(document).ready(function () {
     function toggleLeftNavigation(isShow) {

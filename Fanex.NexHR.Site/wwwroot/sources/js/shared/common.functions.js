@@ -1,4 +1,5 @@
 ﻿import moment from 'moment';
+import 'jquery-ui-bundle/jquery-ui';
 
 const _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
 

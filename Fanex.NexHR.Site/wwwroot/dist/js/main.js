@@ -53556,8 +53556,6 @@ module.exports = function(module) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
-
 var _common = __webpack_require__(/*! ./shared/common.functions */ "./sources/js/shared/common.functions.js");
 
 $(document).ready(function () {
@@ -53685,6 +53683,8 @@ var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 
 var _moment2 = _interopRequireDefault(_moment);
+
+__webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
