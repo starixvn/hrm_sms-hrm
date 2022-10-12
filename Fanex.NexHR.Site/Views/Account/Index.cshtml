@@ -18,7 +18,9 @@
     <div class="panel panel-default">
         <div class="panel-heading avatarbox">
             <div class="avatar">
-                <img src="~/employee/avatar/@(Model.Employee.Code)" alt="@Model.Employee.NickName" />
+                <a href="javascript:;" class="fullSizeAvatar" style="display:block" data-code="@Model.Employee.Code" data-nickName="@Model.Employee.NickName">
+                    <img src="~/employee/avatar/@(Model.Employee.Code)" alt="@Model.Employee.NickName" />
+                </a>
             </div>
             <div class="pinfo">
                 <span class="name">@Model.Employee.FullName</span>

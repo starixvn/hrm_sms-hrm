@@ -50,7 +50,7 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
                         $('form.filter #CurrentPage').val(1);
                         query();
                     });
-                    $('.xicon.avatar').on('click', function () {
+                    $('.fullSizeAvatar').on('click', function () {
                         const codeId = $(this).data('code');
                         const nickname = $(this).data('nickname');
                         showFullAvatar(codeId, nickname);
