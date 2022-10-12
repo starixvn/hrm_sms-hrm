@@ -13,6 +13,8 @@
 
         public string IP { get; set; }
 
+        public bool IsLogin { get; set; }
+
         public override string GetSettingKey() => "Employee_LogEmployeeLogin";
 
         public override bool IsValid() => EmployeeId > 0 && !string.IsNullOrEmpty(Platform) && !string.IsNullOrEmpty(IP);

@@ -86,7 +86,8 @@
                 EmployeeId = employeeId,
                 IP = Request.UserHostAddress,
                 Platform = Request.Headers["User-Agent"],
-                LoginTime = DateTime.Now
+                LoginTime = DateTime.Now,
+                IsLogin = true
             };
 
             baseService.ExecuteNonQuery(criteria);
