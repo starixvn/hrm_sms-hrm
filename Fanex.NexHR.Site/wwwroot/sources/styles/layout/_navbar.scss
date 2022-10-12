@@ -279,4 +279,12 @@
     &.icon-division, &.icon-unit, &.icon-department, &.icon-section {
         background-position: -96px 0;
     }
+
+    &.avatar {
+        background-position: -73px -120px;
+        display: block;
+        position: relative;
+        left: 5px;
+        top: 0px;
+    }
 }

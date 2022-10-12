@@ -4,7 +4,7 @@ import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
 
 (function () {
     function initPagination() {
@@ -49,6 +49,11 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
                         $('form.filter #ItemsPerPage').val($(this).val());
                         $('form.filter #CurrentPage').val(1);
                         query();
+                    });
+                    $('.xicon.avatar').on('click', function () {
+                        const codeId = $(this).data('code');
+                        const nickname = $(this).data('nickname');
+                        showFullAvatar(codeId, nickname);
                     });
                 }
 

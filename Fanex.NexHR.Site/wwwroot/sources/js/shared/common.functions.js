@@ -73,6 +73,26 @@ function confirm(message, callback, options) {
     $confirm.dialog($.extend({}, defaults, options));
 }
 
+function showFullAvatar(codeId, nickname) {
+    const defaults = {
+        title: nickname,
+        modal: true,
+        resizable: false,
+        width: 200,
+        height: 230,
+        dialogClass: 'modal-shadow'
+    };
+
+    const path = resolveClientUrl(`employee/avatar/${codeId}`);
+    const avatarHtml = `<img src="${path}" style="width: 100%; height: 100%" />`;
+
+    const $confirm = $.getOrCreateDialog('fullAvatar');
+
+    $($confirm).html(avatarHtml);
+    // init dialog
+    $confirm.dialog($.extend({}, defaults));
+}
+
 function getParam(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -436,5 +456,6 @@ export {
     resolveClientUrl,
     initTooltip,
     downloadFile,
-    sortTable
+    sortTable,
+    showFullAvatar
 };
