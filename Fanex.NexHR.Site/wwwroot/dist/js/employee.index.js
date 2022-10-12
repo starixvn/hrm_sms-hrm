@@ -60666,7 +60666,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
                         $('form.filter #CurrentPage').val(1);
                         query();
                     });
-                    $('.xicon.avatar').on('click', function () {
+                    $('.fullSizeAvatar').on('click', function () {
                         var codeId = $(this).data('code');
                         var nickname = $(this).data('nickname');
                         (0, _common.showFullAvatar)(codeId, nickname);

@@ -73,6 +73,7 @@
                     <th>@Labels.ActivityLog</th>
                     <th>@Labels.Edit</th>
                 }
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -119,6 +120,9 @@
                                 <a href="@Url.Action("edit", "employee", new { id = employee.Id })" title="Edit">
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="xicon avatar fullSizeAvatar" data-code="@employee.Code" data-nickName="@employee.NickName"></a>
                             </td>
                         }
                     </tr>
