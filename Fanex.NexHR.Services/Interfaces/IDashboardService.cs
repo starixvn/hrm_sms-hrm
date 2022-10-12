@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Dashboard;
 
     public interface IDashboardService
@@ -9,5 +10,7 @@
         IEnumerable<SummaryRequest> GetMySpace(int employeeId, DateTime date);
 
         IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date);
+
+        IEnumerable<EmployeeLogin> GetCurrentEmployeeLogin();
     }
 }

@@ -1989,7 +1989,11 @@
   <data name="CheckInOutOnline" xml:space="preserve">
     <value>Check In/Out Online</value>
   </data>
-  <data name="WorkingHoursPerWeek" xml:space="preserve">
+ <data name="WorkingHoursPerWeek" xml:space="preserve">
     <value>Working hours per week</value>
+  </data>
+<data name="UserOnline" xml:space="preserve">
+    <value>User online</value>
+  </data>
   </data>
 </root>

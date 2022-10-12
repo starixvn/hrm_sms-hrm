@@ -88,6 +88,7 @@
     <Compile Include="EmployeeWorkFromHome\InsertEmployeeWorkFromHomeCriteria.cs" />
     <Compile Include="EmployeeWorkFromHome\UpdateEmployeeWorkFromHomeCriteria.cs" />
     <Compile Include="Employee\UpdateUserIdCommand.cs" />
+    <Compile Include="Employee\GetCurrentEmployeeLoginCriteria.cs" />
     <Compile Include="HospitalizationLeave\DeleteTransactionCriteria.cs" />
     <Compile Include="HospitalizationLeave\GetTransactionByIdCriteria.cs" />
     <Compile Include="HospitalizationLeave\GetTransactionByEmployeeIdCriteria.cs" />

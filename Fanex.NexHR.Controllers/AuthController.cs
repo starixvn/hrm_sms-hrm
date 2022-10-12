@@ -2,6 +2,7 @@
 {
     using System;
     using System.Text;
+    using System.Threading;
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.Data;
@@ -93,6 +94,7 @@
                 }
             }
 
+
             return View(model);
         }
 
@@ -101,7 +103,6 @@
         {
             authService.Logout(userControlSession.OnUserId);
             userControlSession.ClearAll();
-
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
