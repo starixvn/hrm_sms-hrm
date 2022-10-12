@@ -2,7 +2,7 @@
 import tippy from 'tippy.js';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable } from '../../shared/common.functions';
+import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import 'chosen-js/chosen.jquery';
@@ -74,6 +74,12 @@ import 'chosen-js/chosen.jquery';
                         $('form.filter #ItemsPerPage').val($(this).val());
                         $('form.filter #CurrentPage').val(1);
                         query();
+                    });
+
+                    $('.fullSizeAvatar').on('click', function () {
+                        const codeId = $(this).data('code');
+                        const nickname = $(this).data('nickname');
+                        showFullAvatar(codeId, nickname);
                     });
                 }
 
