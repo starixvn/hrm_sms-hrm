@@ -12,3 +12,12 @@ table.table.table-custom {
         font-weight: bold;
     }
 }
+
+.current-online-avatar {
+    img {
+        border-radius: 50%;
+        border: 2px solid #cfd8dc;
+        width: 55px;
+        cursor: pointer;
+    }
+}

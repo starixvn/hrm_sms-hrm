@@ -1992,8 +1992,7 @@
  <data name="WorkingHoursPerWeek" xml:space="preserve">
     <value>Working hours per week</value>
   </data>
-<data name="UserOnline" xml:space="preserve">
+ <data name="UserOnline" xml:space="preserve">
     <value>User online</value>
-  </data>
-  </data>
+ </data>
 </root>
