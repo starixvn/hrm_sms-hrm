@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { stringify } from 'qs';
 
-import { axiosError, resolveClientUrl } from '../shared/common.functions';
+import { axiosError, resolveClientUrl, showFullAvatar } from '../shared/common.functions';
 
 $(document).ready(function () {
     if ($('#IsResetPassword').prop('checked')) {
@@ -28,4 +28,27 @@ $(document).ready(function () {
             }
         });
     }
+
+    $('.fullSizeAvatar').on('click', function () {
+        const codeId = $(this).data('code');
+        const nickname = $(this).data('nickname');
+        showFullAvatar(codeId, nickname);
+    });
+
+    showMoreLessUserOnline();
 });
+
+function showMoreLessUserOnline() {
+    var x = 10;
+    $('.current-online-avatar a:lt(' + x + ')').show();
+
+    if ($('.fullSizeAvatar').length > 10) {
+        $('.fullSizeAvatar:gt(10)').hide();
+        $('.show-more').show();
+    }
+
+    $('.show-more').on('click', function () {
+        $('.fullSizeAvatar:gt(10)').toggle();
+        $(this).text() === 'View all' ? $(this).text('View less') : $(this).text('View all');
+    });
+}

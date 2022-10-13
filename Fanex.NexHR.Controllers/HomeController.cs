@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Core.Constants;
     using Fanex.NexHR.Core.Enums;
@@ -26,11 +27,12 @@
         public ActionResult Index()
         {
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(sessionService.Employee.Id, DateTime.Now);
-            var employeesLogin = dashboardService.GetCurrentEmployeeLogin();
+            var employeesLogin = dashboardService.GetCurrentEmployeeLogin().ToList();
+            var excludeCurrentEmployee = employeesLogin.Where(x => x.EmpId != sessionService.Employee.Id);
             ViewBag.IsResetPassword = employeeService.CheckResetPassword(sessionService.Employee.Id);
             ViewBag.IsVerifierApprover = sessionService.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || sessionService.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
-            ViewBag.CurrentEmployeeLogin = employeesLogin;
+            ViewBag.CurrentEmployeeLogin = excludeCurrentEmployee;
 
             return View(model);
         }
