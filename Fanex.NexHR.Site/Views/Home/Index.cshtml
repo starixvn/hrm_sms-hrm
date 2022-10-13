@@ -35,7 +35,7 @@
 <div class="current-online-avatar">
     @foreach (EmployeeLogin employee in currentEmployeeLogin)
     {
-        <a href="javascript:;" class="fullSizeAvatar" style="background-image: url('/employee/avatar/@(employee.Code)');" data-code="@employee.Code" data-nickName="@employee.Nickname"></a>
+        <a href="javascript:;" class="fullSizeImage" style="background-image: url('/employee/avatar/@(employee.Code)');" data-code="@employee.Code" data-nickName="@employee.Nickname"></a>
     }
     @if(restUserOnline > 0){
         <a href="javascript:;" class="show-more">View all</a>

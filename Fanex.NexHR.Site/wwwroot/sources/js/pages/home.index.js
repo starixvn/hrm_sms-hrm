@@ -15,7 +15,7 @@ $(document).ready(function () {
         });
     }
 
-    $('.fullSizeAvatar').on('click', function () {
+    $('.fullSizeImage').on('click', function () {
         const codeId = $(this).data('code');
         const nickname = $(this).data('nickname');
         showFullAvatar(codeId, nickname);
@@ -28,13 +28,13 @@ function showMoreLessUserOnline() {
     var x = 10;
     $('.current-online-avatar a:lt(' + x + ')').show();
 
-    if ($('.fullSizeAvatar').length > 10) {
-        $('.fullSizeAvatar:gt(10)').hide();
+    if ($('.fullSizeImage').length > 10) {
+        $('.fullSizeImage:gt(10)').hide();
         $('.show-more').show();
     }
 
     $('.show-more').on('click', function () {
-        $('.fullSizeAvatar:gt(10)').toggle();
+        $('.fullSizeImage:gt(10)').toggle();
         $(this).text() === 'View all' ? $(this).text('View less') : $(this).text('View all');
     });
 }
