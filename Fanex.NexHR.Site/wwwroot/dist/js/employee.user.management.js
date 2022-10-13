@@ -61864,6 +61864,8 @@ var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js
 
 var _moment2 = _interopRequireDefault(_moment);
 
+__webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
@@ -61941,9 +61943,9 @@ function showFullAvatar(codeId, nickname) {
         title: nickname,
         modal: true,
         resizable: false,
-        width: 200,
+        width: 190,
         height: 230,
-        dialogClass: 'modal-shadow'
+        dialogClass: "popup-avatar"
     };
 
     var path = resolveClientUrl('employee/avatar/' + codeId);
