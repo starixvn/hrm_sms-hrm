@@ -14,10 +14,28 @@ table.table.table-custom {
 }
 
 .current-online-avatar {
-    img {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+
+    a {
+        display: none;
+    }
+
+    .fullSizeAvatar {
         border-radius: 50%;
-        border: 2px solid #cfd8dc;
-        width: 55px;
+        background-repeat: no-repeat;
+        border: 1px solid #cfd8dc;
+        width: 58px;
+        height: 57px;
+        background-position: center;
         cursor: pointer;
+        margin-right: 5px;
+    }
+
+    .show-more {
+        cursor: pointer;
+        padding-top: 38px;
+        text-decoration: underline;
     }
 }

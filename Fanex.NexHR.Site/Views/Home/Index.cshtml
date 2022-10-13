@@ -6,6 +6,7 @@
     ViewBag.Title = Labels.Dashboard;
     var isResetPassword = (bool)ViewBag.IsResetPassword;
     var currentEmployeeLogin = (IEnumerable<EmployeeLogin>)ViewBag.CurrentEmployeeLogin;
+    var restUserOnline = currentEmployeeLogin.Count() - 10;
     int siteId = ConfigSettings.SiteId;
     var modalTitle = string.Empty;
     switch (siteId)
@@ -31,12 +32,16 @@
     <a class="step">@Labels.Personal</a> <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.UserOnline</h2>
-@foreach (EmployeeLogin employee in currentEmployeeLogin)
-{
-    <div class="current-online-avatar">
-        <img src="~/employee/avatar/@(employee.Code)" alt="@employee.Nickname" />
-    </div>
-}
+<div class="current-online-avatar">
+    @foreach (EmployeeLogin employee in currentEmployeeLogin)
+    {
+        <a href="javascript:;" class="fullSizeAvatar" style="background-image: url('/employee/avatar/@(employee.Code)');" data-code="@employee.Code" data-nickName="@employee.Nickname"></a>
+    }
+    @if(restUserOnline > 0){
+        <a href="javascript:;" class="show-more">View all</a>
+    }
+</div>
+
 <h2 class="page-title">@Labels.MySpace</h2>
 <table class="table table-custom">
     <thead>
@@ -50,77 +55,77 @@
     <tbody>
         @foreach (SummaryRequest item in Model)
         {
-            <tr>
-                <td class="align-left">
-                    @item.RequestType
-                </td>
-                <td>
-                    @RazorHelper.DisplayZeroCell(item.TotalRequest)
-                </td>
-                <td>
-                    @if (item.TotalPending > 0)
+        <tr>
+            <td class="align-left">
+                @item.RequestType
+            </td>
+            <td>
+                @RazorHelper.DisplayZeroCell(item.TotalRequest)
+            </td>
+            <td>
+                @if (item.TotalPending > 0)
                     {
                         switch (item.RequestTypeId)
                         {
                             case (ushort)RequestType.CheckIn:
                             case (ushort)RequestType.CheckOut:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { }, new { @class = "pending" })
+                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.LateIn:
                             case (ushort)RequestType.EarlyOut:
-                                @RazorHelper.DisplayZeroCell(item.TotalPending)
+                @RazorHelper.DisplayZeroCell(item.TotalPending)
                                 break;
                             case (ushort)RequestType.ChangeShift:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { }, new { @class = "pending" })
+                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Leave:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { }, new { @class = "pending" })
+                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.KeepInView:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { }, new { @class = "pending" })
+                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { }, new { @class = "pending" })
                                 break;
                             case (ushort)RequestType.Overtime:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeview", "overtime", new { }, new { @class = "pending" })
+                @Html.ActionLink(item.TotalPending.ToString(), "employeeview", "overtime", new { }, new { @class = "pending" })
                                 break;
                         }
                     }
                     else
                     {
-                        <span>-</span>
+                <span>-</span>
                     }
-                </td>
-                <td>
-                    @switch (item.RequestTypeId)
+            </td>
+            <td>
+                @switch (item.RequestTypeId)
                     {
                         case (ushort)RequestType.CheckIn:
                         case (ushort)RequestType.CheckOut:
-                            @Html.ActionLink(Labels.Request, "create", "checkinout")
+                @Html.ActionLink(Labels.Request, "create", "checkinout")
                             break;
                         case (ushort)RequestType.LateIn:
                         case (ushort)RequestType.EarlyOut:
-                            @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
+                @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
                             break;
                         case (ushort)RequestType.ChangeShift:
-                            @Html.ActionLink(Labels.Request, "create", "changeshift")
+                @Html.ActionLink(Labels.Request, "create", "changeshift")
                             break;
                         case (ushort)RequestType.Leave:
-                            @Html.ActionLink(Labels.Request, "create", "leave")
+                @Html.ActionLink(Labels.Request, "create", "leave")
                             break;
                         case (ushort)RequestType.KeepInView:
-                            @Html.ActionLink(Labels.Request, "create", "KeepInView")
+                @Html.ActionLink(Labels.Request, "create", "KeepInView")
                             break;
                         case (ushort)RequestType.Overtime:
-                            @Html.ActionLink(Labels.Request, "employeeView", "overtime")
+                @Html.ActionLink(Labels.Request, "employeeView", "overtime")
                             break;
                     }
-                </td>
-            </tr>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
 @if ((bool)ViewBag.IsVerifierApprover)
 {
-    @Html.Action("MemberRequest")
+@Html.Action("MemberRequest")
 }
 <input type="checkbox" class="hidden" id="IsResetPassword" @(isResetPassword ? "checked" : string.Empty) />
 <div id="changePasswordModal" class="modal" tabindex="-1" role="dialog">

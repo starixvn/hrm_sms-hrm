@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using Core.Constants;
     using Fanex.NexHR.Models.Dashboard;
@@ -33,11 +34,12 @@
         {
             var user = userService.GetById(userControlSession.UserId);
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(EmployeeSession.EmpId, DateTime.Now);
-            var employeesLogin = dashboardService.GetCurrentEmployeeLogin();
+            var employeesLogin = dashboardService.GetCurrentEmployeeLogin().ToList();
+            var excludeCurrentEmployee = employeesLogin.Where(x => x.EmpId != sessionService.Employee.Id);
             ViewBag.IsResetPassword = user.IsResetPassword;
             ViewBag.IsVerifierApprover = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
-            ViewBag.CurrentEmployeeLogin = employeesLogin;
+            ViewBag.CurrentEmployeeLogin = excludeCurrentEmployee;
 
             return View(model);
         }
