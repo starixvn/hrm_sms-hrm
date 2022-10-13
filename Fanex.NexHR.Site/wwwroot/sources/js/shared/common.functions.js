@@ -79,9 +79,9 @@ function showFullAvatar(codeId, nickname) {
         title: nickname,
         modal: true,
         resizable: false,
-        width: 200,
+        width: 190,
         height: 230,
-        dialogClass: 'modal-shadow'
+        dialogClass: "popup-avatar"
     };
 
     const path = resolveClientUrl(`employee/avatar/${codeId}`);
