@@ -72,7 +72,7 @@ export class DataGrid extends Component {
 
         return <Dropdown>
             <Dropdown.Toggle as={customDropdown} id="dropdown-basic" />
-            <Dropdown.Menu>
+            <Dropdown.Menu popperConfig={{ strategy: "fixed" }}>
                 {
                     window.hasHostPermissionOnUser &&
                     <>
