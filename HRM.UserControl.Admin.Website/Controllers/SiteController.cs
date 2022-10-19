@@ -7,7 +7,6 @@
     using HRM.UserControl.Admin.Website.Criteria.Site;
     using HRM.UserControl.Admin.Website.Filters;
     using HRM.UserControl.Admin.Website.Models.Site;
-    using HRM.UserControl.Admin.Website.Resources;
     using HRM.UserControl.Admin.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
@@ -52,18 +51,9 @@
         [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateSiteCommand command)
         {
-            var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-            if (!Uri.IsWellFormedUriString(command.SiteURL, UriKind.Absolute))
-            {
-                commandResult.Code = 1;
-                commandResult.Message = ViewResources.InvalidUrl;
-
-                return Json(commandResult);
-            }
-
             command.CreatedBy = userControlSession.UserId;
             command.AccessToken = GenerateAccessToken();
-            commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
 
@@ -71,17 +61,8 @@
         [UCPermission(FunctionKey = FunctionKey.SiteManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateSiteCommand command)
         {
-            var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-            if (!Uri.IsWellFormedUriString(command.SiteURL, UriKind.Absolute))
-            {
-                commandResult.Code = 1;
-                commandResult.Message = ViewResources.InvalidUrl;
-
-                return Json(commandResult);
-            }
-
             command.ModifiedBy = userControlSession.UserId;
-            commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }
 
