@@ -6,6 +6,7 @@ import DataService from '@jsroot/common/dataService';
 class AppContainer extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             sites: []
         };
@@ -35,7 +36,7 @@ class AppContainer extends Component {
                     menu.url &&
                     <>
                         {trees.map(item => item)}
-                        <Card.Link href={menu.url}> {menu.menuItemName}</Card.Link>
+                        <Card.Link href={menu.url} target="_blank" rel="noopener noreferrer"> {menu.menuItemName}</Card.Link>
                     </>
                 }
                 {!menu.url && <span>{menu.menuItemName}</span>}
@@ -66,7 +67,7 @@ class AppContainer extends Component {
                                             return (
                                                 <Fragment key={menu.menuItemId}>
                                                     <ListGroup.Item className={!menu.url ? 'none' : ''}>
-                                                        {menu.url && <Card.Link href={menu.url}>{menu.menuItemName}</Card.Link>}
+                                                        {menu.url && <Card.Link href={menu.url} target="_blank" rel="noopener noreferrer">{menu.menuItemName}</Card.Link>}
                                                         {!menu.url && <span>{menu.menuItemName}</span>}
                                                     </ListGroup.Item>
                                                     {this.renderChildMenus(menu.childs)}
