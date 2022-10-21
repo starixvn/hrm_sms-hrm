@@ -24,7 +24,8 @@
         {
             var currentSession = new SessionService();
 
-            if (currentSession.Employee.Id <= 0 || !FunctionKeys.Select(functionKey => currentSession.HasPermissionOnFunction(functionKey, Policy)).Any())
+            if (currentSession.Employee.Id <= 0
+                || !FunctionKeys.Select(functionKey => currentSession.HasPermissionOnFunction(functionKey, Policy)).Any(x => x))
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "AccessDenied" }));
             }
