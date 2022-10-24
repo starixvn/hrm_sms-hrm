@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -82,7 +80,6 @@
                 request.AttachFiles = attachFileService.GetInfoAttachFile(request.Id, PathFolder);
             }
         }
-
 
         [HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         public ActionResult HRView(RequestViewModel request)

@@ -83,8 +83,7 @@
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
         public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
@@ -204,9 +203,7 @@
         }
 
         [HttpPost]
-        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ApproveOvertime)]
-        [HRMPermission(Policy.Host, FunctionKey.ProcessOvertime)]
+        [HRMPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
         public JsonResult EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
         {
             CommandResult commandResult = overtimeService.EditMonthlyRequestStatus(sessionService.Employee.Id, requestIds, command, roleId);
