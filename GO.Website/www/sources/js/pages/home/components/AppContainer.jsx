@@ -36,7 +36,7 @@ class AppContainer extends Component {
                     menu.url &&
                     <>
                         {trees.map(item => item)}
-                        <Card.Link href={menu.url} target="_blank" rel="noopener noreferrer"> {menu.menuItemName}</Card.Link>
+                        <Card.Link onClick={event => this.onClick(event, menu)}> {menu.menuItemName}</Card.Link>
                     </>
                 }
                 {!menu.url && <span>{menu.menuItemName}</span>}
@@ -50,6 +50,16 @@ class AppContainer extends Component {
         }
 
         return rows;
+    };
+
+    onClick = async (event, menu) => {
+        event.preventDefault();
+
+        let url = Site.resolveClientUrl('sso/gettime');
+        await DataService.getDataAsync(url).then(response => {
+            url = `${menu.url}&time=${response.data}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
+        });
     };
 
     render() {
@@ -67,7 +77,12 @@ class AppContainer extends Component {
                                             return (
                                                 <Fragment key={menu.menuItemId}>
                                                     <ListGroup.Item className={!menu.url ? 'none' : ''}>
-                                                        {menu.url && <Card.Link href={menu.url} target="_blank" rel="noopener noreferrer">{menu.menuItemName}</Card.Link>}
+                                                        {
+                                                            menu.url &&
+                                                            <Card.Link onClick={event => this.onClick(event, menu)}>
+                                                                {menu.menuItemName}
+                                                            </Card.Link>
+                                                        }
                                                         {!menu.url && <span>{menu.menuItemName}</span>}
                                                     </ListGroup.Item>
                                                     {this.renderChildMenus(menu.childs)}

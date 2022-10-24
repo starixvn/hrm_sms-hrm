@@ -1,70 +1,37 @@
 ﻿import React, { PureComponent } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import Site from '@jsroot/common/site';
+import DataService from '@jsroot/common/dataService';
 
 export default class Header extends PureComponent {
     constructor(props) {
         super(props);
+
         this.state = {
-            menus: [],
-            nickname: '',
-            expended: false
+            user: null
         };
     }
 
-    handleToggle = () => {
-        this.setState(prevState => {
-            return { expended: !prevState.expended };
+    async componentDidMount() {
+        const url = Site.resolveClientUrl('home/getUserInfo');
+        await DataService.postDataAsync(url).then(response => {
+            this.setState({ user: response.data });
         });
-    };
+    }
 
     render() {
-        const { menus, nickname, expended } = this.state;
-        const currentUrl = document.getElementById('currentUrl').value.toLowerCase();
+        const { user } = this.state;
+        let nickname = '';
+        if (user) {
+            nickname = user.username ? user.username : user.nickname;
+        }
+
         return (
             <nav className="navbar navbar-inverse">
                 <div className="pull-left left-bar">
                     <a className="navbar-brand" href={Site.resolveClientUrl('home/index')}>
-                        <img alt="logo" src={Site.resolveClientUrl('css/images/logo2.svg')} alt="GO System" />
+                        <img src={Site.resolveClientUrl('css/images/logo2.svg')} alt="GO System" />
                     </a>
-                </div>
-                <div className={`pull-left nav-hamberger ${expended ? 'expended' : ''}`}>
-                    <div className="toggle-btn" onClick={this.handleToggle}>
-                        <span className="lines" />
-                    </div>
-                    <ul className="nav navbar-nav">
-                        {
-                            menus.map((item, index) => {
-                                let isActive = this.isActive(item, currentUrl);
-                                const activeClass = isActive ? 'active' : '';
-                                if (item.childs.length > 0) {
-                                    return (
-                                        <li key={index} className={`dropdown ${activeClass}`}>
-                                            <a>{item.menuItemName} <i className="fa fa-angle-down" /></a>
-                                            <ul className="dropdown-menu">
-                                                {
-                                                    item.childs.map(child => {
-                                                        isActive = child.url.toLowerCase().localeCompare(currentUrl) === 0;
-                                                        return (
-                                                            <li key={child.menuItemId} className={`dropdown ${isActive ? 'active' : ''}`}>
-                                                                <a href={child.url}>{child.menuItemName}</a>
-                                                            </li>
-                                                        );
-                                                    })
-                                                }
-                                            </ul>
-                                        </li>
-                                    );
-                                } else {
-                                    return (
-                                        <li key={index} className={`${activeClass}`}>
-                                            <a href={item.url}>{item.menuItemName}</a>
-                                        </li>
-                                    );
-                                }
-                            })
-                        }
-                    </ul>
                 </div>
                 <div className="user-info pull-right">
                     <Dropdown>

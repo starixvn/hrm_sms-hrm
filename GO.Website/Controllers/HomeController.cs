@@ -8,6 +8,7 @@
     using GO.Website.Models;
     using GO.Website.Services;
     using HRM.UserControl.Client.Core.Configurations;
+    using HRM.UserControl.Client.Core.Models.User;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
@@ -17,18 +18,21 @@
         private readonly IUserControlSettings userControlSettings;
         private readonly IUserControlSession userControlSession;
         private readonly IAuthService authService;
+        private readonly IUserService userService;
         private readonly IBaseService baseService;
 
         public HomeController(
             IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
             IAuthService authService,
+            IUserService userService,
             IBaseService baseService)
         {
             this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
             this.authService = authService;
             this.baseService = baseService;
+            this.userService = userService;
         }
 
         public IActionResult Index()
@@ -38,7 +42,6 @@
 
         public async Task<IActionResult> GetSiteMenus()
         {
-            var time = Cryptography.EncryptPassword(await authService.SSOGetTimeAsync());
             var userId = Cryptography.EncryptPassword(userControlSession.UserId.ToString());
             var onUserId = Cryptography.EncryptPassword(userControlSession.OnUserId.ToString());
             var criteria = new GetSiteAndMenuItemByUserIdCriteria
@@ -54,8 +57,8 @@
                 {
                     if (!string.IsNullOrWhiteSpace(menu.URL))
                     {
-                        menu.URL = string.Format("{0}/auth/sso?userId={1}&onUserId={2}&time={3}&redirectUrl={4}",
-                            site.SiteURL, userId, onUserId, time, menu.URL);
+                        menu.URL = string.Format("{0}/auth/sso?userId={1}&onUserId={2}&redirectUrl={3}",
+                            site.SiteURL, userId, onUserId, menu.URL);
                     }
                 }
 
@@ -63,6 +66,21 @@
             }
 
             return Json(sites);
+        }
+
+        [Route("sso/gettime")]
+        public async Task<IActionResult> GetTime()
+        {
+            var time = Cryptography.EncryptPassword(await authService.SSOGetTimeAsync());
+            return Json(time);
+        }
+
+        public IActionResult GetUserInfo()
+        {
+            User user = userService.GetById(userControlSession.UserId);
+            user.UserId = 0;
+            user.Password = string.Empty;
+            return Json(user);
         }
 
         private static IList<MenuItem> GetHierarchyMenu(IList<MenuItem> menus)
