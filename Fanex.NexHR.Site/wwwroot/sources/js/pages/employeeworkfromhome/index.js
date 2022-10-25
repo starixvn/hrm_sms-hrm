@@ -342,7 +342,8 @@ const workFromHomeModule = (function ($) {
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,
-                    isSelectedAll: true
+                    isSelectedAll: true,
+                    hasSearchBox: true
                 });
                 getEmployeeWorkFromHome();
             }).catch(axiosError);

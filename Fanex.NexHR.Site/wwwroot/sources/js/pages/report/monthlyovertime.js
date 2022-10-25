@@ -35,7 +35,8 @@ $(document).ready(function () {
 
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                isSelectedAll: true
+                isSelectedAll: true,
+                hasSearchBox: true
             });
         }).catch(axiosError);
 

@@ -95,20 +95,20 @@ const timesheetModule = (function ($) {
         });
 
         $('#btnCreateCheckIn').click(function () {
-                blockUI();
-                axios({
-                    url: resolveClientUrl('time/AddChekInTime'),
-                    method: 'POST',
-                    responseType: 'json'
-                }).then(response => {
-                    let data = response.data;
-                        if (data.IsSuccessful) {
-                            alert('Create Check In time successfully!');
-                            query();
-                        } else {
-                            alert(response.data.Message);
-                        }
-                }).catch(axiosError).then(() => unblockUI());
+            blockUI();
+            axios({
+                url: resolveClientUrl('time/AddChekInTime'),
+                method: 'POST',
+                responseType: 'json'
+            }).then(response => {
+                let data = response.data;
+                if (data.IsSuccessful) {
+                    alert('Create Check In time successfully!');
+                    query();
+                } else {
+                    alert(response.data.Message);
+                }
+            }).catch(axiosError).then(() => unblockUI());
         });
 
         $('#btnCreateCheckOut').click(function () {

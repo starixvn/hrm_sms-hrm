@@ -82,6 +82,7 @@ $(document).ready(function () {
             $('#Team').multiSelectTreeView({
                 data: response.data,
                 isSelectedAll: true,
+                hasSearchBox: true
             });
             $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 

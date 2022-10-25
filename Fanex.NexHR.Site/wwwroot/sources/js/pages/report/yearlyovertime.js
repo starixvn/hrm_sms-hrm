@@ -31,7 +31,8 @@ function getOrgChart() {
 
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: teamIds
+                selectedItems: teamIds,
+                hasSearchBox: true
             });
         }).catch(axiosError);
 }

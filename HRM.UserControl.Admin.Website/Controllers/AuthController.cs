@@ -128,11 +128,15 @@
         [UCAuthorize]
         public IActionResult GetHeader()
         {
+            var user = userService.GetById(userControlSession.UserId);
+            user.UserId = 0;
+            user.Password = string.Empty;
+
             var menus = GetMenuTrees(userControlSession.MenuItems);
             var header = new
             {
-                menus = menus,
-                nickname = string.Empty
+                menus,
+                user
             };
 
             return Json(header);

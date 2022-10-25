@@ -119,7 +119,8 @@ import 'chosen-js/chosen.jquery';
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,
-                    selectedItems: $('#TeamIds').val()
+                    selectedItems: $('#TeamIds').val(),
+                    hasSearchBox: true
                 });
 
                 query();

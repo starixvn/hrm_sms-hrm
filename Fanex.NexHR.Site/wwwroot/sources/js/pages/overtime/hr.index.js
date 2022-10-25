@@ -295,7 +295,8 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#TeamIds').val()
+                selectedItems: $('#TeamIds').val(),
+                hasSearchBox: true
             });
         }).catch(axiosError);
 

@@ -33,7 +33,8 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                isSelectedAll: true
+                isSelectedAll: true,
+                hasSearchBox: true
             });
         }).catch(axiosError);
 
@@ -47,7 +48,6 @@ $(document).ready(function () {
             query();
         }).catch(axiosError);
 
-    
     $('#Period').multiSelectTreeView({
         data: [{ text: '1H', checked: false, enable: true, isLeaf: true, id: 1 }, { text: '2H', checked: false, enable: true, isLeaf: true, id: 2 }],
         isSelectedAll: true

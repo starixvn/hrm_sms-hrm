@@ -11,7 +11,6 @@ import {
     blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
-
 $(document).on('click', '#btnSearchDetails', function () {
     $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
     query();
@@ -54,12 +53,13 @@ $(document).on('click', '#btnExcelDetails', function () {
 
 $(document).ready(function () {
     initDatepicker();
-    
+
     axios(resolveClientUrl('Section/GetOrgChart'))
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                isSelectedAll: true
+                isSelectedAll: true,
+                hasSearchBox: true
             });
             query();
         }).catch(axiosError);

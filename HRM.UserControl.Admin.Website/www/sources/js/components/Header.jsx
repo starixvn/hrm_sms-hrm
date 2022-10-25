@@ -8,7 +8,7 @@ export default class Header extends PureComponent {
         super(props);
         this.state = {
             menus: [],
-            nickname: '',
+            user: null,
             expended: false
         };
     }
@@ -16,8 +16,8 @@ export default class Header extends PureComponent {
     async componentDidMount() {
         const url = Site.resolveClientUrl('auth/getHeader');
         await DataService.postDataAsync(url).then(response => {
-            const { menus, nickname } = response.data;
-            this.setState({ menus, nickname });
+            const { menus, user } = response.data;
+            this.setState({ menus, user });
         });
     }
 
@@ -31,13 +31,19 @@ export default class Header extends PureComponent {
         || menuItem.childs.filter(child => child.url.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
 
     render() {
-        const { menus, nickname, expended } = this.state;
+        const { menus, user, expended } = this.state;
         const currentUrl = document.getElementById('currentUrl').value.toLowerCase();
+
+        let nickname = '';
+        if (user) {
+            nickname = user.nickname ? user.nickname : user.username;
+        }
+
         return (
             <nav className="navbar navbar-inverse">
                 <div className="pull-left left-bar">
                     <a className="navbar-brand" href={Site.resolveClientUrl('home/index')}>
-                        <img alt="logo" src={Site.resolveClientUrl('css/images/logo2.svg')} alt="User Control" />
+                        <img src={Site.resolveClientUrl('css/images/logo2.svg')} alt="User Control" />
                     </a>
                 </div>
                 <div className={`pull-left nav-hamberger ${expended ? 'expended' : ''}`}>

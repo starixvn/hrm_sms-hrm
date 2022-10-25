@@ -13,7 +13,8 @@ const sickLeaveBalance = (function ($) {
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,
-                    selectedItems: $('#TeamIds').val()
+                    selectedItems: $('#TeamIds').val(),
+                    hasSearchBox: true
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {

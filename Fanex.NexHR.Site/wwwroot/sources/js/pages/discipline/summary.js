@@ -342,6 +342,7 @@ import {
                 $('#Team').multiSelectTreeView({
                     data: data,
                     isSelectedAll: true,
+                    hasSearchBox: true
                 });
                 $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 

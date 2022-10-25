@@ -127,7 +127,8 @@ import { parse } from 'qs';
             .then(response => {
                 $('#Team').multiSelectTreeView({
                     data: response.data,
-                    isSelectedAll: true
+                    isSelectedAll: true,
+                    hasSearchBox: true
                 });
                 query();
             }).catch(axiosError);

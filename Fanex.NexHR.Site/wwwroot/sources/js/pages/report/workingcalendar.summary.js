@@ -9,8 +9,6 @@ import {
     blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
-
-
 $(document).ready(function () {
     initDatepicker();
 
@@ -44,7 +42,8 @@ $(document).ready(function () {
         .then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                isSelectedAll: true
+                isSelectedAll: true,
+                hasSearchBox: true
             });
         }).catch(axiosError);
 

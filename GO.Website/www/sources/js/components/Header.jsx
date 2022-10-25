@@ -23,7 +23,7 @@ export default class Header extends PureComponent {
         const { user } = this.state;
         let nickname = '';
         if (user) {
-            nickname = user.username ? user.username : user.nickname;
+            nickname = user.nickname ? user.nickname : user.username;
         }
 
         return (

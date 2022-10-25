@@ -99,7 +99,8 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
             success: function (data) {
                 $('#Team').multiSelectTreeView({
                     data: data,
-                    isSelectedAll: true
+                    isSelectedAll: true,
+                    hasSearchBox: true
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {

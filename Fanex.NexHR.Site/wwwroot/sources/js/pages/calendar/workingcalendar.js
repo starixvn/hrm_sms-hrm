@@ -48,11 +48,13 @@ const workingCalendarModule = (function ($) {
             .then(([teamResponse, jobResponse]) => {
                 $('#Team').multiSelectTreeView({
                     data: teamResponse.data,
-                    isSelectedAll: true
+                    isSelectedAll: true,
+                    hasSearchBox: true
                 });
                 $('#JobTitle').multiSelectTreeView({
                     data: jobResponse.data,
-                    isSelectedAll: true
+                    isSelectedAll: true,
+                    hasSearchBox: true
                 });
 
                 query();
