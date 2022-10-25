@@ -11,6 +11,5 @@
         public int? EmployeeId { get; set; }
         public bool IsIFrame { get; set; }
         public byte? IsLocal { get; set; }
-        public bool IsEditUnlimited { get; set; }
     }
 }

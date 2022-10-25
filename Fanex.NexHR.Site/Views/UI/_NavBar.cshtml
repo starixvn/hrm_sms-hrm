@@ -4,7 +4,9 @@
     var menus = Model.GroupBy(i => i.MenuItemName).Select(g => g.First()).ToList();
     var unreadMessage = (int)ViewBag.UnreadMessage;
     var selectedMenu = (MenuItem)ViewBag.SelectedMenu;
-    var idSelected = selectedMenu != null ? selectedMenu.MenuItemName + "_" + selectedMenu.MenuItemId : string.Empty;
+    var idSelected = selectedMenu != null
+        ? selectedMenu.MenuItemName.ToLowerInvariant().Replace(" ", string.Empty).Replace("'", string.Empty) + "_" + selectedMenu.MenuItemId
+        : string.Empty;
 }
 
 <div class="nav_links">
@@ -23,8 +25,8 @@
                         var menuText = childMenu.MenuItemName.Equals("My Message", StringComparison.CurrentCultureIgnoreCase) && unreadMessage > 0
                             ? childMenu.MenuItemName + " (" + unreadMessage + ")" : childMenu.MenuItemName;
                         var icon = childMenu.MenuItemName.ToLowerInvariant().Replace(" ", string.Empty).Replace("'", string.Empty);
-                        <div id="@(icon + "_"+childMenu.MenuItemId)" class="el">
-                            <span class="xicon @icon"></span>
+                        <div id="@(icon + "_" + childMenu.MenuItemId)" class="el">
+                            <span class="xicon icon-@icon"></span>
                             <a href="@childMenu.URL">@menuText</a>
                         </div>
                     }

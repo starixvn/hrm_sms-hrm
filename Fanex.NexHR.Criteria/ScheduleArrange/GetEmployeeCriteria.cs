@@ -8,7 +8,6 @@
         public string TeamIds { get; set; }
         public string Query { get; set; }
         public bool IsIFrame { get; set; }
-        public bool IsEditUnlimited { get; set; }
 
         public override string GetSettingKey() => "ScheduleArrangement_GetEmployee";
 

@@ -94,7 +94,7 @@
             return View(EmployeeRequestViewName, request);
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.DailyRequest)]
+        [HRMPermission(Policy.Read, FunctionKey.DailyRequest)]
         public ActionResult DailyView(RequestViewModel request)
         {
             request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;

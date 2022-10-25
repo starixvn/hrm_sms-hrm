@@ -100,7 +100,7 @@
     position: absolute;
     top: 1px;
 
-    &.extensionnumber {
+    &.icon-extensionnumber {
         background-position: 0 0;
     }
 
@@ -108,71 +108,71 @@
         background-position: 0 -72px;
     }
 
-    &.mydashboard {
+    &.icon-mydashboard {
         background-position: -168px 0;
     }
 
-    &.myprofile {
+    &.icon-myprofile {
         background-position: -72px -48px;
     }
 
-    &.memberssrequest {
+    &.icon-memberssrequest {
         background-position: -96px -216px;
     }
 
-    &.memberssovertime {
+    &.icon-memberssovertime {
         background-position: -96px -216px;
     }
 
-    &.disciplinesummary {
+    &.icon-disciplinesummary {
         background-position: -96px -216px;
     }
 
-    &.employeesrequest {
+    &.icon-employeesrequest {
         background-position: -96px -216px;
     }
 
-    &.voidrequest {
+    &.icon-voidrequest {
         background-position: -96px -216px;
     }
 
-    &.employeesovertime {
+    &.icon-employeesovertime {
         background-position: -96px -216px;
     }
 
-    &.dailyrequest {
+    &.icon-dailyrequest {
         background-position: -96px -216px;
     }
 
-    &.jobtitlemanagement {
+    &.icon-jobtitlemanagement {
         background-position: -96px -216px;
     }
 
-    &.joblevelmanagement {
+    &.icon-joblevelmanagement {
         background-position: -96px -216px;
     }
 
-    &.usermanagement {
+    &.icon-usermanagement {
         background-position: -24px 0;
     }
 
-    &.contactlist {
+    &.icon-contactlist {
         background-position: -24px 0;
     }
 
-    &.mycalendar {
+    &.icon-mycalendar {
         background-position: -192px 0;
     }
 
-    &.workingcalendars {
+    &.icon-workingcalendars {
         background-position: -192px 0;
     }
 
-    &.myovertime {
+    &.icon-myovertime {
         background-position: -192px -192px;
     }
 
-    &.attendancereport {
+    &.icon-attendancereport {
         background-position: -192px -192px;
     }
 
@@ -188,19 +188,19 @@
         background-position: -144px -216px;
     }
 
-    &.annualleavebalance, &.hospitalizationleavebalance, &.sickleavebalance {
+    &.icon-annualleavebalance, &.icon-hospitalizationleavebalance, &.icon-sickleavebalance {
         background-position: -120px -216px;
     }
 
-    &.leaverequest {
+    &.icon-leaverequest {
         background-position: -24px -216px;
     }
 
-    &.unpaidleave {
+    &.icon-unpaidleave {
         background-position: -24px -216px;
     }
 
-    &.mytimesheet {
+    &.icon-mytimesheet {
         background-position: 0 -216px;
     }
 
@@ -208,27 +208,19 @@
         background-position: -216px -192px;
     }
 
-    &.companymemo {
+    &.icon-companymemo {
         background-position: -24px -240px;
     }
 
-    &.createaccount {
+    &.icon-createaccount {
         background-position: -216px -216px;
     }
 
-    &.teammanagement {
+    &.icon-teammanagement {
         background-position: -96px 0;
     }
 
-    &.functionmanagement {
-        background-position: -96px 0;
-    }
-
-    &.division {
-        background-position: -96px 0;
-    }
-
-    &.unit {
+    &.icon-functionmanagement {
         background-position: -96px 0;
     }
 
@@ -236,28 +228,19 @@
         background-position: -168px -216px;
     }
 
-    &.checkin-checkout {
+    &.icon-checkin-checkout {
         background-position: -144px -48px;
     }
 
-    &.latein-earlyout {
+    &.icon-latein-earlyout {
         background-position: -72px -216px;
     }
 
-    &.changeshift {
+    &.icon-changeshift {
         background-position: -48px -216px;
     }
 
-    &.requeststatistic {
-        background-position: 0 -96px;
-    }
-
-    &.requestsstatistic {
-        background-position: 0 -96px;
-    }
-
-
-    &.reports {
+    &.icon-requeststatistic, &.icon-requestsstatistic, &.icon-reports {
         background-position: 0 -96px;
     }
 
@@ -269,7 +252,7 @@
         background-position: -48px -192px;
     }
 
-    &.keepinview {
+    &.icon-keepinview {
         background-position: -216px -121px;
     }
 
@@ -277,31 +260,23 @@
         background-position: -216px -96px;
     }
 
-    &.timerecord {
+    &.icon-timerecord {
         background-position: -168px -24px;
     }
 
-    &.mymessage {
+    &.icon-mymessage, &.icon-message {
         background-position: -72px 0;
     }
 
-    &.message {
-        background-position: -72px 0;
-    }
-
-    &.shiftstatistic {
+    &.icon-shiftstatistic {
         background-position: -144px -216px;
     }
 
-    &.schedulearrange {
+    &.icon-schedulearrange {
         background-position: 0 -240px;
     }
 
-    &.department {
-        background-position: -96px 0;
-    }
-
-    &.section {
+    &.icon-division, &.icon-unit, &.icon-department, &.icon-section {
         background-position: -96px 0;
     }
 }

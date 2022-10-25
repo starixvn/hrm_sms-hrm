@@ -64,7 +64,6 @@
         public CustomJsonResult GetEmployees(GetEmployeeFilter filter)
         {
             filter.ActorId = EmployeeSession.EmpId;
-            filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<EmployeeSuggestion> employees = scheduleArrangeService.GetEmployees(filter);
 
             return new CustomJsonResult { Data = employees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -74,7 +73,6 @@
         public CustomJsonResult GetWeeklySchedule(WeeklyScheduleFilter filter)
         {
             filter.ActorId = EmployeeSession.EmpId;
-            filter.IsEditUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Read);
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeService.GetWeeklySchedule(filter);
             IEnumerable<WeeklyScheduleViewModel> schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
                 .Select(x => new WeeklyScheduleViewModel
