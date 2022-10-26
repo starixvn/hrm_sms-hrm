@@ -73,13 +73,17 @@
         [Route("api/user/create")]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
-            string[] keyiv = command.Token.Split(":");
-            var rijndaelKey = keyiv[0];
-            var rijndaelIV = keyiv[1];
-            command.Password = cryptoService.Decrypt(command.Password, rijndaelKey, rijndaelIV);
-            command.Password = BCrypt.Net.BCrypt.HashPassword(command.Password);
             command.SiteId = SiteId;
             command.CreatedBy = UserId;
+            if (!string.IsNullOrWhiteSpace(command.BCryptPassword))
+            {
+                string[] keyiv = command.Token.Split(":");
+                var rijndaelKey = keyiv[0];
+                var rijndaelIV = keyiv[1];
+                command.BCryptPassword = cryptoService.Decrypt(command.BCryptPassword, rijndaelKey, rijndaelIV);
+                command.BCryptPassword = BCrypt.Net.BCrypt.HashPassword(command.BCryptPassword);
+            }
+
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             commandResult.ObjectId = command.UserId;
             return Json(commandResult);

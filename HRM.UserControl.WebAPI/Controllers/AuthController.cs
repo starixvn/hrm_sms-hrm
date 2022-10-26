@@ -1,5 +1,6 @@
 ﻿namespace HRM.UserControl.WebAPI.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
@@ -7,15 +8,14 @@
     using HRM.UserControl.Core.Models;
     using HRM.UserControl.Core.Services;
     using HRM.UserControl.Models;
-    using HRM.UserControl.Models.User;
     using HRM.UserControl.Models.Auth;
+    using HRM.UserControl.Models.User;
+    using HRM.UserControl.WebAPI.Criteria.User;
+    using HRM.UserControl.WebAPI.Services;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
-    using HRM.UserControl.WebAPI.Services;
-    using HRM.UserControl.WebAPI.Criteria.User;
-    using System;
-    using Microsoft.AspNetCore.Authorization;
 
     public class AuthController : Controller
     {
@@ -66,7 +66,7 @@
             }
 
             validUsers = validUsers.Where(x => x.IsActive && !x.IsDeleted).ToList();
-            if(validUsers.Count == 0)
+            if (validUsers.Count == 0)
             {
                 loginResult.ErrorMessage = "User was disabled or deleted.";
                 return Json(loginResult);

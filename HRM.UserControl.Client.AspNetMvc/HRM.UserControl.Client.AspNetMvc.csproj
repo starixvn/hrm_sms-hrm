@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HRM.UserControl.Client.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.5\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
+      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.6\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
     </Reference>
     <Reference Include="jose-jwt, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jose-jwt.3.1.1\lib\net461\jose-jwt.dll</HintPath>
@@ -106,6 +106,7 @@
       <Link>smshrmcsharp.ruleset</Link>
     </None>
     <None Include="app.config" />
+    <None Include="HRM.UserControl.Client.AspNetMvc.nuspec" />
     <None Include="HRM.UserControl.Client.AspNetMvc.ruleset" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -77,10 +77,10 @@
       <HintPath>..\packages\Hangfire.SqlServer.1.7.31\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="HRM.UserControl.Client.AspNetMvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.AspNetMvc.1.0.2\lib\net461\HRM.UserControl.Client.AspNetMvc.dll</HintPath>
+      <HintPath>..\packages\HRM.UserControl.Client.AspNetMvc.1.0.3\lib\net461\HRM.UserControl.Client.AspNetMvc.dll</HintPath>
     </Reference>
     <Reference Include="HRM.UserControl.Client.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.5\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
+      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.6\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
     </Reference>
     <Reference Include="jose-jwt, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jose-jwt.3.1.1\lib\net461\jose-jwt.dll</HintPath>

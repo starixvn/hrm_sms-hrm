@@ -5,6 +5,7 @@
     [Serializable]
     public class UpdateUserInfoParam
     {
+        public int? RefId { get; set; }
         public int UserId { get; set; }
         public string Code { get; set; }
         public string Nickname { get; set; }

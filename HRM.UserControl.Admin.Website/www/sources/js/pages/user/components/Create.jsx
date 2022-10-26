@@ -25,12 +25,11 @@ export class CreateUser extends Component {
     handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
         const token = document.getElementById('token').value;
-        const rijndaelKey = token.split(':')[0];
-        const rijndaelIV = token.split(':')[1];
+        const [rijndaelKey, rijndaelIV] = token.split(':');
 
         const params = {
             username: RijndaelService.encrypt(values.username, rijndaelKey, rijndaelIV),
-            password: RijndaelService.encrypt(values.password, rijndaelKey, rijndaelIV),
+            BCryptPassword: RijndaelService.encrypt(values.password, rijndaelKey, rijndaelIV),
             nickname: values.nickname,
             fullName: values.fullName,
             email: values.email,

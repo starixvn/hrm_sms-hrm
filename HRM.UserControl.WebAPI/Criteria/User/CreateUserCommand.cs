@@ -12,15 +12,21 @@
         public string Nickname { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+
+        [SpParam(SqlParamName = "OldPassword")]
         public string Password { get; set; }
-        public string OldPassword { get; set; }
+
+        [SpParam(SqlParamName = "Password")]
+        public string BCryptPassword { get; set; }
+
         public int CreatedBy { get; set; }
+        public int? RefId { get; set; }
 
         [SpParam(Ignored = true)]
         public string Token { get; set; }
 
         public override string GetSettingKey() => "API_User_Insert";
 
-        public override bool IsValid() => SiteId > 0 && !string.IsNullOrWhiteSpace(Password) && CreatedBy > 0;
+        public override bool IsValid() => SiteId > 0 && CreatedBy > 0;
     }
 }

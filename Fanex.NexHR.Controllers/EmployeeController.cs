@@ -223,10 +223,11 @@
                     var rijndaelIV = keyiv[1];
                     var result = userService.Create(new CreateUserParam
                     {
+                        RefId = (int?)commandResult.OutputId,
                         Code = param.Code,
                         Nickname = param.Nickname,
                         FullName = param.FullName,
-                        Password = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIV),
+                        BCryptPassword = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIV),
                         Token = token
                     });
 
@@ -508,6 +509,7 @@
         {
             var result = userService.UpdateInfo(new UpdateUserInfoParam
             {
+                RefId = param.EmployeeId,
                 UserId = userId,
                 Code = param.Code,
                 Nickname = param.Nickname,
