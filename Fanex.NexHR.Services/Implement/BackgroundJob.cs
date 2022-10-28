@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Hosting;
     using Fanex.NexHR.Core;
@@ -15,6 +17,7 @@
         private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(BackgroundJobService));
 
         private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
+        private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticAnnualLeaveBalance.cshtml";
 
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
@@ -142,8 +145,10 @@
             {
                 Year = DateTime.Now.Year
             };
-            var employees = baseService.GetData<AnnualLeaveBalance>(criteria);
+            var (employees, supervisors, statisticSections) = baseService.FetchMultiple<AnnualLeaveBalance, SupervisorApproveLeave, EmployeeDepartmentSections>(criteria);
             var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
+
+            var validEmployees = new List<AnnualLeaveBalance>();
 
             foreach (var employee in employees)
             {
@@ -155,6 +160,8 @@
 
                 if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
                 {
+                    validEmployees.Add(employee);
+
                     var body = string.Format(
                         bodyTemplate,
                         employee.Nickname,
@@ -170,7 +177,82 @@
                 }
             }
 
+            SendMailStatisticAnnualLeave(validEmployees, supervisors, statisticSections);
             logger.Error("SendMailRemindUserToUseAnnualLeave: End");
+        }
+
+        public void SendMailStatisticAnnualLeave(
+            List<AnnualLeaveBalance> validEmployees,
+            IEnumerable<SupervisorApproveLeave> supervisors,
+            IEnumerable<EmployeeDepartmentSections> statisticSections
+        )
+        {
+            var groupSupervisors = supervisors.GroupBy(g => new { g.OwnerId, g.SectionId, g.DepartmentId, g.Email, g.Nickname });
+            var percentTemplate = GetPercentInMail();
+
+            foreach (var item in statisticSections)
+            {
+                var annualLeaveBalance = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
+                double percentLeave = Math.Round((double)annualLeaveBalance / item.TotalEmployee * 100);
+
+                item.AnnualLeaveBalance = annualLeaveBalance;
+                item.PercentLeave = percentLeave;
+            }
+
+            foreach (var item in groupSupervisors)
+            {
+                var statisticSection = statisticSections.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
+
+                if (statisticSection != null && percentTemplate != string.Empty && !string.IsNullOrWhiteSpace(item.Key.Email))
+                {
+                    var statisticTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(statisticEmailTemplate)));
+                    var statistic = string.Format(
+                        statisticTemplate,
+                        item.Key.Nickname,
+                        percentTemplate,
+                        statisticSection.DepartmentCode,
+                        statisticSection.SectionCode,
+                        statisticSection.TotalEmployee,
+                        statisticSection.AnnualLeaveBalance,
+                        statisticSection.PercentLeave
+                        );
+
+                    BackgroundJob.Enqueue(() => emailService.SendEmail(
+                        ConfigSettings.EmailSetting,
+                        item.Key.Email,
+                        string.Empty,
+                        "Statistic Annual Leave Balance",
+                        statistic));
+                }
+            }
+        }
+
+        private static string GetPercentInMail()
+        {
+            var percent = string.Empty;
+            const byte March = 3;
+            const byte June = 6;
+            const byte September = 9;
+            const byte December = 12;
+
+            switch (DateTime.Now.Month)
+            {
+                case March:
+                    percent = "> 75%";
+                    break;
+                case June:
+                    percent = "> 50%";
+                    break;
+                case September:
+                    percent = "> 25%";
+                    break;
+                case December:
+                    percent = "> 0%";
+                    break;
+                default:
+                    break;
+            }
+            return percent;
         }
 
         private static void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)
