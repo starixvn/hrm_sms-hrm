@@ -71,5 +71,15 @@
 
             return new ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>>(new List<TFirst>(), new List<TSecond>());
         }
+
+        public ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>, IEnumerable<TThird>> FetchMultiple<TFirst, TSecond, TThird>(ICriteria criteria)
+        {
+            if (criteria != null && criteria.IsValid())
+            {
+                return dynamicRepository.FetchMultiple<TFirst, TSecond, TThird>(criteria);
+            }
+
+            return new ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>, IEnumerable<TThird>>(new List<TFirst>(), new List<TSecond>(), new List<TThird>());
+        }
     }
 }

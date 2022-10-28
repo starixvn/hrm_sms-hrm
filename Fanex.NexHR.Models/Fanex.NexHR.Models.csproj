@@ -142,6 +142,9 @@
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="BackgroundJob\AnnualLeaveBalance.cs" />
+    <Compile Include="BackgroundJob\EmployeeDepartmentSections.cs" />
+    <Compile Include="BackgroundJob\StatisticEmployeeDepSec.cs" />
+    <Compile Include="BackgroundJob\SupervisorApproveLeave.cs" />
     <Compile Include="CreateEmployeeParam.cs" />
     <Compile Include="DeleteEmployeeParam.cs" />
     <Compile Include="Discipline\IgnoredDisciplineDetailModel.cs" />
