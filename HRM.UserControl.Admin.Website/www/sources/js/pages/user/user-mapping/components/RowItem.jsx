@@ -21,8 +21,22 @@ export class RowItem extends Component {
         };
     }
 
-    handleOnChange = event => {
-        this.setState({ searchkey: event.target.value });
+    handleOnChange = (event, value) => {
+        this.setState({ searchkey: value }, () => {
+            if (value.length > 1) {
+                const params = {
+                    keyword: value,
+                    siteId: null,
+                    statusId: null,
+                    pageIndex: 1,
+                    pageSize: 10
+                };
+
+                this.props.searchUser(params);
+            } else {
+                this.props.setUserGridData(null);
+            }
+        });
     };
 
     handleOnSelect = id => {
@@ -32,9 +46,9 @@ export class RowItem extends Component {
 
         Site.blockUI();
         const params = {
-            userId: window.selectedUser.userId,
+            userId: userId,
             siteId: user.siteId,
-            newUserId: userId
+            newUserId: window.selectedUser.userId
         };
         this.props.updateUserMapping(params).then(response => {
             Site.unblockUI();
@@ -58,18 +72,6 @@ export class RowItem extends Component {
                 <div><strong>{LangHelper.getResource('FullName')}</strong>: {item.fullName}</div>
             </div>
         );
-    };
-
-    handleOnKeyDown = event => {
-        const params = {
-            keyword: event.target.value,
-            siteId: null,
-            statusId: null,
-            pageIndex: 1,
-            pageSize: 10
-        };
-
-        this.props.searchUser(params);
     };
 
     handleOnMenuVisibilityChange = isOpen => {
@@ -104,7 +106,6 @@ export class RowItem extends Component {
                             renderInput={props => <Form.Control {...props} type="text" size="sm"
                                 name="keyword" id="keyword"
                                 className="shadow-none" autoComplete="off"
-                                onKeyDown={this.handleOnKeyDown}
                                 placeHolder="Search user"
                             />}
                             onMenuVisibilityChange={this.handleOnMenuVisibilityChange}
