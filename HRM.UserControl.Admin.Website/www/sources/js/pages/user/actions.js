@@ -35,6 +35,13 @@ const getAllUser = params => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const searchUser = params => async dispatch => {
+    const url = Site.resolveClientUrl('user/getAll');
+    await DataService.postDataAsync(url, params).then(response => {
+        dispatch(setUserGridData(response.data));
+    });
+};
+
 const createUser = params => async dispatch => {
     const url = Site.resolveClientUrl('user/create');
     await DataService.postDataAsync(url, params).then(response => {
@@ -103,6 +110,19 @@ const updateUserSiteStatus = params => async () => {
     return await DataService.postDataAsync(url, params).then(response => response);
 };
 
+const getUserMappingByUserId = userId => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl(`user/getUserMappingByUserId/${userId}`);
+    await DataService.getDataAsync(url).then(response => {
+        dispatch(setUserSites(response.data));
+    }).then(() => Site.unblockUI());
+};
+
+const updateUserMapping = params => async () => {
+    const url = Site.resolveClientUrl('user/updateUserMapping');
+    return await DataService.postDataAsync(url, params).then(response => response);
+};
+
 export const ActionCreators = {
     setGetAllUserParams,
     setUserGridData,
@@ -122,6 +142,7 @@ export const ActionCreators = {
     setUpdateUserSiteRoleResult,
     getAllSite,
     getAllUser,
+    searchUser,
     createUser,
     resetPassword,
     getSiteByUserId,
@@ -130,5 +151,7 @@ export const ActionCreators = {
     assignSiteToUser,
     updateUserSiteRole,
     updateUserSiteStatus,
-    getUserPermission
+    getUserPermission,
+    getUserMappingByUserId,
+    updateUserMapping
 };

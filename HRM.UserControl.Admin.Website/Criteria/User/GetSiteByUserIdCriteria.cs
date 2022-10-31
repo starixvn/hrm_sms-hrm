@@ -9,6 +9,6 @@
 
         public override string GetSettingKey() => "Site_GetByUserId";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => UserId > 0;
     }
 }

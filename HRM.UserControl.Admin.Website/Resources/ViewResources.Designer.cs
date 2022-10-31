@@ -160,6 +160,15 @@ namespace HRM.UserControl.Admin.Website.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Mapping.
+        /// </summary>
+        public static string UserMapping {
+            get {
+                return ResourceManager.GetString("UserMapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wrong username or password!.
         /// </summary>
         public static string WrongUsernameOrPassword {

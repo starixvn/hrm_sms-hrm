@@ -72,7 +72,7 @@ export class DataGrid extends Component {
 
         return <Dropdown>
             <Dropdown.Toggle as={customDropdown} id="dropdown-basic" />
-            <Dropdown.Menu popperConfig={{ strategy: "fixed" }}>
+            <Dropdown.Menu popperConfig={{ strategy: 'fixed' }}>
                 {
                     window.hasHostPermissionOnUser &&
                     <>
@@ -82,9 +82,17 @@ export class DataGrid extends Component {
                         <Dropdown.Divider />
                     </>
                 }
-                <Dropdown.Item href={Site.resolveClientUrl(`user/assignSite/${user.userId}`)}>View Sites</Dropdown.Item>
+                <Dropdown.Item href={Site.resolveClientUrl(`user/assignSite/${user.userId}`)}>
+                    {LangHelper.getResource('ViewSites')}
+                </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href={Site.resolveClientUrl(`user/permission/${user.userId}`)}>View Permission</Dropdown.Item>
+                <Dropdown.Item href={Site.resolveClientUrl(`user/permission/${user.userId}`)}>
+                    {LangHelper.getResource('ViewPermission')}
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item href={Site.resolveClientUrl(`user/usermapping/${user.userId}`)}>
+                    {LangHelper.getResource('ViewMapping')}
+                </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>;
     };

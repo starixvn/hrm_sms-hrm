@@ -1,0 +1,34 @@
+﻿@import '../../abstracts/mixins';
+@import '../../components/react-grid/react-grid';
+@import '../../components/form-filter';
+@import '../../components/forms';
+@import '../../components/icons';
+@import '../../components/tables';
+@import '../../components/react-select';
+@import "../../components/modal";
+@import "../../components/messages";
+
+#app-container {
+    width: 720px;
+
+    .user-info {
+        background-color: #e9ecef;
+    }
+
+    .autocomplete-container {
+        width: 100%;
+        margin-bottom: 5px;
+
+        .autocomplete-items {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            max-height: 40%;
+            overflow: auto;
+
+            .autocomplete-item {
+                padding: 5px;
+                border-bottom: 1px solid #e9ecef;
+            }
+        }
+    }
+}

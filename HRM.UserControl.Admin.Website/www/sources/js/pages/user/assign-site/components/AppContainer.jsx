@@ -28,7 +28,7 @@ export class AppContainer extends Component {
         Site.blockUI();
         const { siteId, isActive } = this.props.updateUserSiteStatusModalDialog.site;
         this.props.updateUserSiteStatus({ userId: window.selectedUser.userId, siteId, isActive: !isActive }).then(response => {
-            Site.unblockUI()
+            Site.unblockUI();
             this.closeConfirmUpdateUserSiteStatus();
             if (response.data.isSuccessful) {
                 const message = isActive ? 'DeactivatedSuccessfully' : 'ActivatedSuccessfully';

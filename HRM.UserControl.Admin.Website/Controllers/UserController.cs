@@ -146,5 +146,35 @@
             IList<FunctionPermission> permissions = await userService.GetFunctionPermissionAsync(siteId, userId);
             return Json(new { functions, permissions });
         }
+
+        public async Task<IActionResult> UserMapping(int id)
+        {
+            var user = await userService.GetByIdAsync(id);
+            if (user == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            user.Password = string.Empty;
+            ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.UserManagement, Policy.Host);
+            return View("UserMapping", user);
+        }
+
+        public async Task<IActionResult> GetUserMappingByUserId(int id)
+        {
+            var criteria = new GetMappingByUserIdCriteria { UserId = id };
+            var mappings = await baseService.GetDataAsync<UserMapping>(criteria);
+
+            return Json(mappings);
+        }
+
+        [HttpPost]
+        [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> UpdateUserMapping([FromBody] UpdateUserMappingCommand command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
     }
 }

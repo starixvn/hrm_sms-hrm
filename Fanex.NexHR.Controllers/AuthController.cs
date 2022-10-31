@@ -108,12 +108,12 @@
 
         public ActionResult SSO(string userId, string onUserId, string time, string redirectUrl = null)
         {
+            const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
             var userIdValue = Cryptography.DecryptPassword(userId.Replace(" ", "+"));
             var onUserIdValue = Cryptography.DecryptPassword(onUserId.Replace(" ", "+"));
             var timeValue = Cryptography.DecryptPassword(time.Replace(" ", "+"));
             var currentTime = authService.SSOGetTime();
-            TimeSpan expiration = DateTime.ParseExact(currentTime, "yyyy-MM-dd HH:mm:ss.fff", null)
-                - DateTime.ParseExact(timeValue, "yyyy-MM-dd HH:mm:ss.fff", null);
+            TimeSpan expiration = DateTime.ParseExact(currentTime, DateTimeFormat, null) - DateTime.ParseExact(timeValue, DateTimeFormat, null);
             const byte TimeExpiration = 30;
             if (expiration.TotalSeconds <= TimeExpiration)
             {
@@ -130,16 +130,21 @@
                 LoginResult loginResult = authService.SSOLogin(ssoParam);
                 if (loginResult.IsSuccessfull)
                 {
+                    EmployeeSession employee = hrmAuthService.GetByUserId(userControlSession.UserId);
+                    if(employee == null)
+                    {
+                        return RedirectToAction("Login");
+                    }
+
                     userControlSession.UserId = Convert.ToInt32(userIdValue);
                     userControlSession.SiteId = userControlSettings.SiteId;
                     userControlSession.JwtToken = loginResult.JwtToken;
                     userControlSession.OnUserId = loginResult.OnUserId;
                     userControlSession.MenuItems = userService.GetMenuItem();
                     userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
-                    userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, true);
+                    userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
 
-                    EmployeeSession employee = hrmAuthService.GetByUserId(userControlSession.UserId);
-                    userControlSession.Set<EmployeeSession>(SessionKey.Employee, employee);
+                    userControlSession.Set(SessionKey.Employee, employee);
                     FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
                     return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
                 }

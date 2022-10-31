@@ -153,4 +153,7 @@
   <data name="RolePermission" xml:space="preserve">
     <value>Role Permission</value>
   </data>
+  <data name="UserMapping" xml:space="preserve">
+    <value>User Mapping</value>
+  </data>
 </root>

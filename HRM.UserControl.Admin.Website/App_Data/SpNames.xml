@@ -9,6 +9,8 @@
         <Setting Key="User_UpdateSiteRole" SpName="User_UpdateSiteRole" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_GetAvailableSites" SpName="User_GetAvailableSites" DbName="bodb_IUC" Plain="0" />
         <Setting Key="User_AssignSite" SpName="User_AssignSite" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetMapping" SpName="User_GetMapping" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_UpdateMapping" SpName="User_UpdateMapping" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Site">
         <Setting Key="Site_GetAll" SpName="Site_GetAll" DbName="bodb_IUC" Plain="0" />

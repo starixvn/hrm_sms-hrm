@@ -51,7 +51,12 @@ export class Filter extends Component {
 
     render() {
         const { keyword, status, site } = this.state;
-        const siteOptions = this.props.sites.map(item => { return { value: item.siteId, label: item.siteName }; });
+        const siteOptions = this.props.sites.map(item => {
+            return {
+                value: item.siteId,
+                label: item.siteName
+            };
+        });
         siteOptions.unshift({ value: null, label: 'All' });
 
         const statusOptions = [{ value: null, label: 'All' },
