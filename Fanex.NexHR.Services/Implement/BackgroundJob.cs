@@ -12,6 +12,8 @@
 
     public class BackgroundJobService : IBackgroundJobService
     {
+        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(BackgroundJobService));
+
         private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
 
         private readonly IBaseService baseService;
@@ -38,12 +40,18 @@
 
         public void PublishSchedule()
         {
+            logger.Error("PublishSchedule: Start");
+
             var criteria = new PublishScheduleCriteria();
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("PublishSchedule: End");
         }
 
         public void InsertScheduleByDefaultShift()
         {
+            logger.Error("InsertScheduleByDefaultShift: Start");
+
             var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
             var toDate = fromDate.AddDays(6);
             var criteria = new InsertScheduleByDefaultShiftCriteria
@@ -51,12 +59,15 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("InsertScheduleByDefaultShift: Start");
         }
 
         public void InsertScheduleByWeeklyDefaultShift()
         {
+            logger.Error("InsertScheduleByWeeklyDefaultShift: Start");
+
             var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
             var toDate = fromDate.AddDays(6);
             var criteria = new InsertScheduleByWeeklyDefaultShiftCriteria
@@ -64,41 +75,56 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("InsertScheduleByWeeklyDefaultShift: Start");
         }
 
         public void InsertHolidayAutomatically()
         {
+            logger.Error("InsertHolidayAutomatically: Start");
+
             var year = DateTime.Now.Year + 1;
             holidayService.AutoInsertHolidayOnYear(year);
+
+            logger.Error("InsertHolidayAutomatically: End");
         }
 
         public void UpdateWorkingHourPerDay()
         {
-            var criteria = new UpdateWorkingHourPerDayCriteria();
+            logger.Error("UpdateWorkingHourPerDay: Start");
 
+            var criteria = new UpdateWorkingHourPerDayCriteria();
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("UpdateWorkingHourPerDay: End");
         }
 
         public void UpdateAnnualLeaveBalance()
         {
+            logger.Error("UpdateAnnualLeaveBalance: Start");
+
             var criteria = new UpdateAnnualLeaveBalanceCriteria
             {
                 Year = DateTime.Now.Year + 1
             };
 
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("UpdateAnnualLeaveBalance: End");
         }
 
         public void UpdateAnnualLeaveBalanceForNewEmployee()
         {
+            logger.Error("UpdateAnnualLeaveBalanceForNewEmployee: Start");
+
             var criteria = new UpdateAnnualLeaveBalanceForNewEmployeeCriteria
             {
                 Year = DateTime.Now.Year
             };
-
             baseService.ExecuteNonQuery(criteria);
+
+            logger.Error("UpdateAnnualLeaveBalanceForNewEmployee: End");
         }
 
         public async Task SyncWorkingShiftAsync()
@@ -107,8 +133,11 @@
         }
 
         #region Auto send mail remind user to use AL
+
         public void SendMailRemindUserToUseAnnualLeave()
         {
+            logger.Error("SendMailRemindUserToUseAnnualLeave: Start");
+
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = DateTime.Now.Year
@@ -140,6 +169,8 @@
                         body));
                 }
             }
+
+            logger.Error("SendMailRemindUserToUseAnnualLeave: End");
         }
 
         private static void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)
@@ -160,6 +191,7 @@
                         percentInMail = "over 75% ";
                     }
                     break;
+
                 case June:
                     if (percentAnnualLeaveRemaining > Fifty)
                     {
@@ -167,6 +199,7 @@
                         percentInMail = "over 50% ";
                     }
                     break;
+
                 case September:
                     if (percentAnnualLeaveRemaining > TwentyFive)
                     {
@@ -174,17 +207,20 @@
                         percentInMail = "over 25% ";
                     }
                     break;
+
                 case December:
                     if (percentAnnualLeaveRemaining > 0)
                     {
                         isSentMail = true;
                     }
                     break;
+
                 default:
                     // nothing
                     break;
             }
         }
-        #endregion
+
+        #endregion Auto send mail remind user to use AL
     }
 }
