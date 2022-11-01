@@ -80,7 +80,7 @@
         display: flex;
         align-items: center;
         height: 38px;
-        margin-bottom: 42px;
+        margin-bottom: 40px;
 
         &:hover > .fa {
             color: #B3450A;
@@ -98,8 +98,10 @@
             color: #535353;
         }
 
-        .fa-eye {
-            left: 50px;
+        .fa-eye, .fa-eye-slash {
+            margin-left: -44px;
+            margin-top: -24px;
+            position: relative;
         }
 
         .form-control {
@@ -118,6 +120,8 @@
             &:hover {
                 background: #FEF3EE;
                 box-shadow: none;
+                border: none;
+                color: #B3450A !important;
 
                 &::placeholder {
                     color: #B3450A;
@@ -134,6 +138,7 @@
 
             &:focus {
                 background: #EBF6FF;
+                color: #013966 !important;
 
                 &::placeholder {
                     color: #013966;

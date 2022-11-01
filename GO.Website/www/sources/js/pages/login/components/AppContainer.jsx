@@ -13,7 +13,8 @@ class AppContainer extends Component {
             password: '',
             errors: {},
             result: null,
-            isSubmiting: false
+            isSubmiting: false,
+            type: 'password'
         };
     }
 
@@ -61,6 +62,10 @@ class AppContainer extends Component {
         }
     };
 
+    showPassword = () => this.setState(({ type }) => ({
+        type: type === 'text' ? 'password' : 'text'
+    }))
+
     render() {
         const { username, password, errors, result } = this.state;
         return (
@@ -89,12 +94,13 @@ class AppContainer extends Component {
                                         <span className="error">No Empty</span>
                                     </div>
                                     <div className="group">
-                                        <i className="fa fa-lock" />
-                                        <Form.Control type="password" size="sm" isInvalid={errors && errors.password}
+                                        <i className="fa fa-lock " />
+                                        <Form.Control type={this.state.type} size="sm" isInvalid={errors && errors.password}
                                             className="form-control" placeholder={LangHelper.getResource('Password')}
                                             value={password} onChange={event => this.handleChange('password', event.target.value)}
                                         />
                                         <span className="error">No Empty</span>
+                                        <span className={this.state.type == "password" ? 'fa fa-eye' : 'fa fa-eye-slash'} onClick={this.showPassword}></span>
                                     </div>
                                     <div className="group group-login">
                                         <Button className='btn-login' type="submit" variant="primary" size="sm" style={{ width: '100%' }}
