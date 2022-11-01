@@ -30,7 +30,7 @@ export default class Header extends PureComponent {
             <nav className="navbar navbar-inverse">
                 <div className="pull-left left-bar">
                     <a className="navbar-brand" href={Site.resolveClientUrl('home/index')}>
-                        <img src={Site.resolveClientUrl('css/images/logo2.svg')} alt="GO System" />
+                        <img src={Site.resolveClientUrl('css/images/logo.svg')} alt="GO System" />
                     </a>
                 </div>
                 <div className="user-info pull-right">
@@ -38,7 +38,7 @@ export default class Header extends PureComponent {
                         <Dropdown.Toggle id="dropdown-user">
                             {nickname}
                             <span className="user-avatar">
-                                <i className="fa fa-user" style={{ marginTop: 10 }} />
+                                <i className="fa fa-user" style={{ marginTop: 8 }} />
                             </span>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>

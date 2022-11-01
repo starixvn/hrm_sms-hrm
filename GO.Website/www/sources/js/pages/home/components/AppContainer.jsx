@@ -25,13 +25,13 @@ class AppContainer extends Component {
             const trees = [];
             for (let i = 0; i < menu.level; i++) {
                 if (i === menu.level - 1) {
-                    trees.push(<span key={i}>&#9492;&#9472;</span>);
+                    //trees.push(<span key={i}>&#9492;&#9472;</span>);
                 } else {
-                    trees.push(<span key={i} className="invisible">&#9492;&#9472;</span>);
+                    //trees.push(<span key={i} className="invisible">&#9492;&#9472;</span>);
                 }
             }
 
-            const row = <ListGroup.Item key={menu.menuItemId} className={!menu.url ? 'none' : '' }>
+            const row = <ListGroup.Item key={menu.menuItemId} className={!menu.url ? 'none' : ''}>
                 {
                     menu.url &&
                     <>
@@ -62,6 +62,10 @@ class AppContainer extends Component {
         });
     };
 
+    handleDropdown = event => {
+        event.currentTarget.classList.toggle('show-sub-item');
+    };
+
     render() {
         const { sites } = this.state;
         return (
@@ -76,16 +80,16 @@ class AppContainer extends Component {
                                         site.menuItems.map(menu => {
                                             return (
                                                 <Fragment key={menu.menuItemId}>
-                                                    <ListGroup.Item className={!menu.url ? 'none' : ''}>
+                                                    <ListGroup.Item className={!menu.url ? 'none' : 'item-single'} onClick={this.handleDropdown}>
                                                         {
                                                             menu.url &&
-                                                            <Card.Link onClick={event => this.onClick(event, menu)}>
+                                                            <Card.Link onClick={event => this.onClick(event, menu)} >
                                                                 {menu.menuItemName}
                                                             </Card.Link>
                                                         }
-                                                        {!menu.url && <span>{menu.menuItemName}</span>}
+                                                        {!menu.url && <span>{menu.menuItemName}<i className="fa fa-angle-down"></i></span>}
                                                     </ListGroup.Item>
-                                                    {this.renderChildMenus(menu.childs)}
+                                                    <div className={!menu.url ? 'sub-item' : ''}>{this.renderChildMenus(menu.childs)}</div>
                                                 </Fragment>
                                             );
                                         })
