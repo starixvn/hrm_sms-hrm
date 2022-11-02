@@ -44,8 +44,7 @@ class AppContainer extends Component {
             this.setState({ isSubmiting: true });
             const { username, password } = this.state;
             const token = document.getElementById('token').value;
-            const rijndaelKey = token.split(':')[0];
-            const rijndaelIV = token.split(':')[1];
+            const [rijndaelKey, rijndaelIV] = token.split(':');
             const model = {
                 username: RijndaelService.encrypt(username, rijndaelKey, rijndaelIV),
                 password: RijndaelService.encrypt(password, rijndaelKey, rijndaelIV),
@@ -62,9 +61,11 @@ class AppContainer extends Component {
         }
     };
 
-    showPassword = () => this.setState(({ type }) => ({
-        type: type === 'text' ? 'password' : 'text'
-    }))
+    showPassword = () => {
+        this.setState(({ type }) => ({
+            type: type === 'text' ? 'password' : 'text'
+        }));
+    };
 
     render() {
         const { username, password, errors, result } = this.state;
@@ -100,7 +101,9 @@ class AppContainer extends Component {
                                             value={password} onChange={event => this.handleChange('password', event.target.value)}
                                         />
                                         <span className="error">No Empty</span>
-                                        <span className={this.state.type == "password" ? 'fa fa-eye' : 'fa fa-eye-slash'} onClick={this.showPassword}></span>
+                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`}
+                                            onClick={this.showPassword}
+                                        />
                                     </div>
                                     <div className="group group-login">
                                         <Button className='btn-login' type="submit" variant="primary" size="sm" style={{ width: '100%' }}
@@ -124,7 +127,7 @@ class AppContainer extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 }
