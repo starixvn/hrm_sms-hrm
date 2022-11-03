@@ -11,6 +11,7 @@ const userSlice = createSlice({
             pageIndex: 1,
             pageSize: DefaultPageSize
         },
+        users: [],
         sites: [],
         userGridData: null,
         userSites: [],
@@ -30,6 +31,9 @@ const userSlice = createSlice({
     reducers: {
         setGetAllUserParams: (state, action) => {
             state.getAllUserParams = action.payload;
+        },
+        setUsers: (state, action) => {
+            state.users = action.payload;
         },
         setUserGridData: (state, action) => {
             state.userGridData = action.payload;
@@ -83,6 +87,7 @@ const { actions, reducer } = userSlice;
 
 export const {
     setGetAllUserParams,
+    setUsers,
     setUserGridData,
     setSites,
     setUserSites,

@@ -2,6 +2,7 @@
 import DataService from '@jsroot/common/dataService';
 import {
     setGetAllUserParams,
+    setUsers,
     setUserGridData,
     setSites,
     setUserSites,
@@ -33,13 +34,6 @@ const getAllUser = params => async dispatch => {
     await DataService.postDataAsync(url, params).then(response => {
         dispatch(setUserGridData(response.data));
     }).then(() => Site.unblockUI());
-};
-
-const searchUser = params => async dispatch => {
-    const url = Site.resolveClientUrl('user/getAll');
-    await DataService.postDataAsync(url, params).then(response => {
-        dispatch(setUserGridData(response.data));
-    });
 };
 
 const createUser = params => async dispatch => {
@@ -118,6 +112,13 @@ const getUserMappingByUserId = userId => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const searchUserMapping = params => async dispatch => {
+    const url = Site.resolveClientUrl('user/searchUserMapping');
+    await DataService.postDataAsync(url, params).then(response => {
+        dispatch(setUsers(response.data));
+    });
+};
+
 const updateUserMapping = params => async () => {
     const url = Site.resolveClientUrl('user/updateUserMapping');
     return await DataService.postDataAsync(url, params).then(response => response);
@@ -125,6 +126,7 @@ const updateUserMapping = params => async () => {
 
 export const ActionCreators = {
     setGetAllUserParams,
+    setUsers,
     setUserGridData,
     setSites,
     setUserSites,
@@ -142,7 +144,6 @@ export const ActionCreators = {
     setUpdateUserSiteRoleResult,
     getAllSite,
     getAllUser,
-    searchUser,
     createUser,
     resetPassword,
     getSiteByUserId,
@@ -153,5 +154,6 @@ export const ActionCreators = {
     updateUserSiteStatus,
     getUserPermission,
     getUserMappingByUserId,
+    searchUserMapping,
     updateUserMapping
 };

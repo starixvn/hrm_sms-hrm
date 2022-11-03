@@ -26,23 +26,21 @@ export class RowItem extends Component {
             if (value.length > 1) {
                 const params = {
                     keyword: value,
-                    siteId: null,
-                    statusId: null,
-                    pageIndex: 1,
-                    pageSize: 10
+                    siteId: this.state.user.siteId,
+                    statusId: null
                 };
 
-                this.props.searchUser(params);
+                this.props.searchUserMapping(params);
             } else {
-                this.props.setUserGridData(null);
+                this.props.setUsers([]);
             }
         });
     };
 
     handleOnSelect = id => {
         const userId = parseInt(id, 10);
-        const index = this.props.userGridData.data.findIndex(item => item.userId === userId);
-        const user = { ... this.state.user, ...this.props.userGridData.data[index] };
+        const index = this.props.users.findIndex(item => item.userId === userId);
+        const user = { ... this.state.user, ...this.props.users[index] };
 
         Site.blockUI();
         const params = {
@@ -76,7 +74,7 @@ export class RowItem extends Component {
 
     handleOnMenuVisibilityChange = isOpen => {
         if (!isOpen) {
-            this.props.setUserGridData(null);
+            this.props.setUsers([]);
             this.setState({ searchkey: '' });
         }
     };
@@ -84,8 +82,8 @@ export class RowItem extends Component {
     render() {
         const user = this.state.user;
         let items = [];
-        if (this.props.userGridData && this.props.userGridData.data) {
-            items = this.props.userGridData.data;
+        if (this.props.users.length > 0) {
+            items = this.props.users;
         }
 
         return (
@@ -106,7 +104,7 @@ export class RowItem extends Component {
                             renderInput={props => <Form.Control {...props} type="text" size="sm"
                                 name="keyword" id="keyword"
                                 className="shadow-none" autoComplete="off"
-                                placeHolder="Search user"
+                                placeholder="Search user"
                             />}
                             onMenuVisibilityChange={this.handleOnMenuVisibilityChange}
                         />
@@ -124,8 +122,8 @@ export class RowItem extends Component {
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { userGridData } = state;
-    return { userGridData };
+    const { users } = state;
+    return { users };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RowItem);

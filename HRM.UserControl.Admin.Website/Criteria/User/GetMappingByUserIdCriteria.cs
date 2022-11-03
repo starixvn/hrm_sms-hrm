@@ -6,7 +6,7 @@
     {
         public int UserId { get; set; }
 
-        public override string GetSettingKey() => "User_GetMapping";
+        public override string GetSettingKey() => "UserMapping_GetByUserId";
 
         public override bool IsValid() => UserId > 0;
     }

@@ -40,6 +40,7 @@
     Name: 'Name',
     NewPassword: 'New Password',
     Nickname: 'Nickname',
+    NoEmpty: 'No Empty',
     OK: 'OK',
     Order: 'Order',
     Password: 'Password',

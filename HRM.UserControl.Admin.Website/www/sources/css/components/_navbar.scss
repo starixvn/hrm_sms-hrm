@@ -140,8 +140,10 @@
                 background: unset;
                 border: unset;
                 padding-right: 0;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
                 color: #535353;
-                font-size: 14px;
 
                 &:focus {
                     box-shadow: unset;
@@ -175,13 +177,17 @@
         .user-avatar {
             width: 32px;
             height: 32px;
-            border-radius: 50%;
-            background: #d4d4d4;
+            border-radius: 8px;
+            background: #E2F2FF;
             display: inline-block;
             vertical-align: middle;
             position: relative;
-            margin-left: 10px;
+            margin: 0 8px;
             top: -2px;
+
+            .fa-user {
+                color: #013966;
+            }
         }
     }
 }

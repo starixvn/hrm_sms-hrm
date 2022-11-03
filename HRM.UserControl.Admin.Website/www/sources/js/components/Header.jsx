@@ -43,7 +43,7 @@ export default class Header extends PureComponent {
             <nav className="navbar navbar-inverse">
                 <div className="pull-left left-bar">
                     <a className="navbar-brand" href={Site.resolveClientUrl('home/index')}>
-                        <img src={Site.resolveClientUrl('css/images/logo2.svg')} alt="User Control" />
+                        <img src={Site.resolveClientUrl('css/images/logo.svg')} alt="User Control" />
                     </a>
                 </div>
                 <div className={`pull-left nav-hamberger ${expended ? 'expended' : ''}`}>

@@ -13,7 +13,8 @@ class AppContainer extends Component {
             password: '',
             errors: {},
             result: null,
-            isSubmiting: false
+            isSubmiting: false,
+            type: 'password'
         };
     }
 
@@ -43,8 +44,7 @@ class AppContainer extends Component {
             this.setState({ isSubmiting: true });
             const { username, password } = this.state;
             const token = document.getElementById('token').value;
-            const rijndaelKey = token.split(':')[0];
-            const rijndaelIV = token.split(':')[1];
+            const [rijndaelKey, rijndaelIV] = token.split(':');
             const model = {
                 username: RijndaelService.encrypt(username, rijndaelKey, rijndaelIV),
                 password: RijndaelService.encrypt(password, rijndaelKey, rijndaelIV),
@@ -61,50 +61,73 @@ class AppContainer extends Component {
         }
     };
 
+    showPassword = () => {
+        this.setState(({ type }) => ({
+            type: type === 'text' ? 'password' : 'text'
+        }));
+    };
+
     render() {
         const { username, password, errors, result } = this.state;
         return (
-            <Form noValidate onSubmit={this.handleSubmit}>
-                <div className="logo">
-                    <img alt="logo" src={Site.resolveClientUrl('css/images/logo.svg')} alt="User Control" />
+            <div className="login">
+                <div className="login-main">
+                    <div className="container">
+                        <div className="login-flex">
+                            <div className="login-left">
+                                <img className="img-res" src={Site.resolveClientUrl('css/images/login/login.png')} alt="user login" />
+                            </div>
+                            <div className="login-form">
+                                <Form noValidate onSubmit={this.handleSubmit}>
+                                    <div className="login-logo">
+                                        <img alt="logo" src={Site.resolveClientUrl('css/images/login/logo.svg')} className="img-res" />
+                                    </div>
+                                    {
+                                        result && !result.issuccessful &&
+                                        <div className="text-danger">{result.message}</div>
+                                    }
+                                    <div className="group">
+                                        <i className="fa fa-user" />
+                                        <Form.Control type="text" size="sm" isInvalid={errors && errors.username}
+                                            className="form-control" placeholder={LangHelper.getResource('Username')}
+                                            value={username} onChange={event => this.handleChange('username', event.target.value)}
+                                        />
+                                        <span className="error">{LangHelper.getResource('NoEmpty')}</span>
+                                    </div>
+                                    <div className="group">
+                                        <i className="fa fa-lock " />
+                                        <Form.Control type={this.state.type} size="sm" isInvalid={errors && errors.password}
+                                            className="form-control" placeholder={LangHelper.getResource('Password')}
+                                            value={password} onChange={event => this.handleChange('password', event.target.value)}
+                                        />
+                                        <span className="error">{LangHelper.getResource('NoEmpty')}</span>
+                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`}
+                                            onClick={this.showPassword}
+                                        />
+                                    </div>
+                                    <div className="group group-login">
+                                        <Button className='btn-login' type="submit" variant="primary" size="sm" style={{ width: '100%' }}
+                                            onClick={this.handleSubmit}
+                                            disabled={this.state.isSubmiting}
+                                        >
+                                            {LangHelper.getResource('Login')}
+                                            {
+                                                this.state.isSubmiting &&
+                                                <Spinner className="ml-3"
+                                                    as="span"
+                                                    animation="border"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                            }
+                                        </Button>
+                                    </div>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <img className="image-visual" src={Site.resolveClientUrl('css/images/login/keyvisual.png')} alt="user login" />
-                {
-                    result && !result.isSuccessful &&
-                    <div className="group group--error"><div className="text-danger">{result.message}</div></div>
-                }
-                <div className="group">
-                    <span className="fa fa-user" />
-                    <Form.Control type="text" size="sm" isInvalid={errors && errors.username}
-                        className="form-control" placeholder={LangHelper.getResource('Username')}
-                        value={username} onChange={event => this.handleChange('username', event.target.value)}
-                    />
-                </div>
-                <div className="group">
-                    <i className="fa fa-lock" />
-                    <Form.Control type="password" size="sm" isInvalid={errors && errors.password}
-                        className="form-control" placeholder={LangHelper.getResource('Password')}
-                        value={password} onChange={event => this.handleChange('password', event.target.value)}
-                    />
-                </div>
-                <div className="group group-login">
-                    <Button className='btn-login' type="submit" variant="primary" size="sm" style={{ width: '100%' }}
-                        onClick={this.handleSubmit}
-                        disabled={this.state.isSubmiting}
-                    >
-                        {LangHelper.getResource('Login')}
-                        {
-                            this.state.isSubmiting &&
-                            <Spinner className="ml-3"
-                                as="span"
-                                animation="border"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                        }
-                    </Button>
-                </div>
-            </Form>
+            </div>
         );
     }
 }

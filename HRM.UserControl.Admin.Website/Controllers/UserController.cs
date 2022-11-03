@@ -9,6 +9,7 @@
     using HRM.UserControl.Admin.Website.Models.Site;
     using HRM.UserControl.Admin.Website.Models.User;
     using HRM.UserControl.Admin.Website.Services;
+    using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;
@@ -19,6 +20,7 @@
     [UCPermission(FunctionKey = FunctionKey.UserManagement, Policy = Policy.Read)]
     public class UserController : BaseController
     {
+        private readonly IUserControlSettings userControlSettings;
         private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
         private readonly ICryptoService cryptoService;
@@ -26,12 +28,14 @@
         private readonly IUserService userService;
 
         public UserController(
+            IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
             IBaseService baseService,
             ICryptoService cryptoService,
             IFunctionService functionService,
             IUserService userService)
         {
+            this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
             this.baseService = baseService;
             this.cryptoService = cryptoService;
@@ -164,8 +168,16 @@
         {
             var criteria = new GetMappingByUserIdCriteria { UserId = id };
             var mappings = await baseService.GetDataAsync<UserMapping>(criteria);
+            mappings = mappings.Where(x => x.SiteId != userControlSettings.SiteId).ToList();
 
             return Json(mappings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchUserMapping([FromBody] SearchUserMappingCriteria criteria)
+        {
+            var users = await baseService.GetDataAsync<Models.User.User>(criteria);
+            return Json(users);
         }
 
         [HttpPost]
