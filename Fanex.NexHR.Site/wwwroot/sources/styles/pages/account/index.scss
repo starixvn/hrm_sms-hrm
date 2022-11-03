@@ -18,13 +18,18 @@
 
     .avatar {
         border: 1px solid #848484;
-        width: 80px;
-        height: 80px;
+        width: 78px;
+        height: 104px;
         margin-right: 10px;
 
-        img {
+        .fullSizeAvatar {
             width: 100%;
             height: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 

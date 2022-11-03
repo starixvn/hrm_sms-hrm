@@ -79,8 +79,8 @@ function showFullAvatar(codeId, nickname) {
         title: nickname,
         modal: true,
         resizable: false,
-        width: 190,
-        height: 230,
+        width: 156,
+        height: 208,
         dialogClass: "popup-avatar"
     };
 
