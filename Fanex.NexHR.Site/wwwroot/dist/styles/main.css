@@ -11027,7 +11027,7 @@ a:focus, a:hover {
     color: #FFFFFF;
     position: absolute;
     z-index: 2;
-    top: 250px;
+    top: 225px;
     left: 50%;
     transform: translate(-50%, -50%); }
   .popup-avatar .ui-dialog-content {
