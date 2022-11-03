@@ -56,7 +56,7 @@
 
 .login-logo {
     text-align: center;
-    margin-bottom: 44px;
+    margin-bottom: 48px;
 }
 
 .login-logo .img-res {
@@ -82,18 +82,14 @@
         height: 38px;
         margin-bottom: 40px;
 
-        &:hover > .fa {
-            color: #B3450A;
-        }
-
         &:last-child {
             margin-bottom: 0;
         }
 
         .fa {
             position: absolute;
-            top: 12px;
-            left: 13px;
+            top: 10px;
+            left: 14px;
             font-size: 19px;
             color: #535353;
         }
@@ -102,6 +98,10 @@
             margin-left: -44px;
             margin-top: -24px;
             position: relative;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         .form-control {
@@ -119,9 +119,11 @@
 
             &:hover {
                 background: #FEF3EE;
-                box-shadow: none;
-                border: none;
                 color: #B3450A !important;
+
+                ~ .fa-user, ~ .fa-lock {
+                    color: #B3450A;
+                }
 
                 &::placeholder {
                     color: #B3450A;
@@ -143,6 +145,18 @@
                 &::placeholder {
                     color: #013966;
                 }
+
+                &::-webkit-input-placeholder {
+                    color: #013966;
+                }
+
+                &:-ms-input-placeholder {
+                    color: #013966;
+                }
+
+                ~ .fa-user, ~ .fa-lock {
+                    color: #013966;
+                }
             }
         }
 
@@ -160,9 +174,13 @@
             &:-ms-input-placeholder {
                 color: #C2291A;
             }
+
+            ~ .fa-user, ~ .fa-lock {
+                color: #C2291A;
+            }
         }
 
-        .is-invalid + .error {
+        .is-invalid ~ .error {
             display: block;
         }
 

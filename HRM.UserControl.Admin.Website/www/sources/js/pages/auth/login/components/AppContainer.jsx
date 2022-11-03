@@ -87,23 +87,21 @@ class AppContainer extends Component {
                                         <div className="text-danger">{result.message}</div>
                                     }
                                     <div className="group">
-                                        <i className="fa fa-user" />
                                         <Form.Control type="text" size="sm" isInvalid={errors && errors.username}
                                             className="form-control" placeholder={LangHelper.getResource('Username')}
                                             value={username} onChange={event => this.handleChange('username', event.target.value)}
                                         />
+                                        <i className="fa fa-user" />
                                         <span className="error">{LangHelper.getResource('NoEmpty')}</span>
                                     </div>
                                     <div className="group">
-                                        <i className="fa fa-lock " />
                                         <Form.Control type={this.state.type} size="sm" isInvalid={errors && errors.password}
                                             className="form-control" placeholder={LangHelper.getResource('Password')}
                                             value={password} onChange={event => this.handleChange('password', event.target.value)}
                                         />
+                                        <i className="fa fa-lock " />
+                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`} onClick={this.showPassword} />
                                         <span className="error">{LangHelper.getResource('NoEmpty')}</span>
-                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`}
-                                            onClick={this.showPassword}
-                                        />
                                     </div>
                                     <div className="group group-login">
                                         <Button className='btn-login' type="submit" variant="primary" size="sm" style={{ width: '100%' }}

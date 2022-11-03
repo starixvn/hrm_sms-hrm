@@ -100,8 +100,7 @@ class AppContainer extends Component {
                                             value={password} onChange={event => this.handleChange('password', event.target.value)}
                                         />
                                         <i className="fa fa-lock " />
-                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`}
-                                            onClick={this.showPassword} />
+                                        <span className={`fa ${this.state.type === 'password' ? 'fa-eye' : 'fa-eye-slash'}`} onClick={this.showPassword} />
                                         <span className="error">{LangHelper.getResource('NoEmpty')}</span>
                                     </div>
                                     <div className="group group-login">
