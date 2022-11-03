@@ -80,16 +80,18 @@ class AppContainer extends Component {
                                         site.menuItems.map(menu => {
                                             return (
                                                 <Fragment key={menu.menuItemId}>
-                                                    <ListGroup.Item className={!menu.url ? 'none' : 'item-single'} onClick={this.handleDropdown}>
-                                                        {
-                                                            menu.url &&
-                                                            <Card.Link onClick={event => this.onClick(event, menu)} >
-                                                                {menu.menuItemName}
-                                                            </Card.Link>
-                                                        }
-                                                        {!menu.url && <span>{menu.menuItemName}<i className="fa fa-angle-down"></i></span>}
-                                                    </ListGroup.Item>
-                                                    <div className={!menu.url ? 'sub-item' : ''}>{this.renderChildMenus(menu.childs)}</div>
+                                                    <div className="sub-group-item">
+                                                        <ListGroup.Item className={`parent-item ${!menu.url ? '' : 'none'}`} onClick={this.handleDropdown}>
+                                                            {
+                                                                menu.url &&
+                                                                <Card.Link onClick={event => this.onClick(event, menu)} >
+                                                                    {menu.menuItemName}
+                                                                </Card.Link>
+                                                            }
+                                                            {!menu.url && <span>{menu.menuItemName}<i className="fa fa-angle-down"></i></span>}
+                                                        </ListGroup.Item>
+                                                        <div className={!menu.url ? 'sub-item' : ''}>{this.renderChildMenus(menu.childs)}</div>
+                                                    </div>
                                                 </Fragment>
                                             );
                                         })

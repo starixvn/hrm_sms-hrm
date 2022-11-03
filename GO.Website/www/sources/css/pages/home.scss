@@ -5,7 +5,7 @@
         border-right: 0;
 
         .navbar-brand img {
-            margin: 0;
+            margin: 0 0 2px 0;
         }
     }
 
@@ -20,21 +20,37 @@
             }
         }
 
-        .dropdown .btn {
-            font-weight: 400;
-            font-size: 16px;
-            line-height: 24px;
-            color: #535353;
+        .dropdown {
+            .btn {
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 24px;
+                color: #535353;
+            }
+
+            .dropdown-menu {
+                top: 10px !important;
+            }
         }
     }
 }
 
 .navbar {
-    padding: 0 16px;
+    padding: 0 9px 0 16px;
+}
+
+.dropdown-menu.show {
+    border-radius: 4px;
+}
+
+.dropdown-toggle::after {
+    border-left-width: 0.45em;
+    border-right-width: 0.45em;
+    border-top-width: 0.45em;
 }
 
 .container-fluid {
-    padding: 13px 8px;
+    padding: 14px 8px;
 }
 
 .sites {
@@ -44,7 +60,7 @@
     .card {
         width: 256px;
         height: 500px;
-        border: 1px solid #D4D4D4;
+        border: none;
         border-radius: 5px;
         margin: 0 8px;
 
@@ -57,30 +73,29 @@
             padding: 8px;
             border-radius: 5px 5px 0 0;
             border-bottom: 0;
-        }
-
-        &-link {
-            cursor: pointer;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 22px;
-            color: #535353;
+            border-top: 1px solid #013966;
+            border-left: 1px solid #013966;
+            border-right: 1px solid #013966;
         }
 
         .list-group {
             overflow: auto;
+            border-radius: 0 0 5px 5px;
+            height: 460px;
+            border-bottom: 1px solid #D4D4D4;
+            border-left: 1px solid #D4D4D4;
+            border-right: 1px solid #D4D4D4;
 
             &-item {
-                padding: 4px;
+                padding: 5px 8px;
 
-                &.none {
+                &.parent-item {
                     background: #E2F2FF;
                     font-weight: 600;
                     font-size: 14px;
                     line-height: 22px;
                     text-transform: capitalize;
                     color: #1A1A1A;
-                    padding: 5px 7px;
                     border: none;
                     cursor: pointer;
 
@@ -94,41 +109,31 @@
                         -moz-transition: transform 0.3s ease-out;
                         -o-transition: transform 0.3s ease-out;
                     }
-                }
 
-                .card-link {
-                    padding-left: 17px;
-
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        width: 5px;
-                        height: 5px;
-                        background-color: #A9A9A9;
-                        transform: rotate(45deg);
-                        top: 12px;
-                        left: 7px;
-                    }
-
-                    &::after {
-                        content: "";
-                        position: absolute;
-                        width: 9px;
-                        height: 9px;
-                        transform: rotate(45deg);
-                        border: 1px solid #A9A9A9;
-                        left: 5px;
-                        top: 10px;
+                    .card-link {
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 22px;
+                        text-transform: capitalize;
+                        color: #1A1A1A;
+                        cursor: pointer;
                     }
                 }
+
+                &.none {
+                    cursor: default;
+                }
+            }
+
+            .sub-group-item {
+                margin-bottom: 2px;
+                position: relative;
             }
         }
 
         .show-sub-item {
-            border-bottom: 1px solid #E2E2E2 !important;
-
             .fa-angle-down {
-                transform: rotate(-90deg) !important;
+                transform: rotate(-180deg) !important;
             }
 
             + .sub-item {
@@ -140,42 +145,12 @@
             }
         }
 
-        .item-single.show-sub-item {
-            border-bottom: 1px solid #FFFFFF !important;
-        }
-
-        .item-single {
-            margin: 8px 8px 16px 9px;
-            border-top: none;
-            border-left: none;
-            border-right: none;
-
-            &:hover {
-                background: #FEF3EE;
-                border-radius: 4px;
-                border-color: #FFFFFF;
-
-                > a {
-                    color: #B3450A;
-                }
-
-                > a::before {
-                    background-color: #B3450A;
-                }
-
-                > a::after {
-                    border-color: #B3450A;
-                }
-            }
-        }
-
         .sub-item {
             border-left: 1px dashed #E2E2E2;
-            margin: 8px;
+            margin: 8px 8px 0 8px;
 
             .list-group-item {
-                margin-left: 8px;
-                margin-top: 8px;
+                margin: 8px 0 0 8px;
                 padding-bottom: 3px;
                 border-bottom: 1px solid #E2E2E2;
                 border-top: none;
@@ -206,6 +181,37 @@
 
                 .a {
                     padding-left: 4px;
+                }
+
+                .card-link {
+                    padding-left: 13px;
+                    cursor: pointer;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 22px;
+                    color: #535353;
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        width: 5px;
+                        height: 5px;
+                        background-color: #A9A9A9;
+                        transform: rotate(45deg);
+                        top: 12px;
+                        left: 7px;
+                    }
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        width: 9px;
+                        height: 9px;
+                        transform: rotate(45deg);
+                        border: 1px solid #A9A9A9;
+                        left: 5px;
+                        top: 10px;
+                    }
                 }
             }
         }
