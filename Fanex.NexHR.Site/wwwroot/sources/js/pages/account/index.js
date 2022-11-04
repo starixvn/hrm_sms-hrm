@@ -1,4 +1,4 @@
-import { showFullAvatar } from '../../shared/common.functions';
+﻿import { showFullAvatar } from '../../shared/common.functions';
 
 $(document).ready(function () {
     $('.fullSizeAvatar').on('click', function () {
