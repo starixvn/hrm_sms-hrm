@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Models.Auth
 {
+    using System;
+
+    [Serializable]
     public class LoginResult
     {
         public int UserId { get; set; }

@@ -1,5 +1,8 @@
 ﻿namespace HRM.UserControl.Client.Core.Models.Auth
 {
+    using System;
+
+    [Serializable]
     public class LoginResult
     {
         public long OnUserId { get; set; }
