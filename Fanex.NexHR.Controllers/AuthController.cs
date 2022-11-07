@@ -130,7 +130,7 @@
                 LoginResult loginResult = authService.SSOLogin(ssoParam);
                 if (loginResult.IsSuccessfull)
                 {
-                    EmployeeSession employee = hrmAuthService.GetByUserId(userControlSession.UserId);
+                    EmployeeSession employee = hrmAuthService.GetByUserId(Convert.ToInt32(userIdValue));
                     if(employee == null)
                     {
                         return RedirectToAction("Login");
