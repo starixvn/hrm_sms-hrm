@@ -250,6 +250,7 @@
                     percent = "> 0%";
                     break;
                 default:
+                    // nothing
                     break;
             }
             return percent;
