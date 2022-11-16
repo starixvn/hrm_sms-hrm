@@ -5,7 +5,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import { axiosError, confirm, initDatepicker, resolveClientUrl, blockUI, unblockUI } from '../../../shared/common.functions';
-import { LeaveType, DateFormat, RequestType } from '../../../shared/constants';
+import { LeaveType, DateFormat, RequestType, DateTimeFormat } from '../../../shared/constants';
 
 const RequestCommon = {
     showErrorMsg: function (msg, htmlObject) {
@@ -291,8 +291,8 @@ const LeaveRequest = (function ($) {
                             WorkType: $('td select.ddlWorkType', this).first().val(),
                             LeaveTypeId: $('td select.ddlleavetype', this).first().val(),
                             IsHalfDay: isHalfDay,
-                            FromTime: fromTime,
-                            ToTime: toTime
+                            FromTime: moment(fromTime).format(DateTimeFormat),
+                            ToTime: moment(toTime).format(DateTimeFormat)
                         });
                     });
                 } else if (LeaveRequest.halfDayOff.prop('checked')) {
