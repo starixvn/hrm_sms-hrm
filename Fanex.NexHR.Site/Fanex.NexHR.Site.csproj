@@ -1299,9 +1299,6 @@
     <Content Include="Views\JobLevel\Index.cshtml" />
     <Content Include="Views\JobLevel\_JobLevelGrid.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\joblevel\joblevel.scss" />
-    <Content Include="WebConfigs\Web.CTS_PROD.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="wwwroot\dist\js\joblevel.js.map" />
     <Content Include="wwwroot\dist\styles\joblevel.js.map" />
     <Content Include="Views\EmployeeWorkFromHome\_Create.cshtml" />

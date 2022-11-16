@@ -10,6 +10,7 @@
         public string Nickname { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+        public string OldPassword { get; set; }
         public bool IsActive { get; set; }
         public int ModifiedBy { get; set; }
         public int? RefId { get; set; }

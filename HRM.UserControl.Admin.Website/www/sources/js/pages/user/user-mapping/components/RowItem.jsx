@@ -27,7 +27,7 @@ export class RowItem extends Component {
                 const params = {
                     keyword: value,
                     siteId: this.state.user.siteId,
-                    statusId: null
+                    statusId: 1
                 };
 
                 this.props.searchUserMapping(params);
