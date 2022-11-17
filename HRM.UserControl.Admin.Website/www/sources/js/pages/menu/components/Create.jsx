@@ -8,7 +8,7 @@ import Select from 'react-select';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import LangHelper from '@jsroot/common/langHelper';
-import { validateFormik } from '../common.functions';
+import { validateFormik, separateFunctionOptions } from '../common.functions';
 
 export class Create extends Component {
     static defaultProps = {
@@ -46,12 +46,28 @@ export class Create extends Component {
         this.setState({site});
     }
 
+    handleFlatFunction = arr => {
+        let flag = false;
+        const allFunction = [...arr];
+        while (!flag) {
+            arr = arr.flatMap(item => item.childs);
+            const check = arr.find(element => element.childs);
+            if (!check) {
+                flag = true;
+            } else {
+                arr.map(item => allFunction.push(item));
+            }
+        }
+        return allFunction.sort((x,y) => x.functionId - y.functionId);
+    };
+
     handleFunctionOptions = functions =>{
         const defaultFunction = [{
             functionId: null,
             functionName: 'None'
         }];
-        const parentCopy = [...defaultFunction, ...functions];
+        const allFunction = separateFunctionOptions(functions);
+        const parentCopy = [...defaultFunction, ...allFunction];
         const functionOptions = parentCopy.map(item =>{
             return {
                 value: item.functionId,

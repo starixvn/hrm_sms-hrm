@@ -26,3 +26,18 @@ export const validateFormik = (values, siteId) => {
     }   
     return errors;
 };
+
+export const separateFunctionOptions = options => {
+    let flag = false;
+    const allFunction = [...options];
+    while (!flag) {
+        options = options.flatMap(item => item.childs);
+        const isHierarchy = options.find(element => element.childs);
+        if (!isHierarchy) {
+            flag = true;
+        } else {
+            options.map(data => allFunction.push(data));
+        }
+    }
+    return allFunction.sort((x,y) => x.functionId - y.functionId);
+};
