@@ -21,7 +21,7 @@ const getMenuById = id => async dispatch => {
 };
 
 const getFunctionById = id => async () => {
-    const url = Site.resolveClientUrl(`function/getBySiteId/${id}`);
+    const url = Site.resolveClientUrl(`function/getParentBySiteId/${id}`);
     return await DataService.getDataAsync(url).then(response => response);
 };
 

@@ -8,7 +8,7 @@ import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import Select from 'react-select';
 import LangHelper from '@jsroot/common/langHelper';
-import { validateFormik, separateFunctionOptions } from '../common.functions';
+import { validateFormik } from '../common.functions';
 
 export class Update extends Component {
     constructor(props) {
@@ -48,8 +48,7 @@ export class Update extends Component {
             functionId: null,
             functionName: 'None'
         }];
-        const allFunction = separateFunctionOptions(functions);
-        const functionCopy = [...defaultFunction, ...allFunction];
+        const functionCopy = [...defaultFunction, ...functions];
         const functionOptions = functionCopy.map(item =>{
             return {
                 value: item.functionId,

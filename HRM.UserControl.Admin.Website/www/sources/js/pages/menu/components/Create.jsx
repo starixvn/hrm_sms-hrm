@@ -8,7 +8,7 @@ import Select from 'react-select';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import LangHelper from '@jsroot/common/langHelper';
-import { validateFormik, separateFunctionOptions } from '../common.functions';
+import { validateFormik } from '../common.functions';
 
 export class Create extends Component {
     static defaultProps = {
@@ -66,8 +66,7 @@ export class Create extends Component {
             functionId: null,
             functionName: 'None'
         }];
-        const allFunction = separateFunctionOptions(functions);
-        const parentCopy = [...defaultFunction, ...allFunction];
+        const parentCopy = [...defaultFunction, ...functions];
         const functionOptions = parentCopy.map(item =>{
             return {
                 value: item.functionId,
