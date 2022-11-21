@@ -103,10 +103,10 @@ export default class Row extends PureComponent {
                     isHost && enableSyncWorkingShift &&
                     <div className="table-cell cell-syncdata">
                         <div className="checkbox">
-                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata${data.employeeId}`}
+                            <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata-emp${data.employeeId}`}
                                 checked={data.isSelected} onChange={this.handleSelectEmployee}
                             />
-                            <label htmlFor={`ckb-syncdata${data.employeeId}`} />
+                            <label htmlFor={`ckb-syncdata-emp${data.employeeId}`} />
                         </div>
                     </div>
                 }

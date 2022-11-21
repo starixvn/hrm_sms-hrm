@@ -61,19 +61,19 @@ export default class RowTeam extends PureComponent {
                             isHost && enableSyncWorkingShift &&
                             <div className="cell-syncdata">
                                 <div className="checkbox">
-                                    <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata${teamId}`}
+                                    <input type="checkbox" className={`checkbox-custom`} id={`ckb-syncdata-team${teamId}`}
                                         checked={isSelected} onChange={this.handleSelectEmployeeOfTeam}
                                     />
-                                    <label htmlFor={`ckb-syncdata${teamId}`} />
+                                    <label htmlFor={`ckb-syncdata-team${teamId}`} />
                                 </div>
                             </div>
                         }
                         <div className="cell-public">
                             <div className="checkbox">
-                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-public${teamId}`}
+                                <input type="checkbox" className={`checkbox-custom`} id={`ckb-public-team${teamId}`}
                                     checked={isPublic} disabled={!isHost} onChange={this.handleChangePublic}
                                 />
-                                <label htmlFor={`ckb-public${teamId}`}> Publish</label>
+                                <label htmlFor={`ckb-public-team${teamId}`}> Publish</label>
                             </div>
                         </div>
                     </div>
