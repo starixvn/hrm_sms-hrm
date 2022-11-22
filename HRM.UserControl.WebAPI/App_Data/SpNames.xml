@@ -32,4 +32,7 @@
         <Setting Key="API_Role_GetByUserId" SpName="API_Role_GetByUserId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_Role_AssignFunction" SpName="API_Role_AssignFunction" DbName="bodb_IUC" Plain="0" />
     </Function>
+    <Function Name="UserMapping">
+        <Setting Key="API_UserMapping_GetBySiteId" SpName="API_UserMapping_GetBySiteId" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

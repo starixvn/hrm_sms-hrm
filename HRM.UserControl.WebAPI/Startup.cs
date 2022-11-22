@@ -77,6 +77,7 @@ namespace HRM.UserControl.WebAPI
             services.AddSingleton<IJwtManagerService, JwtManagerService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ISiteService, SiteService>();
+            services.AddSingleton<IUserMappingService, UserMappingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
