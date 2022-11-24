@@ -17,9 +17,9 @@
 
         [HttpGet]
         [Route("api/UserMapping/GetBySiteId")]
-        public async Task<IActionResult> GetBySiteId(short siteId, DateTime lastModifiedDate)
+        public async Task<IActionResult> GetBySiteId(DateTime lastModifiedDate)
         {
-            var userMappings = await userMappingService.GetBySiteIdAsync(siteId, lastModifiedDate);
+            var userMappings = await userMappingService.GetBySiteIdAsync(lastModifiedDate);
             return Json(userMappings);
         }
     }
