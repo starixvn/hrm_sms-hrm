@@ -279,7 +279,7 @@
             return baseService.ExecuteNonQuery(command);
         }
 
-        public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryToDate, DateTime? militaryFromDate)
+        public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
         {
             const byte HalfMonth = 15;
             const short DayOfYear = 365;
