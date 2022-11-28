@@ -25,7 +25,7 @@
             this.baseService = baseService;
         }
 
-        public async Task<IEnumerable<UserMapping>> GetBySiteIdAsync(DateTime lastModifiedDate)
+        public async Task<IEnumerable<UserMapping>> GetBySiteIdAsync(DateTime? lastModifiedDate)
         {
             SiteModel requestSite = GetSiteFromRequestHeader();
             var criteria = new GetUserMappingBySiteIdCriteria
