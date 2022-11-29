@@ -35,7 +35,7 @@
             var user = userService.GetById(userControlSession.UserId);
             IEnumerable<SummaryRequest> model = dashboardService.GetMySpace(EmployeeSession.EmpId, DateTime.Now);
             var employeesLogin = dashboardService.GetCurrentEmployeeLogin().ToList();
-            var excludeCurrentEmployee = employeesLogin.Where(x => x.EmpId != sessionService.Employee.Id);
+            var excludeCurrentEmployee = employeesLogin.Where(x => x.EmpId != EmployeeSession.EmpId);
             ViewBag.IsResetPassword = user.IsResetPassword;
             ViewBag.IsVerifierApprover = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);

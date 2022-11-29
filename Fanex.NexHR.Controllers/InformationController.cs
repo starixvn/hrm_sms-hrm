@@ -18,6 +18,7 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Information;
+    using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Session;
 
     public class InformationController : BaseController
@@ -78,7 +79,7 @@
             model.Id = EmployeeSession.EmpId;
             var criteria = SetUpdatePersonalInfoCriteria(model);
             Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
-            
+
             var result = baseService.ExecuteNonQuery(criteria);
 
             if (result.IsSuccessful)
@@ -89,29 +90,19 @@
             return Json(result);
         }
 
-        public bool IsValidRoleToSendMail(List<SystemRoleModel> roles)
+        public bool IsValidRoleToSendMail(IList<Role> roles)
         {
-            foreach (var role in roles)
-            {
-                if (role.RoleId == (int)RoleSystem.HR || role.RoleId == (int)RoleSystem.Verifier || role.RoleId == (int)RoleSystem.Approver)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return roles.Any(role => role.RoleId == (short)RoleSystem.HR
+                || role.RoleId == (short)RoleSystem.Verifier
+                || role.RoleId == (short)RoleSystem.Approver);
         }
 
         public bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
         {
-            if (employee.CardNo != model.CardNo ||
+            return employee.CardNo != model.CardNo ||
                 employee.Phone != model.Phone ||
                 employee.Address != model.Address ||
-                employee.CurrentAddress != model.CurrentAddress              
-            )
-            {
-                return true;
-            }
-            return false;
+                employee.CurrentAddress != model.CurrentAddress;
         }
 
         public void SendMailUpdateInfo(Employee model, Employee employee)
