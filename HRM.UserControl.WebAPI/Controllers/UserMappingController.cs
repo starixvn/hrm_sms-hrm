@@ -17,15 +17,9 @@
 
         [HttpGet]
         [Route("api/UserMapping/GetBySiteId")]
-        public async Task<IActionResult> GetBySiteId(string lastModifiedDate)
+        public async Task<IActionResult> GetBySiteId(DateTime? lastModifiedDate)
         {
-            DateTime? lastUCModifiedDate = null;
-            if (!string.IsNullOrEmpty(lastModifiedDate))
-            {
-                lastUCModifiedDate = DateTime.ParseExact(lastModifiedDate, "yyyy-MM-dd HH:mm:ss:fff", null);
-            }
-
-            var userMappings = await userMappingService.GetBySiteIdAsync(lastUCModifiedDate);
+            var userMappings = await userMappingService.GetBySiteIdAsync(lastModifiedDate);
             return Json(userMappings);
         }
     }
