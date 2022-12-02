@@ -72,25 +72,21 @@
                                         className = "pending";
                                     }
 
-                                    if (dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
+                                    if (dailyWorking.LeaveType.Id == (byte)LeaveTypes.UnpaidLeave
+                                        || dailyWorking.LeaveType.Id == (byte)LeaveTypes.UnpaidLeaveInsurance
+                                        || dailyWorking.LeaveType.Id == (byte)LeaveTypes.MaternityLeave
+                                        || dailyWorking.LeaveType.Id == (byte)LeaveTypes.PaternityLeave
                                         || (dailyWorking.LeaveType2 != null
-                                            && (dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeave
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.MaternityLeave
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.PaternityLeave)))
+                                            && (dailyWorking.LeaveType2.Id == (byte)LeaveTypes.UnpaidLeave
+                                                || dailyWorking.LeaveType2.Id == (byte)LeaveTypes.UnpaidLeaveInsurance
+                                                || dailyWorking.LeaveType2.Id == (byte)LeaveTypes.MaternityLeave
+                                                || dailyWorking.LeaveType2.Id == (byte)LeaveTypes.PaternityLeave)))
                                     {
                                         className += " unpaidleave";
                                     }
                                     if (dailyWorking.IsLeaveHalfDay)
                                     {
-                                        if (dailyWorking.LeaveType.Id == (int)LeaveTypes.KeepInViewByHour)
-                                        {
-                                            value = string.Format("{0}½", dailyWorking.LeaveType2.Code);
-                                        }
-                                        else
+                                        if (dailyWorking.LeaveType.Id != (byte)LeaveTypes.KeepInViewByHour)
                                         {
                                             value = string.Format("{0}½", dailyWorking.LeaveType.Code);
                                         }

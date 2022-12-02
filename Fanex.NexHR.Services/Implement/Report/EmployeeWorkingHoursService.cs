@@ -235,7 +235,7 @@
 
                 if (dailyWorking.IsLeaveHalfDay)
                 {
-                    value = CheckLeaveType(dailyWorking);
+                    value = GetLeaveHalfDay(dailyWorking);
                 }
                 else
                 {
@@ -255,31 +255,31 @@
             }
         }
 
-        private static string CheckLeaveType(DailyWorking dailyWorking)
+        private static string GetLeaveHalfDay(DailyWorking dailyWorking)
         {
-            return dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.KeepInViewByHour
-                        ? string.Format("{0}½", dailyWorking.LeaveType2.Code)
-                        : string.Format("{0}½", dailyWorking.LeaveType.Code);
+            return dailyWorking.LeaveType.Id != (byte)Core.Enums.LeaveTypes.KeepInViewByHour
+                        ? string.Format("{0}½", dailyWorking.LeaveType.Code)
+                        : string.Empty;
         }
 
         public static bool IsUnpaidLeave(DailyWorking dailyWorking)
         {
             bool isUnpaidLeave = false;
 
-            if (dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave
-                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
-                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.MaternityLeave
-                || dailyWorking.LeaveType.Id == (int)Core.Enums.LeaveTypes.PaternityLeave)
+            if (dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeave
+                || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+                || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.MaternityLeave
+                || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.PaternityLeave)
             {
                 isUnpaidLeave = true;
             }
 
 #pragma warning disable S1067 // Expressions should not be too complex
             if (dailyWorking.LeaveType2 != null
-                && (dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.UnpaidLeave
-                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
-                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.MaternityLeave
-                    || dailyWorking.LeaveType2.Id == (int)Core.Enums.LeaveTypes.PaternityLeave))
+                && (dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeave
+                    || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+                    || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.MaternityLeave
+                    || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.PaternityLeave))
 #pragma warning restore S1067 // Expressions should not be too complex
             {
                 isUnpaidLeave = true;

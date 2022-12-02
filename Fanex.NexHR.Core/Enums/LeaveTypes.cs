@@ -40,6 +40,9 @@
         [StringValue("Compensation Leave")]
         CompensationLeave = 27,
 
+        [StringValue("Wedding of Employee's Children")]
+        WeddingOfEmployeeChildren = 34,
+
         [StringValue("Hospitalization Leave")]
         HospitalizationLeave = 39,
 

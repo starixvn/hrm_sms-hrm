@@ -345,22 +345,23 @@
 
         public static string GetBackgroundColorForLeave(int leaveTypeId)
         {
-            var backgroundColor = string.Empty;
+            string backgroundColor;
             switch (leaveTypeId)
             {
-                case (int)LeaveTypes.AnnualLeave:
+                case (byte)LeaveTypes.AnnualLeave:
                     backgroundColor = "#c7f391";
                     break;
 
-                case (int)LeaveTypes.UnpaidLeave:
+                case (byte)LeaveTypes.UnpaidLeave:
                     backgroundColor = "#eacded";
                     break;
 
-                case (int)LeaveTypes.BusinessTrip:
+                case (byte)LeaveTypes.BusinessTrip:
                     backgroundColor = "#c1d6ed";
                     break;
 
-                case (int)LeaveTypes.WeddingLeave:
+                case (byte)LeaveTypes.WeddingLeave:
+                case (byte)LeaveTypes.WeddingOfEmployeeChildren:
                     backgroundColor = "#7cd3e9";
                     break;
 
@@ -374,7 +375,7 @@
 
         public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
         {
-            string result = string.Empty;
+            string result;
 
             if ((toDate - fromDate).Days <= 0)
             {

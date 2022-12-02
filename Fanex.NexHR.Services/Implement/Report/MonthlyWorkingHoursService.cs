@@ -286,15 +286,16 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 11;
+            const byte DefaultColumns = 14;
             var templateIndex = new
             {
                 headerRow = 2,
                 bodyRow = 3,
                 summaryRow = 4,
-                maternityLeaveColumn = 4,
-                weddingLeaveColumn = 11,
-                unpaidLeaveColumn = 12
+                actualWorkingDaysColumn = 4,
+                maternityLeaveColumn = 6,
+                hospitalizationLeaveColumn = 14,
+                unpaidLeaveColumn = 15
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -316,9 +317,10 @@
             // summary
             if (monthlyWorkings.Any())
             {
-                var colIndex = 1;
-                template.Cells[templateIndex.summaryRow, colIndex].Copy(worksheet.Cells[rowIndex, colIndex++]);
-                for (var i = 2; i <= TotalColumns; i++)
+                var colIndex = templateIndex.actualWorkingDaysColumn;
+                template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, colIndex - 1]
+                    .Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex - 1]);
+                for (var i = templateIndex.actualWorkingDaysColumn; i <= TotalColumns; i++)
                 {
                     template.Cells[templateIndex.summaryRow, templateIndex.maternityLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                     var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
@@ -339,7 +341,7 @@
             dynamic templateIndex)
         {
             var rowIndex = templateIndex.headerRow;
-            var colIndex = templateIndex.weddingLeaveColumn;
+            var colIndex = templateIndex.hospitalizationLeaveColumn;
             template.Cells[rowIndex, 1, rowIndex, colIndex].Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex]);
             colIndex++;
             foreach (DateTime month in months)
@@ -359,16 +361,18 @@
             dynamic templateIndex)
         {
             rowIndex = templateIndex.bodyRow;
-            var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name })
-                .Select(x => new { Team = x.Key.Name, Members = x.ToList() })
-                .OrderBy(x => x.Team);
+            var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.Department, x.Section })
+                .Select(x => new { x.Key.Department, x.Key.Section, Team = x.Key.Name, Members = x.ToList() })
+                .OrderBy(x => x.Department).ThenBy(x => x.Section).ThenBy(x => x.Team).ToList();
             foreach (var team in teams)
             {
                 var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(y => IsHoliday(y)));
                 var colIndex = 1;
-                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.weddingLeaveColumn]
-                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.weddingLeaveColumn]);
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.hospitalizationLeaveColumn]
+                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.hospitalizationLeaveColumn]);
 
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Department;
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Section;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
                 worksheet.Cells[rowIndex, colIndex++].Value = totalHolidays;
@@ -382,12 +386,15 @@
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
-                worksheet.Cells[rowIndex, colIndex++].Value =
-                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x =>
+                    SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave)
+                    + SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingOfEmployeeChildren));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.SuspendWork));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.HospitalizationLeave));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.KeepInViewByDay));
 
                 foreach (DateTime month in months)
                 {
