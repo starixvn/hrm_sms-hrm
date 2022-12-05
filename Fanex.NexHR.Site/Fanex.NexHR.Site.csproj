@@ -235,6 +235,7 @@
     </Content>
     <Content Include="Avatars\avatar.jpg" />
     <Content Include="wwwroot\dist\js\account.changepwd.js" />
+    <Content Include="wwwroot\dist\js\account.index.js" />
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
@@ -338,6 +339,7 @@
     <Content Include="wwwroot\dist\styles\shift.index.js" />
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.js" />
+    <Content Include="wwwroot\sources\js\pages\account\index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
@@ -1335,6 +1337,8 @@
     <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js.map" />
     <Content Include="wwwroot\dist\js\discipline.summary.per.year.js.map" />
     <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
+    <Content Include="wwwroot\dist\js\account.index.js.map" />
+    <Content Include="wwwroot\sources\styles\components\_popupAvatar.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SystemLog\" />

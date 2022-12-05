@@ -74,22 +74,23 @@ function confirm(message, callback, options) {
     $confirm.dialog($.extend({}, defaults, options));
 }
 
-function showFullAvatar(codeId, nickname) {
+function showFullAvatar(code, nickname) {
     const defaults = {
         title: nickname,
         modal: true,
         resizable: false,
-        width: 190,
-        height: 230,
-        dialogClass: "popup-avatar"
+        width: 156,
+        height: 208,
+        dialogClass: 'popup-avatar'
     };
 
-    const path = resolveClientUrl(`employee/avatar/${codeId}`);
+    const path = resolveClientUrl(`employee/avatar/${code}`);
     const avatarHtml = `<img src="${path}" style="width: 100%; height: 100%" />`;
 
     const $confirm = $.getOrCreateDialog('fullAvatar');
 
     $($confirm).html(avatarHtml);
+
     // init dialog
     $confirm.dialog($.extend({}, defaults));
 }
