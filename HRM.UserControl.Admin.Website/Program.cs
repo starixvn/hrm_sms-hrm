@@ -2,7 +2,6 @@ namespace HRM.UserControl.Admin.Website
 {
     using System;
     using System.IO;
-    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
     using Serilog;

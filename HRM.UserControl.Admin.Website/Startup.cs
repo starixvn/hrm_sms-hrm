@@ -7,7 +7,6 @@ namespace HRM.UserControl.Admin.Website
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
     using HRM.UserControl.Admin.Website.Middlewares;
-    using HRM.UserControl.Admin.Website.Models;
     using HRM.UserControl.Admin.Website.Repositories;
     using HRM.UserControl.Admin.Website.Services;
     using HRM.UserControl.Client.AspNetCore.Configurations;
