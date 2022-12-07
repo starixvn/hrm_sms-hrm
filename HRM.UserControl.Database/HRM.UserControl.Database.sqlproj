@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>HRM.UserControl.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{aa01a43e-3470-498d-9b76-9f82e07ef286}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>HRM.UserControl.Database</RootNamespace>
+    <AssemblyName>HRM.UserControl.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\UserSite.sql" />
+    <Build Include="dbo\Tables\UserRole.sql" />
+    <Build Include="dbo\Tables\UserMapping.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\Site.sql" />
+    <Build Include="dbo\Tables\RoleFunction.sql" />
+    <Build Include="dbo\Tables\Role.sql" />
+    <Build Include="dbo\Tables\OnUser.sql" />
+    <Build Include="dbo\Tables\MenuItem.sql" />
+    <Build Include="dbo\Tables\Log_UserLogin.sql" />
+    <Build Include="dbo\Tables\Log_Detail.sql" />
+    <Build Include="dbo\Tables\Function.sql" />
+    <Build Include="dbo\Tables\Company.sql" />
+    <Build Include="dbo\Functions\fnc_strSplit.sql" />
+    <Build Include="dbo\Stored Procedures\UserMapping_Update.sql" />
+    <Build Include="dbo\Stored Procedures\UserMapping_Search.sql" />
+    <Build Include="dbo\Stored Procedures\UserMapping_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\User_UpdateSiteStatus.sql" />
+    <Build Include="dbo\Stored Procedures\User_UpdateSiteRole.sql" />
+    <Build Include="dbo\Stored Procedures\User_GetSiteAndMenuItemByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\User_GetAvailableSites.sql" />
+    <Build Include="dbo\Stored Procedures\User_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\User_AssignSite.sql" />
+    <Build Include="dbo\Stored Procedures\Site_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\Site_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Site_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Site_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\Site_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Site_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Role_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\Role_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Role_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Menu_GetBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\Log_UserLogin_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Log_Detail_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Function_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\Function_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Function_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\Company_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\API_UserMapping_GetBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_UpdatePassword.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_Update.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_SSOCheckIn.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_ReCheckIn.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_Logout.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_GetByUsername.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_GetBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_CheckIn.sql" />
+    <Build Include="dbo\Stored Procedures\API_User_AssignRole.sql" />
+    <Build Include="dbo\Stored Procedures\API_Site_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Site_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\API_Role_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Role_GetBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Role_AssignFunction.sql" />
+    <Build Include="dbo\Stored Procedures\API_MenuItem_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Function_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Function_GetBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\API_Function_GetByRoleId.sql" />
+  </ItemGroup>
+</Project>
