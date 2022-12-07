@@ -87,12 +87,12 @@
                     LocalWorkingDays = model.LocalWorkingDays ?? 0,
                     LocalWorkingHours = model.LocalWorkingHours ?? 0,
                     LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
-                    LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek ?? 0,
+                    LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
                     ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
                     ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
                     ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
                     ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek ?? 0
+                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
 
@@ -131,12 +131,12 @@
                 LocalWorkingDays = team.LocalWorkingDays ?? 0,
                 LocalWorkingHours = team.LocalWorkingHours ?? 0,
                 LocalOffDaysbyWeek = team.LocalOffDaysbyWeek ?? 0,
-                LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek ?? 0,
+                LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
                 ExpatBasicAnnualLeaveBalance = team.ExpatBasicAnnualLeaveBalance ?? 0,
                 ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
                 ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
                 ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
-                ExpatWorkingHoursbyWeek= team.ExpatWorkingHoursbyWeek ?? 0,
+                ExpatWorkingHoursbyWeek= team.ExpatWorkingHoursbyWeek,
                 HeadId = unitHead?.EmpId,
                 UnitHead = unitHead?.DisplayName,
                 ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
@@ -177,12 +177,12 @@
                         LocalWorkingDays = model.LocalWorkingDays ?? 0,
                         LocalWorkingHours = model.LocalWorkingHours ?? 0,
                         LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
-                        LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek ?? 0,
+                        LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
                         ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
                         ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
                         ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
                         ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                        ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek ?? 0
+                        ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
                     };
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
 

@@ -75,7 +75,6 @@
         [Range(0, 5, ErrorMessage = "Number of Offday must be between 0 and 5.")]
         public byte? LocalOffDaysbyWeek { get; set; }
 
-        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingHoursPerWeek), ResourceType = typeof(Labels))]
         [Range(1, 120, ErrorMessage = "Working hours per week must be between 1 and 120.")]
         public byte? LocalWorkingHoursbyWeek { get; set; }
@@ -100,7 +99,6 @@
         [Range(0, 5, ErrorMessage = "Number of Offday must be between 0 and 5.")]
         public byte? ExpatOffDaysbyWeek { get; set; }
 
-        [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [Display(Name = nameof(Labels.WorkingHoursPerWeek), ResourceType = typeof(Labels))]
         [Range(1, 120, ErrorMessage = "Working hours per week must be between 1 and 120.")]
         public byte? ExpatWorkingHoursbyWeek { get; set; }
