@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Web.Hosting;
+    using System.Web.UI.WebControls;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
@@ -18,6 +20,7 @@
 
         private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
         private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticAnnualLeaveBalance.cshtml";
+        private readonly string tableALTemplate = "~/app_data/emails/StatisticTableALBalance.cshtml";
 
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
@@ -187,9 +190,6 @@
             IEnumerable<EmployeeDepartmentSections> statisticSections
         )
         {
-            var groupSupervisors = supervisors.GroupBy(g => new { g.OwnerId, g.SectionId, g.DepartmentId, g.Email, g.Nickname });
-            var percentTemplate = GetPercentInMail();
-
             foreach (var item in statisticSections)
             {
                 var annualLeaveBalance = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
@@ -199,35 +199,58 @@
                 item.PercentLeave = percentLeave;
             }
 
-            foreach (var item in groupSupervisors)
-            {
-                var statisticSection = statisticSections.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
+            var percentByMonth = GetPercentByMonth();
 
-                if (statisticSection != null && percentTemplate != string.Empty && !string.IsNullOrWhiteSpace(item.Key.Email))
+            var groupSupervisors = supervisors
+                .GroupBy(g => new { g.Nickname, g.OwnerId, g.SectionId, g.DepartmentId, g.Email })
+                .GroupBy(x => x.Key.OwnerId);
+
+            foreach (var groupSupervisor in groupSupervisors)
+            {
+                var tableStatistic = new StringBuilder();
+                var nickName = groupSupervisor.FirstOrDefault().Key.Nickname;
+                var email = groupSupervisor.FirstOrDefault().Key.Email;
+
+                foreach (var item in groupSupervisor)
+                {
+                    var statisticSection = statisticSections.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
+
+                    if (statisticSection != null)
+                    {
+                        tableStatistic.AppendFormat(
+                            Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(tableALTemplate))),
+                            statisticSection.DepartmentCode,
+                            statisticSection.SectionCode,
+                            statisticSection.TotalEmployee,
+                            statisticSection.AnnualLeaveBalance,
+                            statisticSection.PercentLeave
+                        );
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(email))
                 {
                     var statisticTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(statisticEmailTemplate)));
-                    var statistic = string.Format(
+
+                    var body = string.Format(
                         statisticTemplate,
-                        item.Key.Nickname,
-                        percentTemplate,
-                        statisticSection.DepartmentCode,
-                        statisticSection.SectionCode,
-                        statisticSection.TotalEmployee,
-                        statisticSection.AnnualLeaveBalance,
-                        statisticSection.PercentLeave
-                        );
+                        nickName,
+                        percentByMonth,
+                        tableStatistic,
+                        DateTime.Now.Year + 1
+                    );
 
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
-                        item.Key.Email,
+                        email,
                         string.Empty,
-                        "Statistic Annual Leave Balance",
-                        statistic));
+                        "Department / Section Annual Leave Balance Reminder",
+                        body));
                 }
             }
         }
 
-        private static string GetPercentInMail()
+        private static string GetPercentByMonth()
         {
             var percent = string.Empty;
             const byte March = 3;

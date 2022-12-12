@@ -1194,6 +1194,7 @@
     <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
     <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
     <Content Include="App_Data\Emails\StatisticAnnualLeaveBalance.cshtml" />
+    <Content Include="App_Data\Emails\StatisticTableALBalance.cshtml" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
