@@ -11,6 +11,6 @@
 
         public int? NewUserId { get; set; }
 
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 }

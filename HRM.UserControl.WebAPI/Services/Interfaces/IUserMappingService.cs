@@ -7,6 +7,6 @@
 
     public interface IUserMappingService
     {
-        Task<IEnumerable<UserMapping>> GetBySiteIdAsync(DateTime? lastModifiedDate);
+        Task<IEnumerable<UserMapping>> GetBySiteIdAsync(short siteId, DateTime? lastModifiedDate = null);
     }
 }
