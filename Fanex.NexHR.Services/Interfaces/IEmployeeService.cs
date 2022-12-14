@@ -41,6 +41,8 @@
 
         IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
 
+        IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId);
+
         IList<Employee> GetEmployeeByGender(string query, int gender);
 
         IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);

@@ -230,6 +230,28 @@
     <AdditionalFiles Include="..\SonarQube\smshrm\CSharp\SonarLint.xml">
       <Link>SonarLint.xml</Link>
     </AdditionalFiles>
+    <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Request.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Approval.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Request.cshtml" />
+    <Content Include="App_Data\Emails\EditMemoNotification.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Approval.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Request.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Approval.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Request.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Approval.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Request.cshtml" />
+    <Content Include="App_Data\Emails\MemoNotification.cshtml" />
+    <Content Include="App_Data\Emails\MessageNotification.cshtml" />
+    <Content Include="App_Data\Emails\ReeditRequest.cshtml" />
+    <Content Include="App_Data\Emails\RemindUseAL.cshtml" />
+    <Content Include="App_Data\Emails\RequestApproval.cshtml" />
+    <Content Include="App_Data\Emails\StatisticAnnualLeaveBalance.cshtml" />
     <Content Include="App_Data\SpNames.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -954,12 +976,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Emails\CheckInOut.Request.cshtml" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Request.cshtml" />
-    <Content Include="App_Data\Emails\Leave.Request.cshtml" />
     <Content Include="App_Code\RazorHelper.cshtml" />
-    <Content Include="App_Data\Emails\ChangeShift.Request.cshtml" />
-    <Content Include="App_Data\Emails\RequestApproval.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
@@ -1006,21 +1023,6 @@
     <Content Include="Views\ExtensionNo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Emails\MemoNotification.cshtml" />
-    <Content Include="App_Data\Emails\EditMemoNotification.cshtml" />
-    <Content Include="App_Data\Emails\Leave.Approval.cshtml" />
-    <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Approval.cshtml" />
-    <Content Include="App_Data\Emails\CheckInOut.Approval.cshtml" />
-    <Content Include="App_Data\Emails\KeepInView.Request.cshtml" />
-    <Content Include="App_Data\Emails\ReeditRequest.cshtml" />
-    <Content Include="App_Data\Emails\KeepInView.Approval.cshtml" />
-    <Content Include="App_Data\Emails\Leave.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\CheckInOut.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\KeepInView.Cancel.cshtml" />
-    <Content Include="App_Data\Emails\MessageNotification.cshtml" />
     <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
     <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
     <Content Include="Views\Account\ChangePwd.cshtml" />
@@ -1190,11 +1192,9 @@
     <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
     <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
     <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
-    <Content Include="App_Data\Emails\RemindUseAL.cshtml" />
     <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
     <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
-    <Content Include="App_Data\Emails\StatisticAnnualLeaveBalance.cshtml" />
-    <Content Include="App_Data\Emails\StatisticTableALBalance.cshtml" />
+    <Content Include="App_Data\Emails\UpdateInfoNotification.cshtml" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\HRM.pubxml" />
     <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />

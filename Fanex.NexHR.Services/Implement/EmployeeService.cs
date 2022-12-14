@@ -145,6 +145,15 @@
             return baseService.GetData<Supervisor>(criteria).ToList();
         }
 
+        public IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId)
+        {
+            var criteria = new GetHRAndSupervisorByEmpIdCriteria
+            {
+                EmpId = employeeId
+            };
+            return baseService.GetData<SupervisorNameModel>(criteria).ToList();
+        }
+
         public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
         {
             var criteria = new EditEmployeeSupervisorCriteria

@@ -20,7 +20,6 @@
 
         private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
         private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticAnnualLeaveBalance.cshtml";
-        private readonly string tableALTemplate = "~/app_data/emails/StatisticTableALBalance.cshtml";
 
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
@@ -165,20 +164,20 @@
                 {
                     validEmployees.Add(employee);
 
-                    var body = string.Format(
-                        bodyTemplate,
-                        employee.Nickname,
-                        percentInMail,
-                        DateTime.Now.Year + 1,
-                        string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
-                    BackgroundJob.Enqueue(() => emailService.SendEmail(
-                        ConfigSettings.EmailSetting,
-                        employee.Email,
-                        string.Empty,
-                        "Annual Leave Balance Reminder",
-                        body));
-                }
+                var body = string.Format(
+                    bodyTemplate,
+                    employee.Nickname,
+                    percentInMail,
+                    DateTime.Now.Year + 1,
+                    string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
+                BackgroundJob.Enqueue(() => emailService.SendEmail(
+                    ConfigSettings.EmailSetting,
+                    employee.Email,
+                    string.Empty,
+                    "Annual Leave Balance Reminder",
+                    body));
             }
+        }
 
             SendMailStatisticAnnualLeave(validEmployees, supervisors, statisticSections);
             logger.Error("SendMailRemindUserToUseAnnualLeave: End");
@@ -205,6 +204,12 @@
                 .GroupBy(g => new { g.Nickname, g.OwnerId, g.SectionId, g.DepartmentId, g.Email })
                 .GroupBy(x => x.Key.OwnerId);
 
+            const string tableALTemplate = "<tr><td style=\"border: 1px solid;\">{0}</td>"
+                            + "<td style=\"border: 1px solid;\">{1}</td>"
+                            + "<td style=\"text-align: center; border: 1px solid;\">{2}</td>"
+                            + "<td style=\"text-align: center; border: 1px solid;\">{3}</td>"
+                            + "<td style=\"text-align: center; border: 1px solid;\">{4}%</td></tr>";
+
             foreach (var groupSupervisor in groupSupervisors)
             {
                 var tableStatistic = new StringBuilder();
@@ -218,7 +223,7 @@
                     if (statisticSection != null)
                     {
                         tableStatistic.AppendFormat(
-                            Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(tableALTemplate))),
+                            tableALTemplate,
                             statisticSection.DepartmentCode,
                             statisticSection.SectionCode,
                             statisticSection.TotalEmployee,

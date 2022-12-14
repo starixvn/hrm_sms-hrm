@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web.Hosting;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Employee;
@@ -18,7 +18,6 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Information;
-    using HRM.UserControl.Client.Core.Models.Role;
     using HRM.UserControl.Client.Core.Session;
 
     public class InformationController : BaseController
@@ -27,6 +26,7 @@
         private readonly ICommonDataService commonDataService;
         private readonly IEmployeeService employeeService;
         private readonly IEmailService emailService;
+        private const string UpdateInfoNotificationTemplate = "~/app_data/emails/UpdateInfoNotification.cshtml";
 
         public InformationController(
             IUserControlSession userControlSession,
@@ -82,7 +82,7 @@
 
             var result = baseService.ExecuteNonQuery(criteria);
 
-            if (result.IsSuccessful)
+            if (result.IsSuccessful && IsValidUpdateFieldSendMail(model, employee))
             {
                 SendMailUpdateInfo(model, employee);
             }
@@ -90,32 +90,73 @@
             return Json(result);
         }
 
-        public bool IsValidRoleToSendMail(IList<Role> roles)
-        {
-            return roles.Any(role => role.RoleId == (short)RoleSystem.HR
-                || role.RoleId == (short)RoleSystem.Verifier
-                || role.RoleId == (short)RoleSystem.Approver);
-        }
-
         public bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
         {
-            return employee.CardNo != model.CardNo
-                || employee.Phone != model.Phone
+            var isValidCardInfo = employee.CardNo != model.CardNo
+                || employee.DateOfIdCard != model.DateOfIdCard
+                || employee.PlaceOfIdCard != model.PlaceOfIdCard;
+
+            var isValidAddressInfo = employee.Phone != model.Phone
                 || employee.Address != model.Address
                 || employee.CurrentAddress != model.CurrentAddress;
+
+            return isValidCardInfo || isValidAddressInfo;
+        }
+
+        public string GetTemplateChangeData(Employee model, Employee employee)
+        {
+            var template = new StringBuilder();
+            var infoUpdate = new Dictionary<string, string>
+            {
+                {"CardNo", "- ID Card No.: {0} <br/>"},
+                {"DateOfIdCard", "- ID Card Issue Date: {0} <br/>" },
+                {"PlaceOfIdCard", "- ID Card Place Of Issue: {0} <br/>"},
+                {"Phone", "- Cellphone: {0} <br/>"},
+                {"Address", "- Permanent Address: {0} <br/>"},
+                {"CurrentAddress", "- Current Address: {0} <br/>"}
+            };
+
+            foreach (var info in infoUpdate)
+            {
+                if (GetPropValue(model, info.Key).ToString() != GetPropValue(employee, info.Key).ToString())
+                {
+                    template.AppendFormat(info.Value, GetPropValue(model, info.Key));
+                }
+            }
+
+            return template.ToString();
+        }
+
+        public static object GetPropValue(object src, string propName)
+        {
+            return src.GetType().GetProperty(propName).GetValue(src, null);
         }
 
         public void SendMailUpdateInfo(Employee model, Employee employee)
         {
-            if (IsValidUpdateFieldSendMail(model, employee) && IsValidRoleToSendMail(employee.Roles))
+            var hrAndSupervisors = employeeService.GetHRAndSupervisorByEmpId(EmployeeSession.EmpId);
+            var updateInfoTemplate = Utilities.ReadTextFile(Server.MapPath(UpdateInfoNotificationTemplate));
+
+            foreach (var hrAndSupervisor in hrAndSupervisors)
             {
-                emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
-                    receiverEmail: employee.Email,
-                    mailCC: string.Empty,
-                    subject: Messages.UpdateInformation,
-                    body: Messages.UpdatedSuccessfully
-                );
+                if (!string.IsNullOrEmpty(hrAndSupervisor.Email))
+                {
+                    var body = string.Format(
+                        updateInfoTemplate
+                        ,hrAndSupervisor.NickName
+                        ,employee.NickName
+                        ,employee.FullName
+                        ,GetTemplateChangeData(model, employee)
+                    );
+
+                    emailService.SendEmail(
+                        ConfigSettings.EmailSetting,
+                        hrAndSupervisor.Email,
+                        string.Empty,
+                        $"Updated Personal Information from {employee.NickName} ({employee.FullName})",
+                        body
+                    );
+                }
             }
         }
 
