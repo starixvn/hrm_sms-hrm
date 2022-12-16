@@ -90,6 +90,8 @@ import { parse } from 'qs';
     }
 
     function query() {
+        blockUI();
+
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         $.ajax({
             url: resolveClientUrl('Report/TimeRecordDetail'),
@@ -115,6 +117,8 @@ import { parse } from 'qs';
                     }
                     floatThead('table#data');
                 }
+
+                unblockUI();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ': ' + errorThrown);
