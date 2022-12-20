@@ -7,7 +7,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Hosting;
-    using System.Web.UI.WebControls;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
@@ -147,7 +146,7 @@
             {
                 Year = DateTime.Now.Year
             };
-            var (employees, supervisors, statisticSections) = baseService.FetchMultiple<AnnualLeaveBalance, SupervisorApproveLeave, EmployeeDepartmentSections>(criteria);
+            var (employees, supervisors, statistics) = baseService.FetchMultiple<AnnualLeaveBalance, EmployeeSupervisor, SectionStatisticAnnualLeave>(criteria);
             var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
 
             var validEmployees = new List<AnnualLeaveBalance>();
@@ -164,45 +163,44 @@
                 {
                     validEmployees.Add(employee);
 
-                var body = string.Format(
-                    bodyTemplate,
-                    employee.Nickname,
-                    percentInMail,
-                    DateTime.Now.Year + 1,
-                    string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
-                    employee.Email,
-                    string.Empty,
-                    "Annual Leave Balance Reminder",
-                    body));
+                    var body = string.Format(
+                        bodyTemplate,
+                        employee.Nickname,
+                        percentInMail,
+                        DateTime.Now.Year + 1,
+                        string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
+                    BackgroundJob.Enqueue(() => emailService.SendEmail(
+                        ConfigSettings.EmailSetting,
+                        employee.Email,
+                        string.Empty,
+                        "Annual Leave Balance Reminder",
+                        body));
+                }
             }
-        }
 
-            SendMailStatisticAnnualLeave(validEmployees, supervisors, statisticSections);
+            SendMailStatisticAnnualLeave(validEmployees, supervisors, statistics);
             logger.Error("SendMailRemindUserToUseAnnualLeave: End");
         }
 
         public void SendMailStatisticAnnualLeave(
             List<AnnualLeaveBalance> validEmployees,
-            IEnumerable<SupervisorApproveLeave> supervisors,
-            IEnumerable<EmployeeDepartmentSections> statisticSections
-        )
+            IEnumerable<EmployeeSupervisor> supervisors,
+            IEnumerable<SectionStatisticAnnualLeave> statistics)
         {
-            foreach (var item in statisticSections)
+            foreach (var item in statistics)
             {
-                var annualLeaveBalance = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
-                double percentLeave = Math.Round((double)annualLeaveBalance / item.TotalEmployee * 100);
+                var totalemps = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
+                var percentage = Math.Round((double)totalemps / item.TotalEmployee * 100);
 
-                item.AnnualLeaveBalance = annualLeaveBalance;
-                item.PercentLeave = percentLeave;
+                item.AnnualLeaveBalance = totalemps;
+                item.Percentage = percentage;
             }
 
             var percentByMonth = GetPercentByMonth();
 
             var groupSupervisors = supervisors
                 .GroupBy(g => new { g.Nickname, g.OwnerId, g.SectionId, g.DepartmentId, g.Email })
-                .GroupBy(x => x.Key.OwnerId);
+                .GroupBy(x => x.Key.OwnerId).ToList();
 
             const string tableALTemplate = "<tr><td style=\"border: 1px solid;\">{0}</td>"
                             + "<td style=\"border: 1px solid;\">{1}</td>"
@@ -213,22 +211,21 @@
             foreach (var groupSupervisor in groupSupervisors)
             {
                 var tableStatistic = new StringBuilder();
-                var nickName = groupSupervisor.FirstOrDefault().Key.Nickname;
-                var email = groupSupervisor.FirstOrDefault().Key.Email;
+                var nickname = groupSupervisor.First().Key.Nickname;
+                var email = groupSupervisor.First().Key.Email;
 
                 foreach (var item in groupSupervisor)
                 {
-                    var statisticSection = statisticSections.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
-
+                    var statisticSection = statistics.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
                     if (statisticSection != null)
                     {
                         tableStatistic.AppendFormat(
                             tableALTemplate,
-                            statisticSection.DepartmentCode,
-                            statisticSection.SectionCode,
+                            statisticSection.Department,
+                            statisticSection.Section,
                             statisticSection.TotalEmployee,
                             statisticSection.AnnualLeaveBalance,
-                            statisticSection.PercentLeave
+                            statisticSection.Percentage
                         );
                     }
                 }
@@ -239,11 +236,10 @@
 
                     var body = string.Format(
                         statisticTemplate,
-                        nickName,
+                        nickname,
                         percentByMonth,
                         tableStatistic,
-                        DateTime.Now.Year + 1
-                    );
+                        DateTime.Now.Year + 1);
 
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
@@ -268,16 +264,21 @@
                 case March:
                     percent = "> 75%";
                     break;
+
                 case June:
                     percent = "> 50%";
                     break;
+
                 case September:
                     percent = "> 25%";
                     break;
+
                 case December:
                     percent = "> 0%";
                     break;
+
                 default:
+                    // nothing
                     break;
             }
             return percent;

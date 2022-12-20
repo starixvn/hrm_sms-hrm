@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NexHR.Models.BackgroundJob
 {
-    public class SupervisorApproveLeave
+    public class EmployeeSupervisor
     {
         public int EmpId { get; set; }
 
@@ -15,11 +15,9 @@
         public string Email { get; set; }
 
         public int SectionId { get; set; }
+        public string Section { get; set; }
 
         public int DepartmentId { get; set; }
-
-        public string SectionCode { get; set; }
-
-        public string DepartmentCode { get; set; }
+        public string Department { get; set; }
     }
 }

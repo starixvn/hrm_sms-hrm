@@ -38,9 +38,9 @@
         public bool CanOT { get; set; }
         public decimal? SpecialOT { get; set; }
         public bool IsLocal { get; set; }
-        public int WorkingDays { get; set; }
-        public int WorkingHours { get; set; }
-        public int? WorkingHoursbyWeek { get; set; }
+        public byte WorkingDays { get; set; }
+        public byte WorkingHours { get; set; }
+        public byte? WorkingHoursbyWeek { get; set; }
         public DateTime? CompanyDate { get; set; }
         public string CountryCode { get; set; }
         public bool IsTopManager { get; set; }

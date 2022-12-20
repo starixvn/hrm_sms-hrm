@@ -92,13 +92,13 @@
 
         public bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
         {
-            var isValidCardInfo = employee.CardNo != model.CardNo
+            var isValidCardInfo = !IsEquals(employee.CardNo, model.CardNo)
                 || employee.DateOfIdCard != model.DateOfIdCard
-                || employee.PlaceOfIdCard != model.PlaceOfIdCard;
+                || !IsEquals(employee.PlaceOfIdCard, model.PlaceOfIdCard);
 
-            var isValidAddressInfo = employee.Phone != model.Phone
-                || employee.Address != model.Address
-                || employee.CurrentAddress != model.CurrentAddress;
+            var isValidAddressInfo = !IsEquals(employee.Phone, model.Phone)
+                || !IsEquals(employee.Address, model.Address)
+                || !IsEquals(employee.CurrentAddress, model.CurrentAddress);
 
             return isValidCardInfo || isValidAddressInfo;
         }
@@ -108,17 +108,19 @@
             var template = new StringBuilder();
             var infoUpdate = new Dictionary<string, string>
             {
-                {"CardNo", "- ID Card No.: {0} <br/>"},
-                {"DateOfIdCard", "- ID Card Issue Date: {0} <br/>" },
-                {"PlaceOfIdCard", "- ID Card Place Of Issue: {0} <br/>"},
-                {"Phone", "- Cellphone: {0} <br/>"},
-                {"Address", "- Permanent Address: {0} <br/>"},
-                {"CurrentAddress", "- Current Address: {0} <br/>"}
+                { "CardNo", "- ID Card No.: {0} <br/>" },
+                { "DateOfIdCard", "- ID Card Issue Date: {0} <br/>" },
+                { "PlaceOfIdCard", "- ID Card Place Of Issue: {0} <br/>" },
+                { "Phone", "- Cellphone: {0} <br/>" },
+                { "Address", "- Permanent Address: {0} <br/>" },
+                { "CurrentAddress", "- Current Address: {0} <br/>" }
             };
 
             foreach (var info in infoUpdate)
             {
-                if (GetPropValue(model, info.Key).ToString() != GetPropValue(employee, info.Key).ToString())
+                var oldvalue = GetPropValue(employee, info.Key)?.ToString();
+                var newvalue = GetPropValue(model, info.Key)?.ToString();
+                if (!IsEquals(oldvalue, newvalue))
                 {
                     template.AppendFormat(info.Value, GetPropValue(model, info.Key));
                 }
@@ -127,26 +129,32 @@
             return template.ToString();
         }
 
-        public static object GetPropValue(object src, string propName)
+        private static object GetPropValue(object src, string propName)
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);
         }
 
-        public void SendMailUpdateInfo(Employee model, Employee employee)
+        private static bool IsEquals(string oldvalue, string newvalue)
+        {
+            return string.IsNullOrWhiteSpace(oldvalue) && string.IsNullOrWhiteSpace(newvalue)
+                || oldvalue == newvalue;
+        }
+
+        private void SendMailUpdateInfo(Employee model, Employee employee)
         {
             var hrAndSupervisors = employeeService.GetHRAndSupervisorByEmpId(EmployeeSession.EmpId);
             var updateInfoTemplate = Utilities.ReadTextFile(Server.MapPath(UpdateInfoNotificationTemplate));
 
             foreach (var hrAndSupervisor in hrAndSupervisors)
             {
-                if (!string.IsNullOrEmpty(hrAndSupervisor.Email))
+                if (!string.IsNullOrWhiteSpace(hrAndSupervisor.Email))
                 {
                     var body = string.Format(
-                        updateInfoTemplate
-                        ,hrAndSupervisor.NickName
-                        ,employee.NickName
-                        ,employee.FullName
-                        ,GetTemplateChangeData(model, employee)
+                        updateInfoTemplate,
+                        hrAndSupervisor.NickName,
+                        employee.NickName,
+                        employee.FullName,
+                        GetTemplateChangeData(model, employee)
                     );
 
                     emailService.SendEmail(
