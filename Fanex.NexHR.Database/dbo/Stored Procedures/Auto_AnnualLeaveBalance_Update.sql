@@ -167,6 +167,16 @@ BEGIN
 	SET empsum.AnnualLeaveBalance = empsum.AnnualLeaveBalance + emp.Amount
 	FROM dbo.EmployeeSummary AS empsum WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblEmployeeBalance AS emp WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveTrans AS ltrans WITH (NOLOCK)
+			WHERE emp.EmpId = ltrans.EmpId
+				AND YEAR(ltrans.FromDate) = @Year
+				AND ltrans.DeductDays = 0
+				AND ltrans.CreditDays > 0
+				AND ltrans.RequestId IS NULL
+				AND ltrans.Deleted = 0
+			)
 
 	INSERT INTO dbo.LeaveTrans (
 		EmpId
@@ -188,7 +198,17 @@ BEGIN
 		,@CreatedDate
 		,NULL AS CreatedBy
 		,0 AS Deleted
-	FROM #tblEmployeeBalance WITH (NOLOCK)
+	FROM #tblEmployeeBalance AS tbl WITH (NOLOCK)
+	WHERE NOT EXISTS (
+			SELECT 1
+			FROM dbo.LeaveTrans AS ltrans WITH (NOLOCK)
+			WHERE tbl.EmpId = ltrans.EmpId
+				AND YEAR(ltrans.FromDate) = @Year
+				AND ltrans.DeductDays = 0
+				AND ltrans.CreditDays > 0
+				AND ltrans.RequestId IS NULL
+				AND ltrans.Deleted = 0
+			)
 
 	DROP TABLE #tblEmployeeBalance
 

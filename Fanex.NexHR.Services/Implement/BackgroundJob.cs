@@ -65,7 +65,7 @@
             };
             baseService.ExecuteNonQuery(criteria);
 
-            logger.Error("InsertScheduleByDefaultShift: Start");
+            logger.Error("InsertScheduleByDefaultShift: End");
         }
 
         public void InsertScheduleByWeeklyDefaultShift()
@@ -81,7 +81,7 @@
             };
             baseService.ExecuteNonQuery(criteria);
 
-            logger.Error("InsertScheduleByWeeklyDefaultShift: Start");
+            logger.Error("InsertScheduleByWeeklyDefaultShift: End");
         }
 
         public void InsertHolidayAutomatically()
@@ -112,7 +112,6 @@
             {
                 Year = DateTime.Now.Year + 1
             };
-
             baseService.ExecuteNonQuery(criteria);
 
             logger.Error("UpdateAnnualLeaveBalance: End");
