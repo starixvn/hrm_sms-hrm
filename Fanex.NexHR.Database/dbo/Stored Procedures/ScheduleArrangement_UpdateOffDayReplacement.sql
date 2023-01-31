@@ -49,7 +49,9 @@ BEGIN
 		,@TotalClaimOffDays SMALLINT
 		,@IsFixedOffDay BIT
 		,@DefaultDateFirst TINYINT = @@datefirst
-	DECLARE @tblEmployeeIds TABLE (EmployeeId INT)
+
+	CREATE TABLE #tempEmployeeId (EmployeeId INT PRIMARY KEY)
+
 	DECLARE @tblEmployeeWeekly TABLE (
 		EmployeeId INT
 		,FromDate DATE
@@ -57,29 +59,26 @@ BEGIN
 		,OffDaysByWeek SMALLINT
 		,TotalOffDaysUsed SMALLINT
 		)
-	DECLARE @tblDateRange TABLE (WorkDate DATE)
-	DECLARE @tblResetOffDay TABLE (
-		EmployeeId INT
-		,WorkDate DATE
-		)
+	DECLARE @tblDateRange TABLE (WorkDate DATE PRIMARY KEY)
+	DECLARE @tblResetOffDay TABLE (EmployeeId INT, WorkDate DATE)
+
+	CREATE TABLE #tempEmployeeCalendar (EmployeeId INT, WorkDate DATE, ShiftId INT
+		,IsOvertime BIT, IsHoliday BIT, IsOffDay BIT, IsFixedOffDay BIT, IsKeepInView BIT
+		,IsLeaveDay BIT, IsLeaveOffday BIT, LeaveDay DECIMAL(2, 1), LeaveTypeId INT, LeaveTypeId2 INT
+		,ChangeShiftTypeId TINYINT, MoveOffFromDate DATE, MoveOffToDate DATE
+		,PRIMARY KEY (EmployeeId, WorkDate))
+
 	DECLARE @tblOffDayReplacement TABLE (
 		EmployeeId INT
 		,WorkDate DATE
 		,ReplaceForDate DATE
 		)
 
-	CREATE TABLE #tblEmployee (
-		RowIndex INT IDENTITY(1, 1)
-		,EmployeeId INT
-		,IsLocal BIT
-		,OffDaysByWeek SMALLINT
-		)
+	CREATE TABLE #tempEmployee (RowIndex INT IDENTITY(1, 1), EmployeeId INT PRIMARY KEY, IsLocal BIT, OffDaysByWeek SMALLINT)
 
-	CREATE TABLE #tblWeeklyHasHoliday (
-		RowIndex INT IDENTITY(1, 1)
-		,FromDate DATE
-		,ToDate DATE
-		)
+	CREATE TABLE #tblWeeklyHasHoliday (RowIndex INT IDENTITY(1, 1), FromDate DATE, ToDate DATE)
+
+	CREATE TABLE #tblOldOffDayReplacement (EmpId INT, WorkDate DATE, ShiftId INT, PRIMARY KEY (EmpId, WorkDate))
 
 	SET DATEFIRST 1 -- monday
 	SET @FromDate = DATEADD(DAY, - 1 * (6 + DATEPART(dw, @FromDate)) % 7, @FromDate)
@@ -105,7 +104,7 @@ BEGIN
 
 	SELECT @RowIndex = 1
 		,@TotalRows = COUNT(1)
-	FROM #tblWeeklyHasHoliday
+	FROM #tblWeeklyHasHoliday WITH (NOLOCK)
 
 	IF @TotalRows = 0 RETURN
 
@@ -113,10 +112,10 @@ BEGIN
 	BEGIN
 		SELECT @tmpFromDate = FromDate
 			,@tmpToDate = DATEADD(DAY, 14, ToDate)
-		FROM #tblWeeklyHasHoliday
+		FROM #tblWeeklyHasHoliday WITH (NOLOCK)
 		WHERE RowIndex = @RowIndex
 
-		WHILE (@tmpFromDate <= @tmpToDate)
+		WHILE @tmpFromDate <= @tmpToDate
 		BEGIN
 			IF NOT EXISTS (
 					SELECT 1
@@ -134,11 +133,11 @@ BEGIN
 		SET @RowIndex = @RowIndex + 1
 	END
 
-	INSERT INTO @tblEmployeeIds (EmployeeId)
+	INSERT INTO #tempEmployeeId (EmployeeId)
 	SELECT val
 	FROM dbo.fnc_strSplit(@EmployeeIds, ',')
 
-	INSERT INTO #tblEmployee (
+	INSERT INTO #tempEmployee (
 		EmployeeId
 		,IsLocal
 		,OffDaysByWeek
@@ -149,7 +148,7 @@ BEGIN
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		AND empsum.OffDaysbyWeek > 0
-		LEFT JOIN @tblEmployeeIds AS tblempid ON emp.EmpId = tblempid.EmployeeId
+		LEFT JOIN #tempEmployeeId AS tblempid ON emp.EmpId = tblempid.EmployeeId
 	WHERE (
 			@EmployeeIds IS NULL
 			OR tblempid.EmployeeId IS NOT NULL
@@ -176,7 +175,7 @@ BEGIN
 		,holiday.ToDate
 		,emp.OffDaysByWeek
 		,0
-	FROM #tblEmployee AS emp
+	FROM #tempEmployee AS emp
 		,#tblWeeklyHasHoliday AS holiday
 
 	-- get calendar
@@ -190,25 +189,15 @@ BEGIN
 		,@isEnable = 1
 		,@isDelete = 0
 
-	SELECT emp.EmployeeId
-		,tmpca.WorkDate
-		,empca.ShiftId
-		,tmpca.IsOvertime
-		,tmpca.IsHoliday
-		,tmpca.IsOffDay
-		,ISNULL(empca.IsFixedOffDay, 0) AS IsFixedOffDay
-		,tmpca.IsKeepInView
-		,tmpca.IsLeaveDay
-		,tmpca.IsLeaveOffday
-		,tmpca.LeaveDay
-		,tmpca.LeaveTypeId
-		,tmpca.LeaveTypeId2
-		,empca.ModifiedBy AS ModifierId
-		,tmpca.ChangeShiftTypeId
-		,tmpca.MoveOffFromDate
-		,tmpca.MoveOffToDate
-	INTO #tblEmployeeCalendar
-	FROM #tblEmployee AS emp WITH (NOLOCK)
+	INSERT INTO #tempEmployeeCalendar (EmployeeId, WorkDate, ShiftId
+		,IsOvertime, IsHoliday, IsOffDay, IsFixedOffDay, IsKeepInView
+		,IsLeaveDay, IsLeaveOffday, LeaveDay, LeaveTypeId, LeaveTypeId2
+		,ChangeShiftTypeId, MoveOffFromDate, MoveOffToDate)
+	SELECT emp.EmployeeId, tmpca.WorkDate, empca.ShiftId
+		,tmpca.IsOvertime, tmpca.IsHoliday, tmpca.IsOffDay, ISNULL(empca.IsFixedOffDay, 0), tmpca.IsKeepInView
+		,tmpca.IsLeaveDay, tmpca.IsLeaveOffday, tmpca.LeaveDay, tmpca.LeaveTypeId, tmpca.LeaveTypeId2
+		,tmpca.ChangeShiftTypeId,tmpca.MoveOffFromDate,tmpca.MoveOffToDate
+	FROM #tempEmployee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS tmpca WITH (NOLOCK) ON emp.EmployeeId = tmpca.EmpId
 		AND tmpca.WorkDate BETWEEN @tmpFromDate
 			AND @tmpToDate
@@ -238,7 +227,7 @@ BEGIN
 		FROM @tblEmployeeWeekly AS emp
 			CROSS APPLY (
 			SELECT COUNT(1) AS TotalOffDaysUsed
-			FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
+			FROM #tempEmployeeCalendar AS empca WITH (NOLOCK)
 			WHERE empca.EmployeeId = emp.EmployeeId
 				AND empca.WorkDate BETWEEN emp.FromDate AND emp.ToDate
 				AND empca.IsHoliday = 0
@@ -269,7 +258,6 @@ BEGIN
 							FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 							WHERE emp.EmployeeId = offrep.EmployeeId
 								AND empca.WorkDate = offrep.WorkDate
-								--AND empca.ModifierId IS NULL
 								AND empca.IsOvertime = 0
 							)
 						AND NOT EXISTS (
@@ -291,7 +279,7 @@ BEGIN
 			INNER JOIN @tblEmployeeWeekly AS emp ON empca.EmpId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
-			INNER JOIN #tblEmployeeCalendar AS tmpempca WITH (NOLOCK) ON empca.EmpId = tmpempca.EmployeeId
+			INNER JOIN #tempEmployeeCalendar AS tmpempca WITH (NOLOCK) ON empca.EmpId = tmpempca.EmployeeId
 			AND empca.WorkDate = tmpempca.WorkDate
 		WHERE empca.IsOffDay = 1
 			AND ISNULL(empca.IsFixedOffDay, 0) = 0
@@ -300,20 +288,16 @@ BEGIN
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmpId = offrep.EmployeeId
-					--AND (
-					--	(
-					--		emp.TotalOffDaysUsed < emp.OffDaysByWeek
-					--		AND empca.ModifiedBy IS NULL
-					--		)
-					--	OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
-					--	)
+					--AND emp.TotalOffDaysUsed >= emp.OffDaysByWeek
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate AND emp.ToDate
 				)
 
 		UPDATE empca
 		SET empca.IsOffDay = 0
-		FROM #tblEmployeeCalendar AS empca WITH (NOLOCK)
+		OUTPUT INSERTED.EmployeeId, INSERTED.WorkDate, INSERTED.ShiftId
+		INTO #tblOldOffDayReplacement (EmpId, WorkDate, ShiftId)
+		FROM #tempEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN @tblEmployeeWeekly AS emp ON empca.EmployeeId = emp.EmployeeId
 			AND emp.FromDate = @FromDate
 			AND emp.ToDate = @ToDate
@@ -324,13 +308,7 @@ BEGIN
 				SELECT 1
 				FROM dbo.ScheduleArrangementOffDayReplacement AS offrep WITH (NOLOCK)
 				WHERE empca.EmployeeId = offrep.EmployeeId
-					--AND (
-					--	(
-					--		emp.TotalOffDaysUsed < emp.OffDaysByWeek
-					--		AND empca.ModifierId IS NULL
-					--		)
-					--	OR emp.TotalOffDaysUsed >= emp.OffDaysByWeek
-					--	)
+					--AND emp.TotalOffDaysUsed >= emp.OffDaysByWeek
 					AND empca.WorkDate = offrep.WorkDate
 					AND offrep.ReplaceForDate BETWEEN emp.FromDate
 						AND emp.ToDate
@@ -379,7 +357,7 @@ BEGIN
 
 				-- off day next to PH
 				SELECT @WorkDate = MIN(WorkDate)
-				FROM #tblEmployeeCalendar WITH (NOLOCK)
+				FROM #tempEmployeeCalendar WITH (NOLOCK)
 				WHERE EmployeeId = @EmployeeId
 					AND WorkDate > @PHDate
 					AND WorkDate <= @ToDate
@@ -394,7 +372,7 @@ BEGIN
 				IF @WorkDate IS NOT NULL
 					AND NOT EXISTS (
 						SELECT 1
-						FROM #tblEmployeeCalendar WITH (NOLOCK)
+						FROM #tempEmployeeCalendar WITH (NOLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate > @PHDate
 							AND WorkDate < @WorkDate
@@ -414,7 +392,7 @@ BEGIN
 					VALUES (@EmployeeId, @WorkDate, @PHDate)
 
 					DELETE
-					FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+					FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 					WHERE EmployeeId = @EmployeeId
 						AND WorkDate = @WorkDate
 
@@ -426,7 +404,7 @@ BEGIN
 				-- off day OT
 				SELECT @WorkDate = MIN(WorkDate)
 					,@IsFixedOffDay = MAX(CAST(IsFixedOffDay AS TINYINT))
-				FROM #tblEmployeeCalendar WITH (NOLOCK)
+				FROM #tempEmployeeCalendar WITH (NOLOCK)
 				WHERE EmployeeId = @EmployeeId
 					AND WorkDate BETWEEN @FromDate
 						AND @ToDate
@@ -445,7 +423,7 @@ BEGIN
 					IF @IsFixedOffDay = 0
 					BEGIN
 						SELECT @ReplacedDate = MIN(WorkDate)
-						FROM #tblEmployeeCalendar WITH (NOLOCK)
+						FROM #tempEmployeeCalendar WITH (NOLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate > @PHDate
 							AND WorkDate <= @ToDate
@@ -460,7 +438,7 @@ BEGIN
 						INSERT INTO @tblResetOffDay (EmployeeId, WorkDate)
 						VALUES (@EmployeeId, @WorkDate)
 
-						UPDATE #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						UPDATE #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						SET IsOffDay = 0
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @WorkDate
@@ -471,7 +449,7 @@ BEGIN
 							VALUES (@EmployeeId, @ReplacedDate, @PHDate)
 
 							DELETE
-							FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+							FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate = @ReplacedDate
 
@@ -486,7 +464,7 @@ BEGIN
 						VALUES (@EmployeeId, @WorkDate, @PHDate)
 
 						DELETE
-						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @WorkDate
 
@@ -498,7 +476,7 @@ BEGIN
 
 				-- normal day
 				SELECT @ReplacedDate = MIN(WorkDate)
-				FROM #tblEmployeeCalendar WITH (NOLOCK)
+				FROM #tempEmployeeCalendar AS empca WITH (NOLOCK)
 				WHERE EmployeeId = @EmployeeId
 					AND WorkDate > @PHDate
 					AND WorkDate <= @ToDate
@@ -509,6 +487,29 @@ BEGIN
 					AND IsLeaveDay = 0
 					AND IsLeaveOffDay = 0
 					AND IsOffDay = 0
+					AND EXISTS (
+						SELECT 1
+						FROM #tblOldOffDayReplacement AS tbl WITH (NOLOCK)
+						WHERE empca.EmployeeId = tbl.EmpId
+							AND empca.WorkDate = tbl.WorkDate
+							AND tbl.ShiftId IS NULL
+						)
+
+				IF @ReplacedDate IS NULL
+				BEGIN
+					SELECT @ReplacedDate = MIN(WorkDate)
+					FROM #tempEmployeeCalendar AS empca WITH (NOLOCK)
+					WHERE EmployeeId = @EmployeeId
+						AND WorkDate > @PHDate
+						AND WorkDate <= @ToDate
+						AND IsHoliday = 0
+						AND ChangeShiftTypeId IS NULL
+						AND IsKeepInView = 0
+						AND IsOvertime = 0
+						AND IsLeaveDay = 0
+						AND IsLeaveOffDay = 0
+						AND IsOffDay = 0
+				END
 
 				IF @ReplacedDate IS NOT NULL
 				BEGIN
@@ -516,7 +517,7 @@ BEGIN
 					VALUES (@EmployeeId, @ReplacedDate, @PHDate)
 
 					DELETE
-					FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+					FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 					WHERE EmployeeId = @EmployeeId
 						AND WorkDate = @ReplacedDate
 
@@ -534,7 +535,7 @@ BEGIN
 
 					-- off day next to PH
 					SELECT @WorkDate = MIN(WorkDate)
-					FROM #tblEmployeeCalendar WITH (NOLOCK)
+					FROM #tempEmployeeCalendar WITH (NOLOCK)
 					WHERE EmployeeId = @EmployeeId
 						AND WorkDate BETWEEN @tmpFromDate
 							AND @tmpToDate
@@ -548,7 +549,7 @@ BEGIN
 					IF @WorkDate IS NOT NULL
 						AND NOT EXISTS (
 							SELECT 1
-							FROM #tblEmployeeCalendar WITH (NOLOCK)
+							FROM #tempEmployeeCalendar WITH (NOLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate >= @tmpFromDate
 								AND WorkDate < @WorkDate
@@ -568,7 +569,7 @@ BEGIN
 						VALUES (@EmployeeId, @WorkDate, @PHDate)
 
 						DELETE
-						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @WorkDate
 
@@ -578,7 +579,7 @@ BEGIN
 					-- off day OT
 					SELECT @WorkDate = MIN(WorkDate)
 						,@IsFixedOffDay = MAX(CAST(IsFixedOffDay AS TINYINT))
-					FROM #tblEmployeeCalendar WITH (NOLOCK)
+					FROM #tempEmployeeCalendar WITH (NOLOCK)
 					WHERE EmployeeId = @EmployeeId
 						AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
 						AND IsHoliday = 0
@@ -595,7 +596,7 @@ BEGIN
 						IF @IsFixedOffDay = 0
 						BEGIN
 							SELECT @ReplacedDate = MIN(WorkDate)
-							FROM #tblEmployeeCalendar WITH (NOLOCK)
+							FROM #tempEmployeeCalendar WITH (NOLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
 								AND IsHoliday = 0
@@ -612,13 +613,13 @@ BEGIN
 							INSERT INTO @tblResetOffDay (EmployeeId, WorkDate)
 							VALUES (@EmployeeId, @WorkDate)
 
-							UPDATE #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+							UPDATE #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 							SET IsOffDay = 0
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate = @WorkDate
 
 							DELETE
-							FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+							FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate = @ReplacedDate
 						END
@@ -628,7 +629,7 @@ BEGIN
 							VALUES (@EmployeeId, @WorkDate, @PHDate)
 
 							DELETE
-							FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+							FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate = @WorkDate
 						END
@@ -639,7 +640,7 @@ BEGIN
 					-- TotalOffDays > TotalOffDaysByWeek
 					IF EXISTS (
 							SELECT 1
-							FROM #tblEmployeeCalendar WITH (NOLOCK)
+							FROM #tempEmployeeCalendar WITH (NOLOCK)
 							WHERE EmployeeId = @EmployeeId
 								AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
 								AND IsHoliday = 0
@@ -654,7 +655,7 @@ BEGIN
 							)
 					BEGIN
 						SELECT @ReplacedDate = MIN(WorkDate)
-						FROM #tblEmployeeCalendar WITH (NOLOCK)
+						FROM #tempEmployeeCalendar WITH (NOLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
 							AND IsHoliday = 0
@@ -669,7 +670,7 @@ BEGIN
 						VALUES (@EmployeeId, @ReplacedDate, @PHDate)
 
 						DELETE
-						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @ReplacedDate
 
@@ -678,7 +679,7 @@ BEGIN
 
 					-- normal day
 					SELECT @ReplacedDate = MIN(WorkDate)
-					FROM #tblEmployeeCalendar WITH (NOLOCK)
+					FROM #tempEmployeeCalendar AS empca WITH (NOLOCK)
 					WHERE EmployeeId = @EmployeeId
 						AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
 						AND IsHoliday = 0
@@ -686,8 +687,30 @@ BEGIN
 						AND IsKeepInView = 0
 						AND IsOvertime = 0
 						AND IsLeaveDay = 0
-						AND IsLeaveOffDay = 0
+						AND IsLeaveOffDay = 0						
 						AND IsOffDay = 0
+						AND EXISTS (
+							SELECT 1
+							FROM #tblOldOffDayReplacement AS tbl WITH (NOLOCK)
+							WHERE empca.EmployeeId = tbl.EmpId
+								AND empca.WorkDate = tbl.WorkDate
+								AND tbl.ShiftId IS NULL
+							)
+					
+					IF @ReplacedDate IS NULL
+					BEGIN
+						SELECT @ReplacedDate = MIN(WorkDate)
+						FROM #tempEmployeeCalendar WITH (NOLOCK)
+						WHERE EmployeeId = @EmployeeId
+							AND WorkDate BETWEEN @tmpFromDate AND @tmpToDate
+							AND IsHoliday = 0
+							AND ChangeShiftTypeId IS NULL
+							AND IsKeepInView = 0
+							AND IsOvertime = 0
+							AND IsLeaveDay = 0
+							AND IsLeaveOffDay = 0						
+							AND IsOffDay = 0
+					END
 
 					IF @ReplacedDate IS NOT NULL
 					BEGIN
@@ -695,7 +718,7 @@ BEGIN
 						VALUES (@EmployeeId, @ReplacedDate, @PHDate)
 
 						DELETE
-						FROM #tblEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
+						FROM #tempEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 						WHERE EmployeeId = @EmployeeId
 							AND WorkDate = @ReplacedDate
 
@@ -738,7 +761,7 @@ BEGIN
 
 	DELETE offrep
 	FROM dbo.ScheduleArrangementOffDayReplacement AS offrep
-		LEFT JOIN @tblEmployeeIds AS tblid ON offrep.EmployeeId = tblid.EmployeeId
+		LEFT JOIN #tempEmployeeId AS tblid ON offrep.EmployeeId = tblid.EmployeeId
 	WHERE (
 			@EmployeeIds IS NULL
 			OR tblid.EmployeeId IS NOT NULL
@@ -771,9 +794,13 @@ BEGIN
 				AND tbl.WorkDate = offr.WorkDate
 			)
 
-	DROP TABLE #tblEmployee
+	DROP TABLE #tempEmployeeId
+
+	DROP TABLE #tempEmployee
 
 	DROP TABLE #tblWeeklyHasHoliday
 
-	DROP TABLE #tblEmployeeCalendar
+	DROP TABLE #tempEmployeeCalendar
+
+	DROP TABLE #tblOldOffDayReplacement
 END

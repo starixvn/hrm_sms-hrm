@@ -46,6 +46,7 @@ BEGIN
 		,ShiftId INT
 		,IsOffDay BIT
 		,IsHoliday BIT
+		,PRIMARY KEY (EmpId, WorkDate)
 		)
 
 	IF ISNULL(@empIds, '') <> ''
@@ -69,10 +70,6 @@ BEGIN
 				)
 	END
 
-	--IF @fromDate < DATEADD(MONTH, - 6, GETDATE())
-	--BEGIN
-	--	SET @fromDate = DATEADD(MONTH, - 6, GETDATE())
-	--END
 	INSERT INTO #tempEmployeeCalendar (
 		EmpId
 		,WorkDate
@@ -134,7 +131,7 @@ BEGIN
 			AND empsum.IsDefaultSchedule = 1
 			INNER JOIN dbo.EmployeeDefaultShift AS empshift WITH (NOLOCK) ON emp.EmpId = empshift.EmpId
 		WHERE NOT EXISTS (
-				SELECT tbl.EmpId
+				SELECT 1
 				FROM #tempEmployeeCalendar AS tbl WITH (NOLOCK)
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
@@ -165,7 +162,7 @@ BEGIN
 			ORDER BY empshift.FromDate DESC
 			) AS empshift
 		WHERE NOT EXISTS (
-				SELECT tbl.EmpId
+				SELECT 1
 				FROM #tempEmployeeCalendar AS tbl WITH (NOLOCK)
 				WHERE tbl.EmpId = emp.EmpId
 					AND tbl.WorkDate = @tempDate
@@ -182,10 +179,7 @@ BEGIN
 		INNER JOIN #tempEmployeeCalendar AS tmp WITH (ROWLOCK) ON empca.EmpId = tmp.EmpId
 		AND empca.WorkDate = tmp.WorkDate
 	WHERE empca.RequestId IS NULL
-		OR (
-			empca.RequestId IS NOT NULL
-			AND empca.RequestTypeId = @ChangeShiftRequestTypeId
-			)
+		OR (empca.RequestId IS NOT NULL AND empca.RequestTypeId = @ChangeShiftRequestTypeId)
 
 	INSERT INTO dbo.tmpEmployeeCalendar (
 		EmpId
@@ -201,7 +195,7 @@ BEGIN
 		,IsHoliday
 	FROM #tempEmployeeCalendar AS tmp WITH (ROWLOCK)
 	WHERE NOT EXISTS (
-			SELECT empca.EmpId
+			SELECT 1
 			FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
 			WHERE empca.EmpId = tmp.EmpId
 				AND empca.WorkDate = tmp.WorkDate
@@ -433,7 +427,7 @@ BEGIN
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND (
-			(
+				(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
 				AND empca.ChangeShiftTypeId = @MoveOfDayTypeId
