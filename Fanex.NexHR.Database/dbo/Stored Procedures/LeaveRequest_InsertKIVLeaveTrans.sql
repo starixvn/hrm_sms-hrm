@@ -32,7 +32,7 @@ BEGIN
 			)
 	BEGIN
 		DELETE
-		FROM dbo.KeepInViewByDayTrans
+		FROM dbo.KeepInViewByDayTrans WITH (ROWLOCK, UPDLOCK)
 		WHERE Requestid = @RequestId
 	END
 
@@ -42,36 +42,39 @@ BEGIN
 			WHERE Requestid = @RequestId
 			)
 	BEGIN
-
 		SELECT @empId = EmpId
 			,@onDate = WorkDate
-			,@deductMinutes = DeductMinutes 
-		FROM KeepInViewByHourTrans WITH (NOLOCK)
+			,@deductMinutes = DeductMinutes
+		FROM dbo.KeepInViewByHourTrans WITH (NOLOCK)
 		WHERE RequestId = @RequestId
 
-		WHILE(@deductMinutes > 0)
+		WHILE @deductMinutes > 0
 		BEGIN
-			SELECT TOP 1 @deductMinutes = @deductMinutes - CreditMinutes, @RequestTransId = RequestId
-			FROM KeepInViewByHourTrans WITH (NOLOCK)
-			WHERE EmpId = @empId AND WorkDate > DATEADD(DAY, -1, DATEADD(MONTH, -1, @onDate)) AND CreditMinutes > 0 AND CreditMinutes > MinutesBalance
+			SELECT TOP 1 @deductMinutes = @deductMinutes - CreditMinutes
+				,@RequestTransId = RequestId
+			FROM dbo.KeepInViewByHourTrans WITH (NOLOCK)
+			WHERE EmpId = @empId
+				AND WorkDate > DATEADD(DAY, - 1, DATEADD(MONTH, - 1, @onDate))
+				AND CreditMinutes > 0
+				AND CreditMinutes > MinutesBalance
 			ORDER BY WorkDate ASC
 
-			IF(@deductMinutes >= 0 )
+			IF @deductMinutes >= 0
 			BEGIN
-				UPDATE KeepInViewByHourTrans
+				UPDATE dbo.KeepInViewByHourTrans WITH (ROWLOCK, UPDLOCK)
 				SET MinutesBalance = CreditMinutes
 				WHERE RequestId = @RequestTransId
 			END
 			ELSE
 			BEGIN
-				UPDATE KeepInViewByHourTrans
+				UPDATE dbo.KeepInViewByHourTrans WITH (ROWLOCK, UPDLOCK)
 				SET MinutesBalance = MinutesBalance + CreditMinutes + @deductMinutes
 				WHERE RequestId = @RequestTransId
 			END
 		END
 
 		DELETE
-		FROM dbo.KeepInViewByHourTrans
+		FROM dbo.KeepInViewByHourTrans WITH (ROWLOCK, UPDLOCK)
 		WHERE RequestId = @RequestId
 	END
 
@@ -95,13 +98,11 @@ BEGIN
 		FROM dbo.LeaveRequestDetail WITH (NOLOCK)
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF (
-			EXISTS (
-				SELECT 1
-				FROM dbo.LeaveRequest WITH (NOLOCK)
-				WHERE RequestId = @RequestId
-					AND LeaveType = @KeepInViewByDayLeaveType
-				)
+	ELSE IF EXISTS (
+			SELECT 1
+			FROM dbo.LeaveRequest WITH (NOLOCK)
+			WHERE RequestId = @RequestId
+				AND LeaveType = @KeepInViewByDayLeaveType
 			)
 	BEGIN
 		SELECT @KIVLeaveDay = TotalDays
@@ -126,13 +127,12 @@ BEGIN
 			,ISNULL(@KIVLeaveDay, 0)
 			,YEAR(ToDate)
 			,@startTime
-		FROM dbo.LeaveRequest lr WITH (NOLOCK)
+		FROM dbo.LeaveRequest WITH (NOLOCK)
 		WHERE Requestid = @RequestId
 	END
 
 	IF ISNULL(@KIVLeaveHour, 0) > 0
 	BEGIN
-
 		INSERT INTO dbo.KeepInViewByHourTrans (
 			EmpId
 			,WorkDate
@@ -154,30 +154,33 @@ BEGIN
 
 		SELECT @empId = EmpId
 			,@onDate = WorkDate
-			,@deductMinutes = DeductMinutes 
-		FROM KeepInViewByHourTrans WITH (NOLOCK)
+			,@deductMinutes = DeductMinutes
+		FROM dbo.KeepInViewByHourTrans WITH (NOLOCK)
 		WHERE RequestId = @RequestId
 
-		WHILE(@deductMinutes > 0)
+		WHILE @deductMinutes > 0
 		BEGIN
-
-			SELECT TOP 1 @deductMinutes = @deductMinutes - MinutesBalance , @RequestTransId = RequestId
-			FROM KeepInViewByHourTrans WITH (NOLOCK)
-			WHERE EmpId = @empId AND WorkDate > DATEADD(DAY, -1, DATEADD(MONTH, -1, @onDate)) AND MinutesBalance > 0
+			SELECT TOP 1 @deductMinutes = @deductMinutes - MinutesBalance
+				,@RequestTransId = RequestId
+			FROM dbo.KeepInViewByHourTrans WITH (NOLOCK)
+			WHERE EmpId = @empId
+				AND WorkDate > DATEADD(DAY, - 1, DATEADD(MONTH, - 1, @onDate))
+				AND MinutesBalance > 0
 			ORDER BY WorkDate ASC
 
-			IF(@deductMinutes >= 0 )
+			IF @deductMinutes >= 0
 			BEGIN
-				UPDATE KeepInViewByHourTrans
+				UPDATE dbo.KeepInViewByHourTrans WITH (ROWLOCK, UPDLOCK)
 				SET MinutesBalance = 0
 				WHERE RequestId = @RequestTransId
 			END
 			ELSE
 			BEGIN
-				UPDATE KeepInViewByHourTrans
+				UPDATE dbo.KeepInViewByHourTrans WITH (ROWLOCK, UPDLOCK)
 				SET MinutesBalance = ABS(@deductMinutes)
 				WHERE RequestId = @RequestTransId
 			END
 		END
 	END
 END
+
