@@ -23,6 +23,7 @@ BEGIN
 
 	UPDATE dbo.EmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 	SET IsPublic = 1
+		,ModifiedDate = GETDATE()
 	WHERE WorkDate BETWEEN @fromdate
 			AND @todate
 		AND ISNULL(IsPublic, 0) = 0

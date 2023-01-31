@@ -50,6 +50,7 @@ BEGIN
 		,IsFixedOffDay
 		,IsHoliday
 		,IsPublic
+		,ModifiedDate
 		)
 	SELECT DISTINCT emp.EmpId
 		,tblc.WorkDate
@@ -99,6 +100,7 @@ BEGIN
 			ELSE 0 END
 			) AS IsHoliday
 		,1 AS IsPublic
+		,GETDATE() AS ModifiedDate
 	FROM dbo.EmployeeDefaultShift AS shift WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.EmpId = shift.EmpId
 		AND (
@@ -174,6 +176,7 @@ BEGIN
 			ELSE 0 END
 			)
 		,empca.IsPublic = 1
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND emp.[Enabled] = 1
