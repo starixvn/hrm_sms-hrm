@@ -61,11 +61,17 @@ BEGIN
 			,IsOffDay
 			,tbl.ShiftId
 			,shift.[Name]
-		FROM #tblEmployeeCalendar AS tbl
+		FROM #tblEmployeeCalendar AS tbl WITH (NOLOCK)
 			LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
 		WHERE IsKeepInView = 0
 			AND IsOvertime = 0
-			AND IsHoliday = 0
+			AND (
+				IsHoliday = 0
+				OR (
+					IsHoliday = 1
+					AND tbl.ShiftId IS NOT NULL
+					)
+				)
 			AND IsLeaveOffday = 0
 			AND (
 				IsLeaveDay = 0
@@ -76,7 +82,7 @@ BEGIN
 	BEGIN
 		UPDATE tbl
 		SET tbl.IsOffDay = 1
-		FROM #tblEmployeeCalendar AS tbl
+		FROM #tblEmployeeCalendar AS tbl WITH (NOLOCK)
 			INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON tbl.RequestId = cs.RequestId
 			AND cs.TypeId = @MoveOffDay
 			INNER JOIN dbo.ChangeShiftRequestDetail AS dt WITH (NOLOCK) ON cs.RequestId = dt.RequestId
@@ -87,7 +93,7 @@ BEGIN
 			,IsOffDay
 			,tbl.ShiftId
 			,shift.[Name]
-		FROM #tblEmployeeCalendar AS tbl
+		FROM #tblEmployeeCalendar AS tbl WITH (NOLOCK)
 			LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
 		WHERE tbl.ShiftId IS NULL
 			AND IsKeepInView = 0
