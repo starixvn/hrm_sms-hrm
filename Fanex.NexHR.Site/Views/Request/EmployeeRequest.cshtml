@@ -29,7 +29,7 @@
             @if (Model.ViewType == RequestViewType.PersonalSpace)
             {
                 <tr>
-                    <th colspan="16">
+                    <th colspan="17">
                         <div style="float:right; margin-left: 10px">
                             <input type="button" class="btn btn-primary btnApproveMultiple" id="btnApproveMultiple" command-type="@RequestCommand.Approve" value="@Labels.Approve" />
                         </div>
@@ -43,7 +43,7 @@
             else if (Model.ViewType == RequestViewType.HRSpace)
             {
                 <tr>
-                    <th colspan="16">
+                    <th colspan="17">
                         <div style="float:right;">
                             <input type="button" class="btn btn-primary btnApproveMultiple" id="btnApproveMultiple" command-type="@RequestCommand.Process" value="@Labels.Process" />
                         </div>
@@ -92,6 +92,7 @@
                     </div>
                 </th>
                 <th>@Labels.Details</th>
+                <th>@Labels.Reason</th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         @Labels.Verified
@@ -203,6 +204,9 @@
                         <td class="align-left">
                             @Html.Raw(RequestService.ToRequestMessage(request))
                         </td>
+                        <td class="align-left">
+                            @Html.Raw(RequestService.GetReasonRequest(request.RequestType.Id, request.ReasonId))
+                        </td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
                         </td>
@@ -245,7 +249,7 @@
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: 16);
+            @RazorHelper.DisplayNoInformation(colspan: 17);
         }
     </table>
 </div>

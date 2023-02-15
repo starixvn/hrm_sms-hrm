@@ -75,14 +75,14 @@
         public Shift ToShift { get; set; }
 
         public byte ChangeShiftType { get; set; }
-            
+
         public IEnumerable<ChangeShiftDetail> ChangeShiftDetails { get; set; }
 
         // LateIn-EarlyOut
         public int TotalMins { get; set; }
 
         public int ActualLateInEarlyOut { get; set; }
-        public byte ReasonId { get; set; }
+        public int ReasonId { get; set; }
 
         // Overtime
         public short OvertimeType { get; set; }

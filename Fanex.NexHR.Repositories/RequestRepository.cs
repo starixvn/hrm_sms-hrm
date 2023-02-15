@@ -146,6 +146,7 @@
             entity.Remark = requestInfo.Remark ?? string.Empty;
             entity.TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0;
             entity.CreatedDate = requestInfo.CreatedDate;
+            entity.ReasonId = requestInfo.ReasonId;
             entity.RefNO = requestInfo.RefNo ?? string.Empty;
             entity.ApprovedDate = requestInfo.ApprovedDate;
             entity.VerifiedDate = requestInfo.VerifiedDate;

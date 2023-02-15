@@ -19,6 +19,7 @@
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
+    using Org.BouncyCastle.Asn1.Ocsp;
 
     public class RequestService : IRequestService
     {
@@ -84,6 +85,48 @@
             }
 
             return message;
+        }
+
+        public static string GetReasonRequest(int requestTypeId, int reasonId)
+        {
+            if (reasonId == 0)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                if (requestTypeId == (byte)RequestType.CheckIn || requestTypeId == (byte)RequestType.CheckOut)
+                {
+                    switch (reasonId)
+                    {
+                        case (byte)CheckInOutReason.VanLate:
+                            return Labels.VanLate;
+                        case (byte)CheckInOutReason.BusinessTrip:
+                            return Labels.BusinessTrip;
+                        case (byte)CheckInOutReason.Forgot:
+                            return Labels.Forgot;
+                        case (byte)CheckInOutReason.Other:
+                            return Labels.Other;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (reasonId)
+                    {
+                        case (byte)LateInEarlyOutReason.ManagementAllow:
+                            return Labels.ManagementAllow;
+
+                        case (byte)LateInEarlyOutReason.Other:
+                            return Labels.Other;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return string.Empty;
         }
 
         public IList<RequestEntity> GetRequests(GetRequestCriteria criteria)

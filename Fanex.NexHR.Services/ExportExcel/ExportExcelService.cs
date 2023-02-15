@@ -11,6 +11,7 @@
     using Fanex.NexHR.Models.Request;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using Org.BouncyCastle.Asn1.Ocsp;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelService : IExportExcelService
@@ -317,9 +318,10 @@
             ICell cellNick = row.GetCell(5);
             ICell cellRequest = row.GetCell(6);
             ICell cellDetails = row.GetCell(7);
-            ICell cellRemarks = row.GetCell(8);
-            ICell cellCreateDate = row.GetCell(9);
-            ICell cellStatus = row.GetCell(10);
+            ICell cellReason = row.GetCell(8);
+            ICell cellRemarks = row.GetCell(9);
+            ICell cellCreateDate = row.GetCell(10);
+            ICell cellStatus = row.GetCell(11);
             cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
             cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
             cellSection.SetCellValue(item.Requester.Team.Section.Code);
@@ -328,6 +330,7 @@
             cellName.SetCellValue(item.Requester.FullName);
             cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);
             cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
+            cellReason.SetCellValue(RequestService.GetReasonRequest(item.RequestType.Id, item.ReasonId));
             cellRemarks.SetCellValue(item.Remark);
             cellCreateDate.SetCellValue(item.CreatedDate);
             cellStatus.SetCellValue(item.Status.Name);
