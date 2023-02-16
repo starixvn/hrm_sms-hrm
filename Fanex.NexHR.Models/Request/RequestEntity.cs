@@ -82,7 +82,7 @@
         public int TotalMins { get; set; }
 
         public int ActualLateInEarlyOut { get; set; }
-        public int ReasonId { get; set; }
+        public byte ReasonId { get; set; }
 
         // Overtime
         public short OvertimeType { get; set; }

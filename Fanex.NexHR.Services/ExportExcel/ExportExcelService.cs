@@ -11,7 +11,6 @@
     using Fanex.NexHR.Models.Request;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
-    using Org.BouncyCastle.Asn1.Ocsp;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelService : IExportExcelService
@@ -41,6 +40,7 @@
             var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "EmployeeWorkFromHome");
 
             #region render body
+
             var rowIndex = 4;
             var index = 0;
 
@@ -66,7 +66,7 @@
                 rowIndex++;
             }
 
-            #endregion
+            #endregion render body
 
             // remove sheet & row template
             hssfworkbook.RemoveSheetAt(0);

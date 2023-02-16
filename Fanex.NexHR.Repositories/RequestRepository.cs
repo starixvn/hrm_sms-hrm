@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -97,8 +98,8 @@
             {
                 using (var multi = db.QueryMultiple(criteria))
                 {
-                    IList<LeaveDisciplineModel> disciplines = multi.Read<LeaveDisciplineModel>().ToList();
-                    IList<LeaveDisciplineDetailModel> leaveDetails = multi.Read<LeaveDisciplineDetailModel>().ToList();
+                    var disciplines = multi.Read<LeaveDisciplineModel>().ToList();
+                    var leaveDetails = multi.Read<LeaveDisciplineDetailModel>().ToList();
                     foreach (var discipline in disciplines)
                     {
                         discipline.LeaveDetail = leaveDetails.Where(t => t.WorkDate == discipline.WorkDate).ToList();
@@ -111,8 +112,7 @@
 
         private IList<RequestEntity> FillData(dynamic data)
         {
-            IList<RequestEntity> entityList = new List<RequestEntity>();
-
+            var entityList = new List<RequestEntity>();
             foreach (var request in data)
             {
                 RequestEntity entity = FillDataEntity(request);
@@ -122,7 +122,7 @@
             return entityList;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+        [SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         private RequestEntity FillDataEntity(dynamic requestInfo)
         {
             var entity = new RequestEntity();
@@ -146,7 +146,7 @@
             entity.Remark = requestInfo.Remark ?? string.Empty;
             entity.TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0;
             entity.CreatedDate = requestInfo.CreatedDate;
-            entity.ReasonId = requestInfo.ReasonId;
+            entity.ReasonId = (byte)requestInfo.ReasonId;
             entity.RefNO = requestInfo.RefNo ?? string.Empty;
             entity.ApprovedDate = requestInfo.ApprovedDate;
             entity.VerifiedDate = requestInfo.VerifiedDate;

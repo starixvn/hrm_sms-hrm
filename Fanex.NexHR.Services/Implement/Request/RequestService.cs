@@ -19,7 +19,6 @@
     using Fanex.NexHR.Models.Request.ChangeShift;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
-    using Org.BouncyCastle.Asn1.Ocsp;
 
     public class RequestService : IRequestService
     {
@@ -87,46 +86,53 @@
             return message;
         }
 
-        public static string GetReasonRequest(int requestTypeId, int reasonId)
+        public static string GetReasonRequest(short requestTypeId, byte reasonId)
         {
-            if (reasonId == 0)
+            var reason = string.Empty;
+            if (requestTypeId == (byte)RequestType.CheckIn || requestTypeId == (byte)RequestType.CheckOut)
             {
-                return string.Empty;
+                switch (reasonId)
+                {
+                    case (byte)CheckInOutReason.VanLate:
+                        reason = Labels.VanLate;
+                        break;
+
+                    case (byte)CheckInOutReason.BusinessTrip:
+                        reason = Labels.BusinessTrip;
+                        break;
+
+                    case (byte)CheckInOutReason.Forgot:
+                        reason = Labels.Forgot;
+                        break;
+
+                    case (byte)CheckInOutReason.Other:
+                        reason = Labels.Other;
+                        break;
+
+                    default:
+                        // nothing
+                        break;
+                }
             }
             else
             {
-                if (requestTypeId == (byte)RequestType.CheckIn || requestTypeId == (byte)RequestType.CheckOut)
+                switch (reasonId)
                 {
-                    switch (reasonId)
-                    {
-                        case (byte)CheckInOutReason.VanLate:
-                            return Labels.VanLate;
-                        case (byte)CheckInOutReason.BusinessTrip:
-                            return Labels.BusinessTrip;
-                        case (byte)CheckInOutReason.Forgot:
-                            return Labels.Forgot;
-                        case (byte)CheckInOutReason.Other:
-                            return Labels.Other;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (reasonId)
-                    {
-                        case (byte)LateInEarlyOutReason.ManagementAllow:
-                            return Labels.ManagementAllow;
+                    case (byte)LateInEarlyOutReason.ManagementAllow:
+                        reason = Labels.ManagementAllow;
+                        break;
 
-                        case (byte)LateInEarlyOutReason.Other:
-                            return Labels.Other;
-                        default:
-                            break;
-                    }
+                    case (byte)LateInEarlyOutReason.Other:
+                        reason = Labels.Other;
+                        break;
+
+                    default:
+                        // nothing
+                        break;
                 }
             }
 
-            return string.Empty;
+            return reason;
         }
 
         public IList<RequestEntity> GetRequests(GetRequestCriteria criteria)
