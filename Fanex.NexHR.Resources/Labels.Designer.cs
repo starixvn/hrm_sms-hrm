@@ -5344,6 +5344,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View 5 Years Discipline Summary.
+        /// </summary>
+        public static string View5YearsDisciplineSummary {
+            get {
+                return ResourceManager.GetString("View5YearsDisciplineSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View Change Shift Detail.
         /// </summary>
         public static string ViewChangeShiftDetail {

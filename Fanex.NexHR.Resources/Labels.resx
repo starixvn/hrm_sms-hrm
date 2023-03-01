@@ -1992,4 +1992,7 @@
   <data name="WorkingHoursPerWeek" xml:space="preserve">
     <value>Working hours per week</value>
   </data>
+  <data name="View5YearsDisciplineSummary" xml:space="preserve">
+    <value>View 5 Years Discipline Summary</value>
+  </data>
 </root>

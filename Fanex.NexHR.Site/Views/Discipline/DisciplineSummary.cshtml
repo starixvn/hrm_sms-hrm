@@ -13,7 +13,10 @@
 @section Breadcrumb {
     <a class="step">@ViewBag.Title</a>
 }
-<h2 class="page-title">@Labels.DisciplineSummary</h2>
+<div class="title">
+    <h2 class="page-title">@Labels.DisciplineSummary</h2>
+    <a href="/DisciplineSummaryPerYear">@Labels.View5YearsDisciplineSummary</a>
+</div>
 <form class="form-filter filter">
     @Html.HiddenFor(model => model.TeamId)
     @Html.HiddenFor(model => model.TeamName)
