@@ -24,6 +24,7 @@
         public DateTime? JoinedDate { get; set; }
         public DateTime? ConfirmedDate { get; set; }
         public DateTime? ResignedDate { get; set; }
+        public string ResignedReason { get; set; }
         public DateTime? MilitaryFromDate { get; set; }
         public DateTime? MilitaryToDate { get; set; }
         public string Skype { get; set; }      

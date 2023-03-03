@@ -47,6 +47,8 @@
 
         public DateTime? ResignedDate { get; set; }
 
+        public string ResignedReason { get; set; }
+
         public DateTime? MilitaryFromDate { get; set; }
 
         public DateTime? MilitaryToDate { get; set; }

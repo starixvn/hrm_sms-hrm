@@ -234,6 +234,7 @@
                 CompanyDate = param.CompanyDate,
                 ConfirmedDate = param.ConfirmedDate,
                 ResignedDate = param.ResignedDate,
+                ResignedReason = param.ResignedReason,
                 Skype = param.Skype,
                 LetsTalk = param.LetsTalk,
                 Marriage = param.Marriage,
