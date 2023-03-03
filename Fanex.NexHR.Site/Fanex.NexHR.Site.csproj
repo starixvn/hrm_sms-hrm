@@ -1341,7 +1341,7 @@
     <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
     <Content Include="wwwroot\dist\js\account.index.js.map" />
     <Content Include="wwwroot\sources\styles\components\_popupAvatar.scss" />
-    <Content Include="SystemLog\logfile.log" />
+    <Content Include="SystemLog\logfile.txt" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
