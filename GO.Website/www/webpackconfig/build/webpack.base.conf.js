@@ -18,12 +18,14 @@ function generateConfig(environment) {
             [`${jsPath}/main`]: pathConfig.scriptPaths.main,
             [`${jsPath}/pages/login`]: pathConfig.scriptPaths.login,
             [`${jsPath}/pages/home`]: pathConfig.scriptPaths.home,
+            [`${jsPath}/pages/unit-head/weekly-schedule`]: pathConfig.scriptPaths.unit_head_weekly_schedule,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
             [`${cssPath}/error`]: pathConfig.cssPaths.error,
             [`${cssPath}/pages/login`]: pathConfig.cssPaths.login,
-            [`${cssPath}/pages/home`]: pathConfig.cssPaths.home
+            [`${cssPath}/pages/home`]: pathConfig.cssPaths.home,
+            [`${cssPath}/pages/unit-head/weekly-schedule`]: pathConfig.cssPaths.unit_head_weekly_schedule
         },
         output: {
             path: pathConfig.projectRoot,

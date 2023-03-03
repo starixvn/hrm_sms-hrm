@@ -1,0 +1,126 @@
+﻿.unit-head-weekly-schedule {
+    .form-filter {
+        .form-row {
+            margin: 0;
+        }
+
+        .week-bar {
+            display: flex;
+
+            input {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .table-wrapper {
+        width: 810px;
+        margin-bottom: 10px;
+
+        &.mobile {
+            width: 490px;
+
+            .cell-shift {
+                width: 70px;
+                min-width: 70px;
+            }
+
+            .user-row {
+                background-color: #f2f2c2;
+                font-weight: bold;
+                border: 1px solid #d2d2d2;
+                border-top: 0;
+                padding: 7px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .cell-nickname {
+            width: 250px;
+            min-width: 250px;
+            vertical-align: middle;
+        }
+
+        .cell-shift {
+            width: 80px;
+            min-width: 80px;
+            vertical-align: middle;
+        }
+
+        .table-header {
+            display: table-row;
+            background-color: #324476;
+            color: #fff;
+
+            .table-cell {
+                display: table-cell;
+                border-left: 1px solid #d2d2d2;
+                padding: 8px;
+                vertical-align: middle;
+                text-align: center;
+
+                &:first-child {
+                    border-left: 0;
+                }
+            }
+        }
+
+        .table-body {
+            .nodata {
+                padding: 5px 7px;
+                text-align: center;
+                border: 1px solid #d2d2d2;
+                border-top: 0;
+            }
+
+            .department {
+                color: #fff;
+                padding: 1px 4px;
+                border-radius: 5px;
+                font-weight: normal;
+                font-size: 0.9rem;
+            }
+
+            .table-row {
+                display: table-row;
+
+                .table-cell {
+                    display: table-cell;
+                    border-left: 1px solid #d2d2d2;
+                    border-bottom: 1px solid #d2d2d2;
+                    padding: 6px;
+
+                    &:last-child {
+                        border-right: 1px solid #d2d2d2;
+                    }
+
+                    &.cell-shift {
+                        height: 40px;
+                        font-weight: 600;
+                        padding: 0;
+                        text-align: center;
+
+                        &.offday {
+                            background-color: #f8f89c;
+                        }
+
+                        &.leaveday {
+                            background-color: #c7f391;
+                        }
+
+                        &.past {
+                            background-image: linear-gradient(45deg, rgba(200,200,200,.4) 25%, rgba(222,222,222,.4) 25%, rgba(222,222,222,.4) 50%, rgba(200,200,200,.4) 50%, rgba(200,200,200,.4) 75%, rgba(222,222,222,.4) 75%, rgba(222,222,222,.4) 100%);
+                            background-size: 20px 20px;
+                        }
+                    }
+                }
+
+                .cell-nickname {
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}

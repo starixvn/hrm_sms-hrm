@@ -35,4 +35,10 @@
     <Function Name="UserMapping">
         <Setting Key="API_UserMapping_GetBySiteId" SpName="API_UserMapping_GetBySiteId" DbName="bodb_IUC" Plain="0" />
     </Function>
+    <Function Name="Unit Head">
+        <Setting Key="API_UnitHead_GetInfo" SpName="API_UnitHead_GetInfo" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_UnitHead_GetSchedule" SpName="API_UnitHead_GetSchedule" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_UnitHead_UpdateInfo" SpName="API_UnitHead_UpdateInfo" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="API_UnitHead_UpdateSchedule" SpName="API_UnitHead_UpdateSchedule" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

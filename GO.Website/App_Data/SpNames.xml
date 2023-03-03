@@ -3,4 +3,7 @@
     <Function Name="User">
         <Setting Key="User_GetSiteAndMenuItemByUserId" SpName="User_GetSiteAndMenuItemByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
+    <Function Name="UnitHead">
+        <Setting Key="UnitHead_GetSchedule" SpName="UnitHead_GetSchedule" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

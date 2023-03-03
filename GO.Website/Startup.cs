@@ -102,9 +102,9 @@ namespace GO.Website
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -120,7 +120,6 @@ namespace GO.Website
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
-            //
             services.AddSingleton<IUserControlSession, UserControlSession>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<ICryptoService, CryptoService>();
@@ -129,6 +128,7 @@ namespace GO.Website
             services.AddSingleton<IFunctionService, FunctionService>();
 
             services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IUnitHeadService, UnitHeadService>();
         }
     }
 }

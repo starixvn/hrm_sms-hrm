@@ -7,5 +7,6 @@
     ResetPasswordSuccessfully: 'Reset password successfully!',
     SymbolNo: '#',
     Username: 'Username',
-    Policy: 'Policy'
+    Policy: 'Policy',
+    ThisWeek: 'This Week'
 };

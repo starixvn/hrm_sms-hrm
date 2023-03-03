@@ -8,7 +8,8 @@ const cssPaths = {
     main: ['./www/sources/css/main.scss'],
     error: ['./www/sources/css/pages/error.scss'],
     login: ['./www/sources/css/pages/login.scss'],
-    home: ['./www/sources/css/pages/home.scss']
+    home: ['./www/sources/css/pages/home.scss'],
+    unit_head_weekly_schedule: ['./www/sources/css/pages/unit-head/weekly-schedule.scss']
 };
 
 const scriptPaths = {
@@ -17,7 +18,8 @@ const scriptPaths = {
     language: ['./www/sources/js/common/languages/ViewResources.js'],
     main: ['./www/sources/js/main.js'],
     login: ['./www/sources/js/pages/login/index.js'],
-    home: ['./www/sources/js/pages/home/index.js']
+    home: ['./www/sources/js/pages/home/index.js'],
+    unit_head_weekly_schedule: ['./www/sources/js/pages/unit-head/index.js']
 };
 
 module.exports = {
