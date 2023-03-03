@@ -27,7 +27,7 @@
         {
             RowStartHeader = 2,
             RowStartBody = 3,
-            TotalColumns = 19
+            TotalColumns = 20
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -62,7 +62,7 @@
             writer.CopyRows(2, 1);
 
             FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
-            writer.SyncColumnsWidth(42);
+            writer.SyncColumnsWidth(43);
             writer.CreateFreezePane(0, 3);
 
             writer.Render();
@@ -106,6 +106,7 @@
                 employee.CompanyDate,
                 employee.ConfirmedDate,
                 employee.ResignedDate,
+                employee.ResignedReason,
                 LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
                 DoB = employee.DateOfBirth,
                 Gender = employee.Gender == 0 ? "F" : "M",
@@ -188,6 +189,7 @@
                 CompanyDate = companyDate,
                 ConfirmedDate = confirmedDate,
                 ResignedDate = resignedDate,
+                ResignReason = employee.ResignedReason,
                 WorkingDays = employee.WorkingDays,
                 WorkingHoursbyWeek = employee.WorkingHoursbyWeek,
                 WorkingHours = employee.WorkingHours,
