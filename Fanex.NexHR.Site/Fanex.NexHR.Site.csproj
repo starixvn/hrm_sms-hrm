@@ -1341,10 +1341,9 @@
     <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
     <Content Include="wwwroot\dist\js\account.index.js.map" />
     <Content Include="wwwroot\sources\styles\components\_popupAvatar.scss" />
+    <Content Include="SystemLog\logfile.log" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SystemLog\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.CFG.dll" />
