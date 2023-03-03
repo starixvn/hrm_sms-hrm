@@ -1,5 +1,4 @@
 \\Avatars\\.*
 \\file\.*
-\\SystemLog
 \\*.Debug.config
 \\*.Release.config
