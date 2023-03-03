@@ -126,5 +126,12 @@
     <Build Include="dbo\Stored Procedures\API_Function_GetByUserId.sql" />
     <Build Include="dbo\Stored Procedures\API_Function_GetBySiteId.sql" />
     <Build Include="dbo\Stored Procedures\API_Function_GetByRoleId.sql" />
+    <Build Include="dbo\Tables\UnitHeadSchedule.sql" />
+    <Build Include="dbo\Tables\UnitHeadInfo.sql" />
+    <Build Include="dbo\Stored Procedures\UnitHead_GetSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\API_UnitHead_UpdateSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\API_UnitHead_UpdateInfo.sql" />
+    <Build Include="dbo\Stored Procedures\API_UnitHead_GetSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\API_UnitHead_GetInfo.sql" />
   </ItemGroup>
 </Project>

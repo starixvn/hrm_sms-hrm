@@ -3,6 +3,7 @@ CREATE PROCEDURE [dbo].[API_User_Update] @UserId INT
 	,@SiteId SMALLINT
 	,@RefId INT = NULL
 	,@Code VARCHAR(20) = NULL
+	,@Username VARCHAR(50) = NULL
 	,@Nickname NVARCHAR(50) = NULL
 	,@FullName NVARCHAR(100) = NULL
 	,@Email VARCHAR(50) = NULL
@@ -43,6 +44,7 @@ BEGIN
 	SET @xml = (
 			SELECT UserId AS '@UserId'
 				,Code AS '@Code'
+				,Username AS '@Username'
 				,Nickname AS '@Nickname'
 				,FullName AS '@FullName'
 				,Email AS '@Email'
@@ -58,8 +60,24 @@ BEGIN
 	SET @logDataOld = REPLACE(CONVERT(NVARCHAR(MAX), @xml), '" />', '"/"')
 
 	-- update
+	UPDATE us
+	SET us.IsActive = CASE
+			WHEN u.IsActive = 1 AND @IsActive = 0 THEN 0
+			WHEN u.IsActive = 0 AND @IsActive = 1 THEN 1
+			ELSE us.IsActive END
+		,us.ModifiedBy = @ModifiedBy
+		,us.ModifiedDate = @startRun
+	FROM dbo.[UserSite] AS us WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.[User] AS u WITH (NOLOCK) ON us.UserId = u.UserId
+	WHERE u.UserId = @tmpUserId
+		AND (
+			(u.IsActive = 1 AND @IsActive = 0)
+			OR (u.IsActive = 0 AND @IsActive = 1)
+			)
+	
 	UPDATE dbo.[User] WITH (ROWLOCK, UPDLOCK)
 	SET Code = @Code
+		,Username = CASE WHEN ISNULL(@Username, '') != '' THEN @Username ELSE Username END
 		,Nickname = @Nickname
 		,FullName = @FullName
 		,Email = @Email
@@ -121,6 +139,7 @@ BEGIN
 	SET @xml = (
 			SELECT UserId AS '@UserId'
 				,Code AS '@Code'
+				,Username AS '@Username'
 				,Nickname AS '@Nickname'
 				,FullName AS '@FullName'
 				,Email AS '@Email'
