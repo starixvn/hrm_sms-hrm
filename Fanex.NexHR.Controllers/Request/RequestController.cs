@@ -63,7 +63,7 @@
 
             if (request.StatusId == Constants.DefaultRequestFilterStatusId)
             {
-                const long FromDays = -60;
+                const long FromDays = -180;
                 request.StatusId = Constants.PendingAndVerifiedStatusId;
                 request.FromDate = DateTime.Now.Date.AddDays(FromDays);
                 request.IsFilterByAffectedDate = false;
