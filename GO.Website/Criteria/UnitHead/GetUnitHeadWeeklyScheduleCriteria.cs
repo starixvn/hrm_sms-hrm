@@ -1,4 +1,4 @@
-﻿namespace GO.Website.Criteria
+﻿namespace GO.Website.Criteria.UnitHead
 {
     using System;
     using Fanex.Data.Repository;

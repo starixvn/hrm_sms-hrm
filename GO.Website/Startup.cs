@@ -48,7 +48,7 @@ namespace GO.Website
                .UseDefaultDbSettingProvider("~/App_Data")
                .Run();
 
-            services.AddMemoryCache();
+            services.AddResponseCaching();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -105,6 +105,7 @@ namespace GO.Website
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
