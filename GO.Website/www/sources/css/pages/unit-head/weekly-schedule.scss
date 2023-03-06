@@ -6,6 +6,7 @@
 
         .week-bar {
             display: flex;
+            max-width: 200px;
 
             input {
                 font-weight: bold;
@@ -18,11 +19,12 @@
         margin-bottom: 10px;
 
         &.mobile {
-            width: 490px;
+            width: 350px;
+            font-size: 11px;
 
             .cell-shift {
-                width: 70px;
-                min-width: 70px;
+                width: 50px;
+                min-width: 50px;
             }
 
             .user-row {
@@ -34,6 +36,12 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+            }
+
+            .table-body {
+                .department {
+                    font-size: 10px;
+                }
             }
         }
 

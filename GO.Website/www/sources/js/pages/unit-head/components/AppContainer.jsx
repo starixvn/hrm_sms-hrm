@@ -13,13 +13,13 @@ class AppContainer extends Component {
         super(props);
 
         const fromDate = dayjs().day(1),
-            toDate = dayjs(fromDate).add(6, 'day');
+            toDate = dayjs(fromDate, DateFormat).add(6, 'day');
 
         this.state = {
             isMobile: window.innerWidth <= MobileWidth ? true : false,
             filter: {
-                fromDate: dayjs(fromDate).format(DateFormat),
-                toDate: dayjs(toDate).format(DateFormat)
+                fromDate: dayjs(fromDate, DateFormat).format(DateFormat),
+                toDate: dayjs(toDate, DateFormat).format(DateFormat)
             },
             schedules: []
         };
@@ -58,8 +58,8 @@ class AppContainer extends Component {
         event.preventDefault();
 
         let { fromDate } = this.state.filter;
-        fromDate = dayjs(fromDate).subtract(7, 'day').format(DateFormat);
-        const toDate = dayjs(fromDate).add(6, 'day').format(DateFormat);
+        fromDate = dayjs(fromDate, DateFormat).subtract(7, 'day').format(DateFormat);
+        const toDate = dayjs(fromDate, DateFormat).add(6, 'day').format(DateFormat);
         this.setState({
             filter: {
                 fromDate,
@@ -74,8 +74,8 @@ class AppContainer extends Component {
         event.preventDefault();
 
         let { fromDate } = this.state.filter;
-        fromDate = dayjs(fromDate).add(7, 'day').format(DateFormat);
-        const toDate = dayjs(fromDate).add(6, 'day').format(DateFormat);
+        fromDate = dayjs(fromDate, DateFormat).add(7, 'day').format(DateFormat);
+        const toDate = dayjs(fromDate, DateFormat).add(6, 'day').format(DateFormat);
         this.setState({
             filter: {
                 fromDate,
@@ -93,7 +93,7 @@ class AppContainer extends Component {
         const { fromDate } = this.state.filter;
 
         if (!dayjs(fromDate).isSame(dayjs(today))) {
-            const toDate = dayjs(today).add(6, 'day').format(DateFormat);
+            const toDate = dayjs(today, DateFormat).add(6, 'day').format(DateFormat);
             this.setState({
                 filter: {
                     fromDate: today,
