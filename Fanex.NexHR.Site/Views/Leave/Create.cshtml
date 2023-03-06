@@ -104,6 +104,14 @@
             </div>
             <span id="leavetype-info" class="fa fa-info-circle fa-lg leavetype-info" title="@Model.LeaveTypeDescription"></span>
         </div>
+        <div id="appStayHospital" class="form-group">
+            <div class="checkRight">
+                @Html.CheckBox("ApplicableStayHospital", new { @checked = "checked", @disabled = "disabled" })
+            </div>
+            <div class="label-form labelRight">
+                @Html.LabelFor(model => model.ApplicableStayHospital, Labels.ApplicableStayHospitalOnly, new { @class = "control-label" })
+            </div>
+        </div>
         <div id="grbHalfDay" class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.HalfDayOff, Labels.HalfDay, new { @class = "control-label" })

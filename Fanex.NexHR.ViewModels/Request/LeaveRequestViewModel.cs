@@ -117,5 +117,6 @@
         public List<string> Files { get; set; }
         public bool EnableHospitalizationLeaveBalance { get; set; }
         public bool EnableSickLeaveBalance { get; set; }
+        public bool ApplicableStayHospital { get; set; }
     }
 }

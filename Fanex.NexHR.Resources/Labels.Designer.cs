@@ -421,6 +421,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applicable for stay in Hospital only.
+        /// </summary>
+        public static string ApplicableStayHospitalOnly {
+            get {
+                return ResourceManager.GetString("ApplicableStayHospitalOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve.
         /// </summary>
         public static string Approve {

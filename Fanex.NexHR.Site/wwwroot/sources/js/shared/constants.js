@@ -25,7 +25,8 @@ export const LeaveType = {
     BusinessDuringWorking: 26,
     CompensationLeave: 27,
     UnpaidLeaveInsurance: 41,
-    KeepInViewByHour: 48
+    KeepInViewByHour: 48,
+    HospitalizationLeave: 39
 };
 export const RoleSystem = {
     Member: 1,

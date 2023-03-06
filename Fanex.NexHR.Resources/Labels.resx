@@ -1995,4 +1995,7 @@
   <data name="View5YearsDisciplineSummary" xml:space="preserve">
     <value>View 5 Years Discipline Summary</value>
   </data>
+  <data name="ApplicableStayHospitalOnly" xml:space="preserve">
+    <value>Applicable for stay in Hospital only</value>
+  </data>
 </root>
