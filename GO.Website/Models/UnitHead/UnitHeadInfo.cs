@@ -1,7 +1,6 @@
 ﻿namespace GO.Website.Models.UnitHead
 {
     using System;
-    using System.Xml.Serialization;
 
     [Serializable]
     public class UnitHeadInfo

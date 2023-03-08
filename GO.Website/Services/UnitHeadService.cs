@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Website.Criteria;
+    using GO.Website.Criteria.UnitHead;
     using GO.Website.Models.UnitHead;
 
     public class UnitHeadService : IUnitHeadService

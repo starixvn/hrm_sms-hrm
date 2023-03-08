@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.IO;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -12,10 +10,7 @@
 
     public static class XMLIO
     {
-        private static readonly Dictionary<string, XmlSerializer> SerializerCaches = new Dictionary<string, XmlSerializer>();
-
         public static XElement ToXML<T>(this IEnumerable<T> source, string rootName = "Root")
-
         {
             var lambda = GetElement<T>(typeof(T));
 
@@ -25,37 +20,6 @@
             }
 
             return new XElement(rootName, source.Select(lambda).ToArray());
-        }
-
-        public static IList<T> Deserialize<T>(string xml)
-        {
-            if (string.IsNullOrEmpty(xml))
-            {
-                return new List<T>();
-            }
-
-            using (var stringReader = new StringReader(xml))
-            {
-                var serializer = XmlCacheCreate(typeof(List<T>), new XmlRootAttribute("ROOT"));
-                return (List<T>)serializer.Deserialize(stringReader);
-            }
-        }
-
-        public static T DeserializeXMLFileToObject<T>(string XmlFilename)
-        {
-            T returnObject = default(T);
-            if (string.IsNullOrEmpty(XmlFilename))
-            {
-                return default(T);
-            }
-            XDocument xdoc = XDocument.Load(XmlFilename);
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (TextReader reader = new StringReader(xdoc.ToString()))
-            {
-                returnObject = (T)serializer.Deserialize(reader);
-            }
-
-            return returnObject;
         }
 
         private static XName GetElementName(Type t)
@@ -101,6 +65,7 @@
                     && p.PropertyType.GetGenericArguments()[0].IsPrimitive;
             var isNotPrimitive = p.PropertyType == typeof(string)
                 || p.PropertyType == typeof(DateTime)
+                || p.PropertyType == typeof(DateTime?)
                 || p.PropertyType == typeof(decimal);
 
             if (p.PropertyType.IsPrimitive || isNotPrimitive || isGenericType)
@@ -110,17 +75,6 @@
             }
 
             return GetExpressions(p.PropertyType, prop, lambda);
-        }
-
-        public static XmlSerializer XmlCacheCreate(Type type, XmlRootAttribute root)
-        {
-            var key = string.Format(CultureInfo.InvariantCulture, "{0}:{1}", type, root.ElementName);
-            if (!SerializerCaches.ContainsKey(key))
-            {
-                SerializerCaches.Add(key, new XmlSerializer(type, root));
-            }
-
-            return SerializerCaches[key];
         }
     }
 }

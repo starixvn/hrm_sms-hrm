@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+    <Function Name="Employee">
+        <Setting Key="AutoJob_UnitHead_UpdateInfo" SpName="AutoJob_UnitHead_UpdateInfo" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_UnitHead_UpdateSchedule" SpName="AutoJob_UnitHead_UpdateSchedule" DbName="bodb_IUC" Plain="0" />
+    </Function>
+</Functions>

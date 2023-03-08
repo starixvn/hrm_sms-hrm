@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using GO.Website.Criteria;
+    using GO.Website.Criteria.UnitHead;
     using GO.Website.Models.UnitHead;
 
     public interface IUnitHeadService

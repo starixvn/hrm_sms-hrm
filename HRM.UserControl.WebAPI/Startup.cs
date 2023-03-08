@@ -1,11 +1,12 @@
 namespace HRM.UserControl.WebAPI
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
-    using HRM.UserControl.Core.Extensions;
+    using HRM.UserControl.Core.Repository;
+    using HRM.UserControl.Core.Services;
     using HRM.UserControl.WebAPI.Middlewares;
     using HRM.UserControl.WebAPI.Models;
     using HRM.UserControl.WebAPI.Services;
@@ -71,7 +72,10 @@ namespace HRM.UserControl.WebAPI
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.InjectCoreDI();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
+            services.AddSingleton<IBaseRepository, BaseRepository>();
+            services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<ICryptoService, CryptoService>();
             services.AddSingleton<IJwtManagerService, JwtManagerService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ISiteService, SiteService>();

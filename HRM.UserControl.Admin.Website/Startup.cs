@@ -122,7 +122,6 @@ namespace HRM.UserControl.Admin.Website
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
 
-            //
             services.AddSingleton<IUserControlSession, UserControlSession>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<ICryptoService, CryptoService>();
