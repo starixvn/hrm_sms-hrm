@@ -15,6 +15,7 @@
 	,@JoinedDate DATE = NULL
 	,@ConfirmedDate DATE = NULL
 	,@ResignedDate DATE = NULL
+	,@ResignedReason NVARCHAR(200) = NULL
 	,@Skype VARCHAR(100) = NULL
 	,@LetsTalk VARCHAR(100) = NULL
 	,@Marriage TINYINT = 1
@@ -31,7 +32,7 @@
 	,@IsLocal BIT
 	,@WorkingDays INT
 	,@WorkingHours INT
-	,@WorkingHoursbyWeek INT
+	,@WorkingHoursByWeek TINYINT = NULL
 	,@CompanyDate DATE = NULL
 	,@CountryCode VARCHAR(5) = NULL
 	,@IsTopManager BIT = 0
@@ -63,6 +64,7 @@ Original:
 
 Revisions:
 Param's Explanation:
+-Otis - 03062023: adding field ResignedReason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -148,6 +150,7 @@ BEGIN
 				,JoinedDate AS '@JoinedDate'
 				,ConfirmedDate AS '@ConfirmedDate'
 				,ResignedDate AS '@ResignedDate'
+				,ResignedReason AS '@ResignedReason'
 				,Skype AS '@Skype'
 				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
@@ -176,7 +179,7 @@ BEGIN
 				,IsLocal AS '@IsLocal'
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
-				,WorkingHoursbyWeek AS '@WorkingHoursbyWeek'
+				,WorkingHoursByWeek AS '@WorkingHoursByWeek'
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
@@ -216,6 +219,7 @@ BEGIN
 		,JoinedDate = @JoinedDate
 		,ConfirmedDate = @ConfirmedDate
 		,ResignedDate = @ResignedDate
+		,ResignedReason = @ResignedReason
 		,Skype = @Skype
 		,LetsTalk = @LetsTalk
 		,Marriage = @Marriage
@@ -254,7 +258,7 @@ BEGIN
 		,@IsLocal = @IsLocal
 		,@WorkingDays = @WorkingDays
 		,@WorkingHours = @WorkingHours
-		,@WorkingHoursbyWeek = @WorkingHoursbyWeek
+		,@WorkingHoursByWeek = @WorkingHoursByWeek
 		,@CompanyDate = @CompanyDate
 		,@CountryCode = @CountryCode
 		,@Unit = @Unit
@@ -284,6 +288,7 @@ BEGIN
 				,JoinedDate AS '@JoinedDate'
 				,ConfirmedDate AS '@ConfirmedDate'
 				,ResignedDate AS '@ResignedDate'
+				,ResignedReason AS '@ResignedReason'
 				,Skype AS '@Skype'
 				,LetsTalk AS '@LetsTalk'
 				,Marriage AS '@Marriage'
@@ -312,7 +317,7 @@ BEGIN
 				,IsLocal AS '@IsLocal'
 				,WorkingDays AS '@WorkingDays'
 				,WorkingHours AS '@WorkingHours'
-				,WorkingHoursbyWeek AS '@WorkingHoursbyWeek'
+				,WorkingHoursByWeek AS '@WorkingHoursByWeek'
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
@@ -337,4 +342,3 @@ BEGIN
 		,@ErrCode = @ErrCode OUTPUT
 		,@ErrMsg = @ErrMsg OUTPUT
 END
-

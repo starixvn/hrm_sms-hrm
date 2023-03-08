@@ -18,6 +18,7 @@ Param's Explanation:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
+-Otis: 03082023 - Skip catch ManagementAllow's reason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -240,28 +241,31 @@ BEGIN
 			FROM dbo.LateInEarlyOutRequest WITH (NOLOCK)
 			WHERE RequestId = @RequestId
 
-			INSERT INTO dbo.DisciplineRequestTrans (
-				EmpId
-				,WorkDate
-				,RequestId
-				,DisciplineTypeId
-				,IsIgnored
-				,IsOutOfControl
-				,ModifiedBy
-				,ModifiedDate
-				)
-			SELECT EmpId
-				,WorkDate
-				,@RequestId
-				,DisciplineTypeId
-				,IsIgnored
-				,CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
-				,@ActorId
-				,@ModifiedDate
-			FROM @tblDiscipline
+			IF (@ReasonId != @ManagementAllowReasonId)
+			BEGIN
+				INSERT INTO dbo.DisciplineRequestTrans (
+					EmpId
+					,WorkDate
+					,RequestId
+					,DisciplineTypeId
+					,IsIgnored
+					,IsOutOfControl
+					,ModifiedBy
+					,ModifiedDate
+					)
+				SELECT EmpId
+					,WorkDate
+					,@RequestId
+					,DisciplineTypeId
+					,IsIgnored
+					,CASE 
+						WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
+						ELSE 0
+						END
+					,@ActorId
+					,@ModifiedDate
+				FROM @tblDiscipline
+			END
 
 			-- update
 			UPDATE dis
@@ -403,3 +407,8 @@ BEGIN
 			,@ErrMsg = N'Update discipline unsuccessfully.'
 	END CATCH
 END
+
+
+
+
+

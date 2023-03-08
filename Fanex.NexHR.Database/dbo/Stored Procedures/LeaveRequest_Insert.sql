@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
+﻿CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@LeaveTypeId INT
@@ -27,6 +26,8 @@ Param's Explanation:
 			1. off
 			2. leave
 			3. work
+
+Otis - 03062023: Change Logic Half Day by working hours per day of employee
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -388,16 +389,20 @@ BEGIN
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 				INNER JOIN dbo.LeaveRequest AS l WITH (NOLOCK) ON r.RequestId = l.RequestId
-				LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
-					AND l.ToDate
-				AND c.empid = l.EmpId
-				LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON c.ShiftId = s.ShiftID
+				--LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
+				--	AND l.ToDate
+				--	AND c.empid = l.EmpId
+				--LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON c.ShiftId = s.ShiftID
 			WHERE r.empid = @empid
 				AND r.RequestType = @RequestType
 				AND r.CurrentStatus IN (1, 2, 4, 6)
 				AND (
 					(
-						@TotalDays >= 1
+						NOT EXISTS (
+							SELECT 1
+							FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+							WHERE r.RequestId = ldt.RequestId
+							)
 						AND (
 							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
 								AND @TmpToDate
@@ -410,53 +415,40 @@ BEGIN
 							)
 						)
 					OR (
-						@TotalDays < 1
-						AND TotalDays >= 1
-						AND (
-							CAST(l.FromDate AS DATE) BETWEEN @TmpFromDate
-								AND @TmpToDate
-							OR CAST(l.ToDate AS DATE) BETWEEN @TmpFromDate
-								AND @TmpToDate
-							OR @TmpFromDate BETWEEN CAST(l.FromDate AS DATE)
-								AND CAST(l.ToDate AS DATE)
-							OR @TmpToDate BETWEEN CAST(l.FromDate AS DATE)
-								AND CAST(l.ToDate AS DATE)
+						NOT EXISTS (
+							SELECT 1
+							FROM #tblLeaveRequestDetail WITH (NOLOCK)
+							)
+						AND EXISTS (
+							SELECT 1
+							FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+							WHERE r.RequestId = ldt.RequestId
+								AND ldt.OnDate BETWEEN @TmpFromDate
+									AND @TmpToDate
+							)
+						)
+					OR (
+						EXISTS (
+							SELECT 1
+							FROM dbo.LeaveRequestDetail AS ldt WITH (NOLOCK)
+								INNER JOIN #tblLeaveRequestDetail AS ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
+							WHERE r.RequestId = ldt.RequestId
+								AND (
+									ldt.FromTime BETWEEN ldtt.FromTime
+										AND ldtt.ToTime
+									OR ldt.ToTime BETWEEN ldtt.FromTime
+										AND ldtt.ToTime
+									OR ldtt.FromTime BETWEEN ldt.FromTime
+										AND ldt.ToTime
+									OR ldtt.ToTime BETWEEN ldt.FromTime
+										AND ldt.ToTime
+									)
+								AND ldt.FromTime != ldtt.ToTime
+								AND ldt.ToTime != ldtt.FromTime
 							)
 						)
 					)
 				--AND (s.ShiftID IS NULL OR (s.IsOutAfterDay = 0 AND CAST(l.ToDate AS DATE) >= @TmpFromDate) OR (s.IsOutAfterDay = 1 AND CAST(l.ToDate AS DATE) > @TmpFromDate))
-			)
-		OR EXISTS (
-			SELECT 1
-			FROM dbo.WorkingTimeRequest r WITH (NOLOCK)
-				INNER JOIN dbo.LeaveRequest l WITH (NOLOCK) ON r.RequestId = l.RequestId
-				INNER JOIN dbo.LeaveRequestDetail ldt WITH (NOLOCK) ON r.RequestId = ldt.RequestId
-				INNER JOIN #tblLeaveRequestDetail ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
-			WHERE r.empid = @empid
-				AND r.RequestType = @RequestType
-				AND CurrentStatus IN (1, 2, 4, 6)
-				AND @TotalDays = 0.5
-				AND l.TotalDays = 0.5
-				AND (
-					(
-						ldt.FromTime BETWEEN ldtt.FromTime
-							AND ldtt.ToTime
-						)
-					OR (
-						ldt.ToTime BETWEEN ldtt.FromTime
-							AND ldtt.ToTime
-						)
-					OR (
-						ldtt.FromTime BETWEEN ldt.FromTime
-							AND ldt.ToTime
-						)
-					OR (
-						ldtt.ToTime BETWEEN ldt.FromTime
-							AND ldt.ToTime
-						)
-					)
-				AND ldt.FromTime <> ldtt.ToTime
-				AND ldt.ToTime <> ldtt.FromTime
 			)
 	BEGIN
 		SET @ErrCode = 107
@@ -530,24 +522,43 @@ BEGIN
 		RETURN;
 	END
 
-	DECLARE @WorkingHours INT
-		,@MaxHalfDayMinutes INT
-	SELECT @WorkingHours = WorkingHours
-	FROM dbo.EmployeeSummary WITH (NOLOCK)
-	WHERE EmpId = @EmpId
+	--IF EXISTS (
+	--		SELECT 1
+	--		FROM #tblLeaveRequestDetail WITH (NOLOCK)
+	--		WHERE IsHalfDay = 1
+	--			AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
+	--			AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
+	--		)
+	--BEGIN
+	--	SET @ErrCode = 113
+	--	SET @ErrMsg = 'You can not request leave half day over 5 hours.'
 
-	SET @MaxHalfDayMinutes = CASE WHEN @WorkingHours IS NULL THEN 300 ELSE @WorkingHours * 60 / 2 END
+	--	RETURN;
+	--END
+
+	Declare @WorkingHour INT
+
+	SET @WorkingHour =
+	(
+		SELECT WorkingHours
+		FROM dbo.EmployeeSummary WITH (NOLOCK)
+		WHERE EmpId = @EmpId
+	)
+
+	IF (@WorkingHour = 0)
+	BEGIN SET @WorkingHour = 9;
+	END
 
 	IF EXISTS (
 			SELECT 1
 			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-				AND DATEDIFF(MINUTE, FromTime, ToTime) > @MaxHalfDayMinutes
+				AND DATEDIFF(MINUTE, FromTime, ToTime) > (@WorkingHour/2*60)
 			)
 	BEGIN
 		SET @ErrCode = 113
-		SET @ErrMsg = 'You can not request leave half day over ' + CAST(@MaxHalfDayMinutes AS NVARCHAR(10)) + ' minutes.'
+		SET @ErrMsg = 'You can not request leave half day over '+ CONVERT(NVARCHAR, CAST(@WorkingHour AS float) / CAST(2 AS float)) +' hours.'
 
 		RETURN;
 	END
@@ -670,7 +681,7 @@ BEGIN
 				WHERE EmpId = @EmpId
 					AND @TmpFromDate >= ChildBornDate
 					AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
-					AND BalanceDay >= @TotalDaysPaternity
+					AND BalanceDay >= @TotalDays
 				)
 		BEGIN
 			SET @ErrCode = 119
@@ -817,3 +828,10 @@ BEGIN
 
 	DROP TABLE #tblLeaveRequestDetail
 END
+
+
+
+
+
+
+

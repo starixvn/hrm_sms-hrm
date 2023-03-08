@@ -9,6 +9,7 @@ Original:
 
 Revisions:
 Param's Explanation:
+-Otis - 03062023: get field ResignedReason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -21,6 +22,7 @@ BEGIN
 		,@AnnualLeaveBalance = dbo.fnc_GetAnnualLeaveBalanceByYear(@EmpId, YEAR(@Today), NULL)
 
 	SELECT e.EmpId
+		,e.UserId
 		,e.Code
 		,e.DomainUsername
 		,e.FullName
@@ -36,12 +38,13 @@ BEGIN
 		,e.JoinedDate
 		,e.ConfirmedDate
 		,e.ResignedDate
+		,e.ResignedReason
 		,empsum.CompanyDate
 		,empsum.WorkingDays
 		,empsum.WorkingHours
-		,empsum.WorkingHoursbyWeek
 		,empsum.MilitaryFromDate
 		,empsum.MilitaryToDate
+		,empsum.WorkingHoursByWeek
 		,e.Skype
 		,e.LetsTalk
 		,e.Marriage
@@ -116,3 +119,4 @@ BEGIN
 		AND lk.LookupId = 1
 	WHERE e.EmpId = @Empid
 END
+

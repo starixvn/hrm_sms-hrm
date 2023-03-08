@@ -16,7 +16,7 @@ Original:
 
 Revisions:
 Param's Explanation:
-
+-Otis - 03062023: get field ResignedReason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -124,6 +124,7 @@ BEGIN
       ,[JoinedDate]
       ,[ConfirmedDate]
       ,[ResignedDate]
+	  ,[ResignedReason]
       ,[Skype]
       ,[LetsTalk]
       ,[Marriage]

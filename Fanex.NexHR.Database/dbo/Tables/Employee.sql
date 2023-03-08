@@ -16,6 +16,7 @@
     [JoinedDate]       DATE           NULL,
     [ConfirmedDate]    DATE           NULL,
     [ResignedDate]     DATE           NULL,
+	[ResignedReason]   NVARCHAR (300) NULL,
     [Skype]            VARCHAR (100)  NULL,
     [Yahoo]            VARCHAR (100)  NULL,
     [Marriage]         TINYINT        NULL,
