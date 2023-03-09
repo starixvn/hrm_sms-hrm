@@ -1,7 +1,9 @@
 ﻿import React from 'react';
 import * as dayjs from 'dayjs';
 
-const THead = ({ isMobile, fromDate }) => {
+import Filter from './Filter';
+
+const THead = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday }) => {
     const DateFormat = 'YYYY-MM-DD';
 
     const dayOfWeeks = [
@@ -15,26 +17,34 @@ const THead = ({ isMobile, fromDate }) => {
     ];
 
     return (
-        <>
-            {
-                !isMobile &&
-                <div className="table-cell cell-nickname">Name</div>
-            }
-            {
-                dayOfWeeks.map(item => {
-                    const today = dayjs().format(DateFormat);
-                    const date = dayjs(fromDate, DateFormat).add(item.value, 'day').format(DateFormat);
-                    return (
-                        <div className={`table-cell cell-shift ${dayjs(today).isSame(date) ? 'text-danger' : ''}`} key={`dayOfWeeks${item.value}`}>
-                            <div className="cell-control-wrapper">
-                                <div className="font-weight-bold">{dayjs(date, DateFormat).format('DD MMM')}</div>
-                                <div>{dayjs(date, DateFormat).format('ddd')}</div>
+        <div className={`table-header`}>
+            <Filter fromDate={fromDate}
+                toDate={toDate}
+                onPrev={onPrev}
+                onNext={onNext}
+                onToday={onToday}
+            />
+            <div className="row-dayofweek">
+                {
+                    !isMobile &&
+                    <div className="table-cell cell-nickname"></div>
+                }
+                {
+                    dayOfWeeks.map(item => {
+                        const today = dayjs().format(DateFormat);
+                        const date = dayjs(fromDate, DateFormat).add(item.value, 'day').format(DateFormat);
+                        return (
+                            <div className={`table-cell cell-shift ${dayjs(today).isSame(date) ? 'today' : ''}`} key={`dayOfWeeks${item.value}`}>
+                                <div className="cell-control-wrapper">
+                                    <div className="dayofweek">{dayjs(date, DateFormat).format('ddd')}</div>
+                                    <div className="dayofmonth"><div>{dayjs(date, DateFormat).format('D')}</div></div>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })
-            }
-        </>
+                        );
+                    })
+                }
+            </div>
+        </div>
     );
 };
 

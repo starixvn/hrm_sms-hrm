@@ -7,19 +7,12 @@ const Row = ({ isMobile, data }) => {
         <>
             {
                 isMobile &&
-                <div className={`user-row`}>
-                    <div className="font-weight-bold">
-                        {data.fullName} {`${data.nickname ? ` (${data.nickname})` : ''}`}
-                    </div>
-                    <div>
-                        <span className="department bg-secondary">{data.departmentCode}</span>
-                    </div>
-                </div>
+                <CellNickname data={data} isMobile={isMobile} />
             }
             <div className={`table-row`}>
                 {
                     !isMobile &&
-                    <CellNickname data={data} />
+                    <CellNickname data={data} isMobile={isMobile} />
                 }
                 <CellShift data={data.mondaySchedule}
                     scheduleAttrName={'mondaySchedule'}

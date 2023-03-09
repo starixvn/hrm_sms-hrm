@@ -8,5 +8,5 @@
     SymbolNo: '#',
     Username: 'Username',
     Policy: 'Policy',
-    ThisWeek: 'This Week'
+    Today: 'Today'
 };

@@ -2,7 +2,6 @@
 import * as dayjs from 'dayjs';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
-import Filter from './Filter';
 import Grid from './grid/index';
 
 const DateFormat = 'YYYY-MM-DD';
@@ -46,7 +45,6 @@ class AppContainer extends Component {
         }
     };
 
-
     getWeeklySchedule = async () => {
         const url = Site.resolveClientUrl('UnitHead/getWeeklySchedule');
         await DataService.postDataAsync(url, this.state.filter).then(response => {
@@ -86,7 +84,7 @@ class AppContainer extends Component {
         });
     };
 
-    onThisWeek = () => {
+    onToday = () => {
         event.preventDefault();
 
         const today = dayjs().day(1).format(DateFormat);
@@ -110,15 +108,12 @@ class AppContainer extends Component {
 
         return (
             <div className={`unit-head-weekly-schedule`}>
-                <Filter isMobile={isMobile}
+                <Grid isMobile={isMobile}
                     fromDate={filter.fromDate}
                     toDate={filter.toDate}
                     onPrev={this.onPrev}
                     onNext={this.onNext}
-                    onThisWeek={this.onThisWeek}
-                />
-                <Grid isMobile={isMobile}
-                    fromDate={filter.fromDate}
+                    onToday={this.onToday}
                     data={schedules}
                 />
             </div>

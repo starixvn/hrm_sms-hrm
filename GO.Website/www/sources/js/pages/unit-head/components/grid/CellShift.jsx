@@ -6,12 +6,12 @@ const CellShift = ({ data }) => {
         className = '';
     if (data.isLeaveDay) {
         value = data.leaveTypeCode;
-        className = 'leaveday';
+        className = data.leaveTypeCode === 'AL' ? 'annualleave' : 'leaveday';
     } else if (data.isWorkDay) {
         value = 'W';
     } else if (data.isHoliday) {
         value = 'PH';
-        className = 'offday';
+        className = 'holiday';
     } else if (data.isOffDay) {
         value = 'Off';
         className = 'offday';

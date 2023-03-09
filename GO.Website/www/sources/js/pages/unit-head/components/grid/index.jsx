@@ -3,12 +3,16 @@
 import THead from './THead';
 import Row from './Row';
 
-const Table = ({ isMobile, fromDate, data }) => {
+const Table = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday, data }) => {
     return (
         <div className={`table-wrapper ${isMobile ? 'mobile' : ''}`}>
-            <div className={`table-header`}>
-                <THead isMobile={isMobile} fromDate={fromDate} />
-            </div>
+            <THead isMobile={isMobile}
+                fromDate={fromDate}
+                toDate={toDate}
+                onPrev={onPrev}
+                onNext={onNext}
+                onToday={onToday}
+            />
             <div className="table-body">
                 {
                     data.length === 0 &&
