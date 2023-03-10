@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32106.194
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}"
 EndProject
@@ -31,9 +31,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Site", "Fanex.N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SonarQube", "SonarQube", "{B7FAF5FF-B092-4847-98E4-3FC0141FD0A8}"
 	ProjectSection(SolutionItems) = preProject
+		SonarQube\SMSHRMCSharp.ruleset = SonarQube\SMSHRMCSharp.ruleset
 		SonarQube\smshrm_js_settings.json = SonarQube\smshrm_js_settings.json
 		SonarQube\smshrm_ts_settings.json = SonarQube\smshrm_ts_settings.json
-		SonarQube\SMSHRMCSharp.ruleset = SonarQube\SMSHRMCSharp.ruleset
 		SonarQube\SolutionBinding.sqconfig = SonarQube\SolutionBinding.sqconfig
 		SonarQube\sonar.settings.json = SonarQube\sonar.settings.json
 		SonarQube\smshrm\CSharp\SonarLint.xml = SonarQube\smshrm\CSharp\SonarLint.xml
@@ -65,7 +65,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.Website", "GO.Website\GO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.AutoJobs", "GO.AutoJobs\GO.AutoJobs.csproj", "{17EC537D-33DF-412D-B144-720C02EF0214}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HRM.Letstalk", "HRM.Letstalk", "{4C37E796-2717-4224-943D-6DEF67C5F964}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.Admin.Website", "GO.Admin.Website\GO.Admin.Website.csproj", "{63D51C95-16DF-4348-8D84-F0FF7EF4D496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.Letstalk.Client", "HRM.Letstalk.Client\HRM.Letstalk.Client.csproj", "{4DDA671A-DAC3-4189-AE64-CC21FD48F434}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.Core", "GO.Core\GO.Core.csproj", "{8C51C585-B84B-4654-A0D0-A899C15ABC90}"
 EndProject
@@ -245,6 +249,18 @@ Global
 		{17EC537D-33DF-412D-B144-720C02EF0214}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{17EC537D-33DF-412D-B144-720C02EF0214}.Release|x86.ActiveCfg = Release|Any CPU
 		{17EC537D-33DF-412D-B144-720C02EF0214}.Release|x86.Build.0 = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434}.Release|x86.Build.0 = Release|Any CPU
 		{63D51C95-16DF-4348-8D84-F0FF7EF4D496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63D51C95-16DF-4348-8D84-F0FF7EF4D496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63D51C95-16DF-4348-8D84-F0FF7EF4D496}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -318,6 +334,7 @@ Global
 		{D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F} = {12E1BE00-4FC9-4325-8460-935F8EA1FE0C}
 		{05A55CA5-5440-4B99-942F-DF6DAAAC6B62} = {12E1BE00-4FC9-4325-8460-935F8EA1FE0C}
 		{17EC537D-33DF-412D-B144-720C02EF0214} = {12E1BE00-4FC9-4325-8460-935F8EA1FE0C}
+		{4DDA671A-DAC3-4189-AE64-CC21FD48F434} = {4C37E796-2717-4224-943D-6DEF67C5F964}
 		{63D51C95-16DF-4348-8D84-F0FF7EF4D496} = {D8E4CB26-F1ED-40B7-BB41-3808E2BDF63F}
 		{8C51C585-B84B-4654-A0D0-A899C15ABC90} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
 		{E5E3D0D3-89E4-4692-B61D-5E104D386725} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
