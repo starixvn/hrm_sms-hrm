@@ -3,7 +3,7 @@ import * as dayjs from 'dayjs';
 
 import Filter from './Filter';
 
-const THead = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday }) => {
+const THead = ({ isMobile, filter, onPrev, onNext, onToday, onChangeCompany }) => {
     const DateFormat = 'YYYY-MM-DD';
 
     const dayOfWeeks = [
@@ -18,11 +18,11 @@ const THead = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday }) => {
 
     return (
         <div className={`table-header`}>
-            <Filter fromDate={fromDate}
-                toDate={toDate}
+            <Filter filter={filter}
                 onPrev={onPrev}
                 onNext={onNext}
                 onToday={onToday}
+                onChangeCompany={onChangeCompany}
             />
             <div className="row-dayofweek">
                 {
@@ -32,7 +32,7 @@ const THead = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday }) => {
                 {
                     dayOfWeeks.map(item => {
                         const today = dayjs().format(DateFormat);
-                        const date = dayjs(fromDate, DateFormat).add(item.value, 'day').format(DateFormat);
+                        const date = dayjs(filter.fromDate, DateFormat).add(item.value, 'day').format(DateFormat);
                         return (
                             <div className={`table-cell cell-shift ${dayjs(today).isSame(date) ? 'today' : ''}`} key={`dayOfWeeks${item.value}`}>
                                 <div className="cell-control-wrapper">

@@ -3,15 +3,15 @@
 import THead from './THead';
 import Row from './Row';
 
-const Table = ({ isMobile, fromDate, toDate, onPrev, onNext, onToday, data }) => {
+const Table = ({ isMobile, filter, data, onPrev, onNext, onToday, onChangeCompany }) => {
     return (
         <div className={`table-wrapper ${isMobile ? 'mobile' : ''}`}>
             <THead isMobile={isMobile}
-                fromDate={fromDate}
-                toDate={toDate}
+                filter={filter}
                 onPrev={onPrev}
                 onNext={onNext}
                 onToday={onToday}
+                onChangeCompany={onChangeCompany}
             />
             <div className="table-body">
                 {

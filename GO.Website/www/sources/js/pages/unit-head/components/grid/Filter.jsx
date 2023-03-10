@@ -1,34 +1,68 @@
 ﻿import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import * as dayjs from 'dayjs';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Filter = ({ fromDate, toDate, onPrev, onNext, onToday }) => {
+const Filter = ({ filter, onPrev, onNext, onToday, onChangeCompany }) => {
     const DateFormat = 'YYYY-MM-DD';
 
     const mindate = dayjs().day(1).subtract(7, 'day').format(DateFormat);
     const maxdate = dayjs().day(1).add(28, 'day').format(DateFormat);
+    const fromDate = dayjs(filter.fromDate, DateFormat);
+    const toDate = dayjs(filter.toDate, DateFormat);
 
     let value = '';
-    if (dayjs(fromDate, DateFormat).year() === dayjs(toDate, DateFormat).year()) {
-        if (dayjs(fromDate, DateFormat).month() === dayjs(toDate, DateFormat).month()) {
-            value = dayjs(fromDate, DateFormat).format('MMMM YYYY');
+    if (fromDate.year() === toDate.year()) {
+        if (fromDate.month() === toDate.month()) {
+            value = fromDate.format('MMMM YYYY');
         } else {
-            value = `${dayjs(fromDate, DateFormat).format('MMM')} - ${dayjs(toDate, DateFormat).format('MMM')} ${dayjs(fromDate, DateFormat).format('YYYY')}`;
+            value = `${fromDate.format('MMM')} - ${toDate.format('MMM')} ${fromDate.format('YYYY')}`;
         }
     } else {
-        value = `${dayjs(fromDate, DateFormat).format('DD MMM YYYY')} - ${dayjs(toDate, DateFormat).format('DD MMM YYYY')}`;
+        value = `${fromDate.format('DD MMM YYYY')} - ${toDate.format('DD MMM YYYY')}`;
     }
+
+    const companies = [
+        { companyId: 1, name: 'Nexcel' },
+        { companyId: 3, name: 'SMS' },
+        { companyId: 5, name: 'CTI' },
+        { companyId: 6, name: 'Lexfin' }
+    ];
 
     return (
         <div className="row-filter">
+            <OverlayTrigger
+                placement="right"
+                overlay={
+                    <Tooltip id="tooltip-company">{LangHelper.getResource('Company')}</Tooltip>
+                }
+            >
+                <Dropdown>
+                    <Dropdown.Toggle as="div" className="dropdown-company" id="dropdown-company">
+                        <i className="fa fa-filter" aria-hidden="true"></i>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item className={`${filter.companyId === null ? 'selected' : ''}`}
+                            onClick={() => onChangeCompany(null)}
+                        >-- All --</Dropdown.Item>
+                        {
+                            companies.map(item =>
+                                <Dropdown.Item key={item.companyId}
+                                    className={`${filter.companyId === item.companyId ? 'selected' : ''}`}
+                                    onClick={() => onChangeCompany(item.companyId)}
+                                >{item.name}</Dropdown.Item>)
+                        }
+                    </Dropdown.Menu>
+                </Dropdown>
+            </OverlayTrigger>
+
             <button className="btn btn-sm btn-today" onClick={onToday}>
                 {LangHelper.getResource('Today')}
             </button>
             <OverlayTrigger
                 placement="bottom"
                 overlay={
-                    <Tooltip id="tooltip-prev-week">Previous week</Tooltip>
+                    <Tooltip id="tooltip-prev-week">{LangHelper.getResource('PreviousWeek')}</Tooltip>
                 }
             >
                 <button className="btn btn-sm btn-prev-week"
@@ -41,7 +75,7 @@ const Filter = ({ fromDate, toDate, onPrev, onNext, onToday }) => {
             <OverlayTrigger
                 placement="bottom"
                 overlay={
-                    <Tooltip id="tooltip-next-week">Previous week</Tooltip>
+                    <Tooltip id="tooltip-next-week">{LangHelper.getResource('NextWeek')}</Tooltip>
                 }
             >
                 <button className="btn btn-sm btn-next-week"

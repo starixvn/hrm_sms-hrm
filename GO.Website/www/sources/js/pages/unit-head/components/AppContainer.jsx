@@ -17,6 +17,7 @@ class AppContainer extends Component {
         this.state = {
             isMobile: window.innerWidth <= MobileWidth ? true : false,
             filter: {
+                companyId: null,
                 fromDate: dayjs(fromDate, DateFormat).format(DateFormat),
                 toDate: dayjs(toDate, DateFormat).format(DateFormat)
             },
@@ -55,11 +56,12 @@ class AppContainer extends Component {
     onPrev = event => {
         event.preventDefault();
 
-        let { fromDate } = this.state.filter;
+        let { fromDate, companyId } = this.state.filter;
         fromDate = dayjs(fromDate, DateFormat).subtract(7, 'day').format(DateFormat);
         const toDate = dayjs(fromDate, DateFormat).add(6, 'day').format(DateFormat);
         this.setState({
             filter: {
+                companyId,
                 fromDate,
                 toDate
             }
@@ -71,11 +73,12 @@ class AppContainer extends Component {
     onNext = () => {
         event.preventDefault();
 
-        let { fromDate } = this.state.filter;
+        let { fromDate, companyId } = this.state.filter;
         fromDate = dayjs(fromDate, DateFormat).add(7, 'day').format(DateFormat);
         const toDate = dayjs(fromDate, DateFormat).add(6, 'day').format(DateFormat);
         this.setState({
             filter: {
+                companyId,
                 fromDate,
                 toDate
             }
@@ -88,12 +91,12 @@ class AppContainer extends Component {
         event.preventDefault();
 
         const today = dayjs().day(1).format(DateFormat);
-        const { fromDate } = this.state.filter;
-
+        const { fromDate, companyId } = this.state.filter;
         if (!dayjs(fromDate).isSame(dayjs(today))) {
             const toDate = dayjs(today, DateFormat).add(6, 'day').format(DateFormat);
             this.setState({
                 filter: {
+                    companyId,
                     fromDate: today,
                     toDate
                 }
@@ -103,17 +106,28 @@ class AppContainer extends Component {
         }
     };
 
+    onChangeCompany = companyId => {
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                companyId
+            }
+        }, () => {
+            this.getWeeklySchedule();
+        });
+    };
+
     render() {
         const { isMobile, filter, schedules } = this.state;
 
         return (
             <div className={`unit-head-weekly-schedule`}>
                 <Grid isMobile={isMobile}
-                    fromDate={filter.fromDate}
-                    toDate={filter.toDate}
+                    filter={filter}
                     onPrev={this.onPrev}
                     onNext={this.onNext}
                     onToday={this.onToday}
+                    onChangeCompany={this.onChangeCompany}
                     data={schedules}
                 />
             </div>

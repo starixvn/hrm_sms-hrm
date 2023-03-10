@@ -8,7 +8,7 @@ const CellShift = ({ data }) => {
         value = data.leaveTypeCode;
         className = 'leaveday';
     } else if (data.isWorkDay) {
-        value = 'W';
+        value = '';
     } else if (data.isHoliday) {
         value = 'PH';
         className = 'holiday';
