@@ -44,7 +44,7 @@ namespace GO.AutoJobs
                 .UseWindowsService()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls($"http://*:5001").UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();
     }

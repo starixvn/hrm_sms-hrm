@@ -221,20 +221,26 @@
                 border-radius: 5px;
                 font-weight: normal;
                 font-size: 10px;
-                background-color: rgba(137, 145, 151, 0.7);
             }
 
             .department {
                 margin-right: 4px;
+                background-color: rgba(137, 145, 151, 0.7);
             }
 
             .company {
+                background-color: #31444c;
+
                 &.nexcel {
-                    background-color: #357c9d;
+                    background-color: #e39432;
                 }
 
                 &.sms {
                     background-color: #4d84cd;
+                }
+
+                &.cti {
+                    background-color: #879d0e;
                 }
             }
 
@@ -258,7 +264,7 @@
                         font-weight: 600;
 
                         &.holiday {
-                            background: #f3aa4b;
+                            background-color: #f3aa4b;
                         }
 
                         &.offday {
@@ -266,11 +272,7 @@
                         }
 
                         &.leaveday {
-                            background: #a9a7a7;
-                        }
-
-                        &.annualleave {
-                            background: #c7f391;
+                            background-color: #c7f391;
                         }
 
                         &.past {

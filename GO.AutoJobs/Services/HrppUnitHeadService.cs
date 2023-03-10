@@ -22,7 +22,7 @@
         private readonly HrppApiConfig apiConfig;
 
         public HrppUnitHeadService(
-            ILogger<NexHrmUnitHeadService> logger,
+            ILogger<HrppUnitHeadService> logger,
             IHttpClientFactory clientFactory,
             IBaseService baseService,
             HrppApiConfig apiConfig)

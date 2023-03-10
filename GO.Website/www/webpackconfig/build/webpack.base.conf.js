@@ -76,15 +76,9 @@ function generateConfig(environment) {
                     // disable default cache group
                     default: false,
                     vendors: false,
-                    reactVendor: {
-                        name: 'react-vendor',
-                        test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                        minChunks: 2,
-                        priority: -10
-                    },
-                    reactBootstrapVendor: {
-                        name: 'react-bootstrap-vendor',
-                        test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
+                    vendor: {
+                        name: 'vendors',
+                        test: /[\\/]node_modules[\\/](react|react-dom|react-bootstrap)[\\/]/,
                         minChunks: 2,
                         priority: -10
                     }

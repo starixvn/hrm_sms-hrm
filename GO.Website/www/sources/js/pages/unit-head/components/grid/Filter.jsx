@@ -21,7 +21,7 @@ const Filter = ({ fromDate, toDate, onPrev, onNext, onToday }) => {
     }
 
     return (
-        <div class="row-filter">
+        <div className="row-filter">
             <button className="btn btn-sm btn-today" onClick={onToday}>
                 {LangHelper.getResource('Today')}
             </button>
