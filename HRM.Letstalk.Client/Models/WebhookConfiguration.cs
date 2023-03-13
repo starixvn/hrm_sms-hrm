@@ -7,5 +7,7 @@
         public bool IsAllowedSet { get; set; }
 
         public bool IsAllowedGet { get; set; }
+
+        public string WebhookBaseUrl { get; set; }
     }
 }

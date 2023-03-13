@@ -14,9 +14,9 @@ namespace HRM.Letstalk.Client.Services
     {
         public interface ILetstalkLogService
         {
-            void ErrorAsync(Exception exception);
+            void LogError(Exception exception);
 
-            void ErrorAsync(Exception exception, ICriteria criteria);
+            void LogError(Exception exception, ICriteria criteria);
 
             void LogInformation(string message);
         }
@@ -25,7 +25,7 @@ namespace HRM.Letstalk.Client.Services
         {
             private readonly Logger nlog = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
-            public void ErrorAsync(Exception exception)
+            public void LogError(Exception exception)
             {
                 var logMessage = new LogMessage(exception.Message)
                            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
@@ -35,7 +35,7 @@ namespace HRM.Letstalk.Client.Services
                 nlog.Error(logMessage);
             }
 
-            public void ErrorAsync(Exception exception, ICriteria criteria)
+            public void LogError(Exception exception, ICriteria criteria)
             {
                 var logMessage = new LogMessage(exception.Message)
                           .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using HRM.Letstalk.Client.Models;
-
-namespace HRM.Letstalk.Client.Controllers
+﻿namespace HRM.Letstalk.Client.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using System;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.IdentityModel.Tokens;
+    using HRM.Letstalk.Client.Models;
+
     public class AuthController : ControllerBase
     {
         private readonly AuthenticationSettings appSettings;
@@ -18,6 +18,7 @@ namespace HRM.Letstalk.Client.Controllers
         {
             this.appSettings = appSettings;
         }
+
 
         [AllowAnonymous]
         [HttpPost]
