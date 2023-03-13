@@ -59,32 +59,56 @@ const Filter = ({ filter, onPrev, onNext, onToday, onChangeCompany }) => {
             <button className="btn btn-sm btn-today" onClick={onToday}>
                 {LangHelper.getResource('Today')}
             </button>
-            <OverlayTrigger
-                placement="bottom"
-                overlay={
-                    <Tooltip id="tooltip-prev-week">{LangHelper.getResource('PreviousWeek')}</Tooltip>
-                }
-            >
+            {
+                dayjs(fromDate, DateFormat).isSame(mindate) &&
                 <button className="btn btn-sm btn-prev-week"
                     disabled={dayjs(fromDate, DateFormat).isSame(mindate)}
                     onClick={onPrev}
                 >
                     <i className="fa fa-chevron-left" />
                 </button>
-            </OverlayTrigger>
-            <OverlayTrigger
-                placement="bottom"
-                overlay={
-                    <Tooltip id="tooltip-next-week">{LangHelper.getResource('NextWeek')}</Tooltip>
-                }
-            >
+            }
+            {
+                dayjs(fromDate, DateFormat).isAfter(mindate) &&
+                <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                        <Tooltip id="tooltip-prev-week">{LangHelper.getResource('PreviousWeek')}</Tooltip>
+                    }
+                >
+                    <button className="btn btn-sm btn-prev-week"
+                        disabled={dayjs(fromDate, DateFormat).isSame(mindate)}
+                        onClick={onPrev}
+                    >
+                        <i className="fa fa-chevron-left" />
+                    </button>
+                </OverlayTrigger>
+            }
+            {
+                dayjs(fromDate, DateFormat).isSame(maxdate) &&
                 <button className="btn btn-sm btn-next-week"
                     disabled={dayjs(fromDate, DateFormat).isSame(maxdate)}
                     onClick={onNext}
                 >
                     <i className="fa fa-chevron-right" />
                 </button>
-            </OverlayTrigger>
+            }
+            {
+                dayjs(fromDate, DateFormat).isBefore(maxdate) &&
+                <OverlayTrigger
+                    placement="bottom"
+                    overlay={
+                        <Tooltip id="tooltip-next-week">{LangHelper.getResource('NextWeek')}</Tooltip>
+                    }
+                >
+                    <button className="btn btn-sm btn-next-week"
+                        disabled={dayjs(fromDate, DateFormat).isSame(maxdate)}
+                        onClick={onNext}
+                    >
+                        <i className="fa fa-chevron-right" />
+                    </button>
+                </OverlayTrigger>
+            }
             <div className="txt">{value}</div>
         </div>
     );
