@@ -38,7 +38,7 @@ BEGIN
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 
-	CREATE TABLE #tempEmployeeIds (EmpId INT PRIMARY KEY)
+	CREATE TABLE #tempEmployeeIds (EmpId INT PRIMARY KEY, JoinedDate DATE, ResignedDate DATE)
 
 	CREATE TABLE #tempEmployeeCalendar (
 		EmpId INT
@@ -51,14 +51,15 @@ BEGIN
 
 	IF ISNULL(@empIds, '') <> ''
 	BEGIN
-		INSERT INTO #tempEmployeeIds (EmpId)
-		SELECT val
-		FROM dbo.fnc_strSplit(@empIds, ',')
+		INSERT INTO #tempEmployeeIds (EmpId, JoinedDate, ResignedDate)
+		SELECT emp.EmpId, emp.JoinedDate, emp.ResignedDate
+		FROM dbo.fnc_strSplit(@empIds, ',') AS tmp
+			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON CAST(tmp.val AS INT) = emp.EmpId
 	END
 	ELSE
 	BEGIN
-		INSERT INTO #tempEmployeeIds (EmpId)
-		SELECT EmpId
+		INSERT INTO #tempEmployeeIds (EmpId, JoinedDate, ResignedDate)
+		SELECT EmpId, JoinedDate, ResignedDate
 		FROM dbo.Employee WITH (NOLOCK)
 		WHERE (
 				@isEnable IS NULL
@@ -172,14 +173,31 @@ BEGIN
 	END
 
 	UPDATE empca
-	SET empca.ShiftId = tmp.ShiftId
-		,empca.IsOffDay = tmp.IsOffDay
-		,empca.IsHoliday = tmp.IsHoliday
+	SET empca.ShiftId = CASE
+			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
+			THEN tmp.ShiftId ELSE NULL END
+		,empca.IsOffDay = CASE
+			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
+			THEN tmp.IsOffDay ELSE 0 END
+		,empca.IsHoliday = CASE
+			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
+			THEN tmp.IsHoliday ELSE 0 END
+		,empca.ModifiedDate = CASE
+			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
+			THEN GETDATE() ELSE NULL END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		INNER JOIN #tempEmployeeCalendar AS tmp WITH (ROWLOCK) ON empca.EmpId = tmp.EmpId
 		AND empca.WorkDate = tmp.WorkDate
-	WHERE empca.RequestId IS NULL
-		OR (empca.RequestId IS NOT NULL AND empca.RequestTypeId = @ChangeShiftRequestTypeId)
+	WHERE (
+			empca.RequestId IS NULL
+			OR (empca.RequestId IS NOT NULL AND empca.RequestTypeId = @ChangeShiftRequestTypeId)
+		)
+		AND (
+			ISNULL(empca.ShiftId, 0) != ISNULL(tmp.ShiftId, 0)
+			OR empca.IsOffDay != tmp.IsOffDay
+			OR empca.IsHoliday != tmp.IsHoliday
+		)
 
 	INSERT INTO dbo.tmpEmployeeCalendar (
 		EmpId
@@ -187,13 +205,24 @@ BEGIN
 		,ShiftId
 		,IsOffDay
 		,IsHoliday
+		,ModifiedDate
 		)
-	SELECT EmpId
-		,WorkDate
-		,ShiftId
-		,IsOffDay
-		,IsHoliday
+	SELECT tmp.EmpId
+		,tmp.WorkDate
+		,CASE
+			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
+			THEN ShiftId ELSE NULL END
+		,CASE
+			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
+			THEN IsOffDay ELSE 0 END
+		,CASE
+			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
+			THEN IsHoliday ELSE 0 END
+		,CASE
+			WHEN emp.JoinedDate <= @tempDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > @tempDate)
+			THEN GETDATE() ELSE NULL END
 	FROM #tempEmployeeCalendar AS tmp WITH (ROWLOCK)
+		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON tmp.EmpId = emp.EmpId
 	WHERE NOT EXISTS (
 			SELECT 1
 			FROM dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK)
@@ -213,6 +242,7 @@ BEGIN
 				AND holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			)
+			,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empca.EmpId = empsum.EmpId
@@ -240,6 +270,7 @@ BEGIN
 
 	UPDATE dbo.tmpEmployeeCalendar WITH (ROWLOCK, UPDLOCK)
 	SET IsOffDay = 0
+		,ModifiedDate = GETDATE()
 	WHERE WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND IsOffDay = 1
@@ -253,6 +284,7 @@ BEGIN
 			WHEN overtime.EmpId IS NOT NULL THEN 1
 			ELSE 0 END
 			)
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN dbo.OTDailyRequest AS overtime WITH (NOLOCK) ON empca.EmpId = overtime.EmpId
@@ -279,6 +311,7 @@ BEGIN
 			WHEN kiv.RequestId IS NULL THEN 0
 			ELSE 1 END
 			)
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
@@ -317,6 +350,7 @@ BEGIN
 			ELSE empca.IsOffDay END
 			)
 		,empca.ChangeShiftTypeId = cs.ChangeShiftTypeId
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
@@ -358,6 +392,7 @@ BEGIN
 		,empca.ChangeShiftTypeId = cs.ChangeShiftTypeId
 		,empca.MoveOffFromDate = NULL
 		,empca.MoveOffToDate = cs.ToDate
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
@@ -403,6 +438,7 @@ BEGIN
 		,empca.ChangeShiftTypeId = cs.ChangeShiftTypeId
 		,empca.MoveOffFromDate = cs.OnDate
 		,empca.MoveOffToDate = NULL
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
@@ -550,6 +586,7 @@ BEGIN
 		,empca.LeaveTypeId2 = NULL
 		,empca.FromTime2 = NULL
 		,empca.ToTime2 = NULL
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		LEFT JOIN #tblLeaveRequest AS lr ON empca.EmpId = lr.EmpId
@@ -627,6 +664,7 @@ BEGIN
 		,empca.LeaveTypeId2 = NULL
 		,empca.FromTime2 = NULL
 		,empca.ToTime2 = NULL
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmpId
 		AND empca.WorkDate = rq.WorkDate
@@ -642,6 +680,7 @@ BEGIN
 		,empca.LeaveTypeId2 = rq.LeaveTypeId
 		,empca.FromTime2 = rq.FromTime
 		,empca.ToTime2 = rq.ToTime
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblHalfDayRequest AS rq ON empca.EmpId = rq.EmpId
 		AND empca.WorkDate = rq.WorkDate

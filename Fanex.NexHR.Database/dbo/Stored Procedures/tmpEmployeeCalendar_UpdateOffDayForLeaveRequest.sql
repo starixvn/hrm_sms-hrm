@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOffDayForLeaveRequest] @requestId BIGINT = NULL
 	,@empId INT
 	,@leaveTypeId INT
@@ -125,6 +127,7 @@ BEGIN
 		,IsLeaveDay = 0
 		,IsLeaveOffDay = 0
 		,LeaveDay = 0
+		,ModifiedDate = GETDATE()
 	WHERE EmpId = @empId
 		AND WorkDate IN (
 			SELECT WorkDate

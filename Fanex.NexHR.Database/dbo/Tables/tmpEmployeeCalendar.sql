@@ -20,7 +20,10 @@
     [ChangeShiftTypeId] TINYINT        NULL,
     [MoveOffFromDate]   DATE           NULL,
     [MoveOffToDate]     DATE           NULL,
+    [ModifiedDate]      DATETIME       NULL,
     CONSTRAINT [PK_tmpEmployeeCalendar] PRIMARY KEY CLUSTERED ([EmpId] ASC, [WorkDate] ASC)
 );
+
+
 
 

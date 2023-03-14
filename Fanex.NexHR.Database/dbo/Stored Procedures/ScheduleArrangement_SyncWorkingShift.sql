@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[ScheduleArrangement_SyncWorkingShift] @ActorId INT
+﻿CREATE PROCEDURE [dbo].[ScheduleArrangement_SyncWorkingShift] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@EmployeeIds VARCHAR(MAX) = ''
@@ -60,6 +59,7 @@ BEGIN
 		FROM dbo.fnc_strSplit(@EmployeeIds, ',')
 	END
 
+	BEGIN TRY
 	EXEC sp_xml_preparedocument @DocHandler OUTPUT
 		,@WorkingShiftXml
 
@@ -230,7 +230,7 @@ BEGIN
 		,INSERTED.IsOffDay
 		,INSERTED.IsHoliday
 	INTO #tmpEmployeeCalendar(EmpId, WorkDate, ShiftId, IsOffDay, IsHoliday)
-	SELECT tmpws.ShiftDate
+	SELECT DISTINCT tmpws.ShiftDate
 		,e.EmpId
 		,s.ShiftID
 		,CASE 
@@ -334,6 +334,10 @@ BEGIN
 		WHERE EmpId = @EmpId
 			AND WorkDate = @WorkDate
 	END
+	END TRY
+	BEGIN CATCH
+		SELECT @ErrMsg = ERROR_MESSAGE()
+	END CATCH
 
 	DROP TABLE #tmpEmployeeIds
 
