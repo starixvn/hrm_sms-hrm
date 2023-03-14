@@ -7,6 +7,7 @@
     using Fanex.Data.SqlServer;
     using GO.AutoJobs.Middlewares;
     using GO.AutoJobs.Models;
+    using GO.AutoJobs.Models.UserSite;
     using GO.AutoJobs.Services;
     using GO.AutoJobs.Workers;
     using HRM.UserControl.Core.Repository;
@@ -84,6 +85,9 @@
 
             var hrppApiConfig = configuration.GetSection("HRPPApiConfig").Get<HrppApiConfig>();
             services.AddSingleton(hrppApiConfig);
+
+            var copyUserToAnotherSiteSettings = configuration.GetSection("CopyUserToAnotherSiteSettings").Get<List<CopyUserToAnotherSiteSetting>>();
+            services.AddSingleton(copyUserToAnotherSiteSettings);
         }
 
         private static void AddDependencyInjection(IServiceCollection services)
@@ -94,6 +98,7 @@
 
             services.AddSingleton<INexHrmUnitHeadService, NexHrmUnitHeadService>();
             services.AddSingleton<IHrppUnitHeadService, HrppUnitHeadService>();
+            services.AddSingleton<IUserSiteService, UserSiteService>();
         }
 
         private static void AddWorker(IServiceCollection services)
@@ -102,6 +107,7 @@
             services.AddHostedService<NexHrmUnitHeadScheduleWorker>();
             services.AddHostedService<HrppUnitHeadInfoWorker>();
             services.AddHostedService<HrppUnitHeadScheduleWorker>();
+            services.AddHostedService<CopyUserToAnotherSiteWorker>();
         }
     }
 }

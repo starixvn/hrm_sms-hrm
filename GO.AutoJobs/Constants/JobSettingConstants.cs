@@ -7,5 +7,7 @@
 
         public const string SyncUnitHeadInfoFromHRPP = "SyncUnitHeadInfoFromHRPP";
         public const string SyncUnitHeadScheduleFromHRPP = "SyncUnitHeadScheduleFromHRPP";
+
+        public const string CopyUserToAnotherSite = "CopyUserToAnotherSite";
     }
 }
