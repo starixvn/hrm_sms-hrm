@@ -149,7 +149,7 @@ $(document).ready(function () {
             details.push({
                 onDate: $tr.find('.onDate').val(),
                 fromShiftId: $tr.find('.fromShiftId').val(),
-                toShiftId: typeId === ChangeShiftType.ChangeShift ? $tr.find('.toShiftId').val() : OffDayShiftId,
+                toShiftId: $tr.find('.toShiftId').val(),
                 remark: $.trim($tr.find('.remark').val()),
                 toDate: $tr.find('.moveToDate').val()
             });

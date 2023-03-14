@@ -241,31 +241,29 @@ BEGIN
 			FROM dbo.LateInEarlyOutRequest WITH (NOLOCK)
 			WHERE RequestId = @RequestId
 
-			IF (@ReasonId != @ManagementAllowReasonId)
-			BEGIN
-				INSERT INTO dbo.DisciplineRequestTrans (
-					EmpId
-					,WorkDate
-					,RequestId
-					,DisciplineTypeId
-					,IsIgnored
-					,IsOutOfControl
-					,ModifiedBy
-					,ModifiedDate
-					)
-				SELECT EmpId
-					,WorkDate
-					,@RequestId
-					,DisciplineTypeId
-					,IsIgnored
-					,CASE 
-						WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-						ELSE 0
-						END
-					,@ActorId
-					,@ModifiedDate
-				FROM @tblDiscipline
-			END
+			INSERT INTO dbo.DisciplineRequestTrans (
+				EmpId
+				,WorkDate
+				,RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,IsOutOfControl
+				,ModifiedBy
+				,ModifiedDate
+				)
+			SELECT EmpId
+				,WorkDate
+				,@RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,CASE 
+					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
+					ELSE 0
+					END
+				,@ActorId
+				,@ModifiedDate
+			FROM @tblDiscipline
+			WHERE @ReasonId != @ManagementAllowReasonId
 
 			-- update
 			UPDATE dis

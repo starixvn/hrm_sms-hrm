@@ -179,31 +179,29 @@ BEGIN
 			FROM dbo.CheckInOutRequest WITH (NOLOCK)
 			WHERE RequestId = @RequestId
 
-			IF (@ReasonId IN (@VanLateReasonId, @BusinessTripReasonId))
-			BEGIN
-				INSERT INTO dbo.DisciplineRequestTrans (
-					EmpId
-					,WorkDate
-					,RequestId
-					,DisciplineTypeId
-					,IsIgnored
-					,IsOutOfControl
-					,ModifiedBy
-					,ModifiedDate
-					)
-				SELECT EmpId
-					,WorkDate
-					,@RequestId
-					,DisciplineTypeId
-					,IsIgnored
-					,CASE 
-						WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-						ELSE 0
-						END
-					,@ActorId
-					,@ModifiedDate
-				FROM @tblDiscipline
-			END
+			INSERT INTO dbo.DisciplineRequestTrans (
+				EmpId
+				,WorkDate
+				,RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,IsOutOfControl
+				,ModifiedBy
+				,ModifiedDate
+				)
+			SELECT EmpId
+				,WorkDate
+				,@RequestId
+				,DisciplineTypeId
+				,IsIgnored
+				,CASE 
+					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
+					ELSE 0
+					END
+				,@ActorId
+				,@ModifiedDate
+			FROM @tblDiscipline
+			WHERE @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId)
 
 			-- update
 			UPDATE dis

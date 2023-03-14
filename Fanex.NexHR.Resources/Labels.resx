@@ -1998,4 +1998,7 @@
   <data name="ApplicableStayHospitalOnly" xml:space="preserve">
     <value>Applicable for stay in Hospital only</value>
   </data>
+  <data name="NewShift" xml:space="preserve">
+    <value>New Shift</value>
+  </data>
 </root>

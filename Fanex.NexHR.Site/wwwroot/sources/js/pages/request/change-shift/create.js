@@ -215,13 +215,15 @@ $(document).ready(function () {
     domElements.$btnSubmit.on('click', function () {
         hideValidationSummaryErrors(false);
         const typeId = parseInt(domElements.$typeId.val(), 10);
+        console.log('typeId', typeId);
         let details = [];
         $('#tblchangeshift tbody tr').each(function () {
             let $tr = $(this);
+            console.log('val()', $tr.find('.toShiftId').val());
             details.push({
                 onDate: $tr.find('.onDate').val(),
                 fromShiftId: $tr.find('.fromShiftId').val(),
-                toShiftId: typeId === ChangeShiftType.ChangeShift ? $tr.find('.toShiftId').val() : OffDayShiftId,
+                toShiftId: $tr.find('.toShiftId').val(),
                 remark: $.trim($tr.find('.remark').val()),
                 toDate: $tr.find('.moveToDate').val()
             });
