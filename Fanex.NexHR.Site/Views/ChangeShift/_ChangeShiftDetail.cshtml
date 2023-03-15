@@ -39,6 +39,9 @@
                 @if (typeId == (byte)ChangeShiftType.MoveOffDay)
                 {
                     var disabledates = string.Join(",", item.DisableDates.Select(x => x.ToString("yyyy/MM/dd")));
+                    var shifts = ViewBag.Shifts;
+                    shifts.RemoveAt(0);
+
                     <td>
                         <div class="calendar-form">
                             @{ var toDate = item.ToDate.HasValue ? item.ToDate.ToDateMonthYearFormatedDate() : string.Empty; }
@@ -54,7 +57,7 @@
                     </td>
 
                     <td>
-                        @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId),
+                        @Html.DropDownListFor(m => item.ToShiftId, new SelectList(shifts, "Id", "Code", item.ToShiftId),
                             new { @class = "toShiftId form-control" })
                     </td>
                 }
