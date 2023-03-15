@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@FromDate DATETIME
 	,@ToDate DATETIME
 	,@LeaveTypeId INT
@@ -681,7 +682,7 @@ BEGIN
 				WHERE EmpId = @EmpId
 					AND @TmpFromDate >= ChildBornDate
 					AND @TmpToDate <= DATEADD(M, 1, ChildBornDate)
-					AND BalanceDay >= @TotalDays
+					AND BalanceDay >= @TotalDaysPaternity
 				)
 		BEGIN
 			SET @ErrCode = 119

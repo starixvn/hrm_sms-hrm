@@ -16,7 +16,7 @@
     [JoinedDate]       DATE           NULL,
     [ConfirmedDate]    DATE           NULL,
     [ResignedDate]     DATE           NULL,
-	[ResignedReason]   NVARCHAR (300) NULL,
+    [ResignedReason]   NVARCHAR (300) NULL,
     [Skype]            VARCHAR (100)  NULL,
     [Yahoo]            VARCHAR (100)  NULL,
     [Marriage]         TINYINT        NULL,
@@ -45,12 +45,17 @@
     [PasswordReset]    BIT            CONSTRAINT [DF_Employee_PasswordReset] DEFAULT ((0)) NULL,
     [EmployeeCard]     VARCHAR (10)   NULL,
     [PickupRemark]     NVARCHAR (200) NULL,
-    [TeamDate]      DATE           NULL,
+    [TeamDate]         DATE           NULL,
     [PromotionDate]    DATE           NULL,
     [LetsTalk]         VARCHAR (100)  NULL,
-    [JobLevelId]       INT         NULL,
+    [JobLevelId]       INT            NULL,
+    [UserId]           INT            NULL,
+    [UC_ModifiedDate]  DATETIME       NULL,
+    [UC_SyncDate]      DATETIME       NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
+
+
 
 
 

@@ -9,22 +9,21 @@ RETURNS TABLE
 Created: Quinn.Vo@20151203
 Task: Get employee Id by actor id
 DB: HRM
-Original: 
+Original:
 
-Revisions:  
+Revisions:
 Param's Explanation:
 
 */
 AS
 RETURN WITH cteEmployee AS (
-
 		SELECT e.EmpId
 		FROM dbo.Employee AS e WITH (NOLOCK)
 		WHERE (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
@@ -47,12 +46,12 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(es.IsDeleted, 0) = 0
+			AND es.IsDeleted = 0
 			AND es.ActionType IN (2, 3) -- verifier, approver
 		
 		UNION ALL
@@ -63,12 +62,12 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(es.IsDeleted, 0) = 0
+			AND es.IsDeleted = 0
 			AND es.ActionType IN (4, 5) -- shift manager, on behalf request
 		
 		UNION ALL
@@ -79,19 +78,19 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(gs.IsDeleted, 0) = 0
+			AND gs.IsDeleted = 0
 			AND gs.ActionType = 2
 			AND NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
-				WHERE EmpId = e.EmpId
-					AND ActionType = 2
-					AND ISNULL(IsDeleted, 0) = 0
+				WHERE es.EmpId = e.EmpId
+					AND es.ActionType = 2
+					AND es.IsDeleted = 0
 				)
 		
 		UNION ALL
@@ -102,19 +101,19 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(gs.IsDeleted, 0) = 0
+			AND gs.IsDeleted = 0
 			AND gs.ActionType = 3
 			AND NOT EXISTS (
 				SELECT 1
-				FROM dbo.EmployeeSupervisor WITH (NOLOCK)
-				WHERE EmpId = e.EmpId
-					AND ActionType = 3
-					AND ISNULL(IsDeleted, 0) = 0
+				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
+				WHERE es.EmpId = e.EmpId
+					AND es.ActionType = 3
+					AND es.IsDeleted = 0
 				)
 		
 		UNION ALL
@@ -125,43 +124,43 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(gs.IsDeleted, 0) = 0
+			AND gs.IsDeleted = 0
 			AND gs.ActionType = 4
 			AND NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
-					INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON es.EmpId = ee.EmpId
 				WHERE es.EmpId = e.EmpId
 					AND es.ActionType = 4
-					AND ISNULL(es.IsDeleted, 0) = 0
-					AND ISNULL(ee.IsDeleted, 0) = 0
-					AND ISNULL(ee.[Enabled], 0) = 1
+					AND es.IsDeleted = 0
 				)
 		
 		UNION ALL
 		SELECT e.EmpId
 		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-			LEFT JOIN dbo.EmployeeSupervisor AS es WITH (NOLOCK) ON es.EmpId = e.EmpId
-					AND es.ActionType = 5
-					AND ISNULL(es.IsDeleted, 0) = 0
 		WHERE gs.OwnerId = @EmpId
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(e.isDeleted, 0) = 0
-					AND ISNULL(e.[Enabled], 0) = 1
+					AND e.isDeleted = 0
+					AND e.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)
-			AND ISNULL(gs.IsDeleted, 0) = 0
+			AND gs.IsDeleted = 0
 			AND gs.ActionType = 5
-			AND es.EmpId IS NULL
+			AND NOT EXISTS (
+				SELECT 1
+				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
+				WHERE es.EmpId = e.EmpId
+					AND es.ActionType = 5
+					AND es.IsDeleted = 0
+				)
 		
 		UNION ALL
 		SELECT e.EmpId
@@ -171,8 +170,8 @@ RETURN WITH cteEmployee AS (
 			AND (
 				(
 					@ExcludeUserDelete = 1
-					AND ISNULL(ee.isDeleted, 0) = 0
-					AND ISNULL(ee.[Enabled], 0) = 1
+					AND ee.isDeleted = 0
+					AND ee.[Enabled] = 1
 					)
 				OR @ExcludeUserDelete = 0
 				)

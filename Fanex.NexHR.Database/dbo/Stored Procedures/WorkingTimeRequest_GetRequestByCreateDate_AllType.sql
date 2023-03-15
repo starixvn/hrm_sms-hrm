@@ -1,6 +1,8 @@
 ﻿
 
 
+
+
 CREATE PROCEDURE [dbo].[WorkingTimeRequest_GetRequestByCreateDate_AllType] @SupervisorID INT = NULL
 	,@empid INT = NULL
 	,@TeamIds VARCHAR(max) = ''
@@ -81,7 +83,7 @@ BEGIN
 		BEGIN
 			INSERT INTO #tblEmployeeId (EmpId)
 			SELECT EmpId
-			FROM dbo.fnc_GetEmployeeByActorId(@SupervisorId, 1, 0)
+			FROM dbo.fnc_GetEmployeeByActorIdSkipRoleSA(@SupervisorId, 1, 0)
 		END
 		ELSE
 		BEGIN
@@ -558,6 +560,11 @@ BEGIN
 		,lv.[Name] AS LeaveTypeName
 		,r.Remark
 		,ISNULL(rm.TotalDaysRequest, 0) TotalDaysRequestInMonth
+		,CASE 
+			WHEN r.RequestType IN (1, 2) THEN inoutmiss.ReasonId
+			WHEN r.RequestType IN (3, 4) THEN inout.ReasonId
+			ELSE 0
+			END [ReasonId]
 		,CASE 
 			WHEN r.RequestType IN (1, 2, 6, 7) THEN lr.RefNo
 			WHEN r.RequestType IN (3, 4) THEN inout.RefNo

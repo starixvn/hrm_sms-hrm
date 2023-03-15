@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[ChangeShiftRequest_Approve] @RequestId BIGINT
+﻿CREATE PROCEDURE [dbo].[ChangeShiftRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
@@ -213,6 +212,7 @@ BEGIN
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 				,empca.IsPublic = 1
+				,empca.ShiftId = csdt.ToShift
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
 				AND empca.EmpId = csdt.EmpId
