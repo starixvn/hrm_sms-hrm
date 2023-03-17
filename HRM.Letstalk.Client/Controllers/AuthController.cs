@@ -13,41 +13,60 @@
     {
         private readonly AuthenticationSettings appSettings;
         private readonly string invalidUsernameOrPasswordText = "Username or password is incorrect";
+        private JwtToken jwt;
 
         public AuthController(AuthenticationSettings appSettings)
         {
             this.appSettings = appSettings;
+            jwt = null;
         }
 
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpGet]
         [Route("api/authenticate")]
         public ObjectResult Authenticate(string username, string password)
         {
-            var token = string.Empty;
             if (IsValidCredential(username, password))
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[] {
-                        new Claim(ClaimTypes.Name, username)
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(appSettings.Expiration),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var sercurityToken = tokenHandler.CreateToken(tokenDescriptor);
-                token = tokenHandler.WriteToken(sercurityToken);
-
-                return Ok(new { AccessToken = token });
+                var jwtToken = GetAccessToken(username);
+                return Ok(jwtToken);
             }
             else
             {
                 return BadRequest(invalidUsernameOrPasswordText);
             }
         }
+
+        private JwtToken GetAccessToken(string username)
+        {
+            if (jwt == null || string.IsNullOrEmpty(jwt.Token) || jwt.IsExpired)
+            {
+                jwt = GenerateAccessToken(username);
+            }
+            return jwt;
+        }
+
+        private JwtToken GenerateAccessToken(string username)
+        {
+            var jwtToken = new JwtToken();
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                        new Claim(ClaimTypes.Name, username)
+                    }),
+                Expires = DateTime.UtcNow.AddMinutes(appSettings.Expiration),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            jwtToken.Token = tokenHandler.WriteToken(token);
+            jwtToken.ValidFrom = token.ValidFrom;
+            jwtToken.ValidTo = token.ValidTo;
+
+            return jwtToken;
+        } 
 
         private bool IsValidCredential(string username, string password)
         {

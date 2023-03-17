@@ -6,6 +6,8 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.Services.Interfaces;
+    using HRM.Letstalk.Core.Implement;
+    using HRM.Letstalk.Core.Interface;
     using HRM.UserControl.Client.AspNetMvc.Configurations;
     using HRM.UserControl.Client.AspNetMvc.Session;
     using HRM.UserControl.Client.Core.Configurations;
@@ -57,7 +59,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IBackgroundJobService, BackgroundJobService>();
             container.RegisterType<IPostnatalService, PostnatalService>();
             container.RegisterType<IPaternityService, PaternityService>();
-            container.RegisterType<IBackgroundJobService, BackgroundJobService>();
             container.RegisterType<IDashboardService, DashboardService>();
             container.RegisterType<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
             container.RegisterType<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
@@ -74,6 +75,10 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IJobLevelService, JobLevelService>();
             container.RegisterType<IEmployeeWorkFromHomeService, EmployeeWorkFromHomeService>();
             container.RegisterType<ISyncWorkingShiftService, SyncWorkingShiftService>();
+
+            container.RegisterType<IHttpClientService, HttpClientService>();
+            container.RegisterType<ISendNotificationService, SendNotificationService>();
+            container.RegisterType<ILetstalkService, LetstalkService>();
 
             // excel
             RegisterExportExcelDI(container);

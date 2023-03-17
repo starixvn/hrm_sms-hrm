@@ -16,6 +16,7 @@
         public float AnnualLeaveCurrentYear { get; set; }
 
         public float LeaveBalance { get; set; }
+        public string LetsTalk { get; set; }
 
         public int SectionId { get; set; }
         public string Section { get; set; }

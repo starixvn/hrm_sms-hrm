@@ -194,6 +194,7 @@
     <Compile Include="Export\ExportEmployeeWorkFromHomeController.cs" />
     <Compile Include="Report\DisciplineSummaryPerYearController.cs" />
     <Compile Include="Report\MealAllowanceReportController.cs" />
+    <Compile Include="SendController.cs" />
     <Compile Include="SickLeaveBalanceController.cs" />
     <Compile Include="HospitalizationLeaveBalanceController.cs" />
     <Compile Include="JobLevelController.cs" />
@@ -286,6 +287,10 @@
     <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj">
+      <Project>{F57BC2A2-BFA1-49C0-AE61-5432948DB735}</Project>
+      <Name>HRM.Letstalk.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

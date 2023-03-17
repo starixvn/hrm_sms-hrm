@@ -223,6 +223,7 @@
     <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\JobLevelService .cs" />
+    <Compile Include="Implement\LetstalkService.cs" />
     <Compile Include="Implement\SyncWorkingShiftService.cs" />
     <Compile Include="Implement\EmployeeWorkFromHomeService.cs" />
     <Compile Include="Implement\Report\MealAllowanceSummaryServicecs.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IJobLevelService.cs" />
     <Compile Include="Interfaces\IEmployeeWorkFromHomeService.cs" />
+    <Compile Include="Interfaces\ILetstalkService.cs" />
     <Compile Include="Interfaces\IUnitService.cs" />
     <Compile Include="Interfaces\ISectionService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />
@@ -340,6 +342,10 @@
     <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
       <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
       <Name>Fanex.NexHR.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj">
+      <Project>{F57BC2A2-BFA1-49C0-AE61-5432948DB735}</Project>
+      <Name>HRM.Letstalk.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

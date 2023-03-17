@@ -31,5 +31,9 @@
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
         public static bool EnableRemindAnnualLeaveBalance
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableRemindAnnualLeaveBalance"]);
+        public static string UrlSendLetstalk => ConfigurationManager.AppSettings["UrlSendLetstalk"];
+        public static string AppCredentialId => ConfigurationManager.AppSettings["AppCredentialId"];
+        public static string AppCredentialPassword => ConfigurationManager.AppSettings["AppCredentialPassword"];
+        public static int BotId => Convert.ToInt32(ConfigurationManager.AppSettings["BotId"]);
     }
 }
