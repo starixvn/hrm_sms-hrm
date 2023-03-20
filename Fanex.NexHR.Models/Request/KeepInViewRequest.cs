@@ -26,5 +26,7 @@
         }
 
         public string ShiftName { get; set; }
+
+        public int ShiftId { get; set; }
     }
 }

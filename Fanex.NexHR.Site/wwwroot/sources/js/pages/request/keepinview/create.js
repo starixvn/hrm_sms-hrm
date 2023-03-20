@@ -27,6 +27,8 @@ $(document).ready(function () {
         $toTime: $('#ToTime'),
         $crossDay: $('#CrossDay'),
         $remark: $('#Remark'),
+        $shiftId: $('#ShiftId'),
+        $groupNewShift: $('#groupNewShift'),
         $btnSubmit: $('#btnSubmit')
     };
     let getDataAfterChangeEmployee = function () {
@@ -186,6 +188,7 @@ $(document).ready(function () {
 
         if (domElements.$keepInViewByDay.prop('checked')) {
             domElements.$groupHalfDay.show();
+            domElements.$groupNewShift.show();
             if (domElements.$halfDay.prop('checked')) {
                 domElements.$timeGroup.show();
             } else {
@@ -193,6 +196,7 @@ $(document).ready(function () {
             }
         } else {
             domElements.$groupHalfDay.hide();
+            domElements.$groupNewShift.hide();
             domElements.$timeGroup.show();
         }
     });
@@ -236,6 +240,7 @@ $(document).ready(function () {
             crossDay: domElements.$crossDay.prop('checked'),
             verifierId: domElements.$verifierId.val(),
             approverId: domElements.$approverId.val(),
+            shiftId: typeId === 1 ? domElements.$shiftId.val() : null,
             remark: $.trim(domElements.$remark.val())
         };
 

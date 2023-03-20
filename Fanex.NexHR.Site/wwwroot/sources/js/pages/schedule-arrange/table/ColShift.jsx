@@ -40,6 +40,10 @@ export default class ColShift extends PureComponent {
         }
     };
 
+    isSkipOffDay = data => {
+        return data.isLeaveHalfDay || data.isChangeShift || (data.isKeepInView && data.isOffDay);
+    };
+
     render() {
         const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions, isUsedWeeklyDefaultShift } = this.props;
         const shiftInfo = getColumnShiftInfo(data, isHost, defaultShift, isUsedWeeklyDefaultShift);
@@ -69,7 +73,7 @@ export default class ColShift extends PureComponent {
                         className={shiftInfo.class}
                         placeholder={shiftInfo.placeholder}
                         isDisabled={shiftInfo.isDisabled}
-                        shiftOptions={data.isLeaveHalfDay || data.isChangeShift ? shiftOptions.filter(item => item.id !== OffDayShiftId) : shiftOptions}
+                        shiftOptions={this.isSkipOffDay(data) ? shiftOptions.filter(item => item.id !== OffDayShiftId) : shiftOptions}
                         onChange={this.handleChangeShift}
                     />
                     <div className={`checkbox ${shiftInfo.isShowCheckBox && this.state.isShowCheckbox ? '' : 'hidden'}`}>

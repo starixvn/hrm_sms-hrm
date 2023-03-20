@@ -46,12 +46,12 @@
                         <div class="calendar-form">
                             @{ var toDate = item.ToDate.HasValue ? item.ToDate.ToDateMonthYearFormatedDate() : string.Empty; }
                             <input type="text" class="datepicker form-control moveToDate" value="@toDate"
-                                   @(!isHost ? "disabled" : string.Empty)
-                                   requestdate="@item.OnDate.ToDateMonthYearFormatedDate()"
-                                   mindate="@(new DateTime(item.OnDate.Year, 1, 1).ToString("yyyy/MM/dd"))"
-                                   maxdate="@(new DateTime(item.OnDate.Year, 12, 31).ToString("yyyy/MM/dd"))"
-                                   original-disabledDate="@disabledates"
-                                   disabledDate="@disabledates" />
+                                @(!isHost ? "disabled" : string.Empty)
+                                requestdate="@item.OnDate.ToDateMonthYearFormatedDate()"
+                                mindate="@(new DateTime(item.OnDate.Year, 1, 1).ToString("yyyy/MM/dd"))"
+                                maxdate="@(new DateTime(item.OnDate.Year, 12, 31).ToString("yyyy/MM/dd"))"
+                                original-disabledDate="@disabledates"
+                                disabledDate="@disabledates" />
                             <i class="icon-calendar fa fa-calendar"></i>
                         </div>
                     </td>

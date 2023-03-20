@@ -440,6 +440,12 @@ export default class App extends Component {
         return selectedMembers;
     }
 
+    isChangeOffDayKIV = item => {
+        if (item.isKeepInView) {
+            return !item.isOffDay;
+        } else return true;
+    };
+
     handleChangeOffNoShift = () => {
         let schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
@@ -451,11 +457,10 @@ export default class App extends Component {
                 let members = [...schedules[gindex].members];
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift) {
+                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift) && this.isChangeOffDayKIV(member[attrName])) {
                             member[attrName] = {
                                 ...member[attrName],
                                 isOffDay: true,
@@ -492,7 +497,7 @@ export default class App extends Component {
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) {
+                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) && this.isChangeOffDayKIV(member[attrName])) {
                             const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                             member[attrName] = {
                                 ...member[attrName],
@@ -620,7 +625,7 @@ export default class App extends Component {
                 this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) {
+                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) && this.isChangeOffDayKIV(member[attrName])) {
                             const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
                             member[attrName] = {
                                 ...member[attrName],

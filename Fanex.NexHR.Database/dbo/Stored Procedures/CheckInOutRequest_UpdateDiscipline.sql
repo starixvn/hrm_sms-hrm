@@ -201,7 +201,7 @@ BEGIN
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline
-			WHERE @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId)
+			WHERE @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 
 			-- update
 			UPDATE dis

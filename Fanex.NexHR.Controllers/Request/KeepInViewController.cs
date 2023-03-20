@@ -24,19 +24,22 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IAttachFileService attachFileService;
+        private readonly IShiftService shiftService;
 
         public KeepInViewController(
             IUserControlSession userControlSession,
             IKeepInViewRequestService keepInViewRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IAttachFileService attachFileService) : base(userControlSession)
+            IAttachFileService attachFileService,
+            IShiftService shiftService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.keepInViewRequestService = keepInViewRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.attachFileService = attachFileService;
+            this.shiftService = shiftService;
         }
 
         [HttpGet]
@@ -77,6 +80,7 @@
             ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: false);
 
             return View(model);
         }
@@ -102,7 +106,8 @@
                         : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
-                CreatedBy = EmployeeSession.EmpId
+                CreatedBy = EmployeeSession.EmpId,
+                ShiftId = model.ShiftId
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -145,10 +150,12 @@
                 Approvers = supervisor.Approvers,
                 MinDate = request.OnDate.AddMonths(-1),
                 MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
-                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+                Files = attachFileService.GetAttachFile(id, UploadFolderPath),
+                ShiftId = request.ShiftId
             };
 
             ViewBag.IsTopManager = request.Requester.IsTopManager;
+            ViewBag.Shifts = shiftService.GetAll(isShowOff: false);
 
             return View(viewModel);
         }
@@ -172,6 +179,7 @@
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 ModifiedBy = EmployeeSession.EmpId,
+                ShiftId = model.ShiftId
             };
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

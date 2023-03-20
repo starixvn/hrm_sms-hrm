@@ -44,6 +44,8 @@
         [Display(Name = nameof(Labels.Approver), ResourceType = typeof(Labels))]
         public int? ApproverId { get; set; }
 
+        public int? ShiftId { get; set; }
+
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
         public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
