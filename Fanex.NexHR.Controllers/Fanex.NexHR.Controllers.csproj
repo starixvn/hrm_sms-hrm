@@ -194,7 +194,6 @@
     <Compile Include="Export\ExportEmployeeWorkFromHomeController.cs" />
     <Compile Include="Report\DisciplineSummaryPerYearController.cs" />
     <Compile Include="Report\MealAllowanceReportController.cs" />
-    <Compile Include="SendController.cs" />
     <Compile Include="SickLeaveBalanceController.cs" />
     <Compile Include="HospitalizationLeaveBalanceController.cs" />
     <Compile Include="JobLevelController.cs" />

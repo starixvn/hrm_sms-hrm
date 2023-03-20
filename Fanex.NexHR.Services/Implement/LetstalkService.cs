@@ -9,30 +9,36 @@
     public class LetstalkService : ILetstalkService
     {
         private readonly ISendNotificationService sendNotificationService;
+        private readonly string templateContent = "<strong>{0}</strong><br /> {1}";
 
         public LetstalkService(ISendNotificationService sendNotificationService)
         {
             this.sendNotificationService = sendNotificationService;
         }
 
-        public void SendNotification(string letstalkId, string message)
+        public void SendNotification(string letstalkId, string subject, string message)
         {
-            var botId = ConfigSettings.BotId;
-            var url = ConfigSettings.UrlSendLetstalk;
-            var username = ConfigSettings.AppCredentialId;
-            var pass = ConfigSettings.AppCredentialPassword;
-
-            var jwtToken = sendNotificationService.GetToken(url, username, pass);
-            if (jwtToken != null)
+            if (!string.IsNullOrEmpty(letstalkId))
             {
-                var data = new Dictionary<string, object>(){
+                var botId = ConfigSettings.BotId;
+                var url = ConfigSettings.UrlSendLetstalk;
+                var username = ConfigSettings.AppCredentialId;
+                var pass = ConfigSettings.AppCredentialPassword;
+
+                var content = string.Format(templateContent, subject, message);
+
+                var jwtToken = sendNotificationService.GetToken(url, username, pass);
+                if (jwtToken != null)
+                {
+                    var data = new Dictionary<string, object>(){
                     { "BotId", botId },
                     { "ConversationId", letstalkId },
-                    { "Message", message }
+                    { "Message", content }
                 };
-                BackgroundJob.Enqueue(() =>
-                       sendNotificationService.SendNotificationToLetstalk1(url, jwtToken.Token, data)
-                );
+                    BackgroundJob.Enqueue(() =>
+                           sendNotificationService.SendNotificationToLetstalk1(url, jwtToken.Token, data)
+                    );
+                }
             }
         }
     }

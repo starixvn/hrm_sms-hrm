@@ -24,5 +24,7 @@
                 return NickName + " (" + FullName + ")";
             }
         }
+
+        public string LetsTalk { get; set; }
     }
 }

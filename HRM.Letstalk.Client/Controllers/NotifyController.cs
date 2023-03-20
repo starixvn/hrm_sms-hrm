@@ -12,6 +12,7 @@
     using HRM.Letstalk.Client.Models.Result;
     using HRM.Letstalk.Client.Constants;
     using Newtonsoft.Json;
+    using HRM.Letstalk.Client.Enum;
 
     [Authorize]
     public class NotifyController : ControllerBase
@@ -55,10 +56,16 @@
                 ConversationId = conversationId
             };
 
+            var outGoingMsg = new OutgoingMessage
+            {
+                MessageType = MessageTypeNumber.Html,
+                Text = message
+            };
+
             var botConfigs = webhookConfigurations.FirstOrDefault(config => config.BotId == botId);
             if (botConfigs != null && botConfigs.IsAllowedSet)
             {
-                PushMessageResult result = await letstalkService(botConfigs.BotId).PushAsync(conversationId, message);
+                PushMessageResult result = await letstalkService(botConfigs.BotId).PushMulticastAsync(new List<string> { conversationId }, outGoingMsg);
                 if (result.IsSuccess && !result.BlockList.Any())
                 {
                     sendResult.Status = SendNotificationStatus.Sent;

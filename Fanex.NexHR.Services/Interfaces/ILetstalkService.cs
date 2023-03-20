@@ -2,6 +2,6 @@
 {
     public interface ILetstalkService
     {
-        void SendNotification(string letstalkId, string message);
+        void SendNotification(string letstalkId, string subject, string message);
     }
 }

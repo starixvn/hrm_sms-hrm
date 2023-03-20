@@ -15,6 +15,8 @@ namespace HRM.Letstalk.Client.Services
 
     public class HttpClientService : IHttpClientService
     {
+        private const string JsonContentType = "application/json";
+        private const string PlainTextContentType = "text/plain";
         private const int ExpiredTokenPeriodInMiliseconds = 5000;
         private readonly IHttpClientFactory clientFactory;
         private readonly IJwtService jwtService;
@@ -27,29 +29,39 @@ namespace HRM.Letstalk.Client.Services
             this.botConfig = botConfig;
         }
 
-        public Task<T> ExecuteGetAsync<T>(string endPoint, IDictionary<string, object> data = null) where T : new()
-            => SendHttpClientAsync<T>(endPoint, HttpMethod.Get, data);
+        public Task<T> ExecuteGetAsync<T>(string endPoint, IDictionary<string, object> data = null, string signToken = "", bool encodeData = true) where T : new()
+            => SendHttpClientAsync<T>(endPoint, HttpMethod.Get, data, signToken, encodeData);
 
-        public Task<T> ExecutePostAsync<T>(string endPoint, IDictionary<string, object> data) where T : new()
-            => SendHttpClientAsync<T>(endPoint, HttpMethod.Post, data);
+        public Task<T> ExecutePostAsync<T>(string endPoint, IDictionary<string, object> data, string signToken = "", bool encodeData = true) where T : new()
+            => SendHttpClientAsync<T>(endPoint, HttpMethod.Post, data, signToken, encodeData);
 
-        public Task<T> ExecutePutAsync<T>(string endPoint, IDictionary<string, object> data) where T : new()
-            => SendHttpClientAsync<T>(endPoint, HttpMethod.Put, data);
+        public Task<T> ExecutePutAsync<T>(string endPoint, IDictionary<string, object> data, string signToken = "", bool encodeData = true) where T : new()
+            => SendHttpClientAsync<T>(endPoint, HttpMethod.Put, data, signToken, encodeData);
 
-        public Task<T> ExecuteDeleteAsync<T>(string endPoint, IDictionary<string, object> data) where T : new()
-            => SendHttpClientAsync<T>(endPoint, HttpMethod.Delete, data);
+        public Task<T> ExecuteDeleteAsync<T>(string endPoint, IDictionary<string, object> data, string signToken = "", bool encodeData = true) where T : new()
+            => SendHttpClientAsync<T>(endPoint, HttpMethod.Delete, data, signToken, encodeData);
 
-        private async Task<T> SendHttpClientAsync<T>(string endPoint, HttpMethod method, IDictionary<string, object> data)
+        private async Task<T> SendHttpClientAsync<T>(string endPoint, HttpMethod method, IDictionary<string, object> data, string signToken, bool encodeData)
             where T : new()
         {
             ValidateEndPoint(endPoint);
 
-            using (var request = CreateRequest(endPoint, method))
+            using (var request = CreateRequest(endPoint, method, signToken))
             {
                 if (data != null)
                 {
-                    var encodedData = Encode(data);
-                    var content = new StringContent(encodedData, Encoding.UTF8, "text/plain");
+                    StringContent content;
+                    if (encodeData)
+                    {
+                        var encodedData = Encode(data);
+                        content = new StringContent(encodedData, Encoding.UTF8, PlainTextContentType);
+                    }
+                    else
+                    {
+                        var jsonData = JsonConvert.SerializeObject(data);
+                        content = new StringContent(jsonData, Encoding.UTF8, JsonContentType);
+                    }
+
                     request.Content = content;
                 }
                 var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClientWithProxy);
@@ -68,12 +80,14 @@ namespace HRM.Letstalk.Client.Services
             }
         }
 
-        private HttpRequestMessage CreateRequest(string endPoint, HttpMethod method)
+        private HttpRequestMessage CreateRequest(string endPoint, HttpMethod method, string signToken)
         {
             Uri url = new Uri($"{botConfig.ApiEndpoint}{endPoint}");
+            string token = string.IsNullOrWhiteSpace(signToken) ? EncodeBase64(botConfig.ApiKey) : signToken;
+
             var request = new HttpRequestMessage(method, url);
             request.Headers.Accept.Clear();
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", EncodeBase64(botConfig.ApiKey));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             return request;
         }

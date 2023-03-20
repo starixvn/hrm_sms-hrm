@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Fanex.Caching;
+    using HRM.Letstalk.Client.Enum;
     using HRM.Letstalk.Client.Models;
     using HRM.Letstalk.Client.Models.Result;
     using HRM.Letstalk.Client.Services.Interface;
@@ -13,56 +15,76 @@
     public class LetstalkService : ILetstalkService
     {
         private const int payloadId = 100;
+        private const string LetstalkCacheKey = "CRM-Letstalk-API-Token";
         private readonly BotConfig botConfig;
         private readonly IHttpClientService httpClientService;
         private readonly ICryptographyService cryptographyService;
+        private readonly ICacheService cacheService;
 
-        private readonly JsonSerializerSettings DefaultJsonSerializeSetting = new JsonSerializerSettings
+        private readonly JsonSerializerSettings DefaultJsonSerializeSetting = new()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
         public LetstalkService(ICryptographyService cryptographyService,
             IHttpClientService httpClientService,
+            ICacheService cacheService,
             BotConfig botConfig)
         {
+            this.cacheService = cacheService;
             this.cryptographyService = cryptographyService;
             this.httpClientService = httpClientService;
             this.botConfig = botConfig;
         }
 
-        public async Task<PushMessageResult> PushAsync(IEnumerable<string> accountIds, Payload payload)
+        public async Task<PushMessageResult> PushMulticastAsync(IEnumerable<string> accountIds, OutgoingMessage message)
         {
             ValidateInputParam(nameof(accountIds), accountIds);
-            ValidateInputParam(nameof(payload), payload);
+            ValidateInputParam(nameof(message), message);
+            ValidateMultiCastMessage(message);
 
-            var accountIdToLowerList = accountIds.Select(accountId => accountId.ToLowerInvariant());
-
-            payload.UserId = botConfig.BotUserId;
-            payload.Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            payload.HashType = botConfig.EncryptionMode;
-            payload.From = botConfig.BusinessAccountType;
-            payload.Type = MessageType.Text;
-            payload.Id = payloadId;
-            payload.Receiver = accountIdToLowerList.ElementAt(0);
-            payload.HashId = botConfig.ChatKeyVersion;
-
+            var token = await GetSignAccessTokenAsync();
             var result = await httpClientService.ExecutePostAsync<PushMessageResult>(
-                $"bot/push/{botConfig.BotAccountId}",
+                $"bot/v3/message/multicast",
                 new Dictionary<string, object>
                 {
-                    { "receiver", accountIdToLowerList },
-                    { "payload", JsonConvert.SerializeObject(payload, DefaultJsonSerializeSetting) }
-                });
+                    { "msg", message },
+                    { "receivers", accountIds.ToArray() }
+                },
+                token,
+                encodeData: false);
 
             return result;
         }
 
+        public async Task<PushMessageResult> PushRoomAsync(string chatroomToken, string message, DateTime? expiredTime = null)
+        {
+            ValidateInputParam(nameof(chatroomToken), chatroomToken);
+            ValidateInputParam(nameof(message), message);
+            var outGoingMsg = new OutgoingMessage
+            {
+                MessageType = MessageTypeNumber.Html,
+                Text = message
+            };
+            var token = await GetSignAccessTokenAsync();
+            var result = await httpClientService.ExecutePostAsync<PushMessageResult>(
+               $"bot/push_chatroom/{botConfig.BotAccountId}",
+               new Dictionary<string, object>
+               {
+                    { "receiver", chatroomToken },
+                    { "msg", outGoingMsg }
+               },
+               token,
+               encodeData: false);
+
+            return result ?? new PushMessageResult();
+        }
+
         public async Task<PushMessageResult> PushAsync(IEnumerable<string> accountIds, string message, DateTime? expiredTime = null)
-                => await PushAsync(accountIds, new Message { Content = message }, expiredTime);
+                    => await PushAsync(accountIds, new Message { Content = message }, expiredTime);
 
         public async Task<PushMessageResult> PushAsync(string accountId, string message, DateTime? expiredTime = null)
-                => await PushAsync(new List<string> { accountId }, message, expiredTime);
+                    => await PushAsync(new List<string> { accountId }, message, expiredTime);
 
         public async Task<PushMessageResult> PushAsync(IEnumerable<string> accountIds, Message message, DateTime? expiredTime = null)
         {
@@ -77,20 +99,38 @@
             return await PushAsync(accountIds, payload);
         }
 
-        public async Task<BaseResult> PushRoomAsync(string chatroomToken, string message, DateTime? expiredTime = null)
+        public async Task<PushMessageResult> PushMultiRoomAsync(IEnumerable<string> roomTokenList, OutgoingMessage message)
         {
-            ValidateInputParam(nameof(chatroomToken), chatroomToken);
+            ValidateInputParam(nameof(roomTokenList), roomTokenList);
             ValidateInputParam(nameof(message), message);
+            ValidateMultiCastMessage(message);
 
-            var result = await httpClientService.ExecutePostAsync<BaseResult>(
-               $"bot/push_chatroom/{botConfig.BotAccountId}",
-               new Dictionary<string, object>
-               {
-                    { "receiver", chatroomToken },
-                    { "msg", message }
-               });
+            var token = await GetSignAccessTokenAsync();
+            var result = await httpClientService.ExecutePostAsync<PushMessageResult>(
+                $"bot/v3/message/multi-chatroom",
+                new Dictionary<string, object>
+                {
+                    { "msg", message },
+                    { "receivers", roomTokenList }
+                },
+                token,
+                encodeData: false);
 
-            return result ?? new BaseResult();
+            return result;
+        }
+
+        private static void ValidateMultiCastMessage(OutgoingMessage message)
+        {
+            if (message.MessageType == MessageTypeNumber.Text && string.IsNullOrWhiteSpace(message.Text))
+            {
+                throw new ArgumentNullException(message.Text);
+            }
+
+            if ((message.MessageType == MessageTypeNumber.Image && message.MessageType == MessageTypeNumber.FullImage)
+                && string.IsNullOrWhiteSpace(message.ImageUrl))
+            {
+                throw new ArgumentNullException(message.ImageUrl);
+            }
         }
 
         public async Task<string> GetWebhookAsync()
@@ -116,6 +156,56 @@
                 });
         }
 
+        private async Task<PushMessageResult> PushAsync(IEnumerable<string> accountIds, Payload payload, string type = Models.MessageType.Text)
+        {
+            ValidateInputParam(nameof(accountIds), accountIds);
+            ValidateInputParam(nameof(payload), payload);
+
+            var accountIdToLowerList = accountIds.Select(accountId => accountId.ToLowerInvariant());
+
+            payload.UserId = botConfig.BotUserId;
+            payload.Time = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            payload.HashType = botConfig.EncryptionMode;
+            payload.From = botConfig.BusinessAccountType;
+            payload.Type = type;
+            payload.Id = payloadId;
+            payload.Receiver = accountIdToLowerList.ElementAt(0);
+            payload.HashId = botConfig.ChatKeyVersion;
+
+            var result = await httpClientService.ExecutePostAsync<PushMessageResult>(
+                $"bot/push/{botConfig.BotAccountId}",
+                new Dictionary<string, object>
+                {
+                    { "receiver", accountIdToLowerList },
+                    { "payload", JsonConvert.SerializeObject(payload, DefaultJsonSerializeSetting) }
+                });
+
+            return result;
+        }
+
+        private async Task<string> GetSignAccessTokenAsync()
+        {
+            var token = await cacheService.GetAsync<string>(LetstalkCacheKey);
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                var result = await httpClientService.ExecutePostAsync<TokenResult>(
+              $"bot/v3/sign-token",
+              new Dictionary<string, object>
+              {
+                    { "id", botConfig.BotAccountId },
+                    { "token", botConfig.ApiKey }
+              },
+              encodeData: false);
+                token = result.Token;
+                await cacheService.SetAsync(
+                    LetstalkCacheKey,
+                    token,
+                    new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(5)));
+            }
+
+            return token;
+        }
 
         private static void ValidateInputParam(string paramName, object paramValue)
         {

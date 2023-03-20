@@ -15,5 +15,7 @@
         public string SendToNickName { get; set; }
 
         public bool IsAllowSendRequester { get; set; }
+
+        public string LetsTalk { get; set; }
     }
 }

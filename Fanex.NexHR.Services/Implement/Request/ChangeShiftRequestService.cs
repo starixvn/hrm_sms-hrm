@@ -16,6 +16,7 @@
     using Fanex.NexHR.Models.ScheduleArrange;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
 
     public class ChangeShiftRequestService : IChangeShiftRequestService
@@ -28,17 +29,20 @@
         private readonly IBaseService baseService;
         private readonly IEmailService emailService;
         private readonly IRequestMailService requestMailService;
+        private readonly ILetstalkService letstalkService;
 
         public ChangeShiftRequestService(
             IChangeShiftRequestRepository changeShiftRepository,
             IBaseService baseService,
             IEmailService emailService,
-            IRequestMailService requestMailService)
+            IRequestMailService requestMailService,
+            ILetstalkService letstalkService)
         {
             this.changeShiftRepository = changeShiftRepository;
             this.baseService = baseService;
             this.emailService = emailService;
             this.requestMailService = requestMailService;
+            this.letstalkService = letstalkService;
         }
 
         public int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate)
@@ -215,6 +219,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 

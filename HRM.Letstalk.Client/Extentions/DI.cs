@@ -12,6 +12,7 @@
     using HRM.Letstalk.Client.Services;
     using HRM.Letstalk.Client.Constants;
     using System.Net;
+    using Fanex.Caching;
 
     public static class DI
     {
@@ -44,7 +45,8 @@
             services.AddSingleton<IJwtService, JwtService>();
             services.AddTransient<HttpClientService>();
             services.AddTransient<LetstalkService>();
-            services.AddTransient<Func<int, ILetstalkService>>(serviceProvider => botId =>
+            services.AddSingleton<ICacheService, CacheService>();
+            services.AddSingleton<Func<int, ILetstalkService>>(serviceProvider => botId =>
             {
                 var botConfig = botConfigs.FirstOrDefault(config => config.BotAccountId == botId);
 
@@ -55,7 +57,11 @@
 
                 var httpClientService = new HttpClientService(serviceProvider.GetRequiredService<IHttpClientFactory>(), serviceProvider.GetService<IJwtService>(), botConfig);
 
-                return new LetstalkService(serviceProvider.GetRequiredService<ICryptographyService>(), httpClientService, botConfig);
+                return new LetstalkService(
+                    serviceProvider.GetRequiredService<ICryptographyService>(),
+                    httpClientService,
+                    serviceProvider.GetRequiredService<ICacheService>(),
+                    botConfig);
             });
         }
     }

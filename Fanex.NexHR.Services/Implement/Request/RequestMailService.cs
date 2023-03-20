@@ -217,6 +217,7 @@
             {
                 emailModel.SendTo = relatedPeople.Approver.Email;
                 emailModel.SendToNickName = relatedPeople.Approver.NickName;
+                emailModel.LetsTalk = relatedPeople.Approver.LetsTalk;
             }
 
             return emailModel;
@@ -230,10 +231,12 @@
                 {
                     emailModel.SendTo = relatedPeople.Verifier.Email;
                     emailModel.SendToNickName = relatedPeople.Verifier.NickName;
+                    emailModel.LetsTalk = relatedPeople.Verifier.LetsTalk;
                 }
                 else
                 {
                     emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
+                    emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
                 }
             }
 
@@ -245,6 +248,7 @@
             if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
             {
                 var mailHRs = string.Join(";", relatedPeople.ListHR.Select(x => x.Email ?? string.Empty));
+                var letstalks = string.Join(";", relatedPeople.ListHR.Select(x => x.LetsTalk ?? string.Empty));
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
                     emailModel.SendTo = mailHRs;
@@ -254,6 +258,7 @@
                 {
                     emailModel.SendCC = mailHRs;
                 }
+                emailModel.LetsTalk = letstalks;
             }
 
             return emailModel;
@@ -267,10 +272,12 @@
                 {
                     emailModel.SendTo = relatedPeople.Requester.Email;
                     emailModel.SendToNickName = relatedPeople.Requester.NickName;
+                    emailModel.LetsTalk = relatedPeople.Requester.LetsTalk;
                 }
                 else
                 {
                     emailModel.SendCC = AddMailToList(emailModel.SendCC, relatedPeople.Requester.Email);
+                    emailModel.LetsTalk = AddLetstalkToList(emailModel.LetsTalk, relatedPeople.Requester.Email);
                 }
             }
 
@@ -290,6 +297,21 @@
             }
 
             return mailList + ";" + mail;
+        }
+
+        private static string AddLetstalkToList(string letstalkList, string letstalk)
+        {
+            if (string.IsNullOrWhiteSpace(letstalk))
+            {
+                return letstalkList;
+            }
+
+            if (string.IsNullOrWhiteSpace(letstalkList))
+            {
+                return letstalk;
+            }
+
+            return letstalkList + ";" + letstalk;
         }
 
         private static EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
