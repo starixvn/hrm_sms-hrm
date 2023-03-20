@@ -191,7 +191,7 @@ BEGIN
 		AND empca.WorkDate = tmp.WorkDate
 	WHERE (
 			empca.RequestId IS NULL
-			OR (empca.RequestId IS NOT NULL AND empca.RequestTypeId = @ChangeShiftRequestTypeId)
+			OR (empca.RequestId IS NOT NULL AND (empca.RequestTypeId = @ChangeShiftRequestTypeId OR empca.RequestTypeId = @KeepInViewRequestTypeId))
 		)
 		AND (
 			ISNULL(empca.ShiftId, 0) != ISNULL(tmp.ShiftId, 0)

@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Insert] @EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
 	,@OnDate DATE
@@ -9,6 +11,7 @@ CREATE PROCEDURE [dbo].[KeepInViewRequest_Insert] @EmpId INT
 	,@CreatedBy INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
+	,@ShiftId INT = NULL
 	,@RequestId BIGINT = 0 OUTPUT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -268,6 +271,7 @@ BEGIN
 			,FromTime
 			,ToTime
 			,RefNo
+			,ShiftId
 			)
 		VALUES (
 			@RequestId
@@ -278,6 +282,7 @@ BEGIN
 			,@FromTime
 			,@ToTime
 			,@RefNo
+			,@ShiftId
 			)
 
 		IF @ApproverId IS NULL

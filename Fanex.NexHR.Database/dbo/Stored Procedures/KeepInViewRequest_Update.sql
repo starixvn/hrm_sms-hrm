@@ -1,6 +1,8 @@
 ﻿
 
 
+
+
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -12,6 +14,7 @@ CREATE PROCEDURE [dbo].[KeepInViewRequest_Update] @RequestId BIGINT
 	,@ModifiedBy INT = NULL
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
+	,@ShiftId INT = NULL
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -263,6 +266,7 @@ BEGIN
 		,IsHalfDay = @IsHalfDay
 		,FromTime = @FromTime
 		,ToTime = @ToTime
+		,ShiftId = ISNULL(@ShiftId, NULL)
 	WHERE RequestId = @RequestId
 
 	IF @ApproverId IS NULL

@@ -19,6 +19,7 @@ BEGIN
 		,kiv.FromTime
 		,kiv.ToTime
 		,kiv.IsHalfDay
+		,kiv.ShiftId
 		,wk.Remark
 		,kiv.RefNo
 		,wk.CreatedDate
