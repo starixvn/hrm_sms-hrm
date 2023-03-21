@@ -1,6 +1,5 @@
 namespace HRM.Letstalk.Client
 {
-    using System.Linq;
     using System.Text;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -8,14 +7,10 @@ namespace HRM.Letstalk.Client
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Fanex.Data;
-    using Fanex.Data.SqlServer;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
     using HRM.Letstalk.Client.Models;
-    using System.Collections.Generic;
-    using System.Configuration;
     using HRM.Letstalk.Client.Extentions;
 
     public class Startup

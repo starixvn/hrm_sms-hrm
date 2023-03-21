@@ -11,6 +11,7 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.BackgroundJob;
     using Fanex.NexHR.Models.BackgroundJob;
+    using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
 
     public class BackgroundJobService : IBackgroundJobService
@@ -24,16 +25,19 @@
         private readonly IHolidayService holidayService;
         private readonly ISyncWorkingShiftService syncWorkingShiftService;
         private readonly IEmailService emailService;
+        private readonly ILetstalkService letstalkService;
 
         public BackgroundJobService(IBaseService baseService,
             IHolidayService holidayService,
             ISyncWorkingShiftService syncWorkingShiftService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ILetstalkService letstalkService)
         {
             this.baseService = baseService;
             this.holidayService = holidayService;
             this.syncWorkingShiftService = syncWorkingShiftService;
             this.emailService = emailService;
+            this.letstalkService = letstalkService;
         }
 
         public void ImportTimeRecord()
@@ -158,16 +162,17 @@
 
                 CheckSendMail(ref isSentMail, employee.IsLocal, ref percentInMail, percentAnnualLeaveRemaining);
 
-                if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
-                {
                     validEmployees.Add(employee);
 
-                    var body = string.Format(
+                var body = string.Format(
                         bodyTemplate,
                         employee.Nickname,
                         percentInMail,
                         year + 1,
                         string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
+
+                if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
+                {
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
                         employee.Email,
@@ -175,6 +180,8 @@
                         "Annual Leave Balance Reminder",
                         body));
                 }
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(employee.LetsTalk, "Annual Leave Balance Reminder", body));
             }
 
             SendMailStatisticAnnualLeave(validEmployees, supervisors, statistics);
