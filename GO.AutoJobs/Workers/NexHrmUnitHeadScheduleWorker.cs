@@ -10,10 +10,10 @@
 
     public class NexHrmUnitHeadScheduleWorker : BaseWorker
     {
-        private readonly INexHrmUnitHeadService unitHeadService;
+        private readonly INexHrmService unitHeadService;
 
         public NexHrmUnitHeadScheduleWorker(
-            INexHrmUnitHeadService unitHeadService,
+            INexHrmService unitHeadService,
             List<JobSettings> jobSettings,
             ILogger<NexHrmUnitHeadScheduleWorker> logger) : base(logger)
         {

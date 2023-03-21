@@ -5,7 +5,10 @@
     using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading.Tasks;
+    using GO.AutoJobs.Criteria.Employee;
+    using GO.AutoJobs.Criteria.Team;
     using GO.AutoJobs.Criteria.UnitHead;
     using GO.AutoJobs.Models;
     using GO.AutoJobs.Models.UnitHead;
@@ -15,15 +18,17 @@
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
-    public class NexHrmUnitHeadService : INexHrmUnitHeadService
+    public class NexHrmService : INexHrmService
     {
+        private const string ModifiedDateTimeFormat = "yyyy-MM-dd HH:mm:ss:fff";
+        private readonly DateTime DefaultLastModifiedDate = new DateTime(2010, 1, 1);
         private readonly ILogger logger;
         private readonly IHttpClientFactory clientFactory;
         private readonly IBaseService baseService;
         private readonly NexHrmApiConfig apiConfig;
 
-        public NexHrmUnitHeadService(
-            ILogger<NexHrmUnitHeadService> logger,
+        public NexHrmService(
+            ILogger<NexHrmService> logger,
             IHttpClientFactory clientFactory,
             IBaseService baseService,
             NexHrmApiConfig apiConfig)
@@ -34,6 +39,46 @@
             this.apiConfig = apiConfig;
         }
 
+        public async Task<CommandResult> SyncEmployeeInfoAsync(bool isNexcel = true)
+        {
+            var siteId = isNexcel ? apiConfig.NexHrmSiteId : apiConfig.LumiHrmSiteId;
+            var commandResult = new CommandResult { Code = 0 };
+            var criteria = new GetEmployeeLastModifiedDateBySiteIdCriteria { SiteId = siteId };
+            var lastModifiedDate = await baseService.GetDataEntityAsync<DateTime?>(criteria);
+            var employees = await GetDataFromApiAsync<IEnumerable<Employee>>(apiConfig.EmployeeUrl, isNexcel, lastModifiedDate);
+            if (employees != null && employees.Any())
+            {
+                var command = new ImportEmployeeCommand
+                {
+                    SiteId = siteId,
+                    Value = employees.ToXML().ToString()
+                };
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
+
+            return commandResult;
+        }
+
+        public async Task<CommandResult> SyncTeamAsync(bool isNexcel = true)
+        {
+            var siteId = isNexcel ? apiConfig.NexHrmSiteId : apiConfig.LumiHrmSiteId;
+            var commandResult = new CommandResult { Code = 0 };
+            var criteria = new GetTeamLastModifiedDateBySiteIdCriteria { SiteId = siteId };
+            var lastModifiedDate = await baseService.GetDataEntityAsync<DateTime?>(criteria);
+            var teams = await GetDataFromApiAsync<IEnumerable<Team>>(apiConfig.TeamUrl, isNexcel, lastModifiedDate ?? DefaultLastModifiedDate);
+            if (teams != null && teams.Any())
+            {
+                var command = new ImportTeamCommand
+                {
+                    SiteId = siteId,
+                    Value = teams.ToXML().ToString()
+                };
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
+
+            return commandResult;
+        }
+
         public async Task<CommandResult> SyncUniHeadInfoAsync()
         {
             var commandResult = new CommandResult { Code = 0 };
@@ -42,7 +87,7 @@
             {
                 foreach(var info in infos)
                 {
-                    info.SiteId = apiConfig.SiteId;
+                    info.SiteId = apiConfig.NexHrmSiteId;
                 }
 
                 var command = new UpdateUnitHeadInfoCommand
@@ -63,7 +108,7 @@
             {
                 foreach (var schedule in schedules)
                 {
-                    schedule.SiteId = apiConfig.SiteId;
+                    schedule.SiteId = apiConfig.NexHrmSiteId;
                 }
 
                 var command = new UpdateUnitHeadScheduleCommand
@@ -111,7 +156,7 @@
             }
         }
 
-        private async Task<T> GetDataFromApiAsync<T>(string url)
+        private async Task<T> GetDataFromApiAsync<T>(string url, bool isNexcel = true, DateTime? lastModifiedDate = null)
         {
             string token = await GetTokenAsync();
 
@@ -119,8 +164,11 @@
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
-            var requestUrl = $"{apiConfig.BaseUrl}{url}";
-            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(requestUrl));
+            var requestUrl = new StringBuilder($"{apiConfig.BaseUrl}{url}");
+            requestUrl.AppendFormat("?isNexcel={0}", isNexcel);
+            requestUrl.AppendFormat("&lastModifiedDate={0}", lastModifiedDate.HasValue ? lastModifiedDate.Value.ToString(ModifiedDateTimeFormat) : string.Empty);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(requestUrl.ToString()));
             try
             {
                 using (var response = await httpClient.SendAsync(request))

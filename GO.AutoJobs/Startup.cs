@@ -80,10 +80,10 @@
             var jobSettings = configuration.GetSection("JobSettings").Get<List<JobSettings>>();
             services.AddSingleton(jobSettings);
 
-            var nexHrmApiConfig = configuration.GetSection("NexHRMApiConfig").Get<NexHrmApiConfig>();
+            var nexHrmApiConfig = configuration.GetSection("NexHrmApiConfig").Get<NexHrmApiConfig>();
             services.AddSingleton(nexHrmApiConfig);
 
-            var hrppApiConfig = configuration.GetSection("HRPPApiConfig").Get<HrppApiConfig>();
+            var hrppApiConfig = configuration.GetSection("HrppApiConfig").Get<HrppApiConfig>();
             services.AddSingleton(hrppApiConfig);
 
             var copyUserToAnotherSiteSettings = configuration.GetSection("CopyUserToAnotherSiteSettings").Get<List<CopyUserToAnotherSiteSetting>>();
@@ -96,17 +96,24 @@
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
 
-            services.AddSingleton<INexHrmUnitHeadService, NexHrmUnitHeadService>();
+            services.AddSingleton<INexHrmService, NexHrmService>();
             services.AddSingleton<IHrppUnitHeadService, HrppUnitHeadService>();
             services.AddSingleton<IUserSiteService, UserSiteService>();
         }
 
         private static void AddWorker(IServiceCollection services)
         {
+            services.AddHostedService<NexHrmEmployeeInfoWorker>();
+            services.AddHostedService<NexHrmTeamWorker>();
             services.AddHostedService<NexHrmUnitHeadInfoWorker>();
             services.AddHostedService<NexHrmUnitHeadScheduleWorker>();
+
+            services.AddHostedService<LumiHrmEmployeeInfoWorker>();
+            services.AddHostedService<LumiHrmTeamWorker>();
+
             services.AddHostedService<HrppUnitHeadInfoWorker>();
             services.AddHostedService<HrppUnitHeadScheduleWorker>();
+
             services.AddHostedService<CopyUserToAnotherSiteWorker>();
         }
     }

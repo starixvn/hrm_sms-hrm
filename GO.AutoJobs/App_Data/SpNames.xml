@@ -1,5 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+    <Function Name="Employee">
+        <Setting Key="AutoJob_Employee_GetLastModifiedDateBySiteId" SpName="AutoJob_Employee_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Employee_Import" SpName="AutoJob_Employee_Import" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Team">
+        <Setting Key="AutoJob_Team_GetLastModifiedDateBySiteId" SpName="AutoJob_Team_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Team_Import" SpName="AutoJob_Team_Import" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Section">
+        <Setting Key="AutoJob_Section_GetLastModifiedDateBySiteId" SpName="AutoJob_Section_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Section_Import" SpName="AutoJob_Section_Import" DbName="bodb_IUC" Plain="0" />
+    </Function>
     <Function Name="UnitHead">
         <Setting Key="AutoJob_UnitHead_UpdateInfo" SpName="AutoJob_UnitHead_UpdateInfo" DbName="bodb_IUC" Plain="0" />
         <Setting Key="AutoJob_UnitHead_UpdateSchedule" SpName="AutoJob_UnitHead_UpdateSchedule" DbName="bodb_IUC" Plain="0" />
