@@ -12,6 +12,7 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
 
     public class LateInEarlyOutRequestService : ILateInEarlyOutRequestService
@@ -23,17 +24,20 @@
         private readonly IRequestMailService requestMailService;
         private readonly IEmailService emailService;
         private readonly IBaseService baseService;
+        private readonly ILetstalkService letstalkService;
 
         public LateInEarlyOutRequestService(
             ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
             IRequestMailService requestMailService,
             IEmailService emailService,
-            IBaseService baseService)
+            IBaseService baseService,
+            ILetstalkService letstalkService)
         {
             this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository;
             this.requestMailService = requestMailService;
             this.emailService = emailService;
             this.baseService = baseService;
+            this.letstalkService = letstalkService;
         }
 
         public IList<LateInEarlyOutRequest> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
@@ -92,13 +96,13 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailCreateRequest(long requestId)
+        public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
             LateInEarlyOutRequest request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.New);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.LateInEarlyOutEmailSubject,
@@ -122,6 +126,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -131,7 +137,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Edit);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedLateInEarlyOutEmailSubject,
@@ -155,6 +161,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -164,7 +172,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
@@ -182,6 +190,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -193,7 +203,7 @@
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.LateIn
                     ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Requester.Nickname, commandMessage, actor.Nickname)
@@ -216,6 +226,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

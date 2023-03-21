@@ -113,7 +113,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                checkInOutRequestService.SendMailCreateRequest(commandResult.OutputId);
+                checkInOutRequestService.SendMailAndSendLetstalkCreateRequest(criteria.RequestId);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 

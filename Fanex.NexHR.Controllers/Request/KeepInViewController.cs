@@ -113,7 +113,7 @@
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
             {
-                keepInViewRequestService.SendMailCreateRequest(commandResult.OutputId);
+                keepInViewRequestService.SendMailAndSendLetstalkCreateRequest(criteria.RequestId);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 

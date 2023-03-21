@@ -190,13 +190,13 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailCreateRequest(long requestId)
+        public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
             ChangeShiftRequest request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.New);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -220,6 +220,7 @@
                     email.Subject,
                     email.Body));
 
+
                 BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
@@ -230,7 +231,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Edit);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -253,6 +254,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -262,7 +265,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.Nickname);
@@ -280,6 +283,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -291,7 +296,7 @@
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
@@ -312,6 +317,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

@@ -53,7 +53,7 @@
         {
             var sendResult = new SendNotificationResult
             {
-                ConversationId = conversationId
+                ConversationId = String.Join(", ", conversationId)
             };
 
             var outGoingMsg = new OutgoingMessage
@@ -62,10 +62,12 @@
                 Text = message
             };
 
+            var conversationIds = conversationId.Contains(";") ? conversationId.Split(";").ToList() : new List<string> { conversationId };
+
             var botConfigs = webhookConfigurations.FirstOrDefault(config => config.BotId == botId);
             if (botConfigs != null && botConfigs.IsAllowedSet)
             {
-                PushMessageResult result = await letstalkService(botConfigs.BotId).PushMulticastAsync(new List<string> { conversationId }, outGoingMsg);
+                PushMessageResult result = await letstalkService(botConfigs.BotId).PushMulticastAsync(conversationIds, outGoingMsg);
                 if (result.IsSuccess && !result.BlockList.Any())
                 {
                     sendResult.Status = SendNotificationStatus.Sent;

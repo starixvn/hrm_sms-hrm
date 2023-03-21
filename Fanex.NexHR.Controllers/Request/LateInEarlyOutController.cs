@@ -100,7 +100,7 @@
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             if (commandResult.IsSuccessful)
             {
-                lateInEarlyOutRequestService.SendMailCreateRequest(commandResult.OutputId);
+                lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequest(criteria.RequestId);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 

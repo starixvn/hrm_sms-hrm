@@ -91,7 +91,7 @@
 
             if (commandResult.IsSuccessful)
             {
-                changeShiftService.SendMailCreateRequest(commandResult.OutputId);
+                changeShiftService.SendMailAndSendLetstalkCreateRequest(commandResult.OutputId);
                 attachFileService.UploadFile(files, commandResult.OutputId, UploadFolderPath);
             }
 

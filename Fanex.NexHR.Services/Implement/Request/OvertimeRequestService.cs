@@ -13,6 +13,8 @@
     using Fanex.NexHR.Models.Overtime;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Services.Interfaces;
+    using Hangfire;
 
     public class OvertimeRequestService : IOvertimeRequestService
     {
@@ -22,15 +24,18 @@
         private readonly IOvertimeRequestRepository overtimeRepository;
         private readonly IBaseService baseService;
         private readonly IEmailService emailService;
+        private readonly ILetstalkService letstalkService;
 
         public OvertimeRequestService(
             IOvertimeRequestRepository overtimeRepository,
             IBaseService baseService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ILetstalkService letstalkService)
         {
             this.overtimeRepository = overtimeRepository;
             this.baseService = baseService;
             this.emailService = emailService;
+            this.letstalkService = letstalkService;
         }
 
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
@@ -116,12 +121,20 @@
             if (employees != null)
             {
                 List<string> emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
+                List<string> letstalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
                 var emails = SplitList(emailList, 100);
+                var letstalks = SplitList(letstalkList, 100);
 
                 foreach (List<string> list in emails)
                 {
                     var mailTo = string.Join(";", list);
                     emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                }
+
+                foreach (List<string> letstalk in letstalks)
+                {
+                    var letstalkJoin = string.Join(";", letstalk);
+                    BackgroundJob.Enqueue(() => letstalkService.SendNotification(letstalkJoin, subject, content));
                 }
             }
         }

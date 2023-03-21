@@ -27,7 +27,7 @@
             this.requestRepository = requestRepository;
         }
 
-        public EmailModel GetMailToAndMailCC(long requestId, int action)
+        public EmailModel GetMailToMailCCAndLetstalk(long requestId, int action)
         {
             var emailModel = new EmailModel();
             var criteria = new GetRequestRelatedPeopleCriteria
@@ -46,15 +46,22 @@
                 emailModel = GetMailVerifier(relatedPeople, emailModel);
             }
 
+            if (relatedPeople.EmailSetting.AllowSendVerifier)
+            {
+                emailModel = GetLetstalkVerifier(relatedPeople, emailModel);
+            }
+
             if (relatedPeople.EmailSetting.AllowSendHR)
             {
                 RelatedPeopleAllowSendHR(relatedPeople);
                 emailModel = GetMailHR(relatedPeople, emailModel);
+                emailModel = GetLetstalkHr(relatedPeople, emailModel);
             }
 
             if (relatedPeople.EmailSetting.AllowSendUser)
             {
                 emailModel = GetMailOwnerRequest(relatedPeople, emailModel);
+                emailModel = GetLetstalkOwnerRequest(relatedPeople, emailModel);
             }
 
             if (relatedPeople.EmailSetting.AllowSendMailGroup)
@@ -231,13 +238,41 @@
                 {
                     emailModel.SendTo = relatedPeople.Verifier.Email;
                     emailModel.SendToNickName = relatedPeople.Verifier.NickName;
-                    emailModel.LetsTalk = relatedPeople.Verifier.LetsTalk;
                 }
                 else
                 {
                     emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
-                    emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
                 }
+            }
+
+            return emailModel;
+        }
+
+        private static EmailModel GetLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        {
+            if (relatedPeople.Verifier != null && !string.IsNullOrEmpty(emailModel.LetsTalk))
+            {
+                emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
+            }
+
+            return emailModel;
+        }
+
+        private static EmailModel GetLetstalkHr(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        {
+            if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
+            {
+                emailModel.LetsTalk += ";" + string.Join(";", relatedPeople.ListHR.Select(x => x.LetsTalk ?? string.Empty));
+            }
+
+            return emailModel;
+        }
+
+        private static EmailModel GetLetstalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        {
+            if (relatedPeople.Requester != null)
+            {
+                emailModel.LetsTalk += ";" + relatedPeople.Requester.LetsTalk;
             }
 
             return emailModel;
@@ -258,7 +293,6 @@
                 {
                     emailModel.SendCC = mailHRs;
                 }
-                emailModel.LetsTalk = letstalks;
             }
 
             return emailModel;
@@ -272,12 +306,10 @@
                 {
                     emailModel.SendTo = relatedPeople.Requester.Email;
                     emailModel.SendToNickName = relatedPeople.Requester.NickName;
-                    emailModel.LetsTalk = relatedPeople.Requester.LetsTalk;
                 }
                 else
                 {
                     emailModel.SendCC = AddMailToList(emailModel.SendCC, relatedPeople.Requester.Email);
-                    emailModel.LetsTalk = AddLetstalkToList(emailModel.LetsTalk, relatedPeople.Requester.Email);
                 }
             }
 
@@ -297,21 +329,6 @@
             }
 
             return mailList + ";" + mail;
-        }
-
-        private static string AddLetstalkToList(string letstalkList, string letstalk)
-        {
-            if (string.IsNullOrWhiteSpace(letstalk))
-            {
-                return letstalkList;
-            }
-
-            if (string.IsNullOrWhiteSpace(letstalkList))
-            {
-                return letstalk;
-            }
-
-            return letstalkList + ";" + letstalk;
         }
 
         private static EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)

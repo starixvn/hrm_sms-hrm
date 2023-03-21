@@ -19,7 +19,7 @@
 
         CommandResult Delete(long requestId);
 
-        void SendMailCreateRequest(long requestId);
+        void SendMailAndSendLetstalkCreateRequest(long requestId);
 
         void SendMailEditRequest(long requestId);
 

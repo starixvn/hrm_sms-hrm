@@ -112,7 +112,7 @@
             CommandResult result = baseService.ExecuteNonQuery(criteria);
             if (result.IsSuccessful)
             {
-                leaveRequestService.SendMailCreateRequest(criteria);
+                leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
             }
 

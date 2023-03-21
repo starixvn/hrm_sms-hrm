@@ -31,7 +31,7 @@
 
         CommandResult Delete(long requestId);
 
-        void SendMailCreateRequest(InsertLeaveRequestCriteria criteria);
+        void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria);
 
         void SendMailEditRequest(UpdateLeaveRequestCriteria criteria);
 

@@ -6,7 +6,7 @@
 
     public interface IRequestMailService
     {
-        EmailModel GetMailToAndMailCC(long requestId, int action);
+        EmailModel GetMailToMailCCAndLetstalk(long requestId, int action);
 
         byte GetActionProcessRequest(byte requestStatusId, RequestCommand command);
 

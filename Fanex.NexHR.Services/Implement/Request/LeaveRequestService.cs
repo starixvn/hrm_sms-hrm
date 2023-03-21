@@ -15,6 +15,7 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
+    using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
 
     public class LeaveRequestService : ILeaveRequestService
@@ -26,17 +27,20 @@
         private readonly IRequestMailService requestMailService;
         private readonly IEmailService emailService;
         private readonly IBaseService baseService;
+        private readonly ILetstalkService letstalkService;
 
         public LeaveRequestService(
             ILeaveRequestRepository leaveRequestRepository,
             IRequestMailService requestMailService,
             IBaseService baseService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ILetstalkService letstalkService)
         {
             this.leaveRequestRepository = leaveRequestRepository;
             this.requestMailService = requestMailService;
             this.baseService = baseService;
             this.emailService = emailService;
+            this.letstalkService = letstalkService;
         }
 
         public IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria)
@@ -116,7 +120,7 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public void SendMailCreateRequest(InsertLeaveRequestCriteria criteria)
+        public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
             BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
@@ -130,14 +134,14 @@
 
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.New);
+            EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.New);
             email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
             SendMailForSuccessfully(criteria, templateEmailPath, email);
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = requestMailService.GetMailToAndMailCC(criteria.RequestId, (int)SettingsSendMail.Edit);
+            EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.Edit);
             email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
 
             SendMailForSuccessfully(criteria, templateEmailPath, email);
@@ -149,7 +153,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, (byte)SettingsSendMail.Cancel);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
@@ -170,6 +174,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -185,7 +191,7 @@
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
-                EmailModel email = requestMailService.GetMailToAndMailCC(requestId, action);
+                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
                 email.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject,
                     request.Requester.Nickname,
                     commandMessage,
@@ -208,6 +214,8 @@
                     email.SendCC,
                     email.Subject,
                     email.Body));
+
+                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -237,25 +245,24 @@
 
         private void SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
         {
+            email.Subject += criteria.TotalDays > 1
+                   ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
+                   : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
+            var fromDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(criteria.RequestDetail) : criteria.FromDate;
+            var toDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
+            var forDate = requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, fromDate, toDate, criteria.TotalDays);
+
+            email.Body = Utilities.ReadTextFile(templateEmailPath);
+            email.Body = string.Format(
+                email.Body,
+                email.SendToNickName,
+                criteria.EmployeeName,
+                forDate,
+                criteria.LeaveTypeName,
+                criteria.Remark,
+                ConfigSettings.ApplicationDomain);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
-                email.Subject += criteria.TotalDays > 1
-                    ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
-                    : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
-                var fromDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(criteria.RequestDetail) : criteria.FromDate;
-                var toDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
-                var forDate = requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, fromDate, toDate, criteria.TotalDays);
-
-                email.Body = Utilities.ReadTextFile(templateEmailPath);
-                email.Body = string.Format(
-                    email.Body,
-                    email.SendToNickName,
-                    criteria.EmployeeName,
-                    forDate,
-                    criteria.LeaveTypeName,
-                    criteria.Remark,
-                    ConfigSettings.ApplicationDomain);
-
                 emailService.SendEmail(
                     ConfigSettings.EmailSetting,
                     email.SendTo,
@@ -263,6 +270,8 @@
                     email.Subject,
                     email.Body);
             }
+
+            BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
         }
     }
 }
