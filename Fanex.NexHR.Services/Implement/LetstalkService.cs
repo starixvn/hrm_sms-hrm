@@ -19,7 +19,8 @@
 
         public void SendNotification(string letstalkId, string subject, string message)
         {
-            if (!string.IsNullOrEmpty(letstalkId))
+            var letstalk = !string.IsNullOrEmpty(ConfigSettings.LetstalkForTesing) ? ConfigSettings.LetstalkForTesing : letstalkId;
+            if (!ConfigSettings.IsDisabledSendLetstalk && !string.IsNullOrEmpty(letstalk))
             {
                 var botId = ConfigSettings.BotId;
                 var url = ConfigSettings.UrlSendLetstalk;
@@ -33,7 +34,7 @@
                 {
                     var data = new Dictionary<string, object>(){
                     { "BotId", botId },
-                    { "ConversationId", letstalkId },
+                    { "ConversationId", letstalk },
                     { "Message", content }
                 };
                     BackgroundJob.Enqueue(() =>
