@@ -18,7 +18,7 @@
         private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(BackgroundJobService));
 
         private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
-        private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticAnnualLeaveBalance.cshtml";
+        private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticALBalance.cshtml";
 
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
