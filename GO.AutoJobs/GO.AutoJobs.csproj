@@ -49,6 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HRM.UserControl.Core\HRM.UserControl.Core.csproj" />
+    <ProjectReference Include="..\GO.Core\GO.Core.csproj" />
   </ItemGroup>
 </Project>

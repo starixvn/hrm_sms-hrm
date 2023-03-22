@@ -12,9 +12,9 @@
     using GO.AutoJobs.Criteria.UnitHead;
     using GO.AutoJobs.Models;
     using GO.AutoJobs.Models.UnitHead;
-    using HRM.UserControl.Core.Extensions.XML;
-    using HRM.UserControl.Core.Models;
-    using HRM.UserControl.Core.Services;
+    using GO.Core.Extensions.XML;
+    using GO.Core.Models;
+    using GO.Core.Services;
     using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 

@@ -10,8 +10,8 @@
     using GO.AutoJobs.Models.UserSite;
     using GO.AutoJobs.Services;
     using GO.AutoJobs.Workers;
-    using HRM.UserControl.Core.Repository;
-    using HRM.UserControl.Core.Services;
+    using GO.Core.Repository;
+    using GO.Core.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;

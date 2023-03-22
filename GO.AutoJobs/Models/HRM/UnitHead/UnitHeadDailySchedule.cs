@@ -1,7 +1,7 @@
 ﻿namespace GO.AutoJobs.Models.UnitHead
 {
     using System;
-    using HRM.UserControl.Core.Extensions.XML;
+    using GO.Core.Extensions.XML;
 
     [Serializable]
 

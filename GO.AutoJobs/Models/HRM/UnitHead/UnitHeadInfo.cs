@@ -2,7 +2,7 @@
 {
     using System;
     using System.Xml.Serialization;
-    using HRM.UserControl.Core.Extensions.XML;
+    using GO.Core.Extensions.XML;
 
     [Serializable]
     [XMLName("Row")]

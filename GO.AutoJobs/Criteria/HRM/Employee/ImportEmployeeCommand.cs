@@ -1,6 +1,6 @@
 ﻿namespace GO.AutoJobs.Criteria.Employee
 {
-    using HRM.UserControl.Core.Models;
+    using GO.Core.Models;
 
     public class ImportEmployeeCommand : BaseNonQueryCommand
     {

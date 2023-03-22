@@ -76,6 +76,14 @@
             border-top: 1px solid #013966;
             border-left: 1px solid #013966;
             border-right: 1px solid #013966;
+
+            a {
+                cursor: pointer;
+
+                &:hover {
+                    color: #B3450A;
+                }
+            }
         }
 
         .list-group {

@@ -22,22 +22,10 @@ class AppContainer extends Component {
     renderChildMenus = menus => {
         const rows = [];
         for (const menu of menus) {
-            const trees = [];
-            for (let i = 0; i < menu.level; i++) {
-                if (i === menu.level - 1) {
-                    //trees.push(<span key={i}>&#9492;&#9472;</span>);
-                } else {
-                    //trees.push(<span key={i} className="invisible">&#9492;&#9472;</span>);
-                }
-            }
-
             const row = <ListGroup.Item key={menu.menuItemId} className={!menu.url ? 'none' : ''}>
                 {
                     menu.url &&
-                    <>
-                        {trees.map(item => item)}
-                        <Card.Link onClick={event => this.onClick(event, menu)}> {menu.menuItemName}</Card.Link>
-                    </>
+                    <Card.Link onClick={event => this.onClick(event, menu.url)}> {menu.menuItemName}</Card.Link>
                 }
                 {!menu.url && <span>{menu.menuItemName}</span>}
             </ListGroup.Item>;
@@ -52,12 +40,12 @@ class AppContainer extends Component {
         return rows;
     };
 
-    onClick = async (event, menu) => {
+    onClick = async (event, menuUrl) => {
         event.preventDefault();
 
         let url = Site.resolveClientUrl('sso/gettime');
         await DataService.getDataAsync(url).then(response => {
-            url = `${menu.url}&time=${response.data}`;
+            url = `${menuUrl}&time=${response.data}`;
             window.open(url, '_blank', 'noopener,noreferrer');
         });
     };
@@ -74,7 +62,9 @@ class AppContainer extends Component {
                     sites.map(site => {
                         return (
                             <Card key={site.siteId}>
-                                <Card.Header>{site.siteName}</Card.Header>
+                                <Card.Header>
+                                    <a onClick={event => this.onClick(event, site.siteURL)}>{site.siteName}</a>
+                                </Card.Header>
                                 <ListGroup variant="flush">
                                     {
                                         site.menuItems.map(menu => {
@@ -84,7 +74,7 @@ class AppContainer extends Component {
                                                         <ListGroup.Item className={`parent-item ${!menu.url ? '' : 'none'}`} onClick={this.handleDropdown}>
                                                             {
                                                                 menu.url &&
-                                                                <Card.Link onClick={event => this.onClick(event, menu)} >
+                                                                <Card.Link onClick={event => this.onClick(event, menu.url)} >
                                                                     {menu.menuItemName}
                                                                 </Card.Link>
                                                             }

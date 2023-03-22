@@ -1,6 +1,6 @@
 ﻿namespace GO.AutoJobs.Criteria.UserSite
 {
-    using HRM.UserControl.Core.Models;
+    using GO.Core.Models;
 
     public class CopyUserSiteToAnotherCommand : BaseNonQueryCommand
     {

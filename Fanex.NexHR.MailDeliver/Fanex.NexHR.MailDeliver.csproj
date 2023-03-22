@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Fanex.NexHR.MailDeliver.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\SonarQube\smshrmcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Fanex.NexHR.MailDeliver.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\SonarQube\smshrmcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -99,6 +99,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\SonarQube\smshrmcsharp.ruleset">
+      <Link>smshrmcsharp.ruleset</Link>
+    </None>
     <None Include="app.config" />
     <None Include="Fanex.NexHR.MailDeliver.ruleset" />
     <None Include="packages.config" />

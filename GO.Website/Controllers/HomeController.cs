@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Web;
     using Fanex.Data;
     using GO.Website.Criteria;
     using GO.Website.Models;
@@ -42,36 +43,40 @@
 
         public async Task<IActionResult> GetSiteMenus()
         {
-            var userId = Cryptography.EncryptPassword(userControlSession.UserId.ToString());
-            var onUserId = Cryptography.EncryptPassword(userControlSession.OnUserId.ToString());
+            var userId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.UserId.ToString()));
+            var onUserId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.OnUserId.ToString()));
             var criteria = new GetSiteAndMenuItemByUserIdCriteria
             {
                 UserId = userControlSession.UserId
             };
-            (var sites, var menus) = await baseService.FetchMultipleAsync<SiteMenu, MenuItem>(criteria);
-            sites = sites.Where(x => x.SiteId != userControlSettings.SiteId).ToList();
-            foreach(var site in sites)
+            (var usersites, var menus) = await baseService.FetchMultipleAsync<UserSiteMenu, MenuItem>(criteria);
+            usersites = usersites.Where(x => x.SiteId != userControlSettings.SiteId).ToList();
+            foreach(var usersite in usersites)
             {
-                site.MenuItems = menus.Where(x => x.SiteId == site.SiteId).ToList();
-                foreach(var menu in site.MenuItems)
+                var username = !string.IsNullOrWhiteSpace(usersite.Username) ? usersite.Username : usersite.Code;
+                username = !string.IsNullOrWhiteSpace(username) ? HttpUtility.UrlEncode(Cryptography.EncryptPassword(username)) : string.Empty;
+                usersite.MenuItems = menus.Where(x => x.SiteId == usersite.SiteId).ToList();
+
+                usersite.SiteURL = $"{usersite.SSOUrl}?userId={userId}&onUserId={onUserId}&username={username}";
+
+                foreach (var menu in usersite.MenuItems)
                 {
                     if (!string.IsNullOrWhiteSpace(menu.URL))
                     {
-                        menu.URL = string.Format("{0}/auth/sso?userId={1}&onUserId={2}&redirectUrl={3}",
-                            site.SiteURL, userId, onUserId, menu.URL);
+                        menu.URL = $"{usersite.SSOUrl}?userId={userId}&onUserId={onUserId}&username={username}&redirectUrl={menu.URL}";
                     }
                 }
 
-                site.MenuItems = GetHierarchyMenu(site.MenuItems);
+                usersite.MenuItems = GetHierarchyMenu(usersite.MenuItems);
             }
 
-            return Json(sites);
+            return Json(usersites);
         }
 
         [Route("sso/gettime")]
         public async Task<IActionResult> GetTime()
         {
-            var time = Cryptography.EncryptPassword(await authService.SSOGetTimeAsync());
+            var time = HttpUtility.UrlEncode(Cryptography.EncryptPassword(await authService.SSOGetTimeAsync()));
             return Json(time);
         }
 

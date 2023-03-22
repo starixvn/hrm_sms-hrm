@@ -1,7 +1,7 @@
 ﻿namespace GO.AutoJobs.Services
 {
     using System.Threading.Tasks;
-    using HRM.UserControl.Core.Models;
+    using GO.Core.Models;
 
     public interface INexHrmService
     {

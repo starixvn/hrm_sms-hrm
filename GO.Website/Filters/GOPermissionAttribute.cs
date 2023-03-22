@@ -1,4 +1,4 @@
-﻿namespace HRM.UserControl.Admin.Website.Filters
+﻿namespace GO.Admin.Website.Filters
 {
     using System;
     using System.Net;

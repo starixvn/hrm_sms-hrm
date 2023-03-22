@@ -1,7 +1,7 @@
 ﻿namespace GO.AutoJobs.Models
 {
     using System;
-    using HRM.UserControl.Core.Extensions.XML;
+    using GO.Core.Extensions.XML;
     using Newtonsoft.Json;
 
     [Serializable]

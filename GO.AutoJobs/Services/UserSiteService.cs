@@ -4,8 +4,8 @@
     using System.Threading.Tasks;
     using GO.AutoJobs.Criteria.UserSite;
     using GO.AutoJobs.Models.UserSite;
-    using HRM.UserControl.Core.Models;
-    using HRM.UserControl.Core.Services;
+    using GO.Core.Models;
+    using GO.Core.Services;
 
     public class UserSiteService : IUserSiteService
     {

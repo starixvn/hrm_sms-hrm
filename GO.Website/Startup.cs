@@ -7,6 +7,7 @@ namespace GO.Website
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
     using GO.Website.Middlewares;
+    using GO.Website.Models;
     using GO.Website.Services;
     using HRM.UserControl.Client.AspNetCore.Configurations;
     using HRM.UserControl.Client.AspNetCore.Session;
