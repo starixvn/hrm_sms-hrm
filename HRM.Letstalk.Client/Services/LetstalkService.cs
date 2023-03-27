@@ -49,7 +49,8 @@
                 new Dictionary<string, object>
                 {
                     { "msg", message },
-                    { "receivers", accountIds.ToArray() }
+                    { "receivers", accountIds.ToArray() },
+                    { "forcePush", 1 }
                 },
                 token,
                 encodeData: false);
