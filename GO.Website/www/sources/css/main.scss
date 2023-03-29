@@ -10,6 +10,7 @@ $input-btn-focus-box-shadow: unset;
 @import '~font-awesome/scss/font-awesome';
 @import '~react-toastify/scss/main';
 @import "./components/breadcrumb";
+@import "./components/header";
 @import "./components/navbar";
 
 html {
@@ -29,6 +30,7 @@ body {
 
 .container-fluid {
     padding: 16px;
+    padding-left: 110px;
 
     .content {
         @include border-radius(3px);

@@ -7,6 +7,7 @@
     Password: 'Password',
     Policy: 'Policy',
     PreviousWeek: 'Previous week',
+    Remark: 'Remark',
     ResetPasswordSuccessfully: 'Reset password successfully!',
     SymbolNo: '#',
     Today: 'Today',

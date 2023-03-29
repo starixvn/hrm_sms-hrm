@@ -2,11 +2,11 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetSiteAndMenuItemByUserIdCriteria : CriteriaBase
+    public class GetUserSiteByUserIdCriteria : CriteriaBase
     {
         public int UserId { get; set; }
 
-        public override string GetSettingKey() => "User_GetSiteAndMenuItemByUserId";
+        public override string GetSettingKey() => "User_GetUserSiteByUserId";
 
         public override bool IsValid() => true;
     }

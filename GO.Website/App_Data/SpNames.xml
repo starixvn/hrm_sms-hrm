@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
     <Function Name="User">
-        <Setting Key="User_GetSiteAndMenuItemByUserId" SpName="User_GetSiteAndMenuItemByUserId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="User_GetUserSiteByUserId" SpName="User_GetUserSiteByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Unit Head">
         <Setting Key="API_UnitHead_GetInfo" SpName="API_UnitHead_GetInfo" DbName="bodb_IUC" Plain="0" />

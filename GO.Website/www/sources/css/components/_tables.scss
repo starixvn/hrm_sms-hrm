@@ -1,0 +1,91 @@
+﻿@import "../abstracts/variables";
+
+.table-title {
+    border: 1px solid $border-table-grey;
+    border-bottom-width: 0;
+    padding: 4px 5px;
+    background-color: $bg-table-title-grey;
+    font-weight: bold;
+    color: $blue-button;
+}
+
+.pointer-event-none {
+    pointer-events: none;
+    color: #9a9595;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed !important;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+
+    &:disabled {
+        cursor: default;
+    }
+}
+
+.table-title {
+    border-color: #c4c4c4;
+}
+
+.table-container {
+    .header-content {
+        border-color: #c4c4c4;
+    }
+
+    .body-content {
+        border-color: #c4c4c4;
+
+        td {
+            border-color: #c4c4c4 !important;
+        }
+
+        tr {
+            &:nth-child(2n) {
+                th, td {
+                    background: #ffffff;
+                }
+            }
+
+            &:hover {
+                th, td {
+                    background: #fcf4df;
+                }
+            }
+
+            th, td {
+                background: #ffffff;
+
+                &[rowspan="2"] {
+                    border-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+.table {
+    border-color: #c4c4c4;
+
+    thead {
+        tr {
+            td, th {
+                &:first-child {
+                    border-left: 0;
+                }
+
+                background: #0047BA;
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 8px;
+                border-left: 1px solid #7E9ED2 !important;
+                text-align: center;
+            }
+
+            border-color: #7E9ED2 !important;
+        }
+    }
+}

@@ -1,6 +1,7 @@
 namespace GO.Website
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Fanex.Data;
@@ -49,6 +50,7 @@ namespace GO.Website
                .UseDefaultDbSettingProvider("~/App_Data")
                .Run();
 
+            services.AddHttpClient();
             services.AddResponseCaching();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -76,6 +78,9 @@ namespace GO.Website
                 options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
                 options.Cookie.IsEssential = true;
             });
+
+            var siteTokenSettings = Configuration.GetSection("SiteSettings").Get<List<SiteSetting>>();
+            services.AddSingleton(siteTokenSettings);
 
             RegisterDI(services);
 
