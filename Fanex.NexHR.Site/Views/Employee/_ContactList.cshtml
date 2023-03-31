@@ -95,17 +95,15 @@
             foreach (Employee employee in Model)
             {
                 index++;
-                var cssClass = employee.Enabled ? "" : "disabled";
+                var cssClass = employee.Enabled ? string.Empty : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
                     <td>@employee.Team.Section.Department.Code</td>
                     <td>@employee.Team.Section.Code</td>
-                    <td><span class="tooltip-tippy" data-tippy-content="@employee.Team.Name">@employee.Team.Code</span></td>
+                    <td>@employee.Team.Code</td>
                     <td>@employee.Code</td>
                     <td class="align-left">@employee.FullName</td>
-                    <td>
-                        <a class="avatar-tooltip" data-code="@employee.Code">@employee.NickName</a>
-                    </td>
+                    <td>@employee.NickName</td>
                     @if (isShowJobtitle)
                     {
                         <td class="align-left">@employee.JobTitle</td>

@@ -1,5 +1,4 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import tippy from 'tippy.js';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'floatthead/dist/jquery.floatThead';
 import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
@@ -53,19 +52,6 @@ import 'chosen-js/chosen.jquery';
                 unblockUI();
                 $('#user-management').html(response);
                 checkDisabledUser();
-
-                tippy('.avatar-tooltip', {
-                    maxWidth: 'none',
-                    animation: 'fade',
-                    arrow: true,
-                    placement: 'auto',
-                    appendTo: document.getElementById('tippy-avatar'),
-                    allowHTML: true,
-                    content: (reference) => {
-                        const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
-                        return '<img src="' + path + '" />';
-                    }
-                });
 
                 if ($('table#data #pagination').length > 0) {
                     initPagination();

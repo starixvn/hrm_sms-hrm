@@ -1,5 +1,4 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import tippy from 'tippy.js';
 import 'floatthead/dist/jquery.floatThead';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
@@ -42,7 +41,6 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
             success: function (response) {
                 unblockUI();
                 $('#contact-list').html(response);
-                initTooltip();
                 if ($('table#data #pagination').length > 0) {
                     initPagination();
                     $('#ItemsPerPageOption').on('change', function () {
@@ -64,27 +62,6 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
                 unblockUI();
                 alert(textStatus + ': ' + errorThrown);
             }
-        });
-    }
-
-    function initTooltip() {
-        tippy('.avatar-tooltip', {
-            maxWidth: 'none',
-            animation: 'fade',
-            arrow: true,
-            placement: 'auto',
-            appendTo: document.getElementById('tippy-avatar'),
-            allowHTML: true,
-            content: (reference) => {
-                const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
-                return '<img src="' + path + '" />';
-            }
-        });
-
-        tippy('.tooltip-tippy', {
-            animation: 'fade',
-            arrow: true,
-            placement: 'auto'
         });
     }
 
