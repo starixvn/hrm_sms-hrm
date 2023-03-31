@@ -15,7 +15,6 @@
 }
 <div class="title">
     <h2 class="page-title">@Labels.DisciplineSummary</h2>
-    <a href="/DisciplineSummaryPerYear">@Labels.View5YearsDisciplineSummary</a>
 </div>
 <form class="form-filter filter">
     @Html.HiddenFor(model => model.TeamId)
@@ -37,7 +36,8 @@
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
                     Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new {
+                    new
+                         {
                         @class = "datepicker form-control",
                         mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
                     })
@@ -51,7 +51,8 @@
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
                 Model.ToDate.ToDateMonthYearFormatedDate(),
-                new {
+                new
+                     {
                     @class = "datepicker form-control",
                     mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
                 })
@@ -73,7 +74,7 @@
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-                    {
+                                    {
                         new SelectListItem() {Text = Labels.All, Value = string.Empty},
                         new SelectListItem() {Text = Labels.Expat, Value = "false"},
                         new SelectListItem() {Text = Labels.Local, Value = "true"}
@@ -123,6 +124,9 @@
                 <input type="button" id="submit" class="btn btn-primary" value="@Labels.Submit" />
                 <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
             </div>
+        </div>
+        <div class="form-group form-group--m link-to-report">
+            <a href="@Url.Action("index", "DisciplineSummaryPerYear")">@Labels.View5YearsDisciplineSummary</a>
         </div>
     </div>
 </form>

@@ -63,17 +63,18 @@
                 }
                 @if (typeId == (byte)ChangeShiftType.ChangeShift)
                 {
+                    var shifts = ViewBag.Shifts;
                     if (isHost)
                     {
                         <td>
-                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId),
+                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(shifts, "Id", "Code", item.ToShiftId),
                                 new { @class = "toShiftId form-control" })
                         </td>
                     }
                     else
                     {
                         <td>
-                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(ViewBag.Shifts, "Id", "Code", item.ToShiftId),
+                            @Html.DropDownListFor(m => item.ToShiftId, new SelectList(shifts, "Id", "Code", item.ToShiftId),
                                 new { @class = "toShiftId form-control", @disabled = "disabled" })
                         </td>
                     }

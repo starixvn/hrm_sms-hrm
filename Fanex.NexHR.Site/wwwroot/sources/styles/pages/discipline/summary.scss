@@ -58,8 +58,13 @@
     z-index: 1003;
 }
 
-.title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.form-filter {
+    .link-to-report {
+        padding-top: 7px;
+
+        a {
+            text-decoration: underline;
+            font-weight: 600;
+        }
+    }
 }

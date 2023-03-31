@@ -4,6 +4,7 @@ import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
 import toastr from 'toastr';
 import axios from 'axios';
+import moment from 'moment';
 
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions,

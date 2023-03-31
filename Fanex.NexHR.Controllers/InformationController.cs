@@ -90,7 +90,7 @@
             return Json(result);
         }
 
-        public bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
+        private static bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
         {
             var isValidCardInfo = !IsEquals(employee.CardNo, model.CardNo)
                 || employee.DateOfIdCard != model.DateOfIdCard
@@ -103,7 +103,7 @@
             return isValidCardInfo || isValidAddressInfo;
         }
 
-        public string GetTemplateChangeData(Employee model, Employee employee)
+        private static string GetTemplateChangeData(Employee model, Employee employee)
         {
             var template = new StringBuilder();
             var infoUpdate = new Dictionary<string, string>

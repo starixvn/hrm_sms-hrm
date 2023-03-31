@@ -84,7 +84,7 @@
 
         public int WorkingHours { get; set; }
 
-        public int? WorkingHoursbyWeek { get; set; }
+        public byte? WorkingHoursbyWeek { get; set; }
 
         public DateTime? CompanyDate { get; set; }
 

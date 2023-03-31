@@ -240,7 +240,7 @@ $(document).ready(function () {
             crossDay: domElements.$crossDay.prop('checked'),
             verifierId: domElements.$verifierId.val(),
             approverId: domElements.$approverId.val(),
-            shiftId: typeId === 1 ? domElements.$shiftId.val() : null,
+            shiftId: typeId === KeepInViewType.KeepInViewByDay ? domElements.$shiftId.val() : null,
             remark: $.trim(domElements.$remark.val())
         };
 

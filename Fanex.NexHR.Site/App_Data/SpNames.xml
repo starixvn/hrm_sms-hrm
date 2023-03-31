@@ -95,8 +95,7 @@
         <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="nexhrx" Plain="0"></Setting>
         <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="nexhrx" Plain="0"></Setting>
-        <Setting Key="Employee_LogEmployeeLogin" SpName="Employee_LogEmployeeLogin" DbName="nexhrx" Plain="0"></Setting>
-        <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="nexhrx" Plain="0"></Setting>
+        <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="nexhrx" Plain="0" />
         <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="nexhrx" Plain="0" />
         <Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="nexhrx" Plain="0" />
     </Function>

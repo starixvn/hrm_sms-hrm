@@ -149,7 +149,6 @@
     <Compile Include="Employee\GetEmployeeFullProfileCriteria.cs" />
     <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
     <Compile Include="Employee\GetUploadedFileCriteria.cs" />
-    <Compile Include="Employee\LogEmployeeLoginCriteria.cs" />
     <Compile Include="Holidays\AutoGenerateHoliDayCriteria.cs" />
     <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
     <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />

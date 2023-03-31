@@ -84,7 +84,6 @@ const LeaveRequest = (function ($) {
         approverId: null,
         leaveTypeId: null,
         leavetypeInfo: null,
-        applicableStayHospital: null,
         fromDate: null,
         toDate: null,
         employeeId: null,
@@ -108,7 +107,6 @@ const LeaveRequest = (function ($) {
             LeaveRequest.approverId = $('#ApproverId');
             LeaveRequest.leaveTypeId = $('#LeaveTypeId');
             LeaveRequest.leavetypeInfo = $('#leavetype-info');
-            LeaveRequest.applicableStayHospital = $('#appStayHospital');
             LeaveRequest.fromDate = $('#FromDate');
             LeaveRequest.toDate = $('#ToDate');
             LeaveRequest.employeeId = $('#EmployeeId');
@@ -130,7 +128,6 @@ const LeaveRequest = (function ($) {
             LeaveRequest.isToTimeAfterDay = $('#IsToTimeAfterDay');
             LeaveRequest.autocomplete();
             LeaveRequest.getLeaveTypeInfo();
-            LeaveRequest.getApplicableForStayHospital();
             $('#errors-model-state').hide();
 
             // for edit
@@ -349,16 +346,10 @@ const LeaveRequest = (function ($) {
                 LeaveRequest.leavetypeInfo.hide();
             }
         },
-        getApplicableForStayHospital: function () {
-            if (parseInt(LeaveRequest.leaveTypeId.val(), 10) === LeaveType.HospitalizationLeave) {
-                LeaveRequest.applicableStayHospital.show();
-            } else LeaveRequest.applicableStayHospital.hide();
-        },
         leaveTypeChange: function () {
             LeaveRequest.getLeaveTypeInfo();
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
-            LeaveRequest.getApplicableForStayHospital();
         },
         bindHalfDay: function () {
             if (LeaveRequest.halfDayOff.prop('checked')) {
