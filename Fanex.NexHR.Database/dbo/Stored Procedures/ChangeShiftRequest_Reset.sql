@@ -76,7 +76,13 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = @StatusId))
+	ELSE IF (
+			@RoleId = @ApproverRoleId
+			OR (
+				@RoleId = @HRRoleId
+				AND @ApprovedStatusId = @StatusId
+				)
+			)
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
@@ -130,13 +136,14 @@ BEGIN
 					AND empca.EmpId = csdt.EmpId
 				WHERE empca.EmpId = @EmpId
 					AND csdt.RequestId = @RequestId
-					AND csdt.FromShift = -1 
+					AND csdt.FromShift = - 1
 					AND empca.ChangeShiftId IS NOT NULL
 			END
 			ELSE
 			BEGIN
 				UPDATE empca
 				SET empca.IsOffDay = 1
+					,empca.ShiftId = NULL
 					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -159,7 +166,8 @@ BEGIN
 			END
 		END
 	END
-	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = @StatusId
+	ELSE IF @RoleId = @HRRoleId
+		AND @ProcessedStatusId = @StatusId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId
@@ -218,6 +226,7 @@ BEGIN
 			BEGIN
 				UPDATE empca
 				SET empca.IsOffDay = 0
+					,empca.ShiftId = CASE WHEN csdt.ToShift > 0 THEN csdt.ToShift ELSE empca.ShiftId END
 					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -229,6 +238,7 @@ BEGIN
 
 				UPDATE empca
 				SET empca.IsOffDay = 1
+					,empca.ShiftId = NULL
 					,empca.ModifiedBy = @ActorId
 					,empca.ModifiedDate = @ProcessedDate
 				FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)

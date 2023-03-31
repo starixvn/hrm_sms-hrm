@@ -136,7 +136,7 @@ BEGIN
 				INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON empca.WorkDate = csdt.OnDate
 				AND empca.EmpId = csdt.EmpId
 				AND csdt.RequestId = @RequestId
-				AND csdt.FromShift = -1
+				AND csdt.FromShift = - 1
 			WHERE empca.EmpId = @EmpId
 				AND empca.ChangeShiftId IS NOT NULL
 		END
@@ -144,6 +144,7 @@ BEGIN
 		BEGIN
 			UPDATE empca
 			SET empca.IsOffDay = 1
+				,empca.ShiftId = NULL
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)

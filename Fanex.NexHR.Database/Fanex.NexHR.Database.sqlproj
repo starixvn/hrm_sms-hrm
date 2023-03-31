@@ -548,11 +548,15 @@
     <Build Include="dbo\Stored Procedures\Sync_WorkingShift_GetLastModifiedDate.sql" />
     <Build Include="dbo\Stored Procedures\ScheduleArrangement_SyncWorkingShift.sql" />
     <Build Include="dbo\Stored Procedures\Report_DisciplineSummaryPerYear.sql" />
-    <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_Get.sql" />
     <Build Include="dbo\Stored Procedures\Sync_UserMapping_GetLastModifiedDate.sql" />
     <Build Include="dbo\Stored Procedures\Sync_UserMapping.sql" />
     <Build Include="dbo\Stored Procedures\Sync_GO_UnitHead_GetSchedule.sql" />
     <Build Include="dbo\Stored Procedures\Sync_GO_UnitHead_GetInfo.sql" />
+    <Build Include="dbo\Stored Procedures\Request_GetMemberByActorId.sql" />
+    <Build Include="dbo\Stored Procedures\EmployeeCalendar_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_UpdateUserId.sql" />
+    <Build Include="dbo\Stored Procedures\Employee_GetHRAndSupervisorByEmpId.sql" />
+    <Build Include="dbo\Stored Procedures\Auto_AnnualLeaveBalance_Get.sql" />
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">

@@ -74,6 +74,7 @@ BEGIN
 		BEGIN
 			UPDATE empca
 			SET empca.IsKeepInView = 0
+				,empca.ShiftId = CASE WHEN kiv.ShiftId IS NOT NULL THEN NULL ELSE empca.ShiftId END
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
@@ -104,6 +105,7 @@ BEGIN
 		BEGIN
 			UPDATE empca
 			SET empca.IsKeepInView = 1
+				,empca.ShiftId = ISNULL(kiv.ShiftId, empca.ShiftId)
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)

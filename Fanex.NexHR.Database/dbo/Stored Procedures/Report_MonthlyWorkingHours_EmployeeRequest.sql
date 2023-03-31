@@ -478,8 +478,8 @@ BEGIN
 		,e.NickName
 		,e.FullName
 		,g.[Name] AS Team
-		,sec.Code AS Section
-		,dep.Code AS Department
+		,sec.[Name] AS Section
+		,dep.[Name] AS Department
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 		INNER JOIN #tblRequestIds AS rq ON r.RequestId = rq.RequestId
 		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID

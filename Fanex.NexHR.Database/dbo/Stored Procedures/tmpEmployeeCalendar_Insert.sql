@@ -32,13 +32,19 @@ BEGIN
 		-- change shift type
 		,@ChangeShiftTypeId TINYINT = 1
 		,@MoveOfDayTypeId TINYINT = 2
+		-- kiv type
+		,@KeepInViewByDayTypeId TINYINT = 1
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@NotVerifiedStatusId TINYINT = 3
 		,@RejectedStatusId TINYINT = 5
 		,@VoidStatusId TINYINT = 7
 
-	CREATE TABLE #tempEmployeeIds (EmpId INT PRIMARY KEY, JoinedDate DATE, ResignedDate DATE)
+	CREATE TABLE #tempEmployeeIds (
+		EmpId INT PRIMARY KEY
+		,JoinedDate DATE
+		,ResignedDate DATE
+		)
 
 	CREATE TABLE #tempEmployeeCalendar (
 		EmpId INT
@@ -51,15 +57,27 @@ BEGIN
 
 	IF ISNULL(@empIds, '') <> ''
 	BEGIN
-		INSERT INTO #tempEmployeeIds (EmpId, JoinedDate, ResignedDate)
-		SELECT emp.EmpId, emp.JoinedDate, emp.ResignedDate
+		INSERT INTO #tempEmployeeIds (
+			EmpId
+			,JoinedDate
+			,ResignedDate
+			)
+		SELECT emp.EmpId
+			,emp.JoinedDate
+			,emp.ResignedDate
 		FROM dbo.fnc_strSplit(@empIds, ',') AS tmp
 			INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON CAST(tmp.val AS INT) = emp.EmpId
 	END
 	ELSE
 	BEGIN
-		INSERT INTO #tempEmployeeIds (EmpId, JoinedDate, ResignedDate)
-		SELECT EmpId, JoinedDate, ResignedDate
+		INSERT INTO #tempEmployeeIds (
+			EmpId
+			,JoinedDate
+			,ResignedDate
+			)
+		SELECT EmpId
+			,JoinedDate
+			,ResignedDate
 		FROM dbo.Employee WITH (NOLOCK)
 		WHERE (
 				@isEnable IS NULL
@@ -87,6 +105,11 @@ BEGIN
 		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
+		AND (
+			empca.ShiftId IS NOT NULL
+			OR empca.IsOffDay = 1
+			OR empca.IsHoliday = 1
+			)
 
 	WHILE @tempDate <= @toDate
 	BEGIN
@@ -173,31 +196,51 @@ BEGIN
 	END
 
 	UPDATE empca
-	SET empca.ShiftId = CASE
-			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
-			THEN tmp.ShiftId ELSE NULL END
-		,empca.IsOffDay = CASE
-			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
-			THEN tmp.IsOffDay ELSE 0 END
-		,empca.IsHoliday = CASE
-			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
-			THEN tmp.IsHoliday ELSE 0 END
-		,empca.ModifiedDate = CASE
-			WHEN emp.JoinedDate <= empca.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > empca.WorkDate)
-			THEN GETDATE() ELSE NULL END
+	SET empca.ShiftId = CASE 
+			WHEN emp.JoinedDate <= empca.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > empca.WorkDate
+					) THEN tmp.ShiftId
+			ELSE NULL
+			END
+		,empca.IsOffDay = CASE 
+			WHEN emp.JoinedDate <= empca.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > empca.WorkDate
+					) THEN tmp.IsOffDay
+			ELSE 0
+			END
+		,empca.IsHoliday = CASE 
+			WHEN emp.JoinedDate <= empca.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > empca.WorkDate
+					) THEN tmp.IsHoliday
+			ELSE 0
+			END
+		,empca.ModifiedDate = CASE 
+			WHEN emp.JoinedDate <= empca.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > empca.WorkDate
+					) THEN GETDATE()
+			ELSE NULL
+			END
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		INNER JOIN #tempEmployeeCalendar AS tmp WITH (ROWLOCK) ON empca.EmpId = tmp.EmpId
 		AND empca.WorkDate = tmp.WorkDate
 	WHERE (
 			empca.RequestId IS NULL
-			OR (empca.RequestId IS NOT NULL AND (empca.RequestTypeId = @ChangeShiftRequestTypeId OR empca.RequestTypeId = @KeepInViewRequestTypeId))
-		)
+			--OR (empca.RequestId IS NOT NULL AND (empca.RequestTypeId = @ChangeShiftRequestTypeId OR empca.RequestTypeId = @KeepInViewRequestTypeId))
+			)
 		AND (
 			ISNULL(empca.ShiftId, 0) != ISNULL(tmp.ShiftId, 0)
 			OR empca.IsOffDay != tmp.IsOffDay
 			OR empca.IsHoliday != tmp.IsHoliday
-		)
+			)
 
 	INSERT INTO dbo.tmpEmployeeCalendar (
 		EmpId
@@ -209,18 +252,38 @@ BEGIN
 		)
 	SELECT tmp.EmpId
 		,tmp.WorkDate
-		,CASE
-			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
-			THEN ShiftId ELSE NULL END
-		,CASE
-			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
-			THEN IsOffDay ELSE 0 END
-		,CASE
-			WHEN emp.JoinedDate <= tmp.WorkDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > tmp.WorkDate)
-			THEN IsHoliday ELSE 0 END
-		,CASE
-			WHEN emp.JoinedDate <= @tempDate AND (emp.ResignedDate IS NULL OR emp.ResignedDate > @tempDate)
-			THEN GETDATE() ELSE NULL END
+		,CASE 
+			WHEN emp.JoinedDate <= tmp.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > tmp.WorkDate
+					) THEN ShiftId
+			ELSE NULL
+			END
+		,CASE 
+			WHEN emp.JoinedDate <= tmp.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > tmp.WorkDate
+					) THEN IsOffDay
+			ELSE 0
+			END
+		,CASE 
+			WHEN emp.JoinedDate <= tmp.WorkDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > tmp.WorkDate
+					) THEN IsHoliday
+			ELSE 0
+			END
+		,CASE 
+			WHEN emp.JoinedDate <= @tempDate
+				AND (
+					emp.ResignedDate IS NULL
+					OR emp.ResignedDate > @tempDate
+					) THEN GETDATE()
+			ELSE NULL
+			END
 	FROM #tempEmployeeCalendar AS tmp WITH (ROWLOCK)
 		INNER JOIN #tempEmployeeIds AS emp WITH (NOLOCK) ON tmp.EmpId = emp.EmpId
 	WHERE NOT EXISTS (
@@ -242,7 +305,7 @@ BEGIN
 				AND holiday.Id IS NOT NULL THEN 1
 			ELSE 0 END
 			)
-			,empca.ModifiedDate = GETDATE()
+		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empca.EmpId = empsum.EmpId
@@ -307,15 +370,22 @@ BEGIN
 	UPDATE empca
 	SET empca.RequestId = kiv.RequestId
 		,empca.RequestTypeId = kiv.RequestType
-		,empca.IsKeepInView = (CASE 
+		,empca.IsKeepInView = CASE 
 			WHEN kiv.RequestId IS NULL THEN 0
-			ELSE 1 END
-			)
+			ELSE 1
+			END
+		,empca.ShiftId = CASE 
+			WHEN kiv.KeepInViewType = @KeepInViewByDayTypeId
+				AND kiv.ShiftId IS NOT NULL THEN kiv.ShiftId
+			ELSE empca.ShiftId
+			END
 		,empca.ModifiedDate = GETDATE()
 	FROM dbo.tmpEmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tempEmployeeIds AS tblemp WITH (NOLOCK) ON empca.EmpId = tblemp.EmpId
 		OUTER APPLY (
 		SELECT kiv.RequestId
+			,kiv.KeepInViewType
+			,kiv.ShiftId
 			,r.RequestType
 		FROM dbo.KeepInViewRequest AS kiv WITH (NOLOCK)
 			INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON r.RequestId = kiv.RequestId
@@ -385,6 +455,10 @@ BEGIN
 	UPDATE empca
 	SET empca.RequestId = cs.RequestId
 		,empca.RequestTypeId = cs.RequestType
+		,empca.ShiftId = CASE 
+			WHEN cs.RequestId IS NOT NULL THEN cs.ToShift
+			ELSE NULL
+			END
 		,empca.IsOffDay = CASE 
 			WHEN cs.RequestId IS NOT NULL THEN 0
 			ELSE empca.IsOffDay
@@ -399,6 +473,8 @@ BEGIN
 		SELECT r.RequestId
 			,r.RequestType
 			,@MoveOfDayTypeId AS ChangeShiftTypeId
+			,csdt.FromShift
+			,csdt.ToShift
 			,csdt.ToDate
 		FROM dbo.ChangeShiftRequest AS cs WITH (NOLOCK)
 			INNER JOIN dbo.ChangeShiftRequestDetail AS csdt WITH (NOLOCK) ON cs.RequestId = csdt.RequestId
@@ -463,7 +539,7 @@ BEGIN
 	WHERE empca.WorkDate BETWEEN @fromDate
 			AND @toDate
 		AND (
-				(
+			(
 				empca.RequestId IS NOT NULL
 				AND empca.RequestTypeId = @ChangeShiftRequestTypeId
 				AND empca.ChangeShiftTypeId = @MoveOfDayTypeId

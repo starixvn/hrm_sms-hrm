@@ -52,7 +52,7 @@ BEGIN
 		INNER JOIN dbo.WorkingTimeRequest AS r WITH (NOLOCK) ON cio.RequestId = r.RequestId
 		AND r.RequestId = @RequestId
 
-	IF @StatusId <> @ProcessedStatusId
+	IF @StatusId != @ProcessedStatusId
 	BEGIN
 		EXEC dbo.CheckInOutRequest_UpdateDiscipline @RequestId = @RequestId
 			,@ActorId = @ActorId
@@ -72,7 +72,11 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
-	ELSE IF (@RoleId = @ApproverRoleId OR(@RoleId = @HRRoleId AND @ApprovedStatusId = @StatusId))
+	ELSE IF @RoleId = @ApproverRoleId
+		OR (
+			@RoleId = @HRRoleId
+			AND @ApprovedStatusId = @StatusId
+			)
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @PendingStatusId
@@ -106,7 +110,8 @@ BEGIN
 				,1
 		END
 	END
-	ELSE IF @RoleId = @HRRoleId AND @ProcessedStatusId = @StatusId
+	ELSE IF @RoleId = @HRRoleId
+		AND @ProcessedStatusId = @StatusId
 	BEGIN
 		UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 		SET CurrentStatus = @ApprovedStatusId

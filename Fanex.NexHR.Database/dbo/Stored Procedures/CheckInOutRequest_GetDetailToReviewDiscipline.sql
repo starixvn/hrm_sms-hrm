@@ -13,6 +13,9 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @VanLateReasonId TINYINT = 1
+		,@BusinessTripReasonId TINYINT = 2
+
 	SELECT wkr.RequestId
 		,cio.OnDate AS FromDate
 		,cio.OnDate AS ToDate
@@ -38,4 +41,5 @@ BEGIN
 		AND drule.Value = 1
 		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON shift.ShiftID = empca.ShiftId
 	WHERE wkr.RequestId = @RequestId
+		AND cio.ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 END

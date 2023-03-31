@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[Sync_WorkingShift_Import] @WorkingShiftXml NVARCHAR(MAX) = ''
+﻿CREATE PROCEDURE [dbo].[Sync_WorkingShift_Import] @WorkingShiftXml NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
 AS
@@ -216,7 +215,7 @@ BEGIN
 		,INSERTED.IsOffDay
 		,INSERTED.IsHoliday
 	INTO #tmpEmployeeCalendar(EmpId, WorkDate, ShiftId, IsOffDay, IsHoliday)
-	SELECT tmpws.ShiftDate
+	SELECT DISTINCT tmpws.ShiftDate
 		,e.EmpId
 		,s.ShiftID
 		,CASE 

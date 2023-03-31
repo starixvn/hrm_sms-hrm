@@ -6,9 +6,12 @@
     [ToTime]         DATETIME       NULL,
     [RefNo]          NVARCHAR (200) NULL,
     [OnDate]         DATE           NULL,
+    [ShiftId]        INT            NULL,
     [KeepInViewType] TINYINT        NULL,
     CONSTRAINT [PK_KeepInViewRequest] PRIMARY KEY CLUSTERED ([RequestId] ASC) ON [EmpRequest]
 ) ON [EmpRequest];
+
+
 
 
 

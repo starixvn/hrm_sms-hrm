@@ -7,7 +7,7 @@ CREATE PROCEDURE [dbo].[Employee_Summary_Update] @EmpID INT
 	,@IsLocal BIT = 0
 	,@WorkingDays INT = 0
 	,@WorkingHours INT = 0
-	,@WorkingHoursbyWeek INT = 0
+	,@WorkingHoursByWeek TINYINT = NULL
 	,@CompanyDate DATETIME = NULL
 	,@CountryCode NVARCHAR(5) = NULL
 	,@Unit NVARCHAR(2000) = NULL
@@ -33,34 +33,21 @@ BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
 
-	BEGIN TRY
-		BEGIN TRANSACTION;
-
-		UPDATE [dbo].[EmployeeSummary] WITH (ROWLOCK)
-		SET [CanOT] = @CanOT
-			,SpecialOT = @SpecialOT
-			,[IsLocal] = @IsLocal
-			,[WorkingDays] = @WorkingDays
-			,[WorkingHours] = @WorkingHours
-			,[WorkingHoursbyWeek] = @WorkingHoursbyWeek
-			,[IsDefaultSchedule] = @IsDefaultSchedule
-			,IsTopManager = @IsTopManager
-			,[CompanyDate] = @CompanyDate
-			,CountryCode = @CountryCode
-			,Unit = @Unit
-			,IsExpatUseHoliday = @IsExpatUseHoliday
-			,OffDaysbyWeek = @OffDaysbyWeek
-			,MilitaryFromDate = @MilitaryFromDate
-			,MilitaryToDate = @MilitaryToDate
-		WHERE [EmpId] = @EmpId
-
-		COMMIT TRANSACTION;
-	END TRY
-
-	BEGIN CATCH
-		ROLLBACK TRANSACTION
-
-		SELECT @ErrCode = 100
-			,@ErrMsg = N'Update failed'
-	END CATCH
+	UPDATE [dbo].[EmployeeSummary] WITH (ROWLOCK, UPDLOCK)
+	SET CanOT = @CanOT
+		,SpecialOT = @SpecialOT
+		,IsLocal = @IsLocal
+		,WorkingDays = @WorkingDays
+		,WorkingHours = @WorkingHours
+		,WorkingHoursByWeek = @WorkingHoursByWeek
+		,IsDefaultSchedule = @IsDefaultSchedule
+		,IsTopManager = @IsTopManager
+		,CompanyDate = @CompanyDate
+		,CountryCode = @CountryCode
+		,Unit = @Unit
+		,IsExpatUseHoliday = @IsExpatUseHoliday
+		,OffDaysbyWeek = @OffDaysbyWeek
+		,MilitaryFromDate = @MilitaryFromDate
+		,MilitaryToDate = @MilitaryToDate
+	WHERE EmpId = @EmpId
 END

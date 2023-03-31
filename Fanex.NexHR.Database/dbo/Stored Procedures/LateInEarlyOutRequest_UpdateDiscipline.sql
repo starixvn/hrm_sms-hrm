@@ -13,12 +13,12 @@ DB: HRM
 Original:
 
 Revisions:
+	- 03082023@Otis: skip discipline in case Management Allow
 Param's Explanation:
     @DisciplineXml:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
--Otis: 03082023 - Skip catch ManagementAllow's reason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -47,10 +47,12 @@ BEGIN
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
-
-		DELETE d1
-		FROM dbo.DisciplineIgnoreDetail d1 WITH (NOLOCK)
-		INNER JOIN DisciplineRequestTrans d2 ON d2.RequestId = @RequestId AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
+		DELETE did
+		FROM dbo.DisciplineIgnoreDetail AS did WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN DisciplineRequestTrans AS dtran WITH (NOLOCK) ON did.EmpId = dtran.EmpId
+			AND did.DisciplineTypeId = dtran.DisciplineTypeId
+			AND did.WorkDate = dtran.WorkDate
+		WHERE dtran.RequestId = @RequestId
 
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
@@ -256,10 +258,7 @@ BEGIN
 				,@RequestId
 				,DisciplineTypeId
 				,IsIgnored
-				,CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline
@@ -275,16 +274,13 @@ BEGIN
 					WHEN tbl.DisciplineTypeId = 4 THEN 1
 					ELSE 0
 					END
-				,dis.IsOutOfControlReason = CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE dis.IsOutOfControlReason
-					END
 				,dis.IsDeleted = 0
 				,dis.ModifiedBy = @ActorId
 				,dis.ModifiedDate = @ModifiedDate
 			FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
+			WHERE @ReasonId != @ManagementAllowReasonId
 
 			UPDATE dis
 			SET dis.IsIgnoredLateIn = CASE 
@@ -298,21 +294,25 @@ BEGIN
 			FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
+			WHERE @ReasonId != @ManagementAllowReasonId
 
 			UPDATE dis
 			SET dis.IsOutOfControlLateIn = CASE 
 					WHEN tbl.DisciplineTypeId = 3
-						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
+						AND @ReasonId = @ManagementAllowReasonId
+						AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,dis.IsOutOfControlEarlyOut = CASE 
 					WHEN tbl.DisciplineTypeId = 4
-						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
+						AND @ReasonId = @ManagementAllowReasonId
+						AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
+			WHERE @ReasonId != @ManagementAllowReasonId
 
 			-- insert
 			INSERT INTO dbo.Discipline (
@@ -334,14 +334,12 @@ BEGIN
 					WHEN tbl.DisciplineTypeId = 4 THEN 1
 					ELSE 0
 					END
-				,CASE 
-					WHEN @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline AS tbl
-			WHERE NOT EXISTS (
+			WHERE @ReasonId != @ManagementAllowReasonId
+				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.Discipline AS dis WITH (NOLOCK)
 					WHERE dis.EmpId = tbl.EmpId
@@ -365,7 +363,8 @@ BEGIN
 					ELSE 0
 					END
 			FROM @tblDiscipline AS tbl
-			WHERE NOT EXISTS (
+			WHERE @ReasonId != @ManagementAllowReasonId
+				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
 					WHERE dis.EmpId = tbl.EmpId
@@ -380,18 +379,11 @@ BEGIN
 				)
 			SELECT EmpId
 				,WorkDate
-				,CASE 
-					WHEN tbl.DisciplineTypeId = 3
-						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
-				,CASE 
-					WHEN tbl.DisciplineTypeId = 4
-						AND @ReasonId = @ManagementAllowReasonId AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
+				,0
 			FROM @tblDiscipline AS tbl
-			WHERE NOT EXISTS (
+			WHERE @ReasonId != @ManagementAllowReasonId
+				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineOutOfControl AS dis WITH (NOLOCK)
 					WHERE dis.EmpId = tbl.EmpId

@@ -10,6 +10,7 @@ BEGIN
 	DECLARE @KIVBalance NUMERIC(18, 2) = 0
 		,@FromDate DATE
 
+	--SELECT @FromDate = DATEADD(day, - 7 - (DATEPART(weekday, @Date) + @@DATEFIRST - 2) % 7, @Date)
 	SELECT @FromDate = DATEADD(DAY, -1, DATEADD(MONTH, -1, @Date))
 
 	--SELECT @KIVBalance = SUM(ISNULL(CreditMinutes, 0)) - SUM(CASE 

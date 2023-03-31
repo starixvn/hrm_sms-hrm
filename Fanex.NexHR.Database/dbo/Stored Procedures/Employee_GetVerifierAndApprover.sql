@@ -1,6 +1,4 @@
-﻿/****** Object:  Stored Procedure dbo.Employee_GetVerifierAndApprover    Script Date: 7/20/2016 10:19:03 AM ******/
-/****** Object:  Stored Procedure dbo.Employee_GetVerifierAndApprover    Script Date: 7/19/2016 5:22:12 PM ******/
-
+﻿
 CREATE PROCEDURE [dbo].[Employee_GetVerifierAndApprover] @EmpId INT
 	,@RequestType TINYINT
 AS
@@ -8,37 +6,31 @@ AS
 Created: 20160609@Quinn.Vo
 Task: Get list verifier and approver for employee when create/edit request.
 DB: HRM
-Original: 
+Original:
 
-Revisions:    
+Revisions:
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON
 
-	DECLARE @Verifiers TABLE (
-		OwnerId INT
-		)
-	DECLARE @Approvers TABLE (
-		OwnerId INT
-		)
+	DECLARE @Verifiers TABLE (OwnerId INT)
+	DECLARE @Approvers TABLE (OwnerId INT)
 
 	INSERT INTO @Verifiers (OwnerId)
 	SELECT DISTINCT OwnerId
-	FROM [dbo].[EmployeeSupervisor] AS su WITH (NOLOCK)
+	FROM dbo.EmployeeSupervisor AS su WITH (NOLOCK)
 	WHERE su.EmpId = @EmpId
 		AND (
 			@RequestType IS NULL
 			OR su.RequestType = @RequestType
 			)
-		AND  su.ActionType = 2
-		AND ISNULL(su.IsDeleted, 0) = 0
+		AND su.ActionType = 2
+		AND su.IsDeleted = 0
 
-	IF (
-			NOT EXISTS (
-				SELECT 1
-				FROM @Verifiers
-				)
+	IF NOT EXISTS (
+			SELECT 1
+			FROM @Verifiers
 			)
 	BEGIN
 		INSERT INTO @Verifiers (OwnerId)
@@ -51,25 +43,23 @@ BEGIN
 				OR su.RequestType = @RequestType
 				)
 			AND su.ActionType = 2
-			AND ISNULL(su.IsDeleted, 0) = 0
+			AND su.IsDeleted = 0
 	END
 
 	INSERT INTO @Approvers (OwnerId)
 	SELECT DISTINCT OwnerId
-	FROM [dbo].[EmployeeSupervisor] AS su WITH (NOLOCK)
+	FROM dbo.EmployeeSupervisor AS su WITH (NOLOCK)
 	WHERE su.EmpId = @EmpId
 		AND (
 			@RequestType IS NULL
 			OR su.RequestType = @RequestType
 			)
-		AND  su.ActionType = 3
-		AND ISNULL(su.IsDeleted, 0) = 0
+		AND su.ActionType = 3
+		AND su.IsDeleted = 0
 
-	IF (
-			NOT EXISTS (
-				SELECT 1
-				FROM @Approvers
-				)
+	IF NOT EXISTS (
+			SELECT 1
+			FROM @Approvers
 			)
 	BEGIN
 		INSERT INTO @Approvers (OwnerId)
@@ -82,7 +72,7 @@ BEGIN
 				OR su.RequestType = @RequestType
 				)
 			AND su.ActionType = 3
-			AND ISNULL(su.IsDeleted, 0) = 0
+			AND su.IsDeleted = 0
 	END
 
 	SELECT OwnerId
@@ -90,12 +80,12 @@ BEGIN
 		,ee.NickName
 		,ee.Email
 	FROM @Verifiers AS su
-		INNER JOIN [dbo].Employee AS ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
+		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
 
 	SELECT OwnerId
 		,ee.FullName
 		,ee.NickName
 		,ee.Email
 	FROM @Approvers AS su
-		INNER JOIN [dbo].Employee AS ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
+		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON su.OwnerId = ee.EmpId
 END

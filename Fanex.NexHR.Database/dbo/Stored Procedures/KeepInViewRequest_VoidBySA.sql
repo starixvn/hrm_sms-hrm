@@ -44,6 +44,7 @@ BEGIN
 	BEGIN
 		UPDATE empca
 		SET empca.IsKeepInView = 0
+			,empca.ShiftId = CASE WHEN kiv.ShiftId IS NOT NULL THEN NULL ELSE empca.ShiftId END
 			,empca.ModifiedDate = @ProcessedDate
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate

@@ -71,12 +71,13 @@ BEGIN
 
 		UPDATE empca
 		SET empca.IsKeepInView = 0
+			,empca.ShiftId = CASE WHEN kiv.ShiftId IS NOT NULL THEN NULL ELSE empca.ShiftId END
 			,empca.ModifiedBy = @ActorId
 			,empca.ModifiedDate = @ProcessedDate
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
 			AND empca.EmpId = kiv.EmpId
-			AND kiv.RequestId = @RequestId
+		WHERE kiv.RequestId = @RequestId
 
 		EXEC dbo.KeepInViewRequest_DeleteTrans @RequestId = @RequestId
 

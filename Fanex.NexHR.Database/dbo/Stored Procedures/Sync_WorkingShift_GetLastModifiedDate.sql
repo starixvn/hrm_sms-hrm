@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Sync_WorkingShift_GetLastModifiedDate]
 AS
 /*
@@ -11,11 +12,12 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @SyncDate DATETIME = NULL
+		,@Today DATE = GETDATE()
 
 	SELECT @SyncDate = MAX(OWPModifiedDate)
 	FROM dbo.EmployeeCalendar WITH (NOLOCK)
 
-	SET @SyncDate = ISNULL(@SyncDate, '2022-01-01')
+	SET @SyncDate = ISNULL(@SyncDate, @Today)
 
 	SELECT @SyncDate
 END

@@ -83,10 +83,11 @@ BEGIN
 		FROM @tblDisciplineRule
 
 		DECLARE @logdate DATETIME = GETDATE()
+		DECLARE @description NVARCHAR(100) = 'Update discipline rule TeamId = ' + CAST(@TeamId AS NVARCHAR(10))
 
 		EXEC dbo.Log_WriteLog @LogActionId = 1003
 			,@LogDate = @logdate
-			,@Description = 'Update discipline rule'
+			,@Description = @description
 			,@TrackingValue = @DisciplineRuleXml
 			,@UserId = @ActorId
 	END TRY

@@ -38,7 +38,7 @@ RETURN WITH cteEmployee AS (
 					)
 				)
 		
-		UNION ALL
+		UNION
 		SELECT es.EmpId
 		FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON es.EmpId = e.EmpId
@@ -54,7 +54,7 @@ RETURN WITH cteEmployee AS (
 			AND es.IsDeleted = 0
 			AND es.ActionType IN (2, 3) -- verifier, approver
 		
-		UNION ALL
+		UNION
 		SELECT es.EmpId
 		FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON es.EmpId = e.EmpId
@@ -70,7 +70,7 @@ RETURN WITH cteEmployee AS (
 			AND es.IsDeleted = 0
 			AND es.ActionType IN (4, 5) -- shift manager, on behalf request
 		
-		UNION ALL
+		UNION
 		SELECT e.EmpId
 		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
@@ -84,16 +84,16 @@ RETURN WITH cteEmployee AS (
 				OR @ExcludeUserDelete = 0
 				)
 			AND gs.IsDeleted = 0
-			AND gs.ActionType = 2
+			AND gs.ActionType IN (2, 3)
 			AND NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 				WHERE es.EmpId = e.EmpId
-					AND es.ActionType = 2
+					AND es.ActionType = gs.ActionType
 					AND es.IsDeleted = 0
 				)
 		
-		UNION ALL
+		UNION
 		SELECT e.EmpId
 		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
@@ -107,62 +107,16 @@ RETURN WITH cteEmployee AS (
 				OR @ExcludeUserDelete = 0
 				)
 			AND gs.IsDeleted = 0
-			AND gs.ActionType = 3
+			AND gs.ActionType IN (4, 5)
 			AND NOT EXISTS (
 				SELECT 1
 				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
 				WHERE es.EmpId = e.EmpId
-					AND es.ActionType = 3
+					AND es.ActionType = gs.ActionType
 					AND es.IsDeleted = 0
 				)
 		
-		UNION ALL
-		SELECT e.EmpId
-		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-		WHERE OwnerId = @EmpId
-			AND (
-				(
-					@ExcludeUserDelete = 1
-					AND e.isDeleted = 0
-					AND e.[Enabled] = 1
-					)
-				OR @ExcludeUserDelete = 0
-				)
-			AND gs.IsDeleted = 0
-			AND gs.ActionType = 4
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
-				WHERE es.EmpId = e.EmpId
-					AND es.ActionType = 4
-					AND es.IsDeleted = 0
-				)
-		
-		UNION ALL
-		SELECT e.EmpId
-		FROM dbo.GroupSupervisor AS gs WITH (NOLOCK)
-			INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON gs.GroupId = e.GroupId
-		WHERE gs.OwnerId = @EmpId
-			AND (
-				(
-					@ExcludeUserDelete = 1
-					AND e.isDeleted = 0
-					AND e.[Enabled] = 1
-					)
-				OR @ExcludeUserDelete = 0
-				)
-			AND gs.IsDeleted = 0
-			AND gs.ActionType = 5
-			AND NOT EXISTS (
-				SELECT 1
-				FROM dbo.EmployeeSupervisor AS es WITH (NOLOCK)
-				WHERE es.EmpId = e.EmpId
-					AND es.ActionType = 5
-					AND es.IsDeleted = 0
-				)
-		
-		UNION ALL
+		UNION
 		SELECT e.EmpId
 		FROM dbo.Employee AS e WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.GroupId = e.GroupId
@@ -176,16 +130,10 @@ RETURN WITH cteEmployee AS (
 				OR @ExcludeUserDelete = 0
 				)
 			AND @IsShowUserInTeam = 1
+
+		UNION
+		SELECT @EmpId
 		)
 
-SELECT DISTINCT EmpId
+SELECT EmpId
 FROM cteEmployee
-
-UNION
-SELECT @EmpId
-WHERE @EmpId IS NOT NULL
-	AND NOT EXISTS (
-		SELECT 1
-		FROM cteEmployee
-		WHERE EmpId = @EmpId
-		)

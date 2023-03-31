@@ -15,6 +15,8 @@ BEGIN
 
 	DECLARE @LateInRequestTypeId TINYINT = 3
 		,@EarlyOutRequestTypeId TINYINT = 4
+		-- reason
+		,@ManagementAllowReasonId TINYINT = 1
 
 	SELECT lio.RequestId
 		,lio.OnDate AS FromDate
@@ -61,5 +63,6 @@ BEGIN
 				AND drule.DisciplineTypeId = 4
 				)
 			)
-		LEFT JOIN dbo.Shift AS shift WITH (NOLOCK) ON shift.ShiftId = ca.ShiftId
+		LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON shift.ShiftId = ca.ShiftId
+		WHERE lio.ReasonId != @ManagementAllowReasonId
 END

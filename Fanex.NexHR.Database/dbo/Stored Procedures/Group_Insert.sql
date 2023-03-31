@@ -7,16 +7,16 @@ CREATE PROCEDURE [dbo].[Group_Insert] @Code VARCHAR(20)
 	,@ManagerIds VARCHAR(MAX) = ''
 	,@LeaderIds VARCHAR(MAX) = ''
 	,@SupervisorIds VARCHAR(MAX) = ''
-	,@LocalBasicAnnualLeaveBalance TINYINT
-	,@LocalWorkingDays TINYINT
-	,@LocalWorkingHours TINYINT
-	,@LocalOffDaysbyWeek TINYINT
-	,@LocalWorkingHoursbyWeek TINYINT
-	,@ExpatBasicAnnualLeaveBalance TINYINT
-	,@ExpatWorkingDays TINYINT
-	,@ExpatWorkingHours TINYINT
-	,@ExpatOffDaysbyWeek TINYINT
-	,@ExpatWorkingHoursbyWeek TINYINT
+	,@LocalBasicAnnualLeaveBalance TINYINT = NULL
+	,@LocalWorkingDays TINYINT = NULL
+	,@LocalWorkingHours TINYINT = NULL
+	,@LocalOffDaysbyWeek TINYINT = NULL
+	,@LocalWorkingHoursByWeek TINYINT = NULL
+	,@ExpatBasicAnnualLeaveBalance TINYINT = NULL
+	,@ExpatWorkingDays TINYINT = NULL
+	,@ExpatWorkingHours TINYINT = NULL
+	,@ExpatOffDaysbyWeek TINYINT = NULL
+	,@ExpatWorkingHoursByWeek TINYINT = NULL
 	,@CreatedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg VARCHAR(200) = '' OUTPUT
@@ -58,12 +58,12 @@ BEGIN
 		,LocalWorkingDays
 		,LocalWorkingHours
 		,LocalOffDaysbyWeek
-		,LocalWorkingHoursbyWeek
+		,LocalWorkingHoursByWeek
 		,ExpatBasicAnnualLeaveBalance
 		,ExpatWorkingDays
 		,ExpatWorkingHours
 		,ExpatOffDaysbyWeek
-		,ExpatWorkingHoursbyWeek
+		,ExpatWorkingHoursByWeek
 		)
 	VALUES (
 		@Code
@@ -76,63 +76,37 @@ BEGIN
 		,@LocalWorkingDays
 		,@LocalWorkingHours
 		,@LocalOffDaysbyWeek
-		,@LocalWorkingHoursbyWeek
+		,@LocalWorkingHoursByWeek
 		,@ExpatBasicAnnualLeaveBalance
 		,@ExpatWorkingDays
 		,@ExpatWorkingHours
 		,@ExpatOffDaysbyWeek
-		,@ExpatWorkingHoursbyWeek
+		,@ExpatWorkingHoursByWeek
 		)
 
 	DECLARE @id INT = cast(SCOPE_IDENTITY() AS INT)
 
-	INSERT INTO dbo.GroupManager (
-		GroupId
-		,EmpId
-		,RoleId
-		)
-	VALUES (
-		@id
-		,@HeadId
-		,1
-		)
+	INSERT INTO dbo.GroupManager (GroupId, EmpId, RoleId)
+	VALUES (@id, @HeadId, 1)
 
 	IF ISNULL(@ManagerIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupManager (
-			GroupId
-			,EmpId
-			,RoleId
-			)
-		SELECT @id
-			,val
-			,2
+		INSERT INTO dbo.GroupManager (GroupId, EmpId, RoleId)
+		SELECT @id, val, 2
 		FROM dbo.fnc_strSplit(@ManagerIds, ',')
 	END
 
 	IF ISNULL(@LeaderIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupManager (
-			GroupId
-			,EmpId
-			,RoleId
-			)
-		SELECT @id
-			,val
-			,3
+		INSERT INTO dbo.GroupManager (GroupId, EmpId, RoleId)
+		SELECT @id, val, 3
 		FROM dbo.fnc_strSplit(@LeaderIds, ',')
 	END
 
 	IF ISNULL(@SupervisorIds, '') <> ''
 	BEGIN
-		INSERT INTO dbo.GroupManager (
-			GroupId
-			,EmpId
-			,RoleId
-			)
-		SELECT @id
-			,val
-			,4
+		INSERT INTO dbo.GroupManager (GroupId, EmpId, RoleId)
+		SELECT @id, val, 4
 		FROM dbo.fnc_strSplit(@SupervisorIds, ',')
 	END
 
@@ -148,11 +122,16 @@ BEGIN
 				,@LeaderIds AS '@LeaderIds'
 				,@SupervisorIds AS '@SupervisorIds'
 				,MailGroup AS '@MailGroup'
-				,LocalBasicAnnualLeaveBalance AS '@BasicAnnualLeaveBalance'
-				,LocalWorkingDays AS '@WorkingDays'
-				,LocalWorkingHours AS '@WorkingHours'
-				,LocalOffDaysbyWeek AS '@OffDaysbyWeek'
-				,LocalWorkingHoursbyWeek As '@WorkingHoursbyWeek'
+				,LocalBasicAnnualLeaveBalance AS '@LocalBasicAnnualLeaveBalance'
+				,LocalWorkingDays AS '@LocalWorkingDays'
+				,LocalWorkingHours AS '@LocalWorkingHours'
+				,LocalOffDaysbyWeek AS '@LocalOffDaysbyWeek'
+				,LocalWorkingHoursByWeek AS '@LocalWorkingHoursByWeek'
+				,ExpatBasicAnnualLeaveBalance AS '@ExpatBasicAnnualLeaveBalance'
+				,ExpatWorkingDays AS '@ExpatWorkingDays'
+				,ExpatWorkingHours AS '@ExpatWorkingHours'
+				,ExpatOffDaysbyWeek AS '@ExpatOffDaysbyWeek'
+				,ExpatWorkingHoursByWeek AS '@ExpatWorkingHoursByWeek'
 			FROM dbo.[Group] WITH (NOLOCK)
 			WHERE GroupId = @id
 			FOR XML PATH('Row')

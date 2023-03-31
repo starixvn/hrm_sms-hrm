@@ -275,6 +275,13 @@ BEGIN
 		,@empIds = @EmployeeId
 		,@isUpdateRequestData = 1
 
+	EXEC dbo.Log_WriteLog @LogActionId = 10
+		,@LogDate = @ModifiedDate
+		,@Description = 'Update monthly overtime'
+		,@TrackingValue = @DailyDetailsXml
+		,@UserId = @ActorId
+		,@EmpId = @EmployeeId
+
 	DROP TABLE #tblDailyOvertime
 END
 

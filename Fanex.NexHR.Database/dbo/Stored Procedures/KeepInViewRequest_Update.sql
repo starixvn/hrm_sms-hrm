@@ -1,8 +1,4 @@
 ﻿
-
-
-
-
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Update] @RequestId BIGINT
 	,@EmpId INT
 	,@Remark NVARCHAR(2000) = NULL
@@ -233,7 +229,7 @@ BEGIN
 	FROM dbo.KeepInViewRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	UPDATE WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
+	UPDATE dbo.WorkingTimeRequest WITH (ROWLOCK, UPDLOCK)
 	SET Remark = @Remark
 		,CurrentStatus = CASE 
 			WHEN @IsTopManager = 1
@@ -266,7 +262,7 @@ BEGIN
 		,IsHalfDay = @IsHalfDay
 		,FromTime = @FromTime
 		,ToTime = @ToTime
-		,ShiftId = ISNULL(@ShiftId, NULL)
+		,ShiftId = @ShiftId
 	WHERE RequestId = @RequestId
 
 	IF @ApproverId IS NULL

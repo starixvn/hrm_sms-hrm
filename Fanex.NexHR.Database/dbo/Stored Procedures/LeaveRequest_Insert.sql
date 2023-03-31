@@ -390,10 +390,6 @@ BEGIN
 			SELECT 1
 			FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
 				INNER JOIN dbo.LeaveRequest AS l WITH (NOLOCK) ON r.RequestId = l.RequestId
-				--LEFT JOIN dbo.EmployeeCalendar AS c WITH (NOLOCK) ON c.WorkDate BETWEEN l.fromdate
-				--	AND l.ToDate
-				--	AND c.empid = l.EmpId
-				--LEFT JOIN dbo.[Shift] AS s WITH (NOLOCK) ON c.ShiftId = s.ShiftID
 			WHERE r.empid = @empid
 				AND r.RequestType = @RequestType
 				AND r.CurrentStatus IN (1, 2, 4, 6)
@@ -449,7 +445,6 @@ BEGIN
 							)
 						)
 					)
-				--AND (s.ShiftID IS NULL OR (s.IsOutAfterDay = 0 AND CAST(l.ToDate AS DATE) >= @TmpFromDate) OR (s.IsOutAfterDay = 1 AND CAST(l.ToDate AS DATE) > @TmpFromDate))
 			)
 	BEGIN
 		SET @ErrCode = 107
@@ -459,6 +454,7 @@ BEGIN
 	END
 
 	SELECT @AnnualLeaveDay = ISNULL(@AnnualLeaveDay, 0)
+
 	IF @AnnualLeaveDay > 0
 	BEGIN
 		IF @AnnualLeaveDay > dbo.fnc_GetAnnualLeaveBalanceByDate(@EmpId, @ToDate, NULL)
@@ -471,6 +467,7 @@ BEGIN
 	END
 
 	DECLARE @Year INT = YEAR(@ToDate)
+
 	EXEC dbo.LeaveRequest_CheckSickLeaveBalance @EmpId = @EmpId
 		,@LeaveDays = @SickLeaveDay
 		,@Year = @Year
@@ -488,6 +485,7 @@ BEGIN
 	IF @ErrCode > 0 RETURN;
 
 	SELECT @KIVLeaveDay = ISNULL(@KIVLeaveDay, 0)
+
 	IF @KIVLeaveDay > 0
 	BEGIN
 		IF @KIVLeaveDay > dbo.fnc_GetKIVByDayBalance(@EmpId, @ToDate, NULL)
@@ -523,43 +521,24 @@ BEGIN
 		RETURN;
 	END
 
-	--IF EXISTS (
-	--		SELECT 1
-	--		FROM #tblLeaveRequestDetail WITH (NOLOCK)
-	--		WHERE IsHalfDay = 1
-	--			AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-	--			AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
-	--		)
-	--BEGIN
-	--	SET @ErrCode = 113
-	--	SET @ErrMsg = 'You can not request leave half day over 5 hours.'
+	DECLARE @WorkingHours FLOAT
 
-	--	RETURN;
-	--END
+	SELECT @WorkingHours = WorkingHours
+	FROM dbo.EmployeeSummary WITH (NOLOCK)
+	WHERE EmpId = @EmpId
 
-	Declare @WorkingHour INT
-
-	SET @WorkingHour =
-	(
-		SELECT WorkingHours
-		FROM dbo.EmployeeSummary WITH (NOLOCK)
-		WHERE EmpId = @EmpId
-	)
-
-	IF (@WorkingHour = 0)
-	BEGIN SET @WorkingHour = 9;
-	END
+	SET @WorkingHours = ISNULL(@WorkingHours, 9)
 
 	IF EXISTS (
 			SELECT 1
 			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-				AND DATEDIFF(MINUTE, FromTime, ToTime) > (@WorkingHour/2*60)
+				AND DATEDIFF(MINUTE, FromTime, ToTime) > (@WorkingHours / 2 * 60)
 			)
 	BEGIN
 		SET @ErrCode = 113
-		SET @ErrMsg = 'You can not request leave half day over '+ CONVERT(NVARCHAR, CAST(@WorkingHour AS float) / CAST(2 AS float)) +' hours.'
+		SET @ErrMsg = 'You can not request leave half day over ' + CONVERT(NVARCHAR(10), @WorkingHours / 2) + ' hours.'
 
 		RETURN;
 	END

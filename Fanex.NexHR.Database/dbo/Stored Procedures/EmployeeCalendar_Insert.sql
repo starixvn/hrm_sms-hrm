@@ -193,5 +193,19 @@ BEGIN
 				AND tblc.WorkDate = empca.WorkDate
 			)
 
+	UPDATE empca
+	SET empca.ShiftId = tblc.ShiftId
+		,empca.ModifiedDate = @MofifiedDate
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN #tblDate AS tblc WITH (NOLOCK) ON empca.EmpId = tblc.EmpId
+		AND empca.WorkDate = tblc.WorkDate
+	WHERE empca.ShiftId IS NULL
+		AND tblc.ShiftId IS NOT NULL
+		AND empca.IsOffDay = 0
+		AND empca.IsHoliday = 0
+		AND empca.IsLeaveDay = 0
+		AND empca.IsKeepInView = 0
+		AND empca.ChangeShiftId IS NULL
+
 	DROP TABLE #tblDate
 END

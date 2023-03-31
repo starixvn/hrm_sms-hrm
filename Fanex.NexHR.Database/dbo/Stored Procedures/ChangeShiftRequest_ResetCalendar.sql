@@ -1,6 +1,4 @@
 ﻿
-
-
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_ResetCalendar] @RequestId BIGINT
 	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -21,12 +19,15 @@ BEGIN
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
 		,@TypeId TINYINT
+		-- change shift type
+		,@ChangeShift TINYINT = 1
+		,@MoveOffDay TINYINT = 2
 
 	SELECT @TypeId = TypeId
 	FROM dbo.ChangeShiftRequest WITH (NOLOCK)
 	WHERE RequestId = @RequestId
 
-	IF @TypeId = 1
+	IF @TypeId = @ChangeShift
 	BEGIN
 		UPDATE empca
 		SET empca.IsOffDay = 0

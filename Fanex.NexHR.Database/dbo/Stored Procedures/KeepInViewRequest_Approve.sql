@@ -1,6 +1,4 @@
 ﻿
-
-
 CREATE PROCEDURE [dbo].[KeepInViewRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@ActorId INT
@@ -86,9 +84,9 @@ BEGIN
 
 		UPDATE empca
 		SET empca.IsKeepInView = 1
+			,empca.ShiftId = ISNULL(kiv.ShiftId, empca.ShiftId)
 			,empca.ModifiedBy = @ActorId
 			,empca.ModifiedDate = @ProcessedDate
-			,empca.ShiftId = ISNULL(kiv.ShiftId, empca.ShiftId)
 		FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 			INNER JOIN dbo.KeepInViewRequest AS kiv WITH (NOLOCK) ON empca.WorkDate = kiv.OnDate
 			AND empca.EmpId = kiv.EmpId

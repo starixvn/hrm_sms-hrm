@@ -13,12 +13,12 @@ DB: HRM
 Original:
 
 Revisions:
+	- 03082023@Otis: skip discipline in case Van Late/Business Trip
 Param's Explanation:
     @DisciplineXml:
         <Root>
             <Row WorkDate='' EmployeeId='' DisciplineTypeId='' IsIgnored='' IsConfirmed='' />
         </Root>
--Otis: 03082023 - Skip check Van Late and Business Trip reason
 */
 BEGIN
 	SET NOCOUNT ON;
@@ -26,7 +26,8 @@ BEGIN
 
 	DECLARE @ModifiedDate DATETIME = GETDATE()
 		,@ReasonId TINYINT
-		-- check in/out reason
+		,@MissingCheckInOutDisciplineTypeId TINYINT = 2
+		-- reason
 		,@VanLateReasonId TINYINT = 1
 		,@BusinessTripReasonId TINYINT = 2
 		-- request status
@@ -48,10 +49,12 @@ BEGIN
 		OR @RequestStatusId = @RejectedStatusId
 		OR @RequestStatusId = @VoidStatusId
 	BEGIN
-
-		DELETE d1
-		FROM dbo.DisciplineIgnoreDetail d1 WITH (NOLOCK)
-		INNER JOIN DisciplineRequestTrans d2 ON d2.RequestId = @RequestId AND d1.EmpId = d2.EmpId AND d1.DisciplineTypeId = d2.DisciplineTypeId AND d1.WorkDate = d2.WorkDate
+		DELETE did
+		FROM dbo.DisciplineIgnoreDetail AS did WITH (ROWLOCK, UPDLOCK)
+			INNER JOIN dbo.DisciplineRequestTrans AS dtran WITH (NOLOCK) ON did.EmpId = dtran.EmpId
+			AND did.DisciplineTypeId = dtran.DisciplineTypeId
+			AND did.WorkDate = dtran.WorkDate
+		WHERE dtran.RequestId = @RequestId
 
 		EXEC dbo.DisciplineRequestTrans_Delete @RequestId = @RequestId
 
@@ -92,7 +95,7 @@ BEGIN
 				FROM dbo.Employee AS emp WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-					AND drule.DisciplineTypeId = 2
+					AND drule.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
 					AND empsum.IsLocal = drule.IsLocal
 					AND drule.Value = 1
 				WHERE dis.EmpId = emp.EmpId
@@ -109,7 +112,7 @@ BEGIN
 				FROM dbo.Employee AS emp WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-					AND drule.DisciplineTypeId = 2
+					AND drule.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
 					AND empsum.IsLocal = drule.IsLocal
 					AND drule.Value = 1
 				WHERE dis.EmpId = emp.EmpId
@@ -126,7 +129,7 @@ BEGIN
 				FROM dbo.Employee AS emp WITH (NOLOCK)
 					INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 					INNER JOIN dbo.DisciplineGroupRule AS drule WITH (NOLOCK) ON emp.GroupId = drule.GroupId
-					AND drule.DisciplineTypeId = 2
+					AND drule.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
 					AND empsum.IsLocal = drule.IsLocal
 					AND drule.Value = 1
 				WHERE dis.EmpId = emp.EmpId
@@ -194,10 +197,7 @@ BEGIN
 				,@RequestId
 				,DisciplineTypeId
 				,IsIgnored
-				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline
@@ -206,17 +206,14 @@ BEGIN
 			-- update
 			UPDATE dis
 			SET dis.IsMissingCheckInOut = 1
-				,dis.IsOutOfControlReason = CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-					ELSE dis.IsOutOfControlReason
-					END
 				,dis.IsDeleted = 0
 				,dis.ModifiedBy = @ActorId
 				,dis.ModifiedDate = @ModifiedDate
 			FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
-				AND tbl.DisciplineTypeId = 2
+				AND tbl.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
+			WHERE @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 
 			UPDATE dis
 			SET dis.IsIgnoredMissingCheckInOut = tbl.IsIgnored
@@ -224,16 +221,15 @@ BEGIN
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
 				AND tbl.DisciplineTypeId = 2
+			WHERE @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 
 			UPDATE dis
-			SET dis.IsOutOfControlMissingCheckInOut = CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+			SET dis.IsOutOfControlMissingCheckInOut = 0
 			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
-				AND tbl.DisciplineTypeId = 2
+				AND tbl.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
+			WHERE @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 
 			-- insert
 			INSERT INTO dbo.Discipline (
@@ -247,14 +243,12 @@ BEGIN
 			SELECT EmpId
 				,WorkDate
 				,1
-				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline AS tbl
-			WHERE tbl.DisciplineTypeId = 2
+			WHERE tbl.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
+				AND @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.Discipline AS dis WITH (NOLOCK)
@@ -271,7 +265,8 @@ BEGIN
 				,WorkDate
 				,IsIgnored
 			FROM @tblDiscipline AS tbl
-			WHERE tbl.DisciplineTypeId = 2
+			WHERE tbl.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
+				AND @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
@@ -286,12 +281,10 @@ BEGIN
 				)
 			SELECT EmpId
 				,WorkDate
-				,CASE 
-					WHEN @ReasonId IN (@VanLateReasonId, @BusinessTripReasonId) AND IsIgnored = 1 THEN 1
-					ELSE 0
-					END
+				,0
 			FROM @tblDiscipline AS tbl
-			WHERE tbl.DisciplineTypeId = 2
+			WHERE tbl.DisciplineTypeId = @MissingCheckInOutDisciplineTypeId
+				AND @ReasonId NOT IN (@VanLateReasonId, @BusinessTripReasonId)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineOutOfControl AS dis WITH (NOLOCK)

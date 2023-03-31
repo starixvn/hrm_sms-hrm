@@ -73,6 +73,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.Models", "GO.Models\GO.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GO.WebAPI", "GO.WebAPI\GO.WebAPI.csproj", "{CF0FAFDD-6403-4D4C-A6DC-C5C95FA6BC68}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Fanex.NexHR.Database", "Fanex.NexHR.Database\Fanex.NexHR.Database.sqlproj", "{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -293,6 +295,24 @@ Global
 		{CF0FAFDD-6403-4D4C-A6DC-C5C95FA6BC68}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CF0FAFDD-6403-4D4C-A6DC-C5C95FA6BC68}.Release|x86.ActiveCfg = Release|Any CPU
 		{CF0FAFDD-6403-4D4C-A6DC-C5C95FA6BC68}.Release|x86.Build.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|x86.Build.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|x86.ActiveCfg = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|x86.Build.0 = Release|Any CPU
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -322,11 +342,12 @@ Global
 		{8C51C585-B84B-4654-A0D0-A899C15ABC90} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
 		{E5E3D0D3-89E4-4692-B61D-5E104D386725} = {E5F5A7D5-8355-4062-BEDD-B46454C2D3C4}
 		{CF0FAFDD-6403-4D4C-A6DC-C5C95FA6BC68} = {CF6D3DF4-3377-4563-ADBF-15EBD94E3E09}
+		{3628ED2E-FAB1-41C3-A091-6887C1EECBEE} = {5DAA8E26-3353-4C6C-84DA-78261FEE6D7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
 		SolutionGuid = {B18C2D6B-E5BD-4918-B5BE-13471712599F}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
 	EndGlobalSection
 	GlobalSection(JSLint) = preSolution
 		SolutionConfigurationLocation = JSLintOptions.xml

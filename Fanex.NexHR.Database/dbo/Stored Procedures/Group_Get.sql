@@ -42,7 +42,7 @@ BEGIN
 				END) TotalExpat
 	FROM dbo.[Group] AS g WITH (NOLOCK)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON emp.GroupId = g.GroupId
-		AND ISNULL(emp.isDeleted, 0) = 0
+		AND emp.isDeleted = 0
 		AND emp.[Enabled] = 1
 		INNER JOIN dbo.EmployeeSummary AS esum WITH (NOLOCK) ON esum.EmpId = emp.EmpId
 	WHERE (
@@ -64,12 +64,12 @@ BEGIN
 		,g.LocalWorkingDays
 		,g.LocalWorkingHours
 		,g.LocalOffDaysbyWeek
-		,g.LocalWorkingHoursbyWeek
+		,g.LocalWorkingHoursByWeek
 		,g.ExpatBasicAnnualLeaveBalance
 		,g.ExpatWorkingDays
 		,g.ExpatWorkingHours
 		,g.ExpatOffDaysbyWeek
-		,g.ExpatWorkingHoursbyWeek
+		,g.ExpatWorkingHoursByWeek
 		,tbl.NoOfMembers
 		,tbl.TotalLocal
 		,tbl.TotalExpat
@@ -112,6 +112,6 @@ BEGIN
 			OR g.isDeleted = @isDeleted
 			)
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON mng.EmpId = emp.EmpId
-		AND ISNULL(emp.isDeleted, 0) = 0
+		AND emp.isDeleted = 0
 		AND emp.[Enabled] = 1
 END

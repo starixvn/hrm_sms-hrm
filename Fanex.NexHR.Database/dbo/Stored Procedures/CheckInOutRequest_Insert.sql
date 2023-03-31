@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[CheckInOutRequest_Insert] @EmpId INT
 	,@RequestType TINYINT
 	,@Remark NVARCHAR(2000) = NULL
@@ -226,6 +228,7 @@ BEGIN
 		EXEC dbo.CheckInOutRequest_Approve @RequestId = @RequestId
 			,@ActorId = @EmpId
 			,@RoleId = 3
+			--,@HrApproverId = NULL ---------------------------------------------------------------------------
 			,@ErrCode = @ErrCode OUTPUT
 			,@ErrMsg = @ErrMsg OUTPUT
 	END

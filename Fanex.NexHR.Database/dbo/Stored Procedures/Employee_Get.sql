@@ -1,73 +1,52 @@
-﻿/****** Object:  Stored Procedure dbo.Employee_Get    Script Date: 7/20/2016 10:19:02 AM ******/
-/****** Object:  Stored Procedure dbo.Employee_Get    Script Date: 7/19/2016 5:22:12 PM ******/
-
-
-
-CREATE PROCEDURE [dbo].[Employee_Get] --'2014-12-04'
-	@FromDate DATETIME = NULL
+﻿
+CREATE PROCEDURE [dbo].[Employee_Get] @FromDate DATETIME = NULL
 AS
 /*
 Created: 20140320@Quinn.Vo
 Task: Get all employee from change date
 DB: NexEPA
-Original: 
+Original:
 
-Revisions:  10:12:18
+Revisions:
 Param's Explanation:
 
 */
 BEGIN
 	SET NOCOUNT ON;
 
-	IF(@FromDate IS NOT NULL)
+	IF (@FromDate IS NOT NULL)
 	BEGIN
-		SELECT @FromDate = DATEADD(HH, -1, @FromDate)
+		SELECT @FromDate = DATEADD(HH, - 1, @FromDate)
 	END
 
-	--IF(EXISTS(SELECT 1 FROM dbo.Employee WITH (NOLOCK) WHERE DATEDIFF(SECOND, @FromDate, ModifiedDate) = 0 HAVING COUNT(1) > 1))
-	--BEGIN
-	--	DECLARE @Employee TABLE (EmpId INT, ModifiedDate DATETIME)
-
-	--	INSERT INTO @Employee (EmpId, ModifiedDate)
-	--	SELECT e.EmpId, DATEADD(SECOND, - ROW_NUMBER() OVER (ORDER BY e.ModifiedDate) + 1, e.ModifiedDate)
-	--	FROM dbo.Employee AS e WITH (ROWLOCK, UPDLOCK)
-	--	WHERE DATEDIFF(SECOND, @FromDate, e.ModifiedDate) = 0
-	--	ORDER BY ModifiedDate
-
-	--	SELECT @FromDate = MIN (ModifiedDate) FROM @Employee
-
-	--	UPDATE e 
-	--	SET e.ModifiedDate = ee.ModifiedDate
-	--	FROM dbo.Employee AS e WITH (ROWLOCK, UPDLOCK)
-	--	INNER JOIN @Employee AS ee ON e.EmpId = ee.EmpId
-	--	WHERE DATEDIFF(SECOND, @FromDate, e.ModifiedDate) = 0
-	--END
-
-	SELECT
-	e.EmpId AS UserId,
-	e.[Password],
-	e.Code,
-	e.NickName,
-	e.FullName,
-	e.EmployeeCard,
-	e.DomainUsername AS DomainName,
-	e.Phone,
-	e.Email,
-	e.JobTitleId,
-	e.[Enabled] AS IsEnabled,
-	ISNULL(e.isDeleted, 0) AS IsDeleted,
-	e.JoinedDate,
-	e.ConfirmedDate,
-	es.IsLocal,
-	e.GroupId AS TeamId,
-	CASE WHEN e.ModifiedDate IS NULL THEN e.CreatedDate ELSE e.ModifiedDate END AS ModifiedDate,
-	es.Unit AS CostCenter,
-	e.JobLevelId
+	SELECT e.UserId
+		,e.EmpId
+		,e.[Password]
+		,e.Code
+		,e.NickName
+		,e.FullName
+		,e.EmployeeCard
+		,e.DomainUsername AS DomainName
+		,e.Phone
+		,e.Email
+		,e.JobTitleId
+		,e.[Enabled] AS IsEnabled
+		,ISNULL(e.isDeleted, 0) AS IsDeleted
+		,e.JoinedDate
+		,e.ConfirmedDate
+		,es.IsLocal
+		,e.GroupId AS TeamId
+		,CASE 
+			WHEN e.ModifiedDate IS NULL THEN e.CreatedDate
+			ELSE e.ModifiedDate
+			END AS ModifiedDate
+		,es.Unit AS CostCenter
+		,e.JobLevelId
+		,e.UserId AS UC_UserId
 	FROM dbo.Employee AS e WITH (NOLOCK)
-	INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
 	WHERE @FromDate IS NULL
-	OR e.ModifiedDate > @FromDate
-	OR e.CreatedDate > @FromDate
+		OR e.ModifiedDate > @FromDate
+		OR e.CreatedDate > @FromDate
 	ORDER BY e.ModifiedDate
-	
 END

@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
@@ -105,6 +107,7 @@ BEGIN
 		BEGIN
 			UPDATE empca
 			SET empca.IsOffDay = 1
+				,empca.ShiftId = NULL
 				,empca.ModifiedBy = @ActorId
 				,empca.ModifiedDate = @ProcessedDate
 			FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)

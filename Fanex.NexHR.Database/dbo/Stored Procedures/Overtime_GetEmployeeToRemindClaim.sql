@@ -22,6 +22,7 @@ BEGIN
 		,emp.NickName
 		,emp.FullName
 		,emp.Email
+		,emp.LetsTalk
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 	WHERE emp.isDeleted = 0
