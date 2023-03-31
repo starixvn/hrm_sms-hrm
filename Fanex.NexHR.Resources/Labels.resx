@@ -2001,4 +2001,7 @@
   <data name="NewShift" xml:space="preserve">
     <value>New Shift</value>
   </data>
+  <data name="ResignedReason" xml:space="preserve">
+    <value>Resigned Reason</value>
+  </data>
 </root>

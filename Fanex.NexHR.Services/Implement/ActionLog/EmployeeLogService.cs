@@ -62,6 +62,7 @@
             new MappingFieldConfig { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
             new MappingFieldConfig { FieldName = "ConfirmedDate", DisplayName = Labels.ConfirmedDate },
             new MappingFieldConfig { FieldName = "ResignedDate", DisplayName = Labels.ResignedDate },
+            new MappingFieldConfig { FieldName = "ResignedReason", DisplayName = Labels.ResignedReason },
             new MappingFieldConfig { FieldName = "CanOT", DisplayName = Labels.AllowClaimOT, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "SpecialOT", DisplayName = Labels.SpecialOT },
             new MappingFieldConfig { FieldName = "WorkingDays", DisplayName = Labels.WorkingDaysPerMonth },
@@ -73,7 +74,8 @@
             new MappingFieldConfig { FieldName = "IsExpatUseHoliday", DisplayName = Labels.ExpatApplicableHoliday, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "Enabled", DisplayName = Labels.EnabledUser, DataType = MappingDataType.Boolean },
             new MappingFieldConfig { FieldName = "IsDeleted", DisplayName = Labels.Deleted, DataType = MappingDataType.Boolean },
-            new MappingFieldConfig { FieldName = "ChineseName", DisplayName = Labels.ChineseName }
+            new MappingFieldConfig { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
+            new MappingFieldConfig { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek }
         };
 
         private readonly IUserControlSession userControlSession;
