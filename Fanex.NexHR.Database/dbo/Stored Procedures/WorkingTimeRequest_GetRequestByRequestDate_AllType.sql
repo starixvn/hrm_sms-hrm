@@ -694,7 +694,6 @@ BEGIN
 			WHEN s2.ShiftID IS NULL THEN 'OFF'
 			ELSE s2.[Name] END
 			) AS ToShiftName
-		,s2.ShiftID AS ToShiftId
 		,s2.[Name] AS ToShiftName
 		,csr.TypeId AS ChangeShiftType
 		,rd.InOutMins AS TotalMinutes
