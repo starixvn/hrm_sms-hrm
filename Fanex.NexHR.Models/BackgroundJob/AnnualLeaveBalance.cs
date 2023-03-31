@@ -11,6 +11,7 @@
         public string FullName { get; set; }
 
         public string Email { get; set; }
+        public bool IsLocal { get; set; }
 
         public float AnnualLeaveCurrentYear { get; set; }
 

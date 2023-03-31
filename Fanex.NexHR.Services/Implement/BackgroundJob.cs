@@ -17,8 +17,8 @@
     {
         private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(BackgroundJobService));
 
-        private readonly string messageEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
-        private readonly string statisticEmailTemplate = "~/app_data/emails/StatisticALBalance.cshtml";
+        private readonly string RemindUseALEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
+        private readonly string StatisticEmailTemplate = "~/app_data/emails/StatisticALBalance.cshtml";
 
         private readonly IBaseService baseService;
         private readonly IHolidayService holidayService;
@@ -140,13 +140,13 @@
         public void SendMailRemindUserToUseAnnualLeave()
         {
             logger.Error("SendMailRemindUserToUseAnnualLeave: Start");
-
+            var year = DateTime.Now.Year;
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
-                Year = DateTime.Now.Year
+                Year = year
             };
             var (employees, supervisors, statistics) = baseService.FetchMultiple<AnnualLeaveBalance, EmployeeSupervisor, SectionStatisticAnnualLeave>(criteria);
-            var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(messageEmailTemplate)));
+            var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(RemindUseALEmailTemplate)));
 
             var validEmployees = new List<AnnualLeaveBalance>();
 
@@ -156,7 +156,7 @@
                 bool isSentMail = false;
                 var percentInMail = string.Empty;
 
-                CheckSendMail(ref isSentMail, ref percentInMail, percentAnnualLeaveRemaining);
+                CheckSendMail(ref isSentMail, employee.IsLocal, ref percentInMail, percentAnnualLeaveRemaining);
 
                 if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
                 {
@@ -166,7 +166,7 @@
                         bodyTemplate,
                         employee.Nickname,
                         percentInMail,
-                        DateTime.Now.Year + 1,
+                        year + 1,
                         string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
@@ -231,7 +231,7 @@
 
                 if (!string.IsNullOrWhiteSpace(email))
                 {
-                    var statisticTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(statisticEmailTemplate)));
+                    var statisticTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(StatisticEmailTemplate)));
 
                     var body = string.Format(
                         statisticTemplate,
@@ -283,7 +283,9 @@
             return percent;
         }
 
-        private static void CheckSendMail(ref bool isSentMail, ref string percentInMail, float percentAnnualLeaveRemaining)
+#pragma warning disable S1541 // Methods and properties should not be too complex
+        private static void CheckSendMail(ref bool isSentMail, bool isLocal, ref string percentInMail, float percentAnnualLeaveRemaining)
+#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             const byte March = 3;
             const byte June = 6;
@@ -295,7 +297,7 @@
             switch (DateTime.Now.Month)
             {
                 case March:
-                    if (percentAnnualLeaveRemaining > SeventyFive)
+                    if (!isLocal && percentAnnualLeaveRemaining > SeventyFive)
                     {
                         isSentMail = true;
                         percentInMail = "over 75% ";
@@ -311,7 +313,7 @@
                     break;
 
                 case September:
-                    if (percentAnnualLeaveRemaining > TwentyFive)
+                    if (!isLocal && percentAnnualLeaveRemaining > TwentyFive)
                     {
                         isSentMail = true;
                         percentInMail = "over 25% ";
