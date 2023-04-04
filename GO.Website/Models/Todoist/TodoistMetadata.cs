@@ -13,7 +13,7 @@
         public string Code { get; set; }
         public string Nickname { get; set; }
         public string FullName { get; set; }
-        public string Remark { get; set; }
+        public string Comment { get; set; }
 
         public IList<Discipline> Disciplines { get; set; } = new List<Discipline>();
     }

@@ -15,7 +15,7 @@ export default class ProcessRequestDialog extends Component {
         };
     }
 
-    handleChangeRemark = event => {
+    handleChangeComment = event => {
         const action = this.state.action;
 
         this.setState({
@@ -23,7 +23,7 @@ export default class ProcessRequestDialog extends Component {
                 ...action,
                 metadata: {
                     ...action.metadata,
-                    remark: event.target.value
+                    comment: event.target.value
                 }
             }
         });
@@ -112,14 +112,14 @@ export default class ProcessRequestDialog extends Component {
                             </Form.Group>
                         }
                         <Form.Group as={Row}>
-                            <Form.Label column sm="4" md="3" htmlFor="remark">
-                                {LangHelper.getResource('Remark')}
+                            <Form.Label column sm="4" md="3" htmlFor="comment">
+                                {LangHelper.getResource('Comment')}
                             </Form.Label>
                             <Col sm="8" md="9">
-                                <Form.Control as="textarea" rows={3} size="sm" value={action.metadata.remark}
-                                    name="remark" id="remark"
+                                <Form.Control as="textarea" rows={3} size="sm" value={action.metadata.comment}
+                                    name="comment" id="comment"
                                     className="shadow-none" autoComplete="off"
-                                    onChange={this.handleChangeRemark}
+                                    onChange={this.handleChangeComment}
                                 />
                             </Col>
                         </Form.Group>

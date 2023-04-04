@@ -58,7 +58,7 @@ export default class HRM extends Component {
                             {
                                 todoist.map(item =>
                                     <p key={`hrm-todoist-${item.id}`} className="todoist-item green-border-left">
-                                        <span className="txt">{item.name}</span>
+                                        <span className="txt" dangerouslySetInnerHTML={{ __html: item.name }} />
                                         {
                                             item.actions &&
                                             item.actions.map(action =>

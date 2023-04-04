@@ -1,4 +1,5 @@
 ﻿window._language_en_US = {
+    Comment: 'Comment',
     Login: 'Login',
     NextWeek: 'Next week',
     Nickname: 'Nickname',
@@ -7,7 +8,6 @@
     Password: 'Password',
     Policy: 'Policy',
     PreviousWeek: 'Previous week',
-    Remark: 'Remark',
     ResetPasswordSuccessfully: 'Reset password successfully!',
     SymbolNo: '#',
     Today: 'Today',

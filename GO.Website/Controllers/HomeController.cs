@@ -87,7 +87,7 @@
             items.Add(new TodoistItem
             {
                 SiteId = 1,
-                Name = "You have a Leave Request of Jimmy on 24 Mar, 2023",
+                Name = "You have a Check out Request of <strong>Tạ Quốc Nguyên (Edan.Ta)</strong> on 27 Mar, 2023 <span class='request check-out'>05:00+ 20 >05</span>",
                 TypeId = 1,
                 Actions = new List<TodoistAction>
                 {
@@ -100,11 +100,8 @@
                         {
                             RequestId = 1,
                             EmpId = 1,
-                            Code = "00329",
-                            Nickname = "Jacky",
-                            FullName = "Đặng Vĩ Cường",
                             RequestTypeId = 1,
-                            Remark = string.Empty
+                            Comment = string.Empty
                         }
                     },
                     new TodoistAction
@@ -116,11 +113,8 @@
                         {
                             RequestId = 1,
                             EmpId = 1,
-                            Code = "00329",
-                            Nickname = "Jacky",
-                            FullName = "Đặng Vĩ Cường",
                             RequestTypeId = 1,
-                            Remark = string.Empty
+                            Comment = string.Empty
                         }
                     }
                 }
@@ -128,7 +122,7 @@
             items.Add(new TodoistItem
             {
                 SiteId = 1,
-                Name = "You have a Check-in Request of Jimmy on 27 Mar, 2023",
+                Name = "You have a Change shift Request of <strong>Nguyễn Thanh Dũng (Dung.Nguyen)</strong> on 30 Mar, 2023 <span class='request change-shift'>13 >01 → 08 >20</span>",
                 TypeId = 1,
                 Actions = new List<TodoistAction>
                 {
@@ -141,20 +135,8 @@
                         {
                             RequestId = 2,
                             EmpId = 1,
-                            Code = "00329",
-                            Nickname = "Jacky",
-                            FullName = "Đặng Vĩ Cường",
                             RequestTypeId = 2,
-                            Remark = string.Empty,
-                            Disciplines = new List<Discipline>
-                            {
-                                new Discipline
-                                {
-                                    TypeId = 1,
-                                    Name = "Late in",
-                                    Details = "Late in 10'"
-                                }
-                            }
+                            Comment = string.Empty
                         }
                     }
                 }
