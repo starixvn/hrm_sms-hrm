@@ -13,18 +13,21 @@ Original:
 
 Revisions:
 	- 20200714@Merlin.Le: Get section and department code
+	- 20230704@Otis.Vu: Get supervisor and roles info
 Param's Explanation:
 */
 BEGIN
 	SET NOCOUNT ON;
 
 	CREATE TABLE #GroupsList (GroupId INT)
+	CREATE CLUSTERED INDEX IX_GroupsList ON #GroupsList (GroupId)
 
 	INSERT INTO #GroupsList (GroupId)
 	SELECT val
 	FROM fnc_strSplit( @teamIds, ',')
 
 	CREATE TABLE #tplEmployee (EmpId INT)
+	CREATE CLUSTERED INDEX IX_tplEmployee ON #tplEmployee (EmpId)
 
 	INSERT INTO #tplEmployee (EmpId)
 	SELECT e.EmpId
@@ -48,7 +51,7 @@ BEGIN
 			OR e.FullName LIKE '%' + @query + '%'
 			)
 
-	SELECT e.EmpId
+	SELECT DISTINCT e.EmpId
 		,e.Code
 		,e.FullName
 		,e.NickName
@@ -70,23 +73,92 @@ BEGIN
 		,g.[Name] AS TeamName
 		,sec.Code AS SectionCode
 		,dep.Code AS DepartmentCode
+		,es.Unit
+		,e.EmployeeCard
+		,es.CompanyDate
+		,e.ConfirmedDate
+		,e.ResignedDate
+		,e.ResignedReason
+		,e.JoinedDate
+		,es.MilitaryFromDate
+		,es.MilitaryToDate
+		,lk.[Name] AS JobTitle
+		,jl.[Name] AS JobLevel
+		,e.TeamDate
+		,e.Ethnic
+		,e.[Native]
+		,e.Religion
+		,ISNULL(ctry.Nationality, ctry.CountryName) AS Nationality
+		,e.PassportNo
+		,e.PassportExp
+		,e.PickupRemark
+		,e.Skype
+		,e.LetsTalk
+		,es.CanOT
+		,es.SpecialOT
+		,es.WorkingDays
+		,es.WorkingHours
+		,es.OffDaysbyWeek
+		,es.AnnualLeaveBalance
+		,es.KeepInViewBalance
+		,es.IsTopManager
+		,es.IsLocal
 	FROM #tplEmployee tpl
 	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
 	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
 	INNER JOIN dbo.[Section] sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
 	INNER JOIN dbo.[Department] dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
+	LEFT JOIN dbo.EmployeeSummary es WITH (NOLOCK) ON tpl.EmpId = es.EmpId
+	LEFT JOIN [dbo].[Lookup] AS l WITH(NOLOCK) ON l.Code = 'JT'
+	LEFT JOIN [dbo].[LookupData] AS LK WITH(NOLOCK) ON l.Id = LK.LookupId AND e.JobTitleId = lk.Id
+	LEFT JOIN [dbo].[Country] AS ctry WITH(NOLOCK) ON ctry.CountryCode = es.CountryCode
+	LEFT JOIN [dbo].[JobLevel] AS jl WITH(NOLOCK) ON jl.JobLevelId = e.JobLevelId AND ISNULL(jl.IsDeleted, 0) = 0
 	ORDER BY e.EmpId
 
-	SELECT r.Id
-		,r.EmpId as EmployeeId
-		,r.DateOfBirth
-		,r.Gender
-		,r.FullName
-		,r.Phone
-	FROM dbo.EmployeeRelationship AS r WITH (NOLOCK)
-	INNER JOIN #tplEmployee tpl ON r.EmpId = tpl.EmpId
+
+	CREATE TABLE #tblSupervisor (EmpId INT, ActionType INT, OwnerId INT)
+	CREATE NONCLUSTERED INDEX IX_tblSupervisor ON #tblSupervisor (EmpId, ActionType, OwnerId)
+
+	INSERT INTO #tblSupervisor
+	SELECT DISTINCT tpl.EmpId
+		,su.ActionType
+		,su.OwnerId
+	FROM #tplEmployee tpl
+	LEFT JOIN dbo.EmployeeSupervisor su WITH (NOLOCK) ON tpl.EmpId = su.EmpId AND su.ActionType IN (2, 3, 4, 5, 8) AND su.IsDeleted = 0
+	
+	INSERT INTO #tblSupervisor
+	SELECT DISTINCT tpl.EmpId
+		,su.ActionType
+		,su.OwnerId
+	FROM #tplEmployee tpl
+	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
+	LEFT JOIN dbo.GroupSupervisor su WITH (NOLOCK) ON e.GroupId = su.GroupId AND su.ActionType IN (2, 3, 4, 5, 8) AND su.IsDeleted = 0
+	WHERE NOT EXISTS (
+		SELECT 1
+		FROM #tblSupervisor AS tbl WITH (NOLOCK)
+		WHERE tbl.EmpId = tpl.EmpId
+			AND tbl.ActionType = su.ActionType
+	)
+
+	SELECT tbl.EmpId, tbl.ActionType, tbl.OwnerId, e.NickName
+	FROM #tblSupervisor AS tbl
+	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tbl.OwnerId = e.EmpId
+	ORDER BY tbl.EmpId, tbl.ActionType
+
+
+	SELECT emRo.EmployeeId
+		,emRo.RoleId
+		,lk.Code
+		,lk.[Name]
+	FROM #tplEmployee tpl
+	LEFT JOIN dbo.EmployeeRole AS emRo WITH (NOLOCK) ON emRo.EmployeeId = tpl.EmpId
+	INNER JOIN dbo.LookupData AS lk WITH (NOLOCK) ON emRo.RoleId = lk.Value
+	INNER JOIN dbo.[Lookup] AS l WITH (NOLOCK) ON l.Id = lk.LookupId AND l.Code = 'SR' -- System Role
+
 
 	DROP TABLE #GroupsList
 
 	DROP TABLE #tplEmployee
+
+	DROP TABLE #tblSupervisor
 END
