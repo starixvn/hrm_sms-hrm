@@ -6,6 +6,7 @@
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
+    using Fanex.NexHR.Models.Supervisor;
     using HRM.UserControl.Client.Core.Models.Role;
 
     public class EmployeeRepository : IEmployeeRepository
@@ -130,22 +131,32 @@
                 {
                     var profiles = multi.Read<EmployeeFullProfile>();
 
-                    var relationships = multi.Read<EmployeeRelationship>();
+                    var supervisor = multi.Read<SupervisorNameModel>();
 
-                    profiles = GroupRelationship(profiles, relationships);
+                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
+                            (er, r) =>
+                            {
+                                er.Role = r;
+                                return er;
+                            },
+                            "RoleId");
+
+                    profiles = GroupBySupAndRoles(profiles, supervisor, roles);
 
                     return profiles.ToList();
                 }
             }
         }
 
-        private static IEnumerable<EmployeeFullProfile> GroupRelationship(
+        private static IEnumerable<EmployeeFullProfile> GroupBySupAndRoles(
             IEnumerable<EmployeeFullProfile> profiles,
-            IEnumerable<EmployeeRelationship> relationships)
+            IEnumerable<SupervisorNameModel> supervisor,
+            IEnumerable<EmployeeRole> roles)
         {
             foreach (var profile in profiles)
             {
-                profile.Relationships = relationships.Where(r => r.EmployeeId == profile.EmpId);
+                profile.Supervisor = supervisor.Where(i => i.EmpId == profile.EmpId).ToList();
+                profile.Roles = roles.Where(i => i.EmployeeId == profile.EmpId).Select(i => i.Role).ToList();
             }
 
             return profiles;

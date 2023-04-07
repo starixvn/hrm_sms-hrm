@@ -61,5 +61,6 @@
 
         CommandResult UpdateUserId(UpdateUserIdCommand command);
 
+        string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId);
     }
 }

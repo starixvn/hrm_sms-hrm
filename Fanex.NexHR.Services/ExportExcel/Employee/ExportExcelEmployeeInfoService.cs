@@ -6,9 +6,13 @@
     using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
+    using Org.BouncyCastle.Asn1.Ocsp;
+    using Org.BouncyCastle.Crypto;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
@@ -27,7 +31,7 @@
         {
             RowStartHeader = 2,
             RowStartBody = 3,
-            TotalColumns = 20
+            TotalColumns = 21
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -96,6 +100,7 @@
             var record = new
             {
                 Count = rowIndex,
+                employee.Unit,
                 Department = employee.Team.Section.Department.Code,
                 Section = employee.Team.Section.Code,
                 Team = employee.Team.Name,
@@ -112,8 +117,8 @@
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
                 employee.Email,
+                employee.Address,
                 employee.CurrentAddress,
-                employee.Unit,
                 Category = employee.IsLocal ? Labels.Local : Labels.Expat
             };
 
@@ -222,16 +227,15 @@
             writer.CopyRows(0, 2);
             /// Fill report header.
             writer.CopyRows(2, 1);
-            FillEmployeeFullProfileHeader(writer, maxRelationship);
 
             WriteFullProfileBody(writer, profiles, maxRelationship);
-            writer.SyncColumnsWidth(21 + maxRelationship);
+            writer.SyncColumnsWidth(53 + maxRelationship);
             writer.CreateFreezePane(0, 3);
 
             writer.Render();
         }
 
-        private static void WriteFullProfileBody(ExcelTemplateWriter writer,
+        private void WriteFullProfileBody(ExcelTemplateWriter writer,
             IList<EmployeeFullProfile> profiles,
             int maxLengthRelationship)
         {
@@ -243,7 +247,7 @@
                 var record = CreateRecordEployeeFullProfile(p, currentRow);
                 if (maxLengthRelationship > 0)
                 {
-                    var baseColumn = 21;
+                    var baseColumn = 53;
                     for (int i = 0; i < maxLengthRelationship; i++)
                     {
                         writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
@@ -254,30 +258,11 @@
                     }
                 }
                 writer.WriteRow(writeRowNumber, record);
-                WriteRelationship(writer, p.Relationships, currentRow);
-
                 currentRow++;
             }
         }
 
-        private static void WriteRelationship(ExcelTemplateWriter writer, IEnumerable<EmployeeRelationship> relationships, int currentRow)
-        {
-            if (relationships != null && relationships.Any())
-            {
-                int baseColumn = 21;
-                foreach (var r in relationships)
-                {
-                    writer.WriteCellValue(currentRow, baseColumn, r.FullName);
-                    baseColumn++;
-                    writer.WriteCellValue(currentRow, baseColumn, r.DateOfBirth.ToString("dd/MM/yyyy"));
-                    baseColumn++;
-                    writer.WriteCellValue(currentRow, baseColumn, r.Gender == 0 ? "Female" : "Male");
-                    baseColumn++;
-                }
-            }
-        }
-
-        private static object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
+        private object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
         {
             var gender = "unknown";
             if (p.Gender.HasValue)
@@ -288,52 +273,64 @@
             var record = new
             {
                 Index = currentRow - 2,
+                p.Unit,
                 Department = p.DepartmentCode,
                 Section = p.SectionCode,
                 p.TeamName,
                 p.Code,
+                p.EmployeeCard,
                 p.FullName,
                 p.NickName,
                 Gender = gender,
-                DOB = p.DateOfBirth,
+                GroupDate = p.JoinedDate?.ToString("dd/MM/yyyy"),
+                CompanyDate = p.CompanyDate?.ToString("dd/MM/yyyy"),
+                ConfirmedDate = p.ConfirmedDate?.ToString("dd/MM/yyyy"),
+                ResignedDate = p.ResignedDate?.ToString("dd/MM/yyyy"),
+                p.ResignedReason,
+                LengthOfService = employeeService.CaculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
+                p.JobTitle,
+                p.JobLevel,
+                TeamDate = p.TeamDate?.ToString("dd/MM/yyyy"),
+                DOB = p.DateOfBirth.ToString("dd/MM/yyyy"),
+                p.PlaceOfBirth,
+                p.Ethnic,
+                p.Native,
+                p.Religion,
                 p.MarriageName,
+                p.Nationality,
+                p.CardNo,
+                DateOfIDCard = p.DateOfIdCard?.ToString("dd/MM/yyyy"),
+                p.PlaceOfIdCard,
+                p.PassportNo,
+                PassportExp = p.PassportExp?.ToString("dd/MM/yyyy"),
+                p.Qualification,
+                p.Major,
                 p.Address,
                 p.CurrentAddress,
-                p.CardNo,
-                DateOfIDCard = p.DateOfIdCard,
-                p.PlaceOfIdCard,
-                PlaceRegKCB = string.Empty,
                 p.Phone,
                 p.HomePhone,
                 p.Email,
-                p.Qualification,
-                p.Major
+                p.PickupRemark,
+                p.Skype,
+                p.LetsTalk,
+                CanOT = p.CanOT ? Labels.Yes : Labels.No,
+                p.SpecialOT,
+                p.WorkingDays,
+                p.WorkingHours,
+                p.OffDaysbyWeek,
+                p.AnnualLeaveBalance,
+                p.KeepInViewBalance,
+                Category = p.IsLocal ? Labels.Local : Labels.Expat,
+                p.Roles2String,
+                SpecialUser = p.IsTopManager ? Labels.Yes : Labels.No,
+                VerifiedBy = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.Verifier),
+                ApprovedBy = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.Approver),
+                DisciplineManager = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.DisciplineManager),
+                ShiftArrangement = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.ShiftManager),
+                OnBehalfRequest = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.OnBehalfRequest),
             };
 
             return record;
-        }
-
-        private static void FillEmployeeFullProfileHeader(ExcelTemplateWriter writer, int maxRelationship)
-        {
-            const int headerRow = 2;
-            var currentColumn = 21;
-
-            if (maxRelationship > 0)
-            {
-                for (int i = 0; i < maxRelationship; i++)
-                {
-                    var index = i + 1;
-                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
-                    writer.WriteCellValue(headerRow, currentColumn, "Con " + index);
-                    currentColumn++;
-                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
-                    writer.WriteCellValue(headerRow, currentColumn, "Ngày sinh " + index);
-                    currentColumn++;
-                    writer.CopyCellStyle(headerRow, 1, desRow: headerRow, desCol: currentColumn);
-                    writer.WriteCellValue(headerRow, currentColumn, "Giới tính " + index);
-                    currentColumn++;
-                }
-            }
         }
 
         #endregion Employee Full Profile Information

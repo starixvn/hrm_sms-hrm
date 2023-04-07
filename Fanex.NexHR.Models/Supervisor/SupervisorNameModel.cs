@@ -4,6 +4,8 @@
     {
         public int OwnerId { get; set; }
 
+        public int EmpId { get; set; }
+
         public string NickName { get; set; }
 
         public string FullName { get; set; }

@@ -563,49 +563,29 @@
             return supervisors;
         }
 
-        private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
+        private string GetVerifiers(IList<SupervisorNameModel> supervisors)
         {
-            string supervisorsName = string.Empty;
-            IList<SupervisorNameModel> supervisorsFilter;
-            const byte MaxDisplayItems = 3;
-
-            if (supervisors != null)
-            {
-                supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(MaxDisplayItems).ToList();
-                supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
-
-                if (supervisorsFilter.Count > MaxDisplayItems)
-                {
-                    supervisorsName += ",...";
-                }
-            }
-
-            return supervisorsName;
+            return employeeService.GetSupervisors(supervisors, (short)RoleSystem.Verifier);
         }
 
-        private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
+        private string GetApprovers(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
+            return employeeService.GetSupervisors(supervisors, (short)RoleSystem.Approver);
         }
 
-        private static string GetApprovers(IList<SupervisorNameModel> supervisors)
+        private string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (short)RoleSystem.Approver);
+            return employeeService.GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
         }
 
-        private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
+        private string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
+            return employeeService.GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
         }
 
-        private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
+        private string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
         {
-            return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
-        }
-
-        private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
-        {
-            return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
+            return employeeService.GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
         }
 
         private void ComposeViewBagsForEditEmployee()
