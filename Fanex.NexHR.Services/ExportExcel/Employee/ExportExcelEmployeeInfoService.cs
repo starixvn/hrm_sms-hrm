@@ -9,10 +9,7 @@
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
-    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
-    using Org.BouncyCastle.Asn1.Ocsp;
-    using Org.BouncyCastle.Crypto;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
@@ -113,7 +110,7 @@
                 employee.ResignedDate,
                 employee.ResignedReason,
                 LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
-                DoB = employee.DateOfBirth,
+                DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
                 employee.Email,
@@ -216,8 +213,6 @@
 
         public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
         {
-            int maxRelationship = profiles.Max(p => p.Relationships.Count());
-
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeFullInfoTemplatePath);
             string fileName = "EmployeeFullInfo_" + DateTime.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Full Information";
@@ -228,16 +223,15 @@
             /// Fill report header.
             writer.CopyRows(2, 1);
 
-            WriteFullProfileBody(writer, profiles, maxRelationship);
-            writer.SyncColumnsWidth(53 + maxRelationship);
+            WriteFullProfileBody(writer, profiles);
+            writer.SyncColumnsWidth(56);
             writer.CreateFreezePane(0, 3);
 
             writer.Render();
         }
 
         private void WriteFullProfileBody(ExcelTemplateWriter writer,
-            IList<EmployeeFullProfile> profiles,
-            int maxLengthRelationship)
+            IList<EmployeeFullProfile> profiles)
         {
             var currentRow = 3;
             foreach (var p in profiles)
@@ -245,18 +239,6 @@
                 var writeRowNumber = (currentRow % 2 == 0) ? 4 : 3;
 
                 var record = CreateRecordEployeeFullProfile(p, currentRow);
-                if (maxLengthRelationship > 0)
-                {
-                    var baseColumn = 53;
-                    for (int i = 0; i < maxLengthRelationship; i++)
-                    {
-                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
-                        baseColumn++;
-                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
-                        baseColumn++;
-                        writer.CopyCellStyle(writeRowNumber, 1, currentRow, baseColumn + i);
-                    }
-                }
                 writer.WriteRow(writeRowNumber, record);
                 currentRow++;
             }
