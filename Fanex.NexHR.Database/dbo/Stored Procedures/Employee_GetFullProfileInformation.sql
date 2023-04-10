@@ -116,34 +116,21 @@ BEGIN
 	ORDER BY e.EmpId
 
 
-	CREATE TABLE #tblSupervisor (EmpId INT, ActionType INT, OwnerId INT)
-	CREATE NONCLUSTERED INDEX IX_tblSupervisor ON #tblSupervisor (EmpId, ActionType, OwnerId)
+	CREATE TABLE #tblSupervisor (EmpId INT, ActionType INT, OwnerId INT, NickName NVARCHAR(20))
+	CREATE NONCLUSTERED INDEX IX_tblSupervisor ON #tblSupervisor (EmpId, ActionType, OwnerId, NickName)
 
 	INSERT INTO #tblSupervisor
-	SELECT DISTINCT tpl.EmpId
+	SELECT DISTINCT su.EmpId
 		,su.ActionType
 		,su.OwnerId
-	FROM #tplEmployee tpl
-	LEFT JOIN dbo.EmployeeSupervisor su WITH (NOLOCK) ON tpl.EmpId = su.EmpId AND su.ActionType IN (2, 3, 4, 5, 8) AND su.IsDeleted = 0
-	
-	INSERT INTO #tblSupervisor
-	SELECT DISTINCT tpl.EmpId
-		,su.ActionType
-		,su.OwnerId
-	FROM #tplEmployee tpl
-	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
-	LEFT JOIN dbo.GroupSupervisor su WITH (NOLOCK) ON e.GroupId = su.GroupId AND su.ActionType IN (2, 3, 4, 5, 8) AND su.IsDeleted = 0
-	WHERE NOT EXISTS (
-		SELECT 1
-		FROM #tblSupervisor AS tbl WITH (NOLOCK)
-		WHERE tbl.EmpId = tpl.EmpId
-			AND tbl.ActionType = su.ActionType
-	)
+		,e.NickName
+	FROM dbo.[EmployeeSupervisor] su WITH (NOLOCK)
+	INNER JOIN dbo.Employee e WITH (NOLOCK) ON su.OwnerId = e.EmpId
+	WHERE su.ActionType IN (2, 3, 4, 5, 8) AND ISNULL(su.IsDeleted, 0) = 0
 
-	SELECT tbl.EmpId, tbl.ActionType, tbl.OwnerId, e.NickName
-	FROM #tblSupervisor AS tbl
-	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tbl.OwnerId = e.EmpId
-	ORDER BY tbl.EmpId, tbl.ActionType
+	SELECT tbl.EmpId, tbl.ActionType, tbl.OwnerId, tbl.NickName
+	FROM #tplEmployee tpl WITH (NOLOCK)
+	LEFT JOIN #tblSupervisor AS tbl WITH (NOLOCK) ON tpl.EmpId = tbl.EmpId
 
 
 	SELECT emRo.EmployeeId
