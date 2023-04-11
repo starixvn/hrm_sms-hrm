@@ -79,6 +79,8 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ISendNotificationService, SendNotificationService>();
             container.RegisterType<ILetstalkService, LetstalkService>();
 
+            RegisterAPIDI(container);
+
             // excel
             RegisterExportExcelDI(container);
         }
@@ -121,6 +123,13 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IOvertimeReportRepository, OvertimeReportRepository>();
             container.RegisterType<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
             container.RegisterType<IDepartmentRepository, DepartmentRepository>();
+        }
+
+        private static void RegisterAPIDI(IUnityContainer container)
+        {
+            container.RegisterType<IAPITodolistRequestRepository, APITodolistRequestRepository>();
+
+            container.RegisterType<IAPITodolistRequestService, APITodolistRequestService>();
         }
     }
 }

@@ -215,6 +215,7 @@
     <Compile Include="ExportExcel\ExportExcelTimeRecordService.cs" />
     <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
+    <Compile Include="Implement\API\APITodolistRequestService.cs" />
     <Compile Include="Implement\AttachFileService.cs" />
     <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
     <Compile Include="Implement\WorkingCalendarReportService.cs" />
+    <Compile Include="Interfaces\API\IAPITodolistRequestService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAttachFileService.cs" />
     <Compile Include="Interfaces\IHRMAuthService.cs" />
@@ -387,6 +389,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.CSharp.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

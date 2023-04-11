@@ -117,7 +117,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\APITodoistRequestRepository.cs" />
     <Compile Include="ChangeShiftRequestRepository.cs" />
+    <Compile Include="Interfaces\API\IAPITodolistRequestRepository.cs" />
     <Compile Include="Interfaces\IDepartmentRepository.cs" />
     <Compile Include="Interfaces\IOvertimeReportRepository.cs" />
     <Compile Include="LateInEarlyOutRequestRepository.cs" />

@@ -32,6 +32,8 @@
         public static bool EnableRemindAnnualLeaveBalance
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableRemindAnnualLeaveBalance"]);
 
+        public static string API_Auth_Username => ConfigurationManager.AppSettings["API.Auth:Username"];
+        public static string API_Auth_Password => ConfigurationManager.AppSettings["API.Auth:Password"];
         // Letstalk
         public static bool IsEnableSendLetstalk
             => Convert.ToBoolean(ConfigurationManager.AppSettings["Letstalk:Enable"]);

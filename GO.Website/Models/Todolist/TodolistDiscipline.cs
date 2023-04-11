@@ -1,10 +1,11 @@
-﻿namespace GO.Website.Models.Todoist
+﻿namespace GO.Website.Models.Todolist
 {
     using System;
 
     [Serializable]
-    public class Discipline
+    public class TodolistDiscipline
     {
+        public DateTime WorkDate { get; set; }
         public byte TypeId { get; set; }
         public string Name { get; set; }
         public string Details { get; set; }

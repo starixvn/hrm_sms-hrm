@@ -46,42 +46,48 @@ export default class HRM extends Component {
     };
 
     render() {
-        const todoist = this.props.todoist;
+        const todolist = this.props.todolist;
         const processRequestDialog = this.state.processRequestDialog;
 
         return (
             <>
-                <div className="todoist-items">
+                <div className="todolist-items">
                     {
-                        todoist && todoist.length > 0 &&
+                        todolist && todolist.length > 0 &&
                         <>
                             {
-                                todoist.map(item =>
-                                    <p key={`hrm-todoist-${item.id}`} className="todoist-item green-border-left">
-                                        <span className="txt" dangerouslySetInnerHTML={{ __html: item.name }} />
+                                todolist.map(item =>
+                                    <div key={`hrm-todolist-${item.id}`} className="todolist-item green-border-left">
+                                        <div className="txt" dangerouslySetInnerHTML={{ __html: item.name }} />
                                         {
                                             item.actions &&
-                                            item.actions.map(action =>
-                                                <button key={`hrm-todoist-${item.id}-action-${action.id}`}
-                                                    className="btn btn-primary"
-                                                    onClick={event => this.onClick(event, item.siteId, action)}
-                                                >
-                                                    {action.name}
-                                                </button>
-                                            )
+                                            <div className="todolist-actions">
+                                                {
+                                                    item.actions.map(action =>
+                                                        <button key={`hrm-todolist-${item.id}-action-${action.id}`}
+                                                            className="btn btn-primary"
+                                                            onClick={event => this.onClick(event, item.siteId, action)}
+                                                        >
+                                                            {action.name}
+                                                        </button>
+                                                    )
+                                                }
+                                            </div>
                                         }
-                                    </p>
+                                    </div>
                                 )
                             }
                         </>
                     }
                     {
-                        (!todoist || todoist.length === 0) &&
-                        <p className="green-border-left">
-                            <span>
-                                Nothing to do
-                            </span>
-                        </p>
+                        (!todolist || todolist.length === 0) &&
+                        <div className="todolist-items">
+                            <p className="todolist-item green-border-left">
+                                <span className="txt">
+                                    Nothing to do
+                                </span>
+                            </p>
+                        </div>
                     }
                 </div>
                 {

@@ -9,17 +9,17 @@ class AppContainer extends Component {
         super(props);
 
         this.state = {
-            hrmtodoist: [],
-            hrpptodoist: [],
-            epatodoist: [],
-            epa360todoist: []
+            hrmtodolist: [],
+            hrpptodolist: [],
+            epatodolist: [],
+            epa360todolist: []
         };
     }
 
     async componentDidMount() {
-        const url = Site.resolveClientUrl('home/GetHrmTodoist');
+        const url = Site.resolveClientUrl('todolist/GetHrmTodolist');
         await DataService.getDataAsync(url).then(response => {
-            this.setState({ hrmtodoist: response.data });
+            this.setState({ hrmtodolist: response.data });
         });
     }
 
@@ -32,8 +32,8 @@ class AppContainer extends Component {
                             <span className="txt">HRM</span>
                         </div>
                         <div className="card-body">
-                            <Scrollbars autoHeight>
-                                <HRM todoist={this.state.hrmtodoist} />
+                            <Scrollbars autoHeight autoHeightMax={500}>
+                                <HRM todolist={this.state.hrmtodolist} />
                             </Scrollbars>
                         </div>
                     </div>
@@ -44,9 +44,9 @@ class AppContainer extends Component {
                             <span className="txt">HRPP</span>
                         </div>
                         <div className="card-body">
-                            <div className="todoist-items">
-                                <p className="todoist-item green-border-left">
-                                    <span>
+                            <div className="todolist-items">
+                                <p className="todolist-item green-border-left">
+                                    <span className="txt">
                                         Nothing to do
                                     </span>
                                 </p>
@@ -60,9 +60,9 @@ class AppContainer extends Component {
                             <span className="txt">EPA</span>
                         </div>
                         <div className="card-body">
-                            <div className="todoist-items">
-                                <p className="todoist-item green-border-left">
-                                    <span>
+                            <div className="todolist-items">
+                                <p className="todolist-item green-border-left">
+                                    <span className="txt">
                                         Nothing to do
                                     </span>
                                 </p>
@@ -76,9 +76,9 @@ class AppContainer extends Component {
                             <span className="txt">360° EPA</span>
                         </div>
                         <div className="card-body">
-                            <div className="todoist-items">
-                                <p className="todoist-item green-border-left">
-                                    <span>
+                            <div className="todolist-items">
+                                <p className="todolist-item green-border-left">
+                                    <span className="txt">
                                         Nothing to do
                                     </span>
                                 </p>

@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions>
+    <Function Name="API">
+        <Setting Key="API_GO_GetPendingRequestByUserId" SpName="API_GO_GetPendingRequestByUserId" DbName="nexhrx" Plain="0" />
+    </Function>
     <Function Name="Auth">
         <Setting Key="Employee_GetByUserId" SpName="Employee_GetByUserId" DbName="nexhrx" Plain="0" />
     </Function>

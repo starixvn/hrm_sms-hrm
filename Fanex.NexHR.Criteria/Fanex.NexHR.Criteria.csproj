@@ -70,6 +70,7 @@
     <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
     <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
     <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="API\Request\GetPendingRequestByUserIdCriteria.cs" />
     <Compile Include="Auth\GetEmployeeLoginByUserIdCriteria.cs" />
     <Compile Include="BackgroundJob\GetAnnualLeaveBalanceCriteria.cs" />
     <Compile Include="BackgroundJob\ImportTimeRecordCriteria.cs" />

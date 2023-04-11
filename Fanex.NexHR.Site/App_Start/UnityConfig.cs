@@ -1,5 +1,6 @@
 namespace Fanex.NexHR.Site
 {
+    using System.Web.Http;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Services.Extensions;
@@ -16,6 +17,7 @@ namespace Fanex.NexHR.Site
             container.ResolveServiceCoreDI();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Site.App_Start
+﻿namespace Fanex.NexHR.Site
 {
     using Hangfire.Annotations;
     using Hangfire.Dashboard;

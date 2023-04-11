@@ -1,10 +1,10 @@
-﻿namespace GO.Website.Models.Todoist
+﻿namespace GO.Website.Models.Todolist
 {
     using System;
     using System.Collections.Generic;
 
     [Serializable]
-    public class TodoistMetadata
+    public class TodolistMetadata
     {
         public long RequestId { get; set; }
         public byte RequestTypeId { get; set; }
@@ -15,6 +15,6 @@
         public string FullName { get; set; }
         public string Comment { get; set; }
 
-        public IList<Discipline> Disciplines { get; set; } = new List<Discipline>();
+        public IList<TodolistDiscipline> Disciplines { get; set; } = new List<TodolistDiscipline>();
     }
 }

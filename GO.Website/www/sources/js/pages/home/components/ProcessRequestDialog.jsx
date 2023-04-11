@@ -3,14 +3,23 @@ import { Button, Col, Form, Modal, Row, Table } from 'react-bootstrap';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
+import DateTimeService from '@jsroot/common/DateTimeService';
 
 export default class ProcessRequestDialog extends Component {
     constructor(props) {
         super(props);
 
+        const action = { ...props.action };
+
         this.state = {
             siteId: props.siteId,
-            action: { ...props.action },
+            action: {
+                ...action,
+                metadata: {
+                    ...action.metadata,
+                    comment: action.metadata.comment ?? ''
+                }
+            },
             isSubmitting: false
         };
     }
@@ -85,6 +94,7 @@ export default class ProcessRequestDialog extends Component {
                                     <Table striped bordered size="sm">
                                         <thead>
                                             <tr>
+                                                <th>Date</th>
                                                 <th>Type</th>
                                                 <th>Details</th>
                                                 <th>Ignore</th>
@@ -94,8 +104,11 @@ export default class ProcessRequestDialog extends Component {
                                             {
                                                 action.metadata.disciplines.map((item, index) =>
                                                     <tr key={index}>
+                                                        <td className="text-center">{DateTimeService.toShortDateFormat(item.workDate)}</td>
                                                         <td>{item.name}</td>
-                                                        <td>{item.details}</td>
+                                                        <td>
+                                                            <div dangerouslySetInnerHTML={{ __html: item.details }} />
+                                                        </td>
                                                         <td className="text-center">
                                                             <input type="radio"
                                                                 name={`action.metadata.disciplines[${index}].name`}

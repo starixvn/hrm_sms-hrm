@@ -4,7 +4,6 @@ using System.Web.Configuration;
 using Fanex.Common;
 using Fanex.NexHR.Core;
 using Fanex.NexHR.Services.Extensions;
-using Fanex.NexHR.Site.App_Start;
 using Hangfire;
 using Microsoft.Owin;
 using Owin;

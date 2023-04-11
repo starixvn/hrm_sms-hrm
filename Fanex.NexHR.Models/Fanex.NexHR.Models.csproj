@@ -140,6 +140,15 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AnnualLeaveBalance\AdjustAnnualLeaveBalance.cs" />
+    <Compile Include="API\GetTokenParam.cs" />
+    <Compile Include="API\Request\ChangeShiftDetail.cs" />
+    <Compile Include="API\Request\GeneralLeaveDetail.cs" />
+    <Compile Include="API\Request\ProcessRequestParam.cs" />
+    <Compile Include="API\Request\RequestEntity.cs" />
+    <Compile Include="API\Todolist\TodolistAction.cs" />
+    <Compile Include="API\Todolist\TodolistDiscipline.cs" />
+    <Compile Include="API\Todolist\TodolistItem.cs" />
+    <Compile Include="API\Todolist\TodolistMetadata.cs" />
     <Compile Include="AttachFile.cs" />
     <Compile Include="BackgroundJob\AnnualLeaveBalance.cs" />
     <Compile Include="BackgroundJob\SectionStatisticAnnualLeave.cs" />
