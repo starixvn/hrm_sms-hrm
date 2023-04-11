@@ -48,28 +48,28 @@
                 switch (request.RequestTypeId)
                 {
                     case (byte)RequestType.Leave:
-                        items.Add(ConvertLeaveRequest(employee.EmpId, request));
+                        items.Add(GetLeaveRequest(employee.EmpId, request));
                         break;
 
                     case (byte)RequestType.ChangeShift:
-                        items.Add(ConvertChangeShiftRequest(employee.EmpId, request));
+                        items.Add(GetChangeShiftRequest(employee.EmpId, request));
                         break;
 
                     case (byte)RequestType.CheckIn:
                     case (byte)RequestType.CheckOut:
-                        items.Add(ConvertCheckInOutRequest(employee.EmpId, request));
+                        items.Add(GetCheckInOutRequest(employee.EmpId, request));
                         break;
 
                     case (byte)RequestType.LateIn:
-                        items.Add(ConvertLateInRequest(employee.EmpId, request));
+                        items.Add(GetLateInRequest(employee.EmpId, request));
                         break;
 
                     case (byte)RequestType.EarlyOut:
-                        items.Add(ConvertEarlyOutRequest(employee.EmpId, request));
+                        items.Add(GetEarlyOutRequest(employee.EmpId, request));
                         break;
 
                     case (byte)RequestType.KeepInView:
-                        items.Add(ConvertKeepInViewRequest(employee.EmpId, request));
+                        items.Add(GetKeepInViewRequest(employee.EmpId, request));
                         break;
 
                     default:
@@ -90,13 +90,13 @@
             return baseService.GetDataEntity<EmployeeSession>(criteria);
         }
 
-        private TodolistItem ConvertLeaveRequest(int actorId, RequestEntity request)
+        private TodolistItem GetLeaveRequest(int actorId, RequestEntity request)
         {
             var leaveDateTime = GetDateTimeForLeaveRequest(request);
             var leaveDayDetail = GetLeaveDayDetail(request);
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a {0} of <strong>{1} ({2})</strong> {3}</div><div>Remark: {4}</div>",
+                Name = string.Format("<div>You have a {0} of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
                     request.LeaveTypeName,
                     request.FullName,
                     request.Nickname,
@@ -109,7 +109,7 @@
             return item;
         }
 
-        private TodolistItem ConvertChangeShiftRequest(int actorId, RequestEntity request)
+        private TodolistItem GetChangeShiftRequest(int actorId, RequestEntity request)
         {
             var stringBuilder = new StringBuilder();
             if (request.ChangeShiftTypeId == (byte)ChangeShiftType.MoveOffDay)
@@ -141,7 +141,7 @@
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Change Shift Request of <strong>{0} ({1})</strong> {2}</div><div>Remark: {3}</div>",
+                Name = string.Format("<div>You have a Change Shift Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
                     stringBuilder.ToString(),
@@ -153,14 +153,14 @@
             return item;
         }
 
-        private TodolistItem ConvertCheckInOutRequest(int actorId, RequestEntity request)
+        private TodolistItem GetCheckInOutRequest(int actorId, RequestEntity request)
         {
             var template = "<span class='request " + (request.RequestTypeId == (byte)RequestType.CheckIn ? "check-in" : "check-out") + "'>{0} {1}</span> {2}";
             var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a {0} Request of <strong>{1} ({2})</strong> {3}</div><div>Remark: {4}</div>",
+                Name = string.Format("<div>You have a {0} Request of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
                     request.RequestTypeId == (byte)RequestType.CheckIn ? "Check In" : "Check Out",
                     request.FullName,
                     request.Nickname,
@@ -173,13 +173,13 @@
             return item;
         }
 
-        private TodolistItem ConvertLateInRequest(int actorId, RequestEntity request)
+        private TodolistItem GetLateInRequest(int actorId, RequestEntity request)
         {
             var actualLateIn = request.ActualInOutMinutes == 0 ? "N/A" : ("+" + request.ActualInOutMinutes + "'");
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Late In Request of <strong>{0} ({1})</strong> {2}</div><div>Remark: {3}</div>",
+                Name = string.Format("<div>You have a Late In Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
                     string.Format("<span class='request late-in'>+{0}' {1}</span> {2} (Actual: {3})",
@@ -195,13 +195,13 @@
             return item;
         }
 
-        private TodolistItem ConvertEarlyOutRequest(int actorId, RequestEntity request)
+        private TodolistItem GetEarlyOutRequest(int actorId, RequestEntity request)
         {
             var actualEarlyOut = request.ActualInOutMinutes == 0 ? "N/A" : ("-" + request.ActualInOutMinutes + "'");
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Early Out Request of <strong>{0} ({1})</strong> {2}</div><div>Remark: {3}</div>",
+                Name = string.Format("<div>You have a Early Out Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
                     string.Format("<span class='request early-out'>-{0}' {1}</span> {2} (Actual: {3})",
@@ -217,7 +217,7 @@
             return item;
         }
 
-        private TodolistItem ConvertKeepInViewRequest(int actorId, RequestEntity request)
+        private TodolistItem GetKeepInViewRequest(int actorId, RequestEntity request)
         {
             var stringBuilder = new StringBuilder();
             if (request.KeepInViewTypeId == (byte)KeepInViewTypes.KeepInViewByDay)
@@ -249,7 +249,7 @@
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div><div>Remark: {3}</div>",
+                Name = string.Format("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
                     stringBuilder.ToString(),
@@ -264,7 +264,7 @@
         private IList<TodolistAction> GetAction(int actorId, RequestEntity request)
         {
             var actions = new List<TodolistAction>();
-            string url = $"{ConfigSettings.ApplicationDomain}/api/request/process";
+            string url = $"{ConfigSettings.ApplicationDomain}/api/request/processRequest";
             const string method = "POST";
             if ((request.StatusId == (byte)CurrentRequestStatus.Pending && request.ApproverId == actorId)
                 || request.StatusId == (byte)CurrentRequestStatus.Verified)

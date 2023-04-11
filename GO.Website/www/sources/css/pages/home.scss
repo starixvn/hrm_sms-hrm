@@ -3,12 +3,16 @@
 @import "../components/buttons";
 @import "../components/modal";
 @import "../components/tables";
+@import '~react-loading-skeleton/dist/skeleton.css';
+
+.react-loading-skeleton {
+    --pseudo-element-display: block;
+}
 
 .card-container {
     display: flex;
 
     .card {
-        flex: 1;
         overflow: auto;
         position: relative;
         margin: .5rem .8rem 1rem .8rem;
@@ -67,6 +71,8 @@
                             margin-top: .5rem;
                             margin-right: 1rem;
                             margin-bottom: .5rem;
+                            font-weight: normal;
+                            background: #3a78db;
                         }
                     }
 
@@ -106,7 +112,7 @@
         flex-wrap: wrap;
 
         .card {
-            flex: 47%;
+            flex-basis: 47%;
         }
     }
 }

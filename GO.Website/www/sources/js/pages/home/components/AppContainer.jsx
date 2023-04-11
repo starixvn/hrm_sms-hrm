@@ -1,91 +1,53 @@
 ﻿import React, { Component } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import HRM from './HRM';
+import HRPP from './HRPP';
+import EPA from './EPA';
+import EPA360 from './EPA360';
 
 class AppContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            hrmtodolist: [],
-            hrpptodolist: [],
-            epatodolist: [],
-            epa360todolist: []
+            block: {
+                hrm: false,
+                hrpp: false,
+                epa: false,
+                epa360: false
+            }
         };
     }
 
     async componentDidMount() {
-        const url = Site.resolveClientUrl('todolist/GetHrmTodolist');
+        const url = Site.resolveClientUrl('Todolist/GetTodolistBlock');
         await DataService.getDataAsync(url).then(response => {
-            this.setState({ hrmtodolist: response.data });
+            this.setState({ block: response.data });
         });
     }
 
     render() {
+        const block = this.state.block;
+
         return (
             <div className="card-container">
-                <div className="card">
-                    <div className="card-content">
-                        <div className="card-title">
-                            <span className="txt">HRM</span>
-                        </div>
-                        <div className="card-body">
-                            <Scrollbars autoHeight autoHeightMax={500}>
-                                <HRM todolist={this.state.hrmtodolist} />
-                            </Scrollbars>
-                        </div>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-content">
-                        <div className="card-title">
-                            <span className="txt">HRPP</span>
-                        </div>
-                        <div className="card-body">
-                            <div className="todolist-items">
-                                <p className="todolist-item green-border-left">
-                                    <span className="txt">
-                                        Nothing to do
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-content">
-                        <div className="card-title">
-                            <span className="txt">EPA</span>
-                        </div>
-                        <div className="card-body">
-                            <div className="todolist-items">
-                                <p className="todolist-item green-border-left">
-                                    <span className="txt">
-                                        Nothing to do
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-content">
-                        <div className="card-title">
-                            <span className="txt">360° EPA</span>
-                        </div>
-                        <div className="card-body">
-                            <div className="todolist-items">
-                                <p className="todolist-item green-border-left">
-                                    <span className="txt">
-                                        Nothing to do
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {
+                    block.hrm &&
+                    <HRM />
+                }
+                {
+                    block.hrpp &&
+                    <HRPP />
+                }
+                {
+                    block.epa &&
+                    <EPA />
+                }
+                {
+                    block.epa360 &&
+                    <EPA360 />
+                }
             </div>
         );
     }

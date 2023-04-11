@@ -21,24 +21,40 @@
 
     public class TodolistController : Controller
     {
-        private readonly List<SiteSetting> siteSettings;
+        private readonly List<ApiSiteSetting> apiSiteSettings;
         private readonly IHttpClientFactory clientFactory;
         private readonly IUserControlSession userControlSession;
         private readonly IAuthService authService;
         private readonly IBaseService baseService;
 
         public TodolistController(
-            List<SiteSetting> siteSettings,
+            List<ApiSiteSetting> apiSiteSettings,
             IHttpClientFactory clientFactory,
             IUserControlSession userControlSession,
             IAuthService authService,
             IBaseService baseService)
         {
-            this.siteSettings = siteSettings;
+            this.apiSiteSettings = apiSiteSettings;
             this.clientFactory = clientFactory;
             this.userControlSession = userControlSession;
             this.authService = authService;
             this.baseService = baseService;
+        }
+
+        public async Task<IActionResult> GetTodolistBlock()
+        {
+            var criteria = new GetUserSiteByUserIdCriteria
+            {
+                UserId = userControlSession.UserId
+            };
+            var usersites = await baseService.GetDataAsync<UserSite>(criteria);
+            var result = new
+            {
+                hrm = apiSiteSettings.Any(x => x.IsHrmSystem && usersites.Any(y => y.SiteId == x.SiteId)),
+                epa = apiSiteSettings.Any(x => x.IsEpaSystem && usersites.Any(y => y.SiteId == x.SiteId)),
+                epa360 = apiSiteSettings.Any(x => x.IsEpa360System && usersites.Any(y => y.SiteId == x.SiteId))
+            };
+            return Json(result);
         }
 
         public async Task<IActionResult> GetHrmTodolist()
@@ -48,7 +64,7 @@
                 UserId = userControlSession.UserId
             };
             var usersites = await baseService.GetDataAsync<UserSite>(criteria);
-            var hrmsites = siteSettings.Where(x => x.IsHrmSystem && usersites.Any(y => y.SiteId == x.SiteId)).ToList();
+            var hrmsites = apiSiteSettings.Where(x => x.IsHrmSystem && usersites.Any(y => y.SiteId == x.SiteId)).ToList();
             var todoitems = new List<TodolistItem>();
             foreach (var hrm in hrmsites)
             {
@@ -56,7 +72,7 @@
                 var token = await GetTokenAsync(hrm);
                 var url = string.Format("{0}{1}?userId={2}", hrm.BaseUrl, hrm.TodolistUrl, usersite.UserId);
                 var items = await GetAsync<IList<TodolistItem>>(url, token);
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     item.SiteId = hrm.SiteId;
                 }
@@ -68,7 +84,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessAction(short siteId, TodolistAction action)
+        public async Task<IActionResult> ProcessAction([FromBody] ProcessActionParam param)
         {
             var userId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.UserId.ToString()));
             var onUserId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.OnUserId.ToString()));
@@ -77,36 +93,37 @@
                 UserId = userControlSession.UserId
             };
             var usersites = await baseService.GetDataAsync<UserSite>(criteria);
-            if (action.IsRedirect)
+            if (param.Action.IsRedirect)
             {
-                var usersite = usersites.FirstOrDefault(x => x.SiteId == siteId);
+                var usersite = usersites.FirstOrDefault(x => x.SiteId == param.SiteId);
                 if (usersite != null)
                 {
                     var username = !string.IsNullOrWhiteSpace(usersite.Username) ? usersite.Username : usersite.Code;
                     username = !string.IsNullOrWhiteSpace(username) ? HttpUtility.UrlEncode(Cryptography.EncryptPassword(username)) : string.Empty;
                     var time = HttpUtility.UrlEncode(Cryptography.EncryptPassword(await authService.SSOGetTimeAsync()));
-                    var url = $"{usersite.SSOUrl}?userId={userId}&onUserId={onUserId}&username={username}&time={time}&redirectUrl={action.Url}";
+                    var url = $"{usersite.SSOUrl}?userId={userId}&onUserId={onUserId}&username={username}&time={time}&redirectUrl={param.Action.Url}";
                     return Json(url);
                 }
             }
             else
             {
-                var siteSetting = siteSettings.FirstOrDefault(x => x.SiteId == siteId);
+                param.Action.Metadata.UserId = userControlSession.UserId;
+                var siteSetting = apiSiteSettings.FirstOrDefault(x => x.SiteId == param.SiteId);
                 var token = string.Empty;
                 if (siteSetting != null)
                 {
                     token = await GetTokenAsync(siteSetting);
                 }
 
-                switch (action.Method.ToLowerInvariant())
+                switch (param.Action.Method.ToLowerInvariant())
                 {
                     case "post":
-                        await PostAsync<TodolistMetadata, object>(action.Url, action.Metadata, token);
-                        break;
+                        var result = await PostAsync<TodolistMetadata, CommandResult>(param.Action.Url, param.Action.Metadata, token);
+                        return Ok(result);
 
                     default:
-                        await GetAsync<object>(action.Url, token);
-                        break;
+                        await GetAsync<object>(param.Action.Url, token);
+                        return Ok();
                 }
             }
 
@@ -130,7 +147,7 @@
             return new HttpRequestMessage(httpMethod, new Uri(requestUrl));
         }
 
-        private async Task<string> GetTokenAsync(SiteSetting siteSetting)
+        private async Task<string> GetTokenAsync(ApiSiteSetting siteSetting)
         {
             var url = string.Format("{0}{1}", siteSetting.BaseUrl, siteSetting.TokenUrl);
             using (var request = CreateRequest(url, "POST"))

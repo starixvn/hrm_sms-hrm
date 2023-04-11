@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Col, Form, Modal, Row, Table } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
@@ -57,17 +58,24 @@ export default class ProcessRequestDialog extends Component {
         });
     };
 
-    handleSubmit = async () => {
+    handleSubmit = async event => {
+        event.preventDefault();
+
         this.setState({ isSubmitting: true });
 
-        const url = Site.resolveClientUrl('home/processAction');
+        const url = Site.resolveClientUrl('Todolist/ProcessAction');
         const params = {
             siteId: this.state.siteId,
             action: this.state.action
         };
         await DataService.postDataAsync(url, params).then(response => {
-            if (response.isSuccessful) {
+            this.setState({ isSubmitting: true });
 
+            if (response.data.isSuccessful) {
+                toast.success('Successfully');
+                this.props.onClose(true);
+            } else {
+                toast.error(response.data.message);
             }
         });
     };
