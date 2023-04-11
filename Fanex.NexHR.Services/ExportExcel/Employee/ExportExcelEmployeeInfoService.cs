@@ -3,11 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
@@ -304,14 +306,28 @@
                 Category = p.IsLocal ? Labels.Local : Labels.Expat,
                 p.Roles2String,
                 SpecialUser = p.IsTopManager ? Labels.Yes : Labels.No,
-                VerifiedBy = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.Verifier),
-                ApprovedBy = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.Approver),
-                DisciplineManager = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.DisciplineManager),
-                ShiftArrangement = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.ShiftManager),
-                OnBehalfRequest = employeeService.GetSupervisors(p.Supervisor, (short)RoleSystem.OnBehalfRequest),
+                VerifiedBy = GetSupervisors(p.Supervisor, (short)RoleSystem.Verifier),
+                ApprovedBy = GetSupervisors(p.Supervisor, (short)RoleSystem.Approver),
+                DisciplineManager = GetSupervisors(p.Supervisor, (short)RoleSystem.DisciplineManager),
+                ShiftArrangement = GetSupervisors(p.Supervisor, (short)RoleSystem.ShiftManager),
+                OnBehalfRequest = GetSupervisors(p.Supervisor, (short)RoleSystem.OnBehalfRequest),
             };
 
             return record;
+        }
+
+        private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
+        {
+            string supervisorsName = string.Empty;
+            IList<SupervisorNameModel> supervisorsFilter;
+
+            if (supervisors != null)
+            {
+                supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).ToList();
+                supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
+            }
+
+            return supervisorsName;
         }
 
         #endregion Employee Full Profile Information

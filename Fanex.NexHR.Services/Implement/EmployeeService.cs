@@ -327,25 +327,5 @@
 
             return lengOfService;
         }
-
-        public string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
-        {
-            string supervisorsName = string.Empty;
-            IList<SupervisorNameModel> supervisorsFilter;
-            const byte MaxDisplayItems = 3;
-
-            if (supervisors != null)
-            {
-                supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(MaxDisplayItems).ToList();
-                supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
-
-                if (supervisorsFilter.Count > MaxDisplayItems)
-                {
-                    supervisorsName += ",...";
-                }
-            }
-
-            return supervisorsName;
-        }
     }
 }

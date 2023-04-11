@@ -60,7 +60,5 @@
         string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
         CommandResult UpdateUserId(UpdateUserIdCommand command);
-
-        string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId);
     }
 }
