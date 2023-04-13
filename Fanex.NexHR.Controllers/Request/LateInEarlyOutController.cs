@@ -25,19 +25,22 @@
         private readonly IRequestService requestService;
         private readonly IBaseService baseService;
         private readonly IAttachFileService attachFileService;
+        private readonly IPushNotificationService pushNotificationService;
 
         public LateInEarlyOutController(
             IUserControlSession userControlSession,
             ILateInEarlyOutRequestService lateInEarlyOutRequestService,
             IRequestService requestService,
             IBaseService baseService,
-            IAttachFileService attachFileService) : base(userControlSession)
+            IAttachFileService attachFileService,
+            IPushNotificationService pushNotificationService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
             this.requestService = requestService;
             this.baseService = baseService;
             this.attachFileService = attachFileService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         [HttpGet]
@@ -102,6 +105,7 @@
             {
                 lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequest(criteria.RequestId);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -178,6 +182,8 @@
                 {
                     attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
+
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -192,7 +198,9 @@
             if (commandResult.IsSuccessful)
             {
                 attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
+
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 

@@ -50,6 +50,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@microsoft/signalr": "^5.0.16",
         "@reduxjs/toolkit": "^1.9.3",
         "axios": "^0.23.0",
         "bootstrap": "^4.5.0",

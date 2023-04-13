@@ -29,6 +29,7 @@
         private readonly IBaseService baseService;
         private readonly ICommonDataService commonDataService;
         private readonly IAttachFileService attachFileService;
+        private readonly IPushNotificationService pushNotificationService;
 
         public LeaveController(
             IUserControlSession userControlSession,
@@ -36,7 +37,8 @@
             IRequestService requestService,
             IBaseService baseService,
             ICommonDataService commonDataService,
-            IAttachFileService attachFileService) : base(userControlSession)
+            IAttachFileService attachFileService,
+            IPushNotificationService pushNotificationService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.leaveRequestService = leaveRequestService;
@@ -44,6 +46,7 @@
             this.baseService = baseService;
             this.commonDataService = commonDataService;
             this.attachFileService = attachFileService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         [HttpGet]
@@ -114,6 +117,7 @@
             {
                 leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return Json(result);
@@ -181,6 +185,8 @@
                 {
                     attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
+
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return Json(result);
@@ -218,6 +224,7 @@
             if (commandResult.IsSuccessful)
             {
                 attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

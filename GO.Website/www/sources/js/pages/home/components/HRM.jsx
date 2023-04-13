@@ -4,6 +4,7 @@ import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import ProcessRequestDialog from './ProcessRequestDialog';
 import SkeletonTodoItem from './SkeletonTodoItem';
+import SignalR from './SignalR';
 
 export default class HRM extends Component {
     constructor(props) {
@@ -68,6 +69,7 @@ export default class HRM extends Component {
 
         return (
             <>
+                <SignalR refreshHrm={this.getTodolist} />
                 <div className="card">
                     <div className="card-content">
                         <div className="card-title">

@@ -27,19 +27,22 @@
         private readonly IRequestService requestService;
         private readonly IShiftService shiftService;
         private readonly IAttachFileService attachFileService;
+        private readonly IPushNotificationService pushNotificationService;
 
         public ChangeShiftController(
             IUserControlSession userControlSession,
             IChangeShiftRequestService changeShiftService,
             IRequestService requestService,
             IShiftService shiftService,
-            IAttachFileService attachFileService) : base(userControlSession)
+            IAttachFileService attachFileService,
+            IPushNotificationService pushNotificationService) : base(userControlSession)
         {
             this.userControlSession = userControlSession;
             this.changeShiftService = changeShiftService;
             this.requestService = requestService;
             this.shiftService = shiftService;
             this.attachFileService = attachFileService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         [HttpGet]
@@ -93,6 +96,7 @@
             {
                 changeShiftService.SendMailAndSendLetstalkCreateRequest(commandResult.OutputId);
                 attachFileService.UploadFile(files, commandResult.OutputId, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -157,6 +161,8 @@
                 {
                     attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
+
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -170,6 +176,7 @@
             if (commandResult.IsSuccessful)
             {
                 attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

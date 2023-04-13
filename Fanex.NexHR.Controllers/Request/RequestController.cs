@@ -28,6 +28,7 @@
         private readonly ICommonDataService commonDataService;
         private readonly ITeamService teamService;
         private readonly IAttachFileService attachFileService;
+        private readonly IPushNotificationService pushNotificationService;
 
         public RequestController(
             IUserControlSession userControlSession,
@@ -35,13 +36,15 @@
             IRequestService requestService,
             ICommonDataService commonDataService,
             ITeamService teamService,
-            IAttachFileService attachFileService) : base(userControlSession)
+            IAttachFileService attachFileService,
+            IPushNotificationService pushNotificationService) : base(userControlSession)
         {
             this.employeeService = employeeService;
             this.requestService = requestService;
             this.commonDataService = commonDataService;
             this.teamService = teamService;
             this.attachFileService = attachFileService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         [HttpPost]
@@ -207,6 +210,7 @@
             if (commandResult.IsSuccessful)
             {
                 requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -224,6 +228,7 @@
             if (commandResult.IsSuccessful)
             {
                 requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
+                pushNotificationService.SendNotiRefreshTodolist();
             }
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

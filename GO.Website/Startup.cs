@@ -3,10 +3,12 @@ namespace GO.Website
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using GO.Website.Hubs;
     using GO.Website.Middlewares;
     using GO.Website.Models;
     using GO.Website.Services;
@@ -20,9 +22,11 @@ namespace GO.Website
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Connections;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.IdentityModel.Tokens;
 
     public class Startup
     {
@@ -70,6 +74,18 @@ namespace GO.Website
                         context.Response.Redirect(options.LoginPath);
                         return Task.CompletedTask;
                     };
+                }).AddJwtBearer(x =>
+                {
+                    byte[] secretKey = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtAuthSettings:SecretKey").Value);
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
                 });
 
             services.AddSession(options =>
@@ -79,10 +95,18 @@ namespace GO.Website
                 options.Cookie.IsEssential = true;
             });
 
+            var jwtAuthSettings = Configuration.GetSection("JwtAuthSettings").Get<JwtAuthSettings>();
+            services.AddSingleton(jwtAuthSettings);
+
             var apiSiteSettings = Configuration.GetSection("ApiSiteSettings").Get<List<ApiSiteSetting>>();
             services.AddSingleton(apiSiteSettings);
 
             RegisterDI(services);
+
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.EnableDetailedErrors = true;
+            });
 
             services.AddControllersWithViews();
         }
@@ -115,6 +139,11 @@ namespace GO.Website
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<TodolistHub>("/todolist/hubs", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets;
+                });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -34,6 +34,14 @@
 
         public static string API_Auth_Username => ConfigurationManager.AppSettings["API.Auth:Username"];
         public static string API_Auth_Password => ConfigurationManager.AppSettings["API.Auth:Password"];
+
+        public static string GO_Token_Url => ConfigurationManager.AppSettings["GO.Token:Url"];
+        public static string GO_Token_Username => ConfigurationManager.AppSettings["GO.Token:Username"];
+        public static string GO_Token_Password => ConfigurationManager.AppSettings["GO.Token:Password"];
+
+        public static bool GO_Todolist_EnableNotiRefreshHrm
+            => Convert.ToBoolean(ConfigurationManager.AppSettings["GO.Todolist:EnableNotiRefreshHrm"]);
+        public static string GO_Todolist_NotiRefreshHrmUrl => ConfigurationManager.AppSettings["GO.Todolist:NotiRefreshHrmUrl"];
         // Letstalk
         public static bool IsEnableSendLetstalk
             => Convert.ToBoolean(ConfigurationManager.AppSettings["Letstalk:Enable"]);
