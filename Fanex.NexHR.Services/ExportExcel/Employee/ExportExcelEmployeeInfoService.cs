@@ -98,7 +98,7 @@
             var record = new
             {
                 Count = rowIndex,
-                employee.Unit,
+                employee.UnitName,
                 Department = employee.Team.Section.Department.Code,
                 Section = employee.Team.Section.Code,
                 Team = employee.Team.Name,
@@ -186,7 +186,7 @@
                 Address = employee.Address,
                 CurrentAddress = employee.CurrentAddress,
                 Skype = employee.Skype,
-                Unit = employee.Unit,
+                Unit = employee.UnitName,
                 JobTitle = employee.JobTitle,
                 GroupDate = groupDate,
                 CompanyDate = companyDate,

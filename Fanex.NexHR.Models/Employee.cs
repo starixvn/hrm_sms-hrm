@@ -66,6 +66,8 @@
 
         public byte? Gender { get; set; }
 
+        public string UnitName { get; set; }
+
         public Team Team { get; set; } 
 
         [DataType(DataType.Date)]
@@ -176,8 +178,6 @@
 
         [Range(0, 5, ErrorMessage = "Number of Offdays must be between 0 and 5.")]
         public decimal OffDaysbyWeek { get; set; }
-
-        public string Unit { get; set; }
 
         [Required]
         public override string Code { get; set; }

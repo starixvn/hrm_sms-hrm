@@ -657,7 +657,6 @@
                 WorkingHoursbyWeek = model.WorkingHoursbyWeek,
                 IsTopManager = model.IsTopManager,
                 OffDaysbyWeek = model.OffDaysbyWeek,
-                Unit = model.Unit,
                 PlaceOfBirth = model.PlaceOfBirth,
                 Ethnic = model.Ethnic,
                 Native = model.Native,

@@ -337,14 +337,6 @@
         <ul class="list-group">
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.Unit, Labels.CostCenter, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    @Html.TextBoxFor(model => model.Unit, new { @class = "form-control" })
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">
                     @Html.LabelFor(model => model.Team.Id, Labels.SectionTeam, new { @class = "control-label" })
                 </div>
                 @Html.HiddenFor(model => model.Team.Id)

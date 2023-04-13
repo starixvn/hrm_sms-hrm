@@ -73,8 +73,6 @@
 
         public string ChineseName { get; set; }
 
-        public string Unit { get; set; }
-
         public bool CanOT { get; set; }
         public decimal? SpecialOT { get; set; }
 

@@ -19,21 +19,25 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
+    using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Services;
 
     public class EmployeeService : IEmployeeService
     {
+        private readonly IUserControlSettings userControlSettings;
         private readonly IEmployeeRepository employeeRepository;
         private readonly IBaseService baseService;
         private readonly IHRMAuthService authService;
         private readonly IRoleService roleService;
 
         public EmployeeService(
+            IUserControlSettings userControlSettings,
             IEmployeeRepository employeeRepository,
             IBaseService baseService,
             IHRMAuthService authService,
             IRoleService roleService)
         {
+            this.userControlSettings = userControlSettings;
             this.employeeRepository = employeeRepository;
             this.roleService = roleService;
             this.baseService = baseService;
@@ -67,6 +71,15 @@
             if (criteria != null && criteria.IsValid())
             {
                 employees = employeeRepository.GetEmployees(criteria);
+
+                var roles = roleService.GetBySiteId(userControlSettings.SiteId);
+                foreach(var employee in employees)
+                {
+                    if(employee.Roles != null && employee.Roles.Any())
+                    {
+                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                    }
+                }
             }
 
             return employees ?? new List<Employee>();
@@ -254,7 +267,6 @@
                 WorkingHoursbyWeek = param.WorkingHoursbyWeek,
                 IsTopManager = param.IsTopManager,
                 OffDaysbyWeek = param.OffDaysbyWeek,
-                Unit = param.Unit,
                 PlaceOfbirth = param.PlaceOfBirth,
                 Ethnic = param.Ethnic,
                 Native = param.Native,

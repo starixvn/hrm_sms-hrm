@@ -52,16 +52,18 @@
                         {
                             e.Team = new Team {
                                 Id = t.TeamID,
-                                Code = t.Team,
+                                Code = t.TeamCode,
                                 Name = t.TeamName,
                                 Section = new Section
                                 {
                                     Id = t.SectionId,
                                     Code = t.SectionCode,
+                                    Name = t.SectionName,
                                     Department = new Department
                                     {
                                         Id = t.DepartmentId,
-                                        Code = t.DepartmentCode
+                                        Code = t.DepartmentCode,
+                                        Name = t.DepartmentName
                                     }
                                 }
                             };
