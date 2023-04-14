@@ -6,8 +6,7 @@ namespace Fanex.NexHR.Services.Extensions
     using Fanex.NexHR.Services.Implement;
     using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.Services.Interfaces;
-    using HRM.Letstalk.Core.Implement;
-    using HRM.Letstalk.Core.Interface;
+    using HRM.Letstalk.Core.Services;
     using HRM.UserControl.Client.AspNetMvc.Configurations;
     using HRM.UserControl.Client.AspNetMvc.Session;
     using HRM.UserControl.Client.Core.Configurations;

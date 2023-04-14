@@ -1,11 +1,10 @@
 ﻿namespace Fanex.NexHR.Services.Implement
 {
-    using System;
     using System.Collections.Generic;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Services.Interfaces;
     using Hangfire;
-    using HRM.Letstalk.Core.Interface;
+    using HRM.Letstalk.Core.Services;
 
     public class LetstalkService : ILetstalkService
     {
@@ -19,26 +18,24 @@
 
         public void SendNotification(string letstalkId, string subject, string message)
         {
-            var letstalk = !string.IsNullOrEmpty(ConfigSettings.LetstalkForTesing) ? ConfigSettings.LetstalkForTesing : letstalkId;
-            if (!ConfigSettings.IsDisabledSendLetstalk && !string.IsNullOrEmpty(letstalk))
+            var letstalk = !string.IsNullOrWhiteSpace(ConfigSettings.Letstalk_AccountIdTesting) ? ConfigSettings.Letstalk_AccountIdTesting : letstalkId;
+            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrEmpty(letstalk))
             {
-                var botId = ConfigSettings.BotId;
-                var url = ConfigSettings.UrlSendLetstalk;
-                var username = ConfigSettings.AppCredentialId;
-                var pass = ConfigSettings.AppCredentialPassword;
-
-                var content = string.Format(templateContent, subject, message);
-
-                var jwtToken = sendNotificationService.GetToken(url, username, pass);
+                var jwtToken = sendNotificationService.GetToken(ConfigSettings.Letstalk_API_BaseUrl,
+                    ConfigSettings.Letstalk_Token_Username,
+                    ConfigSettings.Letstalk_Token_Password);
                 if (jwtToken != null)
                 {
-                    var data = new Dictionary<string, object>(){
-                    { "BotId", botId },
-                    { "ConversationId", letstalk },
-                    { "Message", content }
-                };
+                    var content = string.Format(templateContent, subject, message);
+                    var data = new Dictionary<string, object>
+                    {
+                        { "BotId", ConfigSettings.Letstalk_BotId },
+                        { "ConversationId", letstalk },
+                        { "Message", content }
+                    };
+
                     BackgroundJob.Enqueue(() =>
-                           sendNotificationService.SendNotificationToLetstalk1(url, jwtToken.Token, data)
+                           sendNotificationService.SendNotificationToLetstalk(ConfigSettings.Letstalk_API_BaseUrl, jwtToken.Token, data)
                     );
                 }
             }

@@ -31,12 +31,14 @@
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
         public static bool EnableRemindAnnualLeaveBalance
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableRemindAnnualLeaveBalance"]);
-        public static bool IsDisabledSendLetstalk
-            => Convert.ToBoolean(ConfigurationManager.AppSettings["IsDisabledSendLetstalk"]);
-        public static string LetstalkForTesing => ConfigurationManager.AppSettings["LetstalkForTesing"];
-        public static string UrlSendLetstalk => ConfigurationManager.AppSettings["UrlSendLetstalk"];
-        public static string AppCredentialId => ConfigurationManager.AppSettings["AppCredentialId"];
-        public static string AppCredentialPassword => ConfigurationManager.AppSettings["AppCredentialPassword"];
-        public static int BotId => Convert.ToInt32(ConfigurationManager.AppSettings["BotId"]);
+
+        // Letstalk
+        public static bool IsEnableSendLetstalk
+            => Convert.ToBoolean(ConfigurationManager.AppSettings["Letstalk:Enable"]);
+        public static string Letstalk_AccountIdTesting => ConfigurationManager.AppSettings["Letstalk:AccountIdTesting"];
+        public static string Letstalk_API_BaseUrl => ConfigurationManager.AppSettings["Letstalk.API:BaseUrl"];
+        public static string Letstalk_Token_Username => ConfigurationManager.AppSettings["Letstalk.Token:Username"];
+        public static string Letstalk_Token_Password => ConfigurationManager.AppSettings["Letstalk.Token:Password"];
+        public static int Letstalk_BotId => Convert.ToInt32(ConfigurationManager.AppSettings["Letstalk:BotId"]);
     }
 }
