@@ -42,11 +42,11 @@
             /// Fill report title.
             writer.CopyRows(0, 2);
             /// Fill report header.
-            writer.CopyRows((int)BasicInfo.RowStartHeader, 1);
+            writer.CopyRows((byte)BasicInfo.RowStartHeader, 1);
 
             FillContentRowEmployeeBasicInfoReport(employees, ref writer);
-            writer.SyncColumnsWidth((int)BasicInfo.TotalColumns);
-            writer.CreateFreezePane(0, (int)BasicInfo.RowStartBody);
+            writer.SyncColumnsWidth((byte)BasicInfo.TotalColumns);
+            writer.CreateFreezePane(0, (byte)BasicInfo.RowStartBody);
 
             writer.Render();
         }
@@ -99,8 +99,8 @@
             {
                 Count = rowIndex,
                 employee.UnitName,
-                Department = employee.Team.Section.Department.Code,
-                Section = employee.Team.Section.Code,
+                Department = employee.Team.Section.Department.Name,
+                Section = employee.Team.Section.Name,
                 Team = employee.Team.Name,
                 employee.Code,
                 employee.FullName,
@@ -149,13 +149,7 @@
 
         private object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
         {
-            string dateOfInCard = employee.DateOfIdCard.HasValue ? employee.DateOfIdCard.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string passportExp = employee.PassportExp.HasValue ? employee.PassportExp.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string groupDate = employee.JoinedDate.HasValue ? employee.JoinedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string companyDate = employee.CompanyDate.HasValue ? employee.CompanyDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string confirmedDate = employee.ConfirmedDate.HasValue ? employee.ConfirmedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-            string resignedDate = employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : string.Empty;
-
+            const string DateFormat = "dd MMM, yyyy";
             var record = new
             {
                 Count = rowIndex,
@@ -174,10 +168,10 @@
                 MarriageName = employee.MarriageName,
                 CountryName = employee.CountryName,
                 CardNo = employee.CardNo,
-                DateOfIdCard = dateOfInCard,
+                DateOfIdCard = FormatDate(employee.DateOfIdCard, DateFormat),
                 PlaceOfIdCard = employee.PlaceOfIdCard,
                 PassportNo = employee.PassportNo,
-                PassportExp = passportExp,
+                PassportExp = FormatDate(employee.PassportExp, DateFormat),
                 Qualification = employee.Qualification,
                 Major = employee.Major,
                 Phone = employee.Phone,
@@ -188,10 +182,10 @@
                 Skype = employee.Skype,
                 Unit = employee.UnitName,
                 JobTitle = employee.JobTitle,
-                GroupDate = groupDate,
-                CompanyDate = companyDate,
-                ConfirmedDate = confirmedDate,
-                ResignedDate = resignedDate,
+                GroupDate = FormatDate(employee.JoinedDate, DateFormat),
+                CompanyDate = FormatDate(employee.CompanyDate, DateFormat),
+                ConfirmedDate = FormatDate(employee.ConfirmedDate, DateFormat),
+                ResignedDate = FormatDate(employee.ResignedDate, DateFormat),
                 ResignReason = employee.ResignedReason,
                 WorkingDays = employee.WorkingDays,
                 WorkingHoursbyWeek = employee.WorkingHoursbyWeek,
@@ -247,7 +241,7 @@
 
         private object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
         {
-            var gender = "unknown";
+            var gender = "Unknown";
             if (p.Gender.HasValue)
             {
                 gender = p.Gender == 0 ? "Female" : "Male";
@@ -256,25 +250,25 @@
             var record = new
             {
                 Index = currentRow - 2,
-                p.Unit,
-                Department = p.DepartmentCode,
-                Section = p.SectionCode,
+                p.UnitName,
+                Department = p.DepartmentName,
+                Section = p.SectionName,
                 p.TeamName,
                 p.Code,
                 p.EmployeeCard,
                 p.FullName,
-                p.NickName,
+                p.Nickname,
                 Gender = gender,
-                GroupDate = p.JoinedDate?.ToString("dd/MM/yyyy"),
-                CompanyDate = p.CompanyDate?.ToString("dd/MM/yyyy"),
-                ConfirmedDate = p.ConfirmedDate?.ToString("dd/MM/yyyy"),
-                ResignedDate = p.ResignedDate?.ToString("dd/MM/yyyy"),
+                GroupDate = FormatDate(p.JoinedDate),
+                CompanyDate = FormatDate(p.CompanyDate),
+                ConfirmedDate = FormatDate(p.ConfirmedDate),
+                ResignedDate = FormatDate(p.ResignedDate),
                 p.ResignedReason,
                 LengthOfService = employeeService.CaculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
                 p.JobTitle,
                 p.JobLevel,
-                TeamDate = p.TeamDate?.ToString("dd/MM/yyyy"),
-                DOB = p.DateOfBirth.ToString("dd/MM/yyyy"),
+                TeamDate = FormatDate(p.TeamDate),
+                DOB = FormatDate(p.DateOfBirth),
                 p.PlaceOfBirth,
                 p.Ethnic,
                 p.Native,
@@ -282,10 +276,10 @@
                 p.MarriageName,
                 p.Nationality,
                 p.CardNo,
-                DateOfIDCard = p.DateOfIdCard?.ToString("dd/MM/yyyy"),
+                DateOfIDCard = FormatDate(p.DateOfIdCard),
                 p.PlaceOfIdCard,
                 p.PassportNo,
-                PassportExp = p.PassportExp?.ToString("dd/MM/yyyy"),
+                PassportExp = FormatDate(p.PassportExp),
                 p.Qualification,
                 p.Major,
                 p.Address,
@@ -306,11 +300,11 @@
                 Category = p.IsLocal ? Labels.Local : Labels.Expat,
                 p.Roles2String,
                 SpecialUser = p.IsTopManager ? Labels.Yes : Labels.No,
-                VerifiedBy = GetSupervisors(p.Supervisor, (short)RoleSystem.Verifier),
-                ApprovedBy = GetSupervisors(p.Supervisor, (short)RoleSystem.Approver),
-                DisciplineManager = GetSupervisors(p.Supervisor, (short)RoleSystem.DisciplineManager),
-                ShiftArrangement = GetSupervisors(p.Supervisor, (short)RoleSystem.ShiftManager),
-                OnBehalfRequest = GetSupervisors(p.Supervisor, (short)RoleSystem.OnBehalfRequest),
+                VerifiedBy = GetSupervisors(p.Supervisors, (short)RoleSystem.Verifier),
+                ApprovedBy = GetSupervisors(p.Supervisors, (short)RoleSystem.Approver),
+                DisciplineManager = GetSupervisors(p.Supervisors, (short)RoleSystem.DisciplineManager),
+                ShiftArrangement = GetSupervisors(p.Supervisors, (short)RoleSystem.ShiftManager),
+                OnBehalfRequest = GetSupervisors(p.Supervisors, (short)RoleSystem.OnBehalfRequest),
             };
 
             return record;
@@ -318,17 +312,16 @@
 
         private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
         {
-            string supervisorsName = string.Empty;
-            IList<SupervisorNameModel> supervisorsFilter;
-
-            if (supervisors != null)
+            var nicknames = string.Empty;
+            if (supervisors != null && supervisors.Any())
             {
-                supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).ToList();
-                supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
+                nicknames = string.Join(", ", supervisors.Where(x => x.ActionType == roleId).Select(x => x.NickName));
             }
 
-            return supervisorsName;
+            return nicknames;
         }
+
+        private static string FormatDate(DateTime? date, string format = "dd/MM/yyyy") => date?.ToString(format);
 
         #endregion Employee Full Profile Information
     }

@@ -51,7 +51,7 @@
                         (e, t) =>
                         {
                             e.Team = new Team {
-                                Id = t.TeamID,
+                                Id = t.TeamId,
                                 Code = t.TeamCode,
                                 Name = t.TeamName,
                                 Section = new Section
@@ -69,7 +69,7 @@
                             };
                             return e;
                         },
-                        splitOn: "TeamID");
+                        splitOn: "TeamId");
 
                     var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
                         (er, r) =>
@@ -132,8 +132,7 @@
                 using (var multi = db.QueryMultiple(criteria))
                 {
                     var profiles = multi.Read<EmployeeFullProfile>();
-
-                    var supervisor = multi.Read<SupervisorNameModel>();
+                    var supervisors = multi.Read<SupervisorNameModel>();
 
                     var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
                             (er, r) =>
@@ -143,25 +142,23 @@
                             },
                             "RoleId");
 
-                    profiles = GroupBySupAndRoles(profiles, supervisor, roles);
+                    GroupData(profiles, supervisors, roles);
 
                     return profiles.ToList();
                 }
             }
         }
 
-        private static IEnumerable<EmployeeFullProfile> GroupBySupAndRoles(
+        private static void GroupData(
             IEnumerable<EmployeeFullProfile> profiles,
-            IEnumerable<SupervisorNameModel> supervisor,
+            IEnumerable<SupervisorNameModel> supervisors,
             IEnumerable<EmployeeRole> roles)
         {
             foreach (var profile in profiles)
             {
-                profile.Supervisor = supervisor.Where(i => i.EmpId == profile.EmpId).ToList();
+                profile.Supervisors = supervisors.Where(i => i.EmpId == profile.EmpId).ToList();
                 profile.Roles = roles.Where(i => i.EmployeeId == profile.EmpId).Select(i => i.Role).ToList();
             }
-
-            return profiles;
         }
     }
 }

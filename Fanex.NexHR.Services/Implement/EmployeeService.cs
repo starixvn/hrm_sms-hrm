@@ -96,6 +96,14 @@
             if (criteria != null && criteria.IsValid())
             {
                 employees = employeeRepository.GetEmployeesByRole(criteria);
+                var roles = roleService.GetBySiteId(userControlSettings.SiteId);
+                foreach (var employee in employees)
+                {
+                    if (employee.Roles != null && employee.Roles.Any())
+                    {
+                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                    }
+                }
             }
 
             return employees ?? new List<Employee>();
@@ -192,7 +200,17 @@
 
         public IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
         {
-            return employeeRepository.GetEmployeeFullInformation(criteria);
+            var employees = employeeRepository.GetEmployeeFullInformation(criteria);
+            var roles = roleService.GetBySiteId(userControlSettings.SiteId);
+            foreach (var employee in employees)
+            {
+                if (employee.Roles != null && employee.Roles.Any())
+                {
+                    employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                }
+            }
+
+            return employees;
         }
 
         public CommandResult EditPassword(int actorId, EditPassword model)

@@ -13,10 +13,8 @@
         public int EmpId { get; set; }
 
         public string Code { get; set; }
-
         public string FullName { get; set; }
-
-        public string NickName { get; set; }
+        public string Nickname { get; set; }
 
         public string ChineseName { get; set; }
 
@@ -26,13 +24,7 @@
 
         public byte Marriage { get; set; }
 
-        public string MarriageName
-        {
-            get
-            {
-                return ((MarriageStatus)Marriage).ToString();
-            }
-        }
+        public string MarriageName => ((MarriageStatus)Marriage).ToString();
 
         public string CurrentAddress { get; set; }
 
@@ -57,14 +49,9 @@
         public string Major { get; set; }
 
         public string TeamName { get; set; }
-
-        public string SectionCode { get; set; }
-
-        public string DepartmentCode { get; set; }
-
-        public IEnumerable<EmployeeRelationship> Relationships { get; set; }
-
-        public string Unit { get; set; }
+        public string SectionName { get; set; }
+        public string DepartmentName { get; set; }
+        public string UnitName { get; set; }
 
         public string EmployeeCard { get; set; }
 
@@ -89,7 +76,6 @@
         public DateTime? JoinedDate { get; set; }
 
         public string JobTitle { get; set; }
-
         public string JobLevel { get; set; }
 
         [DataType(DataType.Date)]
@@ -127,7 +113,7 @@
 
         public decimal KeepInViewBalance { get; set; }
 
-        public List<Role> Roles { get; set; }
+        public IList<Role> Roles { get; set; }
 
         public string Roles2String
         {
@@ -141,6 +127,6 @@
 
         public bool IsLocal { get; set; }
 
-        public List<SupervisorNameModel> Supervisor { get; set; }
+        public IList<SupervisorNameModel> Supervisors { get; set; }
     }
 }
