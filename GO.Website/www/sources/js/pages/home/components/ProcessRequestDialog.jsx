@@ -39,13 +39,14 @@ export default class ProcessRequestDialog extends Component {
         });
     };
 
-    handleChangeIgnore = (event, index) => {
+    handleChangeIgnore = (event, index, fieldName) => {
         const action = this.state.action;
 
         const disciplines = [...action.metadata.disciplines];
         disciplines[index] = {
             ...disciplines[index],
-            isIgnore: event.target.checked
+            isIgnore: fieldName === 'isIgnore' ? event.target.checked : false,
+            isRecord: fieldName === 'isRecord' ? event.target.checked : false
         };
         this.setState({
             action: {
@@ -106,6 +107,7 @@ export default class ProcessRequestDialog extends Component {
                                                 <th>Type</th>
                                                 <th>Details</th>
                                                 <th>Ignore</th>
+                                                <th>Record</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -121,7 +123,14 @@ export default class ProcessRequestDialog extends Component {
                                                             <input type="radio"
                                                                 name={`action.metadata.disciplines[${index}].name`}
                                                                 checked={action.isIgnore}
-                                                                onChange={event => this.handleChangeIgnore(event, index)}
+                                                                onChange={event => this.handleChangeIgnore(event, index, 'isIgnore')}
+                                                            />
+                                                        </td>
+                                                        <td className="text-center">
+                                                            <input type="radio"
+                                                                name={`action.metadata.disciplines[${index}].name`}
+                                                                checked={action.isRecord}
+                                                                onChange={event => this.handleChangeIgnore(event, index, 'isRecord')}
                                                             />
                                                         </td>
                                                     </tr>

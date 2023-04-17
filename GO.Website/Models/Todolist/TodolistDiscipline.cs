@@ -10,5 +10,6 @@
         public string Name { get; set; }
         public string Details { get; set; }
         public bool IsIgnore { get; set; }
+        public bool IsRecord { get; set; }
     }
 }

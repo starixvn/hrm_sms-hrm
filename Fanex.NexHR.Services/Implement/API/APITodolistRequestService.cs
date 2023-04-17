@@ -96,7 +96,7 @@
             var leaveDayDetail = GetLeaveDayDetail(request);
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a {0} of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
+                Name = string.Format("<div>You have a Leave Request (Type: {0}) of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
                     request.LeaveTypeName,
                     request.FullName,
                     request.Nickname,

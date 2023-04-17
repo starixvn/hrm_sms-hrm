@@ -88,4 +88,12 @@ input[type="checkbox"] {
             border-color: #7E9ED2 !important;
         }
     }
+
+    tbody {
+        tr {
+            td {
+                vertical-align: middle;
+            }
+        }
+    }
 }
