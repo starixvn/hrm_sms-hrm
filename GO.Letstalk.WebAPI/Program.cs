@@ -2,7 +2,9 @@ namespace GO.Letstalk.WebAPI
 {
     using System;
     using System.IO;
+    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
     using Serilog;
     using Serilog.Enrichers;
@@ -27,7 +29,7 @@ namespace GO.Letstalk.WebAPI
             try
             {
                 Log.Information("Application start.");
-                CreateHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
@@ -39,12 +41,9 @@ namespace GO.Letstalk.WebAPI
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseSerilog()
+                .UseStartup<Startup>();
     }
 }
