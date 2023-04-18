@@ -143,7 +143,12 @@ BEGIN
 
 	UPDATE ec
 	SET ec.ShiftId = s.ShiftID
-		,ec.IsOffDay = tmpws.IsOffDay
+		,ec.IsOffDay = CASE 
+			WHEN tmpca.IsLeaveDay = 0
+				AND tmpca.IsKeepInView = 0
+				AND tmpca.ChangeShiftTypeId IS NULL THEN tmpws.IsOffDay
+			ELSE ec.IsOffDay
+			END
 		,ec.IsHoliday = CASE 
 			WHEN tmpws.IsHoliday = 1
 				AND h.Id IS NOT NULL THEN 1

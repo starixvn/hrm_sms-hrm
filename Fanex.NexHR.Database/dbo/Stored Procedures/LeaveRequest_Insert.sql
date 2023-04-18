@@ -431,17 +431,45 @@ BEGIN
 								INNER JOIN #tblLeaveRequestDetail AS ldtt WITH (NOLOCK) ON ldtt.OnDate = ldt.OnDate
 							WHERE r.RequestId = ldt.RequestId
 								AND (
-									ldt.FromTime BETWEEN ldtt.FromTime
-										AND ldtt.ToTime
-									OR ldt.ToTime BETWEEN ldtt.FromTime
-										AND ldtt.ToTime
-									OR ldtt.FromTime BETWEEN ldt.FromTime
-										AND ldt.ToTime
-									OR ldtt.ToTime BETWEEN ldt.FromTime
-										AND ldt.ToTime
+									(
+										ldt.IsHalfDay = 0
+										AND ldtt.IsHalfDay = 0
+										)
+									OR (
+										ldt.IsHalfDay = 0
+										AND ldtt.IsHalfDay = 1
+										AND (
+											ldtt.FromTime BETWEEN ldt.FromTime
+												AND DATEADD(MILLISECOND, - 1, DATEDIFF(DAY, 0, ldt.ToTime) + 1)
+											OR ldtt.ToTime BETWEEN ldt.FromTime
+												AND DATEADD(MILLISECOND, - 1, DATEDIFF(DAY, 0, ldt.ToTime) + 1)
+											)
+										)
+									OR (
+										ldt.IsHalfDay = 1
+										AND ldtt.IsHalfDay = 0
+										AND (
+											ldt.FromTime BETWEEN ldtt.FromTime
+												AND DATEADD(MILLISECOND, - 1, DATEDIFF(DAY, 0, ldtt.ToTime) + 1)
+											OR ldt.ToTime BETWEEN ldtt.FromTime
+												AND DATEADD(MILLISECOND, - 1, DATEDIFF(DAY, 0, ldtt.ToTime) + 1)
+											)
+										)
+									OR (
+										ldt.IsHalfDay = 1
+										AND ldtt.IsHalfDay = 1
+										AND (
+											ldt.FromTime BETWEEN ldtt.FromTime
+												AND ldtt.ToTime
+											OR ldt.ToTime BETWEEN ldtt.FromTime
+												AND ldtt.ToTime
+											OR ldtt.FromTime BETWEEN ldt.FromTime
+												AND ldt.ToTime
+											OR ldtt.ToTime BETWEEN ldt.FromTime
+												AND ldt.ToTime
+											)
+										)
 									)
-								AND ldt.FromTime != ldtt.ToTime
-								AND ldt.ToTime != ldtt.FromTime
 							)
 						)
 					)

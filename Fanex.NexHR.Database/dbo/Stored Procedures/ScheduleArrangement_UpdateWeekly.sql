@@ -129,7 +129,13 @@ BEGIN
 		,@isUpdateRequestData = 1
 
 	DELETE tblweekly
-	FROM #tblWeeklySchedule AS tblweekly
+	FROM #tblWeeklySchedule AS tblweekly WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON tblweekly.EmployeeId = emp.EmpId
+	WHERE emp.JoinedDate > tblweekly.WorkDate
+		OR emp.ResignedDate <= tblweekly.WorkDate
+
+	DELETE tblweekly
+	FROM #tblWeeklySchedule AS tblweekly WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.EmployeeAttendance AS empatt WITH (NOLOCK) ON tblweekly.WorkDate = empatt.AttendanceDate
 		AND tblweekly.EmployeeId = empatt.EmpId
 		INNER JOIN dbo.EmployeeCalendar AS empca WITH (NOLOCK) ON empca.WorkDate = tblweekly.WorkDate
@@ -141,7 +147,7 @@ BEGIN
 	WHERE tblweekly.WorkDate <= @Today
 
 	DELETE tblweekly
-	FROM #tblWeeklySchedule AS tblweekly
+	FROM #tblWeeklySchedule AS tblweekly WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN dbo.tmpEmployeeCalendar AS empca WITH (NOLOCK) ON tblweekly.WorkDate = empca.WorkDate
 		AND tblweekly.EmployeeId = empca.EmpId
 	WHERE (
@@ -175,13 +181,13 @@ BEGIN
 		,SUM(ISNULL(ot.PublicHours, 0))
 		,SUM(ISNULL(ot.SpecialHours, 0))
 	FROM dbo.OTDailyRequest AS ot WITH (NOLOCK)
-		INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
+		INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON ot.EmpId = tblweekly.EmployeeId
 		AND ot.OvertimeDate = tblweekly.WorkDate
 	GROUP BY ot.RequestId
 
 	DELETE ot
 	FROM dbo.OTDailyRequest AS ot WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblWeeklySchedule AS tblweekly ON ot.EmpId = tblweekly.EmployeeId
+		INNER JOIN #tblWeeklySchedule AS tblweekly WITH (NOLOCK) ON ot.EmpId = tblweekly.EmployeeId
 		AND ot.OvertimeDate = tblweekly.WorkDate
 
 	UPDATE otm
@@ -190,7 +196,7 @@ BEGIN
 		,otm.PublicHours = ISNULL(otm.PublicHours, 0) - ot.PublicHours
 		,otm.SpecialHours = ISNULL(otm.SpecialHours, 0) - ot.SpecialHours
 	FROM dbo.OTMonthlyRequest AS otm WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #OTMonthlyRequest AS ot ON otm.RequestId = ot.RequestId
+		INNER JOIN #OTMonthlyRequest AS ot WITH (NOLOCK) ON otm.RequestId = ot.RequestId
 
 	INSERT INTO dbo.tmpEmployeeAttendace (
 		EmpId
@@ -225,8 +231,8 @@ BEGIN
 		AND empca.IsFixedOffDay = 1
 
 	DELETE tblweekly
-	FROM #tblWeeklySchedule AS tblweekly
-		INNER JOIN dbo.EmployeeCalendar AS ec ON tblweekly.WorkDate = ec.WorkDate
+	FROM #tblWeeklySchedule AS tblweekly WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON tblweekly.WorkDate = ec.WorkDate
 		AND tblweekly.EmployeeId = ec.EmpId
 
 	INSERT INTO dbo.EmployeeCalendar (
@@ -249,7 +255,7 @@ BEGIN
 		,IsPublic
 		,@ActorId
 		,@ModifiedDate
-	FROM #tblWeeklySchedule
+	FROM #tblWeeklySchedule WITH (NOLOCK)
 
 	MERGE dbo.ScheduleArrangementDefaultShift AS [target]
 	USING #tblDefaultShift AS [source] ON (

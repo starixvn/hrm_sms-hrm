@@ -37,6 +37,11 @@ BEGIN
 		,IsToAfterday BIT
 		)
 
+	CREATE NONCLUSTERED INDEX IX_tblLeaveDetail_WorkDate_LeaveTypeId ON #tblLeaveDetail (
+		WorkDate
+		,LeaveTypeId
+		);
+
 	IF @LeaveType = @GeneralLeaveType
 		OR @TotalDays = 0.5
 	BEGIN

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
+﻿
+CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@Code VARCHAR(20)
 	,@DomainUsername VARCHAR(50) = ''
 	,@FullName NVARCHAR(50) = ''
@@ -26,7 +27,6 @@
 	,@PassportNo VARCHAR(35) = ''
 	,@PassportExp DATE = NULL
 	,@ChineseName NVARCHAR(200) = NULL
-	,@Unit NVARCHAR(2000) = NULL
 	,@CanOT BIT
 	,@SpecialOT DECIMAL(3, 1) = NULL
 	,@IsLocal BIT
@@ -183,7 +183,6 @@ BEGIN
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
-				,Unit AS '@Unit'
 				,IsExpatUseHoliday AS '@IsExpatUseHoliday'
 				,OffDaysbyWeek AS '@OffDaysbyWeek'
 				,MilitaryFromDate AS '@MilitaryFromDate'
@@ -261,7 +260,6 @@ BEGIN
 		,@WorkingHoursByWeek = @WorkingHoursByWeek
 		,@CompanyDate = @CompanyDate
 		,@CountryCode = @CountryCode
-		,@Unit = @Unit
 		,@IsDefaultSchedule = @IsDefaultSchedule_old
 		,@IsTopManager = @IsTopManager
 		,@OffDaysbyWeek = @OffDaysbyWeek
@@ -321,7 +319,6 @@ BEGIN
 				,IsTopManager AS '@IsTopManager'
 				,CompanyDate AS '@CompanyDate'
 				,CountryCode AS '@CountryCode'
-				,Unit AS '@Unit'
 				,IsExpatUseHoliday AS '@IsExpatUseHoliday'
 				,OffDaysbyWeek AS '@OffDaysbyWeek'
 				,MilitaryFromDate AS '@MilitaryFromDate'

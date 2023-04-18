@@ -28,7 +28,7 @@ BEGIN
 	SELECT emp.EmpId
 		,emp.UserId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-	WHERE emp.Code IN ('00031', '00036', '00053', '00090')
+	WHERE emp.Code IN ('00031', '00036', '00053', '00067', '00090')
 		AND emp.[Enabled] = 1
 		AND emp.isDeleted = 0
 
@@ -68,10 +68,6 @@ BEGIN
 			SELECT 1
 			FROM #tempUnitHead AS tmp WITH (NOLOCK)
 			WHERE empca.EmpId = tmp.EmpId
-			)
-		AND (
-			empca.RequestTypeId IS NULL
-			OR empca.RequestTypeId = 6 -- leave
 			)
 
 	DROP TABLE #tempUnitHead

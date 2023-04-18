@@ -1,74 +1,123 @@
 ﻿
-CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetListSupervisorRequestID]
-	@RequestId  BIGINT,
-	@Action INT = NULL
+CREATE PROCEDURE [dbo].[EmployeeSupervisor_GetListSupervisorRequestID] @RequestId BIGINT
+	,@Action INT = NULL
 AS
 /*
 Created: TOM.VO@2013/10/25
 Task: Get list supervisor for Employee by RequestID.
 DB: HRM_SMS
-Original: 
+Original:
 
-Created: Teddy.le@2023/03/20 Send Letstalk Notification
-
-Revisions:    
+Revisions:
+	2023-03-20@Teddy.Le: get Letstalk
 Param's Explanation:
 */
-SET NOCOUNT ON
-	DECLARE @ApproverId  INT, @VerifierId INT, @EmpId INT, @HRId INT,  @TeamId INT, @IsExistSetting BIT
+BEGIN
+	SET NOCOUNT ON;
 
-	SELECT @ApproverId =  wr.ApproverId  , @VerifierId = wr.VerifierId ,@EmpId= wr.EmpId,@HRId = wr.HRId
-	FROM WorkingTimeRequest wr WITH(NOLOCK)
-	WHERE wr.RequestId = @RequestId 
+	DECLARE @ApproverId INT
+		,@VerifierId INT
+		,@EmpId INT
+		,@HRId INT
+		,@TeamId INT
+		,@IsExistSetting BIT
 
-	IF @EmpId IS NULL
-		SELECT TOP 0  0 RoleID,'Member'  [Role] ,''  FullName, '' NickName, '' Email, '' LetsTalk
-	ELSE
-		SELECT TOP 1  0 RoleID,'Member'  [Role] ,  FullName, NickName, Email, LetsTalk  
-		FROM [dbo].Employee ee  WITH(NOLOCK) 
-		WHERE ee.EmpId = @EmpId
-			AND ISNULL(ResignedDate,GETDATE()+30)>GETDATE()
+	SELECT @ApproverId = wr.ApproverId
+		,@VerifierId = wr.VerifierId
+		,@EmpId = wr.EmpId
+		,@HRId = wr.HRId
+	FROM WorkingTimeRequest AS wr WITH (NOLOCK)
+	WHERE wr.RequestId = @RequestId
 
-	IF @VerifierId IS NULL
-		SELECT TOP 0  0 RoleID,'Verifier'  [Role] ,''  FullName, '' NickName, '' Email, '' LetsTalk
-	ELSE
-		SELECT TOP 1  2 RoleID,'Verifier'  [Role] ,  FullName, NickName, Email, LetsTalk
-		FROM [dbo].Employee ee  WITH(NOLOCK) 
-		WHERE ee.EmpId = @VerifierId
-			AND ISNULL(ResignedDate,GETDATE()+30)>GETDATE()
+	SELECT 0 AS RoleId
+		,'Member' AS [Role]
+		,EmpId
+		,FullName
+		,NickName
+		,Email
+		,LetsTalk
+	FROM dbo.Employee WITH (NOLOCK)
+	WHERE EmpId = @EmpId
+		AND [Enabled] = 1
+		AND isDeleted = 0
 
-	IF @ApproverId IS NULL
-		SELECT TOP 0  0 RoleID,'Approver'  [Role] ,''  FullName, '' NickName, '' Email,'' LetsTalk  
-	ELSE
-		SELECT TOP 1  3 RoleID,'Approver'  [Role] ,  FullName, NickName, Email, LetsTalk 
-		FROM [dbo].Employee ee  WITH(NOLOCK) 
-		WHERE ee.EmpId = @ApproverId
-			AND ISNULL(ResignedDate,GETDATE()+30)>GETDATE()
-	
-	IF @HRId IS NOT NULL
-		SELECT TOP 1  6 RoleID,'HR'  [Role] ,  FullName, NickName, Email, LetsTalk  
-			FROM [dbo].Employee ee  WITH(NOLOCK) 
-			WHERE ee.EmpId = @HRId
-	ELSE
-		SELECT TOP 10  6 RoleID,'HR'  [Role],  FullName, NickName, Email, LetsTalk  
-			FROM [dbo].Employee ee  WITH(NOLOCK) 
-			INNER JOIN dbo.EmployeeRole AS er WITH(NOLOCK) ON ee.EmpId=er.EmployeeId
-			WHERE (ee.isDeleted IS NULL OR ee.isDeleted = 0)
-				AND ee.Enabled = 1 AND  er.RoleId = 6
-				AND NOT EXISTS (SELECT 1 FROM  dbo.EmployeeRole WHERE ee.EmpId = EmployeeId
-					AND RoleId = 7
-					)
-	
-	SELECT  @TeamId = GroupId FROM dbo.Employee WHERE EmpId = @EmpId
+	SELECT 2 AS RoleId
+		,'Verifier' AS [Role]
+		,EmpId
+		,FullName
+		,NickName
+		,Email
+		,LetsTalk
+	FROM dbo.Employee WITH (NOLOCK)
+	WHERE EmpId = @VerifierId
+		AND [Enabled] = 1
+		AND isDeleted = 0
 
-	IF EXISTS (SELECT 1 FROM dbo.MailSettings WHERE GroupId =  @TeamId AND Action = @Action)
+	SELECT 3 AS RoleId
+		,'Approver' AS [Role]
+		,EmpId
+		,FullName
+		,NickName
+		,Email
+		,LetsTalk
+	FROM dbo.Employee WITH (NOLOCK)
+	WHERE EmpId = @ApproverId
+		AND [Enabled] = 1
+		AND isDeleted = 0
+
+	SELECT 6 AS RoleId
+		,'HR' AS [Role]
+		,emp.EmpId
+		,emp.FullName
+		,emp.NickName
+		,emp.Email
+		,emp.LetsTalk
+	FROM dbo.Employee AS emp WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeRole AS er WITH (NOLOCK) ON emp.EmpId = er.EmployeeId
+	WHERE emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+		AND er.RoleId = 6
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.EmployeeRole WITH (NOLOCK)
+			WHERE emp.EmpId = EmployeeId
+				AND RoleId = 7
+			)
+
+	SELECT @TeamId = GroupId
+	FROM dbo.Employee WITH (NOLOCK)
+	WHERE EmpId = @EmpId
+
+	IF EXISTS (
+			SELECT 1
+			FROM dbo.MailSettings WITH (NOLOCK)
+			WHERE GroupId = @TeamId
+				AND [Action] = @Action
+			)
 	BEGIN
-		SELECT GroupId, Action, AllowSendUser, AllowSendVerifier, AllowSendApprover, AllowSendHR, AllowSendMailGroup
-		FROM dbo.MailSettings WHERE GroupId =  @TeamId AND Action = @Action
+		SELECT GroupId
+			,[Action]
+			,AllowSendUser
+			,AllowSendVerifier
+			,AllowSendApprover
+			,AllowSendHR
+			,AllowSendMailGroup
+		FROM dbo.MailSettings WITH (NOLOCK)
+		WHERE GroupId = @TeamId
+			AND [Action] = @Action
 	END
 	ELSE
 	BEGIN
-		SELECT GroupId, Action, AllowSendUser, AllowSendVerifier, AllowSendApprover, AllowSendHR, AllowSendMailGroup
-		FROM dbo.MailSettings WHERE GroupId = 0 AND Action = @Action
+		SELECT GroupId
+			,[Action]
+			,AllowSendUser
+			,AllowSendVerifier
+			,AllowSendApprover
+			,AllowSendHR
+			,AllowSendMailGroup
+		FROM dbo.MailSettings WITH (NOLOCK)
+		WHERE GroupId = 0
+			AND [Action] = @Action
 	END
+END
 

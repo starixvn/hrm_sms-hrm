@@ -10,7 +10,6 @@ CREATE PROCEDURE [dbo].[Employee_Summary_Update] @EmpID INT
 	,@WorkingHoursByWeek TINYINT = NULL
 	,@CompanyDate DATETIME = NULL
 	,@CountryCode NVARCHAR(5) = NULL
-	,@Unit NVARCHAR(2000) = NULL
 	,@IsDefaultSchedule BIT = 0
 	,@IsTopManager BIT = 0
 	,@OffDaysbyWeek SMALLINT = 0
@@ -44,7 +43,6 @@ BEGIN
 		,IsTopManager = @IsTopManager
 		,CompanyDate = @CompanyDate
 		,CountryCode = @CountryCode
-		,Unit = @Unit
 		,IsExpatUseHoliday = @IsExpatUseHoliday
 		,OffDaysbyWeek = @OffDaysbyWeek
 		,MilitaryFromDate = @MilitaryFromDate

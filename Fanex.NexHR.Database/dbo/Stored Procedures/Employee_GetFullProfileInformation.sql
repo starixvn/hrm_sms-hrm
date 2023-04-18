@@ -1,5 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
-	, @teamIds NVARCHAR(MAX) = ''
+﻿
+CREATE PROCEDURE [dbo].[Employee_GetFullProfileInformation] @query NVARCHAR(256) = NULL
+	,@teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
 	,@isLocal BIT = NULL
@@ -19,27 +20,50 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	CREATE TABLE #GroupsList (GroupId INT)
-	CREATE CLUSTERED INDEX IX_GroupsList ON #GroupsList (GroupId)
+	CREATE TABLE #tmpGroup (GroupId INT PRIMARY KEY)
 
-	INSERT INTO #GroupsList (GroupId)
+	CREATE TABLE #tmpEmployee (EmpId INT PRIMARY KEY)
+
+	CREATE TABLE #tmpSupervisor (
+		EmpId INT
+		,ActionType INT
+		,OwnerId INT
+		,Nickname NVARCHAR(20)
+		)
+
+	CREATE NONCLUSTERED INDEX IX_tmpSupervisor ON #tmpSupervisor (
+		EmpId
+		,ActionType
+		,OwnerId
+		)
+
+	INSERT INTO #tmpGroup (GroupId)
 	SELECT val
-	FROM fnc_strSplit( @teamIds, ',')
+	FROM fnc_strSplit(@teamIds, ',')
 
-	CREATE TABLE #tplEmployee (EmpId INT)
-	CREATE CLUSTERED INDEX IX_tplEmployee ON #tplEmployee (EmpId)
-
-	INSERT INTO #tplEmployee (EmpId)
+	INSERT INTO #tmpEmployee (EmpId)
 	SELECT e.EmpId
-	FROM dbo.Employee e WITH (NOLOCK)
-	INNER JOIN dbo.EmployeeSummary es WITH (NOLOCK) ON e.EmpId = es.EmpId
-	LEFT JOIN #GroupsList g ON g.GroupId = e.GroupId
-	WHERE ISNULL(e.isDeleted, 0) = ISNULL(@isDelete, 0)
-		AND e.[Enabled] = ISNULL(@enable, 1)
-		AND (@titleId IS NULL or e.JobTitleId = @titleId)
+	FROM dbo.Employee AS e WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+	WHERE (
+			@isDelete IS NULL
+			OR e.isDeleted = @isDelete
+			)
 		AND (
-			ISNULL( @teamIds, '') = ''
-			OR g.GroupId IS NOT NULL
+			@enable IS NULL
+			OR e.[Enabled] = @enable
+			)
+		AND (
+			@titleId IS NULL
+			OR e.JobTitleId = @titleId
+			)
+		AND (
+			ISNULL(@teamIds, '') = ''
+			OR EXISTS (
+				SELECT 1
+				FROM #tmpGroup AS tmpgr WITH (NOLOCK)
+				WHERE e.GroupId = tmpgr.GroupId
+				)
 			)
 		AND (
 			@isLocal IS NULL
@@ -71,9 +95,9 @@ BEGIN
 		,e.Qualification
 		,e.Major
 		,g.[Name] AS TeamName
-		,sec.Code AS SectionCode
-		,dep.Code AS DepartmentCode
-		,es.Unit
+		,sec.[Name] AS SectionName
+		,dep.[Name] AS DepartmentName
+		,unit.[Name] AS UnitName
 		,e.EmployeeCard
 		,es.CompanyDate
 		,e.ConfirmedDate
@@ -82,7 +106,7 @@ BEGIN
 		,e.JoinedDate
 		,es.MilitaryFromDate
 		,es.MilitaryToDate
-		,lk.[Name] AS JobTitle
+		,jt.[Name] AS JobTitle
 		,jl.[Name] AS JobLevel
 		,e.TeamDate
 		,e.Ethnic
@@ -103,49 +127,55 @@ BEGIN
 		,es.KeepInViewBalance
 		,es.IsTopManager
 		,es.IsLocal
-	FROM #tplEmployee tpl
-	INNER JOIN dbo.Employee e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
-	INNER JOIN dbo.[Group] g WITH (NOLOCK) ON e.GroupId = g.GroupId
-	INNER JOIN dbo.[Section] sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
-	INNER JOIN dbo.[Department] dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
-	LEFT JOIN dbo.EmployeeSummary es WITH (NOLOCK) ON tpl.EmpId = es.EmpId
-	LEFT JOIN [dbo].[Lookup] AS l WITH(NOLOCK) ON l.Code = 'JT'
-	LEFT JOIN [dbo].[LookupData] AS LK WITH(NOLOCK) ON l.Id = LK.LookupId AND e.JobTitleId = lk.Id
-	LEFT JOIN [dbo].[Country] AS ctry WITH(NOLOCK) ON ctry.CountryCode = es.CountryCode
-	LEFT JOIN [dbo].[JobLevel] AS jl WITH(NOLOCK) ON jl.JobLevelId = e.JobLevelId AND ISNULL(jl.IsDeleted, 0) = 0
+	FROM #tmpEmployee AS tpl WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON tpl.EmpId = e.EmpId
+		INNER JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupId = g.GroupId
+		INNER JOIN dbo.[Section] AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId
+		INNER JOIN dbo.[Department] AS dep WITH (NOLOCK) ON sec.DepartmentId = dep.DepartmentId
+		INNER JOIN dbo.Unit AS unit WITH (NOLOCK) ON dep.UnitId = unit.UnitId
+		LEFT JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON tpl.EmpId = es.EmpId
+		LEFT JOIN dbo.[Lookup] AS l WITH (NOLOCK) ON l.Code = 'JT'
+		LEFT JOIN dbo.[LookupData] AS jt WITH (NOLOCK) ON l.Id = jt.LookupId
+		AND e.JobTitleId = jt.Id
+		LEFT JOIN dbo.[Country] AS ctry WITH (NOLOCK) ON ctry.CountryCode = es.CountryCode
+		LEFT JOIN dbo.[JobLevel] AS jl WITH (NOLOCK) ON jl.JobLevelId = e.JobLevelId
+		AND jl.IsDeleted = 0
 	ORDER BY e.EmpId
 
-
-	CREATE TABLE #tblSupervisor (EmpId INT, ActionType INT, OwnerId INT, NickName NVARCHAR(20))
-	CREATE NONCLUSTERED INDEX IX_tblSupervisor ON #tblSupervisor (EmpId, ActionType, OwnerId, NickName)
-
-	INSERT INTO #tblSupervisor
+	INSERT INTO #tmpSupervisor(
+		EmpId
+		,ActionType
+		,OwnerId
+		,Nickname
+		)
 	SELECT DISTINCT su.EmpId
 		,su.ActionType
 		,su.OwnerId
-		,e.NickName
-	FROM dbo.[EmployeeSupervisor] su WITH (NOLOCK)
-	INNER JOIN dbo.Employee e WITH (NOLOCK) ON su.OwnerId = e.EmpId
-	WHERE su.ActionType IN (2, 3, 4, 5, 8) AND ISNULL(su.IsDeleted, 0) = 0
+		,empsu.Nickname
+	FROM dbo.[EmployeeSupervisor] AS su WITH (NOLOCK)
+		INNER JOIN #tmpEmployee AS emp WITH (NOLOCK) ON su.EmpId = emp.EmpId
+		INNER JOIN dbo.Employee AS empsu WITH (NOLOCK) ON su.OwnerId = empsu.EmpId
+	WHERE empsu.[Enabled] = 1
+		AND empsu.isDeleted = 0
+		AND su.ActionType IN (2, 3, 4, 5, 8)
+		AND su.IsDeleted = 0
+	ORDER BY su.EmpId
 
-	SELECT tbl.EmpId, tbl.ActionType, tbl.OwnerId, tbl.NickName
-	FROM #tplEmployee tpl WITH (NOLOCK)
-	LEFT JOIN #tblSupervisor AS tbl WITH (NOLOCK) ON tpl.EmpId = tbl.EmpId
+	SELECT tbl.EmpId
+		,tbl.ActionType
+		,tbl.OwnerId
+		,tbl.Nickname
+	FROM #tmpEmployee AS tpl WITH (NOLOCK)
+		INNER JOIN #tmpSupervisor AS tbl WITH (NOLOCK) ON tpl.EmpId = tbl.EmpId
 
+	SELECT emprole.EmployeeId
+		,emprole.RoleId
+	FROM #tmpEmployee AS tpl WITH (NOLOCK)
+		INNER JOIN dbo.EmployeeRole AS emprole WITH (NOLOCK) ON emprole.EmployeeId = tpl.EmpId
 
-	SELECT emRo.EmployeeId
-		,emRo.RoleId
-		,lk.Code
-		,lk.[Name]
-	FROM #tplEmployee tpl
-	LEFT JOIN dbo.EmployeeRole AS emRo WITH (NOLOCK) ON emRo.EmployeeId = tpl.EmpId
-	INNER JOIN dbo.LookupData AS lk WITH (NOLOCK) ON emRo.RoleId = lk.Value
-	INNER JOIN dbo.[Lookup] AS l WITH (NOLOCK) ON l.Id = lk.LookupId AND l.Code = 'SR' -- System Role
+	DROP TABLE #tmpGroup
 
+	DROP TABLE #tmpEmployee
 
-	DROP TABLE #GroupsList
-
-	DROP TABLE #tplEmployee
-
-	DROP TABLE #tblSupervisor
+	DROP TABLE #tmpSupervisor
 END

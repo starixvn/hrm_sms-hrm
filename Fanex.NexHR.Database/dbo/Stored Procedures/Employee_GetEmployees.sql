@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
+﻿
+CREATE PROCEDURE [dbo].[Employee_GetEmployees] @query NVARCHAR(256) = NULL
 	,@teamIds NVARCHAR(MAX) = ''
 	,@enable BIT = NULL
 	,@isDelete BIT = NULL
@@ -165,47 +166,29 @@ BEGIN
 	  + ',s.CountryCode' + CHAR(13)
 	  + ',s.IsExpatUseHoliday' + CHAR(13)
 	  + ',ISNULL(ctry.Nationality, ctry.CountryName) CountryName' + CHAR(13)
-	  + ',s.Unit' + CHAR(13)
 	  + ',s.MilitaryFromDate' + CHAR(13)
 	  + ',s.MilitaryToDate' + CHAR(13)
-	  + ',e_cs.[BankAccount]' + CHAR(13)
-	  + ',e_cs.[TaxCode]' + CHAR(13)
-	  + ',e_cs.[SocialInsuranceNo]' + CHAR(13)
-	  + ',e_cs.[RegisteredHospital]' + CHAR(13)
-	  + ',e_cs.[Contract1]' + CHAR(13)
-	  + ',e_cs.[FromDate1]' + CHAR(13)
-	  + ',e_cs.[ToDate1]' + CHAR(13)
-	  + ',e_cs.[Contract2]' + CHAR(13)
-	  + ',e_cs.[FromDate2]' + CHAR(13)
-	  + ',e_cs.[ToDate2]' + CHAR(13)
-	  + ',e_cs.[Contract3]' + CHAR(13)
-	  + ',e_cs.[FromDate3]' + CHAR(13)
-	  + ',e_cs.[ToDate3]' + CHAR(13)
-	  + ',e_cs.[Contract4]' + CHAR(13)
-	  + ',e_cs.[FromDate4]' + CHAR(13)
-	  + ',e_cs.[ToDate4]' + CHAR(13)
-	  + ',e_cs.[Contract5]' + CHAR(13)
-	  + ',e_cs.[FromDate5]' + CHAR(13)
-	  + ',e_cs.[ToDate5] ' + CHAR(13)
-	  + ',e_cs.History' + CHAR(13)
-	  + ',lk.Name AS [JobTitle]' + CHAR(13)
-	  + ',g.GroupId AS [TeamID]' + CHAR(13)
-	  + ',g.Code AS [Team]' + CHAR(13)
+	  + ',jt.Name AS [JobTitle]' + CHAR(13)
+	  + ',unit.[Name] AS UnitName' + CHAR(13)
+	  + ',g.GroupId AS [TeamId]' + CHAR(13)
+	  + ',g.Code AS [TeamCode]' + CHAR(13)
 	  + ',g.Name AS [TeamName]' + CHAR(13)
 	  + ',g.Rank' + CHAR(13)
 	  + ',sec.SectionId' + CHAR(13)
-	  + ',sec.Code SectionCode' + CHAR(13)
+	  + ',sec.Code AS SectionCode' + CHAR(13)
+	  + ',sec.[Name] AS SectionName' + CHAR(13)
 	  + ',dep.DepartmentId' + CHAR(13)
-	  + ',dep.Code DepartmentCode' + CHAR(13)
+	  + ',dep.Code AS DepartmentCode' + CHAR(13)
+	  + ',dep.[Name] AS DepartmentName' + CHAR(13)
 	  + 'FROM dbo.Employee AS e WITH (NOLOCK)' + CHAR(13)
 	  + 'INNER JOIN dbo.EmployeeSummary AS s WITH (NOLOCK) ON s.EmpId = e.EmpId' + CHAR(13)
-	  + 'INNER JOIN dbo.EmployeeContract AS e_cs WITH (NOLOCK) ON e_cs.EmpId = e.EmpId' + CHAR(13)
 	  + 'LEFT JOIN dbo.[Group] AS g WITH (NOLOCK) ON e.GroupID = g.GroupID' + CHAR(13)
 	  + 'INNER JOIN dbo.[Section] AS sec WITH (NOLOCK) ON g.SectionId = sec.SectionId' + CHAR(13)
 	  + 'INNER JOIN dbo.[Department] AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId' + CHAR(13)
+	  + 'INNER JOIN dbo.[Unit] AS unit WITH (NOLOCK) ON dep.UnitId = unit.UnitId' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Country] AS ctry WITH(NOLOCK) ON ctry.CountryCode = s.CountryCode' + CHAR(13)
 	  + 'LEFT JOIN [dbo].[Lookup] AS l WITH(NOLOCK) ON l.Code = ''JT''' + CHAR(13)
-	  + 'LEFT JOIN [dbo].[LookupData] AS LK WITH(NOLOCK) ON l.Id = LK.LookupId AND e.JobTitleId = lk.ID' + CHAR(13)
+	  + 'LEFT JOIN [dbo].[LookupData] AS jt WITH(NOLOCK) ON l.Id = jt.LookupId AND e.JobTitleId = jt.Id' + CHAR(13)
 	  + @sWhere + 'ORDER BY ' + CHAR(13)
 
 	IF (@enable = 0)
@@ -220,14 +203,9 @@ BEGIN
 
 	EXEC sp_executesql @SQL
 
-	SELECT emRo.EmployeeId
-		,emRo.RoleId
-		,loDa.Code
-		,loDa.[Name]
+	SELECT EmployeeId
+		,RoleId
 	FROM dbo.EmployeeRole AS emRo WITH (NOLOCK)
-		INNER JOIN dbo.LookupData loDa WITH (NOLOCK) ON emRo.RoleId = loDa.Value
-		INNER JOIN dbo.[Lookup] look WITH (NOLOCK) ON look.Id = loDa.LookupId
-		AND look.Code = 'SR' -- System Role
 
 	PRINT @SQL
 

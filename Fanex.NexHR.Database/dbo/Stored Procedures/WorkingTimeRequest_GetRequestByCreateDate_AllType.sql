@@ -604,22 +604,19 @@ BEGIN
 		,sec.Code AS SectionCode
 		,dep.DepartmentId
 		,dep.Code AS DepartmentCode
-		,ap_V.EmpId AS VerifierId
-		,ap_V.NickName AS VerifierNickName
-		,ap_V.FullName AS VerifierFullName
+		,verifier.EmpId AS VerifierId
+		,verifier.NickName AS VerifierNickName
+		,verifier.FullName AS VerifierFullName
 		,r.VerifiedDate
 		,r.VerifiedStatus
-		,ap_A.EmpId AS ApproverId
-		,ap_A.NickName AS ApproverNickName
-		,ap_A.FullName AS ApproverFullName
-		,ap_AH.EmpId AS ApprovedId
-		,ap_AH.NickName AS ApprovedNickName
-		,ap_AH.FullName AS ApprovedFullName
+		,approver.EmpId AS ApproverId
+		,approver.NickName AS ApproverNickName
+		,approver.FullName AS ApproverFullName
 		,r.ApprovedDate
 		,r.ApprovedStatus
-		,ap_H.EmpId AS ProcessedId
-		,ap_H.NickName AS ProcessedNickName
-		,ap_H.FullName AS ProcessedFullName
+		,hr.EmpId AS ProcessedId
+		,hr.NickName AS ProcessedNickName
+		,hr.FullName AS ProcessedFullName
 		,r.HRDate AS ProcessedDate
 		,r.HRStatus AS ProcessedStatus
 		,r.ModifiedBy ModifiedById
@@ -636,16 +633,10 @@ BEGIN
 		LEFT JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		LEFT JOIN dbo.CheckInOutRequest AS inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
 		LEFT JOIN dbo.ChangeShiftRequest AS csr WITH (NOLOCK) ON r.RequestId = csr.RequestId
-		LEFT JOIN dbo.Employee AS ap_V WITH (NOLOCK) ON ap_V.empid = r.VerifierId
-		LEFT JOIN dbo.Employee AS ap_A WITH (NOLOCK) ON ap_A.empid = r.ApproverId
-		LEFT JOIN dbo.Employee AS ap_H WITH (NOLOCK) ON ap_H.empid = r.HRId
+		LEFT JOIN dbo.Employee AS verifier WITH (NOLOCK) ON verifier.empid = r.VerifierId
+		LEFT JOIN dbo.Employee AS approver WITH (NOLOCK) ON approver.empid = r.ApproverId
+		LEFT JOIN dbo.Employee AS hr WITH (NOLOCK) ON hr.empid = r.HRId
 		LEFT JOIN dbo.Employee AS e_m WITH (NOLOCK) ON e_m.empID = r.ModifiedBy
-		LEFT JOIN dbo.Employee AS ap_AH WITH (NOLOCK) ON ap_AH.empid = (
-			SELECT TOP 1 ModifiedBy
-			FROM WorkingTimeRequestHistory WITH (NOLOCK)
-			WHERE RequestId = r.RequestId
-			ORDER BY LogDate DESC
-			)
 		LEFT JOIN #tblTotalDaysRequestInMonth AS rm ON r.empID = rm.empid
 		AND r.RequestType = rm.RequestType
 		LEFT JOIN #tblGeneralLeaveDetail AS gdt ON r.RequestId = gdt.RequestId
@@ -659,12 +650,6 @@ BEGIN
 		LEFT JOIN dbo.LeaveType AS lv WITH (NOLOCK) ON lv.LeaveTypeID = lr.LeaveType
 		LEFT JOIN dbo.Section AS sec WITH (NOLOCK) ON sec.SectionId = g.SectionId
 		LEFT JOIN dbo.Department AS dep WITH (NOLOCK) ON dep.DepartmentId = sec.DepartmentId
-		OUTER APPLY (
-		SELECT TOP 1 ApproverId
-		FROM WorkingTimeRequestHistory
-		WHERE RequestId = r.RequestId
-		ORDER BY LogDate DESC
-		) AS rh
 	WHERE @leaveTypeId IS NULL
 		OR lr.LeaveType = @leaveTypeId
 	ORDER BY r.CreatedDate DESC

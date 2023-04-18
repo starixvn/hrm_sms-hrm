@@ -31,7 +31,7 @@ BEGIN
 		INNER JOIN dbo.Section AS section WITH (NOLOCK) ON gr.SectionId = section.SectionId
 		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON section.DepartmentId = dept.DepartmentId
 		INNER JOIN dbo.Unit AS unit WITH (NOLOCK) ON dept.UnitId = unit.UnitId
-	WHERE emp.Code IN ('00031', '00036', '00053', '00090')
+	WHERE emp.Code IN ('00031', '00036', '00053', '00067', '00090')
 		AND emp.[Enabled] = 1
 		AND emp.isDeleted = 0
 END
