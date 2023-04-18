@@ -20,12 +20,10 @@
             var botConfigs = configuration.GetSection("LetstalkBotConfigurations").Get<List<BotConfig>>();
             services.AddSingleton(botConfigs);
 
-            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddHttpClient();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ICryptographyService, CryptographyService>();
             services.AddSingleton<IJwtService, JwtService>();
-            services.AddTransient<HttpClientService>();
-            services.AddTransient<LetstalkService>();
 
             services.AddSingleton<Func<int, ILetstalkService>>(serviceProvider => botId =>
             {

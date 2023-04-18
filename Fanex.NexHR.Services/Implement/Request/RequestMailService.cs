@@ -7,6 +7,7 @@
     using Fanex.NexHR.Criteria.Request;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Request;
+    using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
 
@@ -29,59 +30,30 @@
 
         public EmailModel GetMailToMailCCAndLetstalk(long requestId, int action)
         {
-            var emailModel = new EmailModel();
             var criteria = new GetRequestRelatedPeopleCriteria
             {
                 RequestId = requestId,
                 Action = action
             };
             RequestRelatedPeopleModel relatedPeople = requestRepository.GetRequestRelatedPeople(criteria);
-            if (relatedPeople.EmailSetting.AllowSendApprover)
-            {
-                emailModel = GetMailApprover(relatedPeople);
-            }
 
-            if (CheckGetMailVerifier(relatedPeople, emailModel.SendTo))
-            {
-                emailModel = GetMailVerifier(relatedPeople, emailModel);
-            }
+            EmailModel emailModel = GetMailAndLetstalkApprover(relatedPeople);
 
-            if (relatedPeople.EmailSetting.AllowSendVerifier)
-            {
-                emailModel = GetLetstalkVerifier(relatedPeople, emailModel);
-            }
+            GetMailAndLetstalkVerifier(relatedPeople, emailModel);
 
-            if (relatedPeople.EmailSetting.AllowSendHR)
-            {
-                RelatedPeopleAllowSendHR(relatedPeople);
-                emailModel = GetMailHR(relatedPeople, emailModel);
-                emailModel = GetLetstalkHr(relatedPeople, emailModel);
-            }
+            RelatedPeopleAllowSendHR(relatedPeople);
+            GetMailAndLetstalkHR(relatedPeople, emailModel);
 
-            if (relatedPeople.EmailSetting.AllowSendUser)
-            {
-                emailModel = GetMailOwnerRequest(relatedPeople, emailModel);
-                emailModel = GetLetstalkOwnerRequest(relatedPeople, emailModel);
-            }
+            GetMailAndLetstalkOwnerRequest(relatedPeople, emailModel);
 
             if (relatedPeople.EmailSetting.AllowSendMailGroup)
             {
-                emailModel = GetMailGroup(relatedPeople, emailModel);
+                GetMailGroup(relatedPeople, emailModel);
             }
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
             emailModel.Sender = ConfigSettings.EmailSetting;
             return emailModel;
-        }
-
-        private static bool CheckGetMailVerifier(RequestRelatedPeopleModel relatedPeople, string sendTo)
-        {
-            bool isValidVerifier = relatedPeople.Verifier != null && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email);
-            bool isVerifierDifferenceApprover = isValidVerifier && relatedPeople.Approver != null
-                && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
-            return relatedPeople.EmailSetting.AllowSendVerifier
-                   && isValidVerifier
-                   && (string.IsNullOrWhiteSpace(sendTo) || isVerifierDifferenceApprover);
         }
 
         public string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays)
@@ -217,22 +189,26 @@
             return action;
         }
 
-        private static EmailModel GetMailApprover(RequestRelatedPeopleModel relatedPeople)
+        private static EmailModel GetMailAndLetstalkApprover(RequestRelatedPeopleModel relatedPeople)
         {
             var emailModel = new EmailModel();
-            if (relatedPeople.Approver != null)
+            SupervisorNameModel approver = relatedPeople.Approver;
+            if (approver != null && relatedPeople.EmailSetting.AllowSendApprover)
             {
-                emailModel.SendTo = relatedPeople.Approver.Email;
-                emailModel.SendToNickName = relatedPeople.Approver.NickName;
-                emailModel.LetsTalk = relatedPeople.Approver.LetsTalk;
+                emailModel.SendTo = approver.Email;
+                emailModel.SendToNickName = approver.NickName;
+                emailModel.LetsTalk = !string.IsNullOrWhiteSpace(approver.LetsTalk) ? approver.LetsTalk : string.Empty;
             }
 
             return emailModel;
         }
 
-        private static EmailModel GetMailVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static void GetMailAndLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (relatedPeople.Verifier != null)
+            bool isValidVerifier = relatedPeople.Verifier != null;
+            bool isValidApprover = relatedPeople.Approver != null;
+
+            if (relatedPeople.EmailSetting.AllowSendVerifier && isValidVerifier)
             {
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
@@ -241,49 +217,44 @@
                 }
                 else
                 {
-                    emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
+                    bool isValidEmail = isValidApprover
+                        && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
+                        && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
+                    if (isValidEmail)
+                    {
+                        emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
+                    }
+                }
+
+                GetLetstalkVerifier(relatedPeople, emailModel);
+            }
+        }
+
+        private static void GetLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        {
+            if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
+            {
+                emailModel.LetsTalk = relatedPeople.Verifier.LetsTalk;
+            }
+            else
+            {
+                bool isValidLetalk = relatedPeople.Approver != null
+                       && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
+                       && !relatedPeople.Verifier.LetsTalk.Equals(relatedPeople.Approver.LetsTalk, StringComparison.OrdinalIgnoreCase);
+                if (isValidLetalk)
+                {
+                    emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
                 }
             }
-
-            return emailModel;
         }
 
-        private static EmailModel GetLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static void GetMailAndLetstalkHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (relatedPeople.Verifier != null && !string.IsNullOrEmpty(emailModel.LetsTalk))
+            if (relatedPeople.EmailSetting.AllowSendHR && relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
             {
-                emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
-            }
+                var mailHRs = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.Email)).Select(x => x.Email).ToList());
+                var letstalks = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.LetsTalk)).Select(x => x.LetsTalk).ToList());
 
-            return emailModel;
-        }
-
-        private static EmailModel GetLetstalkHr(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
-        {
-            if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
-            {
-                emailModel.LetsTalk += ";" + string.Join(";", relatedPeople.ListHR.Select(x => x.LetsTalk ?? string.Empty));
-            }
-
-            return emailModel;
-        }
-
-        private static EmailModel GetLetstalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
-        {
-            if (relatedPeople.Requester != null)
-            {
-                emailModel.LetsTalk += ";" + relatedPeople.Requester.LetsTalk;
-            }
-
-            return emailModel;
-        }
-
-        private static EmailModel GetMailHR(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
-        {
-            if (relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
-            {
-                var mailHRs = string.Join(";", relatedPeople.ListHR.Select(x => x.Email ?? string.Empty));
-                var letstalks = string.Join(";", relatedPeople.ListHR.Select(x => x.LetsTalk ?? string.Empty));
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
                     emailModel.SendTo = mailHRs;
@@ -293,14 +264,21 @@
                 {
                     emailModel.SendCC = mailHRs;
                 }
-            }
 
-            return emailModel;
+                if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
+                {
+                    emailModel.LetsTalk = letstalks;
+                }
+                else
+                {
+                    emailModel.LetsTalk += ";" + letstalks;
+                }
+            }
         }
 
-        private static EmailModel GetMailOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static void GetMailAndLetstalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            if (relatedPeople.Requester != null)
+            if (relatedPeople.EmailSetting.AllowSendUser && relatedPeople.Requester != null)
             {
                 if (string.IsNullOrWhiteSpace(emailModel.SendTo))
                 {
@@ -311,9 +289,16 @@
                 {
                     emailModel.SendCC = AddMailToList(emailModel.SendCC, relatedPeople.Requester.Email);
                 }
-            }
 
-            return emailModel;
+                if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
+                {
+                    emailModel.LetsTalk = relatedPeople.Requester.LetsTalk;
+                }
+                else
+                {
+                    emailModel.LetsTalk += ";" + relatedPeople.Requester.LetsTalk;
+                }
+            }
         }
 
         private static string AddMailToList(string mailList, string mail)
@@ -331,7 +316,7 @@
             return mailList + ";" + mail;
         }
 
-        private static EmailModel GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+        private static void GetMailGroup(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
             if (relatedPeople.Requester != null)
             {
@@ -349,8 +334,6 @@
                     emailModel.SendCC += ";" + relatedPeople.Requester.MailGroup;
                 }
             }
-
-            return emailModel;
         }
     }
 }

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Services.Interfaces;
-    using Hangfire;
     using HRM.Letstalk.Core.Services;
 
     public class LetstalkService : ILetstalkService
@@ -18,8 +17,7 @@
 
         public void SendNotification(string letstalkId, string subject, string message)
         {
-            var letstalk = !string.IsNullOrWhiteSpace(ConfigSettings.Letstalk_AccountIdTesting) ? ConfigSettings.Letstalk_AccountIdTesting : letstalkId;
-            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrEmpty(letstalk))
+            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrWhiteSpace(letstalkId))
             {
                 var jwtToken = sendNotificationService.GetToken(ConfigSettings.Letstalk_API_BaseUrl,
                     ConfigSettings.Letstalk_Token_Username,
@@ -30,13 +28,11 @@
                     var data = new Dictionary<string, object>
                     {
                         { "BotId", ConfigSettings.Letstalk_BotId },
-                        { "ConversationId", letstalk },
+                        { "ConversationId", letstalkId },
                         { "Message", content }
                     };
 
-                    BackgroundJob.Enqueue(() =>
-                           sendNotificationService.SendNotificationToLetstalk(ConfigSettings.Letstalk_API_BaseUrl, jwtToken.Token, data)
-                    );
+                    sendNotificationService.SendNotificationToLetstalk(ConfigSettings.Letstalk_API_BaseUrl, jwtToken.Token, data);
                 }
             }
         }

@@ -22,7 +22,7 @@
         private readonly List<WebhookConfiguration> webhookConfigurations;
 
         public NotifyController(
-            ILogger logger,
+            ILogger<NotifyController> logger,
             List<WebhookConfiguration> webhookConfigurations,
             Func<int, ILetstalkService> letstalkService
             )

@@ -31,6 +31,8 @@ namespace Fanex.NexHR.Site
             app.UseHangfireServer();
 
             HangfireJobScheduler.ScheduleRecurringJobs();
+
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12;
         }
     }
