@@ -3,6 +3,7 @@ CREATE PROCEDURE [dbo].[Site_Insert] @SiteId SMALLINT OUTPUT
 	,@CompanyId SMALLINT
 	,@SiteName VARCHAR(50)
 	,@SiteURL NVARCHAR(100) = NULL
+	,@SSOUrl NVARCHAR(100) = NULL
 	,@IsActive BIT
 	,@AccessToken VARCHAR(100)
 	,@CreatedBy INT
@@ -56,6 +57,7 @@ BEGIN
 		,SiteName
 		,IsActive
 		,SiteURL
+		,SSOUrl
 		,AccessToken
 		,CreatedBy
 		,CreatedDate
@@ -65,6 +67,7 @@ BEGIN
 		,@SiteName
 		,@IsActive
 		,@SiteURL
+		,@SSOUrl
 		,@AccessToken
 		,@CreatedBy
 		,@startRun
@@ -78,6 +81,7 @@ BEGIN
 				,@IsActive AS '@IsActive'
 				,@AccessToken AS '@AccessToken'
 				,@SiteURL AS '@SiteURL'
+				,@SSOUrl AS '@SSOUrl'
 				,@CreatedBy AS '@CreatedBy'
 				,@startRun AS '@CreatedDate'
 			FOR XML PATH('r')

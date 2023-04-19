@@ -88,6 +88,30 @@ BEGIN
 		,ModifiedDate = @startRun
 	WHERE UserId = @tmpUserId
 
+	INSERT INTO dbo.UserRole (
+		UserId
+		,RoleId
+		,SiteId
+		,CreatedBy
+		,CreatedDate
+		)
+	SELECT @tmpUserId
+		,r.RoleId
+		,@SiteId
+		,@ModifiedBy
+		,@startRun
+	FROM dbo.[Role] AS r WITH (NOLOCK)
+	WHERE r.SiteId = @SiteId
+		AND r.IsActive = 1
+		AND r.IsDefault = 1
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.UserRole AS us WITH (NOLOCK)
+			WHERE us.UserId = @tmpUserId
+				AND us.SiteId = @SiteId
+				AND us.RoleId = r.RoleId
+			)
+	
 	IF NOT EXISTS (
 			SELECT 1
 			FROM dbo.UserSite WITH (NOLOCK)

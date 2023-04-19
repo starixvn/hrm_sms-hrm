@@ -18,6 +18,7 @@ BEGIN
 		,s.AccessToken
 		,s.IsActive
 		,s.SiteURL
+		,s.SSOUrl
 		,c.CompanyId
 		,c.[Name] AS CompanyName
 	FROM dbo.[Site] AS s WITH (NOLOCK)

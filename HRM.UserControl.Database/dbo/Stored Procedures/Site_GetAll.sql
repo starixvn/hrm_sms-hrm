@@ -16,6 +16,7 @@ BEGIN
 	SELECT s.SiteId
 		,s.SiteName
 		,s.SiteURL
+		,s.SSOUrl
 		,s.IsActive
 		,s.AccessToken
 		,COUNT(us.UserId) AS NumOfUser
@@ -29,6 +30,7 @@ BEGIN
 	GROUP BY s.SiteId
 		,s.SiteName
 		,s.SiteURL
+		,s.SSOUrl
 		,s.IsActive
 		,s.AccessToken
 		,c.CompanyId

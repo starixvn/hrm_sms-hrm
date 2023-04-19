@@ -1,6 +1,6 @@
 ﻿
 CREATE PROCEDURE [dbo].[API_UnitHead_UpdateInfo] @SiteId SMALLINT
-	,@Value VARCHAR(MAX)
+	,@Value NVARCHAR(MAX)
 	,@ModifiedBy INT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(1000) = '' OUTPUT

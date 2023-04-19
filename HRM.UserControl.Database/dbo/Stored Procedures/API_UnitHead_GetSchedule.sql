@@ -42,6 +42,7 @@ BEGIN
 		AND tmp.WorkDate = uhs.WorkDate
 	WHERE uhinfo.IsActive = 1
 		AND uhinfo.IsDeleted = 0
+		AND s.CompanyId IN (1, 3) -- nexcel, sms
 
 	DROP TABLE #tempDate
 END

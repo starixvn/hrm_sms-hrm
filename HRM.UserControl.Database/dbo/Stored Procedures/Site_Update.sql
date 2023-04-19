@@ -3,6 +3,7 @@ CREATE PROCEDURE [dbo].[Site_Update] @SiteId SMALLINT
 	,@CompanyId SMALLINT
 	,@SiteName NVARCHAR(50)
 	,@SiteURL NVARCHAR(100) = NULL
+	,@SSOUrl NVARCHAR(100) = NULL
 	,@IsActive BIT
 	,@ModifiedBy INT
 	,@AccessToken VARCHAR(100)
@@ -61,10 +62,11 @@ BEGIN
 				,IsActive AS '@IsActive'
 				,AccessToken AS '@AccessToken'
 				,SiteURL AS '@SiteURL'
+				,SSOUrl AS '@SSOUrl'
 				,ModifiedBy AS '@ModifiedBy'
 				,ModifiedDate AS '@ModifiedDate'
-			FROM dbo.[Site] AS s WITH (NOLOCK)
-			WHERE s.SiteId = @SiteId
+			FROM dbo.[Site] WITH (NOLOCK)
+			WHERE SiteId = @SiteId
 			FOR XML PATH('r')
 				,TYPE
 			)
@@ -76,6 +78,7 @@ BEGIN
 		,AccessToken = AccessToken
 		,IsActive = @IsActive
 		,SiteURL = @SiteURL
+		,SSOUrl = @SSOUrl
 		,ModifiedBy = @ModifiedBy
 		,ModifiedDate = @startRun
 	WHERE SiteId = @SiteId
@@ -88,10 +91,11 @@ BEGIN
 				,IsActive AS '@IsActive'
 				,AccessToken AS '@AccessToken'
 				,SiteURL AS '@SiteURL'
+				,SSOUrl AS '@SSOUrl'
 				,ModifiedBy AS '@ModifiedBy'
 				,ModifiedDate AS '@ModifiedDate'
-			FROM dbo.[Site] AS s WITH (NOLOCK)
-			WHERE s.SiteId = @SiteId
+			FROM dbo.[Site] WITH (NOLOCK)
+			WHERE SiteId = @SiteId
 			FOR XML PATH('r')
 				,TYPE
 			)

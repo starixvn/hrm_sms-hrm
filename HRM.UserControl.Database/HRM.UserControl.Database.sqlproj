@@ -81,7 +81,6 @@
     <Build Include="dbo\Stored Procedures\UserMapping_GetByUserId.sql" />
     <Build Include="dbo\Stored Procedures\User_UpdateSiteStatus.sql" />
     <Build Include="dbo\Stored Procedures\User_UpdateSiteRole.sql" />
-    <Build Include="dbo\Stored Procedures\User_GetSiteAndMenuItemByUserId.sql" />
     <Build Include="dbo\Stored Procedures\User_GetAvailableSites.sql" />
     <Build Include="dbo\Stored Procedures\User_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\User_AssignSite.sql" />
@@ -133,5 +132,6 @@
     <Build Include="dbo\Stored Procedures\API_UnitHead_UpdateInfo.sql" />
     <Build Include="dbo\Stored Procedures\API_UnitHead_GetSchedule.sql" />
     <Build Include="dbo\Stored Procedures\API_UnitHead_GetInfo.sql" />
+    <Build Include="dbo\Stored Procedures\User_GetUserSiteByUserId.sql" />
   </ItemGroup>
 </Project>

@@ -26,4 +26,5 @@ BEGIN
 	FROM dbo.UnitHeadInfo AS uhinfo WITH (NOLOCK)
 		INNER JOIN dbo.[Site] AS s WITH (NOLOCK) ON uhinfo.SiteId = s.SiteId
 		INNER JOIN dbo.Company AS c WITH (NOLOCK) ON s.CompanyId = c.CompanyId
+	WHERE c.CompanyId IN (1, 3) -- nexcel, sms
 END
