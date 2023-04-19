@@ -35,6 +35,7 @@
         // Letstalk
         public static bool IsEnableSendLetstalk
             => Convert.ToBoolean(ConfigurationManager.AppSettings["Letstalk:Enable"]);
+        public static string Letstalk_TestingAccountId => ConfigurationManager.AppSettings["Letstalk:TestingAccountId"];
         public static string Letstalk_API_BaseUrl => ConfigurationManager.AppSettings["Letstalk.API:BaseUrl"];
         public static string Letstalk_Token_Username => ConfigurationManager.AppSettings["Letstalk.API.Token:Username"];
         public static string Letstalk_Token_Password => ConfigurationManager.AppSettings["Letstalk.API.Token:Password"];

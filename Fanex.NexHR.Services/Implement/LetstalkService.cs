@@ -17,7 +17,8 @@
 
         public void SendNotification(string letstalkId, string subject, string message)
         {
-            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrWhiteSpace(letstalkId))
+            var letstalk = !string.IsNullOrWhiteSpace(ConfigSettings.Letstalk_TestingAccountId) ? ConfigSettings.Letstalk_TestingAccountId : letstalkId;
+            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrWhiteSpace(letstalk))
             {
                 var jwtToken = sendNotificationService.GetToken(ConfigSettings.Letstalk_API_BaseUrl,
                     ConfigSettings.Letstalk_Token_Username,
@@ -28,7 +29,7 @@
                     var data = new Dictionary<string, object>
                     {
                         { "BotId", ConfigSettings.Letstalk_BotId },
-                        { "ConversationId", letstalkId },
+                        { "ConversationId", letstalk },
                         { "Message", content }
                     };
 
