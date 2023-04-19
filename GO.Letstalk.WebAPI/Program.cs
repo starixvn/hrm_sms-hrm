@@ -17,6 +17,7 @@ namespace GO.Letstalk.WebAPI
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             var logfile = Path.Combine(baseDir, "logs", "log.txt");
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.With(new ThreadIdEnricher())
                 .Enrich.FromLogContext()
