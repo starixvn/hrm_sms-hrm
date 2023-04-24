@@ -69,7 +69,7 @@
                 if (loginResult.IsSuccessfull)
                 {
                     EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
-                    if(employee == null)
+                    if (employee == null)
                     {
                         ModelState.AddModelError(string.Empty, "User has not been mapped.");
                         return View(model);
@@ -131,7 +131,7 @@
                 if (loginResult.IsSuccessfull)
                 {
                     EmployeeSession employee = hrmAuthService.GetByUserId(Convert.ToInt32(userIdValue));
-                    if(employee == null)
+                    if (employee == null)
                     {
                         return RedirectToAction("Login");
                     }

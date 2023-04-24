@@ -26,19 +26,22 @@
         private readonly IUserControlSession userControlSession;
         private readonly IAuthService authService;
         private readonly IBaseService baseService;
+        private readonly IEpaTodolistService epaTodolistService;
 
         public TodolistController(
             List<ApiSiteSetting> apiSiteSettings,
             IHttpClientFactory clientFactory,
             IUserControlSession userControlSession,
             IAuthService authService,
-            IBaseService baseService)
+            IBaseService baseService,
+            IEpaTodolistService epaTodolistService)
         {
             this.apiSiteSettings = apiSiteSettings;
             this.clientFactory = clientFactory;
             this.userControlSession = userControlSession;
             this.authService = authService;
             this.baseService = baseService;
+            this.epaTodolistService = epaTodolistService;
         }
 
         public async Task<IActionResult> GetTodolistBlock()
@@ -79,6 +82,18 @@
 
                 todoitems.AddRange(items);
             }
+
+            return Json(todoitems);
+        }
+
+        public async Task<IActionResult> GetEpaTodolist()
+        {
+            var criteria = new GetUserSiteByUserIdCriteria
+            {
+                UserId = userControlSession.UserId
+            };
+            var userSites = await baseService.GetDataAsync<UserSite>(criteria);
+            IList<TodolistItem> todoitems = await epaTodolistService.GetByUserIdAsync(userControlSession.UserId, userSites);
 
             return Json(todoitems);
         }

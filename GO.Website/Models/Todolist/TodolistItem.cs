@@ -8,6 +8,8 @@
     {
         public string Id => Guid.NewGuid().ToString();
         public short SiteId { get; set; }
+        public string SiteName { get; set; }
+
         public string Name { get; set; }
         public short TypeId { get; set; }
 

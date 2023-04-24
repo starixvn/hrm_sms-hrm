@@ -165,6 +165,7 @@ namespace GO.Website
 
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();
+            services.AddSingleton<IEpaTodolistService, EpaTodolistService>();
         }
     }
 }

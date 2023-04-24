@@ -3,7 +3,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import ProcessRequestDialog from './ProcessRequestDialog';
-import SkeletonTodoItem from './SkeletonTodoItem';
+import SkeletonTodoItem from '../../SkeletonTodoItem';
 import SignalR from './SignalR';
 
 export default class HRM extends Component {

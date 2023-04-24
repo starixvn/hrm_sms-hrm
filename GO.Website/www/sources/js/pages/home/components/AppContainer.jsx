@@ -1,10 +1,10 @@
 ﻿import React, { Component } from 'react';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
-import HRM from './HRM';
-import HRPP from './HRPP';
-import EPA from './EPA';
-import EPA360 from './EPA360';
+import HRM from './Todolist/hrm/HRM';
+import HRPP from './Todolist/HRPP';
+import EPA from './Todolist/EPA';
+import EPA360 from './Todolist/EPA360';
 
 class AppContainer extends Component {
     constructor(props) {

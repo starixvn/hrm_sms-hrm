@@ -11,6 +11,13 @@ export default class ProcessRequestDialog extends Component {
         super(props);
 
         const action = { ...props.action };
+        const disciplines = [];
+        if (action.metadata.disciplines && action.metadata.disciplines.length > 0) {
+            const totalItems = action.metadata.disciplines.length;
+            for (let i = 0; i < totalItems; i++) {
+                disciplines.push({ ...action.metadata.disciplines[i], isRecord: true });
+            }
+        }
 
         this.state = {
             siteId: props.siteId,
@@ -18,6 +25,7 @@ export default class ProcessRequestDialog extends Component {
                 ...action,
                 metadata: {
                     ...action.metadata,
+                    disciplines,
                     comment: action.metadata.comment ?? ''
                 }
             },
@@ -39,14 +47,14 @@ export default class ProcessRequestDialog extends Component {
         });
     };
 
-    handleChangeIgnore = (event, index, fieldName) => {
+    handleChangeIgnore = (event, index) => {
         const action = this.state.action;
 
         const disciplines = [...action.metadata.disciplines];
         disciplines[index] = {
             ...disciplines[index],
-            isIgnore: fieldName === 'isIgnore' ? event.target.checked : false,
-            isRecord: fieldName === 'isRecord' ? event.target.checked : false
+            isIgnore: event.target.checked,
+            isRecord: !event.target.checked
         };
         this.setState({
             action: {
@@ -94,7 +102,7 @@ export default class ProcessRequestDialog extends Component {
                 <Form noValidate onSubmit={this.handleSubmit}>
                     <Modal.Body>
                         {
-                            action.metadata.disciplines && action.metadata.disciplines.length > 0 &&
+                            action.metadata.disciplines.length > 0 &&
                             <Form.Group as={Row}>
                                 <Form.Label column sm="4" md="3" className="required" htmlFor="name">
                                     {LangHelper.getResource('Discipline')}
@@ -106,8 +114,7 @@ export default class ProcessRequestDialog extends Component {
                                                 <th>Date</th>
                                                 <th>Type</th>
                                                 <th>Details</th>
-                                                <th>Ignore</th>
-                                                <th>Record</th>
+                                                <th>Waive</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -123,14 +130,7 @@ export default class ProcessRequestDialog extends Component {
                                                             <input type="radio"
                                                                 name={`action.metadata.disciplines[${index}].name`}
                                                                 checked={action.isIgnore}
-                                                                onChange={event => this.handleChangeIgnore(event, index, 'isIgnore')}
-                                                            />
-                                                        </td>
-                                                        <td className="text-center">
-                                                            <input type="radio"
-                                                                name={`action.metadata.disciplines[${index}].name`}
-                                                                checked={action.isRecord}
-                                                                onChange={event => this.handleChangeIgnore(event, index, 'isRecord')}
+                                                                onChange={event => this.handleChangeIgnore(event, index)}
                                                             />
                                                         </td>
                                                     </tr>
