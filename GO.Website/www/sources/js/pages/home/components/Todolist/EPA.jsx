@@ -39,13 +39,15 @@ export default class EPA extends Component {
     render() {
         let { todolist } = this.state;
         if (todolist !== null && todolist.length > 0) {
-            const items = [];
+            const todoitems = [];
             const totalItems = todolist.length;
             for (let i = 0; i < totalItems; i++) {
-                if (items.findIndex(x => x.siteId === todolist[i].siteId) >= 0) {
-                    items.items.push(todolist[i]);
+                const index = todoitems.findIndex(x => x.siteId === todolist[i].siteId);
+
+                if (index >= 0) {
+                    todoitems[index].items.push(todolist[i]);
                 } else {
-                    items.push({
+                    todoitems.push({
                         siteId: todolist[i].siteId,
                         siteName: todolist[i].siteName,
                         items: [todolist[i]]
@@ -53,7 +55,7 @@ export default class EPA extends Component {
                 }
             }
 
-            todolist = items;
+            todolist = todoitems;
         }
 
         return (
