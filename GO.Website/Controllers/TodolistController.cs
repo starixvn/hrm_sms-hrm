@@ -10,6 +10,7 @@
     using System.Threading.Tasks;
     using System.Web;
     using Fanex.Data;
+    using GO.Website.Constants;
     using GO.Website.Criteria;
     using GO.Website.Models;
     using GO.Website.Models.Todolist;
@@ -176,7 +177,7 @@
                 var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
                 request.Content = content;
 
-                var client = clientFactory.CreateClient();
+                var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClient);
                 using (var response = await client.SendAsync(request))
                 {
                     var jsonResult = await response.Content.ReadAsStringAsync();
@@ -188,7 +189,7 @@
 
         private async Task<T> GetAsync<T>(string requestUrl, string token = null)
         {
-            var client = clientFactory.CreateClient();
+            var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClient);
             using (var request = CreateRequest(requestUrl, "get"))
             {
                 if (!string.IsNullOrWhiteSpace(token))
@@ -213,7 +214,7 @@
 
         private async Task<TOutput> PostAsync<TInput, TOutput>(string requestUrl, TInput data, string token = null)
         {
-            var client = clientFactory.CreateClient();
+            var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClient);
             using (var request = CreateRequest(requestUrl, "post"))
             {
                 var encodedData = JsonConvert.SerializeObject(data);

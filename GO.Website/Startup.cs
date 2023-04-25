@@ -3,11 +3,13 @@ namespace GO.Website
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using GO.Website.Constants;
     using GO.Website.Hubs;
     using GO.Website.Middlewares;
     using GO.Website.Models;
@@ -54,7 +56,10 @@ namespace GO.Website
                .UseDefaultDbSettingProvider("~/App_Data")
                .Run();
 
-            services.AddHttpClient();
+            services.AddHttpClient(HttpClientName.DefaultHttpClient).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            });
             services.AddResponseCaching();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

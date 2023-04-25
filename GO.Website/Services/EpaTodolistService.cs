@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Threading;
     using System.Threading.Tasks;
+    using GO.Website.Constants;
     using GO.Website.Models;
     using GO.Website.Models.Todolist;
     using Newtonsoft.Json;
@@ -57,7 +57,7 @@
             };
             var encodedContent = new FormUrlEncodedContent(data);
 
-            var client = clientFactory.CreateClient();
+            var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClient);
             using (var response = await client.PostAsync(new Uri(url), encodedContent))
             {
                 if (response.IsSuccessStatusCode)
@@ -73,7 +73,7 @@
 
         private async Task<IList<TodolistItem>> GetTodolistAsync(string requestUrl, string token = null)
         {
-            var client = clientFactory.CreateClient();
+            var client = clientFactory.CreateClient(HttpClientName.DefaultHttpClient);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             using (var response = await client.GetAsync(new Uri(requestUrl)))
             {
