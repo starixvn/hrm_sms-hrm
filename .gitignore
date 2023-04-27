@@ -47,3 +47,4 @@ node_modules/
 */wwwroot/js/dev/
 */coverage/
 *.cobertura.xml
+*.pubxml
