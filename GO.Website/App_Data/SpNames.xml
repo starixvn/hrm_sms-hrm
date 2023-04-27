@@ -6,7 +6,10 @@
     <Function Name="Unit Head">
         <Setting Key="API_UnitHead_GetInfo" SpName="API_UnitHead_GetInfo" DbName="bodb_IUC" Plain="0" />
         <Setting Key="API_UnitHead_GetSchedule" SpName="API_UnitHead_GetSchedule" DbName="bodb_IUC" Plain="0" />
-        
+
         <Setting Key="UnitHead_GetSchedule" SpName="UnitHead_GetSchedule" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="360 Degree Feedback">
+        <Setting Key="GO_GetTodolistByUserId" SpName="GO_GetTodolistByUserId" DbName="bodb_360DegreeFeedback" Plain="0" />
     </Function>
 </Functions>

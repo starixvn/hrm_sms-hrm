@@ -28,6 +28,7 @@
         private readonly IAuthService authService;
         private readonly IBaseService baseService;
         private readonly IEpaTodolistService epaTodolistService;
+        private readonly IFeedbackService feedbackService;
 
         public TodolistController(
             List<ApiSiteSetting> apiSiteSettings,
@@ -35,7 +36,8 @@
             IUserControlSession userControlSession,
             IAuthService authService,
             IBaseService baseService,
-            IEpaTodolistService epaTodolistService)
+            IEpaTodolistService epaTodolistService,
+            IFeedbackService feedbackService)
         {
             this.apiSiteSettings = apiSiteSettings;
             this.clientFactory = clientFactory;
@@ -43,6 +45,7 @@
             this.authService = authService;
             this.baseService = baseService;
             this.epaTodolistService = epaTodolistService;
+            this.feedbackService = feedbackService;
         }
 
         public async Task<IActionResult> GetTodolistBlock()
@@ -95,6 +98,21 @@
             };
             var userSites = await baseService.GetDataAsync<UserSite>(criteria);
             IList<TodolistItem> todoitems = await epaTodolistService.GetByUserIdAsync(userControlSession.UserId, userSites);
+
+            return Json(todoitems);
+        }
+
+        public async Task<IActionResult> GetEpa360Todolist()
+        {
+            var site = apiSiteSettings.FirstOrDefault(x => x.IsEpa360System);
+            IList<TodolistItem> todoitems = await feedbackService.GetTodolistByUserIdAsync(userControlSession.UserId);
+            if(site != null)
+            {
+                foreach(var item in todoitems)
+                {
+                    item.SiteId = site.SiteId;
+                }
+            }
 
             return Json(todoitems);
         }

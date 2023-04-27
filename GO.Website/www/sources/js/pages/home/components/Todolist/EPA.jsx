@@ -76,21 +76,21 @@ export default class EPA extends Component {
                                     {
                                         todolist.length > 0 &&
                                         todolist.map(site =>
-                                            <div key={`hrm-todolist-site-${site.siteId}`}>
+                                            <div key={`epa-todolist-site-${site.siteId}`}>
                                                 {
                                                     todolist.length > 1 &&
-                                                    <div className="hrm-todolist-site">{site.siteName}</div>
+                                                    <div className="epa-todolist-site">{site.siteName}</div>
                                                 }
                                                 {
                                                     site.items.map(item =>
-                                                        <div key={`hrm-todolist-${item.id}`} className="todolist-item green-border-left">
+                                                        <div key={`epa-todolist-${item.id}`} className="todolist-item green-border-left">
                                                             <div className="txt" dangerouslySetInnerHTML={{ __html: item.name }} />
                                                             {
                                                                 item.actions &&
                                                                 <div className="todolist-actions">
                                                                     {
                                                                         item.actions.map(action =>
-                                                                            <button key={`hrm-todolist-${item.id}-action-${action.id}`}
+                                                                            <button key={`epa-todolist-${item.id}-action-${action.id}`}
                                                                                 className="btn btn-primary"
                                                                                 onClick={event => this.onClick(event, item.siteId, action)}
                                                                             >

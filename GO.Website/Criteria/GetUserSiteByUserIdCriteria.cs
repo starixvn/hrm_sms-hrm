@@ -8,6 +8,6 @@
 
         public override string GetSettingKey() => "User_GetUserSiteByUserId";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => UserId > 0;
     }
 }
