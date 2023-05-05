@@ -105,11 +105,13 @@
         {
             services.AddHostedService<NexHrmEmployeeInfoWorker>();
             services.AddHostedService<NexHrmTeamWorker>();
+            services.AddHostedService<NexHrmSectionWorker>();
             services.AddHostedService<NexHrmUnitHeadInfoWorker>();
             services.AddHostedService<NexHrmUnitHeadScheduleWorker>();
 
             services.AddHostedService<LumiHrmEmployeeInfoWorker>();
             services.AddHostedService<LumiHrmTeamWorker>();
+            services.AddHostedService<LumiHrmSectionWorker>();
 
             services.AddHostedService<HrppUnitHeadInfoWorker>();
             services.AddHostedService<HrppUnitHeadScheduleWorker>();

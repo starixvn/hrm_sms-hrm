@@ -79,6 +79,26 @@
             return commandResult;
         }
 
+        public async Task<CommandResult> SyncSectionAsync(bool isNexcel = true)
+        {
+            var siteId = isNexcel ? apiConfig.NexHrmSiteId : apiConfig.LumiHrmSiteId;
+            var commandResult = new CommandResult { Code = 0 };
+            var criteria = new GetSectionLastModifiedDateBySiteIdCriteria { SiteId = siteId };
+            var lastModifiedDate = await baseService.GetDataEntityAsync<DateTime?>(criteria);
+            var sections = await GetDataFromApiAsync<IEnumerable<Section>>(apiConfig.SectionUrl, isNexcel, lastModifiedDate ?? DefaultLastModifiedDate);
+            if (sections != null && sections.Any())
+            {
+                var command = new ImportSectionCommand
+                {
+                    SiteId = siteId,
+                    Value = sections.ToXML().ToString()
+                };
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
+
+            return commandResult;
+        }
+
         public async Task<CommandResult> SyncUniHeadInfoAsync()
         {
             var commandResult = new CommandResult { Code = 0 };
