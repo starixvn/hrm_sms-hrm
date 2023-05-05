@@ -170,7 +170,7 @@ namespace GO.Website
 
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();
-            services.AddSingleton<IEpaTodolistService, EpaTodolistService>();
+            services.AddSingleton<ITodolistService, TodolistService>();
             services.AddSingleton<IFeedbackService, FeedbackService>();
         }
     }

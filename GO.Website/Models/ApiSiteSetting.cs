@@ -10,6 +10,7 @@
         public bool IsHrmSystem { get; set; }
         public bool IsEpaSystem { get; set; }
         public bool IsEpa360System { get; set; }
+        public bool IsHrppSystem { get; set; }
 
         public string BaseUrl { get; set; }
         public string TokenUrl { get; set; }
