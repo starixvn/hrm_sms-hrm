@@ -3,14 +3,30 @@
     <Function Name="Employee">
         <Setting Key="AutoJob_Employee_GetLastModifiedDateBySiteId" SpName="AutoJob_Employee_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="AutoJob_Employee_Import" SpName="AutoJob_Employee_Import" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Employee_ImportFromDB" SpName="AutoJob_Employee_ImportFromDB" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Team">
         <Setting Key="AutoJob_Team_GetLastModifiedDateBySiteId" SpName="AutoJob_Team_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="AutoJob_Team_Import" SpName="AutoJob_Team_Import" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Team_ImportFromDB" SpName="AutoJob_Team_ImportFromDB" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Section">
         <Setting Key="AutoJob_Section_GetLastModifiedDateBySiteId" SpName="AutoJob_Section_GetLastModifiedDateBySiteId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="AutoJob_Section_Import" SpName="AutoJob_Section_Import" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_Section_ImportFromDB" SpName="AutoJob_Section_ImportFromDB" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Department">
+        <Setting Key="AutoJob_Department_ImportFromDB" SpName="AutoJob_Department_ImportFromDB" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Unit">
+        <Setting Key="AutoJob_Unit_ImportFromDB" SpName="AutoJob_Unit_ImportFromDB" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Job Title">
+        <Setting Key="AutoJob_JobTitle_Import" SpName="AutoJob_JobTitle_Import" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="AutoJob_JobTitle_ImportFromDB" SpName="AutoJob_JobTitle_ImportFromDB" DbName="bodb_IUC" Plain="0" />
+    </Function>
+    <Function Name="Job Level">
+        <Setting Key="AutoJob_JobLevel_ImportFromDB" SpName="AutoJob_JobLevel_ImportFromDB" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="UnitHead">
         <Setting Key="AutoJob_UnitHead_UpdateInfo" SpName="AutoJob_UnitHead_UpdateInfo" DbName="bodb_IUC" Plain="0" />

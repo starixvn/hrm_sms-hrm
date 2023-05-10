@@ -1,4 +1,4 @@
-﻿namespace GO.AutoJobs.Models
+﻿namespace GO.AutoJobs.Models.HRM
 {
     using System;
     using GO.Core.Extensions.XML;

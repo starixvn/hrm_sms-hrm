@@ -11,6 +11,8 @@
 
         Task<CommandResult> SyncSectionAsync(bool isNexcel = true);
 
+        Task<CommandResult> SyncJobTitleAsync(bool isNexcel = true);
+
         Task<CommandResult> SyncUniHeadInfoAsync();
 
         Task<CommandResult> SyncUniHeadScheduleAsync();

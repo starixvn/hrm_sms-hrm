@@ -8,21 +8,24 @@
     using GO.AutoJobs.Services;
     using Microsoft.Extensions.Logging;
 
-    public class NexHrmEmployeeInfoWorker : BaseWorker
+    public class NexHrmWorker : BaseWorker
     {
         private readonly INexHrmService hrmService;
 
-        public NexHrmEmployeeInfoWorker(
+        public NexHrmWorker(
             INexHrmService hrmService,
             List<JobSettings> jobSettings,
-            ILogger<NexHrmEmployeeInfoWorker> logger) : base(logger)
+            ILogger<NexHrmWorker> logger) : base(logger)
         {
             this.hrmService = hrmService;
-            jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncEmployeeInfoFromNexHRM);
+            jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromNexHRM);
         }
 
         public override async Task DoWorkAsync()
         {
+            await hrmService.SyncSectionAsync();
+            await hrmService.SyncTeamAsync();
+            await hrmService.SyncJobTitleAsync();
             await hrmService.SyncEmployeeInfoAsync();
         }
     }

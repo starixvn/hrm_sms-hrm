@@ -7,10 +7,10 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
-    using GO.AutoJobs.Criteria.Employee;
-    using GO.AutoJobs.Criteria.Team;
+    using GO.AutoJobs.Criteria.HRM;
     using GO.AutoJobs.Criteria.UnitHead;
     using GO.AutoJobs.Models;
+    using GO.AutoJobs.Models.HRM;
     using GO.AutoJobs.Models.UnitHead;
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
@@ -92,6 +92,24 @@
                 {
                     SiteId = siteId,
                     Value = sections.ToXML().ToString()
+                };
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
+
+            return commandResult;
+        }
+
+        public async Task<CommandResult> SyncJobTitleAsync(bool isNexcel = true)
+        {
+            var siteId = isNexcel ? apiConfig.NexHrmSiteId : apiConfig.LumiHrmSiteId;
+            var commandResult = new CommandResult { Code = 0 };
+            var jobTitles = await GetDataFromApiAsync<IEnumerable<JobTitle>>(apiConfig.JobTitleUrl, isNexcel);
+            if (jobTitles != null && jobTitles.Any())
+            {
+                var command = new ImportJobTitleCommand
+                {
+                    SiteId = siteId,
+                    Value = jobTitles.ToXML().ToString()
                 };
                 commandResult = await baseService.ExecuteNonQueryAsync(command);
             }

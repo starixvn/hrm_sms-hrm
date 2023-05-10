@@ -1,4 +1,4 @@
-﻿namespace GO.AutoJobs.Criteria.Employee
+﻿namespace GO.AutoJobs.Criteria.HRM
 {
     using GO.Core.Models;
 

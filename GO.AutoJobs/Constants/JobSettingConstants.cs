@@ -2,13 +2,12 @@
 {
     public static class JobSettingConstants
     {
-        public const string SyncEmployeeInfoFromNexHRM = "SyncEmployeeInfoFromNexHRM";
-        public const string SyncTeamFromNexHRM = "SyncTeamFromNexHRM";
-        public const string SyncSectionFromNexHRM = "SyncSectionFromNexHRM";
-
-        public const string SyncEmployeeInfoFromLumiHRM = "SyncEmployeeInfoFromLumiHRM";
-        public const string SyncTeamFromLumiHRM = "SyncTeamFromLumiHRM";
-        public const string SyncSectionFromLumiHRM = "SyncSectionFromLumiHRM";
+        public const string SyncDataFromNexHRM = "SyncDataFromNexHRM";
+        public const string SyncDataFromLumiHRM = "SyncDataFromLumiHRM";
+        public const string SyncDataFromSMS = "SyncDataFromSMS";
+        public const string SyncDataFromHongMa = "SyncDataFromHongMa";
+        public const string SyncDataFromCTI = "SyncDataFromCTI";
+        public const string SyncDataFromLexfin = "SyncDataFromLexfin";
 
         public const string SyncUnitHeadInfoFromNexHRM = "SyncUnitHeadInfoFromNexHRM";
         public const string SyncUnitHeadScheduleFromNexHRM = "SyncUnitHeadScheduleFromNexHRM";

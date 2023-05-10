@@ -97,21 +97,22 @@
             services.AddSingleton<IBaseService, BaseService>();
 
             services.AddSingleton<INexHrmService, NexHrmService>();
+            services.AddSingleton<ISyncDataFromDBService, SyncDataFromDBService>();
             services.AddSingleton<IHrppUnitHeadService, HrppUnitHeadService>();
             services.AddSingleton<IUserSiteService, UserSiteService>();
         }
 
         private static void AddWorker(IServiceCollection services)
         {
-            services.AddHostedService<NexHrmEmployeeInfoWorker>();
-            services.AddHostedService<NexHrmTeamWorker>();
-            services.AddHostedService<NexHrmSectionWorker>();
+            services.AddHostedService<NexHrmWorker>();
             services.AddHostedService<NexHrmUnitHeadInfoWorker>();
             services.AddHostedService<NexHrmUnitHeadScheduleWorker>();
 
-            services.AddHostedService<LumiHrmEmployeeInfoWorker>();
-            services.AddHostedService<LumiHrmTeamWorker>();
-            services.AddHostedService<LumiHrmSectionWorker>();
+            services.AddHostedService<LumiHrmWorker>();
+            services.AddHostedService<SmsHrmWorker>();
+            services.AddHostedService<HongMaHrmWorker>();
+            services.AddHostedService<CtiHrmWorker>();
+            services.AddHostedService<LexfinHrmWorker>();
 
             services.AddHostedService<HrppUnitHeadInfoWorker>();
             services.AddHostedService<HrppUnitHeadScheduleWorker>();
