@@ -2,16 +2,16 @@
 import { Button } from 'react-bootstrap';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
-import GroupByUnitGrid from './group-by-unit-grid/index';
-import GroupByCountryGrid from './group-by-country-grid/index';
+import UnitGrid from './unit-grid/index';
+import CountryGrid from './country-grid/index';
 
 class AppContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            groupByCountryData: null,
-            groupByUnitData: null
+            gridCountryData: null,
+            gridUnitData: null
         };
     }
 
@@ -24,8 +24,8 @@ class AppContainer extends Component {
         const url = Site.resolveClientUrl('ManpowerReport/getData');
         await DataService.postDataAsync(url).then(response => {
             this.setState({
-                groupByCountryData: response.data.groupByCountryData,
-                groupByUnitData: response.data.groupByUnitData
+                gridCountryData: response.data.gridCountryData,
+                gridUnitData: response.data.gridUnitData
             });
         }).then(() => Site.unblockUI());
     };
@@ -40,7 +40,7 @@ class AppContainer extends Component {
     };
 
     render() {
-        const { groupByCountryData, groupByUnitData } = this.state;
+        const { gridCountryData, gridUnitData } = this.state;
 
         return (
             <div className="manpower-report">
@@ -51,12 +51,12 @@ class AppContainer extends Component {
                     Export to Excel
                 </Button>
                 {
-                    groupByUnitData &&
-                    <GroupByUnitGrid data={groupByUnitData} />
+                    gridUnitData &&
+                    <UnitGrid data={gridUnitData} />
                 }
                 {
-                    groupByCountryData &&
-                    <GroupByCountryGrid data={groupByCountryData} />
+                    gridCountryData &&
+                    <CountryGrid data={gridCountryData} />
                 }
             </div>
         );

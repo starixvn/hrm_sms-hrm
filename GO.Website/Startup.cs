@@ -169,6 +169,7 @@ namespace GO.Website
             services.AddSingleton<IFunctionService, FunctionService>();
 
             services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IExportExcelService, ExportExcelService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();
             services.AddSingleton<ITodolistService, TodolistService>();
             services.AddSingleton<IFeedbackService, FeedbackService>();

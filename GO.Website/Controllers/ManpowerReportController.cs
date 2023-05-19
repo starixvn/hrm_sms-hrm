@@ -11,6 +11,19 @@
 
     public class ManpowerReportController : BaseController
     {
+        private readonly Dictionary<string, string[]> units = new Dictionary<string, string[]>
+        {
+            { "Product Unit", new [] { "PU01", "PU02", "PU03", "PU04", "PU05", "PU06", "PU07", "PU08", "PU09", "PU10" } },
+            { "Business Unit", new [] { "BU01", "BU02", "BU03", "BU04" } },
+            { "Support Unit", new [] { "SU01", "SU02", "SU03", "SU04" } }
+        };
+
+        private readonly Dictionary<string, string[]> jobLevels = new Dictionary<string, string[]>
+        {
+            { "Supervisor", new [] { "M4-C", "M3-A", "M3-B", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
+            { "Employee", new []{ "E3-A", "E3-B", "E3-C", "E2-A", "E2-B", "E2-C", "E1-A", "E1-B", "E1-C", "E0-A", "E0-B", "E0-C" } }
+        };
+
         private readonly IBaseService baseService;
         private readonly IExportExcelService excelService;
 
@@ -32,21 +45,11 @@
         {
             var criteria = new GetManpowerReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
-            var units = new Dictionary<string, string[]>
-            {
-                { "Product Unit", new [] { "PU01", "PU02", "PU03", "PU04", "PU05", "PU06", "PU07", "PU08", "PU09", "PU10" } },
-                { "Business Unit", new [] { "BU01", "BU02", "BU03", "BU04" } },
-                { "Support Unit", new [] { "SU01", "SU02", "SU03", "SU04" } }
-            };
-            var jobLevels = new Dictionary<string, string[]>
-            {
-                { "Supervisor", new [] { "M4-C", "M3-A", "M3-B", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
-                { "Employee", new []{ "E3-A", "E3-B", "E3-C", "E2-A", "E2-B", "E2-C", "E1-A", "E1-B", "E1-C", "E0-A", "E0-B", "E0-C" } }
-            };
-            GridData groupByCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
-            GridData groupByUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
 
-            return Json(new { groupByCountryData, groupByUnitData });
+            GridData gridCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
+            GridData gridUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
+
+            return Json(new { gridCountryData, gridUnitData });
         }
 
         [HttpPost]
@@ -54,17 +57,7 @@
         {
             var criteria = new GetManpowerReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
-            var units = new Dictionary<string, string[]>
-            {
-                { "Product Unit", new [] { "PU01", "PU02", "PU03", "PU04", "PU05", "PU06", "PU07", "PU08", "PU09", "PU10" } },
-                { "Business Unit", new [] { "BU01", "BU02", "BU03", "BU04" } },
-                { "Support Unit", new [] { "SU01", "SU02", "SU03", "SU04" } }
-            };
-            var jobLevels = new Dictionary<string, string[]>
-            {
-                { "Supervisor", new [] { "M4-C", "M3-A", "M3-B", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
-                { "Employee", new []{ "E3-A", "E3-B", "E3-C", "E2-A", "E2-B", "E2-C", "E1-A", "E1-B", "E1-C", "E0-A", "E0-B", "E0-C" } }
-            };
+
             GridData groupByCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
             GridData groupByUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
 

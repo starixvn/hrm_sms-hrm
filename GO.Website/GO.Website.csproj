@@ -7,12 +7,16 @@
 
   <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
+    <None Remove="ExcelTemplates\ManpowerReport.xlsx" />
     <None Remove="logs\log.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <AdditionalFiles Include="..\SonarQube\smshrm\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     <Content Include="App_Data\SpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTemplates\ManpowerReport.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="logs\log.txt">
@@ -22,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
