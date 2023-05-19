@@ -19,13 +19,15 @@ function generateConfig(environment) {
             [`${jsPath}/pages/login`]: pathConfig.scriptPaths.login,
             [`${jsPath}/pages/home`]: pathConfig.scriptPaths.home,
             [`${jsPath}/pages/unit-head/weekly-schedule`]: pathConfig.scriptPaths.unit_head_weekly_schedule,
+            [`${jsPath}/pages/report/manpower/index`]: pathConfig.scriptPaths.report_manpower,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
             [`${cssPath}/error`]: pathConfig.cssPaths.error,
             [`${cssPath}/pages/login`]: pathConfig.cssPaths.login,
             [`${cssPath}/pages/home`]: pathConfig.cssPaths.home,
-            [`${cssPath}/pages/unit-head/weekly-schedule`]: pathConfig.cssPaths.unit_head_weekly_schedule
+            [`${cssPath}/pages/unit-head/weekly-schedule`]: pathConfig.cssPaths.unit_head_weekly_schedule,
+            [`${cssPath}/pages/report/manpower/index`]: pathConfig.cssPaths.report_manpower
         },
         output: {
             path: pathConfig.projectRoot,

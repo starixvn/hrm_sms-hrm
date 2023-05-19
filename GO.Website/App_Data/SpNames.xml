@@ -12,4 +12,7 @@
     <Function Name="360 Degree Feedback">
         <Setting Key="GO_GetTodolistByUserId" SpName="GO_GetTodolistByUserId" DbName="bodb_360DegreeFeedback" Plain="0" />
     </Function>
+    <Function Name="Report">
+        <Setting Key="Report_Manpower_Get" SpName="Report_Manpower_Get" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

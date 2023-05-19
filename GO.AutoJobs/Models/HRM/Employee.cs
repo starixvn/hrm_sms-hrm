@@ -22,6 +22,8 @@
         [JsonProperty("GroupId")]
         public int? TeamId { get; set; }
 
+        public bool IsLocal { get; set; }
+
         [JsonProperty("Enabled")]
         public bool IsActive { get; set; }
 

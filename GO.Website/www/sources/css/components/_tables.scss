@@ -45,7 +45,7 @@ input[type="checkbox"] {
         tr {
             &:nth-child(2n) {
                 th, td {
-                    background: #ffffff;
+                    background: #fff;
                 }
             }
 
@@ -56,7 +56,7 @@ input[type="checkbox"] {
             }
 
             th, td {
-                background: #ffffff;
+                background: #fff;
 
                 &[rowspan="2"] {
                     border-bottom: 0;
@@ -76,12 +76,12 @@ input[type="checkbox"] {
                     border-left: 0;
                 }
 
-                background: #0047BA;
+                background: #6b7f89;
                 color: #fff;
-                font-size: 14px;
                 font-weight: 600;
                 padding: 8px;
-                border-left: 1px solid #7E9ED2 !important;
+                border-left: 1px solid #dee2e6 !important;
+                vertical-align: middle;
                 text-align: center;
             }
 
@@ -92,7 +92,10 @@ input[type="checkbox"] {
     tbody {
         tr {
             td {
+                background: #fff;
+                border: 1px solid #b7b7b7;
                 vertical-align: middle;
+                padding: 4px 5px;
             }
         }
     }

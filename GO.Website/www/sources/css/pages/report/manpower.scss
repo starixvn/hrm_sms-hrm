@@ -1,0 +1,54 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+@import "../../components/buttons";
+@import "../../components/form-filter";
+@import "../../components/tables";
+
+.manpower-report {
+    .btn-excel {
+        margin-top: 16px;
+        background: #6c757d;
+    }
+
+    .table {
+        margin-top: 16px;
+        width: auto;
+
+        thead {
+            tr {
+                td {
+                    &.col-job-level {
+                        min-width: 100px;
+                    }
+
+                    &.col-total {
+                        width: 80px;
+                    }
+
+                    &.group-unit {
+                        .fa {
+                            margin-left: 1rem;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    &.col-job-level, &.col-total {
+                        background: #97b1bd99;
+                    }
+                }
+
+                &.row-total {
+                    td {
+                        background: #97b1bd99;
+                    }
+                }
+            }
+        }
+    }
+}
