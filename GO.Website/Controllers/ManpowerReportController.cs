@@ -4,11 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using GO.Admin.Website.Filters;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Report;
     using GO.Website.Models.Report.Manpower;
     using GO.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
     using Microsoft.AspNetCore.Mvc;
 
+    [GOPermission(FunctionKey = FunctionKey.ManpowerReport, Policy = Policy.Read)]
     public class ManpowerReportController : BaseController
     {
         private readonly Dictionary<string, string[]> units = new Dictionary<string, string[]>
@@ -49,7 +53,7 @@
             GridData gridCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
             GridData gridUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
 
-            return Json(new { gridCountryData, gridUnitData });
+            return Json(new { employeeInfos, gridCountryData, gridUnitData });
         }
 
         [HttpPost]

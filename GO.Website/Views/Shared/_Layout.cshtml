@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLowerInvariant();
+    var currentAction = ViewContext.RouteData.Values["Action"].ToString().ToLowerInvariant();
+    var currentUrl = string.Format("/{0}/{1}", currentController, currentAction);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -41,7 +47,7 @@
     </div>
 
     <input type="hidden" id="RootUrl" value="@Url.Content("~/")" />
-    <input type="hidden" id="currentUrl" value="" />
+    <input type="hidden" id="currentUrl" value="@currentUrl" />
     @Html.AntiForgeryToken()
 
     <environment include="Development">

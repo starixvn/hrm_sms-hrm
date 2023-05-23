@@ -18,17 +18,20 @@
         private readonly IUserControlSession userControlSession;
         private readonly ICryptoService cryptoService;
         private readonly IAuthService authService;
+        private readonly IUserService userService;
 
         public AuthController(
             IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
             ICryptoService cryptoService,
-            IAuthService authService)
+            IAuthService authService,
+            IUserService userService)
         {
             this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
             this.cryptoService = cryptoService;
             this.authService = authService;
+            this.userService = userService;
         }
 
         public IActionResult Login()
@@ -52,6 +55,8 @@
                 userControlSession.SiteId = userControlSettings.SiteId;
                 userControlSession.OnUserId = loginResult.OnUserId;
                 userControlSession.JwtToken = loginResult.JwtToken;
+                userControlSession.MenuItems = await userService.GetMenuItemAsync();
+                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSettings.SiteId, userControlSession.UserId);
 
                 await DoLoginAsync(loginResult.UserId);
 

@@ -29,17 +29,31 @@
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            if (!session.HasPermissionOnFunction(FunctionKey, Policy))
+            if (session.UserId <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
-                    var response = context.HttpContext.Response;
-                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                    await response.WriteAsync("<center><b>Access denied!</b></center>");
+                    context.Result = new UnauthorizedResult();
                 }
                 else
                 {
-                    context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
+                    context.Result = new RedirectToActionResult("logout", "auth", null);
+                }
+            }
+            else
+            {
+                if (!session.HasPermissionOnFunction(FunctionKey, Policy))
+                {
+                    if (IsAjaxRequest(context.HttpContext.Request))
+                    {
+                        var response = context.HttpContext.Response;
+                        response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                        await response.WriteAsync("<center><b>Access denied!</b></center>");
+                    }
+                    else
+                    {
+                        context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
+                    }
                 }
             }
         }

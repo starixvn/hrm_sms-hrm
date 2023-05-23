@@ -9,7 +9,9 @@ export default class Header extends Component {
 
         this.state = {
             user: null,
-            sites: []
+            sites: [],
+            menus: [],
+            expended: false
         };
     }
 
@@ -23,6 +25,11 @@ export default class Header extends Component {
         await DataService.getDataAsync(url).then(response => {
             this.setState({ sites: response.data });
         });
+
+        url = Site.resolveClientUrl('home/getMenus');
+        await DataService.getDataAsync(url).then(response => {
+            this.setState({ menus: response.data });
+        });
     }
 
     onClick = async (event, menuUrl) => {
@@ -35,8 +42,19 @@ export default class Header extends Component {
         });
     };
 
+    handleToggle = () => {
+        this.setState(prevState => {
+            return { expended: !prevState.expended };
+        });
+    };
+
+    isActive = (menuItem, currentUrl) => (menuItem.url !== null && menuItem.url.toLowerCase().localeCompare(currentUrl) === 0)
+        || menuItem.childs.filter(child => child.url.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
+
     render() {
-        const { user, sites } = this.state;
+        const { user, sites, menus, expended } = this.state;
+        const currentUrl = document.getElementById('currentUrl').value.toLowerCase();
+
         let nickname = '';
         if (user) {
             nickname = user.nickname ? user.nickname : user.username;
@@ -50,6 +68,44 @@ export default class Header extends Component {
                             <a className="navbar-brand" href={Site.resolveClientUrl('home/index')}>
                                 <img src={Site.resolveClientUrl('css/images/logo.svg')} alt="GO System" />
                             </a>
+                        </div>
+                        <div className={`pull-left nav-hamberger ${expended ? 'expended' : ''}`}>
+                            <div className="toggle-btn" onClick={this.handleToggle}>
+                                <span className="lines" />
+                            </div>
+                            <ul className="nav navbar-nav">
+                                {
+                                    menus.map((item, index) => {
+                                        let isActive = this.isActive(item, currentUrl);
+                                        const activeClass = isActive ? 'active' : '';
+                                        if (item.childs.length > 0) {
+                                            return (
+                                                <li key={item.menuItemId} className={`dropdown ${activeClass}`}>
+                                                    <a>{item.menuItemName} <i className="fa fa-angle-down" /></a>
+                                                    <ul className="dropdown-menu">
+                                                        {
+                                                            item.childs.map(child => {
+                                                                isActive = child.url.toLowerCase().localeCompare(currentUrl) === 0;
+                                                                return (
+                                                                    <li key={child.menuItemId} className={`dropdown ${isActive ? 'active' : ''}`}>
+                                                                        <a href={child.url}>{child.menuItemName}</a>
+                                                                    </li>
+                                                                );
+                                                            })
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            );
+                                        } else {
+                                            return (
+                                                <li key={item.menuItemId} className={`${activeClass}`}>
+                                                    <a href={item.url}>{item.menuItemName}</a>
+                                                </li>
+                                            );
+                                        }
+                                    })
+                                }
+                            </ul>
                         </div>
                         <div className="user-info pull-right">
                             <Dropdown>
