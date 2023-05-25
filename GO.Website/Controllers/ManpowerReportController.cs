@@ -62,10 +62,10 @@
             var criteria = new GetManpowerReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
 
-            GridData groupByCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
-            GridData groupByUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
+            GridData gridCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
+            GridData gridUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
 
-            var bytes = excelService.ExportManpowerReport(groupByUnitData, groupByCountryData);
+            var bytes = excelService.ExportManpowerReport(gridUnitData, gridCountryData);
             var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
@@ -80,9 +80,17 @@
             (IList<RowItem> supervisors, RowItem totalSupervisor) = GroupDataByCountry(jobLevels.ElementAt(0).Value, countries, units, employeeInfos);
             (IList<RowItem> employees, RowItem totalEmployee) = GroupDataByCountry(jobLevels.ElementAt(1).Value, countries, units, employeeInfos);
             RowItem grandTotal = GetGrandTotal(countries, totalSupervisor, totalEmployee);
-            var headers = countries.Select(country => new GroupCellItem
+            var headers = countries.Select(country => new RowItem
             {
-                Name = country
+                Name = country,
+                Cells = units.Select(gunit => new GroupCellItem
+                {
+                    Name = gunit.Key,
+                    Cells = gunit.Value.Select(unit => new CellItem
+                    {
+                        Name = unit
+                    }).ToList()
+                }).ToList()
             }).ToList();
 
             return new GridData
@@ -188,10 +196,10 @@
             (IList<RowItem> supervisors, RowItem totalSupervisor) = GroupDataByUnit(jobLevels.ElementAt(0).Value, units, employeeInfos);
             (IList<RowItem> employees, RowItem totalEmployee) = GroupDataByUnit(jobLevels.ElementAt(1).Value, units, employeeInfos);
             RowItem grandTotal = GetGrandTotal(units, totalSupervisor, totalEmployee);
-            var headers = units.Select(group => new GroupCellItem
+            var headers = units.Select(group => new RowItem
             {
                 Name = group.Key,
-                Cells = group.Value.Select(unit => new CellItem { Name = unit }).ToList()
+                Cells = group.Value.Select(unit => new GroupCellItem { Name = unit }).ToList()
             }).ToList();
 
             return new GridData

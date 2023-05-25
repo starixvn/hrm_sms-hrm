@@ -1,83 +1,39 @@
 ﻿import React, { Fragment } from 'react';
+import THead from './THead';
+import Row from './Row';
+import TotalRow from './TotalRow';
+import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Grid = ({ data }) => {
+const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
     const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal } = data;
+
+    const handleShowDetail = (event, jobLevel, country, gunit) => {
+        if (!detail.show) {
+            const units = headers.find(item => item.name === country).cells.find(item => item.name === gunit).cells;
+            const emps = employeeInfos.filter(emp => emp.jobLevel === jobLevel && emp.country === country && units.findIndex(unit => unit.name === emp.unitName) >= 0);
+            onShowDetail(event.target, emps);
+        }
+    };
 
     const renderRows = rows => {
         const trs = [];
         rows.map(item => {
-            trs.push(
-                <tr key={item.name} >
-                    <td className="text-center col-job-level">{item.name}</td>
-                    {
-                        item.cells.map(country => {
-                            const cells = [];
-                            country.cells.map(unit => {
-                                cells.push(<td key={`${item.name}-${country.name}-${unit.name}`} className="text-center">
-                                    {unit.total > 0 ? unit.total : ''}
-                                </td>);
-                            });
-
-                            return cells;
-                        })
-                    }
-                </tr>
-            );
+            trs.push(<Row key={item.name} data={item} onClick={handleShowDetail} />);
         });
 
         return trs;
     };
 
-    const renderTotalRow = row => {
-        return (
-            <tr className="row-total">
-                <td className="text-center">{row.name}</td>
-                {
-                    row.cells.map(country => {
-                        const cells = [];
-                        country.cells.map(unit => {
-                            cells.push(<td key={`total-super-${country.name}-${unit.name}`} className="text-center" >{unit.total}</td>);
-                        });
-                        return cells;
-                    })
-                }
-            </tr>
-        );
-    };
-
     return (
         <table className="table group-by-country">
-            <thead>
-                <tr>
-                    <td rowSpan={2} className="col-job-level">{LangHelper.getResource('JobLevel')}</td>
-                    {
-                        headers.map(country => <td key={country.name} colSpan={3}>{country.name}</td>)
-                    }
-                </tr>
-                <tr>
-                    {
-                        headers.map(country => <Fragment key={country.name}>
-                            <td className="col-total">PU Total</td>
-                            <td className="col-total">BU Total</td>
-                            <td className="col-total">SU Total</td>
-                        </Fragment>)
-                    }
-                </tr>
-            </thead>
+            <THead data={headers} />
             <tbody>
                 {renderRows(supervisors)}
-                {renderTotalRow(totalSupervisor)}
+                <TotalRow data={totalSupervisor} />
                 {renderRows(employees)}
-                {renderTotalRow(totalEmployee)}
-                <tr className="row-total">
-                    <td className="text-center">{grandTotal.name}</td>
-                    {
-                        grandTotal.cells.map(country =>
-                            <td key={`grand-total-${country.name}`} className="text-center" colSpan={3}>{country.cells[0].total}</td>
-                        )
-                    }
-                </tr>
+                <TotalRow data={totalEmployee} />
+                <GrandTotalRow data={grandTotal} />
             </tbody>
         </table>
     );

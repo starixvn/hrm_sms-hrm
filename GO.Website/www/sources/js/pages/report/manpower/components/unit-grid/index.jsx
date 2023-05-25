@@ -1,7 +1,10 @@
 ﻿import React, { useState } from 'react';
+import Row from './Row';
+import TotalRow from './TotalRow';
+import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Grid = ({ data }) => {
+const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
     const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal } = data;
 
     const showHides = headers.map(gunit => {
@@ -12,82 +15,27 @@ const Grid = ({ data }) => {
     });
     const [showHideOptions, setStateValues] = useState(showHides);
 
-    const onClick = unit => {
+    const handleShowHideCells = unit => {
         const options = [...showHideOptions];
         const index = options.findIndex(x => x.key === unit);
         options[index] = { ...options[index], show: !options[index].show };
         setStateValues(options);
     };
 
+    const handleShowDetail = (event, jobLevel, unitName, isLocal) => {
+        if (!detail.show) {
+            const emps = employeeInfos.filter(emp => emp.jobLevel === jobLevel && emp.unitName === unitName && emp.isLocal === isLocal);
+            onShowDetail(event.target, emps);
+        }
+    };
+
     const renderRows = rows => {
         const trs = [];
         rows.map(item => {
-            trs.push(
-                <tr key={item.name}>
-                    <td className="text-center col-job-level">{item.name}</td>
-                    {
-                        item.cells.map(gunit => {
-                            const cells = [];
-                            let totalLocal = 0,
-                                totalExpat = 0;
-                            const showHideOption = showHideOptions.find(x => x.key === gunit.name);
-
-                            gunit.cells.map(unit => {
-                                totalLocal += unit.totalLocal;
-                                totalExpat += unit.totalExpat;
-
-                                if (showHideOption.show) {
-                                    cells.push(<td key={`${item.name}-${gunit.name}-${unit.name}-expat`} className="text-center">
-                                        {unit.totalExpat > 0 ? unit.totalExpat : ''}
-                                    </td>);
-                                    cells.push(<td key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
-                                        {unit.totalLocal > 0 ? unit.totalLocal : ''}
-                                    </td>);
-                                }
-                            });
-
-                            cells.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
-                            cells.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
-
-                            return cells;
-                        })
-                    }
-                </tr>
-            );
+            trs.push(<Row key={item.name} data={item} showHideOptions={showHideOptions} onClick={handleShowDetail} />);
         });
 
         return trs;
-    };
-
-    const renderTotalRow = row => {
-        return (
-            <tr className="row-total">
-                <td className="text-center">{row.name}</td>
-                {
-                    row.cells.map(gunit => {
-                        const cells = [];
-                        let totalLocal = 0,
-                            totalExpat = 0;
-                        const showHideOption = showHideOptions.find(x => x.key === gunit.name);
-
-                        gunit.cells.map(unit => {
-                            totalLocal += unit.totalLocal;
-                            totalExpat += unit.totalExpat;
-
-                            if (showHideOption.show) {
-                                cells.push(<td key={`total-super-${gunit.name}-${unit.name}-expat`} className="text-center" >{unit.totalExpat}</td>);
-                                cells.push(<td key={`total-super-${gunit.name}-${unit.name}-local`} className="text-center" >{unit.totalLocal}</td>);
-                            }
-                        });
-
-                        cells.push(<td key={`total-super-${gunit.name}-expat`} className="text-center">{totalExpat}</td>);
-                        cells.push(<td key={`total-super-${gunit.name}-local`} className="text-center">{totalLocal}</td>);
-
-                        return cells;
-                    })
-                }
-            </tr>
-        );
     };
 
     return (
@@ -105,7 +53,7 @@ const Grid = ({ data }) => {
                                     <span>{gunit.name}</span>
                                     <span
                                         className={`fa ${showHideOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
-                                        onClick={() => onClick(gunit.name)}
+                                        onClick={() => handleShowHideCells(gunit.name)}
                                     />
                                 </td>
                             );
@@ -151,35 +99,10 @@ const Grid = ({ data }) => {
             </thead>
             <tbody>
                 {renderRows(supervisors)}
-                {renderTotalRow(totalSupervisor)}
+                <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
                 {renderRows(employees)}
-                {renderTotalRow(totalEmployee)}
-                <tr className="row-total">
-                    <td className="text-center">{grandTotal.name}</td>
-                    {
-                        grandTotal.cells.map(gunit => {
-                            const cells = [];
-                            let totalLocal = 0,
-                                totalExpat = 0;
-                            const showHideOption = showHideOptions.find(x => x.key === gunit.name);
-
-                            gunit.cells.map(unit => {
-                                totalLocal += unit.totalLocal;
-                                totalExpat += unit.totalExpat;
-
-                                if (showHideOption.show) {
-                                    cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-expat`} className="text-center" >{unit.totalExpat}</td>);
-                                    cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-local`} className="text-center" >{unit.totalLocal}</td>);
-                                }
-                            });
-
-                            cells.push(<td key={`grand-total-${gunit.name}-expat`} className="text-center">{totalExpat}</td>);
-                            cells.push(<td key={`grand-total-${gunit.name}-local`} className="text-center">{totalLocal}</td>);
-
-                            return cells;
-                        })
-                    }
-                </tr>
+                <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
+                <GrandTotalRow data={grandTotal} showHideOptions={showHideOptions} />
             </tbody>
         </table>
     );

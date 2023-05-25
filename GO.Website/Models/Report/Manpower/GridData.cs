@@ -6,7 +6,7 @@
     [Serializable]
     public class GridData
     {
-        public IList<GroupCellItem> Headers { get; set; }
+        public IList<RowItem> Headers { get; set; }
         public IList<RowItem> Supervisors { get; set; }
         public IList<RowItem> Employees { get; set; }
         public RowItem TotalSupervisor { get; set; }

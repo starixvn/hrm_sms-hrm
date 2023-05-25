@@ -13,11 +13,11 @@
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        public byte[] ExportManpowerReport(GridData groupByUnitData, GridData groupByCountryData)
+        public byte[] ExportManpowerReport(GridData gridUnitData, GridData gridCountryData)
         {
             const string ExcelTemplatePath = "ExcelTemplates/ManpowerReport.xlsx";
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
-            var excel = new ManpowerReportExcel(templatePath, groupByUnitData, groupByCountryData);
+            var excel = new ManpowerReportExcel(templatePath, gridUnitData, gridCountryData);
             return excel.Export();
         }
     }

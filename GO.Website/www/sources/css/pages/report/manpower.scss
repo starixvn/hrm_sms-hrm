@@ -41,6 +41,10 @@
                     &.col-job-level, &.col-total {
                         background: #97b1bd99;
                     }
+
+                    .cursor-pointer {
+                        cursor: pointer;
+                    }
                 }
 
                 &.row-total {
@@ -50,6 +54,30 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.popover-employee-infos {
+    max-width: unset;
+    box-shadow: 8px 8px 4px rgba(0, 0, 0, 0.5);
+
+    .popover-header {
+        background: #6b7f89;
+        color: #fff;
+        text-align: right;
+
+        .fa {
+            cursor: pointer;
+        }
+    }
+
+    .popover-body {
+        overflow-y: auto;
+        max-height: 360px;
+
+        .table {
+            margin: 0;
         }
     }
 }

@@ -4,6 +4,6 @@
 
     public interface IExportExcelService
     {
-        byte[] ExportManpowerReport(GridData groupByUnitData, GridData groupByCountryData);
+        byte[] ExportManpowerReport(GridData gridUnitData, GridData gridCountryData);
     }
 }

@@ -1,17 +1,24 @@
 ﻿import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import Site from '@jsroot/common/site';
+import { Button, Overlay, Popover } from 'react-bootstrap';
 import DataService from '@jsroot/common/dataService';
 import UnitGrid from './unit-grid/index';
 import CountryGrid from './country-grid/index';
+import Site from '@jsroot/common/site';
+import LangHelper from '@jsroot/common/langHelper';
 
 class AppContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            employeeInfos: [],
             gridCountryData: null,
-            gridUnitData: null
+            gridUnitData: null,
+            detail: {
+                show: false,
+                target: null,
+                employeeInfos: []
+            }
         };
     }
 
@@ -24,8 +31,7 @@ class AppContainer extends Component {
         const url = Site.resolveClientUrl('ManpowerReport/getData');
         await DataService.postDataAsync(url).then(response => {
             this.setState({
-                gridCountryData: response.data.gridCountryData,
-                gridUnitData: response.data.gridUnitData
+                ...response.data
             });
         }).then(() => Site.unblockUI());
     };
@@ -39,12 +45,76 @@ class AppContainer extends Component {
         }).then(() => Site.unblockUI());
     };
 
+    handleShowDetail = (target, employeeInfos) => {
+        this.setState({
+            detail: {
+                show: true,
+                target,
+                employeeInfos
+            }
+        });
+    };
+
+    handleHideDetail = () => {
+        this.setState({
+            detail: {
+                show: false,
+                target: null,
+                employeeInfos: []
+            }
+        });
+    };
+
+    renderDetail = emps => {
+        return (
+            <table className="table table-employee-infos">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Site Name</td>
+                        <td>{LangHelper.getResource('Code')}</td>
+                        <td>{LangHelper.getResource('Nickname')}</td>
+                        <td>{LangHelper.getResource('FullName')}</td>
+                        <td>{LangHelper.getResource('JobLevel')}</td>
+                        <td>Local / Expat</td>
+                        <td>{LangHelper.getResource('Unit')}</td>
+                        <td>{LangHelper.getResource('Department')}</td>
+                        <td>{LangHelper.getResource('Section')}</td>
+                        <td>{LangHelper.getResource('Team')}</td>
+                        <td>{LangHelper.getResource('Country')}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        emps.map((emp, index) =>
+                            <tr key={`${emp.siteName}-${emp.nickname}`}>
+                                <td className="text-center">{index + 1}</td>
+                                <td>{emp.siteName}</td>
+                                <td>{emp.code}</td>
+                                <td>{emp.nickname}</td>
+                                <td>{emp.fullName}</td>
+                                <td>{emp.jobLevel}</td>
+                                <td>{emp.isLocal ? 'Local' : 'Expat'}</td>
+                                <td>{emp.unitName}</td>
+                                <td>{emp.departmentName}</td>
+                                <td>{emp.sectionName}</td>
+                                <td>{emp.teamName}</td>
+                                <td>{emp.country}</td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        );
+    };
+
     render() {
-        const { gridCountryData, gridUnitData } = this.state;
+        const { employeeInfos, gridCountryData, gridUnitData, detail } = this.state;
 
         return (
             <div className="manpower-report">
                 <ol className="breadcrumb">
+                    <li className="breadcrumb-item">Report</li>
                     <li className="breadcrumb-item active">Manpower Report</li>
                 </ol>
                 <Button variant="secondary" size="sm" className="btn-excel" type="button" onClick={this.exportExcel}>
@@ -52,12 +122,34 @@ class AppContainer extends Component {
                 </Button>
                 {
                     gridUnitData &&
-                    <UnitGrid data={gridUnitData} />
+                    <UnitGrid
+                        data={gridUnitData}
+                        employeeInfos={employeeInfos}
+                        detail={detail}
+                        onShowDetail={this.handleShowDetail}
+                    />
                 }
                 {
                     gridCountryData &&
-                    <CountryGrid data={gridCountryData} />
+                    <CountryGrid
+                        data={gridCountryData}
+                        employeeInfos={employeeInfos}
+                        detail={detail}
+                        onShowDetail={this.handleShowDetail}
+                    />
                 }
+                <Overlay
+                    show={detail.show}
+                    target={detail.target}
+                    popperConfig={{ placement: 'auto' }}
+                >
+                    <Popover id="popover-employee-infos" className="popover-employee-infos">
+                        <Popover.Title as="div"><i className="fa fa-times" onClick={this.handleHideDetail} /></Popover.Title>
+                        <Popover.Content>
+                            {this.renderDetail(detail.employeeInfos)}
+                        </Popover.Content>
+                    </Popover>
+                </Overlay>
             </div>
         );
     }

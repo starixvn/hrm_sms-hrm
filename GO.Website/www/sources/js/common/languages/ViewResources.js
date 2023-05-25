@@ -1,5 +1,8 @@
 ﻿window._language_en_US = {
     Comment: 'Comment',
+    Country: 'Country',
+    Department: 'Department',
+    FullName: 'Full Name',
     JobLevel: 'Job Level',
     Login: 'Login',
     NextWeek: 'Next week',
@@ -10,7 +13,10 @@
     Policy: 'Policy',
     PreviousWeek: 'Previous week',
     ResetPasswordSuccessfully: 'Reset password successfully!',
+    Section: 'Section',
     SymbolNo: '#',
+    Team: 'Team',
     Today: 'Today',
+    Unit: 'Unit',
     Username: 'Username'
 };
