@@ -133,5 +133,30 @@
     <Build Include="dbo\Stored Procedures\API_UnitHead_GetSchedule.sql" />
     <Build Include="dbo\Stored Procedures\API_UnitHead_GetInfo.sql" />
     <Build Include="dbo\Stored Procedures\User_GetUserSiteByUserId.sql" />
+    <Build Include="dbo\Tables\HRM_Unit.sql" />
+    <Build Include="dbo\Tables\HRM_Team.sql" />
+    <Build Include="dbo\Tables\HRM_Section.sql" />
+    <Build Include="dbo\Tables\HRM_JobTitle.sql" />
+    <Build Include="dbo\Tables\HRM_JobLevel.sql" />
+    <Build Include="dbo\Tables\HRM_Employee.sql" />
+    <Build Include="dbo\Tables\HRM_Department.sql" />
+    <Build Include="dbo\Stored Procedures\Report_Manpower_Get.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_UserSite_CopyToAnotherSite.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_UnitHead_UpdateSchedule.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_UnitHead_UpdateInfo.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Unit_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Team_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Team_Import.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Team_GetLastModifiedDateBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Section_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Section_Import.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Section_GetLastModifiedDateBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_JobTitle_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_JobTitle_Import.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_JobLevel_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Employee_ImportFromDB.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Employee_Import.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Employee_GetLastModifiedDateBySiteId.sql" />
+    <Build Include="dbo\Stored Procedures\AutoJob_Department_ImportFromDB.sql" />
   </ItemGroup>
 </Project>

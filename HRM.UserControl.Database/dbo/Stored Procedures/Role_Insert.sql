@@ -23,7 +23,8 @@ BEGIN
 	IF EXISTS (
 			SELECT RoleId
 			FROM dbo.[Role] WITH (NOLOCK)
-			WHERE [Name] = @Name
+			WHERE SiteId = @SiteId
+				AND [Name] = @Name
 			)
 	BEGIN
 		SELECT @ErrCode = 1

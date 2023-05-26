@@ -23,7 +23,8 @@ BEGIN
 	IF EXISTS (
 			SELECT RoleId
 			FROM dbo.[Role] WITH (NOLOCK)
-			WHERE RoleId != @RoleId
+			WHERE SiteId = @SiteId
+				AND RoleId != @RoleId
 				AND [Name] = @Name
 			)
 	BEGIN
