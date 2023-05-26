@@ -24,7 +24,7 @@
 
         private readonly Dictionary<string, string[]> jobLevels = new Dictionary<string, string[]>
         {
-            { "Supervisor", new [] { "M4-C", "M3-A", "M3-B", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
+            { "Supervisor", new [] { "M3-A", "M3-B", "P3-A", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
             { "Employee", new []{ "E3-A", "E3-B", "E3-C", "E2-A", "E2-B", "E2-C", "E1-A", "E1-B", "E1-C", "E0-A", "E0-B", "E0-C" } }
         };
 
