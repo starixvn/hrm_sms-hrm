@@ -57,7 +57,7 @@
                 var username = !string.IsNullOrWhiteSpace(usersite.Username) ? usersite.Username : usersite.Code;
                 username = !string.IsNullOrWhiteSpace(username) ? HttpUtility.UrlEncode(Cryptography.EncryptPassword(username)) : string.Empty;
                 var siteUrl = !string.IsNullOrWhiteSpace(usersite.SSOUrl) ? usersite.SSOUrl : usersite.SiteURL;
-                usersite.SiteURL = $"{usersite.SSOUrl}?userId={userId}&onUserId={onUserId}&username={username}";
+                usersite.SiteURL = $"{siteUrl}?userId={userId}&onUserId={onUserId}&username={username}";
             }
 
             return Json(usersites);
