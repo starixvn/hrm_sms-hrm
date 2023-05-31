@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using System.Web;
     using Fanex.Data;
+    using GO.Core.Models;
     using GO.Website.Models;
     using GO.Website.Models.Todolist;
     using GO.Website.Services;

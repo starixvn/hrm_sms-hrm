@@ -49,4 +49,8 @@
     <None Include="Views\Error\PageNotFound.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GO.Core\GO.Core.csproj" />
+  </ItemGroup>
+
 </Project>

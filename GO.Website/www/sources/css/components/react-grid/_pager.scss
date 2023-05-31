@@ -1,0 +1,81 @@
+﻿$colorLightGray: #ccc;
+$colorDisabledPgButton: #A8A8A8;
+$bgPaging: #eaecef;
+$colorBorderPaging: #b7b7b7;
+
+.page-container {
+    padding: 4px 5px;
+    background-color: $bgPaging;
+    border: 1px solid $colorBorderPaging;
+    border-top-width: 0;
+
+    .fa {
+        font-size: 16px;
+        font-weight: bold;
+        color: #545454;
+        cursor: pointer;
+        margin: 0 5px;
+
+        &:focus {
+            outline: none;
+        }
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+    }
+
+    .disable {
+        color: $colorDisabledPgButton;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .page-form {
+        width: auto;
+        height: auto;
+        font-size: inherit;
+        padding: 2px;
+        text-align: center;
+        margin: 0;
+        outline: unset;
+
+        &,
+        &:focus {
+            background: #fff;
+            border: 1px solid #e2d6d6;
+            box-shadow: none;
+        }
+    }
+
+    .page-input {
+        display: inline;
+
+        &:after,
+        &:before {
+            content: "";
+            border: 1px solid #ccc;
+        }
+
+        &:after, &:before {
+            margin: 0 5px;
+        }
+
+    }
+
+    .pagesize-select {
+        height: auto;
+        font-size: inherit;
+        padding: 2px;
+        min-width: 65px;
+        border: 1px solid #e2d6d6;
+        margin-left: 5px;
+        outline: unset;
+    }
+
+    .page-info {
+        float: right;
+        padding: 3px;
+    }
+}

@@ -1,10 +1,11 @@
 ﻿import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Layout from '@jsroot/components/Layout';
 import AppContainer from './components/AppContainer';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('app-container'));
+root.render(
     <Layout>
         <AppContainer />
-    </Layout>,
-    document.getElementById('app-container'));
+    </Layout>
+);

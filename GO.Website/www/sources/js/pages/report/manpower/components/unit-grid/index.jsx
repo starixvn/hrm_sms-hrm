@@ -13,13 +13,13 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
             show: false
         };
     });
-    const [showHideOptions, setStateValues] = useState(showHides);
+    const [showHideOptions, setShowHideOptions] = useState(showHides);
 
     const handleShowHideCells = unit => {
         const options = [...showHideOptions];
         const index = options.findIndex(x => x.key === unit);
         options[index] = { ...options[index], show: !options[index].show };
-        setStateValues(options);
+        setShowHideOptions(options);
     };
 
     const handleShowDetail = (event, jobLevel, unitName, isLocal) => {

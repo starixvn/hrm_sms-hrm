@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
     using System.Web;
     using Fanex.Data;
+    using GO.Core.Services;
     using GO.Website.Criteria;
     using GO.Website.Models;
-    using GO.Website.Services;
     using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Models;
     using HRM.UserControl.Client.Core.Models.User;

@@ -1,10 +1,11 @@
-﻿namespace GO.Website.Controllers
+﻿namespace GO.Website.Controllers.Manpower
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using GO.Admin.Website.Filters;
+    using GO.Core.Services;
     using GO.Website.Constants;
     using GO.Website.Criteria.Report;
     using GO.Website.Models.Report.Manpower;

@@ -13,6 +13,7 @@ const Layout = ({ children }) => {
                 closeOnClick={false}
                 pauseOnHover
                 draggable={false}
+                theme="colored"
             />
             {children}
         </>

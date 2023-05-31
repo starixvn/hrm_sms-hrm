@@ -9,6 +9,8 @@ namespace GO.Website
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using GO.Core.Repository;
+    using GO.Core.Services;
     using GO.Website.Constants;
     using GO.Website.Hubs;
     using GO.Website.Middlewares;
@@ -163,11 +165,12 @@ namespace GO.Website
 
             services.AddSingleton<IUserControlSession, UserControlSession>();
             services.AddSingleton<IAuthService, AuthService>();
-            services.AddSingleton<ICryptoService, CryptoService>();
+            services.AddSingleton<HRM.UserControl.Client.Core.Services.ICryptoService, HRM.UserControl.Client.Core.Services.CryptoService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();
             services.AddSingleton<IFunctionService, FunctionService>();
 
+            services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IExportExcelService, ExportExcelService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();

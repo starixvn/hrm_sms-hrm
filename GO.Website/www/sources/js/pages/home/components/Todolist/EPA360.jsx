@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import SkeletonTodoItem from '../SkeletonTodoItem';
