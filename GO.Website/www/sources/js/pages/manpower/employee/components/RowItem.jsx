@@ -20,6 +20,7 @@ const RowItem = ({ employee, index, onChangeStatus }) => {
             <Cell className="text-center">{employee.code}</Cell>
             <Cell className="text-center">{employee.nickname}</Cell>
             <Cell>{employee.fullName}</Cell>
+            <Cell className="text-center">{employee.jobLevel}</Cell>
             <Cell className="text-center">{employee.isLocal ? LangHelper.getResource('Local') : LangHelper.getResource('Expat')}</Cell>
             <Cell>{employee.unitName}</Cell>
             <Cell>{employee.departmentName}</Cell>

@@ -23,6 +23,7 @@ export default class DataGrid extends Component {
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Code')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Nickname')}</HeaderCell>
                 <HeaderCell colWidth={12}>{LangHelper.getResource('FullName')}</HeaderCell>
+                <HeaderCell colWidth={8}>{LangHelper.getResource('JobLevel')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Local')} / {LangHelper.getResource('Expat')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Unit')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Department')}</HeaderCell>
