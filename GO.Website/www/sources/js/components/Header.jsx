@@ -53,7 +53,7 @@ export default class Header extends Component {
 
     render() {
         const { user, sites, menus, expended } = this.state;
-        const currentUrl = document.getElementById('currentUrl').value.toLowerCase();
+        const currentUrl = window.location.pathname.toLowerCase();
 
         let nickname = '';
         if (user) {

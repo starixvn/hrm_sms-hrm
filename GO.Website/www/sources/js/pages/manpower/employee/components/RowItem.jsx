@@ -6,8 +6,10 @@ const RowItem = ({ employee, index, onChangeStatus }) => {
     const [excluded, setStatus] = useState(employee.isExcluded);
 
     const handleChangeStatus = () => {
-        setStatus(!excluded);
-        onChangeStatus(employee.siteId, employee.empId, !excluded);
+        if (window.hasHostPermissionOnEmployee) {
+            setStatus(!excluded);
+            onChangeStatus(employee.siteId, employee.empId, !excluded);
+        }
     };
 
     return (
@@ -25,7 +27,7 @@ const RowItem = ({ employee, index, onChangeStatus }) => {
             <Cell>{employee.teamName}</Cell>
             <Cell className="text-center">
                 <input type='checkbox'
-                    checked={!excluded}
+                    checked={!excluded} disabled={!window.hasHostPermissionOnEmployee}
                     onChange={handleChangeStatus}
                 />
             </Cell>

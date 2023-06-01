@@ -1,16 +1,10 @@
-﻿@{
-    var currentController = ViewContext.RouteData.Values["Controller"].ToString().ToLowerInvariant();
-    var currentAction = ViewContext.RouteData.Values["Action"].ToString().ToLowerInvariant();
-    var currentUrl = string.Format("/{0}/{1}", currentController, currentAction);
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <link rel="shortcut icon" type="image/ico" href="~/favicon.ico" />
-    <title>@ViewData["Title"] - GO System</title>
+    <title>@ViewData["Title"]</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap">
     <environment include="Development">
@@ -23,9 +17,8 @@
 </head>
 <body>
     <div id="header" class="header"></div>
-    @await RenderSectionAsync("Breadcrumb", required: false)
-
     <div class="container-fluid">
+        @await RenderSectionAsync("Breadcrumb", required: false)
         @RenderBody()
     </div>
 
@@ -47,7 +40,6 @@
     </div>
 
     <input type="hidden" id="RootUrl" value="@Url.Content("~/")" />
-    <input type="hidden" id="currentUrl" value="@currentUrl" />
     @Html.AntiForgeryToken()
 
     <environment include="Development">

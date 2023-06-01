@@ -1,15 +1,19 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
     using System.Threading.Tasks;
+    using GO.Admin.Website.Filters;
     using GO.Core.Models;
     using GO.Core.Services;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models;
     using GO.Website.Models.Manpower;
+    using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("Manpower/Employee/[action]")]
+    [GOPermission(FunctionKey = FunctionKey.Manpower_EmployeeManagement, Policy = Policy.Read)]
     public class EmployeeController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -25,7 +29,8 @@
 
         public IActionResult Index()
         {
-            return View("~/Views/Manpower/Employee/Index.cshtml");
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_EmployeeManagement, Policy.Host);
+            return View("~/Views/Manpower/Employee/Index.cshtml", isHost);
         }
 
         [HttpPost]
@@ -43,6 +48,7 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_EmployeeManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateExclude([FromBody] UpdateExcludedEmployeeCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

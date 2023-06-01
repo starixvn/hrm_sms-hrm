@@ -70,10 +70,7 @@ class AppContainer extends Component {
 
         return (
             <div className="manpower-report">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item">{LangHelper.getResource('Manpower')}</li>
-                    <li className="breadcrumb-item active">{LangHelper.getResource('EmployeeManagement')}</li>
-                </ol>
+                
                 <Filter sites={sites}
                     onFilterChange={this.handleChangeFilter}
                     getEmployeeInfos={this.getEmployeeInfos}

@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Manpower Report";
 }
+@section Breadcrumb {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Report</li>
+        <li class="breadcrumb-item active">Manpower Report</li>
+    </ol>
+}
 @section Styles {
     <environment include="Development">
         <link rel="stylesheet" href="~/css/dev/pages/report/manpower/index.chunk.css" asp-append-version="true" />

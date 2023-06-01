@@ -56,14 +56,20 @@
 
                 &::-webkit-input-placeholder {
                     color: #474747;
+                    opacity: 0.6;
+                    font-style: italic;
                 }
 
                 &:-ms-input-placeholder {
                     color: #474747;
+                    opacity: 0.6;
+                    font-style: italic;
                 }
 
                 &::placeholder {
                     color: #474747;
+                    opacity: 0.6;
+                    font-style: italic;
                 }
             }
 

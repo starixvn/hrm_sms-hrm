@@ -1,5 +1,12 @@
-﻿@{
+﻿@model bool
+@{
     ViewData["Title"] = "Manpower - Employee Management";
+}
+@section Breadcrumb {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Manpower</li>
+        <li class="breadcrumb-item active">Employee Management</li>
+    </ol>
 }
 @section Styles {
     <environment include="Development">
@@ -10,6 +17,14 @@
     </environment>
 }
 @section Scripts {
+    @if (Model)
+    {
+        <script>window.hasHostPermissionOnEmployee = true;</script>
+    }
+    else
+    {
+        <script>window.hasHostPermissionOnEmployee = false;</script>
+    }
     <environment include="Development">
         <script src="~/js/dev/pages/manpower/employee/index.chunk.js" asp-append-version="true"></script>
     </environment>

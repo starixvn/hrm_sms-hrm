@@ -63,7 +63,7 @@ export default class Filter extends Component {
                     <Form.Group>
                         <Form.Label>{LangHelper.getResource('Keyword')}</Form.Label>
                         <Form.Control type="text" size="sm" value={keyword}
-                            name="keyword" id="keyword"
+                            name="keyword" placeholder="nickname or full name"
                             className="shadow-none" autoComplete="off"
                             onChange={event => this.handleChange('keyword', event.target.value)}
                         />

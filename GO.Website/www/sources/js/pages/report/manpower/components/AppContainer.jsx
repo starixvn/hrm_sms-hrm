@@ -113,10 +113,6 @@ class AppContainer extends Component {
 
         return (
             <div className="manpower-report">
-                <ol className="breadcrumb">
-                    <li className="breadcrumb-item">Report</li>
-                    <li className="breadcrumb-item active">Manpower Report</li>
-                </ol>
                 <Button variant="secondary" size="sm" className="btn-excel" type="button" onClick={this.exportExcel}>
                     Export to Excel
                 </Button>
