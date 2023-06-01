@@ -2,6 +2,7 @@
     [SiteId]        SMALLINT       NOT NULL,
     [EmpId]         INT            NOT NULL,
     [UserId]        INT            NULL,
+    [Username]      NVARCHAR (50)  NULL,
     [Code]          NVARCHAR (20)  NULL,
     [Nickname]      NVARCHAR (50)  NULL,
     [FullName]      NVARCHAR (100) NULL,
@@ -19,4 +20,6 @@
     [SyncDate]      DATETIME       NULL,
     CONSTRAINT [PK_HRM_Employee] PRIMARY KEY CLUSTERED ([SiteId] ASC, [EmpId] ASC)
 );
+
+
 

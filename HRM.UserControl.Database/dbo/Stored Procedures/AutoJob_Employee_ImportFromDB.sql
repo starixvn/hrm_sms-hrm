@@ -28,6 +28,7 @@ BEGIN
 
 	CREATE TABLE #tmpEmployee (
 		EmpId INT
+		,Username NVARCHAR(50)
 		,Code NVARCHAR(20)
 		,Nickname NVARCHAR(50)
 		,FullName NVARCHAR(100)
@@ -48,6 +49,7 @@ BEGIN
 	SELECT @sqlExecute = 'INSERT INTO #tmpEmployee (
 		EmpId
 		,UserId
+		,Username
 		,Code
 		,Nickname
 		,FullName
@@ -64,6 +66,7 @@ BEGIN
 		,ModifiedDate)
 	SELECT EmployeeId
 		,UserId
+		,DomainUsername
 		,Code
 		,Nickname
 		,FullName
@@ -85,6 +88,7 @@ BEGIN
 
 	UPDATE emp
 	SET emp.UserId = tmp.UserId
+		,emp.Username = tmp.Username
 		,emp.Code = tmp.Code
 		,emp.Nickname = tmp.Nickname
 		,emp.FullName = tmp.FullName
@@ -108,6 +112,7 @@ BEGIN
 		SiteId
 		,EmpId
 		,UserId
+		,Username
 		,Code
 		,Nickname
 		,FullName
@@ -127,6 +132,7 @@ BEGIN
 	SELECT @SiteId
 		,tmp.EmpId
 		,tmp.UserId
+		,tmp.Username
 		,tmp.Code
 		,tmp.Nickname
 		,tmp.FullName

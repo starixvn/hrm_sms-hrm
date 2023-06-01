@@ -11,9 +11,11 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT s.SiteName
+	SELECT s.SiteId
+		,s.SiteName
 		,c.[Name] AS CompanyName
 		,c.Country
+		,emp.EmpId
 		,emp.Code
 		,emp.Nickname
 		,emp.FullName
@@ -25,7 +27,7 @@ BEGIN
 		,section.[Name] AS SectionName
 		,dept.Code AS DepartmentCode
 		,dept.[Name] AS DepartmentName
-		,unit.Code AS Unit
+		,unit.Code AS UnitCode
 		,unit.[Name] AS UnitName
 	FROM dbo.HRM_Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.HRM_Team AS team WITH (NOLOCK) ON emp.SiteId = team.SiteId
@@ -54,10 +56,8 @@ BEGIN
 		AND emp.IsDeleted = 0
 		AND NOT EXISTS (
 			SELECT 1
-			FROM dbo.UserMapping AS um WITH (NOLOCK)
-			WHERE emp.SiteId = um.SiteId
-				AND emp.EmpId = um.RefId
-				AND emp.UserId = um.UserId
-				AND ISNULL(um.NewUserId, um.UserId) != um.UserId
+			FROM dbo.HRM_Manpower_ExcludedEmployee AS exclude WITH (NOLOCK)
+			WHERE emp.SiteId = exclude.SiteId
+				AND emp.EmpId = exclude.EmpId
 			)
 END
