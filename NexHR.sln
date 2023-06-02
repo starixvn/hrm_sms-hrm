@@ -31,6 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Site", "Fanex.N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SonarQube", "SonarQube", "{B7FAF5FF-B092-4847-98E4-3FC0141FD0A8}"
 	ProjectSection(SolutionItems) = preProject
+		SonarQube\smshrm_css_settings.json = SonarQube\smshrm_css_settings.json
 		SonarQube\smshrm_js_settings.json = SonarQube\smshrm_js_settings.json
 		SonarQube\smshrm_ts_settings.json = SonarQube\smshrm_ts_settings.json
 		SonarQube\SMSHRMCSharp.ruleset = SonarQube\SMSHRMCSharp.ruleset

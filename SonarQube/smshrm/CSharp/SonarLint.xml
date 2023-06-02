@@ -17,6 +17,10 @@
       <Key>sonar.cs.roslyn.ignoreIssues</Key>
       <Value>true</Value>
     </Setting>
+    <Setting>
+      <Key>sonar.global.exclusions</Key>
+      <Value>**/*GlobalSuppressions.cs,**/*AssemblyInfo.cs,**/*.generated.cs,**/*.native.*,**/Global.asax.cs,**/node_modules/**,**/bower_components/**,**/*.js,**/*.html,**/*.css,**/*.scss</Value>
+    </Setting>
   </Settings>
   <Rules>
     <Rule>
