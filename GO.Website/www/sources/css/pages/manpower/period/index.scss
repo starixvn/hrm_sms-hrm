@@ -1,0 +1,13 @@
+@import "~react-toastify/dist/ReactToastify.css";
+@import '../../../abstracts/mixins';
+@import '../../../components/buttons';
+@import '../../../components/react-grid/react-grid';
+@import '../../../components/form-filter';
+@import '../../../components/forms';
+@import '../../../components/icons';
+@import '../../../components/tables';
+@import '../../../components/react-select';
+
+.table thead tr {
+     border-color: #b7b7b7 !important;
+}

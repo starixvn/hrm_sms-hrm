@@ -23,5 +23,14 @@
     ThereIsNoData: 'There is no data.',
     Today: 'Today',
     Unit: 'Unit',
-    Username: 'Username'
+    Username: 'Username',
+    Name: 'Name',
+    Evaluator: 'Evaluator',
+    Reviewer: 'Reviewer',
+    Employee: 'Employee',
+    Management: 'Management',
+    Active: 'Active',
+    Action: 'Action',
+    FromDate: 'From Date',
+    ToDate: 'To Date'
 };
