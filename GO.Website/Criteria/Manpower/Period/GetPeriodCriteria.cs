@@ -1,7 +1,7 @@
-﻿using Fanex.Data.Repository;
-
-namespace GO.Website.Criteria.Manpower.Period
+﻿namespace GO.Website.Criteria.Manpower.Period
 {
+    using Fanex.Data.Repository;
+
     public class GetPeriodCriteria : CriteriaBase
     {
         public string Keyword { get; set; }

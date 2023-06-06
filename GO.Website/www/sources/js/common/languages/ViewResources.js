@@ -32,5 +32,6 @@
     Active: 'Active',
     Action: 'Action',
     FromDate: 'From Date',
-    ToDate: 'To Date'
+    ToDate: 'To Date',
+    AddNew :'Add New'
 };

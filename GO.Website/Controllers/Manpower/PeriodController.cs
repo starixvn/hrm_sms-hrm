@@ -1,6 +1,7 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
     using GO.Admin.Website.Filters;
+    using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower.Period;
@@ -42,6 +43,27 @@
                 period.Settings = tuple.Item2.Where(x => x.PeriodId == period.PeriodId).ToList();
             }
             return Json(new { totalItems = criteria.TotalRows, data = periods });
+        }
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> UpdateIsActive([FromBody] UpdateStatusPeriodCriteria command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
+            command.SiteId = userControlSession.SiteId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
+
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> Delete([FromBody] DeletePeriodCriteria command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
+            command.SiteId = userControlSession.SiteId;
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
         }
     }
 }

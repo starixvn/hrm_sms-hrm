@@ -71,6 +71,11 @@ export default class Filter extends Component {
                             {LangHelper.getResource('Submit')}
                         </Button>
                     </Form.Group>
+                    <Form.Group>
+                        <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleCreate}>
+                            {LangHelper.getResource('AddNew')}
+                        </Button>
+                    </Form.Group>
                 </Form.Row>
             </Form>
         );

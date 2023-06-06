@@ -43,6 +43,8 @@ export default class DataGrid extends Component {
                 <RowItem
                     key={`row-${item.siteId}-${item.empId}`}
                     period={item}
+                    onChangeStatus={this.props.onChangeStatus}
+                    deletePeriod={this.props.deletePeriod}
                 />
             );
         }

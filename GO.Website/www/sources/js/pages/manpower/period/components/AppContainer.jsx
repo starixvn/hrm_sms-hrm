@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Filter from './Filter';
 import DataService from '@jsroot/common/dataService';
+import { toast } from 'react-toastify';
 import DataGrid from './DataGrid';
 import { DefaultPageSize } from '@jsroot/common/constants';
 import Site from '@jsroot/common/site';
@@ -33,6 +34,32 @@ class AppContainer extends Component {
         this.setState({ filter: value });
     };
 
+    updateIsActive = async (periodId, isActive) => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/UpdateIsActive');
+        const params = { periodId, isActive};
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                toast.success('Update successfully!');
+            } else {
+                toast.error(response.data.message);
+            }
+        }).then(() => Site.unblockUI());
+    };
+
+    deletePeriod = async periodId => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/Delete');
+        const params = { periodId };
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                toast.success('Delete successfully!');
+            } else {
+                toast.error(response.data.message);
+            }
+        }).then(() => Site.unblockUI());
+    };
+
     render() {
         const { filter, gridData } = this.state;
 
@@ -46,6 +73,8 @@ class AppContainer extends Component {
                     gridData={gridData}
                     onFilterChange={this.handleChangeFilter}
                     getPeriodInfos={this.getPeriodInfos}
+                    onChangeStatus={this.updateIsActive}
+                    deletePeriod={this.deletePeriod}
                 />
             </div>
         );

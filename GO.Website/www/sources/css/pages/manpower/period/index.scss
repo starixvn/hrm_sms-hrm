@@ -11,3 +11,21 @@
 .table thead tr {
      border-color: #b7b7b7 !important;
 }
+
+.icon {
+    width: 100%;
+    font-size: 17px;
+    cursor: pointer;
+    display: initial;
+    margin: 5px;
+    color: #444444 !important;
+}
+
+.form-filter .form-row .form-group {
+    width: unset !important;
+}
+
+.btn {
+    width: 97px !important;
+    padding: 4px 20px !important;
+}
