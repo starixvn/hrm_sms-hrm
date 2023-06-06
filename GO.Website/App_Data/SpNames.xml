@@ -14,13 +14,15 @@
     </Function>
     <Function Name="Manpower">
         <Setting Key="HRM_Employee_Search" SpName="HRM_Employee_Search" DbName="bodb_IUC" Plain="0" />
-        
+
         <Setting Key="Manpower_Site_Get" SpName="Manpower_Site_Get" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Employee_Get" SpName="Manpower_Employee_Get" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_ExcludedEmployee_Update" SpName="Manpower_ExcludedEmployee_Update" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_Period_Get" SpName="Manpower_Period_Get" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_Period_UpdateStatus" SpName="Manpower_Period_UpdateStatus" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_Period_Delete" SpName="Manpower_Period_Delete" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_ExcludedEmployee_Update" SpName="Manpower_ExcludedEmployee_Update" DbName="bodb_IUC" Plain="0" />
+
+        <Setting Key="Manpower_Period_Get" SpName="Manpower_Period_Get" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_Period_UpdateStatus" SpName="Manpower_Period_UpdateStatus" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_Period_Delete" SpName="Manpower_Period_Delete" DbName="bodb_IUC" Plain="0" />
+
         <Setting Key="Manpower_Flow_GetUnit" SpName="Manpower_Flow_GetUnit" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Flow_GetByUnit" SpName="Manpower_Flow_GetByUnit" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Flow_Update" SpName="Manpower_Flow_Update" DbName="bodb_IUC" Plain="0" />

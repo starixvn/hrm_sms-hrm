@@ -26,10 +26,8 @@
     Unit: 'Unit',
     UnitHead: 'Unit Head',
     Username: 'Username',
-    Verifier: 'Verifier'
-    Username: 'Username',
+    Verifier: 'Verifier',
     Name: 'Name',
-    Evaluator: 'Evaluator',
     Reviewer: 'Reviewer',
     Employee: 'Employee',
     Management: 'Management',
