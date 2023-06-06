@@ -22,6 +22,7 @@ function generateConfig(environment) {
             [`${jsPath}/pages/report/manpower/index`]: pathConfig.scriptPaths.report_manpower,
             [`${jsPath}/pages/manpower/employee/index`]: pathConfig.scriptPaths.manpower_employee_index,
             [`${jsPath}/pages/manpower/period/index`]: pathConfig.scriptPaths.manpower_period_index,
+            [`${jsPath}/pages/manpower/flow/index`]: pathConfig.scriptPaths.manpower_flow_index,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
@@ -31,7 +32,8 @@ function generateConfig(environment) {
             [`${cssPath}/pages/unit-head/weekly-schedule`]: pathConfig.cssPaths.unit_head_weekly_schedule,
             [`${cssPath}/pages/report/manpower/index`]: pathConfig.cssPaths.report_manpower,
             [`${cssPath}/pages/manpower/employee/index`]: pathConfig.cssPaths.manpower_employee_index,
-            [`${cssPath}/pages/manpower/period/index`]: pathConfig.cssPaths.manpower_period_index
+            [`${cssPath}/pages/manpower/period/index`]: pathConfig.cssPaths.manpower_period_index,
+            [`${cssPath}/pages/manpower/flow/index`]: pathConfig.cssPaths.manpower_flow_index
         },
         output: {
             path: pathConfig.projectRoot,

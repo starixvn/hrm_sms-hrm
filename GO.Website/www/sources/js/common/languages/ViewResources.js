@@ -1,4 +1,5 @@
 ﻿window._language_en_US = {
+    Approver: 'Approver',
     Comment: 'Comment',
     Country: 'Country',
     Department: 'Department',
@@ -23,6 +24,9 @@
     ThereIsNoData: 'There is no data.',
     Today: 'Today',
     Unit: 'Unit',
+    UnitHead: 'Unit Head',
+    Username: 'Username',
+    Verifier: 'Verifier'
     Username: 'Username',
     Name: 'Name',
     Evaluator: 'Evaluator',

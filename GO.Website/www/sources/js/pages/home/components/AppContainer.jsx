@@ -6,7 +6,7 @@ import HRPP from './Todolist/HRPP';
 import EPA from './Todolist/EPA';
 import EPA360 from './Todolist/EPA360';
 
-class AppContainer extends Component {
+export default class AppContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -52,5 +52,3 @@ class AppContainer extends Component {
         );
     }
 }
-
-export default AppContainer;

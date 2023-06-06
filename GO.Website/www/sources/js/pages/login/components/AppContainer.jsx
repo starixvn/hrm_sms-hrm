@@ -5,7 +5,7 @@ import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import RijndaelService from '@jsroot/common/rijndaelService';
 
-class AppContainer extends Component {
+export default class AppContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -129,5 +129,3 @@ class AppContainer extends Component {
         );
     }
 }
-
-export default AppContainer;

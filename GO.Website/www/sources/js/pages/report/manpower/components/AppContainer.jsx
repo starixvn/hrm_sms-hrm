@@ -6,7 +6,7 @@ import CountryGrid from './country-grid/index';
 import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 
-class AppContainer extends Component {
+export default class AppContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -150,5 +150,3 @@ class AppContainer extends Component {
         );
     }
 }
-
-export default AppContainer;

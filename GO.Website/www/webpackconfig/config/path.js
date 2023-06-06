@@ -11,8 +11,9 @@ const cssPaths = {
     home: ['./www/sources/css/pages/home.scss'],
     unit_head_weekly_schedule: ['./www/sources/css/pages/unit-head/weekly-schedule.scss'],
     report_manpower: ['./www/sources/css/pages/report/manpower.scss'],
-    manpower_employee_index: ['./www/sources/css/pages/manpower/employee/index.scss'],
-    manpower_period_index: ['./www/sources/css/pages/manpower/period/index.scss']
+    manpower_employee_index: ['./www/sources/css/pages/manpower/employee.scss'],
+    manpower_period_index: ['./www/sources/css/pages/manpower/period/index.scss'],
+    manpower_flow_index: ['./www/sources/css/pages/manpower/flow.scss']
 };
 
 const scriptPaths = {
@@ -25,7 +26,8 @@ const scriptPaths = {
     unit_head_weekly_schedule: ['./www/sources/js/pages/unit-head/index.js'],
     report_manpower: ['./www/sources/js/pages/report/manpower/index.js'],
     manpower_employee_index: ['./www/sources/js/pages/manpower/employee/index.js'],
-    manpower_period_index: ['./www/sources/js/pages/manpower/period/index.js']
+    manpower_period_index: ['./www/sources/js/pages/manpower/period/index.js'],
+    manpower_flow_index: ['./www/sources/js/pages/manpower/flow/index.js']
 };
 
 module.exports = {

@@ -7,7 +7,7 @@ import Grid from './grid/index';
 const DateFormat = 'YYYY-MM-DD';
 const MobileWidth = 576;
 
-class AppContainer extends Component {
+export default class AppContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -134,5 +134,3 @@ class AppContainer extends Component {
         );
     }
 }
-
-export default AppContainer;

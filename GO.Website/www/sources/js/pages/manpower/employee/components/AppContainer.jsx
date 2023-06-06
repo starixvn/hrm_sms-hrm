@@ -1,58 +1,47 @@
-﻿import React, { Component } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Filter from './Filter';
 import DataGrid from './DataGrid';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
-import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
 
-class AppContainer extends Component {
-    constructor(props) {
-        super(props);
+const AppContainer = () => {
+    const [sites, setSites] = useState([]);
+    const [filter, setFilter] = useState({
+        keyword: '',
+        siteId: null,
+        statusId: 1,
+        pageIndex: 1,
+        pageSize: DefaultPageSize
+    });
+    const [gridData, setGridData] = useState(null);
 
-        this.state = {
-            sites: [],
-            filter: {
-                keyword: '',
-                siteId: null,
-                statusId: 1,
-                pageIndex: 1,
-                pageSize: DefaultPageSize
-            },
-            gridData: null
+    useEffect(() => {
+        const getSites = async () => {
+            Site.blockUI();
+            const url = Site.resolveClientUrl('Manpower/Employee/GetSites');
+            await DataService.getDataAsync(url).then(response => {
+               setSites(response.data);
+            }).then(() => Site.unblockUI());
         };
-    }
 
-    async componentDidMount() {
-        await this.getSites();
-    }
+        getSites();
+    }, []);
 
-    getSites = async () => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/Employee/GetSites');
-        await DataService.getDataAsync(url).then(response => {
-            this.setState({
-                sites: response.data
-            });
-        }).then(() => Site.unblockUI());
-    };
-
-    getEmployeeInfos = async params => {
+    const getEmployeeInfos = async params => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Manpower/Employee/GetEmployeeInfos');
         await DataService.postDataAsync(url, params).then(response => {
-            this.setState({
-                gridData: response.data
-            });
+            setGridData(response.data);
         }).then(() => Site.unblockUI());
     };
 
-    handleChangeFilter = value => {
-        this.setState({ filter: value });
+    const handleChangeFilter = value => {
+        setFilter(value);
     };
 
-    updateExclude = async (siteId, empId, isExcluded) => {
+    const updateExclude = async (siteId, empId, isExcluded) => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Manpower/Employee/UpdateExclude');
         const params = { siteId, empId, isExcluded };
@@ -65,25 +54,20 @@ class AppContainer extends Component {
         }).then(() => Site.unblockUI());
     };
 
-    render() {
-        const { filter, gridData, sites } = this.state;
-
-        return (
-            <div className="manpower-report">
-                
-                <Filter sites={sites}
-                    onFilterChange={this.handleChangeFilter}
-                    getEmployeeInfos={this.getEmployeeInfos}
-                />
-                <DataGrid filter={filter}
-                    gridData={gridData}
-                    onFilterChange={this.handleChangeFilter}
-                    getEmployeeInfos={this.getEmployeeInfos}
-                    onChangeStatus={this.updateExclude}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div className="manpower-employee">
+            <Filter sites={sites}
+                onFilterChange={handleChangeFilter}
+                getEmployeeInfos={getEmployeeInfos}
+            />
+            <DataGrid filter={filter}
+                gridData={gridData}
+                onFilterChange={handleChangeFilter}
+                getEmployeeInfos={getEmployeeInfos}
+                onChangeStatus={updateExclude}
+            />
+        </div>
+    );
+};
 
 export default AppContainer;

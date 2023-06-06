@@ -1,20 +1,22 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import RowItem from './RowItem';
 import { PAGING_SIZES } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
-export default class DataGrid extends Component {
-    onPaging = (pageIndex, pageSize) => {
-        const params = { ...this.props.filter };
-        params['pageIndex'] = pageIndex;
-        params['pageSize'] = pageSize;
+const DataGrid = ({ filter, gridData, getEmployeeInfos, onFilterChange, onChangeStatus }) => {
+    const onPaging = (pageIndex, pageSize) => {
+        const params = {
+            ...filter,
+            pageIndex,
+            pageSize
+        };
 
-        this.props.onFilterChange(params);
-        this.props.getEmployeeInfos(params);
+        onFilterChange(params);
+        getEmployeeInfos(params);
     };
 
-    buildHeader = () => {
+    const buildHeader = () => {
         return (
             <HeaderRow>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
@@ -34,16 +36,16 @@ export default class DataGrid extends Component {
         );
     };
 
-    buildBody = () => {
-        const { totalItems, data } = this.props.gridData;
+    const buildBody = () => {
+        const { totalItems, data } = gridData;
         if (totalItems > 0) {
-            const { pageIndex, pageSize } = this.props.filter;
+            const { pageIndex, pageSize } = filter;
             const startIndex = (pageIndex - 1) * pageSize + 1;
             return data.map((item, index) =>
                 <RowItem
                     key={`row-${item.siteId}-${item.empId}`}
                     employee={item} index={startIndex + index}
-                    onChangeStatus={this.props.onChangeStatus}
+                    onChangeStatus={onChangeStatus}
                 />
             );
         }
@@ -55,32 +57,32 @@ export default class DataGrid extends Component {
         ];
     };
 
-    render() {
-        if (!this.props.gridData) {
-            return null;
-        }
-
-        const { pageIndex, pageSize } = this.props.filter;
-        const { totalItems } = this.props.gridData;
-        const pagingOption = {
-            PageIndex: pageIndex,
-            PageSize: pageSize,
-            TotalItem: totalItems,
-            PageList: PAGING_SIZES
-        };
-        return (
-            <Table
-                minWidth={720}
-                maxWidth={document.getElementById('app-container').clientWidth}
-                autoWidth
-                header={this.buildHeader()}
-                body={this.buildBody()}
-                isPaging
-                pageOption={pagingOption}
-                onPaging={this.onPaging}
-                containerPadding={0}
-                adjustedHeight={10}
-            />
-        );
+    if (!gridData) {
+        return null;
     }
-}
+
+    const { pageIndex, pageSize } = filter;
+    const { totalItems } = gridData;
+    const pagingOption = {
+        PageIndex: pageIndex,
+        PageSize: pageSize,
+        TotalItem: totalItems,
+        PageList: PAGING_SIZES
+    };
+    return (
+        <Table
+            minWidth={720}
+            maxWidth={document.getElementById('app-container').clientWidth}
+            autoWidth
+            header={buildHeader()}
+            body={buildBody()}
+            isPaging
+            pageOption={pagingOption}
+            onPaging={onPaging}
+            containerPadding={0}
+            adjustedHeight={10}
+        />
+    );
+};
+
+export default DataGrid;
