@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Cell, Row } from '@jsroot/components/react-grid/index';
 import dayjs from 'dayjs';
 
-const RowItem = ({ period, onChangeStatus, deletePeriod }) => {
+const RowItem = ({ period, onChangeStatus, deletePeriod, handleModalUpdateDialog }) => {
     const [isActive, setStatus] = useState(period.isActive);
     const dateProcessSettings = [];
     period.settings.map(item => {
@@ -20,6 +20,11 @@ const RowItem = ({ period, onChangeStatus, deletePeriod }) => {
             deletePeriod(period.periodId);
         }
     };
+    const handleUpdatePeriod = () => {
+        if (window.hasHostPermissionOnEmployee) {
+            handleModalUpdateDialog(true);
+        }
+    };
     return (
         <Row>
             <Cell className="text-center">{period.rowNum}</Cell>
@@ -32,8 +37,8 @@ const RowItem = ({ period, onChangeStatus, deletePeriod }) => {
                 />
             </Cell>
             <Cell className="text-center">
-                <a className="icon fa fa-edit" ></a>
-                <a className="icon fa fa-trash" onClick={handleDeletePeriod}></a>
+                <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} ></a>
+                <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod}></a>
             </Cell>
         </Row>
     );

@@ -9,6 +9,7 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using SMS.EPA.Core.Extensions;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -43,6 +44,21 @@
                 period.Settings = tuple.Item2.Where(x => x.PeriodId == period.PeriodId).ToList();
             }
             return Json(new { totalItems = criteria.TotalRows, data = periods });
+        }
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> Create([FromBody] InsertPeriodCriteria command)
+        {
+            command.CreatedBy = userControlSession.UserId;
+            if (command != null)
+            {
+                command.SettingXml = command.Settings.ToXML().ToString();
+                command.IsActive = true;
+                command.CreatedBy = userControlSession.UserId;
+            }
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
         }
 
         [HttpPost]

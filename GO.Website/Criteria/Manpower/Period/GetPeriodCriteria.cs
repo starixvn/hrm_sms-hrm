@@ -4,7 +4,6 @@
 
     public class GetPeriodCriteria : CriteriaBase
     {
-        public string Keyword { get; set; }
         public byte? IsActive { get; set; }
         public short PageIndex { get; set; }
         public short? PageSize { get; set; }

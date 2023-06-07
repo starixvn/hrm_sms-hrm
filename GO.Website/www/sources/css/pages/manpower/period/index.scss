@@ -7,25 +7,47 @@
 @import '../../../components/icons';
 @import '../../../components/tables';
 @import '../../../components/react-select';
+@import '../../../components/date-picker/style';
 
 .table thead tr {
      border-color: #b7b7b7 !important;
 }
 
-.icon {
-    width: 100%;
-    font-size: 17px;
-    cursor: pointer;
-    display: initial;
-    margin: 5px;
-    color: #444444 !important;
-}
-
 .form-filter .form-row .form-group {
     width: unset !important;
+
+    .btn {
+        width: 97px !important;
+        padding: 4px 20px !important;
+    }
 }
 
-.btn {
-    width: 97px !important;
-    padding: 4px 20px !important;
+.modal-dialog {
+    width: 500px;
+
+    .modal-body {
+        padding: 1rem 1.5rem;
+
+        .list-message-error{
+            margin-top: 1rem;
+        }
+        
+        .label-from-to-date {
+            display: flex;
+
+            .label-from-date {
+                width: 50%
+            }
+        }
+
+        .dataPicker-from-to-date {
+            display: flex;
+        }
+
+        .react-datepicker__input-container {
+            width: 130px;
+        }
+    }
 }
+
+   

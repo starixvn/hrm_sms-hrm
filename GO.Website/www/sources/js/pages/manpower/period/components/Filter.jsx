@@ -9,7 +9,6 @@ export default class Filter extends Component {
         super(props);
 
         this.state = {
-            keyword: '',
             status: { value: 1, label: 'Active' }
         };
     }
@@ -20,9 +19,8 @@ export default class Filter extends Component {
     }
 
     getParams = () => {
-        const { keyword, status } = this.state;
+        const { status } = this.state;
         return {
-            keyword,
             IsActive: status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
@@ -40,8 +38,12 @@ export default class Filter extends Component {
         this.setState({ [name]: value });
     };
 
+    handleOpenCreateModalDialog = () => {
+        this.props.handleModalCreateDialog(true);
+    };
+
     render() {
-        const { keyword, status } = this.state;
+        const { status } = this.state;
         const statusOptions = [{ value: null, label: 'All' },
         { value: 1, label: 'Active' },
         { value: 0, label: 'Inactive' }
@@ -50,14 +52,6 @@ export default class Filter extends Component {
         return (
             <Form className="form-filter" onSubmit={this.handleSubmit}>
                 <Form.Row bsPrefix="form-row">
-                    <Form.Group>
-                        <Form.Label>{LangHelper.getResource('Keyword')}</Form.Label>
-                        <Form.Control type="text" size="sm" value={keyword}
-                            name="keyword" placeholder="period name"
-                            className="shadow-none" autoComplete="off"
-                            onChange={event => this.handleChange('keyword', event.target.value)}
-                        />
-                    </Form.Group>
                     <Form.Group>
                         <Form.Label>{LangHelper.getResource('Status')}</Form.Label>
                         <Select className={`react-select-container`}
@@ -72,7 +66,7 @@ export default class Filter extends Component {
                         </Button>
                     </Form.Group>
                     <Form.Group>
-                        <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleCreate}>
+                        <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
                             {LangHelper.getResource('AddNew')}
                         </Button>
                     </Form.Group>

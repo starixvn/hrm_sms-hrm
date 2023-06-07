@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import DataGrid from './DataGrid';
 import { DefaultPageSize } from '@jsroot/common/constants';
 import Site from '@jsroot/common/site';
+import Create from './Create';
+import Update from './Update';
 
 class AppContainer extends Component {
     constructor(props) {
@@ -16,7 +18,11 @@ class AppContainer extends Component {
                 pageIndex: 1,
                 pageSize: DefaultPageSize
             },
-            gridData: null
+            gridData: null,
+            createModalDialog: { show: false },
+            createResult: null,
+            updateModalDialog: { show: false },
+            updateResult: null
         };
     }
 
@@ -60,14 +66,64 @@ class AppContainer extends Component {
         }).then(() => Site.unblockUI());
     };
 
+    createPeriod = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/Create');
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                this.setState({
+                    createResult: null,
+                    createModalDialog: { show: false }
+                });
+                toast.success('Create successfully!');
+                this.getPeriodInfos(this.state.filter);
+            } else {
+                this.setState({
+                    createResult: response.data
+                });
+            }
+        }).then(() => Site.unblockUI());
+    };
+
+    updatePeriod = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/Update');
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                this.setState({
+                    updateResult: null,
+                    updateModalDialog: { show: false }
+                });
+                toast.success('Update successfully!');
+            } else {
+                this.setState({
+                    updateResult: response.data
+                });
+            }
+        }).then(() => Site.unblockUI());
+    };
+
+    handleModalCreateDialog = isShow => {
+        this.setState({
+            createModalDialog: { show: isShow }
+        });
+    };
+
+    handleModalUpdateDialog = isShow => {
+        this.setState({
+            updateModalDialog: { show: isShow }
+        });
+    };
+
     render() {
-        const { filter, gridData } = this.state;
+        const { filter, gridData, createModalDialog, updateModalDialog, createResult } = this.state;
 
         return (
             <div className="manpower-report">
                 <Filter
                     onFilterChange={this.handleChangeFilter}
                     getPeriodInfos={this.getPeriodInfos}
+                    handleModalCreateDialog={this.handleModalCreateDialog}
                 />
                 <DataGrid filter={filter}
                     gridData={gridData}
@@ -75,7 +131,21 @@ class AppContainer extends Component {
                     getPeriodInfos={this.getPeriodInfos}
                     onChangeStatus={this.updateIsActive}
                     deletePeriod={this.deletePeriod}
+                    handleModalUpdateDialog={this.handleModalUpdateDialog}
                 />
+                {
+                    createModalDialog.show &&
+                    <Create createPeriod={this.createPeriod}
+                        handleModalCreateDialog={this.handleModalCreateDialog}
+                        createResult={createResult}
+                    />
+                }
+                {
+                    updateModalDialog.show &&
+                    <Update updatePeriod={this.updatePeriod}
+                        handleModalUpdateDialog={this.handleModalUpdateDialog}
+                    />
+                }
             </div>
         );
     }
