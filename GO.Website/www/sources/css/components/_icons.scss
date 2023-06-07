@@ -12,16 +12,22 @@
     }
 }
 
-.icon-edit:hover {
-    background-color: #ff9913;
+.icon-edi {
+    &:hover {
+        background-color: #ff9913;
+    }
 }
 
-.icon-delete:hover {
-    background-color: #fe3a3a;
+.icon-delete {
+    &:hover {
+        background-color: #fe3a3a;
+    }
 }
 
-.icon-create:hover {
-    background-color: #8cbf26;
+.icon-create {
+    &:hover {
+        background-color: #8cbf26;
+    }
 }
 
 .icon-check {

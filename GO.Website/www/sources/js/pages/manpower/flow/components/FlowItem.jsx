@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import Select from 'react-select';
+
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 
@@ -26,10 +27,10 @@ const FlowItem = ({ flows, processId, onAddFlowItem, onRemoveFlowItem }) => {
 
     const formatOptionLabel = option => (
         <>
-            <div><span className="font-weight-bold">Site Name</span>: {option.siteName}</div>
-            <div><span className="font-weight-bold">Code</span>: {option.code}</div>
-            <div><span className="font-weight-bold">Nickname</span>: {option.nickname}</div>
-            <div><span className="font-weight-bold">Full Name</span>: {option.fullName}</div>
+            <div><span className="font-weight-bold">Site Name</span>: <span className="font-italic">{option.siteName}</span></div>
+            <div><span className="font-weight-bold">Code</span>: <span className="font-italic">{option.code}</span></div>
+            <div><span className="font-weight-bold">Nickname</span>: <span className="font-italic">{option.nickname}</span></div>
+            <div><span className="font-weight-bold">Full Name</span>: <span className="font-italic">{option.fullName}</span></div>
         </>
     );
 
@@ -59,12 +60,11 @@ const FlowItem = ({ flows, processId, onAddFlowItem, onRemoveFlowItem }) => {
                 flowItems.map(item => {
                     return (
                         <div key={`process${item.processId}-site${item.siteId}-emp${item.empId}`} className="flow-item mt-2">
-                            <img className="avatar" />
                             <div className="personal-info">
-                                <div><span className="font-weight-bold">Site Name</span>: {item.siteName}</div>
-                                <div><span className="font-weight-bold">Code</span>: {item.code}</div>
-                                <div><span className="font-weight-bold">Nickname</span>: {item.nickname}</div>
-                                <div><span className="font-weight-bold">Full Name</span>: {item.fullName}</div>
+                                <div><span className="font-weight-bold">Site Name</span>: <span className="font-italic">{item.siteName}</span></div>
+                                <div><span className="font-weight-bold">Code</span>: <span className="font-italic">{item.code}</span></div>
+                                <div><span className="font-weight-bold">Nickname</span>: <span className="font-italic">{item.nickname}</span></div>
+                                <div><span className="font-weight-bold">Full Name</span>: <span className="font-italic">{item.fullName}</span></div>
                             </div>
                             <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
                         </div>

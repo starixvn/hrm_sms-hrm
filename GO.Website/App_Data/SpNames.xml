@@ -26,6 +26,7 @@
         <Setting Key="Manpower_Flow_GetUnit" SpName="Manpower_Flow_GetUnit" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Flow_GetByUnit" SpName="Manpower_Flow_GetByUnit" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Flow_Update" SpName="Manpower_Flow_Update" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_Flow_Delete" SpName="Manpower_Flow_Delete" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Report">
         <Setting Key="Report_Manpower_Get" SpName="Report_Manpower_Get" DbName="bodb_IUC" Plain="0" />

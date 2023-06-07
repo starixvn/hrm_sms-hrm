@@ -5,6 +5,7 @@
 @import '../../components/icons';
 @import '../../components/tables';
 @import '../../components/react-select';
+@import '../../components/modal';
 
 .manpower-flow {
     margin: 1rem 0;
@@ -30,14 +31,14 @@
         padding: 10px;
 
         > div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 1px;
             background: #e2e2e2;
             color: #474747;
             padding: 2px 9px;
             cursor: pointer;
-        }
-
-        .has-flow {
         }
     }
 }
@@ -119,8 +120,6 @@
         }
 
         .personal-info {
-            font-style: italic;
-
             .font-weight-bold {
                 font-weight: 600 !important;
             }
@@ -140,7 +139,6 @@
             .react-select__menu-list {
                 .react-select__option {
                     border-bottom: 1px solid #c8c8c8;
-                    font-style: italic;
 
                     .font-weight-bold {
                         font-weight: 600 !important;

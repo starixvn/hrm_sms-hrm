@@ -8,9 +8,9 @@ const UnitList = ({ units, onClick }) => {
                 {
                     units.map(unit => {
                         return (
-                            <div key={unit.name} className={`d-flex justify-content-between align-items-center`} onClick={() => onClick(unit)}>
+                            <div key={unit.name} onClick={() => onClick(unit)}>
                                 <span className="mr-2">{unit.name}</span>
-                                {unit.hasFlow && <i className="fa fa-check text-success" />}
+                                {unit.hasFlow && <i className="fa fa-check icon-check" />}
                             </div>
                         );
                     })

@@ -40,14 +40,14 @@
             return Json(units);
         }
 
-        public async Task<IActionResult> GetFlowByUnit(GetFlowByUnitCriteria criteria)
+        public async Task<IActionResult> GetByUnit(GetFlowByUnitCriteria criteria)
         {
             var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);
             return Json(flows);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateFlow([FromBody] UpdateFlowParam param)
+        public async Task<IActionResult> Update([FromBody] UpdateFlowParam param)
         {
             var command = new UpdateFlowCommand
             {
@@ -55,6 +55,14 @@
                 FlowXml = param.Flows != null && param.Flows.Any() ? param.Flows.ToXML().ToString() : string.Empty,
                 ModifiedBy = userControlSession.UserId
             };
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] DeleteFlowCommand command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
         }

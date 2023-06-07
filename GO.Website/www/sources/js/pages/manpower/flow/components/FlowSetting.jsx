@@ -1,10 +1,11 @@
 ﻿import React from 'react';
 import { Button } from 'react-bootstrap';
+
 import FlowItem from './FlowItem';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow } from '@jsroot/common/constants';
 
-const FlowSetting = ({ selectedUnit, flows, onAddFlowItem, onRemoveFlowItem, onSubmit }) => {
+const FlowSetting = ({ selectedUnit, flows, onAddFlowItem, onRemoveFlowItem, onSubmit, onDelete }) => {
     return (
         <div className="flow-setting">
             <table className="table table-bordered">
@@ -69,7 +70,7 @@ const FlowSetting = ({ selectedUnit, flows, onAddFlowItem, onRemoveFlowItem, onS
                 selectedUnit &&
                 <div className="button-group">
                     <Button type="button" variant="danger" size="sm"
-                        className="mr-3" disabled={flows.length === 0}
+                        className="mr-3" disabled={flows.length === 0} onClick={onDelete}
                     >
                         {LangHelper.getResource('Delete')}
                     </Button>
