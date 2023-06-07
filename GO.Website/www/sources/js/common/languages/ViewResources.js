@@ -39,7 +39,7 @@
     Team: 'Team',
     ThereIsNoData: 'There is no data.',
     Today: 'Today',
-    ToDate: 'To Date'
+    ToDate: 'To Date',
     UnitHead: 'Unit Head',
     Verifier: 'Verifier',
 };
