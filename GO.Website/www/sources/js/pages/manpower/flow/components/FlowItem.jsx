@@ -1,10 +1,14 @@
 ﻿import React, { useState } from 'react';
 import Select from 'react-select';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { ActionCreators } from '../actions';
 
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 
-const FlowItem = ({ flows, processId, onAddFlowItem, onRemoveFlowItem }) => {
+const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
     const [employeeOptions, setEmployeeOptions] = useState([]);
 
     const handleInputChange = Site.debounce(keyword => {
@@ -35,11 +39,11 @@ const FlowItem = ({ flows, processId, onAddFlowItem, onRemoveFlowItem }) => {
     );
 
     const handleAdd = item => {
-        onAddFlowItem(processId, item);
+        addFlowItem({ processId, employee: item });
     };
 
     const handleRemove = item => {
-        onRemoveFlowItem(processId, item);
+        removeFlowItem({ processId, employee: item });
     };
 
     const flowItems = flows.filter(item => item.processId === processId);
@@ -75,4 +79,11 @@ const FlowItem = ({ flows, processId, onAddFlowItem, onRemoveFlowItem }) => {
     );
 };
 
-export default FlowItem;
+const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
+
+const mapStateToProps = state => {
+    const { flows } = state;
+    return { flows };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FlowItem);
