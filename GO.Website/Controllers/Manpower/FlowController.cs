@@ -2,8 +2,10 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Core.Services;
+    using GO.Admin.Website.Filters;
     using GO.Core.Extensions.XML;
+    using GO.Core.Models;
+    using GO.Core.Services;
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models;
@@ -11,9 +13,9 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using GO.Core.Models;
 
     [Route("Manpower/Flow/[action]")]
+    [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Read)]
     public class FlowController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -29,7 +31,7 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_EmployeeManagement, Policy.Host);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_FlowManagement, Policy.Host);
             return View("~/Views/Manpower/Flow/Index.cshtml", isHost);
         }
 
@@ -47,6 +49,7 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateFlowParam param)
         {
             var command = new UpdateFlowCommand
@@ -60,6 +63,7 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Delete([FromBody] DeleteFlowCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

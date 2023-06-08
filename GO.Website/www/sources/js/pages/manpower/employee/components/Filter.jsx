@@ -59,7 +59,7 @@ const Filter = ({ sites, getEmployeeInfos, onFilterChange }) => {
                 <Form.Group>
                     <Form.Label>{LangHelper.getResource('Site')}</Form.Label>
                     <Select className={`react-select-container`} classNamePrefix="react-select"
-                        options={siteOptions} value={site}
+                        options={siteOptions} value={site} isSearchable={false}
                         onChange={value => setSite(value)}
                     />
                 </Form.Group>

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { ActionCreators } from '../actions';
 
-import FlowItem from './FlowItem';
+import GridFlow from './GridFlow';
 import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
@@ -88,58 +88,9 @@ const FlowSetting = ({
 
     return (
         <div className="flow-setting">
-            <table className="table table-bordered">
-                <thead>
-                    <tr>
-                        <th className="unit">{LangHelper.getResource('Unit')}</th>
-                        <th className="unit-head">{LangHelper.getResource('UnitHead')}</th>
-                        <th className="verifier">{LangHelper.getResource('Verifier')}</th>
-                        <th className="approver">{LangHelper.getResource('Approver')}</th>
-                        <th className="hr">{LangHelper.getResource('HR')}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            {
-                                selectedUnit &&
-                                <div className="flow-item">
-                                    <i className="avatar fa fa-users" />
-                                    <div className="personal-info">
-                                        <span className="font-weight-bold">{selectedUnit.name}</span>
-                                    </div>
-                                </div>
-                            }
-                        </td>
-                        <td>
-                            {
-                                selectedUnit &&
-                                <FlowItem flows={flows} processId={ManpowerFlow.UnitHead} />
-                            }
-                        </td>
-                        <td>
-                            {
-                                selectedUnit &&
-                                <FlowItem flows={flows} processId={ManpowerFlow.Verifier} />
-                            }
-                        </td>
-                        <td>
-                            {
-                                selectedUnit &&
-                                <FlowItem flows={flows} processId={ManpowerFlow.Approver} />
-                            }
-                        </td>
-                        <td>
-                            {
-                                selectedUnit &&
-                                <FlowItem flows={flows} processId={ManpowerFlow.HR} />
-                            }
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <GridFlow />
             {
-                selectedUnit &&
+                selectedUnit && window.hasHostPermissionOnFlow &&
                 <div className="button-group">
                     <Button type="button" variant="danger" size="sm"
                         className="mr-3" disabled={flows.length === 0 || !selectedUnit.hasFlow} onClick={handleShowDeleteModalDialog}

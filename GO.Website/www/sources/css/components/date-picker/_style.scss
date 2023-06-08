@@ -2,18 +2,16 @@
 @import "~react-datepicker/dist/react-datepicker.css";
 
 .react-datepicker {
-    //font-family: $font-family;
     border-radius: unset;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     font-size: 1rem;
 }
 
-.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle {
-    border-bottom-color: #fff;
-}
-
-.react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle {
-    margin-top: -7px;
+.react-datepicker-popper[data-placement^="bottom"] {
+    .react-datepicker__triangle {
+        margin-top: -7px;
+        border-bottom-color: #fff;
+    }
 }
 
 .react-datepicker__month-container,
@@ -43,11 +41,13 @@
 
 .react-datepicker__time-container {
     width: 110px;
-}
 
-.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box {
-    width: 100%;
-    padding: 0 2px;
+    .react-datepicker__time {
+        .react-datepicker__time-box {
+            width: 100%;
+            padding: 0 2px;
+        }
+    }
 }
 
 .react-datepicker__day--outside-month {
@@ -110,19 +110,29 @@
         font: normal normal normal 14px/1 FontAwesome;
     }
 
-    &.react-datepicker__navigation--next {
+    &--next {
         right: 22px;
+
+        &--with-time {
+            right: 140px;
+        }
     }
 
-    &.react-datepicker__navigation--next.react-datepicker__navigation--next--with-time {
-        right: 140px;
-    }
-
-    &.react-datepicker__navigation--previous {
+    &--previous {
         left: 22px;
 
         &:before {
             transform: rotate(180deg);
+        }
+    }
+
+    &-icon {
+        &--previous {
+            right: -4px;
+        }
+
+        &--next {
+            left: 4px;
         }
     }
 }
@@ -137,6 +147,7 @@
     top: 7px;
     right: 10px;
     cursor: pointer;
+    color: #147ccc;
 }
 
 .react-datepicker-wrapper-container {
@@ -153,9 +164,7 @@
         cursor: pointer;
         height: 28px;
     }
-}
 
-.react-datepicker__input-container {
     .form-control:disabled {
         background-color: $bg-table-title-grey;
         cursor: context-menu;

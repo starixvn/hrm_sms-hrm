@@ -48,6 +48,7 @@ const AppContainer = () => {
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 toast.success('Update successfully!');
+                getEmployeeInfos(filter);
             } else {
                 toast.error(response.data.message);
             }

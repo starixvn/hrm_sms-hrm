@@ -7,6 +7,7 @@ import { ActionCreators } from '../actions';
 
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
+import LangHelper from '@jsroot/common/langHelper';
 
 const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
     const [employeeOptions, setEmployeeOptions] = useState([]);
@@ -31,10 +32,10 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
 
     const formatOptionLabel = option => (
         <>
-            <div><span className="font-weight-bold">Site Name</span>: <span className="font-italic">{option.siteName}</span></div>
-            <div><span className="font-weight-bold">Code</span>: <span className="font-italic">{option.code}</span></div>
-            <div><span className="font-weight-bold">Nickname</span>: <span className="font-italic">{option.nickname}</span></div>
-            <div><span className="font-weight-bold">Full Name</span>: <span className="font-italic">{option.fullName}</span></div>
+            <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{option.siteName}</span></div>
+            <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{option.code}</span></div>
+            <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{option.nickname}</span></div>
+            <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{option.fullName}</span></div>
         </>
     );
 
@@ -50,27 +51,33 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
 
     return (
         <div className="flow-setting">
-            <Select className={`react-select-container`}
-                classNamePrefix="react-select"
-                value={null} options={employeeOptions}
-                formatOptionLabel={formatOptionLabel}
-                isClearable={false} placeholder="nickname or full name"
-                backspaceRemovesValue={false}
-                components={{ NoOptionsMessage: () => null }}
-                onInputChange={keyword => handleInputChange(keyword)}
-                onChange={handleAdd}
-            />
+            {
+                window.hasHostPermissionOnFlow &&
+                <Select className={`react-select-container`}
+                    classNamePrefix="react-select"
+                    value={null} options={employeeOptions}
+                    formatOptionLabel={formatOptionLabel}
+                    isClearable={false} placeholder="nickname or full name"
+                    backspaceRemovesValue={false}
+                    components={{ NoOptionsMessage: () => null }}
+                    onInputChange={keyword => handleInputChange(keyword)}
+                    onChange={handleAdd}
+                />
+            }
             {
                 flowItems.map(item => {
                     return (
                         <div key={`process${item.processId}-site${item.siteId}-emp${item.empId}`} className="flow-item mt-2">
                             <div className="personal-info">
-                                <div><span className="font-weight-bold">Site Name</span>: <span className="font-italic">{item.siteName}</span></div>
-                                <div><span className="font-weight-bold">Code</span>: <span className="font-italic">{item.code}</span></div>
-                                <div><span className="font-weight-bold">Nickname</span>: <span className="font-italic">{item.nickname}</span></div>
-                                <div><span className="font-weight-bold">Full Name</span>: <span className="font-italic">{item.fullName}</span></div>
+                                <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{item.siteName}</span></div>
+                                <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{item.code}</span></div>
+                                <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{item.nickname}</span></div>
+                                <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{item.fullName}</span></div>
                             </div>
-                            <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
+                            {
+                                window.hasHostPermissionOnFlow &&
+                                <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
+                            }
                         </div>
                     );
                 })
