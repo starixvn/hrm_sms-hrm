@@ -2,7 +2,7 @@
 {
     using GO.Core.Models;
 
-    public class DeletePeriodCriteria : BaseNonQueryCommand
+    public class DeletePeriodCommand : BaseNonQueryCommand
     {
         public int PeriodId { get; set; }
         public int SiteId { get; set; }

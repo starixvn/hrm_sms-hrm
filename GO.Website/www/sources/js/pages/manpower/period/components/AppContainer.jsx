@@ -60,6 +60,7 @@ class AppContainer extends Component {
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 toast.success('Delete successfully!');
+                this.getPeriodInfos(this.state.filter);
             } else {
                 toast.error(response.data.message);
             }

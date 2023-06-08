@@ -5,7 +5,7 @@
     using GO.Website.Models.Manpower.Period;
     using System.Collections.Generic;
 
-    public class InsertPeriodCriteria : BaseNonQueryCommand
+    public class InsertPeriodCommand : BaseNonQueryCommand
     {
         public string Name { get; set; }
 

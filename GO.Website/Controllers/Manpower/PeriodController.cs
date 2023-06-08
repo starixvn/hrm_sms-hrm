@@ -1,6 +1,7 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
     using GO.Admin.Website.Filters;
+    using GO.Core.Extensions.XML;
     using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Constants;
@@ -9,7 +10,6 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using SMS.EPA.Core.Extensions;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -48,7 +48,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
-        public async Task<IActionResult> Create([FromBody] InsertPeriodCriteria command)
+        public async Task<IActionResult> Create([FromBody] InsertPeriodCommand command)
         {
             command.CreatedBy = userControlSession.UserId;
             if (command != null)
@@ -63,7 +63,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateIsActive([FromBody] UpdateStatusPeriodCriteria command)
+        public async Task<IActionResult> UpdateIsActive([FromBody] UpdateStatusPeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             command.SiteId = userControlSession.SiteId;
@@ -74,7 +74,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
-        public async Task<IActionResult> Delete([FromBody] DeletePeriodCriteria command)
+        public async Task<IActionResult> Delete([FromBody] DeletePeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             command.SiteId = userControlSession.SiteId;

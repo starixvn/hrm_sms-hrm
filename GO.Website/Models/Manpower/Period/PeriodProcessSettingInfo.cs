@@ -1,11 +1,11 @@
 ﻿namespace GO.Website.Models.Manpower.Period
 {
-    using GO.Website.Extensions;
+    using GO.Core.Extensions.XML;
     using System;
     using System.Xml.Serialization;
 
     [Serializable]
-    [XmlName("Row")]
+    [XMLName("Row")]
     public class PeriodProcessSettingInfo
     {
         [XmlIgnore]

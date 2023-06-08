@@ -2,7 +2,7 @@
 {
     using GO.Core.Models;
 
-    public class UpdateStatusPeriodCriteria : BaseNonQueryCommand
+    public class UpdateStatusPeriodCommand : BaseNonQueryCommand
     {
         public int PeriodId { get; set; }
         public byte IsActive { get; set; }
