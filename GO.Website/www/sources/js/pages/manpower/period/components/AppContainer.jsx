@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Filter from './Filter';
+import { Button } from 'react-bootstrap';
 import DataService from '@jsroot/common/dataService';
+import SweetModalDialog from '@jsroot/components/SweetModalDialog';
+import LangHelper from '@jsroot/common/langHelper';
 import { toast } from 'react-toastify';
 import DataGrid from './DataGrid';
 import { DefaultPageSize } from '@jsroot/common/constants';
@@ -21,8 +24,16 @@ class AppContainer extends Component {
             gridData: null,
             createModalDialog: { show: false },
             createResult: null,
-            updateModalDialog: { show: false },
-            updateResult: null
+            updateModalDialog: {
+                show: false,
+                data: null
+            },
+            updateResult: null,
+            deleteModalDialog: {
+                show: false,
+                name: '',
+                periodId: null
+            }
         };
     }
 
@@ -32,6 +43,19 @@ class AppContainer extends Component {
         await DataService.postDataAsync(url, params).then(response => {
             this.setState({
                 gridData: response.data
+            });
+        }).then(() => Site.unblockUI());
+    };
+
+    getPeriodInfosById = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/GetPeriodInfosById');
+        await DataService.postDataAsync(url, params).then(response => {
+            this.setState({
+                updateModalDialog: {
+                    show: true,
+                    data: response.data
+                }
             });
         }).then(() => Site.unblockUI());
     };
@@ -53,14 +77,15 @@ class AppContainer extends Component {
         }).then(() => Site.unblockUI());
     };
 
-    deletePeriod = async periodId => {
+    deletePeriod = async () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Manpower/Period/Delete');
-        const params = { periodId };
+        const params = { periodId: this.state.deleteModalDialog.periodId };
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 toast.success('Delete successfully!');
                 this.getPeriodInfos(this.state.filter);
+                this.closeModalDeleteDialog();
             } else {
                 toast.error(response.data.message);
             }
@@ -96,6 +121,7 @@ class AppContainer extends Component {
                     updateModalDialog: { show: false }
                 });
                 toast.success('Update successfully!');
+                this.getPeriodInfos(this.state.filter);
             } else {
                 this.setState({
                     updateResult: response.data
@@ -116,9 +142,28 @@ class AppContainer extends Component {
         });
     };
 
-    render() {
-        const { filter, gridData, createModalDialog, updateModalDialog, createResult } = this.state;
+    handleModalDeleteDialog = params => {
+        this.setState({
+            deleteModalDialog: {
+                show: params.show,
+                name: params.name,
+                periodId: params.periodId
+            }
+        });
+    };
 
+    closeModalDeleteDialog = () => {
+        this.setState({
+            deleteModalDialog: {
+                show: false,
+                name: '',
+                periodId: null
+            }
+        });
+    };
+
+    render() {
+        const { filter, gridData, createModalDialog, updateModalDialog, createResult, deleteModalDialog } = this.state;
         return (
             <div className="manpower-report">
                 <Filter
@@ -131,8 +176,8 @@ class AppContainer extends Component {
                     onFilterChange={this.handleChangeFilter}
                     getPeriodInfos={this.getPeriodInfos}
                     onChangeStatus={this.updateIsActive}
-                    deletePeriod={this.deletePeriod}
-                    handleModalUpdateDialog={this.handleModalUpdateDialog}
+                    handleModalDeleteDialog={this.handleModalDeleteDialog}
+                    getPeriodInfosById={this.getPeriodInfosById}
                 />
                 {
                     createModalDialog.show &&
@@ -145,6 +190,27 @@ class AppContainer extends Component {
                     updateModalDialog.show &&
                     <Update updatePeriod={this.updatePeriod}
                         handleModalUpdateDialog={this.handleModalUpdateDialog}
+                        data={updateModalDialog.data}
+                    />
+                }
+                {
+                    deleteModalDialog.show &&
+                    <SweetModalDialog
+                        title={LangHelper.getResource('Confirmation')}
+                        contents={<div>Are you sure you want to delete flow of <strong>{deleteModalDialog.name}</strong>?</div>}
+                        buttons={[
+                            <Button variant="primary" size="sm" key="ok"
+                                onClick={this.deletePeriod}
+                            >
+                                {LangHelper.getResource('OK')}
+                            </Button>,
+                            <Button variant="secondary" size="sm" key="cancel"
+                                onClick={this.closeModalDeleteDialog}
+                            >
+                                {LangHelper.getResource('Cancel')}
+                            </Button>
+                        ]}
+                        onClose={this.closeModalDeleteDialog}
                     />
                 }
             </div>

@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import LangHelper from '@jsroot/common/langHelper';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
-import DatePicker from "@jsroot/components/date-picker/index";
+import DatePicker from '@jsroot/components/date-picker/index';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import { validateFormik } from '../common.functions';
+import dayjs from 'dayjs';
 
-export default class Create extends Component {
+export default class Create extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -16,24 +17,25 @@ export default class Create extends Component {
         this.props.handleModalCreateDialog( false );
     };
 
-    handleSubmit = (values) => {
+    handleSubmit = values => {
+        const formatDate = 'YYYY-MM-DD';
         const params = {
             name: values.name,
             settings: [
                 {
                     processId: 1,
-                    fromDate: values.fromDateUnitHead,
-                    todate: values.toDateUnitHead,
+                    fromDate: dayjs(values.fromDateUnitHead).format(formatDate),
+                    todate: dayjs(values.toDateUnitHead).format(formatDate) 
                 },
                 {
                     processId: 2,
-                    fromDate: values.fromDateVerifier,
-                    todate: values.toDateVerifier,
+                    fromDate: dayjs(values.fromDateVerifier).format(formatDate),
+                    todate: dayjs(values.toDateVerifier).format(formatDate) 
                 },
                 {
                     processId: 3,
-                    fromDate: values.fromDateApprover,
-                    todate: values.toDateApprover,
+                    fromDate: dayjs(values.fromDateApprover).format(formatDate),
+                    todate: dayjs(values.toDateApprover).format(formatDate) 
                 }
             ]
         };
@@ -46,8 +48,7 @@ export default class Create extends Component {
         touched,
         handleChange,
         setFieldValue,
-        handleSubmit,
-        isSubmitting
+        handleSubmit
     }) => {
         return (
             <Form noValidate onSubmit={handleSubmit}>
@@ -159,7 +160,7 @@ export default class Create extends Component {
             approver: ''
         };
         return (
-            <Modal show 
+            <Modal show
                 backdrop="static" keyboard={false} size="lg" centered
                 onHide={this.handleCloseModalDialog}
             >

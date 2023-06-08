@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
 
-export default class Filter extends Component {
+export default class Filter extends PureComponent {
     constructor(props) {
         super(props);
 

@@ -47,17 +47,45 @@
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetPeriodInfosById([FromBody] GetPeriodCriteriaByIdCriteria criteria)
+        {
+            var tuple = await baseService.FetchMultipleAsync<PeriodInfo, PeriodProcessSettingInfo>(criteria);
+            IList<PeriodInfo> periods = tuple.Item1.ToList();
+            foreach (var period in periods)
+            {
+                period.Settings = tuple.Item2.Where(x => x.PeriodId == period.PeriodId).ToList();
+            }
+            return Json(periods);
+        }
+
+        [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] InsertPeriodCommand command)
         {
-            command.CreatedBy = userControlSession.UserId;
+            CommandResult commandResult = new();
             if (command != null)
             {
                 command.SettingXml = command.Settings.ToXML().ToString();
+                command.SiteId = userControlSession.SiteId;
                 command.IsActive = true;
                 command.CreatedBy = userControlSession.UserId;
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
             }
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            return Json(commandResult);
+        }
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        public async Task<IActionResult> Update([FromBody] UpdatePeriodCommand command)
+        {
+            CommandResult commandResult = new();
+            if (command != null)
+            {
+                command.SettingXml = command.Settings.ToXML().ToString();
+                command.SiteId = userControlSession.SiteId;
+                command.ModifiedBy = userControlSession.UserId;
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
             return Json(commandResult);
         }
 
@@ -65,20 +93,27 @@
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateIsActive([FromBody] UpdateStatusPeriodCommand command)
         {
-            command.ModifiedBy = userControlSession.UserId;
-            command.SiteId = userControlSession.SiteId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            CommandResult commandResult = new();
+            if (command != null)
+            {
+                command.ModifiedBy = userControlSession.UserId;
+                command.SiteId = userControlSession.SiteId;
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
             return Json(commandResult);
         }
-
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Delete([FromBody] DeletePeriodCommand command)
         {
-            command.ModifiedBy = userControlSession.UserId;
-            command.SiteId = userControlSession.SiteId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            CommandResult commandResult = new();
+            if (command != null)
+            {
+                command.ModifiedBy = userControlSession.UserId;
+                command.SiteId = userControlSession.SiteId;
+                commandResult = await baseService.ExecuteNonQueryAsync(command);
+            }
             return Json(commandResult);
         }
     }

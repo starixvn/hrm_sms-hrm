@@ -16,13 +16,18 @@
 }
 
 .form-filter .form-row .form-group {
-    width: unset !important;
+    width: 135px !important;
 
     .btn {
         width: 97px !important;
         padding: 4px 20px !important;
     }
 }
+
+.icon-edit:hover {
+    background-color: #ff9913 !important;
+}
+
 
 .modal-dialog {
     width: 500px;

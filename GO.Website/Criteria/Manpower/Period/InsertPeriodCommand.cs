@@ -7,6 +7,7 @@
 
     public class InsertPeriodCommand : BaseNonQueryCommand
     {
+        public int SiteId { get; set; }
         public string Name { get; set; }
 
         [SpParam(Ignored = true)]

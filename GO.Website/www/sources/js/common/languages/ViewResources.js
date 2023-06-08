@@ -4,6 +4,7 @@
     Approver: 'Approver',
     AddNew: 'Add New',
     Comment: 'Comment',
+    Confirmation: 'Confirmation',
     Country: 'Country',
     CreatePeriodSuccessfully: 'Create period successfully!',
     Department: 'Department',

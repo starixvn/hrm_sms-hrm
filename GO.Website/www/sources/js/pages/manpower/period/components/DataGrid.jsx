@@ -41,11 +41,11 @@ export default class DataGrid extends Component {
         if (totalItems > 0) {
             return data.map(item =>
                 <RowItem
-                    key={`row-${item.siteId}-${item.empId}`}
+                    key={`row-${item.name}`}
                     period={item}
                     onChangeStatus={this.props.onChangeStatus}
-                    deletePeriod={this.props.deletePeriod}
-                    handleModalUpdateDialog={this.props.handleModalUpdateDialog}
+                    handleModalDeleteDialog={this.props.handleModalDeleteDialog}
+                    getPeriodInfosById={this.props.getPeriodInfosById}
                 />
             );
         }

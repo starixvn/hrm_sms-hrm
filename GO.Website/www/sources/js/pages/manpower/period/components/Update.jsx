@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
 import LangHelper from '@jsroot/common/langHelper';
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
-import DatePicker from "@jsroot/components/date-picker/index";
+import DatePicker from '@jsroot/components/date-picker/index';
+import ResponseMessage from '@jsroot/components/ResponseMessage';
 import { validateFormik } from '../common.functions';
+import dayjs from 'dayjs';
 
-export default class Update extends Component {
+export default class Update extends PureComponent {
     constructor(props) {
         super(props);
     }
@@ -15,17 +17,30 @@ export default class Update extends Component {
         this.props.handleModalUpdateDialog(false);
     };
 
-    handleSubmit = (values, { setSubmitting }) => {
-        //setSubmitting(true);
+    handleSubmit = values => {
+        const formatDate = 'YYYY-MM-DD';
         const params = {
+            periodId: values.periodId,
             name: values.name,
-            fromDateUnitHead: values.fromDateUnitHead,
-            toDateUnitHead: values.toDateUnitHead,
-            fromDateVerifier: values.fromDateVerifier,
-            toDateVerifier: values.toDateVerifier,
-            fromDateApprover: values.fromDateApprover,
-            toDateApprover: values.fromDateApprover
+            settings: [
+                {
+                    processId: 1,
+                    fromDate: dayjs(values.fromDateUnitHead).format(formatDate),
+                    todate: dayjs(values.toDateUnitHead).format(formatDate)
+                },
+                {
+                    processId: 2,
+                    fromDate: dayjs(values.fromDateVerifier).format(formatDate),
+                    todate: dayjs(values.toDateVerifier).format(formatDate)
+                },
+                {
+                    processId: 3,
+                    fromDate: dayjs(values.fromDateApprover).format(formatDate),
+                    todate: dayjs(values.toDateApprover).format(formatDate)
+                }
+            ]
         };
+        this.props.updatePeriod(params);
     };
 
     renderForm = ({
@@ -34,8 +49,7 @@ export default class Update extends Component {
         touched,
         handleChange,
         setFieldValue,
-        handleSubmit,
-        isSubmitting
+        handleSubmit
     }) => {
         return (
             <Form noValidate onSubmit={handleSubmit}>
@@ -122,7 +136,7 @@ export default class Update extends Component {
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button type="submit" variant="primary" size="sm" disabled={isSubmitting}>
+                    <Button type="submit" variant="primary" size="sm">
                         {LangHelper.getResource('Save')}
                     </Button>
                     <Button variant="secondary" size="sm" onClick={this.handleCloseModalDialog}>
@@ -134,8 +148,14 @@ export default class Update extends Component {
     };
 
     render() {
+        let data = null;
+        this.props.data.map(item => data = item);
+        if (!data) {
+            return null;
+        }
         const initialValues = {
-            name: '',
+            periodId: data.periodId,
+            name: data.name,
             toDateUnitHead: '',
             toDateVerifier: '',
             toDateApprover: '',
@@ -146,13 +166,27 @@ export default class Update extends Component {
             verifier: '',
             approver: ''
         };
+        data.settings.map((item, index) => {
+            if (index === 0) {
+                initialValues.fromDateUnitHead = new Date(item.fromDate);
+                initialValues.toDateUnitHead = new Date(item.toDate);
+            }
+            else if (index === 1) {
+                initialValues.fromDateVerifier = new Date(item.fromDate);
+                initialValues.toDateVerifier = new Date(item.toDate);
+            }
+            else {
+                initialValues.fromDateApprover = new Date(item.fromDate);
+                initialValues.toDateApprover = new Date(item.toDate);
+            }
+        });
         return (
             <Modal show
                 backdrop="static" keyboard={false} size="lg" centered
                 onHide={this.handleCloseModalDialog}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title as="div">{LangHelper.getResource('Update')}</Modal.Title>
+                    <Modal.Title as="div">{LangHelper.getResource('Update')}  <strong>{data.name}</strong></Modal.Title>
                 </Modal.Header>
                 <Formik
                     initialValues={initialValues}

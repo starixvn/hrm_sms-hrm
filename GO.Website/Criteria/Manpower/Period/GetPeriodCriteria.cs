@@ -11,6 +11,6 @@
 
         public override string GetSettingKey() => "Manpower_Period_Get";
 
-        public override bool IsValid() => true;
+        public override bool IsValid() => PageIndex > 0 & PageSize > 0;
     }
 }
