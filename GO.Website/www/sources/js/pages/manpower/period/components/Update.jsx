@@ -43,6 +43,8 @@ export default class Update extends PureComponent {
         this.props.updatePeriod(params);
     };
 
+    isCheckInvalid = (touched, errors) => touched && errors ? 'is-invalid' : '';
+
     renderForm = ({
         values,
         errors,
@@ -89,12 +91,12 @@ export default class Update extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateUnitHead} value={values.fromDateUnitHead}
                                 name="fromDateUnitHead" id="fromDateUnitHead"
-                                isInvalid={touched.unitHead && errors.unitHead ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateUnitHead', value)} />
                             <DatePicker size="sm" selected={values.toDateUnitHead} value={values.toDateUnitHead}
                                 name="toDateUnitHead" id="toDateUnitHead"
-                                isInvalid={touched.unitHead && errors.unitHead ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('toDateUnitHead', value)} />
                         </Col>
@@ -106,13 +108,13 @@ export default class Update extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateVerifier} value={values.fromDateVerifier}
                                 name="fromDateVerifier" id="fromDateVerifier"
-                                isInvalid={touched.verifier && errors.verifier ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateVerifier', value)} />
                             <DatePicker size="sm" selected={values.toDateVerifier} value={values.toDateVerifier}
                                 dateFormat="dd MMM,yyyy"
                                 name="toDateVerifier" id="toDateVerifier"
-                                isInvalid={touched.verifier && errors.verifier ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
                                 onChange={value => setFieldValue('toDateVerifier', value)} />
                         </Col>
                     </Form.Group>
@@ -123,12 +125,12 @@ export default class Update extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateApprover} value={values.fromDateApprover}
                                 name="fromDateApprover" id="fromDateApprover"
-                                isInvalid={touched.approver && errors.approver ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateApprover', value)} />
                             <DatePicker size="sm" selected={values.toDateApprover} value={values.toDateApprover}
                                 name="toDateApprover" id="toDateApprover"
-                                isInvalid={touched.approver && errors.approver ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('toDateApprover', value)} />
 

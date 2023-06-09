@@ -25,22 +25,24 @@ export default class Create extends PureComponent {
                 {
                     processId: 1,
                     fromDate: dayjs(values.fromDateUnitHead).format(formatDate),
-                    todate: dayjs(values.toDateUnitHead).format(formatDate) 
+                    todate: dayjs(values.toDateUnitHead).format(formatDate)
                 },
                 {
                     processId: 2,
                     fromDate: dayjs(values.fromDateVerifier).format(formatDate),
-                    todate: dayjs(values.toDateVerifier).format(formatDate) 
+                    todate: dayjs(values.toDateVerifier).format(formatDate)
                 },
                 {
                     processId: 3,
                     fromDate: dayjs(values.fromDateApprover).format(formatDate),
-                    todate: dayjs(values.toDateApprover).format(formatDate) 
+                    todate: dayjs(values.toDateApprover).format(formatDate)
                 }
             ]
         };
         this.props.createPeriod(params);
     };
+
+    isCheckInvalid = (touched, errors) => touched && errors ? 'is-invalid' : '';
 
     renderForm = ({
         values,
@@ -88,12 +90,12 @@ export default class Create extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateUnitHead} value={values.fromDateUnitHead}
                                 name="fromDateUnitHead" id="fromDateUnitHead"
-                                isInvalid={touched.unitHead && errors.unitHead ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateUnitHead', value)} />
                             <DatePicker size="sm" selected={values.toDateUnitHead} value={values.toDateUnitHead}
                                 name="toDateUnitHead" id="toDateUnitHead"
-                                isInvalid={touched.unitHead && errors.unitHead ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('toDateUnitHead', value)} />
                         </Col>
@@ -105,13 +107,13 @@ export default class Create extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateVerifier} value={values.fromDateVerifier}
                                 name="fromDateVerifier" id="fromDateVerifier"
-                                isInvalid={touched.verifier && errors.verifier ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateVerifier', value)}/>
                             <DatePicker size="sm" selected={values.toDateVerifier} value={values.toDateVerifier}
                                 dateFormat="dd MMM,yyyy"
                                 name="toDateVerifier" id="toDateVerifier"
-                                isInvalid={touched.verifier && errors.verifier ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
                                 onChange={value => setFieldValue('toDateVerifier', value)}/>
                         </Col>
                     </Form.Group>
@@ -122,12 +124,12 @@ export default class Create extends PureComponent {
                         <Col sm="8" md="9" className="dataPicker-from-to-date">
                             <DatePicker size="sm" selected={values.fromDateApprover} value={values.fromDateApprover}
                                 name="fromDateApprover" id="fromDateApprover"
-                                isInvalid={touched.approver && errors.approver ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('fromDateApprover', value)}/>
                             <DatePicker size="sm" selected={values.toDateApprover} value={values.toDateApprover}
                                 name="toDateApprover" id="toDateApprover"
-                                isInvalid={touched.approver && errors.approver ? "is-invalid" : ""}
+                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
                                 onChange={value => setFieldValue('toDateApprover', value)}/>
 
