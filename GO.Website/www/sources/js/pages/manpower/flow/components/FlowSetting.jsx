@@ -90,7 +90,7 @@ const FlowSetting = ({
         <div className="flow-setting">
             <GridFlow />
             {
-                selectedUnit && window.hasHostPermissionOnFlow &&
+                selectedUnit &&
                 <div className="button-group">
                     <Button type="button" variant="danger" size="sm"
                         className="mr-3" disabled={flows.length === 0 || !selectedUnit.hasFlow} onClick={handleShowDeleteModalDialog}

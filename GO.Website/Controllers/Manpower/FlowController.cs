@@ -42,6 +42,13 @@
             return Json(units);
         }
 
+        public async Task<IActionResult> GetFlows()
+        {
+            var criteria = new GetFlowCriteria();
+            var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);
+            return Json(flows);
+        }
+
         public async Task<IActionResult> GetByUnit(GetFlowByUnitCriteria criteria)
         {
             var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);

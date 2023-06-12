@@ -27,5 +27,11 @@
 
         [XmlIgnore]
         public string FullName { get; set; }
+
+        [XmlIgnore]
+        public bool IsActive { get; set; }
+
+        [XmlIgnore]
+        public bool IsDeleted { get; set; }
     }
 }

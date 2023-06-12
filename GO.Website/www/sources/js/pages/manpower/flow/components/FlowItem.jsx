@@ -26,7 +26,9 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
                 setEmployeeOptions(emps);
             });
         } else {
-            setEmployeeOptions([]);
+            if (employeeOptions.length > 0) {
+                setEmployeeOptions([]);
+            }
         }
     });
 
@@ -51,33 +53,29 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
 
     return (
         <div className="flow-setting">
-            {
-                window.hasHostPermissionOnFlow &&
-                <Select className={`react-select-container`}
-                    classNamePrefix="react-select"
-                    value={null} options={employeeOptions}
-                    formatOptionLabel={formatOptionLabel}
-                    isClearable={false} placeholder="nickname or full name"
-                    backspaceRemovesValue={false}
-                    components={{ NoOptionsMessage: () => null }}
-                    onInputChange={keyword => handleInputChange(keyword)}
-                    onChange={handleAdd}
-                />
-            }
+            <Select className={`react-select-container`}
+                classNamePrefix="react-select"
+                value={null} options={employeeOptions}
+                formatOptionLabel={formatOptionLabel}
+                isClearable={false} placeholder="nickname or full name"
+                backspaceRemovesValue={false}
+                components={{ NoOptionsMessage: () => null }}
+                onInputChange={keyword => handleInputChange(keyword)}
+                onChange={handleAdd}
+            />
             {
                 flowItems.map(item => {
                     return (
-                        <div key={`process${item.processId}-site${item.siteId}-emp${item.empId}`} className="flow-item mt-2">
+                        <div key={`process${item.processId}-site${item.siteId}-emp${item.empId}`}
+                            className={`flow-item mt-2 ${!item.isActive || item.isDeleted ? 'danger' : ''}`}
+                        >
                             <div className="personal-info">
                                 <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{item.siteName}</span></div>
                                 <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{item.code}</span></div>
                                 <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{item.nickname}</span></div>
                                 <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{item.fullName}</span></div>
                             </div>
-                            {
-                                window.hasHostPermissionOnFlow &&
-                                <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
-                            }
+                            <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
                         </div>
                     );
                 })
