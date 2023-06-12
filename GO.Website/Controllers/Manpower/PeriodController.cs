@@ -1,5 +1,8 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using GO.Admin.Website.Filters;
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
@@ -10,9 +13,6 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     [Route("Manpower/Period/[action]")]
     [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Read)]
@@ -28,6 +28,7 @@
             this.userControlSession = userControlSession;
             this.baseService = baseService;
         }
+
         public IActionResult Index()
         {
             bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
