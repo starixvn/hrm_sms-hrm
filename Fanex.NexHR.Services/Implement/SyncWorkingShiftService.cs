@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Fanex.Logging;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -24,7 +25,6 @@
     public class SyncWorkingShiftService : ISyncWorkingShiftService
     {
         private const int BatchSize = 1000;
-        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(SyncWorkingShiftService));
         private readonly IBaseService baseService;
         private readonly HttpClient _httpClient;
 
@@ -66,7 +66,7 @@
             else
             {
                 var message = await response.Content.ReadAsStringAsync();
-                logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
             }
         }
 
@@ -98,7 +98,7 @@
             else
             {
                 var message = await response.Content.ReadAsStringAsync();
-                logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
                 commandResult.Code = (int)response.StatusCode;
                 commandResult.Message = message;
             }

@@ -6,12 +6,12 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading;
+    using Fanex.Logging;
     using Fanex.NexHR.Core;
     using Newtonsoft.Json;
 
     public class PushNotificationService : IPushNotificationService
     {
-        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(PushNotificationService));
         private static readonly HttpClient httpClient = new HttpClient();
 
         public void SendNotiRefreshTodolist()
@@ -28,14 +28,14 @@
                             if (!response.IsSuccessStatusCode)
                             {
                                 var message = response.Content.ReadAsStringAsync().Result;
-                                logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                                LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(ex.Message);
+                    LogService.Error(ex.Message);
                 }
             }
         }
@@ -66,7 +66,7 @@
                         else
                         {
                             var message = response.Content.ReadAsStringAsync().Result;
-                            logger.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                            LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
 
                             return default;
                         }
@@ -75,7 +75,7 @@
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                LogService.Error(ex.Message);
 
                 return default;
             }
