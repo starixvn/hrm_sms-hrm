@@ -42,10 +42,13 @@ const RowItem = ({ period, onChangeStatus, handleModalDeleteDialog, getPeriodInf
                     onChange={handleChangeStatus}
                 />
             </Cell>
-            <Cell key={`${period.name} -action` } className="text-center">
-                <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} ></a>
-                <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod}></a>
-            </Cell>
+            {
+                window.hasHostPermissionOnEmployee &&
+                <Cell key={`${period.name} -action`} className="text-center">
+                    <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} ></a>
+                    <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod}></a>
+                </Cell>
+            }
         </Row>
     );
 };

@@ -1,8 +1,5 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using GO.Admin.Website.Filters;
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
@@ -13,6 +10,8 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [Route("Manpower/Period/[action]")]
     [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Read)]
@@ -38,11 +37,10 @@
         [HttpPost]
         public async Task<IActionResult> GetPeriodInfos([FromBody] GetPeriodCriteria criteria)
         {
-            var tuple = await baseService.FetchMultipleAsync<PeriodInfo, PeriodProcessSettingInfo>(criteria);
-            IList<PeriodInfo> periods = tuple.Item1.ToList();
+            (var periods, var periodProcessSettingInfos) = await baseService.FetchMultipleAsync<PeriodInfo, PeriodProcessSettingInfo>(criteria);
             foreach (var period in periods)
             {
-                period.Settings = tuple.Item2.Where(x => x.PeriodId == period.PeriodId).ToList();
+                period.Settings = periodProcessSettingInfos.Where(x => x.PeriodId == period.PeriodId).ToList();
             }
             return Json(new { totalItems = criteria.TotalRows, data = periods });
         }
@@ -50,11 +48,10 @@
         [HttpPost]
         public async Task<IActionResult> GetPeriodInfosById([FromBody] GetPeriodCriteriaByIdCriteria criteria)
         {
-            var tuple = await baseService.FetchMultipleAsync<PeriodInfo, PeriodProcessSettingInfo>(criteria);
-            IList<PeriodInfo> periods = tuple.Item1.ToList();
+            (var periods, var periodProcessSettingInfos) = await baseService.FetchMultipleAsync<PeriodInfo, PeriodProcessSettingInfo>(criteria);
             foreach (var period in periods)
             {
-                period.Settings = tuple.Item2.Where(x => x.PeriodId == period.PeriodId).ToList();
+                period.Settings = periodProcessSettingInfos.Where(x => x.PeriodId == period.PeriodId).ToList();
             }
             return Json(periods);
         }

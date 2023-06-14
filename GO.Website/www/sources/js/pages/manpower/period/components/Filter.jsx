@@ -39,7 +39,9 @@ export default class Filter extends PureComponent {
     };
 
     handleOpenCreateModalDialog = () => {
-        this.props.handleModalCreateDialog(true);
+        if (window.hasHostPermissionOnEmployee) {
+            this.props.handleModalCreateDialog(true);
+        }
     };
 
     render() {
@@ -60,16 +62,19 @@ export default class Filter extends PureComponent {
                             onChange={value => this.handleChange('status', value)}
                         />
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group className="btn-submit">
                         <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleSubmit}>
                             {LangHelper.getResource('Submit')}
                         </Button>
                     </Form.Group>
-                    <Form.Group>
-                        <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
-                            {LangHelper.getResource('AddNew')}
-                        </Button>
-                    </Form.Group>
+                    {
+                        window.hasHostPermissionOnEmployee &&
+                        <Form.Group>
+                            <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
+                                {LangHelper.getResource('AddNew')}
+                            </Button>
+                        </Form.Group>
+                    }
                 </Form.Row>
             </Form>
         );

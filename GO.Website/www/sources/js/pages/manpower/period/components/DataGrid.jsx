@@ -23,7 +23,10 @@ export default class DataGrid extends Component {
                 <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Active')}</HeaderCell>
-                <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
+                {
+                    window.hasHostPermissionOnEmployee && 
+                    <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
+                }
             </HeaderRow>,
             <HeaderRow key="header-row2">
                 <HeaderCell colWidth={8}>{LangHelper.getResource('FromDate')}</HeaderCell>

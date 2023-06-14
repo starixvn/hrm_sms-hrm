@@ -15,9 +15,13 @@
      border-color: #b7b7b7 !important;
 }
 
+.btn-submit {
+    margin-right: -15px !important;
+} 
+
 .form-filter .form-row .form-group {
     width: 135px !important;
-
+    
     .btn {
         width: 97px !important;
         padding: 4px 20px !important;
@@ -27,7 +31,6 @@
 .icon-edit:hover {
     background-color: #ff9913 !important;
 }
-
 
 .modal-dialog {
     width: 500px;
@@ -56,5 +59,3 @@
         }
     }
 }
-
-   
