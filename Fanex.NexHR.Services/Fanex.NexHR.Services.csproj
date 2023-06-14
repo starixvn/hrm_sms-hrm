@@ -81,7 +81,6 @@
     <Reference Include="Hangfire.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hangfire.Core.1.8.2\lib\net46\Hangfire.Core.dll</HintPath>
     </Reference>
-    </Reference>
     <Reference Include="HRM.UserControl.Client.AspNetMvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HRM.UserControl.Client.AspNetMvc.1.0.4\lib\net461\HRM.UserControl.Client.AspNetMvc.dll</HintPath>
     </Reference>

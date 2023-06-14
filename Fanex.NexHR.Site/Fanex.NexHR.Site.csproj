@@ -88,7 +88,6 @@
     <Reference Include="Fanex.Logging.Sentry.RavenClient, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.Sentry.RavenClient.1.0.1\lib\net461\Fanex.Logging.Sentry.RavenClient.dll</HintPath>
     </Reference>
-    </Reference>
     <Reference Include="Hangfire.SqlServer, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hangfire.SqlServer.1.8.2\lib\net451\Hangfire.SqlServer.dll</HintPath>
     </Reference>
