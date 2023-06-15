@@ -2,16 +2,18 @@
 {
     using System;
     using System.Globalization;
+    using System.Net;
     using System.Threading.Tasks;
+    using Fanex.Logging;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Logging;
+    using Newtonsoft.Json;
 
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate next;
         private readonly ILogger logger;
 
-        public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
+        public ErrorHandlerMiddleware(RequestDelegate next, ILogger logger)
         {
             this.next = next;
             this.logger = logger;
@@ -25,11 +27,11 @@
             }
             catch (Exception ex)
             {
-                HandleException(context, ex);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private void HandleException(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             var message = string.Format(
                     CultureInfo.InvariantCulture,
@@ -39,9 +41,23 @@
                     context.Request.Headers["Host"],
                     exception.TargetSite,
                     exception.StackTrace);
-            logger.LogError(message);
+            await logger.ErrorAsync(message);
 
-            context.Response.Redirect("/error/500");
+            if (IsAjaxRequest(context.Request))
+            {
+                var result = JsonConvert.SerializeObject(new { error = exception.Message });
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync(result);
+            }
+            else
+            {
+                context.Response.Redirect("/error/500");
+            }
         }
+
+        private static bool IsAjaxRequest(HttpRequest request)
+           => string.Equals(request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase);
     }
 }

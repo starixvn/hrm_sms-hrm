@@ -15,7 +15,8 @@
         public LumiHrmWorker(
             INexHrmService hrmService,
             List<JobSettings> jobSettings,
-            ILogger<LumiHrmWorker> logger) : base(logger)
+            ILogger<LumiHrmWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.hrmService = hrmService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromLumiHRM);

@@ -15,7 +15,8 @@
         public SmsHrmWorker(
             ISyncDataFromDBService syncDataService,
             List<JobSettings> jobSettings,
-            ILogger<SmsHrmWorker> logger) : base(logger)
+            ILogger<SmsHrmWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.syncDataService = syncDataService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromSMS);

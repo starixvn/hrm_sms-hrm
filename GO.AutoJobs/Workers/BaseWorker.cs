@@ -10,17 +10,19 @@ namespace GO.AutoJobs.Workers
 
     public class BaseWorker : BackgroundService
     {
-        private readonly ILogger logger;
+        private readonly ILogger serilog;
+        private readonly Fanex.Logging.ILogger logger;
         protected JobSettings jobSetting;
 
-        public BaseWorker(ILogger<BaseWorker> logger)
+        public BaseWorker(ILogger<BaseWorker> serilog, Fanex.Logging.ILogger logger)
         {
+            this.serilog = serilog;
             this.logger = logger;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            logger.LogInformation($"{jobSetting.JobName}: Start");
+            serilog.LogInformation($"{jobSetting.JobName}: Start");
             return base.StartAsync(cancellationToken);
         }
 
@@ -42,7 +44,7 @@ namespace GO.AutoJobs.Workers
             }
             catch (Exception ex)
             {
-                logger.LogError($"{jobSetting.JobName}: Error - {ex}");
+                await logger.ErrorAsync($"{jobSetting.JobName}: Error - {ex}");
             }
         }
 
@@ -52,14 +54,14 @@ namespace GO.AutoJobs.Workers
             {
                 if (jobSetting.IsEnabled)
                 {
-                    logger.LogInformation($"{jobSetting.JobName}: Doing...");
+                    serilog.LogInformation($"{jobSetting.JobName}: Doing...");
                     await DoWorkAsync();
-                    logger.LogInformation($"{jobSetting.JobName}: Done.");
+                    serilog.LogInformation($"{jobSetting.JobName}: Done.");
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError($"{jobSetting.JobName}: Error - {ex}");
+                await logger.ErrorAsync($"{jobSetting.JobName}: Error - {ex}");
             }
         }
 
@@ -70,14 +72,14 @@ namespace GO.AutoJobs.Workers
 
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            logger.LogInformation($"{jobSetting.JobName}: Stop");
+            serilog.LogInformation($"{jobSetting.JobName}: Stop");
 
             await base.StopAsync(cancellationToken);
         }
 
         public override void Dispose()
         {
-            logger.LogInformation($"{jobSetting.JobName}: Disposed");
+            serilog.LogInformation($"{jobSetting.JobName}: Disposed");
             GC.SuppressFinalize(this);
             base.Dispose();
         }

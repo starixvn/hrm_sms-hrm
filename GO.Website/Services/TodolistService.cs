@@ -8,12 +8,12 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Fanex.Logging;
     using GO.Core.Services;
     using GO.Website.Constants;
     using GO.Website.Criteria;
     using GO.Website.Models;
     using GO.Website.Models.Todolist;
-    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
     public class TodolistService : ITodolistService
@@ -24,7 +24,7 @@
 
         public TodolistService(
             IHttpClientFactory clientFactory,
-            ILogger<TodolistService> logger,
+            ILogger logger,
             IBaseService baseService)
         {
             this.clientFactory = clientFactory;
@@ -120,7 +120,7 @@
                     else
                     {
                         var message = await response.Content.ReadAsStringAsync();
-                        logger.LogError(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                        await logger.ErrorAsync(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
 
                         return default;
                     }
@@ -154,7 +154,7 @@
                     else
                     {
                         var message = await response.Content.ReadAsStringAsync();
-                        logger.LogError(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                        await logger.ErrorAsync(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
                         return default;
                     }
                 }

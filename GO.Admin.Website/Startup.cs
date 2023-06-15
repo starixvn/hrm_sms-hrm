@@ -1,11 +1,17 @@
 namespace GO.Admin.Website
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.AspNetCore;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Sentry;
     using GO.Admin.Website.Middlewares;
     using GO.Admin.Website.Repositories;
     using GO.Admin.Website.Services;
@@ -22,6 +28,7 @@ namespace GO.Admin.Website
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Sentry;
 
     public class Startup
     {
@@ -48,6 +55,20 @@ namespace GO.Admin.Website
                .WithSqlServer()
                .UseDefaultDbSettingProvider("~/App_Data")
                .Run();
+
+            LogManager
+                .SetDefaultLogCategory(Configuration.GetSection("Sentry:LogCategory").Value)
+                .Use(new List<ILogEngine>
+                {
+                    new SentryLogging(new SentryEngineOptions
+                    {
+                        Dsn = new Dsn(Configuration.GetSection("Sentry:Dsn").Value)
+                    })
+                });
+
+            ExceptionHandler
+                .UseConfig(new LoggingConfiguration())
+                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             services.AddMemoryCache();
 
@@ -119,6 +140,7 @@ namespace GO.Admin.Website
         {
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
+            services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
 

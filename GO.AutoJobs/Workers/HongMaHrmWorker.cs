@@ -15,7 +15,8 @@
         public HongMaHrmWorker(
             ISyncDataFromDBService syncDataService,
             List<JobSettings> jobSettings,
-            ILogger<HongMaHrmWorker> logger) : base(logger)
+            ILogger<HongMaHrmWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.syncDataService = syncDataService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromHongMa);

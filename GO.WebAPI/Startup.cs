@@ -1,10 +1,16 @@
 namespace GO.WebAPI
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.AspNetCore;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Sentry;
     using GO.Core.Repository;
     using GO.Core.Services;
     using GO.WebAPI.Middlewares;
@@ -19,6 +25,7 @@ namespace GO.WebAPI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
+    using Sentry;
 
     public class Startup
     {
@@ -44,6 +51,20 @@ namespace GO.WebAPI
                .WithSqlServer()
                .UseDefaultDbSettingProvider(resourcePath: $"~/App_Data/SpNames.xml")
                .Run();
+
+            LogManager
+                .SetDefaultLogCategory(Configuration.GetSection("Sentry:LogCategory").Value)
+                .Use(new List<ILogEngine>
+                {
+                    new SentryLogging(new SentryEngineOptions
+                    {
+                        Dsn = new Dsn(Configuration.GetSection("Sentry:Dsn").Value)
+                    })
+                });
+
+            ExceptionHandler
+                .UseConfig(new LoggingConfiguration())
+                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -71,7 +92,7 @@ namespace GO.WebAPI
             });
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
@@ -92,6 +113,7 @@ namespace GO.WebAPI
             }
             else
             {
+                app.UseMiddleware<ErrorHandlerMiddleware>();
                 app.UseHsts();
             }
 

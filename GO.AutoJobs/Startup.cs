@@ -5,6 +5,11 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.AspNetCore;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Sentry;
     using GO.AutoJobs.Middlewares;
     using GO.AutoJobs.Models;
     using GO.AutoJobs.Models.UserSite;
@@ -17,6 +22,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Sentry;
 
     public class Startup
     {
@@ -74,6 +80,20 @@
                 .UseDefaultDbSettingProvider("~/App_Data/SpNames.xml")
                 .Run();
 
+            LogManager
+                .SetDefaultLogCategory(configuration.GetSection("Sentry:LogCategory").Value)
+                .Use(new List<ILogEngine>
+                {
+                    new SentryLogging(new SentryEngineOptions
+                    {
+                        Dsn = new Dsn(configuration.GetSection("Sentry:Dsn").Value)
+                    })
+                });
+
+            ExceptionHandler
+                .UseConfig(new LoggingConfiguration())
+                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
+
             services.AddSingleton(configuration);
             services.AddHttpClient();
 
@@ -92,6 +112,7 @@
 
         private static void AddDependencyInjection(IServiceCollection services)
         {
+            services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();

@@ -15,7 +15,8 @@
         public LexfinHrmWorker(
             ISyncDataFromDBService syncDataService,
             List<JobSettings> jobSettings,
-            ILogger<LexfinHrmWorker> logger) : base(logger)
+            ILogger<LexfinHrmWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.syncDataService = syncDataService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromLexfin);

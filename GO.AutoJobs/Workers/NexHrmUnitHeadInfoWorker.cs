@@ -15,7 +15,8 @@
         public NexHrmUnitHeadInfoWorker(
             INexHrmService unitHeadService,
             List<JobSettings> jobSettings,
-            ILogger<NexHrmUnitHeadInfoWorker> logger) : base(logger)
+            ILogger<NexHrmUnitHeadInfoWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.unitHeadService = unitHeadService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncUnitHeadInfoFromNexHRM);

@@ -7,6 +7,7 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
+    using Fanex.Logging;
     using GO.AutoJobs.Criteria.HRM;
     using GO.AutoJobs.Criteria.UnitHead;
     using GO.AutoJobs.Models;
@@ -15,7 +16,6 @@
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
     using GO.Core.Services;
-    using Microsoft.Extensions.Logging;
     using Newtonsoft.Json;
 
     public class NexHrmService : INexHrmService
@@ -28,7 +28,7 @@
         private readonly NexHrmApiConfig apiConfig;
 
         public NexHrmService(
-            ILogger<NexHrmService> logger,
+            ILogger logger,
             IHttpClientFactory clientFactory,
             IBaseService baseService,
             NexHrmApiConfig apiConfig)
@@ -180,7 +180,7 @@
                     else
                     {
                         var message = await response.Content.ReadAsStringAsync();
-                        logger.LogError(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                        await logger.ErrorAsync(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
 
                         return default;
                     }
@@ -188,7 +188,7 @@
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                await logger.ErrorAsync(ex.Message);
 
                 return default;
             }
@@ -221,7 +221,7 @@
                     else
                     {
                         var message = await response.Content.ReadAsStringAsync();
-                        logger.LogError(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                        await logger.ErrorAsync(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
 
                         return default;
                     }
@@ -229,7 +229,7 @@
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                await logger.ErrorAsync(ex.Message);
 
                 return default;
             }

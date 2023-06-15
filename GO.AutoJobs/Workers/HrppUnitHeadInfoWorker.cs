@@ -15,7 +15,8 @@
         public HrppUnitHeadInfoWorker(
             IHrppUnitHeadService unitHeadService,
             List<JobSettings> jobSettings,
-            ILogger<HrppUnitHeadInfoWorker> logger) : base(logger)
+            ILogger<HrppUnitHeadInfoWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.unitHeadService = unitHeadService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncUnitHeadInfoFromHRPP);

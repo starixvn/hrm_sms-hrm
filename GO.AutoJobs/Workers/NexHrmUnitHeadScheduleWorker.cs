@@ -15,7 +15,8 @@
         public NexHrmUnitHeadScheduleWorker(
             INexHrmService unitHeadService,
             List<JobSettings> jobSettings,
-            ILogger<NexHrmUnitHeadScheduleWorker> logger) : base(logger)
+            ILogger<NexHrmUnitHeadScheduleWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.unitHeadService = unitHeadService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncUnitHeadScheduleFromNexHRM);

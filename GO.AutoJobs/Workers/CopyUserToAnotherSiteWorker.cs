@@ -15,7 +15,8 @@
         public CopyUserToAnotherSiteWorker(
             IUserSiteService userSiteService,
             List<JobSettings> jobSettings,
-            ILogger<CopyUserToAnotherSiteWorker> logger) : base(logger)
+            ILogger<CopyUserToAnotherSiteWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.userSiteService = userSiteService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.CopyUserToAnotherSite);

@@ -15,7 +15,8 @@
         public CtiHrmWorker(
             ISyncDataFromDBService syncDataService,
             List<JobSettings> jobSettings,
-            ILogger<CtiHrmWorker> logger) : base(logger)
+            ILogger<CtiHrmWorker> serilog,
+            Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.syncDataService = syncDataService;
             jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncDataFromCTI);
