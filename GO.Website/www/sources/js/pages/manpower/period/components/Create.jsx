@@ -1,48 +1,42 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { Formik } from 'formik';
-import LangHelper from '@jsroot/common/langHelper';
+import dayjs from 'dayjs';
+
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import DatePicker from '@jsroot/components/date-picker/index';
 import ResponseMessage from '@jsroot/components/ResponseMessage';
 import { validateFormik } from '../common.functions';
-import dayjs from 'dayjs';
+import LangHelper from '@jsroot/common/langHelper';
+import { ManpowerFlow } from '@jsroot/common/constants';
 
-export default class Create extends PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
-    handleCloseModalDialog = () => {
-        this.props.handleModalCreateDialog( false );
-    };
-
+export default class Create extends Component {
     handleSubmit = values => {
-        const formatDate = 'YYYY-MM-DD';
+        const DateFormat = 'YYYY-MM-DD';
         const params = {
             name: values.name,
             settings: [
                 {
-                    processId: 1,
-                    fromDate: dayjs(values.fromDateUnitHead).format(formatDate),
-                    todate: dayjs(values.toDateUnitHead).format(formatDate)
+                    processId: ManpowerFlow.UnitHead,
+                    fromDate: dayjs(values.fromDateUnitHead).format(DateFormat),
+                    todate: dayjs(values.toDateUnitHead).format(DateFormat)
                 },
                 {
-                    processId: 2,
-                    fromDate: dayjs(values.fromDateVerifier).format(formatDate),
-                    todate: dayjs(values.toDateVerifier).format(formatDate)
+                    processId: ManpowerFlow.Verifier,
+                    fromDate: dayjs(values.fromDateVerifier).format(DateFormat),
+                    todate: dayjs(values.toDateVerifier).format(DateFormat)
                 },
                 {
-                    processId: 3,
-                    fromDate: dayjs(values.fromDateApprover).format(formatDate),
-                    todate: dayjs(values.toDateApprover).format(formatDate)
+                    processId: ManpowerFlow.Approver,
+                    fromDate: dayjs(values.fromDateApprover).format(DateFormat),
+                    todate: dayjs(values.toDateApprover).format(DateFormat)
                 }
             ]
         };
-        this.props.createPeriod(params);
+        this.props.onSubmit(params);
     };
 
-    isCheckInvalid = (touched, errors) => touched && errors ? 'is-invalid' : '';
+    isValidInput = (touched, errors) => touched && errors ? 'is-invalid' : '';
 
     renderForm = ({
         values,
@@ -52,15 +46,14 @@ export default class Create extends PureComponent {
         setFieldValue,
         handleSubmit
     }) => {
+        const commandResult = this.props.commandResult;
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
                     <FormikErrorMessage className="summary-errors" touched={touched} errors={errors} fieldNames={Object.keys(values)} />
                     {
-                        this.props.createResult &&
-                        <ResponseMessage isSuccessful={this.props.createResult.isSuccessful}
-                            message={this.props.createResult.message || LangHelper.getResource('CreatePeriodSuccessfully')}
-                        />
+                        commandResult &&
+                        <ResponseMessage isSuccessful={commandResult.isSuccessful} message={commandResult.message} />
                     }
                     <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" className="required" htmlFor="name">
@@ -75,64 +68,62 @@ export default class Create extends PureComponent {
                             />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="4" md="3">
-                        </Form.Label>
-                        <Col sm="8" md="9" className="label-from-to-date">
-                            <Form.Label className="label-from-date">{LangHelper.getResource('FromDate')}</Form.Label>
-                            <Form.Label >{LangHelper.getResource('ToDate')}</Form.Label>
+                    <Form.Group as={Row} className="group-datepicker-label-container">
+                        <Form.Label column sm="4" md="3" />
+                        <Col sm="8" md="9" className="group-datepicker-label">
+                            <Form.Label>{LangHelper.getResource('FromDate')}</Form.Label>
+                            <Form.Label>{LangHelper.getResource('ToDate')}</Form.Label>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" className="required">
                             {LangHelper.getResource('UnitHead')}
                         </Form.Label>
-                        <Col sm="8" md="9" className="dataPicker-from-to-date">
-                            <DatePicker size="sm" selected={values.fromDateUnitHead} value={values.fromDateUnitHead}
-                                name="fromDateUnitHead" id="fromDateUnitHead"
-                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
+                        <Col sm="8" md="9" className="group-datepicker-input">
+                            <DatePicker selected={values.fromDateUnitHead}
+                                isInvalid={this.isValidInput(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
-                                onChange={value => setFieldValue('fromDateUnitHead', value)} />
-                            <DatePicker size="sm" selected={values.toDateUnitHead} value={values.toDateUnitHead}
-                                name="toDateUnitHead" id="toDateUnitHead"
-                                isInvalid={this.isCheckInvalid(touched.unitHead, errors.unitHead)}
+                                onChange={value => setFieldValue('fromDateUnitHead', value)}
+                            />
+                            <DatePicker selected={values.toDateUnitHead}
+                                isInvalid={this.isValidInput(touched.unitHead, errors.unitHead)}
                                 dateFormat="dd MMM,yyyy"
-                                onChange={value => setFieldValue('toDateUnitHead', value)} />
+                                onChange={value => setFieldValue('toDateUnitHead', value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" className="required">
                             {LangHelper.getResource('Verifier')}
                         </Form.Label>
-                        <Col sm="8" md="9" className="dataPicker-from-to-date">
-                            <DatePicker size="sm" selected={values.fromDateVerifier} value={values.fromDateVerifier}
-                                name="fromDateVerifier" id="fromDateVerifier"
-                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
+                        <Col sm="8" md="9" className="group-datepicker-input">
+                            <DatePicker selected={values.fromDateVerifier}
+                                isInvalid={this.isValidInput(touched.verifier, errors.verifier)}
                                 dateFormat="dd MMM,yyyy"
-                                onChange={value => setFieldValue('fromDateVerifier', value)}/>
-                            <DatePicker size="sm" selected={values.toDateVerifier} value={values.toDateVerifier}
+                                onChange={value => setFieldValue('fromDateVerifier', value)}
+                            />
+                            <DatePicker selected={values.toDateVerifier}
                                 dateFormat="dd MMM,yyyy"
-                                name="toDateVerifier" id="toDateVerifier"
-                                isInvalid={this.isCheckInvalid(touched.verifier, errors.verifier)}
-                                onChange={value => setFieldValue('toDateVerifier', value)}/>
+                                isInvalid={this.isValidInput(touched.verifier, errors.verifier)}
+                                onChange={value => setFieldValue('toDateVerifier', value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" className="required">
                             {LangHelper.getResource('Approver')}
                         </Form.Label>
-                        <Col sm="8" md="9" className="dataPicker-from-to-date">
-                            <DatePicker size="sm" selected={values.fromDateApprover} value={values.fromDateApprover}
-                                name="fromDateApprover" id="fromDateApprover"
-                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
+                        <Col sm="8" md="9" className="group-datepicker-input">
+                            <DatePicker selected={values.fromDateApprover}
+                                isInvalid={this.isValidInput(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
-                                onChange={value => setFieldValue('fromDateApprover', value)}/>
-                            <DatePicker size="sm" selected={values.toDateApprover} value={values.toDateApprover}
-                                name="toDateApprover" id="toDateApprover"
-                                isInvalid={this.isCheckInvalid(touched.approver, errors.approver)}
+                                onChange={value => setFieldValue('fromDateApprover', value)}
+                            />
+                            <DatePicker selected={values.toDateApprover}
+                                isInvalid={this.isValidInput(touched.approver, errors.approver)}
                                 dateFormat="dd MMM,yyyy"
-                                onChange={value => setFieldValue('toDateApprover', value)}/>
-
+                                onChange={value => setFieldValue('toDateApprover', value)}
+                            />
                         </Col>
                     </Form.Group>
                 </Modal.Body>
@@ -140,7 +131,7 @@ export default class Create extends PureComponent {
                     <Button type="submit" variant="primary" size="sm">
                         {LangHelper.getResource('Save')}
                     </Button>
-                    <Button variant="secondary" size="sm" onClick={this.handleCloseModalDialog}>
+                    <Button variant="secondary" size="sm" onClick={this.props.onClose}>
                         {LangHelper.getResource('Cancel')}
                     </Button>
                 </Modal.Footer>
@@ -151,12 +142,12 @@ export default class Create extends PureComponent {
     render() {
         const initialValues = {
             name: '',
-            toDateUnitHead: '',
-            toDateVerifier: '',
-            toDateApprover: '',
             fromDateUnitHead: '',
+            toDateUnitHead: '',
             fromDateVerifier: '',
+            toDateVerifier: '',
             fromDateApprover: '',
+            toDateApprover: '',
             unitHead: '',
             verifier: '',
             approver: ''
@@ -164,7 +155,7 @@ export default class Create extends PureComponent {
         return (
             <Modal show
                 backdrop="static" keyboard={false} size="lg" centered
-                onHide={this.handleCloseModalDialog}
+                onHide={this.props.onClose}
             >
                 <Modal.Header closeButton>
                     <Modal.Title as="div">{LangHelper.getResource('AddNew')}</Modal.Title>

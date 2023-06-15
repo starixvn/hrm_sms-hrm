@@ -6,7 +6,6 @@
     Comment: 'Comment',
     Confirmation: 'Confirmation',
     Country: 'Country',
-    CreatePeriodSuccessfully: 'Create period successfully!',
     Department: 'Department',
     EmployeeManagement: 'Employee Management',
     ErrorDateRange: '{0} From Date must be less than or equal To Date.',
@@ -42,5 +41,5 @@
     Today: 'Today',
     ToDate: 'To Date',
     UnitHead: 'Unit Head',
-    Verifier: 'Verifier',
+    Verifier: 'Verifier'
 };

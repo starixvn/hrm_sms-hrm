@@ -15,13 +15,13 @@ export default class Filter extends PureComponent {
 
     componentDidMount() {
         const params = this.getParams();
-        this.props.getPeriodInfos(params);
+        this.props.onSubmit(params);
     }
 
     getParams = () => {
         const { status } = this.state;
         return {
-            IsActive: status.value,
+            isActive: status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
         };
@@ -31,24 +31,23 @@ export default class Filter extends PureComponent {
         event.preventDefault();
         const params = this.getParams();
         this.props.onFilterChange(params);
-        this.props.getPeriodInfos(params);
+        this.props.onSubmit(params);
     };
 
     handleChange = (name, value) => {
         this.setState({ [name]: value });
     };
 
-    handleOpenCreateModalDialog = () => {
-        if (window.hasHostPermissionOnEmployee) {
-            this.props.handleModalCreateDialog(true);
-        }
+    handleAddNew = () => {
+        this.props.onAddNew();
     };
 
     render() {
         const { status } = this.state;
-        const statusOptions = [{ value: null, label: 'All' },
-        { value: 1, label: 'Active' },
-        { value: 0, label: 'Inactive' }
+        const statusOptions = [
+            { value: null, label: 'All' },
+            { value: 1, label: 'Active' },
+            { value: 0, label: 'Inactive' }
         ];
 
         return (
@@ -62,19 +61,17 @@ export default class Filter extends PureComponent {
                             onChange={value => this.handleChange('status', value)}
                         />
                     </Form.Group>
-                    <Form.Group className="btn-submit">
+                    <Form.Group className="btn-group-container">
                         <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={this.handleSubmit}>
                             {LangHelper.getResource('Submit')}
                         </Button>
-                    </Form.Group>
-                    {
-                        window.hasHostPermissionOnEmployee &&
-                        <Form.Group>
-                            <Button variant="primary" size="sm" className="mr-3" onClick={this.handleOpenCreateModalDialog}>
+                        {
+                            window.hasHostPermissionOnPeriod &&
+                            <Button variant="primary" size="sm" onClick={this.handleAddNew}>
                                 {LangHelper.getResource('AddNew')}
                             </Button>
-                        </Form.Group>
-                    }
+                        }
+                    </Form.Group>
                 </Form.Row>
             </Form>
         );

@@ -1,17 +1,16 @@
 ﻿namespace GO.Website.Criteria.Manpower.Period
 {
+    using System.Collections.Generic;
     using Fanex.Data;
     using GO.Core.Models;
     using GO.Website.Models.Manpower.Period;
-    using System.Collections.Generic;
 
-    public class InsertPeriodCommand : BaseNonQueryCommand
+    public class CreatePeriodCommand : BaseNonQueryCommand
     {
-        public int SiteId { get; set; }
         public string Name { get; set; }
 
         [SpParam(Ignored = true)]
-        public IList<PeriodProcessSettingInfo> Settings { get; set; }
+        public IList<MapnowerPeriodProcessSetting> Settings { get; set; }
 
         public string SettingXml { get; set; }
         public bool IsActive { get; set; } = true;

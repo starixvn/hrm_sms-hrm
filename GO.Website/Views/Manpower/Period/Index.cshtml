@@ -19,11 +19,11 @@
 @section Scripts {
     @if (Model)
     {
-        <script>window.hasHostPermissionOnEmployee = true;</script>
+        <script>window.hasHostPermissionOnPeriod = true;</script>
     }
     else
     {
-        <script>window.hasHostPermissionOnEmployee = false;</script>
+        <script>window.hasHostPermissionOnPeriod = false;</script>
     }
     <environment include="Development">
         <script src="~/js/dev/pages/manpower/period/index.chunk.js" asp-append-version="true"></script>

@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import Filter from './Filter';
 import { Button } from 'react-bootstrap';
-import DataService from '@jsroot/common/dataService';
-import SweetModalDialog from '@jsroot/components/SweetModalDialog';
-import LangHelper from '@jsroot/common/langHelper';
 import { toast } from 'react-toastify';
+
+import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import DataGrid from './DataGrid';
-import { DefaultPageSize } from '@jsroot/common/constants';
-import Site from '@jsroot/common/site';
 import Create from './Create';
 import Update from './Update';
 
-class AppContainer extends Component {
+import { DefaultPageSize } from '@jsroot/common/constants';
+import Site from '@jsroot/common/site';
+import DataService from '@jsroot/common/dataService';
+import LangHelper from '@jsroot/common/langHelper';
+
+export default class AppContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -23,7 +25,7 @@ class AppContainer extends Component {
             },
             gridData: null,
             createModalDialog: { show: false },
-            createResult: null,
+            commandResult: null,
             updateModalDialog: {
                 show: false,
                 data: null
@@ -37,25 +39,12 @@ class AppContainer extends Component {
         };
     }
 
-    getPeriodInfos = async params => {
+    getPeriods = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/Period/GetPeriodInfos');
+        const url = Site.resolveClientUrl('Manpower/Period/GetPeriods');
         await DataService.postDataAsync(url, params).then(response => {
             this.setState({
                 gridData: response.data
-            });
-        }).then(() => Site.unblockUI());
-    };
-
-    getPeriodInfosById = async params => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/Period/GetPeriodInfosById');
-        await DataService.postDataAsync(url, params).then(response => {
-            this.setState({
-                updateModalDialog: {
-                    show: true,
-                    data: response.data
-                }
             });
         }).then(() => Site.unblockUI());
     };
@@ -64,32 +53,16 @@ class AppContainer extends Component {
         this.setState({ filter: value });
     };
 
-    updateIsActive = async (periodId, isActive) => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/Period/UpdateIsActive');
-        const params = { periodId, isActive};
-        await DataService.postDataAsync(url, params).then(response => {
-            if (response.data.isSuccessful) {
-                toast.success('Update successfully!');
-            } else {
-                toast.error(response.data.message);
-            }
-        }).then(() => Site.unblockUI());
+    handleCreatePeriod = () => {
+        this.setState({
+            createModalDialog: { show: true }
+        });
     };
 
-    deletePeriod = async () => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/Period/Delete');
-        const params = { periodId: this.state.deleteModalDialog.periodId };
-        await DataService.postDataAsync(url, params).then(response => {
-            if (response.data.isSuccessful) {
-                toast.success('Delete successfully!');
-                this.getPeriodInfos(this.state.filter);
-                this.closeModalDeleteDialog();
-            } else {
-                toast.error(response.data.message);
-            }
-        }).then(() => Site.unblockUI());
+    handleCloseCreateModalDialog = () => {
+        this.setState({
+            createModalDialog: { show: false }
+        });
     };
 
     createPeriod = async params => {
@@ -98,17 +71,32 @@ class AppContainer extends Component {
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 this.setState({
-                    createResult: null,
+                    commandResult: null,
                     createModalDialog: { show: false }
                 });
                 toast.success('Create successfully!');
-                this.getPeriodInfos(this.state.filter);
+                this.getPeriods(this.state.filter);
             } else {
                 this.setState({
-                    createResult: response.data
+                    commandResult: response.data
                 });
             }
         }).then(() => Site.unblockUI());
+    };
+
+    handleUpdatePeriod = period => {
+        this.setState({
+            updateModalDialog: {
+                show: true,
+                data: period
+            }
+        });
+    };
+
+    handleCloseUpdateModalDialog = () => {
+        this.setState({
+            updateModalDialog: { show: false }
+        });
     };
 
     updatePeriod = async params => {
@@ -121,7 +109,7 @@ class AppContainer extends Component {
                     updateModalDialog: { show: false }
                 });
                 toast.success('Update successfully!');
-                this.getPeriodInfos(this.state.filter);
+                this.getPeriods(this.state.filter);
             } else {
                 this.setState({
                     updateResult: response.data
@@ -130,67 +118,80 @@ class AppContainer extends Component {
         }).then(() => Site.unblockUI());
     };
 
-    handleModalCreateDialog = isShow => {
-        this.setState({
-            createModalDialog: { show: isShow }
-        });
+    updateStatus = async (periodId, isActive) => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/UpdateStatus');
+        const params = { periodId, isActive };
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                toast.success('Update successfully!');
+                this.getPeriods(this.state.filter);
+            } else {
+                toast.error(response.data.message);
+            }
+        }).then(() => Site.unblockUI());
     };
 
-    handleModalUpdateDialog = isShow => {
-        this.setState({
-            updateModalDialog: { show: isShow }
-        });
-    };
-
-    handleModalDeleteDialog = params => {
+    handleDeletePeriod = period => {
         this.setState({
             deleteModalDialog: {
-                show: params.show,
-                name: params.name,
-                periodId: params.periodId
+                show: true,
+                name: period.name,
+                periodId: period.periodId
             }
         });
     };
 
-    closeModalDeleteDialog = () => {
+    handleCloseDeleteModalDialog = () => {
         this.setState({
-            deleteModalDialog: {
-                show: false,
-                name: '',
-                periodId: null
-            }
+            deleteModalDialog: { show: false }
         });
+    };
+
+    deletePeriod = async () => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Period/Delete');
+        const params = { periodId: this.state.deleteModalDialog.periodId };
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                toast.success('Delete successfully!');
+                this.getPeriods(this.state.filter);
+                this.handleCloseDeleteModalDialog();
+            } else {
+                toast.error(response.data.message);
+            }
+        }).then(() => Site.unblockUI());
     };
 
     render() {
-        const { filter, gridData, createModalDialog, updateModalDialog, createResult, deleteModalDialog } = this.state;
+        const { filter, gridData, createModalDialog, updateModalDialog, commandResult, deleteModalDialog } = this.state;
         return (
-            <div className="manpower-report">
+            <div className="manpower-period">
                 <Filter
                     onFilterChange={this.handleChangeFilter}
-                    getPeriodInfos={this.getPeriodInfos}
-                    handleModalCreateDialog={this.handleModalCreateDialog}
+                    onSubmit={this.getPeriods}
+                    onAddNew={this.handleCreatePeriod}
                 />
                 <DataGrid filter={filter}
                     gridData={gridData}
                     onFilterChange={this.handleChangeFilter}
-                    getPeriodInfos={this.getPeriodInfos}
-                    onChangeStatus={this.updateIsActive}
-                    handleModalDeleteDialog={this.handleModalDeleteDialog}
-                    getPeriodInfosById={this.getPeriodInfosById}
+                    getPeriods={this.getPeriods}
+                    onUpdate={this.handleUpdatePeriod}
+                    onChangeStatus={this.updateStatus}
+                    onDelete={this.handleDeletePeriod}
                 />
                 {
                     createModalDialog.show &&
-                    <Create createPeriod={this.createPeriod}
-                        handleModalCreateDialog={this.handleModalCreateDialog}
-                        createResult={createResult}
+                    <Create onSubmit={this.createPeriod}
+                        onClose={this.handleCloseCreateModalDialog}
+                        commandResult={commandResult}
                     />
                 }
                 {
                     updateModalDialog.show &&
-                    <Update updatePeriod={this.updatePeriod}
-                        handleModalUpdateDialog={this.handleModalUpdateDialog}
-                        data={updateModalDialog.data}
+                    <Update onSubmit={this.updatePeriod}
+                        onClose={this.handleCloseUpdateModalDialog}
+                        period={updateModalDialog.data} commandResult={commandResult}
                     />
                 }
                 {
@@ -205,17 +206,15 @@ class AppContainer extends Component {
                                 {LangHelper.getResource('OK')}
                             </Button>,
                             <Button variant="secondary" size="sm" key="cancel"
-                                onClick={this.closeModalDeleteDialog}
+                                onClick={this.handleCloseDeleteModalDialog}
                             >
                                 {LangHelper.getResource('Cancel')}
                             </Button>
                         ]}
-                        onClose={this.closeModalDeleteDialog}
+                        onClose={this.handleCloseDeleteModalDialog}
                     />
                 }
             </div>
         );
     }
 }
-
-export default AppContainer;

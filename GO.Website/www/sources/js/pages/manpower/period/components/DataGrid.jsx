@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import RowItem from './RowItem';
 import { PAGING_SIZES } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
-export default class DataGrid extends Component {
+export default class DataGrid extends PureComponent {
     onPaging = (pageIndex, pageSize) => {
         const params = { ...this.props.filter };
         params['pageIndex'] = pageIndex;
         params['pageSize'] = pageSize;
 
         this.props.onFilterChange(params);
-        this.props.getPeriodInfos(params);
+        this.props.getPeriods(params);
     };
 
     buildHeader = () => {
@@ -24,7 +24,7 @@ export default class DataGrid extends Component {
                 <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Active')}</HeaderCell>
                 {
-                    window.hasHostPermissionOnEmployee && 
+                    window.hasHostPermissionOnPeriod &&
                     <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
                 }
             </HeaderRow>,
@@ -42,13 +42,16 @@ export default class DataGrid extends Component {
     buildBody = () => {
         const { totalItems, data } = this.props.gridData;
         if (totalItems > 0) {
-            return data.map(item =>
+            const { pageIndex, pageSize } = this.props.filter;
+            const startIndex = (pageIndex - 1) * pageSize + 1;
+
+            return data.map((item, index) =>
                 <RowItem
                     key={`row-${item.name}`}
-                    period={item}
+                    period={item} rowIndex={startIndex + index}
                     onChangeStatus={this.props.onChangeStatus}
-                    handleModalDeleteDialog={this.props.handleModalDeleteDialog}
-                    getPeriodInfosById={this.props.getPeriodInfosById}
+                    onUpdate={this.props.onUpdate}
+                    onDelete={this.props.onDelete}
                 />
             );
         }

@@ -39,6 +39,7 @@
         {
             var criteria = new GetUnitCriteria();
             var units = await baseService.GetDataAsync<Unit>(criteria);
+
             return Json(units);
         }
 
@@ -46,12 +47,14 @@
         {
             var criteria = new GetFlowCriteria();
             var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);
+
             return Json(flows);
         }
 
         public async Task<IActionResult> GetByUnit(GetFlowByUnitCriteria criteria)
         {
             var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);
+
             return Json(flows);
         }
 
@@ -66,6 +69,7 @@
                 ModifiedBy = userControlSession.UserId
             };
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+
             return Json(commandResult);
         }
 
@@ -75,6 +79,7 @@
         {
             command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+
             return Json(commandResult);
         }
     }

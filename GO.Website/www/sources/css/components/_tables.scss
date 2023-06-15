@@ -73,6 +73,7 @@ input[type="checkbox"] {
         tr {
             td, th {
                 &:first-child {
+                    border-top: 0;
                     border-left: 0;
                 }
 
@@ -84,8 +85,6 @@ input[type="checkbox"] {
                 vertical-align: middle;
                 text-align: center;
             }
-
-            border-color: #7E9ED2 !important;
         }
     }
 

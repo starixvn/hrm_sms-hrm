@@ -1,52 +1,56 @@
 import React, { useState } from 'react';
-import { Cell, Row } from '@jsroot/components/react-grid/index';
 import dayjs from 'dayjs';
+import { Cell, Row } from '@jsroot/components/react-grid/index';
+import { DateFormat } from '@jsroot/common/constants';
 
-const RowItem = ({ period, onChangeStatus, handleModalDeleteDialog, getPeriodInfosById }) => {
+const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
     const [isActive, setStatus] = useState(period.isActive);
-    const dateProcessSettings = [];
-    period.settings.map(item => {
-        dateProcessSettings.push(<Cell key={`${item.processId + item.fromDate}`} className="text-center">{dayjs(item.fromDate).format('DD MMM,YYYY')}</Cell>);
-        dateProcessSettings.push(<Cell key={`${item.processId + item.toDate}`} className="text-center">{dayjs(item.toDate).format('DD MMM,YYYY')}</Cell>);
-    });
+
     const handleChangeStatus = () => {
-        if (window.hasHostPermissionOnEmployee) {
+        if (window.hasHostPermissionOnPeriod) {
             setStatus(!isActive);
             onChangeStatus(period.periodId, !isActive ? 1 : 0);
         }
     };
-    const handleDeletePeriod = () => {
-        if (window.hasHostPermissionOnEmployee) {
-            handleModalDeleteDialog({
-                show: true,
-                name: period.name,
-                periodId: period.periodId
-            });
-        }
+
+    const handleDeletePeriod = () => onDelete(period);
+
+    const handleUpdatePeriod = () => onUpdate(period);
+
+    const renderProcessSetting = () => {
+        const cells = [];
+        period.settings.map(item => {
+            cells.push(
+                <Cell key={`${item.periodId}-${item.processId}-fromdate`} className="text-center">
+                    {dayjs(item.fromDate).format(DateFormat)}
+                </Cell>
+            );
+            cells.push(
+                <Cell key={`${item.periodId}-${item.processId}-todate`} className="text-center">
+                    {dayjs(item.toDate).format(DateFormat)}
+                </Cell>
+            );
+        });
+
+        return cells;
     };
-    const handleUpdatePeriod = () => {
-        if (window.hasHostPermissionOnEmployee) {
-            getPeriodInfosById({
-                periodId: period.periodId
-            });
-        }
-    };
+
     return (
         <Row>
-            <Cell key={period.rowNum} className="text-center">{period.rowNum}</Cell>
-            <Cell key={period.name} className="text-center">{period.name}</Cell>
-            {dateProcessSettings}
-            <Cell key={`${period.name + period.isActive}`} className="text-center">
+            <Cell className="text-center">{rowIndex}</Cell>
+            <Cell>{period.name}</Cell>
+            {renderProcessSetting()}
+            <Cell className="text-center">
                 <input type='checkbox'
-                    checked={isActive} disabled={!window.hasHostPermissionOnEmployee}
+                    checked={isActive} disabled={!window.hasHostPermissionOnPeriod}
                     onChange={handleChangeStatus}
                 />
             </Cell>
             {
-                window.hasHostPermissionOnEmployee &&
-                <Cell key={`${period.name} -action`} className="text-center">
-                    <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} ></a>
-                    <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod}></a>
+                window.hasHostPermissionOnPeriod &&
+                <Cell className="text-center">
+                    <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} />
+                    <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod} />
                 </Cell>
             }
         </Row>

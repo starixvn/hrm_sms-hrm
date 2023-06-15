@@ -4,13 +4,12 @@
     using System.Collections.Generic;
 
     [Serializable]
-    public class PeriodInfo
+    public class ManpowerPeriod
     {
-        public int RowNum { get; set; }
-        public int PeriodId { get; set; }
+        public short PeriodId { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
-        public IList<PeriodProcessSettingInfo> Settings { get; set; } = new List<PeriodProcessSettingInfo>();
+        public IList<MapnowerPeriodProcessSetting> Settings { get; set; } = new List<MapnowerPeriodProcessSetting>();
     }
 }

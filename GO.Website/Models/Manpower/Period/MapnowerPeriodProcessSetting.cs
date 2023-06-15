@@ -1,15 +1,15 @@
 ﻿namespace GO.Website.Models.Manpower.Period
 {
-    using GO.Core.Extensions.XML;
     using System;
     using System.Xml.Serialization;
+    using GO.Core.Extensions.XML;
 
     [Serializable]
     [XMLName("Row")]
-    public class PeriodProcessSettingInfo
+    public class MapnowerPeriodProcessSetting
     {
         [XmlIgnore]
-        public int PeriodId { get; set; }
+        public short PeriodId { get; set; }
 
         public byte ProcessId { get; set; }
         public DateTime FromDate { get; set; }
