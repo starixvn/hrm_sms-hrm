@@ -7,18 +7,16 @@ export const validateFormik = values => {
         errors.name = LangHelper.formatString(
             LangHelper.getResource('FieldRequired'),
             LangHelper.getResource('Name'));
-    } else {
-        if (values.name.trim().length > 100) {
-            errors.name = LangHelper.formatString(
-                LangHelper.getResource('FieldMaxLength'),
-                LangHelper.getResource('Name'),
-                100);
-        }
+    } else if (values.name.trim().length > 100) {
+        errors.name = LangHelper.formatString(
+            LangHelper.getResource('FieldMaxLength'),
+            LangHelper.getResource('Name'),
+            100);
     }
 
     if (!values.toDateUnitHead || !values.fromDateUnitHead) {
         errors.unitHead = LangHelper.formatString(
-            LangHelper.getResource('FieldRequired'),
+            LangHelper.getResource('FieldDateRequired'),
             LangHelper.getResource('UnitHead'));
     } else if (values.fromDateUnitHead > values.toDateUnitHead ) {
         errors.unitHead = LangHelper.formatString(
@@ -28,7 +26,7 @@ export const validateFormik = values => {
 
     if (!values.fromDateVerifier || !values.toDateVerifier) {
         errors.verifier = LangHelper.formatString(
-            LangHelper.getResource('FieldRequired'),
+            LangHelper.getResource('FieldDateRequired'),
             LangHelper.getResource('Verifier'));
     } else if (values.fromDateVerifier > values.toDateVerifier) {
         errors.verifier = LangHelper.formatString(
@@ -38,12 +36,21 @@ export const validateFormik = values => {
 
     if (!values.fromDateApprover || !values.toDateApprover) {
         errors.approver = LangHelper.formatString(
-            LangHelper.getResource('FieldRequired'),
+            LangHelper.getResource('FieldDateRequired'),
             LangHelper.getResource('Approver'));
     } else if (values.fromDateApprover > values.toDateApprover) {
         errors.approver = LangHelper.formatString(
             LangHelper.getResource('ErrorDateRange'),
             LangHelper.getResource('Approver'));
+    }
+
+    if (values.fromDateVerifier < values.toDateVerifier ||
+        values.toDateVerifier < values.toDateVerifier) {
+        errors.verifier = LangHelper.getResource('ErrorVerifyDateRange')
+    }
+    if (values.fromDateApprover < values.fromDateVerifier ||
+        values.toDateApprover < values.toDateVerifier) {
+        errors.approver = LangHelper.getResource('ErrorApproveDateRange')
     }
 
     return errors;
