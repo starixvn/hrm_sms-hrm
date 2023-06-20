@@ -1,0 +1,75 @@
+@import '../../../components/buttons';
+@import '../../../components/react-grid/react-grid';
+@import '../../../components/tables';
+
+.manpower-forecast {
+    display: flex;
+    width: max-content;
+    margin-right: 0;
+    margin-left: 0;
+
+    .col-company {
+        display: flex;
+        width: 650px;
+        height: 865px;
+
+        .table-company {
+            width: 650px;
+            margin: 10px 20px 0 0px;
+            float: right;
+
+            th {
+                border-left-color: #b7b7b7 !important;
+                width: max-content;
+            }
+
+            td {
+                height: 20px;
+                text-align: center;
+                color: black !important;
+                background: unset !important;
+                padding: 2px 5px !important;
+                width: max-content;
+            }
+        }
+    }
+
+
+    .col-unit {
+        display: flex;
+        width: 450px;
+        margin: 10px 20px 0 0px;
+
+        .table-unit {
+            th {
+                background: #FFD966 !important;
+                color: black !important;
+                border-left-color: #b7b7b7 !important;
+                height: 111px;
+                width: max-content;
+            }
+
+            td {
+                height: 20px;
+                text-align: center;
+                color: black !important;
+                background: unset !important;
+                padding: 2px 5px !important;
+                width: max-content;
+            }
+
+            .jobLevel {
+                width: 18%;
+                background: #FFE699 !important;
+            }
+
+            .data-unit {
+                background: #FFE699 !important;
+            }
+
+            .data-section {
+                background: #FFF2CC !important;
+            }
+        }
+    }
+}
