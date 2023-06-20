@@ -26,5 +26,9 @@
         public string DepartmentName { get; set; }
         public string UnitCode { get; set; }
         public string UnitName { get; set; }
+
+        public DateTime JoinedDate { get; set; }
+        public DateTime ConfirmedDate { get; set; }
+        public DateTime ResignedDate { get; set; }
     }
 }

@@ -197,6 +197,7 @@ namespace GO.Website
             services.AddSingleton<IUnitHeadService, UnitHeadService>();
             services.AddSingleton<ITodolistService, TodolistService>();
             services.AddSingleton<IFeedbackService, FeedbackService>();
+            services.AddSingleton<IManpowerForecastService, ManpowerForecastService>();
         }
     }
 }
