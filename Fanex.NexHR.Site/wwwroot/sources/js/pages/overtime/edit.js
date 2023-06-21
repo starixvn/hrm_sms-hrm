@@ -76,12 +76,35 @@ $(document).ready(function () {
         } else {
             $('input.remark').each(function () {
                 let row = $(this).closest('tr');
-                const normalHours = parseFloat(row.find('input.normalHours').val()) || 0;
-                const specialHours = parseFloat(row.find('input.specialHours').val()) || 0;
+                const workDate = row.find('.workdate').data('workdate');
+                const workingHours = parseFloat($('#WorkingHours').val());
+                const totalHours = parseFloat(row.find('.totalHours').html().trim());
 
-                if (normalHours !== 0 && specialHours !== 0) {
-                    toastr.error('Can not claim both normal and special.', '', toastOptions());
-                    isValid = false;
+                if (row.find('input.normalHours').length > 0
+                    || (row.find('input.specialHours').length > 0 && row.find('input.specialHours.specialPH').length === 0)) {
+                    const maxOTHours = parseFloat((totalHours - workingHours + 0.09).toFixed(2));
+                    const normalHours = parseFloat(row.find('input.normalHours').val()) || 0,
+                        specialHours = parseFloat(row.find('input.specialHours').val()) || 0;
+
+                    if (normalHours !== 0 && specialHours !== 0) {
+                        toastr.error('Can not claim both normal and special.', '', toastOptions());
+                        isValid = false;
+                    } else {
+                        if (normalHours > maxOTHours || specialHours > maxOTHours) {
+                            toastr.error(`Invalid input on ${workDate}`, '', toastOptions());
+                            isValid = false;
+                        }
+                    }
+                } else {
+                    const maxOTHours = parseFloat((totalHours + 0.09).toFixed(2));
+                    const offHours = parseFloat(row.find('input.offHours').val()) || 0,
+                        publicHours = parseFloat(row.find('input.publicHours').val()) || 0,
+                        specialHours = parseFloat(row.find('input.specialHours').val()) || 0;
+
+                    if (offHours > maxOTHours || publicHours > maxOTHours || specialHours > maxOTHours) {
+                        toastr.error(`Invalid input on ${workDate}`, '', toastOptions());
+                        isValid = false;
+                    }
                 }
             });
         }
