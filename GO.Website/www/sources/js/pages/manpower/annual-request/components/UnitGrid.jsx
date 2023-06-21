@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 
 import LangHelper from '@jsroot/common/langHelper';
 
-const UnitGrid = ({ units, department, section, jobLevel }) => {
-    const renderJobLevel = () => {
+const UnitGrid = ({ units }) => {
+    const renderJobLevel = itemSection => {
         const cellJobLevel = [];
-        jobLevel.map(itemJobLevel => {
+        itemSection.jobLevels.map(itemJobLevel => {
             cellJobLevel.push(
-                <tr>
-                    <td>{itemJobLevel.jobLevelName}</td>
+                <tr key={`columnJobLevel-${itemSection.sectionName + itemJobLevel}`}>
+                    <td>{itemJobLevel}</td>
                 </tr>
             );
         });
         cellJobLevel.push(
-            <tr>
+            <tr key={`columnJobLevelToTal-${itemSection.sectionName}`}>
                 <td className="data-section"></td>
             </tr>
         );
@@ -25,13 +25,14 @@ const UnitGrid = ({ units, department, section, jobLevel }) => {
         let rowSpanDepartment = 2;
         const rowSpanSection = 10;
         const cellSections = [];
-        section.map(itemSection => {
+        itemDepartment.sections.map(itemSection => {
             if (itemSection.departmentId === itemDepartment.departmentId) {
                 rowSpanDepartment += rowSpanSection;
-                const cellJobLevel = renderJobLevel();
+                const cellJobLevel = renderJobLevel(itemSection);
                 cellSections.push(
-                    <tr>
-                        <td rowSpan={rowSpanSection} className="data-section">{itemSection.sectionName}</td>
+                    <tr key={`columnSection-${itemDepartment.departmentName + itemSection.sectionName}`}>
+                        <td rowSpan={rowSpanSection}
+                            className="data-section">{itemSection.sectionName}</td>
                     </tr>
                 );
                 cellSections.push(cellJobLevel);
@@ -43,17 +44,18 @@ const UnitGrid = ({ units, department, section, jobLevel }) => {
     const renderDepartment = itemUnit => {
         let rowSpanUnit = 4;
         const cellDepartments = [];
-        department.map(itemDepartment => {
+        itemUnit.departments.map(itemDepartment => {
             if (itemDepartment.unitId === itemUnit.unitId) {
                 const { cellSections, rowSpanDepartment } = renderSection(itemDepartment);
                 cellDepartments.push(
-                    <tr>
-                        <td rowSpan={rowSpanDepartment} className="data-unit">{itemDepartment.departmentName}</td>
+                    <tr key={`columnDeparment-${itemUnit.unitName + itemDepartment.departmentName}`}>
+                        <td rowSpan={rowSpanDepartment}
+                            className="data-unit">{itemDepartment.departmentName}</td>
                     </tr>
                 );
                 cellDepartments.push(cellSections);
                 cellDepartments.push(
-                    <tr className="data-section data-unit">
+                    <tr key={`columnTotal-${itemUnit.unitName + itemDepartment.departmentName}`} className="data-section data-unit">
                         <td>{LangHelper.getResource('Total')}</td>
                         <td></td>
                     </tr>
@@ -69,7 +71,7 @@ const UnitGrid = ({ units, department, section, jobLevel }) => {
         units.map(itemUnit => {
             const { cellDepartments, rowSpanUnit } = renderDepartment(itemUnit);
             cells.push(
-                <tr>
+                <tr key = {`columnUnit-${itemUnit.unitName}`}>
                     <td rowSpan={rowSpanUnit} className="data-unit" >{itemUnit.unitName}</td>
                 </tr>
             );
@@ -96,8 +98,8 @@ const UnitGrid = ({ units, department, section, jobLevel }) => {
 };
 
 const mapStateToProps = state => {
-    const { units, department, section, jobLevel } = state;
-    return { units, department, section, jobLevel };
+    const { units } = state;
+    return { units };
 };
 
 export default connect(mapStateToProps, null)(UnitGrid);

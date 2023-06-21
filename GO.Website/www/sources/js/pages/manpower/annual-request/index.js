@@ -5,10 +5,10 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import Layout from '@jsroot/components/Layout';
 import AppContainer from './components/AppContainer';
-import forecastSlice from './forecastSlice';
+import annualRequestSlice from './annualRequestSlice';
 
 const store = configureStore({
-    reducer: forecastSlice
+    reducer: annualRequestSlice
 });
 
 const root = createRoot(document.getElementById('app-container'));

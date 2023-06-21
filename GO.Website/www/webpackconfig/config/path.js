@@ -14,7 +14,7 @@ const cssPaths = {
     manpower_employee_index: ['./www/sources/css/pages/manpower/employee.scss'],
     manpower_period_index: ['./www/sources/css/pages/manpower/period/index.scss'],
     manpower_flow_index: ['./www/sources/css/pages/manpower/flow.scss'],
-    manpower_forecast_index: ['./www/sources/css/pages/manpower/forecast/index.scss']
+    manpower_forecast_index: ['./www/sources/css/pages/manpower/annual-request/index.scss']
 };
 
 const scriptPaths = {
@@ -29,7 +29,7 @@ const scriptPaths = {
     manpower_employee_index: ['./www/sources/js/pages/manpower/employee/index.js'],
     manpower_period_index: ['./www/sources/js/pages/manpower/period/index.js'],
     manpower_flow_index: ['./www/sources/js/pages/manpower/flow/index.js'],
-    manpower_forecast_index: ['./www/sources/js/pages/manpower/forecast/index.js']
+    manpower_forecast_index: ['./www/sources/js/pages/manpower/annual-request/index.js']
 };
 
 module.exports = {

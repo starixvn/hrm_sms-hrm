@@ -307,7 +307,6 @@ input[type=checkbox]:disabled {
   text-align: center;
 }
 .table thead tr td:first-child, .table thead tr th:first-child {
-  border-top: 0;
   border-left: 0;
 }
 .table tbody tr td {
@@ -325,7 +324,6 @@ input[type=checkbox]:disabled {
 }
 .manpower-forecast .col-company {
   display: flex;
-  width: 650px;
   height: 865px;
 }
 .manpower-forecast .col-company .table-company {
