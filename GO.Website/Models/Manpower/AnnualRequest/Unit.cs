@@ -6,6 +6,5 @@
     {
         public string UnitName { get; set; }
         public IEnumerable<Department> Departments { get; set; }
-        public IEnumerable<string> Companies { get; set; }
     }
 }

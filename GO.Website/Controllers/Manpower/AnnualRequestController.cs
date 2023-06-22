@@ -1,4 +1,7 @@
-﻿using GO.Core.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using GO.Core.Services;
 using GO.Website.Constants;
 using GO.Website.Models.Manpower;
 using GO.Website.Models.Manpower.AnnualRequest;
@@ -6,9 +9,6 @@ using GO.Website.Services;
 using HRM.UserControl.Client.Core.Enumerables;
 using HRM.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GO.Website.Controllers.Manpower
 {
@@ -39,9 +39,30 @@ namespace GO.Website.Controllers.Manpower
         public async Task<IActionResult> GetDataForCreateAnnualRequest()
         {
             (var period, var annualRequestFormDetails) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId);
-            var companies = annualRequestFormDetails.Select(x => x.CompanyName).Distinct().ToList();
+            var companies = GetCompanies(annualRequestFormDetails);
             var units = GetUnits(annualRequestFormDetails);
             return Json(new { period, units, annualRequestFormDetails, companies });
+        }
+
+        private static IList<Company> GetCompanies(IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
+        {
+            var companies = new List<Company>();
+
+            foreach (var item in annualRequestFormDetails)
+            {
+                var IsValidCompany = companies.Where(x => x.Name == item.CompanyName).ToList();
+                if (!IsValidCompany.Any())
+                {
+                    companies.Add(new Company()
+                    {
+                        Name = item.CompanyName,
+                        Units = annualRequestFormDetails.Where(x => x.CompanyName == item.CompanyName).Select(y => y.UnitName).Distinct().ToList(),
+                        Departments = annualRequestFormDetails.Where(x => x.CompanyName == item.CompanyName).Select(y => y.DepartmentName).Distinct().ToList(),
+                        Sections = annualRequestFormDetails.Where(x => x.CompanyName == item.CompanyName).Select(y => y.SectionName).Distinct().ToList()
+                    });
+                }
+            }
+            return companies;
         }
 
         private static IList<Unit> GetUnits(IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
@@ -55,8 +76,7 @@ namespace GO.Website.Controllers.Manpower
                     units.Add(new Unit()
                     {
                         UnitName = item.UnitName,
-                        Departments = GetDepartments(item.UnitName, annualRequestFormDetails),
-                        Companies = annualRequestFormDetails.Where(y => y.UnitName == item.UnitName).Select(x => x.CompanyName).Distinct().ToList()
+                        Departments = GetDepartments(item.UnitName, annualRequestFormDetails)
                     });
                 }
             }

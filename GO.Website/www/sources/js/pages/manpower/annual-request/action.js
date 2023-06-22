@@ -4,7 +4,8 @@ import {
     setUnits,
     setPeriod,
     setCompanies,
-    setAnnualRequestFormDetails
+    setAnnualRequestFormDetails,
+    addAnnualRequestFormDetailsItem
 } from './/annualRequestSlice';
 
 const getDataForCreateAnnualRequest = () => async dispatch => {
@@ -23,5 +24,6 @@ export const ActionCreators = {
     setPeriod,
     setCompanies,
     setAnnualRequestFormDetails,
+    addAnnualRequestFormDetailsItem,
     getDataForCreateAnnualRequest
 };

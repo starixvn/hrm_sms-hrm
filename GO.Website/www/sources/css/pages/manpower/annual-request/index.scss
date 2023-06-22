@@ -2,6 +2,8 @@
 @import '../../../components/react-grid/react-grid';
 @import '../../../components/tables';
 
+
+
 .manpower-forecast {
     display: flex;
     width: max-content;
@@ -23,12 +25,24 @@
             }
 
             td {
-                height: 20px;
+                height: 25px;
                 text-align: center;
                 color: black !important;
                 background: unset !important;
                 padding: 2px 5px !important;
                 width: max-content;
+            }
+
+            .input-add {
+                height: 20px;
+                width: 25px;
+                text-align: center;
+                border-width: 0 0 1px 0;
+            }
+
+            .input-add:focus {
+                outline: none;
+                border-bottom: 1px solid rgba(81, 203, 238, 1);
             }
         }
     }
@@ -48,7 +62,7 @@
             }
 
             td {
-                height: 20px;
+                height: 25px;
                 text-align: center;
                 color: black !important;
                 background: unset !important;

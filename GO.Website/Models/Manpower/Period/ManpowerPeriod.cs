@@ -10,6 +10,8 @@
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
+        public int Year { get; set; }
+
         public IList<MapnowerPeriodProcessSetting> Settings { get; set; } = new List<MapnowerPeriodProcessSetting>();
     }
 }
