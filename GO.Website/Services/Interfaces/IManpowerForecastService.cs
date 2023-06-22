@@ -8,5 +8,7 @@
     public interface IManpowerForecastService
     {
         Task<(ManpowerPeriod, IEnumerable<AnnualRequestFormDetail>)> GetDataForCreateAnnualRequestAsync(int userId);
+
+        Task<AnnualRequestForm> GetAnnualRequestByIdAsync(int requestId);
     }
 }

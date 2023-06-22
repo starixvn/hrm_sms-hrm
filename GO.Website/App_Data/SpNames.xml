@@ -33,8 +33,8 @@
         <Setting Key="Manpower_Flow_Delete" SpName="Manpower_Flow_Delete" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Manpower forecast">
-        <Setting Key="Manpower_Employee_GetByPeriodId" SpName="Manpower_Employee_GetByPeriodId" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_AnnualRequestForm_GetDataForCreate" SpName="Manpower_AnnualRequestForm_GetDataForCreate" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_AnnualRequestForm_GetByRequestId" SpName="Manpower_AnnualRequestForm_GetByRequestId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Report">
         <Setting Key="Report_Manpower_Get" SpName="Report_Manpower_Get" DbName="bodb_IUC" Plain="0" />

@@ -24,31 +24,30 @@
             {
                 UserId = userId
             };
-            (var periods, var details, var jlmappings) = await baseService.FetchMultipleAsync<ManpowerPeriod, AnnualRequestFormDetail, JobLevelMapping>(criteria);
+            (var periods, var details) = await baseService.FetchMultipleAsync<ManpowerPeriod, AnnualRequestFormDetail>(criteria);
             if (periods.Any())
             {
                 period = periods.First();
-                IEnumerable<EmployeeInfo> employees = await GetEmployeeByPeriodAsync(period.PeriodId);
-                foreach (var detail in details)
-                {
-                    var joblevels = jlmappings.Where(x => x.Parent == detail.JobLevel).ToList();
-                    var emps = employees.Where(x => x.SectionName == detail.SectionName && joblevels.Any(jl => jl.Child == x.JobLevel)).ToList();
-
-                    detail.LocalCurrentHeadcount = emps.Count(x => x.IsLocal);
-                    detail.ExpatCurrentHeadcount = emps.Count(x => !x.IsLocal);
-                }
             }
 
             return (period, details);
         }
 
-        protected virtual async Task<IEnumerable<EmployeeInfo>> GetEmployeeByPeriodAsync(short periodId)
+        public async Task<AnnualRequestForm> GetAnnualRequestByIdAsync(int requestId)
         {
-            var criteria = new GetEmployeeByPeriodCriteria
+            AnnualRequestForm request = null;
+               var criteria = new GetAnnualRequestByIdCriteria
             {
-                PeriodId = periodId
+                RequestId = requestId
             };
-            return await baseService.GetDataAsync<EmployeeInfo>(criteria);
+            (var requests, var details) = await baseService.FetchMultipleAsync<AnnualRequestForm, AnnualRequestFormDetail>(criteria);
+            if (requests.Any())
+            {
+                request = requests.First();
+                request.Details = details.ToList();
+            }
+
+            return request;
         }
     }
 }

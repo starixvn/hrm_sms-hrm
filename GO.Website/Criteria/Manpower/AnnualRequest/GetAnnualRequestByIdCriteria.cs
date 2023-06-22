@@ -1,0 +1,13 @@
+﻿namespace GO.Website.Criteria.Manpower
+{
+    using Fanex.Data.Repository;
+
+    public class GetAnnualRequestByIdCriteria : CriteriaBase
+    {
+        public int RequestId { get; set; }
+
+        public override string GetSettingKey() => "Manpower_AnnualRequestForm_GetByRequestId";
+
+        public override bool IsValid() => RequestId > 0;
+    }
+}
