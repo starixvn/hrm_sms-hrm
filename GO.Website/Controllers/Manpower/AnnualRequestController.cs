@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.Core.Models;
 using GO.Core.Services;
 using GO.Website.Constants;
 using GO.Website.Models.Manpower;
@@ -44,6 +45,25 @@ namespace GO.Website.Controllers.Manpower
             return Json(new { period, units, annualRequestFormDetails, companies });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateAnnualManpowerForecastRequestParam param)
+        {
+            CommandResult commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
+            return Json(commandResult);
+        }
+
+        public IActionResult MyRequest()
+        {
+            return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetMyRequest()
+        {
+            var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
+            return Json(requests);
+        }
+
         private static IList<Company> GetCompanies(IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
         {
             var companies = new List<Company>();
@@ -65,7 +85,8 @@ namespace GO.Website.Controllers.Manpower
             return companies;
         }
 
-        private static IList<Unit> GetUnits(IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
+        private static IList<Unit> GetUnits(IEnumerable<AnnualManpowerForecastRequestDetail> annualRequestFormDetails)
+
         {
             var units = new List<Unit>();
             foreach (var item in annualRequestFormDetails)
@@ -83,7 +104,7 @@ namespace GO.Website.Controllers.Manpower
             return units;
         }
 
-        private static IList<Department> GetDepartments(string unitName, IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
+        private static IList<Department> GetDepartments(string unitName, IEnumerable<AnnualManpowerForecastRequestDetail> annualRequestFormDetails)
         {
             var deparments = new List<Department>();
             foreach (var item in annualRequestFormDetails)
@@ -102,7 +123,7 @@ namespace GO.Website.Controllers.Manpower
             return deparments;
         }
 
-        private static IList<Section> GetSection(string unitName, string departmentName, IEnumerable<AnnualRequestFormDetail> annualRequestFormDetails)
+        private static IList<Section> GetSection(string unitName, string departmentName, IEnumerable<AnnualManpowerForecastRequestDetail> annualRequestFormDetails)
         {
             var sections = new List<Section>();
             foreach (var item in annualRequestFormDetails)

@@ -5,13 +5,13 @@
     using GO.Website.Models.Manpower.Period;
 
     [Serializable]
-    public class AnnualRequestForm
+    public class AnnualManpowerForecastRequest
     {
         public int RequestId { get; set; }
         public byte StatusId { get; set; }
 
         public ManpowerPeriod Period { get; set; }
 
-        public IList<AnnualRequestFormDetail> Details { get; set; }
+        public IList<AnnualManpowerForecastRequestDetail> Details { get; set; }
     }
 }

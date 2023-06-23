@@ -20,17 +20,24 @@ const siteSlice = createSlice({
         },
         addFlowItem: (state, action) => {
             const { processId, employee } = action.payload;
-            const index = state.flows.findIndex(x => x.processId === processId && x.siteId === employee.siteId && x.empId === employee.empId);
+            const flow = {
+                processId,
+                siteId: employee.siteId,
+                siteName: employee.siteName,
+                empId: employee.empId,
+                code: employee.code,
+                nickname: employee.nickname,
+                fullName: employee.fullName,
+                isActive: employee.isActive,
+                isDeleted: employee.isDeleted
+            };
+            const index = state.flows.findIndex(x => x.processId === processId);
             if (index < 0) {
-                state.flows.push({
-                    processId,
-                    siteId: employee.siteId,
-                    siteName: employee.siteName,
-                    empId: employee.empId,
-                    code: employee.code,
-                    nickname: employee.nickname,
-                    fullName: employee.fullName
-                });
+                state.flows.push(flow);
+            } else {
+                if (state.flows[index].siteId !== employee.siteId || state.flows[index].empId !== employee.empId) {
+                    state.flows[index] = flow;
+                }
             }
         },
         removeFlowItem: (state, action) => {

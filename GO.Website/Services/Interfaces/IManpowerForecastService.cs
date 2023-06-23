@@ -2,13 +2,18 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using GO.Core.Models;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.Period;
 
     public interface IManpowerForecastService
     {
-        Task<(ManpowerPeriod, IEnumerable<AnnualRequestFormDetail>)> GetDataForCreateAnnualRequestAsync(int userId);
+        Task<(ManpowerPeriod, IEnumerable<AnnualManpowerForecastRequestDetail>)> GetDataForCreateAnnualRequestAsync(int userId);
 
-        Task<AnnualRequestForm> GetAnnualRequestByIdAsync(int requestId);
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetMyAnnualRequestAsync(int userId);
+
+        Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(int requestId);
+
+        Task<CommandResult> CreateAnnualRequestAsync(int userId, CreateAnnualManpowerForecastRequestParam param);
     }
 }

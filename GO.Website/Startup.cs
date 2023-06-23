@@ -20,6 +20,7 @@ namespace GO.Website
     using GO.Website.Hubs;
     using GO.Website.Middlewares;
     using GO.Website.Models;
+    using GO.Website.Repositories;
     using GO.Website.Services;
     using HRM.UserControl.Client.AspNetCore.Configurations;
     using HRM.UserControl.Client.AspNetCore.Session;
@@ -192,6 +193,8 @@ namespace GO.Website
             services.AddSingleton<IFunctionService, FunctionService>();
 
             services.AddSingleton<IBaseRepository, BaseRepository>();
+            services.AddSingleton<IManpowerForecastRepository, ManpowerForecastRepository>();
+
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IExportExcelService, ExportExcelService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();

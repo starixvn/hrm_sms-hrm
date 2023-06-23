@@ -16,6 +16,8 @@
         public string FullName { get; set; }
         public string JobLevel { get; set; }
         public bool IsLocal { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public bool IsExcluded { get; set; }
 
         public string TeamCode { get; set; }

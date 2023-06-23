@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetDataForCreateAnnualRequestCriteria : CriteriaBase
+    public class GetDataForCreateAnnualManpowerForecastRequestCriteria : CriteriaBase
     {
         public int UserId { get; set; }
 
