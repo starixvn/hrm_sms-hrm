@@ -15,7 +15,7 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
             jobLevel: itemDetail.jobLevel,
             companyName: itemDetail.companyName,
             columnName: columnName,
-            value: value
+            value: value === '' ? 0 : parseInt(value, 10)
         };
         addAnnualRequestFormDetailsItem({ param });
     };
@@ -69,15 +69,17 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
                 <td className="data-total">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
                     <input className="input-add" type="number"
+                        min={0}
                         onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'expatAddition')}
                         value={itemDetail.expatAddition}></input>
                 </td>
                 <td>
                     <input className="input-add" type="number"
+                        min={0}
                         onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'localAddition')}
                         value={itemDetail.localAddition}></input>
                 </td>
-                <td className="data-total">{checkZero(itemDetail.expatAddition + itemDetail.localAddition)}</td>
+                <td className="data-total">{checkZero(itemDetail.totalAddition)}</td>
                 <td>{checkZero(itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount)}</td>
                 <td>{checkZero(itemDetail.localCurrentHeadcount + itemDetail.localApprovedHeadcount)}</td>
                 <td className="data-total">{checkZero(itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount +

@@ -42,7 +42,7 @@ const UnitGrid = ({ units }) => {
     };
 
     const renderDepartment = itemUnit => {
-        let rowSpanUnit = 4;
+        let rowSpanUnit = 3;
         const cellDepartments = [];
         itemUnit.departments.map(itemDepartment => {
             if (itemDepartment.unitId === itemUnit.unitId) {
