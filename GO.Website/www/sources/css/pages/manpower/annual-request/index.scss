@@ -1,10 +1,19 @@
+@import "~react-toastify/dist/ReactToastify.css";
 @import '../../../components/buttons';
 @import '../../../components/react-grid/react-grid';
 @import '../../../components/tables';
+@import '../../../components/form-filter';
+@import '../../../components/forms';
+@import '../../../components/react-select';
 
-#app-container {
+.request-form {
     overflow: auto;
-    height: 86.5vh;
+    height: 81.5vh;
+    margin-top: 10px;
+}
+
+.btn--submit{
+    margin: 5px;
 }
 
 .manpower-forecast {
@@ -19,7 +28,7 @@
 
         .table-company {
             width: 650px;
-            margin: 10px 20px 0 0px;
+            margin-right: 20px;
             float: right;
 
             th {
@@ -38,8 +47,7 @@
 
             thead {
                 position: sticky;
-                top: -1px;
-                background: #b7b7b7;
+                top: 0px;
             }
 
             .input-add {
@@ -67,7 +75,7 @@
     .col-unit {
         display: flex;
         width: 450px;
-        margin: 10px 20px 0 0px;
+        margin-right: 20px;
 
         .table-unit {
             th {
@@ -77,7 +85,7 @@
                 height: 111px;
                 width: max-content;
                 position: sticky;
-                top: -1px;
+                top: 0px;
             }
 
             td {

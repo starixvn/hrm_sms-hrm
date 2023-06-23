@@ -1,5 +1,7 @@
 ﻿import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
+import { toast } from 'react-toastify';
+
 import {
     setUnits,
     setPeriod,
@@ -19,11 +21,24 @@ const getDataForCreateAnnualRequest = () => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const createAnnualRequest = params => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl('Manpower/AnnualRequest/Create');
+    await DataService.postDataAsync(url, params).then(response => {
+        if (response.data.isSuccessful) {
+            toast.success('Update successfully!');
+        } else {
+            toast.error(response.data.message);
+        }
+    }).then(() => Site.unblockUI());
+};
+
 export const ActionCreators = {
     setUnits,
     setPeriod,
     setCompanies,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem,
-    getDataForCreateAnnualRequest
+    getDataForCreateAnnualRequest,
+    createAnnualRequest
 };

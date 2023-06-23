@@ -6,7 +6,6 @@ import { ActionCreators } from '../action';
 
 const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem }) => {
     const checkZero = number => number !== 0 ? number : '';
-
     const handleAddAnnualRequestFormDetailsItem = (value, columnName) => {
         const param = {
             unitName: itemDetail.unitName,
@@ -15,7 +14,7 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
             jobLevel: itemDetail.jobLevel,
             companyName: itemDetail.companyName,
             columnName: columnName,
-            value: value === '' ? 0 : parseInt(value, 10)
+            value: (value === '' || parseInt(value, 10) < 0 )? 0 : parseInt(value, 10)
         };
         addAnnualRequestFormDetailsItem({ param });
     };
@@ -68,22 +67,21 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
                 <td>{checkZero(itemDetail.localApprovedHeadcount)}</td>
                 <td className="data-total">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
-                    <input className="input-add" type="number"
-                        min={0}
+                    <input className="input-add" type="number" min={0}
                         onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'expatAddition')}
-                        value={itemDetail.expatAddition}></input>
+                        value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
                 </td>
                 <td>
                     <input className="input-add" type="number"
                         min={0}
                         onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'localAddition')}
-                        value={itemDetail.localAddition}></input>
+                        value={itemDetail.localAddition === 0 ? '' : itemDetail.localAddition}></input>
                 </td>
                 <td className="data-total">{checkZero(itemDetail.totalAddition)}</td>
-                <td>{checkZero(itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount)}</td>
-                <td>{checkZero(itemDetail.localCurrentHeadcount + itemDetail.localApprovedHeadcount)}</td>
-                <td className="data-total">{checkZero(itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount +
-                    itemDetail.localCurrentHeadcount + itemDetail.localApprovedHeadcount)}</td>
+                <td>{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
+                <td>{checkZero(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
+                <td className="data-total">{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
+                    itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
             </tr>
         );
     };

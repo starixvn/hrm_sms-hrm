@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
+import CompanyTotalGrid from './CompanyTotalGrid';
 
 const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => {
     const isValidDataDetail = (itemDetail, company, itemJobLevel) => itemDetail.jobLevel === itemJobLevel && itemDetail.companyName === company.name;
@@ -216,7 +217,7 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                             <th colSpan="12">{company.name}</th>
                         </tr>
                         <tr>
-                            <th colSpan="3">{LangHelper.getResource('CurrentHeadcount') + (period.year -1) }</th>
+                            <th colSpan="3">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
                             <th colSpan="3">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
                             <th colSpan="3">{LangHelper.getResource('Additional')}</th>
                             <th colSpan="3">{LangHelper.getResource('ForecastHeadcount') + period.year}</th>
@@ -242,6 +243,9 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                 </table>
             );
         });
+        if (companies.length > 1) {
+            tables.push(<CompanyTotalGrid key="renderCompanyTotalGrid" />);
+        }
         return tables;
     };
     return (

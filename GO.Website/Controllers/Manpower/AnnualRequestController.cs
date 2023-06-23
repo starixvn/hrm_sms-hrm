@@ -42,7 +42,7 @@ namespace GO.Website.Controllers.Manpower
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAnnualManpowerForecastRequestParam param)
+        public async Task<IActionResult> Create([FromBody] CreateAnnualManpowerForecastRequestParam param)
         {
             CommandResult commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
             return Json(commandResult);
