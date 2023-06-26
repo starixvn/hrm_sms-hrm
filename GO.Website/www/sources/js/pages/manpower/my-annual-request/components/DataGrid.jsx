@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import LangHelper from '@jsroot/common/langHelper';
@@ -42,7 +43,15 @@ const DataGrid = ({ requests }) => {
                     <Cell>{item.period.name}</Cell>
                     <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
-                        <i className="icon-edit fa fa-search"></i>
+                        <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
+                            overlay={
+                                <Tooltip id={`tooltip-request-${item.requestId}`}>
+                                    Detail
+                                </Tooltip>
+                            }
+                        >
+                            <i className="icon-edit fa fa-search" />
+                        </OverlayTrigger>
                     </Cell>
                 </Row>
             );
@@ -58,7 +67,7 @@ const DataGrid = ({ requests }) => {
     return (
         <div>
             <div className="table-title d-flex justify-content-between align-items-center">
-                <a className="mr-3 btn btn-primary btn-sm" href={Site.resolveClientUrl('Manpower/AnnualRequest/Create')}>
+                <a className="mr-3 btn btn-primary btn-sm" href={Site.resolveClientUrl('ManpowerForecast/AnnualRequest/Create')}>
                     {LangHelper.getResource('Create')}
                 </a>
             </div>

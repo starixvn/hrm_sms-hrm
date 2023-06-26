@@ -4,7 +4,6 @@ import DataGrid from './DataGrid';
 
 import DataService from '@jsroot/common/dataService';
 import Site from '@jsroot/common/site';
-import LangHelper from '@jsroot/common/langHelper';
 
 const AppContainer = () => {
     const [requests, setRequests] = useState([]);
@@ -12,7 +11,7 @@ const AppContainer = () => {
     useEffect(() => {
         const getRequests = async () => {
             Site.blockUI();
-            const url = Site.resolveClientUrl('Manpower/AnnualRequest/GetMyRequest');
+            const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMyRequest');
             await DataService.postDataAsync(url).then(response => {
                 setRequests(response.data);
             }).then(() => Site.unblockUI());

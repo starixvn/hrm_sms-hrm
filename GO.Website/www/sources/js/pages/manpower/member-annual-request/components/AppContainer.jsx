@@ -12,7 +12,7 @@ const AppContainer = () => {
 
     const getMemberRequests = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('Manpower/AnnualRequest/GetMemberRequests');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberRequests');
         await DataService.postDataAsync(url, params).then(response => {
             setRequests(response.data);
         }).then(() => Site.unblockUI());

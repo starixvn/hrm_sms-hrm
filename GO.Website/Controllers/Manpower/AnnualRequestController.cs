@@ -1,19 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GO.Admin.Website.Filters;
-using GO.Core.Models;
-using GO.Website.Constants;
-using GO.Website.Criteria.Manpower;
-using GO.Website.Models.Manpower;
-using GO.Website.Models.Manpower.AnnualRequest;
-using GO.Website.Services;
-using HRM.UserControl.Client.Core.Enumerables;
-using HRM.UserControl.Client.Core.Session;
-using Microsoft.AspNetCore.Mvc;
-
-namespace GO.Website.Controllers.Manpower
+﻿namespace GO.Website.Controllers.Manpower
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using GO.Admin.Website.Filters;
+    using GO.Core.Models;
+    using GO.Website.Constants;
+    using GO.Website.Criteria.Manpower;
+    using GO.Website.Models.Manpower;
+    using GO.Website.Models.Manpower.AnnualRequest;
+    using GO.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("ManpowerForecast/AnnualRequest/[action]")]
     [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
     public class AnnualRequestController : BaseController
