@@ -16,8 +16,15 @@
     margin: 5px;
 }
 
+.inValidPeriod {
+    margin-top: 10px;
+    .inValidPeriod-item{
+        width: 100%;
+        text-align: center;
+    }
+}
+
 .manpower-forecast {
-    display: flex;
     width: max-content;
     margin-right: 0;
     margin-left: 0;
@@ -29,11 +36,14 @@
         .table-company {
             width: 650px;
             margin-right: 20px;
-            float: right;
 
             th {
                 border-left-color: #b7b7b7 !important;
                 width: max-content;
+            }
+
+            thead tr {
+                box-shadow: 0 0 0 1px #ddd;
             }
 
             td {
@@ -47,7 +57,7 @@
 
             thead {
                 position: sticky;
-                top: 0px;
+                top: -1px;
             }
 
             .input-add {
@@ -70,12 +80,19 @@
                 margin: 0;
             }
         }
+
+        .table-company:last-child {
+            margin-right: 0px;
+        }
     }
 
     .col-unit {
-        display: flex;
         width: 450px;
         margin-right: 20px;
+        position: sticky;
+        left: 0px;
+        z-index: 2;
+        background: white;
 
         .table-unit {
             th {
@@ -85,7 +102,7 @@
                 height: 111px;
                 width: max-content;
                 position: sticky;
-                top: 0px;
+                top: -1px;
             }
 
             td {

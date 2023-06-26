@@ -47,9 +47,9 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
                 </div>
             }
             {
-                period != null &&
-                <div className="manpower-forecast row">
-                    hết hạn làm request rồi nhé
+                period == null &&
+                <div className="breadcrumb inValidPeriod">
+                    <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
                 </div>
             }
         </>

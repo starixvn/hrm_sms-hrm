@@ -12,14 +12,10 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
         const bodyJobLevel = [];
         itemSection.jobLevels.map(itemJobLevel => {
             annualRequestFormDetails.map(itemDetail => {
-                if (itemDetail.unitName === itemUnit.unitName &&
-                    itemDetail.departmentName === itemDepartment.departmentName &&
-                    itemDetail.sectionName === itemSection.sectionName &&
-                    itemDetail.jobLevel === itemJobLevel) {
-                    bodyJobLevel.push(
-                        <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}-${itemJobLevel}`}
-                            isRenderData={false} isRenderTotal={false}/>
-                    );
+                if (itemDetail.unitName === itemUnit.unitName && itemDetail.departmentName === itemDepartment.departmentName &&
+                    itemDetail.sectionName === itemSection.sectionName && itemDetail.jobLevel === itemJobLevel) {
+                    bodyJobLevel.push( <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}-${itemJobLevel}`}
+                            isRenderData={false} isRenderTotal={false}/>);
                 }
             });
         });
@@ -31,10 +27,8 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
         itemDepartment.sections.map(itemSection => {
             const bodyJobLevel = renderSectionNoneData(itemUnit, itemDepartment, itemSection);
             bodySection.push(bodyJobLevel);
-            bodySection.push(
-                <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
-                    isRenderData={false} isRenderTotal={false}/>
-            );
+            bodySection.push(<RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
+                    isRenderData={false} isRenderTotal={false}/>);
         });
         return bodySection;
     };
@@ -44,28 +38,17 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
         itemUnit.departments.map(itemDepartment => {
             const bodySection = renderDepartmentNoneData(itemUnit, itemDepartment);
             body.push(bodySection);
-            body.push(
-                <RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
-                    isRenderData={false} isRenderTotal={false} />
-            );
+            body.push(<RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`} isRenderData={false} isRenderTotal={false}/>);
         });
         return body;
     };
     const renderJoblevel = (itemUnit, itemDepartment, itemSection, company) => {
         const bodyJobLevel = [];
         let totalSection = {
-            expatCurrentHeadcount: 0,
-            localCurrentHeadcount: 0,
-            totalCurrentHeadcount: 0,
-            expatApprovedHeadcount: 0,
-            localApprovedHeadcount: 0,
-            totalApprovedHeadcount: 0,
-            expatAddition: 0,
-            localAddition: 0,
-            totalAddition: 0,
-            expatForecastHeadcount: 0,
-            localForecastHeadcount: 0,
-            totalForecastHeadcount: 0
+            expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
+            expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0,
+            expatAddition: 0, localAddition: 0, totalAddition: 0,
+            expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
         itemSection.jobLevels.map(itemJobLevel => {
             annualRequestFormDetails.map(itemDetail => {
@@ -100,18 +83,9 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
     const renderSection = (itemUnit, itemDepartment, company) => {
         const bodySection = [];
         let totalDepartment = {
-            expatCurrentHeadcount: 0,
-            localCurrentHeadcount: 0,
-            totalCurrentHeadcount: 0,
-            expatApprovedHeadcount: 0,
-            localApprovedHeadcount: 0,
-            totalApprovedHeadcount: 0,
-            expatAddition: 0,
-            localAddition: 0,
-            totalAddition: 0,
-            expatForecastHeadcount: 0,
-            localForecastHeadcount: 0,
-            totalForecastHeadcount: 0
+            expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
+            expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0, expatAddition: 0,
+            localAddition: 0, totalAddition: 0, expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
         itemDepartment.sections.map(itemSection => {
             if (isExistSection(company, itemSection)) {
@@ -132,17 +106,13 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                 };
 
                 bodySection.push(bodyJobLevel);
-                bodySection.push(
-                     <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
-                        total={totalSection} isRenderData={false} isRenderTotal={true}/>
-                );
+                bodySection.push( <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
+                        total={totalSection} isRenderData={false} isRenderTotal={true}/> );
             }
             else {
                 bodySection.push(renderSectionNoneData(itemUnit, itemDepartment, itemSection));
-                bodySection.push(
-                    <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
-                        isRenderData={false} isRenderTotal={false}/>
-                );
+                bodySection.push(<RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
+                        isRenderData={false} isRenderTotal={false}/>);
             }
         });
         return { totalDepartment, bodySection };
@@ -186,17 +156,13 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                     if (isExistDepartment(company, itemDepartment)) {
                         const { totalDepartment, bodySection } = renderSection(itemUnit, itemDepartment, company);
                         body.push(bodySection);
-                        body.push(
-                            <RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
-                                total={totalDepartment} isRenderData={false} isRenderTotal={true}/>
-                        );
+                        body.push(<RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
+                                total={totalDepartment} isRenderData={false} isRenderTotal={true}/>);
                     }
                     else {
                         body.push(renderDepartmentNoneData(itemUnit, itemDepartment));
-                        body.push(
-                            <RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
-                                isRenderData={false} isRenderTotal={false}/>
-                        );
+                        body.push(<RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
+                                isRenderData={false} isRenderTotal={false}/>);
                     }
                 });
             }
@@ -213,9 +179,7 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
             tables.push(
                 <table key={`tablecompany-${company.name}`} className="table table-bordered table-company">
                     <thead>
-                        <tr>
-                            <th colSpan="12">{company.name}</th>
-                        </tr>
+                        <tr><th colSpan="12">{company.name}</th></tr>
                         <tr>
                             <th colSpan="3">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
                             <th colSpan="3">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
@@ -237,9 +201,7 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                             <th>{LangHelper.getResource('Total')}</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {renderBodyTable(company)}
-                    </tbody>
+                    <tbody>{renderBodyTable(company)}</tbody>
                 </table>
             );
         });
@@ -249,9 +211,7 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
         return tables;
     };
     return (
-        <>
-            {renderTable()}
-        </>
+        <>{renderTable()}</>
     );
 };
 

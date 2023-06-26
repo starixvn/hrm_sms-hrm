@@ -24,6 +24,7 @@
     JobLevel: 'Job Level',
     Login: 'Login',
     Local: 'Local',
+    InValidPeriod: 'Sorry but now is not the time Annual Manpower Forecast Request!',
     Manpower: 'Manpower',
     ManpowerReport: 'Manpower Report',
     NextWeek: 'Next week',
