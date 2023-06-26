@@ -17,13 +17,14 @@ const annualRequestSlice = createSlice({
         },
         addAnnualRequestFormDetailsItem: (state, action) => {
             const { param } = action.payload;
+            const ColumnExpatAddition = 'expatAddition', ColumnLocalAddition = 'localAddition', ColumnTotalAddition = 'totalAddition';
             const index = state.annualRequestFormDetails.findIndex(x => x.unitName === param.unitName && x.departmentName === param.departmentName
                 && x.sectionName === param.sectionName && x.jobLevel === param.jobLevel && x.companyName === param.companyName);
             if (index >= 0 && index <= state.annualRequestFormDetails.length) {
                 state.annualRequestFormDetails[index][param.columnName] = param.value;
-                const expatAddition = state.annualRequestFormDetails[index]['expatAddition'];
-                const localAddition = state.annualRequestFormDetails[index]['localAddition'];
-                state.annualRequestFormDetails[index]['totalAddition'] = expatAddition + localAddition;
+                const expatAddition = state.annualRequestFormDetails[index][ColumnExpatAddition];
+                const localAddition = state.annualRequestFormDetails[index][ColumnLocalAddition];
+                state.annualRequestFormDetails[index][ColumnTotalAddition] = expatAddition + localAddition;
             }
         },
         setCompanies: (state, action) => {

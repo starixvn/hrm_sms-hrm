@@ -15,7 +15,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("ManpowerForecast/AnnualRequest/[action]")]
-    [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+    [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_AnnualRequest, Policy = Policy.Host)]
     public class AnnualRequestController : BaseController
     {
         private readonly IUserControlSession userControlSession;
