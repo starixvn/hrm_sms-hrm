@@ -69,10 +69,10 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                         expatAddition: totalSection.expatAddition + itemDetail.expatAddition,
                         localAddition: totalSection.localAddition + itemDetail.localAddition,
                         totalAddition: totalSection.totalAddition + itemDetail.totalAddition,
-                        expatForecastHeadcount: totalSection.expatForecastHeadcount + itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount,
-                        localForecastHeadcount: totalSection.localForecastHeadcount + itemDetail.localCurrentHeadcount + itemDetail.localApprovedHeadcount,
-                        totalForecastHeadcount: totalSection.totalForecastHeadcount + itemDetail.expatCurrentHeadcount + itemDetail.expatApprovedHeadcount
-                            + itemDetail.localCurrentHeadcount + itemDetail.localApprovedHeadcount
+                        expatForecastHeadcount: totalSection.expatForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount,
+                        localForecastHeadcount: totalSection.localForecastHeadcount + itemDetail.localAddition + itemDetail.localApprovedHeadcount,
+                        totalForecastHeadcount: totalSection.totalForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount
+                            + itemDetail.localAddition + itemDetail.localApprovedHeadcount
                     };
                 }
             });
@@ -177,28 +177,28 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
         const tables = [];
         companies.map(company => {
             tables.push(
-                <table key={`tablecompany-${company.name}`} className="table table-bordered table-company">
+                <table key={`tablecompany-${company.name}`} className={`table table-bordered table-company company-${company.name}`}>
                     <thead>
-                        <tr><th colSpan="12">{company.name}</th></tr>
+                        <tr><th colSpan="12" className="name">{company.name}</th></tr>
                         <tr>
-                            <th colSpan="3">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
-                            <th colSpan="3">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
-                            <th colSpan="3">{LangHelper.getResource('Additional')}</th>
-                            <th colSpan="3">{LangHelper.getResource('ForecastHeadcount') + period.year}</th>
+                            <th colSpan="3" className="highlight">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
+                            <th colSpan="3" className="highlight">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
+                            <th colSpan="3" className="highlight">{LangHelper.getResource('Additional')}</th>
+                            <th colSpan="3" className="highlight">{LangHelper.getResource('ForecastHeadcount') + period.year}</th>
                         </tr>
                         <tr>
-                            <th>{LangHelper.getResource('Expat')}</th>
-                            <th>{LangHelper.getResource('Local')}</th>
-                            <th>{LangHelper.getResource('Total')}</th>
-                            <th>{LangHelper.getResource('Total')}</th>
-                            <th>{LangHelper.getResource('Local')}</th>
-                            <th>{LangHelper.getResource('Total')}</th>
-                            <th>{LangHelper.getResource('Expat')}</th>
-                            <th>{LangHelper.getResource('Local')}</th>
-                            <th>{LangHelper.getResource('Total')}</th>
-                            <th>{LangHelper.getResource('Expat')}</th>
-                            <th>{LangHelper.getResource('Local')}</th>
-                            <th>{LangHelper.getResource('Total')}</th>
+                            <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                            <th className="highlight">{LangHelper.getResource('Local')}</th>
+                            <th className="highlight">{LangHelper.getResource('Total')}</th>
+                            <th className="highlight">{LangHelper.getResource('Total')}</th>
+                            <th className="highlight">{LangHelper.getResource('Local')}</th>
+                            <th className="highlight">{LangHelper.getResource('Total')}</th>
+                            <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                            <th className="highlight">{LangHelper.getResource('Local')}</th>
+                            <th className="highlight">{LangHelper.getResource('Total')}</th>
+                            <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                            <th className="highlight">{LangHelper.getResource('Local')}</th>
+                            <th className="highlight">{LangHelper.getResource('Total')}</th>
                         </tr>
                     </thead>
                     <tbody>{renderBodyTable(company)}</tbody>

@@ -10,9 +10,11 @@ import {
     addAnnualRequestFormDetailsItem
 } from './/annualRequestSlice';
 
+import LangHelper from '@jsroot/common/langHelper';
+
 const getDataForCreateAnnualRequest = () => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('Manpower/AnnualRequest/GetDataForCreateAnnualRequest');
+    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetDataForCreateAnnualRequest');
     await DataService.postDataAsync(url).then(response => {
         dispatch(setPeriod(response.data.period));
         dispatch(setAnnualRequestFormDetails(response.data.annualRequestFormDetails));
@@ -23,10 +25,10 @@ const getDataForCreateAnnualRequest = () => async dispatch => {
 
 const createAnnualRequest = params => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('Manpower/AnnualRequest/Create');
+    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/Create');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success('Update successfully!');
+            toast.success(LangHelper.getResource('CreateSuccessfully'));
         } else {
             toast.error(response.data.message);
         }

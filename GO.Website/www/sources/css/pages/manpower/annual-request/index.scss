@@ -40,6 +40,7 @@
             th {
                 border-left-color: #b7b7b7 !important;
                 width: max-content;
+                color: black;
             }
 
             thead tr {
@@ -50,7 +51,7 @@
                 height: 25px;
                 text-align: center;
                 color: black !important;
-                background: unset !important;
+                background: unset;
                 padding: 2px 5px !important;
                 width: max-content;
             }
@@ -126,6 +127,56 @@
             .data-section {
                 background: #FFF2CC !important;
             }
+        }
+    }
+
+    .company-CTI {
+        .name {
+            background: #a9d18e;
+        }
+
+        .highlight {
+            background: #e2f0d9 !important;
+        }
+    }
+
+    .company-Lexfin {
+        .name {
+            background: #87a3bd;
+        }
+
+        .highlight {
+            background: #bdd7ee !important;
+        }
+    }
+
+    .company-SMS {
+        .name {
+            background: #f8cbad;
+        }
+
+        .highlight {
+            background: #fbe5d6 !important;
+        }
+    }
+
+    .company-Nexcel {
+        .name {
+            background: #afabab;
+        }
+
+        .highlight {
+            background: #d0cece !important;
+        }
+    }
+
+    .company-Total {
+        .name {
+            background: #8faadc;
+        }
+
+        .highlight {
+            background: #dae3f3 !important;
         }
     }
 }

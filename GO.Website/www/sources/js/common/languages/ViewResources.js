@@ -43,6 +43,7 @@
     Update: '',
     Section: 'Section',
     SiteName: 'Site Name',
+    CreateSuccessfully: 'Create request successfully!',
     Save: 'Save',
     Cancel: 'Cancel',
     SymbolNo: '#',

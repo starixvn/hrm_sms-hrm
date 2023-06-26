@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.Admin.Website.Filters;
 using GO.Core.Models;
 using GO.Website.Constants;
 using GO.Website.Models.Manpower;
@@ -12,7 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GO.Website.Controllers.Manpower
 {
-    [Route("Manpower/AnnualRequest/[action]")]
+    [Route("ManpowerForecast/AnnualRequest/[action]")]
+    [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
     public class AnnualRequestController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -26,10 +28,10 @@ namespace GO.Website.Controllers.Manpower
             this.manpowerForecastService = manpowerForecastService;
         }
 
-        public IActionResult Index()
+        public IActionResult Create()
         {
             bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
-            return View("~/Views/Manpower/AnnualRequest/Index.cshtml", isHost);
+            return View("~/Views/Manpower/AnnualRequest/Create.cshtml", isHost);
         }
 
         [HttpPost]
@@ -69,7 +71,7 @@ namespace GO.Website.Controllers.Manpower
                 var IsValidCompany = companies.Where(x => x.Name == item.CompanyName).ToList();
                 if (!IsValidCompany.Any())
                 {
-                    companies.Add(new Company()
+                    companies.Add(new Company
                     {
                         Name = item.CompanyName,
                         Units = details.Where(x => x.CompanyName == item.CompanyName).Select(y => y.UnitName).Distinct().ToList(),

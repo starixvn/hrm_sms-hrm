@@ -72,7 +72,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
             };
             bodyJobLevel.push(
                 <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}-${itemJobLevel}`}
-                    total={totalJoblevel} isRenderData={false} isRenderTotal={true} />
+                    total={totalJoblevel} isRenderData={false} isRenderTotal={true} isTableTotal={true} />
             );
         });
         return { totalSection, bodyJobLevel };
@@ -137,30 +137,30 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
     const renderTable = () => {
         const tables = [];
         tables.push(
-            <table key={`tabletotalcompany`} className="table table-bordered table-company">
+            <table key={`tabletotalcompany`} className="table table-bordered table-company company-Total">
                 <thead>
                     <tr>
-                        <th colSpan="12">{LangHelper.getResource('Total')}</th>
+                        <th colSpan="12" className="name">{LangHelper.getResource('Total')}</th>
                     </tr>
                     <tr>
-                        <th colSpan="3">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
-                        <th colSpan="3">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
-                        <th colSpan="3">{LangHelper.getResource('Additional')}</th>
-                        <th colSpan="3">{LangHelper.getResource('ForecastHeadcount') + period.year}</th>
+                        <th colSpan="3" className="highlight">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
+                        <th colSpan="3" className="highlight">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
+                        <th colSpan="3" className="highlight">{LangHelper.getResource('Additional')}</th>
+                        <th colSpan="3" className="highlight">{LangHelper.getResource('ForecastHeadcount') + period.year}</th>
                     </tr>
                     <tr>
-                        <th>{LangHelper.getResource('Expat')}</th>
-                        <th>{LangHelper.getResource('Local')}</th>
-                        <th>{LangHelper.getResource('Total')}</th>
-                        <th>{LangHelper.getResource('Total')}</th>
-                        <th>{LangHelper.getResource('Local')}</th>
-                        <th>{LangHelper.getResource('Total')}</th>
-                        <th>{LangHelper.getResource('Expat')}</th>
-                        <th>{LangHelper.getResource('Local')}</th>
-                        <th>{LangHelper.getResource('Total')}</th>
-                        <th>{LangHelper.getResource('Expat')}</th>
-                        <th>{LangHelper.getResource('Local')}</th>
-                        <th>{LangHelper.getResource('Total')}</th>
+                        <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                        <th className="highlight">{LangHelper.getResource('Local')}</th>
+                        <th className="highlight">{LangHelper.getResource('Total')}</th>
+                        <th className="highlight">{LangHelper.getResource('Total')}</th>
+                        <th className="highlight">{LangHelper.getResource('Local')}</th>
+                        <th className="highlight">{LangHelper.getResource('Total')}</th>
+                        <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                        <th className="highlight">{LangHelper.getResource('Local')}</th>
+                        <th className="highlight">{LangHelper.getResource('Total')}</th>
+                        <th className="highlight">{LangHelper.getResource('Expat')}</th>
+                        <th className="highlight">{LangHelper.getResource('Local')}</th>
+                        <th className="highlight">{LangHelper.getResource('Total')}</th>
                     </tr>
                 </thead>
                 <tbody>

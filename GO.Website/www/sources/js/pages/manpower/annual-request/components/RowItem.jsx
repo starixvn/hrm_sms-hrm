@@ -4,8 +4,10 @@ import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../action';
 
-const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem }) => {
+const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal }) => {
+    const MaxAdditionalInput = 100;
     const checkZero = number => number !== 0 ? number : '';
+    const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
     const handleAddAnnualRequestFormDetailsItem = (value, columnName) => {
         const param = {
             unitName: itemDetail.unitName,
@@ -14,7 +16,7 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
             jobLevel: itemDetail.jobLevel,
             companyName: itemDetail.companyName,
             columnName: columnName,
-            value: (value === '' || parseInt(value, 10) < 0 )? 0 : parseInt(value, 10)
+            value: (value === '' || value < 0) ? 0 : checkMaxInput(value)
         };
         addAnnualRequestFormDetailsItem({ param });
     };
@@ -22,18 +24,18 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
     const renderTotalDetail = () => {
         return (
             <tr>
-                <td>{checkZero(total.expatCurrentHeadcount)}</td>
-                <td>{checkZero(total.localCurrentHeadcount)}</td>
-                <td className="data-total">{checkZero(total.totalCurrentHeadcount)}</td>
-                <td>{checkZero(total.expatApprovedHeadcount)}</td>
-                <td>{checkZero(total.localApprovedHeadcount)}</td>
-                <td className="data-total">{checkZero(total.totalApprovedHeadcount)}</td>
-                <td>{checkZero(total.expatAddition)}</td>
-                <td>{checkZero(total.localAddition)}</td>
-                <td className="data-total">{checkZero(total.totalAddition)}</td>
-                <td>{checkZero(total.expatForecastHeadcount)}</td>
-                <td>{checkZero(total.localForecastHeadcount)}</td>
-                <td className="data-total">{checkZero(total.totalForecastHeadcount)}</td>
+                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatCurrentHeadcount)}</td>
+                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.localCurrentHeadcount)}</td>
+                <td className="highlight">{checkZero(total.totalCurrentHeadcount)}</td>
+                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatApprovedHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localApprovedHeadcount)}</td>
+                <td className="highlight">{checkZero(total.totalApprovedHeadcount)}</td>
+                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatAddition)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localAddition)}</td>
+                <td className="highlight">{checkZero(total.totalAddition)}</td>
+                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatForecastHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localForecastHeadcount)}</td>
+                <td className="highlight">{checkZero(total.totalForecastHeadcount)}</td>
             </tr>
         );
     };
@@ -43,16 +45,16 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
             <tr>
                 <td></td>
                 <td></td>
-                <td className="data-total"></td>
                 <td></td>
                 <td></td>
-                <td className="data-total"></td>
                 <td></td>
                 <td></td>
-                <td className="data-total"></td>
                 <td></td>
                 <td></td>
-                <td className="data-total"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         );
     };
@@ -62,25 +64,25 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
             <tr>
                 <td>{checkZero(itemDetail.expatCurrentHeadcount)}</td>
                 <td>{checkZero(itemDetail.localCurrentHeadcount)}</td>
-                <td className="data-total">{checkZero(itemDetail.totalCurrentHeadcount)}</td>
+                <td className="highlight">{checkZero(itemDetail.totalCurrentHeadcount)}</td>
                 <td>{checkZero(itemDetail.expatApprovedHeadcount)}</td>
                 <td>{checkZero(itemDetail.localApprovedHeadcount)}</td>
-                <td className="data-total">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
+                <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
-                    <input className="input-add" type="number" min={0}
-                        onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'expatAddition')}
+                    <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
+                        onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
                         value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
                 </td>
                 <td>
                     <input className="input-add" type="number"
-                        min={0}
-                        onChange={e => handleAddAnnualRequestFormDetailsItem(e.target.value, 'localAddition')}
+                        min={0} max={MaxAdditionalInput}
+                        onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
                         value={itemDetail.localAddition === 0 ? '' : itemDetail.localAddition}></input>
                 </td>
-                <td className="data-total">{checkZero(itemDetail.totalAddition)}</td>
+                <td className="highlight">{checkZero(itemDetail.totalAddition)}</td>
                 <td>{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
                 <td>{checkZero(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
-                <td className="data-total">{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
+                <td className="highlight">{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
                     itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
             </tr>
         );
