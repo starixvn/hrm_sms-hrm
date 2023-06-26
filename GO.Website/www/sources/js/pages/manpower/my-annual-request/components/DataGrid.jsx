@@ -1,29 +1,49 @@
 ﻿import React from 'react';
-import { Button, Form } from 'react-bootstrap';
 
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import LangHelper from '@jsroot/common/langHelper';
+import Site from '@jsroot/common/site';
+import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
 const DataGrid = ({ requests }) => {
     const buildHeader = () => {
         return (
             <HeaderRow>
-                <HeaderCell colWidth={5}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
+                <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Period')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Status')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Action')}</HeaderCell>
+                <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
+                <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
         );
+    };
+
+    const renderStatus = statusId => {
+        let status = '';
+        switch (statusId) {
+            case AnnualManpowerForecastRequestStatus.Pending:
+                status = LangHelper.getResource('Pending');
+                break;
+            case AnnualManpowerForecastRequestStatus.Verified:
+                status = LangHelper.getResource('Verified');
+                break;
+            case AnnualManpowerForecastRequestStatus.Approved:
+                status = LangHelper.getResource('Approved');
+                break;
+        }
+
+        return status;
     };
 
     const buildBody = () => {
         if (requests.length > 0) {
             return requests.map((item, index) =>
                 <Row key={item.requestId}>
-                    <Cell className="text-center">{index}</Cell>
-                    <Cell className="text-center" />
-                    <Cell className="text-center" />
-                    <Cell className="text-center" />
+                    <Cell className="text-center">{index + 1}</Cell>
+                    <Cell>{item.period.name}</Cell>
+                    <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
+                    <Cell className="text-center">
+                        <i className="icon-edit fa fa-search"></i>
+                    </Cell>
                 </Row>
             );
         }
@@ -38,9 +58,9 @@ const DataGrid = ({ requests }) => {
     return (
         <div>
             <div className="table-title d-flex justify-content-between align-items-center">
-                <Button variant="primary" size="sm" className="mr-3" type="submit">
+                <a className="mr-3 btn btn-primary btn-sm" href={Site.resolveClientUrl('Manpower/AnnualRequest/Create')}>
                     {LangHelper.getResource('Create')}
-                </Button>
+                </a>
             </div>
             <Table
                 minWidth={720}

@@ -11,3 +11,9 @@ export const ManpowerFlow = {
     Approver: 3,
     HR: 4
 };
+
+export const AnnualManpowerForecastRequestStatus = {
+    Pending: 1,
+    Verified: 2,
+    Approved: 3
+};

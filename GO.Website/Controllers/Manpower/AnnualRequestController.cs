@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GO.Admin.Website.Filters;
 using GO.Core.Models;
 using GO.Website.Constants;
+using GO.Website.Criteria.Manpower;
 using GO.Website.Models.Manpower;
 using GO.Website.Models.Manpower.AnnualRequest;
 using GO.Website.Services;
@@ -59,6 +60,19 @@ namespace GO.Website.Controllers.Manpower
         public async Task<IActionResult> GetMyRequest()
         {
             var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
+            return Json(requests);
+        }
+
+        public IActionResult MemberRequest()
+        {
+            return View("~/Views/Manpower/AnnualRequest/MemberRequest.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetMemberRequests(GetMemberAnnualManpowerForecastRequestCriteria criteria)
+        {
+            criteria.UserId = userControlSession.UserId;
+            var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
             return Json(requests);
         }
 

@@ -49,6 +49,11 @@
             return await manpowerForecastRepository.GetMyAnnualRequestAsync(criteria);
         }
 
+        public async Task<IEnumerable<MemberAnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(GetMemberAnnualManpowerForecastRequestCriteria criteria)
+        {
+            return await manpowerForecastRepository.GetMemberAnnualRequestAsync(criteria);
+        }
+
         public async Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(int requestId)
         {
             var criteria = new GetAnnualManpowerForecastRequestByIdCriteria

@@ -26,6 +26,22 @@
             }
         }
 
+        public async Task<IEnumerable<MemberAnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria)
+        {
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return await db.QueryAsync<MemberAnnualManpowerForecastRequest, EmployeeInfo, MemberAnnualManpowerForecastRequest>(
+                    (req, creator) =>
+                    {
+                        req.Creator = creator;
+
+                        return req;
+                    },
+                    splitOn: "CreatorId",
+                    parameterSet: criteria);
+            }
+        }
+
         public async Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
