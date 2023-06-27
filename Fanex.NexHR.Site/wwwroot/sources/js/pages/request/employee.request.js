@@ -284,10 +284,25 @@ $(function () {
                     requestTypeId = parseInt(request.getAttribute('requestTypeId'), 10),
                     requestId = parseInt(request.getAttribute('id'), 10),
                     roleId = parseInt(request.getAttribute('roleId'), 10),
-                    employeeId = parseInt(request.getAttribute('employeeId'), 10);
-                const title = 'Are you sure you want to approve?';
-                getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title);
+                    employeeId = parseInt(request.getAttribute('employeeId'), 10),
+                    viewType = request.getAttribute('viewType');
+                let title;
+                switch (commandType) {
+                    case 'Accept':
+                        title = 'Are you sure you want to verify?';
+                        getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Accept, title);
+                        break;
+                    case 'Approve':
+                        title = 'Are you sure you want to approve?';
+                        getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Approve, title, viewType);
+                        break;
+                    case 'Process':
+                        title = 'Are you sure you want to process?';
+                        getProcessRequestDialogContent(requestId, requestTypeId, roleId, employeeId, RequestCommand.Process, title);
+                        break;
+                }
                 return;
+
             default:
                 break;
         }
@@ -303,7 +318,6 @@ $(function () {
                 openDialogProcessMultipleRequest();
                 break;
         }
-
     }
 
     function openDialogApproveMultipleRequest() {
@@ -452,7 +466,7 @@ $(function () {
         });
     }
 
-    function processMultiRequests(requests, comment, roleId, command , isIgnoredViolate) {
+    function processMultiRequests(requests, comment, roleId, command, isIgnoredViolate) {
         blockUI();
         const model = {
             requests: requests,

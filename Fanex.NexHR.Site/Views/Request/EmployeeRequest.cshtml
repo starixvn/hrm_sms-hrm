@@ -145,7 +145,8 @@
                                                roleid="@Convert.ToInt32(RoleSystem.Approver)"
                                                requesttypeid="@request.RequestType.Id"
                                                employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
+                                               id="@request.Id"
+                                               viewtype="@Model.ViewType"/>
                                         <label for="@request.Id"></label>
                                     }
                                     else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
@@ -155,7 +156,8 @@
                                                roleid="@Convert.ToInt32(RoleSystem.Verifier)"
                                                requesttypeid="@request.RequestType.Id"
                                                employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
+                                               id="@request.Id"
+                                               viewtype="@Model.ViewType" />
                                         <label for="@request.Id"></label>
                                     }
                                 </div>
@@ -172,7 +174,8 @@
                                                roleid="@Convert.ToInt32(RoleSystem.HR)"
                                                requesttypeid="@request.RequestType.Id"
                                                employeeid="@request.Requester.Id"
-                                               id="@request.Id" />
+                                               id="@request.Id"
+                                               viewtype="@Model.ViewType" />
                                         <label for="@request.Id"></label>
                                     }
                                 </div>
