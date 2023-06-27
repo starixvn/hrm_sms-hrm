@@ -7,10 +7,10 @@ const DataGrid = ({ requests }) => {
     const buildHeader = () => {
         return (
             <HeaderRow>
-                <HeaderCell colWidth={5}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
+                <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('UnitHead')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Status')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Action')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('Status')}</HeaderCell>
+                <HeaderCell colWidth={4}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
         );
     };
@@ -20,7 +20,7 @@ const DataGrid = ({ requests }) => {
             return requests.map((item, index) =>
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
-                    <Cell className="text-center" />
+                    <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
                     <Cell className="text-center" />
                     <Cell className="text-center" />
                 </Row>
