@@ -6,7 +6,8 @@ const annualRequestSlice = createSlice({
         period: '',
         units: [],
         companies: [],
-        annualRequestFormDetails:[]
+        annualRequestFormDetails: [],
+        jobLevels: []
     },
     reducers: {
         setUnits: (state, action) => {
@@ -28,7 +29,22 @@ const annualRequestSlice = createSlice({
             }
         },
         setCompanies: (state, action) => {
-            state.companies = action.payload;
+            const companies = [];
+            action.payload.map(item => {
+                if (companies.indexOf(item.companyName) === -1) {
+                    companies.push(item.companyName)
+                }
+            });
+            state.companies = companies;
+        },
+        setJobLevels: (state, action) => {
+            const jobLevels = [];
+            action.payload.map(item => {
+                if (jobLevels.indexOf(item.jobLevel) === -1) {
+                    jobLevels.push(item.jobLevel)
+                }
+            });
+            state.jobLevels = jobLevels;
         },
         setAnnualRequestFormDetails: (state, action) => {
             state.annualRequestFormDetails = action.payload;
@@ -42,6 +58,7 @@ export const {
     setUnits,
     setPeriod,
     setCompanies,
+    setJobLevels,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem
 } = actions;

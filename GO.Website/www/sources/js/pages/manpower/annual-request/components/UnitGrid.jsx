@@ -3,18 +3,18 @@ import { connect } from 'react-redux';
 
 import LangHelper from '@jsroot/common/langHelper';
 
-const UnitGrid = ({ units }) => {
+const UnitGrid = ({ units, jobLevels }) => {
     const renderJobLevel = itemSection => {
         const cellJobLevel = [];
-        itemSection.jobLevels.map(itemJobLevel => {
+        jobLevels.map(itemJobLevel => {
             cellJobLevel.push(
-                <tr key={`columnJobLevel-${itemSection.sectionName + itemJobLevel}`}>
+                <tr key={`columnJobLevel-${itemSection + itemJobLevel}`}>
                     <td>{itemJobLevel}</td>
                 </tr>
             );
         });
         cellJobLevel.push(
-            <tr key={`columnJobLevelToTal-${itemSection.sectionName}`}>
+            <tr key={`columnJobLevelToTal-${itemSection}`}>
                 <td className="data-section"></td>
             </tr>
         );
@@ -30,9 +30,9 @@ const UnitGrid = ({ units }) => {
                 rowSpanDepartment += rowSpanSection;
                 const cellJobLevel = renderJobLevel(itemSection);
                 cellSections.push(
-                    <tr key={`columnSection-${itemDepartment.departmentName + itemSection.sectionName}`}>
+                    <tr key={`columnSection-${itemDepartment.departmentName + itemSection}`}>
                         <td rowSpan={rowSpanSection}
-                            className="data-section">{itemSection.sectionName}</td>
+                            className="data-section">{itemSection}</td>
                     </tr>
                 );
                 cellSections.push(cellJobLevel);
@@ -98,8 +98,8 @@ const UnitGrid = ({ units }) => {
 };
 
 const mapStateToProps = state => {
-    const { units } = state;
-    return { units };
+    const { units, jobLevels } = state;
+    return { units, jobLevels };
 };
 
 export default connect(mapStateToProps, null)(UnitGrid);

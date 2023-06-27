@@ -5,6 +5,6 @@
     public class Department
     {
         public string DepartmentName { get; set; }
-        public IEnumerable<Section> Sections { get; set; }
+        public IEnumerable<string> Sections { get; set; }
     }
 }

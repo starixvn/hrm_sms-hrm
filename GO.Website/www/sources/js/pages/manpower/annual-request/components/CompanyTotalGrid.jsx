@@ -4,41 +4,25 @@ import { connect } from 'react-redux';
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 
-const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
+const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => {
     const renderJoblevel = (itemUnit, itemDepartment, itemSection) => {
         const bodyJobLevel = [];
         let totalSection = {
-            expatCurrentHeadcount: 0,
-            localCurrentHeadcount: 0,
-            totalCurrentHeadcount: 0,
-            expatApprovedHeadcount: 0,
-            localApprovedHeadcount: 0,
-            totalApprovedHeadcount: 0,
-            expatAddition: 0,
-            localAddition: 0,
-            totalAddition: 0,
-            expatForecastHeadcount: 0,
-            localForecastHeadcount: 0,
-            totalForecastHeadcount: 0
+            expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
+            expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0,
+            expatAddition: 0, localAddition: 0, totalAddition: 0,
+            expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
-        itemSection.jobLevels.map(itemJobLevel => {
+        jobLevels.map(itemJobLevel => {
             let totalJoblevel = {
-                expatCurrentHeadcount: 0,
-                localCurrentHeadcount: 0,
-                totalCurrentHeadcount: 0,
-                expatApprovedHeadcount: 0,
-                localApprovedHeadcount: 0,
-                totalApprovedHeadcount: 0,
-                expatAddition: 0,
-                localAddition: 0,
-                totalAddition: 0,
-                expatForecastHeadcount: 0,
-                localForecastHeadcount: 0,
-                totalForecastHeadcount: 0
+                expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
+                expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0,
+                expatAddition: 0, localAddition: 0, totalAddition: 0,
+                expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
             annualRequestFormDetails.map(itemDetail => {
                 if (itemDetail.unitName === itemUnit.unitName && itemDetail.departmentName === itemDepartment.departmentName &&
-                    itemDetail.sectionName === itemSection.sectionName && itemDetail.jobLevel === itemJobLevel) {
+                    itemDetail.sectionName === itemSection && itemDetail.jobLevel === itemJobLevel) {
                     totalJoblevel = {
                         expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
                         localCurrentHeadcount: totalJoblevel.localCurrentHeadcount + itemDetail.localCurrentHeadcount,
@@ -71,7 +55,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
                 totalForecastHeadcount: totalSection.totalForecastHeadcount + totalJoblevel.totalForecastHeadcount
             };
             bodyJobLevel.push(
-                <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}-${itemJobLevel}`}
+                <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection}-${itemJobLevel}`}
                     total={totalJoblevel} isRenderData={false} isRenderTotal={true} isTableTotal={true} />
             );
         });
@@ -113,7 +97,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
 
             bodySection.push(bodyJobLevel);
             bodySection.push(
-                <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection.sectionName}`}
+                <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection}`}
                     total={totalSection} isRenderData={false} isRenderTotal={true} />
             );
         });
@@ -178,8 +162,8 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails }) => {
 };
 
 const mapStateToProps = state => {
-    const { period, units, annualRequestFormDetails } = state;
-    return { period, units, annualRequestFormDetails };
+    const { period, units, annualRequestFormDetails, jobLevels } = state;
+    return { period, units, annualRequestFormDetails, jobLevels };
 };
 
 export default connect(mapStateToProps, null)(CompanyGrid);

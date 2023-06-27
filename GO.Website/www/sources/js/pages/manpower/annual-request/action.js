@@ -6,6 +6,7 @@ import {
     setUnits,
     setPeriod,
     setCompanies,
+    setJobLevels,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem
 } from './/annualRequestSlice';
@@ -18,7 +19,8 @@ const getDataForCreateAnnualRequest = () => async dispatch => {
     await DataService.postDataAsync(url).then(response => {
         dispatch(setPeriod(response.data.period));
         dispatch(setAnnualRequestFormDetails(response.data.annualRequestFormDetails));
-        dispatch(setCompanies(response.data.companies));
+        dispatch(setCompanies(response.data.annualRequestFormDetails));
+        dispatch(setJobLevels(response.data.annualRequestFormDetails));
         dispatch(setUnits(response.data.units));
     }).then(() => Site.unblockUI());
 };
@@ -39,6 +41,7 @@ export const ActionCreators = {
     setUnits,
     setPeriod,
     setCompanies,
+    setJobLevels,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem,
     getDataForCreateAnnualRequest,
