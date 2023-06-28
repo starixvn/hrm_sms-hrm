@@ -2,9 +2,9 @@
 {
     using Fanex.Data.Repository;
 
-    public class GetSiteCriteria : CriteriaBase
+    public class GetCompanyCriteria : CriteriaBase
     {
-        public override string GetSettingKey() => "Manpower_Site_Get";
+        public override string GetSettingKey() => "Manpower_Company_Get";
 
         public override bool IsValid() => true;
     }

@@ -40,11 +40,11 @@
             return Json(new { totalItems = criteria.TotalRows, data = employeeInfos });
         }
 
-        public async Task<IActionResult> GetSites()
+        public async Task<IActionResult> GetCompanies()
         {
-            var criteria = new GetSiteCriteria();
-            var sites = await baseService.GetDataAsync<Site>(criteria);
-            return Json(sites);
+            var criteria = new GetCompanyCriteria();
+            var companies = await baseService.GetDataAsync<Company>(criteria);
+            return Json(companies);
         }
 
         [HttpPost]

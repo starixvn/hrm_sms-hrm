@@ -24,6 +24,8 @@ const siteSlice = createSlice({
                 processId,
                 siteId: employee.siteId,
                 siteName: employee.siteName,
+                companyId: employee.companyId,
+                companyName: employee.companyName,
                 empId: employee.empId,
                 code: employee.code,
                 nickname: employee.nickname,

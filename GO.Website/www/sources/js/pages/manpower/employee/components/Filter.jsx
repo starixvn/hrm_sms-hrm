@@ -4,10 +4,10 @@ import Select from 'react-select';
 import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
 
-const Filter = ({ sites, getEmployeeInfos, onFilterChange }) => {
+const Filter = ({ companies, getEmployeeInfos, onFilterChange }) => {
     const [keyword, setKeyword] = useState('');
+    const [company, setCompany] = useState({ value: null, label: 'All' });
     const [status, setStatus] = useState({ value: 1, label: 'Include' });
-    const [site, setSite] = useState({ value: null, label: 'All' });
 
     useEffect(() => {
         const params = getParams();
@@ -17,7 +17,7 @@ const Filter = ({ sites, getEmployeeInfos, onFilterChange }) => {
     const getParams = () => {
         return {
             keyword,
-            siteId: site.value,
+            companyId: company.value,
             statusId: status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
@@ -31,13 +31,13 @@ const Filter = ({ sites, getEmployeeInfos, onFilterChange }) => {
         getEmployeeInfos(params);
     };
 
-    const siteOptions = sites.map(item => {
+    const companyOptions = companies.map(item => {
         return {
-            value: item.siteId,
-            label: item.siteName
+            value: item.companyId,
+            label: item.name
         };
     });
-    siteOptions.unshift({ value: null, label: 'All' });
+    companyOptions.unshift({ value: null, label: 'All' });
 
     const statusOptions = [
         { value: null, label: 'All' },
@@ -57,10 +57,10 @@ const Filter = ({ sites, getEmployeeInfos, onFilterChange }) => {
                     />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>{LangHelper.getResource('Site')}</Form.Label>
+                    <Form.Label>{LangHelper.getResource('Company')}</Form.Label>
                     <Select className={`react-select-container`} classNamePrefix="react-select"
-                        options={siteOptions} value={site} isSearchable={false}
-                        onChange={value => setSite(value)}
+                        options={companyOptions} value={company} isSearchable={false}
+                        onChange={value => setCompany(value)}
                     />
                 </Form.Group>
                 <Form.Group>

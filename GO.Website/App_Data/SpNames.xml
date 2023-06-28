@@ -15,7 +15,7 @@
     <Function Name="Manpower">
         <Setting Key="HRM_Employee_Search" SpName="HRM_Employee_Search" DbName="bodb_IUC" Plain="0" />
 
-        <Setting Key="Manpower_Site_Get" SpName="Manpower_Site_Get" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_Company_Get" SpName="Manpower_Company_Get" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_Employee_Get" SpName="Manpower_Employee_Get" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_ExcludedEmployee_Update" SpName="Manpower_ExcludedEmployee_Update" DbName="bodb_IUC" Plain="0" />
 

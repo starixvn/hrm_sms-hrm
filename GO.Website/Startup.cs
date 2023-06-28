@@ -77,6 +77,8 @@ namespace GO.Website
 
             ExceptionHandler
                 .UseConfig(new LoggingConfiguration())
+                .GetHttpHeaderInfo()
+                .GetHttpSessionInfo()
                 .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             services.AddHttpClient(HttpClientName.DefaultHttpClient).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler

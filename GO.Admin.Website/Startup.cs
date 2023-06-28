@@ -68,6 +68,8 @@ namespace GO.Admin.Website
 
             ExceptionHandler
                 .UseConfig(new LoggingConfiguration())
+                .GetHttpHeaderInfo()
+                .GetHttpSessionInfo()
                 .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             services.AddMemoryCache();

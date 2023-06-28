@@ -24,10 +24,22 @@ const Result = ({ units }) => {
         return (
             <div className={`flow-item mb-2 ${!flow.isActive || flow.isDeleted ? 'danger' : ''}`}>
                 <div className="personal-info">
-                    <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{flow.siteName}</span></div>
-                    <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{flow.code}</span></div>
-                    <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{flow.nickname}</span></div>
-                    <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{flow.fullName}</span></div>
+                    <div>
+                        <span className="font-weight-bold">{LangHelper.getResource('Company')}</span>
+                        : <span className="font-italic">{flow.companyName}</span>
+                    </div>
+                    <div>
+                        <span className="font-weight-bold">{LangHelper.getResource('Code')}</span>
+                        : <span className="font-italic">{flow.code}</span>
+                    </div>
+                    <div>
+                        <span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>
+                        : <span className="font-italic">{flow.nickname}</span>
+                    </div>
+                    <div>
+                        <span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>
+                        : <span className="font-italic">{flow.fullName}</span>
+                    </div>
                 </div>
             </div>
         );

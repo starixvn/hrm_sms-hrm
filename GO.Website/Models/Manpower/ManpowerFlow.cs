@@ -17,6 +17,12 @@
         [XmlIgnore]
         public string SiteName { get; set; }
 
+        [XmlIgnore]
+        public short CompanyId { get; set; }
+
+        [XmlIgnore]
+        public string CompanyName { get; set; }
+
         public int EmpId { get; set; }
 
         [XmlIgnore]

@@ -20,7 +20,7 @@ const DataGrid = ({ filter, gridData, getEmployeeInfos, onFilterChange, onChange
         return (
             <HeaderRow>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('SiteName')}</HeaderCell>
+                <HeaderCell colWidth={8}>{LangHelper.getResource('Company')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Username')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Code')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Nickname')}</HeaderCell>

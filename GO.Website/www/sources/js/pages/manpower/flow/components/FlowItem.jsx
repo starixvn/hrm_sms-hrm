@@ -34,10 +34,22 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
 
     const formatOptionLabel = option => (
         <>
-            <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{option.siteName}</span></div>
-            <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{option.code}</span></div>
-            <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{option.nickname}</span></div>
-            <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{option.fullName}</span></div>
+            <div>
+                <span className="font-weight-bold">{LangHelper.getResource('Company')}</span>
+                : <span className="font-italic">{option.companyName}</span>
+            </div>
+            <div>
+                <span className="font-weight-bold">{LangHelper.getResource('Code')}</span>
+                : <span className="font-italic">{option.code}</span>
+            </div>
+            <div>
+                <span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>
+                : <span className="font-italic">{option.nickname}</span>
+            </div>
+            <div>
+                <span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>
+                : <span className="font-italic">{option.fullName}</span>
+            </div>
         </>
     );
 
@@ -70,10 +82,22 @@ const FlowItem = ({ flows, processId, addFlowItem, removeFlowItem }) => {
                             className={`flow-item mt-2 ${!item.isActive || item.isDeleted ? 'danger' : ''}`}
                         >
                             <div className="personal-info">
-                                <div><span className="font-weight-bold">{LangHelper.getResource('SiteName')}</span>: <span className="font-italic">{item.siteName}</span></div>
-                                <div><span className="font-weight-bold">{LangHelper.getResource('Code')}</span>: <span className="font-italic">{item.code}</span></div>
-                                <div><span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>: <span className="font-italic">{item.nickname}</span></div>
-                                <div><span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>: <span className="font-italic">{item.fullName}</span></div>
+                                <div>
+                                    <span className="font-weight-bold">{LangHelper.getResource('Company')}</span>
+                                    : <span className="font-italic">{item.companyName}</span>
+                                </div>
+                                <div>
+                                    <span className="font-weight-bold">{LangHelper.getResource('Code')}</span>
+                                    : <span className="font-italic">{item.code}</span>
+                                </div>
+                                <div>
+                                    <span className="font-weight-bold">{LangHelper.getResource('Nickname')}</span>
+                                    : <span className="font-italic">{item.nickname}</span>
+                                </div>
+                                <div>
+                                    <span className="font-weight-bold">{LangHelper.getResource('FullName')}</span>
+                                    : <span className="font-italic">{item.fullName}</span>
+                                </div>
                             </div>
                             <i className="fa fa-times icon-delete" onClick={() => handleRemove(item)} />
                         </div>

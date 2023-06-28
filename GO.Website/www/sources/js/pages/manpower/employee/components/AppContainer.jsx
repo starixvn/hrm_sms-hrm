@@ -7,10 +7,10 @@ import DataService from '@jsroot/common/dataService';
 import { DefaultPageSize } from '@jsroot/common/constants';
 
 const AppContainer = () => {
-    const [sites, setSites] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const [filter, setFilter] = useState({
         keyword: '',
-        siteId: null,
+        companyId: null,
         statusId: 1,
         pageIndex: 1,
         pageSize: DefaultPageSize
@@ -20,9 +20,9 @@ const AppContainer = () => {
     useEffect(() => {
         const getSites = async () => {
             Site.blockUI();
-            const url = Site.resolveClientUrl('Manpower/Employee/GetSites');
+            const url = Site.resolveClientUrl('Manpower/Employee/GetCompanies');
             await DataService.getDataAsync(url).then(response => {
-               setSites(response.data);
+                setCompanies(response.data);
             }).then(() => Site.unblockUI());
         };
 
@@ -57,7 +57,7 @@ const AppContainer = () => {
 
     return (
         <div className="manpower-employee">
-            <Filter sites={sites}
+            <Filter companies={companies}
                 onFilterChange={handleChangeFilter}
                 getEmployeeInfos={getEmployeeInfos}
             />

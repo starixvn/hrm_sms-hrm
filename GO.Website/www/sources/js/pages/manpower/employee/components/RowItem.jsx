@@ -15,7 +15,7 @@ const RowItem = ({ employee, index, onChangeStatus }) => {
     return (
         <Row>
             <Cell className="text-center">{index}</Cell>
-            <Cell className="text-center">{employee.siteName}</Cell>
+            <Cell className="text-center">{employee.companyName}</Cell>
             <Cell className="text-center">{employee.username}</Cell>
             <Cell className="text-center">{employee.code}</Cell>
             <Cell className="text-center">{employee.nickname}</Cell>
