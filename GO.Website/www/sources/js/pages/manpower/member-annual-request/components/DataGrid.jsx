@@ -1,7 +1,9 @@
 ﻿import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import LangHelper from '@jsroot/common/langHelper';
+import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
 const DataGrid = ({ requests }) => {
     const buildHeader = () => {
@@ -9,10 +11,27 @@ const DataGrid = ({ requests }) => {
             <HeaderRow>
                 <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('UnitHead')}</HeaderCell>
-                <HeaderCell colWidth={6}>{LangHelper.getResource('Status')}</HeaderCell>
-                <HeaderCell colWidth={4}>{LangHelper.getResource('Action')}</HeaderCell>
+                <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
+                <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
         );
+    };
+
+    const renderStatus = statusId => {
+        let status = '';
+        switch (statusId) {
+            case AnnualManpowerForecastRequestStatus.Pending:
+                status = LangHelper.getResource('Pending');
+                break;
+            case AnnualManpowerForecastRequestStatus.Verified:
+                status = LangHelper.getResource('Verified');
+                break;
+            case AnnualManpowerForecastRequestStatus.Approved:
+                status = LangHelper.getResource('Approved');
+                break;
+        }
+
+        return status;
     };
 
     const buildBody = () => {
@@ -21,8 +40,18 @@ const DataGrid = ({ requests }) => {
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
                     <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
-                    <Cell className="text-center" />
-                    <Cell className="text-center" />
+                    <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
+                    <Cell className="text-center">
+                        <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
+                            overlay={
+                                <Tooltip id={`tooltip-request-${item.requestId}`}>
+                                    Detail
+                                </Tooltip>
+                            }
+                        >
+                            <i className="icon-edit fa fa-search" />
+                        </OverlayTrigger>
+                    </Cell>
                 </Row>
             );
         }

@@ -68,10 +68,18 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetMemberRequests(GetMemberAnnualManpowerForecastRequestCriteria criteria)
+        public async Task<IActionResult> GetMemberRequests([FromBody] GetMemberAnnualManpowerForecastRequestCriteria criteria)
         {
             criteria.UserId = userControlSession.UserId;
             var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
+            return Json(requests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
+            var requests = await manpowerForecastService.UpdateStatusAnnualRequestAsync(command);
             return Json(requests);
         }
 

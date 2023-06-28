@@ -75,5 +75,10 @@
             };
             return await baseService.ExecuteNonQueryAsync(command);
         }
+
+        public async Task<CommandResult> UpdateStatusAnnualRequestAsync(UpdateStatusAnnualManpowerForecastRequestCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
     }
 }

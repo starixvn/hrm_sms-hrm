@@ -11,7 +11,10 @@ const Filter = ({ periods, onSubmit }) => {
         if (periods.length > 0) {
             setPeriod({ value: periods[0].periodId, label: periods[0].name });
 
-            const params = getParams();
+            const params = {
+                periodId: periods[0].periodId,
+                statusId: status.value
+            };
             onSubmit(params);
         }
     }, [periods]);
