@@ -8,6 +8,7 @@
     public class AnnualManpowerForecastRequest
     {
         public int RequestId { get; set; }
+        public string UnitName { get; set; }
         public byte StatusId { get; set; }
 
         public ManpowerPeriod Period { get; set; }

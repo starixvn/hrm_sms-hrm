@@ -12,6 +12,7 @@ const DataGrid = ({ requests }) => {
             <HeaderRow>
                 <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Period')}</HeaderCell>
+                <HeaderCell colWidth={10}>{LangHelper.getResource('Unit')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
                 <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
@@ -41,6 +42,7 @@ const DataGrid = ({ requests }) => {
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
                     <Cell>{item.period.name}</Cell>
+                    <Cell>{item.unitName}</Cell>
                     <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
                         <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
@@ -59,7 +61,7 @@ const DataGrid = ({ requests }) => {
 
         return [
             <Row key={'body'} className="no-data">
-                <Cell colSpan={4}>{LangHelper.getResource('ThereIsNoData')}</Cell>
+                <Cell colSpan={5}>{LangHelper.getResource('ThereIsNoData')}</Cell>
             </Row>
         ];
     };
