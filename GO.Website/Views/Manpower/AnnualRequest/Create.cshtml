@@ -1,4 +1,4 @@
-﻿@model bool
+﻿@model IEnumerable<string>
 @{
     ViewData["Title"] = "Annual Manpower Forecast Request Form";
 }
@@ -18,14 +18,7 @@
     </environment>
 }
 @section Scripts {
-    @if (Model)
-    {
-        <script>window.hasHostPermissionOnPeriod = true;</script>
-    }
-    else
-    {
-        <script>window.hasHostPermissionOnPeriod = false;</script>
-    }
+    <script>window.units = @Json.Serialize(Model);</script>
     <environment include="Development">
         <script src="~/js/dev/pages/manpower/annual-request/index.chunk.js" asp-append-version="true"></script>
     </environment>

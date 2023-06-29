@@ -24,7 +24,16 @@
             this.baseService = baseService;
         }
 
-        public async Task<(ManpowerPeriod, IEnumerable<AnnualManpowerForecastRequestDetail>)> GetDataForCreateAnnualRequestAsync(int userId)
+        public async Task<IEnumerable<string>> GetUnitByUserIdAsync(int userId)
+        {
+            var criteria = new GetUnitByUserIdCriteria
+            {
+                UserId = userId
+            };
+            return await baseService.GetDataAsync<string>(criteria);
+        }
+
+        public async Task<(ManpowerPeriod, IEnumerable<AnnualManpowerForecastRequestDetail>)> GetDataForCreateAnnualRequestAsync(int userId, string unitName)
         {
             ManpowerPeriod period = null;
             var criteria = new GetDataForCreateAnnualManpowerForecastRequestCriteria
@@ -70,6 +79,7 @@
             var command = new CreateAnnualManpowerForecastRequestCommand
             {
                 PeriodId = param.PeriodId,
+                UnitName = param.UnitName,
                 DetailXml = param.Details != null && param.Details.Any() ? param.Details.ToXML().ToString() : string.Empty,
                 CreatedBy = userId
             };

@@ -32,10 +32,7 @@
         public string DepartmentName { get; set; }
 
         public int SectionId { get; set; }
-
-        [XmlIgnore]
         public string SectionName { get; set; }
-
         public string JobLevel { get; set; }
 
         [XmlIgnore]

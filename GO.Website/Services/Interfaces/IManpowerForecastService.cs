@@ -9,7 +9,9 @@
 
     public interface IManpowerForecastService
     {
-        Task<(ManpowerPeriod, IEnumerable<AnnualManpowerForecastRequestDetail>)> GetDataForCreateAnnualRequestAsync(int userId);
+        Task<IEnumerable<string>> GetUnitByUserIdAsync(int userId);
+
+        Task<(ManpowerPeriod, IEnumerable<AnnualManpowerForecastRequestDetail>)> GetDataForCreateAnnualRequestAsync(int userId, string unitName);
 
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetMyAnnualRequestAsync(int userId);
 

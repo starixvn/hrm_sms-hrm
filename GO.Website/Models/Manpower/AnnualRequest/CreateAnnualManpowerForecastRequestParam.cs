@@ -5,6 +5,7 @@
     public class CreateAnnualManpowerForecastRequestParam
     {
         public short PeriodId { get; set; }
+        public string UnitName { get; set; }
         public IList<AnnualManpowerForecastRequestDetail> Details { get; set; }
     }
 }

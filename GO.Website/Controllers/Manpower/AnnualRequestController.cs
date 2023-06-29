@@ -29,18 +29,18 @@
             this.manpowerForecastService = manpowerForecastService;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
-            return View("~/Views/Manpower/AnnualRequest/Create.cshtml", isHost);
+            var units = await manpowerForecastService.GetUnitByUserIdAsync(userControlSession.UserId);
+            return View("~/Views/Manpower/AnnualRequest/Create.cshtml", units);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetDataForCreateAnnualRequest()
+        public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
         {
-            (var period, var annualRequestFormDetails) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId);
-            var units = GetUnits(annualRequestFormDetails);
-            return Json(new { period, units, annualRequestFormDetails });
+            (var period, var details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
+            var units = GetUnits(details);
+            return Json(new { period, units, details });
         }
 
         [HttpPost]
