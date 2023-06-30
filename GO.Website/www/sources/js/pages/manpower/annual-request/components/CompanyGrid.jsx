@@ -5,7 +5,7 @@ import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 import CompanyTotalGrid from './CompanyTotalGrid';
 
-const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => {
+const CompanyGrid = ({ isDetail, period, units, companies, annualRequestFormDetails }) => {
     const renderSectionNoneData = (itemUnit, itemDepartment, itemSection) => {
         const bodyJobLevel = [];
         annualRequestFormDetails.map(itemDetail => {
@@ -52,7 +52,7 @@ const CompanyGrid = ({ period, units, companies, annualRequestFormDetails }) => 
                 itemDetail.sectionName === itemSection && itemDetail.companyName === company) {
                 bodyJobLevel.push(
                     <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
-                        itemDetail={itemDetail} isRenderData={true} isRenderTotal={false} />
+                        isDetail={isDetail} itemDetail={itemDetail} isRenderData={true} isRenderTotal={false} />
                 );
 
                 totalSection = {

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../action';
 
-const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal }) => {
+const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal }) => {
     const MaxAdditionalInput = 100;
     const checkZero = number => number !== 0 ? number : '';
     const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
@@ -69,15 +69,27 @@ const RowItem = ({ itemDetail, total, isRenderData, isRenderTotal, addAnnualRequ
                 <td>{checkZero(itemDetail.localApprovedHeadcount)}</td>
                 <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
-                    <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
-                        onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
-                        value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
+                    {
+                        isDetail && (itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition)
+                    }
+                    {
+                        !isDetail && 
+                        <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
+                            onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
+                            value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
+                    }
                 </td>
                 <td>
-                    <input className="input-add" type="number"
-                        min={0} max={MaxAdditionalInput}
-                        onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
-                        value={itemDetail.localAddition === 0 ? '' : itemDetail.localAddition}></input>
+                    {
+                        isDetail && (itemDetail.localAddition === 0 ? '' : itemDetail.localAddition)
+                    }
+                    {
+                        !isDetail &&
+                        <input className="input-add" type="number"
+                            min={0} max={MaxAdditionalInput}
+                            onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
+                            value={itemDetail.localAddition === 0 ? '' : itemDetail.localAddition}></input>
+                    }
                 </td>
                 <td className="highlight">{checkZero(itemDetail.totalAddition)}</td>
                 <td>{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>

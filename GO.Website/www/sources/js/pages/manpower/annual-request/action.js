@@ -38,6 +38,18 @@ const createAnnualRequest = params => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const getAnnualRequestById = requestId => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetAnnualRequestById?requestId=' + requestId);
+    await DataService.postDataAsync(url, requestId).then(response => {
+        dispatch(setPeriod(response.data.period));
+        dispatch(setAnnualRequestFormDetails(response.data.details));
+        dispatch(setCompanies(response.data.details));
+        dispatch(setJobLevels(response.data.details));
+        dispatch(setUnits(response.data.units));
+    }).then(() => Site.unblockUI());
+};
+
 export const ActionCreators = {
     setUnits,
     setPeriod,
@@ -47,5 +59,6 @@ export const ActionCreators = {
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem,
     getDataForCreateAnnualRequest,
-    createAnnualRequest
+    createAnnualRequest,
+    getAnnualRequestById
 };

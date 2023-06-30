@@ -55,11 +55,29 @@
             return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
         }
 
+        public IActionResult Detail(int requestId)
+        {
+            ViewBag.requestId = requestId;
+            return View("~/Views/Manpower/AnnualRequest/Detail.cshtml");
+        }
+
         [HttpPost]
         public async Task<IActionResult> GetMyRequest()
         {
             var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
             return Json(requests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAnnualRequestById(int requestId)
+        {
+            var request = await manpowerForecastService.GetAnnualRequestByIdAsync(requestId);
+            if(request is null)
+            {
+                return NotFound();
+            }
+            var units = GetUnits(request.Details);
+            return Json(new { request.Period, units, request.Details });
         }
 
         public IActionResult MemberRequest()

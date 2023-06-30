@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
-import LangHelper from '@jsroot/common/langHelper';
 
 import { ActionCreators } from '../action';
+
+import LangHelper from '@jsroot/common/langHelper';
 
 const Filter = ({ unitSelected, setUnitSelected, getDataForCreateAnnualRequest }) => {
     const handleChange = async value => {
