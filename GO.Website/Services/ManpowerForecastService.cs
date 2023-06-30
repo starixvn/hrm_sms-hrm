@@ -38,7 +38,8 @@
             ManpowerPeriod period = null;
             var criteria = new GetDataForCreateAnnualManpowerForecastRequestCriteria
             {
-                UserId = userId
+                UserId = userId,
+                UnitName = unitName
             };
             (var periods, var details) = await baseService.FetchMultipleAsync<ManpowerPeriod, AnnualManpowerForecastRequestDetail>(criteria);
             if (periods.Any())

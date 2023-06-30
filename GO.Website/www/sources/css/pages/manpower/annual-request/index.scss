@@ -6,10 +6,22 @@
 @import '../../../components/forms';
 @import '../../../components/react-select';
 
+#react-select-2-listbox{
+    z-index: 3;
+}
 .request-form {
     overflow: auto;
-    height: 81.5vh;
     margin-top: 10px;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.height-none-filter {
+    max-height: 81.5vh;
+}
+
+.height-filter {
+    max-height: 68.5vh;
 }
 
 .btn--submit{
@@ -31,7 +43,6 @@
 
     .col-company {
         display: flex;
-        height: 865px;
 
         .table-company {
             width: 650px;
@@ -44,7 +55,7 @@
             }
 
             thead tr {
-                box-shadow: 0 0 0 1px #a7a6a6;
+                box-shadow: 0 0 0 0.5px #a7a6a6;
             }
 
             td {
@@ -92,9 +103,8 @@
         margin-right: 20px;
         position: sticky;
         left: 0px;
-        z-index: 2;
         background: white;
-
+        z-index: 2;
         .table-unit {
             th {
                 background: #FFD966 !important;

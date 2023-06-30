@@ -7,20 +7,21 @@ import {
     setPeriod,
     setCompanies,
     setJobLevels,
+    setUnitSelected,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem
 } from './/annualRequestSlice';
 
 import LangHelper from '@jsroot/common/langHelper';
 
-const getDataForCreateAnnualRequest = () => async dispatch => {
+const getDataForCreateAnnualRequest = unitName => async dispatch => {
     Site.blockUI();
-    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetDataForCreateAnnualRequest');
-    await DataService.postDataAsync(url).then(response => {
+    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetDataForCreateAnnualRequest?UnitName=' + unitName);
+    await DataService.postDataAsync(url, unitName).then(response => {
         dispatch(setPeriod(response.data.period));
-        dispatch(setAnnualRequestFormDetails(response.data.annualRequestFormDetails));
-        dispatch(setCompanies(response.data.annualRequestFormDetails));
-        dispatch(setJobLevels(response.data.annualRequestFormDetails));
+        dispatch(setAnnualRequestFormDetails(response.data.details));
+        dispatch(setCompanies(response.data.details));
+        dispatch(setJobLevels(response.data.details));
         dispatch(setUnits(response.data.units));
     }).then(() => Site.unblockUI());
 };
@@ -42,6 +43,7 @@ export const ActionCreators = {
     setPeriod,
     setCompanies,
     setJobLevels,
+    setUnitSelected,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem,
     getDataForCreateAnnualRequest,
