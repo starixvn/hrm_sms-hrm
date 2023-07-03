@@ -45,7 +45,7 @@ const DataGrid = ({ requests }) => {
                     <Cell>{item.unitName}</Cell>
                     <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
-                        <a href={`/ManpowerForecast/AnnualRequest/Detail?requestId=${item.requestId}`}>
+                        <a href={`/ManpowerForecast/AnnualRequest/Detail?id=${item.requestId}`}>
                             <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
                                 overlay={
                                     <Tooltip id={`tooltip-request-${item.requestId}`}>

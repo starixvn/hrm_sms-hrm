@@ -3,6 +3,7 @@ import DataService from '@jsroot/common/dataService';
 import { toast } from 'react-toastify';
 
 import {
+    setRequest,
     setDepartments,
     setPeriod,
     setCompanies,
@@ -42,19 +43,21 @@ const getAnnualRequestById = requestId => async dispatch => {
     Site.blockUI();
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetAnnualRequestById?requestId=' + requestId);
     await DataService.postDataAsync(url, requestId).then(response => {
-        dispatch(setPeriod(response.data.period));
-        dispatch(setAnnualRequestFormDetails(response.data.details));
-        dispatch(setCompanies(response.data.details));
-        dispatch(setJobLevels(response.data.details));
+        dispatch(setRequest(response.data.request));
+        dispatch(setPeriod(response.data.request.period));
+        dispatch(setAnnualRequestFormDetails(response.data.request.details));
+        dispatch(setCompanies(response.data.request.details));
+        dispatch(setJobLevels(response.data.request.details));
         dispatch(setDepartments(response.data.departments));
         dispatch(setUnitSelected({
-            value: response.data.details[0].unitName,
-            label: response.data.details[0].unitName
+            value: response.data.request.details[0].unitName,
+            label: response.data.request.details[0].unitName
         }));
     }).then(() => Site.unblockUI());
 };
 
 export const ActionCreators = {
+    setRequest,
     setDepartments,
     setPeriod,
     setCompanies,

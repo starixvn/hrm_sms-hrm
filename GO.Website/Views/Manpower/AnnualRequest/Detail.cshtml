@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model int
 @{
     ViewData["Title"] = "Annual Manpower Forecast Request Form";
 }
@@ -18,7 +18,7 @@
     </environment>
 }
 @section Scripts {
-    <script>window.requestId = @ViewBag.requestId;</script>
+    <script>window.requestId = @Model;</script>
     <environment include="Development">
         <script src="~/js/dev/pages/manpower/detail-annual-request/index.chunk.js" asp-append-version="true"></script>
     </environment>

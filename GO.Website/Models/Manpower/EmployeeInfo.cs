@@ -11,6 +11,7 @@
         public string Country { get; set; }
         public int EmpId { get; set; }
         public int UserId { get; set; }
+        public int CreatorId { get; set; }
         public string Username { get; set; }
         public string Code { get; set; }
         public string Nickname { get; set; }

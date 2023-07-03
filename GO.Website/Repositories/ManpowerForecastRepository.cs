@@ -60,6 +60,7 @@
                     if (request != null)
                     {
                         request.Details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
+                        request.Creator = multi.ReadFirst<EmployeeInfo>();
                     }
 
                     return request;

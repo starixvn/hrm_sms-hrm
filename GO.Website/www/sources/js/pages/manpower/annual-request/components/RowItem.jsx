@@ -4,7 +4,9 @@ import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../action';
 
-const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal }) => {
+import { ManpowerFlow } from '@jsroot/common/constants';
+
+const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal, request }) => {
     const MaxAdditionalInput = 100;
     const checkZero = number => number !== 0 ? number : '';
     const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
@@ -70,10 +72,10 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                 <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
                     {
-                        isDetail && (itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition)
+                        isDetail && !request.isEdit && (itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition)
                     }
                     {
-                        !isDetail && 
+                        (!isDetail || (isDetail && request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead)) && 
                         <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
                             value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
@@ -81,10 +83,10 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                 </td>
                 <td>
                     {
-                        isDetail && (itemDetail.localAddition === 0 ? '' : itemDetail.localAddition)
+                        isDetail && !request.isEdit && (itemDetail.localAddition === 0 ? '' : itemDetail.localAddition)
                     }
                     {
-                        !isDetail &&
+                        (!isDetail || (isDetail && request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead)) && 
                         <input className="input-add" type="number"
                             min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
@@ -116,4 +118,9 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
 };
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
-export default connect(null, mapDispatchToProps)(RowItem);
+const mapStateToProps = state => {
+    const { request } = state;
+    return { request };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RowItem);

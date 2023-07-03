@@ -16,6 +16,23 @@
     max-width: 100%;
 }
 
+.filter {
+    display: flex;
+    margin: 10px;
+    background-color: #eaecef;
+    border: 1px solid #dbdbdb;
+    margin: 1rem 0;
+    padding: 8px;
+
+    .unit {
+        margin: 5px 20px 0px 0px;
+    }
+
+    .unit-option {
+        width: fit-content;
+    }
+}
+
 .height-none-filter {
     max-height: 81.5vh;
 }
@@ -25,7 +42,7 @@
 }
 
 .height-filter {
-    max-height: 68.5vh;
+    max-height: 73.5vh;
 }
 
 .btn--submit{

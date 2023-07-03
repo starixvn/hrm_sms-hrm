@@ -23,18 +23,14 @@ const Filter = ({ unitSelected, setUnitSelected, getDataForCreateAnnualRequest }
     };
     
     return (
-        <Form className="form-filter">
-            <Form.Row bsPrefix="form-row">
-                <Form.Group>
-                    <Form.Label>{LangHelper.getResource('Unit')}</Form.Label>
-                    <Select className={`react-select-container`}
-                        classNamePrefix="react-select" isSearchable={false}
-                        options={unitOptions()} value={unitSelected}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-            </Form.Row>
-        </Form>
+        <div className="filter">
+            <span className="unit">{LangHelper.getResource('Unit')}</span>
+            <Select className="react-select-container unit-option"
+                classNamePrefix="react-select" isSearchable={false}
+                options={unitOptions()} value={unitSelected}
+                onChange={handleChange}
+            />
+        </div> 
     );
 }
 

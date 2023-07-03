@@ -55,10 +55,9 @@
             return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
         }
 
-        public IActionResult Detail(int requestId)
+        public IActionResult Detail(int id)
         {
-            ViewBag.requestId = requestId;
-            return View("~/Views/Manpower/AnnualRequest/Detail.cshtml");
+            return View("~/Views/Manpower/AnnualRequest/Detail.cshtml", id);
         }
 
         [HttpPost]
@@ -76,8 +75,11 @@
             {
                 return NotFound();
             }
+            request.IsEdit = request.Creator.CreatorId == userControlSession.UserId ||
+                request.VerifierId == userControlSession.UserId ||
+                request.ApproverId == userControlSession.UserId;
             var departments = GetDepartments(request.Details);
-            return Json(new { request.Period, departments, request.Details });
+            return Json(new { request, departments});
         }
 
         public IActionResult MemberRequest()
