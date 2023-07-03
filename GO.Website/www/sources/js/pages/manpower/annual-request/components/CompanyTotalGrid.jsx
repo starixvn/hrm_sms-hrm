@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 
-const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => {
-    const renderJoblevel = (itemUnit, itemDepartment, itemSection) => {
+const CompanyGrid = ({ period, departments, annualRequestFormDetails, jobLevels, unitSelected }) => {
+    const renderJoblevel = (itemDepartment, itemSection) => {
         const bodyJobLevel = [];
         let totalSection = {
             expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
@@ -21,7 +21,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
                 expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
             annualRequestFormDetails.map(itemDetail => {
-                if (itemDetail.unitName === itemUnit.unitName && itemDetail.departmentName === itemDepartment.departmentName &&
+                if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
                     itemDetail.sectionName === itemSection && itemDetail.jobLevel === itemJobLevel) {
                     totalJoblevel = {
                         expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
@@ -55,14 +55,14 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
                 totalForecastHeadcount: totalSection.totalForecastHeadcount + totalJoblevel.totalForecastHeadcount
             };
             bodyJobLevel.push(
-                <RowItem key={`${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection}-${itemJobLevel}`}
+                <RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemJobLevel}`}
                     total={totalJoblevel} isRenderData={false} isRenderTotal={true} isTableTotal={true} />
             );
         });
         return { totalSection, bodyJobLevel };
     };
 
-    const renderSection = (itemUnit, itemDepartment) => {
+    const renderSection = itemDepartment => {
         const bodySection = [];
         let totalDepartment = {
             expatCurrentHeadcount: 0,
@@ -79,7 +79,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
             totalForecastHeadcount: 0
         };
         itemDepartment.sections.map(itemSection => {
-            const { totalSection, bodyJobLevel } = renderJoblevel(itemUnit, itemDepartment, itemSection);
+            const { totalSection, bodyJobLevel } = renderJoblevel(itemDepartment, itemSection);
             totalDepartment = {
                 expatCurrentHeadcount: totalDepartment.expatCurrentHeadcount + totalSection.expatCurrentHeadcount,
                 localCurrentHeadcount: totalDepartment.localCurrentHeadcount + totalSection.localCurrentHeadcount,
@@ -97,7 +97,7 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
 
             bodySection.push(bodyJobLevel);
             bodySection.push(
-                <RowItem key={`columnTotalSection-${itemUnit.unitName}-${itemDepartment.departmentName}-${itemSection}`}
+                <RowItem key={`columnTotalSection-${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}`}
                     total={totalSection} isRenderData={false} isRenderTotal={true} />
             );
         });
@@ -105,15 +105,13 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
     };
     const renderBodyTable = () => {
         const body = [];
-        units.map(itemUnit => {
-            itemUnit.departments.map(itemDepartment => {
-                const { totalDepartment, bodySection } = renderSection(itemUnit, itemDepartment);
-                body.push(bodySection);
-                body.push(
-                    <RowItem key={`columnTotalDepartment-${itemUnit.unitName}-${itemDepartment.departmentName}`}
-                        total={totalDepartment} isRenderData={false} isRenderTotal={true} />
-                );
-            });
+        departments.map(itemDepartment => {
+            const { totalDepartment, bodySection } = renderSection(itemDepartment);
+            body.push(bodySection);
+            body.push(
+                <RowItem key={`columnTotalDepartment-${unitSelected.value}-${itemDepartment.departmentName}`}
+                    total={totalDepartment} isRenderData={false} isRenderTotal={true} />
+            );
         });
         return body;
     };
@@ -162,8 +160,8 @@ const CompanyGrid = ({ period, units, annualRequestFormDetails, jobLevels }) => 
 };
 
 const mapStateToProps = state => {
-    const { period, units, annualRequestFormDetails, jobLevels } = state;
-    return { period, units, annualRequestFormDetails, jobLevels };
+    const { period, departments, annualRequestFormDetails, jobLevels, unitSelected } = state;
+    return { period, departments, annualRequestFormDetails, jobLevels, unitSelected };
 };
 
 export default connect(mapStateToProps, null)(CompanyGrid);

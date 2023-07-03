@@ -39,8 +39,8 @@
         public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
         {
             (var period, var details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
-            var units = GetUnits(details);
-            return Json(new { period, units, details });
+            var departments = GetDepartments(details);
+            return Json(new { period, departments, details });
         }
 
         [HttpPost]
@@ -76,8 +76,8 @@
             {
                 return NotFound();
             }
-            var units = GetUnits(request.Details);
-            return Json(new { request.Period, units, request.Details });
+            var departments = GetDepartments(request.Details);
+            return Json(new { request.Period, departments, request.Details });
         }
 
         public IActionResult MemberRequest()
@@ -101,37 +101,18 @@
             return Json(requests);
         }
 
-        private static IList<Unit> GetUnits(IEnumerable<AnnualManpowerForecastRequestDetail> details)
-
-        {
-            var units = new List<Unit>();
-            foreach (var item in details)
-            {
-                var IsValidUnit = units.Where(x => x.UnitName == item.UnitName).ToList();
-                if (!IsValidUnit.Any())
-                {
-                    units.Add(new Unit()
-                    {
-                        UnitName = item.UnitName,
-                        Departments = GetDepartments(item.UnitName, details)
-                    });
-                }
-            }
-            return units;
-        }
-
-        private static IList<Department> GetDepartments(string unitName, IEnumerable<AnnualManpowerForecastRequestDetail> details)
+        private static IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
         {
             var deparments = new List<Department>();
             foreach (var item in details)
             {
                 var IsValidDepartment = deparments.Where(x => x.DepartmentName == item.DepartmentName).ToList();
-                if (item.UnitName == unitName && !IsValidDepartment.Any())
+                if (!IsValidDepartment.Any())
                 {
                     deparments.Add(new Department()
                     {
                         DepartmentName = item.DepartmentName,
-                        Sections = details.Where(x => x.UnitName == unitName && x.DepartmentName == item.DepartmentName)
+                        Sections = details.Where(x => x.DepartmentName == item.DepartmentName)
                                           .Select(y => y.SectionName).Distinct().ToList()
                     });
                 }

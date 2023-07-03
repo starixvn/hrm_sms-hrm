@@ -35,7 +35,7 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
     return (
         <>
             {
-                //period != null &&
+                period != null &&
                 <div>
                     {
                         window.units.length > 1 &&
@@ -58,10 +58,10 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
                 </div>
             }
             {
-                //period == null &&
-                //<div className="breadcrumb inValidPeriod">
-                //    <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
-                //</div>
+                period == null &&
+                <div className="breadcrumb inValidPeriod">
+                    <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
+                </div>
             }
         </>
     );

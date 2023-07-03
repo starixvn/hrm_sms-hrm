@@ -4,15 +4,15 @@ const annualRequestSlice = createSlice({
     name: 'annualRequestSlice',
     initialState: {
         period: '',
-        unitSelected: null,
-        units: [],
+        unitSelected: { value: null, label: null },
+        departments: [],
         companies: [],
         annualRequestFormDetails: [],
         jobLevels: []
     },
     reducers: {
-        setUnits: (state, action) => {
-            state.units = action.payload;
+        setDepartments: (state, action) => {
+            state.departments = action.payload;
         },
         setPeriod: (state, action) => {
             state.period = action.payload;
@@ -59,7 +59,7 @@ const annualRequestSlice = createSlice({
 const { actions, reducer } = annualRequestSlice;
 
 export const {
-    setUnits,
+    setDepartments,
     setPeriod,
     setCompanies,
     setJobLevels,

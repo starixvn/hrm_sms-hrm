@@ -3,7 +3,7 @@ import DataService from '@jsroot/common/dataService';
 import { toast } from 'react-toastify';
 
 import {
-    setUnits,
+    setDepartments,
     setPeriod,
     setCompanies,
     setJobLevels,
@@ -22,7 +22,7 @@ const getDataForCreateAnnualRequest = unitName => async dispatch => {
         dispatch(setAnnualRequestFormDetails(response.data.details));
         dispatch(setCompanies(response.data.details));
         dispatch(setJobLevels(response.data.details));
-        dispatch(setUnits(response.data.units));
+        dispatch(setDepartments(response.data.departments));
     }).then(() => Site.unblockUI());
 };
 
@@ -46,12 +46,16 @@ const getAnnualRequestById = requestId => async dispatch => {
         dispatch(setAnnualRequestFormDetails(response.data.details));
         dispatch(setCompanies(response.data.details));
         dispatch(setJobLevels(response.data.details));
-        dispatch(setUnits(response.data.units));
+        dispatch(setDepartments(response.data.departments));
+        dispatch(setUnitSelected({
+            value: response.data.details[0].unitName,
+            label: response.data.details[0].unitName
+        }));
     }).then(() => Site.unblockUI());
 };
 
 export const ActionCreators = {
-    setUnits,
+    setDepartments,
     setPeriod,
     setCompanies,
     setJobLevels,
