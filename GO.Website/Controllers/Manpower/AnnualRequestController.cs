@@ -14,7 +14,7 @@
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("ManpowerForecast/AnnualRequest/[action]")]
+    [Route("ManpowerForecast/AnnualRequest/[action]/{id?}")]
     [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_AnnualRequest, Policy = Policy.Host)]
     public class AnnualRequestController : BaseController
     {

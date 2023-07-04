@@ -32,7 +32,7 @@ const createAnnualRequest = params => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/Create');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success(LangHelper.getResource('CreateSuccessfully'));
+            toast.success(params.MethodName + LangHelper.getResource('Successfully'));
         } else {
             toast.error(response.data.message);
         }
@@ -61,7 +61,7 @@ const updateStatus = params => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatus');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success(LangHelper.getResource('UpdateStatusSuccessfully'));
+            toast.success(params.MethodName + LangHelper.getResource('Successfully'));
         } else {
             toast.error(response.data.message);
         }

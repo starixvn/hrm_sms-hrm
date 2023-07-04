@@ -27,8 +27,8 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
         const param = {
             PeriodId: period.periodId,
             Details: details,
-            UnitName: unitSelected.value
-
+            UnitName: unitSelected.value,
+            MethodName: 'Create '
         };
         createAnnualRequest(param);
     };

@@ -34,15 +34,20 @@ const AppContainer = ({ getAnnualRequestById,
         ((request.currentProcessId === ManpowerFlow.Approver && AnnualManpowerForecastRequestStatus.Approved === request.statusId) ||
             (request.currentProcessId === ManpowerFlow.Verifier && AnnualManpowerForecastRequestStatus.Verified === request.statusId))) ? true : false;
     const getStatus = () => {
+        let status = '';
         switch (request.statusId) {
             case AnnualManpowerForecastRequestStatus.Pending:
-                return 'Pending';
+                status = LangHelper.getResource('Pending');
+                break;
             case AnnualManpowerForecastRequestStatus.Verified:
-                return 'Verified';
+                status = LangHelper.getResource('Verified');
+                break;
             case AnnualManpowerForecastRequestStatus.Approved:
-                return 'Approved';
+                status = LangHelper.getResource('Approved');
+                break;
         }
-    }
+        return status;
+    };
     const handleSubmit = () => {
         const details = [];
         annualRequestFormDetails.map(itemDetail => {
@@ -53,8 +58,8 @@ const AppContainer = ({ getAnnualRequestById,
         const param = {
             PeriodId: period.periodId,
             Details: details,
-            UnitName: unitSelected.value
-
+            UnitName: unitSelected.value,
+            MethodName: 'Update '
         };
         createAnnualRequest(param);
     };
@@ -63,6 +68,7 @@ const AppContainer = ({ getAnnualRequestById,
         const param = {
             RequestId: request.requestId,
             StatusId: request.statusId + 1,
+            MethodName: 'Update '
         };
         updateStatus(param);
         handleRequest(request.statusId + 1);
@@ -72,6 +78,7 @@ const AppContainer = ({ getAnnualRequestById,
         const param = {
             RequestId: request.requestId,
             StatusId: request.statusId - 1,
+            MethodName: 'Reset '
         };
         updateStatus(param);
         handleRequest(request.statusId - 1);
@@ -113,13 +120,13 @@ const AppContainer = ({ getAnnualRequestById,
             {
                 idVerify() &&
                 <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleUpdateStatus}>
-                    {LangHelper.getResource('Verifier')}
+                    {LangHelper.getResource('Verify')}
                 </Button>
             }
             {
                 isApprove() &&
                 <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleUpdateStatus}>
-                    {LangHelper.getResource('Approver')}
+                    {LangHelper.getResource('Approve')}
                 </Button>
             }
             {
