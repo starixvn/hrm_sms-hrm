@@ -24,8 +24,16 @@
     margin: 1rem 0;
     padding: 8px;
 
-    .unit {
+    .unit{
         margin: 5px 20px 0px 0px;
+    }
+
+    .status{
+        margin-right: 20px; 
+    } 
+    
+    .bold {
+        font-weight: bold;
     }
 
     .unit-option {
@@ -38,7 +46,7 @@
 }
 
 .height-detail {
-    max-height: 84.5vh;
+    max-height: 80.5vh;
 }
 
 .height-filter {

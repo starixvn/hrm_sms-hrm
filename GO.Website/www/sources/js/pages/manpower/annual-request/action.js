@@ -56,6 +56,18 @@ const getAnnualRequestById = requestId => async dispatch => {
     }).then(() => Site.unblockUI());
 };
 
+const updateStatus = params => async dispatch => {
+    Site.blockUI();
+    const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatus');
+    await DataService.postDataAsync(url, params).then(response => {
+        if (response.data.isSuccessful) {
+            toast.success(LangHelper.getResource('UpdateStatusSuccessfully'));
+        } else {
+            toast.error(response.data.message);
+        }
+    }).then(() => Site.unblockUI());
+};
+
 export const ActionCreators = {
     setRequest,
     setDepartments,
@@ -67,5 +79,6 @@ export const ActionCreators = {
     addAnnualRequestFormDetailsItem,
     getDataForCreateAnnualRequest,
     createAnnualRequest,
-    getAnnualRequestById
+    getAnnualRequestById,
+    updateStatus
 };

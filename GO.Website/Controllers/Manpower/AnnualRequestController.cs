@@ -75,9 +75,7 @@
             {
                 return NotFound();
             }
-            request.IsEdit = request.Creator.CreatorId == userControlSession.UserId ||
-                request.VerifierId == userControlSession.UserId ||
-                request.ApproverId == userControlSession.UserId;
+            request.IsEdit = IsEditRequest(request);
             var departments = GetDepartments(request.Details);
             return Json(new { request, departments});
         }
@@ -120,6 +118,23 @@
                 }
             }
             return deparments;
+        }
+
+        public bool IsEditRequest(AnnualManpowerForecastRequest request)
+        {
+            bool isEdit = false;
+            if (request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead) {
+                isEdit = true;
+            }
+            if (request.VerifierId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify)
+            {
+                isEdit = true;
+            }
+            if (request.ApproverId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve)
+            {
+                isEdit = true;
+            }
+            return isEdit;
         }
     }
 }
