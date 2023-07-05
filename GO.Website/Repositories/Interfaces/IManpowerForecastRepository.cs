@@ -12,5 +12,6 @@
         Task<IEnumerable<MemberAnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria);
 
         Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(ICriteria criteria);
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(ICriteria criteria);
     }
 }

@@ -94,6 +94,13 @@
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetAnnualRequestByPeriodId([FromBody] GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
+        {
+            var requests = await manpowerForecastService.GetAnnualRequestByPeriodIdAsync(criteria);
+            return Json(requests);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

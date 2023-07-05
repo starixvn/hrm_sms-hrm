@@ -13,7 +13,7 @@
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("Manpower/Period/[action]")]
+    [Route("Manpower/Period/[action]/{id?}")]
     [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Read)]
     public class PeriodController : BaseController
     {
@@ -32,6 +32,11 @@
         {
             bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
             return View("~/Views/Manpower/Period/Index.cshtml", isHost);
+        }
+
+        public IActionResult Detail(int id)
+        {
+            return View("~/Views/Manpower/Period/Detail.cshtml", id);
         }
 
         [HttpPost]

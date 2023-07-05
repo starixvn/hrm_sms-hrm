@@ -1,0 +1,82 @@
+@import "~react-toastify/dist/ReactToastify.css";
+@import '../../../abstracts/mixins';
+@import '../../../components/buttons';
+@import '../../../components/forms';
+@import '../../../components/icons';
+@import '../../../components/tabs';
+@import '../../../components/tables';
+@import '../../../components/react-select';
+@import '../../../components/modal';
+
+.period-detail {
+    margin: 1rem 0;
+
+    .period-armf {
+        display: flex;
+
+        .period-armf {
+            .table {
+                thead {
+                    tr {
+                        th {
+                            width: 300px;
+                            height: 32px;
+                            padding: 6px;
+                            border-bottom: 0;
+
+                            &.unit {
+                                width: 250px;
+                                background: #11525d;
+                            }
+
+                            &.unit-head {
+                                background: #894f24;
+                            }
+
+                            &.verifier {
+                                background: #775f18;
+                            }
+
+                            &.approver {
+                                background: #5d490c;
+                            }
+
+                            &.hr {
+                                background: #9b6436;
+                            }
+                        }
+                    }
+                }
+
+                tbody {
+                    td {
+                        vertical-align: top;
+                        padding: 16px;
+                    }
+
+                    tr:hover td {
+                        background: #fff !important;
+                    }
+                }
+            }
+
+            .react-select-container {
+                .react-select__menu {
+                    .react-select__menu-list {
+                        .react-select__option {
+                            border-bottom: 1px solid #c8c8c8;
+
+                            .font-weight-bold {
+                                font-weight: 600 !important;
+                            }
+
+                            &:last-child {
+                                border-bottom: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

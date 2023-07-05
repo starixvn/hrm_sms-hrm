@@ -27,6 +27,7 @@ function generateConfig(environment) {
             [`${jsPath}/pages/manpower/annual-request/member-request`]: pathConfig.scriptPaths.manpower_forecast_member_annual_request,
             [`${jsPath}/pages/manpower/annual-request/index`]: pathConfig.scriptPaths.manpower_forecast_index,
             [`${jsPath}/pages/manpower/detail-annual-request/index`]: pathConfig.scriptPaths.manpower_forecast_detail_index,
+            [`${jsPath}/pages/manpower/period/detail`]: pathConfig.scriptPaths.manpower_period_detail,
 
             /*css*/
             [`${cssPath}/main`]: pathConfig.cssPaths.main,
@@ -41,7 +42,8 @@ function generateConfig(environment) {
             [`${cssPath}/pages/manpower/annual-request/my-request`]: pathConfig.cssPaths.manpower_forecast_my_annual_request,
             [`${cssPath}/pages/manpower/annual-request/member-request`]: pathConfig.cssPaths.manpower_forecast_member_annual_request,
             [`${cssPath}/pages/manpower/annual-request/index`]: pathConfig.cssPaths.manpower_forecast_index,
-            [`${cssPath}/pages/manpower/detail-annual-request/index`]: pathConfig.cssPaths.manpower_forecast_detail_index
+            [`${cssPath}/pages/manpower/detail-annual-request/index`]: pathConfig.cssPaths.manpower_forecast_detail_index,
+            [`${cssPath}/pages/manpower/period/detail`]: pathConfig.cssPaths.manpower_period_detail
         },
         output: {
             path: pathConfig.projectRoot,

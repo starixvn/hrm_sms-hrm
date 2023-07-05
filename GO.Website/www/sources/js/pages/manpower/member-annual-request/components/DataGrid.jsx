@@ -44,15 +44,17 @@ const DataGrid = ({ requests }) => {
                     <Cell>{item.unitName}</Cell>
                     <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
-                        <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
-                            overlay={
-                                <Tooltip id={`tooltip-request-${item.requestId}`}>
-                                    Detail
-                                </Tooltip>
-                            }
-                        >
-                            <i className="icon-edit fa fa-search" />
-                        </OverlayTrigger>
+                        <a href={`/ManpowerForecast/AnnualRequest/Detail/${item.requestId}`}>
+                            <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
+                                overlay={
+                                    <Tooltip id={`tooltip-request-${item.requestId}`}>
+                                        Detail
+                                    </Tooltip>
+                                }
+                            >
+                                <i className="icon-edit fa fa-search" />
+                            </OverlayTrigger>
+                        </a>
                     </Cell>
                 </Row>
             );

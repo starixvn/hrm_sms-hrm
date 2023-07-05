@@ -49,6 +49,7 @@ const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
             {
                 window.hasHostPermissionOnPeriod &&
                 <Cell className="text-center">
+                    <a href={`/Manpower/Period/Detail/${period.periodId}`} className="icon-edit fa fa-search" />
                     <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} />
                     <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod} />
                 </Cell>

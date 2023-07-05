@@ -67,5 +67,21 @@
                 }
             }
         }
+
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(ICriteria criteria)
+        {
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return await db.QueryAsync<AnnualManpowerForecastRequest, EmployeeInfo, AnnualManpowerForecastRequest>(
+                    (req, creator) =>
+                    {
+                        req.Creator = creator;
+
+                        return req;
+                    },
+                    splitOn: "CreatorId",
+                    parameterSet: criteria);
+            }
+        }
     }
 }

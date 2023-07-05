@@ -12,7 +12,9 @@
         public byte StatusId { get; set; }
         public byte? CurrentProcessId { get; set; }
         public int VerifierId { get; set; }
+        public string VerifierName { get; set; }
         public int ApproverId { get; set; }
+        public string ApproverName { get; set; }
         public bool IsEdit { get; set; }
         public ManpowerPeriod Period { get; set; }
 
