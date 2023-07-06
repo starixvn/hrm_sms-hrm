@@ -48,7 +48,7 @@
     SiteName: 'Site Name',
     CreateSuccessfully: 'Create request successfully!',
     Save: 'Save',
-    Status: 'Status: ',
+    Status: 'Status',
     Successfully: ' Successfully!',
     Cancel: 'Cancel',
     SymbolNo: '#',

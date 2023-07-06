@@ -9,7 +9,7 @@ export default class DataGrid extends PureComponent {
     }
 
     buildHeader = () => {
-        return 
+        return (
             <HeaderRow>
                 <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('UnitHead')}</HeaderCell>
@@ -17,10 +17,11 @@ export default class DataGrid extends PureComponent {
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
-            </HeaderRow>;
+            </HeaderRow>
+        );
     };
 
-    getStatus = statusId => {
+    renderStatus = statusId => {
         let status = '';
         switch (statusId) {
             case AnnualManpowerForecastRequestStatus.Pending:
@@ -33,6 +34,7 @@ export default class DataGrid extends PureComponent {
                 status = LangHelper.getResource('Approved');
                 break;
         }
+
         return status;
     };
 
@@ -40,13 +42,13 @@ export default class DataGrid extends PureComponent {
         const gridData = this.props.gridData;
         if (gridData.length > 0) {
             return gridData.map((item, index) =>
-                 <Row>
+                <Row key={item.requestId}>
                     <Cell className="text-center">{index}</Cell>
-                    <Cell>{item.creator.nickName}</Cell>
-                    <Cell>{item.unitName}</Cell>
-                    <Cell>{item.verifierName}</Cell>
-                    <Cell>{item.approverName}</Cell>
-                    <Cell>{this.getStatus(item.statusId)}</Cell>
+                    <Cell className="text-center">{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
+                    <Cell className="text-center">{item.unitName}</Cell>
+                    <Cell className="text-center">{item.verifierName}</Cell>
+                    <Cell className="text-center">{item.approverName}</Cell>
+                    <Cell className="text-center">{this.renderStatus(item.statusId)}</Cell>
                 </Row>
             );
         }
@@ -62,17 +64,20 @@ export default class DataGrid extends PureComponent {
         if (!this.props.gridData) {
             return null;
         }
-        
+
         return (
-            <Table
-                minWidth={720}
-                maxWidth={document.getElementById('detail-app-container').clientWidth}
-                autoWidth
-                header={this.buildHeader()}
-                body={this.buildBody()}
-                containerPadding={0}
-                adjustedHeight={10}
-            />
+            <div>
+                <Table
+                    minWidth={720}
+                    maxWidth={document.getElementById('detail-app-container').clientWidth}
+                    autoWidth
+                    header={this.buildHeader()}
+                    body={this.buildBody()}
+                    isPaging={false}
+                    containerPadding={0}
+                    adjustedHeight={10}
+                />
+            </div>
         );
     }
 }

@@ -98,7 +98,7 @@ const AppContainer = ({ getAnnualRequestById,
     return (
         <div>
             <div className="filter">
-                <span className="status">{LangHelper.getResource('Status')}</span>
+                <span className="status">{LangHelper.getResource('Status') + ': '}</span>
                 <span className="bold">{getStatus()}</span>
             </div> 
             <div className="request-form height-filter">
