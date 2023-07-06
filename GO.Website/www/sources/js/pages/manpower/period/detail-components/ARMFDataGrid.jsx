@@ -76,7 +76,7 @@ export default class DataGrid extends PureComponent {
 
         return [
             <Row key={'body'} className="no-data">
-                <Cell colSpan={5}>{LangHelper.getResource('ThereIsNoData')}</Cell>
+                <Cell colSpan={7}>{LangHelper.getResource('ThereIsNoData')}</Cell>
             </Row>
         ];
     };

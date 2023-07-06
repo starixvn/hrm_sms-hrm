@@ -72,13 +72,13 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                 <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
                     {
-                        isDetail && !request.isEdit && (itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition)
+                        isDetail && (!request.isEdit || request.currentProcessId !== ManpowerFlow.UnitHead) && (itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition)
                     }
                     {
                         (!isDetail || (isDetail && request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead)) && 
                         <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
-                            value={itemDetail.expatAddition === 0 ? '' : itemDetail.expatAddition}></input>
+                            value={checkZero(itemDetail.expatAddition)}></input>
                     }
                 </td>
                 <td>
@@ -90,7 +90,7 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                         <input className="input-add" type="number"
                             min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
-                            value={itemDetail.localAddition === 0 ? '' : itemDetail.localAddition}></input>
+                            value={checkZero(itemDetail.localAddition)}></input>
                     }
                 </td>
                 <td className="highlight">{checkZero(itemDetail.totalAddition)}</td>

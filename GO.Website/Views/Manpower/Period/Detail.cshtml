@@ -18,7 +18,7 @@
     </environment>
 }
 @section Scripts {
-    <script>window.periodId = ViewBag.periodId;</script>
+    <script>window.periodId = @ViewBag.periodId;</script>
     @if (Model)
     {
         <script>window.hasHostPermissionOnPeriod = true;</script>
