@@ -18,7 +18,10 @@ export default class DataGrid extends PureComponent {
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
-                <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
+                {
+                    window.hasHostPermissionOnPeriod &&
+                    <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
+                }
             </HeaderRow>
         );
     };
@@ -51,19 +54,22 @@ export default class DataGrid extends PureComponent {
                     <Cell className="text-left">{`${item.verifierFullName} (${item.verifierNickName})`}</Cell>
                     <Cell className="text-left">{`${item.approverFullName} (${item.approverNickName})`}</Cell>
                     <Cell className="text-center">{this.renderStatus(item.statusId)}</Cell>
-                    <Cell className="text-center">
-                        <a href={`/ManpowerForecast/AnnualRequest/Detail/${item.requestId}`}>
-                            <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
-                                overlay={
-                                    <Tooltip id={`tooltip-request-${item.requestId}`}>
-                                        Detail
-                                    </Tooltip>
-                                }
-                            >
-                                <i className="icon-edit fa fa-search" />
-                            </OverlayTrigger>
-                        </a>
-                    </Cell>
+                    {
+                        window.hasHostPermissionOnPeriod &&
+                        <Cell className="text-center">
+                            <a href={`/ManpowerForecast/AnnualRequest/Detail/${item.requestId}`}>
+                                <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
+                                    overlay={
+                                        <Tooltip id={`tooltip-request-${item.requestId}`}>
+                                            Detail
+                                        </Tooltip>
+                                    }
+                                >
+                                    <i className="icon-edit fa fa-search" />
+                                </OverlayTrigger>
+                            </a>
+                        </Cell>
+                    }
                 </Row>
             );
         }

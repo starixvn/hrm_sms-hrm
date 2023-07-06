@@ -36,7 +36,9 @@
 
         public IActionResult Detail(int id)
         {
-            return View("~/Views/Manpower/Period/Detail.cshtml", id);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
+            ViewBag.periodId = id;
+            return View("~/Views/Manpower/Period/Detail.cshtml", isHost);
         }
 
         [HttpPost]

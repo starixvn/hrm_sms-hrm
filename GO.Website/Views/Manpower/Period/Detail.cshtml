@@ -1,4 +1,4 @@
-﻿@model int
+﻿@model bool
 @{
     ViewData["Title"] = "Manpower - Period Management";
 }
@@ -18,7 +18,15 @@
     </environment>
 }
 @section Scripts {
-    <script>window.periodId = @Model;</script>
+    <script>window.periodId = ViewBag.periodId;</script>
+    @if (Model)
+    {
+        <script>window.hasHostPermissionOnPeriod = true;</script>
+    }
+    else
+    {
+        <script>window.hasHostPermissionOnPeriod = false;</script>
+    }
     <environment include="Development">
         <script src="~/js/dev/pages/manpower/period/detail.chunk.js" asp-append-version="true"></script>
     </environment>
