@@ -6,6 +6,7 @@
     Additional: 'Additional ',
     ApprovedForecastHeadcount: 'Approved Forecast Headcount ',
     AddNew: 'Add New',
+    Back: 'Back',
     Comment: 'Comment',
     Confirmation: 'Confirmation',
     Country: 'Country',

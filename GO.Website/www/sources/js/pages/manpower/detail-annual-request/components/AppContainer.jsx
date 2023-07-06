@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 import UnitGrid from '../../annual-request/components/UnitGrid';
 import CompanyGrid from '../../annual-request/components/CompanyGrid';
@@ -95,6 +96,8 @@ const AppContainer = ({ getAnnualRequestById,
             isEdit: request.isEdit
         });
     };
+
+    const navigate = useNavigate();
     return (
         <div>
             <div className="filter">
@@ -135,6 +138,9 @@ const AppContainer = ({ getAnnualRequestById,
                     {LangHelper.getResource('Reset')}
                 </Button>
             }
+            <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={() => navigate(-1)} >
+                {LangHelper.getResource('Back')}
+            </Button>
         </div>
     );
 };
