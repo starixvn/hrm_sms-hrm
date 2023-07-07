@@ -14,30 +14,34 @@
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return await db.QueryAsync<AnnualManpowerForecastRequest, ManpowerPeriod, AnnualManpowerForecastRequest>(
-                    (req, period) =>
+                return await db.QueryAsync<AnnualManpowerForecastRequest, ManpowerPeriod, EmployeeInfo, EmployeeInfo, AnnualManpowerForecastRequest>(
+                    (req, period, verifier, approver) =>
                     {
                         req.Period = period;
+                        req.Verifier = verifier;
+                        req.Approver = approver;
 
                         return req;
                     },
-                    splitOn: "PeriodId",
+                    splitOn: "PeriodId, VerifierId, ApproverId",
                     parameterSet: criteria);
             }
         }
 
-        public async Task<IEnumerable<MemberAnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria)
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return await db.QueryAsync<MemberAnnualManpowerForecastRequest, EmployeeInfo, MemberAnnualManpowerForecastRequest>(
-                    (req, creator) =>
+                return await db.QueryAsync<AnnualManpowerForecastRequest, EmployeeInfo, EmployeeInfo, EmployeeInfo, AnnualManpowerForecastRequest>(
+                    (req, creator, verifier, approver) =>
                     {
                         req.Creator = creator;
+                        req.Verifier = verifier;
+                        req.Approver = approver;
 
                         return req;
                     },
-                    splitOn: "CreatorId",
+                    splitOn: "CreatorId, VerifierId, ApproverId",
                     parameterSet: criteria);
             }
         }
@@ -48,19 +52,21 @@
             {
                 using (var multi = await db.QueryMultipleAsync(criteria))
                 {
-                    var request = multi.Read<AnnualManpowerForecastRequest, ManpowerPeriod, AnnualManpowerForecastRequest>(
-                        (req, period) =>
+                    var request = multi.Read<AnnualManpowerForecastRequest, ManpowerPeriod, EmployeeInfo, EmployeeInfo, EmployeeInfo, AnnualManpowerForecastRequest>(
+                        (req, period, creator, verifier, approver) =>
                         {
                             req.Period = period;
+                            req.Creator = creator;
+                            req.Verifier = verifier;
+                            req.Approver = approver;
 
                             return req;
                         },
-                        splitOn: "PeriodId").FirstOrDefault();
+                        splitOn: "PeriodId, CreatorId, VerifierId, ApproverId").FirstOrDefault();
 
                     if (request != null)
                     {
                         request.Details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
-                        request.Creator = multi.ReadFirst<EmployeeInfo>();
                     }
 
                     return request;
@@ -72,14 +78,16 @@
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return await db.QueryAsync<AnnualManpowerForecastRequest, EmployeeInfo, AnnualManpowerForecastRequest>(
-                    (req, creator) =>
+                return await db.QueryAsync<AnnualManpowerForecastRequest, EmployeeInfo, EmployeeInfo, EmployeeInfo, AnnualManpowerForecastRequest>(
+                    (req, creator, verifier, approver) =>
                     {
                         req.Creator = creator;
+                        req.Verifier = verifier;
+                        req.Approver = approver;
 
                         return req;
                     },
-                    splitOn: "CreatorId",
+                    splitOn: "CreatorId, VerifierId, ApproverId",
                     parameterSet: criteria);
             }
         }

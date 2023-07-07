@@ -19,7 +19,6 @@ const AppContainer = ({ getAnnualRequestById,
     createAnnualRequest,
     updateStatus,
     setRequest }) => {
-
     useEffect(() => {
         if (window.requestId != null) {
             getAnnualRequestById(window.requestId);
@@ -89,8 +88,8 @@ const AppContainer = ({ getAnnualRequestById,
         setRequest({
             requestId: request.requestId,
             currentProcessId: request.currentProcessId,
-            verifierId: request.verifierId,
-            approverId: request.approverId,
+            verifierId: request.verifier.userId,
+            approverId: request.approver.userId,
             creator: request.creator,
             statusId: statusId,
             isEdit: request.isEdit
@@ -103,14 +102,14 @@ const AppContainer = ({ getAnnualRequestById,
             <div className="filter">
                 <span className="status">{LangHelper.getResource('Status') + ': '}</span>
                 <span className="bold">{getStatus()}</span>
-            </div> 
+            </div>
             <div className="request-form height-filter">
                 <div className="manpower-forecast row">
                     <div className="col-unit">
                         <UnitGrid />
                     </div>
                     <div className="col-company">
-                        <CompanyGrid isDetail={ true } />
+                        <CompanyGrid isDetail={true} />
                     </div>
                 </div>
             </div>

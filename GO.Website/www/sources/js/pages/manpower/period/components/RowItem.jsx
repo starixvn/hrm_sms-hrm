@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
+
 import { Cell, Row } from '@jsroot/components/react-grid/index';
+
 import { DateFormat } from '@jsroot/common/constants';
+import Site from '@jsroot/common/site';
 
 const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
     const [isActive, setStatus] = useState(period.isActive);
@@ -46,14 +49,16 @@ const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
                     onChange={handleChangeStatus}
                 />
             </Cell>
-            {
-                window.hasHostPermissionOnPeriod &&
-                <Cell className="text-center">
-                    <a href={`/Manpower/Period/Detail/${period.periodId}`} className="icon-edit fa fa-search" />
-                    <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} />
-                    <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod} />
-                </Cell>
-            }
+            <Cell className="text-center">
+                <a href={Site.resolveClientUrl(`Manpower/Period/Detail/${period.periodId}`)} className="icon-edit fa fa-search" />
+                {
+                    window.hasHostPermissionOnPeriod &&
+                    <>
+                        <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} />
+                        <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod} />
+                    </>
+                }
+            </Cell>
         </Row>
     );
 };

@@ -11,7 +11,7 @@ import {
     setUnitSelected,
     setAnnualRequestFormDetails,
     addAnnualRequestFormDetailsItem
-} from './/annualRequestSlice';
+} from './annualRequestSlice';
 
 import LangHelper from '@jsroot/common/langHelper';
 

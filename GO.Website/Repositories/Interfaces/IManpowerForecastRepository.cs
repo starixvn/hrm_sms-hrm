@@ -9,9 +9,10 @@
     {
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetMyAnnualRequestAsync(ICriteria criteria);
 
-        Task<IEnumerable<MemberAnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria);
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(ICriteria criteria);
 
         Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(ICriteria criteria);
+
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(ICriteria criteria);
     }
 }

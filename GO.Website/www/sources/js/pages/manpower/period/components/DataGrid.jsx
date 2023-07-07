@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
+
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 import RowItem from './RowItem';
+
 import { PAGING_SIZES } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
@@ -23,10 +25,7 @@ export default class DataGrid extends PureComponent {
                 <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Active')}</HeaderCell>
-                {
-                    window.hasHostPermissionOnPeriod &&
-                    <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
-                }
+                <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>,
             <HeaderRow key="header-row2">
                 <HeaderCell colWidth={8}>{LangHelper.getResource('FromDate')}</HeaderCell>

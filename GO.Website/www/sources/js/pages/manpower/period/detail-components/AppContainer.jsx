@@ -4,12 +4,13 @@ import { Tabs, Tab } from 'react-bootstrap';
 import ARMFDataGrid from './ARMFDataGrid';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
+
 export default class AppContainer extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            gridData: null,
+            gridData: null
         };
     }
 

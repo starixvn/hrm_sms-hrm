@@ -129,19 +129,21 @@
 
         public bool IsEditRequest(AnnualManpowerForecastRequest request)
         {
-            bool isEdit = false;
             if (request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead) {
-                isEdit = true;
+                return true;
             }
-            if (request.VerifierId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify)
+
+            if (request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify)
             {
-                isEdit = true;
+                return true;
             }
-            if (request.ApproverId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve)
+
+            if (request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve)
             {
-                isEdit = true;
+                return true;
             }
-            return isEdit;
+
+            return false;
         }
     }
 }

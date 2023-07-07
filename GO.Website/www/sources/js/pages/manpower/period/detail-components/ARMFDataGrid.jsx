@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
+
 import LangHelper from '@jsroot/common/langHelper';
+import Site from '@jsroot/common/site';
 import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
 export default class DataGrid extends PureComponent {
@@ -12,16 +15,13 @@ export default class DataGrid extends PureComponent {
     buildHeader = () => {
         return (
             <HeaderRow>
-                <HeaderCell colWidth={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
+                <HeaderCell colWidth={3}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('UnitHead')}</HeaderCell>
-                <HeaderCell colWidth={10}>{LangHelper.getResource('Unit')}</HeaderCell>
+                <HeaderCell colWidth={8}>{LangHelper.getResource('Unit')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
-                {
-                    window.hasHostPermissionOnPeriod &&
-                    <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
-                }
+                <HeaderCell colWidth={3}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>
         );
     };
@@ -49,27 +49,24 @@ export default class DataGrid extends PureComponent {
             return gridData.map((item, index) =>
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
-                    <Cell className="text-left">{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
-                    <Cell className="text-left">{item.unitName}</Cell>
-                    <Cell className="text-left">{`${item.verifierFullName} (${item.verifierNickName})`}</Cell>
-                    <Cell className="text-left">{`${item.approverFullName} (${item.approverNickName})`}</Cell>
+                    <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
+                    <Cell>{item.unitName}</Cell>
+                    <Cell>{item.verifier != null ? `${item.verifier.fullName} (${item.verifier.nickname})` : ''}</Cell>
+                    <Cell>{item.approver != null ? `${item.approver.fullName} (${item.approver.nickname})` : ''}</Cell>
                     <Cell className="text-center">{this.renderStatus(item.statusId)}</Cell>
-                    {
-                        window.hasHostPermissionOnPeriod &&
-                        <Cell className="text-center">
-                            <a href={`/ManpowerForecast/AnnualRequest/Detail/${item.requestId}`}>
-                                <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
-                                    overlay={
-                                        <Tooltip id={`tooltip-request-${item.requestId}`}>
-                                            Detail
-                                        </Tooltip>
-                                    }
-                                >
-                                    <i className="icon-edit fa fa-search" />
-                                </OverlayTrigger>
-                            </a>
-                        </Cell>
-                    }
+                    <Cell className="text-center">
+                        <a href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${item.requestId}`)}>
+                            <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
+                                overlay={
+                                    <Tooltip id={`tooltip-request-${item.requestId}`}>
+                                        Detail
+                                    </Tooltip>
+                                }
+                            >
+                                <i className="icon-edit fa fa-search" />
+                            </OverlayTrigger>
+                        </a>
+                    </Cell>
                 </Row>
             );
         }

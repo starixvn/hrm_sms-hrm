@@ -34,13 +34,21 @@
     </Function>
     <Function Name="Manpower forecast">
         <Setting Key="Manpower_Unit_GetByUserId" SpName="Manpower_Unit_GetByUserId" DbName="bodb_IUC" Plain="0" />
-        <Setting Key="Manpower_AnnualRequestForm_GetMyRequest" SpName="Manpower_AnnualRequestForm_GetMyRequest" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="ManpowerForecast_GetPreviousApprovedRequest" SpName="ManpowerForecast_GetPreviousApprovedRequest" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_AnnualRequestForm_GetMyRequest" SpName="Manpower_AnnualRequestForm_GetMyRequest" DbName="bodb_IUC" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="UserId" Class="EmployeeInfo" />
+            <Mapping DataField="ApproverId" ObjectProperty="UserId" Class="EmployeeInfo" />
+        </Setting>
         <Setting Key="Manpower_AnnualRequestForm_GetMemberRequest" SpName="Manpower_AnnualRequestForm_GetMemberRequest" DbName="bodb_IUC" Plain="0">
             <Mapping DataField="CreatorId" ObjectProperty="UserId" Class="EmployeeInfo" />
+            <Mapping DataField="VerifierId" ObjectProperty="UserId" Class="EmployeeInfo" />
+            <Mapping DataField="ApproverId" ObjectProperty="UserId" Class="EmployeeInfo" />
         </Setting>
-		<Setting Key="Manpower_AnnualRequestForm_GetByPeriodId" SpName="Manpower_AnnualRequestForm_GetByPeriodId" DbName="bodb_IUC" Plain="0">
-			<Mapping DataField="CreatorId" ObjectProperty="UserId" Class="EmployeeInfo" />
-		</Setting>
+        <Setting Key="Manpower_AnnualRequestForm_GetByPeriodId" SpName="Manpower_AnnualRequestForm_GetByPeriodId" DbName="bodb_IUC" Plain="0">
+            <Mapping DataField="CreatorId" ObjectProperty="UserId" Class="EmployeeInfo" />
+            <Mapping DataField="VerifierId" ObjectProperty="UserId" Class="EmployeeInfo" />
+            <Mapping DataField="ApproverId" ObjectProperty="UserId" Class="EmployeeInfo" />
+        </Setting>
         <Setting Key="Manpower_AnnualRequestForm_GetDataForCreate" SpName="Manpower_AnnualRequestForm_GetDataForCreate" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_AnnualRequestForm_Create" SpName="Manpower_AnnualRequestForm_Create" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_AnnualRequestForm_GetByRequestId" SpName="Manpower_AnnualRequestForm_GetByRequestId" DbName="bodb_IUC" Plain="0" />
