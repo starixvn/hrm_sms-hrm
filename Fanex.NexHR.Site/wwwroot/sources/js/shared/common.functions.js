@@ -194,7 +194,7 @@ function axiosError(error) {
                 break;
         }
 
-        window.location = _global.root + url;
+        window.location = resolveClientUrl(url);
     }
 }
 

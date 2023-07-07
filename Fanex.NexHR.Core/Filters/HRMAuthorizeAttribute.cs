@@ -11,26 +11,35 @@
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
-                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
-            {
-                var ucsession = UserControlClientManager.UserControlSession;
-                if (ucsession.UserId <= 0 || ucsession.JwtToken == null || ucsession.JwtToken.IsExpired)
-                {
-                    FormsAuthentication.SignOut();
+            base.OnAuthorization(filterContext);
 
-                    if (!filterContext.HttpContext.Request.IsAjaxRequest())
-                    {
-                        filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
-                    }
-                    else
-                    {
-                        var response = filterContext.HttpContext.Response;
-                        response.StatusCode = (int)HttpStatusCode.Forbidden;
-                        response.Write("<center><b>Unauthorized</b></center>");
-                    }
-                }
+            if (filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
+                || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
+            {
+                return;
             }
+
+            if (!AuthorizeCore(filterContext.HttpContext) || IsValidSession())
+            {
+                return;
+            }
+
+            if (!filterContext.HttpContext.Request.IsAjaxRequest())
+            {
+                filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
+            }
+            else
+            {
+                var response = filterContext.HttpContext.Response;
+                response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                response.Write("<center><b>Unauthorized</b></center>");
+            }
+        }
+
+        private static bool IsValidSession()
+        {
+            var ucsession = UserControlClientManager.UserControlSession;
+            return ucsession.UserId > 0 && ucsession.JwtToken != null && !ucsession.JwtToken.IsExpired;
         }
     }
 }
